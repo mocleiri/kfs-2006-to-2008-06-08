@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 
 <dictionaryEntry>
 
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetNonpersonnel">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <attributes>
             <attribute name="budgetNonpersonnelCategoryCode" forceUppercase="true">
-                <label>Category</label>
-                <shortLabel>Code</shortLabel>
+                <label>Category Code</label>
                 <maxLength>2</maxLength>
                 <required>true</required>
                 <control>
@@ -35,11 +19,8 @@
                 <summary>Category Code</summary>
                 <description>Category Code</description>
             </attribute>
-            
             <attribute name="budgetNonpersonnelSubCategoryCode" forceUppercase="true">
-                <label>Sub-category</label>
-                <shortLabel>Code</shortLabel>
-                
+                <label>Sub Category Code</label>
                 <maxLength>3</maxLength>
                 <required>true</required>
                 <control>
@@ -86,8 +67,8 @@
             </attribute>
 
             <attribute name="agencyRequestAmount" forceUppercase="true">
-                <label>Agency Amount Requested</label>
-                <shortLabel>Amount</shortLabel>
+                <label>Requested Amount</label>
+                <shortLabel>Requested Amount</shortLabel>
 
                 <maxLength>9</maxLength>
                 <validationPattern>
@@ -104,8 +85,8 @@
             </attribute>
 
             <attribute name="budgetThirdPartyCostShareAmount" forceUppercase="true">
-                <label>3rd Party Cost Share</label>
-                <shortLabel>3rd Party</shortLabel>
+                <label>Third Party Cost Share Amount</label>
+                <shortLabel>Third Party Cost Share Amount</shortLabel>
 
                 <maxLength>9</maxLength>
                 <validationPattern>
@@ -121,9 +102,9 @@
                 <description>Third Party Cost Share Amount</description>
             </attribute>
 
-            <attribute name="budgetInstitutionCostShareAmount" forceUppercase="true">
-                <label>Institution Cost Share</label>
-                <shortLabel>Institution</shortLabel>
+            <attribute name="budgetUniversityCostShareAmount" forceUppercase="true">
+                <label>University Cost Share Amount</label>
+                <shortLabel>University Cost Share Amount</shortLabel>
 
                 <maxLength>9</maxLength>
                 <validationPattern>
@@ -135,8 +116,8 @@
                     <text size="10" />
                 </control>
 
-                <summary>Institution Cost Share Amount</summary>
-                <description>Institution Cost Share Amount</description>
+                <summary>University Cost Share Amount</summary>
+                <description>University Cost Share Amount</description>
             </attribute>
 
             <attribute name="budgetOriginSequenceNumber" forceUppercase="true">
@@ -173,9 +154,9 @@
                 <description>Copy Indicator</description>
             </attribute>
 
-            <attribute name="budgetInstitutionCostShareCopyIndicator" forceUppercase="true">
-                <label>Institution Cost Share Copy Indicator</label>
-                <shortLabel>Institution Cost Share Copy Indicator</shortLabel>
+            <attribute name="budgetUniversityCostShareCopyIndicator" forceUppercase="true">
+                <label>University Cost Share Copy Indicator</label>
+                <shortLabel>University Cost Share Copy Indicator</shortLabel>
 
                 <maxLength>1</maxLength>
                 <validationPattern>
@@ -186,8 +167,8 @@
                     <checkbox />
                 </control>
 
-                <summary>Institution Cost Share Copy Indicator</summary>
-                <description>Institution Cost Share Copy Indicator</description>
+                <summary>University Cost Share Copy Indicator</summary>
+                <description>University Cost Share Copy Indicator</description>
             </attribute>
 
             <attribute name="budgetThirdPartyCostShareCopyIndicator" forceUppercase="true">
@@ -224,9 +205,9 @@
                 <description>Origin Agency Amount</description>
             </attribute>
 
-            <attribute name="budgetOriginInstitutionCostShareAmount" forceUppercase="true">
-                <label>Origin Institution Cost Share Amount</label>
-                <shortLabel>Origin Institution Cost Share Amount</shortLabel>
+            <attribute name="budgetOriginUniversityCostShareAmount" forceUppercase="true">
+                <label>Origin University Cost Share Amount</label>
+                <shortLabel>Origin University Cost Share Amount</shortLabel>
 
                 <maxLength>9</maxLength>
                 <validationPattern>
@@ -237,8 +218,8 @@
                     <text size="10" />
                 </control>
 
-                <summary>Origin Institution Cost Share Amount</summary>
-                <description>Origin Institution Cost Share Amount</description>
+                <summary>Origin University Cost Share Amount</summary>
+                <description>Origin University Cost Share Amount</description>
             </attribute>
 
             <attribute name="budgetOriginThirdPartyCostShareAmount" forceUppercase="true">
@@ -266,7 +247,6 @@
             </attributeReference>
 
         </attributes>
-        <objectLabel>Budget Nonpersonnel</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

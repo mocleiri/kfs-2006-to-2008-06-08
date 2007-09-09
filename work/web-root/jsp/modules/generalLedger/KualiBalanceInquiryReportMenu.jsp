@@ -33,6 +33,7 @@
 	<html:hidden property="referenceTypeCode" write="false" />
 	<html:hidden property="referenceNumber" write="false" />
 	<html:hidden property="projectCode" write="false" />
+	<html:hidden property="budgetYear" write="false" />
 	<div class="topblurb">
 	<div align="center"><b><font size="+1">Balance Inquiry Report Menu</font></b>
 	<br />
@@ -100,7 +101,7 @@
 		</tr>
 		<tr>
 			<td align="center" colspan="2"><html:image
-				src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif" styleClass="globalbuttons"
+				src="${pageContext.request.contextPath}/kr/images/buttonsmall_cancel.gif" styleClass="globalbuttons"
 				property="methodToCall.cancel" alt="cancel" title="cancel" /></td>
 		</tr>
 	</table>

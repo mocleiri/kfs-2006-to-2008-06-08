@@ -1,17 +1,18 @@
 package org.kuali.module.purap.bo;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
 import org.kuali.core.bo.Note;
-import org.kuali.core.util.KualiDecimal;
 
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class CreditMemoView extends AbstractRelatedView {
+
     private String creditMemoNumber;    
     private Integer paymentRequestIdentifier;
     private Integer purchaseOrderIdentifier;
@@ -22,7 +23,7 @@ public class CreditMemoView extends AbstractRelatedView {
     private Date creditMemoExtractedDate;    
     private Timestamp creditMemoPaidTimestamp;
     private String vendorName;
-    private KualiDecimal totalAmount;    
+    private BigDecimal totalAmount;    
    
     /**
      * Gets the accountsPayableApprovalDate attribute. 
@@ -172,7 +173,7 @@ public class CreditMemoView extends AbstractRelatedView {
      * Gets the totalAmount attribute. 
      * @return Returns the totalAmount.
      */
-    public KualiDecimal getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
@@ -180,7 +181,7 @@ public class CreditMemoView extends AbstractRelatedView {
      * Sets the totalAmount attribute value.
      * @param totalAmount The totalAmount to set.
      */
-    public void setTotalAmount(KualiDecimal totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 

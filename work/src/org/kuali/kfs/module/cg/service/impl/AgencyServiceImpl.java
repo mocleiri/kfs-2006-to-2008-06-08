@@ -22,15 +22,21 @@
  */
 package org.kuali.module.cg.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.kuali.module.cg.service.ProjectDirectorService;
+import org.kuali.module.cg.service.AgencyService;
+import org.kuali.module.cg.bo.ProjectDirector;
+import org.kuali.module.cg.bo.Agency;
+import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.spring.Cached;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.cg.bo.Agency;
-import org.kuali.module.cg.service.AgencyService;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Implementation of the Agency service.
@@ -54,11 +60,6 @@ public class AgencyServiceImpl implements AgencyService {
         return primaryKeys;
     }
 
-    /**
-     * Sets the BusinessObjectService. Provides Spring compatibility.
-     * 
-     * @param businessObjectService
-     */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
     }

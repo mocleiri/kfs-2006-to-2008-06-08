@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.rules.budget;
 
@@ -22,22 +29,21 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.KraKeyConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
+import org.kuali.module.kra.budget.KraKeyConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetModular;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.service.BudgetIndirectCostService;
+import org.kuali.module.kra.budget.util.AuditCluster;
+import org.kuali.module.kra.budget.util.AuditError;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
-import org.kuali.module.kra.util.AuditCluster;
-import org.kuali.module.kra.util.AuditError;
 
 public class BudgetAuditRule {
     
@@ -75,7 +81,7 @@ public class BudgetAuditRule {
     
     private boolean runParametersSoftAuditErrors(BudgetDocument budgetDocument) {
         // Need to setup IDC values
-        BudgetIndirectCostService idcService = SpringContext.getBean(BudgetIndirectCostService.class);
+        BudgetIndirectCostService idcService = SpringServiceLocator.getBudgetIndirectCostService();
         idcService.refreshIndirectCost(budgetDocument);
         
         if (ObjectUtils.isNotNull(budgetDocument.getBudget().getIndirectCost())) {
@@ -100,7 +106,7 @@ public class BudgetAuditRule {
 
     private boolean runCostShareAuditErrors(Budget budget) {
         List<AuditError> costShareAuditErrors = new ArrayList<AuditError>();
-        BudgetCostShareFormHelper budgetCostShareFormHelper = new BudgetCostShareFormHelper(budget.getPeriods(), budget.getPersonnel(), budget.getNonpersonnelItems(), budget.getInstitutionCostSharePersonnelItems(), budget.getInstitutionCostShareItems(), budget.getThirdPartyCostShareItems());
+        BudgetCostShareFormHelper budgetCostShareFormHelper = new BudgetCostShareFormHelper(budget.getPeriods(), budget.getPersonnel(), budget.getNonpersonnelItems(), budget.getUniversityCostSharePersonnelItems(), budget.getUniversityCostShareItems(), budget.getThirdPartyCostShareItems());
 
         if (!budgetCostShareFormHelper.getInstitutionDirect().getTotalBalanceToBeDistributed().equals(new KualiInteger(0))) {
             costShareAuditErrors.add(new AuditError("document.budget.audit.costShare.institution.distributed",
@@ -120,7 +126,7 @@ public class BudgetAuditRule {
 
     private boolean runNonpersonnelAuditErrors(List<BudgetNonpersonnel> nonpersonnelItems) {
         List<AuditError> nonpersonnelAuditErrors = new ArrayList<AuditError>();
-        List first25kSubcategoryCodes = Arrays.asList(SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValues("KraDevelopmentGroup", "first25kSubcategoryCodes"));
+        List first25kSubcategoryCodes = Arrays.asList(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues("KraDevelopmentGroup", "first25kSubcategoryCodes"));
         
         HashMap<String, BudgetNonpersonnel> hashMap = new HashMap();
         
@@ -135,7 +141,7 @@ public class BudgetAuditRule {
                     BudgetNonpersonnel matchedBudgetNonpersonnel = hashMap.get(key);
                     
                     matchedBudgetNonpersonnel.setAgencyRequestAmount(matchedBudgetNonpersonnel.getAgencyRequestAmount().add(budgetNonpersonnel.getAgencyRequestAmount()));
-                    matchedBudgetNonpersonnel.setBudgetInstitutionCostShareAmount(matchedBudgetNonpersonnel.getBudgetInstitutionCostShareAmount().add(budgetNonpersonnel.getBudgetInstitutionCostShareAmount()));
+                    matchedBudgetNonpersonnel.setBudgetUniversityCostShareAmount(matchedBudgetNonpersonnel.getBudgetUniversityCostShareAmount().add(budgetNonpersonnel.getBudgetUniversityCostShareAmount()));
                     matchedBudgetNonpersonnel.setBudgetThirdPartyCostShareAmount(matchedBudgetNonpersonnel.getBudgetThirdPartyCostShareAmount().add(budgetNonpersonnel.getBudgetThirdPartyCostShareAmount()));
                 } else {
                     // create a new one so to avoid messing with the interface values
@@ -146,7 +152,7 @@ public class BudgetAuditRule {
         
         // Second step is to look over the aggregated items and decide if they need audit errors (sum(amounts) > 25K).
         for (BudgetNonpersonnel budgetNonpersonnel : hashMap.values()) {
-            if (budgetNonpersonnel.getAgencyRequestAmount().add(budgetNonpersonnel.getBudgetInstitutionCostShareAmount().add(budgetNonpersonnel.getBudgetThirdPartyCostShareAmount())).isGreaterThan(new KualiInteger(25000))) {
+            if (budgetNonpersonnel.getAgencyRequestAmount().add(budgetNonpersonnel.getBudgetUniversityCostShareAmount().add(budgetNonpersonnel.getBudgetThirdPartyCostShareAmount())).isGreaterThan(new KualiInteger(25000))) {
                 // Necessary because the nonpersonnel page doesn't have all the required hidden variables for this. This should only happen
                 // for the first one found that has null values, after that it will be set for all others.
                 if (budgetNonpersonnel.getNonpersonnelObjectCode() == null) {

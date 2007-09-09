@@ -17,15 +17,15 @@ package org.kuali.module.budget.service;
 
 import java.util.List;
 
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Org;
-import org.kuali.test.ConfigureContext;
 
 /**
  * This class tests the BC PermissionService class
  */
-@ConfigureContext
+@WithTestSpringContext
 public class PermissionServiceTest extends KualiTestBase {
 
     private PermissionService permissionService;
@@ -39,7 +39,7 @@ public class PermissionServiceTest extends KualiTestBase {
     public void setUp() throws Exception {
         super.setUp();
         orgs = null;
-        permissionService = SpringContext.getBean(PermissionService.class);
+        permissionService = SpringServiceLocator.getPermissionService();
         
     }
 

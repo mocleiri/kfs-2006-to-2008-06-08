@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/PurapRuleConstants.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +23,14 @@ package org.kuali.module.purap;
 public class PurapRuleConstants {
 
     // GROUP NAMES
-    public static final String PURAP_ADMIN_GROUP = PurapParameterConstants.PURAP_ADMIN_GROUP;
-    public static String CREDIT_MEMO_RULES_GROUP = "Kuali.Purchasing.CreditMemoDocument";
+    public static String PURAP_ADMIN_GROUP = "PurapAdminGroup";
 
     // RULE NAMES
-    public static final String ALLOW_ENCUMBER_NEXT_YEAR_DAYS = "PURAP.ALLOW_ENCUMBER_NEXT_YEAR_DAYS";
-    public static final String ALLOW_APO_NEXT_FY_DAYS = "PURAP.ALLOW_APO_NEXT_FY_DAYS";
-    public static final String ALLOW_BACKPOST_DAYS = "PURAP.ALLOW_BACKPOST_DAYS";
-    
-    public static final String RESTRICTED_OBJECT_TYPE_PARM_NM = "RESTRICTED_OBJECT_TYPE";
-    public static final String RESTRICTED_OBJECT_CONSOLIDATION_PARM_NM = "RESTRICTED_OBJECT_CONSOLIDATION";
-    public static final String RESTRICTED_OBJECT_LEVEL_PARM_NM = "RESTRICTED_OBJECT_LEVEL";
-    public static final String RESTRICTED_OBJECT_LEVEL_BY_TYPE_PARM_PREFIX = "RESTRICTED_OBJECT_LEVEL_OBJECT_TYPE_";
-    public static final String RESTRICTED_OBJECT_SUB_TYPE_PARM_NM = "RESTRICTED_OBJECT_SUB_TYPE";
-    
-    public static final String PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO  = "PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO";
+    public static String PURAP_VENDOR_MIN_ORDER_AMOUNT = "PURAP.VENDOR_MIN_ORDER_AMOUNT";
+    public static String PURAP_NOT_ALLOWED_TAX_NUMBERS = "PURAP.NOT_ALLOWED_TAX_NUMBERS";
+    public static String PURAP_VNDR_MIN_NUM_LOOKUP_CRITERIA = "PURAP.VNDR_MIN_NUM_LOOKUP_CRITERIA";
+    public static String PURAP_VNDR_LOOKUP_MIN_NAME_LENGTH = "PURAP.VNDR_LOOKUP_MIN_NAME_LENGTH";
+
+    public static final String ALLOWED_EMPLOYEE_TYPE_RULE = "AllowedEmployeeTypes";
+
 }

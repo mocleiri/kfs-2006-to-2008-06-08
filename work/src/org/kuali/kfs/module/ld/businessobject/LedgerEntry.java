@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.labor.bo;
@@ -21,12 +30,12 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.DocumentType;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -36,13 +45,12 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.UniversityDate;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class LedgerEntry extends Entry {
+public class LedgerEntry extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -54,8 +62,7 @@ public class LedgerEntry extends Entry {
 	private String financialObjectTypeCode;
 	private String universityFiscalPeriodCode;
 	private String financialDocumentTypeCode;
-    private String financialSystemOriginationCode;
-    private String documentNumber;
+	private String financialDocumentNumber;
 	private Integer transactionLedgerEntrySequenceNumber;
 	private String positionNumber;
 	private String projectCode;
@@ -91,11 +98,16 @@ public class LedgerEntry extends Entry {
 	private String setid;
 	private Timestamp transactionDateTimeStamp;
 
+    private ObjectCode laborLedgerOriginalFinancialObject;
 	private ObjectCode financialObject;
 	private Chart chartOfAccounts;
 	private Account account;
+	private Chart laborLedgerOriginalChartOfAccounts;
+	private Account laborLedgerOriginalAccount;
     private SubAccount subAccount;
+    private SubAccount laborLedgerOriginalSubAccount;
     private SubObjCd financialSubObject;
+    private SubObjCd laborLedgerOriginalFinancialSubObject;
     private ObjectType financialObjectType;
     private BalanceTyp balanceType;
     private AccountingPeriod universityFiscalPeriod;
@@ -103,24 +115,23 @@ public class LedgerEntry extends Entry {
     private DocumentType documentType;
     private DocumentType referenceDocumentType;
     private Options option;
+    private UniversityDate reversalDate;
     private OriginationCode referenceOriginationCode;
     private ProjectCode project;
     private DocumentHeader documentHeader;
-    private OriginationCode financialSystemOrigination;
-    private LedgerBalance ledgerBalance;
-    private LaborObject laborObject;
+    private CalculatedSalaryFoundationCompany company;
     
 	/**
 	 * Default constructor.
 	 */
 	public LedgerEntry() {
-	    super();
+
 	}
 
 	/**
 	 * Gets the universityFiscalYear attribute.
 	 * 
-	 * @return Returns the universityFiscalYear
+	 * @return - Returns the universityFiscalYear
 	 * 
 	 */
 	public Integer getUniversityFiscalYear() { 
@@ -130,7 +141,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the universityFiscalYear attribute.
 	 * 
-	 * @param universityFiscalYear The universityFiscalYear to set.
+	 * @param - universityFiscalYear The universityFiscalYear to set.
 	 * 
 	 */
 	public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -141,7 +152,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the chartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the chartOfAccountsCode
+	 * @return - Returns the chartOfAccountsCode
 	 * 
 	 */
 	public String getChartOfAccountsCode() { 
@@ -151,7 +162,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the chartOfAccountsCode attribute.
 	 * 
-	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * @param - chartOfAccountsCode The chartOfAccountsCode to set.
 	 * 
 	 */
 	public void setChartOfAccountsCode(String chartOfAccountsCode) {
@@ -162,7 +173,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the accountNumber attribute.
 	 * 
-	 * @return Returns the accountNumber
+	 * @return - Returns the accountNumber
 	 * 
 	 */
 	public String getAccountNumber() { 
@@ -172,7 +183,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the accountNumber attribute.
 	 * 
-	 * @param accountNumber The accountNumber to set.
+	 * @param - accountNumber The accountNumber to set.
 	 * 
 	 */
 	public void setAccountNumber(String accountNumber) {
@@ -183,7 +194,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the subAccountNumber attribute.
 	 * 
-	 * @return Returns the subAccountNumber
+	 * @return - Returns the subAccountNumber
 	 * 
 	 */
 	public String getSubAccountNumber() { 
@@ -193,7 +204,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the subAccountNumber attribute.
 	 * 
-	 * @param subAccountNumber The subAccountNumber to set.
+	 * @param - subAccountNumber The subAccountNumber to set.
 	 * 
 	 */
 	public void setSubAccountNumber(String subAccountNumber) {
@@ -204,7 +215,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the financialObjectCode attribute.
 	 * 
-	 * @return Returns the financialObjectCode
+	 * @return - Returns the financialObjectCode
 	 * 
 	 */
 	public String getFinancialObjectCode() { 
@@ -214,7 +225,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the financialObjectCode attribute.
 	 * 
-	 * @param financialObjectCode The financialObjectCode to set.
+	 * @param - financialObjectCode The financialObjectCode to set.
 	 * 
 	 */
 	public void setFinancialObjectCode(String financialObjectCode) {
@@ -225,7 +236,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the financialSubObjectCode attribute.
 	 * 
-	 * @return Returns the financialSubObjectCode
+	 * @return - Returns the financialSubObjectCode
 	 * 
 	 */
 	public String getFinancialSubObjectCode() { 
@@ -235,7 +246,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the financialSubObjectCode attribute.
 	 * 
-	 * @param financialSubObjectCode The financialSubObjectCode to set.
+	 * @param - financialSubObjectCode The financialSubObjectCode to set.
 	 * 
 	 */
 	public void setFinancialSubObjectCode(String financialSubObjectCode) {
@@ -246,7 +257,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the financialBalanceTypeCode attribute.
 	 * 
-	 * @return Returns the financialBalanceTypeCode
+	 * @return - Returns the financialBalanceTypeCode
 	 * 
 	 */
 	public String getFinancialBalanceTypeCode() { 
@@ -256,7 +267,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the financialBalanceTypeCode attribute.
 	 * 
-	 * @param financialBalanceTypeCode The financialBalanceTypeCode to set.
+	 * @param - financialBalanceTypeCode The financialBalanceTypeCode to set.
 	 * 
 	 */
 	public void setFinancialBalanceTypeCode(String financialBalanceTypeCode) {
@@ -267,7 +278,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the financialObjectTypeCode attribute.
 	 * 
-	 * @return Returns the financialObjectTypeCode
+	 * @return - Returns the financialObjectTypeCode
 	 * 
 	 */
 	public String getFinancialObjectTypeCode() { 
@@ -277,7 +288,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the financialObjectTypeCode attribute.
 	 * 
-	 * @param financialObjectTypeCode The financialObjectTypeCode to set.
+	 * @param - financialObjectTypeCode The financialObjectTypeCode to set.
 	 * 
 	 */
 	public void setFinancialObjectTypeCode(String financialObjectTypeCode) {
@@ -288,7 +299,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the universityFiscalPeriodCode attribute.
 	 * 
-	 * @return Returns the universityFiscalPeriodCode
+	 * @return - Returns the universityFiscalPeriodCode
 	 * 
 	 */
 	public String getUniversityFiscalPeriodCode() { 
@@ -298,7 +309,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the universityFiscalPeriodCode attribute.
 	 * 
-	 * @param universityFiscalPeriodCode The universityFiscalPeriodCode to set.
+	 * @param - universityFiscalPeriodCode The universityFiscalPeriodCode to set.
 	 * 
 	 */
 	public void setUniversityFiscalPeriodCode(String universityFiscalPeriodCode) {
@@ -309,33 +320,17 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the financialDocumentTypeCode attribute.
 	 * 
-	 * @return Returns the financialDocumentTypeCode
+	 * @return - Returns the financialDocumentTypeCode
 	 * 
 	 */
 	public String getFinancialDocumentTypeCode() { 
 		return financialDocumentTypeCode;
 	}
 
-    /**
-     * Gets the financialSystemOriginationCode attribute. 
-     * @return Returns the financialSystemOriginationCode.
-     */
-    public String getFinancialSystemOriginationCode() {
-        return financialSystemOriginationCode;
-    }
-
-    /**
-     * Sets the financialSystemOriginationCode attribute value.
-     * @param financialSystemOriginationCode The financialSystemOriginationCode to set.
-     */
-    public void setFinancialSystemOriginationCode(String financialSystemOriginationCode) {
-        this.financialSystemOriginationCode = financialSystemOriginationCode;
-    }    
-    
 	/**
 	 * Sets the financialDocumentTypeCode attribute.
 	 * 
-	 * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
+	 * @param - financialDocumentTypeCode The financialDocumentTypeCode to set.
 	 * 
 	 */
 	public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
@@ -344,30 +339,30 @@ public class LedgerEntry extends Entry {
 
 
 	/**
-	 * Gets the documentNumber attribute.
+	 * Gets the financialDocumentNumber attribute.
 	 * 
-	 * @return Returns the documentNumber
+	 * @return - Returns the financialDocumentNumber
 	 * 
 	 */
-	public String getDocumentNumber() { 
-		return documentNumber;
+	public String getFinancialDocumentNumber() { 
+		return financialDocumentNumber;
 	}
 
 	/**
-	 * Sets the documentNumber attribute.
+	 * Sets the financialDocumentNumber attribute.
 	 * 
-	 * @param documentNumber The documentNumber to set.
+	 * @param - financialDocumentNumber The financialDocumentNumber to set.
 	 * 
 	 */
-	public void setDocumentNumber(String documentNumber) {
-		this.documentNumber = documentNumber;
+	public void setFinancialDocumentNumber(String financialDocumentNumber) {
+		this.financialDocumentNumber = financialDocumentNumber;
 	}
 
 
 	/**
 	 * Gets the transactionLedgerEntrySequenceNumber attribute.
 	 * 
-	 * @return Returns the transactionLedgerEntrySequenceNumber
+	 * @return - Returns the transactionLedgerEntrySequenceNumber
 	 * 
 	 */
 	public Integer getTransactionLedgerEntrySequenceNumber() { 
@@ -377,7 +372,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionLedgerEntrySequenceNumber attribute.
 	 * 
-	 * @param transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
+	 * @param - transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
 	 * 
 	 */
 	public void setTransactionLedgerEntrySequenceNumber(Integer transactionLedgerEntrySequenceNumber) {
@@ -388,7 +383,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the positionNumber attribute.
 	 * 
-	 * @return Returns the positionNumber
+	 * @return - Returns the positionNumber
 	 * 
 	 */
 	public String getPositionNumber() { 
@@ -398,7 +393,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the positionNumber attribute.
 	 * 
-	 * @param positionNumber The positionNumber to set.
+	 * @param - positionNumber The positionNumber to set.
 	 * 
 	 */
 	public void setPositionNumber(String positionNumber) {
@@ -409,7 +404,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the projectCode attribute.
 	 * 
-	 * @return Returns the projectCode
+	 * @return - Returns the projectCode
 	 * 
 	 */
 	public String getProjectCode() { 
@@ -419,7 +414,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the projectCode attribute.
 	 * 
-	 * @param projectCode The projectCode to set.
+	 * @param - projectCode The projectCode to set.
 	 * 
 	 */
 	public void setProjectCode(String projectCode) {
@@ -430,7 +425,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionLedgerEntryDescription attribute.
 	 * 
-	 * @return Returns the transactionLedgerEntryDescription
+	 * @return - Returns the transactionLedgerEntryDescription
 	 * 
 	 */
 	public String getTransactionLedgerEntryDescription() { 
@@ -440,7 +435,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionLedgerEntryDescription attribute.
 	 * 
-	 * @param transactionLedgerEntryDescription The transactionLedgerEntryDescription to set.
+	 * @param - transactionLedgerEntryDescription The transactionLedgerEntryDescription to set.
 	 * 
 	 */
 	public void setTransactionLedgerEntryDescription(String transactionLedgerEntryDescription) {
@@ -451,7 +446,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionLedgerEntryAmount attribute.
 	 * 
-	 * @return Returns the transactionLedgerEntryAmount
+	 * @return - Returns the transactionLedgerEntryAmount
 	 * 
 	 */
 	public KualiDecimal getTransactionLedgerEntryAmount() { 
@@ -461,7 +456,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionLedgerEntryAmount attribute.
 	 * 
-	 * @param transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
+	 * @param - transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
 	 * 
 	 */
 	public void setTransactionLedgerEntryAmount(KualiDecimal transactionLedgerEntryAmount) {
@@ -472,7 +467,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionDebitCreditCode attribute.
 	 * 
-	 * @return Returns the transactionDebitCreditCode
+	 * @return - Returns the transactionDebitCreditCode
 	 * 
 	 */
 	public String getTransactionDebitCreditCode() { 
@@ -482,7 +477,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionDebitCreditCode attribute.
 	 * 
-	 * @param transactionDebitCreditCode The transactionDebitCreditCode to set.
+	 * @param - transactionDebitCreditCode The transactionDebitCreditCode to set.
 	 * 
 	 */
 	public void setTransactionDebitCreditCode(String transactionDebitCreditCode) {
@@ -493,7 +488,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionDate attribute.
 	 * 
-	 * @return Returns the transactionDate
+	 * @return - Returns the transactionDate
 	 * 
 	 */
 	public Date getTransactionDate() { 
@@ -503,7 +498,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionDate attribute.
 	 * 
-	 * @param transactionDate The transactionDate to set.
+	 * @param - transactionDate The transactionDate to set.
 	 * 
 	 */
 	public void setTransactionDate(Date transactionDate) {
@@ -514,7 +509,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the organizationDocumentNumber attribute.
 	 * 
-	 * @return Returns the organizationDocumentNumber
+	 * @return - Returns the organizationDocumentNumber
 	 * 
 	 */
 	public String getOrganizationDocumentNumber() { 
@@ -524,7 +519,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the organizationDocumentNumber attribute.
 	 * 
-	 * @param organizationDocumentNumber The organizationDocumentNumber to set.
+	 * @param - organizationDocumentNumber The organizationDocumentNumber to set.
 	 * 
 	 */
 	public void setOrganizationDocumentNumber(String organizationDocumentNumber) {
@@ -535,7 +530,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the organizationReferenceId attribute.
 	 * 
-	 * @return Returns the organizationReferenceId
+	 * @return - Returns the organizationReferenceId
 	 * 
 	 */
 	public String getOrganizationReferenceId() { 
@@ -545,7 +540,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the organizationReferenceId attribute.
 	 * 
-	 * @param organizationReferenceId The organizationReferenceId to set.
+	 * @param - organizationReferenceId The organizationReferenceId to set.
 	 * 
 	 */
 	public void setOrganizationReferenceId(String organizationReferenceId) {
@@ -556,7 +551,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the referenceFinancialDocumentTypeCode attribute.
 	 * 
-	 * @return Returns the referenceFinancialDocumentTypeCode
+	 * @return - Returns the referenceFinancialDocumentTypeCode
 	 * 
 	 */
 	public String getReferenceFinancialDocumentTypeCode() { 
@@ -566,7 +561,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the referenceFinancialDocumentTypeCode attribute.
 	 * 
-	 * @param referenceFinancialDocumentTypeCode The referenceFinancialDocumentTypeCode to set.
+	 * @param - referenceFinancialDocumentTypeCode The referenceFinancialDocumentTypeCode to set.
 	 * 
 	 */
 	public void setReferenceFinancialDocumentTypeCode(String referenceFinancialDocumentTypeCode) {
@@ -577,7 +572,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the referenceFinancialSystemOriginationCode attribute.
 	 * 
-	 * @return Returns the referenceFinancialSystemOriginationCode
+	 * @return - Returns the referenceFinancialSystemOriginationCode
 	 * 
 	 */
 	public String getReferenceFinancialSystemOriginationCode() { 
@@ -587,7 +582,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the referenceFinancialSystemOriginationCode attribute.
 	 * 
-	 * @param referenceFinancialSystemOriginationCode The referenceFinancialSystemOriginationCode to set.
+	 * @param - referenceFinancialSystemOriginationCode The referenceFinancialSystemOriginationCode to set.
 	 * 
 	 */
 	public void setReferenceFinancialSystemOriginationCode(String referenceFinancialSystemOriginationCode) {
@@ -598,7 +593,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the referenceFinancialDocumentNumber attribute.
 	 * 
-	 * @return Returns the referenceFinancialDocumentNumber
+	 * @return - Returns the referenceFinancialDocumentNumber
 	 * 
 	 */
 	public String getReferenceFinancialDocumentNumber() { 
@@ -608,7 +603,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the referenceFinancialDocumentNumber attribute.
 	 * 
-	 * @param referenceFinancialDocumentNumber The referenceFinancialDocumentNumber to set.
+	 * @param - referenceFinancialDocumentNumber The referenceFinancialDocumentNumber to set.
 	 * 
 	 */
 	public void setReferenceFinancialDocumentNumber(String referenceFinancialDocumentNumber) {
@@ -619,7 +614,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the financialDocumentReversalDate attribute.
 	 * 
-	 * @return Returns the financialDocumentReversalDate
+	 * @return - Returns the financialDocumentReversalDate
 	 * 
 	 */
 	public Date getFinancialDocumentReversalDate() { 
@@ -629,7 +624,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the financialDocumentReversalDate attribute.
 	 * 
-	 * @param financialDocumentReversalDate The financialDocumentReversalDate to set.
+	 * @param - financialDocumentReversalDate The financialDocumentReversalDate to set.
 	 * 
 	 */
 	public void setFinancialDocumentReversalDate(Date financialDocumentReversalDate) {
@@ -640,7 +635,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionEncumbranceUpdateCode attribute.
 	 * 
-	 * @return Returns the transactionEncumbranceUpdateCode
+	 * @return - Returns the transactionEncumbranceUpdateCode
 	 * 
 	 */
 	public String getTransactionEncumbranceUpdateCode() { 
@@ -650,7 +645,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionEncumbranceUpdateCode attribute.
 	 * 
-	 * @param transactionEncumbranceUpdateCode The transactionEncumbranceUpdateCode to set.
+	 * @param - transactionEncumbranceUpdateCode The transactionEncumbranceUpdateCode to set.
 	 * 
 	 */
 	public void setTransactionEncumbranceUpdateCode(String transactionEncumbranceUpdateCode) {
@@ -661,7 +656,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionPostingDate attribute.
 	 * 
-	 * @return Returns the transactionPostingDate
+	 * @return - Returns the transactionPostingDate
 	 * 
 	 */
 	public Date getTransactionPostingDate() { 
@@ -671,7 +666,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionPostingDate attribute.
 	 * 
-	 * @param transactionPostingDate The transactionPostingDate to set.
+	 * @param - transactionPostingDate The transactionPostingDate to set.
 	 * 
 	 */
 	public void setTransactionPostingDate(Date transactionPostingDate) {
@@ -682,7 +677,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the payPeriodEndDate attribute.
 	 * 
-	 * @return Returns the payPeriodEndDate
+	 * @return - Returns the payPeriodEndDate
 	 * 
 	 */
 	public Date getPayPeriodEndDate() { 
@@ -692,7 +687,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the payPeriodEndDate attribute.
 	 * 
-	 * @param payPeriodEndDate The payPeriodEndDate to set.
+	 * @param - payPeriodEndDate The payPeriodEndDate to set.
 	 * 
 	 */
 	public void setPayPeriodEndDate(Date payPeriodEndDate) {
@@ -703,7 +698,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionTotalHours attribute.
 	 * 
-	 * @return Returns the transactionTotalHours
+	 * @return - Returns the transactionTotalHours
 	 * 
 	 */
 	public BigDecimal getTransactionTotalHours() { 
@@ -713,7 +708,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionTotalHours attribute.
 	 * 
-	 * @param transactionTotalHours The transactionTotalHours to set.
+	 * @param - transactionTotalHours The transactionTotalHours to set.
 	 * 
 	 */
 	public void setTransactionTotalHours(BigDecimal transactionTotalHours) {
@@ -724,7 +719,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the payrollEndDateFiscalYear attribute.
 	 * 
-	 * @return Returns the payrollEndDateFiscalYear
+	 * @return - Returns the payrollEndDateFiscalYear
 	 * 
 	 */
 	public Integer getPayrollEndDateFiscalYear() { 
@@ -734,7 +729,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the payrollEndDateFiscalYear attribute.
 	 * 
-	 * @param payrollEndDateFiscalYear The payrollEndDateFiscalYear to set.
+	 * @param - payrollEndDateFiscalYear The payrollEndDateFiscalYear to set.
 	 * 
 	 */
 	public void setPayrollEndDateFiscalYear(Integer payrollEndDateFiscalYear) {
@@ -745,7 +740,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the payrollEndDateFiscalPeriodCode attribute.
 	 * 
-	 * @return Returns the payrollEndDateFiscalPeriodCode
+	 * @return - Returns the payrollEndDateFiscalPeriodCode
 	 * 
 	 */
 	public String getPayrollEndDateFiscalPeriodCode() { 
@@ -755,7 +750,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the payrollEndDateFiscalPeriodCode attribute.
 	 * 
-	 * @param payrollEndDateFiscalPeriodCode The payrollEndDateFiscalPeriodCode to set.
+	 * @param - payrollEndDateFiscalPeriodCode The payrollEndDateFiscalPeriodCode to set.
 	 * 
 	 */
 	public void setPayrollEndDateFiscalPeriodCode(String payrollEndDateFiscalPeriodCode) {
@@ -766,7 +761,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return Returns the emplid
+	 * @return - Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -776,7 +771,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param emplid The emplid to set.
+	 * @param - emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -787,7 +782,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the employeeRecord attribute.
 	 * 
-	 * @return Returns the employeeRecord
+	 * @return - Returns the employeeRecord
 	 * 
 	 */
 	public Integer getEmployeeRecord() { 
@@ -797,7 +792,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the employeeRecord attribute.
 	 * 
-	 * @param employeeRecord The employeeRecord to set.
+	 * @param - employeeRecord The employeeRecord to set.
 	 * 
 	 */
 	public void setEmployeeRecord(Integer employeeRecord) {
@@ -808,7 +803,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the earnCode attribute.
 	 * 
-	 * @return Returns the earnCode
+	 * @return - Returns the earnCode
 	 * 
 	 */
 	public String getEarnCode() { 
@@ -818,7 +813,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the earnCode attribute.
 	 * 
-	 * @param earnCode The earnCode to set.
+	 * @param - earnCode The earnCode to set.
 	 * 
 	 */
 	public void setEarnCode(String earnCode) {
@@ -829,7 +824,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the payGroup attribute.
 	 * 
-	 * @return Returns the payGroup
+	 * @return - Returns the payGroup
 	 * 
 	 */
 	public String getPayGroup() { 
@@ -839,7 +834,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the payGroup attribute.
 	 * 
-	 * @param payGroup The payGroup to set.
+	 * @param - payGroup The payGroup to set.
 	 * 
 	 */
 	public void setPayGroup(String payGroup) {
@@ -850,7 +845,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the salaryAdministrationPlan attribute.
 	 * 
-	 * @return Returns the salaryAdministrationPlan
+	 * @return - Returns the salaryAdministrationPlan
 	 * 
 	 */
 	public String getSalaryAdministrationPlan() { 
@@ -860,7 +855,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the salaryAdministrationPlan attribute.
 	 * 
-	 * @param salaryAdministrationPlan The salaryAdministrationPlan to set.
+	 * @param - salaryAdministrationPlan The salaryAdministrationPlan to set.
 	 * 
 	 */
 	public void setSalaryAdministrationPlan(String salaryAdministrationPlan) {
@@ -871,7 +866,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the grade attribute.
 	 * 
-	 * @return Returns the grade
+	 * @return - Returns the grade
 	 * 
 	 */
 	public String getGrade() { 
@@ -881,7 +876,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the grade attribute.
 	 * 
-	 * @param grade The grade to set.
+	 * @param - grade The grade to set.
 	 * 
 	 */
 	public void setGrade(String grade) {
@@ -892,7 +887,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the runIdentifier attribute.
 	 * 
-	 * @return Returns the runIdentifier
+	 * @return - Returns the runIdentifier
 	 * 
 	 */
 	public String getRunIdentifier() { 
@@ -902,7 +897,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the runIdentifier attribute.
 	 * 
-	 * @param runIdentifier The runIdentifier to set.
+	 * @param - runIdentifier The runIdentifier to set.
 	 * 
 	 */
 	public void setRunIdentifier(String runIdentifier) {
@@ -913,7 +908,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the laborLedgerOriginalChartOfAccountsCode attribute.
 	 * 
-	 * @return Returns the laborLedgerOriginalChartOfAccountsCode
+	 * @return - Returns the laborLedgerOriginalChartOfAccountsCode
 	 * 
 	 */
 	public String getLaborLedgerOriginalChartOfAccountsCode() { 
@@ -923,7 +918,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the laborLedgerOriginalChartOfAccountsCode attribute.
 	 * 
-	 * @param laborLedgerOriginalChartOfAccountsCode The laborLedgerOriginalChartOfAccountsCode to set.
+	 * @param - laborLedgerOriginalChartOfAccountsCode The laborLedgerOriginalChartOfAccountsCode to set.
 	 * 
 	 */
 	public void setLaborLedgerOriginalChartOfAccountsCode(String laborLedgerOriginalChartOfAccountsCode) {
@@ -934,7 +929,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the laborLedgerOriginalAccountNumber attribute.
 	 * 
-	 * @return Returns the laborLedgerOriginalAccountNumber
+	 * @return - Returns the laborLedgerOriginalAccountNumber
 	 * 
 	 */
 	public String getLaborLedgerOriginalAccountNumber() { 
@@ -944,7 +939,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the laborLedgerOriginalAccountNumber attribute.
 	 * 
-	 * @param laborLedgerOriginalAccountNumber The laborLedgerOriginalAccountNumber to set.
+	 * @param - laborLedgerOriginalAccountNumber The laborLedgerOriginalAccountNumber to set.
 	 * 
 	 */
 	public void setLaborLedgerOriginalAccountNumber(String laborLedgerOriginalAccountNumber) {
@@ -955,7 +950,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the laborLedgerOriginalSubAccountNumber attribute.
 	 * 
-	 * @return Returns the laborLedgerOriginalSubAccountNumber
+	 * @return - Returns the laborLedgerOriginalSubAccountNumber
 	 * 
 	 */
 	public String getLaborLedgerOriginalSubAccountNumber() { 
@@ -965,7 +960,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the laborLedgerOriginalSubAccountNumber attribute.
 	 * 
-	 * @param laborLedgerOriginalSubAccountNumber The laborLedgerOriginalSubAccountNumber to set.
+	 * @param - laborLedgerOriginalSubAccountNumber The laborLedgerOriginalSubAccountNumber to set.
 	 * 
 	 */
 	public void setLaborLedgerOriginalSubAccountNumber(String laborLedgerOriginalSubAccountNumber) {
@@ -976,7 +971,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the laborLedgerOriginalFinancialObjectCode attribute.
 	 * 
-	 * @return Returns the laborLedgerOriginalFinancialObjectCode
+	 * @return - Returns the laborLedgerOriginalFinancialObjectCode
 	 * 
 	 */
 	public String getLaborLedgerOriginalFinancialObjectCode() { 
@@ -986,7 +981,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the laborLedgerOriginalFinancialObjectCode attribute.
 	 * 
-	 * @param laborLedgerOriginalFinancialObjectCode The laborLedgerOriginalFinancialObjectCode to set.
+	 * @param - laborLedgerOriginalFinancialObjectCode The laborLedgerOriginalFinancialObjectCode to set.
 	 * 
 	 */
 	public void setLaborLedgerOriginalFinancialObjectCode(String laborLedgerOriginalFinancialObjectCode) {
@@ -997,7 +992,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the laborLedgerOriginalFinancialSubObjectCode attribute.
 	 * 
-	 * @return Returns the laborLedgerOriginalFinancialSubObjectCode
+	 * @return - Returns the laborLedgerOriginalFinancialSubObjectCode
 	 * 
 	 */
 	public String getLaborLedgerOriginalFinancialSubObjectCode() { 
@@ -1007,7 +1002,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the laborLedgerOriginalFinancialSubObjectCode attribute.
 	 * 
-	 * @param laborLedgerOriginalFinancialSubObjectCode The laborLedgerOriginalFinancialSubObjectCode to set.
+	 * @param - laborLedgerOriginalFinancialSubObjectCode The laborLedgerOriginalFinancialSubObjectCode to set.
 	 * 
 	 */
 	public void setLaborLedgerOriginalFinancialSubObjectCode(String laborLedgerOriginalFinancialSubObjectCode) {
@@ -1018,7 +1013,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the hrmsCompany attribute.
 	 * 
-	 * @return Returns the hrmsCompany
+	 * @return - Returns the hrmsCompany
 	 * 
 	 */
 	public String getHrmsCompany() { 
@@ -1028,7 +1023,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the hrmsCompany attribute.
 	 * 
-	 * @param hrmsCompany The hrmsCompany to set.
+	 * @param - hrmsCompany The hrmsCompany to set.
 	 * 
 	 */
 	public void setHrmsCompany(String hrmsCompany) {
@@ -1039,7 +1034,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the setid attribute.
 	 * 
-	 * @return Returns the setid
+	 * @return - Returns the setid
 	 * 
 	 */
 	public String getSetid() { 
@@ -1049,7 +1044,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the setid attribute.
 	 * 
-	 * @param setid The setid to set.
+	 * @param - setid The setid to set.
 	 * 
 	 */
 	public void setSetid(String setid) {
@@ -1060,7 +1055,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the transactionDateTimeStamp attribute.
 	 * 
-	 * @return Returns the transactionDateTimeStamp
+	 * @return - Returns the transactionDateTimeStamp
 	 * 
 	 */
 	public Timestamp getTransactionDateTimeStamp() { 
@@ -1070,17 +1065,38 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the transactionDateTimeStamp attribute.
 	 * 
-	 * @param transactionDateTimeStamp The transactionDateTimeStamp to set.
+	 * @param - transactionDateTimeStamp The transactionDateTimeStamp to set.
 	 * 
 	 */
 	public void setTransactionDateTimeStamp(Timestamp transactionDateTimeStamp) {
 		this.transactionDateTimeStamp = transactionDateTimeStamp;
 	}
 
+
+	/**
+	 * Gets the laborLedgerOriginalFinancialObject attribute.
+	 * 
+	 * @return - Returns the laborLedgerOriginalFinancialObject
+	 * 
+	 */
+	public ObjectCode getLaborLedgerOriginalFinancialObject() { 
+		return laborLedgerOriginalFinancialObject;
+	}
+
+	/**
+	 * Sets the laborLedgerOriginalFinancialObject attribute.
+	 * 
+	 * @param - laborLedgerOriginalFinancialObject The laborLedgerOriginalFinancialObject to set.
+	 * @deprecated
+	 */
+	public void setLaborLedgerOriginalFinancialObject(ObjectCode laborLedgerOriginalFinancialObject) {
+		this.laborLedgerOriginalFinancialObject = laborLedgerOriginalFinancialObject;
+	}
+
 	/**
 	 * Gets the financialObject attribute.
 	 * 
-	 * @return Returns the financialObject
+	 * @return - Returns the financialObject
 	 * 
 	 */
 	public ObjectCode getFinancialObject() { 
@@ -1090,9 +1106,9 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the financialObject attribute.
 	 * 
-	 * @param financialObject The financialObject to set.
+	 * @param - financialObject The financialObject to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setFinancialObject(ObjectCode financialObject) {
 		this.financialObject = financialObject;
 	}
@@ -1100,7 +1116,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the chartOfAccounts attribute.
 	 * 
-	 * @return Returns the chartOfAccounts
+	 * @return - Returns the chartOfAccounts
 	 * 
 	 */
 	public Chart getChartOfAccounts() { 
@@ -1110,9 +1126,9 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the chartOfAccounts attribute.
 	 * 
-	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @param - chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setChartOfAccounts(Chart chartOfAccounts) {
 		this.chartOfAccounts = chartOfAccounts;
 	}
@@ -1120,7 +1136,7 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Gets the account attribute.
 	 * 
-	 * @return Returns the account
+	 * @return - Returns the account
 	 * 
 	 */
 	public Account getAccount() { 
@@ -1130,11 +1146,51 @@ public class LedgerEntry extends Entry {
 	/**
 	 * Sets the account attribute.
 	 * 
-	 * @param account The account to set.
+	 * @param - account The account to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	/**
+	 * Gets the laborLedgerOriginalChartOfAccounts attribute.
+	 * 
+	 * @return - Returns the laborLedgerOriginalChartOfAccounts
+	 * 
+	 */
+	public Chart getLaborLedgerOriginalChartOfAccounts() { 
+		return laborLedgerOriginalChartOfAccounts;
+	}
+
+	/**
+	 * Sets the laborLedgerOriginalChartOfAccounts attribute.
+	 * 
+	 * @param - laborLedgerOriginalChartOfAccounts The laborLedgerOriginalChartOfAccounts to set.
+	 * @deprecated
+	 */
+	public void setLaborLedgerOriginalChartOfAccounts(Chart laborLedgerOriginalChartOfAccounts) {
+		this.laborLedgerOriginalChartOfAccounts = laborLedgerOriginalChartOfAccounts;
+	}
+
+	/**
+	 * Gets the laborLedgerOriginalAccount attribute.
+	 * 
+	 * @return - Returns the laborLedgerOriginalAccount
+	 * 
+	 */
+	public Account getLaborLedgerOriginalAccount() { 
+		return laborLedgerOriginalAccount;
+	}
+
+	/**
+	 * Sets the laborLedgerOriginalAccount attribute.
+	 * 
+	 * @param - laborLedgerOriginalAccount The laborLedgerOriginalAccount to set.
+	 * @deprecated
+	 */
+	public void setLaborLedgerOriginalAccount(Account laborLedgerOriginalAccount) {
+		this.laborLedgerOriginalAccount = laborLedgerOriginalAccount;
 	}
 
     /**
@@ -1148,8 +1204,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the universityFiscalPeriod attribute value.
      * @param universityFiscalPeriod The universityFiscalPeriod to set.
+     * @deprecated
      */
-    @Deprecated
     public void setUniversityFiscalPeriod(AccountingPeriod universityFiscalPeriod) {
         this.universityFiscalPeriod = universityFiscalPeriod;
     }
@@ -1165,8 +1221,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the balanceType attribute value.
      * @param balanceType The balanceType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setBalanceType(BalanceTyp balanceType) {
         this.balanceType = balanceType;
     }
@@ -1182,8 +1238,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the documentHeader attribute value.
      * @param documentHeader The documentHeader to set.
+     * @deprecated
      */
-    @Deprecated
     public void setDocumentHeader(DocumentHeader documentHeader) {
         this.documentHeader = documentHeader;
     }
@@ -1199,8 +1255,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the documentType attribute value.
      * @param documentType The documentType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
     }
@@ -1216,8 +1272,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the financialObjectType attribute value.
      * @param financialObjectType The financialObjectType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialObjectType(ObjectType financialObjectType) {
         this.financialObjectType = financialObjectType;
     }
@@ -1233,10 +1289,44 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the financialSubObject attribute value.
      * @param financialSubObject The financialSubObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialSubObject(SubObjCd financialSubObject) {
         this.financialSubObject = financialSubObject;
+    }
+
+    /**
+     * Gets the laborLedgerOriginalFinancialSubObject attribute. 
+     * @return Returns the laborLedgerOriginalFinancialSubObject.
+     */
+    public SubObjCd getLaborLedgerOriginalFinancialSubObject() {
+        return laborLedgerOriginalFinancialSubObject;
+    }
+
+    /**
+     * Sets the laborLedgerOriginalFinancialSubObject attribute value.
+     * @param laborLedgerOriginalFinancialSubObject The laborLedgerOriginalFinancialSubObject to set.
+     * @deprecated
+     */
+    public void setLaborLedgerOriginalFinancialSubObject(SubObjCd laborLedgerOriginalFinancialSubObject) {
+        this.laborLedgerOriginalFinancialSubObject = laborLedgerOriginalFinancialSubObject;
+    }
+
+    /**
+     * Gets the laborLedgerOriginalSubAccount attribute. 
+     * @return Returns the laborLedgerOriginalSubAccount.
+     */
+    public SubAccount getLaborLedgerOriginalSubAccount() {
+        return laborLedgerOriginalSubAccount;
+    }
+
+    /**
+     * Sets the laborLedgerOriginalSubAccount attribute value.
+     * @param laborLedgerOriginalSubAccount The laborLedgerOriginalSubAccount to set.
+     * @deprecated
+     */
+    public void setLaborLedgerOriginalSubAccount(SubAccount laborLedgerOriginalSubAccount) {
+        this.laborLedgerOriginalSubAccount = laborLedgerOriginalSubAccount;
     }
 
     /**
@@ -1250,8 +1340,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the option attribute value.
      * @param option The option to set.
+     * @deprecated
      */
-    @Deprecated
     public void setOption(Options option) {
         this.option = option;
     }
@@ -1267,8 +1357,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the payrollEndDateFiscalPeriod attribute value.
      * @param payrollEndDateFiscalPeriod The payrollEndDateFiscalPeriod to set.
+     * @deprecated
      */
-    @Deprecated
     public void setPayrollEndDateFiscalPeriod(AccountingPeriod payrollEndDateFiscalPeriod) {
         this.payrollEndDateFiscalPeriod = payrollEndDateFiscalPeriod;
     }
@@ -1284,8 +1374,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the project attribute value.
      * @param project The project to set.
+     * @deprecated
      */
-    @Deprecated
     public void setProject(ProjectCode project) {
         this.project = project;
     }
@@ -1301,8 +1391,8 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the referenceDocumentType attribute value.
      * @param referenceDocumentType The referenceDocumentType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setReferenceDocumentType(DocumentType referenceDocumentType) {
         this.referenceDocumentType = referenceDocumentType;
     }
@@ -1318,10 +1408,27 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the referenceOriginationCode attribute value.
      * @param referenceOriginationCode The referenceOriginationCode to set.
+     * @deprecated
      */
-    @Deprecated
     public void setReferenceOriginationCode(OriginationCode referenceOriginationCode) {
         this.referenceOriginationCode = referenceOriginationCode;
+    }
+
+    /**
+     * Gets the reversalDate attribute. 
+     * @return Returns the reversalDate.
+     */
+    public UniversityDate getReversalDate() {
+        return reversalDate;
+    }
+
+    /**
+     * Sets the reversalDate attribute value.
+     * @param reversalDate The reversalDate to set.
+     * @deprecated
+     */
+    public void setReversalDate(UniversityDate reversalDate) {
+        this.reversalDate = reversalDate;
     }
 
     /**
@@ -1335,48 +1442,31 @@ public class LedgerEntry extends Entry {
     /**
      * Sets the subAccount attribute value.
      * @param subAccount The subAccount to set.
+     * @deprecated
      */
-    @Deprecated
     public void setSubAccount(SubAccount subAccount) {
         this.subAccount = subAccount;
     }
 
     /**
-     * Gets the financialSystemOrigination attribute. 
-     * @return Returns the financialSystemOrigination.
+     * Gets the company attribute. 
+     * @return Returns the company.
      */
-    public OriginationCode getFinancialSystemOrigination() {
-        return financialSystemOrigination;
+    public CalculatedSalaryFoundationCompany getCompany() {
+        return company;
     }
 
     /**
-     * Sets the financialSystemOrigination attribute value.
-     * @param financialSystemOrigination The financialSystemOrigination to set.
+     * Sets the company attribute value.
+     * @param company The company to set.
+     * @deprecated
      */
-    @Deprecated
-    public void setFinancialSystemOrigination(OriginationCode financialSystemOrigination) {
-        this.financialSystemOrigination = financialSystemOrigination;
-    }    
-
-    /**
-     * Gets the ledgerBalance attribute. 
-     * @return Returns the ledgerBalance.
-     */
-    public LedgerBalance getLedgerBalance() {
-        return ledgerBalance;
-    }
-
-    /**
-     * Sets the ledgerBalance attribute value.
-     * @param ledgerBalance The ledgerBalance to set.
-     */
-    @Deprecated
-    public void setLedgerBalance(LedgerBalance ledgerBalance) {
-        this.ledgerBalance = ledgerBalance;
+    public void setCompany(CalculatedSalaryFoundationCompany company) {
+        this.company = company;
     }    
     
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();      
@@ -1392,26 +1482,11 @@ public class LedgerEntry extends Entry {
         m.put("financialObjectTypeCode", this.financialObjectTypeCode);
         m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         if (this.transactionLedgerEntrySequenceNumber != null) {
             m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
         }
         return m;
     }
 
-    /**
-     * Gets the laborObject attribute. 
-     * @return Returns the laborObject.
-     */
-    public LaborObject getLaborObject() {
-        return laborObject;
-    }
-
-    /**
-     * Sets the laborObject attribute value.
-     * @param laborObject The laborObject to set.
-     */
-    public void setLaborObject(LaborObject laborObject) {
-        this.laborObject = laborObject;
-    }
 }

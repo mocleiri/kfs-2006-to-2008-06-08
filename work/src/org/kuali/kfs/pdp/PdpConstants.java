@@ -15,23 +15,8 @@
  */
 package org.kuali.module.pdp;
 
-
 public class PdpConstants {
     public static final String PDP_APPLICATION = "PDP";
-
-    public static class PayeeTypeCodes {
-        public static String VENDOR = "V";
-    }
-
-    // TODO Probably should become a table
-    public static class PayeeIdTypeCodes {
-        public static String PAYEE_ID = "P";
-        public static String SSN = "S";
-        public static String EMPLOYEE_ID = "E";
-        public static String FEIN = "F";
-        public static String VENDOR_ID = "V";
-        public static String OTHER = "X";
-    }
 
     public static class Groups {
         // Security Workgroup names
@@ -60,14 +45,6 @@ public class PdpConstants {
         public static String TAX_GROUP_EMAIL_ADDRESS = "TAX_GROUP_EMAIL_ADDRESS";
         public static String TAX_CANCEL_EMAIL_LIST = "TAX_CANCEL_EMAIL_LIST";
 
-        public static String MAX_NOTE_LINES = "MAX_NOTE_LINES";
-        public static String FORMAT_SUMMARY_ROWS = "FORMAT_SUMMARY_ROWS";
-
         public static String DISBURSEMENT_ACTION_EXPIRATION_DAYS = "DISBURSEMENT_ACTION_EXPIRATION_DAYS";
-    }
-
-    public static class PaymentStatusCodes {
-        public static String FORMAT = "FORM";
-        public static String OPEN = "OPEN";
     }
 }

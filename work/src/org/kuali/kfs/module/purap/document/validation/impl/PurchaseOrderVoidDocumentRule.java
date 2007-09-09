@@ -15,32 +15,18 @@
  */
 package org.kuali.module.purap.rules;
 
-import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
-
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
-import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.rules.TransactionalDocumentRuleBase;
 import org.kuali.core.service.UniversalUserService;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapParameterConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
-import org.kuali.module.purap.PurapConstants.PurchaseOrderStatuses;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.service.PurapGeneralLedgerService;
 
-public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
+public class PurchaseOrderVoidDocumentRule extends TransactionalDocumentRuleBase {
 
     /**
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
@@ -66,49 +52,38 @@ public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
         return isValid;
     }
 
-    public boolean processValidation(PurchaseOrderDocument document) {
+    private boolean processValidation(PurchaseOrderDocument document) {
         boolean valid = true;
-
-        // Check that the PO is not null
+        //return true for now, we need to check EPIC to see if there are any rules for this doc
+        
+        //check that the PO is not null
         if (ObjectUtils.isNull(document)) {
-            throw new ValidationException("Purchase Order Void document was null on validation.");
+          //ServiceError se = new ServiceError("invalid PO", "purchaseOrder.invalid");
+          valid = false;
         }
-        else {
-            // TODO: Get this from Business Rules.
-            // The PO must be in OPEN status.
-            if (!StringUtils.equalsIgnoreCase(document.getStatusCode(), PurchaseOrderStatuses.OPEN)) {
-                valid = false;
-                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.STATUS_CODE, PurapKeyConstants.ERROR_PURCHASE_ORDER_STATUS_NOT_REQUIRED_STATUS, PurchaseOrderStatuses.OPEN);
-            }
 
-            // Check that the user is in purchasing workgroup.
-            String initiatorNetworkId = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
-            UniversalUserService uus = SpringContext.getBean(UniversalUserService.class);
-            UniversalUser user = null;
-            try {
-                user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
-                String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
-                if (!uus.isMember(user, purchasingGroup)) {
-                    valid = false;
-                }
-            }
-            catch (UserNotFoundException ue) {
+        //check that the user is in purchasing workgroup
+        String initiatorNetworkId = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
+        UniversalUserService uus = SpringServiceLocator.getUniversalUserService();
+        UniversalUser user = null;
+        try {
+            user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
+            String purchasingGroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("PurapAdminGroup", PurapConstants.Workgroups.WORKGROUP_PURCHASING);
+            if (!uus.isMember(user, purchasingGroup )) {
                 valid = false;
             }
+        } catch (UserNotFoundException ue) {
+            valid = false;
         }
+
+        //check the PO status
+        String poStatus = document.getStatus().getStatusCode();
+        if (poStatus.equals(PurapConstants.PurchaseOrderStatuses.CLOSED)) {
+            valid = false;
+        }
+        
         return valid;
     }
 
-    @Override
-    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument accountingDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        super.customizeExplicitGeneralLedgerPendingEntry(accountingDocument, accountingLine, explicitEntry);
-        PurchaseOrderDocument po = (PurchaseOrderDocument)accountingDocument;
-
-        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(po, 
-                accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_CREDIT_CODE, PurapDocTypeCodes.PO_DOCUMENT, true);
-
-        explicitEntry.setFinancialDocumentTypeCode(PurapDocTypeCodes.PO_VOID_DOCUMENT);  //don't think i should have to override this, but default isn't getting the right PO doc
-
-    }
 
 }

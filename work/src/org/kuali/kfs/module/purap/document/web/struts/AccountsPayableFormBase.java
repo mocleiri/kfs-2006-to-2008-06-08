@@ -15,43 +15,43 @@
  */
 package org.kuali.module.purap.web.struts.form;
 
-import org.kuali.core.web.ui.ExtraButton;
-import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
+import org.kuali.module.purap.bo.PurchasingApItem;
 
 /**
- * This class is the form class for the Purchasing documents.
+ * This class is the form class for the Purchasing documents. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the Purchasing documents.
+ * 
  */
-public class AccountsPayableFormBase extends PurchasingAccountsPayableFormBase {
+public class AccountsPayableFormBase extends KualiTransactionalDocumentFormBase {
     
-    private PurApItem newPurchasingItemLine;
-    private Boolean notOtherDeliveryBuilding;
-    private boolean calculated;
+    private PurchasingApItem newPurchasingItemLine;
+    private Boolean notOtherDelBldg = true;
     
     /**
      * Constructs a RequisitionForm instance and sets up the appropriately casted document. 
      */
     public AccountsPayableFormBase() {
         super();
-        calculated = false;
-        notOtherDeliveryBuilding = true;
     }
     /**
      * Gets the newPurchasingItemLine attribute. 
      * @return Returns the newPurchasingItemLine.
      */
-    public PurApItem getNewPurchasingItemLine() {
+    public PurchasingApItem getNewPurchasingItemLine() {
         return newPurchasingItemLine;
     }
     /**
      * Sets the newPurchasingItemLine attribute value.
      * @param newPurchasingItemLine The newPurchasingItemLine to set.
      */
-    public void setNewPurchasingItemLine(PurApItem newPurchasingItemLine) {
+    public void setNewPurchasingItemLine(PurchasingApItem newPurchasingItemLine) {
         this.newPurchasingItemLine = newPurchasingItemLine;
     }
     
-    public PurApItem getAndResetNewPurchasingItemLine() {
-        PurApItem aPurchasingItemLine = getNewPurchasingItemLine();
+    public PurchasingApItem getAndResetNewPurchasingItemLine() {
+        PurchasingApItem aPurchasingItemLine = getNewPurchasingItemLine();
         setNewPurchasingItemLine(setupNewPurchasingItemLine());
         return aPurchasingItemLine;
     }
@@ -61,39 +61,14 @@ public class AccountsPayableFormBase extends PurchasingAccountsPayableFormBase {
      * This method should be overriden (or see accountingLines for an alternate way of doing this with newInstance)
      * @return
      */
-    public PurApItem setupNewPurchasingItemLine() {
+    public PurchasingApItem setupNewPurchasingItemLine() {
         return null;
     }
-    public Boolean getNotOtherDeliveryBuilding() {
-        return notOtherDeliveryBuilding;
+    public Boolean getNotOtherDelBldg() {
+        return notOtherDelBldg;
     }
-    public void setNotOtherDeliveryBuilding(Boolean notOtherDeliveryBuilding) {
-        this.notOtherDeliveryBuilding = notOtherDeliveryBuilding;
-    }
-    public boolean isCalculated() {
-        return calculated;
-    }
-    public void setCalculated(boolean calculated) {
-        this.calculated = calculated;
-    }
-    
-    /**
-     * This is a utility method to add a new button to the extra buttons
-     * collection.
-     *   
-     * @param property
-     * @param source
-     * @param altText
-     */ 
-    protected void addExtraButton(String property, String source, String altText){
-        
-        ExtraButton newButton = new ExtraButton();
-        
-        newButton.setExtraButtonProperty(property);
-        newButton.setExtraButtonSource(source);
-        newButton.setExtraButtonAltText(altText);
-        
-        extraButtons.add(newButton);
+    public void setNotOtherDelBldg(Boolean notOtherDelBldg) {
+        this.notOtherDelBldg = notOtherDelBldg;
     }
        
 }

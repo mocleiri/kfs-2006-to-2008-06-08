@@ -18,17 +18,10 @@ package org.kuali.module.cg;
 import org.kuali.core.JstlConstants;
 
 /**
- * Constants specific to the Contracts and Grants module.
+ * User: Laran Evans <lc278@cornell.edu>
+ * Date: Apr 23, 2007
+ * Time: 12:33:59 PM
  */
 public class CGConstants extends JstlConstants {
-
-    /**
-     * The key for the document error map to grab errors for the close document.
-     */
     public static final String CLOSE_DOCUMENT_TAB_ERRORS = "document.close*";
-    
-    /**
-     * The name of the workgroup for Contracts and Grants documents.
-     */
-    public static final String GROUP_CG_MAINT_EDOCS = "CgMaintenanceEDoc";
 }

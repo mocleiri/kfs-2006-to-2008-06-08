@@ -29,7 +29,7 @@ public class LaborNightlyOutStep extends AbstractStep {
     /**
      * @see org.kuali.kfs.batch.Step#execute()
      */
-    public boolean execute(String jobName) {
+    public boolean execute() {
         try{
             laborNightlyOutService.copyApprovedPendingLedgerEntries();
         }

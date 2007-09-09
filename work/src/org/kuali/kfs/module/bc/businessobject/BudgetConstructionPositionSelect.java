@@ -1,26 +1,38 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
-public class BudgetConstructionPositionSelect extends PersistableBusinessObjectBase {
+/**
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ */
+public class BudgetConstructionPositionSelect extends BusinessObjectBase {
 
 	private String personUniversalIdentifier;
 	private String positionNumber;
@@ -33,8 +45,6 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	private String grade;
 	private String positionDescription;
 	private String personName;
-    
-    private BudgetConstructionPosition budgetConstructionPosition;
 
 	/**
 	 * Default constructor.
@@ -46,7 +56,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the personUniversalIdentifier attribute.
 	 * 
-	 * @return Returns the personUniversalIdentifier
+	 * @return - Returns the personUniversalIdentifier
 	 * 
 	 */
 	public String getPersonUniversalIdentifier() { 
@@ -56,7 +66,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the personUniversalIdentifier attribute.
 	 * 
-	 * @param personUniversalIdentifier The personUniversalIdentifier to set.
+	 * @param - personUniversalIdentifier The personUniversalIdentifier to set.
 	 * 
 	 */
 	public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
@@ -67,7 +77,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the positionNumber attribute.
 	 * 
-	 * @return Returns the positionNumber
+	 * @return - Returns the positionNumber
 	 * 
 	 */
 	public String getPositionNumber() { 
@@ -77,7 +87,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the positionNumber attribute.
 	 * 
-	 * @param positionNumber The positionNumber to set.
+	 * @param - positionNumber The positionNumber to set.
 	 * 
 	 */
 	public void setPositionNumber(String positionNumber) {
@@ -88,7 +98,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the universityFiscalYear attribute.
 	 * 
-	 * @return Returns the universityFiscalYear
+	 * @return - Returns the universityFiscalYear
 	 * 
 	 */
 	public Integer getUniversityFiscalYear() { 
@@ -98,7 +108,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the universityFiscalYear attribute.
 	 * 
-	 * @param universityFiscalYear The universityFiscalYear to set.
+	 * @param - universityFiscalYear The universityFiscalYear to set.
 	 * 
 	 */
 	public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -109,7 +119,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return Returns the emplid
+	 * @return - Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -119,7 +129,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param emplid The emplid to set.
+	 * @param - emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -130,7 +140,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the iuPositionType attribute.
 	 * 
-	 * @return Returns the iuPositionType
+	 * @return - Returns the iuPositionType
 	 * 
 	 */
 	public String getIuPositionType() { 
@@ -140,7 +150,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the iuPositionType attribute.
 	 * 
-	 * @param iuPositionType The iuPositionType to set.
+	 * @param - iuPositionType The iuPositionType to set.
 	 * 
 	 */
 	public void setIuPositionType(String iuPositionType) {
@@ -151,7 +161,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the positionDepartmentIdentifier attribute.
 	 * 
-	 * @return Returns the positionDepartmentIdentifier
+	 * @return - Returns the positionDepartmentIdentifier
 	 * 
 	 */
 	public String getPositionDepartmentIdentifier() { 
@@ -161,7 +171,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the positionDepartmentIdentifier attribute.
 	 * 
-	 * @param positionDepartmentIdentifier The positionDepartmentIdentifier to set.
+	 * @param - positionDepartmentIdentifier The positionDepartmentIdentifier to set.
 	 * 
 	 */
 	public void setPositionDepartmentIdentifier(String positionDepartmentIdentifier) {
@@ -172,7 +182,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the setidSalary attribute.
 	 * 
-	 * @return Returns the setidSalary
+	 * @return - Returns the setidSalary
 	 * 
 	 */
 	public String getSetidSalary() { 
@@ -182,7 +192,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the setidSalary attribute.
 	 * 
-	 * @param setidSalary The setidSalary to set.
+	 * @param - setidSalary The setidSalary to set.
 	 * 
 	 */
 	public void setSetidSalary(String setidSalary) {
@@ -193,7 +203,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the salaryAdministrationPlan attribute.
 	 * 
-	 * @return Returns the salaryAdministrationPlan
+	 * @return - Returns the salaryAdministrationPlan
 	 * 
 	 */
 	public String getSalaryAdministrationPlan() { 
@@ -203,7 +213,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the salaryAdministrationPlan attribute.
 	 * 
-	 * @param salaryAdministrationPlan The salaryAdministrationPlan to set.
+	 * @param - salaryAdministrationPlan The salaryAdministrationPlan to set.
 	 * 
 	 */
 	public void setSalaryAdministrationPlan(String salaryAdministrationPlan) {
@@ -214,7 +224,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the grade attribute.
 	 * 
-	 * @return Returns the grade
+	 * @return - Returns the grade
 	 * 
 	 */
 	public String getGrade() { 
@@ -224,7 +234,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the grade attribute.
 	 * 
-	 * @param grade The grade to set.
+	 * @param - grade The grade to set.
 	 * 
 	 */
 	public void setGrade(String grade) {
@@ -235,7 +245,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the positionDescription attribute.
 	 * 
-	 * @return Returns the positionDescription
+	 * @return - Returns the positionDescription
 	 * 
 	 */
 	public String getPositionDescription() { 
@@ -245,7 +255,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the positionDescription attribute.
 	 * 
-	 * @param positionDescription The positionDescription to set.
+	 * @param - positionDescription The positionDescription to set.
 	 * 
 	 */
 	public void setPositionDescription(String positionDescription) {
@@ -256,7 +266,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Gets the personName attribute.
 	 * 
-	 * @return Returns the personName
+	 * @return - Returns the personName
 	 * 
 	 */
 	public String getPersonName() { 
@@ -266,7 +276,7 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	/**
 	 * Sets the personName attribute.
 	 * 
-	 * @param personName The personName to set.
+	 * @param - personName The personName to set.
 	 * 
 	 */
 	public void setPersonName(String personName) {
@@ -274,28 +284,8 @@ public class BudgetConstructionPositionSelect extends PersistableBusinessObjectB
 	}
 
 
-    /**
-     * Gets the budgetConstructionPosition attribute.
-     * 
-     * @return Returns the budgetConstructionPosition
-     * 
-     */
-    public BudgetConstructionPosition getBudgetConstructionPosition() { 
-        return budgetConstructionPosition;
-    }
-
-    /**
-     * Sets the budgetConstructionPosition attribute.
-     * 
-     * @param budgetConstructionPosition The budgetConstructionPosition to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionPosition(BudgetConstructionPosition budgetConstructionPosition) {
-        this.budgetConstructionPosition = budgetConstructionPosition;
-    }
-
 	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    

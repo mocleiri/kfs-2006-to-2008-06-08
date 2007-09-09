@@ -16,110 +16,41 @@
 
 package org.kuali.module.labor.web.struts.form;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts.upload.FormFile;
+import org.kuali.Constants;
+import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
+import org.kuali.core.web.struts.form.KualiTableRenderFormMetadata;
 import org.kuali.core.web.ui.Column;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.web.struts.form.CorrectionForm;
+import org.kuali.module.gl.web.struts.form.GroupHolder;
 import org.kuali.module.labor.bo.LaborOriginEntry;
-import org.kuali.module.labor.document.LaborCorrectionDocument;
-import org.kuali.module.labor.service.LaborCorrectionDocumentService;
 
 public class LaborCorrectionForm extends CorrectionForm {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborCorrectionForm.class);
+
+    private List<LaborOriginEntry> allEntries;
+    private List<LaborOriginEntry> displayEntries;
     
-    private LaborOriginEntry laborEntryForManualEdit;
-    
-    private String laborEntryUniversityFiscalYear;
-    private String laborEntryFinancialDocumentReversalDate;
-    private String laborEntryTransactionDate;
-    private String laborEntryTransactionLedgerEntrySequenceNumber;
-    private String laborEntryTransactionLedgerEntryAmount;
-    
-    
-     public LaborCorrectionForm() {
+    private LaborOriginEntry entryForManualEdit;
+
+    public LaborCorrectionForm() {
         super();
-        laborEntryForManualEdit = new LaborOriginEntry();
-        laborEntryForManualEdit.setEntryId(0);
-        setDocument(new LaborCorrectionDocument());
-        
     }
     public void clearForm() {
         super.clearForm();
         
-    }
-    
-    
-    
-    public void clearLaborEntryForManualEdit() {
-        LaborOriginEntry loe = new LaborOriginEntry();
-        loe.setEntryId(0);
-        loe.setSubAccountNumber("");
-        loe.setFinancialSubObjectCode("");
-        loe.setProjectCode("");
-        setLaborEntryFinancialDocumentReversalDate("");
-        setLaborEntryTransactionDate("");
-        setLaborEntryTransactionLedgerEntryAmount("");
-        setLaborEntryTransactionLedgerEntrySequenceNumber("");
-        setLaborEntryUniversityFiscalYear("");
-        setLaborEntryForManualEdit(loe);
-    }
-    
-    
-    public void setDocType(){
-        setDocumentType("LLCP");
-        setDocTitle("Labor Ledger Correction Process");
-        setHtmlFormAction("laborLedgerCorrection");
-    }
-    public LaborOriginEntry getLaborEntryForManualEdit() {
-        return laborEntryForManualEdit;
-    }
-    public void setLaborEntryForManualEdit(LaborOriginEntry laborEntryForManualEdit) {
-        this.laborEntryForManualEdit = laborEntryForManualEdit;
-    }
-    
-    
-    public void updateLaborEntryForManualEdit() {
-        laborEntryForManualEdit.setFieldValue("universityFiscalYear", getLaborEntryUniversityFiscalYear());
-        laborEntryForManualEdit.setFieldValue("transactionLedgerEntrySequenceNumber",getLaborEntryTransactionLedgerEntrySequenceNumber());
-        laborEntryForManualEdit.setFieldValue("transactionLedgerEntryAmount", getLaborEntryTransactionLedgerEntryAmount());
-        laborEntryForManualEdit.setFieldValue("transactionDate", getLaborEntryTransactionDate());
-        laborEntryForManualEdit.setFieldValue("financialDocumentReversalDate",getLaborEntryFinancialDocumentReversalDate());
-    }
-    public String getLaborEntryFinancialDocumentReversalDate() {
-        return laborEntryFinancialDocumentReversalDate;
-    }
-    public void setLaborEntryFinancialDocumentReversalDate(String laborEntryFinancialDocumentReversalDate) {
-        this.laborEntryFinancialDocumentReversalDate = laborEntryFinancialDocumentReversalDate;
-    }
-    public String getLaborEntryTransactionDate() {
-        return laborEntryTransactionDate;
-    }
-    public void setLaborEntryTransactionDate(String laborEntryTransactionDate) {
-        this.laborEntryTransactionDate = laborEntryTransactionDate;
-    }
-    public String getLaborEntryTransactionLedgerEntryAmount() {
-        return laborEntryTransactionLedgerEntryAmount;
-    }
-    public void setLaborEntryTransactionLedgerEntryAmount(String laborEntryTransactionLedgerEntryAmount) {
-        this.laborEntryTransactionLedgerEntryAmount = laborEntryTransactionLedgerEntryAmount;
-    }
-    public String getLaborEntryTransactionLedgerEntrySequenceNumber() {
-        return laborEntryTransactionLedgerEntrySequenceNumber;
-    }
-    public void setLaborEntryTransactionLedgerEntrySequenceNumber(String laborEntryTransactionLedgerEntrySequenceNumber) {
-        this.laborEntryTransactionLedgerEntrySequenceNumber = laborEntryTransactionLedgerEntrySequenceNumber;
-    }
-    public String getLaborEntryUniversityFiscalYear() {
-        return laborEntryUniversityFiscalYear;
-    }
-    public void setLaborEntryUniversityFiscalYear(String laborEntryUniversityFiscalYear) {
-        this.laborEntryUniversityFiscalYear = laborEntryUniversityFiscalYear;
-    }
-    public LaborCorrectionDocument getLaborCorrectionDocument() {
-        return (LaborCorrectionDocument)getDocument();
-    }
-    public List<Column> getTableRenderColumnMetadata() {
-        return SpringContext.getBean(LaborCorrectionDocumentService.class).getTableRenderColumnMetadata(getDocument().getDocumentNumber());
+        allEntries = new ArrayList<LaborOriginEntry>();
+        displayEntries = new ArrayList<LaborOriginEntry>();
     }
  }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/document/web/struts/SalaryExpenseTransferAction.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +17,14 @@
  */
 package org.kuali.module.labor.web.struts.action;
 
-import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.util.ObjectUtil;
-import org.kuali.module.labor.web.struts.form.SalaryExpenseTransferForm;
-import org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase;
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 
 /**
  * This class extends the parent KualiTransactionalDocumentActionBase class, which contains all common action methods. Since the SEP
  * follows the basic transactional document pattern, there are no specific actions that it has to implement; however, this empty
  * class is necessary for integrating into the framework.
+ * 
+ * 
  */
-public class SalaryExpenseTransferAction extends ExpenseTransferDocumentActionBase {
-    /**
-     * @see org.kuali.module.labor.web.struts.action.ExpenseTransferDocumentActionBase#resetLookupFields(org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase,
-     *      org.kuali.module.labor.bo.LedgerBalance)
-     */
-    @Override
-    protected void resetLookupFields(ExpenseTransferDocumentFormBase expenseTransferDocumentForm, LedgerBalance balance) {
-        SalaryExpenseTransferForm benefitExpenseTransferForm = (SalaryExpenseTransferForm) expenseTransferDocumentForm;
-        ObjectUtil.buildObject(benefitExpenseTransferForm, balance);
-    }
+public class SalaryExpenseTransferAction extends KualiTransactionalDocumentActionBase {
 }

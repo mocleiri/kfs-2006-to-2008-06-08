@@ -7,8 +7,10 @@ package org.kuali.module.pdp.tag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.pdp.dao.ReferenceDao;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 /**
@@ -53,7 +55,7 @@ public class GetReferenceTag  extends TagSupport {
   public int doEndTag() throws JspException {
     LOG.info("doEndTag() starting");
 
-    ReferenceDao rd = SpringContext.getBean(ReferenceDao.class);
+    ReferenceDao rd = (ReferenceDao)SpringServiceLocator.getService("pdpReferenceDao");
 
     pageContext.setAttribute(name + "List",rd.getAll(name));
 

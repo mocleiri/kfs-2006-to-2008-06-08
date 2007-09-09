@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,14 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.kuali.core.lookup.valueFinder.ValueFinder;
-import org.kuali.core.service.LookupService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.MessageOfTheDay;
 
 public class MessageOfTheDayFinder implements ValueFinder {
 
     public String getValue() {
         String motd = "unable to retrieve message of the day";
-        Collection collection = SpringContext.getBean(LookupService.class).findCollectionBySearch(MessageOfTheDay.class, new HashMap());
+        Collection collection = SpringServiceLocator.getLookupService().findCollectionBySearch(MessageOfTheDay.class, new HashMap());
         if (collection != null && !collection.isEmpty()) {
             motd = ((MessageOfTheDay) collection.iterator().next()).getFinancialSystemMessageOfTheDayText();
         }

@@ -21,27 +21,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.lookup.LookupableHelperService;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.lookup.LookupableSpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
 import org.kuali.module.gl.web.TestDataGenerator;
+import org.kuali.module.labor.bo.AccountStatusBaseFunds;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.util.ObjectUtil;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
  * This class contains the test cases that can be applied to the method in LedgerBalanceLookupableImpl class.
  */
-@ConfigureContext
+@WithTestSpringContext
 public class LedgerBalanceLookupableHelperServiceTest extends KualiTestBase {
     private BusinessObjectService businessObjectService;
     private LookupableHelperService lookupableHelperService;
     private PersistenceService persistenceService;
 
+    private BeanFactory beanFactory;
     private Properties properties;
     private String fieldNames, documentFieldNames;
     private String deliminator;
@@ -52,17 +56,18 @@ public class LedgerBalanceLookupableHelperServiceTest extends KualiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
 
-        lookupableHelperService = LookupableSpringContext.getLookupableHelperService("laborLedgerBalanceLookupableHelperService");
+        lookupableHelperService = (LookupableHelperService) beanFactory.getBean("laborLedgerBalanceLookupableHelperService");
         lookupableHelperService.setBusinessObjectClass(LedgerBalance.class);
 
         // Clear up the database so that any existing data cannot affact your test result
         HashMap keys = new HashMap();
-        keys.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, "2004");
-        keys.put(KFSPropertyConstants.EMPLID, "1000000005");        
-        keys.put(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, "AC");        
-        keys.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, "BL");
+        keys.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, "2004");
+        keys.put(PropertyConstants.EMPLID, "1000000005");        
+        keys.put(PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, "AC");        
+        keys.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, "BL");
         businessObjectService.deleteMatching(LedgerBalance.class, keys);               
     }
 
@@ -71,12 +76,12 @@ public class LedgerBalanceLookupableHelperServiceTest extends KualiTestBase {
 
         LedgerBalance ledgerBalance = new LedgerBalance();
         ledgerBalance.setUniversityFiscalYear(2004);
-        ledgerBalance.setEmplid("0000001265");
+        ledgerBalance.setEmplid("1000000005");
         ledgerBalance.setBalanceTypeCode("AC");
         ledgerBalance.setChartOfAccountsCode("BL");
 
         // test the search results before the specified entry is inserted into the database
-        Map fieldValues = buildFieldValues(ledgerBalance, this.getLookupFields(false));       
+        Map fieldValues = buildFieldValues(ledgerBalance, this.getLookupFields(false));
         List searchResults = lookupableHelperService.getSearchResults(fieldValues);
 
         if (searchResults != null) {
@@ -100,10 +105,10 @@ public class LedgerBalanceLookupableHelperServiceTest extends KualiTestBase {
     private List<String> getLookupFields(boolean isExtended) {
         List<String> lookupFields = new ArrayList<String>();
 
-        lookupFields.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        lookupFields.add(KFSPropertyConstants.EMPLID);
-        lookupFields.add(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
-        lookupFields.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        lookupFields.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        lookupFields.add(PropertyConstants.EMPLID);
+        lookupFields.add(PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
+        lookupFields.add(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
 
         return lookupFields;
     }
@@ -119,8 +124,9 @@ public class LedgerBalanceLookupableHelperServiceTest extends KualiTestBase {
 
         TestDataGenerator testDataGenerator = new TestDataGenerator(propertiesFileName, messageFileName);
 
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-        persistenceService = SpringContext.getBean(PersistenceService.class);
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
+        persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
 
         int numberOfDocuments = Integer.valueOf(properties.getProperty("getLedgerBalance.numOfData"));
         List<LedgerBalance> inputDataList = new ArrayList<LedgerBalance>();

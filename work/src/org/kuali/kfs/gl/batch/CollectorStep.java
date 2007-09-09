@@ -26,10 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.kfs.batch.BatchInputFileType;
 import org.kuali.kfs.service.BatchInputFileService;
-import org.kuali.module.gl.service.CollectorHelperService;
-import org.kuali.module.gl.service.CollectorReportService;
 import org.kuali.module.gl.service.CollectorService;
-import org.kuali.module.gl.util.CollectorReportData;
 
 /**
  * Batch step that controls the collector process. 
@@ -46,47 +43,51 @@ public class CollectorStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CollectorStep.class);
 
     private CollectorService collectorService;
-    private CollectorReportService collectorReportService;
-    
+    private BatchInputFileService batchInputFileService;
+    private BatchInputFileType collectorInputFileType;
+
     /**
      * Controls the collector process.
      */
     public boolean execute(String jobName) {
-        CollectorReportData collectorReportData = collectorService.performCollection();
-        collectorReportService.sendEmails(collectorReportData);
-        collectorReportService.generateCollectorRunReports(collectorReportData);
-        return true;
+        List<String> fileNamesToLoad = batchInputFileService.listInputFileNamesWithDoneFile(collectorInputFileType);
+     
+        boolean processSuccess = true;
+        List<String> processedFiles = new ArrayList();
+        for(String inputFileName: fileNamesToLoad) {
+            processSuccess = collectorService.loadCollectorFile(inputFileName);
+            if (processSuccess) {
+                processedFiles.add(inputFileName);
+            }
+        }
+        
+        removeDoneFiles(processedFiles);
+        
+        return processSuccess;
     }
 
     /**
-     * Gets the collectorService attribute. 
-     * @return Returns the collectorService.
+     * Clears out associated .done files for the processed data files.
      */
-    public CollectorService getCollectorService() {
-        return collectorService;
+    private void removeDoneFiles(List<String> dataFileNames) {
+        for(String dataFileName: dataFileNames) {
+            File doneFile = new File(StringUtils.substringBeforeLast(dataFileName, ".") + ".done");
+            if (doneFile.exists()) {
+                doneFile.delete();
+            }
+        }
     }
 
-    /**
-     * Sets the collectorService attribute value.
-     * @param collectorService The collectorService to set.
-     */
     public void setCollectorService(CollectorService collectorService) {
         this.collectorService = collectorService;
     }
 
-    /**
-     * Gets the collectorReportService attribute. 
-     * @return Returns the collectorReportService.
-     */
-    public CollectorReportService getCollectorReportService() {
-        return collectorReportService;
+    public void setBatchInputFileService(BatchInputFileService batchInputFileService) {
+        this.batchInputFileService = batchInputFileService;
     }
-
-    /**
-     * Sets the collectorReportService attribute value.
-     * @param collectorReportService The collectorReportService to set.
-     */
-    public void setCollectorReportService(CollectorReportService collectorReportService) {
-        this.collectorReportService = collectorReportService;
+    
+    public void setCollectorInputFileType(BatchInputFileType collectorInputFileType) {
+        this.collectorInputFileType = collectorInputFileType;
     }
+    
 }

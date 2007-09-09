@@ -1,37 +1,49 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetTaskPeriodIndirectCost extends BusinessObjectBase implements Comparable {
 
-    private String documentNumber; // RDOC_NBR
+    private String documentHeaderId; // ER_REF_TRACK_NBR
     private Integer budgetTaskSequenceNumber; // BDGT_TSK_SEQ_NBR
     private Integer budgetPeriodSequenceNumber; // BDGT_PRD_SEQ_NBR
     private KualiDecimal budgetManualIndirectCostRate; // BDGT_MAN_IDC_RT
     private KualiInteger budgetManualMtdcAmount; // BDGT_MAN_MTDC_AMT
+
+    // We will need to remove this, since this is properly storedin the parent IDC object.
+    private String budgetPurposeCode; // BDGT_PRPS_CD
 
     private BudgetTask task; // BudgetTask associated with this taskPeriodLine.
     private BudgetPeriod period; // BudgetPeriod associated with this taskPeriodLine.
@@ -73,7 +85,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
     public BudgetTaskPeriodIndirectCost(BudgetTaskPeriodIndirectCost template) {
         this();
      
-        this.documentNumber = template.getDocumentNumber();
+        this.documentHeaderId = template.getDocumentHeaderId();
         this.budgetTaskSequenceNumber = template.getBudgetTaskSequenceNumber();
         this.budgetPeriodSequenceNumber = template.getBudgetPeriodSequenceNumber();
         this.budgetManualIndirectCostRate = template.getBudgetManualIndirectCostRate();
@@ -84,29 +96,29 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the documentHeaderId
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the documentHeaderId attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
      * Gets the budgetTaskSequenceNumber attribute.
      * 
-     * @return Returns the budgetTaskSequenceNumber
+     * @return - Returns the budgetTaskSequenceNumber
      * 
      */
     public Integer getBudgetTaskSequenceNumber() {
@@ -126,7 +138,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
     /**
      * Gets the budgetPeriodSequenceNumber attribute.
      * 
-     * @return Returns the budgetPeriodSequenceNumber
+     * @return - Returns the budgetPeriodSequenceNumber
      * 
      */
     public Integer getBudgetPeriodSequenceNumber() {
@@ -146,7 +158,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
     /**
      * Gets the budgetManualIndirectCostRate attribute.
      * 
-     * @return Returns the budgetManualIndirectCostRate
+     * @return - Returns the budgetManualIndirectCostRate
      * 
      */
     public KualiDecimal getBudgetManualIndirectCostRate() {
@@ -166,7 +178,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
     /**
      * Gets the budgetManualMtdcAmount attribute.
      * 
-     * @return Returns the budgetManualMtdcAmount
+     * @return - Returns the budgetManualMtdcAmount
      * 
      */
     public KualiInteger getBudgetManualMtdcAmount() {
@@ -181,6 +193,26 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      */
     public void setBudgetManualMtdcAmount(KualiInteger budgetManualMtdcAmount) {
         this.budgetManualMtdcAmount = budgetManualMtdcAmount;
+    }
+
+    /**
+     * Gets the budgetPurposeCode attribute.
+     * 
+     * @return - Returns the budgetPurposeCode
+     * 
+     */
+    public String getBudgetPurposeCode() {
+        return budgetPurposeCode;
+    }
+
+    /**
+     * Sets the budgetPurposeCode attribute.
+     * 
+     * @param budgetPurposeCode The budgetPurposeCode to set.
+     * 
+     */
+    public void setBudgetPurposeCode(String budgetPurposeCode) {
+        this.budgetPurposeCode = budgetPurposeCode;
     }
 
     /**

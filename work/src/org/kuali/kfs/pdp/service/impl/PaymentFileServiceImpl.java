@@ -12,12 +12,9 @@ import org.kuali.core.mail.InvalidAddressException;
 import org.kuali.core.mail.MailMessage;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.MailService;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.pdp.PdpConstants;
-import org.kuali.module.pdp.bo.Batch;
 import org.kuali.module.pdp.bo.CustomerProfile;
 import org.kuali.module.pdp.bo.PdpUser;
-import org.kuali.module.pdp.dao.PaymentFileLoadDao;
 import org.kuali.module.pdp.exception.PaymentLoadException;
 import org.kuali.module.pdp.service.CustomerProfileService;
 import org.kuali.module.pdp.service.EnvironmentService;
@@ -29,6 +26,9 @@ import org.kuali.module.pdp.xml.XmlHeader;
 import org.kuali.module.pdp.xml.XmlTrailer;
 import org.kuali.module.pdp.xml.impl.DataLoadHandler;
 import org.kuali.module.pdp.xml.impl.HardEditHandler;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -37,18 +37,19 @@ import org.springframework.transaction.annotation.Transactional;
  *  
  */
 @Transactional
-public class PaymentFileServiceImpl implements PaymentFileService {
+public class PaymentFileServiceImpl implements PaymentFileService, BeanFactoryAware {
   private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PaymentFileServiceImpl.class);
 
+  private BeanFactory beanFactory;
   private MailService mailService;
   private KualiConfigurationService kualiConfigurationService;
   private CustomerProfileService customerProfileService;
   private EnvironmentService environmentService;
-  private PaymentFileLoadDao paymentFileLoadDao;
 
-  // Injected
-  public void setPaymentFileLoadDao(PaymentFileLoadDao pfld) {
-      paymentFileLoadDao = pfld;
+  // Spring will set this when it loads this object. This is needed
+  // for the hard edit handler and to get the Payment file parser
+  public void setBeanFactory(BeanFactory bf) throws BeansException {
+    this.beanFactory = bf;
   }
 
   // Injected
@@ -76,7 +77,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
   }
 
   private int getMaxNoteLines() {
-      return GeneralUtilities.getParameterInteger(PdpConstants.ApplicationParameterKeys.MAX_NOTE_LINES, kualiConfigurationService);
+      return GeneralUtilities.getParameterInteger("MAX_NOTE_LINES", kualiConfigurationService);
   }
 
   // NOTE: This only works on Unix right now.
@@ -88,15 +89,11 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     return filename.substring(startingPointer+1);
   }
 
-  public void saveBatch(Batch batch) {
-      paymentFileLoadDao.createBatch(batch);
-  }
-
   // This will parse the file for hard edit problems, then copy the file to
   // the batch directory. The batch job will actually load the file into the
   // database
   public LoadPaymentStatus loadPayments(String filename, PdpUser user) throws PaymentLoadException {
-    PaymentFileParser paymentFileParser = SpringContext.getBean(PaymentFileParser.class);
+    PaymentFileParser paymentFileParser = (PaymentFileParser)beanFactory.getBean("pdpPaymentFileParser");
     
     HardEditHandler hardEditHandler;
 
@@ -104,7 +101,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     // Try to do the hard edits
     LOG.debug("loadPayments() hard edit check");
-    hardEditHandler = new HardEditHandler();
+    hardEditHandler = new HardEditHandler(beanFactory);
     hardEditHandler.clear();
     hardEditHandler.setMaxNoteLines(getMaxNoteLines());
 
@@ -143,7 +140,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     DataLoadHandler dataLoadHandler;
 
-    dataLoadHandler = new DataLoadHandler(hardEditHandler.getTrailer());
+    dataLoadHandler = new DataLoadHandler(beanFactory,hardEditHandler.getTrailer());
     dataLoadHandler.setUser(user);
     dataLoadHandler.setFilename(getBaseFileName(filename));
     dataLoadHandler.setMaxNoteLines(getMaxNoteLines());
@@ -182,23 +179,20 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     LOG.debug("sendErrorEmail() starting");
 
     // To send email or not send email
-    boolean noEmail = false;
-    if ( kualiConfigurationService.hasApplicationParameter(PdpConstants.PDP_APPLICATION, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
-        noEmail = kualiConfigurationService.getApplicationParameterIndicator(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
-    }
-    if ( noEmail ) {
+    boolean noEmail = kualiConfigurationService.getApplicationParameterIndicator(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
+    if ( noEmail) {
       LOG.debug("sendErrorEmail() sending payment file email is disabled");
       return;
     }
 
     CustomerProfile customer = null;
     MailMessage message = new MailMessage();
-
-    if ( environmentService.isProduction() ) {
-        message.setSubject("PDP --- Payment file NOT loaded");
+    
+    String env = environmentService.getEnvironment().toUpperCase();
+    if ("PRD".equals(env)){
+      message.setSubject("PDP --- Payment file NOT loaded");
     } else {
-        String env = environmentService.getEnvironment();
-        message.setSubject(env + "-PDP --- Payment file NOT loaded");
+      message.setSubject(env + "-PDP --- Payment file NOT loaded");
     }
     StringBuffer body = new StringBuffer();
 
@@ -283,6 +277,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     }
   }
 
+//  private void sendLoadEmail(Integer batchId,XmlHeader header, XmlTrailer trailer, List errors) {
   private void sendLoadEmail(DataLoadHandler dataLoadHandler,XmlHeader header, XmlTrailer trailer) {
 
     Integer batchId = dataLoadHandler.getBatch().getId();
@@ -290,10 +285,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     LOG.debug("sendLoadEmail() starting");
 
     //To send email or not send email
-    boolean noEmail = false;
-    if ( kualiConfigurationService.hasApplicationParameter(PdpConstants.PDP_APPLICATION, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
-        noEmail = kualiConfigurationService.getApplicationParameterIndicator(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
-    }
+    boolean noEmail = kualiConfigurationService.getApplicationParameterIndicator(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
     if ( noEmail) {
       LOG.debug("sendLoadEmail() sending payment file email is disabled");
       return;
@@ -301,14 +293,12 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     CustomerProfile customer = null;
     MailMessage message = new MailMessage();
-
-    if ( environmentService.isProduction() ) {
-        message.setSubject("PDP --- Payment file loaded");
+    String env = environmentService.getEnvironment().toUpperCase();
+    if ("PRD".equals(env)){
+      message.setSubject("PDP --- Payment file loaded");
     } else {
-        String env = environmentService.getEnvironment();
-        message.setSubject(env + "-PDP --- Payment file loaded");
+      message.setSubject(env + "-PDP --- Payment file loaded");
     }
-
     StringBuffer body = new StringBuffer();
 
     String ccAddresses = kualiConfigurationService.getApplicationParameterValue(PdpConstants.PDP_APPLICATION, PdpConstants.ApplicationParameterKeys.SOFT_EDIT_CC);
@@ -365,14 +355,12 @@ public class PaymentFileServiceImpl implements PaymentFileService {
   
   private void sendThresholdEmail(String type, DataLoadHandler dataLoadHandler, CustomerProfile customer, XmlHeader header, XmlTrailer trailer){
     MailMessage message = new MailMessage();
-
-    if ( environmentService.isProduction() ) {
-        message.setSubject("PDP --- Payment file loaded with Threshold Warnings");
+    String env = environmentService.getEnvironment().toUpperCase();
+    if ("PRD".equals(env)){
+      message.setSubject("PDP --- Payment file loaded with Threshold Warnings");
     } else {
-        String env = environmentService.getEnvironment();
-        message.setSubject(env + "-PDP --- Payment file loaded with Threshold Warnings");
+      message.setSubject(env + "-PDP --- Payment file loaded with Threshold Warnings");
     }
-
     StringBuffer body = new StringBuffer();
     
     body.append("The following payment file was loaded\n\n");
@@ -432,14 +420,12 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     CustomerProfile customer = null;
     MailMessage message = new MailMessage();
-
-    if ( environmentService.isProduction() ) {
-        message.setSubject("PDP --- Payment file loaded with payment(s) held for Tax");
+    String env = environmentService.getEnvironment().toUpperCase();
+    if ("PRD".equals(env)){
+      message.setSubject("PDP --- Payment file loaded with payment(s) held for Tax");
     } else {
-        String env = environmentService.getEnvironment();
-        message.setSubject(env + "-PDP --- Payment file loaded with payment(s) held for Tax");
+      message.setSubject(env + "-PDP --- Payment file loaded with payment(s) held for Tax");
     }
-
     StringBuffer body = new StringBuffer();
 
     String taxEmail = kualiConfigurationService.getApplicationParameterValue(PdpConstants.PDP_APPLICATION,PdpConstants.ApplicationParameterKeys.TAX_GROUP_EMAIL_ADDRESS);

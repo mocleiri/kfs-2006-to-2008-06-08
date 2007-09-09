@@ -15,13 +15,8 @@
  */
 package org.kuali.module.purap.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
-import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.module.purap.bo.PurchasingApItem;
 
 /**
  * This class contains item utilities
@@ -35,33 +30,13 @@ public class PurApItemUtils {
      * @param item
      * @return
      */
-    public static boolean checkItemActive(PurApItem item) {
+    public static boolean checkItemActive(PurchasingApItem item) {
         boolean active = true;
         if(item instanceof PurchaseOrderItem) {
             PurchaseOrderItem poi = (PurchaseOrderItem)item;
             active = poi.isItemActiveIndicator();
         }
         return active;
-    }
-    
-    public static boolean isNonZeroExtended(PurApItem item) {
-        return(ObjectUtils.isNotNull(item) && ObjectUtils.isNotNull(item.getExtendedPrice()) && !item.getExtendedPrice().isZero());
-    }
-    
-    /**
-     * 
-     * This method is a helper to get aboveTheLineItems only from an item list
-     * @param items
-     * @return
-     */
-    public static List<PurApItem> getAboveTheLineOnly(List<PurApItem>items) {
-        List<PurApItem> returnItems = new ArrayList<PurApItem>();
-        for (PurApItem item : items) {
-            if(item.getItemType().isItemTypeAboveTheLineIndicator()) {
-                returnItems.add((PurApItem)ObjectUtils.deepCopy(item));
-            }
-        }
-        return returnItems;
     }
     
 }

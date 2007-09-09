@@ -18,7 +18,7 @@
 <app:getReference name="DisbursementType"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html locale="true">
-<link rel="stylesheet" type="text/css"  href="<%= request.getContextPath() %>/pdp/css/pdp_styles.css">
+<link rel="stylesheet" type="text/css"  href="https://docs.onestart.iu.edu/dav/MY/channels/css/styles.css">
   <head>
     <html:base />
     <title>Bank Maintenance</title>
@@ -47,7 +47,7 @@
       <logic:empty name="PdpBankForm" property="id"><div align="center">New Bank</div></logic:empty>
       <logic:notEmpty name="PdpBankForm" property="id">
         <logic:equal name="PdpBankForm" property="id" value="0"><div align="center">New Bank</div></logic:equal>
-        <logic:notEqual name="PdpBankForm" property="id" value="0"><div align="center">Bank ID: <c:out value="${PdpBankForm.id}"/></div></logic:notEqual>
+        <logic:notEqual name="PdpBankForm" property="id" value="0"><div align="center">Bank ID: <c:out value="${BankForm.id}"/></div></logic:notEqual>
       </logic:notEmpty>
       </strong>
     </th>
@@ -78,7 +78,10 @@
   <tr>
     <th align="right" valign="top" nowrap="true"><font color="red">*</font>Active?:</th>
     <td align="left" class="datacell">
-      <html:checkbox property="active" value="y" tabindex="5"/>&nbsp;
+      <html:select size="1" property="active" value="Y" tabindex="5">
+        <html:option value="N">No</html:option>
+        <html:option value="Y">Yes</html:option>
+      </html:select>&nbsp;
     </td>
   </tr>
   <tr>

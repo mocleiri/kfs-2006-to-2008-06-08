@@ -32,10 +32,7 @@ public class VendorPropertyConstants {
     public static final String VENDOR_ADDRESS_STATE = "vendorStateCode";
     public static final String VENDOR_ADDRESS_STATE_CODE = "vendorAddresses.vendorStateCode";
     public static final String VENDOR_ADDRESS_ZIP = "vendorZipCode";
-    public static final String VENDOR_ADDRESS_TYPE_CODE = "vendorAddressTypeCode";
-    public static final String VENDOR_ADDRESS_LINE_1 = "vendorLine1Address";
-    public static final String VENDOR_ADDRESS_CITY = "vendorCityName";
-    public static final String VENDOR_ADDRESS_COUNTRY = "vendorCountryCode";
+    public static final String VENDOR_ADDRESS_TYPE_CODE = "vendorAddresses.vendorAddressTypeCode";
     public static final String VENDOR_ADDRESS_EMAIL = "vendorAddresses.vendorAddressEmailAddress";
     public static final String VENDOR_DEFAULT_ADDRESS_INDICATOR = "vendorDefaultAddressIndicator";
     public static final String VENDOR_DEFAULT_ADDRESS_CAMPUS = "vendorCampusCode";
@@ -54,15 +51,10 @@ public class VendorPropertyConstants {
     public static final String VENDOR_TYPE_CODE = "vendorHeader.vendorTypeCode";
     public static final String VENDOR_W9_RECEIVED_INDICATOR = "vendorHeader.vendorW9ReceivedIndicator";
     public static final String VENDOR_W8_BEN_RECEIVED_INDICATOR = "vendorHeader.vendorW8BenReceivedIndicator";
-    public static final String VENDOR_RESTRICTED_REASON_TEXT = "vendorRestrictedReasonText";
     public static final String VENDOR_DEBARRED_INDICATOR = "vendorHeader.vendorDebarredIndicator";
     public static final String VENDOR_FOREIGN_INDICATOR = "vendorHeader.vendorForeignIndicator";
     public static final String VENDOR_INACTIVE_REASON = "vendorInactiveReasonCode";
     
-    public static final String VENDOR_PAYMENT_TERMS = "vendorPaymentTerms";
-    public static final String VENDOR_SHIPPING_TITLE = "vendorShippingTitle";
-    public static final String VENDOR_SHIPPING_PAYMENT_TERMS = "vendorShippingPaymentTerms";
-
     public static final String VENDOR_TAX_TYPE_CODE_WITHOUT_HEADER = "vendorTaxTypeCode";
     public static final String VENDOR_MIN_ORDER_AMOUNT = "vendorMinimumOrderAmount";
     public static final String VENDOR_DETAIL_ASSIGNED_ID = "vendorDetailAssignedIdentifier";

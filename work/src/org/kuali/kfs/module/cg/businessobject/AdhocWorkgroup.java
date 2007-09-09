@@ -17,7 +17,7 @@ package org.kuali.module.kra.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * This class represents an ad-hoc workgroup.
@@ -35,12 +35,6 @@ public class AdhocWorkgroup extends AbstractAdhoc {
     public AdhocWorkgroup(String workgroupName) {
         this();
         this.workgroupName = workgroupName;
-    }
-    
-    public AdhocWorkgroup(String workgroupName, String documentNumber) {
-        this();
-        this.workgroupName = workgroupName;
-        this.setDocumentNumber(documentNumber);
     }
     
     /**
@@ -64,7 +58,7 @@ public class AdhocWorkgroup extends AbstractAdhoc {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
         m.put("workgroupName", this.workgroupName);
         
         return m;

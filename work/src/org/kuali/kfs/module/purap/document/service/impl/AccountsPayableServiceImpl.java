@@ -100,11 +100,11 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
         
         //get parameter to see if fiscal officers may see the continuation account warning
-        String showContinuationAccountWaringFO = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS);
+        String showContinuationAccountWaringFO = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS);
         
-        //TODO (KULPURAP-1569: dlemus) See if/how we want to allow AP users to view the continuation account warning
+        //TODO: See if/how we want to allow AP users to view the continuation account warning
         //get parameter to see if ap users may see the continuation account warning        
-        String showContinuationAccountWaringAP = SpringContext.getBean(KualiConfigurationService.class).getApplicationParameterValue(PurapParameterConstants.PURAP_ADMIN_GROUP, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS);
+        String showContinuationAccountWaringAP = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS);
         
         // versus doing it in their respective documents (preq, credit memo)
         // if not initiate or in process and 
