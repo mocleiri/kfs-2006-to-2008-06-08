@@ -36,9 +36,8 @@ public class KraConstants extends JstlConstants {
     
     
     public static final int maximumPeriodLengthUnits = Calendar.YEAR;
-    public static final int maximumNumberOfPeriods = 20; // used on budgetPeriods.tag
-
-    public static final int maximumNumberOfTasks = 20; // used on budgetTasks.tag
+    //public static final int maximumNumberOfPeriods = 20; // used on budgetPeriods.tag
+    //public static final int maximumNumberOfTasks = 20; // used on budgetTasks.tag
     
     public static final int projectDirectorRouteLevel = 1;
 
@@ -133,6 +132,10 @@ public class KraConstants extends JstlConstants {
     
     public static final String KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS = "NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS";
     public static final String KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES = "ACADEMIC_YEAR_SUBDIVISION_NAMES";
+    
+    public static final String PERSONNEL_STATUSES = "PERSONNEL_STATUSES";
+    public static final String CREATE_PROPOSAL_PROJECT_TYPES = "CREATE_PROPOSAL_PROJECT_TYPES";
+    public static final String PROJECT_TYPES = "PROJECT_TYPES";
     
     public static final String ROUTING_FORM_COST_SHARE_PERMISSION_CODE = "COST_SHARE_ROUTING_CODE";
     
