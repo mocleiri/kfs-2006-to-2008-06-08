@@ -24,14 +24,10 @@ import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants;
  * 
  */
 public interface AuxiliaryVoucherDocumentRuleConstants extends AccountingDocumentRuleBaseConstants {
-    // Security grouping constants used to do application parameter lookups
-    public static final String AUXILIARY_VOUCHER_SECURITY_GROUPING = "Kuali.FinancialTransactionProcessing.AuxiliaryVoucherDocument";
 
     // Application parameter lookup constants to be used in conjunction with the grouping constants above
-    public static final String RESTRICTED_COMBINED_CODES = "RestrictedCombinationOfCodes";
+    public static final String RESTRICTED_COMBINED_CODES = "COMBINATION-OBJECT_TYPE-OBJECT_SUB_TYPE-OBJECT_LEVEL";
     public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "OBJECT_SUB_TYPES";
-    public static final String RESTRICTED_EXPENSE_OBJECT_TYPE_CODES = "RestrictedExpenseObjectTypeCodes";
-    public static final String RESTRICTED_INCOME_OBJECT_TYPE_CODES = "RestrictedIncomeObjectTypeCodes";
     public static final String RESTRICTED_PERIOD_CODES = "ACCOUNTING_PERIODS";
     public static final String GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE = "GLPE_OFFSET_OBJECT";
     public static final String AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD = "ACCOUNTING_PERIOD_GRACE_PERIOD";
