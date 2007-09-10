@@ -90,6 +90,7 @@ import org.kuali.module.financial.bo.TravelMileageRate;
 import org.kuali.module.financial.bo.TravelPerDiem;
 import org.kuali.module.financial.bo.WireCharge;
 import org.kuali.module.gl.batch.PurgeCorrectionProcessFilesStep;
+import org.kuali.module.gl.bo.Batch;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.UniversityDate;
@@ -118,6 +119,7 @@ public class KFSConstants extends JstlConstants {
     public static class Components {
         public static final String NOT_APPLICABLE = RiceConstants.DetailTypes.NA_PARM_DETAIL_TYPE;
     
+        public final static String BATCH = Batch.class.getSimpleName();
         public final static String CAMPUS = Campus.class.getSimpleName();
         //public final static String SYSTEM_PARAMETER = SystemParameter.class.getSimpleName();
         public final static String UNIVERSAL_USER = UniversalUser.class.getSimpleName();
@@ -953,9 +955,9 @@ public class KFSConstants extends JstlConstants {
 //    }
 
     public static class SystemGroupParameterNames {
-        public static final String FLEXIBLE_OFFSET_ENABLED_FLAG = "FLEXIBLE_OFFSET_ENABLED_FLAG";
-        public static final String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = "FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG";
-        public static final String ICR_ENCUMBRANCE_ENABLED_FLAG = "ICR_ENCUMBRANCE_ENABLED_FLAG";
+        public static final String FLEXIBLE_OFFSET_ENABLED_FLAG = "USE_FLEXIBLE_OFFSET_IND";
+        public static final String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = "USE_FLEXIBLE_CLAIM_ON_CASH_IND";
+        public static final String ICR_ENCUMBRANCE_ENABLED_FLAG = "USE_ICR_ENCUMBRANCE_IND";
         public static final String PURGE_GL_ACCT_BALANCES_T_BEFORE_YEAR = "PURGE_GL_ACCT_BALANCES_T_BEFORE_YEAR";
         public static final String PURGE_GL_ENCUMBRANCE_T_BEFORE_YEAR = "PURGE_GL_ENCUMBRANCE_T_BEFORE_YEAR";
         public static final String PURGE_GL_SF_BALANCES_T_BEFORE_YEAR = "PURGE_GL_SF_BALANCES_T_BEFORE_YEAR";
@@ -1002,7 +1004,7 @@ public class KFSConstants extends JstlConstants {
          */
         public static final String PURGE_PENDING_ATTACHMENTS_STEP_MAX_AGE = "purgePendingAttachmentsStepMaxAge";
         
-        public static final String JOB_ADMIN_WORKGROUP = "Job.Admin.Workgroup";
+        public static final String JOB_ADMIN_WORKGROUP = "JOB_ADMIN_GROUP";
         
     }
 
