@@ -89,8 +89,8 @@ public class KualiBatchJobModifyAction extends KualiAction {
      * @throws AuthorizationException
      */
     protected void checkJobAuthorization( BatchJobStatus job, String actionType ) throws AuthorizationException {
-        if ( getConfigService().parameterExists(KFSConstants.CORE_NAMESPACE, KFSConstants.SystemGroupParameterNames.JOB_ADMIN_WORKGROUP) ) {            
-            String adminWorkgroup = getConfigService().getParameterValue(KFSConstants.CORE_NAMESPACE, KFSConstants.SystemGroupParameterNames.JOB_ADMIN_WORKGROUP);
+        if ( getConfigService().parameterExists(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.JOB_ADMIN_WORKGROUP) ) {            
+            String adminWorkgroup = getConfigService().getParameterValue(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.JOB_ADMIN_WORKGROUP);
             if ( !GlobalVariables.getUserSession().getUniversalUser().isMember(adminWorkgroup) ) {
                 throw new AuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), actionType, job.getFullName() );
             }
