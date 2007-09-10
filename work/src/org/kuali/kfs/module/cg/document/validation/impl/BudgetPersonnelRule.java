@@ -49,7 +49,7 @@ public class BudgetPersonnelRule {
 
     protected boolean runPersonnelAuditErrors(List personnel) {
         List<AuditError> personnelAuditErrors = new ArrayList<AuditError>();
-        String INVALID_STATUSES = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, "invalidPersonnelStatuses");
+        String INVALID_STATUSES = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.PERSONNEL_STATUSES);
         for (Iterator iter = personnel.iterator(); iter.hasNext();) {
             BudgetUser person = (BudgetUser) iter.next();
             if (ObjectUtils.isNotNull(person.getUser()) && person.getUser().getEmployeeStatusCode() != null && StringUtils.contains(INVALID_STATUSES, person.getUser().getEmployeeStatusCode())) {
