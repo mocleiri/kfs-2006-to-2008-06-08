@@ -556,10 +556,10 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
         String errorKey = KFSPropertyConstants.FINANCIAL_OBJECT_LEVEL_CODE;
 
         /* check object sub type global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.BUDGET_ADJUSTMENT_DOC, RESTRICTED_OBJECT_SUB_TYPE_CODES, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, AccountingLineRuleUtil.getObjectSubTypeCodeLabel());
+        objectCodeAllowed = objectCodeAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.BUDGET_ADJUSTMENT_DOC, RESTRICTED_OBJECT_SUB_TYPE_CODES, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, AccountingLineRuleUtil.getObjectSubTypeCodeLabel());
 
         /* check object code is in permitted list for payment reason */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.BUDGET_ADJUSTMENT_DOC, RESTRICTED_OBJECT_CODES, accountingLine.getFinancialObjectCode(), errorKey, AccountingLineRuleUtil.getObjectCodeLabel());
+        objectCodeAllowed = objectCodeAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.BUDGET_ADJUSTMENT_DOC, RESTRICTED_OBJECT_CODES, accountingLine.getFinancialObjectCode(), errorKey, AccountingLineRuleUtil.getObjectCodeLabel());
 
         return objectCodeAllowed;
     }
