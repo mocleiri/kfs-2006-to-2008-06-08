@@ -326,7 +326,7 @@ public class RoutingFormServiceImpl implements RoutingFormService {
         proposal.setFederalPassThroughAgencyNumber(routingFormDocument.getAgencyFederalPassThroughNumber());
 
         //There could be multiple types on the RF, but only one of them will pass this rule, and that's the one that should be used to populate the Proposal field.
-        Parameter proposalCreateRule = configService.getParameter(KFSConstants.KRA_NAMESPACE, "KraRoutingFormCreateProposalProjectTypes");
+        Parameter proposalCreateRule = configService.getParameter(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.CREATE_PROPOSAL_PROJECT_TYPES);
         for (RoutingFormProjectType routingFormProjectType : routingFormDocument.getRoutingFormProjectTypes()) {
             if (configService.succeedsRule(proposalCreateRule,routingFormProjectType.getProjectTypeCode())) {
                 proposal.setProposalAwardTypeCode(routingFormProjectType.getProjectTypeCode());
