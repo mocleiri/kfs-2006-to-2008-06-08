@@ -240,9 +240,9 @@ public class OriginEntryTestBase extends KualiTestBase {
     }
 
     protected static String BUDGET_YEAR_ENABLED_FLAG = "BUDGET_YEAR_ENABLED_FLAG";
-    protected static String ICR_ENCUMBRANCE_ENABLED_FLAG = "ICR_ENCUMBRANCE_ENABLED_FLAG";
+    protected static String ICR_ENCUMBRANCE_ENABLED_FLAG = KFSConstants.SystemGroupParameterNames.ICR_ENCUMBRANCE_ENABLED_FLAG;
     protected static String FLEXIBLE_OFFSET_ENABLED_FLAG = "FLEXIBLE_OFFSET_ENABLED_FLAG";
-    protected static String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = "FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG";
+    protected static String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG;
 
     protected void resetAllEnhancementFlags() throws Exception {
         setApplicationConfigurationFlag(OriginEntryTestBase.BUDGET_YEAR_ENABLED_FLAG, false);
