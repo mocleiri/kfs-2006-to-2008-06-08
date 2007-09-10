@@ -198,7 +198,7 @@ public class RoutingFormDocument extends ResearchDocumentBase {
             if (this.getContractGrantProposal().getProposalNumber() == null) {
                 boolean createProposal = false;
                 KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-                Parameter proposalCreateRule = kualiConfigurationService.getParameter(KFSConstants.KRA_NAMESPACE, "KraRoutingFormCreateProposalProjectTypes");
+                Parameter proposalCreateRule = kualiConfigurationService.getParameter(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.CREATE_PROPOSAL_PROJECT_TYPES);
 
                 for (RoutingFormProjectType routingFormProjectType : this.getRoutingFormProjectTypes()) {
                     if (kualiConfigurationService.succeedsRule(proposalCreateRule, routingFormProjectType.getProjectTypeCode())) {
