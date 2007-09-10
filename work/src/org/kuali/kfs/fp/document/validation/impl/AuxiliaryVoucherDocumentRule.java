@@ -46,7 +46,6 @@ import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.REVERSAL_DATE;
 import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD;
-import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.AUXILIARY_VOUCHER_SECURITY_GROUPING;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_COMBINED_CODES;
 import static org.kuali.module.financial.rules.AuxiliaryVoucherDocumentRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_CODES;
@@ -97,8 +96,14 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      * 
      * @return String
      */
+    @Override
     protected String getDefaultParameterNamespace() {
         return KFSConstants.FINANCIAL_NAMESPACE;
+    }
+    
+    @Override
+    protected String getDefaultParameterDetailTypeCode() {
+        return KFSConstants.Components.AUXILIARY_VOUCHER;
     }
 
     /**
@@ -721,7 +726,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
     private boolean isValidDocWithSubAndLevel(AccountingDocument document, AccountingLine accountingLine) {
         boolean retval = true;
 
-        StringBuffer combinedCodes = new StringBuffer("objectType=").append(accountingLine.getObjectType().getCode()).append(";objSubTyp=").append(accountingLine.getObjectCode().getFinancialObjectSubType().getCode()).append(";objLevel=").append(accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode());
+        StringBuffer combinedCodes = new StringBuffer(accountingLine.getObjectType().getCode()).append(',').append(accountingLine.getObjectCode().getFinancialObjectSubType().getCode()).append(',').append(accountingLine.getObjectCode().getFinancialObjectLevel().getFinancialObjectLevelCode());
         
         retval = !getParameterRule(RESTRICTED_COMBINED_CODES).getParameterValue().equals(combinedCodes.toString());
 
