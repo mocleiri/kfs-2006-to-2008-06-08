@@ -21,5 +21,5 @@ package org.kuali.module.vendor;
 public class VendorParameterConstants {
 
     // PARAMETER NAMES
-    public static final String PAYMENT_TERMS_DUE_TYPE_DESC = "PURAP.PAYMENT_TERMS_DUE_TYPE_DESC";
+    public static final String PAYMENT_TERMS_DUE_TYPE_DESC = "PAYMENT_TERMS_DUE_TYPE_DESC";
 }
