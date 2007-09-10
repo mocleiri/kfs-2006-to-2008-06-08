@@ -22,9 +22,6 @@ import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_BALANCE_CONSIDERING_S
 import static org.kuali.kfs.KFSKeyConstants.ERROR_ZERO_AMOUNT;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.ACCOUNT_NUMBER_GLOBAL_RESTRICTION_PARM_NM;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM;
-import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_OBJECT_CODE_GROUP_NM;
-import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_OBJECT_SUB_TYPE_GROUP_NM;
-import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.MCC_PARM_PREFIX;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_CONSOLIDATION_GLOBAL_RESTRICTION_PARM_NM;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM;
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM;
@@ -180,10 +177,10 @@ public class ProcurementCardDocumentRule extends AccountingDocumentRuleBase {
         }
 
         /* check object code is in permitted list for mcc */
-        objectCodeAllowed = objectCodeAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.PROCUREMENT_CARD_DOC, MCC_PARM_PREFIX + mccRestriction, accountingLine.getFinancialObjectCode(), errorKey, "Object code");
+        objectCodeAllowed = objectCodeAllowed && executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.PROCUREMENT_CARD_DOC, ProcurementCardDocumentRuleConstants.VALID_OBJECTS_BY_MCC_CODE_PARM_NM, ProcurementCardDocumentRuleConstants.INVALID_OBJECTS_BY_MCC_CODE_PARM_NM, mccRestriction, accountingLine.getFinancialObjectCode(), errorKey, "Object code");
 
         /* check object sub type is in permitted list for mcc */
-        objectCodeAllowed = objectCodeAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.PROCUREMENT_CARD_DOC, MCC_PARM_PREFIX + mccRestriction, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type code");
+        objectCodeAllowed = objectCodeAllowed && executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.PROCUREMENT_CARD_DOC, ProcurementCardDocumentRuleConstants.VALID_OBJ_SUB_TYPE_BY_MCC_CODE_PARM_NM, ProcurementCardDocumentRuleConstants.INVALID_OBJ_SUB_TYPE_BY_MCC_CODE_PARM_NM, mccRestriction, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type code");
 
         return objectCodeAllowed;
     }
