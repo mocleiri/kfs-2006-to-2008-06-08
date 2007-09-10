@@ -862,11 +862,12 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
      * @param errorParameter
      * @return
      */
-    private boolean executePaymentReasonRestriction( String parameterName, String restrictedFieldValue, String errorField, String errorParameter, String paymentReasonCode, CodeDescriptionFormatter restrictedFieldDescFormatter) {
+    private boolean executePaymentReasonRestriction( String parameterName, String paymentReasonCode, String restrictedFieldValue, String errorField, String errorParameter, CodeDescriptionFormatter restrictedFieldDescFormatter) {
         boolean rulePassed = true;
         Parameter rule = getKualiConfigurationService().getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, parameterName);
         if ( rule != null ) {
-            if (getKualiConfigurationService().failsRule(rule,restrictedFieldValue)) {
+            rulePassed = getKualiConfigurationService().evaluateConstrainedParameter(rule, paymentReasonCode, restrictedFieldValue);
+            if ( !rulePassed ) {
                 String errorMsgKey = null;
                 String endConjunction = null;
                 if (getKualiConfigurationService().isAllowedRule( rule )) {
@@ -895,7 +896,6 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
                 }
 
                 GlobalVariables.getErrorMap().putError(errorField, errorMsgKey, new String[] { errorParameter, restrictedFieldValue, parameterName, "", getKualiConfigurationService().getPrettyParameterValueString( rule ), "Payment reason", paymentReasonCode, prName, restrictedFieldDescFormatter.getFormattedStringWithDescriptions(getKualiConfigurationService().getParameterValuesAsSet( rule ), null, endConjunction) });
-                rulePassed = false;
             }
         }
         return rulePassed;
@@ -910,16 +910,16 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         String errorKey = KFSPropertyConstants.DISBURSEMENT_VOUCHER_DOCUMENTATION_LOCATION_CODE;
 
         // payment reason restrictions
-        executePaymentReasonRestriction(PAYMENT_DOC_LOCATION_GROUP_NM+"."+PAYMENT_PARM_PREFIX + document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location", document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), new DocumentationLocationCodeDescriptionFormatter());
+        executePaymentReasonRestriction(INVALID_DOC_LOC_BY_PAYMENT_REASON_PARM, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location", new DocumentationLocationCodeDescriptionFormatter());
 
         // alien indicator restrictions
         if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-            executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, ALIEN_INDICATOR_CHECKED_PARM_NM, document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location");
+            executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, ALIEN_INDICATOR_CHECKED_PARM_NM, document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location");
         }
 
         // initiator campus code restrictions
-        String initiatorCampusCode = ((ChartUser)getInitiator(document).getModuleUser( ChartUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode();
-        executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, CAMPUS_CODE_PARM_PREFIX + initiatorCampusCode, document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location");
+        String initiatorCampusCode = ((ChartUser)getInitiator(document).getModuleUser( ChartUser.MODULE_ID )).getOrganization().getOrganizationPhysicalCampusCode();        
+        executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.VALID_DOC_LOC_BY_CAMPUS_PARM, DisbursementVoucherRuleConstants.INVALID_DOC_LOC_BY_CAMPUS_PARM, initiatorCampusCode, document.getDisbursementVoucherDocumentationLocationCode(), errorKey, "Documentation location");
     }
 
     /**
@@ -934,7 +934,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
 
         // restrictions on payment reason when alien indicator is checked
         if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-            executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, ALIEN_INDICATOR_CHECKED_PARM_NM, paymentReasonCode, errorKey, "Payment reason");
+            executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, ALIEN_PAYMENT_REASONS_PARM_NM, paymentReasonCode, errorKey, "Payment reason");
         }
 
         /* check revolving fund restrictions */
@@ -1053,7 +1053,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check payment reason is allowed for payee type */
-        executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DVPAYEE_PAYEE_PAYMENT_PARM, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
+        executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.VALID_PAYMENT_REASONS_BY_PAYEE_TYPE_PARM, DisbursementVoucherRuleConstants.INVALID_PAYMENT_REASONS_BY_PAYEE_TYPE_PARM, DisbursementVoucherRuleConstants.DV_PAYEE_TYPE_PAYEE, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
 
         /* for payees with tax type ssn, check employee restrictions */
         if (TAX_TYPE_SSN.equals(dvPayee.getTaxpayerTypeCode())) {
@@ -1111,7 +1111,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check payment reason is allowed for employee type */
-        executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, EMPLOYEE_PAYEE_PAYMENT_PARM, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
+        executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.VALID_PAYMENT_REASONS_BY_PAYEE_TYPE_PARM, DisbursementVoucherRuleConstants.INVALID_PAYMENT_REASONS_BY_PAYEE_TYPE_PARM, DisbursementVoucherRuleConstants.DV_PAYEE_TYPE_EMPLOYEE, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
 
         errors.removeFromErrorPath(KFSPropertyConstants.DV_PAYEE_DETAIL);
     }
@@ -1180,13 +1180,13 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check object type global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectTypeCode(), errorKey, "Object type");
+        objectCodeAllowed = objectCodeAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectTypeCode(), errorKey, "Object type");
 
         /* check object sub type global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
+        objectCodeAllowed = objectCodeAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
 
         /* check object level global restrictions */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level");
+        objectCodeAllowed = objectCodeAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level");
 
         String documentPaymentReason = dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode();
         if (StringUtils.isBlank(documentPaymentReason)) {
@@ -1194,16 +1194,17 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check object level is in permitted list for payment reason */
-        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(PAYMENT_OBJECT_LEVEL_GROUP_NM+"."+PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level", documentPaymentReason, new ObjectLevelCodeDescriptionFormatter(accountingLine.getChartOfAccountsCode()));
+        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(INVALID_OBJ_LEVEL_BY_PAYMENT_REASON_PARM, documentPaymentReason, accountingLine.getObjectCode().getFinancialObjectLevelCode(), errorKey, "Object level", new ObjectLevelCodeDescriptionFormatter(accountingLine.getChartOfAccountsCode()));
 
         /* check object code is in permitted list for payment reason */
-        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(PAYMENT_OBJECT_CODE_GROUP_NM+"."+PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getFinancialObjectCode(), errorKey, "Object code", documentPaymentReason, new ObjectCodeDescriptionFormatter(accountingLine.getPostingYear(), accountingLine.getChartOfAccountsCode()));
+        objectCodeAllowed = objectCodeAllowed && executePaymentReasonRestriction(INVALID_OBJ_CODE_BY_PAYMENT_REASON_PARM, documentPaymentReason, accountingLine.getFinancialObjectCode(), errorKey, "Object code", new ObjectCodeDescriptionFormatter(accountingLine.getPostingYear(), accountingLine.getChartOfAccountsCode()));
 
+        // TODO: check if these are the same as the parameters above...
         /* check payment reason is valid for object code */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_CODE_PARM_PREFIX + accountingLine.getFinancialObjectCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
+        objectCodeAllowed = objectCodeAllowed && executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.VALID_PAYMENT_REASONS_BY_OBJ_CODE_PARM, DisbursementVoucherRuleConstants.INVALID_PAYMENT_REASONS_BY_OBJ_CODE_PARM, accountingLine.getFinancialObjectCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
 
         /* check payment reason is valid for object level */
-        objectCodeAllowed = objectCodeAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, OBJECT_LEVEL_PARM_PREFIX + accountingLine.getObjectCode().getFinancialObjectLevelCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
+        objectCodeAllowed = objectCodeAllowed && executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.VALID_PAYMENT_REASONS_BY_OBJ_LEVEL_PARM, DisbursementVoucherRuleConstants.INVALID_PAYMENT_REASONS_BY_OBJ_LEVEL_PARM, accountingLine.getObjectCode().getFinancialObjectLevelCode(), dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), KFSPropertyConstants.DV_PAYEE_DETAIL + "." + KFSPropertyConstants.DISB_VCHR_PAYMENT_REASON_CODE, "Payment reason code");
 
         return objectCodeAllowed;
     }
@@ -1228,10 +1229,10 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* global sub fund restrictions */
-        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, SUB_FUND_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund code");
+        accountNumberAllowed = accountNumberAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, SUB_FUND_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund code");
 
         /* global function code restrictions */
-        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getFinancialHigherEdFunctionCd(), errorKey, "Function code");
+        accountNumberAllowed = accountNumberAllowed && executeParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM, accountingLine.getAccount().getFinancialHigherEdFunctionCd(), errorKey, "Function code");
 
         String documentPaymentReason = dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode();
         if (StringUtils.isBlank(documentPaymentReason)) {
@@ -1239,10 +1240,10 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         }
 
         /* check sub fund is in permitted list for payment reason */
-        accountNumberAllowed = accountNumberAllowed && executePaymentReasonRestriction(PAYMENT_SUB_FUND_GROUP_NM+"."+PAYMENT_PARM_PREFIX + documentPaymentReason, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund", documentPaymentReason, new SubFundGroupCodeDescriptionFormatter());
+        accountNumberAllowed = accountNumberAllowed && executePaymentReasonRestriction( DisbursementVoucherRuleConstants.INVALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON_PARM, documentPaymentReason, accountingLine.getAccount().getSubFundGroupCode(), errorKey, "Sub fund", new SubFundGroupCodeDescriptionFormatter());
 
         /* check object sub type is allowed for sub fund code */
-        accountNumberAllowed = accountNumberAllowed && executeApplicationParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, SUB_FUND_CODE_PARM_PREFIX + accountingLine.getAccount().getSubFundGroupCode(), accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
+        accountNumberAllowed = accountNumberAllowed && executeConstrainedParameterRestriction(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM, DisbursementVoucherRuleConstants.INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM, accountingLine.getAccount().getSubFundGroupCode(), accountingLine.getObjectCode().getFinancialObjectSubTypeCode(), errorKey, "Object sub type");
 
         return accountNumberAllowed;
     }
