@@ -65,7 +65,7 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
             }
             Map<String,Step> steps = SpringContext.getBeansOfType(Step.class);
             for ( String stepName : steps.keySet() ) {
-                components.add( new ParameterDetailType( steps.get(stepName).getNamespace(), stepName, stepName ) );
+                components.add( new ParameterDetailType( steps.get(stepName).getNamespace(), steps.get(stepName).getComponentName(), stepName ) );
             }
         }
         
