@@ -116,6 +116,7 @@ public class KFSConstants extends JstlConstants {
     public static final String CORE_NAMESPACE = RiceConstants.KNS_NAMESPACE;
     public static final String PDP_NAMESPACE = "KFS-PD";
     public static final String VENDOR_NAMESPACE = "KFS-VN";
+    public static final String KFS_SYSTEM_NAMESPACE = "KFS-SY";
     
     public static class Components {
         public static final String NOT_APPLICABLE = RiceConstants.DetailTypes.NA_PARM_DETAIL_TYPE;
@@ -124,7 +125,7 @@ public class KFSConstants extends JstlConstants {
         public final static String CAMPUS = Campus.class.getSimpleName();
         //public final static String SYSTEM_PARAMETER = SystemParameter.class.getSimpleName();
         public final static String UNIVERSAL_USER = UniversalUser.class.getSimpleName();
-        public final static String OFFSET = OffsetAccount.class.getSimpleName();
+        //public final static String OFFSET = OffsetAccount.class.getSimpleName();
         public final static String ENCUMBRANCE = Encumbrance.class.getSimpleName();
         public final static String PURGE_DOCUMENT_CONTENTS_STEP = PurgeDocumentContentsStep.class.getSimpleName();
         public final static String SCHEDULE_STEP = ScheduleStep.class.getSimpleName();
@@ -133,6 +134,7 @@ public class KFSConstants extends JstlConstants {
         
         public final static String KUALI_MODULE_USER = KualiModuleUser.class.getSimpleName();
 
+        public static final String OFFSET = "Offset";
         
         //CHART RELATED COMPONENTS
         /*
@@ -960,6 +962,7 @@ public class KFSConstants extends JstlConstants {
 //    }
 
     public static class SystemGroupParameterNames {
+        
         public static final String FLEXIBLE_OFFSET_ENABLED_FLAG = "USE_FLEXIBLE_OFFSET_IND";
         public static final String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = "USE_FLEXIBLE_CLAIM_ON_CASH_IND";
         public static final String ICR_ENCUMBRANCE_ENABLED_FLAG = "USE_ICR_ENCUMBRANCE_IND";
