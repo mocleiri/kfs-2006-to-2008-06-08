@@ -63,7 +63,7 @@ public class VendorMaintainableImpl extends KualiMaintainableImpl {
     public String getDocumentTitle(MaintenanceDocument document) {
         String documentTitle = "";
         // Check if we are choosing to override the Kuali default document title.
-        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapParameterConstants.PURAP_OVERRIDE_VENDOR_DOC_TITLE);
+        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapParameterConstants.VENDOR_NAMESPACE,PurapParameterConstants.Components.VENDOR, PurapParameterConstants.PURAP_OVERRIDE_VENDOR_DOC_TITLE);
         
         if (StringUtils.equals(specificTitle,Boolean.TRUE.toString())) {
             // We are overriding the standard with a Vendor-specific document title style.
@@ -319,7 +319,7 @@ public class VendorMaintainableImpl extends KualiMaintainableImpl {
             }
         }
         //If the user is not in Purchasing workgroup, don't include add line for vendor contract and vendor contract organization
-        String purchasingWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, VendorConstants.Workgroups.WORKGROUP_PURCHASING); 
+        String purchasingWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapParameterConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, VendorConstants.Workgroups.WORKGROUP_PURCHASING); 
         if (!currentUser.isMember(purchasingWorkgroup) &&
             (collectionDefinition.getName().equals(VendorPropertyConstants.VENDOR_CONTRACT) ||
              collectionDefinition.getName().equals(VendorPropertyConstants.VENDOR_CONTRACT_ORGANIZATION))) {
