@@ -108,11 +108,11 @@ public class OrganizationReversionProcess {
 
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
         this.ORGANIZATION_REVERSION_COA = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.ORGANIZATION_REVERSION_COA);
-        this.CARRY_FORWARD_OBJECT_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.CARRY_FORWARD_OBJECT_CODE);
+        this.CARRY_FORWARD_OBJECT_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.CARRY_FORWARD_OBJECT_CODE);
         this.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE);
         this.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE);
-        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE);
-        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END);
+        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE);
+        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END);
         this.DEFAULT_DOCUMENT_NUMBER_PREFIX = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.DEFAULT_DOCUMENT_NUMBER_PREFIX);
     }
     
