@@ -28,7 +28,6 @@ import org.kuali.kfs.context.TestUtils;
 import org.kuali.module.financial.batch.pcard.ProcurementCardInputFileType;
 import org.kuali.module.gl.batch.collector.CollectorInputFileType;
 import org.kuali.test.ConfigureContext;
-import org.kuali.test.KualiTestConstants.TestConstants.Data2;
 import org.kuali.test.KualiTestConstants.TestConstants.Data4;
 
 /**
@@ -119,33 +118,6 @@ public class BatchInputServiceSystemParametersTest extends KualiTestBase {
         assertFalse("collector isActive method is true when active param does not contain identifier", batchInputFileService.isBatchInputTypeActive(collectorBatchInputFileType));
     }
 
-    /**
-     * Sets an invalid workgroup on system parameters and verifies user is not authorized.
-     */
-    public final void testIsUserAuthorizedForBatchType_invalidWorkgroupParameter() throws Exception {
-        UniversalUser nonWorkgroupUser = SpringContext.getBean(UniversalUserService.class).getUniversalUserByAuthenticationUserId(Data4.USER_ID2);
-        UniversalUser workgroupUser = SpringContext.getBean(UniversalUserService.class).getUniversalUserByAuthenticationUserId(Data4.USER_ID2);
-
-        setWorkgroupSystemParameter(pcdoBatchInputFileType.getWorkgroupParameterName(), "foo");
-        assertFalse("user is authorized for pcdo batch type but workgroup parameter is invalid", batchInputFileService.isUserAuthorizedForBatchType(pcdoBatchInputFileType, workgroupUser));
-
-        setWorkgroupSystemParameter(collectorBatchInputFileType.getWorkgroupParameterName(), "foo");
-        assertFalse("user is authorized for collector batch type but workgroup parameter is invalid", batchInputFileService.isUserAuthorizedForBatchType(collectorBatchInputFileType, workgroupUser));
-    }
-
-    /**
-     * Sets an valid workgroup on system parameters and verifies user is authorized.
-     */
-    public final void testIsUserAuthorizedForBatchType_validWorkgroupParameter() throws Exception {
-        UniversalUser workgroupUser = SpringContext.getBean(UniversalUserService.class).getUniversalUserByAuthenticationUserId(Data4.USER_ID2);
-        String validWorkgroup = Data2.KUALI_FMSOPS;
-
-        setWorkgroupSystemParameter(pcdoBatchInputFileType.getWorkgroupParameterName(), validWorkgroup);
-        assertTrue("user is not authorized for pcdo batch type but workgroup parameter is valid", batchInputFileService.isUserAuthorizedForBatchType(pcdoBatchInputFileType, workgroupUser));
-
-        setWorkgroupSystemParameter(collectorBatchInputFileType.getWorkgroupParameterName(), validWorkgroup);
-        assertTrue("user is not authorized for collector batch type but workgroup parameter is valid", batchInputFileService.isUserAuthorizedForBatchType(pcdoBatchInputFileType, workgroupUser));
-    }
 
     /**
      * Changes the text for the batch input active system parameter, stores and clears cache.
@@ -154,10 +126,4 @@ public class BatchInputServiceSystemParametersTest extends KualiTestBase {
         TestUtils.setSystemParameter(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.BATCH, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME, parameterText, false, multiValue);
     }
 
-    /**
-     * Changes the text for the given workgroup system parameter, stores and clears cache.
-     */
-    private final void setWorkgroupSystemParameter(String workgroupName, String parameterText) throws Exception {
-        TestUtils.setSystemParameter(KFSConstants.CORE_NAMESPACE, workgroupName, parameterText, false, false);
-    }
-}
+ }
