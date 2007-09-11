@@ -53,7 +53,9 @@ public class Job implements StatefulJob, InterruptableJob {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         workerThread = Thread.currentThread();
         if (isNotRunnable()) {
-            LOG.info("Skipping job because doNotRun is true: " + jobExecutionContext.getJobDetail().getName());
+            if ( LOG.isInfoEnabled() ) {
+                LOG.info("Skipping job because doNotRun is true: " + jobExecutionContext.getJobDetail().getName());
+            }
             return;
         }
         int startStep = 0;
@@ -70,7 +72,9 @@ public class Job implements StatefulJob, InterruptableJob {
         }
         int currentStepNumber = 0;
         try {
-            LOG.info("Executing job: " + jobExecutionContext.getJobDetail() + "\n" + jobExecutionContext.getJobDetail().getJobDataMap() );
+            if ( LOG.isInfoEnabled() ) {
+                LOG.info("Executing job: " + jobExecutionContext.getJobDetail() + "\n" + jobExecutionContext.getJobDetail().getJobDataMap() );
+            }
             for (Step step : getSteps()) {
                 currentStepNumber++;
                 // prevent starting of the next step if the thread has an interrupted status
@@ -80,27 +84,38 @@ public class Job implements StatefulJob, InterruptableJob {
                     return;                    
                 }
                 if ( startStep > 0 && currentStepNumber < startStep ) {
-                    LOG.info( "Skipping step " + currentStepNumber + " - startStep=" + startStep );
+                    if ( LOG.isInfoEnabled() ) {
+                        LOG.info( "Skipping step " + currentStepNumber + " - startStep=" + startStep );
+                    }
                     continue; // skip to next step
                 } else if ( endStep > 0 && currentStepNumber > endStep ) {
-                    LOG.info( "Ending step loop - currentStepNumber=" + currentStepNumber + " - endStep = " + endStep );
+                    if ( LOG.isInfoEnabled() ) {
+                        LOG.info( "Ending step loop - currentStepNumber=" + currentStepNumber + " - endStep = " + endStep );
+                    }
                     break;
                 }
                 currentStep = step;
                 LOG.info(new StringBuffer("Started processing step: ").append(currentStepNumber).append("=").append(step.getName()));
-                String stepRunIndicatorParameter = step.getName() + STEP_RUN_INDICATOR_PARAMETER_SUFFIX;
-                if (getConfigurationService().parameterExists(step.getNamespace(), stepRunIndicatorParameter) && !getConfigurationService().getIndicatorParameter(step.getNamespace(), stepRunIndicatorParameter)) {
-                    LOG.info("Skipping step due to system parameter: " + stepRunIndicatorParameter);
+                String stepRunIndicatorParameter = "RUN_IND";
+                if (getConfigurationService().parameterExists(step.getNamespace(), step.getComponentName(), stepRunIndicatorParameter) 
+                        && !getConfigurationService().getIndicatorParameter(step.getNamespace(), step.getComponentName(), stepRunIndicatorParameter)) {
+                    if ( LOG.isInfoEnabled() ) {
+                        LOG.info("Skipping step due to system parameter: " + stepRunIndicatorParameter);
+                    }
                 }
                 else {
                     GlobalVariables.setErrorMap(new ErrorMap());
                     GlobalVariables.setMessageList(new ArrayList());
-                    String stepUserParameter = step.getName() + STEP_USER_PARAMETER_SUFFIX;
-                    if (getConfigurationService().parameterExists(step.getNamespace(), stepUserParameter)) {
-                        LOG.info(new StringBuffer("Creating user session for step: ").append(stepUserParameter).append("=").append(getConfigurationService().getParameterValue(step.getNamespace(), stepUserParameter)));
-                        GlobalVariables.setUserSession(new UserSession(getConfigurationService().getParameterValue(step.getNamespace(), stepUserParameter)));
+                    String stepUserParameter = "USER";
+                    if (getConfigurationService().parameterExists(step.getNamespace(), step.getComponentName(), stepUserParameter)) {
+                        if ( LOG.isInfoEnabled() ) {
+                            LOG.info(new StringBuffer("Creating user session for step: ").append(stepUserParameter).append("=").append(getConfigurationService().getParameterValue(step.getNamespace(), step.getComponentName(), stepUserParameter)));
+                        }
+                        GlobalVariables.setUserSession(new UserSession(getConfigurationService().getParameterValue(step.getNamespace(), step.getComponentName(), stepUserParameter)));
                     }
-                    LOG.info(new StringBuffer("Executing step: ").append(step.getName()).append("=").append(step.getClass()));
+                    if ( LOG.isInfoEnabled() ) {
+                        LOG.info(new StringBuffer("Executing step: ").append(step.getName()).append("=").append(step.getClass()));
+                    }
                     step.setInterrupted( false );
                     try {
                         if (step.execute(jobExecutionContext.getJobDetail().getFullName())) {
@@ -122,7 +137,9 @@ public class Job implements StatefulJob, InterruptableJob {
                         return;
                     }
                 }
-                LOG.info(new StringBuffer("Finished processing step ").append(currentStepNumber).append(": ").append(step.getName()));
+                if ( LOG.isInfoEnabled() ) {
+                    LOG.info(new StringBuffer("Finished processing step ").append(currentStepNumber).append(": ").append(step.getName()));
+                }
             }
         }
         catch (Exception e) {
