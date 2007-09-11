@@ -256,7 +256,7 @@ public class OriginEntryTestBase extends KualiTestBase {
     }
 
     protected void setApplicationConfigurationFlag(String name, boolean value) throws Exception {
-        TestUtils.setSystemParameter(KFSConstants.CORE_NAMESPACE, name, value ? "Y" : "N", true, false);
+        TestUtils.setSystemParameter(KFSConstants.KFS_SYSTEM_NAMESPACE, name, value ? "Y" : "N", true, false);
     }
 
 
