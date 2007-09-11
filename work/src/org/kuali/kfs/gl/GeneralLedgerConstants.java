@@ -29,11 +29,13 @@ import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.OrganizationReversion;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.batch.BalanceForwardStep;
+import org.kuali.module.gl.batch.ClearOldOriginEntryStep;
 import org.kuali.module.gl.batch.EncumbranceForwardStep;
+import org.kuali.module.gl.batch.NominalActivityClosingStep;
 import org.kuali.module.gl.batch.ScrubberStep;
+import org.kuali.module.gl.batch.collector.CollectorStep;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.labor.LaborConstants.Poster;
 
 
 /**
@@ -52,6 +54,8 @@ public class GLConstants {
     public static final String EMPTY_CODE = "";
     public static final String ERROR_CODE = "E";
     
+    public static final String RETAIN_DAYS = "RETAIN_DAYS";
+    
     public static class Components {
         //public final static String COLLECTOR_JOB = CollectorJob.class.getSimpleName();  //What value should we use for this component?
         //public final static String ENTERPRISE_FEED_JOB = EnterpriseFeedJob.class.getSimpleName();
@@ -60,7 +64,12 @@ public class GLConstants {
         public final static String BALANCE_FORWARD_STEP = BalanceForwardStep.class.getSimpleName();
         public final static String ENCUMBRANCE_FORWARD_STEP = EncumbranceForwardStep.class.getSimpleName();
         public final static String ORGANIZATION_REVERSION = OrganizationReversion.class.getSimpleName();
+        public final static String CLEAR_OLD_ORIGIN_ENTRY_STEP = ClearOldOriginEntryStep.class.getSimpleName();
+        public final static String COLLECTOR_STEP = CollectorStep.class.getSimpleName();
         public final static String SCRUBBER_STEP = ScrubberStep.class.getSimpleName();
+        public final static String ENTERPRISE_FEED_STEP = "EnterpriseFeedStep";
+        public final static String NOMINAL_ACTIVITY_CLOSING_STEP = NominalActivityClosingStep.class.getSimpleName();
+        
     }
     
     public static class DummyBusinessObject {
@@ -101,12 +110,12 @@ public class GLConstants {
         static final public String OFFSET_GENERATION_CODE = "FIN_OFFST_GNRTN_CD";
         static final public String TRANSACTION_LEDGER_ENTRY_AMOUNT = "TRN_LDGR_ENTR_AMT";
 
-        static final public String TRANSACTION_DT = "TRANSACTION_DT";
+        static final public String TRANSACTION_DT = "ANNUAL_CLOSING_TRANSACTION_DATE";
         static final public String FIN_OBJ_TYP_CODE = "FIN_OBJ_TYP_CODE";
-        static final public String NET_EXP_OBJECT_CD = "NET_EXP_OBJECT_CD";
-        static final public String NET_REV_OBJECT_CD = "NET_REV_OBJECT_CD";
-        static final public String FUND_BAL_OBJ_TYP_CD = "FUND_BAL_OBJ_TYP_CD";
-        static final public String FUND_BAL_OBJECT_CD = "FUND_BAL_OBJECT_CD";
+        static final public String NET_EXP_OBJECT_CD = "NET_EXPENSE_OBJECT_CODE";
+        static final public String NET_REV_OBJECT_CD = "NET_REVENUE_OBJECT_CODE";
+        static final public String FUND_BAL_OBJ_TYP_CD = "NET_REVENUE_OBJECT_CODE";
+        static final public String FUND_BAL_OBJECT_CD = "ANNUAL_CLOSING_FUND_BALANCE_OBJECT_CODE";
         static final public String UNIV_DT = "UNIV_DT";
     }
 
@@ -201,8 +210,8 @@ public class GLConstants {
         static final public String CARRY_FORWARD_OBJECT_CODE = "CARRY_FORWARD_OBJECT_CODE";
         static final public String DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE = "DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE";
         static final public String DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE = "DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE";
-        static final public String DEFAULT_FINANCIAL_BALANCE_TYPE_CODE = "DEFAULT_FINANCIAL_BALANCE_TYPE_CODE";
-        static final public String DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END = "DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END";
+        static final public String DEFAULT_FINANCIAL_BALANCE_TYPE_CODE = "CASH_REVERSION_DEFAULT_BALANCE_TYPE";
+        static final public String DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END = "BUDGET_REVERSION_DEFAULT_BALANCE_TYPE";
         static final public String DEFAULT_DOCUMENT_NUMBER_PREFIX = "DEFAULT_DOCUMENT_NUMBER_PREFIX";
     }
     
