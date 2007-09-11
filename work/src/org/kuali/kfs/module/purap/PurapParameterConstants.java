@@ -20,38 +20,41 @@ package org.kuali.module.purap;
  */
 public class PurapParameterConstants {
 
-    private static final String PURAP_PARAM_PREFIX = "PURAP";
-    private static final String STANDARD_SEPARATOR = ".";
-    
     // NAMESPACE NAME
     public static final String PURAP_NAMESPACE = "KFS-PA";
+    public static final String VENDOR_NAMESPACE = "KFS-VN";
+    
+    // COMPONENTS
+    public static class Components {
+        public static final String VENDOR = "Vendor";
+    }
     
     // PARAMETER NAMES
-    public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE";
-    public static final String PURAP_OVERRIDE_PREQ_DOC_TITLE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "OVERRIDE_PREQ_DOC_TITLE";
-    public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "OVERRIDE_REQ_DOC_TITLE";    
-    public static final String PURAP_OVERRIDE_VENDOR_DOC_TITLE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "OVERRIDE_VENDOR_DOC_TITLE";
-    public static final String PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "DEFAULT_NEG_PMT_RQST_APRVL_LMT";
-    public static final String PURAP_PDP_EPIC_ORG_CODE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "PDP.EPIC.ORG.CODE";
-    public static final String PURAP_PDP_EPIC_SBUNT_CODE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "PDP.EPIC.SBUNT.CODE";
-    public static final String PURAP_PDP_USER_ID = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "PDP.USER.ID";
-    public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "DEFAULT_PO_TRANSMISSION_CODE";
+    public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = "OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE";
+    public static final String PURAP_OVERRIDE_PREQ_DOC_TITLE = "OVERRIDE_PREQ_DOC_TITLE";
+    public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = "OVERRIDE_REQ_DOC_TITLE";    
+    public static final String PURAP_OVERRIDE_VENDOR_DOC_TITLE = "OVERRIDE_VENDOR_DOC_TITLE";
+    public static final String PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT = "DEFAULT_NEG_PMT_RQST_APRVL_LMT";
+    public static final String PURAP_PDP_EPIC_ORG_CODE = "PDP.EPIC.ORG.CODE";
+    public static final String PURAP_PDP_EPIC_SBUNT_CODE = "PDP.EPIC.SBUNT.CODE";
+    public static final String PURAP_PDP_USER_ID = "PDP.USER.ID";
+    public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = "DEFAULT_PO_TRANSMISSION_CODE";
 
     public static class Workgroups {
-        public static final String SEARCH_SPECIAL_ACCESS = "WORKGROUP" + STANDARD_SEPARATOR + "SEARCH_SPECIAL_ACCESS";
+        public static final String SEARCH_SPECIAL_ACCESS = "SEARCH_SPECIAL_ACCESS_GROUP";
 
         // ASSIGN A CONTRACT MANAGER DOCUMENT
-        public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "DOCUMENT.ASSIGN.CM.ACTIONS";
+        public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = "DOCUMENT.ASSIGN.CM.ACTIONS";
 
         // PURCHASE ORDER DOCUMENT
-        public static final String WORKGROUP_PURCHASING = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "WORKGROUP.PURCHASING";
-        public static final String PURAP_DOCUMENT_PO_INITIATE_ACTION = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "DOCUMENT.PO.INITIATE.ACTION";
-        public static final String PURAP_DOCUMENT_PO_ACTIONS = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "DOCUMENT.PO.ACTIONS";
+        public static final String WORKGROUP_PURCHASING = "PURCHASING_GROUP";
+        public static final String PURAP_DOCUMENT_PO_INITIATE_ACTION = "DOCUMENT.PO.INITIATE.ACTION";
+        public static final String PURAP_DOCUMENT_PO_ACTIONS = "DOCUMENT.PO.ACTIONS";
         // TODO PURAP: Below parameter not being used??
-//      public static final String WORKGROUP_TAXNBR_ACCESSIBLE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "WORKGROUP.TAXNBR_ACCESSIBLE";
+//      public static final String WORKGROUP_TAXNBR_ACCESSIBLE = "WORKGROUP.TAXNBR_ACCESSIBLE";
 
         // ACCOUNTS PAYABLE DOCUMENT
-        public static final String WORKGROUP_ACCOUNTS_PAYABLE = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "WORKGROUP.ACCOUNTS_PAYABLE";
+        public static final String WORKGROUP_ACCOUNTS_PAYABLE = "ACCOUNTS_PAYABLE_GROUP";
         //TODO PURAP: need an accounts payable supervisor group
         public static final String WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR = WORKGROUP_ACCOUNTS_PAYABLE;
     }
@@ -59,15 +62,15 @@ public class PurapParameterConstants {
     public static class WorkflowParameters {
         public static class RequisitionDocument {
             // config parameters
-            public static final String SEPARATION_OF_DUTIES_DOLLAR_AMOUNT = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "SEPARATION_OF_DUTIES_DOLLAR_AMOUNT";
+            public static final String SEPARATION_OF_DUTIES_DOLLAR_AMOUNT = "SEPARATION_OF_DUTIES_DOLLAR_AMOUNT";
             // Workgroups
-            public static final String SEPARATION_OF_DUTIES_WORKGROUP_NAME = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "WORKGROUP.SEPARATION_OF_DUTIES";
+            public static final String SEPARATION_OF_DUTIES_WORKGROUP_NAME = "WORKGROUP.SEPARATION_OF_DUTIES";
         }
         public static class PurchaseOrderDocument {
             // Config parameter group names
             public static final String CG_RESTRICTED_OBJECT_CODE_RULE_GROUP_NAME = "PurAp.CG_Restricted_Object_Codes";
             // Workgroups
-            public static final String INTERNAL_PURCHASING_WORKGROUP_NAME = PURAP_PARAM_PREFIX + STANDARD_SEPARATOR + "INTERNAL_PURCHASING_REVIEWERS";
+            public static final String INTERNAL_PURCHASING_WORKGROUP_NAME = "INTERNAL_PURCHASING_REVIEWERS";
         }
     }
 
