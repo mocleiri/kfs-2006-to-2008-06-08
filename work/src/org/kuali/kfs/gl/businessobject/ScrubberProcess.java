@@ -1054,9 +1054,10 @@ public class ScrubberProcess {
 
             String objectSubTypeCode = scrubbedEntry.getFinancialObject().getFinancialObjectSubTypeCode();
 
-            Parameter objectParameter = parameters.get(GLConstants.GlScrubberGroupParameters.CAPITALIZATION_SUBTYPE_OBJECT_PREFIX + objectSubTypeCode);
-            if (objectParameter != null) {
-                capitalizationEntry.setFinancialObjectCode(objectParameter.getParameterValue());
+            Parameter objectParameter = parameters.get(GLConstants.GlScrubberGroupParameters.CAPITALIZATION_SUBTYPE_OBJECT );
+            List<String> objList = kualiConfigurationService.getConstrainedValues(objectParameter, objectSubTypeCode);
+            if (objList.size() > 0) {
+                capitalizationEntry.setFinancialObjectCode( objList.get(0) );
                 persistenceService.retrieveReferenceObject(capitalizationEntry, KFSPropertyConstants.FINANCIAL_OBJECT);
             }
 
@@ -1471,7 +1472,7 @@ public class ScrubberProcess {
 
         // General rules
         if ( originEntryObjectCode.equals(financialOriginEntryObjectCode) ) {
-            Parameter param = parameters.get(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_PREFIX + originEntryObjectLevelCode);
+            Parameter param = parameters.get(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_PREFIX );
             if ( param == null ) {
                 param = getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT);
                 if ( param == null ) {
@@ -1480,10 +1481,11 @@ public class ScrubberProcess {
                     originEntryObjectCode = param.getParameterValue();
                 }
             } else {
-                if ( param.getParameterValue() == null ) {
+                List<String> objList = kualiConfigurationService.getConstrainedValues(param, originEntryObjectLevelCode);
+                if ( objList.isEmpty() ) {
                     // Don't do anything with the object code
                 } else {
-                    originEntryObjectCode = param.getParameterValue();                    
+                    originEntryObjectCode = objList.get(0);                    
                 }
             }
         }
