@@ -48,7 +48,6 @@ import org.kuali.core.util.WebUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.budget.xml.BudgetXml;
@@ -74,6 +73,15 @@ public class BudgetOutputAction extends BudgetAction {
     private static final String NIH_MOD = "NIH-mod";
     private static final String NIH_SUMMARY = "NSF-summary";
     private static final String SF_424 = "SF424";
+
+    private static final String GENERIC_BY_PERIOD_XSL_PATH_PARM_NM = "OUTPUT-GENERIC_BY_PERIOD_XSL_PATH";
+    private static final String GENERIC_BY_TASK_XSL_PATH_PARM_NM = "OUTPUT-GENERIC_BY_TASK_XSL_PATH";
+    private static final String NIH_MODULAR_XSL_PATH_PARM_NM = "OUTPUT-NIH_MODULAR_XSL_PATH";
+    private static final String NIH2590_XSL_PATH_PARM_NM = "OUTPUT-NIH2590_XSL_PATH";
+    private static final String NIH398_XSL_PATH_PARM_NM = "OUTPUT-NIH398_XSL_PATH";
+    private static final String NSF_SUMMARY_XSL_PATH_PARM_NM = "OUTPUT-NSF_SUMMARY_XSL_PATH";
+    private static final String SF424_XSL_PATH_PARM_NM = "OUTPUT-SF424_XSL_PATH";
+    private static final String STYLESHEET_URL_OR_PATH_PARM_NM = "OUTPUT-STYLESHEET_URL_OR_PATH";
 
     /**
      * Use for generation of PDF that is to be pushed to the browser.
@@ -247,42 +255,42 @@ public class BudgetOutputAction extends BudgetAction {
         String urlString = "";
         
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        String STYLESHEET_URL_OR_PATH = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputStylesheetUrlOrPath");
+        String stylesheetUrlOrPath = kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, STYLESHEET_URL_OR_PATH_PARM_NM);
 
         // following checks if STYLESHEET_URL_OR_PATH is a URL already or path within the project
-        if (STYLESHEET_URL_OR_PATH.contains("://")) {
-            urlString = STYLESHEET_URL_OR_PATH;
+        if (stylesheetUrlOrPath.contains("://")) {
+            urlString = stylesheetUrlOrPath;
         }
         else {
             String APPLICATION_BASE_URL_KEY = kualiConfigurationService.getPropertyString(KFSConstants.APPLICATION_URL_KEY);
-            urlString = APPLICATION_BASE_URL_KEY + STYLESHEET_URL_OR_PATH;
+            urlString = APPLICATION_BASE_URL_KEY + stylesheetUrlOrPath;
         }
 
         if (GENERIC_BY_TASK.equals(currentOutputReportType)) {
-            urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputGenericByTaskXslPath");
+            urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, GENERIC_BY_TASK_XSL_PATH_PARM_NM);
         }
         else if (GENERIC_BY_PERIOD.equals(currentOutputReportType)) {
-            urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputGenericByPeriodXslPath");
+            urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, GENERIC_BY_PERIOD_XSL_PATH_PARM_NM);
         }
         else if (AGENCY.equals(currentOutputReportType)) {
             if (NIH_2590.equals(currentOutputAgencyType)) {
-                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputNih2590XslPath");
+                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, NIH2590_XSL_PATH_PARM_NM);
             }
             else if (NIH_398.equals(currentOutputAgencyType)) {
-                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputNih398XslPath");
+                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, NIH398_XSL_PATH_PARM_NM);
             }
             else if (NIH_MOD.equals(currentOutputAgencyType)) {
-                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputModularXslPath");
+                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, NIH_MODULAR_XSL_PATH_PARM_NM);
             }
             else if (NIH_SUMMARY.equals(currentOutputAgencyType)) {
-                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputNsfSummaryXslPath");
+                urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, NSF_SUMMARY_XSL_PATH_PARM_NM);
             }
             else {
                 LOG.error("Report type agency stylesheet not found.");
             }
         }
         else if (SF_424.equals(currentOutputReportType)) {
-            urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, "outputSf424XslPath");
+            urlString += kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, SF424_XSL_PATH_PARM_NM);
         }
         else {
             LOG.error("Report type stylesheet not found.");
