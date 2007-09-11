@@ -22,6 +22,7 @@ import org.kuali.RiceConstants;
 import org.kuali.core.JstlConstants;
 import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.DocumentType;
+import org.kuali.core.bo.user.KualiModuleUser;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.KualiDecimal;
@@ -127,6 +128,10 @@ public class KFSConstants extends JstlConstants {
         public final static String ENCUMBRANCE = Encumbrance.class.getSimpleName();
         public final static String PURGE_DOCUMENT_CONTENTS_STEP = PurgeDocumentContentsStep.class.getSimpleName();
         public final static String SCHEDULE_STEP = ScheduleStep.class.getSimpleName();
+        
+        public final static String LOOKUP = "Lookup";
+        
+        public final static String KUALI_MODULE_USER = KualiModuleUser.class.getSimpleName();
 
         
         //CHART RELATED COMPONENTS
@@ -266,7 +271,7 @@ public class KFSConstants extends JstlConstants {
     public static final String KFS_MODULE_CODE = "FS";
     public static final String KFS_MODULE_NAME = "Financial Systems";
 
-    public static final String LOOKUP_RESULTS_LIMIT_URL_KEY = "lookup.results.limit";
+    public static final String LOOKUP_RESULTS_LIMIT_URL_KEY = "RESULTS_LIMIT";
     public static final String DOCHANDLER_DO_URL = "/DocHandler.do?docId=";
     public static final String DOCHANDLER_URL_CHUNK = "&command=displayDocSearchView";
    
@@ -883,14 +888,14 @@ public class KFSConstants extends JstlConstants {
         public static final String CLEAR_FOREIGN_DRAFT_TAB_QUESTION_ID = "ClearForeignDraftTabQuestion";
     }
     
-    public static final String ALLOWED_EMPLOYEE_STATUS_RULE = "AllowedEmployeeStatuses";
+    public static final String ALLOWED_EMPLOYEE_STATUS_RULE = "ACTIVE_EMPLOYEE_STATUSES";
 
     public static class CoreApcParms {
         
         // Kuali User params
         public static final String USER_INVALID_EMPLOYEE_STATUSES = "ACTIVE_KFS_USER_EMPLOYEE_STATUSES";
         
-        public static final String UNIVERSAL_USER_EDIT_WORKGROUP = "UniversalUser.EditWorkgroup";
+        public static final String UNIVERSAL_USER_EDIT_WORKGROUP = "UNIVERSAL_USER_EDIT_GROUP";
     }
     
     public static class ChartApcParms {
@@ -968,16 +973,16 @@ public class KFSConstants extends JstlConstants {
         public static final String GL_ACCOUNT_BALANCE_SERVICE = "GL.ACCOUNT_BALANCE_SERVICE";
 
         public static final String GL_ACLO = "GLACLO";
-        public static final String GL_ANNAL_CLOSING_DOC_TYPE = "GLACLO";
+        public static final String GL_ANNAL_CLOSING_DOC_TYPE = "ANNUAL_CLOSING_DOCUMENT_TYPE";
         public static final String GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE = "GLClosingOfNominalActivityObjectTypeCode";
         public static final String GL_INDIRECT_COST_RECOVERY = "GLIndirectCostRecovery";
         public static final String GL_NET_EXPENSE_OBJECT_TYPE_CODE = "GLNetExpenseObjectTypeCode";
-        public static final String GL_ORIGINATION_CODE = "GLOriginationCode";
+        public static final String GL_ORIGINATION_CODE = "MANUAL_FEED_ORIGINATION";
         public static final String GL_SCRUBBER_VALIDATION_DAYS_OFFSET = "GL_SCRUBBER_VALIDATION_DAYS_OFFSET";
         
         public static final String LOOKUP_RESULTS_LIMIT = "lookup.results.limit";
-        public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_PER_PAGE = "multipleValueLookupResultsPerPage";
-        public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE = "multipleValueLookupResultsExpirationAge";
+        public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_PER_PAGE = "MULTIPLE_VALUE_RESULTS_PER_PAGE";
+        public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE = "MULTIPLE_VALUE_RESULTS_EXPIRATION_SECONDS";
       
         public static final String ACTIVE_INPUT_TYPES_PARAMETER_NAME = "ACTIVE_INPUT_TYPES";
         public static final String PCDO_FILE_TYPE_PARAMETER_NAMESPACE = FINANCIAL_NAMESPACE;
@@ -989,14 +994,14 @@ public class KFSConstants extends JstlConstants {
         public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_PARAMETER_NAMESPACE = GL_NAMESPACE;
         public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_PARAMETER_COMPONENT = "EnterpriseFeedStep";
         
-        public static final String COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME = "ValidationEmailSubjectLine";
-        public static final String COLLECTOR_DEMERGER_EMAIL_SUBJECT_PARAMETER_NAME = "DemergerEmailSubjectLine";
-        public static final String COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES = "EqualDebitCreditTotalDocumentTypes";
-        public static final String COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK = "PerformDuplicateHeaderCheck";
+        public static final String COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME = "VALIDATION_EMAIL_SUBJECT_LINE";
+        public static final String COLLECTOR_DEMERGER_EMAIL_SUBJECT_PARAMETER_NAME = "ERROR_EMAIL_SUBJECT_LINE";
+        public static final String COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES = "EQUAL_DEBIT_CREDIT_TOTAL_DOCUMENT_TYPES";
+        public static final String COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK = "PERFORM_DUPLICATE_HEADER_CHECK";
         
-        public static final String BATCH_SCHEDULE_CUTOFF_TIME = "scheduleStep_CUTOFF_TIME";
-        public static final String BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY = "scheduleStep_IS_CUTOFF_TIME_NEXT_DAY";
-        public static final String BATCH_SCHEDULE_STATUS_CHECK_INTERVAL = "scheduleStep_STATUS_CHECK_INTERVAL";
+        public static final String BATCH_SCHEDULE_CUTOFF_TIME = "CUTOFF_TIME";
+        public static final String BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY = "CUTOFF_TIME_NEXT_DAY_IND";
+        public static final String BATCH_SCHEDULE_STATUS_CHECK_INTERVAL = "STATUS_CHECK_INTERVAL";
         
         /**
          * Used by PurgePendingAttachmentsJob to compute the maximum amount of time a pending attachment is allowed to
@@ -1021,7 +1026,7 @@ public class KFSConstants extends JstlConstants {
     }
 
     public static class EnterpriseFeederApplicationParameterKeys {
-        public static final String TO_ADDRESS = "ToAddress";
+        public static final String TO_ADDRESS = "INVALID_FILE_TO_ADDRESS";
     }
 
     public static class ParameterValues {
