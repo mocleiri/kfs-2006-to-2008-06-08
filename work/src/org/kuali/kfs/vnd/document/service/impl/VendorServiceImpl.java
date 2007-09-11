@@ -307,7 +307,7 @@ public class VendorServiceImpl implements VendorService {
             if (StringUtils.isNotBlank(ssnTaxId)) {
                 try {
                     UniversalUser user = universalUserService.getUniversalUser(new PersonTaxId(ssnTaxId));
-                    return (user.isFaculty() || user.isStaff() || user.isAffiliate()) && !configService.failsRule(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.NOT_APPLICABLE, KFSConstants.ALLOWED_EMPLOYEE_STATUS_RULE,user.getEmployeeStatusCode());
+                    return (user.isFaculty() || user.isStaff() || user.isAffiliate()) && !configService.failsRule(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.KUALI_MODULE_USER, KFSConstants.ALLOWED_EMPLOYEE_STATUS_RULE,user.getEmployeeStatusCode());
                 }
                 catch (UserNotFoundException e) {
                     // user is not in the system... assume non-employee
