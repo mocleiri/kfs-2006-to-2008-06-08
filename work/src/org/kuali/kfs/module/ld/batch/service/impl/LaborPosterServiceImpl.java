@@ -15,7 +15,6 @@
  */
 package org.kuali.module.labor.service.impl;
 
-import static org.kuali.module.gl.GLConstants.GL_SUMMARY_REPORT_GROUP;
 import static org.kuali.module.gl.GLConstants.GlSummaryReport.CURRENT_AND_LAST_YEAR;
 import static org.kuali.module.gl.GLConstants.GlSummaryReport.CURRENT_YEAR_LOWER;
 import static org.kuali.module.gl.GLConstants.GlSummaryReport.CURRENT_YEAR_UPPER;
@@ -23,7 +22,6 @@ import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_ERROR;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_VALID;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_SCRUBBER_VALID;
 import static org.kuali.module.labor.LaborConstants.DestinationNames.ORIGN_ENTRY;
-import static org.kuali.module.labor.LaborConstants.ParameterGroups.POSTER;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -115,9 +113,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
     public void generateBalanceSummaryReports(Date runDate) {
         LOG.info("generateBalanceSummaryReports(Date) started");
         
-        String yearEndPeriodLowerBound = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, CURRENT_YEAR_LOWER);
-        String lastDayOfFiscalYear = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, CURRENT_AND_LAST_YEAR);
-        String yearEndPeriodUpperBound = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, CURRENT_YEAR_UPPER);
+        String yearEndPeriodLowerBound = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, "PosterSummaryReportStep", CURRENT_YEAR_LOWER);
+        String lastDayOfFiscalYear = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, "PosterSummaryReportStep", CURRENT_AND_LAST_YEAR);
+        String yearEndPeriodUpperBound = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, "PosterSummaryReportStep", CURRENT_YEAR_UPPER);
 
         Integer currentYear = optionsService.getCurrentYearOptions().getUniversityFiscalYear();       
         this.generateBalanceSummaryReports(currentYear, runDate);
@@ -477,7 +475,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the balance type codes that are bypassed by Labor Poster
      */
     public String[] getBalanceTypesNotProcessed() {
-        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, Poster.BALANCE_TYPES_NOT_PROCESSED);
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, "LaborPosterStep", Poster.BALANCE_TYPES_NOT_PROCESSED);
     }
 
     /**
@@ -486,7 +484,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the object codes that are bypassed by Labor Poster
      */
     public String[] getObjectsNotProcessed() {
-        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, Poster.OBJECT_CODES_NOT_PROCESSED);
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, "LaborPosterStep", Poster.OBJECT_CODES_NOT_PROCESSED);
     }
 
     /**
@@ -495,7 +493,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @return a set of the fiscal period codes that are bypassed by Labor Poster
      */
     public String[] getPeriodCodesNotProcessed() {
-        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, Poster.PERIOD_CODES_NOT_PROCESSED);
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, "LaborPosterStep", Poster.PERIOD_CODES_NOT_PROCESSED);
     }
 
     /**
