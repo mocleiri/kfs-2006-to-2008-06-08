@@ -72,6 +72,8 @@ public class GLConstants {
         
     }
     
+    
+    
     public static class DummyBusinessObject {
         static final public String COST_SHARE_OPTION = "dummyBusinessObject.costShareOption";
         static final public String PENDING_ENTRY_OPTION = "dummyBusinessObject.pendingEntryOption";
@@ -110,12 +112,12 @@ public class GLConstants {
         static final public String OFFSET_GENERATION_CODE = "FIN_OFFST_GNRTN_CD";
         static final public String TRANSACTION_LEDGER_ENTRY_AMOUNT = "TRN_LDGR_ENTR_AMT";
 
-        static final public String TRANSACTION_DT = "ANNUAL_CLOSING_TRANSACTION_DATE";
+        static final public String TRANSACTION_DT = "TRANSACTION_DT";
         static final public String FIN_OBJ_TYP_CODE = "FIN_OBJ_TYP_CODE";
-        static final public String NET_EXP_OBJECT_CD = "NET_EXPENSE_OBJECT_CODE";
-        static final public String NET_REV_OBJECT_CD = "NET_REVENUE_OBJECT_CODE";
-        static final public String FUND_BAL_OBJ_TYP_CD = "NET_REVENUE_OBJECT_CODE";
-        static final public String FUND_BAL_OBJECT_CD = "ANNUAL_CLOSING_FUND_BALANCE_OBJECT_CODE";
+        static final public String NET_EXP_OBJECT_CD = "NET_EXP_OBJECT_CD";
+        static final public String NET_REV_OBJECT_CD = "NET_REV_OBJECT_CD";
+        static final public String FUND_BAL_OBJ_TYP_CD = "FUND_BAL_OBJ_TYP_CD";
+        static final public String FUND_BAL_OBJECT_CD = "FUND_BAL_OBJECT_CD";
         static final public String UNIV_DT = "UNIV_DT";
     }
 
@@ -138,6 +140,9 @@ public class GLConstants {
     public static final String GL_POSTER_OUTPUT_SUMMARY_ENTRY_GROUP = "GL.POSTER_OUTPUT_SUMMARY_ENTRY";
     public static final String GL_BALANCE_FORWARD_PROCESS = "GL.BALANCE_FORWARD_PROCESS";
     public static final String GL_ENCUMBRANCE_FORWARD_PROCESS = "GL.ENCUMBRANCE_FORWARD_PROCESS";
+    
+    public static final String ANNUAL_CLOSING_TRANSACTION_DATE_PARM = "ANNUAL_CLOSING_TRANSACTION_DATE";
+    public static final String ANNUAL_CLOSING_FISCAL_YEAR_PARM = "ANNUAL_CLOSING_FISCAL_YEAR";
     
     public static class GlAccountBalanceGroupParameters {
         static final public String EXPENSE_OBJECT_TYPE_CODES = "EXPENSE_OBJECT_TYPE_CODES";
