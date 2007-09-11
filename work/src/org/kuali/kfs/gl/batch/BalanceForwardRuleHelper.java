@@ -210,7 +210,7 @@ public class BalanceForwardRuleHelper {
             generalSwObjectTypes[1] = options.getFinObjectTypeLiabilitiesCode();
             generalSwObjectTypes[2] = options.getFinObjectTypeFundBalanceCd();
             
-            final String[] CONDITION_GENERAL_SW_FLAG = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.BalanceForwardRule.BALANCE_TYPES_TO_ROLL_FORWARD_FOR_BALANCE_SHEET);
+            final String[] CONDITION_GENERAL_SW_FLAG = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.BALANCE_FORWARD_STEP, GLConstants.BalanceForwardRule.BALANCE_TYPES_TO_ROLL_FORWARD_FOR_BALANCE_SHEET);
             if (ObjectHelper.isOneOf(balance.getBalanceTypeCode(), CONDITION_GENERAL_SW_FLAG) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), generalSwObjectTypes)) {
 
                 selectGeneralSwFlag = true;
@@ -314,7 +314,7 @@ public class BalanceForwardRuleHelper {
             priorYearAccountObjectTypes[6] = options.getFinObjectTypeIncomecashCode();
             priorYearAccountObjectTypes[7] = options.getFinObjTypeCshNotIncomeCd();
 
-            final String[] CONDITION_PRIOR_YEAR_ACCOUNT = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.BalanceForwardRule.BALANCE_TYPES_TO_ROLL_FORWARD_FOR_INCOME_EXPENSE);
+            final String[] CONDITION_PRIOR_YEAR_ACCOUNT = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.BALANCE_FORWARD_STEP, GLConstants.BalanceForwardRule.BALANCE_TYPES_TO_ROLL_FORWARD_FOR_INCOME_EXPENSE);
             if (ObjectHelper.isOneOf(balance.getBalanceTypeCode(), CONDITION_PRIOR_YEAR_ACCOUNT) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), priorYearAccountObjectTypes)) {
 
                 // 1025 005520 MOVE GLGLBL-FIN-COA-CD
@@ -386,7 +386,7 @@ public class BalanceForwardRuleHelper {
                     // 1076 006030 OR 'PFCMR ')
 
                     // Contract and grants balances.
-                    final String[] CONDITION_ACTIVE_SW_FLAG = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.BalanceForwardRule.SUB_FUND_GROUPS_FOR_INCEPTION_TO_DATE_REPORTING);
+                    final String[] CONDITION_ACTIVE_SW_FLAG = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.BALANCE_FORWARD_STEP, GLConstants.BalanceForwardRule.SUB_FUND_GROUPS_FOR_INCEPTION_TO_DATE_REPORTING);
                     if (priorYearAccount.isForContractsAndGrants() || ObjectHelper.isOneOf(subFundGroup.getSubFundGroupCode().trim(), CONDITION_ACTIVE_SW_FLAG)) {
 
                         // 1077 006040 MOVE 'Y' TO WS-SELECT-ACTIVE-SW
@@ -784,7 +784,7 @@ public class BalanceForwardRuleHelper {
                     // 1251 007780 MOVE 'MF'
                     // 1252 007790 TO FS-ORIGIN-CD.
 
-                    final String GL_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE);
+                    final String GL_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE);
                     entry.setFinancialSystemOriginationCode(GL_ORIGINATION_CODE);
 
                     // 1253 007800 STRING 'AC'
