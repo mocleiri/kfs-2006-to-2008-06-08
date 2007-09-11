@@ -34,6 +34,7 @@ import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.MockCollectorBatch;
+import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.batch.collector.CollectorInputFileType;
 import org.kuali.module.gl.bo.CollectorDetail;
 import org.kuali.module.gl.bo.OriginEntry;
@@ -68,10 +69,10 @@ public class CollectorServiceTest extends KualiTestBase {
      */
     @RelatesTo(RelatesTo.JiraIssue.KULUT31)
     public final void testEmailSystemParametersExist() throws Exception {
-        String subject = configurationService.getParameterValue(KFSConstants.GL_NAMESPACE, SystemGroupParameterNames.COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME);
+        String subject = configurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.Components.COLLECTOR_STEP, SystemGroupParameterNames.COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME);
         assertTrue("system parameter " + SystemGroupParameterNames.COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME + " is not setup or is empty", StringUtils.isNotBlank(subject));
         
-        String[] documentTypes = configurationService.getParameterValues(KFSConstants.GL_NAMESPACE, SystemGroupParameterNames.COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES);
+        String[] documentTypes = configurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.COLLECTOR_STEP, SystemGroupParameterNames.COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES);
         assertTrue("system parameter " + SystemGroupParameterNames.COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES + " is not setup or is empty", documentTypes.length > 0);
     }
 
