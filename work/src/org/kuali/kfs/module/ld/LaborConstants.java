@@ -152,9 +152,9 @@ public class LaborConstants {
     }
     
     public static class Poster {
-        public static final String PERIOD_CODES_NOT_PROCESSED = "periodCodesNotProcessed";
-        public static final String OBJECT_CODES_NOT_PROCESSED = "objectsNotProcessed";
-        public static final String BALANCE_TYPES_NOT_PROCESSED = "balanceTypesNotProcessed";
+        public static final String PERIOD_CODES_NOT_PROCESSED = "SENT_TO_GL_PERIOD_CODES";
+        public static final String OBJECT_CODES_NOT_PROCESSED = "SENT_TO_GL_OBJECT_CODES";
+        public static final String BALANCE_TYPES_NOT_PROCESSED = "SENT_TO_GL_BALANCE_TYPES";
     }
     
     public static class YearEnd {
