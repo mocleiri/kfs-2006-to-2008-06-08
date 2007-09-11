@@ -43,6 +43,7 @@ import org.kuali.kfs.exceptions.XMLParseException;
 import org.kuali.kfs.service.BatchInputFileService;
 import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.batch.collector.CollectorBatch;
 import org.kuali.module.gl.bo.CollectorDetail;
 import org.kuali.module.gl.bo.CollectorHeader;
@@ -190,7 +191,7 @@ public class CollectorHelperServiceImpl implements CollectorHelperService {
     protected boolean performValidation(CollectorBatch batch, ErrorMap errorMap) {
         boolean valid = true;
 
-        boolean performDuplicateHeaderCheck = kualiConfigurationService.getIndicatorParameter(KFSConstants.GL_NAMESPACE, SystemGroupParameterNames.COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK);
+        boolean performDuplicateHeaderCheck = kualiConfigurationService.getIndicatorParameter(KFSConstants.GL_NAMESPACE, GLConstants.Components.COLLECTOR_STEP, SystemGroupParameterNames.COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK);
         if (performDuplicateHeaderCheck) {
             valid = duplicateHeaderCheck(batch, errorMap);
         }
@@ -423,7 +424,7 @@ public class CollectorHelperServiceImpl implements CollectorHelperService {
         }
 
         // retrieve document types that balance by equal debits and credits
-        String[] documentTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, SystemGroupParameterNames.COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES);
+        String[] documentTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.COLLECTOR_STEP, KFSConstants.SystemGroupParameterNames.COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES);
 
         boolean equalDebitCreditTotal = false;
         for (int i = 0; i < documentTypes.length; i++) {
