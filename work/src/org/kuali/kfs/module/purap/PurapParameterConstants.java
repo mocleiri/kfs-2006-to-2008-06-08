@@ -27,10 +27,11 @@ public class PurapParameterConstants {
     // COMPONENTS
     public static class Components {
         public static final String VENDOR = "Vendor";
+        public static final String ASSIGN_CONTRACT_MANAGER = "AssignContractManager";
     }
     
     // PARAMETER NAMES
-    public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = "OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE";
+    public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
     public static final String PURAP_OVERRIDE_PREQ_DOC_TITLE = "OVERRIDE_PREQ_DOC_TITLE";
     public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = "OVERRIDE_REQ_DOC_TITLE";    
     public static final String PURAP_OVERRIDE_VENDOR_DOC_TITLE = "OVERRIDE_VENDOR_DOC_TITLE";
@@ -44,7 +45,7 @@ public class PurapParameterConstants {
         public static final String SEARCH_SPECIAL_ACCESS = "SEARCH_SPECIAL_ACCESS_GROUP";
 
         // ASSIGN A CONTRACT MANAGER DOCUMENT
-        public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = "DOCUMENT.ASSIGN.CM.ACTIONS";
+        //public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = "DOCUMENT.ASSIGN.CM.ACTIONS";
 
         // PURCHASE ORDER DOCUMENT
         public static final String WORKGROUP_PURCHASING = "PURCHASING_GROUP";
