@@ -291,15 +291,16 @@ public class TestUtils {
     /**
      * This sets a given system parameter and clears the method cache for retrieving the parameter.
      */
-    public static void setSystemParameter(String parameterNamespace, String parameterName, String parameterText, boolean isIndicator, boolean isMultipleValue) throws Exception {
+    public static void setSystemParameter(String parameterNamespace, String parameterDetailTypeCode, String parameterName, String parameterText, boolean isIndicator, boolean isMultipleValue) throws Exception {
         // retrieve parameter for updating
         Parameter systemParameter = new Parameter();
         systemParameter.setParameterNamespaceCode(parameterNamespace);
         systemParameter.setParameterName(parameterName);
+        systemParameter.setParameterDetailTypeCode(parameterDetailTypeCode);
 
         systemParameter = (Parameter)SpringContext.getBean(BusinessObjectService.class).retrieve(systemParameter);
         if (systemParameter == null) {
-            throw new RuntimeException("TestUtils.setSystemParameter()--system parameter not found: "+parameterNamespace+"/"+parameterName);
+            throw new RuntimeException("TestUtils.setSystemParameter()--system parameter not found: "+parameterNamespace+"/"+parameterDetailTypeCode+"/"+parameterName);
         }
 
         // update parameter text and store
@@ -316,8 +317,8 @@ public class TestUtils {
         } else {
             removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValue", new Class[] { String.class, String.class }), new Object[] { parameterNamespace, parameterName });
         }
-    }
-
+    }    
+    
     /**
      * Converts an InputStream to a String using UTF-8 encoding.
      * 
