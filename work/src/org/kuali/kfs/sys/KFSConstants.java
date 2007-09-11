@@ -976,7 +976,7 @@ public class KFSConstants extends JstlConstants {
         public static final String GL_ACCOUNT_BALANCE_SERVICE = "GL.ACCOUNT_BALANCE_SERVICE";
 
         public static final String GL_ACLO = "GLACLO";
-        public static final String GL_ANNAL_CLOSING_DOC_TYPE = "ANNUAL_CLOSING_DOCUMENT_TYPE";
+        public static final String GL_ANNUAL_CLOSING_DOC_TYPE = "ANNUAL_CLOSING_DOCUMENT_TYPE";
         public static final String GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE = "GLClosingOfNominalActivityObjectTypeCode";
         public static final String GL_INDIRECT_COST_RECOVERY = "GLIndirectCostRecovery";
         public static final String GL_NET_EXPENSE_OBJECT_TYPE_CODE = "GLNetExpenseObjectTypeCode";
