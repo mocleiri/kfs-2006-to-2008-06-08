@@ -33,6 +33,7 @@ public class PurgeOldLookupResultsStep extends AbstractStep {
             LOG.info("executing PurgeOldLookupResultsStep");
             
             String maxAgeInSecondsStr = getConfigurationService().getParameterValue(KFSConstants.CORE_NAMESPACE,
+                    KFSConstants.Components.LOOKUP,
                     KFSConstants.SystemGroupParameterNames.MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE);
             int maxAgeInSeconds = Integer.parseInt(maxAgeInSecondsStr);
             
