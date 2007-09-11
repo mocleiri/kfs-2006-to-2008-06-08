@@ -29,6 +29,7 @@ import java.util.Map;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.context.TestUtils;
+import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.OriginEntryTestBase;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -56,7 +57,7 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
         super.setUp();
 
         DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, "TRANSACTION_DT")).getTime()));
+        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM)).getTime()));
     }
 
     /**
@@ -157,9 +158,9 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
      * @see org.kuali.module.gl.OriginEntryTestBase#setApplicationConfigurationFlag(java.lang.String, boolean)
      */
     @Override
-    protected void setApplicationConfigurationFlag(String name, boolean value) throws Exception {
-        super.setApplicationConfigurationFlag(name, value);
-        TestUtils.setSystemParameter(KFSConstants.GL_NAMESPACE, "TRANSACTION_DT", "2004-01-01", false, false);
-        TestUtils.setSystemParameter(KFSConstants.LABOR_NAMESPACE, "UNIV_FISCAL_YR", "2004", false, false);
+    protected void setApplicationConfigurationFlag(String namespace, String component, String name, boolean value) throws Exception {
+        super.setApplicationConfigurationFlag(namespace, component, name, value);
+        TestUtils.setSystemParameter(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM, "2004-01-01", false, false);
+        TestUtils.setSystemParameter(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_FISCAL_YEAR_PARM, "2004", false, false);
     }
 }
