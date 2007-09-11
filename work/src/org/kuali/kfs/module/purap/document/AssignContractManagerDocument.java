@@ -177,7 +177,7 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
     @Override
     public String getDocumentTitle() {
         String title = "";
-        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE);
+        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapParameterConstants.PURAP_NAMESPACE, PurapParameterConstants.Components.ASSIGN_CONTRACT_MANAGER, PurapParameterConstants.PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE);
         if (StringUtils.equalsIgnoreCase(specificTitle, Boolean.TRUE.toString())) {
             title = PurapWorkflowConstants.AssignContractManagerDocument.WORKFLOW_DOCUMENT_TITLE;
         }
