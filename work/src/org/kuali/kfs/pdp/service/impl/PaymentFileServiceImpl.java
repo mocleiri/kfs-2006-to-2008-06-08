@@ -77,7 +77,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
   }
 
   private int getMaxNoteLines() {
-      return GeneralUtilities.getParameterInteger(PdpConstants.ApplicationParameterKeys.MAX_NOTE_LINES, kualiConfigurationService);
+      return GeneralUtilities.getParameterInteger(KFSConstants.Components.ALL, PdpConstants.ApplicationParameterKeys.MAX_NOTE_LINES, kualiConfigurationService);
   }
 
   // NOTE: This only works on Unix right now.
@@ -184,8 +184,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     // To send email or not send email
     boolean noEmail = false;
-    if ( kualiConfigurationService.parameterExists(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
-        noEmail = kualiConfigurationService.getIndicatorParameter(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
+    if ( kualiConfigurationService.parameterExists(KFSConstants.PDP_NAMESPACE, KFSConstants.Components.ALL,  PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
+        noEmail = kualiConfigurationService.getIndicatorParameter(KFSConstants.PDP_NAMESPACE,KFSConstants.Components.ALL,  PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
     }
     if ( noEmail ) {
       LOG.debug("sendErrorEmail() sending payment file email is disabled");
@@ -203,7 +203,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     }
     StringBuffer body = new StringBuffer();
 
-    String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,PdpConstants.ApplicationParameterKeys.HARD_EDIT_CC);
+    String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,KFSConstants.Components.ALL, PdpConstants.ApplicationParameterKeys.HARD_EDIT_CC);
     String ccAddressList[] = ccAddresses.split(",");
 
     if (header == null) {
@@ -312,7 +312,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     StringBuffer body = new StringBuffer();
 
-    String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.SOFT_EDIT_CC);
+    String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, KFSConstants.Components.ALL, PdpConstants.ApplicationParameterKeys.SOFT_EDIT_CC);
     String ccAddressList[] = ccAddresses.split(",");
 
     // Get customer

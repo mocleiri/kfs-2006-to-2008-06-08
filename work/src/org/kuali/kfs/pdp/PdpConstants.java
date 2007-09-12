@@ -49,21 +49,21 @@ public class PdpConstants {
     }
 
     public static class ApplicationParameterKeys {
-        public static String SEARCH_RESULTS_TOTAL = "SEARCH_RESULTS_TOTAL";
-        public static String SEARCH_RESULTS_PER_PAGE = "SEARCH_RESULTS_PER_PAGE";
+        public static String SEARCH_RESULTS_TOTAL = "RESULTS_LIMIT";
+        public static String SEARCH_RESULTS_PER_PAGE = "RESULTS_PER_PAGE";
 
         public static String BATCH_OUTPUT_DIR = "BATCH_OUTPUT_DIR";
 
-        public static String HARD_EDIT_CC = "HARD_EDIT_CC";
-        public static String SOFT_EDIT_CC = "SOFT_EDIT_CC";
+        public static String HARD_EDIT_CC = "HARD_EDIT_TO_ADDRESS";
+        public static String SOFT_EDIT_CC = "SOFT_EDIT_TO_ADDRESS";
         public static String NO_PAYMENT_FILE_EMAIL = "NO_PAYMENT_FILE_EMAIL";
         public static String TAX_GROUP_EMAIL_ADDRESS = "TAX_GROUP_EMAIL_ADDRESS";
         public static String TAX_CANCEL_EMAIL_LIST = "TAX_CANCEL_EMAIL_LIST";
 
         public static String MAX_NOTE_LINES = "MAX_NOTE_LINES";
-        public static String FORMAT_SUMMARY_ROWS = "FORMAT_SUMMARY_ROWS";
+        public static String FORMAT_SUMMARY_ROWS = "FORMAT_SUMMARY_REVIEW_RESULTS_PER_PAGE";
 
-        public static String DISBURSEMENT_ACTION_EXPIRATION_DAYS = "DISBURSEMENT_ACTION_EXPIRATION_DAYS";
+        public static String DISBURSEMENT_ACTION_EXPIRATION_DAYS = "DISBURSEMENT_CANCELLATION_DAYS";
     }
 
     public static class PaymentStatusCodes {
