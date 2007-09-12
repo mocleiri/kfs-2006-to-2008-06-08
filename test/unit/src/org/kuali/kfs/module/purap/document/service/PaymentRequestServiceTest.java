@@ -56,6 +56,7 @@ public class PaymentRequestServiceTest extends KualiTestBase {
             kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
             String samt = kualiConfigurationService.getParameterValue(
                     KFSConstants.PURAP_NAMESPACE, 
+                    PurapConstants.Components.PAYMENT_REQUEST,
                     PurapParameterConstants.PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT);
             defaultMinimumLimit = new KualiDecimal(samt);
         }
