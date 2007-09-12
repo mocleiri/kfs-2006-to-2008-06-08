@@ -140,7 +140,7 @@ public class LaborScrubberProcess {
         this.laborReportService = laborReportService;
         this.scrubberValidator = scrubberValidator;
         
-        parameters = kualiConfigurationService.getParametersByDetailTypeAsMap(KFSConstants.GL_NAMESPACE, GLConstants.GL_SCRUBBER_GROUP );
+        parameters = kualiConfigurationService.getParametersByDetailTypeAsMap(KFSConstants.GL_NAMESPACE, GLConstants.Components.SCRUBBER_STEP );
 
         cutoffHour = null;
         cutoffMinute = null;
