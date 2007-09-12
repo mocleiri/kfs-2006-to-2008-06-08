@@ -122,7 +122,7 @@ public class VendorDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase 
      * @param user
      */
     private void setVendorContractFieldsAuthorization(VendorDetail vendor, MaintenanceDocumentAuthorizations auths, UniversalUser user) {
-        String purchasingWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, VendorConstants.Workgroups.WORKGROUP_PURCHASING); 
+        String purchasingWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, VendorConstants.Workgroups.WORKGROUP_PURCHASING); 
         if (!user.isMember(purchasingWorkgroup)) {
             List<VendorContract> contracts = vendor.getVendorContracts();
             int i = 0;
