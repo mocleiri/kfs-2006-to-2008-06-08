@@ -90,7 +90,7 @@ public abstract class PurApDocumentSearchGenerator extends StandardDocumentSearc
     }
     
     public String getSpecialAccessSearchUserWorkgroupName() {
-        return SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.SEARCH_SPECIAL_ACCESS);
+        return SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.SEARCH_SPECIAL_ACCESS);
     }
 
     /**
