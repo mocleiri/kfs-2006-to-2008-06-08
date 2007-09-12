@@ -32,13 +32,13 @@ public class PurapParameterConstants {
     
     // PARAMETER NAMES
     public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
-    public static final String PURAP_OVERRIDE_PREQ_DOC_TITLE = "OVERRIDE_PREQ_DOC_TITLE";
+    public static final String PURAP_OVERRIDE_PREQ_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
     public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";    
     public static final String PURAP_OVERRIDE_VENDOR_DOC_TITLE = "OVERRIDE_VENDOR_DOC_TITLE";
-    public static final String PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT = "DEFAULT_NEG_PMT_RQST_APRVL_LMT";
-    public static final String PURAP_PDP_EPIC_ORG_CODE = "PDP.EPIC.ORG.CODE";
-    public static final String PURAP_PDP_EPIC_SBUNT_CODE = "PDP.EPIC.SBUNT.CODE";
-    public static final String PURAP_PDP_USER_ID = "PDP.USER.ID";
+    public static final String PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT = "DEFAULT_POS_APRVL_LMT";
+    public static final String PURAP_PDP_EPIC_ORG_CODE = "PRE_DISBURSEMENT_EXTRACT_ORGANIZATION";
+    public static final String PURAP_PDP_EPIC_SBUNT_CODE = "PRE_DISBURSEMENT_EXTRACT_SUB_UNIT";
+    public static final String PURAP_PDP_USER_ID = "PRE_DISBURSEMENT_EXTRACT_USER";
     public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = "DEFAULT_TRANSMISSION_CODE";
 
     public static class Workgroups {
@@ -49,8 +49,8 @@ public class PurapParameterConstants {
 
         // PURCHASE ORDER DOCUMENT
         public static final String WORKGROUP_PURCHASING = "PURCHASING_GROUP";
-        public static final String PURAP_DOCUMENT_PO_INITIATE_ACTION = "DOCUMENT.PO.INITIATE.ACTION";
-        public static final String PURAP_DOCUMENT_PO_ACTIONS = "DOCUMENT.PO.ACTIONS";
+        public static final String PURAP_DOCUMENT_PO_INITIATE_ACTION = "INITIATE_ACTION";
+        public static final String PURAP_DOCUMENT_PO_ACTIONS = "ACTION_TAKING_GROUP";
         // TODO PURAP: Below parameter not being used??
 //      public static final String WORKGROUP_TAXNBR_ACCESSIBLE = "WORKGROUP.TAXNBR_ACCESSIBLE";
 
@@ -71,7 +71,7 @@ public class PurapParameterConstants {
             // Config parameter group names
             public static final String CG_RESTRICTED_OBJECT_CODE_RULE_GROUP_NAME = "PurAp.CG_Restricted_Object_Codes";
             // Workgroups
-            public static final String INTERNAL_PURCHASING_WORKGROUP_NAME = "INTERNAL_PURCHASING_REVIEWERS";
+            public static final String INTERNAL_PURCHASING_WORKGROUP_NAME = "INTERNAL_PURCHASING_REVIEWERS_GROUP";
         }
     }
 
