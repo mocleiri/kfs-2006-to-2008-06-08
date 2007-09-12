@@ -24,9 +24,9 @@ public class PurapRuleConstants {
     public static String CREDIT_MEMO_RULES_GROUP = "Kuali.Purchasing.CreditMemoDocument";
 
     // RULE NAMES
-    public static final String ALLOW_ENCUMBER_NEXT_YEAR_DAYS = "PURAP.ALLOW_ENCUMBER_NEXT_YEAR_DAYS";
-    public static final String ALLOW_APO_NEXT_FY_DAYS = "PURAP.ALLOW_APO_NEXT_FY_DAYS";
-    public static final String ALLOW_BACKPOST_DAYS = "PURAP.ALLOW_BACKPOST_DAYS";
+    public static final String ALLOW_ENCUMBER_NEXT_YEAR_DAYS = "ALLOW_ENCUMBER_NEXT_YEAR_DAYS";
+    public static final String ALLOW_APO_NEXT_FY_DAYS = "ALLOW_APO_NEXT_FY_DAYS";
+    public static final String ALLOW_BACKPOST_DAYS = "ALLOW_BACKPOST_DAYS";
     
     public static final String RESTRICTED_OBJECT_TYPE_PARM_NM = "RESTRICTED_OBJECT_TYPE";
     public static final String RESTRICTED_OBJECT_CONSOLIDATION_PARM_NM = "OBJECT_CONSOLIDATIONS";
