@@ -32,17 +32,17 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>WorkflowAdmin</workgroup>
+                    <workgroup>KUALI_PARAMETER_MAINTAINERS</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
         <documentTypeName>ParameterDetailTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PDTP</documentTypeCode>
-        <label>Parameter Detail Type Maintenance Document</label>
-        <shortLabel>Parm Dtl Type Maint. Doc.</shortLabel>
-        <summary>Parameter Detail Type Maintenance Document</summary>
+        <label>Parameter Component Maintenance Document</label>
+        <shortLabel>Parm Comp. Maint. Doc.</shortLabel>
+        <summary>Parameter Component Maintenance Document</summary>
         <description>
-            This document can be used to create or update parameter detail types.
+            This document can be used to create or update parameter components.
         </description>
         <help parameterNamespace="KR-NS" parameterDetailType="N/A"
             parameterName="NERVOUS_SYSTEM_HELP_PARAMETER_DETAIL_TYPE"
@@ -61,7 +61,7 @@
         </defaultExistenceChecks>
 
         <maintainableSections>
-            <maintainableSection title="Edit Parameter Detail Type">
+            <maintainableSection title="Edit Parameter Component">
                 <maintainableItems>
                     <maintainableField name="parameterNamespaceCode" required="true" />
                     <maintainableField name="parameterDetailTypeCode" required="true" />

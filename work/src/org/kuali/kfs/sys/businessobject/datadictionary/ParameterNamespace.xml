@@ -21,9 +21,9 @@
     <businessObject businessObjectClass="org.kuali.core.bo.ParameterNamespace">
 
         <inquiry>
-            <title>Parameter Namespace Inquiry</title>
+            <title>Module Inquiry</title>
             <inquirySections>
-                <inquirySection title="Parameter Namespace Information">
+                <inquirySection title="Module Information">
                     <inquiryFields>
                         <field attributeName="code" />
                         <field attributeName="name" noInquiry="true" />
@@ -33,9 +33,9 @@
             </inquirySections>
         </inquiry>
         <lookup>
-            <title>Parameter Namespace Lookup</title>
+            <title>Module Lookup</title>
 
-            <instructions>Look up a Parameter Namespace.</instructions>
+            <instructions>Look up a Module.</instructions>
             <defaultSort attributeName="name" sortAscending="true" />
             <lookupFields>
                 <lookupField attributeName="code" required="false"
@@ -57,8 +57,8 @@
 
         <attributes>
             <attribute name="code" forceUppercase="true">
-                <label>Parameter Namespace Code</label>
-                <shortLabel>Nmspc Cd</shortLabel>
+                <label>Module Code</label>
+                <shortLabel>Module Cd</shortLabel>
                 <maxLength>20</maxLength>
                 <validationPattern>
                     <anyCharacter />
@@ -67,14 +67,14 @@
                 <control>
                     <text size="10" />
                 </control>
-                <summary>Code identifying the namespace.</summary>
+                <summary>Code identifying the module.</summary>
                 <description>
-                    Code identifying the namespace.
+                    Code identifying the module.
                 </description>
             </attribute>
             <attribute name="name" forceUppercase="false">
-                <label>Parameter Namespace Name</label>
-                <shortLabel>Nmspc Nm</shortLabel>
+                <label>Module Name</label>
+                <shortLabel>Module Nm</shortLabel>
                 <maxLength>40</maxLength>
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
@@ -83,14 +83,14 @@
                 <control>
                     <text size="40" />
                 </control>
-                <summary>The name of the namespace.</summary>
+                <summary>The name of the module.</summary>
                 <description>
-                    The name of the namespace.
+                    The name of the module.
                 </description>
             </attribute>
             <attribute name="codeAndDescription" forceUppercase="false">
-                <label>Parameter Namespace</label>
-                <shortLabel>Parm Nmspc</shortLabel>
+                <label>Module</label>
+                <shortLabel>Module</shortLabel>
                 <maxLength>100</maxLength>
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
@@ -99,9 +99,9 @@
                 <control>
                     <text size="40" />
                 </control>
-                <summary>The name of the namespace.</summary>
+                <summary>The name of the module.</summary>
                 <description>
-                    The name of the namespace.
+                    The name of the module.
                 </description>
             </attribute>
             <attributeReference name="active"

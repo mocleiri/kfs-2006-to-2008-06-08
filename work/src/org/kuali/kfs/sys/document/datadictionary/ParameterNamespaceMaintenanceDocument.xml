@@ -32,17 +32,17 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>WorkflowAdmin</workgroup>
+                    <workgroup>KUALI_PARAMETER_MAINTAINERS</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
         <documentTypeName>ParameterNamespaceMaintenanceDocument</documentTypeName>
         <documentTypeCode>PNMS</documentTypeCode>
-        <label>Parameter Namespace Maintenance Document</label>
-        <shortLabel>Parm Nmspc Maint. Doc.</shortLabel>
-        <summary>Parameter Namespace Maintenance Document</summary>
+        <label>Module Maintenance Document</label>
+        <shortLabel>Module Maint. Doc.</shortLabel>
+        <summary>Module Maintenance Document</summary>
         <description>
-            This document can be used to create or update parameter namespaces.
+            This document can be used to create or update modules.
         </description>
         <help parameterNamespace="KR-NS" parameterDetailType="N/A"
             parameterName="NERVOUS_SYSTEM_HELP_PARAMETER_NAMESPACE"
@@ -53,7 +53,7 @@
         </lockingKeys>
 
         <maintainableSections>
-            <maintainableSection title="Edit Parameter Namespace">
+            <maintainableSection title="Edit Module">
                 <maintainableItems>
                     <maintainableField name="code" required="true" />
                     <maintainableField name="name" required="true" />
