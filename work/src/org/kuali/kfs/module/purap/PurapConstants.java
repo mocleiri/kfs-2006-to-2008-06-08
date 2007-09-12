@@ -41,6 +41,7 @@ public class PurapConstants extends JstlConstants {
     
     public static class Components {
         public static final String CREDIT_MEMO_DOC = "CreditMemo";
+        public static final String ASSIGN_CONTRACT_MANGER = "AssignContractManger";
     }
     
     // STANDARD PARAMETER PREFIXES
@@ -88,16 +89,16 @@ public class PurapConstants extends JstlConstants {
     public static final String DELIVERY_BUILDING_OTHER_CODE = "OTH";
 
     // PDF KFSConstants
-    public static final String IMAGE_TEMP_PATH = "PURAP.IMAGE.TEMP.PATH";
-    public static final String PDF_DIRECTORY = "PURAP.PDF.DIRECTORY";
-    public static final String STATUS_INQUIRY_URL = "PURAP.STATUS.INQUIRY.URL";
-    public static final String PURCHASING_DIRECTOR_IMAGE_PREFIX = "PURAP.PUR.DIRECTOR.IMAGE.PREFIX";
-    public static final String PURCHASING_DIRECTOR_IMAGE_EXTENSION = "PURAP.PUR.DIRECTOR.IMAGE.EXTENSION";
-    public static final String CONTRACT_MANAGER_IMAGE_PREFIX = "PURAP.CONTRACT.MGR.IMAGE.PREFIX";
-    public static final String CONTRACT_MANAGER_IMAGE_EXTENSION = "PURAP.CONTRACT.MGR.IMAGE.EXTENSION";
-    public static final String LOGO_IMAGE_PREFIX = "PURAP.PDF.LOGO.IMAGE.PREFIX";
-    public static final String LOGO_IMAGE_EXTENSION = "PURAP.PDF.LOGO.IMAGE.EXTENSION";
-    public static final String PDF_IMAGES_AVAILABLE_INDICATOR = "PURAP.PDF.IMAGES.AVAILABLE.INDICATOR";
+    public static final String IMAGE_TEMP_PATH = "PDF_IMAGE_TEMP_PATH";
+    public static final String PDF_DIRECTORY = "PDF_DIRECTORY";
+    public static final String STATUS_INQUIRY_URL = "PDF_STATUS_INQUIRY_URL";
+    public static final String PURCHASING_DIRECTOR_IMAGE_PREFIX = "PDF_DIRECTOR_IMAGE_PREFIX";
+    public static final String PURCHASING_DIRECTOR_IMAGE_EXTENSION = "PDF_DIRECTOR_IMAGE_EXTENSION";
+    public static final String CONTRACT_MANAGER_IMAGE_PREFIX = "PDF_IMAGE_PREFIX";
+    public static final String CONTRACT_MANAGER_IMAGE_EXTENSION = "PDF_IMAGE_EXTENSION";
+    public static final String LOGO_IMAGE_PREFIX = "PDF_LOGO_IMAGE_PREFIX";
+    public static final String LOGO_IMAGE_EXTENSION = "PDF_LOGO_IMAGE_EXTENSION";
+    public static final String PDF_IMAGES_AVAILABLE_INDICATOR = "PDF_IMAGES_AVAILABLE_IND";
 
     public static class RequisitionStatuses {
         // TODO delyea - check statuses for use/MDS entry
