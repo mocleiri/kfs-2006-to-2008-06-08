@@ -200,7 +200,7 @@ public class PurapServiceImpl implements PurapService {
            
         }
         String securityGroup = (String)PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
-        String[] itemTypes = kualiConfigurationService.getParameterValues( KFSConstants.PURAP_NAMESPACE, securityGroup+"."+PurapConstants.BELOW_THE_LINES_PARAMETER);
+        String[] itemTypes = kualiConfigurationService.getParameterValues( KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.CREDIT_MEMO_DOC, PurapConstants.BELOW_THE_LINES_PARAMETER);
         return itemTypes;
     }
     
