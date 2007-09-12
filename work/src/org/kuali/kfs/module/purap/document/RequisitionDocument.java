@@ -137,7 +137,8 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
      */
     private String determinePurchaseOrderTransmissionMethod(){
         //KULPURAP-826: Return a value based on a sys param. Perhaps later change it to more dynamic logic
-        return SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.PURAP_DEFAULT_PO_TRANSMISSION_CODE);
+        return SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.REQUISITION, 
+                PurapParameterConstants.PURAP_DEFAULT_PO_TRANSMISSION_CODE);
     }
     
     /**
@@ -608,7 +609,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
     @Override
     public String getDocumentTitle() {
         String title = "";
-        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapParameterConstants.PURAP_OVERRIDE_REQ_DOC_TITLE);
+        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapConstants.Components.REQUISITION, PurapParameterConstants.PURAP_OVERRIDE_REQ_DOC_TITLE);
         if (StringUtils.equalsIgnoreCase(specificTitle,Boolean.TRUE.toString())) {
             String docIdStr = "";
             if ( (this.getPurapDocumentIdentifier() != null) && (StringUtils.isNotBlank(this.getPurapDocumentIdentifier().toString())) ) {
