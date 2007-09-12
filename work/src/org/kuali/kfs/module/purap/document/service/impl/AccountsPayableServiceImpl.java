@@ -27,13 +27,13 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
 import org.kuali.module.purap.bo.PurApAccountingLineBase;
 import org.kuali.module.purap.document.AccountsPayableDocument;
@@ -100,11 +100,11 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
         
         //get parameter to see if fiscal officers may see the continuation account warning
-        String showContinuationAccountWaringFO = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS);
+        String showContinuationAccountWaringFO = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT,  PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS);
         
         //TODO: See if/how we want to allow AP users to view the continuation account warning
         //get parameter to see if ap users may see the continuation account warning        
-        String showContinuationAccountWaringAP = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS);
+        String showContinuationAccountWaringAP = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS);
         
         // versus doing it in their respective documents (preq, credit memo)
         // if not initiate or in process and 
