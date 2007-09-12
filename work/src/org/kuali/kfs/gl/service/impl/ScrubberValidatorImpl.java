@@ -306,8 +306,8 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
             return null;
         }
 
-        String[] continuationAccountBypassOriginationCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES);
-        String[] continuationAccountBypassBalanceTypeCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_BALANCE_TYPE_CODES);
+        String[] continuationAccountBypassOriginationCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.SCRUBBER_STEP, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES);
+        String[] continuationAccountBypassBalanceTypeCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.SCRUBBER_STEP, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_BALANCE_TYPE_CODES);
         String[] continuationAccountBypassDocumentTypeCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.SCRUBBER_STEP, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES);
         
         // Has an expiration date or is closed
