@@ -156,10 +156,11 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
         }
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
         String securityGroup = PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
-        Parameter allowsZeroRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, securityGroup+"."+PurapConstants.ITEM_ALLOWS_ZERO);
-        Parameter allowsPositiveRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, securityGroup+"."+PurapConstants.ITEM_ALLOWS_POSITIVE);
-        Parameter allowsNegativeRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, securityGroup+"."+PurapConstants.ITEM_ALLOWS_NEGATIVE);
-        Parameter requiresDescriptionRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, securityGroup+"."+PurapConstants.ITEM_REQUIRES_USER_ENTERED_DESCRIPTION);
+        String parameterDetailTypeCode = (String)PurapConstants.PURAP_DETAIL_TYPE_CODE_MAP.get(documentType);
+        Parameter allowsZeroRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_ZERO);
+        Parameter allowsPositiveRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_POSITIVE);
+        Parameter allowsNegativeRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_NEGATIVE);
+        Parameter requiresDescriptionRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_REQUIRES_USER_ENTERED_DESCRIPTION);
 
         boolean requiresAccountValidationOnAllEnteredItems = requiresAccountValidationOnAllEnteredItems(purapDocument);
         for (PurchasingApItem item : purapDocument.getItems()) {
