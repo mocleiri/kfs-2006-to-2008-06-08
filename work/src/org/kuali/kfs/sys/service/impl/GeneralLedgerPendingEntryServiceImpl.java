@@ -16,7 +16,6 @@
 package org.kuali.kfs.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -44,9 +43,11 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.chart.service.ChartService;
 import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.UniversityDate;
+import org.kuali.module.gl.service.SufficientFundsServiceConstants;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -151,7 +152,7 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     public KualiDecimal getActualSummary(List universityFiscalYears, String chartOfAccountsCode, String accountNumber, boolean isDebit) {
         LOG.debug("getActualSummary() started");
 
-        List<String> codes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.FINANCIAL_NAMESPACE, "SufficientFundsServiceSpecialFinancialObjectCodes");
+        List<String> codes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.FINANCIAL_NAMESPACE, GLConstants.Components.SUFFICIENT_FUND_BALANCES, SufficientFundsServiceConstants.SUFFICIENT_FUNDS_OBJECT_CODE_SPECIALS);
 
         // Note, we are getting the options from the first fiscal year in the list. We are assuming that the
         // balance type code for actual is the same in all the years in the list.
