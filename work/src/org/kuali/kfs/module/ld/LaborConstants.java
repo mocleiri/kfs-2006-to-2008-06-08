@@ -26,6 +26,8 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.labor.batch.LaborPosterStep;
+import org.kuali.module.labor.batch.PayrollAccrualStep;
 
 /**
  * This class contains the constants used by Labor Distribution.
@@ -53,12 +55,11 @@ public class LaborConstants {
     
     public static class Components {
         
-        //Not sure which value to use.
-        /*
-        public final static String LABOR_BENEFITS_TYPE = LaborBenefitsType.class.getSimpleName();
-        public final static String LABOR_BENEFIT_CALCULATION = LaborBenefitCalculation.class.getSimpleName();
-        public final static String LABOR_OBJECT_BENEFIT = LaborObjectBenefit.class.getSimpleName();
-        */
+       public static final String LABOR_POSTER_STEP = LaborPosterStep.class.getSimpleName();
+       public static final String PAYROLL_ACCURAL_STEP = PayrollAccrualStep.class.getSimpleName();
+       public static final String YEAR_END_BALANCE_FORWARD_JOB = "YearEndBalanceForwardJob";
+        
+        
     }
 
     public static class DestinationNames {
@@ -137,18 +138,18 @@ public class LaborConstants {
     }
     
     public static class PayrollAccrual {
-        public static final String ACCRUAL_DAYS = "input.accrualDays";
-        public static final String WORK_DAYS = "input.workDays";
-        public static final String FISCAL_YEAR = "input.fiscalYear";
-        public static final String FISCAL_PERIOD = "input.fiscalPeriod";
-        public static final String REVERSAL_FISCAL_YEAR = "input.reversalFiscalYear";
-        public static final String REVERSAL_FISCAL_PERIOD = "input.reversalFiscalPeriod";
-        public static final String DOCUMENT_NUMBER = "input.documentNumber";
-        public static final String EARN_CODES = "input.earnCodes";
-        public static final String RUN_ID = "input.runId";
-        public static final String EXCLUDED_SUB_FUND_GROUPS = "input.excludedSubFundGroups";
+        public static final String ACCRUAL_DAYS = "NUMBER_OF_DAYS_TO_ACCRUE";
+        public static final String WORK_DAYS = "PAY_PERIOD_WORK_DAYS";
+        public static final String FISCAL_YEAR = "FISCAL_YEAR_SELECTION";
+        public static final String FISCAL_PERIOD = "FISCAL_PERIOD_SELECTION";
+        public static final String REVERSAL_FISCAL_YEAR = "FISCAL_YEAR_REVERSAL";
+        public static final String REVERSAL_FISCAL_PERIOD = "FISCAL_PERIOD_REVERSAL";
+        public static final String DOCUMENT_NUMBER = "DOCUMENT_NUMBER";
+        public static final String EARN_CODES = "EARN_CODE_SELECTION";
+        public static final String RUN_ID = "DOCUMENT_NUMBER_SELECTION";
+        public static final String EXCLUDED_SUB_FUND_GROUPS = "SUB_FUND_GROUP_SELECTION";
         
-        public static final String ORIGINATION_CODE = "originationCode";
+        public static final String ORIGINATION_CODE = "ORIGINATION";
     }
     
     public static class Poster {
@@ -158,10 +159,10 @@ public class LaborConstants {
     }
     
     public static class YearEnd {
-        public static final String FUND_GROUP_PROCESSED = "fundGroupProcessed";
-        public static final String DOCUMENT_TYPE_CODE = "documentTypeCode";
-        public static final String ORIGINATION_CODE = "originationCode";
-        public static final String OLD_FISCAL_YEAR = "oldFiscalYear";
+        public static final String FUND_GROUP_PROCESSED = "FUND_GROUPS";
+        public static final String DOCUMENT_TYPE_CODE = "ANNUAL_CLOSING_DOCUMENT_TYPE";
+        public static final String ORIGINATION_CODE = "ORIGINATION";
+        public static final String OLD_FISCAL_YEAR = "FISCAL_YEAR_SELECTION";
     }
 
     public static final class LABOR_LEDGER_PENDING_ENTRY_CODE {

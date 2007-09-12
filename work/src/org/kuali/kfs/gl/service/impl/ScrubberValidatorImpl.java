@@ -308,7 +308,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
 
         String[] continuationAccountBypassOriginationCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES);
         String[] continuationAccountBypassBalanceTypeCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_BALANCE_TYPE_CODES);
-        String[] continuationAccountBypassDocumentTypeCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES);
+        String[] continuationAccountBypassDocumentTypeCodes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.Components.SCRUBBER_STEP, GLConstants.GlScrubberGroupRules.CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES);
         
         // Has an expiration date or is closed
         if ((org.apache.commons.lang.StringUtils.isNumeric(originEntry.getFinancialSystemOriginationCode()) || ArrayUtils.contains(continuationAccountBypassOriginationCodes, originEntry.getFinancialSystemOriginationCode())) && account.isAccountClosedIndicator()) {
@@ -414,7 +414,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     private void adjustAccountIfContractsAndGrants(Account account) {
         if (account.isForContractsAndGrants() && (!account.isAccountClosedIndicator())) {
             
-            String daysOffset = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_SCRUBBER_VALIDATION_DAYS_OFFSET);
+            String daysOffset = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.Components.SCRUBBER_STEP, KFSConstants.SystemGroupParameterNames.GL_SCRUBBER_VALIDATION_DAYS_OFFSET);
             int daysOffsetInt = 3 * 30; //default to 90 days (approximately 3 months)
             
             if(daysOffset.trim().length()>0){
