@@ -434,7 +434,7 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
       }
 //      message.addToAddress(cp.getAdviceReturnEmailAddr());
 
-      String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,PdpConstants.ApplicationParameterKeys.TAX_CANCEL_EMAIL_LIST);
+      String ccAddresses = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,KFSConstants.Components.ALL, PdpConstants.ApplicationParameterKeys.TAX_CANCEL_EMAIL_LIST);
       String ccAddressList[] = ccAddresses.split(",");
 
       if (ccAddressList.length > 0) {
