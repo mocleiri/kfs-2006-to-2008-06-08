@@ -453,7 +453,7 @@ public class PosterServiceImpl implements PosterService {
             // TODO Reporting thing line 1946
         }
 
-        e.setFinancialDocumentTypeCode(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
+        e.setFinancialDocumentTypeCode(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.Components.POSTER_INDIRECT_COST_RECOVERY_ENTRIES_STEP, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
         e.setFinancialSystemOriginationCode(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
         e.setDocumentNumber(sdf.format(runDate));
