@@ -290,7 +290,8 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         Iterator<PaymentRequestDocument> docs = paymentRequestDao.getEligibleForAutoApproval();
         if (docs.hasNext()) {
             String samt = kualiConfigurationService.getParameterValue(
-                    KFSConstants.PURAP_NAMESPACE, 
+                    KFSConstants.PURAP_NAMESPACE,
+                    PurapConstants.Components.PAYMENT_REQUEST,
                     PurapParameterConstants.PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT);
             KualiDecimal defaultMinimumLimit = new KualiDecimal(samt);
             
