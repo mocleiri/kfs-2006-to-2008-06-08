@@ -27,7 +27,6 @@ public class KraConstants extends JstlConstants {
 
     public static class Components {
         public final static String ROUTING_FORM = RoutingForm.class.getSimpleName();
-        public final static String ALL = "All";
         public final static String BUDGET = Budget.class.getSimpleName();
     }
     
