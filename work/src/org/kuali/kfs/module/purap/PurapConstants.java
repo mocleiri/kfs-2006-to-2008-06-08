@@ -48,6 +48,7 @@ public class PurapConstants extends JstlConstants {
         public static final String ASSIGN_CONTRACT_MANGER = "AssignContractManger";
         public static final String PAYMENT_REQUEST = "PaymentRequest";
         public static final String REQUISITION = "Requisition";
+        public static final String PURCHASE_ORDER = "PurchaseOrder";
     }
     
     // STANDARD PARAMETER PREFIXES
@@ -649,7 +650,28 @@ public class PurapConstants extends JstlConstants {
         map.put(CREDIT_MEMO_DOCUMENT_DOC_TYPE, "Kuali.PURAP.CreditMemoDocument");
         return map;
     }
+    
+    private static HashMap<String, String> getPurapParameterDetailTypeCodes()
+    {
+        HashMap<String, String> map;
+        map = new HashMap<String, String>();
+        map.put("RequisitionDocument", PurapConstants.Components.REQUISITION);
+        map.put("PurchaseOrderDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put("PurchaseOrderCloseDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put("PurchaseOrderReopenDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put("PurchaseOrderAmendmentDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put("PurchaseOrderPaymentHoldDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put("PurchaseOrderRemoveHoldDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put("PurchaseOrderRetransmitDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put("PurchaseOrderVoidDocument", PurapConstants.Components.PURCHASE_ORDER);
+        map.put(PAYMENT_REQUEST_DOCUMENT_DOC_TYPE, PurapConstants.Components.PAYMENT_REQUEST);
+        map.put(CREDIT_MEMO_DOCUMENT_DOC_TYPE, PurapConstants.Components.CREDIT_MEMO_DOC);
+        return map;
+    }    
     public final static HashMap<String,String> ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP =
                         itemTypes();
+    
+    public final static HashMap<String,String> PURAP_DETAIL_TYPE_CODE_MAP =
+        getPurapParameterDetailTypeCodes();
 
 }
