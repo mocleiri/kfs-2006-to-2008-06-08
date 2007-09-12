@@ -33,13 +33,13 @@ public class PurapParameterConstants {
     // PARAMETER NAMES
     public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
     public static final String PURAP_OVERRIDE_PREQ_DOC_TITLE = "OVERRIDE_PREQ_DOC_TITLE";
-    public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = "OVERRIDE_REQ_DOC_TITLE";    
+    public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";    
     public static final String PURAP_OVERRIDE_VENDOR_DOC_TITLE = "OVERRIDE_VENDOR_DOC_TITLE";
     public static final String PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT = "DEFAULT_NEG_PMT_RQST_APRVL_LMT";
     public static final String PURAP_PDP_EPIC_ORG_CODE = "PDP.EPIC.ORG.CODE";
     public static final String PURAP_PDP_EPIC_SBUNT_CODE = "PDP.EPIC.SBUNT.CODE";
     public static final String PURAP_PDP_USER_ID = "PDP.USER.ID";
-    public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = "DEFAULT_PO_TRANSMISSION_CODE";
+    public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = "DEFAULT_TRANSMISSION_CODE";
 
     public static class Workgroups {
         public static final String SEARCH_SPECIAL_ACCESS = "SEARCH_SPECIAL_ACCESS_GROUP";
@@ -65,7 +65,7 @@ public class PurapParameterConstants {
             // config parameters
             public static final String SEPARATION_OF_DUTIES_DOLLAR_AMOUNT = "SEPARATION_OF_DUTIES_DOLLAR_AMOUNT";
             // Workgroups
-            public static final String SEPARATION_OF_DUTIES_WORKGROUP_NAME = "WORKGROUP.SEPARATION_OF_DUTIES";
+            public static final String SEPARATION_OF_DUTIES_WORKGROUP_NAME = "SEPARATION_OF_DUTIES_GROUP";
         }
         public static class PurchaseOrderDocument {
             // Config parameter group names
