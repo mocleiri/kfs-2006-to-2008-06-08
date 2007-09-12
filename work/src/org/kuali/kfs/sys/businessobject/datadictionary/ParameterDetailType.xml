@@ -66,7 +66,7 @@
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ParameterNamespaceValuesFinder"/>
                 </control>
             </attributeReference>
-            <attribute name="parameterDetailTypeCode" forceUppercase="true">
+            <attribute name="parameterDetailTypeCode" forceUppercase="false">
                 <label>Parameter Detail Type Code</label>
                 <shortLabel>Dtl Type Cd</shortLabel>
                 <maxLength>100</maxLength>

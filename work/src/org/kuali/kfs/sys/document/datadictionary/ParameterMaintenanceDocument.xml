@@ -64,10 +64,6 @@
                 attributeToHighlightOnFail="parameterTypeCode"
                 activeIndicatorAttributeName="active"
             />
-            <reference attributeName="parameterDetailType"
-                attributeToHighlightOnFail="parameterDetailTypeCode"
-                activeIndicatorAttributeName="active"
-            />
         </defaultExistenceChecks>
 
         <maintainableSections>
