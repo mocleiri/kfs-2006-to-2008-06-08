@@ -52,6 +52,7 @@ import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.bo.UniversityDate;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapRuleConstants;
 import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
 import org.kuali.module.purap.bo.CreditMemoItem;
@@ -166,7 +167,7 @@ public class PurapGeneralLedgerServiceImpl implements PurapGeneralLedgerService 
             explicitEntry.setDocumentNumber(preq.getDocumentNumber());
 
             // PREQs created in the previous fiscal year get backdated if we're at the beginning of the new fiscal year (i.e. prior to first closing)
-            Integer allowBackpost = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapRuleConstants.ALLOW_BACKPOST_DAYS));
+            Integer allowBackpost = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST, PurapRuleConstants.ALLOW_BACKPOST_DAYS));
             if (allowBackpost == null) {
                 throw new IllegalArgumentException("ALLOW_BACKPOST_DAYS needs to be defined in system parameters");
             }
