@@ -21,9 +21,9 @@
     <businessObject businessObjectClass="org.kuali.core.bo.ParameterDetailType">
 
         <inquiry>
-            <title>Parameter Detail Type Inquiry</title>
+            <title>Parameter Component Inquiry</title>
             <inquirySections>
-                <inquirySection title="Parameter Detail Type Information">
+                <inquirySection title="Parameter Component Information">
                     <inquiryFields>
                         <field attributeName="parameterDetailTypeCode" />
                         <field attributeName="parameterDetailTypeName" />
@@ -35,9 +35,9 @@
         </inquiry>
         <lookup>
             <lookupableID>parameterDetailTypeLookupable</lookupableID>
-            <title>Parameter Detail Type Lookup</title>
+            <title>Parameter Component Lookup</title>
 
-            <instructions>Look up a Parameter Detail Type.</instructions>
+            <instructions>Look up a Parameter Component.</instructions>
             <defaultSort attributeName="parameterDetailTypeName" sortAscending="true" />
             <lookupFields>
                 <lookupField attributeName="parameterNamespaceCode" required="false" />
@@ -67,8 +67,8 @@
                 </control>
             </attributeReference>
             <attribute name="parameterDetailTypeCode" forceUppercase="false">
-                <label>Parameter Detail Type Code</label>
-                <shortLabel>Dtl Type Cd</shortLabel>
+                <label>Parameter Component</label>
+                <shortLabel>Component</shortLabel>
                 <maxLength>100</maxLength>
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
@@ -77,14 +77,14 @@
                 <control>
                     <text size="20" />
                 </control>
-                <summary>Code identifying the parameter detail type.</summary>
+                <summary>Code identifying the parameter Component.</summary>
                 <description>
-                    Code identifying the parameter detail type.
+                    Code identifying the parameter Component.
                 </description>
             </attribute>
             <attribute name="parameterDetailTypeName" forceUppercase="false">
-                <label>Parameter Detail Type Name</label>
-                <shortLabel>Dtl Type Nm</shortLabel>
+                <label>Parameter Component Name</label>
+                <shortLabel>Comp. Nm</shortLabel>
                 <maxLength>255</maxLength>
                 <validationPattern>
                     <anyCharacter allowWhitespace="true" />
@@ -93,9 +93,9 @@
                 <control>
                     <text size="50" />
                 </control>
-                <summary>The name of the parameter detail type.</summary>
+                <summary>The name of the parameter Component.</summary>
                 <description>
-                    The name of the parameter detail type.
+                    The name of the parameter Component.
                 </description>
             </attribute>
             <attributeReference name="parameterNamespace.codeAndDescription" sourceClassName="org.kuali.core.bo.ParameterNamespace" sourceAttributeName="codeAndDescription"></attributeReference>

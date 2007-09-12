@@ -24,7 +24,7 @@
             org.kuali.core.maintenance.KualiMaintainableImpl
         </maintainableClass>
         <businessRulesClass>
-            org.kuali.core.rules.ParameterRule
+            org.kuali.kfs.rules.ParameterRule
         </businessRulesClass>
         <documentAuthorizerClass>
             org.kuali.core.document.authorization.ParameterMaintenanceDocumentAuthorizer

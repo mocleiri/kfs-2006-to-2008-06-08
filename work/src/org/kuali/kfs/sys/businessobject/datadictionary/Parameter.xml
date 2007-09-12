@@ -84,7 +84,7 @@
             </attributeReference>
             <attributeReference name="parameterDetailTypeCode" sourceClassName="org.kuali.core.bo.ParameterDetailType" sourceAttributeName="parameterDetailTypeCode" >
                 <required>true</required>
-            
+
             </attributeReference>
             <attribute name="parameterName" forceUppercase="false">
                 <label>Parameter Name</label>
