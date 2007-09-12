@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.AttributeDefinition;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.batch.PurgePendingAttachmentsStep;
 import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.A21SubAccount;
@@ -32,10 +33,17 @@ import org.kuali.module.gl.batch.BalanceForwardStep;
 import org.kuali.module.gl.batch.ClearOldOriginEntryStep;
 import org.kuali.module.gl.batch.EncumbranceForwardStep;
 import org.kuali.module.gl.batch.NominalActivityClosingStep;
+import org.kuali.module.gl.batch.PurgeAccountBalancesStep;
+import org.kuali.module.gl.batch.PurgeBalanceStep;
+import org.kuali.module.gl.batch.PurgeCollectorDetailStep;
+import org.kuali.module.gl.batch.PurgeEncumbranceStep;
+import org.kuali.module.gl.batch.PurgeEntryStep;
+import org.kuali.module.gl.batch.PurgeSufficientFundBalancesStep;
 import org.kuali.module.gl.batch.ScrubberStep;
 import org.kuali.module.gl.batch.collector.CollectorStep;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.bo.SufficientFundBalances;
 
 
 /**
@@ -69,7 +77,17 @@ public class GLConstants {
         public final static String SCRUBBER_STEP = ScrubberStep.class.getSimpleName();
         public final static String ENTERPRISE_FEED_STEP = "EnterpriseFeedStep";
         public final static String NOMINAL_ACTIVITY_CLOSING_STEP = NominalActivityClosingStep.class.getSimpleName();
-        
+        public final static String ORGNIAZATION_REVERSION_CLOSING_STEP = "OrganizationReversionClosingStep";
+        public final static String POSTER_INDIRECT_COST_RECOVERY_ENTRIES_STEP = "PosterIndirectCostRecoveryEntriesStep";
+        public final static String POSTER_SUMMARY_REPORT_STEP = "PosterSummaryReportStep";
+        public final static String PURGE_ACCOUNT_BALANCES_STEP = PurgeAccountBalancesStep.class.getSimpleName();
+        public final static String PURGE_BALANCE_STEP = PurgeBalanceStep.class.getSimpleName();
+        public final static String PURGE_COLLECTOR_DETAIL_STEP = PurgeCollectorDetailStep.class.getSimpleName();
+        public final static String PURGE_ENCUMBRANCE_STEP = PurgeEncumbranceStep.class.getSimpleName();
+        public final static String PURGE_ENTRY_STEP = PurgeEntryStep.class.getSimpleName();
+        public final static String PURGE_PENDING_ATTACHMENTS_STEP = PurgePendingAttachmentsStep.class.getSimpleName();
+        public final static String PURGE_SUFFICIENT_FUND_BALANCES_STEP = PurgeSufficientFundBalancesStep.class.getSimpleName();
+        public final static String SUFFICIENT_FUND_BALANCES = SufficientFundBalances.class.getSimpleName();
     }
     
     
@@ -199,9 +217,9 @@ public class GLConstants {
         static final public String PLANT_INDEBTEDNESS_OBJ_SUB_TYPE_CODES = "PLANT_INDEBTEDNESS_OBJ_SUB_TYPE_CODES";
         static final public String PLANT_INDEBTEDNESS_SUB_FUND_GROUP_CODES = "PLANT_INDEBTEDNESS_SUB_FUND_GROUP_CODES";
 
-        static final public String CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES = "CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES";
+        static final public String CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES = "CONTINUATION_ACCOUNT_BYPASS_ORIGINATIONS";
         static final public String CONTINUATION_ACCOUNT_BYPASS_BALANCE_TYPE_CODES = "CONTINUATION_ACCOUNT_BYPASS_BALANCE_TYPE_CODES";
-        static final public String CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES = "CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES";
+        static final public String CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES = "CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPES";
     }
     
     public static class GlSummaryReport {
@@ -212,9 +230,10 @@ public class GLConstants {
     
     public static class OrganizationReversionProcess {
         static final public String ORGANIZATION_REVERSION_COA = "ORGANIZATION_REVERSION_COA";
+        
         static final public String CARRY_FORWARD_OBJECT_CODE = "CARRY_FORWARD_OBJECT_CODE";
-        static final public String DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE = "DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE";
-        static final public String DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE = "DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE";
+        static final public String DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE = "DEFAULT_DOCUMENT_TYPE";
+        static final public String DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE = "MANUAL_FEED_ORIGINATION";
         static final public String DEFAULT_FINANCIAL_BALANCE_TYPE_CODE = "CASH_REVERSION_DEFAULT_BALANCE_TYPE";
         static final public String DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END = "BUDGET_REVERSION_DEFAULT_BALANCE_TYPE";
         static final public String DEFAULT_DOCUMENT_NUMBER_PREFIX = "DEFAULT_DOCUMENT_NUMBER_PREFIX";
