@@ -131,6 +131,7 @@ public class KFSConstants extends JstlConstants {
         public final static String SCHEDULE_STEP = ScheduleStep.class.getSimpleName();
         
         public final static String LOOKUP = "Lookup";
+        public final static String ALL = "All";
         
         public final static String KUALI_MODULE_USER = KualiModuleUser.class.getSimpleName();
 
