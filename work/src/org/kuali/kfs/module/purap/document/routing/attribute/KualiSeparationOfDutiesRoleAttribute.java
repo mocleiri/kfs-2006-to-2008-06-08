@@ -28,6 +28,7 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.workflow.KualiWorkflowUtils;
 
@@ -107,13 +108,13 @@ public class KualiSeparationOfDutiesRoleAttribute extends UnqualifiedRoleAttribu
             return null;
         }
         KualiConfigurationService configService = SpringContext.getBean(KualiConfigurationService.class);
-        KualiDecimal maxAllowedAmount = new KualiDecimal(configService.getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapParameterConstants.WorkflowParameters.RequisitionDocument.SEPARATION_OF_DUTIES_DOLLAR_AMOUNT));
+        KualiDecimal maxAllowedAmount = new KualiDecimal(configService.getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapConstants.Components.REQUISITION, PurapParameterConstants.WorkflowParameters.RequisitionDocument.SEPARATION_OF_DUTIES_DOLLAR_AMOUNT));
         // if app param amount is greater than or equal to documentTotalAmount... no need for separation of duties
         KualiDecimal totalAmount = KualiWorkflowUtils.getFinancialDocumentTotalAmount(routeContext);
         if ( ObjectUtils.isNotNull(maxAllowedAmount) && ObjectUtils.isNotNull(totalAmount) && (maxAllowedAmount.compareTo(totalAmount) >= 0)) {
             return null;
         }
-        String workgroupName = configService.getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapParameterConstants.WorkflowParameters.RequisitionDocument.SEPARATION_OF_DUTIES_WORKGROUP_NAME);
+        String workgroupName = configService.getParameterValue(KFSConstants.PURAP_NAMESPACE,PurapConstants.Components.REQUISITION, PurapParameterConstants.WorkflowParameters.RequisitionDocument.SEPARATION_OF_DUTIES_WORKGROUP_NAME);
         return new ResolvedQualifiedRole(SEPARATION_OF_DUTIES_ROLE_LABEL, Arrays.asList(new Id[] {new GroupNameId(workgroupName)}));
     }
 }
