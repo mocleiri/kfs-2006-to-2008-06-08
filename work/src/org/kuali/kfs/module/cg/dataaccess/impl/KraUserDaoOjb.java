@@ -29,7 +29,7 @@ public class KraUserDaoOjb extends KualiModuleUserDaoOjb {
 	
 	@Override
 	public Object getActiveUserQueryCriteria(String moduleId) {
-        String[] values = getConfigService().getParameterValues( KFSConstants.KRA_NAMESPACE, KraConstants.Components.ALL, KraConstants.ALLOWED_EMPLOYEE_STATUS_RULE  );
+        String[] values = getConfigService().getParameterValues( KFSConstants.KRA_NAMESPACE, KFSConstants.Components.ALL, KraConstants.ALLOWED_EMPLOYEE_STATUS_RULE  );
 
 		Criteria criteria = new Criteria();
 		criteria.addEqualTo("staff", "Y");
