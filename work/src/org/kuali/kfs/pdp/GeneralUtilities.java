@@ -27,8 +27,8 @@ public class GeneralUtilities {
 
     // GENERAL UTILITIES SECTION
 
-    public static int getParameterInteger(String parm,KualiConfigurationService kcs) {
-        String srpp = kcs.getParameterValue(KFSConstants.PDP_NAMESPACE, parm);
+    public static int getParameterInteger(String parameterDetailTypeCode,String parm, KualiConfigurationService kcs) {
+        String srpp = kcs.getParameterValue(KFSConstants.PDP_NAMESPACE, parameterDetailTypeCode, parm);
         if ( srpp != null ) {
             try {
                 return Integer.parseInt(srpp);
@@ -40,8 +40,8 @@ public class GeneralUtilities {
         }
     }
 
-    public static int getParameterInteger(String parm,KualiConfigurationService kcs,int defaultValue) {
-        String srpp = kcs.getParameterValue(KFSConstants.PDP_NAMESPACE, parm);
+    public static int getParameterInteger(String parameterDetailTypeCode,String parm,KualiConfigurationService kcs, int defaultValue) {
+        String srpp = kcs.getParameterValue(KFSConstants.PDP_NAMESPACE, parameterDetailTypeCode, parm);
         if ( srpp != null ) {
             try {
                 return Integer.parseInt(srpp);
