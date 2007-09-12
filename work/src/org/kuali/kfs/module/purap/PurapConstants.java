@@ -39,9 +39,15 @@ public class PurapConstants extends JstlConstants {
     
     public static final String PURAP_NAMESPACE = KFSConstants.PURAP_NAMESPACE;
     
+    public static final String B2_B_ALLOW_COPY_DAYS = "B2_B_ALLOW_COPY_DAYS";
+    
+    public static final String DEFAULT_FUNDING_SOURCE = "DEFAULT_FUNDING_SOURCE";
+    
     public static class Components {
         public static final String CREDIT_MEMO_DOC = "CreditMemo";
         public static final String ASSIGN_CONTRACT_MANGER = "AssignContractManger";
+        public static final String PAYMENT_REQUEST = "PaymentRequest";
+        public static final String REQUISITION = "Requisition";
     }
     
     // STANDARD PARAMETER PREFIXES
@@ -330,8 +336,8 @@ public class PurapConstants extends JstlConstants {
     // Weird PaymentTermsType is due on either the 10th or 25th with no discount
     public static String PMT_TERMS_TYP_NO_DISCOUNT_CD = "00N2T";
 
-    public static String PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS = "PURAP.AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS";
-    public static String PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS = "PURAP.AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS";
+    public static String PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS = "SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS_IND";
+    public static String PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS = "SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS_IND";
 
     public static class PaymentRequestIndicatorText {
         public static String HOLD = "HOLD";
@@ -470,10 +476,10 @@ public class PurapConstants extends JstlConstants {
         public static String VENDOR_POSTAL_CODE = "Postal Code";
     }
 
-    public static final String BELOW_THE_LINES_PARAMETER = "BELOW_THE_LINE_ITEMS";
-    public static final String ITEM_ALLOWS_ZERO = "ALLOWS_ZERO";
-    public static final String ITEM_ALLOWS_POSITIVE = "ALLOWS_POSITIVE";
-    public static final String ITEM_ALLOWS_NEGATIVE = "ALLOWS_NEGATIVE";
+    public static final String BELOW_THE_LINES_PARAMETER = "BELOW_THE_LINE_ITEM_TYPES";
+    public static final String ITEM_ALLOWS_ZERO = "ITEM_TYPES_ALLOWING_ZERO";
+    public static final String ITEM_ALLOWS_POSITIVE = "ITEM_TYPES_ALLOWING_POSITIVE";
+    public static final String ITEM_ALLOWS_NEGATIVE = "ITEM_TYPES_ALLOWING_NEGATIVE";
     public static final String ITEM_REQUIRES_USER_ENTERED_DESCRIPTION = "REQUIRES_USER_ENTERED_DESCRIPTION";
 
     public static class ItemFields {
