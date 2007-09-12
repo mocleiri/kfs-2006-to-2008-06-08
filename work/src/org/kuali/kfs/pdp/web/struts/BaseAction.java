@@ -143,7 +143,7 @@ public abstract class BaseAction extends Action {
     protected Timestamp getLastGoodDisbursementActionDate() {
         LOG.debug("getLastGoodDisbursementActionDate() started");
 
-        String daysStr = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.DISBURSEMENT_ACTION_EXPIRATION_DAYS);
+        String daysStr = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, KFSConstants.Components.ALL, PdpConstants.ApplicationParameterKeys.DISBURSEMENT_ACTION_EXPIRATION_DAYS);
         int days = Integer.valueOf(daysStr);
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, (days * -1));

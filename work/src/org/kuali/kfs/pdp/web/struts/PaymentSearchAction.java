@@ -48,15 +48,15 @@ public class PaymentSearchAction extends BaseAction {
     }
 
     private int getSearchResultsPerPage() {
-        return getParameterInteger(PdpConstants.ApplicationParameterKeys.SEARCH_RESULTS_PER_PAGE);
+        return getParameterInteger(KFSConstants.Components.LOOKUP, PdpConstants.ApplicationParameterKeys.SEARCH_RESULTS_PER_PAGE);
     }
 
     private int getMaxSearchTotal() {
-        return getParameterInteger(PdpConstants.ApplicationParameterKeys.SEARCH_RESULTS_TOTAL);
+        return getParameterInteger(KFSConstants.Components.LOOKUP, PdpConstants.ApplicationParameterKeys.SEARCH_RESULTS_TOTAL);
     }
 
-    private int getParameterInteger(String parm) {
-        String srpp = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, parm);
+    private int getParameterInteger(String parameterDetailTypeCode, String parm) {
+        String srpp = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE, parameterDetailTypeCode, parm);
         if ( srpp != null ) {
             try {
                 return Integer.parseInt(srpp);
