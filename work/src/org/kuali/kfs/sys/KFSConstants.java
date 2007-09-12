@@ -966,22 +966,22 @@ public class KFSConstants extends JstlConstants {
         public static final String FLEXIBLE_OFFSET_ENABLED_FLAG = "USE_FLEXIBLE_OFFSET_IND";
         public static final String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = "USE_FLEXIBLE_CLAIM_ON_CASH_IND";
         public static final String ICR_ENCUMBRANCE_ENABLED_FLAG = "USE_ICR_ENCUMBRANCE_IND";
-        public static final String PURGE_GL_ACCT_BALANCES_T_BEFORE_YEAR = "PURGE_GL_ACCT_BALANCES_T_BEFORE_YEAR";
-        public static final String PURGE_GL_ENCUMBRANCE_T_BEFORE_YEAR = "PURGE_GL_ENCUMBRANCE_T_BEFORE_YEAR";
-        public static final String PURGE_GL_SF_BALANCES_T_BEFORE_YEAR = "PURGE_GL_SF_BALANCES_T_BEFORE_YEAR";
-        public static final String PURGE_GL_BALANCE_T_BEFORE_YEAR = "PURGE_GL_BALANCE_T_BEFORE_YEAR";
-        public static final String PURGE_GL_ENTRY_T_BEFORE_YEAR = "PURGE_GL_ENTRY_T_BEFORE_YEAR";
-        public static final String PURGE_GL_ID_BILL_T_BEFORE_YEAR = "PURGE_GL_ID_BILL_T_BEFORE_YEAR";
+        public static final String PURGE_GL_ACCT_BALANCES_T_BEFORE_YEAR = "PRIOR_TO_YEAR";
+        public static final String PURGE_GL_ENCUMBRANCE_T_BEFORE_YEAR = "PRIOR_TO_YEAR";
+        public static final String PURGE_GL_SF_BALANCES_T_BEFORE_YEAR = "PRIOR_TO_YEAR";
+        public static final String PURGE_GL_BALANCE_T_BEFORE_YEAR = "PRIOR_TO_YEAR";
+        public static final String PURGE_GL_ENTRY_T_BEFORE_YEAR = "PRIOR_TO_YEAR";
+        public static final String PURGE_GL_ID_BILL_T_BEFORE_YEAR = "PRIOR_TO_YEAR";
         public static final String SUFFICIENT_FINDS_EXPENSE_OBJECT_TYPES = "SufficientFundsExpenseObjectTypes";
         public static final String GL_ACCOUNT_BALANCE_SERVICE = "GL.ACCOUNT_BALANCE_SERVICE";
 
         public static final String GL_ACLO = "GLACLO";
         public static final String GL_ANNUAL_CLOSING_DOC_TYPE = "ANNUAL_CLOSING_DOCUMENT_TYPE";
         public static final String GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE = "GLClosingOfNominalActivityObjectTypeCode";
-        public static final String GL_INDIRECT_COST_RECOVERY = "GLIndirectCostRecovery";
+        public static final String GL_INDIRECT_COST_RECOVERY = "INDIRECT_COST_RECOVERY_DOCUMENT_TYPE";
         public static final String GL_NET_EXPENSE_OBJECT_TYPE_CODE = "GLNetExpenseObjectTypeCode";
         public static final String GL_ORIGINATION_CODE = "MANUAL_FEED_ORIGINATION";
-        public static final String GL_SCRUBBER_VALIDATION_DAYS_OFFSET = "GL_SCRUBBER_VALIDATION_DAYS_OFFSET";
+        public static final String GL_SCRUBBER_VALIDATION_DAYS_OFFSET = "CG_ACCOUNT_EXPIRATION_EXTENSION_DAYS";
         
         public static final String LOOKUP_RESULTS_LIMIT = "lookup.results.limit";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_PER_PAGE = "MULTIPLE_VALUE_RESULTS_PER_PAGE";
@@ -1010,7 +1010,7 @@ public class KFSConstants extends JstlConstants {
          * Used by PurgePendingAttachmentsJob to compute the maximum amount of time a pending attachment is allowed to
          * persist on the file system before being deleted.
          */
-        public static final String PURGE_PENDING_ATTACHMENTS_STEP_MAX_AGE = "purgePendingAttachmentsStepMaxAge";
+        public static final String PURGE_PENDING_ATTACHMENTS_STEP_MAX_AGE = "MAX_AGE";
         
         public static final String JOB_ADMIN_WORKGROUP = "JOB_ADMIN_GROUP";
         
@@ -1079,7 +1079,7 @@ public class KFSConstants extends JstlConstants {
     public static final String RULE_CODE_C1 = "C1";
     public static final String RULE_CODE_C2 = "C2";
     public static final String TRANSACTION_DT = "TRANSACTION_DT";
-    public static final String UNALLOC_OBJECT_CD = "UNALLOC_OBJECT_CD";
+    public static final String UNALLOC_OBJECT_CD = "ANNUAL_CLOSING_UNALLOCATED_OBJECT_CODE";
     public static final String BEG_BUD_CASH_OBJECT_CD = "BEG_BUD_CASH_OBJECT_CD";
     public static final String FUND_BAL_OBJECT_CD = "FUND_BAL_OBJECT_CD";
     public static final String UNIV_FISCAL_YR = "UNIV_FISCAL_YR";
