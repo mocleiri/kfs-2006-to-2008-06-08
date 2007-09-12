@@ -200,7 +200,7 @@ public class PurapServiceImpl implements PurapService {
            
         }
         String securityGroup = (String)PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
-        String[] itemTypes = kualiConfigurationService.getParameterValues( KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.CREDIT_MEMO_DOC, PurapConstants.BELOW_THE_LINES_PARAMETER);
+        String[] itemTypes = kualiConfigurationService.getParameterValues( KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST, PurapConstants.BELOW_THE_LINES_PARAMETER);
         return itemTypes;
     }
     
@@ -259,7 +259,7 @@ public class PurapServiceImpl implements PurapService {
 
         java.util.Date today = dateTimeService.getCurrentDate();
         java.util.Date closingDate = universityDateService.getLastDateOfFiscalYear(universityDateService.getCurrentFiscalYear());
-        Integer allowEncumberNext = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapRuleConstants.ALLOW_ENCUMBER_NEXT_YEAR_DAYS));
+        Integer allowEncumberNext = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.REQUISITION, PurapRuleConstants.ALLOW_ENCUMBER_NEXT_YEAR_DAYS));
         int diffTodayClosing = dateTimeService.dateDiff(today, closingDate, false);
 
         if (ObjectUtils.isNotNull(closingDate) && ObjectUtils.isNotNull(today) && ObjectUtils.isNotNull(allowEncumberNext)) {
