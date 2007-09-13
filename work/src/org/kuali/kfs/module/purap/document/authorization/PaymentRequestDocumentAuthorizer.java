@@ -46,7 +46,7 @@ public class PaymentRequestDocumentAuthorizer extends AccountingDocumentAuthoriz
 
     @Override
     public boolean hasInitiateAuthorization(Document document, UniversalUser user) {
-        String authorizedWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
+        String authorizedWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
         try {
             return SpringContext.getBean(KualiGroupService.class).getByGroupName(authorizedWorkgroup).hasMember(user);
         }
