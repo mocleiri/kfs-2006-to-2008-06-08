@@ -291,10 +291,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     LOG.debug("sendLoadEmail() starting");
 
     //To send email or not send email
-    boolean noEmail = false;
-    if ( kualiConfigurationService.parameterExists(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL) ) {
-        noEmail = kualiConfigurationService.getIndicatorParameter(KFSConstants.PDP_NAMESPACE, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
-    }
+    boolean noEmail = kualiConfigurationService.getIndicatorParameter(KFSConstants.PDP_NAMESPACE, KFSConstants.Components.ALL, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
     if ( noEmail) {
       LOG.debug("sendLoadEmail() sending payment file email is disabled");
       return;
@@ -443,7 +440,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
     StringBuffer body = new StringBuffer();
 
-    String taxEmail = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,PdpConstants.ApplicationParameterKeys.TAX_GROUP_EMAIL_ADDRESS);
+    String taxEmail = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,KFSConstants.Components.ALL, PdpConstants.ApplicationParameterKeys.TAX_GROUP_EMAIL_ADDRESS);
     if (GeneralUtilities.isStringEmpty(taxEmail)) {
       LOG.error("No Tax E-mail Application Setting found to send notification e-mail");
       return;
