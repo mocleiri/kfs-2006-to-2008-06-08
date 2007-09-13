@@ -448,7 +448,7 @@ public class BudgetParametersRule {
                 }
                 else {
                     if (academicYearSubdivisionNames == null)
-                        academicYearSubdivisionNames = kcs.getParameterValues(KFSConstants.KRA_NAMESPACE, "KraBudgetAcademicYearSubdivisionNames");
+                        academicYearSubdivisionNames = kcs.getParameterValues(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES);
                     String[] graduateAssistantRateErrorMessage = { budgetGraduateAssistantRate.getCampusCode() + " " + academicYearSubdivisionNames[anAcademicYearSubdivisionIndex - 1] + " Current Rate" };
                     GlobalVariables.getErrorMap().putError("budget.graduateAssistantRate[" + i + "].campusMaximumPeriod" + anAcademicYearSubdivisionIndex + "Rate", KFSKeyConstants.ERROR_REQUIRED, graduateAssistantRateErrorMessage);
                     valid = false;
