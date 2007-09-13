@@ -43,7 +43,7 @@ public class KualiBatchJobModifyAction extends KualiAction {
     private static final String END_STEP_PARAMETER = "endStep";
     private static final String START_TIME_PARAMETER = "startTime";
     private static final String EMAIL_PARAMETER = "emailAddress";
-    private static final String JOB_ADMIN_PARAMETER_SUFFIX = "_WORKGROUP";
+    private static final String JOB_ADMIN_PARAMETER = "WORKGROUP";
 
     private static SchedulerService schedulerService;
     private static KualiConfigurationService configService;
@@ -96,8 +96,8 @@ public class KualiBatchJobModifyAction extends KualiAction {
             }
         }
         // TODO: put the namespace on the job instead of looking at the 1st step
-        if ( getConfigService().parameterExists(job.getSteps().get(0).getNamespace(), job.getName() + JOB_ADMIN_PARAMETER_SUFFIX) ) {
-            String jobSpecificAdminWorkgroup = getConfigService().getParameterValue(job.getSteps().get(0).getNamespace(), job.getName() + JOB_ADMIN_PARAMETER_SUFFIX );
+        String jobSpecificAdminWorkgroup = getConfigService().getParameterValue(job.getSteps().get(0).getNamespace(), job.getSteps().get(0).getComponentName(), JOB_ADMIN_PARAMETER );
+        if ( StringUtils.isNotBlank(jobSpecificAdminWorkgroup) ) {
             if ( !GlobalVariables.getUserSession().getUniversalUser().isMember(jobSpecificAdminWorkgroup) ) {
                 throw new AuthorizationException( GlobalVariables.getUserSession().getUniversalUser().getPersonUserIdentifier(), actionType, job.getFullName() );
             }
