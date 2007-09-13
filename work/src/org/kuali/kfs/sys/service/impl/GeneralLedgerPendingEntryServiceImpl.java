@@ -42,6 +42,7 @@ import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.chart.service.ChartService;
+import org.kuali.module.chart.service.ObjectTypeService;
 import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.Balance;
@@ -72,8 +73,10 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
      */
     public KualiDecimal getExpenseSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd) {
         LOG.debug("getExpenseSummary() started");
-
-        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ALL, "EXPENSE_OBJECT_TYPE_CODES");
+        
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> objectTypes = objectTypeService.getBasicExpenseObjectTypes(universityFiscalYear);
+        objectTypes.add( objectTypeService.getExpenseTransferObjectType(universityFiscalYear));
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
@@ -91,7 +94,9 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     public KualiDecimal getEncumbranceSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd) {
         LOG.debug("getEncumbranceSummary() started");
 
-        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.ALL, "EXPENSE_OBJECT_TYPE_CODES");
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> objectTypes = objectTypeService.getBasicExpenseObjectTypes(universityFiscalYear);
+        objectTypes.add( objectTypeService.getExpenseTransferObjectType(universityFiscalYear));
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
@@ -111,7 +116,9 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     public KualiDecimal getBudgetSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isYearEnd) {
         LOG.debug("getBudgetSummary() started");
 
-        List<String> objectTypes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.ALL, "EXPENSE_OBJECT_TYPE_CODES");
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> objectTypes = objectTypeService.getBasicExpenseObjectTypes(universityFiscalYear);
+        objectTypes.add( objectTypeService.getExpenseTransferObjectType(universityFiscalYear));
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
