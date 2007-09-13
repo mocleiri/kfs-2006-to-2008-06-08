@@ -33,7 +33,7 @@ import org.kuali.test.ConfigureContext;
 public class FlexibleOffsetAccountServiceTest extends KualiTestBase {
 
     public void testGetByPrimaryId_valid() throws Exception {
-        boolean enabled = SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
+        boolean enabled = SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.OFFSET, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
    
         TestUtils.setSystemParameter(KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.OFFSET, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, "Y", true, false);
         OffsetAccount offsetAccount = SpringContext.getBean(FlexibleOffsetAccountService.class).getByPrimaryIdIfEnabled(OFFSET_ACCOUNT1.chartOfAccountsCode, OFFSET_ACCOUNT1.accountNumber, OFFSET_ACCOUNT1.financialOffsetObjectCode);
