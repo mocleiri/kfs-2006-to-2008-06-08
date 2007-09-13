@@ -50,7 +50,7 @@ public class CreditMemoDocumentAuthorizer extends AccountingDocumentAuthorizerBa
      */
     @Override
     public boolean hasInitiateAuthorization(Document document, UniversalUser user) {
-        String authorizedWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
+        String authorizedWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
         try {
             return SpringContext.getBean(KualiGroupService.class).getByGroupName(authorizedWorkgroup).hasMember(user);
         }
@@ -95,7 +95,7 @@ public class CreditMemoDocumentAuthorizer extends AccountingDocumentAuthorizerBa
 
         //TODO: can we have an AP doc authorizer and move some of this similar logic up.  Also when we get
         //AccountsPayableDocumentActionAuthorizer call the isExtracted method there.
-        String apGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);        
+        String apGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);        
         if (user.isMember(apGroup) && (creditMemoDocument.getExtractedDate()==null)) {
             editModeMap.put(PurapAuthorizationConstants.PaymentRequestEditMode.EDIT_PRE_EXTRACT, "TRUE");
         }
