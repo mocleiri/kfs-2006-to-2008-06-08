@@ -344,7 +344,7 @@ public class ObjectCodeRule extends MaintenanceDocumentRuleBase {
     }
 
     private Set<String> retrieveParameterSet(String parameterName) {
-        return configService.getParameterValuesAsSet(KFSConstants.CHART_NAMESPACE, parameterName);
+        return configService.getParameterValuesAsSet(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.OBJECT, parameterName);
     }
 
 }
