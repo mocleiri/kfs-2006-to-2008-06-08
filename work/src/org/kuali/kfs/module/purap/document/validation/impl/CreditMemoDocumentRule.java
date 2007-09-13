@@ -537,7 +537,7 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
         valid &= executeParameterRestriction(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.CREDIT_MEMO_DOC, PurapRuleConstants.RESTRICTED_OBJECT_LEVEL_PARM_NM, objectCode.getFinancialObjectLevelCode(), KFSPropertyConstants.FINANCIAL_OBJECT_CODE, objectCodeLabel);
 
         // check object level by object type restrictions
-        valid &= executeParameterRestriction(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.CREDIT_MEMO_DOC, PurapRuleConstants.RESTRICTED_OBJECT_LEVEL_BY_TYPE_PARM_PREFIX + objectCode.getFinancialObjectTypeCode(), objectCode.getFinancialObjectLevelCode(), KFSPropertyConstants.FINANCIAL_OBJECT_CODE, objectCodeLabel);
+        valid &= executeConstrainedParameterRestriction(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.CREDIT_MEMO_DOC, PurapRuleConstants.VALID_OBJECT_LEVELS_BY_OBJECT_TYPE_PARM_NM, PurapRuleConstants.INVALID_OBJECT_LEVELS_BY_OBJECT_TYPE_PARM_NM, objectCode.getFinancialObjectTypeCode(), objectCode.getFinancialObjectLevelCode(), KFSPropertyConstants.FINANCIAL_OBJECT_CODE, objectCodeLabel);
 
         // check object sub type restrictions
         valid &= executeParameterRestriction(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.CREDIT_MEMO_DOC, PurapRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_PARM_NM, objectCode.getFinancialObjectSubTypeCode(), KFSPropertyConstants.FINANCIAL_OBJECT_CODE, objectCodeLabel);
