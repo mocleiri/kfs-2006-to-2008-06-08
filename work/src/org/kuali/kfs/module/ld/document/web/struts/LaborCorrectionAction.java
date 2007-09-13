@@ -94,7 +94,7 @@ public class LaborCorrectionAction extends CorrectionAction{
             CorrectionAction.kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
         }
 
-        request.setAttribute("debug", Boolean.valueOf(kualiConfigurationService.getIndicatorParameter(KFSConstants.GL_NAMESPACE, "GL.DEBUG")));
+        request.setAttribute("debug", Boolean.valueOf(kualiConfigurationService.getIndicatorParameter(KFSConstants.GL_NAMESPACE, KFSConstants.Components.NOT_APPLICABLE, "GL.DEBUG")));
 
         CorrectionForm rForm = (CorrectionForm) form;
         LOG.debug("execute() methodToCall: " + rForm.getMethodToCall());
