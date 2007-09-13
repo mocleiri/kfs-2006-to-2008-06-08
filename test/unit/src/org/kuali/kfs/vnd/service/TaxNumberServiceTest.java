@@ -23,6 +23,7 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.vendor.VendorConstants;
+import org.kuali.module.vendor.VendorParameterConstants;
 import org.kuali.module.vendor.VendorRuleConstants;
 import org.kuali.test.ConfigureContext;
 
@@ -63,7 +64,7 @@ public class TaxNumberServiceTest extends KualiTestBase {
     private String[] getNotAllowedTaxNumbers() {
         if (ObjectUtils.isNull(notAllowedTaxNumberRule)) {
             notAllowedTaxNumberRule = SpringContext.getBean(KualiConfigurationService.class).getParameter(
-                    KFSConstants.PURAP_NAMESPACE,VendorRuleConstants.PURAP_NOT_ALLOWED_TAX_NUMBERS);
+                    KFSConstants.VENDOR_NAMESPACE, VendorParameterConstants.Components.VENDOR, VendorRuleConstants.PURAP_NOT_ALLOWED_TAX_NUMBERS);
         }
         String[] notAllowedTaxNumbers = SpringContext.getBean(KualiConfigurationService.class).getParameterValues(notAllowedTaxNumberRule);
         return notAllowedTaxNumbers;
