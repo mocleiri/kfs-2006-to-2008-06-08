@@ -778,7 +778,7 @@ public class BalanceForwardRuleHelper {
                     // 1249 007760 MOVE 'ACLO'
                     // 1250 007770 TO FDOC-TYP-CD.
 
-                    final String GL_ACLO = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_ACLO);
+                    final String GL_ACLO = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_ANNUAL_CLOSING_DOC_TYPE);
                     entry.setFinancialDocumentTypeCode(GL_ACLO);
 
                     // 1251 007780 MOVE 'MF'
@@ -1097,13 +1097,13 @@ public class BalanceForwardRuleHelper {
                     // 1352 008740 MOVE 'ACLO'
                     // 1353 008750 TO FDOC-TYP-CD OF GLEN-RECORD.
 
-                    final String GL_ACLO = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_ACLO);
+                    final String GL_ACLO = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_ANNUAL_CLOSING_DOC_TYPE);
                     activeEntry.setFinancialDocumentTypeCode(GL_ACLO);
 
                     // 1354 008760 MOVE 'MF'
                     // 1355 008770 TO FS-ORIGIN-CD OF GLEN-RECORD.
 
-                    final String GL_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE);
+                    final String GL_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE);
                     activeEntry.setFinancialSystemOriginationCode(GL_ORIGINATION_CODE);
 
                     // 1356 008780 STRING 'AC'
