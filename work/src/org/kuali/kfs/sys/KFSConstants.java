@@ -235,6 +235,8 @@ public class KFSConstants extends JstlConstants {
         public final static String GENERAL_ERROR_CORRECTION_DOC = "GeneralErrorCorrection";
         public final static String GENERAL_LEDGER_CORRECTION_PROCESS_DOC = "GeneralLedgerCorrectionProcess";        
         public final static String TRANSFER_OF_FUNDS_DOC = "TransferOfFunds";
+        
+        public final static String BALANCE_INQUIRY_AVAILABLE_BALANCES = "BalanceInquiryAvailableBalances";
     }        
     
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
@@ -978,9 +980,9 @@ public class KFSConstants extends JstlConstants {
 
         public static final String GL_ACLO = "GLACLO";
         public static final String GL_ANNUAL_CLOSING_DOC_TYPE = "ANNUAL_CLOSING_DOCUMENT_TYPE";
-        public static final String GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE = "GLClosingOfNominalActivityObjectTypeCode";
+        public static final String GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE = "GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE";
         public static final String GL_INDIRECT_COST_RECOVERY = "INDIRECT_COST_RECOVERY_DOCUMENT_TYPE";
-        public static final String GL_NET_EXPENSE_OBJECT_TYPE_CODE = "GLNetExpenseObjectTypeCode";
+        public static final String GL_NET_EXPENSE_OBJECT_TYPE_CODE = "NET_EXPENSE_OBJECT_TYPE_CODE";
         public static final String GL_ORIGINATION_CODE = "MANUAL_FEED_ORIGINATION";
         public static final String GL_SCRUBBER_VALIDATION_DAYS_OFFSET = "CG_ACCOUNT_EXPIRATION_EXTENSION_DAYS";
         
