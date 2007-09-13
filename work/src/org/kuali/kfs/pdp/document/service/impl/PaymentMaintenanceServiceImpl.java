@@ -452,7 +452,7 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
         body.append("The following payment has been cancelled by the Financial Management Services Tax Department.  The payment was cancelled for the following reason:\n\n");
       }
       body.append(note + "\n\n");
-      String taxEmail = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,PdpConstants.ApplicationParameterKeys.TAX_GROUP_EMAIL_ADDRESS);
+      String taxEmail = kualiConfigurationService.getParameterValue(KFSConstants.PDP_NAMESPACE,KFSConstants.Components.ALL,PdpConstants.ApplicationParameterKeys.TAX_GROUP_EMAIL_ADDRESS);
       if (GeneralUtilities.isStringEmpty(taxEmail)){
         body.append("Please contact the Financial Management Services Tax Department if you have questions regarding this cancellation.\n\n");
       } else {
