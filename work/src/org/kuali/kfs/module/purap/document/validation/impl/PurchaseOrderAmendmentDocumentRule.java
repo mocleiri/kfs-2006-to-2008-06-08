@@ -54,7 +54,7 @@ public class PurchaseOrderAmendmentDocumentRule extends PurchaseOrderDocumentRul
         UniversalUser user = null;
         try {
             user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
-            String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
+            String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
             if (!uus.isMember(user, purchasingGroup)) {
                 valid = false;
                 GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURAP_DOC_ID , KFSKeyConstants.AUTHORIZATION_ERROR_DOCUMENT, initiatorNetworkId, "amend", PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_DOCUMENT);

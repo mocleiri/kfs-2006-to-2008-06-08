@@ -237,7 +237,7 @@ public class VendorLookupableHelperServiceImpl extends AbstractLookupableHelperS
         String vendorName = (String) fieldValues.get(VendorPropertyConstants.VENDOR_NAME);
         if (StringUtils.isNotBlank(vendorName)) {
             if (ObjectUtils.isNull(VNDR_LOOKUP_MIN_NAME_LENGTH)) {
-                VNDR_LOOKUP_MIN_NAME_LENGTH = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, 
+                VNDR_LOOKUP_MIN_NAME_LENGTH = kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE, KFSConstants.Components.LOOKUP,
                         VendorRuleConstants.PURAP_VNDR_LOOKUP_MIN_NAME_LENGTH);
             }
             if (vendorName.length() < Integer.parseInt(VNDR_LOOKUP_MIN_NAME_LENGTH)) {
@@ -337,7 +337,7 @@ public class VendorLookupableHelperServiceImpl extends AbstractLookupableHelperS
             criteria--;
         }
         if (ObjectUtils.isNull(VNDR_MIN_NUM_LOOKUP_CRITERIA)) {
-            VNDR_MIN_NUM_LOOKUP_CRITERIA = kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE, 
+            VNDR_MIN_NUM_LOOKUP_CRITERIA = kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE, KFSConstants.Components.LOOKUP,
                     VendorRuleConstants.PURAP_VNDR_MIN_NUM_LOOKUP_CRITERIA);
         }
         if (criteria < Integer.parseInt(VNDR_MIN_NUM_LOOKUP_CRITERIA)) {
