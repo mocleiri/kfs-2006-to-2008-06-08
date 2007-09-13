@@ -490,7 +490,7 @@ public class PosterServiceImpl implements PosterService {
         }
 
         if (et.getBalanceTypeCode().equals(et.getOption().getExtrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getIntrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getPreencumbranceFinBalTypeCd()) || et.getBalanceTypeCode().equals(et.getOption().getCostShareEncumbranceBalanceTypeCd())) {
-            e.setDocumentNumber(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
+            e.setDocumentNumber(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, "PosterIndirectCostRecoveryEntriesStep", KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
         }
         e.setProjectCode(et.getProjectCode());
         if (GLConstants.getDashOrganizationReferenceId().equals(et.getOrganizationReferenceId())) {
