@@ -69,7 +69,7 @@ public class PurapParameterConstants {
         }
         public static class PurchaseOrderDocument {
             // Config parameter group names
-            public static final String CG_RESTRICTED_OBJECT_CODE_RULE_GROUP_NAME = "PurAp.CG_Restricted_Object_Codes";
+            public static final String CG_RESTRICTED_OBJECT_CODE_RULE_PARM_NM = "PurAp.CG_Restricted_Object_Codes";
             // Workgroups
             public static final String INTERNAL_PURCHASING_WORKGROUP_NAME = "INTERNAL_PURCHASING_REVIEWERS_GROUP";
         }
