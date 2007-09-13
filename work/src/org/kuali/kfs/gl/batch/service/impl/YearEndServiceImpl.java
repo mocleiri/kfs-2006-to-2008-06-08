@@ -29,6 +29,7 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.chart.service.ObjectTypeService;
 import org.kuali.module.chart.service.PriorYearAccountService;
@@ -101,6 +102,12 @@ public class YearEndServiceImpl implements YearEndService {
         Map jobParameters = new HashMap();
 
         varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_FISCAL_YEAR_PARM));
+        
+        
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> objectTypes = objectTypeService.getBasicExpenseObjectTypes(varFiscalYear);
+        objectTypes.add( objectTypeService.getExpenseTransferObjectType(varFiscalYear));
+        String[] expenseObjectCodeTypes = objectTypes.toArray(new String[0]);
 
         // 680 003670 DISPLAY "TRANSACTION_DT" UPON ENVIRONMENT-NAME.
         // 681 003680 ACCEPT VAR-UNIV-DT FROM ENVIRONMENT-VALUE.
@@ -237,7 +244,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 860 005430 IF GLGLBL-FIN-OBJ-TYP-CD = 'ES' OR 'EX' OR 'EE'
                     // 861 005440 OR 'TE'
 
-                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_NET_EXPENSE_OBJECT_TYPE_CODE))) {
+                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), expenseObjectCodeTypes ) ) {
 
                         // 862 005450 MOVE VAR-NET-EXP-OBJECT-CD
                         // 863 005460 TO FIN-OBJECT-CD OF GLEN-RECORD
@@ -297,7 +304,7 @@ public class YearEndServiceImpl implements YearEndService {
                     // 926 006070 IF GLGLBL-FIN-OBJ-TYP-CD = 'EX' OR 'ES' OR 'EE'
                     // 927 006080 OR 'TE'
 
-                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_NET_EXPENSE_OBJECT_TYPE_CODE))) {
+                    if (ObjectHelper.isOneOf(balance.getObjectTypeCode(), expenseObjectCodeTypes) ) {
 
                         // 928 006090 STRING 'CLS ENT TO NE FOR '
                         // 929 006100 GLGLBL-SUB-ACCT-NBR
@@ -938,7 +945,7 @@ public class YearEndServiceImpl implements YearEndService {
         // 812 004950 OR 'EE' OR 'CH' OR 'IC' OR 'IN')
 
         String actualFinancial = balance.getOption().getActualFinancialBalanceTypeCd();
-        if (actualFinancial.equals(balance.getBalanceTypeCode()) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE))) {
+        if (actualFinancial.equals(balance.getBalanceTypeCode()) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE))) {
 
             // 813 004960 NEXT SENTENCE
 
@@ -1049,7 +1056,7 @@ public class YearEndServiceImpl implements YearEndService {
             throw new IllegalArgumentException("Unable to parse transaction date");
         }
 
-        Integer varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
+        Integer varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.LABOR_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
 
         OriginEntryGroup unclosedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE, true, false, true);
         OriginEntryGroup closedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE_PRIOR_YEAR, true, false, true);
@@ -1119,7 +1126,7 @@ public class YearEndServiceImpl implements YearEndService {
         String FIELD_TRANSACTION_DATE = GLConstants.ColumnNames.TRANSACTION_DT;
 
         // Get the current fiscal year.
-        varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, FIELD_FISCAL_YEAR));
+        varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, FIELD_FISCAL_YEAR));
 
         // Get the current date (transaction date).
         try {
