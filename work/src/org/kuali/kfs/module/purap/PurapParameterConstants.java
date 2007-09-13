@@ -41,6 +41,9 @@ public class PurapParameterConstants {
     public static final String PURAP_PDP_USER_ID = "PRE_DISBURSEMENT_EXTRACT_USER";
     public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = "DEFAULT_TRANSMISSION_CODE";
 
+    public static final String PHONE_NUMBER_FORMATS_PARM_NM = "PHONE_NUMBER_FORMATS";
+    public static final String DEFAULT_PHONE_NUMBER_DIGITS_PARM_NM = "PHONE_NUMBER_FORMATS";
+    
     public static class Workgroups {
         public static final String SEARCH_SPECIAL_ACCESS = "SEARCH_SPECIAL_ACCESS_GROUP";
 
