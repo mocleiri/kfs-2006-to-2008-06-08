@@ -379,9 +379,9 @@ public class BudgetAction extends ResearchDocumentActionBase {
      * @throws Exception
      */
     protected static void setupAcademicYearSubdivisionConstants(BudgetForm budgetForm) throws Exception {
-        List<String> academicYearSubdivisionNames = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES);
+        List<String> academicYearSubdivisionNames = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_ACADEMIC_YEAR_SUBDIVISION_NAMES);
         budgetForm.setAcademicYearSubdivisionNames(academicYearSubdivisionNames);
-        budgetForm.setNumberOfAcademicYearSubdivisions(Integer.parseInt(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS)));
+        budgetForm.setNumberOfAcademicYearSubdivisions(Integer.parseInt(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.KRA_BUDGET_NUMBER_OF_ACADEMIC_YEAR_SUBDIVISIONS)));
     }
     
     private static List<AdHocRoutePerson> convertToAdHocRoutePersons(List<AdhocPerson> adHocPermissions) {
