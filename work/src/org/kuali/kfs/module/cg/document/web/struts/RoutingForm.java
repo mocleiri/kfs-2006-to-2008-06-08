@@ -265,10 +265,10 @@ public class RoutingForm extends ResearchDocumentFormBase {
             systemParametersMap = new HashMap();
             
             KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-            systemParametersMap.put(KraConstants.SUBMISSION_TYPE_CHANGE, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.SUBMISSION_TYPE_CHANGE));
-            systemParametersMap.put(KraConstants.PROJECT_TYPE_OTHER, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PROJECT_TYPE_OTHER));
-            systemParametersMap.put(KraConstants.PURPOSE_RESEARCH, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PURPOSE_RESEARCH));
-            systemParametersMap.put(KraConstants.PURPOSE_OTHER, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.PURPOSE_OTHER));
+            systemParametersMap.put(KraConstants.SUBMISSION_TYPE_CHANGE, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.SUBMISSION_TYPE_CHANGE));
+            systemParametersMap.put(KraConstants.PROJECT_TYPE_OTHER, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PROJECT_TYPE_OTHER));
+            systemParametersMap.put(KraConstants.PURPOSE_RESEARCH, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PURPOSE_RESEARCH));
+            systemParametersMap.put(KraConstants.PURPOSE_OTHER, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PURPOSE_OTHER));
         }
         
         return systemParametersMap;
