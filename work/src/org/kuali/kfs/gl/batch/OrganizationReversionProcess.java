@@ -107,7 +107,7 @@ public class OrganizationReversionProcess {
         super();
 
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        this.ORGANIZATION_REVERSION_COA = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.OrganizationReversionProcess.ORGANIZATION_REVERSION_COA);
+        this.ORGANIZATION_REVERSION_COA = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.ORGANIZATION_REVERSION_COA);
         this.CARRY_FORWARD_OBJECT_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.CARRY_FORWARD_OBJECT_CODE);
         this.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE);
         this.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE);
@@ -784,11 +784,11 @@ public class OrganizationReversionProcess {
 
     private void setParameters() {
         // Get job parameters
-        String strTransactionDate = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.TRANSACTION_DT);
+        String strTransactionDate = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.TRANSACTION_DT);
         paramUnallocObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.Components.ORGNIAZATION_REVERSION_CLOSING_STEP, KFSConstants.UNALLOC_OBJECT_CD);
-        paramBegBudgetCashObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.BEG_BUD_CASH_OBJECT_CD);
-        paramFundBalanceObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.FUND_BAL_OBJECT_CD);
-        String strUniversityFiscalYear = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.UNIV_FISCAL_YR);
+        paramBegBudgetCashObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.BEG_BUD_CASH_OBJECT_CD);
+        paramFundBalanceObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.FUND_BAL_OBJECT_CD);
+        String strUniversityFiscalYear = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.UNIV_FISCAL_YR);
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
