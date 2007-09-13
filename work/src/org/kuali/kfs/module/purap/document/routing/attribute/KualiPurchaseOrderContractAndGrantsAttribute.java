@@ -163,13 +163,13 @@ public class KualiPurchaseOrderContractAndGrantsAttribute implements WorkflowAtt
         ruleSubFundGroupCode = LookupUtils.forceUppercase(SubFundGroup.class, KFSPropertyConstants.SUB_FUND_GROUP_CODE, ruleSubFundGroupCode);
         Set<AccountContainer> accountContainers = populateFromDocContent(docContent);
                 
-        Map<String,Parameter> parameterRulesByChart = SpringContext.getBean(KualiConfigurationService.class).getParametersByDetailTypeAsMap( KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.WorkflowParameters.PurchaseOrderDocument.CG_RESTRICTED_OBJECT_CODE_RULE_GROUP_NAME );
+        Parameter parameterRulesByChart = SpringContext.getBean(KualiConfigurationService.class).getParameter( KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.PURCHASE_ORDER, PurapParameterConstants.WorkflowParameters.PurchaseOrderDocument.CG_RESTRICTED_OBJECT_CODE_RULE_PARM_NM );
         for (AccountContainer accountContainer : accountContainers) {
             // check to see if account is a C&G account
             if (accountContainer.account.isForContractsAndGrants()) {
                 // check the restricted object code in rule table (object codes listed in the table should route via this attribute)
-                Parameter rule = parameterRulesByChart.get(accountContainer.account.getChartOfAccountsCode());
-                if ( (rule != null) && (SpringContext.getBean(KualiConfigurationService.class).failsRule(rule,accountContainer.objectCode.getFinancialObjectCode())) ) {
+                boolean ruleSucceeds = SpringContext.getBean(KualiConfigurationService.class).evaluateConstrainedParameter(parameterRulesByChart, accountContainer.account.getChartOfAccountsCode(), accountContainer.objectCode.getFinancialObjectCode() );
+                if ( !ruleSucceeds ) {
                     if (StringUtils.isBlank(accountContainer.account.getSubFundGroupCode())) {
                         // sub fund is blank
                         String errorMsg = "SubFund not found for account '" + accountContainer.account.getChartOfAccountsCode() + "-" + accountContainer.account.getAccountNumber() + "'";

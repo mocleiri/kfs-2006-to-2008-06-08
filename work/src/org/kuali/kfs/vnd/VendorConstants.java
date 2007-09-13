@@ -29,7 +29,6 @@ public class VendorConstants {
         public static final String PAYMENT_TERM_TYPE = PaymentTermType.class.getSimpleName();
     }
     public static class Workgroups {
-        public static final String WORKGROUP_ACCOUNTS_PAYABLE = "ACCOUNTS_PAYABLE_GROUP"; 
         public static final String WORKGROUP_PURCHASING = "PURCHASING_GROUP"; 
         public static final String WORKGROUP_TAXNBR_ACCESSIBLE = "PURAP.WORKGROUP.TAXNBR_ACCESSIBLE"; 
     }
