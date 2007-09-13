@@ -139,7 +139,7 @@ public class BatchInputFileSetServiceImpl implements BatchInputFileSetService {
         }
 
         String workgroupParameterName = batchInputFileSetType.getWorkgroupParameterName();
-        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.CORE_NAMESPACE, workgroupParameterName);
+        String authorizedWorkgroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(batchInputFileSetType.getWorkgroupParameterNamespace(), batchInputFileSetType.getWorkgroupParameterComponent(), workgroupParameterName);
  
         return user.isMember(authorizedWorkgroupName);
     }
