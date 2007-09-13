@@ -43,6 +43,7 @@ import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.module.chart.bo.ChartUser;
+import org.kuali.module.chart.service.ObjectTypeService;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
@@ -119,8 +120,12 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
         FlexibleOffsetAccountService flexibleOffsetAccountService = SpringContext.getBean(FlexibleOffsetAccountService.class);
         
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> expenseObjectTypes = objectTypeService.getCurrentYearBasicExpenseObjectTypes();
+        expenseObjectTypes.add( objectTypeService.getCurrentYearExpenseTransferObjectType() );        
+        
         for (GeneralLedgerPendingEntry ple : this.getGeneralLedgerPendingEntries()) {
-            if (kualiConfigurationService.succeedsRule(KFSConstants.GL_NAMESPACE, KFSConstants.Components.NOT_APPLICABLE, KFSConstants.SystemGroupParameterNames.SUFFICIENT_FINDS_EXPENSE_OBJECT_TYPES, ple.getFinancialObjectTypeCode())) {
+            if (expenseObjectTypes.contains(ple.getFinancialObjectTypeCode())) {
                 //is an expense object type, keep checking
                 ple.refreshNonUpdateableReferences();
                 if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT)) {
