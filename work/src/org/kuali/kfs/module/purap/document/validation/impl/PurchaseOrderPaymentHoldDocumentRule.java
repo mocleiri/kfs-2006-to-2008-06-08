@@ -85,7 +85,7 @@ public class PurchaseOrderPaymentHoldDocumentRule extends TransactionalDocumentR
             UniversalUser user = null;
             try {
                 user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
-                String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
+                String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
                 if (!uus.isMember(user, purchasingGroup)) {
                     valid = false;
                 }
