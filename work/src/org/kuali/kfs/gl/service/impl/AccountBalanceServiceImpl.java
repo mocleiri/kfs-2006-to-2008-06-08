@@ -63,10 +63,10 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
     public List findAccountBalanceByConsolidation(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String subAccountNumber, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntryCode) {
         LOG.debug("findAccountBalanceByConsolidation() started");
 
-        String[] incomeObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlAccountBalanceGroupParameters.INCOME_OBJECT_TYPE_CODES);
-        String[] incomeTransferObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlAccountBalanceGroupParameters.INCOME_TRANSFER_OBJECT_TYPE_CODES);
-        String[] expenseObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlAccountBalanceGroupParameters.EXPENSE_OBJECT_TYPE_CODES);
-        String[] expenseTransferObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, GLConstants.GlAccountBalanceGroupParameters.EXPENSE_TRANSFER_OBJECT_TYPE_CODES);
+        String[] incomeObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ALL, GLConstants.GlAccountBalanceGroupParameters.INCOME_OBJECT_TYPE_CODES);
+        String[] incomeTransferObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ALL, GLConstants.GlAccountBalanceGroupParameters.INCOME_TRANSFER_OBJECT_TYPE_CODES);
+        String[] expenseObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ALL, GLConstants.GlAccountBalanceGroupParameters.EXPENSE_OBJECT_TYPE_CODES);
+        String[] expenseTransferObjectTypes = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ALL, GLConstants.GlAccountBalanceGroupParameters.EXPENSE_TRANSFER_OBJECT_TYPE_CODES);
 
         // Consolidate all object types into one array (yes I could have used lists, but it was just as many lines of code than
         // this)
