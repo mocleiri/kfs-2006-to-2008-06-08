@@ -150,7 +150,7 @@
             <attributeReference name="parameterTypeCode" sourceClassName="org.kuali.core.bo.ParameterType" sourceAttributeName="code" >
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ParameterTypeValuesFinder" />
+                    <radio valuesFinderClass="org.kuali.core.lookup.keyvalues.ParameterTypeValuesFinder" />
                 </control>
             </attributeReference>
 
