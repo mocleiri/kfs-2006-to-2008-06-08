@@ -945,7 +945,7 @@ public class YearEndServiceImpl implements YearEndService {
         // 812 004950 OR 'EE' OR 'CH' OR 'IC' OR 'IN')
 
         String actualFinancial = balance.getOption().getActualFinancialBalanceTypeCd();
-        if (actualFinancial.equals(balance.getBalanceTypeCode()) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.SystemGroupParameterNames.GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE))) {
+        if (actualFinancial.equals(balance.getBalanceTypeCode()) && ObjectHelper.isOneOf(balance.getObjectTypeCode(), kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.GL_CLOSING_OF_NOMINAL_ACTIVITY_OBJECT_TYPE_CODE))) {
 
             // 813 004960 NEXT SENTENCE
 
@@ -1056,7 +1056,7 @@ public class YearEndServiceImpl implements YearEndService {
             throw new IllegalArgumentException("Unable to parse transaction date");
         }
 
-        Integer varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.LABOR_NAMESPACE, GLConstants.ColumnNames.UNIVERSITY_FISCAL_YEAR));
+        Integer varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_FISCAL_YEAR_PARM));
 
         OriginEntryGroup unclosedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE, true, false, true);
         OriginEntryGroup closedPriorYearAccountGroup = originEntryGroupService.createGroup(varTransactionDate, OriginEntrySource.YEAR_END_BEGINNING_BALANCE_PRIOR_YEAR, true, false, true);
@@ -1126,7 +1126,7 @@ public class YearEndServiceImpl implements YearEndService {
         String FIELD_TRANSACTION_DATE = GLConstants.ColumnNames.TRANSACTION_DT;
 
         // Get the current fiscal year.
-        varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, FIELD_FISCAL_YEAR));
+        varFiscalYear = new Integer(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_FISCAL_YEAR_PARM));
 
         // Get the current date (transaction date).
         try {
