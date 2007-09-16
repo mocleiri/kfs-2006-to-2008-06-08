@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -18,7 +18,10 @@
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
-	<businessObject businessObjectClass="org.kuali.module.chart.bo.OrganizationExtension">
+	<businessObject
+		businessObjectClass="org.kuali.module.chart.bo.OrganizationExtension">
+
+		<customAttributeEnabled>false</customAttributeEnabled>
 
 		<attributes>
 			<attributeReference name="chartOfAccountsCode" 
@@ -125,8 +128,8 @@
 			</attribute>
 			
       <attributeReference name="hrmsPersonnelApproverUniversalId"
-                         sourceClassName="org.kuali.core.bo.user.UniversalUser"
-                         sourceAttributeName="personUniversalIdentifier">
+				        sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
+				        sourceAttributeName="genericSystemId">
         <label>Personnel Approver UserID</label>
         <shortLabel>Personnel Approver UserID</shortLabel>
         <required>true</required>
@@ -166,8 +169,8 @@
 		</attributeReference>
 
       <attributeReference name="fiscalApproverUniversalId"
-                          sourceClassName="org.kuali.core.bo.user.UniversalUser"
-                          sourceAttributeName="personUniversalIdentifier">
+				        sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
+				        sourceAttributeName="genericSystemId">
         <label>Fiscal Approver UserID</label>
         <shortLabel>Fiscal Approver UserID</shortLabel>
         <required>true</required>
@@ -272,17 +275,13 @@
         <relationships>
             <relationship objectAttributeName="hrmsPersonnelApproverUniversal" >
                 <primitiveAttribute sourceName="hrmsPersonnelApproverUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="hrmsPersonnelApproverUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="hrmsPersonnelApproverUniversal.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="fiscalApproverUniversal" >
                 <primitiveAttribute sourceName="fiscalApproverUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="fiscalApproverUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="fiscalApproverUniversal.personName" targetName="personName" />
             </relationship>
         </relationships>
-		<objectLabel>Organization Extension</objectLabel>
+
 	</businessObject>
 </dictionaryEntry>
 

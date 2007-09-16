@@ -17,7 +17,6 @@ package org.kuali.workflow.attribute;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -73,7 +72,7 @@ public class KualiDocumentTotalAmountXMLSearchAttributeImpl extends KualiXmlSear
     private SearchableAttributeFloatValue generateZeroDollarSearchableAttributeValue() {
         SearchableAttributeFloatValue sav = new SearchableAttributeFloatValue();
         sav.setSearchableAttributeKey(FIELD_DEF_NAME);
-        sav.setSearchableAttributeValue(BigDecimal.ZERO);
+        sav.setSearchableAttributeValue(new Float(0.00));
         return sav;
     }
 

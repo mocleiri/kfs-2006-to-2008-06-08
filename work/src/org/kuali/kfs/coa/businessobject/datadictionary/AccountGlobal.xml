@@ -160,8 +160,8 @@
             </attributeReference>
 
             <attribute name="financialHigherEdFunctionCd" forceUppercase="true">
-                <label>Higher Education Function Code</label>
-                <shortLabel>Higher Ed Func Cd</shortLabel>
+                <label>Financial Higher Ed Function Cd</label>
+                <shortLabel>Cd</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern>
@@ -173,7 +173,7 @@
                 </control>
 
                 <summary>financialHigherEdFunctionCd</summary>
-                <description>The Higher Education Function Code which classifies the purpose of the account.</description>
+                <description>financialHigherEdFunctionCd description...</description>
             </attribute>
 
             <attributeReference name="incomeStreamAccountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">

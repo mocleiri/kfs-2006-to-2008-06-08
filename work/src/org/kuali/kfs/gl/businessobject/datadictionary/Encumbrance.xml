@@ -74,8 +74,6 @@
                 <field attributeName="transactionEncumbranceDescription" />
                 <field attributeName="accountLineEncumbranceAmount" />
                 <field attributeName="accountLineEncumbranceClosedAmount" />
-                <!-- accountLineEncumbranceOutstandingAmount = accountLineEncumbranceAmount - accountLineEncumbranceClosedAmount -->
-                <field attributeName="accountLineEncumbranceOutstandingAmount" />
                 <field attributeName="transactionEncumbranceDate" />
             </resultFields>
         </lookup>
@@ -139,14 +137,6 @@
                 <description>accountLineEncumbranceClosedAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
-            
-            <attributeReference name="accountLineEncumbranceOutstandingAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Outstanding Amount</label>
-                <shortLabel>Outstanding Amount</shortLabel>
-                <summary>accountLineEncumbranceOutstandingAmount</summary>
-                <description>accountLineEncumbranceOutstandingAmount description...</description>
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
-            </attributeReference>
 
             <attribute name="transactionEncumbranceDescription" forceUppercase="false">
                 <label>Description</label>
@@ -198,6 +188,8 @@
                 <summary>transactionEncumbranceDate</summary>
                 <description>transactionEncumbranceDate description...</description>
             </attributeReference>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
             <attributeReference name="timestamp" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericTimestamp">
                 <label>Transaction Entry Processed</label>

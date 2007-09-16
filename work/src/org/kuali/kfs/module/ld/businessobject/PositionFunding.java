@@ -16,25 +16,7 @@
 
 package org.kuali.module.labor.bo;
 
-import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
 
-public class PositionFunding extends CalculatedSalaryFoundationTracker { 
-    private UniversalUser ledgerPerson;
-
-    /**
-     * Gets the ledgerPerson attribute. 
-     * @return Returns the ledgerPerson.
-     */
-    public UniversalUser getLedgerPerson() {
-        return ledgerPerson;
-    }
-
-    /**
-     * Sets the ledgerPerson attribute value.
-     * @param ledgerPerson The ledgerPerson to set.
-     */
-    public void setLedgerPerson(UniversalUser ledgerPerson) {
-        this.ledgerPerson = ledgerPerson;
-    }
+public class PositionFunding extends CalculatedSalaryFoundationTracker {  
 }
