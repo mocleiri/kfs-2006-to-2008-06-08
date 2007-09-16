@@ -75,7 +75,7 @@
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <text size="20" />
+                    <text size="40" />
                 </control>
                 <summary>Code identifying the parameter Component.</summary>
                 <description>
