@@ -166,7 +166,7 @@
                 <maxLength>70</maxLength>
                 <required>true</required>
                 <control>
-                    <text size="20" />
+                	<workflowWorkgroup size="20"/>                    
                 </control>
 
                 <summary>
