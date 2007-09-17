@@ -495,7 +495,7 @@ public class PurapConstants extends JstlConstants {
     }
     
     // CREDIT MEMO DOCUMENT
-    public static final String CREDIT_MEMO_DOCUMENT_DOC_TYPE = "CreditMemoDocument";
+    public static final String CREDIT_MEMO_DOCUMENT_DOC_TYPE = "CreditMemo";
 
     public static class CreditMemoStatuses {
         // TODO delyea - check statuses for use/MDS entry
