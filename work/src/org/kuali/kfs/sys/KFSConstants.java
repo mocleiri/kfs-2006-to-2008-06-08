@@ -1085,7 +1085,7 @@ public class KFSConstants extends JstlConstants {
     public static final String RULE_CODE_C1 = "C1";
     public static final String RULE_CODE_C2 = "C2";
     public static final String TRANSACTION_DT = "TRANSACTION_DT";
-    public static final String UNALLOC_OBJECT_CD = "ANNUAL_CLOSING_UNALLOCATED_OBJECT_CODE";
+    public static final String UNALLOC_OBJECT_CD = "UNALLOC_OBJECT_CD";
     public static final String BEG_BUD_CASH_OBJECT_CD = "BEG_BUD_CASH_OBJECT_CD";
     public static final String FUND_BAL_OBJECT_CD = "FUND_BAL_OBJECT_CD";
     public static final String UNIV_FISCAL_YR = "UNIV_FISCAL_YR";
