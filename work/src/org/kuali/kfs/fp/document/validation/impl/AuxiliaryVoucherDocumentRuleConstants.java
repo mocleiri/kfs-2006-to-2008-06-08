@@ -26,7 +26,7 @@ import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants;
 public interface AuxiliaryVoucherDocumentRuleConstants extends AccountingDocumentRuleBaseConstants {
 
     // Application parameter lookup constants to be used in conjunction with the grouping constants above
-    public static final String RESTRICTED_COMBINED_CODES = "COMBINATION-OBJECT_TYPE-OBJECT_SUB_TYPE-OBJECT_LEVEL";
+    public static final String RESTRICTED_COMBINED_CODES = "COMBINATION_OBJECT_TYPE_OBJECT_SUB_TYPE_OBJECT_LEVEL";
     public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "OBJECT_SUB_TYPES";
     public static final String RESTRICTED_PERIOD_CODES = "ACCOUNTING_PERIODS";
     public static final String GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE = "GLPE_OFFSET_OBJECT";
