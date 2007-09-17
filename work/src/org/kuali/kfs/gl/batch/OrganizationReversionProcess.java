@@ -784,11 +784,11 @@ public class OrganizationReversionProcess {
 
     private void setParameters() {
         // Get job parameters
-        String strTransactionDate = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.TRANSACTION_DT);
-        paramUnallocObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.Components.ORGNIAZATION_REVERSION_CLOSING_STEP, KFSConstants.UNALLOC_OBJECT_CD);
-        paramBegBudgetCashObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.BEG_BUD_CASH_OBJECT_CD);
-        paramFundBalanceObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.FUND_BAL_OBJECT_CD);
-        String strUniversityFiscalYear = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.UNIV_FISCAL_YR);
+        String strTransactionDate = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM);
+        paramUnallocObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.Components.ORGNIAZATION_REVERSION_CLOSING_STEP, GLConstants.ANNUAL_CLOSING_UNALLOC_OBJECT_CODE_PARM);
+        paramBegBudgetCashObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_BEGIN_BUDGET_CASH_OBJECT_CODE_PARM);
+        paramFundBalanceObjectCode = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_FUND_BALANCE_OBJECT_CODE_PARM);
+        String strUniversityFiscalYear = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_FISCAL_YEAR_PARM);
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
