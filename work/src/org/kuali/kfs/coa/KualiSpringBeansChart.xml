@@ -171,6 +171,9 @@
 		<property name="objectTypeDao">
 			<ref bean="objectTypeDao" />
 		</property>
+        <property name="optionsDao">
+            <ref bean="optionsDao" />
+        </property>
 	</bean>
 
 	<bean id="a21SubAccountService" class="org.kuali.module.chart.service.impl.A21SubAccountServiceImpl">
