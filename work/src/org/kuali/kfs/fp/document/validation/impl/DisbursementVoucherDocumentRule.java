@@ -1074,7 +1074,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
             }
             else if (isEmployeeSSN(dvPayee.getTaxIdNumber())) {
                 // check parm setting for paid outside payroll check
-                boolean performPaidOutsidePayrollInd = getKualiConfigurationService().getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, PERFORM_PREPAID_EMPL_PARM_NM);
+                boolean performPaidOutsidePayrollInd = getKualiConfigurationService().getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, DisbursementVoucherRuleConstants.CHECK_EMPLOYEE_PAID_OUTSIDE_PAYROLL_PARM_NM);
 
                 if (performPaidOutsidePayrollInd) {
                     /* If payee is type payee and employee, payee record must be flagged as paid outside of payroll */
