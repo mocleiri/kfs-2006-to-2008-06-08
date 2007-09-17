@@ -119,6 +119,7 @@ public interface DisbursementVoucherRuleConstants {
     public static final String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
     public static final String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
     public static final String PERFORM_PREPAID_EMPL_PARM_NM = "CHECK_PREPAID_ACTIVE_EMPLOYEE_IND";
+    public static final String CHECK_EMPLOYEE_PAID_OUTSIDE_PAYROLL_PARM_NM = "CHECK_EMPLOYEE_PAID_OUTSIDE_PAYROLL_IND";
     public static final String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
 
     public static String TAX_TYPE_SSN = "1";
