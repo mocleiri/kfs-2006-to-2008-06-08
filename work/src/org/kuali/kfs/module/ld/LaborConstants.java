@@ -57,6 +57,7 @@ public class LaborConstants {
         
        public static final String LABOR_POSTER_STEP = LaborPosterStep.class.getSimpleName();
        public static final String PAYROLL_ACCURAL_STEP = PayrollAccrualStep.class.getSimpleName();
+       public static final String SALARY_EXPENSE_TRANSFER = SalaryExpenseTransfer.class.getSimpleName();
        public static final String YEAR_END_BALANCE_FORWARD_JOB = "YearEndBalanceForwardJob";
         
         
