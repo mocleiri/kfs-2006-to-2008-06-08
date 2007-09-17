@@ -901,7 +901,10 @@ public class KFSConstants extends JstlConstants {
         public static final String USER_INVALID_EMPLOYEE_STATUSES = "ACTIVE_KFS_USER_EMPLOYEE_STATUSES";
         
         public static final String UNIVERSAL_USER_EDIT_WORKGROUP = "UNIVERSAL_USER_EDIT_GROUP";
+        
     }
+    
+    public static final String MAINTENANCE_ADMIN_WORKGROUP_PARM_NM = "MAINTENANCE_ROLE_ADMINISTRATOR";
     
     public static class ChartApcParms {
 
