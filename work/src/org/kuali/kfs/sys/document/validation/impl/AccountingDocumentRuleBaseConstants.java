@@ -36,11 +36,9 @@ public interface AccountingDocumentRuleBaseConstants {
 
     // Application parameter lookup constants to be used in conjunction with the grouping constants above
     public static final class APPLICATION_PARAMETER {
-        public static final String RESTRICTED_OBJECT_CODES = "OBJECTS";
+        public static final String RESTRICTED_OBJECT_CODES = "OBJECT_CODES";
         public static final String RESTRICTED_OBJECT_TYPE_CODES = "OBJECT_TYPES";
         public static final String RESTRICTED_SUB_FUND_GROUP_CODES = "SUB_FUND_GROUPS";
-        public static final String INCOME_OBJECT_TYPE_CODES = "IncomeObjectTypeCodes";
-        public static final String EXPENSE_OBJECT_TYPE_CODES = "ExpenseObjectTypeCodes";
         public static final String MANDATORY_TRANSFER_SUBTYPE_CODES = "MANDATORY_TRANSFER_OBJECT_SUB_TYPES";
         public static final String NONMANDATORY_TRANSFER_SUBTYPE_CODES = "NON_MANDATORY_TRANSFER_OBJECT_SUB_TYPES";
         public static final String FUND_GROUP_BALANCING_SET = "FUND_GROUP_BALANCING_SET";
