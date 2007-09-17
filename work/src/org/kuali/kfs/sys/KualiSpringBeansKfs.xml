@@ -89,7 +89,7 @@
 	<bean id="step" abstract="true">
 		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="dateTimeService" ref="dateTimeService" />
-        <property name="namespace" value="KR" />
+        <property name="namespace" value="KR-NS" />
 	</bean>
 
 	<bean id="scheduleJob" parent="scheduledJobDescriptor">
