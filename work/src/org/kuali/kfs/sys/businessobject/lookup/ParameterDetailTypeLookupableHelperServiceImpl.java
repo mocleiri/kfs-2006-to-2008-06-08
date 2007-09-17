@@ -39,7 +39,7 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
     @Override
     public List<? extends BusinessObject> getSearchResults(java.util.Map<String,String> fieldValues) {
 
-        List baseLookup = super.getSearchResults(fieldValues);
+        List<BusinessObject> baseLookup = (List<BusinessObject>)super.getSearchResults(fieldValues);
         getDataDictionaryService().getDataDictionary().forceCompleteDataDictionaryLoad();
         
         // all step beans
@@ -71,7 +71,22 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
         
         if ( baseLookup instanceof CollectionIncomplete ) {
             long originalCount = ((CollectionIncomplete)baseLookup).getActualSizeIfTruncated();
-            baseLookup = new ArrayList( baseLookup );
+            baseLookup = new ArrayList<BusinessObject>( baseLookup );
+            for ( ParameterDetailType pdt : components ) {
+                boolean includeType = true;
+                if ( StringUtils.isNotBlank( fieldValues.get("parameterDetailTypeCode") ) ) {
+                    // if not match set to false
+                }
+                if ( StringUtils.isNotBlank( fieldValues.get("parameterNamespaceCode") ) ) {
+                    // if not match set to false
+                }
+                if ( StringUtils.isNotBlank( fieldValues.get("parameterDetailTypeName") ) ) {
+                    // if not match set to false
+                }
+                if ( includeType ) {
+                    baseLookup.add( pdt );
+                }
+            }
             baseLookup.addAll( components );
             baseLookup = new CollectionIncomplete( baseLookup, originalCount + components.size() );
         }
