@@ -1131,7 +1131,7 @@ public class YearEndServiceImpl implements YearEndService {
         // Get the current date (transaction date).
         try {
             DateFormat transactionDateFormat = new SimpleDateFormat(TRANSACTION_DATE_FORMAT_STRING);
-            varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, FIELD_TRANSACTION_DATE)).getTime());
+            varTransactionDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM)).getTime());
         }
         catch (ParseException pe) {
             LOG.error("Failed to parse TRANSACTION_DT from kualiConfigurationService");
