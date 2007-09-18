@@ -993,10 +993,10 @@ public class KFSConstants extends JstlConstants {
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_PER_PAGE = "MULTIPLE_VALUE_RESULTS_PER_PAGE";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE = "MULTIPLE_VALUE_RESULTS_EXPIRATION_SECONDS";
       
-        public static final String ACTIVE_INPUT_TYPES_PARAMETER_NAME = "ACTIVE_INPUT_TYPES";
+        public static final String ACTIVE_INPUT_TYPES_PARAMETER_NAME = "ACTIVE_FILE_TYPES";
         public static final String PCDO_FILE_TYPE_PARAMETER_NAMESPACE = FINANCIAL_NAMESPACE;
-        public static final String PCDO_FILE_TYPE_PARAMETER_COMPONENT = "PcdoLoadStep";
-        public static final String FILE_TYPE_WORKGROUP_PARAMETER_NAME = "FILE_TYPE_GROUP";
+        public static final String PCDO_FILE_TYPE_PARAMETER_COMPONENT = "ProcurementCardLoadStep";
+        public static final String FILE_TYPE_WORKGROUP_PARAMETER_NAME = "UPLOAD_GROUP";
         public static final String FILE_SET_TYPE_WORKGROUP_PARAMETER_NAME = "FILE_SET_TYPE_GROUP";
         public static final String COLLECTOR_FILE_TYPE_PARAMETER_NAMESPACE = GL_NAMESPACE;
         public static final String COLLECTOR_FILE_TYPE_PARAMETER_COMPONENT = "CollectorStep";
