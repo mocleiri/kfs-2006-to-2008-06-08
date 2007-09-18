@@ -20,6 +20,7 @@ import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.purap.PurapParameterConstants;
+import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.service.PhoneNumberService;
 
 public class PhoneNumberServiceImpl implements PhoneNumberService {
@@ -58,7 +59,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         }
         String formattedNumber = unformattedNumber.replaceAll("\\D", "");
         Integer defaultPhoneNumberDigits = 
-            new Integer(kualiConfigurationService.getParameterValue(KFSConstants.PURAP_NAMESPACE,KFSConstants.Components.NOT_APPLICABLE, PurapParameterConstants.DEFAULT_PHONE_NUMBER_DIGITS_PARM_NM));
+            new Integer(kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE,VendorConstants.Components.VENDOR, PurapParameterConstants.DEFAULT_PHONE_NUMBER_DIGITS_PARM_NM));
         // Before moving to the parameter table:
         // if ( formattedNumber.length() != VendorConstants.GENERIC_DEFAULT_PHONE_NUM_DIGITS ) {
         if ( formattedNumber.length() != defaultPhoneNumberDigits ) {
@@ -96,7 +97,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     protected String[] parseFormats() {
         if( ObjectUtils.isNull( phoneNumberFormats ) ) {
             phoneNumberFormats = kualiConfigurationService.getParameter(
-                    KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.NOT_APPLICABLE, PurapParameterConstants.PHONE_NUMBER_FORMATS_PARM_NM );
+                    KFSConstants.VENDOR_NAMESPACE, VendorConstants.Components.VENDOR, PurapParameterConstants.PHONE_NUMBER_FORMATS_PARM_NM );
         }
         return kualiConfigurationService.getParameterValues(phoneNumberFormats);
     }
