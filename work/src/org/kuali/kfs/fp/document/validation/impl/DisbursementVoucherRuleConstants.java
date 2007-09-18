@@ -100,11 +100,11 @@ public interface DisbursementVoucherRuleConstants {
     public static final String VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM = "VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP";
     public static final String VALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON_PARM = "VALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON";
     
-    public static final String FEDERAL_TAX_PARM_PREFIX = "NRA_TAX_FEDERAL-";
-    public static final String STATE_TAX_PARM_PREFIX = "NRA_TAX_STATE-";
+    public static final String FEDERAL_TAX_PARM_PREFIX = "NRA_TAX_FEDERAL_";
+    public static final String STATE_TAX_PARM_PREFIX = "NRA_TAX_STATE_";
     public static final String TAX_PARM_ACCOUNT_SUFFIX = "ACCOUNT";
     public static final String TAX_PARM_CHART_SUFFIX = "CHART";
-    public static final String TAX_PARM_OBJECT_BY_INCOME_CLASS_SUFFIX = "OBJECT_BY_INCOME_CLASS";
+    public static final String TAX_PARM_OBJECT_BY_INCOME_CLASS_SUFFIX = "OBJECT_CODE_BY_INCOME_CLASS";
     public static final String ALIEN_INDICATOR_CHECKED_PARM_NM = "ALIEN_DOCUMENTATION_LOCATIONS";
     public static final String ALIEN_PAYMENT_REASONS_PARM_NM = "ALIEN_PAYMENT_REASONS";
     public static final String TRAVEL_PER_DIEM_MESSAGE_PARM_NM = "TRAVEL_PER_DIEM_LINK_PAGE_MESSAGE";
