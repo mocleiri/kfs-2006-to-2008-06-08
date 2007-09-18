@@ -28,7 +28,7 @@ public class ProcurementCardDocumentRuleConstants {
     public static final String ERROR_TRANS_ACCOUNT_PARM_NM = "ERROR_TRANSACTION_ACCOUNT_NUMBER";
     public static final String DEFAULT_TRANS_CHART_CODE_PARM_NM = "DEFAULT_TRANSACTION_CHART";
     public static final String DEFAULT_TRANS_ACCOUNT_PARM_NM = "DEFAULT_TRANSACTION_ACCOUNT";
-    public static final String DEFAULT_TRANS_OBJECT_CODE_PARM_NM = "DEFAULT_TRANSACTION_OBJECT";
+    public static final String DEFAULT_TRANS_OBJECT_CODE_PARM_NM = "DEFAULT_TRANSACTION_OBJECT_CODE";
     public static final String DISPUTE_URL_PARM_NM = "DISPUTE_URL";
     public static final String AUTO_APPROVE_DOCUMENTS_IND = "AUTO_APPROVE_IND";
     public static final String AUTO_APPROVE_NUMBER_OF_DAYS = "AUTO_APPROVE_NUMBER_OF_DAYS";
