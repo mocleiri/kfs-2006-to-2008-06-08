@@ -97,7 +97,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
 //                documentService.saveDocumentWithoutRunningValidation(pcardDocument);
             }
             catch (Exception e) {
-                LOG.error("Error persisting document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage());
+                LOG.error("Error persisting document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage(),e);
                 throw new RuntimeException("Error persisting document # " + pcardDocument.getDocumentHeader().getDocumentNumber() + " " + e.getMessage());
             }
         }
