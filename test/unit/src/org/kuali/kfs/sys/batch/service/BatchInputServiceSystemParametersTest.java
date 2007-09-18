@@ -64,14 +64,14 @@ public class BatchInputServiceSystemParametersTest extends KualiTestBase {
      * Verifies system parameters needed by the batch upload process exist in the db.
      */
     public final void testSystemParametersExist() throws Exception {
-        String[] activeFileTypes = configurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
-        assertTrue("system parameter " + SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME + " is not setup or contains no file types", activeFileTypes != null && activeFileTypes.length > 0);
+        String[] activeFileTypes = configurationService.getParameterValues(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.BATCH, SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME);
+        assertTrue("system parameter " + SystemGroupParameterNames.ACTIVE_INPUT_TYPES_PARAMETER_NAME + " is not setup or contains no file types", activeFileTypes != null && activeFileTypes.length > 0 && StringUtils.isNotBlank( activeFileTypes[0] ) );
 
         String pcdoUploadWorkgroup = configurationService.getParameterValue(pcdoBatchInputFileType.getWorkgroupParameterNamespace(), pcdoBatchInputFileType.getWorkgroupParameterComponent(), pcdoBatchInputFileType.getWorkgroupParameterName());
-        assertTrue("system parameter " + pcdoBatchInputFileType.getWorkgroupParameterName() + " does not exist or has empty value.", StringUtils.isNotBlank(pcdoUploadWorkgroup));
+        assertTrue("system parameter " + pcdoBatchInputFileType.getWorkgroupParameterNamespace()+"/"+pcdoBatchInputFileType.getWorkgroupParameterComponent()+"/"+pcdoBatchInputFileType.getWorkgroupParameterName() + " does not exist or has empty value.", StringUtils.isNotBlank(pcdoUploadWorkgroup));
 
         String collectorUploadWorkgroup = configurationService.getParameterValue(collectorBatchInputFileType.getWorkgroupParameterNamespace(), collectorBatchInputFileType.getWorkgroupParameterComponent(), collectorBatchInputFileType.getWorkgroupParameterName());
-        assertTrue("system parameter " + collectorBatchInputFileType.getWorkgroupParameterName() + " does not exist or has empty value.", StringUtils.isNotBlank(collectorUploadWorkgroup));
+        assertTrue("system parameter " + collectorBatchInputFileType.getWorkgroupParameterNamespace()+"/"+collectorBatchInputFileType.getWorkgroupParameterComponent()+"/"+collectorBatchInputFileType.getWorkgroupParameterName() + " does not exist or has empty value.", StringUtils.isNotBlank(collectorUploadWorkgroup));
     }
 
 
