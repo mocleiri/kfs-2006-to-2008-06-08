@@ -148,7 +148,7 @@ public class KFSConstants extends JstlConstants {
         public final static String FISCAL_YEAR_MAKER_STEP = FiscalYearMakerStep.class.getSimpleName();
         public final static String ACCOUNT = Account.class.getSimpleName();
         public final static String ACCOUNTING_PERIOD = AccountingPeriod.class.getSimpleName();
-        public final static String ACCOUNT_DELEGATE = Delegate.class.getSimpleName();
+        public final static String ACCOUNT_DELEGATE = "AccountDelegate";
         public final static String ACCOUNT_TYPE = AcctType.class.getSimpleName();
         public final static String AICPA_FUNCTION = AicpaFunction.class.getSimpleName();
         public final static String BALANCE_TYPE = BalanceTyp.class.getSimpleName();
@@ -168,9 +168,9 @@ public class KFSConstants extends JstlConstants {
         public final static String OBJECT_SUB_TYPE = ObjSubTyp.class.getSimpleName();
         public final static String OBJECT_TYPE = ObjectType.class.getSimpleName();
         public final static String OFFSET_DEFINITION = OffsetDefinition.class.getSimpleName();
-        public final static String ORGANIZATION = Org.class.getSimpleName();
-        public final static String ORGANIZATION_TYPE = OrgType.class.getSimpleName();
-        public final static String ORIGINATION = OriginationCode.class.getSimpleName();
+        public final static String ORGANIZATION = "Organization";
+        public final static String ORGANIZATION_TYPE = "OrganizationType";
+        public final static String ORIGINATION = "Origination";
         public final static String POSTAL_CODE = PostalZipCode.class.getSimpleName();
         public final static String PROGRAM = Program.class.getSimpleName();
         public final static String PROJECT = ProjectCode.class.getSimpleName();
@@ -904,7 +904,7 @@ public class KFSConstants extends JstlConstants {
         
     }
     
-    public static final String MAINTENANCE_ADMIN_WORKGROUP_PARM_NM = "MAINTENANCE_ROLE_ADMINISTRATOR";
+    public static final String MAINTENANCE_ADMIN_WORKGROUP_PARM_NM = "MAINTENANCE_ADMIN_GROUP";
     
     public static class ChartApcParms {
 
