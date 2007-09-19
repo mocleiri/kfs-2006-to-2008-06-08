@@ -49,7 +49,7 @@ public class TaxNumberServiceImpl implements TaxNumberService {
         String digits = taxNbr.replaceAll("\\D", "");
         
         Integer defaultTaxNumberDigits = 
-            new Integer (kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE,VendorParameterConstants.Components.VENDOR,"DEFAULT_TAX_NUM_DIGITS"));
+            new Integer (kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE,VendorParameterConstants.Components.VENDOR,"DEFAULT_TAX_NUMBER_DIGITS"));
 
         if (digits.length() < defaultTaxNumberDigits) {
             throw new FormatException("Tax number has fewer than " + defaultTaxNumberDigits + " digits.", KFSKeyConstants.ERROR_CUSTOM, taxNbr);
@@ -114,7 +114,7 @@ public class TaxNumberServiceImpl implements TaxNumberService {
         String[] ssnFormats = parseSSNFormats();
         String[] feinFormats = parseFEINFormats();
         Integer defaultTaxNumberDigits = 
-            new Integer (kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE,VendorParameterConstants.Components.VENDOR,"DEFAULT_TAX_NUM_DIGITS"));
+            new Integer (kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE,VendorParameterConstants.Components.VENDOR,"DEFAULT_TAX_NUMBER_DIGITS"));
 
         if (taxNbr.length() != defaultTaxNumberDigits || 
                 !isStringAllNumbers(taxNbr)) {
@@ -171,7 +171,7 @@ public class TaxNumberServiceImpl implements TaxNumberService {
     public  String[] parseSSNFormats() {
         if( ObjectUtils.isNull( taxNumberFormats ) ) {
             taxNumberFormats = kualiConfigurationService.getParameter(
-                    KFSConstants.VENDOR_NAMESPACE, VendorParameterConstants.Components.VENDOR, "TAX_NUMBER_FORMATS");
+                    KFSConstants.VENDOR_NAMESPACE, VendorParameterConstants.Components.VENDOR, "TAX_SSN_NUMBER_FORMATS");
         }
         return kualiConfigurationService.getParameterValues( taxNumberFormats );
     }
