@@ -95,10 +95,9 @@ public class RunDateServiceImpl implements RunDateService {
     }
     
     protected CutoffTime parseCutoffTime(String cutoffTime) {
-        if (!StringUtils.isBlank(cutoffTime)) {
+        if (StringUtils.isBlank(cutoffTime)) {
             return new CutoffTime(0, 0, 0);
-        }
-        else {
+        } else {
             cutoffTime = cutoffTime.trim();
             LOG.debug("Cutoff time value found: " + cutoffTime);
             StringTokenizer st = new StringTokenizer(cutoffTime, ":", false);
