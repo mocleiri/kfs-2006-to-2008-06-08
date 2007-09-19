@@ -64,7 +64,7 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
      */
     public void testNonFlexibleOffsetGeneration() throws Exception {
 
-        super.setApplicationConfigurationFlag(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, false);
+        super.setApplicationConfigurationFlag(KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.OFFSET, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, false);
 
         updateDocTypeForScrubberOffsetGeneration();
         setOffsetAccounts();
