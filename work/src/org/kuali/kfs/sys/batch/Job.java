@@ -111,7 +111,7 @@ public class Job implements StatefulJob, InterruptableJob {
                         stepUserName = KFSConstants.SYSTEM_USER;
                     }
                     if ( LOG.isInfoEnabled() ) {
-                        LOG.info(new StringBuffer("Creating user session for step: ").append(STEP_USER_PARM_NM).append("=").append(getConfigurationService().getParameterValue(step.getNamespace(), step.getComponentName(), STEP_USER_PARM_NM)));
+                        LOG.info(new StringBuffer("Creating user session for step: ").append(step.getName()).append("=").append(stepUserName));
                     }
                     GlobalVariables.setUserSession(new UserSession(stepUserName));
                     if ( LOG.isInfoEnabled() ) {
