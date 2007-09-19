@@ -771,7 +771,7 @@ public class ScrubberProcess {
     private Parameter getParameter(String param) {
         Parameter p = parameters.get(param);
         if (p == null) {
-            throw new IllegalArgumentException("Parameter: " + GLConstants.GL_SCRUBBER_GROUP + "/" + param + " does not exist");
+            throw new IllegalArgumentException("Parameter: " + KFSConstants.GL_NAMESPACE+"/"+GLConstants.Components.SCRUBBER_STEP + "/" + param + " does not exist");
         }
         return p;
     }
@@ -1243,7 +1243,13 @@ public class ScrubberProcess {
         Parameter objSubTypeCodes = getParameter(GLConstants.GlScrubberGroupRules.LIABILITY_OBJ_SUB_TYPE_CODES);
         Parameter subFundGroupCodes = getParameter(GLConstants.GlScrubberGroupRules.LIABILITY_SUB_FUND_GROUP_CODES);
 
-        if (scrubbedEntry.getFinancialBalanceTypeCode().equals(scrubbedEntry.getOption().getActualFinancialBalanceTypeCd()) && scrubbedEntry.getUniversityFiscalYear().intValue() > 1995 && kualiConfigurationService.succeedsRule( docTypeCodes,scrubbedEntry.getFinancialDocumentTypeCode()) && kualiConfigurationService.succeedsRule( fiscalPeriods,scrubbedEntry.getUniversityFiscalPeriodCode()) && kualiConfigurationService.succeedsRule( objSubTypeCodes,scrubbedEntry.getFinancialObject().getFinancialObjectSubTypeCode()) && kualiConfigurationService.succeedsRule( subFundGroupCodes,scrubbedEntry.getAccount().getSubFundGroupCode()) && kualiConfigurationService.succeedsRule( chartCodes,scrubbedEntry.getChartOfAccountsCode())) {
+        if (scrubbedEntry.getFinancialBalanceTypeCode().equals(scrubbedEntry.getOption().getActualFinancialBalanceTypeCd()) 
+                && scrubbedEntry.getUniversityFiscalYear().intValue() > 1995 
+                && kualiConfigurationService.succeedsRule( docTypeCodes,scrubbedEntry.getFinancialDocumentTypeCode()) 
+                && kualiConfigurationService.succeedsRule( fiscalPeriods,scrubbedEntry.getUniversityFiscalPeriodCode()) 
+                && kualiConfigurationService.succeedsRule( objSubTypeCodes,scrubbedEntry.getFinancialObject().getFinancialObjectSubTypeCode()) 
+                && kualiConfigurationService.succeedsRule( subFundGroupCodes,scrubbedEntry.getAccount().getSubFundGroupCode()) 
+                && kualiConfigurationService.succeedsRule( chartCodes,scrubbedEntry.getChartOfAccountsCode())) {
 
             liabilityEntry.setFinancialObjectCode((getParameter(GLConstants.GlScrubberGroupParameters.LIABILITY_OBJECT_CODE)).getParameterValue());
             liabilityEntry.setFinancialObjectTypeCode(scrubbedEntry.getOption().getFinObjectTypeLiabilitiesCode());
