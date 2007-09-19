@@ -53,7 +53,7 @@ import org.kuali.module.gl.bo.SufficientFundBalances;
  */
 public class GLConstants {
 
-    public static final String GL_NAMESPACE = "KNS-GL";
+    public static final String GL_NAMESPACE = "KFS-GL";
     
     public static final String INSERT_CODE = "I";
     public static final String UPDATE_CODE = "U";
