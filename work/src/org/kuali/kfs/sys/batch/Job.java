@@ -18,6 +18,7 @@ package org.kuali.kfs.batch;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
 import org.kuali.core.UserSession;
@@ -36,9 +37,9 @@ public class Job implements StatefulJob, InterruptableJob {
 
     public static final String JOB_RUN_START_STEP = "JOB_RUN_START_STEP";
     public static final String JOB_RUN_END_STEP = "JOB_RUN_END_STEP";
+    public static final String STEP_RUN_PARM_NM = "RUN_IND";
+    public static final String STEP_USER_PARM_NM = "USER";
     private static final Logger LOG = Logger.getLogger(Job.class);
-    protected static final String STEP_RUN_INDICATOR_PARAMETER_SUFFIX = "_FLAG";
-    protected static final String STEP_USER_PARAMETER_SUFFIX = "_USER";
     private SchedulerService schedulerService;
     private KualiConfigurationService configurationService;
     private List<Step> steps;
@@ -96,23 +97,23 @@ public class Job implements StatefulJob, InterruptableJob {
                 }
                 currentStep = step;
                 LOG.info(new StringBuffer("Started processing step: ").append(currentStepNumber).append("=").append(step.getName()));
-                String stepRunIndicatorParameter = "RUN_IND";
-                if (getConfigurationService().parameterExists(step.getNamespace(), step.getComponentName(), stepRunIndicatorParameter) 
-                        && !getConfigurationService().getIndicatorParameter(step.getNamespace(), step.getComponentName(), stepRunIndicatorParameter)) {
+                // check if step should not be run
+                if (getConfigurationService().parameterExists(step.getNamespace(), step.getComponentName(), STEP_RUN_PARM_NM) 
+                        && !getConfigurationService().getIndicatorParameter(step.getNamespace(), step.getComponentName(), STEP_RUN_PARM_NM)) {
                     if ( LOG.isInfoEnabled() ) {
-                        LOG.info("Skipping step due to system parameter: " + stepRunIndicatorParameter);
+                        LOG.info("Skipping step due to system parameter: " + STEP_RUN_PARM_NM);
                     }
-                }
-                else {
+                } else { // step *SHOULD* be run
                     GlobalVariables.setErrorMap(new ErrorMap());
                     GlobalVariables.setMessageList(new ArrayList());
-                    String stepUserParameter = "USER";
-                    if (getConfigurationService().parameterExists(step.getNamespace(), step.getComponentName(), stepUserParameter)) {
-                        if ( LOG.isInfoEnabled() ) {
-                            LOG.info(new StringBuffer("Creating user session for step: ").append(stepUserParameter).append("=").append(getConfigurationService().getParameterValue(step.getNamespace(), step.getComponentName(), stepUserParameter)));
-                        }
-                        GlobalVariables.setUserSession(new UserSession(getConfigurationService().getParameterValue(step.getNamespace(), step.getComponentName(), stepUserParameter)));
+                    String stepUserName = getConfigurationService().getParameterValue(step.getNamespace(), step.getComponentName(), STEP_USER_PARM_NM);
+                    if ( StringUtils.isBlank( stepUserName ) ) {
+                        stepUserName = KFSConstants.SYSTEM_USER;
                     }
+                    if ( LOG.isInfoEnabled() ) {
+                        LOG.info(new StringBuffer("Creating user session for step: ").append(STEP_USER_PARM_NM).append("=").append(getConfigurationService().getParameterValue(step.getNamespace(), step.getComponentName(), STEP_USER_PARM_NM)));
+                    }
+                    GlobalVariables.setUserSession(new UserSession(stepUserName));
                     if ( LOG.isInfoEnabled() ) {
                         LOG.info(new StringBuffer("Executing step: ").append(step.getName()).append("=").append(step.getClass()));
                     }
