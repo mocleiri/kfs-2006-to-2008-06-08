@@ -505,13 +505,13 @@
         </property>
     </bean>
         	
-	<bean id="laborNightlyOutStep" class="org.kuali.module.labor.batch.LaborNightlyOutStep" parent="step">
+	<bean id="laborNightlyOutStep" class="org.kuali.module.labor.batch.LaborNightlyOutStep" parent="laborStep">
 		<property name="laborNightlyOutService">
 			<ref bean="laborNightlyOutService" />
 		</property>
 	</bean>  
 	
-	<bean id="clearLaborPendingStep" class="org.kuali.module.labor.batch.ClearLaborPendingStep" parent="step">
+	<bean id="clearLaborPendingStep" class="org.kuali.module.labor.batch.ClearLaborPendingStep" parent="laborStep">
 		<property name="laborNightlyOutService">
 			<ref bean="laborNightlyOutService" />
         </property>
