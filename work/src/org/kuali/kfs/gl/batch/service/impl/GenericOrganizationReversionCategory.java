@@ -67,21 +67,21 @@ public class GenericOrganizationReversionCategory implements OrganizationReversi
                 KFSConstants.OrgReversion.VALID_PREFIX + KFSConstants.OrgReversion.OBJECT_LEVEL_PARAM_SUFFIX,
                 KFSConstants.OrgReversion.INVALID_PREFIX + KFSConstants.OrgReversion.OBJECT_LEVEL_PARAM_SUFFIX,
                 categoryCode,
-                cons );
+                level );
         boolean objectTypeRulesPassed = kualiConfigurationService.evaluateConstrainedParameter(
                 KFSConstants.CHART_NAMESPACE, 
                 KFSConstants.Components.ORGANIZATION_REVERSION_CATEGORY,
                 KFSConstants.OrgReversion.VALID_PREFIX + KFSConstants.OrgReversion.OBJECT_TYPE_PARAM_SUFFIX,
                 KFSConstants.OrgReversion.INVALID_PREFIX + KFSConstants.OrgReversion.OBJECT_TYPE_PARAM_SUFFIX,
                 categoryCode,
-                cons );
+                objTyp );
         boolean objectSubTypeRulesPassed = kualiConfigurationService.evaluateConstrainedParameter(
                 KFSConstants.CHART_NAMESPACE, 
                 KFSConstants.Components.ORGANIZATION_REVERSION_CATEGORY,
                 KFSConstants.OrgReversion.VALID_PREFIX + KFSConstants.OrgReversion.OBJECT_SUB_TYPE_PARAM_SUFFIX,
                 KFSConstants.OrgReversion.INVALID_PREFIX + KFSConstants.OrgReversion.OBJECT_SUB_TYPE_PARAM_SUFFIX,
                 categoryCode,
-                cons );
+                objSubTyp );
 
         return consolidationRulesPassed && levelRulesPassed && objectTypeRulesPassed && objectSubTypeRulesPassed;
     }
