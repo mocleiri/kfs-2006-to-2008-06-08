@@ -378,13 +378,15 @@ public class BatchInputFileServiceImpl implements BatchInputFileService {
         File[] filesInBatchDirectory = listFilesInBatchTypeDirectory(batchInputFileType);
 
         List<File> userFileList = new ArrayList<File>();
-        for (int i = 0; i < filesInBatchDirectory.length; i++) {
-            File batchFile = filesInBatchDirectory[i];
-            String fileExtension = StringUtils.substringAfterLast(batchFile.getName(), ".");
-            if (batchInputFileType.getFileExtension().equals(fileExtension)) {
-                boolean userAuthorizedForFile = batchInputFileType.checkAuthorization(user, batchFile);
-                if (userAuthorizedForFile) {
-                    userFileList.add(batchFile);
+        if ( filesInBatchDirectory != null ) {
+            for (int i = 0; i < filesInBatchDirectory.length; i++) {
+                File batchFile = filesInBatchDirectory[i];
+                String fileExtension = StringUtils.substringAfterLast(batchFile.getName(), ".");
+                if (batchInputFileType.getFileExtension().equals(fileExtension)) {
+                    boolean userAuthorizedForFile = batchInputFileType.checkAuthorization(user, batchFile);
+                    if (userAuthorizedForFile) {
+                        userFileList.add(batchFile);
+                    }
                 }
             }
         }
