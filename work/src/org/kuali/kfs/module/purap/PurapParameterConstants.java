@@ -40,6 +40,13 @@ public class PurapParameterConstants {
     public static final String PURAP_PDP_EPIC_SBUNT_CODE = "PRE_DISBURSEMENT_EXTRACT_SUB_UNIT";
     public static final String PURAP_PDP_USER_ID = "PRE_DISBURSEMENT_EXTRACT_USER";
     public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = "DEFAULT_TRANSMISSION_CODE";
+    public static final String PURAP_PREQ_REQUIRE_ATTACHMENT = "REQUIRE_ATTACHMENT";
+    public static final String PURAP_CM_REQUIRE_ATTACHMENT = "REQUIRE_ATTACHMENT";
+
+    public static final String PURAP_PDP_PREQ_CANCEL_NOTE = "CANCEL_NOTE";
+    public static final String PURAP_PDP_PREQ_RESET_NOTE = "RESET_NOTE";
+    public static final String PURAP_PDP_CM_CANCEL_NOTE = "CANCEL_NOTE";
+    public static final String PURAP_PDP_CM_RESET_NOTE = "RESET_NOTE";
 
     public static final String PHONE_NUMBER_FORMATS_PARM_NM = "GENERIC_PHONE_NUMBER_FORMATS";
     public static final String DEFAULT_PHONE_NUMBER_DIGITS_PARM_NM = "GENERIC_DEFAULT_PHONE_NUMBER_LENGTH";
