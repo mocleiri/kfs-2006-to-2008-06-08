@@ -19,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,14 +53,15 @@ import org.kuali.module.purap.PurapConstants.PurchaseOrderStatuses;
 import org.kuali.module.purap.PurapConstants.RequisitionSources;
 import org.kuali.module.purap.PurapConstants.VendorChoice;
 import org.kuali.module.purap.PurapWorkflowConstants.PurchaseOrderDocument.NodeDetailEnum;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderQuoteStatus;
 import org.kuali.module.purap.bo.PurchaseOrderVendorQuote;
-import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.dao.PurchaseOrderDao;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.PurchasingDocumentBase;
 import org.kuali.module.purap.document.RequisitionDocument;
+import org.kuali.module.purap.service.LogicContainer;
 import org.kuali.module.purap.service.PrintService;
 import org.kuali.module.purap.service.PurApWorkflowIntegrationService;
 import org.kuali.module.purap.service.PurapService;
@@ -218,7 +218,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     public void createAutomaticPurchaseOrderDocument(RequisitionDocument reqDocument) {
         String newSessionUserId = KFSConstants.SYSTEM_USER;
         try {
-            PurapService.LogicToRunAsFakeUser logicToRun = new PurapService.LogicToRunAsFakeUser() {
+            LogicContainer logicToRun = new LogicContainer() {
                 public Object runLogic(Object[] objects) throws Exception {
                     RequisitionDocument doc = (RequisitionDocument)objects[0];
                     // update REQ data
@@ -408,7 +408,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     public void performPurchaseOrderFirstTransmitViaPrinting(String documentNumber, ByteArrayOutputStream baosPDF) {
         PurchaseOrderDocument po = getPurchaseOrderByDocumentNumber(documentNumber);
         String environment = kualiConfigurationService.getPropertyString(KFSConstants.ENVIRONMENT_KEY);
-        Collection<String> generatePDFErrors = printService.generatePurchaseOrderPdf(po, baosPDF, environment);
+        Collection<String> generatePDFErrors = printService.generatePurchaseOrderPdf(po, baosPDF, environment, null);
         if (!generatePDFErrors.isEmpty()) {
             addStringErrorMessagesToErrorMap(PurapKeyConstants.ERROR_PURCHASE_ORDER_PDF, generatePDFErrors);
             throw new ValidationException("printing purchase order for first transmission failed");
@@ -423,10 +423,23 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         po.setPurchaseOrderFirstTransmissionDate(currentDate);
         po.setPurchaseOrderLastTransmitDate(currentDate);
         po.setOverrideWorkflowButtons(Boolean.FALSE);
-        SpringContext.getBean(PurApWorkflowIntegrationService.class).takeAllActionsForGivenCriteria(po, null, GlobalVariables.getUserSession().getUniversalUser(), null);
+        boolean performedAction = SpringContext.getBean(PurApWorkflowIntegrationService.class).takeAllActionsForGivenCriteria(po, "Action taken automatically as part of document initial print transmission", NodeDetailEnum.DOCUMENT_TRANSMISSION.getName(), GlobalVariables.getUserSession().getUniversalUser(), null);
+        if (!performedAction) {
+            SpringContext.getBean(PurApWorkflowIntegrationService.class).takeAllActionsForGivenCriteria(po, "Action taken automatically as part of document initial print transmission by user " + GlobalVariables.getUserSession().getUniversalUser().getPersonName(), NodeDetailEnum.DOCUMENT_TRANSMISSION.getName(), null, KFSConstants.SYSTEM_USER);
+        }
 //        takeWorkflowActionsForDocumentTransmission(po, null);
         po.setOverrideWorkflowButtons(Boolean.TRUE);
         attemptSetupOfInitialOpenOfDocument(po);
+    }
+    
+    public void performPrintPurchaseOrderPDFOnly(String documentNumber, ByteArrayOutputStream baosPDF) {
+        PurchaseOrderDocument po = getPurchaseOrderByDocumentNumber(documentNumber);
+        String environment = kualiConfigurationService.getPropertyString(KFSConstants.ENVIRONMENT_KEY);
+        Collection<String> generatePDFErrors = printService.generatePurchaseOrderPdf(po, baosPDF, environment, null);
+        if (!generatePDFErrors.isEmpty()) {
+            addStringErrorMessagesToErrorMap(PurapKeyConstants.ERROR_PURCHASE_ORDER_PDF, generatePDFErrors);
+            throw new ValidationException("printing purchase order for first transmission failed");
+        }
     }
     
     private void takeWorkflowActionsForDocumentTransmission(PurchaseOrderDocument po, String annotation) {
@@ -481,8 +494,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                 retransmitItems.add(item);
             }
         }
-        po.setItems(retransmitItems);
-        Collection<String> generatePDFErrors = printService.generatePurchaseOrderPdfForRetransmission(po, baosPDF, environment);
+        Collection<String> generatePDFErrors = printService.generatePurchaseOrderPdfForRetransmission(po, baosPDF, environment, retransmitItems);
 
         if (generatePDFErrors.size() > 0) {
             addStringErrorMessagesToErrorMap(PurapKeyConstants.ERROR_PURCHASE_ORDER_PDF, generatePDFErrors);
@@ -585,7 +597,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             sourceObjectClass = sourceObjectClass.getSuperclass();
             classesToExclude.add(sourceObjectClass);
         }
-        PurApObjectUtils.populateFromBaseWithSuper(sourceDocument, newPurchaseOrderChangeDocument, new HashMap(), classesToExclude);
+        PurApObjectUtils.populateFromBaseWithSuper(sourceDocument, newPurchaseOrderChangeDocument, PurapConstants.UNCOPYABLE_FIELDS_FOR_PO, classesToExclude);
         newPurchaseOrderChangeDocument.getDocumentHeader().setFinancialDocumentDescription(sourceDocument.getDocumentHeader().getFinancialDocumentDescription());
         newPurchaseOrderChangeDocument.getDocumentHeader().setOrganizationDocumentNumber(sourceDocument.getDocumentHeader().getOrganizationDocumentNumber());
 
@@ -595,7 +607,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         //TODO f2f: what is this doing?
         //Need to find a way to make the ManageableArrayList to expand and populating the items and
         //accounts, otherwise it will complain about the account on item 1 is missing. 
-        for (PurchasingApItem item : (List<PurchasingApItem>)newPurchaseOrderChangeDocument.getItems()) {
+        for (PurApItem item : (List<PurApItem>)newPurchaseOrderChangeDocument.getItems()) {
             item.getSourceAccountingLines().iterator();
             //we only need to do this once to apply to all items, so we can break out of the loop now
             break;
@@ -708,8 +720,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         if (POTransmissionMethods.PRINT.equals(po.getPurchaseOrderTransmissionMethodCode())) {
             String newStatusCode = PurchaseOrderStatuses.STATUSES_BY_TRANSMISSION_TYPE.get(po.getPurchaseOrderTransmissionMethodCode());
             LOG.debug("setupDocumentForPendingFirstTransmission() Purchase Order Transmission Type is '" + po.getPurchaseOrderTransmissionMethodCode() + "' setting status to '" + newStatusCode + "'");
-            po.setPurchaseOrderCurrentIndicator(true);
-            po.setPendingActionIndicator(true);
             purapService.updateStatusAndStatusHistory(po, newStatusCode);
         }
         else {
