@@ -699,6 +699,10 @@ public class KFSKeyConstants {
     public static final String MESSAGE_BATCH_UPLOAD_SAVE_SUCCESSFUL = "message.batchUpload.saveSuccessful";
     public static final String MESSAGE_BATCH_UPLOAD_SAVE_SUCCESSFUL_WITH_FILE_INFO = "message.batchUpload.saveSuccessful.with.file.info";
     public static final String MESSAGE_BATCH_UPLOAD_DELETE_SUCCESSFUL = "message.batchUpload.deleteSuccessful";
+    public static final String ERROR_BATCH_UPLOAD_DELETE_FAILED_FILE_ALREADY_PROCESSED = "error.batchUpload.deleteFailed.fileAlreadyProcessed";
+    public static final String ERROR_BATCH_UPLOAD_DELETE_FAILED_FILE_SET_ALREADY_PROCESSED = "error.batchUpload.deleteFailed.fileSetAlreadyProcessed";
+    public static final String ERROR_BATCH_UPLOAD_DELETE_FAILED_NOT_AUTHORIZED = "error.batchUpload.deleteFailed.fileNotAuthorized";
+    public static final String ERROR_BATCH_UPLOAD_DELETE_FAILED_FILE_SET_NOT_AUTHORIZED = "error.batchUpload.deleteFailed.fileSetNotAuthorized";
     public static final String ERROR_BATCH_UPLOAD_PARSING_XML = "error.batchUpload.xmlParse";
     public static final String ERROR_BATCH_UPLOAD_SAVE = "error.batchUpload.save";
     public static final String ERROR_BATCH_UPLOAD_DELETE = "error.batchUpload.delete";
@@ -710,6 +714,8 @@ public class KFSKeyConstants {
     public static final String ERROR_BATCH_UPLOAD_NO_FILE_SELECTED_DELETE = "error.batchUpload.delete.noFileSelected";
     public static final String ERROR_BATCH_UPLOAD_NO_FILE_SELECTED_DOWNLOAD = "error.batchUpload.download.noFileSelected";
     public static final String ERROR_BATCH_UPLOAD_NO_FILE_TYPE_SELECTED_DOWNLOAD = "error.batchUpload.download.noFileTypeSelected";
+    public static final String ERROR_BATCH_UPLOAD_FILE_USER_IDENTIFIER_BAD_FORMAT = "error.batchUpload.save.fileUserIdentifierBadFormat";
+    public static final String ERROR_BATCH_UPLOAD_FILE_SET_IDENTIFIER_BAD_FORMAT = "error.batchUpload.save.fileSetIdentifierBadFormat";
     
     public static final class AdvanceDeposit {
         public static final String ERROR_DOCUMENT_ADVANCE_DEPOSIT_TOTAL_INVALID = "error.document.advanceDeposit.depositTotalInvalid";
@@ -782,7 +788,7 @@ public class KFSKeyConstants {
     }
 
     public static final class CashManagement {
-        public static final String URL_LOAD_DOCUMENT_CASH_MGMT = "url.load.document.cashManagment";
+        public static final String URL_LOAD_DOCUMENT_CASH_MGMT = "url.load.document.cashManagement";
 
         public static final String DEFAULT_DOCUMENT_DESCRIPTION = "cashManagement.document.defaultDescription";
         public static final String STATUS_DEPOSIT_CANCELED = "cashManagement.document.status.depositCanceled";
