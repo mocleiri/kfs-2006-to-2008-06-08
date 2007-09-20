@@ -16,7 +16,6 @@
 package org.kuali.module.purap.document;
 
 import java.sql.Date;
-import java.util.List;
 
 import org.kuali.core.bo.Campus;
 import org.kuali.core.rule.event.KualiDocumentEvent;
@@ -25,6 +24,7 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
+import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.bo.BillingAddress;
 import org.kuali.module.purap.bo.DeliveryRequiredDateReason;
 import org.kuali.module.purap.bo.FundingSource;
@@ -280,7 +280,7 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
     public void setPurchaseOrderCostSourceCode(String purchaseOrderCostSourceCode) {
         this.purchaseOrderCostSourceCode = purchaseOrderCostSourceCode;
     }
-
+    
     /**
      * Gets the deliveryRequiredDateReasonCode attribute.
      * 
@@ -1308,7 +1308,9 @@ public abstract class PurchasingDocumentBase extends PurchasingAccountsPayableDo
      * 
      */
     public PurchaseOrderCostSource getPurchaseOrderCostSource() { 
-        return purchaseOrderCostSource;
+        if (ObjectUtils.isNull(purchaseOrderCostSource))
+            refreshReferenceObject(PurapPropertyConstants.PURCHASE_ORDER_COST_SOURCE);
+        return purchaseOrderCostSource; 
     }
 
     /**
