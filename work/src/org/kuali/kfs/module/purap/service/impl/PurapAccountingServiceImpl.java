@@ -17,11 +17,9 @@ package org.kuali.module.purap.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.kuali.core.util.KualiDecimal;
@@ -30,7 +28,8 @@ import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.bo.PurApAccountingLine;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.module.purap.bo.PurApSummaryItem;
 import org.kuali.module.purap.dao.PurApAccountingDao;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
@@ -247,7 +246,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateSummary(java.util.List)
      */
-    public List<SourceAccountingLine> generateSummary(List<PurchasingApItem> items) {
+    public List<SourceAccountingLine> generateSummary(List<PurApItem> items) {
         String methodName = "generateSummary()";
         LOG.debug(methodName + " started");
         List<SourceAccountingLine> returnList = generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
@@ -263,7 +262,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
 //        return returnList;
 //    }
     
-    public List<SummaryAccount> generateSummaryAccounts(List<PurchasingApItem> items) {
+    public List<SummaryAccount> generateSummaryAccounts(List<PurApItem> items) {
         String methodName = "generateSummaryAccounts()";
         List<SummaryAccount> returnList = new ArrayList<SummaryAccount>();
         LOG.debug(methodName + " started");
@@ -271,11 +270,14 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         for (SourceAccountingLine sourceAccountingLine : sourceLines) {
             SummaryAccount summaryAccount = new SummaryAccount();
             summaryAccount.setAccount((SourceAccountingLine)ObjectUtils.deepCopy(sourceAccountingLine));
-            for (PurchasingApItem item : items) {
+            for (PurApItem item : items) {
                 List<PurApAccountingLine> itemAccounts = item.getSourceAccountingLines();
                 for (PurApAccountingLine purApAccountingLine : itemAccounts) {
                     if(purApAccountingLine.accountStringsAreEqual(summaryAccount.getAccount())) {
-                        summaryAccount.getItems().add(item);
+                        PurApSummaryItem summaryItem = item.getSummaryItem();
+                        //TODO: ctk do we need to make this amount based for PREQ's past full entry?
+                        summaryItem.setEstimatedEncumberanceAmount(new KualiDecimal(purApAccountingLine.getAccountLinePercent().divide(new BigDecimal("100")).multiply(item.getExtendedPrice().bigDecimalValue())));
+                        summaryAccount.getItems().add(summaryItem);
                         break;
                     }
                 }
@@ -291,7 +293,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateSummaryWithNoZeroTotals(java.util.List)
      */
-    public List<SourceAccountingLine> generateSummaryWithNoZeroTotals(List<PurchasingApItem> items) {
+    public List<SourceAccountingLine> generateSummaryWithNoZeroTotals(List<PurApItem> items) {
         String methodName = "generateSummaryWithNoZeroTotals()";
         LOG.debug(methodName + " started");
         List<SourceAccountingLine> returnList = generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
@@ -304,7 +306,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateSummaryWithNoZeroTotalsUsingAlternateAmount(java.util.List)
      */
-    public List<SourceAccountingLine> generateSummaryWithNoZeroTotalsUsingAlternateAmount(List<PurchasingApItem> items) {
+    public List<SourceAccountingLine> generateSummaryWithNoZeroTotalsUsingAlternateAmount(List<PurApItem> items) {
         String methodName = "generateSummaryWithNoZeroTotals()";
         LOG.debug(methodName + " started");
         List<SourceAccountingLine> returnList = generateAccountSummary(items, null, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_USED);
@@ -317,7 +319,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateSummaryExcludeItemTypes(java.util.List, java.util.Set)
      */
-    public List<SourceAccountingLine> generateSummaryExcludeItemTypes(List<PurchasingApItem> items, Set excludedItemTypeCodes) {
+    public List<SourceAccountingLine> generateSummaryExcludeItemTypes(List<PurApItem> items, Set excludedItemTypeCodes) {
         String methodName = "generateSummaryExcludeItemTypes()";
         LOG.debug(methodName + " started");
         List<SourceAccountingLine> returnList = generateAccountSummary(items, excludedItemTypeCodes, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
@@ -330,7 +332,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateSummaryIncludeItemTypesAndNoZeroTotals(java.util.List, java.util.Set)
      */
-    public List<SourceAccountingLine> generateSummaryIncludeItemTypesAndNoZeroTotals(List<PurchasingApItem> items, Set includedItemTypeCodes) {
+    public List<SourceAccountingLine> generateSummaryIncludeItemTypesAndNoZeroTotals(List<PurApItem> items, Set includedItemTypeCodes) {
         String methodName = "generateSummaryExcludeItemTypesAndNoZeroTotals()";
         LOG.debug(methodName + " started");
         List<SourceAccountingLine> returnList = generateAccountSummary(items, includedItemTypeCodes, ITEM_TYPES_INCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
@@ -343,7 +345,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateSummaryIncludeItemTypes(java.util.List, java.util.Set)
      */
-    public List<SourceAccountingLine> generateSummaryIncludeItemTypes(List<PurchasingApItem> items, Set includedItemTypeCodes) {
+    public List<SourceAccountingLine> generateSummaryIncludeItemTypes(List<PurApItem> items, Set includedItemTypeCodes) {
         String methodName = "generateSummaryIncludeItemTypes()";
         LOG.debug(methodName + " started");
         List<SourceAccountingLine> returnList = generateAccountSummary(items, includedItemTypeCodes, ITEM_TYPES_INCLUDED_VALUE, ZERO_TOTALS_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
@@ -356,7 +358,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * 
      * @see org.kuali.module.purap.service.PurapAccountingService#generateSummaryExcludeItemTypesAndNoZeroTotals(java.util.List, java.util.Set)
      */
-    public List<SourceAccountingLine> generateSummaryExcludeItemTypesAndNoZeroTotals(List<PurchasingApItem> items, Set excludedItemTypeCodes) {
+    public List<SourceAccountingLine> generateSummaryExcludeItemTypesAndNoZeroTotals(List<PurApItem> items, Set excludedItemTypeCodes) {
         String methodName = "generateSummaryIncludeItemTypesAndNoZeroTotals()";
         LOG.debug(methodName + " started");
         List<SourceAccountingLine> returnList = generateAccountSummary(items, excludedItemTypeCodes, ITEM_TYPES_EXCLUDED_VALUE, ZERO_TOTALS_NOT_RETURNED_VALUE, ALTERNATE_AMOUNT_NOT_USED);
@@ -443,12 +445,12 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
 //        return accountItemsMap;
 //    }
     
-    private List<SourceAccountingLine> generateAccountSummary(List<PurchasingApItem> items, Set itemTypeCodes, Boolean itemTypeCodesAreIncluded, Boolean useZeroTotals,
+    private List<SourceAccountingLine> generateAccountSummary(List<PurApItem> items, Set itemTypeCodes, Boolean itemTypeCodesAreIncluded, Boolean useZeroTotals,
             Boolean useAlternateAmount) {
-        List<PurchasingApItem> itemsToProcess = getProcessablePurapItems(items, itemTypeCodes, itemTypeCodesAreIncluded, useZeroTotals);
+        List<PurApItem> itemsToProcess = getProcessablePurapItems(items, itemTypeCodes, itemTypeCodesAreIncluded, useZeroTotals);
         Set<PurApAccountingLine> accountSet = new HashSet<PurApAccountingLine>();
         
-        for (PurchasingApItem currentItem : items) {
+        for (PurApItem currentItem : items) {
             if (PurApItemUtils.checkItemActive(currentItem)) {
                 for (PurApAccountingLine account : currentItem.getSourceAccountingLines()) {
                     boolean thisAccountAlreadyInSet = false;
@@ -514,14 +516,14 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * @param useZeroTotals - value to tell whether to include zero dollar items (see {@link #ZERO_TOTALS_RETURNED_VALUE})
      * @return a list of {@link PurchasingApItem} objects that should be used for processing by calling method
      */
-    private List<PurchasingApItem> getProcessablePurapItems(List<PurchasingApItem> items, Set itemTypeCodes, Boolean itemTypeCodesAreIncluded, Boolean useZeroTotals) {
+    private List<PurApItem> getProcessablePurapItems(List<PurApItem> items, Set itemTypeCodes, Boolean itemTypeCodesAreIncluded, Boolean useZeroTotals) {
         String methodName = "getProcessablePurapItems()";
-        List<PurchasingApItem> newItemList = new ArrayList<PurchasingApItem>();
+        List<PurApItem> newItemList = new ArrayList<PurApItem>();
         // error out if we have an invalid 'itemTypeCodesAreIncluded' value
         if ( (!(ITEM_TYPES_INCLUDED_VALUE.equals(itemTypeCodesAreIncluded))) && (!(ITEM_TYPES_EXCLUDED_VALUE.equals(itemTypeCodesAreIncluded))) ) {
            throwRuntimeException(methodName, "Invalid parameter found while trying to find processable items for dealing with purchasing/accounts payable accounts");
         }
-        for (PurchasingApItem currentItem : items) {
+        for (PurApItem currentItem : items) {
             if ( (itemTypeCodes != null) && (!(itemTypeCodes.isEmpty())) ) {
                 // we have at least one entry in our item type code list
                 boolean foundMatchInList = false;
@@ -574,7 +576,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         if((document instanceof PaymentRequestDocument) && SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(document)){
             return;
         }
-        for (PurchasingApItem item : document.getItems()) {
+        for (PurApItem item : document.getItems()) {
             if ( (item.getExtendedPrice()!=null) && 
                  KualiDecimal.ZERO.compareTo(item.getExtendedPrice()) != 0 ) {
                 //TODO: is this the best sort to use?
@@ -605,7 +607,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
   
         }
 
-    public List<PurApAccountingLine> getAccountsFromItem(PurchasingApItem item) {
+    public List<PurApAccountingLine> getAccountsFromItem(PurApItem item) {
         // TODO Auto-generated method stub
         return purApAccountingDao.getAccountingLinesForItem(item);
     }

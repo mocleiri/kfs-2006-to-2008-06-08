@@ -143,7 +143,7 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
     
     public Iterator<LaborOriginEntry> getBadBalanceEntries(Collection groups) {
         LOG.debug("getBadBalanceEntries() started");
-        Iterator returnVal = originEntryDao.getBadBalanceEntries(groups);
+        Iterator returnVal = laborOriginEntryDao.getBadBalanceEntries(groups);
 
         return returnVal;
     }
@@ -157,7 +157,7 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
 
     public Iterator<LaborOriginEntry> getEntriesByGroupReportOrder(OriginEntryGroup oeg) {
         LOG.debug("getEntriesByGroupAccountOrder() started");
-        Iterator returnVal = originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_REPORT);
+        Iterator returnVal = laborOriginEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_REPORT);
 
         return returnVal;
     }
@@ -165,7 +165,7 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
     public Iterator<LaborOriginEntry> getEntriesByGroupListingReportOrder(OriginEntryGroup oeg) {
         LOG.debug("getEntriesByGroupAccountOrder() started");
 
-        Iterator returnVal = originEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_LISTING_REPORT);
+        Iterator returnVal = laborOriginEntryDao.getEntriesByGroup(oeg, OriginEntryDao.SORT_LISTING_REPORT);
         return returnVal;
     }
 
@@ -204,7 +204,7 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
     public void save(LaborOriginEntry entry) {
         LOG.debug("save() started");
 
-        originEntryDao.saveOriginEntry(entry);
+        laborOriginEntryDao.saveOriginEntry(entry);
     }
 
     /**
@@ -451,6 +451,17 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
     public int getCountOfEntriesInGroups(Collection<OriginEntryGroup> groups) {
         return laborOriginEntryDao.getCountOfEntriesInGroups(groups);
     }
+    
+
+    /**
+     * @see org.kuali.module.labor.service.LaborOriginEntryService#getCountOfEntriesInSingleGroup(org.kuali.module.gl.bo.OriginEntryGroup)
+     */
+    public int getCountOfEntriesInSingleGroup(OriginEntryGroup group) {
+        List<OriginEntryGroup> groups = new ArrayList<OriginEntryGroup>();
+        groups.add(group);
+        
+        return this.getCountOfEntriesInGroups(groups);
+    }
 
     /**
      * Sets the dateTimeService attribute value.
@@ -486,6 +497,5 @@ public class LaborOriginEntryServiceImpl implements LaborOriginEntryService {
      */
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
-    }
-   
+    }  
 }
