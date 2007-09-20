@@ -21,16 +21,16 @@ import static org.kuali.core.util.KualiDecimal.ZERO;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.document.Document;
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.SequenceAccessorService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
@@ -48,6 +48,7 @@ import org.kuali.module.purap.PurapWorkflowConstants.PurchaseOrderDocument.NodeD
 import org.kuali.module.purap.bo.CreditMemoView;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PaymentRequestView;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderStatusHistory;
@@ -55,7 +56,6 @@ import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
 import org.kuali.module.purap.bo.PurchaseOrderVendorQuote;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.bo.PurchaseOrderView;
-import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.RecurringPaymentFrequency;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.service.PurapAccountingService;
@@ -104,7 +104,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     private Integer newQuoteVendorHeaderGeneratedIdentifier;
     private Integer newQuoteVendorDetailAssignedIdentifier;
     private String alternateVendorName;
-    private String statusChange;
     private boolean purchaseOrderCurrentIndicator = false;
     private boolean pendingActionIndicator = false;
     private Date purchaseOrderFirstTransmissionDate;
@@ -114,6 +113,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     private List<PurchaseOrderVendorQuote> purchaseOrderVendorQuotes;
 
     // NOT PERSISTED IN DB
+    private String statusChange;
     private String alternateVendorNumber;
     private String purchaseOrderRetransmissionMethodCode;
     private String retransmitHeader;
@@ -158,9 +158,9 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     @Override
     public void customPrepareForSave(KualiDocumentEvent event) {
         if (ObjectUtils.isNull(getPurapDocumentIdentifier())) {
-            //need to save to generate PO id to save in GL entries
-            // TODO hstaplet/delyea - is this needed?  Entries are generated prior to this being called and this throws optimistic lock exception now?
-            SpringContext.getBean(BusinessObjectService.class).save(this);
+            //need retrieve the next available PO id to save in GL entries (only do if purap id is null which should be on first save)
+            Long poSequenceNumber = SpringContext.getBean(SequenceAccessorService.class).getNextAvailableSequenceNumber("PO_ID");
+            setPurapDocumentIdentifier(new Integer(poSequenceNumber.intValue()));
         }
 
         // Set outstanding encumbered quantity/amount on items
@@ -179,7 +179,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
 
             //TODO check setting of outstanding amount in the accounts
             List accounts = (List)item.getSourceAccountingLines();
-//          Collections.sort(accounts);
+            Collections.sort(accounts);
 
             KualiDecimal accountTotalAmount = new KualiDecimal(0);
             PurchaseOrderAccount lastAccount = null;
@@ -200,6 +200,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
                 }
             }//endfor accounts
 
+            //FIXME finish coding rounding
           // Rounding
 //          if (lastAccount != null && this.getAmount() != null) {
 //              KualiDecimal difference = this.getAmount().subtract(accountTotalAmount);
@@ -307,7 +308,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         this.setStatusCode(PurapConstants.PurchaseOrderStatuses.IN_PROCESS);
         //copy items from req to pending (which will copy the item's accounts and assets)
         List<PurchaseOrderItem> items = new ArrayList();
-        for (PurchasingApItem reqItem : ((PurchasingAccountsPayableDocument) requisitionDocument).getItems()) {
+        for (PurApItem reqItem : ((PurchasingAccountsPayableDocument) requisitionDocument).getItems()) {
           items.add(new PurchaseOrderItem((RequisitionItem)reqItem, this));
         }
         this.setItems(items);
