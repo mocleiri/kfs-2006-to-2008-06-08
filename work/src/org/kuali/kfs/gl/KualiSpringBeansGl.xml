@@ -65,6 +65,8 @@
 				<value>manualPurgeJob</value>
 				<value>clearOldOriginEntriesJob</value>
 				<value>purgeCorrectionProcessFilesJob</value>
+				<value>markScrubbableBackupGroupsAsUnscrubbableJob</value>
+				<value>markPostableGroupsAsUnpostableJob</value>
 			</list>
 		</property>
 	</bean>
@@ -498,12 +500,12 @@
 	<bean id="glOrganizationReversionSelection" class="org.kuali.module.gl.service.impl.orgreversion.OrganizationReversionSelectionImpl" />
 
 	<bean id="glCashOrganizationReversionCategoryLogic" class="org.kuali.module.gl.service.impl.orgreversion.CashOrganizationReversionCategoryLogic" />
-
-	<bean id="genericOrganizationReversionCategory" class="org.kuali.module.gl.service.impl.orgreversion.GenericOrganizationReversionCategory" singleton="false">
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
-		</property>
-	</bean>
+	
+	<bean id="genericOrganizationReversionCategory" class="org.kuali.module.gl.service.impl.orgreversion.GenericOrganizationReversionCategory" singleton="false"> 
+    	<property name="kualiConfigurationService"> 
+        	<ref bean="kualiConfigurationService" /> 
+		</property> 
+	</bean> 
 
 	<bean id="glEncumbranceClosingRuleHelper" class="org.kuali.module.gl.batch.closing.year.service.impl.helper.EncumbranceClosingRuleHelper">
 		<property name="a21SubAccountService">
@@ -598,6 +600,12 @@
 		</property>
 		<property name="scrubberProcessObjectCodeOverride">
 			<ref bean="glScrubberProcessObjectCodeOverride" />
+		</property>
+		<property name="runDateService">
+			<ref bean="glRunDateService" />
+		</property>
+		<property name="originEntryLiteService">
+			<ref bean="originEntryLiteService" />
 		</property>
 	</bean>
 
@@ -715,6 +723,9 @@
 		<property name="kualiConfigurationService">
 			<ref bean="kualiConfigurationService" />
 		</property>
+		<property name="runDateService">
+			<ref bean="glRunDateService"/>
+		</property>
 	</bean>
 
 	<bean id="glEntryService" class="org.kuali.module.gl.service.impl.EntryServiceImpl">
@@ -763,6 +774,25 @@
 		</property>
 		<property name="dateTimeService">
 			<ref bean="dateTimeService" />
+		</property>
+	</bean>
+	
+	<bean id="originEntryLiteCachingLookup" class="org.kuali.module.gl.util.CachingLookup" singleton="false">
+		<property name="businessObjectService">
+			<ref bean="businessObjectService" />
+		</property>
+		<property name="cacheSize" value="6000" />
+	</bean>
+	
+	<bean id="originEntryableLookupService" class="org.kuali.module.gl.service.impl.OriginEntryableLookupServiceImpl" singleton="false">
+		<property name="persistenceStructureService">
+			<ref bean="persistenceStructureService" />
+		</property>
+	</bean>
+	
+	<bean id="originEntryLiteService" class="org.kuali.module.gl.service.impl.OriginEntryLiteServiceImpl">
+		<property name="originEntryDao">
+			<ref bean="originEntryLiteDao" />
 		</property>
 	</bean>
 
@@ -940,7 +970,6 @@
 		<property name="universityDateService">
 			<ref bean="universityDateService" />
 		</property>
-		<property name="dbPlatform" ref="kualiDBPlatformDao" />
 	</bean>
 
 	<bean id="glAccountBalanceConsolidationDao" parent="glAccountBalanceDaoBase" class="org.kuali.module.gl.dao.jdbc.AccountBalanceConsolidationDaoJdbc">
@@ -964,6 +993,14 @@
 		<property name="entryClass">
 			<bean class="java.lang.Class" factory-method="forName">
   			<constructor-arg value="org.kuali.module.gl.bo.OriginEntry"/>
+   			</bean>
+		</property>
+	</bean>
+	
+	<bean id="originEntryLiteDao" parent="platformAwareDao" class="org.kuali.module.gl.dao.ojb.OriginEntryDaoOjb">
+		<property name="entryClass">
+			<bean class="java.lang.Class" factory-method="forName">
+  			<constructor-arg value="org.kuali.module.gl.bo.OriginEntryLite"/>
    			</bean>
 		</property>
 	</bean>
@@ -1162,6 +1199,11 @@
 				<ref bean="encumbranceForwardStep" />
 			</list>
 		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="posterJob" value="hardDependency" />
+			</map>
+		</property>
 	</bean>
 	
 	<bean id="balanceForwardJob" parent="scheduledJobDescriptor">
@@ -1169,6 +1211,11 @@
 			<list>
 				<ref bean="balanceForwardStep" />
 			</list>
+		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="posterJob" value="hardDependency" />
+			</map>
 		</property>
 	</bean>
 	
@@ -1178,6 +1225,11 @@
 				<ref bean="nominalActivityClosingStep" />
 			</list>
 		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="posterJob" value="hardDependency" />
+			</map>
+		</property>
 	</bean>
 	
 	<bean id="organizationReversionClosingJob" parent="scheduledJobDescriptor">
@@ -1186,6 +1238,11 @@
 				<ref bean="organizationReversionClosingStep" />
 			</list>
 		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="posterJob" value="hardDependency" />
+			</map>
+		</property>
 	</bean>
 		
 	<bean id="organizationReversionOpeningJob" parent="unscheduledJobDescriptor">
@@ -1193,6 +1250,11 @@
 			<list>
 				<ref bean="organizationReversionOpeningStep" />
 			</list>
+		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="posterJob" value="hardDependency" />
+			</map>
 		</property>
 	</bean>
     
@@ -1396,6 +1458,48 @@
 		<property name="steps">
 			<list>
 				<ref bean="purgeCorrectionProcessFilesStep" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="markScrubbableBackupGroupsAsUnscrubbableStep" class="org.kuali.module.gl.batch.MarkScrubbableBackupGroupsAsUnscrubbableStep" parent="step">
+		<property name="originEntryGroupService">
+			<ref bean="originEntryGroupService" />
+		</property>
+	</bean>
+
+	<bean id="markScrubbableBackupGroupsAsUnscrubbableJob" parent="unscheduledJobDescriptor">
+		<property name="steps">
+			<list>
+				<ref bean="markScrubbableBackupGroupsAsUnscrubbableStep" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="markPostableScrubberValidGroupsAsUnpostableStep" class="org.kuali.module.gl.batch.MarkPostableScrubberValidGroupsAsUnpostableStep" parent="step">
+		<property name="originEntryGroupService">
+			<ref bean="originEntryGroupService" />
+		</property>
+	</bean>
+
+	<bean id="markPostableIcrGroupsAsUnpostableStep" class="org.kuali.module.gl.batch.MarkPostableIcrGroupsAsUnpostableStep" parent="step">
+		<property name="originEntryGroupService">
+			<ref bean="originEntryGroupService" />
+		</property>
+	</bean>
+	
+	<bean id="deleteAllExpenditureTransactionsStep" class="org.kuali.module.gl.batch.DeleteAllExpenditureTransactionsStep" parent="step">
+		<property name="expenditureTransactionDao">
+			<ref bean="glExpenditureTransactionDao"/>
+		</property>
+	</bean>
+	
+	<bean id="markPostableGroupsAsUnpostableJob" parent="unscheduledJobDescriptor">
+		<property name="steps">
+			<list>
+				<ref bean="markPostableScrubberValidGroupsAsUnpostableStep" />
+				<ref bean="markPostableIcrGroupsAsUnpostableStep" />
+				<ref bean="deleteAllExpenditureTransactionsStep" />
 			</list>
 		</property>
 	</bean>
