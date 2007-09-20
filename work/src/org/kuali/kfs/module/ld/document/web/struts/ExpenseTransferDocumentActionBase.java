@@ -41,15 +41,21 @@ import org.kuali.core.service.KualiRuleService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.Timer;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.core.web.struts.form.KualiForm;
+import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rule.event.AddAccountingLineEvent;
+import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.kfs.web.ui.AccountingLineDecorator;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
@@ -57,7 +63,6 @@ import org.kuali.module.labor.bo.LaborAccountingLineOverride;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.document.LaborExpenseTransferDocumentBase;
 import org.kuali.module.labor.service.SegmentedLookupResultsService;
-import org.kuali.module.labor.web.struts.form.BenefitExpenseTransferForm;
 import org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -67,6 +72,25 @@ import edu.iu.uis.eden.exception.WorkflowException;
  */
 public class ExpenseTransferDocumentActionBase extends LaborDocumentActionBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ExpenseTransferDocumentActionBase.class);
+
+   @Override
+   public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+       ActionForward result=null;
+       try {
+           result = super.execute(mapping, form, request, response);
+       } catch (Exception e) {  
+           throw e;
+       } finally {
+           KualiAccountingDocumentFormBase transForm = (KualiAccountingDocumentFormBase) form;
+
+           // handle changes to accountingLines
+           if (transForm.hasDocumentId()) {
+               AccountingDocument financialDocument = (AccountingDocument) transForm.getDocument();
+               setNotRevertableAccountingLines(financialDocument, transForm, KFSConstants.SOURCE);
+           }                                 
+       }
+        return result;
+    }
 
     /**
      * Takes care of storing the action form in the user session and forwarding to the balance inquiry lookup action.
@@ -275,7 +299,14 @@ public class ExpenseTransferDocumentActionBase extends LaborDocumentActionBase {
     }
 
     /**
-     * delete all accounting lines
+     * Delete all accounting lines
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return mapping
+     * @throws Exception
      */
     public ActionForward deleteAllAccountingLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
@@ -294,17 +325,57 @@ public class ExpenseTransferDocumentActionBase extends LaborDocumentActionBase {
     }
 
     /**
+     * Delete all source accounting lines
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return ActionMapping
+     * @throws Exception
+     */
+    public ActionForward deleteAllSourceAccountingLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
+        boolean success = false;
+        List sourceAccountingLines = financialDocumentForm.getFinancialDocument().getSourceAccountingLines();
+        if (sourceAccountingLines != null) {
+            success = sourceAccountingLines.removeAll(sourceAccountingLines);
+        }
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+
+    /**
+     * Delete all target accounting lines
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return ActionMapping
+     * @throws Exception
+     */
+    public ActionForward deleteAllTargetAccountingLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
+        boolean success = false;
+        List targetAccountingLines = financialDocumentForm.getFinancialDocument().getTargetAccountingLines();
+        if (targetAccountingLines != null) {
+            success = targetAccountingLines.removeAll(targetAccountingLines);
+        }
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }     
+    
+    
+    /**
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#copyAccountingLine(ActionMapping, ActionForm,
      *      HttpServletRequest, HttpServletResponse)
      */
     public ActionForward copyAccountingLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
-
         LaborExpenseTransferDocumentBase financialDocument = (LaborExpenseTransferDocumentBase) financialDocumentForm.getDocument();
 
         int index = getSelectedLine(request);
 
-        ExpenseTransferAccountingLine line = (ExpenseTransferAccountingLine) financialDocumentForm.getFinancialDocument().getTargetAccountingLineClass().newInstance();
+        ExpenseTransferAccountingLine line = (ExpenseTransferAccountingLine) financialDocumentForm.getFinancialDocument().getTargetAccountingLineClass().newInstance();        
         copyAccountingLine((ExpenseTransferAccountingLine) financialDocument.getSourceAccountingLine(index), line);
 
         boolean rulePassed = runRule(new AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
@@ -444,4 +515,42 @@ public class ExpenseTransferDocumentActionBase extends LaborDocumentActionBase {
     private SegmentedLookupResultsService getSegmentedLookupResultsService() {
         return SpringContext.getBean(SegmentedLookupResultsService.class);
     }
+
+    //**************************************************
+
+    /**
+     * This method was created with the purpose of hidding the reverse button from the SET and BET
+     * @param transDoc
+     * @param transForm
+     * @param lineSet
+     */    
+    private void setNotRevertableAccountingLines(AccountingDocument transDoc, KualiAccountingDocumentFormBase transForm, String lineSet) {        
+        // figure out which set of lines we're looking at
+        List formLines;
+        List<AccountingLineDecorator> decorators;
+        boolean source;
+        if (lineSet.equals(KFSConstants.SOURCE)) {
+            formLines = transDoc.getSourceAccountingLines();
+            decorators = transForm.getSourceLineDecorators(formLines.size());
+            source = true;
+        }
+        else {
+            formLines = transDoc.getTargetAccountingLines();
+            decorators = transForm.getTargetLineDecorators(formLines.size());
+            source = false;
+        }
+
+        // find and process corresponding form and baselines
+        int index = 0;
+        for (Iterator i = formLines.iterator(); i.hasNext(); index++) {
+            if (index == decorators.size()){
+                break;
+            }
+            AccountingLineDecorator decorator = decorators.get(index);
+
+            // always update decorator
+            decorator.setRevertible(false);
+        }
+    }
+
 }
