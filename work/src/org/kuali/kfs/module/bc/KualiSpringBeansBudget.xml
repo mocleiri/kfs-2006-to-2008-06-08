@@ -98,6 +98,31 @@
 			<ref bean="kualiConfigurationService" />
 		</property>
 	</bean>
+	
+	<bean id="intendedIncumbentSelectLookupableHelperService" class="org.kuali.module.budget.web.lookupable.IntendedIncumbentSelectLookupableHelperServiceImpl" singleton="false">
+		<property name="persistenceStructureService">
+			<ref bean="persistenceStructureService" />
+		</property>
+		<property name="lookupService">
+			<ref bean="lookupService" />
+		</property>
+		<property name="businessObjectDictionaryService">
+			<ref bean="businessObjectDictionaryService" />
+		</property>
+		<property name="businessObjectMetaDataService">
+			<ref bean="businessObjectMetaDataService" />
+		</property>
+		<property name="dataDictionaryService">
+			<ref bean="dataDictionaryService" />
+		</property>		
+	</bean>
+	
+	<bean id="intendedIncumbentSelectLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
+		<property name="lookupableHelperService">
+			<ref bean="intendedIncumbentSelectLookupableHelperService" />
+		</property>
+	</bean>	
+	
 
 	<bean id="budgetConstructionDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb" />
 	
@@ -126,8 +151,10 @@
             <ref bean="workflowDocumentService" />
         </property>
     </bean>
-
+    
     <bean id="calculatedSalaryFoundationTrackerOverrideService" class="org.kuali.module.budget.service.impl.CalculatedSalaryFoundationTrackerOverrideServiceImpl">
     </bean>
+    
+    <bean id="genesisBatchStep" class="org.kuali.module.budget.batch.GenesisBatchStep" parent="step"> </bean>
     	
 </beans>

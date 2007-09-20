@@ -29,6 +29,8 @@ import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.labor.batch.LaborPosterStep;
 import org.kuali.module.labor.batch.PayrollAccrualStep;
 
+import edu.iu.uis.eden.workgroup.web.WorkgroupForm.WorkgroupMember;
+
 /**
  * This class contains the constants used by Labor Distribution.
  */
@@ -52,6 +54,8 @@ public class LaborConstants {
         public static final String EXPENSE_TRANSFER_YEST = "YEST";
         public static final String EXPENSE_TRANSFER_YEBT = "YEBT";
     }
+    
+    public static final String LABOR_NAMESPACE = "KFS-LD";
     
     public static class Components {
         
@@ -111,6 +115,9 @@ public class LaborConstants {
 
     public static class SalaryExpenseTransfer {
         public static final String LABOR_LEDGER_SALARY_CODE = "S";
+        public static final String SET_ADMIN_WORKGROUP_PARM_NM = "SET_GROUP";
+        public static final String BENEFIT_CLEARING_CHART_PARM_NM = "BENEFIT_CLEARING_CHART_OF_ACCOUNTS";
+        public static final String BENEFIT_CLEARING_ACCOUNT_PARM_NM = "BENEFIT_CLEARING_ACCOUNT_NUMBER";
     }
 
     public static class BenefitExpenseTransfer {
@@ -130,6 +137,7 @@ public class LaborConstants {
         public static final String BALANCE_CODE = "BB";
         public static final String EMPLOYEE_FUNDING_EXPENSE_OBJECT_TYPE_CODE = "ES";
         public static final String EMPLOYEE_FUNDING_NORMAL_OP_EXPENSE_OBJECT_TYPE_CODE = "EX";
+        public static final String LEDGER_ENTRY_LOOKUPABLE_FOR_EXPENSE_TRANSFER = "laborLedgerEntryForExpenseTransferLookupable";
     }
 
     public static class ParameterGroups {
@@ -161,6 +169,7 @@ public class LaborConstants {
     
     public static class YearEnd {
         public static final String FUND_GROUP_PROCESSED = "FUND_GROUPS";
+        public static final String SUB_FUND_GROUP_PROCESSED = "SUB_FUND_GROUPS";
         public static final String DOCUMENT_TYPE_CODE = "ANNUAL_CLOSING_DOCUMENT_TYPE";
         public static final String ORIGINATION_CODE = "ORIGINATION";
         public static final String OLD_FISCAL_YEAR = "FISCAL_YEAR_SELECTION";
@@ -199,6 +208,7 @@ public class LaborConstants {
     
     public static class LookupableBeanKeys {
         static final public String PENDING_ENTRY = "laborPendingEntryLookupable";
+        static final public String CSF_TRACKER = "laborCalculatedSalaryFoundationTrackerLookupable";
     }
     
     public static final Map<String, String> periodCodeMapping = new HashMap<String, String>();
@@ -221,12 +231,13 @@ public class LaborConstants {
     public static final String LONG_ROW_TABLE_INRUIRY_ACTION = "laborLongRowTableInquiry.do";
     public static final String LABOR_INQUIRY_OPTIONS_SERVICE = "laborInquiryOptionsService";
     public static final String BASE_FUNDS_LOOKUP_HELPER_SRVICE_NAME = "BaseFundsLookupableHelperService";
-    public static final String CSF_TRACKER_LOOKUP_HELPER_SRVICE_NAME = "CSFTrackerBalanceLookupableHelperService";
+    public static final String CSF_TRACKER_LOOKUP_HELPER_SRVICE_NAME = "laborCalculatedSalaryFoundationTrackerLookupableHelperService";
     public static final String CURRENT_FUNDS_LOOKUP_HELPER_SRVICE_NAME = "CurrentFundsLookupableHelperService";
     public static final String EXPENSE_TRANSFER_ACCOUNTING_LINE_SERVIOCE_NAME = "expenseTransferAccountingLineService";
     public static final String DASHES_DELETE_CODE = "-";
     public static final int LLCP_MAX_LENGTH = 294;    
     private static String SPACE_TRANSACTION_DATE = null;
+        
     public static String getSpaceTransactionDate() {
         if (SPACE_TRANSACTION_DATE == null) {
             SPACE_TRANSACTION_DATE = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeSize(OriginEntry.class, KFSPropertyConstants.TRANSACTION_DATE), ' ');
