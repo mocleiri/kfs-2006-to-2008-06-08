@@ -40,12 +40,13 @@ import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapRuleConstants;
+import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
 import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
 import org.kuali.module.purap.bo.CreditMemoAccount;
 import org.kuali.module.purap.bo.CreditMemoItem;
 import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
@@ -66,7 +67,7 @@ import org.kuali.module.vendor.util.VendorUtils;
 /**
  * Business rules for the Credit Memo Document.
  */
-public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase implements ContinueAccountsPayableRule, CalculateAccountsPayableRule, PreCalculateAccountsPayableRule {
+public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase implements PreCalculateAccountsPayableRule {
 
     /**
      * Validation that occurs on Route of the document.
@@ -82,8 +83,6 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
 
         valid = processDocumentOverviewValidation(cmDocument);
         valid &= processItemValidation(cmDocument);
-//FIXME: this should be warning only (i.e. question framework) remove this code when that's working
-        //        valid = valid && validateTotalMatchesVendorAmount(cmDocument);
         valid &= validateTotalOverZero(cmDocument);
 
         return valid;
@@ -227,6 +226,10 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
                     GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER, PurapKeyConstants.ERROR_CREDIT_MEMO_PURCHASE_ORDER_INVALID, purchaseOrderID.toString());
                     valid = false;
                 }
+                else if (purchaseOrder.isPendingActionIndicator()) {
+                    GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER, PurapKeyConstants.ERROR_PURCHASE_PENDING_ACTION);
+                    valid &= false;
+                }
                 else if (!(StringUtils.equals(purchaseOrder.getStatusCode(), PurapConstants.PurchaseOrderStatuses.OPEN) || StringUtils.equals(purchaseOrder.getStatusCode(), PurapConstants.PurchaseOrderStatuses.CLOSED))) {
                     GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER, PurapKeyConstants.ERROR_CREDIT_MEMO_PURCAHSE_ORDER_INVALID_STATUS, purchaseOrderID.toString());
                     valid = false;
@@ -265,19 +268,26 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
         for (int i = 0; i < itemList.size(); i++) {
             CreditMemoItem item = (CreditMemoItem) itemList.get(i);
             item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
-            /*  TODO: Chris - this is a temporary fix to just run these validations on above the line long term we need to look into using parent validation more
-             *                if super call is not used handle below the line items in an else below
-             */
             if(item.getItemType().isItemTypeAboveTheLineIndicator()) {
                 String errorKeyPrefix = KFSPropertyConstants.DOCUMENT + "." + PurapPropertyConstants.ITEM + "[" + Integer.toString(i) + "].";
-
+    
                 valid &= validateItemQuantity(cmDocument, item, errorKeyPrefix + PurapPropertyConstants.QUANTITY);
                 valid &= validateItemUnitPrice(cmDocument, item, errorKeyPrefix + PurapPropertyConstants.ITEM_UNIT_PRICE);
                 valid &= validateItemExtendedPrice(cmDocument, item, errorKeyPrefix + PurapPropertyConstants.EXTENDED_PRICE);
-
-
+    
                 if (item.getExtendedPrice() != null && item.getExtendedPrice().isNonZero()) {
-                    valid &= processAccountValidation(item.getSourceAccountingLines(), errorKeyPrefix);
+                    valid &= processAccountValidation(purapDocument, item.getSourceAccountingLines(), errorKeyPrefix);
+                }
+            }
+            else {
+                String documentTypeClassName = purapDocument.getClass().getName();
+                String[] documentTypeArray = StringUtils.split(documentTypeClassName, ".");
+                String documentType = documentTypeArray[documentTypeArray.length - 1];
+                if (cmDocument.isSourceDocumentPaymentRequest()) {
+                    valid &= valideBelowTheLineValues(documentType, "FromPaymentRequest", item);
+                }
+                else if (cmDocument.isSourceDocumentPurchaseOrder()) {
+                    valid &= valideBelowTheLineValues(documentType, "FromPurchaseOrder", item);
                 }
             }
         }
@@ -502,7 +512,7 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
      * 
      * @param itemList - list of items to check
      */
-    private void flagLineItemTotals(List<PurchasingApItem> itemList) {
+    private void flagLineItemTotals(List<PurApItem> itemList) {
         for (int i = 0; i < itemList.size(); i++) {
             CreditMemoItem item = (CreditMemoItem) itemList.get(i);
             if (item.getItemQuantity() != null && item.calculateExtendedPrice().compareTo(item.getExtendedPrice()) != 0) {
@@ -554,7 +564,7 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
      * @return boolean - true if lines are valid, false if errors were found
      */
     @Override
-    public boolean processAccountValidation(List<PurApAccountingLine> purAccounts, String errorPrefix) {
+    public boolean processAccountValidation(AccountingDocument document, List<PurApAccountingLine> purAccounts, String errorPrefix) {
         boolean valid = true;
 
         valid = valid & verifyHasAccounts(purAccounts, errorPrefix);
@@ -636,23 +646,10 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
 
         CreditMemoDocument cm = (CreditMemoDocument)accountingDocument;
         
-        //GENERATE ENCUMBRANCE ENTRIES (ON CREATE OR CANCEL)
-        if (cm.isGenerateEncumbranceEntries()) {
-            //even if generating encumbrance entries on cancel, call is the same because the method gets negative amounts from the map so Debits on negatives = a credit
-            SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(cm, 
-                    accountingLine, explicitEntry, cm.getPurchaseOrderIdentifier(), GL_DEBIT_CODE, PurapDocTypeCodes.CREDIT_MEMO_DOCUMENT, true);
-        }
-        //GENERATE ACTUAL ENTRIES ON CREATE
-        else if (!cm.isGenerateCancelEntries()) {
-            SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(cm, 
-                    accountingLine, explicitEntry, cm.getPurchaseOrderIdentifier(), GL_CREDIT_CODE, PurapDocTypeCodes.CREDIT_MEMO_DOCUMENT, false);
-        }
-        //GENERATE ACTUAL ENTRIES ON CANCEL
-        else {
-            SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(cm, 
-                    accountingLine, explicitEntry, cm.getPurchaseOrderIdentifier(), GL_DEBIT_CODE, PurapDocTypeCodes.CREDIT_MEMO_DOCUMENT, false);
-        }
-        
+        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(cm, 
+                accountingLine, explicitEntry, cm.getPurchaseOrderIdentifier(), cm.getDebitCreditCodeForGLEntries(), 
+                PurapDocTypeCodes.CREDIT_MEMO_DOCUMENT, cm.isGenerateEncumbranceEntries());
+
         //CMs do not wait for document final approval to post GL entries to the real table; here we are forcing them to be APPROVED
         explicitEntry.setFinancialDocumentApprovedCode(KFSConstants.DocumentStatusCodes.APPROVED);
 
@@ -667,4 +664,11 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase impl
         return true;
     }
 
+    public boolean processCancelAccountsPayableBusinessRules(AccountsPayableDocument document) {
+        CreditMemoDocument creditMemoDocument = (CreditMemoDocument)document;
+        //TODO: ckirschenman - we are doing this differently than PREQ but it does basically the same thing - merge
+        return SpringContext.getBean(CreditMemoService.class).canCancelCreditMemo(creditMemoDocument, GlobalVariables.getUserSession().getUniversalUser());
+    }
+
+    
 }
