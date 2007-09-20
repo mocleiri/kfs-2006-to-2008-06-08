@@ -15,7 +15,10 @@
  */
 package org.kuali.module.labor.rules;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.Document;
@@ -28,6 +31,7 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
 import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;
+import org.kuali.module.labor.bo.ExpenseTransferTargetAccountingLine;
 import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
 import org.kuali.module.labor.bo.LaborObject;
 import org.kuali.module.labor.document.BenefitExpenseTransferDocument;
@@ -62,28 +66,36 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
             isValid = false;
         }
 
-        // ensure the accounts in source accounting lines are same
-        if (!hasSameAccount(accountingDocument)) {
-            reportError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.Labor.ERROR_ACCOUNT_NOT_SAME);
-            return false;
-        }
+        // Only check this rule for source accounting lines
+        boolean isTargetLine = accountingLine.isTargetAccountingLine();
+        if (!isTargetLine){
 
+            // ensure the accounts in source accounting lines are same
+            if (!hasSameAccount(accountingDocument, accountingLine)) {
+                reportError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.Labor.ERROR_ACCOUNT_NOT_SAME);
+                return false;
+            }
+        }
+        
         return isValid;
     }
 
     /**
-     * @see org.kuali.kfs.rules.AccountingDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
+     * @see org.kuali.module.labor.rules.LaborExpenseTransferDocumentRules#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
      */
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
         boolean isValid = super.processCustomRouteDocumentBusinessRules(document);
 
-        BenefitExpenseTransferDocument benefitExpenseTransferDocument = (BenefitExpenseTransferDocument) document;
+        LaborExpenseTransferDocumentBase expenseTransferDocument = (LaborExpenseTransferDocumentBase) document;
 
-        // ensure the accounts in source accounting lines are same
-        if (!hasSameAccount(benefitExpenseTransferDocument)) {
-            reportError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.Labor.ERROR_ACCOUNT_NOT_SAME);
-            isValid = false;
+        // benefit transfers cannot be made between two different fringe benefit labor object codes.
+        if (isValid) {
+            boolean hasSameFringeBenefitObjectCodes = hasSameFringeBenefitObjectCodes(expenseTransferDocument);
+            if (!hasSameFringeBenefitObjectCodes) {
+                reportError(KFSPropertyConstants.TARGET_ACCOUNTING_LINES, KFSKeyConstants.Labor.DISTINCT_OBJECT_CODE_ERROR);
+                isValid = false;
+            }
         }
 
         return isValid;
@@ -96,9 +108,9 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
     @Override
     public boolean processGenerateLaborLedgerPendingEntries(LaborLedgerPostingDocument document, AccountingLine accountingLine, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
         LOG.info("started processGenerateLaborLedgerPendingEntries()");
-        
+
         ExpenseTransferAccountingLine expenseTransferAccountingLine = (ExpenseTransferAccountingLine) accountingLine;
-        List<LaborLedgerPendingEntry> expensePendingEntries = LaborPendingEntryGenerator.generateExpesnePendingEntries(document, expenseTransferAccountingLine, sequenceHelper);
+        List<LaborLedgerPendingEntry> expensePendingEntries = LaborPendingEntryGenerator.generateExpensePendingEntries(document, expenseTransferAccountingLine, sequenceHelper);
         document.getLaborLedgerPendingEntries().addAll(expensePendingEntries);
 
         return true;
@@ -124,29 +136,60 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
     }
 
     /**
-     * determine whether the accounts in the source accouting lines are same
+     * determine whether the given accouting line has the same account as the source accounting lines
      * 
      * @param accountingDocument the given accouting document
-     * @return true if the accounts in the source accouting lines are same; otherwise, false
+     * @param accountingLine the given accounting line
+     * @return true if the given accouting line has the same account as the source accounting lines; otherwise, false
      */
-    private boolean hasSameAccount(AccountingDocument accountingDocument) {
-        LOG.debug("started hasSameAccount");
+    private boolean hasSameAccount(AccountingDocument accountingDocument, AccountingLine accountingLine) {
+        LOG.debug("started hasSameAccount(AccountingDocument, AccountingLine)");
 
         LaborExpenseTransferDocumentBase expenseTransferDocument = (LaborExpenseTransferDocumentBase) accountingDocument;
         List<ExpenseTransferSourceAccountingLine> sourceAccountingLines = expenseTransferDocument.getSourceAccountingLines();
 
-        Account cachedAccount = null;
+        Account cachedAccount = accountingLine.getAccount();
         for (AccountingLine sourceAccountingLine : sourceAccountingLines) {
             Account account = sourceAccountingLine.getAccount();
-            if (account == null) {
-                return false;
-            }
 
-            cachedAccount = cachedAccount == null ? account : cachedAccount;
+            // account number was not retrieved correctly, so the two statements are used to populate the fields manually
+            account.setChartOfAccountsCode(sourceAccountingLine.getChartOfAccountsCode());
+            account.setAccountNumber(sourceAccountingLine.getAccountNumber());
+
             if (!account.equals(cachedAccount)) {
                 return false;
             }
         }
+     
         return true;
+    }
+
+    /**
+     * Determine whether target accouting lines have the same fringe benefit object codes as source accounting lines
+     * 
+     * @param accountingDocument the given accounting document
+     * @return true if target accouting lines have the same fringe benefit object codes as source accounting lines; otherwise, false
+     */
+    protected boolean hasSameFringeBenefitObjectCodes(AccountingDocument accountingDocument) {
+        LOG.debug("started hasSameFringeBenefitObjectCodes(accountingDocument)");
+        LaborExpenseTransferDocumentBase expenseTransferDocument = (LaborExpenseTransferDocumentBase) accountingDocument;
+
+        Set<String> objectCodesFromSourceLine = new HashSet<String>();
+        for (Object sourceAccountingLine : expenseTransferDocument.getSourceAccountingLines()) {
+            AccountingLine line = (AccountingLine) sourceAccountingLine;
+            objectCodesFromSourceLine.add(line.getFinancialObjectCode());
+        }
+
+        Set<String> objectCodesFromTargetLine = new HashSet<String>();
+        for (Object targetAccountingLine : expenseTransferDocument.getTargetAccountingLines()) {
+            AccountingLine line = (AccountingLine) targetAccountingLine;
+            objectCodesFromTargetLine.add(line.getFinancialObjectCode());
+        }
+
+        if (objectCodesFromSourceLine.size() != objectCodesFromTargetLine.size()) {
+            return false;
+        }
+
+        return objectCodesFromSourceLine.containsAll(objectCodesFromTargetLine);
     }
 }

@@ -15,7 +15,6 @@
  */
 package org.kuali.module.labor.web.struts.form;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.GroupNotFoundException;
 import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.service.KualiGroupService;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.OptionsService;
-import org.kuali.module.chart.service.AccountingPeriodService;
+import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
 import org.kuali.module.labor.bo.LaborUser;
 import org.kuali.module.labor.bo.LedgerBalance;
@@ -119,15 +120,16 @@ public class SalaryExpenseTransferForm extends ExpenseTransferDocumentFormBase {
      * @param emplid
      * @throws UserNotFoundException because a lookup at the database discovers user data from the personPayrollIdentifier
      */
-    public void setEmplid(String id){
+    public void setEmplid(String id) {
         getSalaryExpenseTransferDocument().setEmplid(id);
 
         if (id != null) {
             try {
-                setUser(SpringContext.getBean(LaborUserService.class).getLaborUserByPersonPayrollIdentifier(id));    
-            } catch (UserNotFoundException e){
+                setUser(SpringContext.getBean(LaborUserService.class).getLaborUserByPersonPayrollIdentifier(id));
             }
-            
+            catch (UserNotFoundException e) {
+            }
+
         }
     }
 
@@ -139,14 +141,14 @@ public class SalaryExpenseTransferForm extends ExpenseTransferDocumentFormBase {
      */
     public String getEmplid() throws UserNotFoundException {
         if (user == null) {
-            
+
             try {
-                setUser(SpringContext.getBean(LaborUserService.class)
-                        .getLaborUserByPersonPayrollIdentifier(getSalaryExpenseTransferDocument().getEmplid()));
-                
-            } catch (UserNotFoundException e){
+                setUser(SpringContext.getBean(LaborUserService.class).getLaborUserByPersonPayrollIdentifier(getSalaryExpenseTransferDocument().getEmplid()));
+
             }
-            
+            catch (UserNotFoundException e) {
+            }
+
         }
         return getSalaryExpenseTransferDocument().getEmplid();
     }
@@ -160,25 +162,37 @@ public class SalaryExpenseTransferForm extends ExpenseTransferDocumentFormBase {
         map.remove(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
         map.remove(KFSPropertyConstants.ACCOUNT_NUMBER);
         map.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        map.remove(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
         map.remove(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
         map.remove(KFSPropertyConstants.PROJECT_CODE);
         map.remove(KFSPropertyConstants.ORGANIZATION_REFERENCE_ID);
         map.remove(KFSPropertyConstants.AMOUNT);
         
+        // check if user is allowed to edit the object code.
+        String adminGroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(LaborConstants.LABOR_NAMESPACE, LaborConstants.Components.SALARY_EXPENSE_TRANSFER, LaborConstants.SalaryExpenseTransfer.SET_ADMIN_WORKGROUP_PARM_NM);
+        boolean isAdmin = false;
+        try {
+            isAdmin = GlobalVariables.getUserSession().getUniversalUser().isMember(adminGroupName);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Workgroup " + LaborConstants.SalaryExpenseTransfer.SET_ADMIN_WORKGROUP_PARM_NM + " not found", e);
+        }
+        if (isAdmin) {
+            map.remove(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
+        }
+        
         return map;
     }
-    
+
     /**
      * @see org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase#populateSearchFields()
      */
     @Override
-    public void populateSearchFields() {        
+    public void populateSearchFields() {
         List<ExpenseTransferAccountingLine> sourceAccoutingLines = this.getSalaryExpenseTransferDocument().getSourceAccountingLines();
-        if(sourceAccoutingLines != null  && !sourceAccoutingLines.isEmpty()){
+        if (sourceAccoutingLines != null && !sourceAccoutingLines.isEmpty()) {
             ExpenseTransferAccountingLine sourceAccountingLine = sourceAccoutingLines.get(0);
             this.setUniversityFiscalYear(sourceAccountingLine.getPostingYear());
             this.setEmplid(sourceAccountingLine.getEmplid());
-}
+        }
     }
 }
