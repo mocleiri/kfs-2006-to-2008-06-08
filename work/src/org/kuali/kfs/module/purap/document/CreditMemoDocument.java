@@ -27,6 +27,7 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.rule.event.KualiDocumentEvent;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.NoteService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -34,6 +35,7 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapConstants.CREDIT_MEMO_TYPE_LABELS;
 import org.kuali.module.purap.PurapConstants.CreditMemoStatuses;
@@ -42,6 +44,8 @@ import org.kuali.module.purap.PurapWorkflowConstants.CreditMemoDocument.NodeDeta
 import org.kuali.module.purap.bo.CreditMemoItem;
 import org.kuali.module.purap.bo.CreditMemoStatusHistory;
 import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
+import org.kuali.module.purap.service.AccountsPayableDocumentSpecificService;
+import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.CreditMemoCreateService;
 import org.kuali.module.purap.service.CreditMemoService;
 import org.kuali.module.purap.service.PaymentRequestService;
@@ -63,7 +67,9 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     private Timestamp creditMemoPaidTimestamp;
     private String itemMiscellaneousCreditDescription;
     private Date purchaseOrderEndDate;
-
+    private boolean closePurchaseOrderIndicator;
+    private boolean reopenPurchaseOrderIndicator;
+    
     private PaymentRequestDocument paymentRequestDocument;
 
     /**
@@ -164,7 +170,7 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
      * Performs extended price calculation and sets on item if extended price is empty.
      */
     public void updateExtendedPriceOnItems() {
-    //TODO: ckirschenman - this method is the same as PaymentRequest, move up
+    //TODO (KULPURAP-1572: ckirschenman) - this method is the same as PaymentRequest, move up
         for (CreditMemoItem item : (List<CreditMemoItem>) getItems()) {
             item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
 
@@ -188,6 +194,7 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
             if (this.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
                 SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, PurapConstants.CreditMemoStatuses.COMPLETE);
                 SpringContext.getBean(CreditMemoService.class).saveDocumentWithoutValidation(this);
+                //TODO: ctk - we need a cancel check here in case it's DPTA/AUTO approved and not extracted.
                 return;
             }
             // DOCUMENT DISAPPROVED
@@ -201,18 +208,19 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
                         newStatusCode = CreditMemoStatuses.CANCELLED_IN_PROCESS;
                     }
                     if (StringUtils.isNotBlank(newStatusCode)) {
-                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, newStatusCode);
-                        SpringContext.getBean(CreditMemoService.class).saveDocumentWithoutValidation(this);
+//                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, newStatusCode);
+//                        SpringContext.getBean(CreditMemoService.class).saveDocumentWithoutValidation(this);
+                        SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(this, nodeName);
                         return;
                     }
                 }
-                // TODO PURAP/delyea - what to do in a disapproval where no status to set exists?
+                // TODO (KULPURAP-1579: ckirshenman/hjs) delyea - what to do in a disapproval where no status to set exists?
                 logAndThrowRuntimeException("No status found to set for document being disapproved in node '" + nodeName + "'");
             }
             // DOCUMENT CANCELED
             else if (this.getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
                 String currentNodeName = SpringContext.getBean(WorkflowDocumentService.class).getCurrentRouteLevelName(getDocumentHeader().getWorkflowDocument());
-                SpringContext.getBean(CreditMemoService.class).cancelCreditMemo(this, currentNodeName); 
+                SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(this, currentNodeName); 
             }
         }
         catch (WorkflowException e) {
@@ -513,6 +521,38 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     public void setPurchaseOrderEndDate(Date purchaseOrderEndDate) {
         this.purchaseOrderEndDate = purchaseOrderEndDate;
     }
+
+    /**
+     * Gets the closePurchaseOrderIndicator attribute. 
+     * @return Returns the closePurchaseOrderIndicator.
+     */
+    public boolean isClosePurchaseOrderIndicator() {
+        return closePurchaseOrderIndicator;
+    }
+
+    /**
+     * Sets the closePurchaseOrderIndicator attribute value.
+     * @param closePurchaseOrderIndicator The closePurchaseOrderIndicator to set.
+     */
+    public void setClosePurchaseOrderIndicator(boolean closePurchaseOrderIndicator) {
+        this.closePurchaseOrderIndicator = closePurchaseOrderIndicator;
+    }
+
+    /**
+     * Gets the reopenPurchaseOrderIndicator attribute. 
+     * @return Returns the reopenPurchaseOrderIndicator.
+     */
+    public boolean isReopenPurchaseOrderIndicator() {
+        return reopenPurchaseOrderIndicator;
+    }
+
+    /**
+     * Sets the reopenPurchaseOrderIndicator attribute value.
+     * @param reopenPurchaseOrderIndicator The reopenPurchaseOrderIndicator to set.
+     */
+    public void setReopenPurchaseOrderIndicator(boolean reopenPurchaseOrderIndicator) {
+        this.reopenPurchaseOrderIndicator = reopenPurchaseOrderIndicator;
+    }    
     
     /**
      * USED FOR ROUTING ONLY
@@ -537,6 +577,13 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     }
 
     /**
+     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getPoDocumentTypeForAccountsPayableDocumentApprove()
+     */
+    public String getPoDocumentTypeForAccountsPayableDocumentCancel() {
+        return PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_CLOSE_DOCUMENT;
+    }
+
+    /**
      * 
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getInitialAmount()
      */
@@ -554,5 +601,17 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
         
         super.prepareForSave(event);
     }
-        
+    /**
+     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#isAttachmentRequired()
+     */
+    @Override
+    protected boolean isAttachmentRequired() {
+        return StringUtils.equalsIgnoreCase("Y", SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.CREDIT_MEMO_DOC, PurapParameterConstants.PURAP_CM_REQUIRE_ATTACHMENT));
+    }
+
+    @Override
+    public AccountsPayableDocumentSpecificService getDocumentSpecificService() {
+        return SpringContext.getBean(CreditMemoService.class);
+    }
+
 }

@@ -37,7 +37,7 @@ import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorQuote;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.service.PurApWorkflowIntegrationService;
 
@@ -115,7 +115,7 @@ public class PurchaseOrderForm extends PurchasingFormBase {
      * @see org.kuali.module.purap.web.struts.form.PurchasingFormBase#setupNewPurchasingItemLine()
      */
     @Override
-    public PurchasingApItem setupNewPurchasingItemLine() {
+    public PurApItem setupNewPurchasingItemLine() {
         return new PurchaseOrderItem();
     }
 
@@ -217,15 +217,6 @@ public class PurchaseOrderForm extends PurchasingFormBase {
             printButton.setExtraButtonSource("${" + KFSConstants.EXTERNALIZABLE_IMAGES_URL_KEY + "}buttonsmall_print.gif");
             printButton.setExtraButtonAltText("Print");
             this.getExtraButtons().add(printButton);
-        }
-        // show the payment hold button
-        if ( PurapConstants.PurchaseOrderStatuses.STATUSES_BY_TRANSMISSION_TYPE.values().contains(purchaseOrder.getStatusCode()) &&
-                (isUserAuthorized ||  isDocumentTransmissionActionRequested) ) {
-            ExtraButton paymentHoldButton = new ExtraButton();
-            paymentHoldButton.setExtraButtonProperty("methodToCall.paymentHoldPo");
-            paymentHoldButton.setExtraButtonSource("${" + KFSConstants.EXTERNALIZABLE_IMAGES_URL_KEY + "}buttonsmall_paymenthold.gif");
-            paymentHoldButton.setExtraButtonAltText("Payment Hold");
-            this.getExtraButtons().add(paymentHoldButton);
         }
         if (purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.CLOSED) && purchaseOrder.isPurchaseOrderCurrentIndicator() && !purchaseOrder.isPendingActionIndicator() && isUserAuthorized) {
             ExtraButton reopenButton = new ExtraButton();
