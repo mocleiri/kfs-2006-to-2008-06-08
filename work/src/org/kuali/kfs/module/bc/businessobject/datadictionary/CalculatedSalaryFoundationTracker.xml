@@ -83,16 +83,21 @@
                 <field attributeName="positionNumber" />
                 <field attributeName="personName" />				
                 <field attributeName="csfAmount" />
-                <field attributeName="csfFundingStatusCode" />
-                <field attributeName="csfDeleteCode" />
                 <field attributeName="csfTimePercent" />
                 <field attributeName="earnCode" />
                 <field attributeName="effectiveDate" />
+                <field attributeName="csfFundingStatusCode" />
+                <field attributeName="csfDeleteCode" />
             </resultFields>
         </lookup>
 
         <attributes>
-            <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear" />
+			<attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
+           		<label>Fiscal Year</label>
+           		<shortLabel>Fiscal Year</shortLabel>
+           		<description>Identifies the Fiscal Year.</description>
+     		</attributeReference>
+     		
 			<attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
 			<attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber" />
             <attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber" />          
@@ -168,7 +173,7 @@
 
 		  <attribute name="csfTimePercent" forceUppercase="true">
 
-                <label>FTE</label>
+                <label>CSF Time Percent</label>
                 <shortLabel>Percent</shortLabel>
                 <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
@@ -270,7 +275,7 @@
 			</attribute>
 
 			<attribute name="personName" forceUppercase="true">
-				<label>Display Name</label>
+				<label>Person</label>
 				<shortLabel>Name</shortLabel>
 
 				<maxLength>80</maxLength>
