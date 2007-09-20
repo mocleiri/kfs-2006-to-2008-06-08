@@ -116,6 +116,11 @@ public class KualiBatchInputFileAction extends KualiAction {
             GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_ERRORS, KFSKeyConstants.ERROR_BATCH_UPLOAD_NO_FILE_SELECTED_SAVE, new String[] {});
             return mapping.findForward(KFSConstants.MAPPING_BASIC);
         }
+        
+        if (!batchInputFileService.isFileUserIdentifierProperlyFormatted(batchUpload.getFileUserIdentifer())) {
+            GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_ERRORS, KFSKeyConstants.ERROR_BATCH_UPLOAD_FILE_USER_IDENTIFIER_BAD_FORMAT, new String[] {});
+            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        }
 
         InputStream fileContents = ((KualiBatchInputFileForm) form).getUploadFile().getInputStream();
         byte[] fileByteContent = IOUtils.toByteArray(fileContents);
@@ -164,9 +169,12 @@ public class KualiBatchInputFileAction extends KualiAction {
 
         BatchInputFileType batchType = retrieveBatchInputFileTypeImpl(batchUpload.getBatchInputTypeName());
         try {
-            SpringContext.getBean(BatchInputFileService.class).delete(GlobalVariables.getUserSession().getUniversalUser(), batchType, batchUpload.getExistingFileName());
+            boolean deleteSuccessful = SpringContext.getBean(BatchInputFileService.class).delete(GlobalVariables.getUserSession().getUniversalUser(), batchType, batchUpload.getExistingFileName());
 
-            GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_BATCH_UPLOAD_DELETE_SUCCESSFUL);
+            if (deleteSuccessful) {
+                GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_BATCH_UPLOAD_DELETE_SUCCESSFUL);
+            }
+            // if not successful, the delete method is responsible for populating the error map with the reason why deletion failed
         }
         catch (FileNotFoundException e1) {
             LOG.error("errors deleting file " + e1.getMessage(), e1);
@@ -234,12 +242,22 @@ public class KualiBatchInputFileAction extends KualiAction {
             throw new RuntimeException(("Batch input type implementation not found for id " + form.getBatchUpload().getBatchInputTypeName()));
         }
         
-        List<String> userFilePathNames = SpringContext.getBean(BatchInputFileService.class).listBatchTypeFilesForUser(batchInputFileType, user);
-
+        BatchInputFileService batchInputFileService = SpringContext.getBean(BatchInputFileService.class);
+        List<String> userFileNames = batchInputFileService.listBatchTypeFilesForUser(batchInputFileType, user);
+        
         userFiles.add(new KeyLabelPair("", ""));
-        for (int i = 0; i < userFilePathNames.size(); i++) {
-            String fileName = userFilePathNames.get(i);
-            userFiles.add(new KeyLabelPair(fileName, fileName));
+        for (int i = 0; i < userFileNames.size(); i++) {
+            String fileName = userFileNames.get(i);
+            // do NOT expose the full path name to the browser
+            String key = fileName;
+            String label = fileName;
+            if (batchInputFileService.hasBeenProcessed(batchInputFileType, fileName)) {
+                label = label + " (processed)";
+            }
+            else {
+                label = label + " (ready to process)";
+            }
+            userFiles.add(new KeyLabelPair(key, label));
         }
 
         form.setUserFiles(userFiles);

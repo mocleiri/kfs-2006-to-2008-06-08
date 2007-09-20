@@ -38,7 +38,7 @@
         <documentTypeName>PaymentRequestDocument</documentTypeName>
         <documentTypeCode>PREQ</documentTypeCode>
 
-        <label>PaymentRequest</label>
+        <label>Payment Request</label>
         <shortLabel>PREQ</shortLabel>
 
         <attributes>
@@ -120,7 +120,7 @@
 			
 			<attribute name="vendorInvoiceAmount" forceUppercase="true">
                 <label>Vendor Invoice Amount</label>
-                <shortLabel>Vendor Invoice Amount</shortLabel>
+                <shortLabel>Vendor Inv Amt</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
@@ -377,6 +377,13 @@
 				<shortLabel>Invoice Total Prior to Additional Charges</shortLabel>
 				<summary>Invoice Total Prior to Additional Charges</summary>
 				<description>Invoice Total Prior to Additional Charges description...</description>
+			</attributeReference>
+
+			<attributeReference name="grandTotalExcludingDiscount" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemAmount">
+				<label>Total Before Discount</label>
+				<shortLabel>Total Before Discount</shortLabel>
+				<summary>Total Before Discount</summary>
+				<description>Total Before Discount description...</description>
 			</attributeReference>
 
 			<attributeReference name="grandTotal" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemAmount">
