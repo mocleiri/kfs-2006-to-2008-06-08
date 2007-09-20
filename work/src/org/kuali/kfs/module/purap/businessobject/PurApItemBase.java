@@ -17,6 +17,8 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -26,11 +28,12 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
+import org.kuali.module.purap.util.PurApObjectUtils;
 
 /**
  * 
  */
-public abstract class PurApItemBase extends PersistableBusinessObjectBase implements PurchasingApItem {
+public abstract class PurApItemBase extends PersistableBusinessObjectBase implements PurApItem {
 
 	private Integer itemIdentifier;
 	private Integer itemLineNumber;
@@ -46,10 +49,9 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	private String externalOrganizationB2bProductTypeName;
 	private boolean itemAssignedToTradeInIndicator;
     private KualiDecimal extendedPrice; //not currently in DB
-    private KualiDecimal extendedPriceForAccountSummary;
+
     
     private List<PurApAccountingLine> sourceAccountingLines;
-    //TODO: add transient back if that doesn't cause  a problem
     private transient List<PurApAccountingLine> baselineSourceAccountingLines;
     private transient PurApAccountingLine newSourceLine;
     
@@ -63,9 +65,7 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	 * Default constructor.
 	 */
 	public PurApItemBase() {
-	    //TODO: Chris - default itemType (should probably get this from spring or KFSConstants file)
-	    //        itemTypeCode = "ITEM";
-
+        itemTypeCode = PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE;
         sourceAccountingLines = new TypedArrayList(getAccountingLineClass());
         baselineSourceAccountingLines = new TypedArrayList(getAccountingLineClass());
         resetAccount();
@@ -549,7 +549,7 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      */
     @Override
     public List buildListOfDeletionAwareLists() {
-        List managedLists = super.buildListOfDeletionAwareLists();
+        List managedLists = new ArrayList();
 
         managedLists.add(getSourceAccountingLines());
 
@@ -611,11 +611,10 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
         return true;
     }
     
-    public KualiDecimal getExtendedPriceForAccountSummary() {
-        return extendedPriceForAccountSummary;
-}
-    public void setExtendedPriceForAccountSummary(KualiDecimal extendedPriceForAccountSummary) {
-        this.extendedPriceForAccountSummary = extendedPriceForAccountSummary;
+    public PurApSummaryItem getSummaryItem() {
+        PurApSummaryItem summaryItem = new PurApSummaryItem();
+        PurApObjectUtils.populateFromBaseClass(PurApItemBase.class, this, summaryItem, new HashMap());
+        return summaryItem;
     }
-    
+       
 }
