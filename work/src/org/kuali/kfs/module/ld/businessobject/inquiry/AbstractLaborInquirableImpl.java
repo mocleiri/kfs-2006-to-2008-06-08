@@ -89,7 +89,7 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
 
         // process the business object class if the attribute name is not user-defined
         if (!isUserDefinedAttribute) {
-            if (isExclusiveField(attributeName, attributeValue)) {
+            if (isExclusiveFieldToBeALink(attributeName, attributeValue)) {
                 return Constant.EMPTY_STRING;
             }
 
@@ -145,7 +145,7 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
                 }
 
                 Object keyValue = ObjectUtils.getPropertyValue(businessObject, keyConversion);
-                keyValue = (keyValue == null) ? Constant.EMPTY_STRING : keyValue.toString();
+                keyValue = (keyValue == null) ? Constant.EMPTY_STRING : keyValue.toString();               
 
                 // convert the key value and name into the given ones
                 Object tempKeyValue = this.getKeyValue(keyName, keyValue);
@@ -240,27 +240,44 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
     protected boolean isExclusiveField(Object keyName, Object keyValue) {
 
         if (keyName != null && keyValue != null) {
-            String convertedKeyName = BusinessObjectFieldConverter.convertFromTransactionPropertyName(keyName.toString());
 
-            if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
+            if (keyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
+            else if (keyName.equals(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
+            else if (keyName.equals(KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
                 return true;
             }
-            if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(KFSConstants.getDashSubAccountNumber())) {
+        }
+        return false;
+    }
+    
+    /**
+     * This method determines whether the input name-value pair is exclusive to be a link
+     * 
+     * @param keyName the name of the name-value pair
+     * @param keyValue the value of the name-value pair
+     * @return true if the input key is in the exclusive list; otherwise, false
+     */
+    protected boolean isExclusiveFieldToBeALink(Object keyName, Object keyValue) {
+
+        if (keyName != null && keyValue != null) {
+
+            if (isExclusiveField(keyName, keyValue)){
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(KFSConstants.getDashFinancialSubObjectCode())) {
+            else if (keyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(KFSConstants.getDashSubAccountNumber())) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.PROJECT_CODE) && keyValue.equals(KFSConstants.getDashProjectCode())) {
+            else if (keyName.equals(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE) && keyValue.equals(KFSConstants.getDashFinancialSubObjectCode())) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.POSITION_NUMBER) && keyValue.equals(KFSConstants.getDashPositionNumber())) {
+            else if (keyName.equals(KFSPropertyConstants.PROJECT_CODE) && keyValue.equals(KFSConstants.getDashProjectCode())) {
+                return true;
+            }
+            else if (keyName.equals(KFSPropertyConstants.POSITION_NUMBER) && keyValue.equals(KFSConstants.getDashPositionNumber())) {
                 return true;
             }
         }
