@@ -26,10 +26,6 @@
  
     <c:set var="displayInitTab" value="${KualiForm.editingMode['displayInitTab']}" scope="request" />
     
-    <!-- setting the variable to force the Posting Year in doucment overview tag to be read only -->
-    <c:set var="fiscalYearReadOnly" value="true" scope="request" />
-    
-
     <kul:hiddenDocumentFields excludePostingYear="true" />
 	
 	<!-- purap:hiddenPurapFields / -->
@@ -39,6 +35,8 @@
 	<html:hidden property="document.vendorHeaderGeneratedIdentifier" />
 	<html:hidden property="document.vendorDetailAssignedIdentifier" />
 	<html:hidden property="document.accountsPayablePurchasingDocumentLinkIdentifier" />
+	<html:hidden property="document.paymentRequestedCancelIndicator" />
+	<%--<html:hidden property="document.lastActionPerformedByUniversalUserId" />--%>
    
     <!-- html:hidden property="document.purchaseOrderEncumbranceFiscalYear" / --> 
     <html:hidden property="document.paymentRequestCostSourceCode" />
@@ -64,8 +62,9 @@
 	</c:if>
 	
 	<c:if test="${not KualiForm.editingMode['displayInitTab']}" >
-	    <purap:documentOverview editingMode="${KualiForm.editingMode}"
+	    <kul:documentOverview editingMode="${KualiForm.editingMode}"
 	        includePostingYear="true"
+	        fiscalYearReadOnly="true"
 	        postingYearAttributes="${DataDictionary.PaymentRequestDocument.attributes}" />
 	</c:if>
     
@@ -78,8 +77,7 @@
 		< purap:vendor
 	        documentAttributes="${DataDictionary.PaymentRequestDocument.attributes}" 
 	        displayPurchaseOrderFields="false" displayPaymentRequestFields="true"/>
-		<!--  c:out value="${KualiForm.paymentRequestInitiated}" / -->
-		
+		<!--  c:out value="${KualiForm.paymentRequestInitiated}" / -->		
 	
 		<purap:paymentRequestInvoiceInfo documentAttributes="${DataDictionary.PaymentRequestDocument.attributes}"
 	 		 displayPaymentRequestInvoiceInfoFields="true" />        
@@ -89,18 +87,9 @@
 			itemAttributes="${DataDictionary.PaymentRequestItem.attributes}"
 			accountingLineAttributes="${DataDictionary.PaymentRequestAccount.attributes}" />
 		   
-	    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}"  allowsNoteFYI="true"/> 
-	    	
-	    < kul:adHocRecipients />
-	
-	    <kul:routeLog />
-
-        <gl:generalLedgerPendingEntries />
-
-    <!-- TEMPORARILY DISABLING ACCOUNT SUMMARY FUNCTIONALITY -->
-	    <!--  purap:summaryaccounts
+	    <purap:summaryaccounts
             itemAttributes="${DataDictionary.PaymentRequestItem.attributes}"
-    	    documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" / -->  
+    	    documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" />  
 	
 		<purap:relatedDocuments documentAttributes="${DataDictionary.RelatedDocuments.attributes}"/>
            	
@@ -112,6 +101,15 @@
             	&nbsp;&nbsp;&nbsp;<bean:write name="warnings"/><br><br>
           	</html:messages>       
     	</purap:statushistory>
+    	
+        <gl:generalLedgerPendingEntries />
+
+	    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}"  allowsNoteFYI="true"/> 
+	    	
+	    < kul:adHocRecipients />
+	
+	    <kul:routeLog />
+    	
 	</c:if>
 	
     <kul:panelFooter />
