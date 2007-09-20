@@ -42,6 +42,7 @@ public class OriginEntrySource extends KualiCodeBase {
     public static final String YEAR_END_CLOSE_NOMINAL_BALANCES = "YECN";
     public static final String YEAR_END_ENCUMBRANCE_CLOSING = "YEEC";
     public static final String YEAR_END_ORG_REVERSION = "YEOR";
+    public static final String PDP = "PDP";
 
     public static final String ENTERPRISE_FEED = "ENTP";
     
@@ -58,6 +59,7 @@ public class OriginEntrySource extends KualiCodeBase {
     public static final String LABOR_YEAR_END_BALANCE_FORWARD = "LBF";
     
     public static final String LABOR_PAYROLL_ACCRUAL = "ACCR";
+    public static final String LABOR_LEDGER_GENERAL_LEDGER = "LLGL";
 
     // Code base has all the fields we need
 }
