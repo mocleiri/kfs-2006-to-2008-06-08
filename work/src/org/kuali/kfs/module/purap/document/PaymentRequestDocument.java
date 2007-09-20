@@ -27,7 +27,6 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.core.rule.event.RouteDocumentEvent;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -41,7 +40,6 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.PurapWorkflowConstants.PaymentRequestDocument.NodeDetailEnum;
@@ -53,7 +51,10 @@ import org.kuali.module.purap.bo.PurApAccountingLine;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.RecurringPaymentType;
 import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
+import org.kuali.module.purap.service.AccountsPayableDocumentSpecificService;
+import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.PaymentRequestService;
+import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
 import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
@@ -97,6 +98,8 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     private Integer alternateVendorHeaderGeneratedIdentifier;
     private Integer alternateVendorDetailAssignedIdentifier;
     private String purchaseOrderNotes;
+    private boolean closePurchaseOrderIndicator;
+    private boolean reopenPurchaseOrderIndicator;  
 
     // NOT PERSISTED IN DB
     private String recurringPaymentTypeCode;
@@ -120,6 +123,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         super();
     }
 
+
     /**
      * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
      */
@@ -127,6 +131,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     public boolean isBoNotesSupport() {
         return true;
     }
+
 
     /**
      * Gets the requisitionIdentifier attribute. 
@@ -143,7 +148,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     public void setRequisitionIdentifier(Integer requisitionIdentifier) {
         this.requisitionIdentifier = requisitionIdentifier;
     }
-    
+
     /**
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#populateDocumentForRouting()
      */
@@ -591,7 +596,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
 
     public String getVendorShippingTitleCode() {
-        //TODO f2f: this should be printing the decription instead of the code; do we need the reference object?
+        //TODO (KULPURAP-1575) f2f: this should be printing the decription instead of the code; do we need the reference object?
         if (ObjectUtils.isNotNull(this.getPurchaseOrderDocument())) {
             return this.getPurchaseOrderDocument().getVendorShippingTitleCode();
         }
@@ -620,6 +625,38 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         this.purchaseOrderEndDate = purchaseOrderEndDate;
     }
 
+    /**
+     * Gets the closePurchaseOrderIndicator attribute. 
+     * @return Returns the closePurchaseOrderIndicator.
+     */
+    public boolean isClosePurchaseOrderIndicator() {
+        return closePurchaseOrderIndicator;
+    }
+
+    /**
+     * Sets the closePurchaseOrderIndicator attribute value.
+     * @param closePurchaseOrderIndicator The closePurchaseOrderIndicator to set.
+     */
+    public void setClosePurchaseOrderIndicator(boolean closePurchaseOrderIndicator) {
+        this.closePurchaseOrderIndicator = closePurchaseOrderIndicator;
+    }
+
+    /**
+     * Gets the reopenPurchaseOrderIndicator attribute. 
+     * @return Returns the reopenPurchaseOrderIndicator.
+     */
+    public boolean isReopenPurchaseOrderIndicator() {
+        return reopenPurchaseOrderIndicator;
+    }
+
+    /**
+     * Sets the reopenPurchaseOrderIndicator attribute value.
+     * @param reopenPurchaseOrderIndicator The reopenPurchaseOrderIndicator to set.
+     */
+    public void setReopenPurchaseOrderIndicator(boolean reopenPurchaseOrderIndicator) {
+        this.reopenPurchaseOrderIndicator = reopenPurchaseOrderIndicator;
+    }    
+    
     /**
      * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String)
      */
@@ -662,7 +699,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
   
     /**
-     * TODO: this should be cleaned up
+     * TODO (KULPURAP-436: ctk) this should be cleaned up
      * This method populates a preq from po
      * @param po
      */
@@ -716,20 +753,21 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         }
         this.setPaymentRequestPayDate(SpringContext.getBean(PaymentRequestService.class).calculatePayDate(this.getInvoiceDate(), this.getVendorPaymentTerms()));
         for (PurchaseOrderItem poi : (List<PurchaseOrderItem>)po.getItems()) {
-            //TODO: add this back if we end up building the list of items at every load (see KULPURAP-1393)
+            //TODO (KULPURAP-1393: ctk) add this back if we end up building the list of items at every load
 //            if(poi.isItemActiveIndicator()) {
                 this.getItems().add(new PaymentRequestItem(poi,this));                
 //            }
-        }
+            }
         //add missing below the line
         SpringContext.getBean(PurapService.class).addBelowLineItems(this);
         this.setAccountsPayablePurchasingDocumentLinkIdentifier(po.getAccountsPayablePurchasingDocumentLinkIdentifier());
 
         this.refreshNonUpdateableReferences();
     }
-
+    
+   
     /**
-     * TODO: this should be cleaned up.. it is also a replica of the method above except it performs account replacement
+     * TODO (KULPURAP-1575) this should be cleaned up.. it is also a replica of the method above except it performs account replacement
      * This method populates a preq from po
      * @param po
      */
@@ -783,7 +821,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         }
         this.setPaymentRequestPayDate(SpringContext.getBean(PaymentRequestService.class).calculatePayDate(this.getInvoiceDate(), this.getVendorPaymentTerms()));
         for (PurchaseOrderItem poi : (List<PurchaseOrderItem>)po.getItems()) {
-            //TODO: add this back if we end up building the list of items at every load (see KULPURAP-1393)
+            //TODO (KULPURAP-1393: ctk) add this back if we end up building the list of items at every load
 //            if(poi.isItemActiveIndicator()) {
                 this.getItems().add(new PaymentRequestItem(poi,this, expiredOrClosedAccountList));                
 //              }
@@ -900,12 +938,15 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
                         newStatusCode = PaymentRequestStatuses.CANCELLED_IN_PROCESS;
                     }
                     if (StringUtils.isNotBlank(newStatusCode)) {
-                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, newStatusCode);
-                        SpringContext.getBean(PaymentRequestService.class).saveDocumentWithoutValidation(this);
+//                        
+//                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, newStatusCode);
+//                        
+//                        SpringContext.getBean(PaymentRequestService.class).saveDocumentWithoutValidation(this);
+                        SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(this, nodeName);
                         return;
                     }
                 }
-                // TODO PURAP/delyea - what to do in a disapproval where no status to set exists?
+                // TODO (KULPURAP-1579: ctk) delyea - what to do in a disapproval where no status to set exists?
                 logAndThrowRuntimeException("No status found to set for document being disapproved in node '" + nodeName + "'");
             }
             // DOCUMENT CANCELED
@@ -920,7 +961,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
                         return;
                     }
                 }
-                // TODO PURAP/delyea - what to do in a cancel where no status to set exists?
+                // TODO (KULPURAP-1579: ctk) delyea - what to do in a cancel where no status to set exists?
                 LOG.warn("No status found to set for document being disapproved in node '" + currentNodeName + "'");
             }
         }
@@ -939,8 +980,10 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
             // everything in the below list requires correcting entries to be written to the GL
             if (NodeDetailEnum.getNodesRequiringCorrectingGeneralLedgerEntries().contains(currentNode)) {
                 if (NodeDetailEnum.ACCOUNT_REVIEW.getName().equals(currentNode)) {
-                    //FIXME this is not working right now becuase the document has already been saved before reaching this point...that is a problem :(
-//                    SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesModifyPreq(this);
+                    //TODO remove this config (for testing only) hjs
+                    if (SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST,"GL_MODIFY")) {
+                        SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesModifyPaymentRequest(this);
+                    }
                 }
             }
         }
@@ -1093,6 +1136,22 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
     
     /**
+     * this method get the total excluding discount
+     * @return
+     */
+    public KualiDecimal getGrandTotalExcludingDiscount() {
+        String[] discountCode = new String[]{PurapConstants.ItemTypeCodes.ITEM_TYPE_PMT_TERMS_DISCOUNT_CODE};
+        return this.getTotalDollarAmountWithExclusions(discountCode, true);
+    }
+    
+    /**
+     * this method returns true if has discount
+     */
+    public boolean isDiscount() {
+        return SpringContext.getBean(PaymentRequestService.class).hasDiscountItem(this); 
+    }
+    
+    /**
      * The total that was paid on the po excluding below the line
      * @return total paid
      * 
@@ -1131,6 +1190,13 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         //do nothing
     }
 
+    /** 
+     * This method is here due to a setter requirement by the htmlControlAttribute
+     * @param amount
+     */
+    public void setGrandTotalExcludingDiscount(KualiDecimal amount) {
+        //do nothing
+    }  
     /** 
      * This method is here due to a setter requirement by the htmlControlAttribute
      * @param amount
@@ -1235,13 +1301,21 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
 
     /**
+     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getPoDocumentTypeForAccountsPayableDocumentApprove()
+     */
+    public String getPoDocumentTypeForAccountsPayableDocumentCancel() {
+        return PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_REOPEN_DOCUMENT;
+    }
+
+    /**
      * 
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getInitialAmount()
      */
     public KualiDecimal getInitialAmount(){
         return this.getVendorInvoiceAmount();
     }
-    
+
+
     @Override
     public void prepareForSave(KualiDocumentEvent event) {
         
@@ -1252,5 +1326,20 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         
         super.prepareForSave(event);
     }
-    
+
+
+    /**
+     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#isAttachmentRequired()
+     */
+    @Override
+    protected boolean isAttachmentRequired() {
+        return StringUtils.equalsIgnoreCase("Y", SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST, PurapParameterConstants.PURAP_PREQ_REQUIRE_ATTACHMENT));
+	}
+
+
+    @Override
+    public AccountsPayableDocumentSpecificService getDocumentSpecificService() {
+        return (AccountsPayableDocumentSpecificService)SpringContext.getBean(PaymentRequestService.class);
+    }
+   
 }

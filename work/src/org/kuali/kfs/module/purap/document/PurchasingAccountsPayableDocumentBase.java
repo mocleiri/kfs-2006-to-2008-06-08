@@ -18,47 +18,37 @@ package org.kuali.module.purap.document;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ojb.broker.util.collections.ManageableArrayList;
 import org.kuali.core.bo.Note;
+import org.kuali.core.dao.ojb.DocumentDaoOjb;
 import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.core.service.NoteService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.Country;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.rule.event.AccountingLineEvent;
-import org.kuali.kfs.rule.event.AddAccountingLineEvent;
-import org.kuali.kfs.rule.event.DeleteAccountingLineEvent;
-import org.kuali.kfs.rule.event.ReviewAccountingLineEvent;
-import org.kuali.kfs.rule.event.UpdateAccountingLineEvent;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.bo.CreditMemoView;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PaymentRequestView;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.bo.PurchaseOrderView;
-import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.RequisitionView;
 import org.kuali.module.purap.bo.Status;
-import org.kuali.module.purap.bo.StatusHistory;
 import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapService;
+import org.kuali.module.purap.util.PurApOjbCollectionHelper;
 import org.kuali.module.vendor.bo.VendorAddress;
 import org.kuali.module.vendor.bo.VendorDetail;
 
@@ -102,7 +92,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     protected List statusHistories;
 
     // COLLECTIONS
-    private List<PurchasingApItem> items;
+    private List<PurApItem> items;
     private transient List<RequisitionView> relatedRequisitionViews;
     private transient List<PurchaseOrderView> relatedPurchaseOrderViews;
     private transient List<PaymentRequestView> relatedPaymentRequestViews;
@@ -129,6 +119,13 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     @Override
     public void prepareForSave(KualiDocumentEvent event) {
         SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(this);
+        //These next 3 lines are temporary changes so that we can use PurApOjbCollectionHelper for release 2.
+        //But these 3 lines will not be necessary anymore if the changes in PurApOjbCollectionHelper is
+        //merge into Rice. KULPURAP-1370 is the related jira.
+        DocumentDaoOjb docDao = SpringContext.getBean(DocumentDaoOjb.class);
+        PurchasingAccountsPayableDocumentBase retrievedDocument = (PurchasingAccountsPayableDocumentBase)docDao.findByDocumentHeaderId(this.getClass(), this.getDocumentNumber());
+        SpringContext.getBean(PurApOjbCollectionHelper.class).processCollections(docDao, this, retrievedDocument);
+        
         super.prepareForSave(event);
     }
 
@@ -149,18 +146,12 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
      */
     @Override
     public void populateDocumentForRouting() {
-        /* refreshNonUpdateableReferences needed below to update status reference object for 
-         * document search results display of status description
-         */
-        refreshNonUpdateableReferences();
         SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(this);
         
-        //TODO f2f: why would we need to do this here?  we do not need this for routing
-        //refreshAccountSummary();
-        
-        //TODO this is only temporary until we find out what's going on with refreshAccountSummary() (hjs)
         setAccountsForRouting(SpringContext.getBean(PurapAccountingService.class).generateSummary(getItems()));
-        
+
+        //need to refresh to get the references for the searchable attributes (ie status) and for invoking route levels (ie account objects) -hjs 
+        refreshNonUpdateableReferences();
         super.populateDocumentForRouting();
     }
 
@@ -220,7 +211,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         }
 
         KualiDecimal total = new KualiDecimal(BigDecimal.ZERO);
-        for (PurchasingApItem item : (List<PurchasingApItem>)getItems()) {
+        for (PurApItem item : (List<PurApItem>)getItems()) {
             item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
             ItemType it = item.getItemType();
             if((includeBelowTheLine || it.isItemTypeAboveTheLineIndicator()) && 
@@ -351,6 +342,9 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     }
 
     public Status getStatus() {
+        if(ObjectUtils.isNull(this.status) && StringUtils.isNotEmpty(this.getStatusCode())) {
+            this.refreshReferenceObject(PurapPropertyConstants.STATUS);
+        }
         return status;
     }
 
@@ -408,7 +402,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
      * renumberItems(itemLinePosition); }
      */
 
-    public void addItem(PurchasingApItem item) {
+    public void addItem(PurApItem item) {
         int itemLinePosition = getItemLinePosition();
         if (ObjectUtils.isNotNull(item.getItemLineNumber()) && (item.getItemLineNumber() > 0) && (item.getItemLineNumber() <= itemLinePosition)) {
             itemLinePosition = item.getItemLineNumber().intValue() - 1;
@@ -426,7 +420,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
 
     public void renumberItems(int start) {
         for (int i = start; i < items.size(); i++) {
-            PurchasingApItem item = (PurchasingApItem) items.get(i);
+            PurApItem item = (PurApItem) items.get(i);
             // only set the item line number for above the line items
             if (item.getItemType().isItemTypeAboveTheLineIndicator()) {
                 item.setItemLineNumber(new Integer(i + 1));
@@ -444,8 +438,8 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
            (positionTo>=getItemLinePosition())) {
             return;
         }
-        PurchasingApItem item1 = this.getItem(positionFrom);
-        PurchasingApItem item2 = this.getItem(positionTo);
+        PurApItem item1 = this.getItem(positionFrom);
+        PurApItem item2 = this.getItem(positionTo);
         Integer oldFirstPos = item1.getItemLineNumber();
         //swap line numbers
         item1.setItemLineNumber(item2.getItemLineNumber());
@@ -464,7 +458,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
      */
     public int getItemLinePosition() {
         int belowTheLineCount = 0;
-        for (PurchasingApItem item : items) {
+        for (PurApItem item : items) {
             if (!item.getItemType().isItemTypeAboveTheLineIndicator()) {
                 belowTheLineCount++;
             }
@@ -472,7 +466,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         return items.size() - belowTheLineCount;
     }
 
-    public PurchasingApItem getItem(int pos) {
+    public PurApItem getItem(int pos) {
         // TODO: we probably don't need this because of the TypedArrayList
         while (getItems().size() <= pos) {
 
@@ -489,7 +483,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
                 logAndThrowRuntimeException("Can't instantiate Purchasing Item from base", e);
             }
         }
-        return (PurchasingApItem) items.get(pos);
+        return (PurApItem) items.get(pos);
     }
     
     /**
@@ -499,9 +493,9 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
      * @param lineNumber - line number to match on
      * @return PurchasingApItem - if a match was found, or null
      */
-    public PurchasingApItem getItemByLineNumber(int lineNumber) {
+    public PurApItem getItemByLineNumber(int lineNumber) {
         for (Iterator iter = items.iterator(); iter.hasNext();) {
-            PurchasingApItem item = (PurchasingApItem) iter.next();
+            PurApItem item = (PurApItem) iter.next();
 
             if (item.getItemLineNumber().intValue() == lineNumber) {
                 return item;
@@ -710,6 +704,13 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     public Country getVendorCountry() {
         return vendorCountry;
     }
+    
+    /**
+     * @deprecated Added only to allow for {@link org.kuali.module.purap.util.PurApObjectUtils} class to work correctly
+     */
+    public void setVendorCountry(Country vendorCountry) {
+        this.vendorCountry = vendorCountry;
+    }
 
     protected boolean documentWillStopInRouteNode(String routeNodeName) {
         populateDocumentForRouting();
@@ -736,7 +737,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         PurapAccountingService purApAccountingService = SpringContext.getBean(PurapAccountingService.class);
         List persistedSourceLines = new ArrayList();
 
-        for (PurchasingApItem item : (List<PurchasingApItem>)this.getItems()) {
+        for (PurApItem item : (List<PurApItem>)this.getItems()) {
             //only check items that already have been persisted since last save
             if(ObjectUtils.isNotNull(item.getItemIdentifier())) {
                 persistedSourceLines.addAll(purApAccountingService.getAccountsFromItem(item));
@@ -754,7 +755,7 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         PurapAccountingService purApAccountingService = SpringContext.getBean(PurapAccountingService.class);
         List currentSourceLines = new ArrayList();
 
-        for (PurchasingApItem item : (List<PurchasingApItem>)this.getItems()) {
+        for (PurApItem item : (List<PurApItem>)this.getItems()) {
             currentSourceLines.addAll(item.getSourceAccountingLines());
         }
         return currentSourceLines;
