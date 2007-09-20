@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.document.Document;
 import org.kuali.core.bo.Parameter;
+import org.kuali.core.document.Document;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
@@ -40,7 +40,7 @@ import org.kuali.kfs.rules.AccountingDocumentRuleBase;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.bo.PurApAccountingLine;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.rule.AddPurchasingAccountsPayableItemRule;
 
@@ -154,16 +154,9 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
         if (documentType.equals("CreditMemoDocument")) {
            
         }
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        String securityGroup = PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
-        String parameterDetailTypeCode = (String)PurapConstants.PURAP_DETAIL_TYPE_CODE_MAP.get(documentType);
-        Parameter allowsZeroRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_ZERO);
-        Parameter allowsPositiveRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_POSITIVE);
-        Parameter allowsNegativeRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_NEGATIVE);
-        Parameter requiresDescriptionRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_REQUIRES_USER_ENTERED_DESCRIPTION);
 
         boolean requiresAccountValidationOnAllEnteredItems = requiresAccountValidationOnAllEnteredItems(purapDocument);
-        for (PurchasingApItem item : purapDocument.getItems()) {
+        for (PurApItem item : purapDocument.getItems()) {
             
             //do the DD validation first, I wonder if the original one from DocumentRuleBase is broken ? 
             GlobalVariables.getErrorMap().addToErrorPath(PurapConstants.ITEM_TAB_ERROR_PROPERTY);
@@ -172,6 +165,34 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
             if (item.isConsideredEntered()) {
                 //only do this check for below the line items
                 if (!item.getItemType().isItemTypeAboveTheLineIndicator()) {
+                    valid &= valideBelowTheLineValues(documentType, null, item);
+                }
+                
+                if (requiresAccountValidationOnAllEnteredItems || (!item.getSourceAccountingLines().isEmpty())) {
+                    processAccountValidation(purapDocument, item.getSourceAccountingLines(),item.getItemIdentifierString());
+                }
+//                // only check active items
+//                if(PurApItemUtils.checkItemActive(item)) {
+//                    // check account validation if we require it on all items or if there is at least one account on the item
+//                    if (requiresAccountValidationOnAllEnteredItems || (!item.getSourceAccountingLines().isEmpty())) {
+//                        processAccountValidation(item.getSourceAccountingLines(),item.getItemIdentifierString());
+//                    }
+//                }
+            }
+        }
+        return valid;
+    }
+
+    protected boolean valideBelowTheLineValues(String documentType, String fromSourceDocument, PurApItem item) {
+        boolean valid = true;
+        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+        String securityGroup = PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
+        String parameterDetailTypeCode = (String)PurapConstants.PURAP_DETAIL_TYPE_CODE_MAP.get(documentType);
+        Parameter allowsZeroRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_ZERO);
+        Parameter allowsPositiveRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_POSITIVE);
+        Parameter allowsNegativeRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_NEGATIVE);
+        Parameter requiresDescriptionRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_REQUIRES_USER_ENTERED_DESCRIPTION);
+
                     if (ObjectUtils.isNotNull(item.getItemUnitPrice()) &&(new KualiDecimal(item.getItemUnitPrice())).isZero()) {
                         if (kualiConfigurationService.isUsable( allowsZeroRule ) &&
                                 !kualiConfigurationService.getParameterValuesAsSet(allowsZeroRule).contains(item.getItemTypeCode())) {
@@ -200,24 +221,11 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
                             GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_BELOW_THE_LINE, "The item description of " + item.getItemType().getItemTypeDescription(), "empty");
                         }
                     }
-                }
-                
-                if (requiresAccountValidationOnAllEnteredItems || (!item.getSourceAccountingLines().isEmpty())) {
-                    processAccountValidation(item.getSourceAccountingLines(),item.getItemIdentifierString());
-                }
-//                // only check active items
-//                if(PurApItemUtils.checkItemActive(item)) {
-//                    // check account validation if we require it on all items or if there is at least one account on the item
-//                    if (requiresAccountValidationOnAllEnteredItems || (!item.getSourceAccountingLines().isEmpty())) {
-//                        processAccountValidation(item.getSourceAccountingLines(),item.getItemIdentifierString());
-//                    }
-//                }
-            }
-        }
+
         return valid;
-    }
+    }    
     
-    public boolean processAddItemBusinessRules(AccountingDocument financialDocument, PurchasingApItem item) {
+    public boolean processAddItemBusinessRules(AccountingDocument financialDocument, PurApItem item) {
         return getDictionaryValidationService().isBusinessObjectValid(item, KFSPropertyConstants.NEW_ITEM);
     }
 
@@ -265,12 +273,12 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
      * @param purapDocument
      * @return
      */
-    public boolean processAccountValidation(List<PurApAccountingLine> purAccounts, String itemLineNumber) {
+    public boolean processAccountValidation(AccountingDocument accountingDocument, List<PurApAccountingLine> purAccounts, String itemLineNumber) {
         boolean valid = true;
         valid = valid & verifyHasAccounts(purAccounts,itemLineNumber);
         // if we don't have any accounts... not need to run any further validation as it will all fail
         if (valid) {
-            valid = valid & verifyAccountPercent(purAccounts,itemLineNumber);
+            valid = valid & verifyAccountPercent(accountingDocument, purAccounts,itemLineNumber);
         }
         //We can't invoke the verifyUniqueAccountingStrings in here because otherwise it would be invoking it more than once, if we're also
         //calling it upon Save.
@@ -294,7 +302,7 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
      * @param purAccounts
      * @return
      */
-    protected boolean verifyAccountPercent(List<PurApAccountingLine> purAccounts,String itemLineNumber) {
+    protected boolean verifyAccountPercent(AccountingDocument accountingDocument, List<PurApAccountingLine> purAccounts,String itemLineNumber) {
         boolean valid = true;
         
         //validate that the percents total 100 for each item
