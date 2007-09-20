@@ -24,7 +24,7 @@ import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.module.purap.bo.PurApAccountingLine;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.util.SummaryAccount;
@@ -41,7 +41,7 @@ public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFo
 
     public PurchasingAccountsPayableFormBase() {
         super();
-        summaryAccounts = new TypedArrayList(SummaryAccount.class);
+        clearSummaryAccounts();
     }
 
     /**
@@ -49,7 +49,12 @@ public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFo
      * currently we are only calling this on load and when refreshAccountSummary is called.
      */
     public void refreshAccountSummmary() {
-//        summaryAccounts.addAll(SpringContext.getBean(PurapAccountingService.class).generateSummaryAccounts(((PurchasingAccountsPayableDocument)this.getDocument()).getItems()));
+        clearSummaryAccounts();
+        summaryAccounts.addAll(SpringContext.getBean(PurapAccountingService.class).generateSummaryAccounts(((PurchasingAccountsPayableDocument)this.getDocument()).getItems()));
+    }
+
+    public void clearSummaryAccounts() {
+        summaryAccounts = new TypedArrayList(SummaryAccount.class);
     }
 
     /**
@@ -60,7 +65,7 @@ public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFo
         List<AccountingLine> accounts = super.getBaselineSourceAccountingLines();
         if(ObjectUtils.isNull(accounts)|| accounts.isEmpty()) {
             accounts = new ArrayList<AccountingLine>();
-            for (PurchasingApItem item : ((PurchasingAccountsPayableDocument)getDocument()).getItems()) {
+            for (PurApItem item : ((PurchasingAccountsPayableDocument)getDocument()).getItems()) {
                 List<PurApAccountingLine> lines = item.getBaselineSourceAccountingLines();
                 for (PurApAccountingLine line : lines) {
                     accounts.add(line);
@@ -69,6 +74,14 @@ public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFo
             }
         }
         return accounts;
+    }
+
+    public List<SummaryAccount> getSummaryAccounts() {
+        return summaryAccounts;
+    }
+
+    public void setSummaryAccounts(List<SummaryAccount> summaryAccounts) {
+        this.summaryAccounts = summaryAccounts;
     }
     
 }
