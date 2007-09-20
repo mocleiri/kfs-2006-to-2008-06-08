@@ -45,7 +45,12 @@ public interface DisbursementVoucherRuleConstants {
     // document location
     public static String NO_DOCUMENTATION_LOCATION = "N";
 
-    // system parameter security group constants
+
+    public static class DocumentStatusCodes {
+        public static String APPROVED = "A";
+        public static String EXTRACTED = "E";
+    }
+
     public static class PaymentReasonCodes {
         public static String PRIZE = "A";
         public static String OUT_OF_POCKET = "B";
