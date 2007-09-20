@@ -39,7 +39,6 @@ import org.kuali.core.workflow.service.KualiWorkflowInfo;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
@@ -49,6 +48,7 @@ import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.PurapWorkflowConstants.RequisitionDocument.NodeDetailEnum;
 import org.kuali.module.purap.bo.BillingAddress;
 import org.kuali.module.purap.bo.PurApAccountingLine;
+import org.kuali.module.purap.bo.PurapUser;
 import org.kuali.module.purap.bo.RequisitionAccount;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.bo.RequisitionStatusHistory;
@@ -109,7 +109,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         // set the default funding source
         this.setFundingSourceCode(SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.REQUISITION, PurapConstants.DEFAULT_FUNDING_SOURCE));
 
-        ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
+        PurapUser currentUser = (PurapUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( PurapUser.MODULE_ID );
         this.setChartOfAccountsCode(currentUser.getChartOfAccountsCode());
         this.setOrganizationCode(currentUser.getOrganizationCode());
         this.setDeliveryCampusCode(currentUser.getUniversalUser().getCampusCode());
@@ -183,7 +183,7 @@ public class RequisitionDocument extends PurchasingDocumentBase implements Copya
         
         super.toCopy();
 
-        ChartUser currentUser = (ChartUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( ChartUser.MODULE_ID );
+        PurapUser currentUser = (PurapUser)GlobalVariables.getUserSession().getUniversalUser().getModuleUser( PurapUser.MODULE_ID );
 
         this.setPurapDocumentIdentifier(null);
 
