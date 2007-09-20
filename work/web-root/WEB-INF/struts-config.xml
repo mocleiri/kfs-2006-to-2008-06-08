@@ -58,7 +58,7 @@
    		<form-bean name="LaborBenefitExpenseTransferForm" type="org.kuali.module.labor.web.struts.form.BenefitExpenseTransferForm" />
    		<form-bean name="LaborJournalVoucherForm" type="org.kuali.module.labor.web.struts.form.LaborJournalVoucherForm" />
 		<form-bean name="LaborCorrectionForm" type="org.kuali.module.labor.web.struts.form.LaborCorrectionForm" />
-		<form-bean name="LaborYearEndBenefitTransferForm" type="org.kuali.module.labor.web.struts.form.YearEndBenefitTransferForm" />
+		<form-bean name="LaborYearEndBenefitExpenseTransferForm" type="org.kuali.module.labor.web.struts.form.YearEndBenefitExpenseTransferForm" />
 
 		<!-- Budget Construction Bean Definitions -->
    		<form-bean name="BudgetConstructionSelectionForm" type="org.kuali.module.budget.web.struts.form.BudgetConstructionSelectionForm" />
@@ -68,6 +68,7 @@
    		<form-bean name="MonthlyBudgetForm" type="org.kuali.module.budget.web.struts.form.MonthlyBudgetForm" />
    		<form-bean name="PositionSalarySettingForm" type="org.kuali.module.budget.web.struts.form.PositionSalarySettingForm" />
    		<form-bean name="IncumbentSalarySettingForm" type="org.kuali.module.budget.web.struts.form.IncumbentSalarySettingForm" />
+   		<form-bean name="TempListLookupForm" type="org.kuali.module.budget.web.struts.form.TempListLookupForm" />
 
         <!-- KRA Module Bean Definitions -->
         <form-bean name="BudgetForm" type="org.kuali.module.kra.budget.web.struts.form.BudgetForm" />
@@ -275,6 +276,7 @@
             <forward name="basic" path="/jsp/modules/purap/{1}.jsp" />
             <forward name="viewRelatedDocuments" path="/jsp/modules/purap/ViewRelatedDocuments.jsp" redirect="false" />
             <forward name="viewPaymentHistory" path="/jsp/modules/purap/ViewPaymentHistory.jsp" redirect="false" />
+            <forward name="printPurchaseOrderPDF" path="/jsp/modules/purap/PrintForward.jsp" redirect="false" />
         </action>
 
         <action path="/cg*" name="{1}Form" input="/jsp/modules/cg/{1}.jsp" type="org.kuali.module.cg.web.struts.action.{1}Action" scope="request" parameter="methodToCall" validate="true" attribute="KualiForm">
