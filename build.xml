@@ -22,7 +22,7 @@
 		<tstamp><format property="project.cvs.tag" pattern="MM/dd/yyyy hh:mm aa" /></tstamp>
 		<condition property="context.docbase" value=' docBase="${basedir}${file.separator}work${file.separator}web-root"'><equals arg1="${is.local.build}" arg2="true" /></condition>
 		<property name="context.docbase" value="" />
-		<condition property="datasource.url" value="${mysql.datasource.url}"><equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
+		<condition property="datasource.url" value="${mysql.datasource.url}"><equals arg1="${datasource.ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
 		<property name="datasource.url" value="${oracle.datasource.url}" />
 		<condition property="use.p6spy.local">
 			<and>
@@ -31,16 +31,14 @@
 			</and>
 		</condition>
 		<condition property="driver.class" value="${p6spy.driver.class}"><equals arg1="${use.p6spy.local}" arg2="true"/></condition>
-		<condition property="driver.class" value="${mysql.driver.class}"><equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
+		<condition property="driver.class" value="${mysql.driver.class}"><equals arg1="${datasource.ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
 		<property name="driver.class" value="${oracle.driver.class}" />
-		<condition property="p6spy.real.driver.class" value="${mysql.driver.class}"><equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
+		<condition property="p6spy.real.driver.class" value="${mysql.driver.class}"><equals arg1="${datasource.ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
 		<property name="p6spy.real.driver.class" value="${oracle.driver.class}" />
-		<condition property="datasource.ojb.sequencemanager.class" value="${mysql.sequence.manager.class}"><equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
-		<property name="datasource.ojb.sequencemanager.class" value="${oracle.sequence.manager.class}" />
-	    <condition property="datasource.platform.class" value="${mysql.database.platform}"><equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
-		<property name="datasource.platform.class" value="${oracle.database.platform}" />
-	    <condition property="rice.workflow.datasource.platform.class" value="${mysql.workflow.database.platform}"><equals arg1="${ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
-		<property name="rice.workflow.datasource.platform.class" value="${oracle.workflow.database.platform}" />
+		<condition property="datasource.ojb.sequence.manager" value="${mysql.ojb.sequence.manager}"><equals arg1="${datasource.ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
+		<property name="datasource.ojb.sequence.manager" value="${oracle.ojb.sequence.manager}" />
+	    <condition property="rice.workflow.datasource.platform" value="${mysql.workflow.datasource.platform}"><equals arg1="${datasource.ojb.platform}" arg2="${mysql.ojb.platform}" /></condition>
+		<property name="rice.workflow.datasource.platform" value="${oracle.workflow.datasource.platform}" />
 		<condition property="appenders" value="INFO, LogFile, StdOut"><equals arg1="${is.local.build}" arg2="true" /></condition>
 		<property name="appenders" value="INFO, LogFile" />
 		<condition property="startup.stats.mailing.list" value="${configuration.manager.mailing.list}"><equals arg1="${build.environment}" arg2="cnv" /></condition>
@@ -90,7 +88,7 @@
 
 	<target name="clean-project" depends="init-property-files">
 		<delete failonerror="false">
-			<fileset dir="${basedir}" includes="${source.directory}/${configuration.file},${source.directory}/${p6spy.file},${webinf.directory}/${web.file},${lib.directory}/${log4j.library.file},${war.directory}/**/**,${test.directory}/**/**,*.war,*.zip,${help.directory}/**/**,${webroot.directory}/${rice.application}/**/**,${webroot.directory}/${tags.directory}/${rice.application}/**/**,${webroot.directory}/${workflow.application}/**/**,${database.directory}/${rice.name}/**/**,${licenses.directory}/${rice.name}/**/**" />
+			<fileset dir="${basedir}" includes="${source.directory}/${configuration.file},${source.directory}/${p6spy.file},${webinf.directory}/${web.file},${lib.directory}/${log4j.library.file},${war.directory}/**/**,${test.directory}/**/**,*.war,*.zip,${help.directory}/**/**,${webroot.directory}/${rice.application}/**/**,${webroot.directory}/${tags.directory}/${rice.application}/**/**,${webroot.directory}/${workflow.application}/**/**,${licenses.directory}/${rice.name}/**/**" />
 		</delete>
 	</target>
 
@@ -135,7 +133,6 @@
 	<target name="filter-project" depends="filter-project-p6spy">
 		<unzip dest="${help.directory}" src="${build.project.directory}/help.zip" />
 		<unzip dest="${webroot.directory}" src="${build.project.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" />
-		<unzip dest="${database.directory}/${rice.name}" src="${build.project.directory}/${rice.name}-${rice.version}${rice.output.ddl.suffix}" />
 		<unzip dest="${licenses.directory}/${rice.name}" src="${build.project.directory}/${rice.name}-${rice.version}${rice.output.licenses.suffix}" />
 		<echo file="${source.directory}/${configuration.file}" message="${configuration}" />
 		<echo file="${source.directory}/${p6spy.file}" message="${p6spy}" />
@@ -165,7 +162,7 @@
 
 	<target name="make-source" depends="init-make-references,filter-project">
 		<mkdir dir="${make-source.target.directory}" />
-		<javac destdir="${make-source.target.directory}" srcdir="${source.directory}" debug="true" optimize="true" fork="true" memoryinitialsize="${compile.min.memory}" memorymaximumsize="${compile.max.memory}">
+		<javac destdir="${make-source.target.directory}" srcdir="${source.directory}" optimize="true" fork="true" memoryinitialsize="${compile.min.memory}" memorymaximumsize="${compile.max.memory}">
 			<classpath refid="compile.source.classpath" />
 		</javac>
 		<copy todir="${make-source.target.directory}">
@@ -177,7 +174,7 @@
 
 	<target name="make-tests" depends="init-make-references,filter-project">
 		<mkdir dir="${test.classes.directory}" />
-		<javac destdir="${test.classes.directory}" debug="true" optimize="true" fork="true" memoryinitialsize="${compile.min.memory}" memorymaximumsize="${compile.max.memory}">
+		<javac destdir="${test.classes.directory}" optimize="true" fork="true" memoryinitialsize="${compile.min.memory}" memorymaximumsize="${compile.max.memory}">
 			<classpath refid="compile.tests.classpath" />
 			<src path="${source.directory}" />
 			<src path="${test.source.directory}" />
@@ -340,10 +337,10 @@
 		<delete>
 			<fileset dir="${build.project.directory}" includes="${rice.name}*${rice.output.web.suffix}" />
 		</delete>
-		<zip destfile="${build.project.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" basedir="${rice.sampleapp.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/*.tag,${workflow.application}/**/**" excludes="**/CVS" />
+		<zip destfile="${build.project.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" basedir="${rice.sampleapp.directory}" includes="${rice.application}/**/**,${tags.directory}/${rice.application}/**/*.tag,${workflow.application}/**/**,${ksb.application}/**/**" excludes="**/CVS" />
 	</target>
 
-	<target name="update-rice-extended" depends="init-property-files,update-rice-kuali-dependencies,update-rice-ddl,update-rice-licenses" />
+	<target name="update-rice-extended" depends="init-property-files,update-rice-kuali-dependencies,update-rice-licenses" />
 
 	<target name="update-rice-kuali-dependencies" depends="init-property-files">
 		<delete>
@@ -377,26 +374,13 @@
 		<zip destfile="${dependencies.project.directory}/${rice.name}-${workflow.name}-${workflow.version}-doc.zip" basedir="${workflow.project.directory}/dist/api" />-->
 	</target>
 
-	<target name="update-rice-ddl" depends="init-property-files">
-		<delete>
-			<fileset dir="${build.project.directory}" includes="${rice.name}*${rice.output.ddl.suffix}" />
-		</delete>
-		<mkdir dir="temp" />
-		<copy todir="temp">
-			<fileset dir="${rice.project.directory}" includes="${rice.ddl.files}" excludes="${rice.excludes},**/CVS" />
-			<regexpmapper from="^.*\${file.separator}src\${file.separator}main\${file.separator}config\${file.separator}(.*)$$" to="\1" />
-		</copy>
-		<zip destfile="${build.project.directory}/${rice.name}-${rice.version}-ddl.zip" basedir="temp" />
-		<delete dir="temp" />
-	</target>
-
 	<target name="update-rice-licenses" depends="init-property-files">
 		<zip destfile="${build.project.directory}/${rice.name}-${rice.version}-licenses.zip" basedir="${rice.project.directory}/${licenses.directory}" excludes="**/CVS" />
 	</target>
 	
 	<macrodef name="maven">
 		<attribute name="goals" />
-		<attribute name="options" default="--offline" />
+		<attribute name="options" default="" />
 		<sequential>
 	        <java classname="org.codehaus.classworlds.Launcher" dir="${rice.project.directory}" fork="true" failonerror="true">
 	        	<arg line="@{options} @{goals}"/>
