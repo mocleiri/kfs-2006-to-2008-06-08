@@ -19,9 +19,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
+import org.kuali.core.service.PersistenceStructureService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
@@ -29,8 +31,10 @@ import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.gl.GLConstants;
+import org.kuali.module.gl.bo.OriginEntryable;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.UniversityDate;
+import org.kuali.module.gl.service.OriginEntryableLookupService;
 import org.kuali.module.gl.service.ScrubberValidator;
 import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.ObjectHelper;
@@ -44,6 +48,8 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     private AccountService accountService;
     private PersistenceService persistenceService;
     private ScrubberValidator scrubberValidator;
+    private PersistenceStructureService persistenceStructureService;
+    private OriginEntryableLookupService referenceLookup;
 
     // TODO: those arrays should go to FS_PARAM_T
     private String[] continuationAccountBypassOriginationCodes = new String[] { "EU", "PL" };
@@ -67,7 +73,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
      * @see org.kuali.module.labor.service.LaborScrubberValidator#validateTransaction(owrg.kuali.module.labor.bo.LaborOriginEntry,
      *      org.kuali.module.labor.bo.LaborOriginEntry, org.kuali.module.gl.bo.UniversityDate)
      */
-    public List<Message> validateTransaction(OriginEntry originEntry, OriginEntry scrubbedEntry, UniversityDate universityRunDate, boolean validateAccountIndicator) {
+    public List<Message> validateTransaction(OriginEntryable originEntry, OriginEntryable scrubbedEntry, UniversityDate universityRunDate, boolean validateAccountIndicator) {
         LOG.debug("validateTransaction() started");
         List<Message> errors = new ArrayList<Message>();
         
@@ -76,9 +82,10 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         
         //For labor scrubber.
         
-        
-        
+        scrubberValidator.setReferenceLookup(this.referenceLookup);
         errors = scrubberValidator.validateTransaction(laborOriginEntry, laborScrubbedEntry, universityRunDate, validateAccountIndicator);
+        refreshOriginEntryReferences(laborOriginEntry);
+        refreshOriginEntryReferences(laborScrubbedEntry);
 
         Message err = null;
         
@@ -109,6 +116,40 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     public void validateForInquiry(GeneralLedgerPendingEntry entry){
         
     }
+    
+    protected void refreshOriginEntryReferences(OriginEntry originEntry) {
+        Map<String, Class> referenceClasses = persistenceStructureService.listReferenceObjectFields(originEntry.getClass());
+        for (String reference : referenceClasses.keySet()) {
+            if (KFSPropertyConstants.PROJECT.equals(reference)) {
+                if (KFSConstants.getDashProjectCode().equals(originEntry.getProjectCode())) {
+                    originEntry.setProject(null);
+                }
+                else {
+                    persistenceService.retrieveReferenceObject(originEntry, reference);
+                }
+            }
+            else if (KFSPropertyConstants.FINANCIAL_SUB_OBJECT.equals(reference)) {
+                if (KFSConstants.getDashFinancialSubObjectCode().equals(originEntry.getFinancialSubObjectCode())) {
+                    originEntry.setFinancialSubObject(null);
+                }
+                else {
+                    persistenceService.retrieveReferenceObject(originEntry, reference);
+                }                
+            }
+            else if (KFSPropertyConstants.SUB_ACCOUNT.equals(reference)) {
+                if (KFSConstants.getDashSubAccountNumber().equals(originEntry.getSubAccountNumber())) {
+                    originEntry.setSubAccount(null);
+                }
+                else {
+                    persistenceService.retrieveReferenceObject(originEntry, reference);
+                }                
+            }
+            else {
+                persistenceService.retrieveReferenceObject(originEntry, reference);
+            }
+        }
+    }
+
 
     public void setScrubberValidator(ScrubberValidator sv) {
         scrubberValidator = sv;
@@ -180,9 +221,15 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         persistenceService = ps;
     }
     
-    
-    
-    
+    /**
+     * Sets the persistenceStructureService attribute value.
+     * @param persistenceStructureService The persistenceStructureService to set.
+     */
+    public void setPersistenceStructureService(PersistenceStructureService persistenceStructureService) {
+        this.persistenceStructureService = persistenceStructureService;
+    }
+
+
     private Message validateAccount(LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, UniversityDate universityRunDate) {
         LOG.debug("validateAccount() started");
 
@@ -471,5 +518,14 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         
         return null;
     }
+
+
+    /**
+     * @see org.kuali.module.gl.service.ScrubberValidator#setReferenceLookup(org.kuali.module.gl.service.OriginEntryableLookupService)
+     */
+    public void setReferenceLookup(OriginEntryableLookupService originEntryableLookupService) {
+        this.referenceLookup = originEntryableLookupService;
+    }
+    
     
 }

@@ -15,6 +15,8 @@
  */
 package org.kuali.module.purap.document.authorization;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,8 @@ import org.kuali.module.purap.PurapAuthorizationConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapWorkflowConstants.PaymentRequestDocument.NodeDetailEnum;
+import org.kuali.module.purap.bo.PaymentRequestItem;
+import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.service.PurapService;
 
@@ -63,7 +67,6 @@ public class PaymentRequestDocumentAuthorizer extends AccountingDocumentAuthoriz
         Map editModeMap = super.getEditMode(document, user, sourceAccountingLines, targetAccountingLines);
         PaymentRequestDocument preq = (PaymentRequestDocument) document;
 
-        //TODO: Chris - This class should be renamed since it's not just for actions
         PaymentRequestDocumentActionAuthorizer preqDocAuth  = new PaymentRequestDocumentActionAuthorizer(preq,user); 
         
         String editMode = AuthorizationConstants.EditMode.VIEW_ONLY;
@@ -80,12 +83,22 @@ public class PaymentRequestDocumentAuthorizer extends AccountingDocumentAuthoriz
                 editMode = AuthorizationConstants.EditMode.FULL_ENTRY;
             }
             
-
             if (currentRouteLevels.contains(NodeDetailEnum.ACCOUNT_REVIEW.getName())) {
                 editModeMap.remove(AuthorizationConstants.EditMode.FULL_ENTRY);
                 //expense_entry was already added in super
                 //add amount edit mode
                 editMode = PurapAuthorizationConstants.PaymentRequestEditMode.ALLOW_ACCOUNT_AMOUNT_ENTRY;
+
+                List lineList = new ArrayList();
+                for (Iterator iter = preq.getItems().iterator(); iter.hasNext();) {
+                    PaymentRequestItem item = (PaymentRequestItem) iter.next();
+                    lineList.addAll(item.getSourceAccountingLines());
+                    // If FO has deleted the last accounting line for an item, set entry mode to full so they can add another one
+                    if (item.getItemType().isItemTypeAboveTheLineIndicator() && item.getSourceAccountingLines().size() == 0) {
+                        editModeMap.remove(AuthorizationConstants.EditMode.VIEW_ONLY);
+                        editModeMap.put(AuthorizationConstants.TransactionalEditMode.EXPENSE_ENTRY, "TRUE");
+                    }
+                }
             }
         } 
 
@@ -117,12 +130,9 @@ public class PaymentRequestDocumentAuthorizer extends AccountingDocumentAuthoriz
         PaymentRequestDocument paymentRequestDocument = (PaymentRequestDocument) document;
         if (StringUtils.equals(paymentRequestDocument.getStatusCode(), PurapConstants.PaymentRequestStatuses.INITIATE)) {
             flags.setCanSave(false);
-            flags.setCanClose(false);
-            flags.setCanCancel(true);
+            flags.setCanClose(true);
+            flags.setCanCancel(false);
             flags.setCanDisapprove(false);
-            // If there was a way to add custom flags for our new buttons, we could avoid having the logic in jsp pag and have it here
-            //flags.setCanContinue(true);
-
         }
         else {
             if (!getCurrentRouteLevels(workflowDocument).contains(NodeDetailEnum.ACCOUNTS_PAYABLE_REVIEW.getName())) {
