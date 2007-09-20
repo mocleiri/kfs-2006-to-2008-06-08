@@ -27,6 +27,7 @@
 <c:if test="${empty editableFundingSource}">
 	<c:set var="editableFundingSource" value="false" />
 </c:if>
+<c:set var="contractManagerChangeMode" value="${(not empty KualiForm.editingMode['contractManagerChangeable'])}" />
 
 <div class="h2-container">
 	<h2><c:out value="${detailSectionLabel}"/></h2>
@@ -54,18 +55,10 @@
             <div align="right"><kul:htmlAttributeLabel attributeEntry="${documentAttributes.fundingSourceCode}" /></div>
         </th>
         <td align=left valign=middle class="datacell">
-		    <c:if test="${editableFundingSource}">
-            <kul:htmlControlAttribute
-                property="document.fundingSourceCode"
-                attributeEntry="${documentAttributes.fundingSourceCode}"
-                readOnly="${not fullEntryMode}"/>
-			</c:if>
-		    <c:if test="${!editableFundingSource}">
             <kul:htmlControlAttribute
                 property="document.fundingSource.fundingSourceDescription"
                 attributeEntry="${documentAttributes.fundingSourceCode}"
-                readOnly="true"/>
-			</c:if>
+                readOnly="${not (fullEntryMode and editableFundingSource)}"/>
         </td>
     </tr>
     <c:if test="${purchaseOrder}">
@@ -80,7 +73,7 @@
 	        	<kul:htmlControlAttribute 
 	                property="document.purchaseOrderPreviousIdentifier" 
 	                attributeEntry="${documentAttributes.purchaseOrderPreviousIdentifier}" 
-	                readOnly="true" />
+	                readOnly="${not (fullEntryMode or amendmentEntry)}" />
 	        </td>
 	        <th align=right valign=middle class="bord-l-b">
 	            <div align="right">
@@ -91,7 +84,7 @@
 	        	<kul:htmlControlAttribute 
 	                property="document.purchaseOrderConfirmedIndicator"
 	                attributeEntry="${documentAttributes.purchaseOrderConfirmedIndicator}" 
-	                readOnly="${not fullEntryMode}" />
+                    readOnly="${not (fullEntryMode or amendmentEntry)}" />
 	        </td> 
 	    </tr>
 	 </c:if>
