@@ -61,6 +61,17 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
         }
         return null;
     }
+    
+    /**
+     * @see org.kuali.module.labor.service.LaborInquiryOptionsService#getSelectedPendingEntryOption(java.util.Map)
+     */
+    public String getSelectedPendingEntryOption(Map fieldValues) {
+        // truncate the non-property filed
+        String pendingEntryOption = (String) fieldValues.get(Constant.PENDING_ENTRY_OPTION);
+        fieldValues.remove(Constant.PENDING_ENTRY_OPTION);
+
+        return pendingEntryOption;
+    }
 
     /**
      * @see org.kuali.module.labor.service.LaborInquiryOptionsService#getConsolidationOption(java.util.Map)
@@ -76,8 +87,20 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
      * @see org.kuali.module.labor.service.LaborInquiryOptionsService#isConsolidationSelected(java.util.Map, java.util.Collection)
      */
     public boolean isConsolidationSelected(Map fieldValues, Collection<Row> rows) {
+        boolean isConsolidationSelected = isConsolidationSelected(fieldValues);
+
+        if(!isConsolidationSelected){
+            Field consolidationField = getConsolidationField(rows);
+            consolidationField.setPropertyValue(Constant.DETAIL);
+        }        
+        return isConsolidationSelected;           
+    }
+    
+    /**
+     * @see org.kuali.module.labor.service.LaborInquiryOptionsService#isConsolidationSelected(java.util.Map)
+     */
+    public boolean isConsolidationSelected(Map fieldValues) {
         String consolidationOption = getConsolidationOption(fieldValues);
-        Field consolidationField = getConsolidationField(rows);
 
         // detail option would be used
         if (Constant.DETAIL.equals(consolidationOption)) {
@@ -88,7 +111,6 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
         // if the subObjectCode is specified, detail option could be used
         // if the objectTypeCode is specified, detail option could be used
         if (isDetailDefaultFieldUsed(fieldValues, KFSPropertyConstants.SUB_ACCOUNT_NUMBER) || isDetailDefaultFieldUsed(fieldValues, KFSPropertyConstants.SUB_OBJECT_CODE) || isDetailDefaultFieldUsed(fieldValues, KFSPropertyConstants.OBJECT_TYPE_CODE)) {
-            consolidationField.setPropertyValue(Constant.DETAIL);
             return false;
         }
         return true;
@@ -101,7 +123,7 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
      * @param fieldName
      */
     private boolean isDetailDefaultFieldUsed(Map fieldValues, String fieldName) {
-        return !(StringUtils.isBlank((String) fieldValues.get(fieldName)));
+        return StringUtils.isNotBlank((String) fieldValues.get(fieldName));
     }
 
     /**
@@ -117,17 +139,6 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
         else if (Constant.APPROVED_PENDING_ENTRY.equals(pendingEntryOption)) {
             updateEntryCollection(entryCollection, fieldValues, true, isConsolidated);
         }
-    }
-
-    /**
-     * @see org.kuali.module.labor.service.LaborInquiryOptionsService#getSelectedPendingEntryOption(java.util.Map)
-     */
-    public String getSelectedPendingEntryOption(Map fieldValues) {
-        // truncate the non-property filed
-        String pendingEntryOption = (String) fieldValues.get(Constant.PENDING_ENTRY_OPTION);
-        fieldValues.remove(Constant.PENDING_ENTRY_OPTION);
-
-        return pendingEntryOption;
     }
 
     /**
@@ -150,11 +161,13 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
 
             LedgerBalance ledgerBalance = laborLedgerBalanceService.findLedgerBalance(entryCollection, pendingEntry);
             if (ledgerBalance == null) {
-                laborLedgerBalanceService.addLedgerBalance(entryCollection, pendingEntry);
+                ledgerBalance = laborLedgerBalanceService.addLedgerBalance(entryCollection, pendingEntry);
             }
             else {
                 laborLedgerBalanceService.updateLedgerBalance(ledgerBalance, pendingEntry);
             }
+            ledgerBalance.getDummyBusinessObject().setConsolidationOption(isConsolidated ? Constant.CONSOLIDATION : Constant.DETAIL);
+            ledgerBalance.getDummyBusinessObject().setPendingEntryOption(isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY);
         }
     }
 
@@ -175,5 +188,4 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
     public void setLaborLedgerPendingEntryService(LaborLedgerPendingEntryService laborLedgerPendingEntryService) {
         this.laborLedgerPendingEntryService = laborLedgerPendingEntryService;
     }
-
 }
