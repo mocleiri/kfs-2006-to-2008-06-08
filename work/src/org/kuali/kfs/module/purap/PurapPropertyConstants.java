@@ -36,9 +36,15 @@ public class PurapPropertyConstants {
     public static final String ITEM_DESCRIPTION = "itemDescription";
     
     // accounting line
+    public static final String ACCOUNT_IDENTIFIER = "accountIdentifier";
     public static final String ACCOUNT_LINE_PERCENT = "accountLinePercent";
     
     public static final String DATA_OBJ_MAINT_CD_ACTIVE_IND = "dataObjectMaintenanceCodeActiveIndicator";
+    
+    // status history
+    public static final String STATUS_HISTORY_IDENTIFIER = "statusHistoryIdentifier";
+    //document fileds
+    public static final String GENERAL_LEDGER_PENDING_ENTRIES = "generalLedgerPendingEntries";
     
     // PURCHASING AND ACCOUNTS PAYABLE DOCUMENT BASE
     public static final String PURAP_DOC_ID = "purapDocumentIdentifier";
@@ -46,6 +52,7 @@ public class PurapPropertyConstants {
     public static final String NEW_STATUS = "newStatus";
     public static final String STATUS_CODE = "statusCode";
     public static final String STATUS = "status";
+    public static final String STATUS_HISTORIES = "statusHistories";
     public static final String VENDOR_NUMBER = "vendorNumber";
 //    public static final String VENDOR_POSTAL_CODE = "document.vendorPostalCode";
     public static final String VENDOR_POSTAL_CODE = "vendorPostalCode";
@@ -68,6 +75,7 @@ public class PurapPropertyConstants {
 //   public static final String VENDOR_CONTRACT_ID = "document.vendorContractGeneratedIdentifier";
     public static final String VENDOR_CONTRACT_ID = "vendorContractGeneratedIdentifier";
     public static final String PURCHASE_ORDER = "purchaseOrder";
+    public static final String PURCHASE_ORDER_COST_SOURCE = "purchaseOrderCostSource";
     
     // AP DOCUMENT BASE
 //    public static final String PURCHASE_ORDER_IDENTIFIER = "document.purchaseOrderIdentifier";
@@ -82,6 +90,8 @@ public class PurapPropertyConstants {
     public static final String VENDOR_QUOTES = "purchaseOrderVendorQuotes";
     // Quote Language
     public static final String PURCHASE_ORDER_QUOTE_LANGUAGE_ID = "purchaseOrderQuoteLanguageIdentifier";
+    // vendor quote
+    public static final String PURCHASE_ORDER_VENDOR_QUOTE_IDENTIFIER = "purchaseOrderVendorQuoteIdentifier";
     // Stipulations
     public static final String VENDOR_STIPULATION_DESCRIPTION = "vendorStipulationDescription";
     
