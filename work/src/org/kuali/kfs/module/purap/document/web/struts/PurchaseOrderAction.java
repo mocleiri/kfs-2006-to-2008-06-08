@@ -426,11 +426,22 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     private void addExtraButtons(KualiDocumentFormBase kualiDocumentFormBase) {
         ((PurchaseOrderForm) kualiDocumentFormBase).addButtons();
     }
+    
+    @Override
+    public ActionForward refreshAccountSummary(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ActionForward forward = super.refreshAccountSummary(mapping, form, request, response);
+        KualiDocumentFormBase kualiDocumentFormBase = (KualiDocumentFormBase)form;
+        addExtraButtons(kualiDocumentFormBase);
+        return forward;
+    }
 
     /**
-     * This method is executed when the user click on the "print" button on a Purchase Order Print Document page. It will display
-     * the PDF document on the browser window and set a few fields (transmission dates and statuses) of the original Purchase Order
-     * Document and Purchase Order Print Document itself and save these fields to the database.
+     * This method is executed when the user click on the "print" button on a Purchase Order Print Document page. On a non
+     * javascript enabled browser, it will display a page with 2 buttons. One is to display the PDF, the other is to view
+     * the PO tabbed page where the PO document statuses, buttons, etc had already been updated (the updates of those
+     * occurred while the performPurchaseOrderFirstTransmitViaPrinting method is invoked.
+     * On a javascript enabled browser, it will display both the PO tabbed page containing the updated PO document info
+     * and the pdf on the next window/tab of the browser.
      * 
      * @param mapping
      * @param form
@@ -443,15 +454,53 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         String poDocId = request.getParameter("docId");
         ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
         try {
-            // will throw validation exception if errors occur
             SpringContext.getBean(PurchaseOrderService.class).performPurchaseOrderFirstTransmitViaPrinting(poDocId, baosPDF);
+        }
+        finally {
+            if (baosPDF != null) {
+                baosPDF.reset();
+            }
+        }
+        String basePath = getBasePath(request);
+        String docId = ((PurchaseOrderForm)form).getDocId();
+        String methodToCallPrintPurchaseOrderPDF = "printPurchaseOrderPDFOnly";
+        String methodToCallDocHandler = "docHandler";
+        String printPOPDFUrl = getUrlForPrintPO(basePath, docId, methodToCallPrintPurchaseOrderPDF);
+        String displayPOTabbedPageUrl = getUrlForPrintPO(basePath, docId, methodToCallDocHandler);
+        request.setAttribute("printPOPDFUrl", printPOPDFUrl);
+        request.setAttribute("displayPOTabbedPageUrl", displayPOTabbedPageUrl);
+        String label = SpringContext.getBean(DataDictionaryService.class).getDocumentLabelByClass(PurchaseOrderDocument.class);
+        request.setAttribute("purchaseOrderLabel", label);
+        return mapping.findForward("printPurchaseOrderPDF");
+    }
+
+    private String getUrlForPrintPO(String basePath, String docId, String methodToCall) {
+        StringBuffer result = new StringBuffer(basePath);
+        result.append("/purapPurchaseOrder.do?methodToCall=");
+        result.append(methodToCall);
+        result.append("&docId=");
+        result.append(docId);
+        result.append("&command=displayDocSearchView");
+        return result.toString();
+    }
+    
+    public ActionForward printPurchaseOrderPDFOnly(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String poDocId = request.getParameter("docId");
+        ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
+        try {
+            // will throw validation exception if errors occur
+            SpringContext.getBean(PurchaseOrderService.class).performPrintPurchaseOrderPDFOnly(poDocId, baosPDF);
 
             response.setHeader("Cache-Control", "max-age=30");
             response.setContentType("application/pdf");
             StringBuffer sbContentDispValue = new StringBuffer();
-            //sbContentDispValue.append("inline");
-            sbContentDispValue.append("attachment");
-
+            String useJavascript = request.getParameter("useJavascript");
+            if (useJavascript == null || useJavascript.equalsIgnoreCase("false")) {
+                sbContentDispValue.append("attachment");
+            }
+            else {
+                sbContentDispValue.append("inline");
+            }
             StringBuffer sbFilename = new StringBuffer();
             sbFilename.append("PURAP_PO_");
             sbFilename.append(poDocId);
@@ -481,7 +530,8 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         }
         return null;
     }
-
+    
+    
     public ActionForward printPoQuote(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 //        String poDocId = request.getParameter("docId");
 //        PurchaseOrderDocument po = (PurchaseOrderDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(poDocId);
@@ -700,55 +750,65 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         KualiDocumentFormBase kualiDocumentFormBase = (KualiDocumentFormBase) form;
         PurchaseOrderDocument po = (PurchaseOrderDocument) kualiDocumentFormBase.getDocument();
 
-            List items = po.getItems();
-            String retransmitHeader = po.getRetransmitHeader();
-            po = SpringContext.getBean(PurchaseOrderService.class).getPurchaseOrderByDocumentNumber(po.getDocumentNumber());
-            po.setItems(items);
-            po.setRetransmitHeader(retransmitHeader);
-            ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
-            try {
-                StringBuffer sbFilename = new StringBuffer();
-                sbFilename.append("PURAP_PO_");
-                sbFilename.append(po.getPurapDocumentIdentifier());
-                sbFilename.append("_");
-                sbFilename.append(System.currentTimeMillis());
-                sbFilename.append(".pdf");
+        List items = po.getItems();
+        String retransmitHeader = po.getRetransmitHeader();
+        po = SpringContext.getBean(PurchaseOrderService.class).getPurchaseOrderByDocumentNumber(po.getDocumentNumber());
+        //setting the isItemSelectedForRetransmitIndicator items of the PO obtained from the database based on its value from 
+        //the po from the form
+        setItemSelectedForRetransmitIndicatorFromPOInForm(items, po.getItems());
+        po.setRetransmitHeader(retransmitHeader);
+        ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
+        try {
+            StringBuffer sbFilename = new StringBuffer();
+            sbFilename.append("PURAP_PO_");
+            sbFilename.append(po.getPurapDocumentIdentifier());
+            sbFilename.append("_");
+            sbFilename.append(System.currentTimeMillis());
+            sbFilename.append(".pdf");
 
-                // below method will throw ValidationException if errors are found
-                SpringContext.getBean(PurchaseOrderService.class).retransmitPurchaseOrderPDF(po, baosPDF);
+            // below method will throw ValidationException if errors are found
+            SpringContext.getBean(PurchaseOrderService.class).retransmitPurchaseOrderPDF(po, baosPDF);
 
-                response.setHeader("Cache-Control", "max-age=30");
-                response.setContentType("application/pdf");
-                StringBuffer sbContentDispValue = new StringBuffer();
-                sbContentDispValue.append("inline");
-                sbContentDispValue.append("; filename=");
-                sbContentDispValue.append(sbFilename);
+            response.setHeader("Cache-Control", "max-age=30");
+            response.setContentType("application/pdf");
+            StringBuffer sbContentDispValue = new StringBuffer();
+            sbContentDispValue.append("inline");
+            sbContentDispValue.append("; filename=");
+            sbContentDispValue.append(sbFilename);
 
-                response.setHeader("Content-disposition", sbContentDispValue.toString());
+            response.setHeader("Content-disposition", sbContentDispValue.toString());
 
-                response.setContentLength(baosPDF.size());
+            response.setContentLength(baosPDF.size());
 
-                ServletOutputStream sos;
+            ServletOutputStream sos;
 
-                sos = response.getOutputStream();
+            sos = response.getOutputStream();
 
-                baosPDF.writeTo(sos);
+            baosPDF.writeTo(sos);
 
-                sos.flush();
+            sos.flush();
 
-            }
-            catch (ValidationException e) {
-                LOG.warn("Caught ValidationException while trying to retransmit PO with doc id " + po.getDocumentNumber());
-                return mapping.findForward(KFSConstants.MAPPING_ERROR);
-            }
-            finally {
-                if (baosPDF != null) {
-                    baosPDF.reset();
-                }
-            }
-            return null;
         }
+        catch (ValidationException e) {
+            LOG.warn("Caught ValidationException while trying to retransmit PO with doc id " + po.getDocumentNumber());
+            return mapping.findForward(KFSConstants.MAPPING_ERROR);
+        }
+        finally {
+            if (baosPDF != null) {
+                baosPDF.reset();
+            }
+        }
+        return null;
+    }
 
+    private void setItemSelectedForRetransmitIndicatorFromPOInForm(List itemsFromForm, List itemsFromDB) {
+        int i=0;
+        for (PurchaseOrderItem itemFromForm : (List<PurchaseOrderItem>)itemsFromForm) {
+            ((PurchaseOrderItem)(itemsFromDB.get(i))).setItemSelectedForRetransmitIndicator(itemFromForm.isItemSelectedForRetransmitIndicator());
+            i++;
+        }
+    }
+    
     /**
      * This method is to check on a few conditions that would cause a warning message to be displayed on top of the Purchase Order
      * page.
