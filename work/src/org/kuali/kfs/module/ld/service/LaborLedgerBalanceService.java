@@ -50,6 +50,16 @@ public interface LaborLedgerBalanceService {
      * @return the summary records of balance entries
      */
     public Integer getBalanceRecordCount(Map fieldValues, boolean isConsolidated);
+    
+    /**
+     * find a ledger balance from the given ledger balance collection with the given transaction information
+     * 
+     * @param ledgerBalanceCollection the given ledger balance collection
+     * @param transaction the given transaction information
+     * @param keyList the given list of keys that need to be compared
+     * @return a matching ledger balance from the given ledger balance
+     */
+    public LedgerBalance findLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction, List<String> keyList);
 
     /**
      * find a ledger balance from the given ledger balance collection with the given transaction information
@@ -65,9 +75,9 @@ public interface LaborLedgerBalanceService {
      * 
      * @param ledgerBalanceCollection the given ledger balance collection
      * @param transaction the given transaction information
-     * @return true if the ledger balance has been added; otherwise, false;
+     * @return the ledger balance that has been added; otherwise, null;
      */
-    public boolean addLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction);
+    public LedgerBalance addLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction);
 
     /**
      * update the given ledger balance with the given transaction information

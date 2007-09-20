@@ -17,6 +17,7 @@ package org.kuali.module.vendor.lookup;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,8 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.format.Formatter;
 import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.context.SpringContext;
+import org.kuali.module.purap.service.CreditMemoCreateService;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.VendorKeyConstants;
 import org.kuali.module.vendor.VendorPropertyConstants;
@@ -147,30 +150,50 @@ public class VendorLookupableHelperServiceImpl extends AbstractLookupableHelperS
         List<BusinessObject> processedSearchResults = new ArrayList();
         
         // loop through results
-        // if its a top level vendor, search for its divisions and add them to the appropriate list then add the vendor to the return results
-        // if its a division, see if we already have the parent and if not, retrieve it and its divisions then add the parent to the return results
-        
-        // loop through results
         for (BusinessObject bo : searchResults) {
             VendorDetail vendor = (VendorDetail) bo;
+
+            // if its a top level vendor, search for its divisions and add them to the appropriate list then add the vendor to the return results
+            // if its a division, see if we already have the parent and if not, retrieve it and its divisions then add the parent to the return results
+
+ 
             //If this vendor is not already in the processedSearchResults, let's do further processing (e.g. setting the state for lookup from default address, etc)
             //and then add it in the processedSearchResults.
             if (!processedSearchResults.contains(vendor)) {
-                // populate state from default address
+                Map<String, String> tmpValues = new HashMap<String, String>();
+                List<VendorDetail> relatedVendors = new ArrayList();
+                tmpValues.put(VendorPropertyConstants.VENDOR_HEADER_GENERATED_ID, vendor.getVendorHeaderGeneratedIdentifier().toString());
+                relatedVendors = (List) getLookupService().findCollectionBySearchHelper(getBusinessObjectClass(), tmpValues, unbounded);
 
-                if (!vendor.isVendorParentIndicator()) {
-                    for (BusinessObject tmpObject : searchResults) {
-                        VendorDetail tmpVendor = (VendorDetail) tmpObject;
-                        if (tmpVendor.getVendorHeaderGeneratedIdentifier().equals(vendor.getVendorHeaderGeneratedIdentifier()) && tmpVendor.getVendorDetailAssignedIdentifier() == 0) {
-                            vendor.setVendorName(tmpVendor.getVendorName() + " > " + vendor.getVendorName());
-                            break;
-                        }
+                for (VendorDetail tmpVendor : relatedVendors) {
+                    if (tmpVendor != null && !processedSearchResults.contains(tmpVendor)) {
+                        // populate state from default address
+                        updatedefaultVendorAddress(tmpVendor);
+                        processedSearchResults.add(tmpVendor);
                     }
                 }
-                updatedefaultVendorAddress(vendor);
-                processedSearchResults.add(vendor);
+
+                if (!processedSearchResults.contains(vendor)) {
+                    updatedefaultVendorAddress(vendor);
+                    processedSearchResults.add(vendor);
+                }
             }
         }
+
+        for (BusinessObject bo : processedSearchResults) {
+            VendorDetail vendor = (VendorDetail) bo;
+            if (!vendor.isVendorParentIndicator()) {
+                // find the parent object in the details collection and add that§
+                for (BusinessObject tmpObject : processedSearchResults) {
+                    VendorDetail tmpVendor = (VendorDetail) tmpObject;
+                    if (tmpVendor.getVendorHeaderGeneratedIdentifier().equals(vendor.getVendorHeaderGeneratedIdentifier()) && tmpVendor.getVendorDetailAssignedIdentifier() == 0) {
+                        vendor.setVendorName(tmpVendor.getVendorName() + " > " + vendor.getVendorName());
+                        break;
+                    }
+                }
+            }
+        }
+
         searchResults.clear();
         searchResults.addAll(processedSearchResults);
         
@@ -214,13 +237,6 @@ public class VendorLookupableHelperServiceImpl extends AbstractLookupableHelperS
         validateVendorNumber(fieldValues);
         validateVendorName(fieldValues);
         validateTaxNumber(fieldValues);
-        validateNumberOfSearchCriteria(fieldValues);
-        /* This validation is removed, as of requested by Jira 1456. 
-         * So now users aren't required to choose vendor name or state when vendor type is selected.
-        validateTypeNameState(fieldValues);
-        */
-        validateStatusName(fieldValues);
-        validateStateType(fieldValues);
         
         if (!GlobalVariables.getErrorMap().isEmpty()) {
             throw new ValidationException("Error(s) in search criteria");
@@ -321,91 +337,6 @@ public class VendorLookupableHelperServiceImpl extends AbstractLookupableHelperS
         if (StringUtils.isNotBlank(taxNumber) && (!StringUtils.isNumeric(taxNumber) || taxNumber.length() != 9)) {
             GlobalVariables.getErrorMap().putError(VendorPropertyConstants.VENDOR_TAX_NUMBER, 
                     VendorKeyConstants.ERROR_VENDOR_LOOKUP_TAX_NUM_INVALID);
-        }
-    }
-    
-    /**
-     * This method checks that at least the minimum number of search criteria are selected. Vendor Type does not count as a
-     * criterion.
-     * 
-     * @param fieldValues A Map containing only those key-value pairs that have been filled in on the lookup
-     */
-    private void validateNumberOfSearchCriteria(Map fieldValues) {
-        int criteria = fieldValues.size();
-        String typeCd = (String) fieldValues.get(VendorPropertyConstants.VENDOR_TYPE_CODE);
-        if (StringUtils.isNotBlank(typeCd)) {
-            criteria--;
-        }
-        if (ObjectUtils.isNull(VNDR_MIN_NUM_LOOKUP_CRITERIA)) {
-            VNDR_MIN_NUM_LOOKUP_CRITERIA = kualiConfigurationService.getParameterValue(KFSConstants.VENDOR_NAMESPACE, KFSConstants.Components.LOOKUP,
-                    VendorRuleConstants.PURAP_VNDR_MIN_NUM_LOOKUP_CRITERIA);
-        }
-        if (criteria < Integer.parseInt(VNDR_MIN_NUM_LOOKUP_CRITERIA)) {
-            GlobalVariables.getErrorMap().putError(VendorPropertyConstants.VENDOR_NUMBER, 
-                    VendorKeyConstants.ERROR_VENDOR_LOOKUP_FEWER_THAN_MIN_CRITERIA, VNDR_MIN_NUM_LOOKUP_CRITERIA);
-        }
-    }
-    
-    /**
-     * This method validates that if there is a Vendor Type Code selected, either a Name must be filled in, or a State must be
-     * selected.
-     * 
-     * @param fieldValues A Map containing only those key-value pairs that have been filled in on the lookup
-     */
-    private void validateTypeNameState(Map fieldValues) {
-        String typeCd = (String) fieldValues.get(VendorPropertyConstants.VENDOR_TYPE_CODE);
-        String vendorName = (String) fieldValues.get(VendorPropertyConstants.VENDOR_NAME);
-        String vendorFirstName = (String) fieldValues.get(VendorPropertyConstants.VENDOR_FIRST_NAME);
-        String vendorLastName = (String) fieldValues.get(VendorPropertyConstants.VENDOR_LAST_NAME);
-        String vendorStateForLookup = (String) fieldValues.get(VendorPropertyConstants.VENDOR_ADDRESS_STATE_CODE);
-
-        if (StringUtils.isNotBlank(typeCd)) {
-            if (StringUtils.isBlank(vendorStateForLookup)) {
-                if (StringUtils.isBlank(vendorName) && 
-                    StringUtils.isBlank(vendorFirstName) && 
-                    StringUtils.isBlank(vendorLastName)) {
-                    GlobalVariables.getErrorMap().putError(VendorPropertyConstants.VENDOR_NAME, 
-                            VendorKeyConstants.ERROR_VENDOR_LOOKUP_TYPE_NO_NAME_OR_STATE, VendorPropertyConstants.VENDOR_NAME);
-                }
-            }
-        }
-    }
-    
-    /**
-     * This method makes sure that if an active indicator status is chosen, then a Name must be filled in.
-     * 
-     * @param fieldValues A Map containing only those key-value pairs that have been filled in on the lookup
-     */
-    private void validateStatusName(Map fieldValues) {
-        String status = (String) fieldValues.get(VendorPropertyConstants.DATA_OBJ_MAINT_CD_ACTIVE_IND);
-        String vendorName = (String) fieldValues.get(VendorPropertyConstants.VENDOR_NAME);
-        String vendorFirstName = (String) fieldValues.get(VendorPropertyConstants.VENDOR_FIRST_NAME);
-        String vendorLastName = (String) fieldValues.get(VendorPropertyConstants.VENDOR_LAST_NAME);
-
-        if (StringUtils.isNotBlank(status)) {
-            if (StringUtils.isBlank(vendorName) && 
-                StringUtils.isBlank(vendorFirstName) && 
-                StringUtils.isBlank(vendorLastName)) {
-                GlobalVariables.getErrorMap().putError(VendorPropertyConstants.VENDOR_NAME, 
-                        VendorKeyConstants.ERROR_VENDOR_LOOKUP_STATUS_NO_NAME);
-            }
-        }
-    }
-    
-    /**
-     * This method ensures that if a State is selected, a Vendor Type Code must be selected.
-     * 
-     * @param fieldValues A Map containing only those key-value pairs that have been filled in on the lookup
-     */
-    private void validateStateType(Map fieldValues) {
-        String vendorStateForLookup = (String) fieldValues.get(VendorPropertyConstants.VENDOR_ADDRESS_STATE_CODE);
-        String typeCd = (String) fieldValues.get(VendorPropertyConstants.VENDOR_TYPE_CODE);
-
-        if (StringUtils.isNotBlank(vendorStateForLookup)) {
-            if (StringUtils.isBlank(typeCd)) {
-                GlobalVariables.getErrorMap().putError(VendorPropertyConstants.VENDOR_TYPE_CODE, 
-                        VendorKeyConstants.ERROR_VENDOR_LOOKUP_STATE_NO_TYPE);
-            }
         }
     }
 
