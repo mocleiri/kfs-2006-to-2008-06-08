@@ -65,6 +65,51 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
         }
     }
 
+    
+    /**
+     * @see org.kuali.module.gl.service.OriginEntryGroupService#markBackupGroupsUnscrubbable()
+     */
+    public void markScrubbableBackupGroupsAsUnscrubbable() {
+        LOG.debug("markScrubbableBackupGroupsAsUnscrubbable() started");
+        for (OriginEntryGroup scrubbableBackupGroup : getAllScrubbableBackupGroups()) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("marking backup origin entry group as don't process: " + scrubbableBackupGroup.getId());
+            }
+            scrubbableBackupGroup.setProcess(Boolean.FALSE);
+            save(scrubbableBackupGroup);
+        }
+    }
+
+    /**
+     * @see org.kuali.module.gl.service.OriginEntryGroupService#markPostableScrubberValidGroupsAsUnpostable()
+     */
+    public void markPostableScrubberValidGroupsAsUnpostable() {
+        LOG.debug("markPostableScrubberValidGroupsAsUnpostable() started");
+        Collection<OriginEntryGroup> postableGroups = getGroupsToPost();
+        for (OriginEntryGroup postableGroup : postableGroups) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("marking postable SCV origin entry group as don't process: " + postableGroup.getId());
+            }
+            postableGroup.setProcess(Boolean.FALSE);
+            save(postableGroup);
+        }
+    }
+
+    /**
+     * @see org.kuali.module.gl.service.OriginEntryGroupService#markPostableIcrGroupsAsUnpostable()
+     */
+    public void markPostableIcrGroupsAsUnpostable() {
+        LOG.debug("markPostableIcrGroupsAsUnpostable() started");
+        Collection<OriginEntryGroup> postableGroups = getIcrGroupsToPost();
+        for (OriginEntryGroup postableGroup : postableGroups) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("marking postable ICR origin entry group as don't process: " + postableGroup.getId());
+            }
+            postableGroup.setProcess(Boolean.FALSE);
+            save(postableGroup);
+        }
+    }
+    
     /**
      * 
      * @see org.kuali.module.gl.service.OriginEntryGroupService#getNewestScrubberErrorGroup()
@@ -98,17 +143,13 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
         
         return originEntryGroupDao.getGroupsFromSourceForDate(sourceCode, date);
     }
-    
+
     /**
-     * 
-     * @see org.kuali.module.gl.service.OriginEntryGroupService#getBackupGroups(java.sql.Date)
+     * @see org.kuali.module.gl.service.OriginEntryGroupService#getAllScrubbableBackupGroups()
      */
-    public Collection getBackupGroups(Date backupDate) {
-        LOG.debug("getBackupGroups() started");
-
-        return originEntryGroupDao.getBackupGroups(backupDate);
+    public Collection<OriginEntryGroup> getAllScrubbableBackupGroups() {
+        return originEntryGroupDao.getAllScrubbableBackupGroups();
     }
-
     
     /**
      * 
