@@ -22,10 +22,7 @@
     </c:if>
  
     <c:set var="displayInitTab" value="${KualiForm.editingMode['displayInitTab']}" scope="request" />
-    
-    <!-- setting the variable to force the Posting Year in doucment overview tag to be read only -->
-    <c:set var="fiscalYearReadOnly" value="true" scope="request" /> 
-
+        
     <kul:hiddenDocumentFields excludePostingYear="true" />
 	
 	<purap:hiddenPurapFields includeNonAPFields="false" />
@@ -48,7 +45,7 @@
 		  <h3>This Credit Memo has been Held by <c:out value="${KualiForm.document.lastActionPerformedByPersonName}"/></h3>		
 	    </c:if>
 	    
-		<purap:documentOverview editingMode="${KualiForm.editingMode}" includePostingYear="true" postingYearAttributes="${DataDictionary.CreditMemoDocument.attributes}" />
+		<kul:documentOverview editingMode="${KualiForm.editingMode}" includePostingYear="true" fiscalYearReadOnly="true" postingYearAttributes="${DataDictionary.CreditMemoDocument.attributes}" />
 	        
 		<purap:vendor documentAttributes="${DataDictionary.CreditMemoDocument.attributes}" displayPurchaseOrderFields="false" displayCreditMemoFields="true"/>
 	
@@ -59,30 +56,28 @@
 			itemAttributes="${DataDictionary.CreditMemoItem.attributes}"
 			accountingLineAttributes="${DataDictionary.CreditMemoAccount.attributes}" isCreditMemo="true" />
 	  
-	    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}" allowsNoteFYI="true"/> 
-	
-	    <kul:adHocRecipients />
-	
-	    <kul:routeLog />
-	
-	    <gl:generalLedgerPendingEntries />
-
-    <!-- TEMPORARILY DISABLING ACCOUNT SUMMARY FUNCTIONALITY -->
-	    <!--  purap:summaryaccounts
+	    <purap:summaryaccounts
             itemAttributes="${DataDictionary.CreditMemoItem.attributes}"
-    	    documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" / -->  
+    	    documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" />  
     	    	
 		<purap:relatedDocuments documentAttributes="${DataDictionary.RelatedDocuments.attributes}"/>
            	
 	    <purap:paymentHistory documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
         
-
 	    <purap:statushistory 
 	        documentAttributes="${DataDictionary.CreditMemoStatusHistory.attributes}">
 	          <html:messages id="warnings" property="statusHistoryWarning" message="true">
 	            &nbsp;&nbsp;&nbsp;<bean:write name="warnings"/><br><br>
 	          </html:messages>       
 	    </purap:statushistory>
+	
+	    <gl:generalLedgerPendingEntries />
+
+	    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}" allowsNoteFYI="true"/> 
+	
+	    <kul:adHocRecipients />
+	
+	    <kul:routeLog />
 	
         <kul:panelFooter />
 	</c:if>

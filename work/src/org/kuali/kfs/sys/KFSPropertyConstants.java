@@ -50,6 +50,7 @@ public class KFSPropertyConstants {
     public static final String ACCOUNT_LINE_ENCUMBRANCE_AMOUNT = "accountLineEncumbranceAmount";
     public static final String ACCOUNT_LINE_ENCUMBRANCE_BALANCE_AMOUNT = "accountLineEncumbranceBalanceAmount";
     public static final String ACCOUNT_LINE_ENCUMBRANCE_CLOSED_AMOUNT = "accountLineEncumbranceClosedAmount";
+    public static final String ACCOUNT_LINE_ENCUMBRANCE_OUTSTANDING_AMOUNT = "accountLineEncumbranceOutstandingAmount";
     public static final String ACCOUNT_LINE_ENCUMBRANCE_PURGE_CODE = "accountLineEncumbrancePurgeCode";
     public static final String ACCOUNT_MANAGER_SYSTEM_IDENTIFIER = "accountManagerSystemIdentifier";
     public static final String ACCOUNT_MANAGER_USER = "accountManagerUser";
@@ -468,9 +469,9 @@ public class KFSPropertyConstants {
     public static final String DV_WIRE_ADMINISTRATOR_USER = "DVWireAdministratorUser";
     public static final String DV_WIRE_TRANSFER = "dvWireTransfer";
     public static final String EDIT = "edit";
+    public static final String EFFECTIVE_DATE = "effectiveDate";
     public static final String ELECTRONIC_RESEARCH_ADMINISTRATION_GRANT_NUMBER = "electronicResearchAdministrationGrantNumber";
     public static final String EMAIL_ADDRESS = "emailAddress";
-    public static final String EMPL_ID = "emplId";
     public static final String EMPLID = "emplid";
     public static final String EMPLOYEE = "employee";
     public static final String EMPLOYEE_RECORD = "employeeRecord";
@@ -727,6 +728,7 @@ public class KFSPropertyConstants {
     public static final String ITEM_UNIT_AMOUNT = "itemUnitAmount";
     public static final String ITEMS = "items";
     public static final String IU_NORMAL_WORK_MONTHS = "iuNormalWorkMonths";
+    public static final String JULY1_BUDGET_AMOUNT = "july1BudgetAmount";
     public static final String JV_USER = "JVUser";
     public static final String KUALI_USER = "kualiUser";
     public static final String KUALI_USER_CHART_OF_ACCOUNTS_CODE = "chartOfAccountsCode";
