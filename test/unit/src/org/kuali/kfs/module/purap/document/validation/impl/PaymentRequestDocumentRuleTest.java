@@ -22,6 +22,7 @@ import java.util.Calendar;
 
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.fixtures.PaymentRequestInvoiceTabFixture;
 import org.kuali.test.ConfigureContext;
@@ -32,12 +33,14 @@ public class PaymentRequestDocumentRuleTest extends PurapRuleTestBase {
     PaymentRequestDocumentRule rule;
     PaymentRequestDocument preq;
     
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         preq = new PaymentRequestDocument();
         rule = new PaymentRequestDocumentRule();
     }
     
+    @Override
     protected void tearDown() throws Exception {
         rule = null;
         preq = null;
@@ -113,14 +116,23 @@ public class PaymentRequestDocumentRuleTest extends PurapRuleTestBase {
     /* 
      * Tests of validatePaymentRequestDates
      */
+    public void testValidatePaymentRequestDates_Yesterday() {
+        Date yesterday = getDateFromOffsetFromToday(-1);
+        preq.setPaymentRequestPayDate(yesterday);
+        assertFalse(rule.validatePaymentRequestDates(preq));
+    }
     
-    /*
-     * Tests of validateTotals
-     */ 
+    public void testValidatePaymentRequestDates_Today() {
+        Date today = SpringContext.getBean(DateTimeService.class).getCurrentSqlDate();
+        preq.setPaymentRequestPayDate(today);
+        assertTrue(rule.validatePaymentRequestDates(preq));
+    }
     
-    /*
-     * Tests of processCalculateAccountsPayableBusinessRules
-     */
+    public void testValidatePaymentRequestDates_Tomorrow() {
+        Date tomorrow = getDateFromOffsetFromToday(1);
+        preq.setPaymentRequestPayDate(tomorrow);
+        assertTrue(rule.validatePaymentRequestDates(preq));
+    }
     
     /*
      * Tests of validateItem
