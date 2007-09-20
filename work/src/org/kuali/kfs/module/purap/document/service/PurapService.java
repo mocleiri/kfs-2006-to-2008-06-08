@@ -23,7 +23,7 @@ import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.module.purap.bo.ItemType;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -48,7 +48,25 @@ public interface PurapService {
      * @param iT the itemType
      * @return below the line item by item type 
      */
-    public PurchasingApItem getBelowTheLineByType(PurchasingAccountsPayableDocument document, ItemType iT);
+    public PurApItem getBelowTheLineByType(PurchasingAccountsPayableDocument document, ItemType iT);
+    
+    /**
+     * A method to determine whether a given date is in the past.
+     * 
+     * @param compareDate   An SQL date (not a DateFormatter date, or a util Date)
+     * @return  True if the given date is before today.
+     */
+    public boolean isDateInPast(Date compareDate);
+    
+    /**
+     * A method to determine whether a given date is more than a given number of days
+     * away from the current date.
+     * 
+     * @param compareDate   An SQL date (not a DateFormatter date, or a util Date)
+     * @param daysAway      An int, positive for future days, negative for past days
+     * @return   True if the given date is more than the given number of days away in either direction.
+     */
+    public boolean isDateMoreThanANumberOfDaysAway(Date compareDate, int daysAway);
     
     /**
      * We are obliged not to simply use a dateDiff and compare the result to 365, because we have
@@ -103,7 +121,6 @@ public interface PurapService {
      */
     public void performLogicForFullEntryCompleted(PurchasingAccountsPayableDocument purapDocument);
     
-    public Object performLogicWithFakedUserSession(String requiredUniversalUserPersonUserId, LogicToRunAsFakeUser logicToRun, Object... objects) throws UserNotFoundException, WorkflowException, Exception;
-    
-    public abstract interface LogicToRunAsFakeUser { public abstract Object runLogic(Object[] objects) throws Exception; }
+    public Object performLogicWithFakedUserSession(String requiredUniversalUserPersonUserId, LogicContainer logicToRun, Object... objects) throws UserNotFoundException, WorkflowException, Exception;
+
 }
