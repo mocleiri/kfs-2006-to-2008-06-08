@@ -21,13 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.kuali.core.service.BusinessObjectDictionaryService;
-import org.kuali.core.service.LookupService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
-import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
+import org.kuali.module.labor.LaborConstants;
+import org.kuali.module.labor.bo.LaborCalculatedSalaryFoundationTracker;
 
 /**
  * This class is used to generate the URL for the user-defined attributes for the Base Funds screen. It is entended the
@@ -53,29 +51,29 @@ public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getUserDefinedAttributeMap()
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getUserDefinedAttributeMap()
      */
     protected Map getUserDefinedAttributeMap() {
         Map userDefinedAttributeMap = new HashMap();
-        userDefinedAttributeMap.put(KFSPropertyConstants.CSF_AMOUNT, KFSPropertyConstants.CSF_AMOUNT);        
+        userDefinedAttributeMap.put(KFSPropertyConstants.CSF_AMOUNT, KFSPropertyConstants.CSF_AMOUNT);
         return userDefinedAttributeMap;
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getAttributeName(java.lang.String)
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getAttributeName(java.lang.String)
      */
     protected String getAttributeName(String attributeName) {
         return attributeName;
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
      */
-    protected Object getKeyValue(String keyName, Object keyValue) {       
-        if(keyValue.toString().startsWith("-")){
+    protected Object getKeyValue(String keyName, Object keyValue) {
+        if (keyValue.toString().startsWith("-")) {
             return keyValue;
         }
-               
+
         if (isExclusiveField(keyName, keyValue)) {
             keyValue = Constant.EMPTY_STRING;
         }
@@ -83,21 +81,21 @@ public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyName(java.lang.String)
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getKeyName(java.lang.String)
      */
     protected String getKeyName(String keyName) {
         return keyName;
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getLookupableImplAttributeName()
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getLookupableImplAttributeName()
      */
     protected String getLookupableImplAttributeName() {
-        return "CSFTrackerBalanceLookupable";
+        return LaborConstants.LookupableBeanKeys.CSF_TRACKER;
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
         // TODO: investigate change to this constant
@@ -105,14 +103,15 @@ public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getInquiryBusinessObjectClass(String)
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getInquiryBusinessObjectClass(java.lang.String)
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
-        return CalculatedSalaryFoundationTracker.class;
+        return LaborCalculatedSalaryFoundationTracker.class;
     }
 
     /**
-     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#addMoreParameters(java.util.Properties,
+     *      java.lang.String)
      */
     protected void addMoreParameters(Properties parameter, String attributeName) {
     }

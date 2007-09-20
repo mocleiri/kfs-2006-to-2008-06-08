@@ -24,11 +24,14 @@ import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapConstants.ItemFields;
 import org.kuali.module.purap.PurapWorkflowConstants.PaymentRequestDocument.NodeDetailEnum;
 import org.kuali.module.purap.bo.PaymentRequestItem;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
+import org.kuali.module.purap.rule.CalculateAccountsPayableRule;
+import org.kuali.module.purap.rule.CancelAccountsPayableRule;
+import org.kuali.module.purap.rule.ContinueAccountsPayableRule;
 
-public class AccountsPayableDocumentRuleBase extends PurchasingAccountsPayableDocumentRuleBase {
+public abstract class AccountsPayableDocumentRuleBase extends PurchasingAccountsPayableDocumentRuleBase  implements ContinueAccountsPayableRule, CalculateAccountsPayableRule, CancelAccountsPayableRule {
     
     @Override
     public boolean processValidation(PurchasingAccountsPayableDocument purapDocument) {
@@ -57,7 +60,7 @@ public class AccountsPayableDocumentRuleBase extends PurchasingAccountsPayableDo
     public boolean processItemValidation(PurchasingAccountsPayableDocument purapDocument) {
         boolean valid = super.processItemValidation(purapDocument);
        
-        for (PurchasingApItem item : purapDocument.getItems()) {
+        for (PurApItem item : purapDocument.getItems()) {
             String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
             if (item.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE)) {
                 valid &= validateItemTypeItems((PaymentRequestItem) item, identifierString);
@@ -82,5 +85,10 @@ public class AccountsPayableDocumentRuleBase extends PurchasingAccountsPayableDo
             GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_AMOUNT_BELOW_ZERO, ItemFields.INVOICE_EXTENDED_PRICE, identifierString);
         }
         return valid;
-    }    
+    }
+
+    /**
+     * @see org.kuali.module.purap.rule.CancelAccountsPayableRule#processCancelAccountsPayableBusinessRules(org.kuali.module.purap.document.AccountsPayableDocument)
+     */
+    public abstract boolean processCancelAccountsPayableBusinessRules(AccountsPayableDocument document);
 }
