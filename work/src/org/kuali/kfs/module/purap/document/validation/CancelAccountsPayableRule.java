@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.purap.rule;
 
-import java.util.List;
+import org.kuali.module.purap.document.AccountsPayableDocument;
 
-import org.kuali.module.purap.bo.PurApItem;
-
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
-    
+/**
+ * Defines a rule which gets invoked on cancel
+ * of an AccountsPayable document.
+ */
+public interface CancelAccountsPayableRule {
+    /**
+     * @param document
+     * @return true if the business rules pass
+     */
+    public boolean processCancelAccountsPayableBusinessRules(AccountsPayableDocument document);
 }

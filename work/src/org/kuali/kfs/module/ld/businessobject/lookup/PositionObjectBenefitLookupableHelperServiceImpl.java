@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.labor.document;
+package org.kuali.module.labor.web.lookupable;
 
-import org.kuali.module.financial.document.YearEndDocument;
+import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.lookup.KualiLookupableHelperServiceImpl;
 
 /**
- * The class that represents the Benefit Expense Transfer Document.
+ * Custom lookupable to supress edit/copy actions on lookup screen.
  */
-public class YearEndBenefitExpenseTransferDocument extends BenefitExpenseTransferDocument implements YearEndDocument {
+public class PositionObjectBenefitLookupableHelperServiceImpl extends KualiLookupableHelperServiceImpl {
 
     /**
-     * Constructs a YearEndBenefitExpenseTransferDocument.java.
+     * @returns Empty string because we don't want any action links to be displayed on the lookups results page.
+     * @see org.kuali.core.lookup.LookupableHelperService#getActionUrls(org.kuali.core.bo.BusinessObject)
      */
-    public YearEndBenefitExpenseTransferDocument() {
-        super();
+    public String getActionUrls(BusinessObject businessObject) {
+        return "";
     }
 }

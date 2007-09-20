@@ -34,20 +34,49 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
+import org.kuali.module.purap.PurapParameterConstants;
+import org.kuali.module.purap.PurapPropertyConstants;
+import org.kuali.module.purap.PurapRuleConstants;
 import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
 import org.kuali.module.purap.bo.PurApAccountingLineBase;
 import org.kuali.module.purap.document.AccountsPayableDocument;
+import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
+import org.kuali.module.purap.service.AccountsPayableDocumentSpecificService;
 import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.PurapAccountingService;
+import org.kuali.module.purap.service.PurapGeneralLedgerService;
+import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.util.ExpiredOrClosedAccount;
 import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
+import org.kuali.module.purap.web.struts.action.AccountsPayableActionBase;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 @Transactional
 public class AccountsPayableServiceImpl implements AccountsPayableService {
 
     private PurapAccountingService purapAccountingService;
+    private PurapGeneralLedgerService purapGeneralLedgerService;
+    private DocumentService documentService;
+    private PurapService purapService;
+
+    /**
+     * Gets the purapService attribute. 
+     * @return Returns the purapService.
+     */
+    public PurapService getPurapService() {
+        return purapService;
+    }
+
+    /**
+     * Sets the purapService attribute value.
+     * @param purapService The purapService to set.
+     */
+    public void setPurapService(PurapService purapService) {
+        this.purapService = purapService;
+    }
 
     /**
      * Gets the purapAccountingService attribute. 
@@ -63,6 +92,38 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
      */
     public void setPurapAccountingService(PurapAccountingService purapAccountingService) {
         this.purapAccountingService = purapAccountingService;
+    }
+
+    /**
+     * Gets the purapGeneralLedgerService attribute. 
+     * @return Returns the purapGeneralLedgerService.
+     */
+    public PurapGeneralLedgerService getPurapGeneralLedgerService() {
+        return purapGeneralLedgerService;
+    }
+
+    /**
+     * Sets the purapGeneralLedgerService attribute value.
+     * @param purapGeneralLedgerService The purapGeneralLedgerService to set.
+     */
+    public void setPurapGeneralLedgerService(PurapGeneralLedgerService purapGeneralLedgerService) {
+        this.purapGeneralLedgerService = purapGeneralLedgerService;
+    }
+
+    /**
+     * Gets the documentService attribute. 
+     * @return Returns the documentService.
+     */
+    public DocumentService getDocumentService() {
+        return documentService;
+    }
+
+    /**
+     * Sets the documentService attribute value.
+     * @param documentService The documentService to set.
+     */
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 
     /**
@@ -102,7 +163,7 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         //get parameter to see if fiscal officers may see the continuation account warning
         String showContinuationAccountWaringFO = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT,  PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS);
         
-        //TODO: See if/how we want to allow AP users to view the continuation account warning
+        //TODO (KULPURAP-1569: dlemus) See if/how we want to allow AP users to view the continuation account warning
         //get parameter to see if ap users may see the continuation account warning        
         String showContinuationAccountWaringAP = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS);
         
@@ -315,6 +376,35 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         }
 
         return isFiscalUser;
+    }
+    
+    /**
+     * Sets ap doc to canceled. If gl entries have been created cancel entries are
+     * created.
+     * 
+     */
+    public void cancelAccountsPayableDocument(AccountsPayableDocument apDocument, String currentNodeName) {
+        // retrieve and save with canceled status, clear gl entries
+//        AccountsPayableDocument apDoc;
+//        try {
+//            apDoc = (AccountsPayableDocument)documentService.getByDocumentHeaderId(apDocument.getDocumentNumber());
+//        }
+//        catch (WorkflowException e) {
+//            throw new RuntimeException("Can't get workflow doc "+e);
+//        }
+        
+        if (purapService.isFullDocumentEntryCompleted(apDocument)) {
+            //TODO remove this config (for testing only) hjs
+            if (SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, "PURAP_GL_CANCEL_AP")) {
+                purapGeneralLedgerService.generateEntriesCancelAccountsPayableDocument(apDocument);
+            }
+        }
+        AccountsPayableDocumentSpecificService accountsPayableDocumentSpecificService = apDocument.getDocumentSpecificService();
+        String cancelledStatusCode = accountsPayableDocumentSpecificService.updateStatusByNode(currentNodeName, apDocument);
+//        apDocument.setStatusCode(cancelledStatusCode);
+        apDocument.refreshReferenceObject(PurapPropertyConstants.STATUS);
+        //close/reopen po?
+        accountsPayableDocumentSpecificService.takePurchaseOrderCancelAction(apDocument);
     }
 
 }

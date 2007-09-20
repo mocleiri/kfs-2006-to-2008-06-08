@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.labor.web.struts.action;
 
-import java.util.List;
+public class YearEndBenefitExpenseTransferAction extends BenefitExpenseTransferAction {
 
-import org.kuali.module.purap.bo.PurApItem;
-
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
-    
+    public YearEndBenefitExpenseTransferAction() {
+        super();
+    }
 }

@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.pdp.dao;
 
-import java.util.List;
+import org.kuali.module.pdp.bo.AchBank;
 
-import org.kuali.module.purap.bo.PurApItem;
+public interface AchBankDao {
+    /**
+     * Save a bank
+     * 
+     * @param ab
+     */
+    public void save(AchBank ab);
 
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
-    
+    /**
+     * Remove all data from the table
+     * 
+     */
+    public void emptyTable();
 }

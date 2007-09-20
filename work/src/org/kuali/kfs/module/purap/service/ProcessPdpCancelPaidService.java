@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.purap.service;
 
-import java.util.List;
+public interface ProcessPdpCancelPaidService {
+    /**
+     * Update Payment Requests that were cancelled or paid in PDP
+     */
+    public void processPdpCancelsAndPaids();
 
-import org.kuali.module.purap.bo.PurApItem;
+    /**
+     * Update Payment Requests that were cancelled in PDP
+     */
+    public void processPdpCancels();
 
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
-    
+    /**
+     * Update Payment Requests that were paid in PDP
+     */
+    public void processPdpPaids();
 }

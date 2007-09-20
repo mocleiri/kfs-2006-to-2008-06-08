@@ -13,14 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.pdp.service;
 
-import java.util.List;
+import org.kuali.module.pdp.bo.AchBank;
 
-import org.kuali.module.purap.bo.PurApItem;
+public interface AchBankService {
+    /**
+     * Save a bank
+     * 
+     * @param ab
+     */
+    public void save(AchBank ab);
 
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
-    
+    /**
+     * Read the bank data from a text file and reset table to match this file.
+     * The format of the file comes from here:
+     * 
+     * https://www.fededirectory.frb.org/format_ACH.cfm
+     * https://www.fededirectory.frb.org/FedACHdir.txt
+     * 
+     * @param filename
+     */
+    public boolean reloadTable(String filename);
 }

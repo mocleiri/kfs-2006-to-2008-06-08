@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.purap.service;
 
-import java.util.List;
+/**
+ * This class is used for containing logic that must be run... usually when faking a user session
+ */
+public abstract interface LogicContainer {
 
-import org.kuali.module.purap.bo.PurApItem;
-
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
+    public abstract Object runLogic(Object[] objects) throws Exception;
     
 }

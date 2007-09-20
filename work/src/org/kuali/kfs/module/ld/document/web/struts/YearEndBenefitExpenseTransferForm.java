@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.labor.document;
+package org.kuali.module.labor.web.struts.form;
 
-import org.kuali.module.financial.document.YearEndDocument;
+import org.kuali.module.labor.document.YearEndBenefitExpenseTransferDocument;
 
 /**
- * The class that represents the Benefit Expense Transfer Document.
+ * This class is the form class for the Labor Year End Benefit Expense Transfer document.
  */
-public class YearEndBenefitExpenseTransferDocument extends BenefitExpenseTransferDocument implements YearEndDocument {
+public class YearEndBenefitExpenseTransferForm extends BenefitExpenseTransferForm {
+    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(YearEndBenefitExpenseTransferForm.class);
 
     /**
-     * Constructs a YearEndBenefitExpenseTransferDocument.java.
+     * Constructs a BenefitExpenseTransferForm instance and sets up the appropriately casted document.
      */
-    public YearEndBenefitExpenseTransferDocument() {
+    public YearEndBenefitExpenseTransferForm() {
+        
         super();
+        setDocument(new YearEndBenefitExpenseTransferDocument());
     }
 }

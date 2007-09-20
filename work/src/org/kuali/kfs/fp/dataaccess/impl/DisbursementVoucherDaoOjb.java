@@ -28,6 +28,24 @@ import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 public class DisbursementVoucherDaoOjb extends PlatformAwareDaoBaseOjb implements DisbursementVoucherDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherDaoOjb.class);
 
+    public void save(DisbursementVoucherDocument document) {
+        LOG.debug("save() started");
+
+        getPersistenceBrokerTemplate().store(document);
+    }
+
+    /**
+     * @see org.kuali.module.financial.dao.DisbursementVoucherDao#getDocument(java.lang.String)
+     */
+    public DisbursementVoucherDocument getDocument(String fdocNbr) {
+        LOG.debug("getDocument() started");
+
+        Criteria criteria = new Criteria();
+        criteria.addEqualTo("documentNumber", fdocNbr);
+
+        return (DisbursementVoucherDocument)getPersistenceBrokerTemplate().getObjectByQuery(new QueryByCriteria(DisbursementVoucherDocument.class,criteria));
+    }
+
     /**
      * @see org.kuali.module.financial.dao.DisbursementVoucherDao#getDocumentsByHeaderStatus(java.lang.String)
      */

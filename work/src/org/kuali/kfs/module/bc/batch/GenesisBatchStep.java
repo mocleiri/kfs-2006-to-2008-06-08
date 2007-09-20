@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.budget.batch;
 
-import java.util.List;
+import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.module.budget.service.GenesisService;
+import org.kuali.kfs.context.SpringContext;
 
-import org.kuali.module.purap.bo.PurApItem;
+public class GenesisBatchStep extends AbstractStep {
 
-public interface PurApAccountingDao {
+private GenesisService genesisService;
 
-    public List getAccountingLinesForItem(PurApItem item);
+public boolean execute(String jobName) 
+{
+    genesisService = SpringContext.getBean(GenesisService.class);
+    //@@TODO: in production, we will use the current fiscal year, not the last one
+    Integer baseFiscalYear = genesisService.genesisFiscalYearFromToday()-1;
+    genesisService.genesisStep(baseFiscalYear);
+    return true;
+}
     
 }

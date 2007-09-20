@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.gl.batch;
 
-import java.util.List;
+import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.module.gl.service.OriginEntryGroupService;
 
-import org.kuali.module.purap.bo.PurApItem;
-
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
+public class MarkPostableIcrGroupsAsUnpostableStep extends AbstractStep {
+    private OriginEntryGroupService originEntryGroupService;
     
+    public boolean execute(String jobName) throws InterruptedException {
+        originEntryGroupService.markPostableIcrGroupsAsUnpostable();
+        return true;
+    }
+
+    public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
+        this.originEntryGroupService = originEntryGroupService;
+    }
 }

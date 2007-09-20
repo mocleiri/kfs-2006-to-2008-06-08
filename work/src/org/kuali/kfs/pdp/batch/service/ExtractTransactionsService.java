@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.pdp.service;
 
-import java.util.List;
-
-import org.kuali.module.purap.bo.PurApItem;
-
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
-    
+public interface ExtractGlTransactionService {
+    /**
+     * Extract GL Transactions
+     */
+    public void extractGlTransactions();
 }

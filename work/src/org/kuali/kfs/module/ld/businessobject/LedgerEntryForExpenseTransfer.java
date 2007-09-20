@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.module.purap.dao;
+package org.kuali.module.labor.bo;
 
-import java.util.List;
 
-import org.kuali.module.purap.bo.PurApItem;
+public class LedgerEntryForExpenseTransfer extends LedgerEntry {
 
-public interface PurApAccountingDao {
-
-    public List getAccountingLinesForItem(PurApItem item);
-    
 }
