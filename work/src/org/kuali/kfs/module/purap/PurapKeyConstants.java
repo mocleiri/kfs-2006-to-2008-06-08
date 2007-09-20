@@ -27,6 +27,8 @@ public class PurapKeyConstants {
     public static final String PURAP_GENERAL_NO_ITEMS_TO_REMOVE_ACCOUNTS_FROM = "error.document.purap.noItemsToRemoveAccountsFrom";
     public static final String PURAP_GENERAL_ACCOUNTS_DISTRIBUTED = "message.document.purap.accountsDistributed";
     public static final String PURAP_GENERAL_ACCOUNTS_REMOVED = "message.document.purap.accountsRemoved";
+    public static final String ERROR_INVALID_CHART_OF_ACCOUNTS_CODE = "error.document.purap.invalidChartOfAccountsCode";
+    public static final String ERROR_INVALID_ORGANIZATION_CODE = "error.document.purap.invalidOrganizationCode";
     
     //Purchase Order & Requisition
     public static final String ERROR_PURCHASE_ORDER_BEGIN_DATE_AFTER_END = "error.purchaseOrder.beginDateAfterEnd";
@@ -51,6 +53,7 @@ public class PurapKeyConstants {
     public static final String ERROR_NO_ITEMS = "error.requisition.no.items";
     public static final String ERROR_NO_ACCOUNTS = "error.requisition.no.accounts";
     public static final String ERROR_NOT_100_PERCENT = "error.requisition.items.not.100.percent";
+    public static final String ERROR_REQUISITION_ACCOUNT_CLOSED = "error.document.requisition.accountClosed";
     
     //Purchase Order  
     public static final String PURCHASE_ORDER_QUESTION_DOCUMENT = "purchaseOrder.question.text";
@@ -92,10 +95,12 @@ public class PurapKeyConstants {
     public static final String ERROR_APPROVE_REQUIRES_CALCULATE="errors.save.calculationRequired";
     public static final String ERROR_AP_REQUIRES_ATTACHMENT="errors.ap.attachmentRequired";
     public static final String AP_QUESTION_CONFIRM_INVOICE_MISMATCH = "ap.question.confirm.invoice.mismatch";
+    public static final String AP_QUESTION_PREFIX = "ap.question.";
     
     //Payment Request
     public static final String ERROR_PURCHASE_ORDER_NOT_EXIST="error.invoice.purchaseOrder.notExist";
     public static final String ERROR_PURCHASE_ORDER_NOT_OPEN="error.invoice.purchaseOrder.notOpen";
+    public static final String ERROR_PURCHASE_PENDING_ACTION="error.invoice.purchaseOrder.pending.action";
     public static final String ERROR_PURCHASE_ORDER_IS_PENDING="error.invoice.purchaseOrder.isPending";
     public static final String ERROR_INVALID_INVOICE_DATE="errors.invalid.invoice.date";
     public static final String ERROR_INVALID_PAY_DATE="errors.invalid.pay.date";
@@ -134,7 +139,7 @@ public class PurapKeyConstants {
 
     public static final String WARNING_ENCUMBER_NEXT_FY="warning.encumber.nextFY";
     public static final String WARNING_CANCEL_REOPEN_PO="warning.cancel.reOpenPO";
-    public static final String WARNING_PAYMENT_REQUEST_PAYDATE_OVER_60_DAYS="warning.paymentRequest.payDate.over.60days";
+    public static final String WARNING_PAYMENT_REQUEST_PAYDATE_OVER_THRESHOLD_DAYS="warning.paymentRequest.payDate.over.threshold.days";
     public static final String MESSAGE_PAYMENT_REQUEST_VENDOR_INVOICE_AMOUNT_INVALID="message.paymentRequest.vendorInvoiceAmount.invalid";
     
     //Item and Accounting line
