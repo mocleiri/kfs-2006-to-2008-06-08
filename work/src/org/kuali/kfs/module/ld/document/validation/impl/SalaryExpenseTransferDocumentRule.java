@@ -22,7 +22,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.RiceConstants;
 import org.kuali.core.document.Document;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
@@ -56,6 +58,28 @@ public class SalaryExpenseTransferDocumentRule extends LaborExpenseTransferDocum
     }
 
     /**
+     * @see org.kuali.module.labor.rules.LaborExpenseTransferDocumentRules#isValidAmountTransferredByObjectCode(org.kuali.kfs.document.AccountingDocument)
+     */
+    @Override
+    protected boolean isValidAmountTransferredByObjectCode(AccountingDocument accountingDocument) {
+        // check if user is allowed to edit the object code.
+        String adminGroupName = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(LaborConstants.LABOR_NAMESPACE, LaborConstants.Components.SALARY_EXPENSE_TRANSFER, LaborConstants.SalaryExpenseTransfer.SET_ADMIN_WORKGROUP_PARM_NM);
+        boolean isAdmin = false;
+        try {
+            isAdmin = GlobalVariables.getUserSession().getUniversalUser().isMember(adminGroupName);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Workgroup " + LaborConstants.SalaryExpenseTransfer.SET_ADMIN_WORKGROUP_PARM_NM + " not found", e);
+        }
+        
+        if (isAdmin) {
+            return true;
+        }
+        
+        return super.isValidAmountTransferredByObjectCode(accountingDocument);
+    }
+
+    /**
      * @see org.kuali.core.rules.SaveDocumentRule#processCustomSaveDocumentBusinessRules(Document)
      */
     @Override
@@ -75,7 +99,6 @@ public class SalaryExpenseTransferDocumentRule extends LaborExpenseTransferDocum
             // reportError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.Labor.ERROR_EMPLOYEE_ID_NOT_SAME);
             return false;
         }
-
 
         return true;
     }
@@ -151,7 +174,6 @@ public class SalaryExpenseTransferDocumentRule extends LaborExpenseTransferDocum
      *         sourceAccountingLine.getEmplid(); if (emplid == null) { return false; } cachedEmplid = cachedEmplid == null ? emplid :
      *         cachedEmplid; if (!emplid.equals(cachedEmplid)) { return false; } } return true; }
      */
-
     private boolean hasAccountingLinesSameEmployee(AccountingDocument accountingDocument) {
         LOG.debug("stared hasDocumentsSameEmployee");
 
@@ -194,6 +216,7 @@ public class SalaryExpenseTransferDocumentRule extends LaborExpenseTransferDocum
         if (!targetAccountingLinesValidationResult) {
             reportError(KFSPropertyConstants.TARGET_ACCOUNTING_LINES, KFSKeyConstants.Labor.ERROR_EMPLOYEE_ID_NOT_SAME_IN_TARGET);
         }
+        
         return (sourceAccountingLinesValidationResult && targetAccountingLinesValidationResult);
     }
 
@@ -242,7 +265,7 @@ public class SalaryExpenseTransferDocumentRule extends LaborExpenseTransferDocum
 
         ExpenseTransferAccountingLine expenseTransferAccountingLine = (ExpenseTransferAccountingLine) accountingLine;
 
-        List<LaborLedgerPendingEntry> expensePendingEntries = LaborPendingEntryGenerator.generateExpesnePendingEntries(document, expenseTransferAccountingLine, sequenceHelper);
+        List<LaborLedgerPendingEntry> expensePendingEntries = LaborPendingEntryGenerator.generateExpensePendingEntries(document, expenseTransferAccountingLine, sequenceHelper);
         document.getLaborLedgerPendingEntries().addAll(expensePendingEntries);
 
         List<LaborLedgerPendingEntry> benefitPendingEntries = LaborPendingEntryGenerator.generateBenefitPendingEntries(document, expenseTransferAccountingLine, sequenceHelper);
@@ -258,10 +281,12 @@ public class SalaryExpenseTransferDocumentRule extends LaborExpenseTransferDocum
     public boolean processGenerateLaborLedgerBenefitClearingPendingEntries(LaborLedgerPostingDocument document, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
         LOG.info("started processGenerateLaborLedgerBenefitClearingPendingEntries()");
 
-        String chartOfAccountsCode = "UA"; // TODO: make it configurable
-        String accountNumber = "9712700"; // TODO: make it configurable
-
-        LaborPendingEntryGenerator.generateBenefitClearingPendingEntries(document, sequenceHelper, accountNumber, chartOfAccountsCode);
+        String chartOfAccountsCode = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(LaborConstants.LABOR_NAMESPACE, LaborConstants.Components.SALARY_EXPENSE_TRANSFER, LaborConstants.SalaryExpenseTransfer.BENEFIT_CLEARING_CHART_PARM_NM); 
+        String accountNumber = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(LaborConstants.LABOR_NAMESPACE, LaborConstants.Components.SALARY_EXPENSE_TRANSFER, LaborConstants.SalaryExpenseTransfer.BENEFIT_CLEARING_ACCOUNT_PARM_NM); 
+        
+        List<LaborLedgerPendingEntry> benefitClearingPendingEntries = LaborPendingEntryGenerator.generateBenefitClearingPendingEntries(document, sequenceHelper, accountNumber, chartOfAccountsCode);
+        document.getLaborLedgerPendingEntries().addAll(benefitClearingPendingEntries);
+        
         return true;
     }
 }
