@@ -28,10 +28,6 @@
         <c:set var="retransmitMode" value="true" scope="request" />
     </c:if>
     
-    <c:if test="${KualiForm.editingMode['contractManagerChangeable']}">
-    	<c:set var="contractManagerChangeMode" value="true" scope="request" />
-    </c:if>
-    
     <kul:hiddenDocumentFields excludePostingYear="true" />
 
     <purap:hiddenPurapFields />
@@ -95,15 +91,16 @@
     <purap:additional
         documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" />
         
-    <!-- TEMPORARILY DISABLING ACCOUNT SUMMARY FUNCTIONALITY -->
-    <!-- purap:summaryaccounts
+    <purap:summaryaccounts
         itemAttributes="${DataDictionary.PurchaseOrderItem.attributes}"
-    	documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" / -->  
+    	documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" />  
 	
-    <purap:quotes
-        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}"
-        vendorQuoteAttributes="${DataDictionary.PurchaseOrderVendorQuote.attributes}"
-        isPurchaseOrderAwarded="${KualiForm.document.purchaseOrderAwarded}" />
+	<c:if test="${KualiForm.document.statusCode eq 'INPR' || KualiForm.document.statusCode eq 'QUOT'}">
+	    <purap:quotes
+	        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}"
+	        vendorQuoteAttributes="${DataDictionary.PurchaseOrderVendorQuote.attributes}"
+	        isPurchaseOrderAwarded="${KualiForm.document.purchaseOrderAwarded}" />
+	</c:if>
 
     <purap:relatedDocuments
             documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
@@ -118,6 +115,8 @@
           </html:messages>       
     </purap:statushistory>
 
+    <gl:generalLedgerPendingEntries />
+
     <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}"  allowsNoteFYI="true">
           <html:messages id="warnings" property="noteWarning" message="true">
             &nbsp;&nbsp;&nbsp;<bean:write name="warnings"/><br><br>
@@ -127,7 +126,6 @@
     <kul:adHocRecipients />
 
     <kul:routeLog />
-    <gl:generalLedgerPendingEntries />
 
 </c:if>
     <kul:panelFooter />

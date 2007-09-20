@@ -23,26 +23,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.core.UserSession;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.question.ConfirmationQuestion;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.KualiRuleService;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.rule.event.DocumentSystemSaveEvent;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapConstants.PREQDocumentsStrings;
 import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.rule.event.CalculateAccountsPayableEvent;
-import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
 import org.kuali.module.purap.service.PaymentRequestService;
-import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.util.PurQuestionCallback;
+import org.kuali.module.purap.web.struts.form.AccountsPayableFormBase;
 import org.kuali.module.purap.web.struts.form.PaymentRequestForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -209,6 +206,23 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
     }
 
     /**
+     * @see org.kuali.module.purap.web.struts.action.AccountsPayableActionBase#cancelPOActionCallbackMethod()
+     */
+    @Override
+    protected PurQuestionCallback cancelPOActionCallbackMethod() {
+        return new PurQuestionCallback() {
+            public void doPostQuestion(AccountsPayableDocument document, String noteText) throws Exception {
+                PaymentRequestDocument preqDocument = (PaymentRequestDocument)document;
+                DocumentService documentService = SpringContext.getBean(DocumentService.class);
+                preqDocument.setReopenPurchaseOrderIndicator(true);
+                //well be saved on cancel I believe
+                //TODO: ckirschenman - delyea is this the right event for this case?
+//                documentService.saveDocument(preqDocument, DocumentSystemSaveEvent.class);
+            }
+        };
+    }
+
+    /**
      * This action removes a request for cancel on a PREQ.
      * 
      * @param mapping
@@ -231,60 +245,6 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
     }
 
     /**
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#cancel(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward cancel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        PaymentRequestForm preqForm = (PaymentRequestForm) form;
-        PaymentRequestDocument document = (PaymentRequestDocument) preqForm.getDocument();
-        if (document.getDocumentHeader().hasWorkflowDocument()) {
-            if ((document.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) || (document.getDocumentHeader().getWorkflowDocument().stateIsFinal())) {
-                // TODO delyea - call custom cancel in the service
-            }
-            else if (document.getDocumentHeader().getWorkflowDocument().stateIsEnroute()) {
-                // one way or another we will have to fake the user session so get the current one
-                UserSession originalUserSession = GlobalVariables.getUserSession();
-                if (document.isPaymentRequestedCancelIndicator()) {
-                    // need to run a disapprove to cancel the document
-                    UniversalUser user = document.getLastActionPerformedByUser();
-                    if (ObjectUtils.isNull(user)) {
-                        // throw error
-                        String errorMsg = "Could not find valid 'last action performed' user for universal user id " + document.getLastActionPerformedByUniversalUserId();
-                        LOG.error("cancel() " + errorMsg);
-                        throw new RuntimeException(errorMsg);
-                    }
-                    ActionForward actionForward = mapping.findForward(KFSConstants.MAPPING_BASIC);
-                    try {
-                        // need to run the disapprove as the user who requested the document be canceled
-                        GlobalVariables.setUserSession(new UserSession(user.getPersonUserIdentifier()));
-                        PaymentRequestForm newPreqForm = (PaymentRequestForm)ObjectUtils.deepCopy(preqForm);
-                        newPreqForm.setDocument(SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(document.getDocumentNumber()));
-                        actionForward = super.disapprove(mapping, newPreqForm, request, response);
-                    }
-                    finally {
-                        GlobalVariables.setUserSession(originalUserSession);
-                    }
-                    return actionForward;
-                }
-                else {
-                    ActionForward actionForward = mapping.findForward(KFSConstants.MAPPING_BASIC);
-                    try {
-                        // need to run a super user cancel since person canceling may not have an action requested on the document
-                        GlobalVariables.setUserSession(new UserSession(PurapConstants.SYSTEM_AP_USER));
-                        SpringContext.getBean(DocumentService.class).superUserCancelDocument(SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(document.getDocumentNumber()), "Document Cancelled by user " + originalUserSession.getUniversalUser().getPersonName() + " (" + originalUserSession.getUniversalUser().getPersonUserIdentifier() + ")");
-                    }
-                    finally {
-                        GlobalVariables.setUserSession(originalUserSession);
-                    }
-                    return actionForward;
-                }
-            }
-        }
-        return super.cancel(mapping, form, request, response);
-    }
-
-    /**
      * calls a service method to calculate for a payment request document
      */
     @Override
@@ -292,29 +252,14 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         PaymentRequestDocument preqDoc = (PaymentRequestDocument) apDoc;
         //set amounts on any empty
         preqDoc.updateExtendedPriceOnItems();
+
         //notice we're ignoring whether the boolean, because these are just warnings they shouldn't halt anything
         SpringContext.getBean(KualiRuleService.class).applyRules(new CalculateAccountsPayableEvent(preqDoc));
-
         SpringContext.getBean(PaymentRequestService.class).calculatePaymentRequest(preqDoc, true);
-        // TODO Chris - an updateAccountAmounts is done at the end of the above method... need it here? (I don't think so)
-//        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(apDoc);
     }
-
-
-    /**
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#save(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    /*
-     @Override
-     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-     // TODO Auto-generated method stub
-     LOG.debug("save() method");
-
-     PaymentRequestForm preqForm = (PaymentRequestForm) form;
-     PaymentRequestDocument document = (PaymentRequestDocument) preqForm.getDocument();
-     
-     SpringContext.getBean(PaymentRequestService.class).save(document);
-     return super.save(mapping, form, request, response);
-     }
-     */
+    
+    @Override
+    public String getActionName(){
+        return PurapConstants.PAYMENT_REQUEST_ACTION_NAME;
+    }
 }

@@ -27,6 +27,7 @@ import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.rule.event.KualiDocumentEvent;
 import org.kuali.core.rule.event.RouteDocumentEvent;
 import org.kuali.core.service.DataDictionaryService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -34,8 +35,10 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowInfo;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
+import org.kuali.module.purap.service.AccountsPayableDocumentSpecificService;
 import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
@@ -62,9 +65,9 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     private String processingCampusCode;
     private String noteLine1Text;
     private String noteLine2Text;
-    private String noteLine3Text;   
+    private String noteLine3Text;
     private boolean continuationAccountIndicator;
-    
+
     private boolean unmatchedOverride; // not persisted
     
     // NOT PERSISTED IN DB
@@ -77,7 +80,7 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     // NOT PERSISTED IN DB
     // BELOW USED BY GL ENTRY CREATION
     private boolean generateEncumbranceEntries;
-    private boolean generateCancelEntries;
+    private String debitCreditCodeForGLEntries;
 
     // REFERENCE OBJECTS
     private Campus processingCampus;
@@ -89,12 +92,18 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     }
 
     public boolean requiresAccountsPayableReviewRouting() {
-        return documentHasNoImagesAttached();
+        return !approvalAtAccountsPayableReviewAllowed();
     }
 
     public boolean approvalAtAccountsPayableReviewAllowed() {
-        return !documentHasNoImagesAttached();
+        return !(isAttachmentRequired() && documentHasNoImagesAttached());
     }
+
+    /**
+     * This method checks whether an attachment is required
+     * @return
+     */
+    protected abstract boolean isAttachmentRequired();
     
     private boolean documentHasNoImagesAttached() {
         List boNotes = this.getDocumentBusinessObject().getBoNotes();
@@ -129,14 +138,14 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
      */
     @Override
     public void prepareForSave(KualiDocumentEvent event) {
-        //if routing and closereopen po indicator set, call closereopen po method
-        if((event instanceof RouteDocumentEvent) && this.isCloseReopenPoIndicator()){
-            processCloseReopenPo();
-            this.setCloseReopenPoIndicator(false);
-        }
 
         //copied from super because we can't call super for AP docs
         SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(this);
+
+        //if routing and close/reopen checkbox selected, call close/reopen po method
+        if((event instanceof RouteDocumentEvent) && this.isCloseReopenPoIndicator() ){
+            processCloseReopenPo( getPoDocumentTypeForAccountsPayableDocumentApprove() );
+        }
 
         //DO NOT CALL SUPER HERE!!  Cannot call super because it will mess up the GL entry creation process (hjs)
         //super.prepareForSave(event);
@@ -149,13 +158,18 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     public abstract String getPoDocumentTypeForAccountsPayableDocumentApprove();
     
     /**
+     * Helper method to be called from custom prepare for save and to be
+     * overriden by sub class.
+     */
+    public abstract String getPoDocumentTypeForAccountsPayableDocumentCancel();
+
+    /**
      * This method should be called from child class from overridden processCloseReopenPo(), it will pass the action it will take,
      * which is document specific.
      * 
      * @param docType
      */
-    public void processCloseReopenPo() {
-        String docType = getPoDocumentTypeForAccountsPayableDocumentApprove();
+    public void processCloseReopenPo(String docType) {
         String action = null;
         if (PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_CLOSE_DOCUMENT.equals(docType)) {
             action = "closed";
@@ -353,14 +367,6 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
         this.generateEncumbranceEntries = generateEncumbranceEntries;
     }
 
-    public boolean isGenerateCancelEntries() {
-        return generateCancelEntries;
-    }
-
-    public void setGenerateCancelEntries(boolean generateCancelEntries) {
-        this.generateCancelEntries = generateCancelEntries;
-    }
-
     public PurchaseOrderDocument getPurchaseOrderDocument() {
         if ( (ObjectUtils.isNull(purchaseOrderDocument)) && (ObjectUtils.isNotNull(getPurchaseOrderIdentifier())) ) {
             setPurchaseOrderDocument(SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(this.getPurchaseOrderIdentifier()));
@@ -408,6 +414,14 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
         }
     }
 
+    public String getDebitCreditCodeForGLEntries() {
+        return debitCreditCodeForGLEntries;
+    }
+
+    public void setDebitCreditCodeForGLEntries(String debitCreditCodeForGLEntries) {
+        this.debitCreditCodeForGLEntries = debitCreditCodeForGLEntries;
+    }
+
     /**
      * Gets the unmatchedOverride attribute.
      * 
@@ -433,7 +447,7 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
      * 
      * @return
      */
-    public abstract KualiDecimal getInitialAmount();    
+    public abstract KualiDecimal getInitialAmount();
 
     /**
      * Gets the continuationAccountIndicator attribute. 
@@ -441,8 +455,7 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
      */
     public boolean isContinuationAccountIndicator() {
         return continuationAccountIndicator;
-    }
-
+}
     /**
      * Sets the continuationAccountIndicator attribute value.
      * @param continuationAccountIndicator The continuationAccountIndicator to set.
@@ -450,8 +463,10 @@ public abstract class AccountsPayableDocumentBase extends PurchasingAccountsPaya
     public void setContinuationAccountIndicator(boolean continuationAccountIndicator) {
         this.continuationAccountIndicator = continuationAccountIndicator;
     }
-    
+
     public boolean isExtracted() {
-        return (this.getExtractedDate()==null)?false:true;
+        return (ObjectUtils.isNotNull(getExtractedDate()));
     }
+    
+    public abstract AccountsPayableDocumentSpecificService getDocumentSpecificService();
 }
