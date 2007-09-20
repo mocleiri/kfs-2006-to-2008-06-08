@@ -128,7 +128,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
             PaymentRequestItem preqItemToTemplate = (PaymentRequestItem) preqDocument.getItemByLineNumber(poItem.getItemLineNumber());
 
             if (preqItemToTemplate != null && preqItemToTemplate.getItemType().isItemTypeAboveTheLineIndicator()) {
-                if (preqItemToTemplate.getItemQuantity() != null || preqItemToTemplate.getExtendedPrice().isNonZero()) {
+                if (preqItemToTemplate.getExtendedPrice().isNonZero()) {
                     cmDocument.getItems().add(new CreditMemoItem(cmDocument, preqItemToTemplate, poItem, expiredOrClosedAccountList));
                 }
             }
@@ -188,7 +188,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
         // add below the line items
         SpringContext.getBean(PurapService.class).addBelowLineItems(cmDocument);
         
-        // TODO: account distribution?
+        // TODO (KULPURAP-1571: ckirschenman) account distribution?
     }
 
     /**
@@ -258,7 +258,6 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
                         String param1 = identifier + "." + accountIdentifier;
                         String param2 = calcAmount.bigDecimalValue().subtract(accountAmount.bigDecimalValue()).toString();
                         GlobalVariables.getErrorMap().putError(item.getItemIdentifierString(), PurapKeyConstants.ERROR_ITEM_ACCOUNTING_ROUNDING, param1, param2);
-                        // fix
                         account.setAmount(calcAmount);
                     }
 
