@@ -16,6 +16,7 @@
 package org.kuali.module.purap.service.impl;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,12 +42,13 @@ import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapRuleConstants;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.OrganizationParameter;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.bo.PurchaseOrderView;
-import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
+import org.kuali.module.purap.service.LogicContainer;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.vendor.service.VendorService;
@@ -153,10 +155,10 @@ public class PurapServiceImpl implements PurapService {
     public void addBelowLineItems(PurchasingAccountsPayableDocument document) {
         String[] itemTypes = getBelowTheLineForDocument(document);
         
-        List<PurchasingApItem> existingItems = document.getItems();
+        List<PurApItem> existingItems = document.getItems();
 
         List<String> existingItemTypes = new ArrayList();
-        for (PurchasingApItem existingItem : existingItems) {
+        for (PurApItem existingItem : existingItems) {
             existingItemTypes.add(existingItem.getItemTypeCode());
         }
         
@@ -172,7 +174,7 @@ public class PurapServiceImpl implements PurapService {
                     else {
                         lastFound = existingItemTypes.size();
                     }
-                    PurchasingApItem newItem = (PurchasingApItem)itemClass.newInstance();                    
+                    PurApItem newItem = (PurApItem)itemClass.newInstance();                    
                     newItem.setItemTypeCode(itemTypes[i]);
                     existingItems.add(lastFound, newItem);
                     existingItemTypes.add(itemTypes[i]);
@@ -209,9 +211,9 @@ public class PurapServiceImpl implements PurapService {
      * 
      * @see org.kuali.module.purap.service.PurapService#getBelowTheLineByType(org.kuali.module.purap.document.PurchasingAccountsPayableDocument, org.kuali.module.purap.bo.ItemType)
      */
-    public PurchasingApItem getBelowTheLineByType(PurchasingAccountsPayableDocument document, ItemType iT) {
-        PurchasingApItem belowTheLineItem = null;
-        for (PurchasingApItem item : (List<PurchasingApItem>)document.getItems()) {
+    public PurApItem getBelowTheLineByType(PurchasingAccountsPayableDocument document, ItemType iT) {
+        PurApItem belowTheLineItem = null;
+        for (PurApItem item : (List<PurApItem>)document.getItems()) {
             if(!item.getItemType().isItemTypeAboveTheLineIndicator()) {
                 if(StringUtils.equals(iT.getItemTypeCode(), item.getItemType().getItemTypeCode())) {
                     belowTheLineItem = item;
@@ -220,6 +222,33 @@ public class PurapServiceImpl implements PurapService {
             }
         }
         return belowTheLineItem;
+    }
+    
+    /**
+     * @see org.kuali.module.purap.service.PurapService#isDateInPast(java.sql.Date)
+     */
+    public boolean isDateInPast(Date compareDate) {
+        Date today = dateTimeService.getCurrentSqlDate();
+        int diffFromToday = dateTimeService.dateDiff(today, compareDate, false);
+        return (diffFromToday < 0);
+    }
+    
+    /**
+     * @see org.kuali.module.purap.service.PurapService#isDateMoreThanANumberOfDaysAway(java.sql.Date, int)
+     */
+    public boolean isDateMoreThanANumberOfDaysAway(Date compareDate, int daysAway) {
+        Date todayAtMidnight = dateTimeService.getCurrentSqlDateMidnight();
+        Calendar daysAwayCalendar = dateTimeService.getCalendar(todayAtMidnight);
+        daysAwayCalendar.add(Calendar.DATE, daysAway);
+        Timestamp daysAwayTime = new Timestamp(daysAwayCalendar.getTime().getTime());
+        Calendar compareCalendar = dateTimeService.getCalendar(compareDate);
+        compareCalendar.set(Calendar.HOUR, 0);
+        compareCalendar.set(Calendar.MINUTE, 0);
+        compareCalendar.set(Calendar.SECOND, 0);
+        compareCalendar.set(Calendar.MILLISECOND, 0);
+        compareCalendar.set(Calendar.AM_PM, Calendar.AM);        
+        Timestamp compareTime = new Timestamp(compareCalendar.getTime().getTime());
+        return (compareTime.compareTo(daysAwayTime) > 0 );
     }
     
     /**
@@ -313,11 +342,16 @@ public class PurapServiceImpl implements PurapService {
         }
         // below code preferable to run in post processing
         else if (purapDocument instanceof PaymentRequestDocument) {
+            PaymentRequestDocument paymentRequest = (PaymentRequestDocument)purapDocument;
             // change PREQ accounts from percents to dollars
             // TODO Chris - put code here for document to change percents into dollars and any related functions
             // do GL entries for PREQ creation
-            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesCreatePreq((PaymentRequestDocument)purapDocument);
-            // route potential 'Close PO Document' if checkbox was checked
+            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesCreatePaymentRequest((PaymentRequestDocument)purapDocument);
+            if (paymentRequest.isClosePurchaseOrderIndicator()) {
+                // TODO (KULPURAP-1576: dlemus/delyea) route the reopen purchase order here
+                // get the po id and get the current po
+                // check the current po: if status is not closed and there is no pending action... route close po as system user
+        	}
         }
         // below code preferable to run in post processing
         else if (purapDocument instanceof CreditMemoDocument) {
@@ -325,14 +359,15 @@ public class PurapServiceImpl implements PurapService {
             // TODO Chris - put code here for document to change percents into dollars and any related functions
             // do GL entries for CM creation
             SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesCreateCreditMemo((CreditMemoDocument)purapDocument);
-            // route potential 'Re-Open PO Document' if PO criteria meets requirements from EPIC business rules
+            // get the po id and get the current PO
+            // route 'Re-Open PO Document' if PO criteria meets requirements from EPIC business rules
         }
         else {
-        throw new RuntimeException("Attempted to perform full entry logic for unhandled document type '" + purapDocument.getClass().getName() + "'");
+        	throw new RuntimeException("Attempted to perform full entry logic for unhandled document type '" + purapDocument.getClass().getName() + "'");
         }
     }
 
-    public Object performLogicWithFakedUserSession(String requiredUniversalUserPersonUserId, LogicToRunAsFakeUser logicToRun, Object... objects) throws UserNotFoundException, WorkflowException, Exception {
+    public Object performLogicWithFakedUserSession(String requiredUniversalUserPersonUserId, LogicContainer logicToRun, Object... objects) throws UserNotFoundException, WorkflowException, Exception {
         if (StringUtils.isBlank(requiredUniversalUserPersonUserId)) {
             throw new RuntimeException("Attempted to perform logic with a fake user session with a blank user person id: '" + requiredUniversalUserPersonUserId + "'");
         }
