@@ -39,6 +39,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.kuali.core.bo.Parameter;
+import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.service.DocumentTypeService;
@@ -542,6 +543,11 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
                 financialDocumentForm.getBaselineSourceAccountingLines().remove(deleteIndex);
             }
             financialDocumentForm.getSourceLineDecorators().remove(deleteIndex);
+            
+            // update the doc total 
+            AccountingDocument tdoc = (AccountingDocument) financialDocumentForm.getDocument();
+            if (tdoc instanceof AmountTotaling)
+                financialDocumentForm.getDocument().getDocumentHeader().setFinancialDocumentTotalAmount(tdoc.getSourceTotal());
         }
         else {
             // remove from document
@@ -749,6 +755,10 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
             if(line.isSalesTaxRequired()) {
                 populateSalesTax(line);
             }
+            
+            // Update the doc total
+            if (tdoc instanceof AmountTotaling)
+                financialDocumentForm.getDocument().getDocumentHeader().setFinancialDocumentTotalAmount(tdoc.getSourceTotal());
         }
         else {
             // add it to the document
