@@ -17,18 +17,19 @@ package org.kuali.module.gl.service.impl.orgreversion;
 
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.gl.service.OrganizationReversionCategoryLogic;
 
 public class GenericOrganizationReversionCategory implements OrganizationReversionCategoryLogic {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GenericOrganizationReversionCategory.class);
 
-    private KualiConfigurationService kualiConfigurationService;
-
     private String categoryCode;
     private String categoryName;
     private boolean isExpense;
-
+    
+    private KualiConfigurationService kualiConfigurationService;
+    
     public GenericOrganizationReversionCategory() {
     }
 
@@ -52,7 +53,7 @@ public class GenericOrganizationReversionCategory implements OrganizationReversi
         String cons = oc.getFinancialObjectLevel().getFinancialConsolidationObjectCode();
         String level = oc.getFinancialObjectLevelCode();
         String objTyp = oc.getFinancialObjectTypeCode();
-        String objSubTyp = oc.getFinancialObjectSubTypeCode();
+        String objSubTyp = oc.getFinancialObjectSubType().getCode();
 
         boolean consolidationRulesPassed = kualiConfigurationService.evaluateConstrainedParameter(
                 KFSConstants.CHART_NAMESPACE, 
@@ -98,6 +99,10 @@ public class GenericOrganizationReversionCategory implements OrganizationReversi
         return isExpense;
     }
 
+    /**
+     * Sets the kualiConfigurationService attribute value.
+     * @param kualiConfigurationService The kualiConfigurationService to set.
+     */
     public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
         this.kualiConfigurationService = kualiConfigurationService;
     }
