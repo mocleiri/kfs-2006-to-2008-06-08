@@ -320,7 +320,7 @@
             </attributeReference>
 
             <attribute name="financialHigherEdFunctionCd" forceUppercase="true">
-                <label>Financial Higher Education Function Code</label>
+                <label>Higher Education Function Code</label>
                 <shortLabel>HighEdFncCd</shortLabel>
 
                 <maxLength>4</maxLength>
@@ -781,7 +781,7 @@
             </attributeReference>
 
             <attributeReference name="pendingAcctSufficientFundsIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
-                <label>TP Sufficient Funds Check</label>
+                <label>Transaction Processing Sufficient Funds Check</label>
                 <shortLabel>TPSuffChk</shortLabel>
                 <required>true</required>
                 <summary>
