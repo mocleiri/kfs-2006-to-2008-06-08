@@ -140,7 +140,7 @@ public class FormatServiceImpl implements FormatService {
         return GeneralUtilities.getParameterInteger(KFSConstants.Components.LOOKUP, PdpConstants.ApplicationParameterKeys.FORMAT_SUMMARY_ROWS,appSettingService, 40);
     }
 
-    public List performFormat(Integer procId) throws DisbursementRangeExhaustedException,MissingDisbursementRangeException,NoBankForCustomerException {
+    public List performFormat(Integer procId) {
         LOG.debug("performFormat() started");
 
         PaymentProcess proc = processDao.get(procId);
@@ -226,7 +226,7 @@ public class FormatServiceImpl implements FormatService {
                 pg.setPaymentStatus(ps);
                 if ( checkBank == null ) {
                     LOG.error("performFormat() A bank is needed for CHCK for customer: " + customer);
-                    throw new NoBankForCustomerException("A bank is needed for CHCK for customer: " + customer);
+                    throw new NoBankForCustomerException("A bank is needed for CHCK for customer: " + customer,customer.getChartCode()+"-"+customer.getOrgCode()+"-"+customer.getSubUnitCode());
                 }
                 pg.setBank(checkBank);
             } else {
@@ -236,7 +236,7 @@ public class FormatServiceImpl implements FormatService {
                 pg.setPaymentStatus(ps);
                 if ( achBank == null ) {
                     LOG.error("performFormat() A bank is needed for ACH for customer: " + customer);
-                    throw new NoBankForCustomerException("A bank is needed for ACH for customer: " + customer);
+                    throw new NoBankForCustomerException("A bank is needed for ACH for customer: " + customer,customer.getChartCode()+"-"+customer.getOrgCode()+"-"+customer.getSubUnitCode());
                 }
                 pg.setBank(achBank);
 
