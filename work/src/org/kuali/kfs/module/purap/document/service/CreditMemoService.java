@@ -15,6 +15,7 @@
  */
 package org.kuali.module.purap.service;
 
+import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,12 +24,10 @@ import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 
-import edu.iu.uis.eden.exception.WorkflowException;
-
 /**
  * Defines methods that must be implemented by a CreditMemoService implementation.
  */
-public interface CreditMemoService {
+public interface CreditMemoService extends AccountsPayableDocumentSpecificService {
 
     /**
      * Gets the Credit memos that can be extracted
@@ -76,16 +75,6 @@ public interface CreditMemoService {
     public void populateAndSaveCreditMemo(CreditMemoDocument creditMemoDocument);
 
     /**
-     * Performs checks for approve and any necessary modifications of the document.
-     * 
-     * @param cmDocument - document that is being approved
-     * @param annotation - routing note
-     * @param adHocRecipients - list of additional people to route to
-     * @throws WorkflowException
-     */
-    public void route(CreditMemoDocument cmDocument, String annotation, List adHocRecipients) throws WorkflowException;
-
-    /**
      * Performs the credit memo item extended price calculation.
      * 
      * @param cmDocument - credit memo document to calculate
@@ -127,8 +116,6 @@ public interface CreditMemoService {
      */
     public boolean canRemoveHoldCreditMemo(CreditMemoDocument cmDocument, UniversalUser user);
 
-    public void cancelCreditMemo(CreditMemoDocument cmDocument, String currentNodeName);
-
     /**
      * Determines if the document can be canceled and if the given user has permission to do so.
      * 
@@ -143,4 +130,12 @@ public interface CreditMemoService {
     public void cancelExtractedCreditMemo(CreditMemoDocument cmDocument, String note);
 
     public void reopenClosedPO(CreditMemoDocument cmDocument);
+
+    /**
+     * Mark a credit memo is being used on a payment
+     * 
+     * @param cm
+     * @param processDate
+     */
+    public void markPaid(CreditMemoDocument cm,Date processDate);
 }

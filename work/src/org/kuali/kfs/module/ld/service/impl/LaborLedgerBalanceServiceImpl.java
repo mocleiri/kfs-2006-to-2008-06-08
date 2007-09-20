@@ -28,7 +28,6 @@ import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TransactionalServiceUtils;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.labor.LaborConstants;
@@ -37,6 +36,7 @@ import org.kuali.module.labor.bo.LaborBalanceSummary;
 import org.kuali.module.labor.bo.LaborTransaction;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.dao.LaborLedgerBalanceDao;
+import org.kuali.module.labor.rules.DebitCreditUtil;
 import org.kuali.module.labor.service.LaborCalculatedSalaryFoundationTrackerService;
 import org.kuali.module.labor.service.LaborLedgerBalanceService;
 import org.kuali.module.labor.util.ObjectUtil;
@@ -81,6 +81,20 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
         }
         return recordCount;
     }
+    
+    /**
+     * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findLedgerBalance(java.util.Collection,
+     *      org.kuali.module.labor.bo.LaborTransaction)
+     */
+    public LedgerBalance findLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction, List<String> keyList) {
+        for (LedgerBalance ledgerBalance : ledgerBalanceCollection) {
+            boolean found = ObjectUtil.compareObject(ledgerBalance, transaction, keyList);
+            if (found) {
+                return ledgerBalance;
+            }
+        }
+        return null;
+    }
 
     /**
      * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findLedgerBalance(java.util.Collection,
@@ -103,7 +117,7 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
     public void updateLedgerBalance(LedgerBalance ledgerBalance, LaborTransaction transaction) {
         String debitCreditCode = transaction.getTransactionDebitCreditCode();
         KualiDecimal amount = transaction.getTransactionLedgerEntryAmount();
-        amount = debitCreditCode.equals(KFSConstants.GL_CREDIT_CODE) ? amount.negated() : amount;
+        amount = DebitCreditUtil.getNumericAmount(amount, debitCreditCode);
 
         ledgerBalance.addAmount(transaction.getUniversityFiscalPeriodCode(), amount);
     }
@@ -112,16 +126,18 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
      * @see org.kuali.module.labor.service.LaborLedgerBalanceService#addLedgerBalance(java.util.Collection,
      *      org.kuali.module.labor.bo.LaborTransaction)
      */
-    public boolean addLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction) {
+    public LedgerBalance addLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction) {
         LedgerBalance ledgerBalance = this.findLedgerBalance(ledgerBalanceCollection, transaction);
 
         if (ledgerBalance == null) {
             LedgerBalance newLedgerBalance = new LedgerBalance();
             ObjectUtil.buildObject(newLedgerBalance, transaction);
+            updateLedgerBalance(newLedgerBalance, transaction);
+            
             ledgerBalanceCollection.add(newLedgerBalance);
-            return true;
+            return newLedgerBalance;
         }
-        return false;
+        return null;
     }
 
     /**
@@ -159,17 +175,20 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
     public List<EmployeeFunding> findEmployeeFundingWithCSFTracker(Map fieldValues, boolean isConsolidated) {
         List<EmployeeFunding> currentFundsCollection = this.findEmployeeFunding(fieldValues, isConsolidated);
         List<EmployeeFunding> CSFTrackersCollection = laborCalculatedSalaryFoundationTrackerService.findCSFTrackersAsEmployeeFunding(fieldValues, isConsolidated);
+        
+        for (EmployeeFunding CSFTrackerAsEmployeeFunding : CSFTrackersCollection) {
+            if (currentFundsCollection.contains(CSFTrackerAsEmployeeFunding)) {
+                int index = currentFundsCollection.indexOf(CSFTrackerAsEmployeeFunding);
+                EmployeeFunding currentFunds = currentFundsCollection.get(index);
 
-        for (EmployeeFunding employeeFunding : currentFundsCollection) {
-            if (CSFTrackersCollection.contains(employeeFunding)) {
-                int index = CSFTrackersCollection.indexOf(employeeFunding);
-                EmployeeFunding CSFTracker = CSFTrackersCollection.get(index);
-
-                // TODO: make sure if there are multiple csf trackers for a single employee funding
-                employeeFunding.setCsfDeleteCode(CSFTracker.getCsfDeleteCode());
-                employeeFunding.setCsfTimePercent(CSFTracker.getCsfTimePercent());
-                employeeFunding.setCsfFundingStatusCode(CSFTracker.getCsfFundingStatusCode());
-                employeeFunding.setCsfAmount(CSFTracker.getCsfAmount());
+                currentFunds.setCsfDeleteCode(CSFTrackerAsEmployeeFunding.getCsfDeleteCode());
+                currentFunds.setCsfTimePercent(CSFTrackerAsEmployeeFunding.getCsfTimePercent());
+                currentFunds.setCsfFundingStatusCode(CSFTrackerAsEmployeeFunding.getCsfFundingStatusCode());
+                currentFunds.setCsfAmount(CSFTrackerAsEmployeeFunding.getCsfAmount());
+                currentFunds.setCsfFullTimeEmploymentQuantity(CSFTrackerAsEmployeeFunding.getCsfFullTimeEmploymentQuantity());
+            }
+            else{
+                currentFundsCollection.add(CSFTrackerAsEmployeeFunding);              
             }
         }
         return currentFundsCollection;
