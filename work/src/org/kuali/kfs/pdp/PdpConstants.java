@@ -17,8 +17,13 @@ package org.kuali.module.pdp;
 
 
 public class PdpConstants {
-    public static final String PDP_APPLICATION = "PDP";
-
+    
+    public static final String PDP_NAMESPACE = "KFS-PD";
+    
+    public static class Components {
+        public static final String LOAD_FED_RESERVE_BANK_DATA_STEP = "LoadFederalReserveBankDataStep";
+    }
+    
     public static class PayeeTypeCodes {
         public static String VENDOR = "V";
     }
@@ -52,6 +57,8 @@ public class PdpConstants {
         public static String SEARCH_RESULTS_TOTAL = "RESULTS_LIMIT";
         public static String SEARCH_RESULTS_PER_PAGE = "RESULTS_PER_PAGE";
 
+        public static String ACH_BANK_INPUT_FILE = "ACH_BANK_INPUT_FILE";
+
         public static String BATCH_OUTPUT_DIR = "BATCH_OUTPUT_DIR";
 
         public static String HARD_EDIT_CC = "HARD_EDIT_TO_ADDRESS";
@@ -69,5 +76,8 @@ public class PdpConstants {
     public static class PaymentStatusCodes {
         public static String FORMAT = "FORM";
         public static String OPEN = "OPEN";
+        public static String CANCEL_DISBURSEMENT = "CDIS";
+        public static String CANCEL_PAYMENT = "CPAY";
+        public static String EXTRACTED = "EXTR";
     }
 }
