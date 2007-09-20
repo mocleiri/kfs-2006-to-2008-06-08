@@ -37,7 +37,7 @@ import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.bo.PurApAccountingLine;
-import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.rule.event.AddPurchasingAccountsPayableItemEvent;
@@ -81,14 +81,11 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
             document.setVendorContractName(null);
 
             // retrieve vendor based on selection from vendor lookup
-            VendorDetail refreshVendorDetail = new VendorDetail();
-            refreshVendorDetail.setVendorDetailAssignedIdentifier(document.getVendorDetailAssignedIdentifier());
-            refreshVendorDetail.setVendorHeaderGeneratedIdentifier(document.getVendorHeaderGeneratedIdentifier());
-            refreshVendorDetail = (VendorDetail) businessObjectService.retrieve(refreshVendorDetail);
-            document.templateVendorDetail(refreshVendorDetail);
+            document.refreshReferenceObject("vendorDetail");
+            document.templateVendorDetail(document.getVendorDetail());
 
             // populate default address based on selected vendor
-            VendorAddress defaultAddress = SpringContext.getBean(VendorService.class).getVendorDefaultAddress(refreshVendorDetail.getVendorAddresses(), refreshVendorDetail.getVendorHeader().getVendorType().getAddressType().getVendorAddressTypeCode(), "");
+            VendorAddress defaultAddress = SpringContext.getBean(VendorService.class).getVendorDefaultAddress(document.getVendorDetail().getVendorAddresses(), document.getVendorDetail().getVendorHeader().getVendorType().getAddressType().getVendorAddressTypeCode(), "");
             document.templateVendorAddress(defaultAddress);
         }
 
@@ -110,14 +107,13 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
                 document.setVendorCustomerNumber(null);
 
                 // retrieve Vendor based on selected contract
-                VendorDetail refreshVendorDetail = new VendorDetail();
-                refreshVendorDetail.setVendorDetailAssignedIdentifier(refreshVendorContract.getVendorDetailAssignedIdentifier());
-                refreshVendorDetail.setVendorHeaderGeneratedIdentifier(refreshVendorContract.getVendorHeaderGeneratedIdentifier());
-                refreshVendorDetail = (VendorDetail) businessObjectService.retrieve(refreshVendorDetail);
-                document.templateVendorDetail(refreshVendorDetail);
+                document.setVendorDetailAssignedIdentifier(refreshVendorContract.getVendorDetailAssignedIdentifier());
+                document.setVendorHeaderGeneratedIdentifier(refreshVendorContract.getVendorHeaderGeneratedIdentifier());
+                document.refreshReferenceObject("vendorDetail");
+                document.templateVendorDetail(document.getVendorDetail());
 
                 // populate default address from selected vendor
-                VendorAddress defaultAddress = SpringContext.getBean(VendorService.class).getVendorDefaultAddress(refreshVendorDetail.getVendorAddresses(), refreshVendorDetail.getVendorHeader().getVendorType().getAddressType().getVendorAddressTypeCode(), "");
+                VendorAddress defaultAddress = SpringContext.getBean(VendorService.class).getVendorDefaultAddress(document.getVendorDetail().getVendorAddresses(), document.getVendorDetail().getVendorHeader().getVendorType().getAddressType().getVendorAddressTypeCode(), "");
                 document.templateVendorAddress(defaultAddress);
                 
                 // populate cost source from the selected contract
@@ -125,8 +121,8 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
                     String costSourceCode = refreshVendorContract.getPurchaseOrderCostSourceCode();
                     if (StringUtils.isNotBlank(costSourceCode)) {
                         document.setPurchaseOrderCostSourceCode(costSourceCode);
-                        // document.setPurchaseOrderCostSource(refreshVendorContract.getPurchaseOrderCostSource());
-                    }
+                        document.refreshReferenceObject(PurapPropertyConstants.PURCHASE_ORDER_COST_SOURCE); 
+                     }
                 }
             }
         }
@@ -140,6 +136,13 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
                 refreshVendorAddress = (VendorAddress) businessObjectService.retrieve(refreshVendorAddress);
                 document.templateVendorAddress(refreshVendorAddress);
             }
+        }
+        
+        //We're supposed to refresh vendor again based on the vendor header and detail id on the requisition, unless if
+        //this was a refresh for contract lookup or refresh for vendor lookup
+        if (!(StringUtils.equals(refreshCaller, VendorConstants.VENDOR_CONTRACT_LOOKUPABLE_IMPL) || (StringUtils.equalsIgnoreCase(refreshCaller, VendorConstants.VENDOR_LOOKUPABLE_IMPL)))) {
+            document.refreshReferenceObject("vendorDetail");
+            document.templateVendorDetail(document.getVendorDetail());
         }
         return super.refresh(mapping, form, request, response);
     }
@@ -163,11 +166,27 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
             if (document.isDeliveryBuildingOther()) {
                 document.setDeliveryBuildingName(PurapConstants.DELIVERY_BUILDING_OTHER);
                 document.setDeliveryBuildingCode(PurapConstants.DELIVERY_BUILDING_OTHER_CODE);
+                document.setDeliveryCampusCode(null);
+                document.setDeliveryBuildingLine1Address(null);               
+                document.setDeliveryBuildingLine2Address(null);                
+                document.setDeliveryBuildingRoomNumber(null);                
+                document.setDeliveryCityName(null);                
+                document.setDeliveryStateCode(null);                
+                document.setDeliveryCountryCode(null);                
+                document.setDeliveryPostalCode(null);                
                 baseForm.setNotOtherDeliveryBuilding(false);
             }
             else {
                 document.setDeliveryBuildingName(null);
                 document.setDeliveryBuildingCode(null);
+                document.setDeliveryCampusCode(null);
+                document.setDeliveryBuildingLine1Address(null);               
+                document.setDeliveryBuildingLine2Address(null);                
+                document.setDeliveryBuildingRoomNumber(null);                
+                document.setDeliveryCityName(null);                
+                document.setDeliveryStateCode(null);                
+                document.setDeliveryCountryCode(null);                
+                document.setDeliveryPostalCode(null);                
                 baseForm.setNotOtherDeliveryBuilding(true);
             }
         }
@@ -187,7 +206,7 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
     public ActionForward addItem(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         PurchasingFormBase purchasingForm = (PurchasingFormBase) form;
         // TODO: should call add line event/rules here
-        PurchasingApItem item = purchasingForm.getAndResetNewPurchasingItemLine();
+        PurApItem item = purchasingForm.getAndResetNewPurchasingItemLine();
         PurchasingDocument purDocument = (PurchasingDocument) purchasingForm.getDocument();
         boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new AddPurchasingAccountsPayableItemEvent("item", purDocument, item));
         // AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINES_PROPERTY_NAME + "[" + Integer.toString(itemIndex) + "]",
@@ -273,7 +292,7 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
             return this.performQuestionWithoutInput(mapping, form, request, response, PurapConstants.REMOVE_ACCOUNTS_QUESTION, questionText, KFSConstants.CONFIRMATION_QUESTION, KFSConstants.ROUTE_METHOD, "0");
         }
         else if (ConfirmationQuestion.YES.equals(buttonClicked)) {
-            for (PurchasingApItem item : ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems()) {
+            for (PurApItem item : ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems()) {
                 item.getSourceAccountingLines().clear();
             }
 
@@ -287,9 +306,12 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
 
         if (((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems().size() > 0) {
             if (purchasingForm.getAccountDistributionsourceAccountingLines().size() > 0) {
-                for (PurchasingApItem item : ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems()) {
+                for (PurApItem item : ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItems()) {
                     BigDecimal zero = new BigDecimal(0);
-                    if (item.getSourceAccountingLines().size() == 0 && item.getItemUnitPrice() != null && zero.compareTo(item.getItemUnitPrice()) < 0) {
+                    // We should be distributing accounting lines to above the line items all the time;
+                    // but only to the below the line items when there is a unit cost.
+                    boolean unitCostNotZeroForBelowLineItems = item.getItemType().isItemTypeAboveTheLineIndicator() ? true : item.getItemUnitPrice() != null && zero.compareTo(item.getItemUnitPrice()) < 0;
+                    if (item.getSourceAccountingLines().size() == 0 && unitCostNotZeroForBelowLineItems) {
                         item.getSourceAccountingLines().addAll(purchasingForm.getAccountDistributionsourceAccountingLines());
                     }
                 }
@@ -327,7 +349,7 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
 
         // index of item selected
         int itemIndex = getSelectedLine(request);
-        PurchasingApItem item = null;
+        PurApItem item = null;
 
         if (itemIndex == -2) {
             PurApAccountingLine line = purchasingForm.getAccountDistributionnewSourceLine();
@@ -353,7 +375,7 @@ public class PurchasingActionBase extends PurchasingAccountsPayableActionBase {
             purchasingForm.getAccountDistributionsourceAccountingLines().remove(accountIndex);
         }
         else {
-            PurchasingApItem item = (PurchasingApItem) ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItem((itemIndex));
+            PurApItem item = (PurApItem) ((PurchasingAccountsPayableDocument) purchasingForm.getDocument()).getItem((itemIndex));
             item.getSourceAccountingLines().remove(accountIndex);
         }
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
