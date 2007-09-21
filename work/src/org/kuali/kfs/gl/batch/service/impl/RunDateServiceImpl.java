@@ -128,7 +128,7 @@ public class RunDateServiceImpl implements RunDateService {
      * In particular, 0 <= hour <= 23, 0 <= minute <= 59, and 0 <= second <= 59
      */
     protected String retrieveCutoffTimeValue() {
-        String value = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.BATCH, GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME);
+        String value = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, GLConstants.Components.SCRUBBER_STEP, GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME);
         if ( StringUtils.isBlank( value ) ) {
             LOG.error("Unable to retrieve parameter for GL process cutoff date.  Defaulting to no cutoff time (i.e. midnight)" );
             value = null;
