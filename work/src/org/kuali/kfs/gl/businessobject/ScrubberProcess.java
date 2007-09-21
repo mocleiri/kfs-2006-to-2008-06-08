@@ -21,12 +21,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.Parameter;
@@ -35,7 +32,6 @@ import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
@@ -50,32 +46,29 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.chart.service.OffsetDefinitionService;
 import org.kuali.module.financial.exceptions.InvalidFlexibleOffsetException;
-import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.batch.collector.CollectorBatch;
-import org.kuali.module.gl.bo.CollectorDetail;
 import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.gl.bo.OriginEntryable;
-import org.kuali.module.gl.bo.OriginEntryLite;
 import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.gl.bo.OriginEntryLite;
 import org.kuali.module.gl.bo.OriginEntrySource;
+import org.kuali.module.gl.bo.OriginEntryable;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.OriginEntryLiteService;
+import org.kuali.module.gl.service.OriginEntryService;
+import org.kuali.module.gl.service.OriginEntryableLookupService;
 import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.RunDateService;
 import org.kuali.module.gl.service.ScrubberProcessObjectCodeOverride;
 import org.kuali.module.gl.service.ScrubberValidator;
-import org.kuali.module.gl.service.OriginEntryableLookupService;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 import org.kuali.module.gl.util.CachingLookup;
 import org.kuali.module.gl.util.CollectorReportData;
-import org.kuali.module.gl.util.DocumentGroupData;
 import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.OriginEntryStatistics;
@@ -826,7 +819,7 @@ public class ScrubberProcess {
         Options scrubbedEntryOption = referenceLookup.get().getOption(scrubbedEntry);
         A21SubAccount scrubbedEntryA21SubAccount = referenceLookup.get().getA21SubAccount(scrubbedEntry);
 
-        costShareEntry.setFinancialObjectCode((getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_OBJECT_CODE)).getParameterValue());
+        costShareEntry.setFinancialObjectCode(getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_OBJECT_CODE_PARM_NM).getParameterValue());
         costShareEntry.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
         costShareEntry.setFinancialObjectTypeCode(scrubbedEntryOption.getFinancialObjectTypeTransferExpenseCd());
         costShareEntry.setTransactionLedgerEntrySequenceNumber(new Integer(0));
@@ -1537,22 +1530,15 @@ public class ScrubberProcess {
 
         // General rules
         if ( originEntryObjectCode.equals(financialOriginEntryObjectCode) ) {
-            Parameter param = parameters.get(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_PREFIX );
-            if ( param == null ) {
-                param = getParameter(GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT);
-                if ( param == null ) {
-                    throw new IllegalArgumentException("Missing " + GLConstants.GL_SCRUBBER_GROUP + "/" + GLConstants.GlScrubberGroupParameters.COST_SHARE_LEVEL_OBJECT_DEFAULT + " parameter in system parameters table");
-                } else {
-                    originEntryObjectCode = param.getParameterValue();
-                }
-            } else {
-                List<String> objList = kualiConfigurationService.getConstrainedValues(param, originEntryObjectLevelCode);
-                if ( objList.isEmpty() ) {
-                    // Don't do anything with the object code
-                } else {
-                    originEntryObjectCode = objList.get(0);                    
+            Parameter param = parameters.get( GLConstants.GlScrubberGroupParameters.COST_SHARE_OBJECT_CODE_BY_LEVEL_PARM_NM );
+            List<String> objectCodeArray = kualiConfigurationService.getConstrainedValues( param, originEntryObjectLevelCode );
+            if ( org.apache.commons.lang.StringUtils.isBlank( objectCodeArray.get(0) ) ) {
+                objectCodeArray = kualiConfigurationService.getConstrainedValues( param, "DEFAULT" );
+                if ( org.apache.commons.lang.StringUtils.isBlank( objectCodeArray.get(0) ) ) {
+                    throw new RuntimeException("Unable to determine cost sharing object code from object level.  Default entry missing.");
                 }
             }
+            originEntryObjectCode = objectCodeArray.get(0);
         }
 
         // Lookup the new object code
