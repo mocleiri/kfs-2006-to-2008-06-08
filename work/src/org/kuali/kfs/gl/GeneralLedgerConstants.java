@@ -177,9 +177,8 @@ public class GLConstants {
         static final public String CAPITALIZATION_IND = "CAPITALIZATION_IND";
         static final public String CAPITALIZATION_SUBTYPE_OBJECT = "CAPITALIZATION_OBJECT_CODE_BY_OBJECT_SUB_TYPE";
 
-        static final public String COST_SHARE_LEVEL_OBJECT_PREFIX = "COST_SHARE_LEVEL_OBJECT";
-        static final public String COST_SHARE_LEVEL_OBJECT_DEFAULT = "COST_SHARE_LEVEL_OBJECT_DEFAULT";
-        static final public String COST_SHARE_OBJECT_CODE = "COST_SHARE_OBJECT_CODE";
+        static final public String COST_SHARE_OBJECT_CODE_BY_LEVEL_PARM_NM = "COST_SHARE_OBJECT_CODE_BY_LEVEL";
+        static final public String COST_SHARE_OBJECT_CODE_PARM_NM = "COST_SHARE_OBJECT_CODE";
 
         static final public String LIABILITY_IND = "LIABILITY_IND";
         static final public String LIABILITY_OBJECT_CODE = "LIABILITY_OBJECT_CODE";
