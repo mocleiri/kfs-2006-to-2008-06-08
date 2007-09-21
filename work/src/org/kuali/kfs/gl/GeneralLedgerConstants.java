@@ -212,7 +212,7 @@ public class GLConstants {
         static final public String LIABILITY_OBJ_SUB_TYPE_CODES = "LIABILITY_OBJ_SUB_TYPE_CODES";
         static final public String LIABILITY_SUB_FUND_GROUP_CODES = "LIABILITY_SUB_FUND_GROUP_CODES";
 
-        static final public String OFFSET_DOC_TYPE_CODES = "OFFSET_DOC_TYPE_CODES";
+        static final public String OFFSET_DOC_TYPE_CODES = "OFFSET_GENERATION_DOCUMENT_TYPES";
         static final public String OFFSET_FISCAL_PERIOD_CODES = "OFFSET_FISCAL_PERIOD_CODES";
 
         static final public String PLANT_FUND_CAMPUS_OBJECT_SUB_TYPE_CODES = "PLANT_FUND_CAMPUS_OBJECT_SUB_TYPE_CODES";
