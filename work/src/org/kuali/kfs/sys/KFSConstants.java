@@ -105,6 +105,8 @@ public class KFSConstants extends JstlConstants {
     
     // special user used in the post-processor
     public static final String SYSTEM_USER = "KULUSER";
+
+    public static final String KFS_NAMESPACE_PREFIX = "KFS-";
     
     public static final String CHART_NAMESPACE = "KFS-CA";
     public static final String FINANCIAL_NAMESPACE = "KFS-FP";
