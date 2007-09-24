@@ -271,15 +271,14 @@
 			<ref bean="moduleLookupableHelperService" />
 		</property>
 	</bean>
-    <!-- 
+
     <bean id="parameterDetailTypeLookupable" class="org.kuali.core.lookup.KualiLookupableImpl">
         <property name="lookupableHelperService">
             <bean id="parameterDetailTypeLookupableHelperService" class="org.kuali.kfs.lookup.ParameterDetailTypeLookupableHelperServiceImpl"
-                parent="kualiLookupableHelperService">
+                parent="lookupableHelperService">
             </bean>
         </property>
     </bean>
-     -->
 
     <bean id="kualiInquirable" class="org.kuali.kfs.inquiry.KfsInquirableImpl" singleton="false" />
     
