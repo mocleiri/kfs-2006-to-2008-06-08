@@ -1026,7 +1026,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         
         //second we need to check the account and object code combination to see if it needs sales tax
         if(required) {
-            Parameter objCdAndAccountRule = configService.getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, APPLICATION_PARAMETER.VALID_ACCOUNT_AND_OBJ_CD);
+            Parameter objCdAndAccountRule = configService.getParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DOCUMENT, APPLICATION_PARAMETER.SALES_TAX_APPLICABLE_ACCOUNTS_AND_OBJECT_CODES);
             //get the object code and account
             String objCd = accountingLine.getFinancialObjectCode();
             String account = accountingLine.getAccountNumber();
