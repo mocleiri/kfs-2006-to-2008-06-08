@@ -44,7 +44,7 @@ public class PurapConstants extends JstlConstants {
     
     public static final KualiDecimal HUNDRED = new KualiDecimal(100);
     
-    public static final String PURAP_NAMESPACE = KFSConstants.PURAP_NAMESPACE;
+    public static final String PURAP_NAMESPACE = "KFS-PA";
     
     public static final String B2_B_ALLOW_COPY_DAYS = "B2_B_ALLOW_COPY_DAYS";
     
@@ -335,7 +335,6 @@ public class PurapConstants extends JstlConstants {
     }
     // PAYMENT REQUEST
     public static final String PAYMENT_REQUEST_ACTION_NAME = "PaymentRequest";
-    public static final String PAYMENT_REQUEST_DOCUMENT_DOC_TYPE = "PaymentRequestDocument";
     public static final int PREQ_PAY_DATE_DEFAULT_NUMBER_OF_DAYS = 10;
     public static final String PREQ_PAY_DATE_DAYS = "days";
     public static final String PREQ_PAY_DATE_DATE = "date";
@@ -505,7 +504,6 @@ public class PurapConstants extends JstlConstants {
     
     // CREDIT MEMO DOCUMENT
     public static final String CREDIT_MEMO_ACTION_NAME = "CreditMemo";
-    public static final String CREDIT_MEMO_DOCUMENT_DOC_TYPE = "CreditMemo";
 
     public static class CreditMemoStatuses {
         // TODO delyea - check statuses for use/MDS entry
@@ -660,25 +658,6 @@ public class PurapConstants extends JstlConstants {
     
     public static final Integer PRORATION_SCALE = new Integer(6);
     
-    //variables moved down so doc types are defined before this call, KULPURAP-1185
-    private static final HashMap<String, String> itemTypes()
-    {
-        HashMap<String, String> map;
-        map = new HashMap<String, String>();
-        map.put("RequisitionDocument", "Kuali.PURAP.RequisitionDocument");
-        map.put("PurchaseOrderDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderCloseDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderReopenDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderAmendmentDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderPaymentHoldDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderRemoveHoldDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderRetransmitDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put("PurchaseOrderVoidDocument", "Kuali.PURAP.PurchaseOrderDocument");
-        map.put(PAYMENT_REQUEST_DOCUMENT_DOC_TYPE, "Kuali.PURAP.PaymentRequestDocument");
-        map.put("CreditMemoDocument", "Kuali.PURAP.CreditMemoDocument");
-        return map;
-    }
-    
     private static HashMap<String, String> getPurapParameterDetailTypeCodes()
     {
         HashMap<String, String> map;
@@ -692,12 +671,10 @@ public class PurapConstants extends JstlConstants {
         map.put("PurchaseOrderRemoveHoldDocument", PurapConstants.Components.PURCHASE_ORDER);
         map.put("PurchaseOrderRetransmitDocument", PurapConstants.Components.PURCHASE_ORDER);
         map.put("PurchaseOrderVoidDocument", PurapConstants.Components.PURCHASE_ORDER);
-        map.put(PAYMENT_REQUEST_DOCUMENT_DOC_TYPE, PurapConstants.Components.PAYMENT_REQUEST);
+        map.put("PaymentRequestDocument", PurapConstants.Components.PAYMENT_REQUEST);
         map.put("CreditMemoDocument", PurapConstants.Components.CREDIT_MEMO_DOC);
         return map;
     }    
-    public static final HashMap<String,String> ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP =
-                        itemTypes();
     
     public static final HashMap<String,String> PURAP_DETAIL_TYPE_CODE_MAP =
         getPurapParameterDetailTypeCodes();
