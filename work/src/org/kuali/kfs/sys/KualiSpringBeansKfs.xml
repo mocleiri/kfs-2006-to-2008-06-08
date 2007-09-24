@@ -276,7 +276,6 @@
         <property name="lookupableHelperService">
             <bean id="parameterDetailTypeLookupableHelperService" class="org.kuali.kfs.lookup.ParameterDetailTypeLookupableHelperServiceImpl"
                 parent="lookupableHelperService">
-                <property name="kualiModuleService" ref="kualiModuleService" />
             </bean>
         </property>
     </bean>
