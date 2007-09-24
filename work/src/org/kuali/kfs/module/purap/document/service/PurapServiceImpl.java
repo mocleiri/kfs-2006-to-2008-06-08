@@ -201,7 +201,6 @@ public class PurapServiceImpl implements PurapService {
         if (documentType.equals("CreditMemoDocument")) {
            
         }
-        String securityGroup = (String)PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
         String parameterDetailTypeCode = (String)PurapConstants.PURAP_DETAIL_TYPE_CODE_MAP.get(documentType);
         String[] itemTypes = kualiConfigurationService.getParameterValues( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.BELOW_THE_LINES_PARAMETER);
         return itemTypes;
