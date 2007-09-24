@@ -675,7 +675,7 @@ public class PurapConstants extends JstlConstants {
         map.put("PurchaseOrderRetransmitDocument", "Kuali.PURAP.PurchaseOrderDocument");
         map.put("PurchaseOrderVoidDocument", "Kuali.PURAP.PurchaseOrderDocument");
         map.put(PAYMENT_REQUEST_DOCUMENT_DOC_TYPE, "Kuali.PURAP.PaymentRequestDocument");
-        map.put(CREDIT_MEMO_DOCUMENT_DOC_TYPE, "Kuali.PURAP.CreditMemoDocument");
+        map.put("CreditMemoDocument", "Kuali.PURAP.CreditMemoDocument");
         return map;
     }
     
@@ -693,7 +693,7 @@ public class PurapConstants extends JstlConstants {
         map.put("PurchaseOrderRetransmitDocument", PurapConstants.Components.PURCHASE_ORDER);
         map.put("PurchaseOrderVoidDocument", PurapConstants.Components.PURCHASE_ORDER);
         map.put(PAYMENT_REQUEST_DOCUMENT_DOC_TYPE, PurapConstants.Components.PAYMENT_REQUEST);
-        map.put(CREDIT_MEMO_DOCUMENT_DOC_TYPE, PurapConstants.Components.CREDIT_MEMO_DOC);
+        map.put("CreditMemoDocument", PurapConstants.Components.CREDIT_MEMO_DOC);
         return map;
     }    
     public static final HashMap<String,String> ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP =
