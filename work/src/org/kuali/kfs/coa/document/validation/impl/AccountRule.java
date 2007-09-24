@@ -59,8 +59,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountRule.class);
 
-    private static final String ACCT_PREFIX_RESTRICTION = "Account.PrefixRestriction";
-    private static final String ACCT_CAPITAL_SUBFUNDGROUP = "Account.CapitalSubFundGroup";
+    private static final String ACCT_PREFIX_RESTRICTION = "PREFIXES";
+    private static final String ACCT_CAPITAL_SUBFUNDGROUP = "CAPITAL_SUB_FUND_GROUP";
 
     private static final String GENERAL_FUND_CD = "GF";
     private static final String RESTRICTED_FUND_CD = "RF";
