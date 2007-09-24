@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>LetterOfCreditFundGroupMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiContractsAndGrantsLetterOfCreditFundGroupMaintenanceDocument</documentTypeName>
         <documentTypeCode>LFGR</documentTypeCode>
 
         <label>Letter of Credit Fund Group Maintenance Document</label>
@@ -40,6 +40,8 @@
 
         <summary>Letter of Credit Fund Group Maintenance Document</summary>
         <description>Document used to create or update Letter of Credit Fund Group objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="letterOfCreditFundGroupCode" />
@@ -53,7 +55,6 @@
                     <maintainableField name="rowActiveIndicator" required="false">
 						<defaultValue>true</defaultValue>
 					</maintainableField>
-                    <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>

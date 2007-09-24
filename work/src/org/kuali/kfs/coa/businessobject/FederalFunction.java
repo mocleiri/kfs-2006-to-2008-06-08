@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class FederalFunction extends PersistableBusinessObjectBase {
+public class FederalFunction extends BusinessObjectBase {
 
     private String financialFederalFunctionCode;
     private String financialFederalFunctionName;
@@ -38,7 +38,7 @@ public class FederalFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialFederalFunctionCode attribute.
      * 
-     * @return Returns the financialFederalFunctionCode
+     * @return - Returns the financialFederalFunctionCode
      * 
      */
     public String getFinancialFederalFunctionCode() {
@@ -59,7 +59,7 @@ public class FederalFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialFederalFunctionName attribute.
      * 
-     * @return Returns the financialFederalFunctionName
+     * @return - Returns the financialFederalFunctionName
      * 
      */
     public String getFinancialFederalFunctionName() {

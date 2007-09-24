@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class DisbursementVoucherDocumentationLocation extends PersistableBusinessObjectBase {
+public class DisbursementVoucherDocumentationLocation extends BusinessObjectBase {
 
     private String disbursementVoucherDocumentationLocationCode;
     private String disbursementVoucherDocumentationLocationName;
@@ -39,7 +39,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
     /**
      * Gets the disbursementVoucherDocumentationLocationCode attribute.
      * 
-     * @return Returns the disbursementVoucherDocumentationLocationCode
+     * @return - Returns the disbursementVoucherDocumentationLocationCode
      * 
      */
     public String getDisbursementVoucherDocumentationLocationCode() {
@@ -60,7 +60,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
     /**
      * Gets the disbursementVoucherDocumentationLocationName attribute.
      * 
-     * @return Returns the disbursementVoucherDocumentationLocationName
+     * @return - Returns the disbursementVoucherDocumentationLocationName
      * 
      */
     public String getDisbursementVoucherDocumentationLocationName() {
@@ -81,7 +81,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
     /**
      * Gets the disbursementVoucherDocumentationLocationAddress attribute.
      * 
-     * @return Returns the disbursementVoucherDocumentationLocationAddress
+     * @return - Returns the disbursementVoucherDocumentationLocationAddress
      * 
      */
     public String getDisbursementVoucherDocumentationLocationAddress() {

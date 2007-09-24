@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.SubAccount;
@@ -28,9 +27,9 @@ import org.kuali.module.chart.bo.SubAccount;
 /**
  * 
  */
-public class ProcurementCardHolder extends PersistableBusinessObjectBase {
+public class ProcurementCardHolder extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String transactionCreditCardNumber;
     private String cardHolderName;
     private String cardHolderAlternateName;
@@ -61,30 +60,30 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
     /**
      * Gets the transactionCreditCardNumber attribute.
      * 
-     * @return Returns the transactionCreditCardNumber
+     * @return - Returns the transactionCreditCardNumber
      * 
      */
     public String getTransactionCreditCardNumber() {
@@ -105,7 +104,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderName attribute.
      * 
-     * @return Returns the cardHolderName
+     * @return - Returns the cardHolderName
      * 
      */
     public String getCardHolderName() {
@@ -126,7 +125,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderAlternateName attribute.
      * 
-     * @return Returns the cardHolderAlternateName
+     * @return - Returns the cardHolderAlternateName
      * 
      */
     public String getCardHolderAlternateName() {
@@ -147,7 +146,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderLine1Address attribute.
      * 
-     * @return Returns the cardHolderLine1Address
+     * @return - Returns the cardHolderLine1Address
      * 
      */
     public String getCardHolderLine1Address() {
@@ -168,7 +167,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderLine2Address attribute.
      * 
-     * @return Returns the cardHolderLine2Address
+     * @return - Returns the cardHolderLine2Address
      * 
      */
     public String getCardHolderLine2Address() {
@@ -189,7 +188,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderCityName attribute.
      * 
-     * @return Returns the cardHolderCityName
+     * @return - Returns the cardHolderCityName
      * 
      */
     public String getCardHolderCityName() {
@@ -210,7 +209,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderStateCode attribute.
      * 
-     * @return Returns the cardHolderStateCode
+     * @return - Returns the cardHolderStateCode
      * 
      */
     public String getCardHolderStateCode() {
@@ -231,7 +230,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderZipCode attribute.
      * 
-     * @return Returns the cardHolderZipCode
+     * @return - Returns the cardHolderZipCode
      * 
      */
     public String getCardHolderZipCode() {
@@ -252,7 +251,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardHolderWorkPhoneNumber attribute.
      * 
-     * @return Returns the cardHolderWorkPhoneNumber
+     * @return - Returns the cardHolderWorkPhoneNumber
      * 
      */
     public String getCardHolderWorkPhoneNumber() {
@@ -273,7 +272,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardLimit attribute.
      * 
-     * @return Returns the cardLimit
+     * @return - Returns the cardLimit
      * 
      */
     public KualiDecimal getCardLimit() {
@@ -294,7 +293,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardCycleAmountLimit attribute.
      * 
-     * @return Returns the cardCycleAmountLimit
+     * @return - Returns the cardCycleAmountLimit
      * 
      */
     public KualiDecimal getCardCycleAmountLimit() {
@@ -315,7 +314,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardCycleVolumeLimit attribute.
      * 
-     * @return Returns the cardCycleVolumeLimit
+     * @return - Returns the cardCycleVolumeLimit
      * 
      */
     public KualiDecimal getCardCycleVolumeLimit() {
@@ -336,7 +335,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardStatusCode attribute.
      * 
-     * @return Returns the cardStatusCode
+     * @return - Returns the cardStatusCode
      * 
      */
     public String getCardStatusCode() {
@@ -357,7 +356,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the cardNoteText attribute.
      * 
-     * @return Returns the cardNoteText
+     * @return - Returns the cardNoteText
      * 
      */
     public String getCardNoteText() {
@@ -378,7 +377,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -399,7 +398,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -420,7 +419,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the subAccountNumber attribute.
      * 
-     * @return Returns the subAccountNumber
+     * @return - Returns the subAccountNumber
      * 
      */
     public String getSubAccountNumber() {
@@ -441,7 +440,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the account attribute.
      * 
-     * @return Returns the account
+     * @return - Returns the account
      * 
      */
     public Account getAccount() {
@@ -461,7 +460,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts() {
@@ -497,7 +496,7 @@ public class ProcurementCardHolder extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 }

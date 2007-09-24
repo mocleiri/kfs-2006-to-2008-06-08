@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCodeCurrent;
@@ -26,7 +26,7 @@ import org.kuali.module.chart.bo.ObjectCodeCurrent;
 /**
  * 
  */
-public class OffsetAccount extends PersistableBusinessObjectBase {
+public class OffsetAccount extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -50,7 +50,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      * 
      */
     public String getChartOfAccountsCode() {
@@ -71,7 +71,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber() {
@@ -92,7 +92,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the financialOffsetObjectCode attribute.
      * 
-     * @return Returns the financialOffsetObjectCode
+     * @return - Returns the financialOffsetObjectCode
      * 
      */
     public String getFinancialOffsetObjectCode() {
@@ -113,7 +113,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the financialOffsetChartOfAccountCode attribute.
      * 
-     * @return Returns the financialOffsetChartOfAccountCode
+     * @return - Returns the financialOffsetChartOfAccountCode
      * 
      */
     public String getFinancialOffsetChartOfAccountCode() {
@@ -134,7 +134,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the financialOffsetAccountNumber attribute.
      * 
-     * @return Returns the financialOffsetAccountNumber
+     * @return - Returns the financialOffsetAccountNumber
      * 
      */
     public String getFinancialOffsetAccountNumber() {
@@ -155,7 +155,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the chart attribute.
      * 
-     * @return Returns the chart
+     * @return - Returns the chart
      * 
      */
     public Chart getChart() {
@@ -175,7 +175,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the account attribute.
      * 
-     * @return Returns the account
+     * @return - Returns the account
      * 
      */
     public Account getAccount() {
@@ -195,7 +195,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the financialOffsetChartOfAccount attribute.
      * 
-     * @return Returns the financialOffsetChartOfAccount
+     * @return - Returns the financialOffsetChartOfAccount
      * 
      */
     public Chart getFinancialOffsetChartOfAccount() {

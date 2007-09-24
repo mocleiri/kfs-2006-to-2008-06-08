@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,14 +37,12 @@ public class ObjectType extends KualiCodeBase {
     private boolean finObjectTypeIcrSelectionIndicator;
     private boolean fundBalanceIndicator;
     private String financialReportingSortCode;
-    private String basicAccountingCategoryCode;
 
-    private BasicAccountingCategory basicAccountingCategory;
-    
+
     /**
      * Gets the finObjectTypeDebitcreditCd attribute.
      * 
-     * @return Returns the finObjectTypeDebitcreditCd
+     * @return - Returns the finObjectTypeDebitcreditCd
      * 
      */
     public String getFinObjectTypeDebitcreditCd() {
@@ -64,7 +62,7 @@ public class ObjectType extends KualiCodeBase {
     /**
      * Gets the finObjectTypeIcrSelectionIndicator attribute.
      * 
-     * @return Returns the finObjectTypeIcrSelectionIndicator
+     * @return - Returns the finObjectTypeIcrSelectionIndicator
      * 
      */
     public boolean isFinObjectTypeIcrSelectionIndicator() {
@@ -84,7 +82,7 @@ public class ObjectType extends KualiCodeBase {
     /**
      * Gets the fundBalanceIndicator attribute.
      * 
-     * @return Returns the fundBalanceIndicator
+     * @return - Returns the fundBalanceIndicator
      * 
      */
     public boolean isFundBalanceIndicator() {
@@ -104,7 +102,7 @@ public class ObjectType extends KualiCodeBase {
     /**
      * Gets the financialReportingSortCode attribute.
      * 
-     * @return Returns the financialReportingSortCode
+     * @return - Returns the financialReportingSortCode
      * 
      */
     public String getFinancialReportingSortCode() {
@@ -119,39 +117,6 @@ public class ObjectType extends KualiCodeBase {
      */
     public void setFinancialReportingSortCode(String financialReportingSortCode) {
         this.financialReportingSortCode = financialReportingSortCode;
-    }
-
-    /**
-     * Gets the accountCategoryCode attribute. 
-     * @return Returns the accountCategoryCode.
-     */
-    public String getBasicAccountingCategoryCode() {
-        return basicAccountingCategoryCode;
-    }
-
-    /**
-     * Sets the accountCategoryCode attribute value.
-     * @param accountCategoryCode The accountCategoryCode to set.
-     */
-    public void setBasicAccountingCategoryCode(String accountCategoryCode) {
-        this.basicAccountingCategoryCode = accountCategoryCode;
-    }
-
-    /**
-     * Gets the basicAccountingCategory attribute. 
-     * @return Returns the basicAccountingCategory.
-     */
-    public BasicAccountingCategory getBasicAccountingCategory() {
-        return basicAccountingCategory;
-    }
-
-    /**
-     * Sets the basicAccountingCategory attribute value.
-     * @param basicAccountingCategory The basicAccountingCategory to set.
-     * @deprecated
-     */
-    public void setBasicAccountingCategory(BasicAccountingCategory basicAccountingCategory) {
-        this.basicAccountingCategory = basicAccountingCategory;
     }
 
 }
