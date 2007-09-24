@@ -53,11 +53,11 @@
             </lookupFields>
             <resultFields>
                 <field attributeName="parameterNamespaceCode" forceInquiry="true" />
-                <field attributeName="parameterDetailTypeCode" noInquiry="true"/>
-                <field attributeName="parameterName" forceInquiry="true" />
-                <field attributeName="parameterValue" />
+                <field attributeName="parameterDetailTypeCode" noInquiry="true" />
+                <field attributeName="parameterName" forceInquiry="true" maxLength="60" />
+                <field attributeName="parameterValue" maxLength="40" />
                 <field attributeName="parameterConstraintCode" />
-                <field attributeName="parameterDescription" />
+                <field attributeName="parameterDescription" maxLength="40" />
                 <field attributeName="parameterType.name" forceInquiry="true" />
                 <field attributeName="parameterWorkgroupName" />
             </resultFields>
