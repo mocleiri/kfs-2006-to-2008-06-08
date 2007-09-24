@@ -72,14 +72,14 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
             }
         }
         
-        String activeCheck = fieldValues.get("parameterDetailTypeCode");
+        String activeCheck = fieldValues.get("active");
         if ( activeCheck == null ) {
             activeCheck = "";
         }
         int maxResultsCount = LookupUtils.getApplicationSearchResultsLimit();
         // only bother with the component lookup if returning active components
         // and we have not already hit the configured lookup maximum
-        if ( baseLookup instanceof CollectionIncomplete && activeCheck != "N" && ((CollectionIncomplete)baseLookup).getActualSizeIfTruncated() < maxResultsCount ) {
+        if ( baseLookup instanceof CollectionIncomplete && !activeCheck.equals( "N" ) && ((CollectionIncomplete)baseLookup).getActualSizeIfTruncated() < maxResultsCount ) {
             long originalCount = Math.max(baseLookup.size(), ((CollectionIncomplete)baseLookup).getActualSizeIfTruncated() );
             long totalCount = originalCount;
             //baseLookup = new ArrayList<BusinessObject>( baseLookup );
@@ -87,7 +87,6 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
             Pattern namespaceRegex = null;
             Pattern nameRegex = null;
             // TODO module lookup?
-            // TODO active check
             if ( StringUtils.isNotBlank( fieldValues.get("parameterDetailTypeCode") ) ) {
                 String patternStr = fieldValues.get("parameterDetailTypeCode").replace("*", ".*").toUpperCase();
                 try {
