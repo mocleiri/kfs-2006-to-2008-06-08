@@ -317,7 +317,6 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
      * @param document
      */
     public void validateTotals(PaymentRequestDocument document) {
-        String securityGroup = (String)PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(PurapConstants.PAYMENT_REQUEST_DOCUMENT_DOC_TYPE);
         Set<String> allowsNegativeRule = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsSet( KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST, PurapConstants.ITEM_ALLOWS_NEGATIVE);
         if ((ObjectUtils.isNull(document.getVendorInvoiceAmount())) || 
             (this.getTotalExcludingItemTypes(document.getItems(), allowsNegativeRule).compareTo(document.getVendorInvoiceAmount()) != 0 && !document.isUnmatchedOverride())) {
