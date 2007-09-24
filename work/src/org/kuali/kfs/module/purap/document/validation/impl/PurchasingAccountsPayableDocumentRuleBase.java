@@ -186,7 +186,6 @@ public class PurchasingAccountsPayableDocumentRuleBase extends AccountingDocumen
     protected boolean valideBelowTheLineValues(String documentType, String fromSourceDocument, PurApItem item) {
         boolean valid = true;
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        String securityGroup = PurapConstants.ITEM_TYPE_SYSTEM_PARAMETERS_SECURITY_MAP.get(documentType);
         String parameterDetailTypeCode = (String)PurapConstants.PURAP_DETAIL_TYPE_CODE_MAP.get(documentType);
         Parameter allowsZeroRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_ZERO);
         Parameter allowsPositiveRule = kualiConfigurationService.getParameter( KFSConstants.PURAP_NAMESPACE, parameterDetailTypeCode, PurapConstants.ITEM_ALLOWS_POSITIVE);
