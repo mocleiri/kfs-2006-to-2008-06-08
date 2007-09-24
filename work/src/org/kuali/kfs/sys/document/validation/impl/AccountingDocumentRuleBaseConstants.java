@@ -46,7 +46,7 @@ public interface AccountingDocumentRuleBaseConstants {
         public static final String DOCTYPE_SALES_TAX_CHECK = "SALES_TAX_APPLICABLE_DOCUMENT_TYPES";
         
         // combination object code and account parameter
-        public static final String VALID_ACCOUNT_AND_OBJ_CD = "SALES_TAX_APPLICABLE_ACCOUNTS_AND_OBJECTS";
+        public static final String SALES_TAX_APPLICABLE_ACCOUNTS_AND_OBJECT_CODES = "SALES_TAX_APPLICABLE_ACCOUNTS_AND_OBJECT_CODES";
     }
     /**
      * Constant to statically define reusable error paths
