@@ -16,6 +16,7 @@
 package org.kuali.kfs.lookup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -58,6 +59,9 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
             // get all components from the DD and make a list.
             // hold statically since it won't change after DD load is complete
             DataDictionary dd = getDataDictionaryService().getDataDictionary();
+            
+            // Business Objects
+            
             for ( String boClassName : dd.getBusinessObjectClassNames() ) {
                 String simpleName = StringUtils.substringAfterLast(boClassName, ".");
                 if ( StringUtils.isBlank( simpleName ) ) continue;
@@ -85,34 +89,49 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
                     components.add( pdt );
                 }
             }
+            
+            // Transactional documents
+            
             Map<String,DocumentEntry> ddDocuments = dd.getDocumentEntries();
+            HashSet<DocumentEntry> addedDocs = new HashSet<DocumentEntry>();
             for ( String transDocName : ddDocuments.keySet() ) {
-                if ( StringUtils.isBlank( transDocName ) ) continue;
                 DocumentEntry doc = ddDocuments.get(transDocName);
+                if ( StringUtils.isBlank( transDocName ) 
+                        || transDocName.startsWith("Kuali")
+                        || transDocName.contains(".")
+                        || addedDocs.contains( doc ) ) continue;
                 if ( doc instanceof TransactionalDocumentEntry ) {
+                    // remove the document string from the end
+                    String componentName = transDocName.replace("Document", "");
                     ParameterDetailType pdt = null;
                     KualiModule km = kualiModuleService.getResponsibleModule( doc.getDocumentClass() );
                     if ( km != null ) {
-                        pdt = new ParameterDetailType( KFSConstants.KFS_NAMESPACE_PREFIX + km.getModuleCode(), transDocName, doc.getLabel() );
+                        pdt = new ParameterDetailType( KFSConstants.KFS_NAMESPACE_PREFIX + km.getModuleCode(), componentName, doc.getLabel() );
                     } else {
                         if ( doc.getDocumentClass().getName().startsWith( "org.kuali.core" ) ) {
-                            pdt = new ParameterDetailType( KFSConstants.CORE_NAMESPACE, transDocName, doc.getLabel() );
+                            pdt = new ParameterDetailType( KFSConstants.CORE_NAMESPACE, componentName, doc.getLabel() );
                         } else if ( doc.getDocumentClass().getName().startsWith( "org.kuali.kfs" ) ) {
-                            pdt = new ParameterDetailType( KFSConstants.KFS_SYSTEM_NAMESPACE, transDocName, doc.getLabel() );
+                            pdt = new ParameterDetailType( KFSConstants.KFS_SYSTEM_NAMESPACE, componentName, doc.getLabel() );
                         } else {
                             LOG.error( "Unable to determine module for: " + doc.getDocumentClass().getName() );
-                            pdt = new ParameterDetailType( "N/A", transDocName, doc.getLabel() );
+                            pdt = new ParameterDetailType( "N/A", componentName, doc.getLabel() );
                         }
                     }
                     if ( pdt != null ) {
                         pdt.refreshNonUpdateableReferences();
                         components.add( pdt );
+                        addedDocs.add( doc );
                     }
                 }
             }
+            
+            // Batch Steps
+            
             Map<String,Step> steps = SpringContext.getBeansOfType(Step.class);
             for ( String stepName : steps.keySet() ) {
-                components.add( new ParameterDetailType( steps.get(stepName).getNamespace(), steps.get(stepName).getComponentName(), stepName ) );
+                ParameterDetailType pdt = new ParameterDetailType( steps.get(stepName).getNamespace(), steps.get(stepName).getComponentName(), stepName );
+                pdt.refreshNonUpdateableReferences();
+                components.add( pdt );
             }
         }
         
