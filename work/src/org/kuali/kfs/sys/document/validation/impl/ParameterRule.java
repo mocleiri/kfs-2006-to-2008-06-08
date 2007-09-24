@@ -17,6 +17,8 @@ package org.kuali.kfs.rules;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +32,8 @@ import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.batch.Step;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.lookup.ParameterDetailTypeLookupableHelperServiceImpl;
+import org.kuali.kfs.util.ParameterDetailTypeUtils;
 
 public class ParameterRule extends org.kuali.core.rules.ParameterRule {
 
@@ -50,19 +54,15 @@ public class ParameterRule extends org.kuali.core.rules.ParameterRule {
         String namespace = param.getParameterNamespaceCode();
         boolean result = false;
         
-        // check the DD
-        if ( ddComponentNames.isEmpty() ) {
-            initComponents();
-        }
-        result = ddComponentNames.contains(component);
-        if ( !result ) {
-            for ( String[] step : stepNames ) {
-                if ( step[0].equals(namespace) && step[1].equals(component) ) {
-                    result = true;
-                    break;
-                }
+        // check the DD        
+        List<ParameterDetailType> ddComponents = ParameterDetailTypeUtils.getDDComponents();
+        for ( ParameterDetailType pdt : ddComponents ) {
+            if ( pdt.getParameterNamespaceCode().equals(namespace)
+                    && pdt.getParameterDetailTypeCode().equals(component) ) {
+                result = true;
+                break;
             }
-        }        
+        }
         
         // check the table
         if ( !result ) {
@@ -79,28 +79,4 @@ public class ParameterRule extends org.kuali.core.rules.ParameterRule {
         return result;
     }
     
-    private synchronized void initComponents() {
-        if ( ddComponentNames.isEmpty() ) {
-            DataDictionaryService dds = SpringContext.getBean( DataDictionaryService.class );
-            dds.getDataDictionary().forceCompleteDataDictionaryLoad();
-            DataDictionary dd = dds.getDataDictionary();
-            for ( String boClassName : dd.getBusinessObjectClassNames() ) {
-                String simpleName = StringUtils.substringAfterLast(boClassName, ".");
-                if ( StringUtils.isBlank( simpleName ) ) continue;
-                ddComponentNames.add( simpleName );
-            }
-            Map<String,DocumentEntry> ddDocuments = dd.getDocumentEntries();
-            for ( String transDocName : ddDocuments.keySet() ) {
-                if ( StringUtils.isBlank( transDocName ) ) continue;
-                DocumentEntry doc = ddDocuments.get(transDocName);
-                if ( doc instanceof TransactionalDocumentEntry ) {
-                    ddComponentNames.add( doc.getDocumentTypeName() );
-                }
-            }
-            Map<String,Step> steps = SpringContext.getBeansOfType(Step.class);
-            for ( String stepName : steps.keySet() ) {
-                stepNames.add( new String[] { steps.get(stepName).getNamespace(), steps.get(stepName).getComponentName() } );
-            }            
-        }
-    }
 }

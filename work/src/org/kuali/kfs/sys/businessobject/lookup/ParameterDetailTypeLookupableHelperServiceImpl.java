@@ -15,125 +15,33 @@
  */
 package org.kuali.kfs.lookup;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.KualiModule;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.bo.ParameterDetailType;
-import org.kuali.core.datadictionary.DataDictionary;
-import org.kuali.core.datadictionary.DocumentEntry;
-import org.kuali.core.datadictionary.TransactionalDocumentEntry;
 import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.lookup.KualiLookupableHelperServiceImpl;
 import org.kuali.core.lookup.LookupUtils;
 import org.kuali.core.service.KualiModuleService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.batch.Step;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.ParameterDetailTypeUtils;
 
 public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupableHelperServiceImpl {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( ParameterDetailTypeLookupableHelperServiceImpl.class );
     
-    private static ArrayList<ParameterDetailType> components = new ArrayList<ParameterDetailType>(); 
-
-    private KualiModuleService kualiModuleService;
-    
     @Override
     public List<? extends BusinessObject> getSearchResults(java.util.Map<String,String> fieldValues) {
 
         List<BusinessObject> baseLookup = (List<BusinessObject>)super.getSearchResults(fieldValues);
-        getDataDictionaryService().getDataDictionary().forceCompleteDataDictionaryLoad();
         
         // all step beans
         // all BO beans
         // all trans doc beans 
-        
-        if ( components.isEmpty() ) {
-            // get all components from the DD and make a list.
-            // hold statically since it won't change after DD load is complete
-            DataDictionary dd = getDataDictionaryService().getDataDictionary();
-            
-            // Business Objects
-            
-            for ( String boClassName : dd.getBusinessObjectClassNames() ) {
-                String simpleName = StringUtils.substringAfterLast(boClassName, ".");
-                if ( StringUtils.isBlank( simpleName ) ) continue;
-                ParameterDetailType pdt = null;
-                try {
-                    KualiModule km = kualiModuleService.getResponsibleModule(Class.forName(boClassName));
-                    if ( km != null ) {
-                        pdt = new ParameterDetailType( KFSConstants.KFS_NAMESPACE_PREFIX + km.getModuleCode(), simpleName, simpleName );
-                    } else {
-                        if ( boClassName.startsWith( "org.kuali.core" ) ) {
-                            pdt = new ParameterDetailType( KFSConstants.CORE_NAMESPACE, simpleName, simpleName );
-                        } else if ( boClassName.startsWith( "org.kuali.kfs" ) ) {
-                            pdt = new ParameterDetailType( KFSConstants.KFS_SYSTEM_NAMESPACE, simpleName, simpleName );
-                        } else {
-                            LOG.error( "Unable to determine module for: " + boClassName );
-                            pdt = new ParameterDetailType( "N/A", simpleName, simpleName );
-                        }
-                    }
-                } catch ( ClassNotFoundException ex ) {
-                    LOG.error( "Unable to convert string to class for BO: " + boClassName, ex );
-                    pdt = new ParameterDetailType( "N/A", simpleName, simpleName );
-                }
-                if ( pdt != null ) {
-                    pdt.refreshNonUpdateableReferences();
-                    components.add( pdt );
-                }
-            }
-            
-            // Transactional documents
-            
-            Map<String,DocumentEntry> ddDocuments = dd.getDocumentEntries();
-            HashSet<DocumentEntry> addedDocs = new HashSet<DocumentEntry>();
-            for ( String transDocName : ddDocuments.keySet() ) {
-                DocumentEntry doc = ddDocuments.get(transDocName);
-                if ( StringUtils.isBlank( transDocName ) 
-                        || transDocName.startsWith("Kuali")
-                        || transDocName.contains(".")
-                        || addedDocs.contains( doc ) ) continue;
-                if ( doc instanceof TransactionalDocumentEntry ) {
-                    // remove the document string from the end
-                    String componentName = transDocName.replace("Document", "");
-                    ParameterDetailType pdt = null;
-                    KualiModule km = kualiModuleService.getResponsibleModule( doc.getDocumentClass() );
-                    if ( km != null ) {
-                        pdt = new ParameterDetailType( KFSConstants.KFS_NAMESPACE_PREFIX + km.getModuleCode(), componentName, doc.getLabel() );
-                    } else {
-                        if ( doc.getDocumentClass().getName().startsWith( "org.kuali.core" ) ) {
-                            pdt = new ParameterDetailType( KFSConstants.CORE_NAMESPACE, componentName, doc.getLabel() );
-                        } else if ( doc.getDocumentClass().getName().startsWith( "org.kuali.kfs" ) ) {
-                            pdt = new ParameterDetailType( KFSConstants.KFS_SYSTEM_NAMESPACE, componentName, doc.getLabel() );
-                        } else {
-                            LOG.error( "Unable to determine module for: " + doc.getDocumentClass().getName() );
-                            pdt = new ParameterDetailType( "N/A", componentName, doc.getLabel() );
-                        }
-                    }
-                    if ( pdt != null ) {
-                        pdt.refreshNonUpdateableReferences();
-                        components.add( pdt );
-                        addedDocs.add( doc );
-                    }
-                }
-            }
-            
-            // Batch Steps
-            
-            Map<String,Step> steps = SpringContext.getBeansOfType(Step.class);
-            for ( String stepName : steps.keySet() ) {
-                ParameterDetailType pdt = new ParameterDetailType( steps.get(stepName).getNamespace(), steps.get(stepName).getComponentName(), stepName );
-                pdt.refreshNonUpdateableReferences();
-                components.add( pdt );
-            }
-        }
+
+        List<ParameterDetailType> components = ParameterDetailTypeUtils.getDDComponents();
         
         String activeCheck = fieldValues.get("active");
         if ( activeCheck == null ) {
@@ -198,13 +106,5 @@ public class ParameterDetailTypeLookupableHelperServiceImpl extends KualiLookupa
         }
         
         return baseLookup;
-    }
-
-    public KualiModuleService getKualiModuleService() {
-        return kualiModuleService;
-    }
-
-    public void setKualiModuleService(KualiModuleService kualiModuleService) {
-        this.kualiModuleService = kualiModuleService;
     }
 }
