@@ -139,7 +139,7 @@
                 <maxLength>1</maxLength>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ParameterOperatorValuesFinder" />
+                    <radio valuesFinderClass="org.kuali.core.lookup.keyvalues.ParameterOperatorValuesFinder" />
                 </control>
 
                 <summary>parameterConstraintCode</summary>
@@ -150,7 +150,7 @@
             <attributeReference name="parameterTypeCode" sourceClassName="org.kuali.core.bo.ParameterType" sourceAttributeName="code" >
                 <required>true</required>
                 <control>
-                    <radio valuesFinderClass="org.kuali.core.lookup.keyvalues.ParameterTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ParameterTypeValuesFinder" />
                 </control>
             </attributeReference>
 
