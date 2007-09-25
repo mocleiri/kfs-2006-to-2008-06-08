@@ -82,14 +82,11 @@ public class OffsetDefinitionRule extends MaintenanceDocumentRuleBase {
         Parameter parmRule = getConfigService().getParameter(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.OFFSET_DEFINITION, KFSConstants.ChartApcParms.VALID_DOCUMENT_TYPES_BY_OBJECT_SUB_TYPE);
         // we need to check to see if the values are in the right range and then
         // see if the ObjectCode is the right value
-        if (getConfigService().succeedsRule(parmRule,newDefinition.getFinancialDocumentTypeCode())) {
-            if ((ObjectUtils.isNotNull(newDefinition.getFinancialObject()) && StringUtils.isNotEmpty(newDefinition.getFinancialObject().getFinancialObjectSubTypeCode()) && !newDefinition.getFinancialObject().getFinancialObjectSubTypeCode().equalsIgnoreCase("AR")) || StringUtils.isEmpty(newDefinition.getFinancialObjectCode())) {
-
+        if ((ObjectUtils.isNotNull(newDefinition.getFinancialObject()) && StringUtils.isNotEmpty(newDefinition.getFinancialObject().getFinancialObjectSubTypeCode()) && !newDefinition.getFinancialObject().getFinancialObjectSubTypeCode().equalsIgnoreCase("AR")) || StringUtils.isEmpty(newDefinition.getFinancialObjectCode())) {
+            if( getConfigService().evaluateConstrainedParameter(parmRule, newDefinition.getFinancialObject().getFinancialObjectSubTypeCode(), newDefinition.getFinancialDocumentTypeCode()) ){
                 putFieldError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_OFFSETDEFMAINT_INVALID_OBJ_CODE_FOR_DOCTYPE, new String[] { newDefinition.getFinancialObjectCode(), parmRule.getParameterValue() });
-
+                success &= false;
             }
-
-            success &= false;
         }
 
         return success;
