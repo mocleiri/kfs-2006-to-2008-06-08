@@ -49,7 +49,7 @@ public class ParameterRule extends org.kuali.core.rules.ParameterRule {
         return result;
     }
     
-    protected boolean checkComponent( Parameter param ) {
+    public boolean checkComponent( Parameter param ) {
         String component = param.getParameterDetailTypeCode();
         String namespace = param.getParameterNamespaceCode();
         boolean result = false;
