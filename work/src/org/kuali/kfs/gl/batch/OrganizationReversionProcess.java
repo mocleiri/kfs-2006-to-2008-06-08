@@ -107,13 +107,13 @@ public class OrganizationReversionProcess {
         super();
 
         KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        this.ORGANIZATION_REVERSION_COA = kualiConfigurationService.getParameterValues(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.ORGANIZATION_REVERSION_COA);
-        this.CARRY_FORWARD_OBJECT_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.CARRY_FORWARD_OBJECT_CODE);
-        this.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE);
-        this.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE);
-        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE);
-        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END);
-        this.DEFAULT_DOCUMENT_NUMBER_PREFIX = kualiConfigurationService.getParameterValue(KFSConstants.GL_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_DOCUMENT_NUMBER_PREFIX);
+        this.ORGANIZATION_REVERSION_COA = kualiConfigurationService.getParameterValues(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.ORGANIZATION_REVERSION_COA);
+        this.CARRY_FORWARD_OBJECT_CODE = kualiConfigurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.CARRY_FORWARD_OBJECT_CODE);
+        this.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_DOCUMENT_TYPE_CODE);
+        this.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE = kualiConfigurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_SYSTEM_ORIGINATION_CODE);
+        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE = kualiConfigurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE);
+        this.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END = kualiConfigurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_FINANCIAL_BALANCE_TYPE_CODE_YEAR_END);
+        this.DEFAULT_DOCUMENT_NUMBER_PREFIX = kualiConfigurationService.getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ORGANIZATION_REVERSION, GLConstants.OrganizationReversionProcess.DEFAULT_DOCUMENT_NUMBER_PREFIX);
     }
     
     public OrganizationReversionProcess(boolean endOfYear, OrganizationReversionService ors, KualiConfigurationService kcs, BalanceService bs, OrganizationReversionSelection orgrs, OriginEntryGroupService oegs, OriginEntryService oes, PersistenceService ps, DateTimeService dts, OrganizationReversionCategoryLogic corc, PriorYearAccountService pyas, ReportService rs, OrgReversionUnitOfWorkService oruows) {
