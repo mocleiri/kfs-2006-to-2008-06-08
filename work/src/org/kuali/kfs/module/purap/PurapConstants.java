@@ -52,7 +52,7 @@ public class PurapConstants extends JstlConstants {
     
     public static class Components {
         public static final String CREDIT_MEMO_DOC = "CreditMemo";
-        public static final String ASSIGN_CONTRACT_MANGER = "AssignContractManger";
+        public static final String ASSIGN_CONTRACT_MANGER = "AssignContractManager";
         public static final String PAYMENT_REQUEST = "PaymentRequest";
         public static final String REQUISITION = "Requisition";
         public static final String PURCHASE_ORDER = "PurchaseOrder";
