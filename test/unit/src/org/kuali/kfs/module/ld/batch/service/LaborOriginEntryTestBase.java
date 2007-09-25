@@ -214,7 +214,7 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
     }
 
     protected static String[] ICR_ENCUMBRANCE_ENABLED_FLAG = { KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.ENCUMBRANCE, KFSConstants.SystemGroupParameterNames.ICR_ENCUMBRANCE_ENABLED_FLAG };
-    protected static String[] FLEXIBLE_OFFSET_ENABLED_FLAG = { KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.OFFSET, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG };
+    protected static String[] FLEXIBLE_OFFSET_ENABLED_FLAG = { KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.OFFSET_DEFINITION, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG };
     protected static String[] FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = { KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.BANK, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG };
 
     protected void resetAllEnhancementFlags() throws Exception {
