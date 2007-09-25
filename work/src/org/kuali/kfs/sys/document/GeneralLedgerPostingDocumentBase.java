@@ -79,7 +79,7 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
      * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#isBankCashOffsetEnabled()
      */
     public boolean isBankCashOffsetEnabled() {
-        return SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.BANK, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG);
+        return SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.BANK, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG);
     }
 
     /**
