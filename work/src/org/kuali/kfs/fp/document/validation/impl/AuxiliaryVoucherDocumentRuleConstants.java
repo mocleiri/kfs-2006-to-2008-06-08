@@ -29,6 +29,6 @@ public interface AuxiliaryVoucherDocumentRuleConstants extends AccountingDocumen
     public static final String RESTRICTED_COMBINED_CODES = "COMBINATION_OBJECT_TYPE_OBJECT_SUB_TYPE_OBJECT_LEVEL";
     public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "OBJECT_SUB_TYPES";
     public static final String RESTRICTED_PERIOD_CODES = "ACCOUNTING_PERIODS";
-    public static final String GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE = "GLPE_OFFSET_OBJECT";
+    public static final String GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE = "GLPE_OFFSET_OBJECT_CODE";
     public static final String AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD = "ACCOUNTING_PERIOD_GRACE_PERIOD";
 }
