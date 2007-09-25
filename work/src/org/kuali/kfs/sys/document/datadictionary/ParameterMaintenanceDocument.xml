@@ -72,10 +72,12 @@
                     <maintainableField name="parameterNamespaceCode" required="true" />
                     <maintainableField name="parameterDetailTypeCode" required="true" />
                     <maintainableField name="parameterName" required="true" />
-                    <maintainableField name="parameterValue" required="true" />
+                    <maintainableField name="parameterValue" />
                     <maintainableField name="parameterDescription" required="true" />
                     <maintainableField name="parameterTypeCode" required="true" />
-                    <maintainableField name="parameterConstraintCode" required="true" />
+                    <maintainableField name="parameterConstraintCode" required="true">
+                        <defaultValue>A</defaultValue>
+                    </maintainableField>
                     <maintainableField name="parameterWorkgroupName" required="true" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
