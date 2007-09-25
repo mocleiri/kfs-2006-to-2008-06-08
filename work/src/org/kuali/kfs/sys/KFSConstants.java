@@ -136,28 +136,25 @@ public class KFSConstants extends JstlConstants {
         public final static String ALL = "All";
         
         public final static String KUALI_MODULE_USER = KualiModuleUser.class.getSimpleName();
-
-        public static final String OFFSET = "Offset";
+        
+        // KFS System related components
+        public final static String COUNTRY = Country.class.getSimpleName();
+        public final static String DOCUMENT_TYPE = DocumentType.class.getSimpleName();
+        public final static String DOCUMENT = "Document";
+        public final static String ORIGINATION = OriginationCode.class.getSimpleName();
+        public final static String POSTAL_CODE = PostalZipCode.class.getSimpleName();
+        public final static String STATE = State.class.getSimpleName();
+        public final static String OPTIONS = Options.class.getSimpleName();
         
         //CHART RELATED COMPONENTS
-        /*
-        public final static String INDIRECT_COST_RECOVERY_AUTOMATED_ENTRY = IndirectCostRecoveryAutomatedEntry.class.getSimpleName();
-        public final static String INDIRECT_COST_RECOVERY_EXCLUSION_BY_ACCOUNT = IndirectCostRecoveryExclusionByAccount.class.getSimpleName();
-        public final static String INDIRECT_COST_RECOVERY_EXCLUSION_BY_TYPE = IndirectCostRecoveryExclusionByType.class.getSimpleName();
-        public final static String INDIRECT_COST_RECOVERY_TYPE = IndirectCostRecoveryType.class.getSimpleName();
-        public final static String MANDITORY_TRANSFER_ELIMINATION = ManditoryTransferElimination.class.getSimpleName();
-        */      
         public final static String FISCAL_YEAR_MAKER_STEP = FiscalYearMakerStep.class.getSimpleName();
         public final static String ACCOUNT = Account.class.getSimpleName();
         public final static String ACCOUNTING_PERIOD = AccountingPeriod.class.getSimpleName();
-        public final static String ACCOUNT_DELEGATE = "AccountDelegate";
+        public final static String ACCOUNT_DELEGATE = Delegate.class.getSimpleName();
         public final static String ACCOUNT_TYPE = AcctType.class.getSimpleName();
         public final static String AICPA_FUNCTION = AicpaFunction.class.getSimpleName();
         public final static String BALANCE_TYPE = BalanceTyp.class.getSimpleName();
         public final static String CHART = Chart.class.getSimpleName();
-        public final static String COUNTRY = Country.class.getSimpleName();
-        public final static String DOCUMENT_TYPE = DocumentType.class.getSimpleName();
-        public final static String DOCUMENT = "Document";
         public final static String FEDERAL_FUNCTION = FederalFunction.class.getSimpleName();
         public final static String FEDERAL_FUNDED_CODE = FederalFundedCode.class.getSimpleName();
         public final static String FINANCIAL_REPORTING_CODE = ReportingCodes.class.getSimpleName();
@@ -170,29 +167,21 @@ public class KFSConstants extends JstlConstants {
         public final static String OBJECT_SUB_TYPE = ObjSubTyp.class.getSimpleName();
         public final static String OBJECT_TYPE = ObjectType.class.getSimpleName();
         public final static String OFFSET_DEFINITION = OffsetDefinition.class.getSimpleName();
-        public final static String ORGANIZATION = "Organization";
-        public final static String ORGANIZATION_TYPE = "OrganizationType";
-        public final static String ORIGINATION = "Origination";
-        public final static String POSTAL_CODE = PostalZipCode.class.getSimpleName();
-        public final static String PROGRAM = Program.class.getSimpleName();
+        public final static String ORGANIZATION = Org.class.getSimpleName();
+        public final static String ORGANIZATION_TYPE = OrgType.class.getSimpleName();
         public final static String PROJECT = ProjectCode.class.getSimpleName();
         public final static String RESPONSIBILITY_CENTER = ResponsibilityCenter.class.getSimpleName();
         public final static String RESTRICTED_STATUS = RestrictedStatus.class.getSimpleName();
-        public final static String STATE = State.class.getSimpleName();
         public final static String SUB_FUND_GROUP = SubFundGroup.class.getSimpleName();
         public final static String SUB_FUND_GROUP_TYPE = SubFundGroupType.class.getSimpleName();
         public final static String SUB_OBJECT_CODE = SubObjCd.class.getSimpleName();
         public final static String UNIVERSITY_BUDGET_OFFICE_FUNCTION = UniversityBudgetOfficeFunction.class.getSimpleName();
-        public final static String UNIVERSITY_DATE = UniversityDate.class.getSimpleName();;
         public final static String SUB_ACCOUNT = SubAccount.class.getSimpleName();
         public final static String CHART_USER = ChartUser.class.getSimpleName();
         public final static String ORGANIZATION_REVERSION = OrganizationReversion.class.getSimpleName();
         public final static String ORGANIZATION_REVERSION_CATEGORY = OrganizationReversionCategory.class.getSimpleName();
-        public final static String OPTIONS = Options.class.getSimpleName();
         
         //FINANCIAL RELATED COMPONENTS
-        //public final static String PROCUREMENT_CARD_JOB = ProcurementCardJob.class.getSimpleName(); //Is this the same as PROCUREMENT CARD
-        //public final static String FISCAL_YEAR_FUNCTION_CONTROL_CODE = FiscalYearFunctionControlCode.class.getSimpleName();        
         public final static String BANK = Bank.class.getSimpleName();
         public final static String BANK_ACCOUNT = BankAccount.class.getSimpleName();
         public final static String CREDIT_CARD_TYPE = CreditCardType.class.getSimpleName();
@@ -239,6 +228,8 @@ public class KFSConstants extends JstlConstants {
         public final static String TRANSFER_OF_FUNDS_DOC = "TransferOfFunds";
         
         public final static String BALANCE_INQUIRY_AVAILABLE_BALANCES = "BalanceInquiryAvailableBalances";
+
+        public final static String UNIVERSITY_DATE = UniversityDate.class.getSimpleName();;
     }        
     
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
