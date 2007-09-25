@@ -239,9 +239,9 @@ public class OriginEntryTestBase extends KualiTestBase {
         return -1;
     }
 
-    protected static String[] ICR_ENCUMBRANCE_ENABLED_FLAG = { KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.ENCUMBRANCE, KFSConstants.SystemGroupParameterNames.ICR_ENCUMBRANCE_ENABLED_FLAG };
-    protected static String[] FLEXIBLE_OFFSET_ENABLED_FLAG = { KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.OFFSET_DEFINITION, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG };
-    protected static String[] FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = { KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.BANK, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG };
+    protected static String[] ICR_ENCUMBRANCE_ENABLED_FLAG = { KFSConstants.GL_NAMESPACE, KFSConstants.Components.ENCUMBRANCE, KFSConstants.SystemGroupParameterNames.ICR_ENCUMBRANCE_ENABLED_FLAG };
+    protected static String[] FLEXIBLE_OFFSET_ENABLED_FLAG = { KFSConstants.CHART_NAMESPACE, KFSConstants.Components.OFFSET_DEFINITION, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG };
+    protected static String[] FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = { KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.BANK, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG };
 
     protected void resetAllEnhancementFlags() throws Exception {
         setApplicationConfigurationFlag(ICR_ENCUMBRANCE_ENABLED_FLAG[0], ICR_ENCUMBRANCE_ENABLED_FLAG[1], ICR_ENCUMBRANCE_ENABLED_FLAG[2], false);
