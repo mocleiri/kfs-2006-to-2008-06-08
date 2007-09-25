@@ -120,7 +120,7 @@ public class BudgetForm extends ResearchDocumentFormBase {
     public BudgetForm() {
         super();
 
-        DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
+        DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.DEFAULT_BUDGET_TASK_NAME);
         TO_BE_NAMED_LABEL = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.TO_BE_NAMED_LABEL);
 
         newPeriod = new BudgetPeriod();
