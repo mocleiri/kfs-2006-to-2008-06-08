@@ -206,11 +206,10 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
     protected boolean isObjectTypeAndObjectSubTypeAllowed(ObjectCode code) {
         boolean retval = true;
 
-        retval = !(failsRule(COMBINED_RESTRICTED_OBJECT_TYPE_CODES, code.getFinancialObjectTypeCode()) && failsRule(COMBINED_RESTRICTED_OBJECT_SUB_TYPE_CODES, code.getFinancialObjectSubTypeCode()));
-
-        if (!retval) {
+        if (!getKualiConfigurationService().evaluateConstrainedParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.GENERAL_ERROR_CORRECTION_DOC, COMBINED_RESTRICTED_OBJECT_TYPE_CODES, code.getFinancialObjectTypeCode(), code.getFinancialObjectSubTypeCode())) {
             // add message
             GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_WITH_SUB_TYPE_CODE, new String[] { code.getFinancialObjectCode(), code.getFinancialObjectTypeCode(), code.getFinancialObjectSubTypeCode() });
+            retval = false;
         }
 
         return retval;
