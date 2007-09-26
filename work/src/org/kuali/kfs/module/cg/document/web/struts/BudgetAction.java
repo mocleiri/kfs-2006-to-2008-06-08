@@ -198,7 +198,7 @@ public class BudgetAction extends ResearchDocumentActionBase {
         BudgetForm budgetForm = (BudgetForm) form;
 
         // Set default task name
-        String DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
+        String DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.DEFAULT_BUDGET_TASK_NAME);
         budgetForm.getNewTask().setBudgetTaskName(DEFAULT_BUDGET_TASK_NAME + " " + (budgetForm.getBudgetDocument().getTaskListSize() + 1));
         
 //      New task defaults to on campus
