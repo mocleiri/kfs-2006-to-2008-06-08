@@ -57,8 +57,8 @@ public class RoutingFormOutputAction extends RoutingFormAction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetOutputAction.class);
     private static Logger fopLogger = null; // Needed for fop logging
 
-    private static final String XSL_PATH_PARM_NM = "OUTPUT-XSL_PATH";
-    private static final String STYLESHEET_URL_OR_PATH_PARM_NM = "OUTPUT-STYLESHEET_URL_OR_PATH";
+    private static final String XSL_PATH_PARM_NM = "OUTPUT_XSL_PATH";
+    private static final String STYLESHEET_URL_OR_PATH_PARM_NM = "OUTPUT_STYLESHEET_URL_OR_PATH";
     
     /**
      * Use for generation of PDF that is to be pushed to the browser.
