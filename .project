@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>kuali_project_sys_param</name>
+	<name>kuali_project</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -19,16 +19,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>kns-r</name>
-			<type>2</type>
-			<location>/Users/jonathan/dev/eclipse/Eclipse.app/Contents/MacOS/C::/kuali/projects/rice_sys_param/kns/src/main/resources</location>
-		</link>
-		<link>
-			<name>kns</name>
-			<type>2</type>
-			<location>/Users/jonathan/dev/eclipse/Eclipse.app/Contents/MacOS/C::/kuali/projects/rice_sys_param/kns/src/main/java</location>
-		</link>
-	</linkedResources>
 </projectDescription>
