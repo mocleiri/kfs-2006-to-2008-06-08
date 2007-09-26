@@ -74,14 +74,14 @@ public class BudgetOutputAction extends BudgetAction {
     private static final String NIH_SUMMARY = "NSF-summary";
     private static final String SF_424 = "SF424";
 
-    private static final String GENERIC_BY_PERIOD_XSL_PATH_PARM_NM = "OUTPUT-GENERIC_BY_PERIOD_XSL_PATH";
-    private static final String GENERIC_BY_TASK_XSL_PATH_PARM_NM = "OUTPUT-GENERIC_BY_TASK_XSL_PATH";
-    private static final String NIH_MODULAR_XSL_PATH_PARM_NM = "OUTPUT-NIH_MODULAR_XSL_PATH";
-    private static final String NIH2590_XSL_PATH_PARM_NM = "OUTPUT-NIH2590_XSL_PATH";
-    private static final String NIH398_XSL_PATH_PARM_NM = "OUTPUT-NIH398_XSL_PATH";
-    private static final String NSF_SUMMARY_XSL_PATH_PARM_NM = "OUTPUT-NSF_SUMMARY_XSL_PATH";
-    private static final String SF424_XSL_PATH_PARM_NM = "OUTPUT-SF424_XSL_PATH";
-    private static final String STYLESHEET_URL_OR_PATH_PARM_NM = "OUTPUT-STYLESHEET_URL_OR_PATH";
+    private static final String GENERIC_BY_PERIOD_XSL_PATH_PARM_NM = "OUTPUT_GENERIC_BY_PERIOD_XSL_PATH";
+    private static final String GENERIC_BY_TASK_XSL_PATH_PARM_NM = "OUTPUT_GENERIC_BY_TASK_XSL_PATH";
+    private static final String NIH_MODULAR_XSL_PATH_PARM_NM = "OUTPUT_NIH_MODULAR_XSL_PATH";
+    private static final String NIH2590_XSL_PATH_PARM_NM = "OUTPUT_NIH2590_XSL_PATH";
+    private static final String NIH398_XSL_PATH_PARM_NM = "OUTPUT_NIH398_XSL_PATH";
+    private static final String NSF_SUMMARY_XSL_PATH_PARM_NM = "OUTPUT_NSF_SUMMARY_XSL_PATH";
+    private static final String SF424_XSL_PATH_PARM_NM = "OUTPUT_SF424_XSL_PATH";
+    private static final String STYLESHEET_URL_OR_PATH_PARM_NM = "OUTPUT_STYLESHEET_URL_OR_PATH";
 
     /**
      * Use for generation of PDF that is to be pushed to the browser.
