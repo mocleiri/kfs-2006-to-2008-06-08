@@ -20,11 +20,11 @@ import java.util.LinkedHashMap;
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.KualiCode;
 import org.kuali.core.bo.Summarizable;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.impl.PersistenceStructureServiceImpl;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
 import org.kuali.module.chart.bo.codes.FederalFundedCode;
 import org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode;
@@ -34,12 +34,6 @@ import org.kuali.module.gl.bo.SufficientFundRebuild;
  * 
  */
 public class ObjectCode extends PersistableBusinessObjectBase implements Summarizable {
-    
-    
-    static {
-        PersistenceStructureServiceImpl.referenceConversionMap.put(ObjectCode.class, ObjectCodeCurrent.class);
-    }
-    
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectCode.class);
 
     private static final long serialVersionUID = -965833141452795485L;
@@ -64,19 +58,21 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
     private transient MandatoryTransferEliminationCode finObjMandatoryTrnfrelim;
     private transient FederalFundedCode financialFederalFunded;
     private transient Options universityFiscal;
+    private transient ObjectCode nextYearFinancialObject;
     private transient ObjLevel financialObjectLevel;
     private transient Chart chartOfAccounts;
     private transient Chart reportsToChartOfAccounts;
     private transient ObjectCode reportsToFinancialObject;
     private transient ObjectType financialObjectType;
     private transient ObjSubTyp financialObjectSubType;
+    private transient ObjectCode objectCode;
 
     /**
      * Default no-arg constructor.
      */
     public ObjectCode() {
         // initialize the object fiscal year to the current fiscal year
-        // universityFiscalYear = SpringContext.getBean(DateTimeService.class).getCurrentFiscalYear();
+        // universityFiscalYear = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
 
         // construct the referenced objects for the calling of the referencing object
         this.financialObjectLevel = new ObjLevel();
@@ -282,6 +278,26 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
      */
     public void setUniversityFiscal(Options universityFiscal) {
         this.universityFiscal = universityFiscal;
+    }
+
+    /**
+     * Gets the nextYearFinancialObject attribute.
+     * 
+     * @return Returns the nextYearFinancialObject
+     * 
+     */
+    public ObjectCode getNextYearFinancialObject() {
+        return nextYearFinancialObject;
+    }
+
+    /**
+     * Sets the nextYearFinancialObject attribute.
+     * 
+     * @param nextYearFinancialObject The nextYearFinancialObject to set.
+     * @deprecated
+     */
+    public void setNextYearFinancialObject(ObjectCode nextYearFinancialObject) {
+        this.nextYearFinancialObject = nextYearFinancialObject;
     }
 
     /**
@@ -550,6 +566,21 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
         this.finObjMandatoryTrnfrelimCd = finObjMandatoryTrnfrelimCd;
     }
 
+    /**
+     * @return Returns the objectCode.
+     */
+    public ObjectCode getObjectCode() {
+        return objectCode;
+    }
+
+    /**
+     * @param objectCode The objectCode to set.
+     * @deprecated
+     */
+    public void setObjectCode(ObjectCode objectCode) {
+        this.objectCode = objectCode;
+    }
+
     public BudgetAggregationCode getFinancialBudgetAggregation() {
         return financialBudgetAggregation;
     }
@@ -572,7 +603,7 @@ public class ObjectCode extends PersistableBusinessObjectBase implements Summari
         try {
             // KULCOA-549: update the sufficient funds table
             // get the current data from the database
-            BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
+            BusinessObjectService boService = SpringServiceLocator.getBusinessObjectService();
             ObjectCode originalObjectCode = (ObjectCode) boService.retrieve(this);
 
             if (originalObjectCode != null) {

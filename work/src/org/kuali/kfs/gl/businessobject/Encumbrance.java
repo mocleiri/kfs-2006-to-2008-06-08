@@ -18,10 +18,10 @@ package org.kuali.module.gl.bo;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.module.chart.bo.Account;
@@ -52,7 +52,6 @@ public class Encumbrance extends PersistableBusinessObjectBase {
     private Date transactionEncumbranceDate;
     private KualiDecimal accountLineEncumbranceAmount;
     private KualiDecimal accountLineEncumbranceClosedAmount;
-    private KualiDecimal accountLineEncumbranceOutstandingAmount;
     private String accountLineEncumbrancePurgeCode;
     private Date timestamp;
 
@@ -93,18 +92,18 @@ public class Encumbrance extends PersistableBusinessObjectBase {
 
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap map = new LinkedHashMap();
-        map.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, getUniversityFiscalYear());
-        map.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, getChartOfAccountsCode());
-        map.put(KFSPropertyConstants.ACCOUNT_NUMBER, getAccountNumber());
-        map.put(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, getSubAccountNumber());
-        map.put(KFSPropertyConstants.OBJECT_CODE, getObjectCode());
-        map.put(KFSPropertyConstants.SUB_OBJECT_CODE, getSubObjectCode());
-        map.put(KFSPropertyConstants.BALANCE_TYPE_CODE, getBalanceTypeCode());
-        map.put(KFSPropertyConstants.DOCUMENT_TYPE_CODE, getDocumentTypeCode());
-        map.put(KFSPropertyConstants.ORIGIN_CODE, getOriginCode());
-        map.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
-        map.put(KFSPropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_AMOUNT, getAccountLineEncumbranceAmount());
-        map.put(KFSPropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_CLOSED_AMOUNT, getAccountLineEncumbranceClosedAmount());
+        map.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, getUniversityFiscalYear());
+        map.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, getChartOfAccountsCode());
+        map.put(PropertyConstants.ACCOUNT_NUMBER, getAccountNumber());
+        map.put(PropertyConstants.SUB_ACCOUNT_NUMBER, getSubAccountNumber());
+        map.put(PropertyConstants.OBJECT_CODE, getObjectCode());
+        map.put(PropertyConstants.SUB_OBJECT_CODE, getSubObjectCode());
+        map.put(PropertyConstants.BALANCE_TYPE_CODE, getBalanceTypeCode());
+        map.put(PropertyConstants.DOCUMENT_TYPE_CODE, getDocumentTypeCode());
+        map.put(PropertyConstants.ORIGIN_CODE, getOriginCode());
+        map.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        map.put(PropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_AMOUNT, getAccountLineEncumbranceAmount());
+        map.put(PropertyConstants.ACCOUNT_LINE_ENCUMBRANCE_CLOSED_AMOUNT, getAccountLineEncumbranceClosedAmount());
         return map;
     }
 
@@ -135,12 +134,6 @@ public class Encumbrance extends PersistableBusinessObjectBase {
      */
     public KualiDecimal getAccountLineEncumbranceClosedAmount() {
         return accountLineEncumbranceClosedAmount;
-    }
-    
-    public void setAccountLineEncumbranceOutstandingAmount() {}
-    
-    public KualiDecimal getAccountLineEncumbranceOutstandingAmount() {
-        return accountLineEncumbranceAmount.subtract(accountLineEncumbranceClosedAmount);
     }
 
     /**

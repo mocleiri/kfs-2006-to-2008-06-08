@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
@@ -106,8 +106,8 @@ public class JournalVoucherForm extends VoucherForm {
             sourceLine.setBalanceTypeCode(selectedBalanceType.getCode());
 
             // set the encumbrance update code appropriately
-            if (KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE.equals(selectedBalanceType.getCode())) {
-                sourceLine.setEncumbranceUpdateCode(KFSConstants.JOURNAL_VOUCHER_ENCUMBRANCE_UPDATE_CODE_BALANCE_TYPE_EXTERNAL_ENCUMBRANCE);
+            if (Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE.equals(selectedBalanceType.getCode())) {
+                sourceLine.setEncumbranceUpdateCode(Constants.JOURNAL_VOUCHER_ENCUMBRANCE_UPDATE_CODE_BALANCE_TYPE_EXTERNAL_ENCUMBRANCE);
             }
             else {
                 sourceLine.setEncumbranceUpdateCode(null);
@@ -116,7 +116,7 @@ public class JournalVoucherForm extends VoucherForm {
         else {
             // it's the first time in, the form will be empty the first time in
             // set up default selection
-            selectedBalanceType = SpringContext.getBean(BalanceTypService.class).getBalanceTypByCode(KFSConstants.BALANCE_TYPE_ACTUAL); // default
+            selectedBalanceType = SpringServiceLocator.getBalanceTypService().getBalanceTypByCode(Constants.BALANCE_TYPE_ACTUAL); // default
             // value
             setSelectedBalanceType(selectedBalanceType);
             setOriginalBalanceType(selectedBalanceType.getCode());
@@ -203,7 +203,7 @@ public class JournalVoucherForm extends VoucherForm {
      */
     private void populateBalanceTypeListForRendering() {
         // grab the list of valid balance types
-        ArrayList balanceTypes = new ArrayList(SpringContext.getBean(BalanceTypService.class).getAllBalanceTyps());
+        ArrayList balanceTypes = new ArrayList(SpringServiceLocator.getBalanceTypService().getAllBalanceTyps());
 
         // set into the form for rendering
         this.setBalanceTypes(balanceTypes);
@@ -218,7 +218,7 @@ public class JournalVoucherForm extends VoucherForm {
         }
         else { // it's the first time in, the form will be empty the first time in
             // set up default selection
-            selectedBalanceType = getPopulatedBalanceTypeInstance(KFSConstants.BALANCE_TYPE_ACTUAL); // default
+            selectedBalanceType = getPopulatedBalanceTypeInstance(Constants.BALANCE_TYPE_ACTUAL); // default
             // value
             setSelectedBalanceType(selectedBalanceType);
             setOriginalBalanceType(selectedBalanceType.getCode());
@@ -235,7 +235,7 @@ public class JournalVoucherForm extends VoucherForm {
      */
     private BalanceTyp getPopulatedBalanceTypeInstance(String balanceTypeCode) {
         // now we have to get the code and the name of the original and new balance types
-        BalanceTypService bts = SpringContext.getBean(BalanceTypService.class);
+        BalanceTypService bts = SpringServiceLocator.getBalanceTypService();
         return bts.getBalanceTypByCode(balanceTypeCode);
     }
 
