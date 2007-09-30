@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
@@ -21,19 +30,17 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.financial.document.CashManagementDocument;
-import org.kuali.module.financial.document.CashReceiptDocument;
 
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class Deposit extends PersistableBusinessObjectBase {
+public class Deposit extends BusinessObjectBase {
     // primary key
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer financialDocumentDepositLineNumber;
     // attributes
     private String depositTypeCode;
@@ -43,9 +50,6 @@ public class Deposit extends PersistableBusinessObjectBase {
     // related objects and foreign keys
     private String depositBankCode;
     private String depositBankAccountNumber;
-    
-    private CurrencyDetail depositedCurrency;
-    private CoinDetail depositedCoin;
 
     private BankAccount bankAccount;
     private CashManagementDocument cashManagementDocument;
@@ -237,19 +241,19 @@ public class Deposit extends PersistableBusinessObjectBase {
 
 
     /**
-     * @return current value of documentNumber.
+     * @return current value of financialDocumentNumber.
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute value.
+     * Sets the financialDocumentNumber attribute value.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
@@ -259,7 +263,7 @@ public class Deposit extends PersistableBusinessObjectBase {
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        m.put("financialDocumentNumber", getFinancialDocumentNumber());
         m.put("financialDocumentDepositLineNumber", getFinancialDocumentDepositLineNumber());
         return m;
     }
@@ -272,62 +276,12 @@ public class Deposit extends PersistableBusinessObjectBase {
     public boolean keysEqual(Deposit other) {
         boolean keysEqual = false;
 
-        if (getDocumentNumber().equals(other.getDocumentNumber())) {
+        if (getFinancialDocumentNumber().equals(other.getFinancialDocumentNumber())) {
             if (getFinancialDocumentDepositLineNumber().equals(other.getFinancialDocumentDepositLineNumber())) {
                 keysEqual = true;
             }
         }
 
         return keysEqual;
-    }
-    
-    /**
-     * 
-     * This method returns whether the given deposit contains the parameter cash receipt document
-     * @param crDoc the cash receipt document to look for
-     * @return true if the cash receipt document is part of the deposit, false if otherwise
-     */
-    public boolean containsCashReceipt(CashReceiptDocument crDoc) {
-        boolean result = false;
-        for (int i = 0; i < this.getDepositCashReceiptControl().size() && !result; i++) {
-            DepositCashReceiptControl crCtrl = (DepositCashReceiptControl)getDepositCashReceiptControl().get(i);
-            result = crCtrl.getFinancialDocumentCashReceiptNumber().equals(crDoc.getDocumentNumber());
-        }
-        return result;
-    }
-    
-    /**
-     * Gets the depositedCoin attribute. 
-     * @return Returns the depositedCoin.
-     */
-    public CoinDetail getDepositedCoin() {
-        return depositedCoin;
-    }
-
-
-    /**
-     * Sets the depositedCoin attribute value.
-     * @param depositedCoin The depositedCoin to set.
-     */
-    public void setDepositedCoin(CoinDetail depositedCoin) {
-        this.depositedCoin = depositedCoin;
-    }
-
-
-    /**
-     * Gets the depositedCurrency attribute. 
-     * @return Returns the depositedCurrency.
-     */
-    public CurrencyDetail getDepositedCurrency() {
-        return depositedCurrency;
-    }
-
-
-    /**
-     * Sets the depositedCurrency attribute value.
-     * @param depositedCurrency The depositedCurrency to set.
-     */
-    public void setDepositedCurrency(CurrencyDetail depositedCurrency) {
-        this.depositedCurrency = depositedCurrency;
     }
 }
