@@ -15,53 +15,28 @@
  */
 package org.kuali.module.purap.rules;
 
-import org.kuali.RicePropertyConstants;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapConstants.ItemFields;
-import org.kuali.module.purap.PurapWorkflowConstants.PaymentRequestDocument.NodeDetailEnum;
 import org.kuali.module.purap.bo.PaymentRequestItem;
-import org.kuali.module.purap.bo.PurApItem;
-import org.kuali.module.purap.document.AccountsPayableDocument;
+import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
-import org.kuali.module.purap.rule.CalculateAccountsPayableRule;
-import org.kuali.module.purap.rule.CancelAccountsPayableRule;
-import org.kuali.module.purap.rule.ContinueAccountsPayableRule;
-import org.kuali.module.purap.rule.PreCalculateAccountsPayableRule;
+import org.kuali.module.purap.document.PurchasingDocument;
 
-public abstract class AccountsPayableDocumentRuleBase extends PurchasingAccountsPayableDocumentRuleBase  implements ContinueAccountsPayableRule, CalculateAccountsPayableRule, PreCalculateAccountsPayableRule, CancelAccountsPayableRule {
-    
+public class AccountsPayableDocumentRuleBase extends PurchasingAccountsPayableDocumentRuleBase {
     @Override
     public boolean processValidation(PurchasingAccountsPayableDocument purapDocument) {
         boolean valid = super.processValidation(purapDocument);
-        
-        valid &= processApprovalAtAccountsPayableReviewAllowed((AccountsPayableDocument)purapDocument);
-        
-        return valid;
-    }
-
-    private boolean processApprovalAtAccountsPayableReviewAllowed(AccountsPayableDocument apDocument) {
-        boolean valid = true;
-        GlobalVariables.getErrorMap().clearErrorPath();
-        GlobalVariables.getErrorMap().addToErrorPath(RicePropertyConstants.DOCUMENT);
-        
-        if (apDocument.isDocumentStoppedInRouteNode(NodeDetailEnum.ACCOUNTS_PAYABLE_REVIEW)) {
-            if(!apDocument.approvalAtAccountsPayableReviewAllowed()) {
-                valid &= false;
-                GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_ERRORS, PurapKeyConstants.ERROR_AP_REQUIRES_ATTACHMENT);
-            }
-        }
-        GlobalVariables.getErrorMap().clearErrorPath();
+        // TODO: Add more validations in here
         return valid;
     }
 
     public boolean processItemValidation(PurchasingAccountsPayableDocument purapDocument) {
         boolean valid = super.processItemValidation(purapDocument);
        
-        for (PurApItem item : purapDocument.getItems()) {
+        for (PurchasingApItem item : purapDocument.getItems()) {
             String identifierString = (item.getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + item.getItemLineNumber().toString() : item.getItemType().getItemTypeDescription());
             if (item.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE)) {
                 valid &= validateItemTypeItems((PaymentRequestItem) item, identifierString);
@@ -79,18 +54,12 @@ public abstract class AccountsPayableDocumentRuleBase extends PurchasingAccounts
         if (ObjectUtils.isNotNull(item.getItemUnitPrice()) && item.getItemUnitPrice().signum() == -1) {
            // if unit price is negative give an error                       
             valid = false;
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_AMOUNT_BELOW_ZERO, ItemFields.UNIT_COST, identifierString);
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_AMOUNT_BELOW_ZERO, ItemFields.UNIT_COST, identifierString);
         }
-        if (ObjectUtils.isNotNull(item.getExtendedPrice()) && item.getExtendedPrice().isNegative()) {
+        if (ObjectUtils.isNotNull(item.getItemExtendedPrice()) && item.getItemExtendedPrice().isNegative()) {
             valid = false;
-            GlobalVariables.getErrorMap().putError(PurapConstants.ITEM_TAB_ERROR_PROPERTY, PurapKeyConstants.ERROR_ITEM_AMOUNT_BELOW_ZERO, ItemFields.INVOICE_EXTENDED_PRICE, identifierString);
+            GlobalVariables.getErrorMap().putError("newPurchasingItemLine", PurapKeyConstants.ERROR_ITEM_AMOUNT_BELOW_ZERO, ItemFields.INVOICE_EXTENDED_PRICE, identifierString);
         }
         return valid;
     }
-
-    /**
-     * @see org.kuali.module.purap.rule.CancelAccountsPayableRule#processCancelAccountsPayableBusinessRules(org.kuali.module.purap.document.AccountsPayableDocument)
-     */
-    public abstract boolean processCancelAccountsPayableBusinessRules(AccountsPayableDocument document);
-
 }
