@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.PriorYearAccount">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Prior Year Account Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountCityName" />
                 <field attributeName="accountClosedIndicator" />
                 <field attributeName="accountCreateDate" />
@@ -56,7 +56,7 @@
                 <field attributeName="awardPeriodEndMonth" />
                 <field attributeName="awardPeriodEndYear" />
                 <field attributeName="budgetRecordingLevelCode" />
-                <field attributeName="accountCfdaNumber" />
+                <field attributeName="cgCatlfFedDomestcAssistNbr" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="continuationFinChrtOfAcctCd" />
@@ -70,7 +70,7 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="forContractsAndGrants" />
+                <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="indirectCostRcvyFinCoaCode" />
@@ -78,14 +78,17 @@
                 <field attributeName="intrnlFinEncumSufficntFndIndicator" />
                 <field attributeName="organizationCode" />
                 <field attributeName="pendingAcctSufficientFundsIndicator" />
+                <field attributeName="programCode" />
                 <field attributeName="reportsToAccountNumber" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="subFundGroupCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Prior Year Account Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.PriorYearAccount">Create New</a>]]></menubar>
 
             <instructions>Look up a Prior Year Account</instructions>
 
@@ -128,7 +131,7 @@
                 <lookupField attributeName="awardPeriodEndMonth" required="false" />
                 <lookupField attributeName="awardPeriodEndYear" required="false" />
                 <lookupField attributeName="budgetRecordingLevelCode" required="false" />
-                <lookupField attributeName="accountCfdaNumber" required="false" />
+                <lookupField attributeName="cgCatlfFedDomestcAssistNbr" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="continuationAccountNumber" required="false" />
                 <lookupField attributeName="continuationFinChrtOfAcctCd" required="false" />
@@ -142,7 +145,7 @@
                 <lookupField attributeName="financialHigherEdFunctionCd" required="false" />
                 <lookupField attributeName="financialIcrSeriesIdentifier" required="false" />
                 <lookupField attributeName="financialObjectivePrsctrlIndicator" required="false" />
-                <lookupField attributeName="forContractsAndGrants" required="false" />
+                <lookupField attributeName="inCg" required="false" />
                 <lookupField attributeName="incomeStreamAccountNumber" required="false" />
                 <lookupField attributeName="incomeStreamFinancialCoaCode" required="false" />
                 <lookupField attributeName="indirectCostRcvyFinCoaCode" required="false" />
@@ -150,6 +153,7 @@
                 <lookupField attributeName="intrnlFinEncumSufficntFndIndicator" required="false" />
                 <lookupField attributeName="organizationCode" required="false" />
                 <lookupField attributeName="pendingAcctSufficientFundsIndicator" required="false" />
+                <lookupField attributeName="programCode" required="false" />
                 <lookupField attributeName="reportsToAccountNumber" required="false" />
                 <lookupField attributeName="reportsToChartOfAccountsCode" required="false" />
                 <lookupField attributeName="subFundGroupCode" required="false" />
@@ -187,7 +191,7 @@
                 <field attributeName="awardPeriodEndMonth" />
                 <field attributeName="awardPeriodEndYear" />
                 <field attributeName="budgetRecordingLevelCode" />
-                <field attributeName="accountCfdaNumber" />
+                <field attributeName="cgCatlfFedDomestcAssistNbr" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="continuationFinChrtOfAcctCd" />
@@ -201,7 +205,7 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="forContractsAndGrants" />
+                <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="indirectCostRcvyFinCoaCode" />
@@ -209,6 +213,7 @@
                 <field attributeName="intrnlFinEncumSufficntFndIndicator" />
                 <field attributeName="organizationCode" />
                 <field attributeName="pendingAcctSufficientFundsIndicator" />
+                <field attributeName="programCode" />
                 <field attributeName="reportsToAccountNumber" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="subFundGroupCode" />
@@ -633,8 +638,8 @@
                 <description>The indicator to show if this account is recording its budget by account (A), consolidation (C), object code (O), level (L), sub-account (S), mixed (M), or no budget (N).</description>
 			</attribute>
 
-            <attribute name="accountCfdaNumber" forceUppercase="true">
-                <label>Catalog of Federal Domestic Assistance Number</label>
+            <attribute name="cgCatlfFedDomestcAssistNbr" forceUppercase="true">
+                <label>Cg Catlf Fed Domestc Assist Nbr</label>
                 <shortLabel>Nbr</shortLabel>
 
                 <maxLength>6</maxLength>
@@ -645,7 +650,7 @@
                 </control>
 
                 <summary><![CDATA[&nbsp;]]></summary>
-                <description>accountCfdaNumber description...</description>
+                <description>cgCatlfFedDomestcAssistNbr description...</description>
 			</attribute>
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
@@ -840,7 +845,7 @@
                 <description>Select the check box to indicate that this account uses object presence control. Clear the check box, if it does not. Object presence control requires that an Object Code be budgeted for the account before it can be used on an actual or encumbrance transaction.</description>
 			</attribute>
 
-            <attribute name="forContractsAndGrants" forceUppercase="true">
+            <attribute name="inCg" forceUppercase="true">
                 <label>In Cg</label>
                 <shortLabel>Cg</shortLabel>
 
@@ -957,6 +962,21 @@
                 <description>Select the check box if sufficient funds checking should be performed on this account. Clear the check box if not.</description>
 			</attribute>
 
+            <attribute name="programCode" forceUppercase="true">
+                <label>Program Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>6</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="8" />
+                </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The financial reporting classification required by some community colleges.</description>
+			</attribute>
+
             <attribute name="reportsToAccountNumber" forceUppercase="true">
                 <label>Reports To Account Number</label>
                 <shortLabel>Number</shortLabel>
@@ -1009,20 +1029,14 @@
         <relationships>
             <relationship objectAttributeName="accountFiscalOfficerUser" >
                 <primitiveAttribute sourceName="accountFiscalOfficerSystemIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountFiscalOfficerUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountFiscalOfficerUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountSupervisoryUser" >
                 <primitiveAttribute sourceName="accountsSupervisorySystemsIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountSupervisoryUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountSupervisoryUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountManagerUser" >
                 <primitiveAttribute sourceName="accountManagerSystemIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountManagerUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountManagerUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountGuideline" >
@@ -1030,7 +1044,5 @@
                 <primitiveAttribute sourceName="accountNumber" targetName="accountNumber" />
             </relationship>
         </relationships>
-        
-        <objectLabel>Prior Year Account</objectLabel>
     </businessObject>
 </dictionaryEntry>

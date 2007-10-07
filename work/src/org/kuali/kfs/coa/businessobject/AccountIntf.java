@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.bo;
 
@@ -20,10 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.kuali.core.bo.Campus;
+import org.kuali.core.bo.PostalZipCode;
+import org.kuali.core.bo.State;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.kfs.bo.PostalZipCode;
-import org.kuali.kfs.bo.State;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
 
@@ -35,12 +41,12 @@ public interface AccountIntf {
      * 
      * @return true if C&G account
      */
-    public boolean isForContractsAndGrants();
+    public boolean isInCg();
 
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      * 
      */
     public String getAccountNumber();
@@ -56,7 +62,7 @@ public interface AccountIntf {
     /**
      * Gets the accountName attribute.
      * 
-     * @return Returns the accountName
+     * @return - Returns the accountName
      * 
      */
     public String getAccountName();
@@ -72,7 +78,7 @@ public interface AccountIntf {
     /**
      * Gets the _AccountsFringesBnftIndicator_ attribute.
      * 
-     * @return Returns the _AccountsFringesBnftIndicator_
+     * @return - Returns the _AccountsFringesBnftIndicator_
      * 
      */
     public boolean isAccountsFringesBnftIndicator();
@@ -88,7 +94,7 @@ public interface AccountIntf {
     /**
      * Gets the accountRestrictedStatusDate attribute.
      * 
-     * @return Returns the accountRestrictedStatusDate
+     * @return - Returns the accountRestrictedStatusDate
      * 
      */
     public Timestamp getAccountRestrictedStatusDate();
@@ -104,7 +110,7 @@ public interface AccountIntf {
     /**
      * Gets the accountCityName attribute.
      * 
-     * @return Returns the accountCityName
+     * @return - Returns the accountCityName
      * 
      */
     public String getAccountCityName();
@@ -120,7 +126,7 @@ public interface AccountIntf {
     /**
      * Gets the accountStateCode attribute.
      * 
-     * @return Returns the accountStateCode
+     * @return - Returns the accountStateCode
      * 
      */
     public String getAccountStateCode();
@@ -136,7 +142,7 @@ public interface AccountIntf {
     /**
      * Gets the accountStreetAddress attribute.
      * 
-     * @return Returns the accountStreetAddress
+     * @return - Returns the accountStreetAddress
      * 
      */
     public String getAccountStreetAddress();
@@ -152,7 +158,7 @@ public interface AccountIntf {
     /**
      * Gets the accountZipCode attribute.
      * 
-     * @return Returns the accountZipCode
+     * @return - Returns the accountZipCode
      * 
      */
     public String getAccountZipCode();
@@ -168,7 +174,7 @@ public interface AccountIntf {
     /**
      * Gets the accountCreateDate attribute.
      * 
-     * @return Returns the accountCreateDate
+     * @return - Returns the accountCreateDate
      * 
      */
     public Timestamp getAccountCreateDate();
@@ -184,7 +190,7 @@ public interface AccountIntf {
     /**
      * Gets the accountEffectiveDate attribute.
      * 
-     * @return Returns the accountEffectiveDate
+     * @return - Returns the accountEffectiveDate
      * 
      */
     public Timestamp getAccountEffectiveDate();
@@ -200,7 +206,7 @@ public interface AccountIntf {
     /**
      * Gets the accountExpirationDate attribute.
      * 
-     * @return Returns the accountExpirationDate
+     * @return - Returns the accountExpirationDate
      * 
      */
     public Timestamp getAccountExpirationDate();
@@ -217,13 +223,15 @@ public interface AccountIntf {
      * 
      * This method determines whether the account is expired or not.
      * 
-     * Note that if Expiration Date is the same as today, then this will return false. It will only return true if the account
+     * Note that if Expiration Date is the same as today, then this 
+     * will return false.  It will only return true if the account 
      * expiration date is one day earlier than today or earlier.
      * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * Note that this logic ignores all time components when doing the 
+     * comparison.  It only does the before/after comparison based on 
      * date values, not time-values.
      * 
-     * @return true or false based on the logic outlined above
+     * @return - true or false based on the logic outlined above
      * 
      */
     public boolean isExpired();
@@ -232,15 +240,17 @@ public interface AccountIntf {
      * 
      * This method determines whether the account is expired or not.
      * 
-     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
-     * account expiration date is one day earlier than testDate or earlier.
+     * Note that if Expiration Date is the same date as testDate, then this 
+     * will return false.  It will only return true if the account 
+     * expiration date is one day earlier than testDate or earlier.
      * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * Note that this logic ignores all time components when doing the 
+     * comparison.  It only does the before/after comparison based on 
      * date values, not time-values.
      * 
-     * @param testDate - Calendar instance with the date to test the Account's Expiration Date against. This is most commonly set to
-     *        today's date.
-     * @return true or false based on the logic outlined above
+     * @param testDate - Calendar instance with the date to test the Account's Expiration Date against.  
+     *                   This is most commonly set to today's date.
+     * @return - true or false based on the logic outlined above
      * 
      */
     public boolean isExpired(Calendar testDate);
@@ -249,15 +259,17 @@ public interface AccountIntf {
      * 
      * This method determines whether the account is expired or not.
      * 
-     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
-     * account expiration date is one day earlier than testDate or earlier.
+     * Note that if Expiration Date is the same date as testDate, then this 
+     * will return false.  It will only return true if the account 
+     * expiration date is one day earlier than testDate or earlier.
      * 
-     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * Note that this logic ignores all time components when doing the 
+     * comparison.  It only does the before/after comparison based on 
      * date values, not time-values.
      * 
-     * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against. This is most commonly
-     *        set to today's date.
-     * @return true or false based on the logic outlined above
+     * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against.  
+     *                   This is most commonly set to today's date.
+     * @return - true or false based on the logic outlined above
      * 
      */
     public boolean isExpired(Date testDate);
@@ -265,7 +277,7 @@ public interface AccountIntf {
     /**
      * Gets the awardPeriodEndYear attribute.
      * 
-     * @return Returns the awardPeriodEndYear
+     * @return - Returns the awardPeriodEndYear
      * 
      */
     public Integer getAwardPeriodEndYear();
@@ -281,7 +293,7 @@ public interface AccountIntf {
     /**
      * Gets the awardPeriodEndMonth attribute.
      * 
-     * @return Returns the awardPeriodEndMonth
+     * @return - Returns the awardPeriodEndMonth
      * 
      */
     public String getAwardPeriodEndMonth();
@@ -297,7 +309,7 @@ public interface AccountIntf {
     /**
      * Gets the awardPeriodBeginYear attribute.
      * 
-     * @return Returns the awardPeriodBeginYear
+     * @return - Returns the awardPeriodBeginYear
      * 
      */
     public Integer getAwardPeriodBeginYear();
@@ -313,7 +325,7 @@ public interface AccountIntf {
     /**
      * Gets the awardPeriodBeginMonth attribute.
      * 
-     * @return Returns the awardPeriodBeginMonth
+     * @return - Returns the awardPeriodBeginMonth
      * 
      */
     public String getAwardPeriodBeginMonth();
@@ -329,7 +341,7 @@ public interface AccountIntf {
     /**
      * Gets the acctIndirectCostRcvyTypeCd attribute.
      * 
-     * @return Returns the acctIndirectCostRcvyTypeCd
+     * @return - Returns the acctIndirectCostRcvyTypeCd
      * 
      */
     public String getAcctIndirectCostRcvyTypeCd();
@@ -345,7 +357,7 @@ public interface AccountIntf {
     /**
      * Gets the acctCustomIndCstRcvyExclCd attribute.
      * 
-     * @return Returns the acctCustomIndCstRcvyExclCd
+     * @return - Returns the acctCustomIndCstRcvyExclCd
      * 
      */
     public String getAcctCustomIndCstRcvyExclCd();
@@ -361,7 +373,7 @@ public interface AccountIntf {
     /**
      * Gets the financialIcrSeriesIdentifier attribute.
      * 
-     * @return Returns the financialIcrSeriesIdentifier
+     * @return - Returns the financialIcrSeriesIdentifier
      * 
      */
     public String getFinancialIcrSeriesIdentifier();
@@ -377,7 +389,7 @@ public interface AccountIntf {
     /**
      * Gets the accountInFinancialProcessingIndicator attribute.
      * 
-     * @return Returns the accountInFinancialProcessingIndicator
+     * @return - Returns the accountInFinancialProcessingIndicator
      * 
      */
     public boolean getAccountInFinancialProcessingIndicator();
@@ -393,7 +405,7 @@ public interface AccountIntf {
     /**
      * Gets the budgetRecordingLevelCode attribute.
      * 
-     * @return Returns the budgetRecordingLevelCode
+     * @return - Returns the budgetRecordingLevelCode
      * 
      */
     public String getBudgetRecordingLevelCode();
@@ -409,7 +421,7 @@ public interface AccountIntf {
     /**
      * Gets the accountSufficientFundsCode attribute.
      * 
-     * @return Returns the accountSufficientFundsCode
+     * @return - Returns the accountSufficientFundsCode
      * 
      */
     public String getAccountSufficientFundsCode();
@@ -425,7 +437,7 @@ public interface AccountIntf {
     /**
      * Gets the pendingAcctSufficientFundsIndicator attribute.
      * 
-     * @return Returns the pendingAcctSufficientFundsIndicator
+     * @return - Returns the pendingAcctSufficientFundsIndicator
      * 
      */
     public boolean isPendingAcctSufficientFundsIndicator();
@@ -441,7 +453,7 @@ public interface AccountIntf {
     /**
      * Gets the extrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @return Returns the extrnlFinEncumSufficntFndIndicator
+     * @return - Returns the extrnlFinEncumSufficntFndIndicator
      * 
      */
     public boolean isExtrnlFinEncumSufficntFndIndicator();
@@ -457,7 +469,7 @@ public interface AccountIntf {
     /**
      * Gets the intrnlFinEncumSufficntFndIndicator attribute.
      * 
-     * @return Returns the intrnlFinEncumSufficntFndIndicator
+     * @return - Returns the intrnlFinEncumSufficntFndIndicator
      * 
      */
     public boolean isIntrnlFinEncumSufficntFndIndicator();
@@ -473,7 +485,7 @@ public interface AccountIntf {
     /**
      * Gets the finPreencumSufficientFundIndicator attribute.
      * 
-     * @return Returns the finPreencumSufficientFundIndicator
+     * @return - Returns the finPreencumSufficientFundIndicator
      * 
      */
     public boolean isFinPreencumSufficientFundIndicator();
@@ -489,7 +501,7 @@ public interface AccountIntf {
     /**
      * Gets the _FinancialObjectivePrsctrlIndicator_ attribute.
      * 
-     * @return Returns the _FinancialObjectivePrsctrlIndicator_
+     * @return - Returns the _FinancialObjectivePrsctrlIndicator_
      * 
      */
     public boolean isFinancialObjectivePrsctrlIndicator();
@@ -503,25 +515,25 @@ public interface AccountIntf {
     public void setFinancialObjectivePrsctrlIndicator(boolean _FinancialObjectivePrsctrlIndicator_);
 
     /**
-     * Gets the accountCfdaNumber attribute.
+     * Gets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @return Returns the accountCfdaNumber
+     * @return - Returns the cgCatlfFedDomestcAssistNbr
      * 
      */
-    public String getAccountCfdaNumber();
+    public String getCgCatlfFedDomestcAssistNbr();
 
     /**
-     * Sets the accountCfdaNumber attribute.
+     * Sets the cgCatlfFedDomestcAssistNbr attribute.
      * 
-     * @param accountCfdaNumber The accountCfdaNumber to set.
+     * @param cgCatlfFedDomestcAssistNbr The cgCatlfFedDomestcAssistNbr to set.
      * 
      */
-    public void setAccountCfdaNumber(String accountCfdaNumber);
+    public void setCgCatlfFedDomestcAssistNbr(String cgCatlfFedDomestcAssistNbr);
 
     /**
      * Gets the accountOffCampusIndicator attribute.
      * 
-     * @return Returns the accountOffCampusIndicator
+     * @return - Returns the accountOffCampusIndicator
      * 
      */
     public boolean isAccountOffCampusIndicator();
@@ -537,7 +549,7 @@ public interface AccountIntf {
     /**
      * Gets the accountClosedIndicator attribute.
      * 
-     * @return Returns the accountClosedIndicator
+     * @return - Returns the accountClosedIndicator
      * 
      */
     public boolean isAccountClosedIndicator();
@@ -553,7 +565,7 @@ public interface AccountIntf {
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
      * 
      */
     public Chart getChartOfAccounts();
@@ -569,7 +581,7 @@ public interface AccountIntf {
     /**
      * Gets the organization attribute.
      * 
-     * @return Returns the organization
+     * @return - Returns the organization
      * 
      */
     public Org getOrganization();
@@ -585,7 +597,7 @@ public interface AccountIntf {
     /**
      * Gets the accountType attribute.
      * 
-     * @return Returns the accountType
+     * @return - Returns the accountType
      * 
      */
     public AcctType getAccountType();
@@ -601,7 +613,7 @@ public interface AccountIntf {
     /**
      * Gets the accountPhysicalCampus attribute.
      * 
-     * @return Returns the accountPhysicalCampus
+     * @return - Returns the accountPhysicalCampus
      * 
      */
     public Campus getAccountPhysicalCampus();
@@ -617,7 +629,7 @@ public interface AccountIntf {
     /**
      * Gets the accountState attribute
      * 
-     * @return Returns the accountState
+     * @return - Returns the accountState
      */
     public State getAccountState();
 
@@ -632,7 +644,7 @@ public interface AccountIntf {
     /**
      * Gets the subFundGroup attribute.
      * 
-     * @return Returns the subFundGroup
+     * @return - Returns the subFundGroup
      * 
      */
     public SubFundGroup getSubFundGroup();
@@ -648,7 +660,7 @@ public interface AccountIntf {
     /**
      * Gets the financialHigherEdFunction attribute.
      * 
-     * @return Returns the financialHigherEdFunction
+     * @return - Returns the financialHigherEdFunction
      * 
      */
     public HigherEdFunction getFinancialHigherEdFunction();
@@ -664,7 +676,7 @@ public interface AccountIntf {
     /**
      * Gets the accountRestrictedStatus attribute.
      * 
-     * @return Returns the accountRestrictedStatus
+     * @return - Returns the accountRestrictedStatus
      * 
      */
     public RestrictedStatus getAccountRestrictedStatus();
@@ -680,7 +692,7 @@ public interface AccountIntf {
     /**
      * Gets the reportsToAccount attribute.
      * 
-     * @return Returns the reportsToAccount
+     * @return - Returns the reportsToAccount
      * 
      */
     public Account getReportsToAccount();
@@ -696,7 +708,7 @@ public interface AccountIntf {
     /**
      * Gets the endowmentIncomeAccount attribute.
      * 
-     * @return Returns the endowmentIncomeAccount
+     * @return - Returns the endowmentIncomeAccount
      * 
      */
     public Account getEndowmentIncomeAccount();
@@ -712,7 +724,7 @@ public interface AccountIntf {
     /**
      * Gets the contractControlAccount attribute.
      * 
-     * @return Returns the contractControlAccount
+     * @return - Returns the contractControlAccount
      * 
      */
     public Account getContractControlAccount();
@@ -728,7 +740,7 @@ public interface AccountIntf {
     /**
      * Gets the incomeStreamAccount attribute.
      * 
-     * @return Returns the incomeStreamAccount
+     * @return - Returns the incomeStreamAccount
      * 
      */
     public Account getIncomeStreamAccount();
@@ -744,7 +756,7 @@ public interface AccountIntf {
     /**
      * Gets the indirectCostRecoveryAcct attribute.
      * 
-     * @return Returns the indirectCostRecoveryAcct
+     * @return - Returns the indirectCostRecoveryAcct
      * 
      */
     public Account getIndirectCostRecoveryAcct();
@@ -801,6 +813,16 @@ public interface AccountIntf {
      */
     public void setContinuationAccount(Account continuationAccount);
 
+    /**
+     * @return Returns the program.
+     */
+    public Program getProgram();
+
+    /**
+     * @param program The program to set.
+     * @deprecated
+     */
+    public void setProgram(Program program);
 
     /**
      * @return Returns the accountGuideline.
@@ -814,15 +836,13 @@ public interface AccountIntf {
     public void setAccountGuideline(AccountGuideline accountGuideline);
 
     /**
-     * Gets the accountDescription attribute.
-     * 
+     * Gets the accountDescription attribute. 
      * @return Returns the accountDescription.
      */
     public AccountDescription getAccountDescription();
 
     /**
      * Sets the accountDescription attribute value.
-     * 
      * @param accountDescription The accountDescription to set.
      */
     public void setAccountDescription(AccountDescription accountDescription);
@@ -1058,46 +1078,50 @@ public interface AccountIntf {
     public void setSubFundGroupCode(String subFundGroupCode);
 
     /**
-     * Gets the postalZipCode attribute.
-     * 
+     * Gets the postalZipCode attribute. 
      * @return Returns the postalZipCode.
      */
     public PostalZipCode getPostalZipCode();
 
     /**
      * Sets the postalZipCode attribute value.
-     * 
      * @param postalZipCode The postalZipCode to set.
      */
     public void setPostalZipCode(PostalZipCode postalZipCode);
 
     /**
-     * Gets the budgetRecordingLevel attribute.
-     * 
+     * Gets the budgetRecordingLevel attribute. 
      * @return Returns the budgetRecordingLevel.
      */
     public BudgetRecordingLevelCode getBudgetRecordingLevel();
 
     /**
      * Sets the budgetRecordingLevel attribute value.
-     * 
      * @param budgetRecordingLevel The budgetRecordingLevel to set.
      */
     public void setBudgetRecordingLevel(BudgetRecordingLevelCode budgetRecordingLevel);
 
     /**
-     * Gets the sufficientFundsCode attribute.
-     * 
+     * Gets the sufficientFundsCode attribute. 
      * @return Returns the sufficientFundsCode.
      */
     public SufficientFundsCode getSufficientFundsCode();
 
     /**
      * Sets the sufficientFundsCode attribute value.
-     * 
      * @param sufficientFundsCode The sufficientFundsCode to set.
      */
     public void setSufficientFundsCode(SufficientFundsCode sufficientFundsCode);
+
+    /**
+     * @return Returns the programCode.
+     */
+    public String getProgramCode();
+
+    /**
+     * @param programCode The programCode to set.
+     */
+    public void setProgramCode(String programCode);
 
     /**
      * Implementing equals since I need contains to behave reasonably in a hashed datastructure.
@@ -1124,91 +1148,78 @@ public interface AccountIntf {
     public String getAccountKey();
 
     /**
-     * Gets the dummy attribute.
-     * 
+     * Gets the dummy attribute. 
      * @return Returns the dummy.
      */
 
     /**
-     * Gets the accountResponsibilitySection attribute.
-     * 
+     * Gets the accountResponsibilitySection attribute. 
      * @return Returns the accountResponsibilitySection.
      */
     public String getAccountResponsibilitySection();
 
     /**
      * Sets the accountResponsibilitySection attribute value.
-     * 
      * @param accountResponsibilitySection The accountResponsibilitySection to set.
      */
     public void setAccountResponsibilitySection(String accountResponsibilitySection);
 
     /**
-     * Gets the contractsAndGrantsSection attribute.
-     * 
+     * Gets the contractsAndGrantsSection attribute. 
      * @return Returns the contractsAndGrantsSection.
      */
     public String getContractsAndGrantsSection();
 
     /**
      * Sets the contractsAndGrantsSection attribute value.
-     * 
      * @param contractsAndGrantsSection The contractsAndGrantsSection to set.
      */
     public void setContractsAndGrantsSection(String contractsAndGrantsSection);
 
     /**
-     * Gets the accountDescriptionSection attribute.
-     * 
+     * Gets the accountDescriptionSection attribute. 
      * @return Returns the accountDescriptionSection.
      */
     public String getAccountDescriptionSection();
 
     /**
      * Sets the accountDescriptionSection attribute value.
-     * 
      * @param accountDescriptionSection The accountDescriptionSection to set.
      */
     public void setAccountDescriptionSection(String accountDescriptionSection);
 
     /**
-     * Gets the guidelinesAndPurposeSection attribute.
-     * 
+     * Gets the guidelinesAndPurposeSection attribute. 
      * @return Returns the guidelinesAndPurposeSection.
      */
     public String getGuidelinesAndPurposeSection();
 
     /**
      * Sets the guidelinesAndPurposeSection attribute value.
-     * 
      * @param guidelinesAndPurposeSection The guidelinesAndPurposeSection to set.
      */
     public void setGuidelinesAndPurposeSection(String guidelinesAndPurposeSection);
 
     /**
-     * Gets the accountResponsibilitySectionBlank attribute.
-     * 
+     * Gets the accountResponsibilitySectionBlank attribute. 
      * @return Returns the accountResponsibilitySectionBlank.
      */
     public String getAccountResponsibilitySectionBlank();
 
     /**
-     * Gets the contractsAndGrantsSectionBlank attribute.
-     * 
+     * Gets the contractsAndGrantsSectionBlank attribute. 
      * @return Returns the contractsAndGrantsSectionBlank.
      */
     public String getContractsAndGrantsSectionBlank();
 
     /**
-     * Gets the accountDescriptionSectionBlank attribute.
-     * 
+     * Gets the accountDescriptionSectionBlank attribute. 
      * @return Returns the accountDescriptionSectionBlank.
      */
     public String getAccountDescriptionSectionBlank();
 
     /**
-     * Gets the guidelinesAndPurposeSectionBlank attribute.
-     * 
+     * Gets the guidelinesAndPurposeSectionBlank attribute. 
      * @return Returns the guidelinesAndPurposeSectionBlank.
      */
     public String getGuidelinesAndPurposeSectionBlank();

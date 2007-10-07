@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 package org.kuali.module.financial.bo;
 
-import org.kuali.kfs.bo.SourceAccountingLine;
-
+import org.kuali.core.bo.SourceAccountingLine;
 
 
 /**
@@ -26,4 +25,12 @@ import org.kuali.kfs.bo.SourceAccountingLine;
  * 
  */
 public class GECSourceAccountingLine extends SourceAccountingLine {
+    /**
+     * This constructor needs to initialize the ojbConcreteClass attribute such that it sets it to its class name. This is how OJB
+     * knows what grouping of objects to work with.
+     */
+    public GECSourceAccountingLine() {
+        super();
+        super.ojbConcreteClass = this.getClass().getName();
+    }
 }
