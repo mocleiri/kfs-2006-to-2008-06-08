@@ -1,12 +1,12 @@
 /*
  * Copyright 2005-2007 The Kuali Foundation.
- * 
+ *
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.opensource.org/licenses/ecl1.php
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -103,12 +103,12 @@ import org.kuali.module.labor.bo.LaborOriginEntry;
  */
 public class KFSConstants extends JstlConstants {
     private static final long serialVersionUID = 2882277719647128949L;
-    
+
     // special user used in the post-processor
     public static final String SYSTEM_USER = "KULUSER";
 
     public static final String KFS_NAMESPACE_PREFIX = "KFS-";
-    
+
     public static final String CHART_NAMESPACE = "KFS-CA";
     public static final String FINANCIAL_NAMESPACE = "KFS-FP";
     public static final String LABOR_NAMESPACE = "KFS-LD";
@@ -120,10 +120,10 @@ public class KFSConstants extends JstlConstants {
     public static final String PDP_NAMESPACE = "KFS-PD";
     public static final String VENDOR_NAMESPACE = "KFS-VN";
     public static final String KFS_SYSTEM_NAMESPACE = "KFS-SY";
-    
+
     public static class Components {
         public static final String NOT_APPLICABLE = RiceConstants.DetailTypes.NA_PARM_DETAIL_TYPE;
-    
+
         public final static String BATCH = Batch.class.getSimpleName();
         public final static String CAMPUS = Campus.class.getSimpleName();
         //public final static String SYSTEM_PARAMETER = SystemParameter.class.getSimpleName();
@@ -132,12 +132,12 @@ public class KFSConstants extends JstlConstants {
         public final static String ENCUMBRANCE = Encumbrance.class.getSimpleName();
         public final static String PURGE_DOCUMENT_CONTENTS_STEP = PurgeDocumentContentsStep.class.getSimpleName();
         public final static String SCHEDULE_STEP = ScheduleStep.class.getSimpleName();
-        
+
         public final static String LOOKUP = "Lookup";
         public final static String ALL = "All";
-        
+
         public final static String KUALI_MODULE_USER = KualiModuleUser.class.getSimpleName();
-        
+
         // KFS System related components
         public final static String COUNTRY = Country.class.getSimpleName();
         public final static String DOCUMENT_TYPE = DocumentType.class.getSimpleName();
@@ -146,7 +146,7 @@ public class KFSConstants extends JstlConstants {
         public final static String POSTAL_CODE = PostalZipCode.class.getSimpleName();
         public final static String STATE = State.class.getSimpleName();
         public final static String OPTIONS = Options.class.getSimpleName();
-        
+
         //CHART RELATED COMPONENTS
         public final static String FISCAL_YEAR_MAKER_STEP = FiscalYearMakerStep.class.getSimpleName();
         public final static String ACCOUNT = Account.class.getSimpleName();
@@ -181,7 +181,7 @@ public class KFSConstants extends JstlConstants {
         public final static String CHART_USER = ChartUser.class.getSimpleName();
         public final static String ORGANIZATION_REVERSION = OrganizationReversion.class.getSimpleName();
         public final static String ORGANIZATION_REVERSION_CATEGORY = OrganizationReversionCategory.class.getSimpleName();
-        
+
         //FINANCIAL RELATED COMPONENTS
         public final static String BANK = Bank.class.getSimpleName();
         public final static String BANK_ACCOUNT = BankAccount.class.getSimpleName();
@@ -225,25 +225,25 @@ public class KFSConstants extends JstlConstants {
         public final static String CREDIT_CARD_RECEIPT_DOC = "CreditCardReceipt";
         public final static String DISTRIBUTION_OF_INCOME_AND_EXPENSE_DOC = "DistributionOfIncomeAndExpense";
         public final static String GENERAL_ERROR_CORRECTION_DOC = "GeneralErrorCorrection";
-        public final static String GENERAL_LEDGER_CORRECTION_PROCESS_DOC = "GeneralLedgerCorrectionProcess";        
+        public final static String GENERAL_LEDGER_CORRECTION_PROCESS_DOC = "GeneralLedgerCorrectionProcess";
         public final static String TRANSFER_OF_FUNDS_DOC = "TransferOfFunds";
-        
+
         public final static String BALANCE_INQUIRY_AVAILABLE_BALANCES = "BalanceInquiryAvailableBalances";
 
         public final static String UNIVERSITY_DATE = UniversityDate.class.getSimpleName();;
-    }        
-    
+    }
+
     public static final String PARAM_MAINTENANCE_VIEW_MODE = "maintenanceViewMode";
     public static final String PARAM_MAINTENANCE_VIEW_MODE_MAINTENANCE = "maintenance";
     public static final String PARAM_MAINTENANCE_VIEW_MODE_LOOKUP = "lookup";
     public static final String PARAM_MAINTENANCE_VIEW_MODE_INQUIRY = "inquiry";
-    
+
     public static final String ENVIRONMENT_KEY = "environment";
     public static final String VERSION_KEY = "version";
     public static final String LOG4J_SETTINGS_FILE_KEY = "log4j.settings.file";
     public static final String LOGS_DIRECTORY_KEY = "logs.directory";
     public static final String LOG4J_RELOAD_MINUTES_KEY = "log4j.reload.minutes";
-    public static final String STARTUP_STATS_MAILING_LIST_KEY = "startup.stats.mailing.list"; 
+    public static final String STARTUP_STATS_MAILING_LIST_KEY = "startup.stats.mailing.list";
     public static final String APPLICATION_URL_KEY = "application.url";
     public static final String ATTACHMENTS_DIRECTORY_KEY = "attachments.directory";
     public static final String ATTACHMENTS_PENDING_DIRECTORY_KEY = "attachments.pending.directory";
@@ -257,12 +257,13 @@ public class KFSConstants extends JstlConstants {
     public static final String WORKFLOW_URL_KEY = "workflow.url";
     public static final String PROD_ENVIRONMENT_CODE_KEY = "production.environment.code";
     public static final String MAINTAIN_USERS_LOCALLY_KEY = "maintain.users.locally";
-    
+    public static final String USE_CENTRAL_WORKFLOW_SERVER = "rice.use.central.workflow.server";
+
     public static final String DATABASE_REPOSITORY_FILES_LIST_NAME = "databaseRepositoryFilePaths";
     public static final String SCRIPT_CONFIGURATION_FILES_LIST_NAME = "scriptConfigurationFilePaths";
     public static final String JOB_NAMES_LIST_NAME = "jobNames";
     public static final String TRIGGER_NAMES_LIST_NAME = "triggerNames";
-    
+
     public static final String CROSS_MODULE_ID = "core";
     public static final String CROSS_MODULE_CODE = "CF";
     public static final String CROSS_MODULE_NAME = "Core Functionality";
@@ -273,7 +274,7 @@ public class KFSConstants extends JstlConstants {
     public static final String LOOKUP_RESULTS_LIMIT_URL_KEY = "RESULTS_LIMIT";
     public static final String DOCHANDLER_DO_URL = "/DocHandler.do?docId=";
     public static final String DOCHANDLER_URL_CHUNK = "&command=displayDocSearchView";
-   
+
     public static final String ACCOUNT_NUMBER_PROPERTY_NAME = "accountNumber";
     public static final String MODULE_ID_PROPERTY_NAME = "moduleId";
     public static final String MODULE_CODE_PROPERTY_NAME = "moduleCode";
@@ -392,7 +393,7 @@ public class KFSConstants extends JstlConstants {
     public static final String LABOR_DISTRIBUTION_ORIGIN_CODE = "LD";
     public static final String STAND_IN_BUSINESS_OBJECT_FOR_ATTRIBUTES = "KFSAttributeReferenceDummy";
     public static final String LABOR_MODIFIED_INQUIRY_ACTION = "laborModifiedInquiry.do";
-    public static final String EMPLOYEE_FUNDING_INQUIRY_ACTION = "employeeFundingInquiry.do";    
+    public static final String EMPLOYEE_FUNDING_INQUIRY_ACTION = "employeeFundingInquiry.do";
     public static final String OVERRIDE_KEYS = "overrideKeys";
     public static final String[] LLCP_GROUP_FILTER_EXCEPTION = new String[]{ "LLGL" };
 
@@ -400,14 +401,14 @@ public class KFSConstants extends JstlConstants {
      * This value denotes that a max length has not been defined for a given lookup results field
      */
     public static final int LOOKUP_RESULT_FIELD_MAX_LENGTH_NOT_DEFINED = -1;
-    
+
     /**
      * The number of levels BusinessObjectDictionaryServiceImpl will recurse.  If this number is high, it may lead to serious
      * performance problems
      */
     public static final int BUSINESS_OBJECT_DICTIONARY_SERVICE_PERFORM_FORCE_UPPERCASE_RECURSION_MAX_DEPTH = 3;
-    
-    
+
+
     /**
      * When checkboxes are rendered on the form, a hidden field will also be rendered corresponding to each checkbox
      * with the checkbox's name suffixed with the value of this constant.  No real fields should have names that contain this suffix,
@@ -558,7 +559,7 @@ public class KFSConstants extends JstlConstants {
     public static final String METHOD_TO_CALL_PARM13_LEFT_DEL = "(:::;";
     public static final String METHOD_TO_CALL_PARM13_RIGHT_DEL = ";:::)";
     // if more strings needed, then add more colons to the PARM11 strings above, e.g. (::; (:::;, etc.
-    
+
     public static final String ANCHOR = "anchor";
     public static final String ANCHOR_TOP_OF_FORM = "topOfForm";
     public static final String QUESTION_ANCHOR = "questionAnchor";
@@ -651,7 +652,7 @@ public class KFSConstants extends JstlConstants {
             return KFSConstants.DOCUMENT_PROPERTY_NAME+"."+getPath();
         }
     }
-    
+
     public static final String EDIT_JOURNAL_VOUCHER_ERRORS = "EditJournalVoucherErrors";
     public static final String EDIT_AUXILIARY_VOUCHER_ERRORS = "EditAuxiliaryVoucherErrors";
     public static final String EDIT_PRE_ENCUMBRANCE_ERRORS = "EditPreEncumbranceErrors";
@@ -728,7 +729,7 @@ public class KFSConstants extends JstlConstants {
     // CashManagement tab errors
     public static final String CASH_MANAGEMENT_ERRORS = "cashManagementDocument.*";
     public static final String CASH_MANAGEMENT_DEPOSIT_ERRORS = "document.deposit*";
-    
+
     // Coin and Currency Amounts
     public static class CoinTypeAmounts {
         public static final KualiDecimal HUNDRED_CENT_AMOUNT = new KualiDecimal(1.0);
@@ -738,7 +739,7 @@ public class KFSConstants extends JstlConstants {
         public static final KualiDecimal FIVE_CENT_AMOUNT = new KualiDecimal(0.05);
         public static final KualiDecimal ONE_CENT_AMOUNT = new KualiDecimal(0.01);
     }
-    
+
     public static class CurrencyTypeAmounts {
         public static final KualiDecimal HUNDRED_DOLLAR_AMOUNT = new KualiDecimal(100.0);
         public static final KualiDecimal FIFTY_DOLLAR_AMOUNT = new KualiDecimal(50.0);
@@ -748,7 +749,7 @@ public class KFSConstants extends JstlConstants {
         public static final KualiDecimal TWO_DOLLAR_AMOUNT = new KualiDecimal(2.0);
         public static final KualiDecimal ONE_DOLLAR_AMOUNT = new KualiDecimal(1.0);
     }
-    
+
     // Cashiering source constants
     public static class CurrencyCoinSources {
         public static final String CASH_MANAGEMENT_IN = "R"; // money coming in through cashiering activity
@@ -757,7 +758,7 @@ public class KFSConstants extends JstlConstants {
         public static final String CASH_MANAGEMENT_OUT = "O"; // money going out through cashiering activity
         public static final String CASH_MANAGEMENT_MASTER = "M"; // an amalgamation of a cashiering transaction
     }
-    
+
     // Constants for check sources
     // Why are these constants different from the Currency/Coin constants?
     // Why, I ask you in return, is the sky blue?  That's right, because of
@@ -766,7 +767,7 @@ public class KFSConstants extends JstlConstants {
         public static final String CASH_RECEIPTS = "R";
         public static final String CASH_MANAGEMENT = "I";
     }
-    
+
     public static final String CASHIERING_TRANSACTION_OPEN_ITEM_IN_PROCESS_PROPERTY = "document.currentTransaction.openItemInProcess";
 
     // Tab error patterns must be at the top level; JSPs do not have access to the nested classes.
@@ -785,7 +786,7 @@ public class KFSConstants extends JstlConstants {
     // Workflow constants
     public static final String WORKFLOW_FYI_REQUEST = "F";
     public static final String WORKFLOW_APPROVE_REQUEST = "A";
-    
+
     // Permission codes
     public static final String PERMISSION_READ_CODE = "R";
     public static final String PERMISSION_READ_DESCRIPTION = "READ";
@@ -888,20 +889,20 @@ public class KFSConstants extends JstlConstants {
         public static final String CLEAR_WIRE_TRANSFER_TAB_QUESTION_ID = "ClearWireTransferTabQuestion";
         public static final String CLEAR_FOREIGN_DRAFT_TAB_QUESTION_ID = "ClearForeignDraftTabQuestion";
     }
-    
+
     public static final String ALLOWED_EMPLOYEE_STATUS_RULE = "ACTIVE_EMPLOYEE_STATUSES";
 
     public static class CoreApcParms {
-        
+
         // Kuali User params
         public static final String USER_INVALID_EMPLOYEE_STATUSES = "ACTIVE_KFS_USER_EMPLOYEE_STATUSES";
-        
+
         public static final String UNIVERSAL_USER_EDIT_WORKGROUP = "UNIVERSAL_USER_EDIT_GROUP";
-        
+
     }
-    
+
     public static final String MAINTENANCE_ADMIN_WORKGROUP_PARM_NM = "MAINTENANCE_ADMIN_GROUP";
-    
+
     public static class ChartApcParms {
 
         public static final String FISCAL_YEAR_MAKER_REPLACE_MODE = "REPLACE_MODE";
@@ -932,10 +933,10 @@ public class KFSConstants extends JstlConstants {
         public static final String ORG_PLANT_WORKGROUP_PARM_NAME = "PLANT_GROUP";
 
         public static final String ADMINISTRATOR_WORKGROUP = "Maintenance.Admin.Workgroup";
-        
+
         public static final String ACCOUNT_FUND_GROUP_DENOTES_CG = "FUND_GROUP_DENOTES_CG_IND";
         public static final String ACCOUNT_CG_DENOTING_VALUE = "CG_DENOTING_VALUE";
-        
+
         public static final String DEFAULT_USER_CHART_CODE_SOURCE_ATTRIBUTE = "DEFAULT_CHART_SOURCE_ATTRIBUTE";
         public static final String DEFAULT_USER_CHART_CODE_EXTRACTION_REGEXP = "DEFAULT_CHART_EXTRACTION_REG_EXP";
         public static final String DEFAULT_USER_ORGANIZATION_CODE_SOURCE_ATTRIBUTE = "DEFAULT_ORGANIZATION_SOURCE_ATTRIBUTE";
@@ -943,16 +944,16 @@ public class KFSConstants extends JstlConstants {
     }
 
     public static class FinancialApcParms {
-//        public static final String GROUP_DV_DOCUMENT = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";        
-        
-        public static final String DV_TAX_WORKGROUP = "TAX_GROUP"; 
-        public static final String DV_ADMIN_WORKGROUP = "ADMIN_GROUP"; 
-        public static final String DV_FOREIGNDRAFT_WORKGROUP = "FOREIGN_DRAFT_GROUP"; 
-        public static final String DV_WIRETRANSFER_WORKGROUP = "WIRE_TRANSFER_GROUP"; 
-        public static final String DV_TRAVEL_WORKGROUP = "TRAVEL_GROUP"; 
+//        public static final String GROUP_DV_DOCUMENT = "Kuali.FinancialTransactionProcessing.DisbursementVoucherDocument";
+
+        public static final String DV_TAX_WORKGROUP = "TAX_GROUP";
+        public static final String DV_ADMIN_WORKGROUP = "ADMIN_GROUP";
+        public static final String DV_FOREIGNDRAFT_WORKGROUP = "FOREIGN_DRAFT_GROUP";
+        public static final String DV_WIRETRANSFER_WORKGROUP = "WIRE_TRANSFER_GROUP";
+        public static final String DV_TRAVEL_WORKGROUP = "TRAVEL_GROUP";
         public static final String ACCOUNTING_LINE_IMPORT_HELP = "ACCOUNTING_LINE_IMPORT";
     }
-    
+
 //    public static class ParameterGroups {
 //        public static final String SYSTEM = "SYSTEM";
 //        public static final String FP_GLOBAL_PARAMETERS = "Kuali.FinancialTransactionProcessing.GlobalRules";
@@ -964,7 +965,7 @@ public class KFSConstants extends JstlConstants {
 //    }
 
     public static class SystemGroupParameterNames {
-        
+
         public static final String FLEXIBLE_OFFSET_ENABLED_FLAG = "USE_FLEXIBLE_OFFSET_IND";
         public static final String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = "USE_FLEXIBLE_CLAIM_ON_CASH_IND";
         public static final String ICR_ENCUMBRANCE_ENABLED_FLAG = "USE_ICR_ENCUMBRANCE_IND";
@@ -984,11 +985,11 @@ public class KFSConstants extends JstlConstants {
         public static final String GL_NET_EXPENSE_OBJECT_TYPE_CODE = "NET_EXPENSE_OBJECT_TYPE_CODE";
         public static final String GL_ORIGINATION_CODE = "MANUAL_FEED_ORIGINATION";
         public static final String GL_SCRUBBER_VALIDATION_DAYS_OFFSET = "CG_ACCOUNT_EXPIRATION_EXTENSION_DAYS";
-        
+
         public static final String LOOKUP_RESULTS_LIMIT = "lookup.results.limit";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_PER_PAGE = "MULTIPLE_VALUE_RESULTS_PER_PAGE";
         public static final String MULTIPLE_VALUE_LOOKUP_RESULTS_EXPIRATION_AGE = "MULTIPLE_VALUE_RESULTS_EXPIRATION_SECONDS";
-      
+
         public static final String ACTIVE_INPUT_TYPES_PARAMETER_NAME = "ACTIVE_FILE_TYPES";
         public static final String PCDO_FILE_TYPE_PARAMETER_NAMESPACE = FINANCIAL_NAMESPACE;
         public static final String PCDO_FILE_TYPE_PARAMETER_COMPONENT = "ProcurementCardLoadStep";
@@ -998,24 +999,24 @@ public class KFSConstants extends JstlConstants {
         public static final String COLLECTOR_FILE_TYPE_PARAMETER_COMPONENT = "CollectorStep";
         public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_PARAMETER_NAMESPACE = GL_NAMESPACE;
         public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_PARAMETER_COMPONENT = "EnterpriseFeedStep";
-        
+
         public static final String COLLECTOR_VALIDATOR_EMAIL_SUBJECT_PARAMETER_NAME = "VALIDATION_EMAIL_SUBJECT_LINE";
         public static final String COLLECTOR_DEMERGER_EMAIL_SUBJECT_PARAMETER_NAME = "ERROR_EMAIL_SUBJECT_LINE";
         public static final String COLLECTOR_EQUAL_DC_TOTAL_DOCUMENT_TYPES = "EQUAL_DEBIT_CREDIT_TOTAL_DOCUMENT_TYPES";
         public static final String COLLECTOR_PERFORM_DUPLICATE_HEADER_CHECK = "PERFORM_DUPLICATE_HEADER_CHECK";
-        
+
         public static final String BATCH_SCHEDULE_CUTOFF_TIME = "CUTOFF_TIME";
         public static final String BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY = "CUTOFF_TIME_NEXT_DAY_IND";
         public static final String BATCH_SCHEDULE_STATUS_CHECK_INTERVAL = "STATUS_CHECK_INTERVAL";
-        
+
         /**
          * Used by PurgePendingAttachmentsJob to compute the maximum amount of time a pending attachment is allowed to
          * persist on the file system before being deleted.
          */
         public static final String PURGE_PENDING_ATTACHMENTS_STEP_MAX_AGE = "MAX_AGE";
-        
+
         public static final String JOB_ADMIN_WORKGROUP = "JOB_ADMIN_GROUP";
-        
+
     }
 
     public static class GeneralLedgerApplicationParameterKeys {
@@ -1024,7 +1025,7 @@ public class KFSConstants extends JstlConstants {
         public static final String EXPENSE_OBJECT_TYPE_CODES = "EXPENSE_OBJECT_TYPE_CODES";
         public static final String EXPENSE_TRANSFER_OBJECT_TYPE_CODES = "EXPENSE_TRANSFER_OBJECT_TYPE_CODES";
     }
-    
+
     public static class GeneralLedgerCorrectionProcessApplicationParameterKeys {
         public static final String RECORD_COUNT_FUNCTIONALITY_LIMIT = "RECORD_COUNT_FUNCTIONALITY_LIMIT";
         public static final String RECORDS_PER_PAGE = "RECORDS_PER_PAGE";
@@ -1089,18 +1090,18 @@ public class KFSConstants extends JstlConstants {
     public static final String UNIV_FISCAL_YR = "UNIV_FISCAL_YR";
 
     public static final int DEFAULT_NUM_OF_COLUMNS = 1;
-    
+
     public static final String EMPLOYEE_LOOKUP_ERRORS = "document.employeeLookups";
     public static class BudgetConstructionConstants {
-        
+
         public enum LockStatus {
             SUCCESS, BY_OTHER, NO_DOOR, OPTIMISTIC_EX, FLOCK_FOUND}
-        
+
         public static final int maxLockRetry = 20;
-        
+
         /*  KFSConstants for the CSF Tracker  */
         public static final String ACTIVE_CSF_DELETE_CODE = "-";
-        
+
         /*  KFSConstants for the budget construction flag names */
         private static int NUMBER_OF_CTRL_FLAGS = 8;
         public final static String BUDGET_ADMINSTRATION_ACTIVE = "BAACTV";
@@ -1114,7 +1115,7 @@ public class KFSConstants extends JstlConstants {
         /*  state for current year budget construction flags after genesis */
         private static HashMap<String, String> buildCurrentYear ()
         {
-            HashMap<String,String> mapSLF; 
+            HashMap<String,String> mapSLF;
             mapSLF =  new HashMap<String,String>(NUMBER_OF_CTRL_FLAGS,(float) 1.00);
             mapSLF.put(BUDGET_ADMINSTRATION_ACTIVE,
                        ParameterValues.YES);
@@ -1139,7 +1140,7 @@ public class KFSConstants extends JstlConstants {
         /* state for next year budget construction flags after genesis */
         private static HashMap<String, String> buildNextYear ()
         {
-            HashMap<String,String> mapSLF; 
+            HashMap<String,String> mapSLF;
             mapSLF =  new HashMap<String,String>(NUMBER_OF_CTRL_FLAGS,(float) 1.00);
             mapSLF.put(BUDGET_ADMINSTRATION_ACTIVE,
                        ParameterValues.NO);
@@ -1170,36 +1171,36 @@ public class KFSConstants extends JstlConstants {
         public final static Integer INITIAL_ORGANIZATION_LEVEL_CODE = new Integer(0);
         public final static String INITIAL_ORGANIZATION_LEVEL_CHART_OF_ACCOUNTS_CODE = null;
         public final static String INITIAL_ORGANIZATION_LEVEL_ORGANIZATION_CODE = null;
-        
+
         /*  Budget Construction document type */
         public final static String BUDGET_CONSTRUCTION_DOCUMENT_TYPE = "BC";
-        public final static String BUDGET_CONSTRUCTION_DOCUMENT_NAME = 
+        public final static String BUDGET_CONSTRUCTION_DOCUMENT_NAME =
                                    "KualiBudgetConstructionDocument";
         public final static String BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION =
                                    "Budget Construction";
         public final static String BUDGET_CONSTRUCTION_DOCUMENT_INITIAL_STATUS = "$";
         public final static String ORG_REVIEW_RULE_TEMPLATE = "KualiOrgReviewTemplate";
-        
+
         /*  codes used in the Calculated Salary Foundation (CSF) */
         public final static String VACANT_CSF_LINE = "V";
         public final static String UNFUNDED_CSF_LINE = "U";
         public final static String ACTIVE_CSF_LINE = "-";
         public final static String VACANT_EMPLID = "VACANT";
-        
+
         /*
          *  object code which stores amounts by which pending general ledger
-         *  rows in budget construction are out of balance 
+         *  rows in budget construction are out of balance
          */
         public final static String OBJECT_CODE_2PLG = "2PLG";
         /*
          *  initial sizes for hash maps used in genesis
-         *  supposedly starting the map out with about the right amount of space 
+         *  supposedly starting the map out with about the right amount of space
          *  makes look-ups more efficient
          *  these numbers shouldn't need to be very precise
          */
         public final static Integer ESTIMATED_PENDING_GENERAL_LEDGER_ROWS = 70000;
         public final static Integer  AVERAGE_REPORTING_TREE_SIZE = 4;
-        
+
     }
 
     public static class OperationType {
@@ -1210,39 +1211,39 @@ public class KFSConstants extends JstlConstants {
         public static final String DELETE = "delete";
         public static final String SELECT = "select";
     }
-    
+
     public static class PENDING_ENTRY_APPROVED_STATUS_CODE{
         public static final String APPROVED = "A";
         public static final String PROCESSED = "X";
     }
-    
+
     public static class TableRenderConstants {
         public static final String SWITCH_TO_PAGE_METHOD = "switchToPage";
         public static final String SORT_METHOD = "sort";
         public static final String SELECT_ALL_METHOD = "selectAll";
         public static final String UNSELECT_ALL_METHOD = "unselectAll";
-        
+
         public static final String PREVIOUSLY_SORTED_COLUMN_INDEX_PARAM = "previouslySortedColumnIndex";
         public static final String VIEWED_PAGE_NUMBER = "viewedPageNumber";
     }
-    
+
     public static final String PCDO_FILE_TYPE_INDENTIFIER = "procurementCardInputFileType";
     public static final String COLLECTOR_FILE_TYPE_INDENTIFIER = "collectorInputFileType";
     public static final String ENTERPRISE_FEEDER_FILE_SET_TYPE_INDENTIFIER = "enterpriseFeederFileSetType";
-    
+
     // next 3 variables for the enterprise feeder batch upload
     public static final String DATA_FILE_TYPE = "DATA";
     public static final String RECON_FILE_TYPE = "RECON";
-    
+
     /**
      * The base implementation of {@link org.kuali.module.gl.util.EnterpriseFeederStatusBase} uses strings contained within ApplicationResources.properties
-     * to store the human-readable descriptions of each status object.  The fully qualified class name is appended to the end of this key to generate the 
+     * to store the human-readable descriptions of each status object.  The fully qualified class name is appended to the end of this key to generate the
      * true key.  For example, gl.EnterpriseFeeder.StatusDescriptionPrefix.org.kuali.module.gl.util.FileReconBadLoadAbortedStatus
      */
     public static final String ENTERPRISE_FEEDER_STATUS_DESCRIPTION_PREFIX = "gl.EnterpriseFeeder.StatusDescription.";
-    
+
     public static final String BATCH_STEP_RUNNER_JOB_NAME = "stepRunByBatchStepRunner";
-    
+
     // Some static method calls below that could be done in static variables instead but isn't safe to do during class loading w/SpringContext.
     private static String DASH_FINANCIAL_OBJECT_CODE = null;
     public static String getDashFinancialObjectCode() {
@@ -1251,7 +1252,7 @@ public class KFSConstants extends JstlConstants {
         }
         return DASH_FINANCIAL_OBJECT_CODE;
     }
-    
+
     private static String DASH_FINANCIAL_SUB_OBJECT_CODE = null;
     public static String getDashFinancialSubObjectCode() {
         if (DASH_FINANCIAL_SUB_OBJECT_CODE == null) {
@@ -1259,7 +1260,7 @@ public class KFSConstants extends JstlConstants {
         }
         return DASH_FINANCIAL_SUB_OBJECT_CODE;
     }
-    
+
     private static String DASH_SUB_ACCOUNT_NUMBER = null;
     public static String getDashSubAccountNumber() {
         if (DASH_SUB_ACCOUNT_NUMBER == null) {
@@ -1267,7 +1268,7 @@ public class KFSConstants extends JstlConstants {
         }
         return DASH_SUB_ACCOUNT_NUMBER;
     }
-    
+
     private static String DASH_PROJECT_CODE = null;
     public static String getDashProjectCode() {
         if (DASH_PROJECT_CODE == null) {
@@ -1275,7 +1276,7 @@ public class KFSConstants extends JstlConstants {
         }
         return DASH_PROJECT_CODE;
     }
-    
+
     private static String DASH_POSITION_NUMBER = null;
     public static String getDashPositionNumber() {
         if (DASH_POSITION_NUMBER == null) {
@@ -1283,7 +1284,7 @@ public class KFSConstants extends JstlConstants {
         }
         return DASH_POSITION_NUMBER;
     }
-    
+
     private static String DASH_EMPLID = null;
     public static String getDashEmplId() {
         if (DASH_EMPLID == null) {
