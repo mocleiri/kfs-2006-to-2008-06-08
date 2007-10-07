@@ -262,16 +262,16 @@
 			      build for your machine (you do not need to worry about the rice development section)
 			    - override other property values in ${user.home}/${ant.project.name}-build.properties as needed
 			    - save your changes
-			
+
 			2. run the echo-properties target and review the results
 
 			3. follow the instructions associated with the dist-local target and run that target
-						
+
 			4. right click on the root project directory and select "Refresh"
-			
+
 			5. click the "Run/Stop/Restart MyEclipse Application Servers" button in the "Java (default)" perspective in
 			eclipse to start tomcat
-			
+
 			6. launch a browser and access http://localhost:8080/kuali-dev
 
 	you can override the default log4j settings for your local deployments by copying
@@ -332,7 +332,7 @@
 		</copy>
 		<get src="https://onestart.iu.edu/dav/MY/maven-mirror/maven2/${workflow.name}/${workflow.name}/${workflow.version}/${workflow.name}-${workflow.version}.jar" dest="${basedir}/${lib.directory}/${rice.name}-${workflow.name}-${workflow.version}.jar" />
 	</target>
-	
+
 	<target name="update-rice-web" depends="init-property-files">
 		<delete>
 			<fileset dir="${build.project.directory}" includes="${rice.name}*${rice.output.web.suffix}" />
@@ -377,7 +377,25 @@
 	<target name="update-rice-licenses" depends="init-property-files">
 		<zip destfile="${build.project.directory}/${rice.name}-${rice.version}-licenses.zip" basedir="${rice.project.directory}/${licenses.directory}" excludes="**/CVS" />
 	</target>
-	
+
+	<target name="dist-plugin" depends="make-source">
+		<copy todir="${plugin.classes.directory}">
+			<fileset dir="${make-source.target.directory}"/>
+		</copy>
+		<copy todir="${plugin.lib.directory}">
+			<fileset dir="${lib.directory}">
+				<exclude name="rice-kew-*.jar"/>
+				<exclude name="rice-ksb-*.jar"/>
+				<exclude name="rice-core-*.jar"/>
+				<exclude name="rice-shared-*.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${plugin.directory}">
+			<fileset dir="${build.plugin.directory}"/>
+		</copy>
+		<zip basedir="${plugin.directory}" destfile="en-plugins.zip"/>
+	</target>
+
 	<macrodef name="maven">
 		<attribute name="goals" />
 		<attribute name="options" default="" />
