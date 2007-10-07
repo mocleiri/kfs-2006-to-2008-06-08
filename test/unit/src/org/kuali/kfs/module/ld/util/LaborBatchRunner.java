@@ -7,21 +7,25 @@
  */
 package org.kuali.module.labor.util;
 
-import org.kuali.kfs.batch.BatchSpringContext;
+import java.util.List;
+
 import org.kuali.kfs.batch.JobDescriptor;
 import org.kuali.kfs.batch.Step;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.fixtures.UserNameFixture;
+import org.kuali.kfs.util.SpringServiceLocator;
 
-@ConfigureContext(session=UserNameFixture.KULUSER)
-public class LaborBatchRunner extends KualiTestBase {
+public class LaborBatchRunner {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborBatchRunner.class);
+    private JobDescriptor laborBatchJob;
 
-    public void testRunBatch() {
-        JobDescriptor laborBatchJob = BatchSpringContext.getJobDescriptor("laborBatchJob");
-        for (Step step : laborBatchJob.getSteps()) {
-            runStep(step);
+    static {
+        SpringServiceLocator.initializeApplicationContext();
+    }
+
+    public void runBatch() {
+        laborBatchJob = (JobDescriptor) SpringServiceLocator.getBeanFactory().getBean("laborBatchJob");
+        List<Step> steps = laborBatchJob.getSteps();
+        for(Step step :steps){
+            this.runStep(step);
         }
     }
     
@@ -32,7 +36,7 @@ public class LaborBatchRunner extends KualiTestBase {
             long start = System.currentTimeMillis();
             System.out.println(stepName + " started at " + start);
 
-            boolean isSuccess = step.execute(getClass().getName());
+            boolean isSuccess = step.execute();
 
             long elapsedTime = System.currentTimeMillis() - start;
             System.out.println("Execution Time = " + elapsedTime + "(" + isSuccess + ")");
@@ -40,5 +44,19 @@ public class LaborBatchRunner extends KualiTestBase {
         catch (Exception e) {
             System.out.println(e);
         } 
+    }
+
+    public static void main(String[] args) {
+        try {
+            LaborBatchRunner laborBatchRunner = new LaborBatchRunner();
+            laborBatchRunner.runBatch();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        finally {
+            System.out.println("Labor batch stopped");
+            System.exit(0);
+        }
     }
 }

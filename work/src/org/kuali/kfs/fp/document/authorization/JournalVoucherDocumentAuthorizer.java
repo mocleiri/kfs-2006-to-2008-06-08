@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,13 @@
 package org.kuali.module.financial.document.authorization;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.kuali.module.chart.bo.ChartUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.TransactionalDocument;
-import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
 
 /**
@@ -41,18 +39,7 @@ public class JournalVoucherDocumentAuthorizer extends AccountingDocumentAuthoriz
      * @see org.kuali.core.authorization.TransactionalDocumentAuthorizer#getEditableAccounts(org.kuali.core.document.TransactionalDocument,
      *      org.kuali.core.bo.user.KualiUser)
      */
-    public Map getEditableAccounts(TransactionalDocument document, ChartUser user) {
+    public Map getEditableAccounts(TransactionalDocument document, UniversalUser user) {
         return new HashMap();
     }
-
-    /**
-     * No accountingLines will ever be editable, since the only two possible editModes don't check editableAccounts
-     * 
-     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List, org.kuali.module.chart.bo.ChartUser)
-     */
-    @Override
-    public Map getEditableAccounts(List<AccountingLine> lines, ChartUser user) {
-        return new HashMap();
-    }
-
 }

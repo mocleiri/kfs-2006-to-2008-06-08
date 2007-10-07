@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.pdp.action.BaseAction;
 import org.kuali.module.pdp.form.format.FormatProcessForm;
 import org.kuali.module.pdp.form.format.FormatSelectionForm;
@@ -38,7 +38,7 @@ public class FormatPrepareAction extends BaseAction {
 
   public FormatPrepareAction() {
       super();
-      setFormatService( SpringContext.getBean(FormatService.class) );
+      setFormatService( (FormatService)SpringServiceLocator.getService("pdpFormatService") );
   }
 
   public void setFormatService(FormatService fs) {
@@ -96,14 +96,14 @@ public class FormatPrepareAction extends BaseAction {
     if ( results.size() == 0 ) {
       return mapping.findForward("no_payments");
     }
-
+    
     // Get the first one to get the process ID out of it
     FormatResult fr = (FormatResult)results.get(0);
 
     FormatProcessForm fpf = new FormatProcessForm();
     fpf.setProcId(fr.getProcId());
     fpf.setCampusCd(campus);
-    request.setAttribute("PdpFormatProcessForm",fpf);
+    request.setAttribute("FormatProcessForm",fpf);
 
     int count = 0;
     BigDecimal amount = new BigDecimal(0);
@@ -123,4 +123,5 @@ public class FormatPrepareAction extends BaseAction {
 
     return mapping.findForward("continue");
   }
+
 }

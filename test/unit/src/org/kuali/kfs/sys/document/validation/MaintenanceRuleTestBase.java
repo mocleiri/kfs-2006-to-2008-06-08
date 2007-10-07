@@ -1,53 +1,65 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.core.maintenance;
 
 import java.util.Iterator;
 import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
+import org.kuali.core.document.MaintenanceDocumentBase;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRule;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.service.DictionaryValidationService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.MaintenanceDocumentDictionaryService;
 import org.kuali.core.util.ErrorMessage;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBaseWithFixtures;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
-@ConfigureContext
-public abstract class MaintenanceRuleTestBase extends KualiTestBase {
+public abstract class MaintenanceRuleTestBase extends KualiTestBaseWithFixtures {
+        protected DictionaryValidationService dictionaryValidationService;
+
+        protected void setUp() throws Exception {
+            super.setUp();
+            clearErrors();
+            dictionaryValidationService = SpringServiceLocator.getDictionaryValidationService();
+        }
+
         /**
          * 
          * This method creates a minimal MaintenanceDocument instance, and populates it with the provided businessObject for the
          * newMaintainable, and null for the oldMaintainable.
          * 
          * @param newSubAccount - populated subAccount for the newMaintainable
-         * @return a populated MaintenanceDocument instance
+         * @return - a populated MaintenanceDocument instance
          * 
          */
-        protected MaintenanceDocument newMaintDoc(PersistableBusinessObject newBo) {
+        protected MaintenanceDocument newMaintDoc(BusinessObject newBo) {
             return newMaintDoc(null, newBo);
         }
 
@@ -58,10 +70,10 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          * 
          * @param oldSubAccount - populated subAccount for the oldMaintainable
          * @param newSubAccount - populated subAccount for the newMaintainable
-         * @return a populated MaintenanceDocument instance
+         * @return - a populated MaintenanceDocument instance
          * 
          */
-        protected MaintenanceDocument newMaintDoc(PersistableBusinessObject oldBo, PersistableBusinessObject newBo) {
+        protected MaintenanceDocument newMaintDoc(BusinessObject oldBo, BusinessObject newBo) {
 
             // disallow null value for newBo
             if (null == newBo) {
@@ -71,7 +83,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
             // get a new MaintenanceDocument from Spring
             MaintenanceDocument document = null;
             try {
-            	document = (MaintenanceDocument) SpringContext.getBean(DocumentService.class).getNewDocument( SpringContext.getBean(MaintenanceDocumentDictionaryService.class).getDocumentTypeName( newBo.getClass() ) );
+                document = (MaintenanceDocument) SpringServiceLocator.getDocumentService().getNewDocument(MaintenanceDocumentBase.class);
             }
             catch (WorkflowException e) {
                 throw new RuntimeException(e);
@@ -99,10 +111,10 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          * 
          * @param newBo - the populated businessObject for the newMaintainble
          * @param ruleClass - the class of rule to instantiate
-         * @return a populated and ready-to-test rule, of the specified class
+         * @return - a populated and ready-to-test rule, of the specified class
          * 
          */
-        protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject newBo, Class ruleClass) {
+        protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject newBo, Class ruleClass) {
             MaintenanceDocument maintDoc = newMaintDoc(newBo);
             return setupMaintDocRule(maintDoc, ruleClass);
         }
@@ -117,10 +129,10 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          * @param oldBo - the populated businessObject for the oldMaintainable
          * @param newBo - the populated businessObject for the newMaintainable
          * @param ruleClass - the class of rule to instantiate
-         * @return a populated and ready-to-test rule, of the specified class
+         * @return - a populated and ready-to-test rule, of the specified class
          * 
          */
-        protected MaintenanceDocumentRule setupMaintDocRule(PersistableBusinessObject oldBo, PersistableBusinessObject newBo, Class ruleClass) {
+        protected MaintenanceDocumentRule setupMaintDocRule(BusinessObject oldBo, BusinessObject newBo, Class ruleClass) {
 
             MaintenanceDocument maintDoc = newMaintDoc(oldBo, newBo);
 
@@ -134,7 +146,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          * 
          * @param maintDoc - the populated MaintenanceDocument instance
          * @param ruleClass - the class of rule to instantiate
-         * @return a populated and ready-to-test rule, of the specified class
+         * @return - a populated and ready-to-test rule, of the specified class
          */
         protected MaintenanceDocumentRule setupMaintDocRule(MaintenanceDocument maintDoc, Class ruleClass) {
 
@@ -157,19 +169,19 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
             return rule;
         }
 
-        protected void testDefaultExistenceCheck(PersistableBusinessObject bo, String fieldName, boolean shouldFail) {
+        protected void testDefaultExistenceCheck(BusinessObject bo, String fieldName, boolean shouldFail) {
 
             // init the error path
             GlobalVariables.getErrorMap().addToErrorPath("document.newMaintainableObject");
 
             // run the dataDictionary validation
-            SpringContext.getBean(DictionaryValidationService.class).validateDefaultExistenceChecks(bo);
+            dictionaryValidationService.validateDefaultExistenceChecks(bo);
 
             // clear the error path
             GlobalVariables.getErrorMap().removeFromErrorPath("document.newMaintainableObject");
 
             // assert that the existence of the error is what is expected
-            assertFieldErrorExistence(fieldName, KFSKeyConstants.ERROR_EXISTENCE, shouldFail);
+            assertFieldErrorExistence(fieldName, KeyConstants.ERROR_EXISTENCE, shouldFail);
 
         }
 
@@ -192,7 +204,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          * 
          * @param fieldName
          * @param errorKey
-         * @return True if the error exists in the GlobalErrors, false if not.
+         * @return - True if the error exists in the GlobalErrors, false if not.
          * 
          */
         protected boolean doesFieldErrorExist(String fieldName, String errorKey) {
@@ -212,7 +224,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          */
         protected void assertFieldErrorExistence(String fieldName, String errorKey, boolean expectedResult) {
             boolean result = doesFieldErrorExist(fieldName, errorKey);
-            assertEquals("Existence check for Error on fieldName/errorKey: " + fieldName + "/" + errorKey+". "+GlobalVariables.getErrorMap(), expectedResult, result);
+            assertEquals("Existence check for Error on fieldName/errorKey: " + fieldName + "/" + errorKey, expectedResult, result);
         }
 
         /**
@@ -229,7 +241,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          */
         protected void assertFieldErrorDoesNotExist(String fieldName, String errorKey) {
             boolean result = doesFieldErrorExist(fieldName, errorKey);
-            assertTrue("FieldName (" + fieldName + ") should NOT contain errorKey: " + errorKey, !result);
+            assertTrue("FieldName (" + fieldName + ") should NOT contain errorKey: " + errorKey, result);
         }
 
         /**
@@ -259,7 +271,7 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
          * 
          */
         protected void assertGlobalErrorExists(String errorKey) {
-            boolean result = GlobalVariables.getErrorMap().fieldHasMessage(KFSConstants.DOCUMENT_ERRORS, errorKey);
+            boolean result = GlobalVariables.getErrorMap().fieldHasMessage(Constants.DOCUMENT_ERRORS, errorKey);
             assertTrue("Document should contain errorKey: " + errorKey, result);
         }
 
@@ -301,5 +313,15 @@ public abstract class MaintenanceRuleTestBase extends KualiTestBase {
             }
 
         }
+
+        /**
+         * 
+         * This method clears all errors out of the GlobalVariables.getErrorMap();
+         * 
+         */
+        protected void clearErrors() {
+            GlobalVariables.getErrorMap().clear();
+        }
+
     }
 

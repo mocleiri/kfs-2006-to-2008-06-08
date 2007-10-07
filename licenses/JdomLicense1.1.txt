@@ -1,5 +1,7 @@
 /*-- 
 
+ $Id: JdomLicense1.1.txt,v 1.1.2.1 2006-10-16 12:38:00 sfheise Exp $
+
  Copyright (C) 2000-2002 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  
@@ -51,3 +53,4 @@
  the JDOM Project, please see <http://www.jdom.org/>.
  
  */
+

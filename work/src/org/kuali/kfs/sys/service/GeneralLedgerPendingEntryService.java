@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,6 +99,11 @@ public interface GeneralLedgerPendingEntryService {
      * @return
      */
     public KualiDecimal getBudgetSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isYearEnd);
+
+    /**
+     * Delete pending entries that have been either cancelled or disapproved.
+     */
+    public void deleteEntriesForCancelledOrDisapprovedDocuments();
 
     /**
      * @param transactionEntrySequenceId

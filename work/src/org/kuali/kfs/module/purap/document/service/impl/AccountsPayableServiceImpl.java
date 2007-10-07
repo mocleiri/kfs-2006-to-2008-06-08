@@ -15,7 +15,6 @@
  */
 package org.kuali.module.purap.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,8 +27,6 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.context.SpringContext;
@@ -37,27 +34,25 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
+import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
+import org.kuali.module.purap.PurapRuleConstants;
 import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
-import org.kuali.module.purap.bo.CreditMemoItem;
-import org.kuali.module.purap.bo.ItemType;
-import org.kuali.module.purap.bo.PaymentRequestItem;
 import org.kuali.module.purap.bo.PurApAccountingLineBase;
-import org.kuali.module.purap.bo.PurApItem;
-import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.CreditMemoDocument;
-import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.service.AccountsPayableDocumentSpecificService;
 import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.service.PurchaseOrderService;
 import org.kuali.module.purap.util.ExpiredOrClosedAccount;
 import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
+import org.kuali.module.purap.web.struts.action.AccountsPayableActionBase;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 @Transactional
 public class AccountsPayableServiceImpl implements AccountsPayableService {
@@ -273,15 +268,7 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         if( po != null){
             //get list of active accounts
             PurapAccountingService pas = SpringContext.getBean(PurapAccountingService.class);
-            List<PurApItem> apItems = document.getItems();
-            List<PurchaseOrderItem> poItems = po.getItemsActiveOnly();
-            List<PurApItem> poItemsOnDoc = new ArrayList<PurApItem>();
-            for (PurchaseOrderItem purchaseOrderItem : poItems) {
-                if(ObjectUtils.isNotNull(document.getAPItemFromPOItem(purchaseOrderItem))) {
-                    poItemsOnDoc.add(purchaseOrderItem);
-                }
-            }
-            List<SourceAccountingLine> accountList = pas.generateSummary(poItemsOnDoc);            
+            List<SourceAccountingLine> accountList = pas.generateSummary(po.getItemsActiveOnly());            
             
             //loop through accounts
             for (SourceAccountingLine poAccountingLine : accountList) {
@@ -407,7 +394,10 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
 //        }
         
         if (purapService.isFullDocumentEntryCompleted(apDocument)) {
-            purapGeneralLedgerService.generateEntriesCancelAccountsPayableDocument(apDocument);
+            //TODO remove this config (for testing only) hjs
+            if (SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, "PURAP_GL_CANCEL_AP")) {
+                purapGeneralLedgerService.generateEntriesCancelAccountsPayableDocument(apDocument);
+            }
         }
         AccountsPayableDocumentSpecificService accountsPayableDocumentSpecificService = apDocument.getDocumentSpecificService();
         String cancelledStatusCode = accountsPayableDocumentSpecificService.updateStatusByNode(currentNodeName, apDocument);
@@ -415,144 +405,6 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         apDocument.refreshReferenceObject(PurapPropertyConstants.STATUS);
         //close/reopen po?
         accountsPayableDocumentSpecificService.takePurchaseOrderCancelAction(apDocument);
-    }
-
-    public void updateItemList(AccountsPayableDocument apDocument) {
-        //don't run the following if past full entry
-        if(purapService.isFullDocumentEntryCompleted(apDocument)) {
-            return;
-        }
-        if(apDocument instanceof CreditMemoDocument) {
-            //TODO: merge this CM code with below PREQ code, it is almost identical
-            CreditMemoDocument cm = (CreditMemoDocument)apDocument;
-            if(cm.isSourceDocumentPaymentRequest()) {
-                //just update encumberances, items shouldn't change, get to them through po (or through preq)
-                List<PaymentRequestItem> items = cm.getPaymentRequestDocument().getItems();
-                for (PaymentRequestItem preqItem : items) {
-                    PurchaseOrderItem poItem = preqItem.getPurchaseOrderItem();
-                    CreditMemoItem cmItem = cm.getCMItemFromPOItem(poItem);
-                    // take invoiced quantities from the lower of the preq and po if different
-                    updateEncumberances(preqItem, poItem, cmItem);
-                }
-                
-            } else if(cm.isSourceDocumentPurchaseOrder()) {
-                PurchaseOrderDocument po = SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(apDocument.getPurchaseOrderIdentifier());
-                List<PurchaseOrderItem> poItems = po.getItems();
-                List<CreditMemoItem> cmItems = cm.getItems();
-                //iterate through the above the line poItems to find matching
-                for (PurchaseOrderItem purchaseOrderItem : poItems) {
-                    
-                    if(!purchaseOrderItem.getItemType().isItemTypeAboveTheLineIndicator()) {
-                        continue;
-                    }
-                    CreditMemoItem cmItem = cm.getCMItemFromPOItem(purchaseOrderItem);
-                    if(ObjectUtils.isNull(cmItem)) {
-                        //must be a new item from amendment add to preqItems
-                        cmItems.add(new CreditMemoItem(cm, purchaseOrderItem));
-                        continue;
-                    }
-                    if(!cmItem.isConsideredEntered()) {
-                        //if the user didn't modify the preq item see if it is still eligible to be payed on
-                        if(!purchaseOrderItemEligibleForPayment(purchaseOrderItem)) {
-                            cmItems.remove(cmItem);
-                            continue;
-                        }
-                    }
-                  //update encumberance (this is only qty and amount for now NOTE we should also update other key fields, like description etc in case ammendment modified a line
-                  updateEncumberance(purchaseOrderItem, cmItem);
-
-                }
-                
-                
-            } //else do nothing
-           return;
-            
-            //finally update encumberances (or try to do it as I'm going
-        } else if(apDocument instanceof PaymentRequestDocument){
-        
-
-            //get a fresh po
-            PurchaseOrderDocument po = SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(apDocument.getPurchaseOrderIdentifier());
-            PaymentRequestDocument preq = (PaymentRequestDocument)apDocument;
-
-            List<PurchaseOrderItem> poItems = po.getItems();
-            List<PaymentRequestItem> preqItems = preq.getItems();
-            //iterate through the above the line poItems to find matching
-            for (PurchaseOrderItem purchaseOrderItem : poItems) {
-                if(!purchaseOrderItem.getItemType().isItemTypeAboveTheLineIndicator()) {
-                    continue;
-                }
-                PaymentRequestItem preqItem = (PaymentRequestItem)preq.getAPItemFromPOItem(purchaseOrderItem);
-                if(ObjectUtils.isNull(preqItem)) {
-                    //must be a new item from amendment add to preqItems
-                    preqItems.add(new PaymentRequestItem(purchaseOrderItem, preq));
-                    continue;
-                }
-                if(!preqItem.isConsideredEntered()) {
-                    //if the user didn't modify the preq item see if it is still eligible to be payed on
-                    if(!purchaseOrderItemEligibleForPayment(purchaseOrderItem)) {
-                        preqItems.remove(preqItem);
-                    }
-                }
-
-            }
-        }
-        //TODO: ctk - call calculate here?
-    }
-
-    /**
-     * This method updates encumberances
-     * @param preqItem
-     * @param poItem
-     * @param cmItem
-     */
-    private void updateEncumberances(PaymentRequestItem preqItem, PurchaseOrderItem poItem, CreditMemoItem cmItem) {
-        if (poItem.getItemInvoicedTotalQuantity() != null && preqItem.getItemQuantity() != null && poItem.getItemInvoicedTotalQuantity().isLessThan(preqItem.getItemQuantity())) {
-            cmItem.setPreqInvoicedTotalQuantity(poItem.getItemInvoicedTotalQuantity());
-            cmItem.setPreqExtendedPrice(poItem.getItemInvoicedTotalAmount());
-        }
-        else {
-            cmItem.setPreqInvoicedTotalQuantity(preqItem.getItemQuantity());
-            cmItem.setPreqExtendedPrice(preqItem.getExtendedPrice());
-        }
-    }
-
-    /**
-     * This method updates the encumberance related fields.
-     * @param purchaseOrderItem
-     * @param cmItem
-     */
-    private void updateEncumberance(PurchaseOrderItem purchaseOrderItem, CreditMemoItem cmItem) {
-        cmItem.setPoInvoicedTotalQuantity(purchaseOrderItem.getItemInvoicedTotalQuantity());
-        cmItem.setPoExtendedPrice(purchaseOrderItem.getItemInvoicedTotalAmount());
-    }
-    
-    public boolean purchaseOrderItemEligibleForPayment(PurchaseOrderItem poi) {
-        if(ObjectUtils.isNull(poi)) {
-//          LOG.debug("poi was null");
-            throw new RuntimeException("item null in purchaseOrderItemEligibleForPayment ... this should never happen");
-        }
-
-        //if the po item is not active... skip it
-        if(!poi.isItemActiveIndicator()) {
-//          LOG.debug("poi was not active: "+poi.toString());
-            return false;
-        }
-
-        ItemType poiType = poi.getItemType();
-
-        if(poiType.isQuantityBasedGeneralLedgerIndicator()) {
-            if(poi.getItemQuantity().isGreaterThan(poi.getItemInvoicedTotalQuantity())) {
-                return true;
-            } 
-            return false;
-        } else { //not quantity based
-            if(poi.getItemOutstandingEncumberedAmount().isGreaterThan(KualiDecimal.ZERO)) {
-                return true;
-            } 
-            return false;
-        }
-
     }
 
 }

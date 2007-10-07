@@ -17,23 +17,18 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.util.PurApObjectUtils;
 
 /**
  * 
  */
-public abstract class PurApItemBase extends PersistableBusinessObjectBase implements PurApItem {
+public class PurApItemBase extends PersistableBusinessObjectBase implements PurchasingApItem {
 
 	private Integer itemIdentifier;
 	private Integer itemLineNumber;
@@ -44,39 +39,27 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	private String itemCapitalAssetNoteText;
 	private BigDecimal itemUnitPrice;
 	private String itemTypeCode;
+	private String requisitionLineIdentifier;
 	private String itemAuxiliaryPartIdentifier;
 	private String externalOrganizationB2bProductReferenceNumber;
 	private String externalOrganizationB2bProductTypeName;
 	private boolean itemAssignedToTradeInIndicator;
     private KualiDecimal extendedPrice; //not currently in DB
-
     
-    private List<PurApAccountingLine> sourceAccountingLines;
-    private transient List<PurApAccountingLine> baselineSourceAccountingLines;
-    private transient PurApAccountingLine newSourceLine;
-    
+    private List<PurApAccountingLine> accountingLines;
     
 	private CapitalAssetTransactionType capitalAssetTransactionType;
 	private ItemType itemType;
-    private Integer purapDocumentIdentifier;
-    private KualiDecimal itemQuantity;
 
 	/**
 	 * Default constructor.
 	 */
 	public PurApItemBase() {
-        itemTypeCode = PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE;
-        sourceAccountingLines = new TypedArrayList(getAccountingLineClass());
-        baselineSourceAccountingLines = new TypedArrayList(getAccountingLineClass());
-        resetAccount();
+	    //TODO: Chris - default itemType (should probably get this from spring or Constants file)
+        itemTypeCode = "ITEM";
+        accountingLines = new TypedArrayList(PurApAccountingLineBase.class);
 	}
-	
-    public String getItemIdentifierString() {
-        String itemLineNumberString = (getItemLineNumber() != null ? getItemLineNumber().toString() : "");
-        String identifierString = (getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + itemLineNumberString : getItemType().getItemTypeDescription()); 
-        return identifierString;
-    }
-    
+
 	/**
 	 * Gets the ItemIdentifier attribute.
 	 * 
@@ -229,16 +212,7 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	 * @return Returns the itemUnitPrice
 	 * 
 	 */
-	public BigDecimal getItemUnitPrice() {
-        //KULPURAP-1096 Setting scale on retrieval of unit price
-        if(itemUnitPrice!=null) {
-            if(itemUnitPrice.scale()<PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, KualiDecimal.ROUND_BEHAVIOR);
-            } else if(itemUnitPrice.scale()>PurapConstants.DOLLAR_AMOUNT_MIN_SCALE && itemUnitPrice.scale() < PurapConstants.UNIT_PRICE_MAX_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, KualiDecimal.ROUND_BEHAVIOR);
-            }
-        }
-
+	public BigDecimal getItemUnitPrice() { 
         return itemUnitPrice;
 	}
 
@@ -251,9 +225,9 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
 		if(itemUnitPrice!=null) {
             if(itemUnitPrice.scale()<PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, KualiDecimal.ROUND_BEHAVIOR);
-            } else if(itemUnitPrice.scale()>PurapConstants.DOLLAR_AMOUNT_MIN_SCALE && itemUnitPrice.scale() < PurapConstants.UNIT_PRICE_MAX_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, KualiDecimal.ROUND_BEHAVIOR);
+                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, BigDecimal.ROUND_HALF_EVEN);
+            } else if(itemUnitPrice.scale()>PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
+                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, BigDecimal.ROUND_HALF_EVEN);
             }
         }
         this.itemUnitPrice = itemUnitPrice;
@@ -278,6 +252,28 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	public void setItemTypeCode(String itemTypeCode) {
 		this.itemTypeCode = itemTypeCode;
 	}
+
+
+	/**
+	 * Gets the requisitionLineIdentifier attribute.
+	 * 
+	 * @return Returns the requisitionLineIdentifier
+	 * 
+	 */
+	public String getRequisitionLineIdentifier() { 
+		return requisitionLineIdentifier;
+	}
+
+	/**
+	 * Sets the LineIdentifier attribute.
+	 * 
+	 * @param LineIdentifier The LineIdentifier to set.
+	 * 
+	 */
+	public void setRequisitionLineIdentifier(String requisitionLineIdentifier) {
+		this.requisitionLineIdentifier = requisitionLineIdentifier;
+	}
+
 
 	/**
 	 * Gets the itemAuxiliaryPartIdentifier attribute.
@@ -389,9 +385,6 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 	 * 
 	 */
 	public ItemType getItemType() { 
-        if (ObjectUtils.isNull(itemType)) {
-            refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
-        }
 		return itemType;
 	}
 
@@ -405,47 +398,15 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
 		this.itemType = itemType;
 	}
 
-    
-// from epic
-//    public BigDecimal getExtendedCost() {
-//        if (this.unitPrice == null) {
-//          return null;
-//        } else if (this.getIsServiceItem()) {
-//          return getUnitPrice().setScale(2,BigDecimal.ROUND_HALF_UP);
-//        } else {
-//          return this.orderQuantity.multiply(getUnitPrice()).setScale(2,BigDecimal.ROUND_HALF_UP);
-//        }
-//      }
-
 	/**
      * Gets the extendedPrice attribute. 
      * @return Returns the extendedPrice.
      */
     public KualiDecimal getExtendedPrice() {
-        return calculateExtendedPrice();
+        return extendedPrice;
     }
 
     /**
-     * This method calculates the extended price based on item type
-     * 
-     * @return KualiDecimal - calculate extended price
-     */
-    public KualiDecimal calculateExtendedPrice() {
-        KualiDecimal extendedPrice = KualiDecimal.ZERO;
-        if (ObjectUtils.isNotNull(itemUnitPrice)) {
-            if (!this.itemType.isQuantityBasedGeneralLedgerIndicator()) {
-                //SERVICE ITEM: return unit price as extended price
-                extendedPrice = new KualiDecimal(this.itemUnitPrice.toString());
-            } else if (ObjectUtils.isNotNull(this.getItemQuantity())) {
-                BigDecimal calcExtendedPrice = this.itemUnitPrice.multiply(this.itemQuantity.bigDecimalValue());
-                //ITEM TYPE (qty driven): return (unitPrice x qty)
-                extendedPrice = new KualiDecimal(calcExtendedPrice);
-            }
-        }
-        return extendedPrice;
-    }
-    
-     /**
      * Sets the extendedPrice attribute value.
      * @param extendedPrice The extendedPrice to set.
      */
@@ -457,32 +418,16 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      * Gets the accountingLines attribute. 
      * @return Returns the accountingLines.
      */
-    public List<PurApAccountingLine> getSourceAccountingLines() {
-        return sourceAccountingLines;
+    public List<PurApAccountingLine> getAccountingLines() {
+        return accountingLines;
     }
 
     /**
      * Sets the accountingLines attribute value.
      * @param accountingLines The accountingLines to set.
      */
-    public void setSourceAccountingLines(List<PurApAccountingLine> accountingLines) {
-        this.sourceAccountingLines = accountingLines;
-    }
-
-    /**
-     * Gets the baselineSourceLines attribute. 
-     * @return Returns the baselineSourceLines.
-     */
-    public List<PurApAccountingLine> getBaselineSourceAccountingLines() {
-        return baselineSourceAccountingLines;
-    }
-
-    /**
-     * Sets the baselineSourceLines attribute value.
-     * @param baselineSourceLines The baselineSourceLines to set.
-     */
-    public void setBaselineSourceAccountingLines(List<PurApAccountingLine> baselineSourceLines) {
-        this.baselineSourceAccountingLines = baselineSourceLines;
+    public void setAccountingLines(List<PurApAccountingLine> accountingLines) {
+        this.accountingLines = accountingLines;
     }
 
     /**
@@ -494,54 +439,27 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      * 
      * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLine(int)
      */
-    public PurApAccountingLine getSourceAccountingLine(int index) {
-        //TODO: we probably don't need this because of the TypedArrayList
-//        while (getAccountingLines().size() <= index) {
-//            PurApAccountingLine newAccount = getNewAccount();
-//            getAccountingLines().add(newAccount);
-//        }
-        
-        return (PurApAccountingLine) getSourceAccountingLines().get(index);
+    public PurApAccountingLine getAccountingLine(int index) {
+        while (getAccountingLines().size() <= index) {
+            try {
+                getAccountingLines().add((PurApAccountingLine)getAccountingLineClass().newInstance());
+            }
+            catch (InstantiationException e) {
+                throw new RuntimeException("Unable to get class");
+            }
+            catch (IllegalAccessException e) {
+                throw new RuntimeException("Unable to get class");
+            }
+            catch (NullPointerException e) {
+                throw new RuntimeException("Can't instantiate Purchasing Account from base");
+            }
+        }
+        return (PurApAccountingLine) getAccountingLines().get(index);
     }
 
-    public PurApAccountingLine getBaselineSourceAccountingLine(int index) {
-        return (PurApAccountingLine) getBaselineSourceAccountingLines().get(index);
-    }
-    
-    /**
-     * This method...
-     * @param newAccount
-     * @return
-     * @throws RuntimeException
-     */
-    private PurApAccountingLine getNewAccount() throws RuntimeException {
-        
-        PurApAccountingLine newAccount=null;
-        try {
-            newAccount = (PurApAccountingLine)getAccountingLineClass().newInstance();
-        }
-        catch (InstantiationException e) {
-            throw new RuntimeException("Unable to get class");
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException("Unable to get class");
-        }
-        catch (NullPointerException e) {
-            throw new RuntimeException("Can't instantiate Purchasing Account from base");
-        }
-        return newAccount;
-    }
-
-    public abstract Class getAccountingLineClass();
-    
-    /**
-     * 
-     * @see org.kuali.module.purap.bo.PurchasingApItem#resetAccount()
-     */
-    public void resetAccount() {
-        //add a blank accounting line
-        PurApAccountingLine purApAccountingLine = getNewAccount();
-        setNewSourceLine(purApAccountingLine);
+    public Class getAccountingLineClass() {
+        //TODO: throw uninstantiated error here?
+        return null;
     }
     
     /**
@@ -549,9 +467,9 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      */
     @Override
     public List buildListOfDeletionAwareLists() {
-        List managedLists = new ArrayList();
+        List managedLists = super.buildListOfDeletionAwareLists();
 
-        managedLists.add(getSourceAccountingLines());
+        managedLists.add(getAccountingLines());
 
         return managedLists;
     }
@@ -566,55 +484,4 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
         }
 	    return m;
     }
-
-    /**
-     * Gets the newSourceLine attribute. 
-     * @return Returns the newSourceLine.
-     */
-    public PurApAccountingLine getNewSourceLine() {
-        return newSourceLine;
-    }
-
-    /**
-     * Sets the newSourceLine attribute value.
-     * @param newSourceLine The newSourceLine to set.
-     */
-    public void setNewSourceLine(PurApAccountingLine newAccountingLine) {
-        this.newSourceLine = newAccountingLine;
-    }
-
-    public Integer getPurapDocumentIdentifier() {
-        return purapDocumentIdentifier;
-    }
-
-    public void setPurapDocumentIdentifier(Integer purapDocumentIdentifier) {
-        this.purapDocumentIdentifier = purapDocumentIdentifier;
-    }
-
-    public KualiDecimal getItemQuantity() {
-        return itemQuantity;
-    }
-
-    public void setItemQuantity(KualiDecimal itemQuantity) {
-        this.itemQuantity = itemQuantity;
-    }
-    
-    public boolean isAccountListEmpty() {
-        List<PurApAccountingLine> accounts = getSourceAccountingLines();
-        if (ObjectUtils.isNotNull(accounts)) {
-            for (PurApAccountingLine element : accounts) {
-                if (!element.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    
-    public PurApSummaryItem getSummaryItem() {
-        PurApSummaryItem summaryItem = new PurApSummaryItem();
-        PurApObjectUtils.populateFromBaseClass(PurApItemBase.class, this, summaryItem, new HashMap());
-        return summaryItem;
-    }
-       
 }

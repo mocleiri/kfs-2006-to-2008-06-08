@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionMonthly">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Construction Monthly Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialBalanceTypeCode" />
@@ -40,23 +25,25 @@
                 <field attributeName="financialDocumentMonth7LineAmount" />
                 <field attributeName="financialDocumentMonth8LineAmount" />
                 <field attributeName="financialDocumentMonth9LineAmount" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="subAccountNumber" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Budget Construction Monthly Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionMonthly">Create New</a>]]></menubar>
+
             <instructions>Look up Budget Construction Monthly</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="documentNumber" />
+                    <sortAttribute attributeName="financialDocumentNumber" />
                 </sortAttributes>
             </defaultSort>
 
@@ -76,7 +63,7 @@
                 <lookupField attributeName="financialDocumentMonth7LineAmount" required="false" />
                 <lookupField attributeName="financialDocumentMonth8LineAmount" required="false" />
                 <lookupField attributeName="financialDocumentMonth9LineAmount" required="false" />
-                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="financialDocumentNumber" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialObjectTypeCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
@@ -100,7 +87,7 @@
                 <field attributeName="financialDocumentMonth7LineAmount" />
                 <field attributeName="financialDocumentMonth8LineAmount" />
                 <field attributeName="financialDocumentMonth9LineAmount" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
@@ -158,11 +145,10 @@
 
             <attribute name="financialDocumentMonth10LineAmount" forceUppercase="true">
                 <label>Financial Document Month10 Line Amount</label>
-                <shortLabel>Month 10</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -174,11 +160,10 @@
 
             <attribute name="financialDocumentMonth11LineAmount" forceUppercase="true">
                 <label>Financial Document Month11 Line Amount</label>
-                <shortLabel>Month 11</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -190,11 +175,10 @@
 
             <attribute name="financialDocumentMonth12LineAmount" forceUppercase="true">
                 <label>Financial Document Month12 Line Amount</label>
-                <shortLabel>Month 12</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -206,11 +190,10 @@
 
             <attribute name="financialDocumentMonth1LineAmount" forceUppercase="true">
                 <label>Financial Document Month1 Line Amount</label>
-                <shortLabel>Month 1</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -222,11 +205,10 @@
 
             <attribute name="financialDocumentMonth2LineAmount" forceUppercase="true">
                 <label>Financial Document Month2 Line Amount</label>
-                <shortLabel>Month 2</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -238,11 +220,10 @@
 
             <attribute name="financialDocumentMonth3LineAmount" forceUppercase="true">
                 <label>Financial Document Month3 Line Amount</label>
-                <shortLabel>Month 3</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -254,11 +235,10 @@
 
             <attribute name="financialDocumentMonth4LineAmount" forceUppercase="true">
                 <label>Financial Document Month4 Line Amount</label>
-                <shortLabel>Month 4</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -270,11 +250,10 @@
 
             <attribute name="financialDocumentMonth5LineAmount" forceUppercase="true">
                 <label>Financial Document Month5 Line Amount</label>
-                <shortLabel>Month 5</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -286,11 +265,10 @@
 
             <attribute name="financialDocumentMonth6LineAmount" forceUppercase="true">
                 <label>Financial Document Month6 Line Amount</label>
-                <shortLabel>Month 6</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -302,11 +280,10 @@
 
             <attribute name="financialDocumentMonth7LineAmount" forceUppercase="true">
                 <label>Financial Document Month7 Line Amount</label>
-                <shortLabel>Month 7</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -318,11 +295,10 @@
 
             <attribute name="financialDocumentMonth8LineAmount" forceUppercase="true">
                 <label>Financial Document Month8 Line Amount</label>
-                <shortLabel>Month 8</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -334,11 +310,10 @@
 
             <attribute name="financialDocumentMonth9LineAmount" forceUppercase="true">
                 <label>Financial Document Month9 Line Amount</label>
-                <shortLabel>Month 9</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -348,8 +323,8 @@
                 <description>financialDocumentMonth9LineAmount description...</description>
 			</attribute>
 
-            <attribute name="documentNumber" forceUppercase="true">
-                <label>Document Number</label>
+            <attribute name="financialDocumentNumber" forceUppercase="true">
+                <label>Financial Document Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
@@ -359,8 +334,8 @@
                     <text size="16" />
                 </control>
 
-                <summary>documentNumber</summary>
-                <description>documentNumber description...</description>
+                <summary>financialDocumentNumber</summary>
+                <description>financialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="financialObjectCode" forceUppercase="true">

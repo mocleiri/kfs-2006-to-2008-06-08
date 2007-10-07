@@ -28,16 +28,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.AuthorizationException;
-import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.web.struts.form.KualiForm;
 import org.kuali.module.budget.BCConstants;
 import org.kuali.module.budget.bo.BudgetConstructionIntendedIncumbent;
+import org.kuali.module.budget.bo.BudgetConstructionPosition;
 import org.kuali.module.budget.bo.PendingBudgetConstructionAppointmentFunding;
 import org.kuali.module.budget.document.authorization.BudgetConstructionDocumentAuthorizer;
-
+import org.kuali.rice.KNSServiceLocator;
 
 /**
  * This class...
@@ -45,7 +44,7 @@ import org.kuali.module.budget.document.authorization.BudgetConstructionDocument
  * from new class DetailSalarySettingForm and put common code there. Or use something like
  * DetailSalarySettingFormHelper?
  */
-public class IncumbentSalarySettingForm extends DetailSalarySettingForm {
+public class IncumbentSalarySettingForm extends KualiForm {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(IncumbentSalarySettingForm.class);
 
     private BudgetConstructionIntendedIncumbent budgetConstructionIntendedIncumbent;
@@ -77,18 +76,16 @@ public class IncumbentSalarySettingForm extends DetailSalarySettingForm {
     //this also controls where we return the user when done
     private boolean budgetByAccountMode;
 
-    //TODO these should be moved to BudgetConstructionIntendedIncumbent.java to be consistent with
-    //SalarySettingExpansion.java and BudgetConstructionPosition.java totaling
     //totals
     private KualiDecimal csfAmountTotal = new KualiDecimal(0.00);
-    private BigDecimal csfFullTimeEmploymentQuantityTotal = new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR);
-    private BigDecimal csfStandardHoursTotal = new BigDecimal(0).setScale(2,KualiDecimal.ROUND_BEHAVIOR);
+    private BigDecimal csfFullTimeEmploymentQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+    private BigDecimal csfStandardHoursTotal = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN);
     private KualiDecimal appointmentRequestedAmountTotal = new KualiDecimal(0.00);
-    private BigDecimal appointmentRequestedFteQuantityTotal = new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR);
-    private BigDecimal appointmentRequestedStandardHoursTotal = new BigDecimal(0).setScale(2,KualiDecimal.ROUND_BEHAVIOR);
+    private BigDecimal appointmentRequestedFteQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+    private BigDecimal appointmentRequestedStandardHoursTotal = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN);
     private KualiDecimal appointmentRequestedCsfAmountTotal = new KualiDecimal(0.00);
-    private BigDecimal appointmentRequestedCsfFteQuantityTotal = new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR);
-    private BigDecimal appointmentRequestedCsfStandardHoursTotal = new BigDecimal(0).setScale(2,KualiDecimal.ROUND_BEHAVIOR);
+    private BigDecimal appointmentRequestedCsfFteQuantityTotal = new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN);
+    private BigDecimal appointmentRequestedCsfStandardHoursTotal = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN);
 
     public IncumbentSalarySettingForm(){
         super();
@@ -103,8 +100,6 @@ public class IncumbentSalarySettingForm extends DetailSalarySettingForm {
     public void populate(HttpServletRequest request) {
 
         super.populate(request);
-        
-        zeroTotals();
 
         //TODO add insert line populate call here
 
@@ -116,7 +111,7 @@ public class IncumbentSalarySettingForm extends DetailSalarySettingForm {
      * TODO verify this - and calls prepareAccountingLineForValidationAndPersistence on each one.
      * This is called to refresh ref objects for use by validation
      */
-    public void populateBCAFLines(){
+    protected void populateBCAFLines(){
 
         //TODO add bcaf totaling here??
 
@@ -136,10 +131,8 @@ public class IncumbentSalarySettingForm extends DetailSalarySettingForm {
 
 //        final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] { "financialObject", "financialSubObject", "laborObject", "budgetConstructionMonthly"}));
       final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "financialObject", "financialSubObject", "bcnCalculatedSalaryFoundationTracker", "budgetConstructionDuration"}));
-//        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(line, REFRESH_FIELDS);
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(line, REFRESH_FIELDS);
-        
-        addBCAFLineToTotals(line);
+//        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(line, REFRESH_FIELDS);
+        KNSServiceLocator.getPersistenceService().retrieveReferenceObjects(line, REFRESH_FIELDS);
 
     }
 
@@ -336,15 +329,15 @@ public class IncumbentSalarySettingForm extends DetailSalarySettingForm {
      */
     protected void useBCAuthorizer(BudgetConstructionDocumentAuthorizer documentAuthorizer) {
         UniversalUser kualiUser = GlobalVariables.getUserSession().getUniversalUser();
-        
-        if (this.isBudgetByAccountMode()){
-            // user got here by opening a BC doc - check using the entire BC security model checking manager, delegate, orgreviewhierachy
+
+//TODO need to create getEditMode() signature for kualiuser to check if user is an org approver.
+        if (this.getAccountNumber() != null){
             setEditingMode(documentAuthorizer.getEditMode(this.getUniversityFiscalYear(), this.getChartOfAccountsCode(), this.getAccountNumber(), this.getSubAccountNumber(), kualiUser));
         } else {
-            // user got here through organization salary setting - check that the user is a BC org approver somewhere
-            setEditingMode(documentAuthorizer.getEditMode());
+            //this case should handle authorization for Salary Setting by Organization subsystem vector
         }
-        
+
+
 //TODO probably don't need these, editingmode drives expansion screen actions
 //        setDocumentActionFlags(documentAuthorizer.getDocumentActionFlags(document, kualiUser));
     }
@@ -384,16 +377,16 @@ public class IncumbentSalarySettingForm extends DetailSalarySettingForm {
         line.setAppointmentFundingDeleteIndicator(false);
 //TODO remove this will be set when a user selects and sets the positionNumber
 //        line.setAppointmentFundingMonth(bcII.getIuNormalWorkMonths());
-        line.setAppointmentRequestedAmount(new KualiInteger(0));
-        line.setAppointmentRequestedFteQuantity(new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR));
-        line.setAppointmentRequestedTimePercent(new BigDecimal(0).setScale(2,KualiDecimal.ROUND_BEHAVIOR));
-        line.setAppointmentRequestedPayRate(new BigDecimal(0).setScale(2,KualiDecimal.ROUND_BEHAVIOR));
+        line.setAppointmentRequestedAmount(new KualiDecimal(0));
+        line.setAppointmentRequestedFteQuantity(new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentRequestedTimePercent(new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentRequestedPayRate(new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN));
         line.setAppointmentFundingDurationCode(BCConstants.APPOINTMENT_FUNDING_DURATION_DEFAULT);
-        line.setAppointmentRequestedCsfAmount(new KualiInteger(BigDecimal.ZERO));
-        line.setAppointmentRequestedCsfFteQuantity(new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR));
-        line.setAppointmentRequestedCsfTimePercent(new BigDecimal(0).setScale(2,KualiDecimal.ROUND_BEHAVIOR));
-        line.setAppointmentTotalIntendedAmount(new KualiInteger(BigDecimal.ZERO));
-        line.setAppointmentTotalIntendedFteQuantity(new BigDecimal(0).setScale(5,KualiDecimal.ROUND_BEHAVIOR));
+        line.setAppointmentRequestedCsfAmount(new KualiDecimal(0));
+        line.setAppointmentRequestedCsfFteQuantity(new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentRequestedCsfTimePercent(new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_EVEN));
+        line.setAppointmentTotalIntendedAmount(new KualiDecimal(0));
+        line.setAppointmentTotalIntendedFteQuantity(new BigDecimal(0).setScale(5,BigDecimal.ROUND_HALF_EVEN));
         
         
     }

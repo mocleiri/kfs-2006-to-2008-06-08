@@ -15,6 +15,8 @@
  */
 package org.kuali.module.gl.service.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +24,15 @@ import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
 import org.kuali.core.bo.LookupResults;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.service.GlCorrectionProcessOriginEntryService;
 import org.springframework.transaction.annotation.Transactional;
+import sun.font.GlyphLayout.GVData;
 
 /**
  * This implementation of GlCorrectionProcessOriginEntryService uses the database to temporarily store lists of origin entries.
@@ -46,7 +49,7 @@ public class GlCorrectionProcessOriginEntryServiceImpl implements GlCorrectionPr
     /**
      * @see org.kuali.module.gl.service.GlCorrectionProcessOriginEntryService#persistAllEntries(java.lang.String, java.util.List)
      */
-    public void persistAllEntries(String glcpSearchResuiltsSequenceNumber, List<OriginEntryFull> allEntries) throws Exception {
+    public void persistAllEntries(String glcpSearchResuiltsSequenceNumber, List<OriginEntry> allEntries) throws Exception {
         String serializedOriginEntries = new String(Base64.encodeBase64(ObjectUtils.toByteArray(allEntries)));
         
         LookupResults lookupResults = retrieveGlcpAllOriginEntries(glcpSearchResuiltsSequenceNumber);
@@ -55,7 +58,7 @@ public class GlCorrectionProcessOriginEntryServiceImpl implements GlCorrectionPr
             lookupResults.setLookupResultsSequenceNumber(glcpSearchResuiltsSequenceNumber);
             lookupResults.setLookupUniversalUserId(GlobalVariables.getUserSession().getUniversalUser().getPersonUniversalIdentifier());
         }
-        lookupResults.setLookupDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
+        lookupResults.setLookupDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
         lookupResults.setSerializedLookupResults(serializedOriginEntries);
         businessObjectService.save(lookupResults);
     }
@@ -63,12 +66,12 @@ public class GlCorrectionProcessOriginEntryServiceImpl implements GlCorrectionPr
     /**
      * @see org.kuali.module.gl.service.GlCorrectionProcessOriginEntryService#retrieveAllEntries(java.lang.String)
      */
-    public List<OriginEntryFull> retrieveAllEntries(String glcpSearchResuiltsSequenceNumber) throws Exception {
+    public List<OriginEntry> retrieveAllEntries(String glcpSearchResuiltsSequenceNumber) throws Exception {
         LookupResults lookupResults = retrieveGlcpAllOriginEntries(glcpSearchResuiltsSequenceNumber);
         if (lookupResults == null) {
             return null;
         }
-        List<OriginEntryFull> allOEs = (List<OriginEntryFull>) ObjectUtils.fromByteArray(Base64.decodeBase64(lookupResults.getSerializedLookupResults().getBytes()));
+        List<OriginEntry> allOEs = (List<OriginEntry>) ObjectUtils.fromByteArray(Base64.decodeBase64(lookupResults.getSerializedLookupResults().getBytes()));
         return allOEs;
     }
 

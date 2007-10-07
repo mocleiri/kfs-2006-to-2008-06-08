@@ -15,21 +15,23 @@
  */
 package org.kuali.module.chart.rules;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.service.UniversalUserService;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.module.chart.bo.DelegateChangeDocument;
+import org.kuali.module.chart.bo.OrganizationRoutingModelName;
+import org.kuali.module.chart.bo.OrganizationRoutingModel;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.bo.OrganizationRoutingModel;
-import org.kuali.module.chart.bo.OrganizationRoutingModelName;
+import org.kuali.rice.KNSServiceLocator;
 
 public class OrganizationRoutingModelRule extends MaintenanceDocumentRuleBase {
 
@@ -100,13 +102,11 @@ public class OrganizationRoutingModelRule extends MaintenanceDocumentRuleBase {
     protected boolean checkSimpleRules(OrganizationRoutingModelName globalDelegateTemplate) {
         boolean success = true;
         
-        success &= checkModelNameHasAtLeastOneModel(globalDelegateTemplate);
-        
         int line = 0;
         for (OrganizationRoutingModel delegateModel: globalDelegateTemplate.getOrganizationRoutingModel()) {
-            GlobalVariables.getErrorMap().addToErrorPath(MAINTAINABLE_ERROR_PATH+".organizationRoutingModel["+line+"].");
+            GlobalVariables.getErrorMap().addToErrorPath(MAINTAINABLE_ERROR_PATH+"organizationRoutingModel["+line+"].");
             success &= checkSimpleRulesForOrganizationRoutingModel(globalDelegateTemplate, delegateModel);
-            GlobalVariables.getErrorMap().addToErrorPath(MAINTAINABLE_ERROR_PATH+".organizationRoutingModel["+line+"].");
+            GlobalVariables.getErrorMap().addToErrorPath(MAINTAINABLE_ERROR_PATH+"organizationRoutingModel["+line+"].");
             line++;
         }
         return success;
@@ -120,56 +120,21 @@ public class OrganizationRoutingModelRule extends MaintenanceDocumentRuleBase {
     protected boolean checkSimpleRulesForOrganizationRoutingModel(OrganizationRoutingModelName globalDelegateTemplate, OrganizationRoutingModel delegateModel) {
         boolean success = true;
         
-        if (delegateModel.isActive()) {
-            success &= checkDelegateFromAmountPositive(delegateModel);
-            success &= checkDelegateToAmountNotNull(delegateModel);
-            success &= checkDelegateToAmountGreaterThanFromAmount(delegateModel);
-            success &= checkDelegateUserRules(delegateModel);
-            success &= checkPrimaryRoutePerDocType(globalDelegateTemplate, delegateModel);
-        }
-    
+        success &= checkDelegateFromAmountPositive(delegateModel);
+        success &= checkDelegateToAmountNotNull(delegateModel);
+        success &= checkDelegateToAmountGreaterThanFromAmount(delegateModel);
+        success &= checkDelegateUserRules(delegateModel);
+        success &= checkPrimaryRouteOnlyAllowOneAllDocType(globalDelegateTemplate, delegateModel);
+        success &= checkPrimaryRoutePerDocType(globalDelegateTemplate, delegateModel);
+        
         return success;
     }
     
-    /**
-     * This method makes certain that the collection of account delegates in the "mo itdel"
-     * has at least one account delegate template in it.
-     * 
-     * @param globalDelegateTemplate the account delegate model to check
-     * @return true if account delegate model has at least one account delegate template in it
-     */
     protected boolean checkModelNameHasAtLeastOneModel(OrganizationRoutingModelName globalDelegateTemplate) {
         boolean success = true;
         if (globalDelegateTemplate.getOrganizationRoutingModel().size() == 0) {
             success = false;
-            GlobalVariables.getErrorMap().putError(KFSConstants.MAINTENANCE_NEW_MAINTAINABLE+"add.organizationRoutingModel.financialDocumentTypeCode", KFSKeyConstants.ERROR_DOCUMENT_DELEGATE_CHANGE_NO_DELEGATE, new String[0]);
-        }
-        return success;
-    }
-    
-    /**
-     * This method checks that the account delegate model has at least one active "model" within it.
-     * @param globalDelegateTemplate the account delegate model to check
-     * @return true if account delegate model has at least one active model in it.
-     */
-    // method not currently in use, as per Bill's comments in KULRNE-4805
-    protected boolean checkModelNameHasAtLeastOneActiveModel(OrganizationRoutingModelName globalDelegateTemplate) {
-        boolean success = true;
-        int activeModelCount = 0;
-        
-        for (OrganizationRoutingModel mdl: globalDelegateTemplate.getOrganizationRoutingModel()) {
-            if (mdl.isActive()) {
-                activeModelCount++;
-            }
-        }
-        
-        if (activeModelCount == 0) {
-            success = false;
-            if (globalDelegateTemplate.getOrganizationRoutingModel().size() == 0) {
-                GlobalVariables.getErrorMap().putError(KFSConstants.MAINTENANCE_NEW_MAINTAINABLE+"add.organizationRoutingModel.active", KFSKeyConstants.ERROR_DOCUMENT_DELEGATE_CHANGE_NO_ACTIVE_DELEGATE, new String[0]);
-            } else {
-                GlobalVariables.getErrorMap().putError(KFSConstants.MAINTENANCE_NEW_MAINTAINABLE+"organizationRoutingModel[0].active", KFSKeyConstants.ERROR_DOCUMENT_DELEGATE_CHANGE_NO_ACTIVE_DELEGATE, new String[0]);
-            }
+            GlobalVariables.getErrorMap().putError("financialDocumentTypeCode", KFSKeyConstants.ERROR_DOCUMENT_DELEGATE_CHANGE_NO_DELEGATE, new String[0]);
         }
         return success;
     }
@@ -236,7 +201,7 @@ public class OrganizationRoutingModelRule extends MaintenanceDocumentRuleBase {
         
         // refresh account delegate
         try {
-            delegateModel.setAccountDelegate(SpringContext.getBean(UniversalUserService.class).getUniversalUser(delegateModel.getAccountDelegateUniversalId()));
+            delegateModel.setAccountDelegate(KNSServiceLocator.getUniversalUserService().getUniversalUser(delegateModel.getAccountDelegateUniversalId()));
         }
         catch (UserNotFoundException e) {
             if (LOG.isDebugEnabled()) {
@@ -254,15 +219,56 @@ public class OrganizationRoutingModelRule extends MaintenanceDocumentRuleBase {
             UniversalUser user = delegateModel.getAccountDelegate();
     
             // user must be of the allowable statuses (A - Active)
-            if (apcRuleFails(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT_DELEGATE, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
+            if (apcRuleFails(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
                 GlobalVariables.getErrorMap().putError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE, new String[0]);
                 success = false;
             }
     
             // user must be of the allowable types (P - Professional)
-            if (apcRuleFails(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT_DELEGATE, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
+            if (apcRuleFails(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
                 GlobalVariables.getErrorMap().putError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_PROFESSIONAL, new String[0]);
                 success = false;
+            }
+        }
+
+        return success;
+    }
+    
+    /**
+     * 
+     * This method validates the rule that says there can be only one PrimaryRoute delegate on a Global Delegate document if the
+     * docType is ALL. It checks the delegateChangeToTest against the list, to determine whether adding this new
+     * delegateChangeToTest would violate any PrimaryRoute business rule violations.
+     * 
+     * If any of the incoming variables is null or empty, the method will do nothing, and return Null. It will only process the
+     * business rules if there is sufficient data to do so.
+     * 
+     * @param delegateChangeToTest A delegateChange line that you want to test agains the list.
+     * @param delegateChanges A List of delegateChange items that is being tested against.
+     * @return Null if the business rule passes, or an Integer value greater than zero, representing the line that the new line is
+     *         conflicting with
+     * 
+     */
+    protected boolean checkPrimaryRouteOnlyAllowOneAllDocType(OrganizationRoutingModelName globalDelegateTemplate, OrganizationRoutingModel delegateModel) {
+        boolean success = true;
+        
+        // exit immediately if the adding line isnt both Primary and ALL docTypes
+        if (delegateModel == null || globalDelegateTemplate == null || globalDelegateTemplate.getOrganizationRoutingModel().isEmpty()) {
+            return success;
+        }
+        if (!delegateModel.getAccountDelegatePrimaryRoutingIndicator()) {
+            return success;
+        }
+        if (!"ALL".equalsIgnoreCase(delegateModel.getFinancialDocumentTypeCode())) {
+            return success;
+        }
+
+        // at this point, the delegateChange being added is a Primary for ALL docTypes, so we need to
+        // test whether any in the existing list are also Primary, regardless of docType
+        for (OrganizationRoutingModel currDelegateModel: globalDelegateTemplate.getOrganizationRoutingModel()) {
+            if (!delegateModel.equals(currDelegateModel) && currDelegateModel.getAccountDelegatePrimaryRoutingIndicator()) {
+                success = false;
+                GlobalVariables.getErrorMap().putError("accountDelegatePrimaryRoutingIndicator", KFSKeyConstants.ERROR_DOCUMENT_GLOBAL_DELEGATEMAINT_PRIMARY_ROUTE_ALL_TYPES_ALREADY_EXISTS, new String[0]);
             }
         }
 
@@ -272,14 +278,14 @@ public class OrganizationRoutingModelRule extends MaintenanceDocumentRuleBase {
     /**
      * 
      * This method validates the rule that says there can be only one PrimaryRoute delegate for each given docType. It checks the
-     * delegateGlobalToTest against the list, to determine whether adding this new delegateGlobalToTest would violate any
+     * delegateChangeToTest against the list, to determine whether adding this new delegateChangeToTest would violate any
      * PrimaryRoute business rule violations.
      * 
      * If any of the incoming variables is null or empty, the method will do nothing, and return Null. It will only process the
      * business rules if there is sufficient data to do so.
      * 
-     * @param delegateGlobalToTest A delegateGlobal line that you want to test against the list.
-     * @param delegateGlobals A List of delegateGlobal items that is being tested against.
+     * @param delegateChangeToTest A delegateChange line that you want to test against the list.
+     * @param delegateChanges A List of delegateChange items that is being tested against.
      * @return Null if the business rule passes, or an Integer value greater than zero, representing the line that the new line is
      *         conflicting with
      * 
@@ -298,11 +304,11 @@ public class OrganizationRoutingModelRule extends MaintenanceDocumentRuleBase {
             return success;
         }
 
-        // at this point, the delegateGlobal being added is a Primary for ALL docTypes, so we need to
+        // at this point, the delegateChange being added is a Primary for ALL docTypes, so we need to
         // test whether any in the existing list are also Primary, regardless of docType
         String docType = delegateModel.getFinancialDocumentTypeCode();
         for (OrganizationRoutingModel currDelegateModel: globalDelegateTemplate.getOrganizationRoutingModel()) {
-            if (currDelegateModel.isActive() && !delegateModel.equals(currDelegateModel) && currDelegateModel.getAccountDelegatePrimaryRoutingIndicator() && delegateModel.getFinancialDocumentTypeCode().equals(currDelegateModel.getFinancialDocumentTypeCode())) {
+            if (!delegateModel.equals(currDelegateModel) && currDelegateModel.getAccountDelegatePrimaryRoutingIndicator() && delegateModel.getFinancialDocumentTypeCode().equals(currDelegateModel.getFinancialDocumentTypeCode())) {
                 success = false;
                 GlobalVariables.getErrorMap().putError("accountDelegatePrimaryRoutingIndicator", KFSKeyConstants.ERROR_DOCUMENT_GLOBAL_DELEGATEMAINT_PRIMARY_ROUTE_ALREADY_EXISTS_FOR_DOCTYPE, new String[0]);
             }

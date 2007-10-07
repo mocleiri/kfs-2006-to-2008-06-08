@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
@@ -19,12 +28,12 @@ package org.kuali.module.budget.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBase {
+public class BudgetConstructionActiveJobMove extends BusinessObjectBase {
 
 	private String personUniversalIdentifier;
 	private String emplid;
@@ -45,7 +54,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the personUniversalIdentifier attribute.
 	 * 
-	 * @return Returns the personUniversalIdentifier
+	 * @return - Returns the personUniversalIdentifier
 	 * 
 	 */
 	public String getPersonUniversalIdentifier() { 
@@ -55,7 +64,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the personUniversalIdentifier attribute.
 	 * 
-	 * @param personUniversalIdentifier The personUniversalIdentifier to set.
+	 * @param - personUniversalIdentifier The personUniversalIdentifier to set.
 	 * 
 	 */
 	public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
@@ -66,7 +75,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the emplid attribute.
 	 * 
-	 * @return Returns the emplid
+	 * @return - Returns the emplid
 	 * 
 	 */
 	public String getEmplid() { 
@@ -76,7 +85,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the emplid attribute.
 	 * 
-	 * @param emplid The emplid to set.
+	 * @param - emplid The emplid to set.
 	 * 
 	 */
 	public void setEmplid(String emplid) {
@@ -87,7 +96,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the employeeRecord attribute.
 	 * 
-	 * @return Returns the employeeRecord
+	 * @return - Returns the employeeRecord
 	 * 
 	 */
 	public Integer getEmployeeRecord() { 
@@ -97,7 +106,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the employeeRecord attribute.
 	 * 
-	 * @param employeeRecord The employeeRecord to set.
+	 * @param - employeeRecord The employeeRecord to set.
 	 * 
 	 */
 	public void setEmployeeRecord(Integer employeeRecord) {
@@ -108,7 +117,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the effectiveDate attribute.
 	 * 
-	 * @return Returns the effectiveDate
+	 * @return - Returns the effectiveDate
 	 * 
 	 */
 	public Date getEffectiveDate() { 
@@ -118,7 +127,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the effectiveDate attribute.
 	 * 
-	 * @param effectiveDate The effectiveDate to set.
+	 * @param - effectiveDate The effectiveDate to set.
 	 * 
 	 */
 	public void setEffectiveDate(Date effectiveDate) {
@@ -129,7 +138,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the effectiveSequence attribute.
 	 * 
-	 * @return Returns the effectiveSequence
+	 * @return - Returns the effectiveSequence
 	 * 
 	 */
 	public Integer getEffectiveSequence() { 
@@ -139,7 +148,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the effectiveSequence attribute.
 	 * 
-	 * @param effectiveSequence The effectiveSequence to set.
+	 * @param - effectiveSequence The effectiveSequence to set.
 	 * 
 	 */
 	public void setEffectiveSequence(Integer effectiveSequence) {
@@ -150,7 +159,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the positionNumber attribute.
 	 * 
-	 * @return Returns the positionNumber
+	 * @return - Returns the positionNumber
 	 * 
 	 */
 	public String getPositionNumber() { 
@@ -160,7 +169,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the positionNumber attribute.
 	 * 
-	 * @param positionNumber The positionNumber to set.
+	 * @param - positionNumber The positionNumber to set.
 	 * 
 	 */
 	public void setPositionNumber(String positionNumber) {
@@ -171,7 +180,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the employeeStatus attribute.
 	 * 
-	 * @return Returns the employeeStatus
+	 * @return - Returns the employeeStatus
 	 * 
 	 */
 	public String getEmployeeStatus() { 
@@ -181,7 +190,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the employeeStatus attribute.
 	 * 
-	 * @param employeeStatus The employeeStatus to set.
+	 * @param - employeeStatus The employeeStatus to set.
 	 * 
 	 */
 	public void setEmployeeStatus(String employeeStatus) {
@@ -192,7 +201,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Gets the departmentIdentifier attribute.
 	 * 
-	 * @return Returns the departmentIdentifier
+	 * @return - Returns the departmentIdentifier
 	 * 
 	 */
 	public String getDepartmentIdentifier() { 
@@ -202,7 +211,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 	/**
 	 * Sets the departmentIdentifier attribute.
 	 * 
-	 * @param departmentIdentifier The departmentIdentifier to set.
+	 * @param - departmentIdentifier The departmentIdentifier to set.
 	 * 
 	 */
 	public void setDepartmentIdentifier(String departmentIdentifier) {
@@ -211,7 +220,7 @@ public class BudgetConstructionActiveJobMove extends PersistableBusinessObjectBa
 
 
 	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    

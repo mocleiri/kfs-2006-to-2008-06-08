@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
@@ -20,13 +29,13 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Campus;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.module.chart.bo.Campus;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjectBase {
+public class ElectronicInvoiceHeaderInformation extends BusinessObjectBase {
 
 	private Integer invoiceHeaderInformationIdentifier;
 	private Long accountsPayableElectronicInvoiceLoadSummaryIdentifier;
@@ -101,7 +110,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceHeaderInformationIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceHeaderInformationIdentifier
+	 * @return - Returns the invoiceHeaderInformationIdentifier
 	 * 
 	 */
 	public Integer getInvoiceHeaderInformationIdentifier() { 
@@ -111,7 +120,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceHeaderInformationIdentifier attribute.
 	 * 
-	 * @param invoiceHeaderInformationIdentifier The invoiceHeaderInformationIdentifier to set.
+	 * @param - invoiceHeaderInformationIdentifier The invoiceHeaderInformationIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceHeaderInformationIdentifier(Integer invoiceHeaderInformationIdentifier) {
@@ -122,7 +131,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the accountsPayableElectronicInvoiceLoadSummaryIdentifier attribute.
 	 * 
-	 * @return Returns the accountsPayableElectronicInvoiceLoadSummaryIdentifier
+	 * @return - Returns the accountsPayableElectronicInvoiceLoadSummaryIdentifier
 	 * 
 	 */
 	public Long getAccountsPayableElectronicInvoiceLoadSummaryIdentifier() { 
@@ -132,7 +141,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the accountsPayableElectronicInvoiceLoadSummaryIdentifier attribute.
 	 * 
-	 * @param accountsPayableElectronicInvoiceLoadSummaryIdentifier The accountsPayableElectronicInvoiceLoadSummaryIdentifier to set.
+	 * @param - accountsPayableElectronicInvoiceLoadSummaryIdentifier The accountsPayableElectronicInvoiceLoadSummaryIdentifier to set.
 	 * 
 	 */
 	public void setAccountsPayableElectronicInvoiceLoadSummaryIdentifier(Long accountsPayableElectronicInvoiceLoadSummaryIdentifier) {
@@ -143,7 +152,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceProcessDate attribute.
 	 * 
-	 * @return Returns the invoiceProcessDate
+	 * @return - Returns the invoiceProcessDate
 	 * 
 	 */
 	public Date getInvoiceProcessDate() { 
@@ -153,7 +162,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceProcessDate attribute.
 	 * 
-	 * @param invoiceProcessDate The invoiceProcessDate to set.
+	 * @param - invoiceProcessDate The invoiceProcessDate to set.
 	 * 
 	 */
 	public void setInvoiceProcessDate(Date invoiceProcessDate) {
@@ -164,7 +173,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileName attribute.
 	 * 
-	 * @return Returns the invoiceFileName
+	 * @return - Returns the invoiceFileName
 	 * 
 	 */
 	public String getInvoiceFileName() { 
@@ -174,7 +183,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileName attribute.
 	 * 
-	 * @param invoiceFileName The invoiceFileName to set.
+	 * @param - invoiceFileName The invoiceFileName to set.
 	 * 
 	 */
 	public void setInvoiceFileName(String invoiceFileName) {
@@ -185,7 +194,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the vendorDunsNumber attribute.
 	 * 
-	 * @return Returns the vendorDunsNumber
+	 * @return - Returns the vendorDunsNumber
 	 * 
 	 */
 	public String getVendorDunsNumber() { 
@@ -195,7 +204,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the vendorDunsNumber attribute.
 	 * 
-	 * @param vendorDunsNumber The vendorDunsNumber to set.
+	 * @param - vendorDunsNumber The vendorDunsNumber to set.
 	 * 
 	 */
 	public void setVendorDunsNumber(String vendorDunsNumber) {
@@ -206,7 +215,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the vendorHeaderGeneratedIdentifier attribute.
 	 * 
-	 * @return Returns the vendorHeaderGeneratedIdentifier
+	 * @return - Returns the vendorHeaderGeneratedIdentifier
 	 * 
 	 */
 	public Integer getVendorHeaderGeneratedIdentifier() { 
@@ -216,7 +225,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the vendorHeaderGeneratedIdentifier attribute.
 	 * 
-	 * @param vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
+	 * @param - vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
 	 * 
 	 */
 	public void setVendorHeaderGeneratedIdentifier(Integer vendorHeaderGeneratedIdentifier) {
@@ -227,7 +236,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the vendorDetailAssignedIdentifier attribute.
 	 * 
-	 * @return Returns the vendorDetailAssignedIdentifier
+	 * @return - Returns the vendorDetailAssignedIdentifier
 	 * 
 	 */
 	public Integer getVendorDetailAssignedIdentifier() { 
@@ -237,7 +246,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the vendorDetailAssignedIdentifier attribute.
 	 * 
-	 * @param vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
+	 * @param - vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
 	 * 
 	 */
 	public void setVendorDetailAssignedIdentifier(Integer vendorDetailAssignedIdentifier) {
@@ -248,7 +257,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileDate attribute.
 	 * 
-	 * @return Returns the invoiceFileDate
+	 * @return - Returns the invoiceFileDate
 	 * 
 	 */
 	public String getInvoiceFileDate() { 
@@ -258,7 +267,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileDate attribute.
 	 * 
-	 * @param invoiceFileDate The invoiceFileDate to set.
+	 * @param - invoiceFileDate The invoiceFileDate to set.
 	 * 
 	 */
 	public void setInvoiceFileDate(String invoiceFileDate) {
@@ -269,7 +278,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileNumber attribute.
 	 * 
-	 * @return Returns the invoiceFileNumber
+	 * @return - Returns the invoiceFileNumber
 	 * 
 	 */
 	public String getInvoiceFileNumber() { 
@@ -279,7 +288,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileNumber attribute.
 	 * 
-	 * @param invoiceFileNumber The invoiceFileNumber to set.
+	 * @param - invoiceFileNumber The invoiceFileNumber to set.
 	 * 
 	 */
 	public void setInvoiceFileNumber(String invoiceFileNumber) {
@@ -290,7 +299,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFilePurposeIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceFilePurposeIdentifier
+	 * @return - Returns the invoiceFilePurposeIdentifier
 	 * 
 	 */
 	public String getInvoiceFilePurposeIdentifier() { 
@@ -300,7 +309,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFilePurposeIdentifier attribute.
 	 * 
-	 * @param invoiceFilePurposeIdentifier The invoiceFilePurposeIdentifier to set.
+	 * @param - invoiceFilePurposeIdentifier The invoiceFilePurposeIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceFilePurposeIdentifier(String invoiceFilePurposeIdentifier) {
@@ -311,7 +320,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileOperationIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceFileOperationIdentifier
+	 * @return - Returns the invoiceFileOperationIdentifier
 	 * 
 	 */
 	public String getInvoiceFileOperationIdentifier() { 
@@ -321,7 +330,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileOperationIdentifier attribute.
 	 * 
-	 * @param invoiceFileOperationIdentifier The invoiceFileOperationIdentifier to set.
+	 * @param - invoiceFileOperationIdentifier The invoiceFileOperationIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceFileOperationIdentifier(String invoiceFileOperationIdentifier) {
@@ -332,7 +341,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileDeploymentModeValue attribute.
 	 * 
-	 * @return Returns the invoiceFileDeploymentModeValue
+	 * @return - Returns the invoiceFileDeploymentModeValue
 	 * 
 	 */
 	public String getInvoiceFileDeploymentModeValue() { 
@@ -342,7 +351,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileDeploymentModeValue attribute.
 	 * 
-	 * @param invoiceFileDeploymentModeValue The invoiceFileDeploymentModeValue to set.
+	 * @param - invoiceFileDeploymentModeValue The invoiceFileDeploymentModeValue to set.
 	 * 
 	 */
 	public void setInvoiceFileDeploymentModeValue(String invoiceFileDeploymentModeValue) {
@@ -353,7 +362,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileHeaderTypeIndicator attribute.
 	 * 
-	 * @return Returns the invoiceFileHeaderTypeIndicator
+	 * @return - Returns the invoiceFileHeaderTypeIndicator
 	 * 
 	 */
 	public boolean isInvoiceFileHeaderTypeIndicator() { 
@@ -364,7 +373,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileHeaderTypeIndicator attribute.
 	 * 
-	 * @param invoiceFileHeaderTypeIndicator The invoiceFileHeaderTypeIndicator to set.
+	 * @param - invoiceFileHeaderTypeIndicator The invoiceFileHeaderTypeIndicator to set.
 	 * 
 	 */
 	public void setInvoiceFileHeaderTypeIndicator(boolean invoiceFileHeaderTypeIndicator) {
@@ -375,7 +384,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileInformationOnlyIndicator attribute.
 	 * 
-	 * @return Returns the invoiceFileInformationOnlyIndicator
+	 * @return - Returns the invoiceFileInformationOnlyIndicator
 	 * 
 	 */
 	public boolean isInvoiceFileInformationOnlyIndicator() { 
@@ -386,7 +395,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileInformationOnlyIndicator attribute.
 	 * 
-	 * @param invoiceFileInformationOnlyIndicator The invoiceFileInformationOnlyIndicator to set.
+	 * @param - invoiceFileInformationOnlyIndicator The invoiceFileInformationOnlyIndicator to set.
 	 * 
 	 */
 	public void setInvoiceFileInformationOnlyIndicator(boolean invoiceFileInformationOnlyIndicator) {
@@ -397,7 +406,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileTaxInLineIndicator attribute.
 	 * 
-	 * @return Returns the invoiceFileTaxInLineIndicator
+	 * @return - Returns the invoiceFileTaxInLineIndicator
 	 * 
 	 */
 	public boolean isInvoiceFileTaxInLineIndicator() { 
@@ -408,7 +417,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileTaxInLineIndicator attribute.
 	 * 
-	 * @param invoiceFileTaxInLineIndicator The invoiceFileTaxInLineIndicator to set.
+	 * @param - invoiceFileTaxInLineIndicator The invoiceFileTaxInLineIndicator to set.
 	 * 
 	 */
 	public void setInvoiceFileTaxInLineIndicator(boolean invoiceFileTaxInLineIndicator) {
@@ -419,7 +428,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileSpecialHandlingInLineIndicator attribute.
 	 * 
-	 * @return Returns the invoiceFileSpecialHandlingInLineIndicator
+	 * @return - Returns the invoiceFileSpecialHandlingInLineIndicator
 	 * 
 	 */
 	public boolean isInvoiceFileSpecialHandlingInLineIndicator() { 
@@ -430,7 +439,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileSpecialHandlingInLineIndicator attribute.
 	 * 
-	 * @param invoiceFileSpecialHandlingInLineIndicator The invoiceFileSpecialHandlingInLineIndicator to set.
+	 * @param - invoiceFileSpecialHandlingInLineIndicator The invoiceFileSpecialHandlingInLineIndicator to set.
 	 * 
 	 */
 	public void setInvoiceFileSpecialHandlingInLineIndicator(boolean invoiceFileSpecialHandlingInLineIndicator) {
@@ -441,7 +450,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileShippingInLineIndicator attribute.
 	 * 
-	 * @return Returns the invoiceFileShippingInLineIndicator
+	 * @return - Returns the invoiceFileShippingInLineIndicator
 	 * 
 	 */
 	public boolean isInvoiceFileShippingInLineIndicator() { 
@@ -452,7 +461,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileShippingInLineIndicator attribute.
 	 * 
-	 * @param invoiceFileShippingInLineIndicator The invoiceFileShippingInLineIndicator to set.
+	 * @param - invoiceFileShippingInLineIndicator The invoiceFileShippingInLineIndicator to set.
 	 * 
 	 */
 	public void setInvoiceFileShippingInLineIndicator(boolean invoiceFileShippingInLineIndicator) {
@@ -463,7 +472,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceFileDiscountInLineIndicator attribute.
 	 * 
-	 * @return Returns the invoiceFileDiscountInLineIndicator
+	 * @return - Returns the invoiceFileDiscountInLineIndicator
 	 * 
 	 */
 	public boolean isInvoiceFileDiscountInLineIndicator() { 
@@ -474,7 +483,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceFileDiscountInLineIndicator attribute.
 	 * 
-	 * @param invoiceFileDiscountInLineIndicator The invoiceFileDiscountInLineIndicator to set.
+	 * @param - invoiceFileDiscountInLineIndicator The invoiceFileDiscountInLineIndicator to set.
 	 * 
 	 */
 	public void setInvoiceFileDiscountInLineIndicator(boolean invoiceFileDiscountInLineIndicator) {
@@ -485,7 +494,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderReferenceOrderIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceOrderReferenceOrderIdentifier
+	 * @return - Returns the invoiceOrderReferenceOrderIdentifier
 	 * 
 	 */
 	public String getInvoiceOrderReferenceOrderIdentifier() { 
@@ -495,7 +504,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderReferenceOrderIdentifier attribute.
 	 * 
-	 * @param invoiceOrderReferenceOrderIdentifier The invoiceOrderReferenceOrderIdentifier to set.
+	 * @param - invoiceOrderReferenceOrderIdentifier The invoiceOrderReferenceOrderIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceOrderReferenceOrderIdentifier(String invoiceOrderReferenceOrderIdentifier) {
@@ -506,7 +515,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderReferenceDocumentReferencePayloadIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceOrderReferenceDocumentReferencePayloadIdentifier
+	 * @return - Returns the invoiceOrderReferenceDocumentReferencePayloadIdentifier
 	 * 
 	 */
 	public String getInvoiceOrderReferenceDocumentReferencePayloadIdentifier() { 
@@ -516,7 +525,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderReferenceDocumentReferencePayloadIdentifier attribute.
 	 * 
-	 * @param invoiceOrderReferenceDocumentReferencePayloadIdentifier The invoiceOrderReferenceDocumentReferencePayloadIdentifier to set.
+	 * @param - invoiceOrderReferenceDocumentReferencePayloadIdentifier The invoiceOrderReferenceDocumentReferencePayloadIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceOrderReferenceDocumentReferencePayloadIdentifier(String invoiceOrderReferenceDocumentReferencePayloadIdentifier) {
@@ -527,7 +536,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderReferenceDocumentReferenceText attribute.
 	 * 
-	 * @return Returns the invoiceOrderReferenceDocumentReferenceText
+	 * @return - Returns the invoiceOrderReferenceDocumentReferenceText
 	 * 
 	 */
 	public String getInvoiceOrderReferenceDocumentReferenceText() { 
@@ -537,7 +546,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderReferenceDocumentReferenceText attribute.
 	 * 
-	 * @param invoiceOrderReferenceDocumentReferenceText The invoiceOrderReferenceDocumentReferenceText to set.
+	 * @param - invoiceOrderReferenceDocumentReferenceText The invoiceOrderReferenceDocumentReferenceText to set.
 	 * 
 	 */
 	public void setInvoiceOrderReferenceDocumentReferenceText(String invoiceOrderReferenceDocumentReferenceText) {
@@ -548,7 +557,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderMasterAgreementReferenceIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceOrderMasterAgreementReferenceIdentifier
+	 * @return - Returns the invoiceOrderMasterAgreementReferenceIdentifier
 	 * 
 	 */
 	public String getInvoiceOrderMasterAgreementReferenceIdentifier() { 
@@ -558,7 +567,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderMasterAgreementReferenceIdentifier attribute.
 	 * 
-	 * @param invoiceOrderMasterAgreementReferenceIdentifier The invoiceOrderMasterAgreementReferenceIdentifier to set.
+	 * @param - invoiceOrderMasterAgreementReferenceIdentifier The invoiceOrderMasterAgreementReferenceIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceOrderMasterAgreementReferenceIdentifier(String invoiceOrderMasterAgreementReferenceIdentifier) {
@@ -569,7 +578,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderMasterAgreementReferenceDate attribute.
 	 * 
-	 * @return Returns the invoiceOrderMasterAgreementReferenceDate
+	 * @return - Returns the invoiceOrderMasterAgreementReferenceDate
 	 * 
 	 */
 	public String getInvoiceOrderMasterAgreementReferenceDate() { 
@@ -579,7 +588,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderMasterAgreementReferenceDate attribute.
 	 * 
-	 * @param invoiceOrderMasterAgreementReferenceDate The invoiceOrderMasterAgreementReferenceDate to set.
+	 * @param - invoiceOrderMasterAgreementReferenceDate The invoiceOrderMasterAgreementReferenceDate to set.
 	 * 
 	 */
 	public void setInvoiceOrderMasterAgreementReferenceDate(String invoiceOrderMasterAgreementReferenceDate) {
@@ -590,7 +599,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderMasterAgreementInformationIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceOrderMasterAgreementInformationIdentifier
+	 * @return - Returns the invoiceOrderMasterAgreementInformationIdentifier
 	 * 
 	 */
 	public String getInvoiceOrderMasterAgreementInformationIdentifier() { 
@@ -600,7 +609,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderMasterAgreementInformationIdentifier attribute.
 	 * 
-	 * @param invoiceOrderMasterAgreementInformationIdentifier The invoiceOrderMasterAgreementInformationIdentifier to set.
+	 * @param - invoiceOrderMasterAgreementInformationIdentifier The invoiceOrderMasterAgreementInformationIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceOrderMasterAgreementInformationIdentifier(String invoiceOrderMasterAgreementInformationIdentifier) {
@@ -611,7 +620,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderMasterAgreementInformationDate attribute.
 	 * 
-	 * @return Returns the invoiceOrderMasterAgreementInformationDate
+	 * @return - Returns the invoiceOrderMasterAgreementInformationDate
 	 * 
 	 */
 	public String getInvoiceOrderMasterAgreementInformationDate() { 
@@ -621,7 +630,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderMasterAgreementInformationDate attribute.
 	 * 
-	 * @param invoiceOrderMasterAgreementInformationDate The invoiceOrderMasterAgreementInformationDate to set.
+	 * @param - invoiceOrderMasterAgreementInformationDate The invoiceOrderMasterAgreementInformationDate to set.
 	 * 
 	 */
 	public void setInvoiceOrderMasterAgreementInformationDate(String invoiceOrderMasterAgreementInformationDate) {
@@ -632,7 +641,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderPurchaseOrderIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceOrderPurchaseOrderIdentifier
+	 * @return - Returns the invoiceOrderPurchaseOrderIdentifier
 	 * 
 	 */
 	public String getInvoiceOrderPurchaseOrderIdentifier() { 
@@ -642,7 +651,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderPurchaseOrderIdentifier attribute.
 	 * 
-	 * @param invoiceOrderPurchaseOrderIdentifier The invoiceOrderPurchaseOrderIdentifier to set.
+	 * @param - invoiceOrderPurchaseOrderIdentifier The invoiceOrderPurchaseOrderIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceOrderPurchaseOrderIdentifier(String invoiceOrderPurchaseOrderIdentifier) {
@@ -653,7 +662,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderPurchaseOrderDate attribute.
 	 * 
-	 * @return Returns the invoiceOrderPurchaseOrderDate
+	 * @return - Returns the invoiceOrderPurchaseOrderDate
 	 * 
 	 */
 	public String getInvoiceOrderPurchaseOrderDate() { 
@@ -663,7 +672,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderPurchaseOrderDate attribute.
 	 * 
-	 * @param invoiceOrderPurchaseOrderDate The invoiceOrderPurchaseOrderDate to set.
+	 * @param - invoiceOrderPurchaseOrderDate The invoiceOrderPurchaseOrderDate to set.
 	 * 
 	 */
 	public void setInvoiceOrderPurchaseOrderDate(String invoiceOrderPurchaseOrderDate) {
@@ -674,7 +683,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceOrderSupplierOrderInformationIdentifier attribute.
 	 * 
-	 * @return Returns the invoiceOrderSupplierOrderInformationIdentifier
+	 * @return - Returns the invoiceOrderSupplierOrderInformationIdentifier
 	 * 
 	 */
 	public String getInvoiceOrderSupplierOrderInformationIdentifier() { 
@@ -684,7 +693,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceOrderSupplierOrderInformationIdentifier attribute.
 	 * 
-	 * @param invoiceOrderSupplierOrderInformationIdentifier The invoiceOrderSupplierOrderInformationIdentifier to set.
+	 * @param - invoiceOrderSupplierOrderInformationIdentifier The invoiceOrderSupplierOrderInformationIdentifier to set.
 	 * 
 	 */
 	public void setInvoiceOrderSupplierOrderInformationIdentifier(String invoiceOrderSupplierOrderInformationIdentifier) {
@@ -695,7 +704,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the epicPurchaseOrderIdentifier attribute.
 	 * 
-	 * @return Returns the epicPurchaseOrderIdentifier
+	 * @return - Returns the epicPurchaseOrderIdentifier
 	 * 
 	 */
 	public Integer getEpicPurchaseOrderIdentifier() { 
@@ -705,7 +714,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the epicPurchaseOrderIdentifier attribute.
 	 * 
-	 * @param epicPurchaseOrderIdentifier The epicPurchaseOrderIdentifier to set.
+	 * @param - epicPurchaseOrderIdentifier The epicPurchaseOrderIdentifier to set.
 	 * 
 	 */
 	public void setEpicPurchaseOrderIdentifier(Integer epicPurchaseOrderIdentifier) {
@@ -716,7 +725,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemSubTotalAmount attribute.
 	 * 
-	 * @return Returns the invoiceItemSubTotalAmount
+	 * @return - Returns the invoiceItemSubTotalAmount
 	 * 
 	 */
 	public BigDecimal getInvoiceItemSubTotalAmount() { 
@@ -726,7 +735,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemSubTotalAmount attribute.
 	 * 
-	 * @param invoiceItemSubTotalAmount The invoiceItemSubTotalAmount to set.
+	 * @param - invoiceItemSubTotalAmount The invoiceItemSubTotalAmount to set.
 	 * 
 	 */
 	public void setInvoiceItemSubTotalAmount(BigDecimal invoiceItemSubTotalAmount) {
@@ -737,7 +746,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemSubTotalCurrencyCode attribute.
 	 * 
-	 * @return Returns the invoiceItemSubTotalCurrencyCode
+	 * @return - Returns the invoiceItemSubTotalCurrencyCode
 	 * 
 	 */
 	public String getInvoiceItemSubTotalCurrencyCode() { 
@@ -747,7 +756,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemSubTotalCurrencyCode attribute.
 	 * 
-	 * @param invoiceItemSubTotalCurrencyCode The invoiceItemSubTotalCurrencyCode to set.
+	 * @param - invoiceItemSubTotalCurrencyCode The invoiceItemSubTotalCurrencyCode to set.
 	 * 
 	 */
 	public void setInvoiceItemSubTotalCurrencyCode(String invoiceItemSubTotalCurrencyCode) {
@@ -758,7 +767,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemSpecialHandlingAmount attribute.
 	 * 
-	 * @return Returns the invoiceItemSpecialHandlingAmount
+	 * @return - Returns the invoiceItemSpecialHandlingAmount
 	 * 
 	 */
 	public BigDecimal getInvoiceItemSpecialHandlingAmount() { 
@@ -768,7 +777,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemSpecialHandlingAmount attribute.
 	 * 
-	 * @param invoiceItemSpecialHandlingAmount The invoiceItemSpecialHandlingAmount to set.
+	 * @param - invoiceItemSpecialHandlingAmount The invoiceItemSpecialHandlingAmount to set.
 	 * 
 	 */
 	public void setInvoiceItemSpecialHandlingAmount(BigDecimal invoiceItemSpecialHandlingAmount) {
@@ -779,7 +788,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemSpecialHandlingCurrencyCode attribute.
 	 * 
-	 * @return Returns the invoiceItemSpecialHandlingCurrencyCode
+	 * @return - Returns the invoiceItemSpecialHandlingCurrencyCode
 	 * 
 	 */
 	public String getInvoiceItemSpecialHandlingCurrencyCode() { 
@@ -789,7 +798,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemSpecialHandlingCurrencyCode attribute.
 	 * 
-	 * @param invoiceItemSpecialHandlingCurrencyCode The invoiceItemSpecialHandlingCurrencyCode to set.
+	 * @param - invoiceItemSpecialHandlingCurrencyCode The invoiceItemSpecialHandlingCurrencyCode to set.
 	 * 
 	 */
 	public void setInvoiceItemSpecialHandlingCurrencyCode(String invoiceItemSpecialHandlingCurrencyCode) {
@@ -800,7 +809,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemShippingAmount attribute.
 	 * 
-	 * @return Returns the invoiceItemShippingAmount
+	 * @return - Returns the invoiceItemShippingAmount
 	 * 
 	 */
 	public BigDecimal getInvoiceItemShippingAmount() { 
@@ -810,7 +819,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemShippingAmount attribute.
 	 * 
-	 * @param invoiceItemShippingAmount The invoiceItemShippingAmount to set.
+	 * @param - invoiceItemShippingAmount The invoiceItemShippingAmount to set.
 	 * 
 	 */
 	public void setInvoiceItemShippingAmount(BigDecimal invoiceItemShippingAmount) {
@@ -821,7 +830,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemShippingCurrencyCode attribute.
 	 * 
-	 * @return Returns the invoiceItemShippingCurrencyCode
+	 * @return - Returns the invoiceItemShippingCurrencyCode
 	 * 
 	 */
 	public String getInvoiceItemShippingCurrencyCode() { 
@@ -831,7 +840,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemShippingCurrencyCode attribute.
 	 * 
-	 * @param invoiceItemShippingCurrencyCode The invoiceItemShippingCurrencyCode to set.
+	 * @param - invoiceItemShippingCurrencyCode The invoiceItemShippingCurrencyCode to set.
 	 * 
 	 */
 	public void setInvoiceItemShippingCurrencyCode(String invoiceItemShippingCurrencyCode) {
@@ -842,7 +851,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemShippingDescription attribute.
 	 * 
-	 * @return Returns the invoiceItemShippingDescription
+	 * @return - Returns the invoiceItemShippingDescription
 	 * 
 	 */
 	public String getInvoiceItemShippingDescription() { 
@@ -852,7 +861,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemShippingDescription attribute.
 	 * 
-	 * @param invoiceItemShippingDescription The invoiceItemShippingDescription to set.
+	 * @param - invoiceItemShippingDescription The invoiceItemShippingDescription to set.
 	 * 
 	 */
 	public void setInvoiceItemShippingDescription(String invoiceItemShippingDescription) {
@@ -863,7 +872,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemTaxAmount attribute.
 	 * 
-	 * @return Returns the invoiceItemTaxAmount
+	 * @return - Returns the invoiceItemTaxAmount
 	 * 
 	 */
 	public BigDecimal getInvoiceItemTaxAmount() { 
@@ -873,7 +882,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemTaxAmount attribute.
 	 * 
-	 * @param invoiceItemTaxAmount The invoiceItemTaxAmount to set.
+	 * @param - invoiceItemTaxAmount The invoiceItemTaxAmount to set.
 	 * 
 	 */
 	public void setInvoiceItemTaxAmount(BigDecimal invoiceItemTaxAmount) {
@@ -884,7 +893,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemTaxCurrencyCode attribute.
 	 * 
-	 * @return Returns the invoiceItemTaxCurrencyCode
+	 * @return - Returns the invoiceItemTaxCurrencyCode
 	 * 
 	 */
 	public String getInvoiceItemTaxCurrencyCode() { 
@@ -894,7 +903,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemTaxCurrencyCode attribute.
 	 * 
-	 * @param invoiceItemTaxCurrencyCode The invoiceItemTaxCurrencyCode to set.
+	 * @param - invoiceItemTaxCurrencyCode The invoiceItemTaxCurrencyCode to set.
 	 * 
 	 */
 	public void setInvoiceItemTaxCurrencyCode(String invoiceItemTaxCurrencyCode) {
@@ -905,7 +914,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemTaxDescription attribute.
 	 * 
-	 * @return Returns the invoiceItemTaxDescription
+	 * @return - Returns the invoiceItemTaxDescription
 	 * 
 	 */
 	public String getInvoiceItemTaxDescription() { 
@@ -915,7 +924,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemTaxDescription attribute.
 	 * 
-	 * @param invoiceItemTaxDescription The invoiceItemTaxDescription to set.
+	 * @param - invoiceItemTaxDescription The invoiceItemTaxDescription to set.
 	 * 
 	 */
 	public void setInvoiceItemTaxDescription(String invoiceItemTaxDescription) {
@@ -926,7 +935,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemGrossAmount attribute.
 	 * 
-	 * @return Returns the invoiceItemGrossAmount
+	 * @return - Returns the invoiceItemGrossAmount
 	 * 
 	 */
 	public BigDecimal getInvoiceItemGrossAmount() { 
@@ -936,7 +945,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemGrossAmount attribute.
 	 * 
-	 * @param invoiceItemGrossAmount The invoiceItemGrossAmount to set.
+	 * @param - invoiceItemGrossAmount The invoiceItemGrossAmount to set.
 	 * 
 	 */
 	public void setInvoiceItemGrossAmount(BigDecimal invoiceItemGrossAmount) {
@@ -947,7 +956,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemGrossCurrencyCode attribute.
 	 * 
-	 * @return Returns the invoiceItemGrossCurrencyCode
+	 * @return - Returns the invoiceItemGrossCurrencyCode
 	 * 
 	 */
 	public String getInvoiceItemGrossCurrencyCode() { 
@@ -957,7 +966,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemGrossCurrencyCode attribute.
 	 * 
-	 * @param invoiceItemGrossCurrencyCode The invoiceItemGrossCurrencyCode to set.
+	 * @param - invoiceItemGrossCurrencyCode The invoiceItemGrossCurrencyCode to set.
 	 * 
 	 */
 	public void setInvoiceItemGrossCurrencyCode(String invoiceItemGrossCurrencyCode) {
@@ -968,7 +977,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemDiscountAmount attribute.
 	 * 
-	 * @return Returns the invoiceItemDiscountAmount
+	 * @return - Returns the invoiceItemDiscountAmount
 	 * 
 	 */
 	public BigDecimal getInvoiceItemDiscountAmount() { 
@@ -978,7 +987,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemDiscountAmount attribute.
 	 * 
-	 * @param invoiceItemDiscountAmount The invoiceItemDiscountAmount to set.
+	 * @param - invoiceItemDiscountAmount The invoiceItemDiscountAmount to set.
 	 * 
 	 */
 	public void setInvoiceItemDiscountAmount(BigDecimal invoiceItemDiscountAmount) {
@@ -989,7 +998,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemDiscountCurrencyCode attribute.
 	 * 
-	 * @return Returns the invoiceItemDiscountCurrencyCode
+	 * @return - Returns the invoiceItemDiscountCurrencyCode
 	 * 
 	 */
 	public String getInvoiceItemDiscountCurrencyCode() { 
@@ -999,7 +1008,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemDiscountCurrencyCode attribute.
 	 * 
-	 * @param invoiceItemDiscountCurrencyCode The invoiceItemDiscountCurrencyCode to set.
+	 * @param - invoiceItemDiscountCurrencyCode The invoiceItemDiscountCurrencyCode to set.
 	 * 
 	 */
 	public void setInvoiceItemDiscountCurrencyCode(String invoiceItemDiscountCurrencyCode) {
@@ -1010,7 +1019,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemNetAmount attribute.
 	 * 
-	 * @return Returns the invoiceItemNetAmount
+	 * @return - Returns the invoiceItemNetAmount
 	 * 
 	 */
 	public BigDecimal getInvoiceItemNetAmount() { 
@@ -1020,7 +1029,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemNetAmount attribute.
 	 * 
-	 * @param invoiceItemNetAmount The invoiceItemNetAmount to set.
+	 * @param - invoiceItemNetAmount The invoiceItemNetAmount to set.
 	 * 
 	 */
 	public void setInvoiceItemNetAmount(BigDecimal invoiceItemNetAmount) {
@@ -1031,7 +1040,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceItemNetCurrencyCode attribute.
 	 * 
-	 * @return Returns the invoiceItemNetCurrencyCode
+	 * @return - Returns the invoiceItemNetCurrencyCode
 	 * 
 	 */
 	public String getInvoiceItemNetCurrencyCode() { 
@@ -1041,7 +1050,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceItemNetCurrencyCode attribute.
 	 * 
-	 * @param invoiceItemNetCurrencyCode The invoiceItemNetCurrencyCode to set.
+	 * @param - invoiceItemNetCurrencyCode The invoiceItemNetCurrencyCode to set.
 	 * 
 	 */
 	public void setInvoiceItemNetCurrencyCode(String invoiceItemNetCurrencyCode) {
@@ -1052,7 +1061,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceRejectExtractDate attribute.
 	 * 
-	 * @return Returns the invoiceRejectExtractDate
+	 * @return - Returns the invoiceRejectExtractDate
 	 * 
 	 */
 	public Date getInvoiceRejectExtractDate() { 
@@ -1062,7 +1071,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceRejectExtractDate attribute.
 	 * 
-	 * @param invoiceRejectExtractDate The invoiceRejectExtractDate to set.
+	 * @param - invoiceRejectExtractDate The invoiceRejectExtractDate to set.
 	 * 
 	 */
 	public void setInvoiceRejectExtractDate(Date invoiceRejectExtractDate) {
@@ -1073,7 +1082,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the epicPurchaseOrderDeliveryCampusCode attribute.
 	 * 
-	 * @return Returns the epicPurchaseOrderDeliveryCampusCode
+	 * @return - Returns the epicPurchaseOrderDeliveryCampusCode
 	 * 
 	 */
 	public String getEpicPurchaseOrderDeliveryCampusCode() { 
@@ -1083,7 +1092,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the epicPurchaseOrderDeliveryCampusCode attribute.
 	 * 
-	 * @param epicPurchaseOrderDeliveryCampusCode The epicPurchaseOrderDeliveryCampusCode to set.
+	 * @param - epicPurchaseOrderDeliveryCampusCode The epicPurchaseOrderDeliveryCampusCode to set.
 	 * 
 	 */
 	public void setEpicPurchaseOrderDeliveryCampusCode(String epicPurchaseOrderDeliveryCampusCode) {
@@ -1094,7 +1103,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipDate attribute.
 	 * 
-	 * @return Returns the invoiceShipDate
+	 * @return - Returns the invoiceShipDate
 	 * 
 	 */
 	public Date getInvoiceShipDate() { 
@@ -1104,7 +1113,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipDate attribute.
 	 * 
-	 * @param invoiceShipDate The invoiceShipDate to set.
+	 * @param - invoiceShipDate The invoiceShipDate to set.
 	 * 
 	 */
 	public void setInvoiceShipDate(Date invoiceShipDate) {
@@ -1115,7 +1124,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceAddressName attribute.
 	 * 
-	 * @return Returns the invoiceAddressName
+	 * @return - Returns the invoiceAddressName
 	 * 
 	 */
 	public String getInvoiceAddressName() { 
@@ -1125,7 +1134,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceAddressName attribute.
 	 * 
-	 * @param invoiceAddressName The invoiceAddressName to set.
+	 * @param - invoiceAddressName The invoiceAddressName to set.
 	 * 
 	 */
 	public void setInvoiceAddressName(String invoiceAddressName) {
@@ -1136,7 +1145,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipToLine1Address attribute.
 	 * 
-	 * @return Returns the invoiceShipToLine1Address
+	 * @return - Returns the invoiceShipToLine1Address
 	 * 
 	 */
 	public String getInvoiceShipToLine1Address() { 
@@ -1146,7 +1155,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipToLine1Address attribute.
 	 * 
-	 * @param invoiceShipToLine1Address The invoiceShipToLine1Address to set.
+	 * @param - invoiceShipToLine1Address The invoiceShipToLine1Address to set.
 	 * 
 	 */
 	public void setInvoiceShipToLine1Address(String invoiceShipToLine1Address) {
@@ -1157,7 +1166,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipToLine2Address attribute.
 	 * 
-	 * @return Returns the invoiceShipToLine2Address
+	 * @return - Returns the invoiceShipToLine2Address
 	 * 
 	 */
 	public String getInvoiceShipToLine2Address() { 
@@ -1167,7 +1176,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipToLine2Address attribute.
 	 * 
-	 * @param invoiceShipToLine2Address The invoiceShipToLine2Address to set.
+	 * @param - invoiceShipToLine2Address The invoiceShipToLine2Address to set.
 	 * 
 	 */
 	public void setInvoiceShipToLine2Address(String invoiceShipToLine2Address) {
@@ -1178,7 +1187,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipToLine3Address attribute.
 	 * 
-	 * @return Returns the invoiceShipToLine3Address
+	 * @return - Returns the invoiceShipToLine3Address
 	 * 
 	 */
 	public String getInvoiceShipToLine3Address() { 
@@ -1188,7 +1197,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipToLine3Address attribute.
 	 * 
-	 * @param invoiceShipToLine3Address The invoiceShipToLine3Address to set.
+	 * @param - invoiceShipToLine3Address The invoiceShipToLine3Address to set.
 	 * 
 	 */
 	public void setInvoiceShipToLine3Address(String invoiceShipToLine3Address) {
@@ -1199,7 +1208,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceCustomerNumber attribute.
 	 * 
-	 * @return Returns the invoiceCustomerNumber
+	 * @return - Returns the invoiceCustomerNumber
 	 * 
 	 */
 	public String getInvoiceCustomerNumber() { 
@@ -1209,7 +1218,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceCustomerNumber attribute.
 	 * 
-	 * @param invoiceCustomerNumber The invoiceCustomerNumber to set.
+	 * @param - invoiceCustomerNumber The invoiceCustomerNumber to set.
 	 * 
 	 */
 	public void setInvoiceCustomerNumber(String invoiceCustomerNumber) {
@@ -1220,7 +1229,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipToStateCode attribute.
 	 * 
-	 * @return Returns the invoiceShipToStateCode
+	 * @return - Returns the invoiceShipToStateCode
 	 * 
 	 */
 	public String getInvoiceShipToStateCode() { 
@@ -1230,7 +1239,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipToStateCode attribute.
 	 * 
-	 * @param invoiceShipToStateCode The invoiceShipToStateCode to set.
+	 * @param - invoiceShipToStateCode The invoiceShipToStateCode to set.
 	 * 
 	 */
 	public void setInvoiceShipToStateCode(String invoiceShipToStateCode) {
@@ -1241,7 +1250,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipToCountryCode attribute.
 	 * 
-	 * @return Returns the invoiceShipToCountryCode
+	 * @return - Returns the invoiceShipToCountryCode
 	 * 
 	 */
 	public String getInvoiceShipToCountryCode() { 
@@ -1251,7 +1260,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipToCountryCode attribute.
 	 * 
-	 * @param invoiceShipToCountryCode The invoiceShipToCountryCode to set.
+	 * @param - invoiceShipToCountryCode The invoiceShipToCountryCode to set.
 	 * 
 	 */
 	public void setInvoiceShipToCountryCode(String invoiceShipToCountryCode) {
@@ -1262,7 +1271,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipToCityName attribute.
 	 * 
-	 * @return Returns the invoiceShipToCityName
+	 * @return - Returns the invoiceShipToCityName
 	 * 
 	 */
 	public String getInvoiceShipToCityName() { 
@@ -1272,7 +1281,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipToCityName attribute.
 	 * 
-	 * @param invoiceShipToCityName The invoiceShipToCityName to set.
+	 * @param - invoiceShipToCityName The invoiceShipToCityName to set.
 	 * 
 	 */
 	public void setInvoiceShipToCityName(String invoiceShipToCityName) {
@@ -1283,7 +1292,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceShipToPostalCode attribute.
 	 * 
-	 * @return Returns the invoiceShipToPostalCode
+	 * @return - Returns the invoiceShipToPostalCode
 	 * 
 	 */
 	public String getInvoiceShipToPostalCode() { 
@@ -1293,7 +1302,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceShipToPostalCode attribute.
 	 * 
-	 * @param invoiceShipToPostalCode The invoiceShipToPostalCode to set.
+	 * @param - invoiceShipToPostalCode The invoiceShipToPostalCode to set.
 	 * 
 	 */
 	public void setInvoiceShipToPostalCode(String invoiceShipToPostalCode) {
@@ -1304,7 +1313,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoicePurchaseOrderNumber attribute.
 	 * 
-	 * @return Returns the invoicePurchaseOrderNumber
+	 * @return - Returns the invoicePurchaseOrderNumber
 	 * 
 	 */
 	public String getInvoicePurchaseOrderNumber() { 
@@ -1314,7 +1323,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoicePurchaseOrderNumber attribute.
 	 * 
-	 * @param invoicePurchaseOrderNumber The invoicePurchaseOrderNumber to set.
+	 * @param - invoicePurchaseOrderNumber The invoicePurchaseOrderNumber to set.
 	 * 
 	 */
 	public void setInvoicePurchaseOrderNumber(String invoicePurchaseOrderNumber) {
@@ -1325,7 +1334,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the invoiceHeaderInformation attribute.
 	 * 
-	 * @return Returns the invoiceHeaderInformation
+	 * @return - Returns the invoiceHeaderInformation
 	 * 
 	 */
 	public ElectronicInvoiceRejectReason getInvoiceHeaderInformation() { 
@@ -1335,7 +1344,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the invoiceHeaderInformation attribute.
 	 * 
-	 * @param invoiceHeaderInformation The invoiceHeaderInformation to set.
+	 * @param - invoiceHeaderInformation The invoiceHeaderInformation to set.
 	 * @deprecated
 	 */
 	public void setInvoiceHeaderInformation(ElectronicInvoiceRejectReason invoiceHeaderInformation) {
@@ -1345,7 +1354,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the accountsPayableElectronicInvoiceLoadSummary attribute.
 	 * 
-	 * @return Returns the accountsPayableElectronicInvoiceLoadSummary
+	 * @return - Returns the accountsPayableElectronicInvoiceLoadSummary
 	 * 
 	 */
 	public ElectronicInvoiceLoadSummary getAccountsPayableElectronicInvoiceLoadSummary() { 
@@ -1355,7 +1364,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the accountsPayableElectronicInvoiceLoadSummary attribute.
 	 * 
-	 * @param accountsPayableElectronicInvoiceLoadSummary The accountsPayableElectronicInvoiceLoadSummary to set.
+	 * @param - accountsPayableElectronicInvoiceLoadSummary The accountsPayableElectronicInvoiceLoadSummary to set.
 	 * @deprecated
 	 */
 	public void setAccountsPayableElectronicInvoiceLoadSummary(ElectronicInvoiceLoadSummary accountsPayableElectronicInvoiceLoadSummary) {
@@ -1365,7 +1374,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Gets the epicPurchaseOrderDeliveryCampus attribute.
 	 * 
-	 * @return Returns the epicPurchaseOrderDeliveryCampus
+	 * @return - Returns the epicPurchaseOrderDeliveryCampus
 	 * 
 	 */
 	public Campus getEpicPurchaseOrderDeliveryCampus() { 
@@ -1375,7 +1384,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	/**
 	 * Sets the epicPurchaseOrderDeliveryCampus attribute.
 	 * 
-	 * @param epicPurchaseOrderDeliveryCampus The epicPurchaseOrderDeliveryCampus to set.
+	 * @param - epicPurchaseOrderDeliveryCampus The epicPurchaseOrderDeliveryCampus to set.
 	 * @deprecated
 	 */
 	public void setEpicPurchaseOrderDeliveryCampus(Campus epicPurchaseOrderDeliveryCampus) {
@@ -1383,7 +1392,7 @@ public class ElectronicInvoiceHeaderInformation extends PersistableBusinessObjec
 	}
 
 	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
 	 */
 	protected LinkedHashMap toStringMapper() {
 	    LinkedHashMap m = new LinkedHashMap();	    

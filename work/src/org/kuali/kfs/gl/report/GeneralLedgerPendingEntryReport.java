@@ -21,9 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
@@ -111,14 +111,14 @@ public class GeneralLedgerPendingEntryReport {
             KualiDecimal totalDocumentDebit = KualiDecimal.ZERO;
             KualiDecimal totalDocumentBlank = KualiDecimal.ZERO;
 
-            OriginEntryFull lastEntry = null;
+            OriginEntry lastEntry = null;
 
             boolean firstAccount = true;
 
             while ( entries.hasNext() ) {
-                OriginEntryFull entry = (OriginEntryFull) entries.next();
+                OriginEntry entry = (OriginEntry) entries.next();
 
-                String docNumber = entry.getFinancialSystemOriginationCode() + "-" + entry.getDocumentNumber();
+                String docNumber = entry.getFinancialSystemOriginationCode() + "-" + entry.getFinancialDocumentNumber();
 
                 if ( ! docNumber.equals(previousDocumentNumber) && ! "-1".equals(previousDocumentNumber) ) {
                     printTotal("Totals:",totalDocumentCredit,totalDocumentDebit,totalDocumentBlank);
@@ -184,7 +184,7 @@ public class GeneralLedgerPendingEntryReport {
                 dataTable.addCell(column);
 
                 KualiDecimal amount = null;
-                if(KFSConstants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
+                if(Constants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
                     amount = entry.getTransactionLedgerEntryAmount();
                     totalDocumentDebit = totalDocumentDebit.add(amount);
                     totalDocumentTypeDebit = totalDocumentTypeDebit.add(amount);
@@ -195,7 +195,7 @@ public class GeneralLedgerPendingEntryReport {
                 dataTable.addCell(column);
 
                 amount = null;
-                if ( KFSConstants.GL_CREDIT_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
+                if ( Constants.GL_CREDIT_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
                     amount = entry.getTransactionLedgerEntryAmount();
                     totalDocumentCredit = totalDocumentCredit.add(amount);
                     totalDocumentTypeCredit = totalDocumentTypeCredit.add(amount);
@@ -206,7 +206,7 @@ public class GeneralLedgerPendingEntryReport {
                 dataTable.addCell(column);
 
                 amount = null;
-                if( KFSConstants.GL_BUDGET_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
+                if( Constants.GL_BUDGET_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
                     amount = entry.getTransactionLedgerEntryAmount();
                     totalDocumentBlank = totalDocumentBlank.add(amount);
                     totalDocumentTypeBlank = totalDocumentTypeBlank.add(amount);

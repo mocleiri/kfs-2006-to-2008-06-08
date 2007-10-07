@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ProjectCode;
@@ -46,6 +45,8 @@ import org.kuali.module.pdp.xml.XmlDetail;
 import org.kuali.module.pdp.xml.XmlGroup;
 import org.kuali.module.pdp.xml.XmlHeader;
 import org.kuali.module.pdp.xml.XmlTrailer;
+import org.springframework.beans.factory.BeanFactory;
+
 
 /**
  * @author jsissom
@@ -101,15 +102,15 @@ public class DataLoadHandler implements PdpFileHandler {
   private String fileThresholdMessage;
   //
 
-  public DataLoadHandler(XmlTrailer t) {
-      customerDao = SpringContext.getBean(CustomerProfileDao.class);
-      loadDao = SpringContext.getBean(PaymentFileLoadDao.class);
-      referenceDao = SpringContext.getBean(ReferenceDao.class);
-      accountService = SpringContext.getBean(AccountService.class);
-      subAccountService = SpringContext.getBean(SubAccountService.class);
-      objectCodeService = SpringContext.getBean(ObjectCodeService.class);
-      subObjectCodeService = SpringContext.getBean(SubObjectCodeService.class);
-      projectCodeService = SpringContext.getBean(ProjectCodeService.class);
+  public DataLoadHandler(BeanFactory bf,XmlTrailer t) {
+      customerDao = (CustomerProfileDao)bf.getBean("pdpCustomerProfileDao");
+      loadDao = (PaymentFileLoadDao)bf.getBean("pdpPaymentFileLoadDao");
+      referenceDao = (ReferenceDao)bf.getBean("pdpReferenceDao");
+      accountService = (AccountService)bf.getBean("accountService");
+      subAccountService = (SubAccountService)bf.getBean("subAccountService");
+      objectCodeService = (ObjectCodeService)bf.getBean("objectCodeService");
+      subObjectCodeService = (SubObjectCodeService)bf.getBean("subObjectCodeService");
+      projectCodeService = (ProjectCodeService)bf.getBean("projectCodeService");
       fileThreshold = new Boolean(false);
       detailThreshold = new Boolean(false);
       detailThresholdMessages = new ArrayList();

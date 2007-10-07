@@ -20,16 +20,16 @@ import java.sql.Timestamp;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests AccountingLineOverride.
  * 
  * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class AccountingLineOverrideTest extends KualiTestBase {
     private static final AccountingLineOverride EXPIRED = AccountingLineOverride.valueOf(AccountingLineOverride.CODE.EXPIRED_ACCOUNT);
     private static final AccountingLineOverride NONE = AccountingLineOverride.valueOf(AccountingLineOverride.CODE.NONE);

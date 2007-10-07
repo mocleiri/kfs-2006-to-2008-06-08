@@ -15,29 +15,17 @@
  */
 package org.kuali.module.purap.rules;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rules.TransactionalDocumentRuleBase;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapParameterConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapConstants.PurchaseOrderStatuses;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 
-/**
- * This class is purposely not extending PurchaseOrderDocumentRule becuase it does not need to since 
- * it does not allow the PO to be edited nor should it create GL entries.
- */
 public class PurchaseOrderPaymentHoldDocumentRule extends TransactionalDocumentRuleBase {
 
     /**
@@ -64,36 +52,36 @@ public class PurchaseOrderPaymentHoldDocumentRule extends TransactionalDocumentR
         return isValid;
     }
 
-    boolean processValidation(PurchaseOrderDocument document) {
+    private boolean processValidation(PurchaseOrderDocument document) {
         boolean valid = true;
-
-        // Check that the PO is not null.
+        //return true for now, we need to check EPIC to see if there are any rules for this doc
+        
+        //check that the PO is not null
         if (ObjectUtils.isNull(document)) {
-            throw new ValidationException("Purchase Order Payment Hold document was null on validation.");
+          //ServiceError se = new ServiceError("invalid PO", "purchaseOrder.invalid");
+          valid = false;
         }
-        else {
-            // TODO: Get this from Business Rules.
-            // Check the PO status.
-            if (StringUtils.equalsIgnoreCase(document.getStatusCode(), PurchaseOrderStatuses.CLOSED)) {
-                valid = false;
-                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.STATUS_CODE, PurapKeyConstants.ERROR_PURCHASE_ORDER_STATUS_INCORRECT, PurchaseOrderStatuses.CLOSED);
-            }
-            
-            // Check that the user is in purchasing workgroup.
-            String initiatorNetworkId = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
-            UniversalUserService uus = SpringContext.getBean(UniversalUserService.class);
-            UniversalUser user = null;
-            try {
-                user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
-                String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
-                if (!uus.isMember(user, purchasingGroup)) {
-                    valid = false;
-                }
-            }
-            catch (UserNotFoundException ue) {
+
+        //check that the user is in purchasing workgroup
+        String initiatorNetworkId = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
+        UniversalUserService uus = SpringServiceLocator.getUniversalUserService();
+        UniversalUser user = null;
+        try {
+            user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
+            String purchasingGroup = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("PurapAdminGroup", PurapConstants.Workgroups.WORKGROUP_PURCHASING);
+            if (!uus.isMember(user, purchasingGroup )) {
                 valid = false;
             }
+        } catch (UserNotFoundException ue) {
+            valid = false;
         }
+
+        //check the PO status
+        String poStatus = document.getStatus().getStatusCode();
+        if (poStatus.equals(PurapConstants.PurchaseOrderStatuses.CLOSED)) {
+            valid = false;
+        }
+        
         return valid;
     }
 

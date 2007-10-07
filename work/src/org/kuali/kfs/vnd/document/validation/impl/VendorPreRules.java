@@ -21,18 +21,19 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.rules.PreRulesContinuationBase;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.rules.MaintenancePreRulesBase;
+import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.bo.VendorDetail;
 import org.kuali.module.vendor.bo.VendorHeader;
 import org.kuali.module.vendor.bo.VendorTaxChange;
-import org.kuali.module.vendor.bo.VendorType;
 
 /**
  * 
@@ -68,7 +69,7 @@ public class VendorPreRules extends MaintenancePreRulesBase {
 
     protected DateTimeService getDateTimeService() {
         if( ObjectUtils.isNull( this.dateTimeService ) ) {
-            this.dateTimeService = SpringContext.getBean(DateTimeService.class);
+            this.dateTimeService = SpringServiceLocator.getDateTimeService();
         }
         return this.dateTimeService;
     }
@@ -78,7 +79,6 @@ public class VendorPreRules extends MaintenancePreRulesBase {
         setVendorNamesAndIndicator(document);
         setVendorRestriction(document);
         setVendorTaxChange(document);
-        displayReview(document);
         return true;
     }
  
@@ -205,34 +205,23 @@ public class VendorPreRules extends MaintenancePreRulesBase {
     }
 
 
-    /**
-     * This method displays a review if indicated byt the vendor type and the associated text from that type
-     * @param document - vendordetail document
-     */
-    public void displayReview(Document document) {        
+    @Override
+    public boolean doRules(Document document) {
         VendorDetail vendorDetail = (VendorDetail) document.getDocumentBusinessObject();
-
-        VendorType vendorType = vendorDetail.getVendorHeader().getVendorType();
+        boolean proceed = super.doRules(document);
         
-        if (vendorType == null) {
-            vendorType = new VendorType();
-            vendorType.setVendorTypeCode(vendorDetail.getVendorHeader().getVendorTypeCode());
-            vendorType = (VendorType) SpringContext.getBean(BusinessObjectService.class).retrieve(vendorType);
-        }
-        if (vendorType != null && vendorType.isVendorShowReviewIndicator()) {
-            String questionText = vendorType.getVendorReviewText();
-            if (vendorDetail.getVendorName() != null) {
-                questionText = questionText.replace("{0}", vendorDetail.getVendorName());
-            } else {
-                questionText = questionText.replace("{0}", "(not entered)");
-            }
+        if (proceed) {
+            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(VendorConstants.ACKNOWLEDGE_NEW_VENDOR_INFO_TEXT);
+            questionText = questionText.replace("{0}", vendorDetail.getVendorName());
             questionText = questionText.replace("{1}", document.getDocumentNumber());
-            Boolean proceed = super.askOrAnalyzeYesNoQuestion(VendorConstants.ACKNOWLEDGE_NEW_VENDOR_INFO, questionText);
-    
-            if (!proceed) {
-                abortRulesCheck();
-            }
+            proceed = super.askOrAnalyzeYesNoQuestion(VendorConstants.ACKNOWLEDGE_NEW_VENDOR_INFO, questionText);
         }
+
+        if (!proceed) {
+            abortRulesCheck();
+        }
+
+        return proceed;
     }
-    
+
 }

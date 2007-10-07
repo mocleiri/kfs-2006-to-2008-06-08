@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.util.KFSUtils;
 import org.kuali.module.pdp.bo.PaymentGroup;
 import org.kuali.module.pdp.bo.PaymentStatus;
 import org.kuali.module.pdp.dao.BatchMaintenanceDao;
@@ -63,13 +63,12 @@ public class BatchMaintenanceDaoOjb extends PlatformAwareDaoBaseOjb implements B
     crit.addIn("paymentStatusCode",codeList);
 
     ReportQueryByCriteria q = QueryFactory.newReportQuery(PaymentGroup.class,crit);
-    q.setAttributes(new String[] { "paymentStatusCode" }); 
-    q.addGroupBy("paymentStatusCode");
+    q.setAttributes(new String[] { "paymentStatusCode" }); q.addGroupBy("paymentStatusCode");
 
-    Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
+    PersistenceBroker b = getPersistenceBroker(true); 
+    Iterator i = b.getReportQueryIteratorByQuery(q);
     if ( i.hasNext() ) {
       LOG.debug("doBatchPaymentsHaveOpenStatus() Not all payment groups have status 'OPEN'.");
-      KFSUtils.exhaustIterator(i);
       return false;
     } else {
       LOG.debug("doBatchPaymentsHaveOpenStatus() All payment groups have status 'OPEN'.");
@@ -99,19 +98,18 @@ public class BatchMaintenanceDaoOjb extends PlatformAwareDaoBaseOjb implements B
         codeList.add(element.getCode());
       }
     }
-
+    
     Criteria crit = new Criteria();
     crit.addEqualTo("batchId", batchId);
     crit.addIn("paymentStatusCode",codeList);
 
     ReportQueryByCriteria q = QueryFactory.newReportQuery(PaymentGroup.class,crit);
-    q.setAttributes(new String[] { "paymentStatusCode" }); 
-    q.addGroupBy("paymentStatusCode");
+    q.setAttributes(new String[] { "paymentStatusCode" }); q.addGroupBy("paymentStatusCode");
 
-    Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
+    PersistenceBroker b = getPersistenceBroker(true); 
+    Iterator i = b.getReportQueryIteratorByQuery(q);
     if ( i.hasNext() ) {
       LOG.debug("doBatchPaymentsHaveHeldStatus() Not all payment groups have status 'HELD'.");
-      KFSUtils.exhaustIterator(i);
       return false;
     } else {
       LOG.debug("doBatchPaymentsHaveHeldStatus() All payment groups have status 'HELD'.");

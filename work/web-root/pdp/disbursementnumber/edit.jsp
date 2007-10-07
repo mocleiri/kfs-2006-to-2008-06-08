@@ -18,7 +18,7 @@
 <app:getBank active="Y" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html locale="true">
-<link rel="stylesheet" type="text/css"  href="<%= request.getContextPath() %>/pdp/css/pdp_styles.css">
+<link rel="stylesheet" type="text/css"  href="https://docs.onestart.iu.edu/dav/MY/channels/css/styles.css">
   <head>
     <html:base />
     <title>Disbursement Range Maintenance</title>
@@ -49,7 +49,7 @@
         	<div align="center">New Disbursement Range</div>
         </logic:equal>
         <logic:notEqual name="PdpDisbursementNumberMaintenanceForm" property="id" value="0">
-        	<div align="center">Disbursement Range ID: <c:out value="${PdpDisbursementNumberMaintenanceForm.id}"/></div>
+        	<div align="center">Disbursement Range ID: <c:out value="${DisbursementNumberMaintenanceForm.id}"/></div>
         </logic:notEqual>
       </logic:notEmpty>
       </strong>

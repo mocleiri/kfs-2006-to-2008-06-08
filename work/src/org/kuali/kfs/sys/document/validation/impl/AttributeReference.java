@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 package org.kuali.kfs.rules;
 
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * This class refers to an attribute which has a value and is labeled in the DataDictionary.
@@ -37,7 +36,7 @@ public class AttributeReference {
     public AttributeReference(Class businessObjectClass, String propertyName, Object value) {
         this.propertyName = propertyName;
         this.valueString = value == null ? null : value.toString();
-        this.label = SpringContext.getBean(DataDictionaryService.class).getAttributeLabel(businessObjectClass, propertyName);
+        this.label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(businessObjectClass, propertyName);
     }
 
     /**

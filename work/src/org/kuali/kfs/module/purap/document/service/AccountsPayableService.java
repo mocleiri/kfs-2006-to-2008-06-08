@@ -18,7 +18,6 @@ package org.kuali.module.purap.service;
 import java.util.HashMap;
 
 import org.kuali.module.purap.bo.PurApAccountingLineBase;
-import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
 
@@ -59,26 +58,5 @@ public interface AccountsPayableService {
      */
     public void processExpiredOrClosedAccount(PurApAccountingLineBase acctLineBase, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList);
     
-    /**
-     * 
-     * This method calls the cancel related functions
-     * @param apDocument
-     * @param currentNodeName
-     */
     public void cancelAccountsPayableDocument(AccountsPayableDocument apDocument, String currentNodeName);
-    
-    /**
-     * 
-     * This method updates the item based on what's eligible to be payed on po
-     * @param apDocument
-     */
-    public void updateItemList(AccountsPayableDocument apDocument);
-    
-    /**
-     * 
-     * This method returns true if item is eligible to be payed on
-     * @param poi
-     * @return
-     */
-    public boolean purchaseOrderItemEligibleForPayment(PurchaseOrderItem poi);
 }

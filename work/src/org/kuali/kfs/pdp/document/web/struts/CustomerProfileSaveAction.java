@@ -17,7 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.SubAccount;
@@ -58,14 +58,14 @@ public class CustomerProfileSaveAction extends BaseAction {
 
   public CustomerProfileSaveAction() {
       super();
-      setCustomerProfileService( SpringContext.getBean(CustomerProfileService.class) );
-      setReferenceService( SpringContext.getBean(ReferenceService.class) );
-      setBankService( SpringContext.getBean(BankService.class) );
-      setAccountService( SpringContext.getBean(AccountService.class) );
-      setSubAccountService( SpringContext.getBean(SubAccountService.class) );
-      setObjectCodeService( SpringContext.getBean(ObjectCodeService.class) );
-      setSubObjectCodeService( SpringContext.getBean(SubObjectCodeService.class) );
-      setProjectCodeService( SpringContext.getBean(ProjectCodeService.class) );
+      setCustomerProfileService( (CustomerProfileService)SpringServiceLocator.getService("pdpCustomerProfileService") );
+      setReferenceService( (ReferenceService)SpringServiceLocator.getService("pdpReferenceService") );
+      setBankService( (BankService)SpringServiceLocator.getService("pdpBankService") );
+      setAccountService( SpringServiceLocator.getAccountService() );
+      setSubAccountService( SpringServiceLocator.getSubAccountService() );
+      setObjectCodeService( SpringServiceLocator.getObjectCodeService() );
+      setSubObjectCodeService( SpringServiceLocator.getSubObjectCodeService() );
+      setProjectCodeService( SpringServiceLocator.getProjectCodeService() );
   }
 
   public void setCustomerProfileService(CustomerProfileService c) {

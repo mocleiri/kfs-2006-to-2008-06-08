@@ -1,46 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetUser">
 
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Personnel Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="user.personUniversalIdentifier" />
                 <field attributeName="user.personUserIdentifier" />
                 <field attributeName="user.personName" />
-                <field attributeName="user.campusCode" />
-                <field attributeName="user.primaryDepartmentCode" />
+                <field attributeName="user.deptid" />
                 <field attributeName="user.employeeStatusCode" />
                 <field attributeName="user.employeeTypeCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
 
 
         <attributes>
 
-            <attribute name="documentNumber" forceUppercase="false">
+            <attribute name="documentHeaderId" forceUppercase="false">
                 <label>Document Header Id</label>
                 <shortLabel>Document Id</shortLabel>
 
@@ -108,7 +92,7 @@
 
                 <maxLength>15</maxLength>
                 <validationPattern>
-                    <anyCharacter  allowWhitespace="true"/>
+                    <anyCharacter />
                 </validationPattern>
 
                 <control>
@@ -125,7 +109,7 @@
 
                 <maxLength>15</maxLength>
                 <validationPattern>
-                    <anyCharacter  allowWhitespace="true" />
+                    <anyCharacter />
                 </validationPattern>
 
                 <control>
@@ -302,10 +286,10 @@
             </attribute>
 
             <attributeReference name="user.personUniversalIdentifier" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericSystemId">
-                <label>Institution ID</label>
+                <label>University ID</label>
                 <shortLabel>Univ ID</shortLabel>
-                <summary>Institution ID</summary>
-                <description>Institution ID</description>
+                <summary>University ID</summary>
+                <description>University ID</description>
             </attributeReference>
 
             <attributeReference name="user.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
@@ -322,10 +306,7 @@
                 <description>Project Director Name</description>
             </attributeReference>
 
-			<attributeReference name="user.campusCode" sourceClassName="org.kuali.core.bo.Campus" sourceAttributeName="campusCode">
-			</attributeReference>
-
-            <attributeReference name="user.primaryDepartmentCode" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="primaryDepartmentCode">
+            <attributeReference name="user.deptid" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="deptid">
                 <label>Dept ID</label>
                 <shortLabel>Dept ID</shortLabel>
                 <summary>Dept ID</summary>
@@ -345,20 +326,7 @@
                 <summary>Employee Type</summary>
                 <description>Employee Type</description>
             </attributeReference>
-
-            <attributeReference name="delete" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean" />
-
         </attributes>
-
-        <relationships>
-            <relationship objectAttributeName="user" >
-                <primitiveAttribute sourceName="personUniversalIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="user.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="user.personName" targetName="personName" />
-            </relationship>
-		</relationships>
-
-        <objectLabel>Budget User/Personnel</objectLabel>
     </businessObject>
 
 </dictionaryEntry>

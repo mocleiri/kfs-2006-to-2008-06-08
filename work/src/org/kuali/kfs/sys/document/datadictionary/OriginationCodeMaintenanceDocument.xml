@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>OriginationCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOriginationCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>ORIG</documentTypeCode>
 
         <label>Origination Code Maintenance Document</label>
@@ -40,7 +40,9 @@
 
         <summary>Origination Code maintenance document</summary>
         <description>Document used to create or update Origination Code objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Origination" parameterName="ORIGINATION" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ORIGINATION_CODE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="financialSystemOriginationCode" />

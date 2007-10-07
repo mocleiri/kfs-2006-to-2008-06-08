@@ -1,45 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionHeader">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Construction Header Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountNumber" />
                 <field attributeName="budgetLockUserIdentifier" />
                 <field attributeName="budgetTransactionLockUserIdentifier" />
                 <field attributeName="chartOfAccountsCode" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="organizationLevelChartOfAccountsCode" />
                 <field attributeName="organizationLevelCode" />
                 <field attributeName="organizationLevelOrganizationCode" />
                 <field attributeName="subAccountNumber" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Budget Construction Header Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionHeader">Create New</a>]]></menubar>
 
             <instructions>Look up a Budget Construction Header</instructions>
 
@@ -56,7 +43,7 @@
                 <lookupField attributeName="budgetLockUserIdentifier" required="false" />
                 <lookupField attributeName="budgetTransactionLockUserIdentifier" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
-                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="financialDocumentNumber" required="false" />
                 <lookupField attributeName="organizationLevelChartOfAccountsCode" required="false" />
                 <lookupField attributeName="organizationLevelCode" required="false" />
                 <lookupField attributeName="organizationLevelOrganizationCode" required="false" />
@@ -69,7 +56,7 @@
                 <field attributeName="budgetLockUserIdentifier" />
                 <field attributeName="budgetTransactionLockUserIdentifier" />
                 <field attributeName="chartOfAccountsCode" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="organizationLevelChartOfAccountsCode" />
                 <field attributeName="organizationLevelCode" />
                 <field attributeName="organizationLevelOrganizationCode" />
@@ -82,12 +69,11 @@
 
             <attribute name="accountNumber" forceUppercase="true">
                 <label>Account Number</label>
-                <shortLabel>Account</shortLabel>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>7</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
 
-                <required>true</required>
                 <control>
                     <text size="9" />
                 </control>
@@ -104,7 +90,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="11" />
+                    <text size="12" />
                 </control>
 
                 <summary>budgetLockUserIdentifier</summary>
@@ -119,7 +105,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="11" />
+                    <text size="12" />
                 </control>
 
                 <summary>budgetTransactionLockUserIdentifier</summary>
@@ -128,35 +114,32 @@
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
                 <label>Chart Of Accounts Code</label>
-                <shortLabel>Chart</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
 
-                <required>true</required>
                 <control>
-                    <!-- <text size="4" /-->
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.SimpleChartValuesFinder" />
+                    <text size="4" />
                 </control>
 
                 <summary>chartOfAccountsCode</summary>
                 <description>chartOfAccountsCode description...</description>
 			</attribute>
 
-            <attribute name="documentNumber" forceUppercase="true">
-                <label>Document Number</label>
-                <shortLabel>Doc#</shortLabel>
+            <attribute name="financialDocumentNumber" forceUppercase="true">
+                <label>Financial Document Number</label>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
 
-                <required>true</required>
                 <control>
-                    <text size="15" />
+                    <text size="16" />
                 </control>
 
-                <summary>documentNumber</summary>
-                <description>documentNumber description...</description>
+                <summary>financialDocumentNumber</summary>
+                <description>financialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="organizationLevelChartOfAccountsCode" forceUppercase="true">
@@ -167,7 +150,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="3" />
+                    <text size="4" />
                 </control>
 
                 <summary>organizationLevelChartOfAccountsCode</summary>
@@ -182,7 +165,7 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="8" />
+                    <text size="9" />
                 </control>
 
                 <summary>organizationLevelCode</summary>
@@ -197,7 +180,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="5" />
+                    <text size="6" />
                 </control>
 
                 <summary>organizationLevelOrganizationCode</summary>
@@ -206,13 +189,13 @@
 
             <attribute name="subAccountNumber" forceUppercase="true">
                 <label>Sub Account Number</label>
-                <shortLabel>Sub Account</shortLabel>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>5</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="6" />
+                    <text size="7" />
                 </control>
 
                 <summary>subAccountNumber</summary>
@@ -226,9 +209,8 @@
                 <maxLength>4</maxLength>
                 <validationPattern><numeric /></validationPattern>
 
-                <required>true</required>
                 <control>
-                    <text size="5" />
+                    <text size="6" />
                 </control>
 
                 <summary>universityFiscalYear</summary>

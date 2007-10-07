@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.kuali.module.kra.bo.AdhocOrg;
 import org.kuali.module.kra.bo.AdhocPerson;
-import org.kuali.module.kra.bo.AdhocWorkgroup;
 import org.kuali.module.kra.bo.ResearchAdhocPermissionType;
 
 /**
@@ -37,23 +36,6 @@ public interface ResearchDocumentPermissionsService {
      * @return AdHocPerson
      */
     public AdhocPerson getAdHocPerson(String documentNumber, String personUniversalIdentifier);
-    
-    /**
-     * Retrieve the AdHocWorkgroup for the given documentNumber and personUniversalIdentifier.
-     * 
-     * @param documentNumber
-     * @param workgroupName
-     * @return AdhocWorkgroup
-     */
-    public AdhocWorkgroup getAdHocWorkgroup(String documentNumber, String workgroupName);
-    
-    /**
-     * Retrieve the AdHocWorkgroups for the given documentNumber.
-     * 
-     * @param documentNumber
-     * @return AdhocWorkgroup
-     */
-    public List<AdhocWorkgroup> getAllAdHocWorkgroups(String documentNumber);
     
     /**
      * Retrieve the ad-hoc orgs for the given documentNumber and budgetPermissionCode.
@@ -78,5 +60,5 @@ public interface ResearchDocumentPermissionsService {
      * @param String uuid
      * @return boolean
      */
-    public boolean isUserInOrgHierarchy(String orgXml, String documentType, String uuid);
+    public boolean isUserInOrgHierarchy(String orgXml, String uuid);
 }

@@ -10,8 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.module.pdp.PdpConstants;
 import org.kuali.module.pdp.bo.PaymentDetailSearch;
 import org.kuali.module.pdp.dao.PaymentDetailSearchDao;
 import org.kuali.module.pdp.service.PaymentDetailSearchService;
@@ -60,6 +58,6 @@ public class PaymentDetailSearchServiceImpl implements PaymentDetailSearchServic
     }
 
     private int getMaxSearchTotal() {
-        return GeneralUtilities.getParameterInteger(KFSConstants.Components.LOOKUP, PdpConstants.ApplicationParameterKeys.SEARCH_RESULTS_TOTAL, kualiConfigurationService);
+        return GeneralUtilities.getParameterInteger("SEARCH_RESULTS_TOTAL", kualiConfigurationService);
     }
 }

@@ -34,23 +34,12 @@
     <bc:incumbentSalarySetting />
 	<kul:panelFooter />
 
-<%--TODO need to create save and close(and prompt to save) actions that calls returnToCaller 
-    or closes the window when not in budgetByAccountMode --%>
+<%--TODO need to create save and close(and prompt to save) actions that calls returnToCaller --%>
     <div id="globalbuttons" class="globalbuttons">
         <c:if test="${!KualiForm.editingMode['systemViewOnly'] && KualiForm.editingMode['fullEntry']}">
-	        <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_save.gif" styleClass="globalbuttons" property="methodToCall.save" title="save" alt="save"/>
+	        <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_save.gif" styleClass="globalbuttons" property="methodToCall.returnToCaller" title="save" alt="save"/>
 	    </c:if>
-        <c:if test="${KualiForm.budgetByAccountMode}">
-            <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_close.gif" styleClass="globalbuttons" property="methodToCall.returnToCaller" title="close" alt="close"/>
-	    </c:if>
-        <c:if test="${!KualiForm.budgetByAccountMode}">
-            <SCRIPT>
-                document.write("<a href=\"#\" onclick=\"window.close()\"><img src=\"${ConfigProperties.kr.externalizable.images.url}buttonsmall_close.gif\" alt=\"close this window\" /></a>");
-            </SCRIPT>
-            <NOSCRIPT>
-                &nbsp;
-            </NOSCRIPT>
-	    </c:if>
+        <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_close.gif" styleClass="globalbuttons" property="methodToCall.returnToCaller" title="close" alt="close"/>
     </div>
 
 <%-- Need these here to override and initialize vars used by objectinfo.js to BC specific --%>

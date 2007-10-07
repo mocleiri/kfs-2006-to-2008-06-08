@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,17 +71,6 @@ public interface AccountingDocument extends GeneralLedgerPostingDocument {
      * @return Class of the document's target accounting lines
      */
     public Class getTargetAccountingLineClass();
-    
-    /*
-     * @return Name of the document's source accounting lines
-     */
-    public String getSourceAccountingLineEntryName();
-
-
-    /*
-     * @return Name of the document's target accounting lines
-     */
-    public String getTargetAccountingLineEntryName();
     
     /**
      * Retrieves the next line sequence number for an accounting line in the Source accounting line section on a transactional

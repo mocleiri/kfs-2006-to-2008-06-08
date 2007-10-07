@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@
  */
 package org.kuali.module.chart.rules;
 
+import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Chart;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.service.ChartService;
 
 public class ChartRule extends MaintenanceDocumentRuleBase {
@@ -35,7 +36,7 @@ public class ChartRule extends MaintenanceDocumentRuleBase {
         boolean result=true;
         
         Chart chart=(Chart)document.getNewMaintainableObject().getBusinessObject();
-        ChartService chartService = SpringContext.getBean(ChartService.class);
+        ChartService chartService = SpringServiceLocator.getChartService();
         
         String chartCode=chart.getChartOfAccountsCode();
         
@@ -45,21 +46,22 @@ public class ChartRule extends MaintenanceDocumentRuleBase {
             Chart reportsToChart=chartService.getByPrimaryId(reportsToChartCode);
             if (reportsToChart==null) {
                 result = false;
-                putFieldError("reportsToChartOfAccountsCode", KFSKeyConstants.ERROR_DOCUMENT_CHART_REPORTS_TO_CHART_MUST_EXIST);
+                putFieldError("reportsToChartOfAccountsCode", KeyConstants.ERROR_DOCUMENT_CHART_REPORTS_TO_CHART_MUST_EXIST);
             }
         }
         
         UniversalUser chartManager = null;
         try {
-           chartManager = getUniversalUserService().getUniversalUser( chart.getFinCoaManagerUniversalId() );
-         } catch (UserNotFoundException e) {
+           chartManager=SpringServiceLocator.getKualiUserService().getUniversalUser(chart.getFinCoaManagerUniversalId());
+         }
+         catch (UserNotFoundException e) {
              result = false;
-             putFieldError("finCoaManagerUniversal.personUserIdentifier",KFSKeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_EXIST);
+             putFieldError("finCoaManagerUniversal.personUserIdentifier",KeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_EXIST);
          }
         
-        if (chartManager!=null && !chartManager.isActiveForModule( ChartUser.MODULE_ID ) ) {
+        if (chartManager!=null && !chartManager.isActiveKualiUser()) {
             result=false;
-            putFieldError("finCoaManagerUniversal.personUserIdentifier",KFSKeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_BE_KUALI_USER);
+            putFieldError("finCoaManagerUniversal.personUserIdentifier",KeyConstants.ERROR_DOCUMENT_CHART_MANAGER_MUST_BE_KUALI_USER);
         }
         
         

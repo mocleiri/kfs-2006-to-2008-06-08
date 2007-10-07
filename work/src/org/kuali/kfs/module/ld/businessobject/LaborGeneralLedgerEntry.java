@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/LaborGeneralLedgerEntry.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +21,11 @@ package org.kuali.module.labor.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.OriginationCode;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -34,12 +35,12 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.gl.bo.Entry;
+import org.kuali.PropertyConstants;
 
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class LaborGeneralLedgerEntry extends Entry {
+public class LaborGeneralLedgerEntry extends BusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -623,8 +624,8 @@ public class LaborGeneralLedgerEntry extends Entry {
 	 * Sets the financialObject attribute.
 	 * 
 	 * @param financialObject The financialObject to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setFinancialObject(ObjectCode financialObject) {
 		this.financialObject = financialObject;
 	}
@@ -643,8 +644,8 @@ public class LaborGeneralLedgerEntry extends Entry {
 	 * Sets the account attribute.
 	 * 
 	 * @param account The account to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setAccount(Account account) {
 		this.account = account;
 	}
@@ -663,8 +664,8 @@ public class LaborGeneralLedgerEntry extends Entry {
 	 * Sets the chartOfAccounts attribute.
 	 * 
 	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
 	 */
-    @Deprecated
 	public void setChartOfAccounts(Chart chartOfAccounts) {
 		this.chartOfAccounts = chartOfAccounts;
 	}
@@ -680,8 +681,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the balanceType attribute value.
      * @param balanceType The balanceType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setBalanceType(BalanceTyp balanceType) {
         this.balanceType = balanceType;
     }
@@ -697,8 +698,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the documentType attribute value.
      * @param documentType The documentType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
     }
@@ -714,8 +715,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the financialDocument attribute value.
      * @param financialDocument The financialDocument to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialDocument(DocumentHeader financialDocument) {
         this.financialDocument = financialDocument;
     }
@@ -731,8 +732,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the financialObjectType attribute value.
      * @param financialObjectType The financialObjectType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialObjectType(ObjectType financialObjectType) {
         this.financialObjectType = financialObjectType;
     }
@@ -748,8 +749,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the financialSubObject attribute value.
      * @param financialSubObject The financialSubObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialSubObject(SubObjCd financialSubObject) {
         this.financialSubObject = financialSubObject;
     }
@@ -765,8 +766,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the project attribute value.
      * @param project The project to set.
+     * @deprecated
      */
-    @Deprecated
     public void setProject(ProjectCode project) {
         this.project = project;
     }
@@ -782,8 +783,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the referenceDocumentType attribute value.
      * @param referenceDocumentType The referenceDocumentType to set.
+     * @deprecated
      */
-    @Deprecated
     public void setReferenceDocumentType(DocumentType referenceDocumentType) {
         this.referenceDocumentType = referenceDocumentType;
     }
@@ -799,8 +800,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the referenceFinancialDocument attribute value.
      * @param referenceFinancialDocument The referenceFinancialDocument to set.
+     * @deprecated
      */
-    @Deprecated
     public void setReferenceFinancialDocument(DocumentHeader referenceFinancialDocument) {
         this.referenceFinancialDocument = referenceFinancialDocument;
     }
@@ -816,8 +817,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the referenceOriginationCode attribute value.
      * @param referenceOriginationCode The referenceOriginationCode to set.
+     * @deprecated
      */
-    @Deprecated
     public void setReferenceOriginationCode(OriginationCode referenceOriginationCode) {
         this.referenceOriginationCode = referenceOriginationCode;
     }
@@ -833,8 +834,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the subAccount attribute value.
      * @param subAccount The subAccount to set.
+     * @deprecated
      */
-    @Deprecated
     public void setSubAccount(SubAccount subAccount) {
         this.subAccount = subAccount;
     }
@@ -850,8 +851,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the universityFiscalPeriod attribute value.
      * @param universityFiscalPeriod The universityFiscalPeriod to set.
+     * @deprecated
      */
-    @Deprecated
     public void setUniversityFiscalPeriod(AccountingPeriod universityFiscalPeriod) {
         this.universityFiscalPeriod = universityFiscalPeriod;
     }
@@ -867,8 +868,8 @@ public class LaborGeneralLedgerEntry extends Entry {
     /**
      * Sets the financialSystemOrigination attribute value.
      * @param financialSystemOrigination The financialSystemOrigination to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialSystemOrigination(OriginationCode financialSystemOrigination) {
         this.financialSystemOrigination = financialSystemOrigination;
     }    
@@ -890,7 +891,7 @@ public class LaborGeneralLedgerEntry extends Entry {
         m.put("financialObjectTypeCode", this.financialObjectTypeCode);
         m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.transactionLedgerEntrySequenceNumber != null) {
             m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
         }

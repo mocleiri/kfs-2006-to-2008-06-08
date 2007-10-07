@@ -3,20 +3,27 @@
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
-    <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionCalculatedSalaryFoundationTracker">
+    <businessObject businessObjectClass="org.kuali.module.labor.bo.CalculatedSalaryFoundationTracker">
         <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Budget Construction Calculated Salary Foundation Tracker Inquiry</title>
+            <title>Calculated Salary Foundation Tracker Inquiry</title>
 
             <inquiryFields>
                 <field attributeName="accountNumber" />
+                <field attributeName="additionalSequence" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="csfAmount" />
+                <field attributeName="csfCreateTimestamp" />
+                <field attributeName="csfDeleteCode" />
                 <field attributeName="csfFullTimeEmploymentQuantity" />
                 <field attributeName="csfFundingStatusCode" />
                 <field attributeName="csfTimePercent" />
+                <field attributeName="earnCode" />
+                <field attributeName="effectiveDate" />
+                <field attributeName="effectiveSequence" />
                 <field attributeName="emplid" />
+                <field attributeName="employeeRecord" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="positionNumber" />
@@ -26,11 +33,11 @@
         </inquiry>
 
         <lookup>
-            <title>Budget Construction Calculated Salary Foundation Tracker Lookup</title>
+            <title>Calculated Salary Foundation Tracker Lookup</title>
 
-			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionCalculatedSalaryFoundationTracker">Create New</a>]]></menubar>
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.CalculatedSalaryFoundationTracker">Create New</a>]]></menubar>
 
-            <instructions>Look up a Budget Construction Calculated Salary Foundation Tracker</instructions>
+            <instructions>Look up a Calculated Salary Foundation Tracker</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
@@ -42,12 +49,19 @@
 
             <lookupFields>
                 <lookupField attributeName="accountNumber" required="false" />
+                <lookupField attributeName="additionalSequence" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="csfAmount" required="false" />
+                <lookupField attributeName="csfCreateTimestamp" required="false" />
+                <lookupField attributeName="csfDeleteCode" required="false" />
                 <lookupField attributeName="csfFullTimeEmploymentQuantity" required="false" />
                 <lookupField attributeName="csfFundingStatusCode" required="false" />
                 <lookupField attributeName="csfTimePercent" required="false" />
+                <lookupField attributeName="earnCode" required="false" />
+                <lookupField attributeName="effectiveDate" required="false" />
+                <lookupField attributeName="effectiveSequence" required="false" />
                 <lookupField attributeName="emplid" required="false" />
+                <lookupField attributeName="employeeRecord" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
                 <lookupField attributeName="positionNumber" required="false" />
@@ -57,12 +71,19 @@
 
             <resultFields>
                 <field attributeName="accountNumber" />
+                <field attributeName="additionalSequence" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="csfAmount" />
+                <field attributeName="csfCreateTimestamp" />
+                <field attributeName="csfDeleteCode" />
                 <field attributeName="csfFullTimeEmploymentQuantity" />
                 <field attributeName="csfFundingStatusCode" />
                 <field attributeName="csfTimePercent" />
+                <field attributeName="earnCode" />
+                <field attributeName="effectiveDate" />
+                <field attributeName="effectiveSequence" />
                 <field attributeName="emplid" />
+                <field attributeName="employeeRecord" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="positionNumber" />
@@ -86,6 +107,21 @@
 
                 <summary>accountNumber</summary>
                 <description>accountNumber description...</description>
+			</attribute>
+
+            <attribute name="additionalSequence" forceUppercase="true">
+                <label>Additional Sequence</label>
+                <shortLabel>Sequence</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>additionalSequence</summary>
+                <description>additionalSequence description...</description>
 			</attribute>
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
@@ -116,6 +152,36 @@
 
                 <summary>csfAmount</summary>
                 <description>csfAmount description...</description>
+			</attribute>
+
+            <attribute name="csfCreateTimestamp" forceUppercase="true">
+                <label>Csf Create Timestamp</label>
+                <shortLabel>Timestamp</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>csfCreateTimestamp</summary>
+                <description>csfCreateTimestamp description...</description>
+			</attribute>
+
+            <attribute name="csfDeleteCode" forceUppercase="true">
+                <label>Csf Delete Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>1</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="3" />
+                </control>
+
+                <summary>csfDeleteCode</summary>
+                <description>csfDeleteCode description...</description>
 			</attribute>
 
             <attribute name="csfFullTimeEmploymentQuantity" forceUppercase="true">
@@ -163,6 +229,51 @@
                 <description>csfTimePercent description...</description>
 			</attribute>
 
+            <attribute name="earnCode" forceUppercase="true">
+                <label>Earn Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>earnCode</summary>
+                <description>earnCode description...</description>
+			</attribute>
+
+            <attribute name="effectiveDate" forceUppercase="true">
+                <label>Effective Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>effectiveDate</summary>
+                <description>effectiveDate description...</description>
+			</attribute>
+
+            <attribute name="effectiveSequence" forceUppercase="true">
+                <label>Effective Sequence</label>
+                <shortLabel>Sequence</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>effectiveSequence</summary>
+                <description>effectiveSequence description...</description>
+			</attribute>
+
             <attribute name="emplid" forceUppercase="true">
                 <label>Emplid</label>
                 <shortLabel>Emplid</shortLabel>
@@ -176,6 +287,21 @@
 
                 <summary>emplid</summary>
                 <description>emplid description...</description>
+			</attribute>
+
+            <attribute name="employeeRecord" forceUppercase="true">
+                <label>Employee Record</label>
+                <shortLabel>Record</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>employeeRecord</summary>
+                <description>employeeRecord description...</description>
 			</attribute>
 
             <attribute name="financialObjectCode" forceUppercase="true">
