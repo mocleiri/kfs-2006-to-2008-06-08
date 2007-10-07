@@ -29,9 +29,11 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.cache.MethodCacheInterceptor;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.service.SchedulerService;
 import org.kuali.kfs.util.MemoryMonitor;
 import org.kuali.rice.KNSServiceLocator;
+import org.kuali.rice.core.Core;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -43,8 +45,11 @@ import uk.ltd.getahead.dwr.create.SpringCreator;
 public class SpringContext {
     private static final Logger LOG = Logger.getLogger(SpringContext.class);
     private static final String APPLICATION_CONTEXT_DEFINITION = "SpringBeans.xml";
+    private static final String CENTRAL_KEW_DATASOURCE_CONTEXT_DEFINITION = "SpringCentralKEWDataSourceBeans.xml";
+    private static final String DATASOURCE_CONTEXT_DEFINITION = "SpringDataSourceBeans.xml";
     private static final String SPRING_SOURCE_FILES_KEY = "spring.source.files";
     private static final String SPRING_TEST_FILES_KEY = "spring.test.files";
+    private static final String SPRING_PLUGIN_FILES_KEY = "spring.plugin.files";
     private static final String MEMORY_MONITOR_THRESHOLD_KEY = "memory.monitor.threshold";
     private static ConfigurableApplicationContext applicationContext;
     private static Set<Class> SINGLETON_TYPES = new HashSet<Class>();
@@ -62,7 +67,7 @@ public class SpringContext {
      * specific DateTimeService.class as the type. To retrieve the latter, you should specify ConfigurableDateService.class as the
      * type. Unless you are writing a unit test and need to down cast to an implementation, you do not need to cast the result of
      * this method.
-     * 
+     *
      * @param <T>
      * @param type
      * @return an object that has been defined as a bean in our spring context and is of the specified type
@@ -100,11 +105,11 @@ public class SpringContext {
         }
         return bean;
     }
-    
+
     /**
      * Use this method to retrieve all beans of a give type in our spring context. Pass in the type of the service interface, NOT
      * the service implementation.
-     * 
+     *
      * @param <T>
      * @param type
      * @return a map of the spring bean ids / beans that are of the specified type
@@ -126,7 +131,7 @@ public class SpringContext {
         }
         return beansOfType;
     }
-    
+
     @SuppressWarnings("unchecked")
     private static <T> T getBean(Class<T> type, String name) {
         verifyProperInitialization();
@@ -188,6 +193,10 @@ public class SpringContext {
         initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY, SPRING_TEST_FILES_KEY }), false);
     }
 
+    protected static void initializePluginApplicationContext() {
+        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY, SPRING_PLUGIN_FILES_KEY }), false);
+    }
+
     protected static void close() {
         applicationContext.close();
     }
@@ -209,6 +218,11 @@ public class SpringContext {
     private static String[] getSpringConfigurationFiles(String[] propertyNames) {
         List<String> springConfigurationFiles = new ArrayList<String>();
         springConfigurationFiles.add(APPLICATION_CONTEXT_DEFINITION);
+        if (Boolean.valueOf(getStringConfigurationProperty(KFSConstants.USE_CENTRAL_WORKFLOW_SERVER))) {
+            springConfigurationFiles.add(CENTRAL_KEW_DATASOURCE_CONTEXT_DEFINITION);
+        } else {
+            springConfigurationFiles.add(DATASOURCE_CONTEXT_DEFINITION);
+        }
         for (int i = 0; i < propertyNames.length; i++) {
             springConfigurationFiles.addAll(getListConfigurationProperty(propertyNames[i]));
         }
