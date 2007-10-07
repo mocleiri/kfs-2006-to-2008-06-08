@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 The Kuali Foundation.
- * 
+ *
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.opensource.org/licenses/ecl1.php
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import edu.iu.uis.eden.util.ClassLoaderUtils;
 public class PropertyLoadingFactoryBean implements FactoryBean {
     private static final String PROPERTY_FILE_NAMES_KEY = "property.files";
     private static final String PROPERTY_TEST_FILE_NAMES_KEY = "property.test.files";
-    protected static final String CONFIGURATION_FILE_NAME = "configuration";
+    public static final String CONFIGURATION_FILE_NAME = "configuration";
     private boolean testMode;
 
     public Object getObject() throws Exception {
