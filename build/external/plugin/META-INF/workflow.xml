@@ -1,0 +1,3 @@
+<plugin>
+    <resourceLoader class="org.kuali.workflow.KFSPluginResourceLoader"/>
+</plugin>
