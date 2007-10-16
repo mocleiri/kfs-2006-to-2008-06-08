@@ -26,16 +26,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ojb.broker.metadata.MetadataManager;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.IcrAutomatedEntry;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -45,11 +42,10 @@ import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.financial.exceptions.InvalidFlexibleOffsetException;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
 import org.kuali.module.gl.GLConstants;
-import org.kuali.module.gl.batch.PosterIndirectCostRecoveryEntriesStep;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
 import org.kuali.module.gl.bo.ExpenditureTransaction;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Reversal;
@@ -62,17 +58,24 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.PosterService;
 import org.kuali.module.gl.service.ReportService;
-import org.kuali.module.gl.service.RunDateService;
-import org.kuali.module.gl.util.Message;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class PosterServiceImpl implements PosterService {
+public class PosterServiceImpl implements PosterService, BeanFactoryAware {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceImpl.class);
 
-    public static final KualiDecimal WARNING_MAX_DIFFERENCE = new KualiDecimal("0.03");
+    public static final String INSERT_CODE = "I";
+    public static final String UPDATE_CODE = "U";
+    public static final String DELETE_CODE = "D";
+    public static final String SELECT_CODE = "S";
+
+    public static final KualiDecimal warningMaxDifference = new KualiDecimal("0.05");
     public static final String DATE_FORMAT_STRING = "yyyyMMdd";
 
+    private BeanFactory beanFactory;
     private List transactionPosters;
     private VerifyTransaction verifyTransaction;
     private OriginEntryService originEntryService;
@@ -85,10 +88,8 @@ public class PosterServiceImpl implements PosterService {
     private IcrAutomatedEntryDao icrAutomatedEntryDao;
     private ObjectCodeService objectCodeService;
     private ReportService reportService;
-    private ParameterService parameterService;
-    private KualiConfigurationService configurationService;
+    private KualiConfigurationService kualiConfigurationService;
     private FlexibleOffsetAccountService flexibleOffsetAccountService;
-    private RunDateService runDateService;
 
     /**
      * Post scrubbed GL entries to GL tables.
@@ -125,9 +126,7 @@ public class PosterServiceImpl implements PosterService {
         OriginEntryGroup validGroup = null;
         OriginEntryGroup invalidGroup = null;
 
-        Date executionDate = new Date(dateTimeService.getCurrentDate().getTime());
-        Date runDate = new Date(runDateService.calculateRunDate(executionDate).getTime());
-
+        Date runDate = new Date(dateTimeService.getCurrentDate().getTime());
         UniversityDate runUniversityDate = universityDateDao.getByPrimaryKey(runDate);
 
         Collection groups = null;
@@ -137,19 +136,19 @@ public class PosterServiceImpl implements PosterService {
                 validEntrySourceCode = OriginEntrySource.MAIN_POSTER_VALID;
                 invalidEntrySourceCode = OriginEntrySource.MAIN_POSTER_ERROR;
                 groups = originEntryGroupService.getGroupsToPost();
-                reportService.generatePosterMainLedgerSummaryReport(executionDate, runDate, groups);
+                reportService.generatePosterMainLedgerSummaryReport(runDate, groups);
                 break;
             case PosterService.MODE_REVERSAL:
                 validEntrySourceCode = OriginEntrySource.REVERSAL_POSTER_VALID;
                 invalidEntrySourceCode = OriginEntrySource.REVERSAL_POSTER_ERROR;
                 reversalTransactions = reversalDao.getByDate(runDate);
-                reportService.generatePosterReversalLedgerSummaryReport(executionDate, runDate, reversalTransactions);
+                reportService.generatePosterReversalLedgerSummaryReport(runDate, reversalTransactions);
                 break;
             case PosterService.MODE_ICR:
                 validEntrySourceCode = OriginEntrySource.ICR_POSTER_VALID;
                 invalidEntrySourceCode = OriginEntrySource.ICR_POSTER_ERROR;
                 groups = originEntryGroupService.getIcrGroupsToPost();
-                reportService.generatePosterIcrLedgerSummaryReport(executionDate, runDate, groups);
+                reportService.generatePosterIcrLedgerSummaryReport(runDate, groups);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid poster mode " + mode);
@@ -167,64 +166,48 @@ public class PosterServiceImpl implements PosterService {
         Map reportSummary = new HashMap();
         for (Iterator posterIter = transactionPosters.iterator(); posterIter.hasNext();) {
             PostTransaction poster = (PostTransaction) posterIter.next();
-            reportSummary.put(poster.getDestinationName() + "," + GLConstants.DELETE_CODE, new Integer(0));
-            reportSummary.put(poster.getDestinationName() + "," + GLConstants.INSERT_CODE, new Integer(0));
-            reportSummary.put(poster.getDestinationName() + "," + GLConstants.UPDATE_CODE, new Integer(0));
+            reportSummary.put(poster.getDestinationName() + "," + PosterServiceImpl.DELETE_CODE, new Integer(0));
+            reportSummary.put(poster.getDestinationName() + "," + PosterServiceImpl.INSERT_CODE, new Integer(0));
+            reportSummary.put(poster.getDestinationName() + "," + PosterServiceImpl.UPDATE_CODE, new Integer(0));
         }
 
         int ecount = 0;
-        try {
-            if ((mode == PosterService.MODE_ENTRIES) || (mode == PosterService.MODE_ICR)) {
-                LOG.debug("postEntries() Processing groups");
-                for (Iterator iter = groups.iterator(); iter.hasNext();) {
-                    OriginEntryGroup group = (OriginEntryGroup) iter.next();
+        if ((mode == PosterService.MODE_ENTRIES) || (mode == PosterService.MODE_ICR)) {
+            LOG.debug("postEntries() Processing groups");
+            for (Iterator iter = groups.iterator(); iter.hasNext();) {
+                OriginEntryGroup group = (OriginEntryGroup) iter.next();
 
-                    Iterator entries = originEntryService.getEntriesByGroup(group);
-                    while (entries.hasNext()) {
-                        Transaction tran = (Transaction) entries.next();
-
-                        postTransaction(tran, mode, reportSummary, reportError, invalidGroup, validGroup, runUniversityDate);
-
-                        if (++ecount % 1000 == 0) {
-                            LOG.info("postEntries() Posted Entry " + ecount);
-                        }
-                    }
-
-                    // Mark this group so we don't process it again next time the poster runs
-                    group.setProcess(Boolean.FALSE);
-                    originEntryGroupService.save(group);
-                }
-            }
-            else {
-                LOG.debug("postEntries() Processing reversal transactions");
-
-                final String GL_REVERSAL_T = MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(Reversal.class).getFullTableName();
-
-                while (reversalTransactions.hasNext()) {
-                    Transaction tran = (Transaction) reversalTransactions.next();
-                    addReporting(reportSummary, GL_REVERSAL_T, GLConstants.SELECT_CODE);
+                Iterator entries = originEntryService.getEntriesByGroup(group);
+                while (entries.hasNext()) {
+                    Transaction tran = (Transaction) entries.next();
 
                     postTransaction(tran, mode, reportSummary, reportError, invalidGroup, validGroup, runUniversityDate);
-
-                    if (++ecount % 1000 == 0) {
-                        LOG.info("postEntries() Posted Entry " + ecount);
-                    }
+                    LOG.info("postEntries() Posted Entry " + (++ecount));
                 }
 
-                // Report Reversal poster valid transactions
-                reportService.generatePosterReversalTransactionsListing(executionDate, runDate, validGroup);
+                // Mark this group so we don't process it again next time the poster runs
+                group.setProcess(Boolean.FALSE);
+                originEntryGroupService.save(group);
             }
         }
-        catch (RuntimeException e) {
-            LOG.info("postEntries() failed posting Entry " + ecount);
-            throw e;
+        else {
+            LOG.debug("postEntries() Processing reversal transactions");
+            while (reversalTransactions.hasNext()) {
+                Transaction tran = (Transaction) reversalTransactions.next();
+                addReporting(reportSummary, "GL_REVERSAL_T", PosterServiceImpl.SELECT_CODE);
+
+                postTransaction(tran, mode, reportSummary, reportError, invalidGroup, validGroup, runUniversityDate);
+
+                // Report Reversal poster valid transactions
+                reportService.generatePosterReversalTransactionsListing(runDate, validGroup);
+
+                LOG.info("postEntries() Posted Entry " + (++ecount));
+            }
         }
 
-        LOG.info("postEntries() done, total count = " + ecount);
-
         // Generate the reports
-        reportService.generatePosterStatisticsReport(executionDate, runDate, reportSummary, transactionPosters, reportError, mode);
-        reportService.generatePosterErrorTransactionListing(executionDate, runDate, invalidGroup, mode);
+        reportService.generatePosterStatisticsReport(runDate, reportSummary, transactionPosters, reportError, mode);
+        reportService.generatePosterErrorTransactionListing(runDate, invalidGroup, mode);
     }
 
     private void postTransaction(Transaction tran, int mode, Map reportSummary, Map reportError, OriginEntryGroup invalidGroup, OriginEntryGroup validGroup, UniversityDate runUniversityDate) {
@@ -233,14 +216,12 @@ public class PosterServiceImpl implements PosterService {
 
         Transaction originalTransaction = tran;
 
-        final String GL_ORIGIN_ENTRY_T = MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(OriginEntryFull.class).getFullTableName();
-
         // Update select count in the report
         if (mode == PosterService.MODE_ENTRIES) {
-            addReporting(reportSummary, GL_ORIGIN_ENTRY_T, GLConstants.SELECT_CODE);
+            addReporting(reportSummary, "GL_ORIGIN_ENTRY_T", PosterServiceImpl.SELECT_CODE);
         }
         else {
-            addReporting(reportSummary, GL_ORIGIN_ENTRY_T + " (ICR)", GLConstants.SELECT_CODE);
+            addReporting(reportSummary, "GL_ORIGIN_ENTRY_T (ICR)", PosterServiceImpl.SELECT_CODE);
         }
 
         // If these are reversal entries, we need to reverse the entry and
@@ -275,14 +256,14 @@ public class PosterServiceImpl implements PosterService {
                     reversal.setTransactionLedgerEntryDescription(newDescription);
                 }
                 else {
-                    errors.add(configurationService.getPropertyString(KFSKeyConstants.ERROR_UNIV_DATE_NOT_IN_ACCOUNTING_PERIOD_TABLE));
+                    errors.add(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_UNIV_DATE_NOT_IN_ACCOUNTING_PERIOD_TABLE));
                 }
             }
             else {
-                errors.add(configurationService.getPropertyString(KFSKeyConstants.ERROR_REVERSAL_DATE_NOT_IN_UNIV_DATE_TABLE));
+                errors.add(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_REVERSAL_DATE_NOT_IN_UNIV_DATE_TABLE));
             }
 
-            PersistenceService ps = SpringContext.getBean(PersistenceService.class);
+            PersistenceService ps = SpringServiceLocator.getPersistenceService();
             ps.retrieveNonKeyFields(reversal);
             tran = reversal;
         }
@@ -305,7 +286,7 @@ public class PosterServiceImpl implements PosterService {
         if (errors.size() > 0) {
             // Error on this transaction
             reportError.put(tran, errors);
-            addReporting(reportSummary, "WARNING", GLConstants.SELECT_CODE);
+            addReporting(reportSummary, "WARNING", PosterServiceImpl.SELECT_CODE);
 
             originEntryService.createEntry(tran, invalidGroup);
         }
@@ -315,22 +296,22 @@ public class PosterServiceImpl implements PosterService {
                 PostTransaction poster = (PostTransaction) posterIter.next();
                 String actionCode = poster.post(tran, mode, runUniversityDate.getUniversityDate());
 
-                if (actionCode.startsWith(GLConstants.ERROR_CODE)) {
+                if (actionCode.startsWith("E")) {
                     errors = new ArrayList();
                     errors.add(actionCode);
                     reportError.put(tran, errors);
                 }
-                else if (actionCode.indexOf(GLConstants.INSERT_CODE) >= 0) {
-                    addReporting(reportSummary, poster.getDestinationName(), GLConstants.INSERT_CODE);
+                else if (actionCode.indexOf(PosterServiceImpl.INSERT_CODE) >= 0) {
+                    addReporting(reportSummary, poster.getDestinationName(), PosterServiceImpl.INSERT_CODE);
                 }
-                else if (actionCode.indexOf(GLConstants.UPDATE_CODE) >= 0) {
-                    addReporting(reportSummary, poster.getDestinationName(), GLConstants.UPDATE_CODE);
+                else if (actionCode.indexOf(PosterServiceImpl.UPDATE_CODE) >= 0) {
+                    addReporting(reportSummary, poster.getDestinationName(), PosterServiceImpl.UPDATE_CODE);
                 }
-                else if (actionCode.indexOf(GLConstants.DELETE_CODE) >= 0) {
-                    addReporting(reportSummary, poster.getDestinationName(), GLConstants.DELETE_CODE);
+                else if (actionCode.indexOf(PosterServiceImpl.DELETE_CODE) >= 0) {
+                    addReporting(reportSummary, poster.getDestinationName(), PosterServiceImpl.DELETE_CODE);
                 }
-                else if (actionCode.indexOf(GLConstants.SELECT_CODE) >= 0) {
-                    addReporting(reportSummary, poster.getDestinationName(), GLConstants.SELECT_CODE);
+                else if (actionCode.indexOf(PosterServiceImpl.SELECT_CODE) >= 0) {
+                    addReporting(reportSummary, poster.getDestinationName(), PosterServiceImpl.SELECT_CODE);
                 }
             }
 
@@ -340,7 +321,7 @@ public class PosterServiceImpl implements PosterService {
                 // Delete the reversal entry
                 if (mode == PosterService.MODE_REVERSAL) {
                     reversalDao.delete((Reversal) originalTransaction);
-                    addReporting(reportSummary, MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(Reversal.class).getFullTableName(), GLConstants.DELETE_CODE);
+                    addReporting(reportSummary, "GL_REVERSAL_T", PosterServiceImpl.DELETE_CODE);
                 }
             }
         }
@@ -352,12 +333,11 @@ public class PosterServiceImpl implements PosterService {
     public void generateIcrTransactions() {
         LOG.debug("generateIcrTransactions() started");
 
-        Date executionDate = dateTimeService.getCurrentSqlDate();
-        Date runDate = new Date(runDateService.calculateRunDate(executionDate).getTime());
+        Date runDate = new Date(dateTimeService.getCurrentDate().getTime());
 
         OriginEntryGroup group = originEntryGroupService.createGroup(runDate, OriginEntrySource.ICR_TRANSACTIONS, true, true, false);
 
-        Map<ExpenditureTransaction, List<Message>> reportErrors = new HashMap();
+        Map reportErrors = new HashMap();
 
         int reportExpendTranRetrieved = 0;
         int reportExpendTranDeleted = 0;
@@ -370,38 +350,45 @@ public class PosterServiceImpl implements PosterService {
             reportExpendTranRetrieved++;
 
             KualiDecimal transactionAmount = et.getAccountObjectDirectCostAmount();
+            KualiDecimal distributionPercent = KualiDecimal.ZERO;
             KualiDecimal distributionAmount = KualiDecimal.ZERO;
+            KualiDecimal distributedAmount = KualiDecimal.ZERO;
 
             Collection automatedEntries = icrAutomatedEntryDao.getEntriesBySeries(et.getUniversityFiscalYear(), et.getAccount().getFinancialIcrSeriesIdentifier(), et.getBalanceTypeCode());
             int automatedEntriesCount = automatedEntries.size();
 
             if (automatedEntriesCount > 0) {
+                int count = 0;
                 for (Iterator icrIter = automatedEntries.iterator(); icrIter.hasNext();) {
                     IcrAutomatedEntry icrEntry = (IcrAutomatedEntry) icrIter.next();
+                    count++;
+
                     KualiDecimal generatedTransactionAmount = null;
 
-                    if (!icrIter.hasNext()) {
-                        generatedTransactionAmount = distributionAmount;
+                    if (icrEntry.getAwardIndrCostRcvyEntryNbr().intValue() == 1) {
+                        // Line 1 must have the total percentage of the transaction to distribute
+                        distributionPercent = icrEntry.getAwardIndrCostRcvyRatePct();
+                        distributionAmount = getPercentage(transactionAmount, distributionPercent.bigDecimalValue());
 
-                        // Log differences that are over WARNING_MAX_DIFFERENCE
-                        if(getPercentage(transactionAmount, icrEntry.getAwardIndrCostRcvyRatePct()).subtract(distributionAmount).abs().isGreaterThan(WARNING_MAX_DIFFERENCE)) {
-                            List warnings = new ArrayList();
-                            warnings.add("ADJUSTMENT GREATER THAN " + WARNING_MAX_DIFFERENCE);
-                            reportErrors.put(et, warnings);
-                        }
-                    } else if (icrEntry.getTransactionDebitIndicator().equals(KFSConstants.GL_DEBIT_CODE)) {
-                        generatedTransactionAmount = getPercentage(transactionAmount, icrEntry.getAwardIndrCostRcvyRatePct());
-                        distributionAmount = distributionAmount.add(generatedTransactionAmount);
-                    }
-                    else if (icrEntry.getTransactionDebitIndicator().equals(KFSConstants.GL_CREDIT_CODE)) {
-                        generatedTransactionAmount = getPercentage(transactionAmount, icrEntry.getAwardIndrCostRcvyRatePct());
-                        distributionAmount = distributionAmount.subtract(generatedTransactionAmount);
+                        generatedTransactionAmount = distributionAmount;
                     }
                     else {
-                        // Log if D / C code not found
-                        List warnings = new ArrayList();
-                        warnings.add("DEBIT OR CREDIT CODE NOT FOUND");
-                        reportErrors.put(et, warnings);
+                        if (automatedEntriesCount != count) {
+                            generatedTransactionAmount = getPercentage(transactionAmount, icrEntry.getAwardIndrCostRcvyRatePct().bigDecimalValue());
+                            distributedAmount = distributedAmount.add(generatedTransactionAmount);
+                        }
+                        else {
+                            // Distribute the remaining amount on the last one
+                            generatedTransactionAmount = distributionAmount.subtract(distributedAmount);
+                        }
+
+                        // if (difference.compareTo(KualiDecimal.ZERO) != 0) {
+                        // if (difference.abs().compareTo(warningMaxDifference) >= 0) {
+                        // // TODO Rounding warning
+                        // }
+                        // distributedAmount.add(difference);
+                        // }
+
                     }
 
                     generateTransactions(et, icrEntry, generatedTransactionAmount, runDate, group, reportErrors);
@@ -414,7 +401,7 @@ public class PosterServiceImpl implements PosterService {
             reportExpendTranDeleted++;
         }
 
-        reportService.generatePosterIcrStatisticsReport(executionDate, runDate, reportErrors, reportExpendTranRetrieved, reportExpendTranDeleted, reportExpendTranKept, reportOriginEntryGenerated);
+        reportService.generatePosterIcrStatisticsReport(runDate, reportErrors, reportExpendTranRetrieved, reportExpendTranDeleted, reportExpendTranKept, reportOriginEntryGenerated);
     }
 
     /**
@@ -430,18 +417,18 @@ public class PosterServiceImpl implements PosterService {
         BigDecimal pct = new BigDecimal(icrEntry.getAwardIndrCostRcvyRatePct().toString());
         pct = pct.divide(BDONEHUNDRED);
 
-        OriginEntryFull e = new OriginEntryFull();
+        OriginEntry e = new OriginEntry();
         e.setTransactionLedgerEntrySequenceNumber(0);
 
-        // SYMBOL_USE_EXPENDITURE_ENTRY means we use the field from the expenditure entry, SYMBOL_USE_IRC_FROM_ACCOUNT
-        // means we use the ICR field from the account record, otherwise, use the field in the icrEntry
-        if (GLConstants.PosterService.SYMBOL_USE_EXPENDITURE_ENTRY.equals(icrEntry.getFinancialObjectCode()) || GLConstants.PosterService.SYMBOL_USE_IRC_FROM_ACCOUNT.equals(icrEntry.getFinancialObjectCode())) {
+        // @ means we use the field from the expenditure entry, # means we use the ICR field from the account record, otherwise, use
+        // the field in the icrEntry
+        if ("@".equals(icrEntry.getFinancialObjectCode()) || "#".equals(icrEntry.getFinancialObjectCode())) {
             e.setFinancialObjectCode(et.getObjectCode());
             e.setFinancialSubObjectCode(et.getSubObjectCode());
         }
         else {
             e.setFinancialObjectCode(icrEntry.getFinancialObjectCode());
-            if (GLConstants.PosterService.SYMBOL_USE_EXPENDITURE_ENTRY.equals(icrEntry.getFinancialSubObjectCode())) {
+            if ("@".equals(icrEntry.getFinancialSubObjectCode())) {
                 e.setFinancialSubObjectCode(et.getSubObjectCode());
             }
             else {
@@ -449,15 +436,15 @@ public class PosterServiceImpl implements PosterService {
             }
         }
 
-        if (GLConstants.PosterService.SYMBOL_USE_EXPENDITURE_ENTRY.equals(icrEntry.getAccountNumber())) {
+        if ("@".equals(icrEntry.getAccountNumber())) {
             e.setAccountNumber(et.getAccountNumber());
             e.setChartOfAccountsCode(et.getChartOfAccountsCode());
             e.setSubAccountNumber(et.getSubAccountNumber());
         }
-        else if (GLConstants.PosterService.SYMBOL_USE_IRC_FROM_ACCOUNT.equals(icrEntry.getAccountNumber())) {
+        else if ("#".equals(icrEntry.getAccountNumber())) {
             e.setAccountNumber(et.getAccount().getIndirectCostRecoveryAcctNbr());
             e.setChartOfAccountsCode(et.getAccount().getIndirectCostRcvyFinCoaCode());
-            e.setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
+            e.setSubAccountNumber(KFSConstants.DASHES_SUB_ACCOUNT_NUMBER);
         }
         else {
             e.setAccountNumber(icrEntry.getAccountNumber());
@@ -466,8 +453,8 @@ public class PosterServiceImpl implements PosterService {
             // TODO Reporting thing line 1946
         }
 
-        e.setFinancialDocumentTypeCode(parameterService.getParameterValue(PosterIndirectCostRecoveryEntriesStep.class, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
-        e.setFinancialSystemOriginationCode(parameterService.getParameterValue(ParameterConstants.GENERAL_LEDGER_BATCH.class, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
+        e.setFinancialDocumentTypeCode(kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
+        e.setFinancialSystemOriginationCode(kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.GL_ORIGINATION_CODE));
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
         e.setDocumentNumber(sdf.format(runDate));
         if (KFSConstants.GL_DEBIT_CODE.equals(icrEntry.getTransactionDebitIndicator())) {
@@ -485,7 +472,7 @@ public class PosterServiceImpl implements PosterService {
         ObjectCode oc = objectCodeService.getByPrimaryId(e.getUniversityFiscalYear(), e.getChartOfAccountsCode(), e.getFinancialObjectCode());
         if (oc == null) {
             // TODO This should be a report thing, not an exception
-            throw new IllegalArgumentException(configurationService.getPropertyString(KFSKeyConstants.ERROR_OBJECT_CODE_NOT_FOUND_FOR) + e.getUniversityFiscalYear() + "," + e.getChartOfAccountsCode() + "," + e.getFinancialObjectCode());
+            throw new IllegalArgumentException(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_OBJECT_CODE_NOT_FOUND_FOR) + e.getUniversityFiscalYear() + "," + e.getChartOfAccountsCode() + "," + e.getFinancialObjectCode());
         }
         e.setFinancialObjectTypeCode(oc.getFinancialObjectTypeCode());
 
@@ -503,10 +490,10 @@ public class PosterServiceImpl implements PosterService {
         }
 
         if (et.getBalanceTypeCode().equals(et.getOption().getExtrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getIntrnlEncumFinBalanceTypCd()) || et.getBalanceTypeCode().equals(et.getOption().getPreencumbranceFinBalTypeCd()) || et.getBalanceTypeCode().equals(et.getOption().getCostShareEncumbranceBalanceTypeCd())) {
-            e.setDocumentNumber(parameterService.getParameterValue(PosterIndirectCostRecoveryEntriesStep.class, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
+            e.setDocumentNumber(kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.GL_INDIRECT_COST_RECOVERY));
         }
         e.setProjectCode(et.getProjectCode());
-        if (GLConstants.getDashOrganizationReferenceId().equals(et.getOrganizationReferenceId())) {
+        if (GLConstants.DASH_ORGANIZATION_REFERENCE_ID.equals(et.getOrganizationReferenceId())) {
             e.setOrganizationReferenceId(null);
         }
         else {
@@ -517,20 +504,20 @@ public class PosterServiceImpl implements PosterService {
         originEntryService.createEntry(e, group);
 
         // Now generate Offset
-        e = new OriginEntryFull(e);
+        e = new OriginEntry(e);
         if (KFSConstants.GL_DEBIT_CODE.equals(e.getTransactionDebitCreditCode())) {
             e.setTransactionDebitCreditCode(KFSConstants.GL_CREDIT_CODE);
         }
         else {
             e.setTransactionDebitCreditCode(KFSConstants.GL_DEBIT_CODE);
         }
-        e.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
+        e.setFinancialSubObjectCode(KFSConstants.DASHES_SUB_OBJECT_CODE);
         e.setFinancialObjectCode(icrEntry.getOffsetBalanceSheetObjectCodeNumber());
 
         ObjectCode balSheetObjectCode = objectCodeService.getByPrimaryId(icrEntry.getUniversityFiscalYear(), e.getChartOfAccountsCode(), icrEntry.getOffsetBalanceSheetObjectCodeNumber());
         if (balSheetObjectCode == null) {
             List warnings = new ArrayList();
-            warnings.add(configurationService.getPropertyString(KFSKeyConstants.ERROR_INVALID_OFFSET_OBJECT_CODE) + icrEntry.getUniversityFiscalYear() + "-" + e.getChartOfAccountsCode() + "-" + icrEntry.getOffsetBalanceSheetObjectCodeNumber());
+            warnings.add(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_INVALID_OFFSET_OBJECT_CODE) + icrEntry.getUniversityFiscalYear() + "-" + e.getChartOfAccountsCode() + "-" + icrEntry.getOffsetBalanceSheetObjectCodeNumber());
             reportErrors.put(e, warnings);
         }
         else {
@@ -548,9 +535,8 @@ public class PosterServiceImpl implements PosterService {
             flexibleOffsetAccountService.updateOffset(e);
         }
         catch (InvalidFlexibleOffsetException ex) {
-            List warnings = new ArrayList();
-            warnings.add("FAILED TO GENERATE FLEXIBLE OFFSETS " + ex.getMessage());
-            reportErrors.put(e, warnings);
+            // TODO This should be a report thing, not an exception
+            throw new IllegalArgumentException(ex.getMessage());
         }
 
         originEntryService.createEntry(e, group);
@@ -667,23 +653,15 @@ public class PosterServiceImpl implements PosterService {
         reportService = rs;
     }
 
-    public void setConfigurationService(KualiConfigurationService configurationService) {
-        this.configurationService = configurationService;
+    public void setBeanFactory(BeanFactory bf) throws BeansException {
+        beanFactory = bf;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 
     public void setFlexibleOffsetAccountService(FlexibleOffsetAccountService flexibleOffsetAccountService) {
         this.flexibleOffsetAccountService = flexibleOffsetAccountService;
-    }
-
-    public RunDateService getRunDateService() {
-        return runDateService;
-    }
-
-    public void setRunDateService(RunDateService runDateService) {
-        this.runDateService = runDateService;
     }
 }

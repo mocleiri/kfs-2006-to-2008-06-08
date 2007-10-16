@@ -16,71 +16,54 @@
 
 package org.kuali.module.purap.document;
 
-import static org.kuali.core.util.KualiDecimal.ZERO;
+import static org.kuali.kfs.KFSConstants.ZERO;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.Note;
 import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.document.Document;
+import org.kuali.core.document.Copyable;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.SequenceAccessorService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.core.workflow.service.KualiWorkflowInfo;
-import org.kuali.core.workflow.service.WorkflowDocumentService;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ConciseXmlDocumentConversionService;
+import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapWorkflowConstants;
-import org.kuali.module.purap.PurapConstants.CreditMemoStatuses;
 import org.kuali.module.purap.PurapConstants.RequisitionSources;
 import org.kuali.module.purap.PurapConstants.VendorChoice;
-import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
-import org.kuali.module.purap.PurapWorkflowConstants.PurchaseOrderDocument.NodeDetailEnum;
 import org.kuali.module.purap.bo.CreditMemoView;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PaymentRequestView;
-import org.kuali.module.purap.bo.PurApItem;
-import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
+import org.kuali.module.purap.bo.PurchaseOrderStatusHistory;
 import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
 import org.kuali.module.purap.bo.PurchaseOrderVendorQuote;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.bo.PurchaseOrderView;
+import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.RecurringPaymentFrequency;
 import org.kuali.module.purap.bo.RequisitionItem;
-import org.kuali.module.purap.service.PurapAccountingService;
-import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.service.PurchaseOrderService;
-import org.kuali.module.purap.service.RequisitionService;
+import org.kuali.module.purap.service.PurchaseOrderPostProcessorService;
 import org.kuali.module.vendor.VendorConstants;
-import org.kuali.module.vendor.bo.ContractManager;
 import org.kuali.module.vendor.bo.PaymentTermType;
 import org.kuali.module.vendor.bo.ShippingPaymentTerms;
 import org.kuali.module.vendor.bo.ShippingTitle;
 import org.kuali.module.vendor.bo.VendorDetail;
 
-import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO;
-import edu.iu.uis.eden.clientapp.vo.DocumentRouteLevelChangeVO;
-import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
-import edu.iu.uis.eden.clientapp.vo.ReportCriteriaVO;
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * Purchase Order Document
  */
-public class PurchaseOrderDocument extends PurchasingDocumentBase {
+public class PurchaseOrderDocument extends PurchasingDocumentBase implements Copyable {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderDocument.class);
 
     private Date purchaseOrderCreateDate;
@@ -106,22 +89,21 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     private Integer newQuoteVendorHeaderGeneratedIdentifier;
     private Integer newQuoteVendorDetailAssignedIdentifier;
     private String alternateVendorName;
-    private boolean purchaseOrderCurrentIndicator = false;
-    private boolean pendingActionIndicator = false;
+    private String statusChange;
+    private String statusChangeNote;
+    private boolean purchaseOrderCurrentIndicator;
+    private boolean pendingActionIndicator;
     private Date purchaseOrderFirstTransmissionDate;
-    private Integer contractManagerCode;
     
     //COLLECTIONS
     private List<PurchaseOrderVendorStipulation> purchaseOrderVendorStipulations;
     private List<PurchaseOrderVendorQuote> purchaseOrderVendorQuotes;
 
     // NOT PERSISTED IN DB
-    private String statusChange;
     private String alternateVendorNumber;
     private String purchaseOrderRetransmissionMethodCode;
     private String retransmitHeader;
     private Integer purchaseOrderQuoteListIdentifier;
-    private KualiDecimal internalPurchasingLimit;
     
     // REFERENCE OBJECTS
     private PurchaseOrderVendorChoice purchaseOrderVendorChoice;
@@ -129,60 +111,14 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     private ShippingTitle vendorShippingTitle;
     private ShippingPaymentTerms vendorShippingPaymentTerms;
     private RecurringPaymentFrequency recurringPaymentFrequency;
-    private ContractManager contractManager;
     
     /**
-     * Default constructor.
-     */
-    public PurchaseOrderDocument() {
+	 * Default constructor.
+	 */
+	public PurchaseOrderDocument() {
         super();
         this.purchaseOrderVendorStipulations = new TypedArrayList( PurchaseOrderVendorStipulation.class );
         this.purchaseOrderVendorQuotes = new TypedArrayList( PurchaseOrderVendorQuote.class );
-    }
-
-    @Override
-    protected Document getDocumentRepresentationForSerialization() {
-        return SpringContext.getBean(ConciseXmlDocumentConversionService.class).getDocumentForSerialization(this);
-    }
-
-    public ContractManager getContractManager() {
-        return contractManager;
-    }
-
-    public void setContractManager(ContractManager contractManager) {
-        this.contractManager = contractManager;
-    }
-
-    /**
-     * Gets the contractManagerCode attribute.
-     * 
-     * @return Returns the contractManagerCode
-     * 
-     */
-    public Integer getContractManagerCode() { 
-        return contractManagerCode;
-    }
-
-    /**
-     * Sets the contractManagerCode attribute.
-     * 
-     * @param contractManagerCode The contractManagerCode to set.
-     * 
-     */
-    public void setContractManagerCode(Integer contractManagerCode) {
-        this.contractManagerCode = contractManagerCode;
-    }
-    
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getOverrideWorkflowButtons()
-     */
-    @Override
-    public Boolean getOverrideWorkflowButtons() {
-        if (ObjectUtils.isNull(super.getOverrideWorkflowButtons())) {
-            // should only be null on the first call... never after
-            setOverrideWorkflowButtons(Boolean.TRUE);
-        }
-        return super.getOverrideWorkflowButtons();
     }
 
     /**
@@ -193,14 +129,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         return true;
     }
 
-    @Override
     public void customPrepareForSave(KualiDocumentEvent event) {
-        super.customPrepareForSave(event);
-        if (ObjectUtils.isNull(getPurapDocumentIdentifier())) {
-            //need retrieve the next available PO id to save in GL entries (only do if purap id is null which should be on first save)
-            Long poSequenceNumber = SpringContext.getBean(SequenceAccessorService.class).getNextAvailableSequenceNumber("PO_ID");
-            setPurapDocumentIdentifier(new Integer(poSequenceNumber.intValue()));
-        }
 
         // Set outstanding encumbered quantity/amount on items
         for (Iterator items = this.getItems().iterator(); items.hasNext();) {
@@ -214,34 +143,30 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
             item.setItemInvoicedTotalAmount(ZERO);
 
             // Set amount
-            item.setItemOutstandingEncumberedAmount(item.getExtendedPrice() == null ? ZERO : item.getExtendedPrice());
+            item.setItemOutstandingEncumbranceAmount(item.getExtendedPrice() == null ? ZERO : item.getExtendedPrice());
 
-            List accounts = (List)item.getSourceAccountingLines();
-            Collections.sort(accounts);
+            //TODO check setting of outstanding amount in the accounts in item.prepareToSave()
+            item.prepareToSave();
+        }//endfor
 
-            for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-                PurchaseOrderAccount account = (PurchaseOrderAccount) iterator.next();
-                if (!account.isEmpty()) {
-                    account.setItemAccountOutstandingEncumbranceAmount(account.getAmount());
-                }
-            }//endfor accounts
-
-        }//endfor items
-
-        this.setSourceAccountingLines(SpringContext.getBean(PurapAccountingService.class).generateSummaryWithNoZeroTotals(this.getItems()));
-    }//end customPrepareForSave(KualiDocumentEvent)
+    }//end customPrepareForSave()
     
     @Override
     public void prepareForSave(KualiDocumentEvent event) {
-        if (PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_DOCUMENT.equals(getDocumentHeader().getWorkflowDocument().getDocumentType())) {
-            if (!getDocumentHeader().getWorkflowDocument().stateIsProcessed() && !getDocumentHeader().getWorkflowDocument().stateIsFinal()) {
-                super.prepareForSave(event);
-            }
-            else {
-                //if doc is PROCESSED or FINAL, saving should not be creating GL entries
-                setGeneralLedgerPendingEntries(new ArrayList());
-            }
+        customPrepareForSave(event);
+        if (ObjectUtils.isNull(getPurapDocumentIdentifier())) {
+            //need to save to generate PO id to save in GL entries
+            SpringServiceLocator.getPurchaseOrderService().save(this);
         }
+        this.refreshNonUpdateableReferences();
+        this.setSourceAccountingLines(SpringServiceLocator.getPurapAccountingService().generateSummaryWithNoZeroTotals(this.getItems()));
+        super.prepareForSave(event);
+    }
+
+    @Override
+    public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
+        // FIXME
+        return new ArrayList();
     }
 
     public void setDefaultValuesForAPO() {
@@ -255,7 +180,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     public void populatePurchaseOrderFromRequisition(RequisitionDocument requisitionDocument) {
 // TODO fix this (is this data correct?  is there a better way of doing this?
 //        this.setPurchaseOrderCreateDate(requisitionDocument.getDocumentHeader().getWorkflowDocument().getCreateDate());
-        this.setPurchaseOrderCreateDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
+        this.setPurchaseOrderCreateDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
         
         this.getDocumentHeader().setOrganizationDocumentNumber(requisitionDocument.getDocumentHeader().getOrganizationDocumentNumber());
         this.getDocumentHeader().setFinancialDocumentDescription(requisitionDocument.getDocumentHeader().getFinancialDocumentDescription());
@@ -270,6 +195,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         this.setBillingPhoneNumber(requisitionDocument.getBillingPhoneNumber());
         this.setBillingPostalCode(requisitionDocument.getBillingPostalCode());
         this.setBillingStateCode(requisitionDocument.getBillingStateCode());
+        this.setContractManagerCode(requisitionDocument.getContractManagerCode());
         this.setPurchaseOrderCostSourceCode(requisitionDocument.getPurchaseOrderCostSourceCode());
         this.setDeliveryBuildingCode(requisitionDocument.getDeliveryBuildingCode());
         this.setDeliveryBuildingRoomNumber(requisitionDocument.getDeliveryBuildingRoomNumber());
@@ -323,18 +249,21 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         this.setVendorStateCode(requisitionDocument.getVendorStateCode());
         this.setExternalOrganizationB2bSupplierIdentifier(requisitionDocument.getExternalOrganizationB2bSupplierIdentifier());
         this.setRequisitionSourceCode(requisitionDocument.getRequisitionSourceCode());
-        this.setAccountsPayablePurchasingDocumentLinkIdentifier(requisitionDocument.getAccountsPayablePurchasingDocumentLinkIdentifier());
 
         this.setStatusCode(PurapConstants.PurchaseOrderStatuses.IN_PROCESS);
         //copy items from req to pending (which will copy the item's accounts and assets)
         List<PurchaseOrderItem> items = new ArrayList();
-        for (PurApItem reqItem : ((PurchasingAccountsPayableDocument) requisitionDocument).getItems()) {
+        for (PurchasingApItem reqItem : ((PurchasingAccountsPayableDocument) requisitionDocument).getItems()) {
           items.add(new PurchaseOrderItem((RequisitionItem)reqItem, this));
         }
         this.setItems(items);
         
     }
 
+    public void refreshAllReferences() {
+        super.refreshAllReferences();
+    }
+    
     public PurchaseOrderVendorStipulation getPurchaseOrderVendorStipulation(int index) {
         while (getPurchaseOrderVendorStipulations().size() <= index) {
             getPurchaseOrderVendorStipulations().add(new PurchaseOrderVendorStipulation());
@@ -343,141 +272,35 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocumentBase#handleRouteStatusChange()
+     * @see org.kuali.core.document.DocumentBase#handleRouteStatusChange()
      */
     @Override
     public void handleRouteStatusChange() {
         LOG.debug("handleRouteStatusChange() started");
         super.handleRouteStatusChange();
 
-        //child classes need to call super, but we don't want to inherit the post-processing done by this PO class
-        if ( PurchaseOrderDocument.class.getName().equals(this.getClass().getName()) ) {
-            try {
-                // DOCUMENT PROCESSED
-                if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-                    SpringContext.getBean(PurchaseOrderService.class).completePurchaseOrder(this);
-                }
-                // DOCUMENT DISAPPROVED
-                else if (getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-                    String nodeName = SpringContext.getBean(WorkflowDocumentService.class).getCurrentRouteLevelName(getDocumentHeader().getWorkflowDocument());
-                    NodeDetails currentNode = NodeDetailEnum.getNodeDetailEnumByName(nodeName);
-                    if (ObjectUtils.isNotNull(currentNode)) {
-                        if (StringUtils.isNotBlank(currentNode.getDisapprovedStatusCode())) {
-                            SpringContext.getBean(PurapService.class).updateStatus(this, currentNode.getDisapprovedStatusCode());
-                            SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
-                            RequisitionDocument req = getPurApSourceDocumentIfPossible();
-                            appSpecificRouteDocumentToUser(getDocumentHeader().getWorkflowDocument(), req.getDocumentHeader().getWorkflowDocument().getRoutedByUserNetworkId(), "Notification of Order Disapproval for Requisition " + req.getPurapDocumentIdentifier() + "(document id " + req.getDocumentNumber() + ")", "Requisition Routed By User");
-                            return;
-                        }
-                    }
-                    // TODO PURAP/delyea - what to do in a disapproval where no status to set exists?
-                    logAndThrowRuntimeException("No status found to set for document being disapproved in node '" + nodeName + "'");
-                }
-                // DOCUMENT CANCELED
-                else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-                    // TODO PURAP/delyea - what status to use if this cancel is a super user cancel while ENROUTE?
-                    SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
-                }
-            }
-            catch (WorkflowException e) {
-                logAndThrowRuntimeException("Error saving routing data while saving document with id " + getDocumentNumber(), e);
-            }
-        }
-        
-    }
-    
-    private String getCurrentRouteNodeName(KualiWorkflowDocument wd) throws WorkflowException {
-        String[] nodeNames = wd.getNodeNames();
-        if ( (nodeNames == null) || (nodeNames.length == 0) ) {
-          return null;
-        } else {
-          return nodeNames[0];
-        }
-      }
-
-    private void appSpecificRouteDocumentToUser(KualiWorkflowDocument workflowDocument, String userNetworkId, String annotation, String responsibility) throws WorkflowException {
-        if (ObjectUtils.isNotNull(workflowDocument)) {
-        String annotationNote = (ObjectUtils.isNull(annotation)) ? "" : annotation;
-        String responsibilityNote = (ObjectUtils.isNull(responsibility)) ? "" : responsibility;
-        String currentNodeName = getCurrentRouteNodeName(workflowDocument);
-        workflowDocument.appSpecificRouteDocumentToUser(EdenConstants.ACTION_REQUEST_FYI_REQ, currentNodeName, 0, annotationNote, new NetworkIdVO(userNetworkId), responsibilityNote, true);
-    }
-    }
-
-    /**
-     * @see org.kuali.core.document.DocumentBase#handleRouteLevelChange(edu.iu.uis.eden.clientapp.vo.DocumentRouteLevelChangeVO)
-     */
-    @Override
-    public void handleRouteLevelChange(DocumentRouteLevelChangeVO levelChangeEvent) {
-        LOG.debug("handleRouteLevelChange() started");
-        super.handleRouteLevelChange(levelChangeEvent);
-
-        LOG.debug("handleRouteLevelChange() started");
-        String newNodeName = levelChangeEvent.getNewNodeName();
-        if (StringUtils.isNotBlank(newNodeName)) {
-            ReportCriteriaVO reportCriteriaVO = new ReportCriteriaVO(Long.valueOf(getDocumentNumber()));
-            reportCriteriaVO.setTargetNodeName(newNodeName);
-            try {
-                NodeDetails newNodeDetails = NodeDetailEnum.getNodeDetailEnumByName(newNodeName);
-                if (ObjectUtils.isNotNull(newNodeDetails)) {
-                    if (PurapWorkflowConstants.PurchaseOrderDocument.NodeDetailEnum.DOCUMENT_TRANSMISSION.equals(newNodeDetails)) {
-                        // in the document transmission node... we do special processing to set the status and update the PO
-                        boolean willHaveRequest = SpringContext.getBean(KualiWorkflowInfo.class).documentWillHaveAtLeastOneActionRequest(reportCriteriaVO, null);
-                        PurchaseOrderService poService = SpringContext.getBean(PurchaseOrderService.class);
-                        poService.setupDocumentForPendingFirstTransmission(this, willHaveRequest);
-                        poService.saveDocumentNoValidation(this);
-                    }
-                    else {
-                        String newStatusCode = newNodeDetails.getAwaitingStatusCode();
-                        if (StringUtils.isNotBlank(newStatusCode)) {
-                            if (SpringContext.getBean(KualiWorkflowInfo.class).documentWillHaveAtLeastOneActionRequest(
-                                    reportCriteriaVO, new String[]{EdenConstants.ACTION_REQUEST_APPROVE_REQ,EdenConstants.ACTION_REQUEST_COMPLETE_REQ})) {
-                                // if an approve or complete request will be created then we need to set the status as awaiting for the new node
-                                SpringContext.getBean(PurapService.class).updateStatus(this, newStatusCode);
-                                SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (WorkflowException e) {
-                String errorMsg = "Workflow Error found checking actions requests on document with id " + getDocumentNumber() + ". *** WILL NOT UPDATE PURAP STATUS ***";
-                LOG.warn(errorMsg, e);
-            }
-        }
-    }
-
-    /**
-     * @see org.kuali.core.document.DocumentBase#doActionTaken(edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO)
-     */
-    @Override
-    public void doActionTaken(ActionTakenEventVO event) {
-        super.doActionTaken(event);
         // additional processing
+        PurchaseOrderPostProcessorService popp = 
+            SpringServiceLocator.getPurchaseOrderService().convertDocTypeToService(getDocumentHeader().getWorkflowDocument().getDocumentType());
+        // null if defined as empty string in map
+        if (popp != null) {
+            popp.handleRouteStatusChange(this);
+        }
     }
-    
+
+    @Override
+    public void handleRouteLevelChange() {
+        LOG.debug("handleRouteLevelChange() started");
+        super.handleRouteLevelChange();
+    }
+
     public List getItemsActiveOnly() {
         List returnList = new ArrayList();
         for (Iterator iter = getItems().iterator(); iter.hasNext();) {
             PurchaseOrderItem item = (PurchaseOrderItem) iter.next();
             if (item.isItemActiveIndicator()) {
                 returnList.add(item);
-            }
-        }
-        return returnList;
     }
-
-    public List getItemsActiveOnlySetupAlternateAmount() {
-        List returnList = new ArrayList();
-        for (Iterator iter = getItems().iterator(); iter.hasNext();) {
-            PurchaseOrderItem item = (PurchaseOrderItem) iter.next();
-            if (item.isItemActiveIndicator()) {
-                for (Iterator iterator = item.getSourceAccountingLines().iterator(); iterator.hasNext();) {
-                    PurchaseOrderAccount account = (PurchaseOrderAccount) iterator.next();
-                    account.setAlternateAmountForGLEntryCreation(account.getItemAccountOutstandingEncumbranceAmount());
-                }
-                returnList.add(item);
-            }
         }
         return returnList;
     }
@@ -721,6 +544,15 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     public void setStatusChange(String statusChange) {
         this.statusChange = statusChange;
     }
+
+    public String getStatusChangeNote() {
+        return statusChangeNote;
+    }
+
+    public void setStatusChangeNote(String statusChangeNote) {
+        this.statusChangeNote = statusChangeNote;
+    }
+
     
     public String getPurchaseOrderRetransmissionMethodCode() {
         return purchaseOrderRetransmissionMethodCode;
@@ -736,6 +568,16 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
 
     public void setRetransmitHeader(String retransmitHeader) {
         this.retransmitHeader = retransmitHeader;
+    }
+
+    /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String)
+     */
+    public void addToStatusHistories( String oldStatus, String newStatus, Note statusHistoryNote ) {
+        PurchaseOrderStatusHistory posh = new PurchaseOrderStatusHistory( oldStatus, newStatus );
+        this.addStatusHistoryNote( posh, statusHistoryNote );
+        posh.setDocumentHeaderIdentifier(this.documentNumber);
+        this.getStatusHistories().add( posh );
     }
 
     /**
@@ -769,7 +611,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
     public void setPurchaseOrderCurrentIndicator(boolean purchaseOrderCurrentIndicator) {
         this.purchaseOrderCurrentIndicator = purchaseOrderCurrentIndicator;
     }
-    
+
     /**
      * Gets the purchaseOrderFirstTransmissionDate attribute. 
      * @return Returns the purchaseOrderFirstTransmissionDate.
@@ -839,6 +681,29 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         this.setAlternateVendorName(vendorDetail.getVendorName());
     }
     
+    public void toCopy(String docType) throws WorkflowException {
+        TransactionalDocument newDoc = (TransactionalDocument) SpringServiceLocator.getDocumentService().getNewDocument(docType);
+        newDoc.getDocumentHeader().setFinancialDocumentDescription(getDocumentHeader().getFinancialDocumentDescription());
+        newDoc.getDocumentHeader().setOrganizationDocumentNumber(getDocumentHeader().getOrganizationDocumentNumber());
+        //setting it to new to avoid recursion problem (if deep copy checked for recursive objects or ignored transient we wouldn't need this)
+        documentBusinessObject = new PurchaseOrderDocument();
+        try {
+            ObjectUtils.setObjectPropertyDeep(this, KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber.getClass(), newDoc.getDocumentNumber());
+        }
+        catch (IllegalAccessException e) {
+            //ignore for now, we need a rice change to ignore these transient and self referential fields 
+        }
+        catch (Exception e) {
+            LOG.error("Unable to set document number property in copied document " + e.getMessage());
+            throw new RuntimeException("Unable to set document number property in copied document " + e.getMessage());
+        }
+        refreshDocumentBusinessObject();
+        
+        // replace current documentHeader with new documentHeader
+        setDocumentHeader(newDoc.getDocumentHeader());
+        
+    }        
+            
     /**
      * Overriding this from the super class so that Note will use only the oldest
      * PurchaseOrderDocument as the documentBusinessObject.
@@ -847,23 +712,16 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
      */
     @Override
     public PersistableBusinessObject getDocumentBusinessObject() {
-        if (ObjectUtils.isNotNull(getPurapDocumentIdentifier()) && ((ObjectUtils.isNull(documentBusinessObject)) || ObjectUtils.isNull(((PurchaseOrderDocument)documentBusinessObject).getPurapDocumentIdentifier()))) {    
-            refreshDocumentBusinessObject();
-        } else if(ObjectUtils.isNull(getPurapDocumentIdentifier()) && ObjectUtils.isNull(documentBusinessObject)) {
-            //needed to keep populate happy
-            documentBusinessObject = new PurchaseOrderDocument();
+        if (ObjectUtils.isNotNull(getPurapDocumentIdentifier()) && ObjectUtils.isNull(documentBusinessObject)) {
+                refreshDocumentBusinessObject();
         }
         return documentBusinessObject;
     }
     
     public void refreshDocumentBusinessObject() {
-        documentBusinessObject = SpringContext.getBean(PurchaseOrderService.class).getOldestPurchaseOrder(this,(PurchaseOrderDocument)this.documentBusinessObject);
+        documentBusinessObject = SpringServiceLocator.getPurchaseOrderService().getOldestPurchaseOrder(getPurapDocumentIdentifier(),this);
     }
 
-    public void setDocumentBusinessObject(PurchaseOrderDocument po) {
-        documentBusinessObject = po;
-    }
-    
     @Override
     public List<PurchaseOrderView> getRelatedPurchaseOrderViews() {
         return null;
@@ -874,28 +732,9 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
      */
     @Override
     public Class getItemClass() {
+        // TODO Auto-generated method stub
         return PurchaseOrderItem.class;
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getPurApSourceDocumentIfPossible()
-     */
-    @Override
-    public RequisitionDocument getPurApSourceDocumentIfPossible() {
-        RequisitionDocument sourceDoc = null;
-        if (ObjectUtils.isNotNull(getRequisitionIdentifier())) {
-            sourceDoc = SpringContext.getBean(RequisitionService.class).getRequisitionById(getRequisitionIdentifier());
-        }
-        return sourceDoc;
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getPurApSourceDocumentLabelIfPossible()
-     */
-    @Override
-    public String getPurApSourceDocumentLabelIfPossible() {
-        return SpringContext.getBean(DataDictionaryService.class).getDocumentLabelByClass(RequisitionDocument.class);
-    }
+}
 
     public Integer getNewQuoteVendorDetailAssignedIdentifier() {
         return newQuoteVendorDetailAssignedIdentifier;
@@ -940,14 +779,8 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         return getTotalDollarAmount(false, true);
     }
     
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getTotalDollarAmountAboveLineItems()
-     */
-    @Override
-    public KualiDecimal getTotalDollarAmountAboveLineItems() {
-        return getTotalDollarAmount(false, false);
-    }
-
+    //TODO: look into merging this with the super method with excludedTypes.  Can probably find a way to \ 
+    //abstract out the active flag which would be the only real difference
     public KualiDecimal getTotalDollarAmount(boolean includeInactive, boolean includeBelowTheLine) {
         KualiDecimal total = new KualiDecimal(BigDecimal.ZERO);
         for (PurchaseOrderItem item : (List<PurchaseOrderItem>)getItems()) {
@@ -967,7 +800,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
             for (PaymentRequestView element : getRelatedPaymentRequestViews()) {
                 // If the PREQ is neither cancelled nor voided, check whether the PREQ has been paid.
                 // If it has not been paid, then this method will return true.
-                if (!PurapConstants.PaymentRequestStatuses.CANCELLED_STATUSES.contains(element.getStatusCode())) {
+                if (!element.getStatusCode().equals(PurapConstants.PaymentRequestStatuses.CANCELLED_IN_PROCESS) && !element.getStatusCode().equals(PurapConstants.PaymentRequestStatuses.CANCELLED_POST_APPROVE)) {
                     if (element.getPaymentPaidDate() == null) {
                         return true;
                     }
@@ -978,7 +811,7 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
             for (CreditMemoView element : getRelatedCreditMemoViews()) {
                 // If the CM is cancelled, check whether the CM has been paid.
                 // If it has not been paid, then this method will return true.
-                if (!CreditMemoStatuses.CANCELLED_STATUSES.contains(element.getCreditMemoStatusCode())) {
+                if (!element.getCreditMemoStatusCode().equals(PurapConstants.CreditMemoStatuses.CANCELLED_POST_APPROVE)) {
                     if (element.getCreditMemoPaidTimestamp() == null) {
                         return true;
                     }
@@ -995,42 +828,4 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
 //    public Class getSourceAccountingLineClass() {
 //        return PurchaseOrderAccount.class;
 //    }
-
-    /**
-     * USED FOR ROUTING ONLY
-     * @deprecated
-     */
-    public String getContractManagerName() {
-        return "";
-}
-    /**
-     * USED FOR ROUTING ONLY
-     * @deprecated
-     */
-    public void setContractManagerName(String contractManagerName) {
-    }
-
-    /**
-     * USED FOR ROUTING ONLY
-     * @deprecated
-     */
-    public String getStatusDescription() {
-        return "";
-    }
-
-    /**
-     * USED FOR ROUTING ONLY
-     * @deprecated
-     */
-    public void setStatusDescription(String statusDescription) {
-    }
-
-    public KualiDecimal getInternalPurchasingLimit() {
-        return internalPurchasingLimit;
-    }
-
-    public void setInternalPurchasingLimit(KualiDecimal internalPurchasingLimit) {
-        this.internalPurchasingLimit = internalPurchasingLimit;
-    }
-
 }
