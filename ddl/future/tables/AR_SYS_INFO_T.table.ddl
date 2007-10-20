@@ -1,0 +1,26 @@
+CREATE TABLE AR_SYS_INFO_T(
+        UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT AR_SYS_INFO_TN1 NOT NULL,
+        PRCS_FIN_COA_CD                VARCHAR2(2) CONSTRAINT AR_SYS_INFO_TN2 NOT NULL,
+        PRCS_ORG_CD                    VARCHAR2(4) CONSTRAINT AR_SYS_INFO_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_SYS_INFO_TN4 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_SYS_INFO_TN5 NOT NULL,
+        UNIV_FEIN_NBR                  VARCHAR2(9),
+        SALESTAX_ACCT_NBR              VARCHAR2(7),
+        SALESTAX_FINOBJ_CD             VARCHAR2(4),
+        REFUND_FIN_OBJ_CD              VARCHAR2(4),
+        DBTEXP_FIN_OBJ_CD              VARCHAR2(4),
+        UNIV_CLR_COA_CD                VARCHAR2(2),
+        UNIV_CLR_ACCT_NBR              VARCHAR2(7),
+        UNIV_CLR_SUBAC_NBR             VARCHAR2(5),
+        UNIV_CLR_OBJECT_CD             VARCHAR2(4),
+        UNIV_CLR_SUBOBJ_CD             VARCHAR2(3),
+        PMT_CLR_FIN_OBJ_CD             VARCHAR2(4),
+        AR_LOCKBOX_NBR                 VARCHAR2(5),
+        ROW_ACTV_IND                   VARCHAR2(1) CONSTRAINT AR_SYS_INFO_TN6 NOT NULL,
+     CONSTRAINT AR_SYS_INFO_TP1 PRIMARY KEY (
+        UNIV_FISCAL_YR,
+        PRCS_FIN_COA_CD,
+        PRCS_ORG_CD),
+     CONSTRAINT AR_SYS_INFO_TC0 UNIQUE (OBJ_ID)
+)
+/

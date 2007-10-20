@@ -1,0 +1,3 @@
+CREATE INDEX PDP_FIL_TI2 ON PDP_FIL_T(
+        CUST_ID )
+/

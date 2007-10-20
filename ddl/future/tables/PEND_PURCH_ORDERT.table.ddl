@@ -1,0 +1,19 @@
+CREATE TABLE PEND_PURCH_ORDERT(
+        PO_NUMBER                      VARCHAR2(9) CONSTRAINT PEND_PURCH_ORDERTN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT PEND_PURCH_ORDERTN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PEND_PURCH_ORDERTN3 NOT NULL,
+        REQ_NUMBER                     VARCHAR2(8),
+        DEPT_REP                       VARCHAR2(40),
+        DELIVER_TO_NAME                VARCHAR2(40),
+        DELIVER_TO_ADDR1               VARCHAR2(40),
+        DELIVER_TO_ADDR2               VARCHAR2(40),
+        REQUEST_NAME                   VARCHAR2(40),
+        REQUEST_ADDR1                  VARCHAR2(40),
+        REQUEST_ADDR2                  VARCHAR2(40),
+        RQSTR_PRSN_EMAIL_ADDR          VARCHAR2(100),
+        RQSTR_PRSN_PHN_NBR             VARCHAR2(45),
+     CONSTRAINT PEND_PURCH_ORDERTP1 PRIMARY KEY (
+        PO_NUMBER),
+     CONSTRAINT PEND_PURCH_ORDERTC0 UNIQUE (OBJ_ID)
+)
+/

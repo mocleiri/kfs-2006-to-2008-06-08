@@ -1,0 +1,31 @@
+CREATE TABLE CM_EQPLNRTRN_DOC_T(
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT CM_EQPLNRTRN_DOC_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CM_EQPLNRTRN_DOC_TN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CM_EQPLNRTRN_DOC_TN3 NOT NULL,
+        CPTLAST_IU_TAG_NBR             VARCHAR2(8),
+        CPTLAST_ORGTAG_NBR             VARCHAR2(8),
+        AST_INS_COA_CD                 VARCHAR2(2),
+        AST_INS_ACCT_NBR               VARCHAR2(7),
+        CPTLAST_LOAN_DT                DATE,
+        AST_EXPCTRETURN_DT             DATE,
+        CPTLAST_LN_RTRN_DT             DATE,
+        AST_BORWR_UNVL_ID              VARCHAR2(10),
+        AST_BORWR_ADDR                 VARCHAR2(30),
+        AST_BORWR_CITY_NM              VARCHAR2(25),
+        AST_BORWR_STATE_CD             VARCHAR2(2),
+        AST_BORWR_ZIP_CD               VARCHAR2(9),
+        AST_BORWR_CNTRY_CD             VARCHAR2(2),
+        AST_BORWR_PHN_NBR              VARCHAR2(13),
+        AST_BORWRSTRG_ADDR             VARCHAR2(30),
+        AST_BORWRSTRGCT_NM             VARCHAR2(25),
+        AST_BORWRSTRGST_CD             VARCHAR2(2),
+        AST_BORWRSTRGZP_CD             VARCHAR2(9),
+        AST_BORWRSTRCNT_CD             VARCHAR2(2),
+        AST_BORWRSTRPH_NBR             VARCHAR2(13),
+        CPTLAST_INS_CD                 NUMBER(4),
+        AST_SIG_CD                     VARCHAR2(1),
+     CONSTRAINT CM_EQPLNRTRN_DOC_TP1 PRIMARY KEY (
+        FDOC_NBR),
+     CONSTRAINT CM_EQPLNRTRN_DOC_TC0 UNIQUE (OBJ_ID)
+)
+/

@@ -1,0 +1,32 @@
+CREATE TABLE CM_AST_PMT_DOC_T(
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT CM_AST_PMT_DOC_TN1 NOT NULL,
+        FDOC_LINE_NBR                  NUMBER(7) CONSTRAINT CM_AST_PMT_DOC_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CM_AST_PMT_DOC_TN3 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CM_AST_PMT_DOC_TN4 NOT NULL,
+        CPTLAST_PMTAPPL_DT             DATE,
+        FDOC_POST_YR                   NUMBER(4),
+        FDOC_POST_PRD_CD               VARCHAR2(2),
+        FIN_COA_CD                     VARCHAR2(2),
+        ACCOUNT_NBR                    VARCHAR2(7),
+        SUB_ACCT_NBR                   VARCHAR2(5),
+        FIN_OBJECT_CD                  VARCHAR2(4),
+        FIN_SUB_OBJ_CD                 VARCHAR2(3),
+        PROJECT_CD                     VARCHAR2(10),
+        ORG_REFERENCE_ID               VARCHAR2(8),
+        ACCT_CHARGE_AMT                NUMBER(19, 2),
+        EXPND_FS_ORIGIN_CD             VARCHAR2(2),
+        EXPND_FDOC_NBR                 VARCHAR2(14),
+        EXPND_FDOC_TYP_CD              VARCHAR2(4),
+        EXPND_FDOC_POST_DT             DATE,
+        PO_NUMBER                      VARCHAR2(9),
+        REQUISITION_NBR                VARCHAR2(8),
+        FDOC_OVERRIDE_CD               VARCHAR2(1),
+        AST_PMT_DEPR1_AMT              NUMBER(19, 2),
+        AST_PMT_DEPR2_AMT              NUMBER(19, 2),
+        AST_TRNFR_PMT_CD               VARCHAR2(1),
+     CONSTRAINT CM_AST_PMT_DOC_TP1 PRIMARY KEY (
+        FDOC_NBR,
+        FDOC_LINE_NBR),
+     CONSTRAINT CM_AST_PMT_DOC_TC0 UNIQUE (OBJ_ID)
+)
+/

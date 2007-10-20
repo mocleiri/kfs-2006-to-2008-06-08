@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.ar.bo.InvoiceOrPayment">
+ 
+        <inquiry>
+            <title>Invoice Or Payment Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="billingDate" />
+                        <field attributeName="customerChartOfAccountCode" />
+                        <field attributeName="customerCheckNumber" />
+                        <field attributeName="customerNumber" />
+                        <field attributeName="customerOrganizationCode" />
+                        <field attributeName="customerPaymentMediumCode" />
+                        <field attributeName="customerPurchaseOrderDate" />
+                        <field attributeName="customerPurchaseOrderNumber" />
+                        <field attributeName="documentNumber" />
+                        <field attributeName="documentTypeCode" />
+                        <field attributeName="entryDate" />
+                        <field attributeName="invoiceAttentionLineText" />
+                        <field attributeName="invoiceDueDate" />
+                        <field attributeName="invoiceHeaderText" />
+                        <field attributeName="invoicePaidOrAppliedAmount" />
+                        <field attributeName="invoicePaymentDescription" />
+                        <field attributeName="invoiceTermsText" />
+                        <field attributeName="invoiceTotalAmount" />
+                        <field attributeName="invoiceWriteoffAmount" />
+                        <field attributeName="organizationInvoiceNumber" />
+                        <field attributeName="printInvoiceDetailIndicator" />
+                        <field attributeName="printInvoiceIndicator" />
+                        <field attributeName="processingChartOfAccountCode" />
+                        <field attributeName="processingOrganizationCode" />
+                        <field attributeName="writeoffIndicator" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Invoice Or Payment Lookup</title>
+
+            <instructions>Look up an Invoice Or Payment</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="documentNumber" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="billingDate" required="false" />
+                <lookupField attributeName="customerChartOfAccountCode" required="false" />
+                <lookupField attributeName="customerCheckNumber" required="false" />
+                <lookupField attributeName="customerNumber" required="false" />
+                <lookupField attributeName="customerOrganizationCode" required="false" />
+                <lookupField attributeName="customerPaymentMediumCode" required="false" />
+                <lookupField attributeName="customerPurchaseOrderDate" required="false" />
+                <lookupField attributeName="customerPurchaseOrderNumber" required="false" />
+                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="documentTypeCode" required="false" />
+                <lookupField attributeName="entryDate" required="false" />
+                <lookupField attributeName="invoiceAttentionLineText" required="false" />
+                <lookupField attributeName="invoiceDueDate" required="false" />
+                <lookupField attributeName="invoiceHeaderText" required="false" />
+                <lookupField attributeName="invoicePaidOrAppliedAmount" required="false" />
+                <lookupField attributeName="invoicePaymentDescription" required="false" />
+                <lookupField attributeName="invoiceTermsText" required="false" />
+                <lookupField attributeName="invoiceTotalAmount" required="false" />
+                <lookupField attributeName="invoiceWriteoffAmount" required="false" />
+                <lookupField attributeName="organizationInvoiceNumber" required="false" />
+                <lookupField attributeName="printInvoiceDetailIndicator" required="false" />
+                <lookupField attributeName="printInvoiceIndicator" required="false" />
+                <lookupField attributeName="processingChartOfAccountCode" required="false" />
+                <lookupField attributeName="processingOrganizationCode" required="false" />
+                <lookupField attributeName="writeoffIndicator" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="billingDate" />
+                <field attributeName="customerChartOfAccountCode" />
+                <field attributeName="customerCheckNumber" />
+                <field attributeName="customerNumber" />
+                <field attributeName="customerOrganizationCode" />
+                <field attributeName="customerPaymentMediumCode" />
+                <field attributeName="customerPurchaseOrderDate" />
+                <field attributeName="customerPurchaseOrderNumber" />
+                <field attributeName="documentNumber" />
+                <field attributeName="documentTypeCode" />
+                <field attributeName="entryDate" />
+                <field attributeName="invoiceAttentionLineText" />
+                <field attributeName="invoiceDueDate" />
+                <field attributeName="invoiceHeaderText" />
+                <field attributeName="invoicePaidOrAppliedAmount" />
+                <field attributeName="invoicePaymentDescription" />
+                <field attributeName="invoiceTermsText" />
+                <field attributeName="invoiceTotalAmount" />
+                <field attributeName="invoiceWriteoffAmount" />
+                <field attributeName="organizationInvoiceNumber" />
+                <field attributeName="printInvoiceDetailIndicator" />
+                <field attributeName="printInvoiceIndicator" />
+                <field attributeName="processingChartOfAccountCode" />
+                <field attributeName="processingOrganizationCode" />
+                <field attributeName="writeoffIndicator" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="billingDate" forceUppercase="true">
+                <label>Billing Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>billingDate</summary>
+                <description>billingDate description...</description>
+			</attribute>
+
+            <attribute name="customerChartOfAccountCode" forceUppercase="true">
+                <label>Customer Chart Of Account Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>customerChartOfAccountCode</summary>
+                <description>customerChartOfAccountCode description...</description>
+			</attribute>
+
+            <attribute name="customerCheckNumber" forceUppercase="true">
+                <label>Customer Check Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>15</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="17" />
+                </control>
+
+                <summary>customerCheckNumber</summary>
+                <description>customerCheckNumber description...</description>
+			</attribute>
+
+            <attribute name="customerNumber" forceUppercase="true">
+                <label>Customer Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>customerNumber</summary>
+                <description>customerNumber description...</description>
+			</attribute>
+
+            <attribute name="customerOrganizationCode" forceUppercase="true">
+                <label>Customer Organization Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>customerOrganizationCode</summary>
+                <description>customerOrganizationCode description...</description>
+			</attribute>
+
+            <attribute name="customerPaymentMediumCode" forceUppercase="true">
+                <label>Customer Payment Medium Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>customerPaymentMediumCode</summary>
+                <description>customerPaymentMediumCode description...</description>
+			</attribute>
+
+            <attribute name="customerPurchaseOrderDate" forceUppercase="true">
+                <label>Customer Purchase Order Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>customerPurchaseOrderDate</summary>
+                <description>customerPurchaseOrderDate description...</description>
+			</attribute>
+
+            <attribute name="customerPurchaseOrderNumber" forceUppercase="true">
+                <label>Customer Purchase Order Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>customerPurchaseOrderNumber</summary>
+                <description>customerPurchaseOrderNumber description...</description>
+			</attribute>
+
+            <attribute name="documentNumber" forceUppercase="true">
+                <label>Document Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>14</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="16" />
+                </control>
+
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
+			</attribute>
+
+            <attribute name="documentTypeCode" forceUppercase="true">
+                <label>Document Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>documentTypeCode</summary>
+                <description>documentTypeCode description...</description>
+			</attribute>
+
+            <attribute name="entryDate" forceUppercase="true">
+                <label>Entry Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>entryDate</summary>
+                <description>entryDate description...</description>
+			</attribute>
+
+            <attribute name="invoiceAttentionLineText" forceUppercase="true">
+                <label>Invoice Attention Line Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>80</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="82" />
+                </control>
+
+                <summary>invoiceAttentionLineText</summary>
+                <description>invoiceAttentionLineText description...</description>
+			</attribute>
+
+            <attribute name="invoiceDueDate" forceUppercase="true">
+                <label>Invoice Due Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>invoiceDueDate</summary>
+                <description>invoiceDueDate description...</description>
+			</attribute>
+
+            <attribute name="invoiceHeaderText" forceUppercase="true">
+                <label>Invoice Header Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>120</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="122" />
+                </control>
+
+                <summary>invoiceHeaderText</summary>
+                <description>invoiceHeaderText description...</description>
+			</attribute>
+
+            <attribute name="invoicePaidOrAppliedAmount" forceUppercase="true">
+                <label>Invoice Paid Or Applied Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>invoicePaidOrAppliedAmount</summary>
+                <description>invoicePaidOrAppliedAmount description...</description>
+			</attribute>
+
+            <attribute name="invoicePaymentDescription" forceUppercase="true">
+                <label>Invoice Payment Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>invoicePaymentDescription</summary>
+                <description>invoicePaymentDescription description...</description>
+			</attribute>
+
+            <attribute name="invoiceTermsText" forceUppercase="true">
+                <label>Invoice Terms Text</label>
+                <shortLabel>Text</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>invoiceTermsText</summary>
+                <description>invoiceTermsText description...</description>
+			</attribute>
+
+            <attribute name="invoiceTotalAmount" forceUppercase="true">
+                <label>Invoice Total Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>invoiceTotalAmount</summary>
+                <description>invoiceTotalAmount description...</description>
+			</attribute>
+
+            <attribute name="invoiceWriteoffAmount" forceUppercase="true">
+                <label>Invoice Writeoff Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>invoiceWriteoffAmount</summary>
+                <description>invoiceWriteoffAmount description...</description>
+			</attribute>
+
+            <attribute name="organizationInvoiceNumber" forceUppercase="true">
+                <label>Organization Invoice Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>organizationInvoiceNumber</summary>
+                <description>organizationInvoiceNumber description...</description>
+			</attribute>
+
+            <attribute name="printInvoiceDetailIndicator" forceUppercase="true">
+                <label>Print Invoice Detail Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>printInvoiceDetailIndicator</summary>
+                <description>printInvoiceDetailIndicator description...</description>
+			</attribute>
+
+            <attribute name="printInvoiceIndicator" forceUppercase="true">
+                <label>Print Invoice Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>printInvoiceIndicator</summary>
+                <description>printInvoiceIndicator description...</description>
+			</attribute>
+
+            <attribute name="processingChartOfAccountCode" forceUppercase="true">
+                <label>Processing Chart Of Account Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>processingChartOfAccountCode</summary>
+                <description>processingChartOfAccountCode description...</description>
+			</attribute>
+
+            <attribute name="processingOrganizationCode" forceUppercase="true">
+                <label>Processing Organization Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>processingOrganizationCode</summary>
+                <description>processingOrganizationCode description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+            <attribute name="writeoffIndicator" forceUppercase="true">
+                <label>Writeoff Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>writeoffIndicator</summary>
+                <description>writeoffIndicator description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

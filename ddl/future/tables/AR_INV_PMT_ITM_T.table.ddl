@@ -1,0 +1,33 @@
+CREATE TABLE AR_INV_PMT_ITM_T(
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT AR_INV_PMT_ITM_TN1 NOT NULL,
+        AR_INV_ITM_NBR                 NUMBER(5) CONSTRAINT AR_INV_PMT_ITM_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_INV_PMT_ITM_TN3 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_INV_PMT_ITM_TN4 NOT NULL,
+        AR_ITM_PD_APLD_AMT             NUMBER(19, 2),
+        AR_ACCTG_ITMPD_AMT             NUMBER(19, 2),
+        UNIV_FISCAL_YR                 NUMBER(4),
+        FIN_COA_CD                     VARCHAR2(2),
+        ACCOUNT_NBR                    VARCHAR2(7),
+        SUB_ACCT_NBR                   VARCHAR2(5),
+        FIN_OBJECT_CD                  VARCHAR2(4),
+        FIN_SUB_OBJ_CD                 VARCHAR2(3),
+        PROJECT_CD                     VARCHAR2(10),
+        ORG_REFERENCE_ID               VARCHAR2(8),
+        FIN_AR_OBJ_CD                  VARCHAR2(4),
+        FIN_AR_SUB_OBJ_CD              VARCHAR2(3),
+        AR_INV_ITM_QTY                 NUMBER,
+        AR_INV_ITM_UOM_CD              VARCHAR2(2),
+        AR_INVITM_UNIT_PRC             NUMBER(19, 2),
+        AR_INV_ITM_TOT_AMT             NUMBER(19, 2),
+        AR_INV_ITM_SRVC_DT             DATE,
+        AR_INV_ITM_CD                  VARCHAR2(3),
+        AR_INV_ITM_DESC                VARCHAR2(800),
+        CUST_FIN_COA_CD                VARCHAR2(2),
+        CUST_ORG_CD                    VARCHAR2(4),
+        FDOC_REF_INV_NBR               VARCHAR2(14),
+     CONSTRAINT AR_INV_PMT_ITM_TP1 PRIMARY KEY (
+        FDOC_NBR,
+        AR_INV_ITM_NBR),
+     CONSTRAINT AR_INV_PMT_ITM_TC0 UNIQUE (OBJ_ID)
+)
+/

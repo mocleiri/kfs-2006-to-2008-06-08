@@ -1,0 +1,33 @@
+CREATE TABLE AR_INV_PMT_T(
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT AR_INV_PMT_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_INV_PMT_TN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_INV_PMT_TN3 NOT NULL,
+        CUST_FIN_COA_CD                VARCHAR2(2),
+        CUST_ORG_CD                    VARCHAR2(4),
+        CUST_NBR                       VARCHAR2(9),
+        PRCS_FIN_COA_CD                VARCHAR2(2),
+        PRCS_ORG_CD                    VARCHAR2(4),
+        AR_ENTRY_DT                    DATE,
+        AR_DOC_TYP_CD                  VARCHAR2(4),
+        AR_INV_HDR_TXT                 VARCHAR2(120),
+        AR_INV_ATTN_LN_TXT             VARCHAR2(80),
+        AR_INV_DUE_DT                  DATE,
+        AR_BILLING_DT                  DATE,
+        AR_INV_TERMS_TXT               VARCHAR2(40),
+        ORG_INV_NBR                    VARCHAR2(9),
+        AR_WRITEOFF_IND                VARCHAR2(1),
+        CUST_PO_NBR                    VARCHAR2(12),
+        AR_PRN_INV_IND                 VARCHAR2(1),
+        AR_PRN_INV_DTL_IND             VARCHAR2(1),
+        CUST_CHECK_NBR                 VARCHAR2(15),
+        CUST_PMT_MEDIUM_CD             VARCHAR2(2),
+        AR_INV_TOT_AMT                 NUMBER(19, 2),
+        AR_INV_PD_APLD_AMT             NUMBER(19, 2),
+        AR_INV_WRTOFF_AMT              NUMBER(19, 2),
+        AR_INV_PMT_DESC                VARCHAR2(40),
+        CUST_PO_DT                     DATE,
+     CONSTRAINT AR_INV_PMT_TP1 PRIMARY KEY (
+        FDOC_NBR),
+     CONSTRAINT AR_INV_PMT_TC0 UNIQUE (OBJ_ID)
+)
+/

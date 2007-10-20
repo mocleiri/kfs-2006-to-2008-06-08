@@ -1,0 +1,9 @@
+CREATE VIEW PUR_REQS_V as(
+SELECT
+        AP_PUR_DOC_LNK_ID, 
+        REQS_ID,
+        FDOC_NBR, 
+        OBJ_ID 
+FROM PUR_REQS_T
+)
+/

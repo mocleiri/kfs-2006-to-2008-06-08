@@ -1,0 +1,31 @@
+CREATE TABLE CM_FABR_RQST_DOC_T(
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT CM_FABR_RQST_DOC_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CM_FABR_RQST_DOC_TN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CM_FABR_RQST_DOC_TN3 NOT NULL,
+        CPTLAST_DESC                   VARCHAR2(2000),
+        ORG_INVN_NM                    VARCHAR2(40),
+        AST_INVN_STAT_CD               VARCHAR2(1),
+        CPTLAST_COND_CD                VARCHAR2(1),
+        CPTLAST_TYP_CD                 VARCHAR2(7),
+        ORG_CPTLAST_TYP_ID             VARCHAR2(20),
+        AST_FABR_APPRVL_DT             DATE,
+        AST_ESTFABRCMPL_DT             DATE,
+        AST_FABRESTTOT_AMT             NUMBER(19, 2),
+        AST_ESTLIFETM_LMT              NUMBER(5),
+        CPTLAST_ORG_TXT                VARCHAR2(255),
+        CPTLAST_RECEIVE_DT             DATE,
+        CPTLAST_ACQ_SRC_NM             VARCHAR2(40),
+        CPTLAST_ACQ_TYP_CD             VARCHAR2(1),
+        CPTLAST_MFR_NM                 VARCHAR2(40),
+        BLDG_ROOM_NBR                  VARCHAR2(8),
+        BLDG_SUB_ROOM_NBR              VARCHAR2(2),
+        AST_DEPR_MTHD1_CD              VARCHAR2(3),
+        AST_OFFCMP_ADDR                VARCHAR2(30),
+        AST_OFFCMP_CITY_NM             VARCHAR2(25),
+        AST_OFFCMP_ST_CD               VARCHAR2(2),
+        AST_OFFCMP_ZIP_CD              VARCHAR2(9),
+     CONSTRAINT CM_FABR_RQST_DOC_TP1 PRIMARY KEY (
+        FDOC_NBR),
+     CONSTRAINT CM_FABR_RQST_DOC_TC0 UNIQUE (OBJ_ID)
+)
+/

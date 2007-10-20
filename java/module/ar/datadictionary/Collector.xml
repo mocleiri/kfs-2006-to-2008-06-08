@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.ar.bo.Collector">
+ 
+        <inquiry>
+            <title>Collector Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="chartOfAccountsCode" />
+                        <field attributeName="collector800PhoneNumber" />
+                        <field attributeName="collectorCampusBuildingRoomAddress" />
+                        <field attributeName="collectorCampusCityName" />
+                        <field attributeName="collectorCampusStateCode" />
+                        <field attributeName="collectorCampusStreetAddress" />
+                        <field attributeName="collectorCampusZipCode" />
+                        <field attributeName="collectorFaxNumber" />
+                        <field attributeName="collectorName" />
+                        <field attributeName="collectorPhoneNumber" />
+                        <field attributeName="collectorRemitCityName" />
+                        <field attributeName="collectorRemitLine1Address" />
+                        <field attributeName="collectorRemitLine2Address" />
+                        <field attributeName="collectorRemitStateCode" />
+                        <field attributeName="collectorRemitZipCode" />
+                        <field attributeName="collectorTitle" />
+                        <field attributeName="collectorUniversalIdentifier" />
+                        <field attributeName="organizationAssignmentCollectorIdentifier" />
+                        <field attributeName="organizationCode" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Collector Lookup</title>
+
+            <instructions>Look up a Collector</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="chartOfAccountsCode" />
+                    <sortAttribute attributeName="organizationCode" />
+                    <sortAttribute attributeName="organizationAssignmentCollectorIdentifier" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="collector800PhoneNumber" required="false" />
+                <lookupField attributeName="collectorCampusBuildingRoomAddress" required="false" />
+                <lookupField attributeName="collectorCampusCityName" required="false" />
+                <lookupField attributeName="collectorCampusStateCode" required="false" />
+                <lookupField attributeName="collectorCampusStreetAddress" required="false" />
+                <lookupField attributeName="collectorCampusZipCode" required="false" />
+                <lookupField attributeName="collectorFaxNumber" required="false" />
+                <lookupField attributeName="collectorName" required="false" />
+                <lookupField attributeName="collectorPhoneNumber" required="false" />
+                <lookupField attributeName="collectorRemitCityName" required="false" />
+                <lookupField attributeName="collectorRemitLine1Address" required="false" />
+                <lookupField attributeName="collectorRemitLine2Address" required="false" />
+                <lookupField attributeName="collectorRemitStateCode" required="false" />
+                <lookupField attributeName="collectorRemitZipCode" required="false" />
+                <lookupField attributeName="collectorTitle" required="false" />
+                <lookupField attributeName="collectorUniversalIdentifier" required="false" />
+                <lookupField attributeName="organizationAssignmentCollectorIdentifier" required="false" />
+                <lookupField attributeName="organizationCode" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="collector800PhoneNumber" />
+                <field attributeName="collectorCampusBuildingRoomAddress" />
+                <field attributeName="collectorCampusCityName" />
+                <field attributeName="collectorCampusStateCode" />
+                <field attributeName="collectorCampusStreetAddress" />
+                <field attributeName="collectorCampusZipCode" />
+                <field attributeName="collectorFaxNumber" />
+                <field attributeName="collectorName" />
+                <field attributeName="collectorPhoneNumber" />
+                <field attributeName="collectorRemitCityName" />
+                <field attributeName="collectorRemitLine1Address" />
+                <field attributeName="collectorRemitLine2Address" />
+                <field attributeName="collectorRemitStateCode" />
+                <field attributeName="collectorRemitZipCode" />
+                <field attributeName="collectorTitle" />
+                <field attributeName="collectorUniversalIdentifier" />
+                <field attributeName="organizationAssignmentCollectorIdentifier" />
+                <field attributeName="organizationCode" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
+
+            <attribute name="collector800PhoneNumber" forceUppercase="true">
+                <label>Collector800 Phone Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>13</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="15" />
+                </control>
+
+                <summary>collector800PhoneNumber</summary>
+                <description>collector800PhoneNumber description...</description>
+			</attribute>
+
+            <attribute name="collectorCampusBuildingRoomAddress" forceUppercase="true">
+                <label>Collector Campus Building Room Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>30</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="32" />
+                </control>
+
+                <summary>collectorCampusBuildingRoomAddress</summary>
+                <description>collectorCampusBuildingRoomAddress description...</description>
+			</attribute>
+
+            <attribute name="collectorCampusCityName" forceUppercase="true">
+                <label>Collector Campus City Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>25</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="27" />
+                </control>
+
+                <summary>collectorCampusCityName</summary>
+                <description>collectorCampusCityName description...</description>
+			</attribute>
+
+            <attribute name="collectorCampusStateCode" forceUppercase="true">
+                <label>Collector Campus State Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>collectorCampusStateCode</summary>
+                <description>collectorCampusStateCode description...</description>
+			</attribute>
+
+            <attribute name="collectorCampusStreetAddress" forceUppercase="true">
+                <label>Collector Campus Street Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>30</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="32" />
+                </control>
+
+                <summary>collectorCampusStreetAddress</summary>
+                <description>collectorCampusStreetAddress description...</description>
+			</attribute>
+
+            <attribute name="collectorCampusZipCode" forceUppercase="true">
+                <label>Collector Campus Zip Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>11</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="13" />
+                </control>
+
+                <summary>collectorCampusZipCode</summary>
+                <description>collectorCampusZipCode description...</description>
+			</attribute>
+
+            <attribute name="collectorFaxNumber" forceUppercase="true">
+                <label>Collector Fax Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>13</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="15" />
+                </control>
+
+                <summary>collectorFaxNumber</summary>
+                <description>collectorFaxNumber description...</description>
+			</attribute>
+
+            <attribute name="collectorName" forceUppercase="true">
+                <label>Collector Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>collectorName</summary>
+                <description>collectorName description...</description>
+			</attribute>
+
+            <attribute name="collectorPhoneNumber" forceUppercase="true">
+                <label>Collector Phone Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>13</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="15" />
+                </control>
+
+                <summary>collectorPhoneNumber</summary>
+                <description>collectorPhoneNumber description...</description>
+			</attribute>
+
+            <attribute name="collectorRemitCityName" forceUppercase="true">
+                <label>Collector Remit City Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>25</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="27" />
+                </control>
+
+                <summary>collectorRemitCityName</summary>
+                <description>collectorRemitCityName description...</description>
+			</attribute>
+
+            <attribute name="collectorRemitLine1Address" forceUppercase="true">
+                <label>Collector Remit Line1 Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>30</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="32" />
+                </control>
+
+                <summary>collectorRemitLine1Address</summary>
+                <description>collectorRemitLine1Address description...</description>
+			</attribute>
+
+            <attribute name="collectorRemitLine2Address" forceUppercase="true">
+                <label>Collector Remit Line2 Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>30</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="32" />
+                </control>
+
+                <summary>collectorRemitLine2Address</summary>
+                <description>collectorRemitLine2Address description...</description>
+			</attribute>
+
+            <attribute name="collectorRemitStateCode" forceUppercase="true">
+                <label>Collector Remit State Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>collectorRemitStateCode</summary>
+                <description>collectorRemitStateCode description...</description>
+			</attribute>
+
+            <attribute name="collectorRemitZipCode" forceUppercase="true">
+                <label>Collector Remit Zip Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>11</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="13" />
+                </control>
+
+                <summary>collectorRemitZipCode</summary>
+                <description>collectorRemitZipCode description...</description>
+			</attribute>
+
+            <attribute name="collectorTitle" forceUppercase="true">
+                <label>Collector Title</label>
+                <shortLabel>Title</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>collectorTitle</summary>
+                <description>collectorTitle description...</description>
+			</attribute>
+
+            <attribute name="collectorUniversalIdentifier" forceUppercase="true">
+                <label>Collector Universal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>collectorUniversalIdentifier</summary>
+                <description>collectorUniversalIdentifier description...</description>
+			</attribute>
+
+            <attribute name="organizationAssignmentCollectorIdentifier" forceUppercase="true">
+                <label>Organization Assignment Collector Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>organizationAssignmentCollectorIdentifier</summary>
+                <description>organizationAssignmentCollectorIdentifier description...</description>
+			</attribute>
+
+            <attribute name="organizationCode" forceUppercase="true">
+                <label>Organization Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>organizationCode</summary>
+                <description>organizationCode description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

@@ -1,0 +1,17 @@
+CREATE TABLE AR_AGE_TRIAL_BAL_T(
+        PERSON_UNVL_ID                 VARCHAR2(10) CONSTRAINT AR_AGE_TRIAL_BAL_TN1 NOT NULL,
+        CUST_NBR                       VARCHAR2(9) CONSTRAINT AR_AGE_TRIAL_BAL_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_AGE_TRIAL_BAL_TN3 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_AGE_TRIAL_BAL_TN4 NOT NULL,
+        CUST_NM                        VARCHAR2(60),
+        CURRENT_INV_AMT                NUMBER(19, 2),
+        OVER30_INV_AMT                 NUMBER(19, 2),
+        OVER60_INV_AMT                 NUMBER(19, 2),
+        OVER90_INV_AMT                 NUMBER(19, 2),
+     CONSTRAINT AR_AGE_TRIAL_BAL_TP1 PRIMARY KEY (
+        PERSON_UNVL_ID,
+        CUST_NBR),
+     CONSTRAINT AR_AGE_TRIAL_BAL_TC0 UNIQUE (OBJ_ID)
+)
+/
+	 

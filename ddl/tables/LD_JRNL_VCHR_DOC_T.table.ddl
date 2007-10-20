@@ -1,0 +1,15 @@
+CREATE TABLE LD_JRNL_VCHR_DOC_T(
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT LD_JRNL_VCHR_DOC_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT LD_JRNL_VCHR_DOC_TN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_JRNL_VCHR_DOC_TN3 NOT NULL,
+        FDOC_NXT_LINE_NBR              NUMBER(7),
+        FDOC_POST_YR                   NUMBER(4),
+        FDOC_POST_PRD_CD               VARCHAR2(2),
+        FDOC_REVERSAL_DT               DATE,
+        FIN_BALANCE_TYP_CD             VARCHAR2(2),
+        FDOC_OFST_TYP_CD               VARCHAR2(4),
+     CONSTRAINT LD_JRNL_VCHR_DOC_TP1 PRIMARY KEY (
+        FDOC_NBR),
+     CONSTRAINT LD_JRNL_VCHR_DOC_TC0 UNIQUE (OBJ_ID)
+)
+/
