@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dataset SYSTEM "data.dtd">
-<dataset>
-    <SH_NTE_T NTE_AUTH_ID="KULUSER" NTE_ID="2040"
-        NTE_POST_TS="20071006183524"
-        NTE_TXT="Requisition did not become an APO because: Vendor was not selected from the vendor database."
-        NTE_TYP_CD="BO" OBJ_ID="F570CC5A-7387-9EEF-7AAA-454AE1F95562"
-        RMT_OBJ_ID="D7617A6F-4B02-A1BD-D9BB-E78859029852" VER_NBR="5"/>
-</dataset>

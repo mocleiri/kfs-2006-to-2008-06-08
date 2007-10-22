@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dataset SYSTEM "data.dtd">
-<dataset>
-    <ER_BDGT_TYP_CD_T BDGT_TYP_CD="PR" BDGT_TYP_DESC="Project"
-        OBJ_ID="0C601412F71956B2E043814FD88156B2" VER_NBR="1"/>
-    <ER_BDGT_TYP_CD_T BDGT_TYP_CD="SC"
-        BDGT_TYP_DESC="Subaward / Consortium"
-        OBJ_ID="0C601412F71A56B2E043814FD88156B2" VER_NBR="1"/>
-</dataset>

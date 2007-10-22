@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dataset SYSTEM "data.dtd">
-<dataset>
-    <FP_CASH_RCPT_DOC_T CAMPUS_CD="??" FDOC_CASH_AMT="30"
-        FDOC_NBR="292229" FDOC_NXT_CK_LN_NBR="2" FDOC_NXT_LINE_NBR="2"
-        FDOC_POST_PRD_CD="11" FDOC_POST_YR="2007"
-        FDOC_TOTL_CHCK_AMT="50" FDOC_TOTL_COIN_AMT="0"
-        OBJ_ID="610092E6-9B04-A6A0-EDAB-1A658C2F84B9" VER_NBR="2"/>
-</dataset>
