@@ -10736,18 +10736,6 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="PDP_PHYS_CMP_T">
-        <column name="PHYS_CMP_PROC_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="DFLT_CMP_IND" required="true" size="1" type="VARCHAR"/>
-        <column name="FMT_SEL_CUST_IND" required="true" size="1" type="VARCHAR"/>
-        <column name="LST_UPDT_TS" required="true" type="DATE"/>
-        <unique name="PDP_PHYS_CMP_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
     <table name="PDP_PMT_ACCT_DTL_T">
         <column name="PMT_ACCT_DTL_ID" primaryKey="true" size="8" type="DECIMAL"/>
         <column default="SYS_GUID()" name="OBJ_ID" required="true"
@@ -11082,18 +11070,6 @@
         <column name="PROC_USR_ID" required="true" size="11" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <unique name="PDP_PROC_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="PDP_RSTRC_OBJ_CD_T">
-        <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="RSTRC_OBJ_CD_DESC" size="20" type="VARCHAR"/>
-        <column name="LST_UPDT_TS" required="true" type="DATE"/>
-        <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
-        <unique name="PDP_RSTRC_OBJ_CD_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
