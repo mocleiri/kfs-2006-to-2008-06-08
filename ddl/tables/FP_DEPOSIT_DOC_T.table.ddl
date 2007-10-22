@@ -21,7 +21,7 @@ CREATE TABLE FP_DEPOSIT_DOC_T(
         FDOC_DPST_TYP_CD               VARCHAR2(1),
         FDOC_DPST_DT                   DATE,
         FDOC_DPST_BNK_CD               VARCHAR2(4),
-        FDOC_BNK_ACCT_NBR              VARCHAR2(4000),
+        FDOC_BNK_ACCT_NBR              VARCHAR2(255),
         FDOC_DPST_TKT_NBR              VARCHAR2(20),
         FDOC_DPST_AMT                  NUMBER(19, 2),
      CONSTRAINT FP_DEPOSIT_DOC_TP1 PRIMARY KEY (

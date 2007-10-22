@@ -25,7 +25,7 @@ CREATE TABLE FP_ADV_DPST_DTL_T(
         FDOC_ADV_DPST_DESC             VARCHAR2(40),
         FDOC_ADV_DPST_AMT              NUMBER(19, 2),
         FDOC_BANK_CD                   VARCHAR2(4),
-        FDOC_BANK_ACCT_NBR             VARCHAR2(4000),
+        FDOC_BANK_ACCT_NBR             VARCHAR2(255),
      CONSTRAINT FP_ADV_DPST_DTL_TP1 PRIMARY KEY (
         FDOC_NBR,
         FDOC_TYP_CD,
