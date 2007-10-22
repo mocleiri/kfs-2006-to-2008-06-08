@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.OwnerChange">
+ 
+        <inquiry>
+            <title>Owner Change Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="changeTransactionExecuteDate" />
+                        <field attributeName="changeTransactionRecordCount" />
+                        <field attributeName="changeTransactionRequestDate" />
+                        <field attributeName="newOrganizationOwnerAccountNumber" />
+                        <field attributeName="newOrganizationOwnerChartCode" />
+                        <field attributeName="oldOrganizationOwnerAccountNumber" />
+                        <field attributeName="oldOrganizationOwnerChartCode" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Owner Change Lookup</title>
+
+            <instructions>Look up an Owner Change</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="oldOrganizationOwnerChartCode" />
+                    <sortAttribute attributeName="oldOrganizationOwnerAccountNumber" />
+                    <sortAttribute attributeName="changeTransactionRequestDate" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="changeTransactionExecuteDate" required="false" />
+                <lookupField attributeName="changeTransactionRecordCount" required="false" />
+                <lookupField attributeName="changeTransactionRequestDate" required="false" />
+                <lookupField attributeName="newOrganizationOwnerAccountNumber" required="false" />
+                <lookupField attributeName="newOrganizationOwnerChartCode" required="false" />
+                <lookupField attributeName="oldOrganizationOwnerAccountNumber" required="false" />
+                <lookupField attributeName="oldOrganizationOwnerChartCode" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="changeTransactionExecuteDate" />
+                <field attributeName="changeTransactionRecordCount" />
+                <field attributeName="changeTransactionRequestDate" />
+                <field attributeName="newOrganizationOwnerAccountNumber" />
+                <field attributeName="newOrganizationOwnerChartCode" />
+                <field attributeName="oldOrganizationOwnerAccountNumber" />
+                <field attributeName="oldOrganizationOwnerChartCode" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="changeTransactionExecuteDate" forceUppercase="true">
+                <label>Change Transaction Execute Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>changeTransactionExecuteDate</summary>
+                <description>changeTransactionExecuteDate description...</description>
+			</attribute>
+
+            <attribute name="changeTransactionRecordCount" forceUppercase="true">
+                <label>Change Transaction Record Count</label>
+                <shortLabel>Count</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>changeTransactionRecordCount</summary>
+                <description>changeTransactionRecordCount description...</description>
+			</attribute>
+
+            <attribute name="changeTransactionRequestDate" forceUppercase="true">
+                <label>Change Transaction Request Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>changeTransactionRequestDate</summary>
+                <description>changeTransactionRequestDate description...</description>
+			</attribute>
+
+            <attribute name="newOrganizationOwnerAccountNumber" forceUppercase="true">
+                <label>New Organization Owner Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>newOrganizationOwnerAccountNumber</summary>
+                <description>newOrganizationOwnerAccountNumber description...</description>
+			</attribute>
+
+            <attribute name="newOrganizationOwnerChartCode" forceUppercase="true">
+                <label>New Organization Owner Chart Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>newOrganizationOwnerChartCode</summary>
+                <description>newOrganizationOwnerChartCode description...</description>
+			</attribute>
+
+            <attribute name="oldOrganizationOwnerAccountNumber" forceUppercase="true">
+                <label>Old Organization Owner Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>oldOrganizationOwnerAccountNumber</summary>
+                <description>oldOrganizationOwnerAccountNumber description...</description>
+			</attribute>
+
+            <attribute name="oldOrganizationOwnerChartCode" forceUppercase="true">
+                <label>Old Organization Owner Chart Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>oldOrganizationOwnerChartCode</summary>
+                <description>oldOrganizationOwnerChartCode description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

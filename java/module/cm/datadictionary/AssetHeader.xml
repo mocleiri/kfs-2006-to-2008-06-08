@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.AssetHeader">
+ 
+        <inquiry>
+            <title>Asset Header Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="agencyNumber" />
+                        <field attributeName="buildingCode" />
+                        <field attributeName="campusCode" />
+                        <field attributeName="capitalAssetNumber" />
+                        <field attributeName="documentNumber" />
+                        <field attributeName="nextCapitalAssetPaymentLineNumber" />
+                        <field attributeName="organizationOwnerAccountNumber" />
+                        <field attributeName="organizationOwnerChartOfAccountsCode" />
+                        <field attributeName="representativeUniversalIdentifier" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Asset Header Lookup</title>
+
+            <instructions>Look up an Asset Header</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="documentNumber" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="agencyNumber" required="false" />
+                <lookupField attributeName="buildingCode" required="false" />
+                <lookupField attributeName="campusCode" required="false" />
+                <lookupField attributeName="capitalAssetNumber" required="false" />
+                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="nextCapitalAssetPaymentLineNumber" required="false" />
+                <lookupField attributeName="organizationOwnerAccountNumber" required="false" />
+                <lookupField attributeName="organizationOwnerChartOfAccountsCode" required="false" />
+                <lookupField attributeName="representativeUniversalIdentifier" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="agencyNumber" />
+                <field attributeName="buildingCode" />
+                <field attributeName="campusCode" />
+                <field attributeName="capitalAssetNumber" />
+                <field attributeName="documentNumber" />
+                <field attributeName="nextCapitalAssetPaymentLineNumber" />
+                <field attributeName="organizationOwnerAccountNumber" />
+                <field attributeName="organizationOwnerChartOfAccountsCode" />
+                <field attributeName="representativeUniversalIdentifier" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="agencyNumber" forceUppercase="true">
+                <label>Agency Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>agencyNumber</summary>
+                <description>agencyNumber description...</description>
+			</attribute>
+
+            <attribute name="buildingCode" forceUppercase="true">
+                <label>Building Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>buildingCode</summary>
+                <description>buildingCode description...</description>
+			</attribute>
+
+            <attribute name="campusCode" forceUppercase="true">
+                <label>Campus Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>campusCode</summary>
+                <description>campusCode description...</description>
+			</attribute>
+
+            <attribute name="capitalAssetNumber" forceUppercase="true">
+                <label>Capital Asset Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>capitalAssetNumber</summary>
+                <description>capitalAssetNumber description...</description>
+			</attribute>
+
+            <attribute name="documentNumber" forceUppercase="true">
+                <label>Document Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>14</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="16" />
+                </control>
+
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
+			</attribute>
+
+            <attribute name="nextCapitalAssetPaymentLineNumber" forceUppercase="true">
+                <label>Next Capital Asset Payment Line Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>nextCapitalAssetPaymentLineNumber</summary>
+                <description>nextCapitalAssetPaymentLineNumber description...</description>
+			</attribute>
+
+            <attribute name="organizationOwnerAccountNumber" forceUppercase="true">
+                <label>Organization Owner Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>organizationOwnerAccountNumber</summary>
+                <description>organizationOwnerAccountNumber description...</description>
+			</attribute>
+
+            <attribute name="organizationOwnerChartOfAccountsCode" forceUppercase="true">
+                <label>Organization Owner Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>organizationOwnerChartOfAccountsCode</summary>
+                <description>organizationOwnerChartOfAccountsCode description...</description>
+			</attribute>
+
+            <attribute name="representativeUniversalIdentifier" forceUppercase="true">
+                <label>Representative Universal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>representativeUniversalIdentifier</summary>
+                <description>representativeUniversalIdentifier description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

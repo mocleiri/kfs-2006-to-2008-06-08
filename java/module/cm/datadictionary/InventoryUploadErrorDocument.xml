@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.InventoryUploadErrorDocument">
+ 
+        <inquiry>
+            <title>Inventory Upload Error Document Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="documentNumber" />
+                        <field attributeName="uploaderSequenceNumber" />
+                        <field attributeName="uploaderUniversalIdentifier" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Inventory Upload Error Document Lookup</title>
+
+            <instructions>Look up an Inventory Upload Error Document</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="documentNumber" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="uploaderSequenceNumber" required="false" />
+                <lookupField attributeName="uploaderUniversalIdentifier" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="documentNumber" />
+                <field attributeName="uploaderSequenceNumber" />
+                <field attributeName="uploaderUniversalIdentifier" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="documentNumber" forceUppercase="true">
+                <label>Document Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>14</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="16" />
+                </control>
+
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
+			</attribute>
+
+            <attribute name="uploaderSequenceNumber" forceUppercase="true">
+                <label>Uploader Sequence Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>uploaderSequenceNumber</summary>
+                <description>uploaderSequenceNumber description...</description>
+			</attribute>
+
+            <attribute name="uploaderUniversalIdentifier" forceUppercase="true">
+                <label>Uploader Universal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>uploaderUniversalIdentifier</summary>
+                <description>uploaderUniversalIdentifier description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

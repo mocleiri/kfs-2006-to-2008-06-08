@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.RoomChange">
+ 
+        <inquiry>
+            <title>Room Change Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="buildingCode" />
+                        <field attributeName="campusCode" />
+                        <field attributeName="changeTransactionExecuteDate" />
+                        <field attributeName="changeTransactionRecordCount" />
+                        <field attributeName="changeTransactionRequestDate" />
+                        <field attributeName="newBuildingRoomNumber" />
+                        <field attributeName="newBuildingSubRoomNumber" />
+                        <field attributeName="oldBuildingRoomNumber" />
+                        <field attributeName="oldBuildingSubRoomNumber" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Room Change Lookup</title>
+
+            <instructions>Look up a Room Change</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="campusCode" />
+                    <sortAttribute attributeName="buildingCode" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="buildingCode" required="false" />
+                <lookupField attributeName="campusCode" required="false" />
+                <lookupField attributeName="changeTransactionExecuteDate" required="false" />
+                <lookupField attributeName="changeTransactionRecordCount" required="false" />
+                <lookupField attributeName="changeTransactionRequestDate" required="false" />
+                <lookupField attributeName="newBuildingRoomNumber" required="false" />
+                <lookupField attributeName="newBuildingSubRoomNumber" required="false" />
+                <lookupField attributeName="oldBuildingRoomNumber" required="false" />
+                <lookupField attributeName="oldBuildingSubRoomNumber" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="buildingCode" />
+                <field attributeName="campusCode" />
+                <field attributeName="changeTransactionExecuteDate" />
+                <field attributeName="changeTransactionRecordCount" />
+                <field attributeName="changeTransactionRequestDate" />
+                <field attributeName="newBuildingRoomNumber" />
+                <field attributeName="newBuildingSubRoomNumber" />
+                <field attributeName="oldBuildingRoomNumber" />
+                <field attributeName="oldBuildingSubRoomNumber" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="buildingCode" forceUppercase="true">
+                <label>Building Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>buildingCode</summary>
+                <description>buildingCode description...</description>
+			</attribute>
+
+            <attribute name="campusCode" forceUppercase="true">
+                <label>Campus Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>campusCode</summary>
+                <description>campusCode description...</description>
+			</attribute>
+
+            <attribute name="changeTransactionExecuteDate" forceUppercase="true">
+                <label>Change Transaction Execute Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>changeTransactionExecuteDate</summary>
+                <description>changeTransactionExecuteDate description...</description>
+			</attribute>
+
+            <attribute name="changeTransactionRecordCount" forceUppercase="true">
+                <label>Change Transaction Record Count</label>
+                <shortLabel>Count</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>changeTransactionRecordCount</summary>
+                <description>changeTransactionRecordCount description...</description>
+			</attribute>
+
+            <attribute name="changeTransactionRequestDate" forceUppercase="true">
+                <label>Change Transaction Request Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>changeTransactionRequestDate</summary>
+                <description>changeTransactionRequestDate description...</description>
+			</attribute>
+
+            <attribute name="newBuildingRoomNumber" forceUppercase="true">
+                <label>New Building Room Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>newBuildingRoomNumber</summary>
+                <description>newBuildingRoomNumber description...</description>
+			</attribute>
+
+            <attribute name="newBuildingSubRoomNumber" forceUppercase="true">
+                <label>New Building Sub Room Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>newBuildingSubRoomNumber</summary>
+                <description>newBuildingSubRoomNumber description...</description>
+			</attribute>
+
+            <attribute name="oldBuildingRoomNumber" forceUppercase="true">
+                <label>Old Building Room Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>oldBuildingRoomNumber</summary>
+                <description>oldBuildingRoomNumber description...</description>
+			</attribute>
+
+            <attribute name="oldBuildingSubRoomNumber" forceUppercase="true">
+                <label>Old Building Sub Room Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>oldBuildingSubRoomNumber</summary>
+                <description>oldBuildingSubRoomNumber description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

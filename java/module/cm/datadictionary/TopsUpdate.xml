@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.TopsUpdate">
+ 
+        <inquiry>
+            <title>Tops Update Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="beginningCapitalAssetNumber" />
+                        <field attributeName="beginningOriginationCode" />
+                        <field attributeName="endingCapitalAssetNumber" />
+                        <field attributeName="endingOriginationCode" />
+                        <field attributeName="expenditureFinancialDocumentPostedDate" />
+                        <field attributeName="purchaseOrderNumber" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Tops Update Lookup</title>
+
+            <instructions>Look up a Tops Update</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="beginningOriginationCode" />
+                    <sortAttribute attributeName="beginningCapitalAssetNumber" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="beginningCapitalAssetNumber" required="false" />
+                <lookupField attributeName="beginningOriginationCode" required="false" />
+                <lookupField attributeName="endingCapitalAssetNumber" required="false" />
+                <lookupField attributeName="endingOriginationCode" required="false" />
+                <lookupField attributeName="expenditureFinancialDocumentPostedDate" required="false" />
+                <lookupField attributeName="purchaseOrderNumber" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="beginningCapitalAssetNumber" />
+                <field attributeName="beginningOriginationCode" />
+                <field attributeName="endingCapitalAssetNumber" />
+                <field attributeName="endingOriginationCode" />
+                <field attributeName="expenditureFinancialDocumentPostedDate" />
+                <field attributeName="purchaseOrderNumber" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="beginningCapitalAssetNumber" forceUppercase="true">
+                <label>Beginning Capital Asset Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>beginningCapitalAssetNumber</summary>
+                <description>beginningCapitalAssetNumber description...</description>
+			</attribute>
+
+            <attribute name="beginningOriginationCode" forceUppercase="true">
+                <label>Beginning Origination Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>beginningOriginationCode</summary>
+                <description>beginningOriginationCode description...</description>
+			</attribute>
+
+            <attribute name="endingCapitalAssetNumber" forceUppercase="true">
+                <label>Ending Capital Asset Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>endingCapitalAssetNumber</summary>
+                <description>endingCapitalAssetNumber description...</description>
+			</attribute>
+
+            <attribute name="endingOriginationCode" forceUppercase="true">
+                <label>Ending Origination Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>endingOriginationCode</summary>
+                <description>endingOriginationCode description...</description>
+			</attribute>
+
+            <attribute name="expenditureFinancialDocumentPostedDate" forceUppercase="true">
+                <label>Expenditure Financial Document Posted Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>expenditureFinancialDocumentPostedDate</summary>
+                <description>expenditureFinancialDocumentPostedDate description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderNumber" forceUppercase="true">
+                <label>Purchase Order Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderNumber</summary>
+                <description>purchaseOrderNumber description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

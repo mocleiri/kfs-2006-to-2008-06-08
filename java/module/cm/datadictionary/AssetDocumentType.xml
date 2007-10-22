@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.AssetDocumentType">
+ 
+        <inquiry>
+            <title>Asset Document Type Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="active" />
+                        <field attributeName="financialDocumentName" />
+                        <field attributeName="financialDocumentTypeCode" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Asset Document Type Lookup</title>
+
+            <instructions>Look up an Asset Document Type</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="financialDocumentTypeCode" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="active" required="false" />
+                <lookupField attributeName="financialDocumentName" required="false" />
+                <lookupField attributeName="financialDocumentTypeCode" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="active" />
+                <field attributeName="financialDocumentName" />
+                <field attributeName="financialDocumentTypeCode" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="active" forceUppercase="true">
+                <label>Active</label>
+                <shortLabel>Active</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>active</summary>
+                <description>active description...</description>
+			</attribute>
+
+            <attribute name="financialDocumentName" forceUppercase="true">
+                <label>Financial Document Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>financialDocumentName</summary>
+                <description>financialDocumentName description...</description>
+			</attribute>
+
+            <attribute name="financialDocumentTypeCode" forceUppercase="true">
+                <label>Financial Document Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>financialDocumentTypeCode</summary>
+                <description>financialDocumentTypeCode description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

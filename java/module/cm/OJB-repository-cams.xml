@@ -155,7 +155,7 @@
 	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 	</reference-descriptor>
-	<reference-descriptor name="financialBalanceType" class-ref="org.kuali.module.chart.bo.BalanceTyp" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="financialBalanceType" class-ref="org.kuali.module.chart.bo.codes.BalanceTyp" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="financialBalanceTypeCode" />
 	</reference-descriptor>
 	<reference-descriptor name="financialObjectType" class-ref="org.kuali.module.chart.bo.ObjectType" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -164,10 +164,10 @@
 	<reference-descriptor name="project" class-ref="org.kuali.module.chart.bo.ProjectCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="projectCode" />
 	</reference-descriptor>
-	<reference-descriptor name="referenceFinancialSystemOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="referenceFinancialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="referenceFinancialSystemOriginationCode" />
 	</reference-descriptor>
-	<reference-descriptor name="financialSystemOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="financialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="financialSystemOriginationCode" />
 	</reference-descriptor>
     <reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -378,7 +378,7 @@
 	<reference-descriptor name="project" class-ref="org.kuali.module.chart.bo.ProjectCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="projectCode" />
 	</reference-descriptor>
-	<reference-descriptor name="universityFiscalPeriod" class-ref="org.kuali.core.bo.AccountingPeriod" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="universityFiscalPeriod" class-ref="org.kuali.module.chart.bo.AccountingPeriod" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="universityFiscalYear" />
 		<foreignkey field-ref="universityFiscalPeriodCode" />
 	</reference-descriptor>
@@ -495,7 +495,7 @@
     <reference-descriptor name="expenditureFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="expenditureFinancialDocumentNumber" />
     </reference-descriptor>
-	<reference-descriptor name="expenditureFinancialSystemOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="expenditureFinancialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="expenditureFinancialSystemOriginationCode" />
 	</reference-descriptor>
 </class-descriptor>
@@ -550,7 +550,7 @@
 	<reference-descriptor name="retirementReason" class-ref="org.kuali.module.cams.bo.RetirementReason" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="retirementReasonCode" />
 	</reference-descriptor>
-	<reference-descriptor name="cashReceiptFinancialSystemOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="cashReceiptFinancialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="cashReceiptFinancialSystemOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="cashReceiptFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -604,7 +604,7 @@
 		<foreignkey field-ref="organizationOwnerChartOfAccountsCode" />
 		<foreignkey field-ref="organizationCode" />
 	</reference-descriptor>
-	<reference-descriptor name="transferOfFundsOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="transferOfFundsOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="transferOfFundsOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="transferOfFundsFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -784,7 +784,7 @@
 	<reference-descriptor name="campus" class-ref="org.kuali.core.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="campusCode" />
 	</reference-descriptor>
-	<reference-descriptor name="buildingRoom" class-ref="org.kuali.core.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="buildingRoom" class-ref="org.kuali.kfs.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="campusCode" />
 		<foreignkey field-ref="buildingCode" />
 		<foreignkey field-ref="buildingRoomNumber" />
@@ -821,13 +821,13 @@
 	<reference-descriptor name="retirementReason" class-ref="org.kuali.module.cams.bo.RetirementReason" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="retirementReasonCode" />
 	</reference-descriptor>
-	<reference-descriptor name="cashReceiptFinancialSystemOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="cashReceiptFinancialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="cashReceiptFinancialSystemOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="cashReceiptFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="cashReceiptFinancialDocumentNumber" />
 	</reference-descriptor>
-	<reference-descriptor name="transferOfFundsOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="transferOfFundsOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="transferOfFundsOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="transferOfFundsFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -931,7 +931,7 @@
 		<foreignkey field-ref="chartOfAccountsCode" />
 		<foreignkey field-ref="accountNumber" />
 	</reference-descriptor>
-	<reference-descriptor name="financialBalanceType" class-ref="org.kuali.module.chart.bo.BalanceTyp" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="financialBalanceType" class-ref="org.kuali.module.chart.bo.codes.BalanceTyp" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="financialBalanceTypeCode" />
 	</reference-descriptor>
 	<reference-descriptor name="financialObjectType" class-ref="org.kuali.module.chart.bo.ObjectType" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -940,13 +940,13 @@
 	<reference-descriptor name="project" class-ref="org.kuali.module.chart.bo.ProjectCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="projectCode" />
 	</reference-descriptor>
-	<reference-descriptor name="referenceFinancialSystemOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="referenceFinancialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="referenceFinancialSystemOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="referenceFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="referenceFinancialDocumentNumber" />
 	</reference-descriptor>
-	<reference-descriptor name="financialSystemOrigination" class-ref="org.kuali.core.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="financialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="financialSystemOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -1029,12 +1029,12 @@
 		<foreignkey field-ref="campusCode" />
 		<foreignkey field-ref="buildingCode" />
 	</reference-descriptor>
-	<reference-descriptor name="oldBuildingRoom" class-ref="org.kuali.core.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="oldBuildingRoom" class-ref="org.kuali.kfs.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="campusCode" />
 		<foreignkey field-ref="buildingCode" />
 		<foreignkey field-ref="oldBuildingRoomNumber" />
 	</reference-descriptor>
-	<reference-descriptor name="newBuildingRoom" class-ref="org.kuali.core.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="newBuildingRoom" class-ref="org.kuali.kfs.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="campusCode" />
 		<foreignkey field-ref="buildingCode" />
 		<foreignkey field-ref="newBuildingRoomNumber" />
@@ -1128,7 +1128,7 @@
 		<foreignkey field-ref="campusCode" />
 		<foreignkey field-ref="buildingCode" />
 	</reference-descriptor>
-	<reference-descriptor name="buildingRoom" class-ref="org.kuali.core.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="buildingRoom" class-ref="org.kuali.kfs.bo.Room" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="campusCode" />
 		<foreignkey field-ref="buildingCode" />
 		<foreignkey field-ref="buildingRoomNumber" />

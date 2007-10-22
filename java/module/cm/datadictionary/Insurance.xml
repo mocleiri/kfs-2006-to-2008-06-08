@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.Insurance">
+ 
+        <inquiry>
+            <title>Insurance Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="active" />
+                        <field attributeName="insuranceCode" />
+                        <field attributeName="insuranceDeductibleAmount" />
+                        <field attributeName="insuranceFiscalYear" />
+                        <field attributeName="insuranceItemDescription" />
+                        <field attributeName="insurancePremiumAmount" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Insurance Lookup</title>
+
+            <instructions>Look up Insurance</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="insuranceCode" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="active" required="false" />
+                <lookupField attributeName="insuranceCode" required="false" />
+                <lookupField attributeName="insuranceDeductibleAmount" required="false" />
+                <lookupField attributeName="insuranceFiscalYear" required="false" />
+                <lookupField attributeName="insuranceItemDescription" required="false" />
+                <lookupField attributeName="insurancePremiumAmount" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="active" />
+                <field attributeName="insuranceCode" />
+                <field attributeName="insuranceDeductibleAmount" />
+                <field attributeName="insuranceFiscalYear" />
+                <field attributeName="insuranceItemDescription" />
+                <field attributeName="insurancePremiumAmount" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="active" forceUppercase="true">
+                <label>Active</label>
+                <shortLabel>Active</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>active</summary>
+                <description>active description...</description>
+			</attribute>
+
+            <attribute name="insuranceCode" forceUppercase="true">
+                <label>Insurance Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>insuranceCode</summary>
+                <description>insuranceCode description...</description>
+			</attribute>
+
+            <attribute name="insuranceDeductibleAmount" forceUppercase="true">
+                <label>Insurance Deductible Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>insuranceDeductibleAmount</summary>
+                <description>insuranceDeductibleAmount description...</description>
+			</attribute>
+
+            <attribute name="insuranceFiscalYear" forceUppercase="true">
+                <label>Insurance Fiscal Year</label>
+                <shortLabel>Year</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>insuranceFiscalYear</summary>
+                <description>insuranceFiscalYear description...</description>
+			</attribute>
+
+            <attribute name="insuranceItemDescription" forceUppercase="true">
+                <label>Insurance Item Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>35</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="37" />
+                </control>
+
+                <summary>insuranceItemDescription</summary>
+                <description>insuranceItemDescription description...</description>
+			</attribute>
+
+            <attribute name="insurancePremiumAmount" forceUppercase="true">
+                <label>Insurance Premium Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>insurancePremiumAmount</summary>
+                <description>insurancePremiumAmount description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>
