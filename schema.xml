@@ -5100,7 +5100,7 @@
         <column name="FDOC_ADV_DPST_DESC" size="40" type="VARCHAR"/>
         <column name="FDOC_ADV_DPST_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FDOC_BANK_CD" size="4" type="VARCHAR"/>
-        <column name="FDOC_BANK_ACCT_NBR" size="4000" type="VARCHAR"/>
+        <column name="FDOC_BANK_ACCT_NBR" size="255" type="VARCHAR"/>
         <foreign-key foreignTable="FP_BANK_ACCOUNT_T" name="FP_ADV_DPST_DTL_TR3">
             <reference foreign="FDOC_BANK_CD" local="FDOC_BANK_CD"/>
             <reference foreign="FDOC_BANK_ACCT_NBR" local="FDOC_BANK_ACCT_NBR"/>
@@ -5580,7 +5580,7 @@
         <column name="FDOC_DPST_TYP_CD" size="1" type="VARCHAR"/>
         <column name="FDOC_DPST_DT" type="DATE"/>
         <column name="FDOC_DPST_BNK_CD" size="4" type="VARCHAR"/>
-        <column name="FDOC_BNK_ACCT_NBR" size="4000" type="VARCHAR"/>
+        <column name="FDOC_BNK_ACCT_NBR" size="255" type="VARCHAR"/>
         <column name="FDOC_DPST_TKT_NBR" size="20" type="VARCHAR"/>
         <column name="FDOC_DPST_AMT" scale="2" size="19" type="DECIMAL"/>
         <foreign-key foreignTable="FP_DEPOSIT_HDR_T" name="FP_DEPOSIT_DOC_TR2">
@@ -6813,18 +6813,6 @@
         <column name="CNTCT_MAIL_ADDR" required="true" size="30" type="VARCHAR"/>
         <column name="CNTCT_DEPT_NM" required="true" size="30" type="VARCHAR"/>
         <unique name="FS_CLCTR_HDR_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="FS_CODES_DESC_T">
-        <column name="CODE" primaryKey="true" size="50" type="VARCHAR"/>
-        <column name="CLASS_NAME" primaryKey="true" size="75" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="NAME" size="2000" type="VARCHAR"/>
-        <column name="ACTIVE_IND" required="true" size="1" type="VARCHAR"/>
-        <unique name="FS_CODES_DESC_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
