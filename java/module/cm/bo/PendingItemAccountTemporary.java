@@ -15,7 +15,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class ItemAccountTemporary extends PersistableBusinessObjectBase {
+public class PendingItemAccountTemporary extends PersistableBusinessObjectBase {
 
 	private String purchaseOrderNumber;
 	private String invoiceNumber;
@@ -52,7 +52,7 @@ public class ItemAccountTemporary extends PersistableBusinessObjectBase {
 	/**
 	 * Default constructor.
 	 */
-	public ItemAccountTemporary() {
+	public PendingItemAccountTemporary() {
 
 	}
 

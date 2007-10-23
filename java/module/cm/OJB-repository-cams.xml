@@ -36,7 +36,7 @@
 	<field-descriptor name="itemAssignedToTradeInIndicator" column="ITM_ASND_TO_TRADE_IN_IND" jdbc-type="CHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.ItemAccountTemporary" table="CB_ITM_ACCT_TEMP_T">
+<class-descriptor class="org.kuali.module.cams.bo.PendingItemAccountTemporary" table="CB_ITM_ACCT_TEMP_T">
 	<field-descriptor name="purchaseOrderNumber" column="PO_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="invoiceNumber" column="INVOICE_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="lineItemNumber" column="LINE_ITEM_NUMBER" jdbc-type="BIGINT" primarykey="true" index="true"/>
@@ -96,7 +96,7 @@
 	</reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingCapitalAssetTemporary" table="CB_PND_AST_TEMP_T">
+<class-descriptor class="org.kuali.module.cams.bo.PendingAssetTemporary" table="CB_PND_AST_TEMP_T">
 	<field-descriptor name="universityFiscalYear" column="UNIV_FISCAL_YR" jdbc-type="INTEGER" primarykey="true" index="true"/>
 	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true"/>

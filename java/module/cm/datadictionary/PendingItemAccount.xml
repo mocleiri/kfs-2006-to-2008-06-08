@@ -3,10 +3,10 @@
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
-    <businessObject businessObjectClass="org.kuali.module.cams.bo.ItemAccountTemporary">
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.PendingItemAccount">
  
         <inquiry>
-            <title>Item Account Temporary Inquiry</title>
+            <title>Pending Item Account Inquiry</title>
              
             <inquirySections>
                 <inquirySection title="Header Text">
@@ -40,9 +40,9 @@
         </inquiry>
 
         <lookup>
-            <title>Item Account Temporary Lookup</title>
+            <title>Pending Item Account Lookup</title>
 
-            <instructions>Look up an Item Account Temporary</instructions>
+            <instructions>Look up a Pending Item Account</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>

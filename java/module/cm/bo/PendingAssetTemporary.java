@@ -20,7 +20,7 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
 /**
  * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PendingCapitalAssetTemporary extends PersistableBusinessObjectBase {
+public class PendingAssetTemporary extends PersistableBusinessObjectBase {
 
 	private Integer universityFiscalYear;
 	private String chartOfAccountsCode;
@@ -66,7 +66,7 @@ public class PendingCapitalAssetTemporary extends PersistableBusinessObjectBase 
 	/**
 	 * Default constructor.
 	 */
-	public PendingCapitalAssetTemporary() {
+	public PendingAssetTemporary() {
 
 	}
 

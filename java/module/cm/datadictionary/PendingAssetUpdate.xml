@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.PendingAssetUpdate">
+ 
+        <inquiry>
+            <title>Pending Asset Update Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="capitalAssetNumber" />
+                        <field attributeName="documentNumber" />
+                        <field attributeName="financialDocumentTypeCode" />
+                        <field attributeName="lineItemNumber" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Pending Asset Update Lookup</title>
+
+            <instructions>Look up a Pending Asset Update</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="financialDocumentTypeCode" />
+                    <sortAttribute attributeName="capitalAssetNumber" />
+                    <sortAttribute attributeName="lineItemNumber" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="capitalAssetNumber" required="false" />
+                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="financialDocumentTypeCode" required="false" />
+                <lookupField attributeName="lineItemNumber" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="capitalAssetNumber" />
+                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentTypeCode" />
+                <field attributeName="lineItemNumber" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="capitalAssetNumber" forceUppercase="true">
+                <label>Capital Asset Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>capitalAssetNumber</summary>
+                <description>capitalAssetNumber description...</description>
+			</attribute>
+
+            <attribute name="documentNumber" forceUppercase="true">
+                <label>Document Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>14</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="16" />
+                </control>
+
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
+			</attribute>
+
+            <attribute name="financialDocumentTypeCode" forceUppercase="true">
+                <label>Financial Document Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>financialDocumentTypeCode</summary>
+                <description>financialDocumentTypeCode description...</description>
+			</attribute>
+
+            <attribute name="lineItemNumber" forceUppercase="true">
+                <label>Line Item Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>lineItemNumber</summary>
+                <description>lineItemNumber description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

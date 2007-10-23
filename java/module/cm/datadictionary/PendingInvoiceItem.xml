@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.PendingInvoiceItem">
+ 
+        <inquiry>
+            <title>Pending Invoice Item Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="financialSubObjectCode" />
+                        <field attributeName="invoiceNumber" />
+                        <field attributeName="itemAssignedToTradeInIndicator" />
+                        <field attributeName="itemExpenseClass" />
+                        <field attributeName="itemTypeCode" />
+                        <field attributeName="lineItemAdditionalCharge" />
+                        <field attributeName="lineItemCost" />
+                        <field attributeName="lineItemDescription" />
+                        <field attributeName="lineItemDiscount" />
+                        <field attributeName="lineItemNumber" />
+                        <field attributeName="manufacturerName" />
+                        <field attributeName="purchaseOrderNumber" />
+                        <field attributeName="purchasingCommodityCode" />
+                        <field attributeName="quantityInvoiced" />
+                        <field attributeName="reasonPendingCode" />
+                        <field attributeName="transactionTypeCode" />
+                        <field attributeName="transactionTypeServiceIndicator" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Pending Invoice Item Lookup</title>
+
+            <instructions>Look up a Pending Invoice Item</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="purchaseOrderNumber" />
+                    <sortAttribute attributeName="invoiceNumber" />
+                    <sortAttribute attributeName="lineItemNumber" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="invoiceNumber" required="false" />
+                <lookupField attributeName="itemAssignedToTradeInIndicator" required="false" />
+                <lookupField attributeName="itemExpenseClass" required="false" />
+                <lookupField attributeName="itemTypeCode" required="false" />
+                <lookupField attributeName="lineItemAdditionalCharge" required="false" />
+                <lookupField attributeName="lineItemCost" required="false" />
+                <lookupField attributeName="lineItemDescription" required="false" />
+                <lookupField attributeName="lineItemDiscount" required="false" />
+                <lookupField attributeName="lineItemNumber" required="false" />
+                <lookupField attributeName="manufacturerName" required="false" />
+                <lookupField attributeName="purchaseOrderNumber" required="false" />
+                <lookupField attributeName="purchasingCommodityCode" required="false" />
+                <lookupField attributeName="quantityInvoiced" required="false" />
+                <lookupField attributeName="reasonPendingCode" required="false" />
+                <lookupField attributeName="transactionTypeCode" required="false" />
+                <lookupField attributeName="transactionTypeServiceIndicator" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="invoiceNumber" />
+                <field attributeName="itemAssignedToTradeInIndicator" />
+                <field attributeName="itemExpenseClass" />
+                <field attributeName="itemTypeCode" />
+                <field attributeName="lineItemAdditionalCharge" />
+                <field attributeName="lineItemCost" />
+                <field attributeName="lineItemDescription" />
+                <field attributeName="lineItemDiscount" />
+                <field attributeName="lineItemNumber" />
+                <field attributeName="manufacturerName" />
+                <field attributeName="purchaseOrderNumber" />
+                <field attributeName="purchasingCommodityCode" />
+                <field attributeName="quantityInvoiced" />
+                <field attributeName="reasonPendingCode" />
+                <field attributeName="transactionTypeCode" />
+                <field attributeName="transactionTypeServiceIndicator" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="financialSubObjectCode" forceUppercase="true">
+                <label>Financial Sub Object Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
+			</attribute>
+
+            <attribute name="invoiceNumber" forceUppercase="true">
+                <label>Invoice Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>14</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="16" />
+                </control>
+
+                <summary>invoiceNumber</summary>
+                <description>invoiceNumber description...</description>
+			</attribute>
+
+            <attribute name="itemAssignedToTradeInIndicator" forceUppercase="true">
+                <label>Item Assigned To Trade In Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>itemAssignedToTradeInIndicator</summary>
+                <description>itemAssignedToTradeInIndicator description...</description>
+			</attribute>
+
+            <attribute name="itemExpenseClass" forceUppercase="true">
+                <label>Item Expense Class</label>
+                <shortLabel>Class</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemExpenseClass</summary>
+                <description>itemExpenseClass description...</description>
+			</attribute>
+
+            <attribute name="itemTypeCode" forceUppercase="true">
+                <label>Item Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemTypeCode</summary>
+                <description>itemTypeCode description...</description>
+			</attribute>
+
+            <attribute name="lineItemAdditionalCharge" forceUppercase="true">
+                <label>Line Item Additional Charge</label>
+                <shortLabel>Charge</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>lineItemAdditionalCharge</summary>
+                <description>lineItemAdditionalCharge description...</description>
+			</attribute>
+
+            <attribute name="lineItemCost" forceUppercase="true">
+                <label>Line Item Cost</label>
+                <shortLabel>Cost</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>lineItemCost</summary>
+                <description>lineItemCost description...</description>
+			</attribute>
+
+            <attribute name="lineItemDescription" forceUppercase="true">
+                <label>Line Item Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>2000</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
+
+                <summary>lineItemDescription</summary>
+                <description>lineItemDescription description...</description>
+			</attribute>
+
+            <attribute name="lineItemDiscount" forceUppercase="true">
+                <label>Line Item Discount</label>
+                <shortLabel>Discount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>lineItemDiscount</summary>
+                <description>lineItemDiscount description...</description>
+			</attribute>
+
+            <attribute name="lineItemNumber" forceUppercase="true">
+                <label>Line Item Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>lineItemNumber</summary>
+                <description>lineItemNumber description...</description>
+			</attribute>
+
+            <attribute name="manufacturerName" forceUppercase="true">
+                <label>Manufacturer Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>manufacturerName</summary>
+                <description>manufacturerName description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderNumber" forceUppercase="true">
+                <label>Purchase Order Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderNumber</summary>
+                <description>purchaseOrderNumber description...</description>
+			</attribute>
+
+            <attribute name="purchasingCommodityCode" forceUppercase="true">
+                <label>Purchasing Commodity Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>purchasingCommodityCode</summary>
+                <description>purchasingCommodityCode description...</description>
+			</attribute>
+
+            <attribute name="quantityInvoiced" forceUppercase="true">
+                <label>Quantity Invoiced</label>
+                <shortLabel>Invoiced</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>quantityInvoiced</summary>
+                <description>quantityInvoiced description...</description>
+			</attribute>
+
+            <attribute name="reasonPendingCode" forceUppercase="true">
+                <label>Reason Pending Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>reasonPendingCode</summary>
+                <description>reasonPendingCode description...</description>
+			</attribute>
+
+            <attribute name="transactionTypeCode" forceUppercase="true">
+                <label>Transaction Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>transactionTypeCode</summary>
+                <description>transactionTypeCode description...</description>
+			</attribute>
+
+            <attribute name="transactionTypeServiceIndicator" forceUppercase="true">
+                <label>Transaction Type Service Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>transactionTypeServiceIndicator</summary>
+                <description>transactionTypeServiceIndicator description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

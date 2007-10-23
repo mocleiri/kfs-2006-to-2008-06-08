@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.PendingAction">
+ 
+        <inquiry>
+            <title>Pending Action Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="actionCode" />
+                        <field attributeName="actionDescription" />
+                        <field attributeName="active" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Pending Action Lookup</title>
+
+            <instructions>Look up a Pending Action</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="actionCode" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="actionCode" required="false" />
+                <lookupField attributeName="actionDescription" required="false" />
+                <lookupField attributeName="active" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="actionCode" />
+                <field attributeName="actionDescription" />
+                <field attributeName="active" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="actionCode" forceUppercase="true">
+                <label>Action Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>actionCode</summary>
+                <description>actionCode description...</description>
+			</attribute>
+
+            <attribute name="actionDescription" forceUppercase="true">
+                <label>Action Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>20</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="22" />
+                </control>
+
+                <summary>actionDescription</summary>
+                <description>actionDescription description...</description>
+			</attribute>
+
+            <attribute name="active" forceUppercase="true">
+                <label>Active</label>
+                <shortLabel>Active</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>active</summary>
+                <description>active description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

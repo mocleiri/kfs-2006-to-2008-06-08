@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.PendingPurchaseOrderNote">
+ 
+        <inquiry>
+            <title>Pending Purchase Order Note Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="noteDescription" />
+                        <field attributeName="noteLineNumber" />
+                        <field attributeName="noteTypeCode" />
+                        <field attributeName="purchaseOrderNumber" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Pending Purchase Order Note Lookup</title>
+
+            <instructions>Look up a Pending Purchase Order Note</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="purchaseOrderNumber" />
+                    <sortAttribute attributeName="noteLineNumber" />
+                    <sortAttribute attributeName="noteTypeCode" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="noteDescription" required="false" />
+                <lookupField attributeName="noteLineNumber" required="false" />
+                <lookupField attributeName="noteTypeCode" required="false" />
+                <lookupField attributeName="purchaseOrderNumber" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="noteDescription" />
+                <field attributeName="noteLineNumber" />
+                <field attributeName="noteTypeCode" />
+                <field attributeName="purchaseOrderNumber" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="noteDescription" forceUppercase="true">
+                <label>Note Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>800</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
+
+                <summary>noteDescription</summary>
+                <description>noteDescription description...</description>
+			</attribute>
+
+            <attribute name="noteLineNumber" forceUppercase="true">
+                <label>Note Line Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>noteLineNumber</summary>
+                <description>noteLineNumber description...</description>
+			</attribute>
+
+            <attribute name="noteTypeCode" forceUppercase="true">
+                <label>Note Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>1</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="3" />
+                </control>
+
+                <summary>noteTypeCode</summary>
+                <description>noteTypeCode description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderNumber" forceUppercase="true">
+                <label>Purchase Order Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderNumber</summary>
+                <description>purchaseOrderNumber description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

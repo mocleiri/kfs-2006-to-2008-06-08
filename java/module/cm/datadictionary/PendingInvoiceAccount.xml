@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cams.bo.PendingInvoiceAccount">
+ 
+        <inquiry>
+            <title>Pending Invoice Account Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="accountNumber" />
+                        <field attributeName="accountObjectCode" />
+                        <field attributeName="chartOfAccountsCode" />
+                        <field attributeName="financialSubObjectCode" />
+                        <field attributeName="fiscalCampus" />
+                        <field attributeName="invoiceNumber" />
+                        <field attributeName="organizationReferenceId" />
+                        <field attributeName="payableInvoiceAccountAmount" />
+                        <field attributeName="payableInvoiceAccountDiscount" />
+                        <field attributeName="payableInvoiceAccountPercent" />
+                        <field attributeName="projectCode" />
+                        <field attributeName="purchaseOrderNumber" />
+                        <field attributeName="subAccountNumber" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
+
+        <lookup>
+            <title>Pending Invoice Account Lookup</title>
+
+            <instructions>Look up a Pending Invoice Account</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="chartOfAccountsCode" />
+                    <sortAttribute attributeName="accountNumber" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="accountNumber" required="false" />
+                <lookupField attributeName="accountObjectCode" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="fiscalCampus" required="false" />
+                <lookupField attributeName="invoiceNumber" required="false" />
+                <lookupField attributeName="organizationReferenceId" required="false" />
+                <lookupField attributeName="payableInvoiceAccountAmount" required="false" />
+                <lookupField attributeName="payableInvoiceAccountDiscount" required="false" />
+                <lookupField attributeName="payableInvoiceAccountPercent" required="false" />
+                <lookupField attributeName="projectCode" required="false" />
+                <lookupField attributeName="purchaseOrderNumber" required="false" />
+                <lookupField attributeName="subAccountNumber" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="accountNumber" />
+                <field attributeName="accountObjectCode" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="fiscalCampus" />
+                <field attributeName="invoiceNumber" />
+                <field attributeName="organizationReferenceId" />
+                <field attributeName="payableInvoiceAccountAmount" />
+                <field attributeName="payableInvoiceAccountDiscount" />
+                <field attributeName="payableInvoiceAccountPercent" />
+                <field attributeName="projectCode" />
+                <field attributeName="purchaseOrderNumber" />
+                <field attributeName="subAccountNumber" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="accountNumber" forceUppercase="true">
+                <label>Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
+			</attribute>
+
+            <attribute name="accountObjectCode" forceUppercase="true">
+                <label>Account Object Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>accountObjectCode</summary>
+                <description>accountObjectCode description...</description>
+			</attribute>
+
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
+
+            <attribute name="financialSubObjectCode" forceUppercase="true">
+                <label>Financial Sub Object Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
+			</attribute>
+
+            <attribute name="fiscalCampus" forceUppercase="true">
+                <label>Fiscal Campus</label>
+                <shortLabel>Campus</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>fiscalCampus</summary>
+                <description>fiscalCampus description...</description>
+			</attribute>
+
+            <attribute name="invoiceNumber" forceUppercase="true">
+                <label>Invoice Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>14</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="16" />
+                </control>
+
+                <summary>invoiceNumber</summary>
+                <description>invoiceNumber description...</description>
+			</attribute>
+
+            <attribute name="organizationReferenceId" forceUppercase="true">
+                <label>Organization Reference Id</label>
+                <shortLabel>Id</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>organizationReferenceId</summary>
+                <description>organizationReferenceId description...</description>
+			</attribute>
+
+            <attribute name="payableInvoiceAccountAmount" forceUppercase="true">
+                <label>Payable Invoice Account Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>payableInvoiceAccountAmount</summary>
+                <description>payableInvoiceAccountAmount description...</description>
+			</attribute>
+
+            <attribute name="payableInvoiceAccountDiscount" forceUppercase="true">
+                <label>Payable Invoice Account Discount</label>
+                <shortLabel>Discount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>payableInvoiceAccountDiscount</summary>
+                <description>payableInvoiceAccountDiscount description...</description>
+			</attribute>
+
+            <attribute name="payableInvoiceAccountPercent" forceUppercase="true">
+                <label>Payable Invoice Account Percent</label>
+                <shortLabel>Percent</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>payableInvoiceAccountPercent</summary>
+                <description>payableInvoiceAccountPercent description...</description>
+			</attribute>
+
+            <attribute name="projectCode" forceUppercase="true">
+                <label>Project Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>projectCode</summary>
+                <description>projectCode description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderNumber" forceUppercase="true">
+                <label>Purchase Order Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderNumber</summary>
+                <description>purchaseOrderNumber description...</description>
+			</attribute>
+
+            <attribute name="subAccountNumber" forceUppercase="true">
+                <label>Sub Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>subAccountNumber</summary>
+                <description>subAccountNumber description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>
