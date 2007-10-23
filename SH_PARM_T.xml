@@ -3761,4 +3761,12 @@
         SH_PARM_NMSPC_CD="KFS-PA"
         SH_PARM_TXT="Reset for Extraction by PDP" SH_PARM_TYP_CD="CONFG"
         VER_NBR="0" WRKGRP_NM="PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="3D2EFA4C6636D00AE043814FD881D00A"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Valid values for the &quot;Area&quot; field of workgroups with the System Workgroup Type"
+        SH_PARM_DTL_TYP_CD="All"
+        SH_PARM_NM="SYSTEM_WORKGROUP_TYPE_AREAS"
+        SH_PARM_NMSPC_CD="KFS-SY"
+        SH_PARM_TXT="Bursar;Central Administration;Help;Identity Management;Tax;Travel"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
 </dataset>
