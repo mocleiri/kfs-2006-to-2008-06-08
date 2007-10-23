@@ -3175,7 +3175,7 @@
         SH_PARM_DESC="Workgroup which can perform functions on documents in exception routing status."
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="EXCEPTION_GROUP"
         SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="KUALI_ROLE_EXCEPTION"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="AUTH" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC4BA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Workgroup which can perform almost any function within Kuali."
@@ -3422,7 +3422,7 @@
         SH_PARM_DTL_TYP_CD="SalaryExpenseTransfer"
         SH_PARM_NM="SALARY_EXPENSE_TRANSFER_ADMINISTRATORS_GROUP"
         SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="KUALI_SET_ADMIN"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="AUTH" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC93A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Workgroup which can perform actions on PO documents (cancel, save, route, adhocroute, close, reopen, void)."
@@ -3498,13 +3498,13 @@
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="ACCOUNTS_PAYABLE_SUPERVISOR_GROUP"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="PURAP_AP_SUPERVISOR"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="AUTH" VER_NBR="0" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3C04E894956730EEE043814FD88130EE"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Workgroup name for List of persons identified as Contract Managers for the purpose of Internal Purchasing routing on the PO document"
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="CONTRACT_MANAGERS_GROUP" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="PURAP_PUR_CONTR_MGR" SH_PARM_TYP_CD="CONFG"
+        SH_PARM_TXT="PURAP_PUR_CONTR_MGR" SH_PARM_TYP_CD="AUTH"
         VER_NBR="0" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3C04E894956830EEE043814FD88130EE"
         SH_PARM_CONS_CD="A"
@@ -3622,7 +3622,7 @@
         SH_PARM_DESC="The workgroup that has access to the service bus user interfaces"
         SH_PARM_DTL_TYP_CD="All" SH_PARM_NM="SERVICE_BUS_ACCESS_GROUP"
         SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="KUALI_FMSOPS"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="AUTH" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="1178873C-E6F5-C6F6-EFE7-75D00E4594D7"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Maximum upload size for accounting line spreadsheets. Used by KualiAccountingDocumentFormBase. Must be an integer, optionally followed by &quot;K&quot;, &quot;M&quot;, or &quot;G&quot;."
