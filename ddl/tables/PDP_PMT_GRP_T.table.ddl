@@ -13,7 +13,7 @@ CREATE TABLE PDP_PMT_GRP_T(
         ALTRNT_PAYEE_ID_TYP_CD         VARCHAR2(1),
         PMT_ACH_EXTRT_TS               DATE,
         PAYEE_OWNR_CD                  VARCHAR2(2),
-        CUST_IU_NBR                    VARCHAR2(30),
+        CUST_INST_NBR                  VARCHAR2(30),
         PMT_LN1_ADDR                   VARCHAR2(55),
         PMT_LN2_ADDR                   VARCHAR2(55),
         PMT_LN3_ADDR                   VARCHAR2(55),
