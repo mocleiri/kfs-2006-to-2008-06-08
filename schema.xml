@@ -2512,9 +2512,6 @@
         <column default="SYS_GUID()" name="OBJ_ID" required="true"
             size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <foreign-key foreignTable="FS_UNIVERSAL_USR_T" name="CG_PRJDR_TR1">
-            <reference foreign="PERSON_UNVL_ID" local="PERSON_UNVL_ID"/>
-        </foreign-key>
         <unique name="CG_PRJDR_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -10395,34 +10392,25 @@
     </table>
     <table name="PDP_ACCTG_CHG_CD_T">
         <column name="ACCTG_CHG_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACCTG_CHG_CD_DESC" required="true" size="50" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
-        <unique name="PDP_ACCTG_CHG_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_ACH_ACCT_NBR_T">
         <column name="PMT_GRP_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACH_BNK_ACCT_NBR" size="17" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <foreign-key foreignTable="PDP_PMT_GRP_T" name="PDP_ACH_ACCT_NBR_TR1">
             <reference foreign="PMT_GRP_ID" local="PMT_GRP_ID"/>
         </foreign-key>
-        <unique name="PDP_ACH_ACCT_NBR_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_ACH_BNK_T">
         <column name="BNK_RTNG_NBR" primaryKey="true" size="9" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="BNK_OFFC_CD" size="1" type="VARCHAR"/>
         <column name="BNK_SRVC_NBR" size="9" type="VARCHAR"/>
@@ -10439,14 +10427,10 @@
         <column name="BNK_PHN_SFX_NBR" size="4" type="VARCHAR"/>
         <column name="BNK_INST_STAT_CD" size="1" type="VARCHAR"/>
         <column name="BNK_DTA_V_CD" size="1" type="VARCHAR"/>
-        <unique name="PDP_ACH_BNK_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_BNK_CD_T">
         <column name="BNK_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="BNK_DESC" required="true" size="25" type="VARCHAR"/>
         <column name="BNK_NM" required="true" size="25" type="VARCHAR"/>
@@ -10459,17 +10443,13 @@
         <foreign-key foreignTable="PDP_DISB_TYP_CD_T" name="PDP_BNK_CD_TR1">
             <reference foreign="DISB_TYP_CD" local="DISB_TYP_CD"/>
         </foreign-key>
-        <unique name="PDP_BNK_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_BNK_CD_TI2">
             <index-column name="DISB_TYP_CD"/>
         </index>
     </table>
     <table name="PDP_CUST_BNK_T">
         <column name="CUST_BNK_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CUST_ID" size="8" type="DECIMAL"/>
         <column name="BNK_ID" size="8" type="DECIMAL"/>
@@ -10485,9 +10465,6 @@
         <foreign-key foreignTable="PDP_BNK_CD_T" name="PDP_CUST_BNK_TR2">
             <reference foreign="BNK_ID" local="BNK_ID"/>
         </foreign-key>
-        <unique name="PDP_CUST_BNK_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <unique name="PDP_CUST_BNK_TC1">
             <unique-column name="CUST_ID"/>
             <unique-column name="DISB_TYP_CD"/>
@@ -10504,8 +10481,7 @@
     </table>
     <table name="PDP_CUST_PRFL_T">
         <column name="CUST_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FIN_COA_CD" required="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" required="true" size="4" type="VARCHAR"/>
@@ -10554,9 +10530,6 @@
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD_LBLTY_RLF_CD" size="1" type="VARCHAR"/>
-        <unique name="PDP_CUST_PRFL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <unique name="PDP_CUST_PRFL_TC1">
             <unique-column name="FIN_COA_CD"/>
             <unique-column name="ORG_CD"/>
@@ -10565,8 +10538,7 @@
     </table>
     <table name="PDP_DISB_NBR_RNG_T">
         <column name="DISB_NBR_RNG_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="BNK_ID" size="8" type="DECIMAL"/>
         <column name="PHYS_CMP_PROC_CD" required="true" size="2" type="VARCHAR"/>
@@ -10580,29 +10552,21 @@
         <foreign-key foreignTable="PDP_BNK_CD_T" name="PDP_DISB_NBR_RNG_TR1">
             <reference foreign="BNK_ID" local="BNK_ID"/>
         </foreign-key>
-        <unique name="PDP_DISB_NBR_RNG_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_DISB_NBR_RNG_TI3">
             <index-column name="BNK_ID"/>
         </index>
     </table>
     <table name="PDP_DISB_TYP_CD_T">
         <column name="DISB_TYP_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="DISB_TYP_DESC" required="true" size="25" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
-        <unique name="PDP_DISB_TYP_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_DOC_TYP_CD_T">
         <column name="DOC_TYP_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="DISB_TYP_CD" size="4" type="VARCHAR"/>
         <column name="FS_ORIGIN_CD" size="2" type="VARCHAR"/>
@@ -10616,9 +10580,6 @@
         <foreign-key foreignTable="PDP_DISB_TYP_CD_T" name="PDP_DOC_TYP_CD_TR2">
             <reference foreign="DISB_TYP_CD" local="DISB_TYP_CD"/>
         </foreign-key>
-        <unique name="PDP_DOC_TYP_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_DOC_TYP_CD_TI4">
             <index-column name="DISB_TYP_CD"/>
         </index>
@@ -10628,8 +10589,7 @@
     </table>
     <table name="PDP_FIL_T">
         <column name="PMT_FIL_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PMT_FL_NM" size="30" type="VARCHAR"/>
         <column name="CUST_FL_CRTN_TS" type="DATE"/>
@@ -10642,28 +10602,20 @@
         <foreign-key foreignTable="PDP_CUST_PRFL_T" name="PDP_FIL_TR1">
             <reference foreign="CUST_ID" local="CUST_ID"/>
         </foreign-key>
-        <unique name="PDP_FIL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_FIL_TI2">
             <index-column name="CUST_ID"/>
         </index>
     </table>
     <table name="PDP_FMT_PROC_T">
         <column name="PHYS_CMP_PROC_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="BEG_PROC_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
-        <unique name="PDP_FMT_PROC_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_GL_PENDING_ENTRY_T">
         <column name="GL_PENDING_ENTRY_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FS_ORIGIN_CD" required="true" size="2" type="VARCHAR"/>
         <column name="FDOC_NBR" required="true" size="14" type="VARCHAR"/>
@@ -10694,14 +10646,10 @@
         <column name="ACCT_SF_FINOBJ_CD" size="4" type="VARCHAR"/>
         <column name="TRN_ENTR_OFST_CD" size="1" type="VARCHAR"/>
         <column name="TRN_EXTRT_IND" size="1" type="VARCHAR"/>
-        <unique name="PDP_GL_PENDING_ENTRY_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_PAYEE_ACH_ACCT_T">
         <column name="ACH_ACCT_GNRTD_ID" primaryKey="true" size="10" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="BNK_RTNG_NBR" size="9" type="VARCHAR"/>
         <column name="BNK_ACCT_NBR" size="17" type="VARCHAR"/>
@@ -10720,14 +10668,10 @@
         <foreign-key foreignTable="PDP_ACH_BNK_T" name="PDP_PAYEE_ACH_ACCT_TR1">
             <reference foreign="BNK_RTNG_NBR" local="BNK_RTNG_NBR"/>
         </foreign-key>
-        <unique name="PDP_PAYEE_ACH_ACCT_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_PMT_ACCT_DTL_T">
         <column name="PMT_ACCT_DTL_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FIN_COA_CD" required="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" required="true" size="7" type="VARCHAR"/>
@@ -10742,17 +10686,13 @@
         <foreign-key foreignTable="PDP_PMT_DTL_T" name="PDP_PMT_ACCT_DTL_TR1">
             <reference foreign="PMT_DTL_ID" local="PMT_DTL_ID"/>
         </foreign-key>
-        <unique name="PDP_PMT_ACCT_DTL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_PMT_ACCT_DTL_TI2">
             <index-column name="PMT_DTL_ID"/>
         </index>
     </table>
     <table name="PDP_PMT_ACCT_HIST_T">
         <column name="PMT_ACCT_HIST_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACCTG_CHG_CD" size="4" type="VARCHAR"/>
         <column name="ACCT_ATTRIB_NM" size="25" type="VARCHAR"/>
@@ -10767,9 +10707,6 @@
         <foreign-key foreignTable="PDP_ACCTG_CHG_CD_T" name="PDP_PMT_ACCT_HIST_TR2">
             <reference foreign="ACCTG_CHG_CD" local="ACCTG_CHG_CD"/>
         </foreign-key>
-        <unique name="PDP_PMT_ACCT_HIST_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_PMT_ACCT_HIST_TI2">
             <index-column name="PMT_ACCT_DTL_ID"/>
         </index>
@@ -10779,20 +10716,15 @@
     </table>
     <table name="PDP_PMT_CHG_CD_T">
         <column name="PMT_CHG_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PMT_CHG_CD_DESC" required="true" size="50" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
-        <unique name="PDP_PMT_CHG_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_PMT_DTL_T">
         <column name="PMT_DTL_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CUST_PMT_DOC_NBR" size="9" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
@@ -10817,9 +10749,6 @@
         <foreign-key foreignTable="PDP_PMT_GRP_T" name="PDP_PMT_DTL_TR1">
             <reference foreign="PMT_GRP_ID" local="PMT_GRP_ID"/>
         </foreign-key>
-        <unique name="PDP_PMT_DTL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_PMT_DTL_TI2">
             <index-column name="PMT_GRP_ID"/>
         </index>
@@ -10829,8 +10758,7 @@
     </table>
     <table name="PDP_PMT_GRP_HIST_T">
         <column name="PMT_GRP_HIST_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PMT_CHG_CD" size="4" type="VARCHAR"/>
         <column name="PMT_CHG_NTE_TXT" size="250" type="VARCHAR"/>
@@ -10869,9 +10797,6 @@
         <foreign-key foreignTable="PDP_PROC_T" name="PDP_PMT_GRP_HIST_TR2">
             <reference foreign="PROC_ID" local="ORIG_PROC_ID"/>
         </foreign-key>
-        <unique name="PDP_PMT_GRP_HIST_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_PMT_GRP_HIST_TI3">
             <index-column name="ORIG_PMT_STAT_CD"/>
         </index>
@@ -10893,8 +10818,7 @@
     </table>
     <table name="PDP_PMT_GRP_T">
         <column name="PMT_GRP_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PMT_PAYEE_NM" size="40" type="VARCHAR"/>
         <column name="DISB_NBR" size="9" type="DECIMAL"/>
@@ -10952,9 +10876,6 @@
         <foreign-key foreignTable="PDP_BNK_CD_T" name="PDP_PMT_GRP_TR4">
             <reference foreign="BNK_ID" local="BNK_ID"/>
         </foreign-key>
-        <unique name="PDP_PMT_GRP_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_PMT_GRP_TI2">
             <index-column name="PMT_FIL_ID"/>
         </index>
@@ -10979,8 +10900,7 @@
     </table>
     <table name="PDP_PMT_NTE_TXT_T">
         <column name="PMT_NTE_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CUST_NTE_LN_NBR" required="true" size="2" type="DECIMAL"/>
         <column name="CUST_NTE_TXT" required="true" size="90" type="VARCHAR"/>
@@ -10989,9 +10909,6 @@
         <foreign-key foreignTable="PDP_PMT_DTL_T" name="PDP_PMT_NTE_TXT_TR1">
             <reference foreign="PMT_DTL_ID" local="PMT_DTL_ID"/>
         </foreign-key>
-        <unique name="PDP_PMT_NTE_TXT_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <unique name="PDP_PMT_NTE_TXT_TC1">
             <unique-column name="PMT_DTL_ID"/>
             <unique-column name="CUST_NTE_LN_NBR"/>
@@ -11002,20 +10919,15 @@
     </table>
     <table name="PDP_PMT_STAT_CD_T">
         <column name="PMT_STAT_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PMT_STAT_CD_DESC" required="true" size="25" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
-        <unique name="PDP_PMT_STAT_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_PROC_SUM_T">
         <column name="PROC_SUM_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="DISB_TYP_CD" required="true" size="4" type="VARCHAR"/>
         <column name="PMT_SORT_ORD_VAL" required="true" size="1" type="VARCHAR"/>
@@ -11035,9 +10947,6 @@
         <foreign-key foreignTable="PDP_CUST_PRFL_T" name="PDP_PROC_SUM_TR2">
             <reference foreign="CUST_ID" local="CUST_ID"/>
         </foreign-key>
-        <unique name="PDP_PROC_SUM_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="PDP_PROC_SUM_TI2">
             <index-column name="DISB_TYP_CD"/>
         </index>
@@ -11050,28 +10959,20 @@
     </table>
     <table name="PDP_PROC_T">
         <column name="PROC_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PHYS_CMP_CD" required="true" size="2" type="VARCHAR"/>
         <column name="PROC_TS" required="true" type="DATE"/>
         <column name="PROC_USR_ID" required="true" size="11" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
-        <unique name="PDP_PROC_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PDP_TRN_TYP_CD_T">
         <column name="TRN_TYP_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
+        <column default="SYS_GUID()" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="TRN_TYP_DESC" size="25" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
-        <unique name="PDP_TRN_TYP_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="PS_POSITION_DATA">
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
@@ -13523,6 +13424,7 @@
     <sequence name="GL_CRRCTN_GRP_T_SEQ" nextval="43"/>
     <sequence name="GL_CRRCTN_RPLC_SPC_T_SEQ" nextval="43"/>
     <sequence name="GL_CRRCTN_SRCH_CRT_T_SEQ" nextval="43"/>
+    <sequence name="GL_ID_BILL_T_SEQ" nextval="1"/>
     <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="11909"/>
     <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="31885"/>
     <sequence name="INV_HDR_INFO_ID" nextval="1002"/>
@@ -13572,15 +13474,15 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2040"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2060"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317040"/>
-    <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="3812"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317060"/>
+    <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="3932"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2000"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="11656"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357629"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563357709"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151636"/>
     <sequence name="SEQ_TRANSACTION_TST" nextval="100"/>
