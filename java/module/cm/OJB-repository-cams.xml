@@ -263,18 +263,6 @@
 	<field-descriptor name="payableInvoiceAccountPercent" column="ACCT_PERCENT" jdbc-type="DECIMAL"/>
 	<field-descriptor name="fiscalCampus" column="FISCAL_CAMPUS" jdbc-type="VARCHAR"/>
 
-<!-- this may need to be a collection -->
-	<reference-descriptor name="organizationReference" class-ref="org.kuali.module.cams.bo.PendingItemAccount" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderNumber" />
-		<foreignkey field-ref="invoiceNumber" />
-		<foreignkey field-ref="chartOfAccountsCode" />
-		<foreignkey field-ref="accountNumber" />
-		<foreignkey field-ref="subAccountNumber" />
-		<foreignkey field-ref="accountObjectCode" />
-		<foreignkey field-ref="financialSubObjectCode" />
-		<foreignkey field-ref="projectCode" />
-		<foreignkey field-ref="organizationReferenceId" />
-	</reference-descriptor>
 	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 	</reference-descriptor>
@@ -313,12 +301,6 @@
 	<field-descriptor name="transactionTypeServiceIndicator" column="CPTL_AST_TRN_TYP_SRVC_IND" jdbc-type="CHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="itemAssignedToTradeInIndicator" column="ITM_ASND_TO_TRADE_IN_IND" jdbc-type="CHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 
-<!-- this may need to be a collection -->
-	<reference-descriptor name="lineItem" class-ref="org.kuali.module.cams.bo.PendingItemAccount" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderNumber" />
-		<foreignkey field-ref="invoiceNumber" />
-		<foreignkey field-ref="lineItemNumber" />
-	</reference-descriptor>
 	<reference-descriptor name="reasonPending" class-ref="org.kuali.module.cams.bo.PendingReasonCode" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="reasonPendingCode" />
 	</reference-descriptor>
@@ -351,6 +333,22 @@
 	<field-descriptor name="referenceDocumentAmount" column="REF_DOC_AMOUNT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="referenceDocumentDate" column="REF_DOCUMENT_DATE" jdbc-type="VARCHAR"/>
 
+	<reference-descriptor name="pendingInvoiceAccount" class-ref="org.kuali.module.cams.bo.PendingInvoiceAccount" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="purchaseOrderNumber" />
+		<foreignkey field-ref="invoiceNumber" />
+		<foreignkey field-ref="chartOfAccountsCode" />
+		<foreignkey field-ref="accountNumber" />
+		<foreignkey field-ref="subAccountNumber" />
+		<foreignkey field-ref="accountObjectCode" />
+		<foreignkey field-ref="financialSubObjectCode" />
+		<foreignkey field-ref="projectCode" />
+		<foreignkey field-ref="organizationReferenceId" />
+	</reference-descriptor>
+	<reference-descriptor name="pendingInvoiceItem" class-ref="org.kuali.module.cams.bo.PendingInvoiceItem" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="purchaseOrderNumber" />
+		<foreignkey field-ref="invoiceNumber" />
+		<foreignkey field-ref="lineItemNumber" />
+	</reference-descriptor>
 	<reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 	</reference-descriptor>
@@ -409,17 +407,20 @@
 	<field-descriptor name="lastActionCode" column="LAST_ACTION_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="paymentRequestStatusCode" column="PMT_RQST_STAT_CD" jdbc-type="VARCHAR"/>
 
-<!--  make this a collection -->
-	<reference-descriptor name="invoice" class-ref="org.kuali.module.cams.bo.PendingInvoiceItem" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="purchaseOrderNumber" />
-		<foreignkey field-ref="invoiceNumber" />
-	</reference-descriptor>
 	<reference-descriptor name="lastAction" class-ref="org.kuali.module.cams.bo.PendingAction" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="lastActionCode" />
 	</reference-descriptor>
 	<reference-descriptor name="campus" class-ref="org.kuali.core.bo.Campus" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="campusCode" />
 	</reference-descriptor>
+	<reference-descriptor name="purchaseOrder" class-ref="org.kuali.module.cams.bo.PendingPurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="purchaseOrderNumber" />
+	</reference-descriptor>
+    <collection-descriptor name="pendingInvoiceItems" element-class-ref="org.kuali.module.cams.bo.PendingInvoiceItem" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <orderby name="lineItemNumber" sort="ASC" />
+        <inverse-foreignkey field-ref="purchaseOrderNumber" />
+        <inverse-foreignkey field-ref="invoiceNumber" />
+    </collection-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.cams.bo.PendingPurchaseOrderNote" table="PEND_NOTE_LINET">
@@ -429,6 +430,10 @@
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="noteDescription" column="NOTE_DESCRIPTION" jdbc-type="VARCHAR"/>
+
+	<reference-descriptor name="purchaseOrder" class-ref="org.kuali.module.cams.bo.PendingPurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="purchaseOrderNumber" />
+	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.cams.bo.PaymentDocument" table="CM_AST_PMT_DOC_T">
@@ -1673,6 +1678,9 @@
 	<reference-descriptor name="organization" class-ref="org.kuali.module.chart.bo.Org" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="chartOfAccountsCode" />
 		<foreignkey field-ref="organizationCode" />
+	</reference-descriptor>
+	<reference-descriptor name="purchaseOrder" class-ref="org.kuali.module.cams.bo.PendingPurchaseOrder" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="purchaseOrderNumber" />
 	</reference-descriptor>
 </class-descriptor>
 

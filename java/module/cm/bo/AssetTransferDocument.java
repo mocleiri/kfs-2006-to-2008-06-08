@@ -29,7 +29,7 @@ public class AssetTransferDocument extends PersistableBusinessObjectBase {
 	private String organizationOwnerAccountNumber;
 	private String organizationText;
 	private String organizationInventoryName;
-	private String transferOfFundsFinancialSystemOriginationCode;
+	private String transferOfFundsOriginationCode;
 	private String transferOfFundsFinancialDocumentNumber;
 	private String organizationCode;
 	private String offCampusAddress;
@@ -288,23 +288,23 @@ public class AssetTransferDocument extends PersistableBusinessObjectBase {
 
 
 	/**
-	 * Gets the transferOfFundsFinancialSystemOriginationCode attribute.
+	 * Gets the transferOfFundsOriginationCode attribute.
 	 * 
-	 * @return Returns the transferOfFundsFinancialSystemOriginationCode
+	 * @return Returns the transferOfFundsOriginationCode
 	 * 
 	 */
-	public String getTransferOfFundsFinancialSystemOriginationCode() { 
-		return transferOfFundsFinancialSystemOriginationCode;
+	public String getTransferOfFundsOriginationCode() { 
+		return transferOfFundsOriginationCode;
 	}
 
 	/**
-	 * Sets the transferOfFundsFinancialSystemOriginationCode attribute.
+	 * Sets the transferOfFundsOriginationCode attribute.
 	 * 
-	 * @param transferOfFundsFinancialSystemOriginationCode The transferOfFundsFinancialSystemOriginationCode to set.
+	 * @param transferOfFundsOriginationCode The transferOfFundsOriginationCode to set.
 	 * 
 	 */
-	public void setTransferOfFundsFinancialSystemOriginationCode(String transferOfFundsFinancialSystemOriginationCode) {
-		this.transferOfFundsFinancialSystemOriginationCode = transferOfFundsFinancialSystemOriginationCode;
+	public void setTransferOfFundsOriginationCode(String transferOfFundsOriginationCode) {
+		this.transferOfFundsOriginationCode = transferOfFundsOriginationCode;
 	}
 
 

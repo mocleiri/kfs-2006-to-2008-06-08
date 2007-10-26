@@ -41,6 +41,8 @@ public class PendingItemAccount extends PersistableBusinessObjectBase {
 	private KualiDecimal referenceDocumentAmount;
 	private String referenceDocumentDate;
 
+    private PendingInvoiceAccount pendingInvoiceAccount;
+    private PendingInvoiceItem pendingInvoiceItem;
     private Chart chartOfAccounts;
     private Account account;
     private SubAccount subAccount;
@@ -671,6 +673,40 @@ public class PendingItemAccount extends PersistableBusinessObjectBase {
      */
     public void setAccountObject(ObjectCode accountObject) {
         this.accountObject = accountObject;
+    }
+
+    /**
+     * Gets the pendingInvoiceItem attribute. 
+     * @return Returns the pendingInvoiceItem.
+     */
+    public PendingInvoiceItem getPendingInvoiceItem() {
+        return pendingInvoiceItem;
+    }
+
+    /**
+     * Sets the pendingInvoiceItem attribute value.
+     * @param pendingInvoiceItem The pendingInvoiceItem to set.
+     * @deprecated
+     */
+    public void setPendingInvoiceItem(PendingInvoiceItem pendingInvoiceItem) {
+        this.pendingInvoiceItem = pendingInvoiceItem;
+    }    
+    
+    /**
+     * Gets the pendingInvoiceAccount attribute. 
+     * @return Returns the pendingInvoiceAccount.
+     */
+    public PendingInvoiceAccount getPendingInvoiceAccount() {
+        return pendingInvoiceAccount;
+    }
+
+    /**
+     * Sets the pendingInvoiceAccount attribute value.
+     * @param pendingInvoiceAccount The pendingInvoiceAccount to set.
+     * @deprecated
+     */
+    public void setPendingInvoiceAccount(PendingInvoiceAccount pendingInvoiceAccount) {
+        this.pendingInvoiceAccount = pendingInvoiceAccount;
     }
     
     /**

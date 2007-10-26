@@ -1,7 +1,9 @@
 package org.kuali.module.cams.bo;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
@@ -29,12 +31,16 @@ public class PendingInvoice extends PersistableBusinessObjectBase {
     private PendingInvoiceItem invoice;
 	private PendingAction lastAction;
     private Campus campus;
+    private PendingPurchaseOrder purchaseOrder;
+
+    private List<PendingInvoiceItem> pendingInvoiceItems;
     
 	/**
 	 * Default constructor.
 	 */
 	public PendingInvoice() {
-
+        pendingInvoiceItems = new ArrayList<PendingInvoiceItem>();
+        
 	}
 
 	/**
@@ -366,15 +372,48 @@ public class PendingInvoice extends PersistableBusinessObjectBase {
     public void setCampus(Campus campus) {
         this.campus = campus;
     }
+
+    /**
+     * Gets the purchaseOrder attribute. 
+     * @return Returns the purchaseOrder.
+     */
+    public PendingPurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    /**
+     * Sets the purchaseOrder attribute value.
+     * @param purchaseOrder The purchaseOrder to set.
+     * @deprecated
+     */
+    public void setPurchaseOrder(PendingPurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }    
     
     /**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("purchaseOrderNumber", this.purchaseOrderNumber);
-        m.put("invoiceNumber", this.invoiceNumber);
-	    return m;
+     * Gets the pendingInvoiceItems attribute. 
+     * @return Returns the pendingInvoiceItems.
+     */
+    public List<PendingInvoiceItem> getPendingInvoiceItems() {
+        return pendingInvoiceItems;
+    }
+
+    /**
+     * Sets the pendingInvoiceItems attribute value.
+     * @param pendingInvoiceItems The pendingInvoiceItems to set.
+     */
+    public void setPendingInvoiceItems(List<PendingInvoiceItem> pendingInvoiceItems) {
+        this.pendingInvoiceItems = pendingInvoiceItems;
     }
  
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
+        m.put("purchaseOrderNumber", this.purchaseOrderNumber);
+        m.put("invoiceNumber", this.invoiceNumber);
+        return m;
+    }
+
 }

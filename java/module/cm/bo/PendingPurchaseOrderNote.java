@@ -14,6 +14,8 @@ public class PendingPurchaseOrderNote extends PersistableBusinessObjectBase {
 	private String noteTypeCode;
 	private String noteDescription;
 
+    private PendingPurchaseOrder purchaseOrder;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -104,7 +106,23 @@ public class PendingPurchaseOrderNote extends PersistableBusinessObjectBase {
 		this.noteDescription = noteDescription;
 	}
 
+    /**
+     * Gets the purchaseOrder attribute. 
+     * @return Returns the purchaseOrder.
+     */
+    public PendingPurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
 
+    /**
+     * Sets the purchaseOrder attribute value.
+     * @param purchaseOrder The purchaseOrder to set.
+     * @deprecated
+     */
+    public void setPurchaseOrder(PendingPurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+    
 	/**
 	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
 	 */
@@ -117,4 +135,5 @@ public class PendingPurchaseOrderNote extends PersistableBusinessObjectBase {
         m.put("noteTypeCode", this.noteTypeCode);
 	    return m;
     }
+
 }
