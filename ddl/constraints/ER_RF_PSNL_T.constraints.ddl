@@ -22,10 +22,6 @@ ALTER TABLE ER_RF_PSNL_T
         COA_CD,ORG_CD)
   REFERENCES CA_ORG_T (
         FIN_COA_CD,ORG_CD))
-  ADD (CONSTRAINT ER_RF_PSNL_TR3 FOREIGN KEY (
-        RDOC_NBR,PRSN_ROLE_CD)
-  REFERENCES ER_RF_PRSN_ROLE_T (
-        RDOC_NBR,PRSN_ROLE_CD))
   ADD (CONSTRAINT ER_RF_PSNL_TR4 FOREIGN KEY (
         PRSN_CNTRY_CD)
   REFERENCES SH_COUNTRY_T (
@@ -34,12 +30,4 @@ ALTER TABLE ER_RF_PSNL_T
         PRSN_ST_CD)
   REFERENCES SH_STATE_T (
         POSTAL_STATE_CD))
-/
-
-/*
- * KULERA-733: Disable 1:1 relations due to OJB / Oracle difference
- * in handling constraints on 1:1 mappings only.
- */
-ALTER TABLE ER_RF_PSNL_T
-  disable CONSTRAINT ER_RF_PSNL_TR3
 /

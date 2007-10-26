@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 ALTER TABLE ER_BDGT_T
-  ADD (CONSTRAINT ER_BDGT_TR1 FOREIGN KEY (
-        RDOC_NBR)
-  REFERENCES ER_BDGT_DOC_T (
-        FDOC_NBR))
   ADD (CONSTRAINT ER_BDGT_TR2 FOREIGN KEY (
         BDGT_AGNCY_NBR)
   REFERENCES CG_AGENCY_T (
@@ -34,12 +30,4 @@ ALTER TABLE ER_BDGT_T
         BDGT_PARNT_TRK_NBR)
   REFERENCES ER_BDGT_T (
         RDOC_NBR))
-/
-
-/*
- * KULERA-733: Disable 1:1 relations due to OJB / Oracle difference
- * in handling constraints on 1:1 mappings only.
- */
-ALTER TABLE ER_BDGT_T
-  disable CONSTRAINT ER_BDGT_TR1
 /

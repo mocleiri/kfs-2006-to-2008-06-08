@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 ALTER TABLE ER_RF_AGNCY_T
-  ADD (CONSTRAINT ER_RF_AGNCY_TR1 FOREIGN KEY (
-        RDOC_NBR)
-  REFERENCES ER_RF_DOC_T (
-        RDOC_NBR))
   ADD (CONSTRAINT ER_RF_AGNCY_TR2 FOREIGN KEY (
         AGNCY_CNTRY_CD)
   REFERENCES SH_COUNTRY_T (
@@ -30,19 +26,4 @@ ALTER TABLE ER_RF_AGNCY_T
         AGNCY_NBR)
   REFERENCES CG_AGENCY_T (
         CG_AGENCY_NBR))
-  ADD (CONSTRAINT ER_RF_AGNCY_TR5 FOREIGN KEY (
-        RDOC_NBR,RF_DUE_DT_TYP_CD)
-  REFERENCES ER_RF_DUE_DT_TYP_T (
-        RDOC_NBR,DUE_DT_TYP_CD))
-/
-
-/*
- * KULERA-733: Disable 1:1 relations due to OJB / Oracle difference
- * in handling constraints on 1:1 mappings only.
- */
-ALTER TABLE ER_RF_AGNCY_T
-  disable CONSTRAINT ER_RF_AGNCY_TR1
-/
-ALTER TABLE ER_RF_AGNCY_T
-  disable CONSTRAINT ER_RF_AGNCY_TR5
 /
