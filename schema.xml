@@ -3594,7 +3594,7 @@
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
     </table>
     <table name="EN_WRKGRP_T">
-        <column name="WRKGRP_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="WRKGRP_ID" primaryKey="true" size="19" type="DECIMAL"/>
         <column default="0" name="WRKGRP_VER_NBR" primaryKey="true"
             size="8" type="DECIMAL"/>
         <column name="WRKGRP_NM" required="true" size="70" type="VARCHAR"/>
@@ -3843,9 +3843,6 @@
         <column name="BDGT_MAN_RT_IND" size="1" type="VARCHAR"/>
         <column name="BDGT_PRPS_CD" size="2" type="VARCHAR"/>
         <column name="BDGT_URCV_IDC_IND" size="1" type="VARCHAR"/>
-        <foreign-key foreignTable="ER_BDGT_T" name="ER_BDGT_IDC_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <foreign-key foreignTable="ER_PRPS_T" name="ER_BDGT_IDC_TR3">
             <reference foreign="PRPS_CD" local="BDGT_PRPS_CD"/>
         </foreign-key>
@@ -3885,9 +3882,6 @@
             size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" size="8" type="DECIMAL"/>
         <column name="BDGT_ADJ_MOD_DCST_AMT" size="7" type="DECIMAL"/>
-        <foreign-key foreignTable="ER_BDGT_T" name="ER_BDGT_MOD_PRD_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <unique name="ER_BDGT_MOD_PRD_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -3903,9 +3897,6 @@
         <column name="BDGT_MOD_CSRM_DESC" type="CLOB"/>
         <column name="BDGT_MOD_PSNL_DESC" type="CLOB"/>
         <column name="BDGT_MOD_VAR_ADJ_DESC" type="CLOB"/>
-        <foreign-key foreignTable="ER_BDGT_T" name="ER_BDGT_MOD_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <unique name="ER_BDGT_MOD_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -4048,9 +4039,6 @@
         <column name="BDGT_PRJDR_TBN_IND" size="1" type="VARCHAR"/>
         <column name="BDGT_TYP_CD_TXT" size="40" type="VARCHAR"/>
         <column name="BDGT_PARNT_TRK_NBR" size="14" type="VARCHAR"/>
-        <foreign-key foreignTable="ER_BDGT_DOC_T" name="ER_BDGT_TR1">
-            <reference foreign="FDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <foreign-key foreignTable="CG_AGENCY_T" name="ER_BDGT_TR3">
             <reference foreign="CG_AGENCY_NBR" local="BDGT_FED_PASS_AGNCY_NBR"/>
         </foreign-key>
@@ -4085,17 +4073,6 @@
         <column default="1" name="VER_NBR" size="8" type="DECIMAL"/>
         <column name="BDGT_MAN_IDC_RT" scale="4" size="5" type="DECIMAL"/>
         <column name="BDGT_MAN_MTDC_AMT" size="9" type="DECIMAL"/>
-        <foreign-key foreignTable="ER_BDGT_TSK_T" name="ER_BDGT_TSK_PRD_IDC_TR2">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-            <reference foreign="BDGT_TSK_SEQ_NBR" local="BDGT_TSK_SEQ_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="ER_BDGT_T" name="ER_BDGT_TSK_PRD_IDC_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="ER_BDGT_PRD_T" name="ER_BDGT_TSK_PRD_IDC_TR3">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-            <reference foreign="BDGT_PRD_SEQ_NBR" local="BDGT_PRD_SEQ_NBR"/>
-        </foreign-key>
         <unique name="ER_BDGT_TSK_PRD_IDC_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -4146,10 +4123,6 @@
         <column name="PRSN_HRLY_NBR" size="3" type="DECIMAL"/>
         <column name="BDGT_SLRY_FISCAL_YR" size="4" type="DECIMAL"/>
         <column name="PRSN_UNVL_ID" size="10" type="VARCHAR"/>
-        <foreign-key foreignTable="CA_ORG_T" name="ER_BDGT_USR_TR2">
-            <reference foreign="FIN_COA_CD" local="EMP_FSCL_CMP_CD"/>
-            <reference foreign="ORG_CD" local="EMP_PRM_DEPT_CD"/>
-        </foreign-key>
         <foreign-key foreignTable="ER_BDGT_T" name="ER_BDGT_USR_TR1">
             <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
         </foreign-key>
@@ -4164,9 +4137,6 @@
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CGPRPSL_NBR" size="12" type="DECIMAL"/>
         <column name="CGPRPSL_CRTE_DT" type="DATE"/>
-        <foreign-key foreignTable="ER_RF_DOC_T" name="ER_CG_PRPSL_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <unique name="ER_CG_PRPSL_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -4383,15 +4353,8 @@
         <foreign-key foreignTable="SH_COUNTRY_T" name="ER_RF_AGNCY_TR2">
             <reference foreign="POSTAL_CNTRY_CD" local="AGNCY_CNTRY_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="ER_RF_DOC_T" name="ER_RF_AGNCY_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <foreign-key foreignTable="SH_STATE_T" name="ER_RF_AGNCY_TR3">
             <reference foreign="POSTAL_STATE_CD" local="AGNCY_ST_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="ER_RF_DUE_DT_TYP_T" name="ER_RF_AGNCY_TR5">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-            <reference foreign="DUE_DT_TYP_CD" local="RF_DUE_DT_TYP_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CG_AGENCY_T" name="ER_RF_AGNCY_TR4">
             <reference foreign="CG_AGENCY_NBR" local="AGNCY_NBR"/>
@@ -4416,9 +4379,6 @@
         <column name="RF_BGT_TOT_END_DT" type="DATE"/>
         <column name="RF_BGT_TOT_IDC_AMT" scale="4" size="19" type="DECIMAL"/>
         <column name="RF_BGT_TOT_STRT_DT" type="DATE"/>
-        <foreign-key foreignTable="ER_RF_DOC_T" name="ER_RF_BDGT_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <unique name="ER_RF_BDGT_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -4429,9 +4389,6 @@
             size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="RF_CI_DESC" size="1000" type="VARCHAR"/>
-        <foreign-key foreignTable="ER_RF_DOC_T" name="ER_RF_CI_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
         <unique name="ER_RF_CI_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -4496,23 +4453,11 @@
         <foreign-key foreignTable="ER_BDGT_T" name="ER_RF_DOC_TR1">
             <reference foreign="RDOC_NBR" local="RF_BDGT_NBR"/>
         </foreign-key>
-        <foreign-key foreignTable="ER_RF_SUBM_TYP_T" name="ER_RF_DOC_TR6">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-            <reference foreign="SUBM_TYP_CD" local="SUBM_TYP_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="ER_RF_PRPS_T" name="ER_RF_DOC_TR3">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-            <reference foreign="PRPS_CD" local="RF_PRPS_CD"/>
-        </foreign-key>
         <foreign-key foreignTable="ER_RF_DOC_T" name="ER_RF_DOC_TR2">
             <reference foreign="RDOC_NBR" local="RF_PARNT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="ER_RF_STAT_T" name="ER_RF_DOC_TR4">
             <reference foreign="RF_STAT_CD" local="RF_STAT_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="ER_RF_RSRCH_TYP_CD_T" name="ER_RF_DOC_TR5">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-            <reference foreign="RSRCH_TYP_CD" local="RSRCH_TYP_CD"/>
         </foreign-key>
         <unique name="ER_RF_DOC_TC0">
             <unique-column name="OBJ_ID"/>
@@ -4734,10 +4679,6 @@
         <column name="PRSN_TBN_IND" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="SH_COUNTRY_T" name="ER_RF_PSNL_TR4">
             <reference foreign="POSTAL_CNTRY_CD" local="PRSN_CNTRY_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="ER_RF_PRSN_ROLE_T" name="ER_RF_PSNL_TR3">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-            <reference foreign="PRSN_ROLE_CD" local="PRSN_ROLE_CD"/>
         </foreign-key>
         <foreign-key foreignTable="ER_RF_DOC_T" name="ER_RF_PSNL_TR1">
             <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
@@ -12771,7 +12712,7 @@
             size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="VNDR_TYP_CD" required="true" size="4" type="VARCHAR"/>
-        <column name="VNDR_TAX_NBR" size="9" type="VARCHAR"/>
+        <column name="VNDR_TAX_NBR" size="255" type="VARCHAR"/>
         <column name="VNDR_TAX_TYP_CD" size="4" type="VARCHAR"/>
         <column name="VNDR_OWNR_CD" size="4" type="VARCHAR"/>
         <column name="VNDR_OWNR_CTGRY_CD" size="4" type="VARCHAR"/>
@@ -12882,7 +12823,7 @@
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="VNDR_HDR_GNRTD_ID" required="true" size="10" type="DECIMAL"/>
         <column name="VNDR_TAX_CHG_DT" required="true" type="DATE"/>
-        <column name="VNDR_PREV_TAX_NBR" size="9" type="VARCHAR"/>
+        <column name="VNDR_PREV_TAX_NBR" size="255" type="VARCHAR"/>
         <column name="VNDR_PREV_TAX_TYP_CD" size="4" type="VARCHAR"/>
         <column name="VNDR_TAX_CHG_PRSN_ID" required="true" size="32" type="VARCHAR"/>
         <foreign-key foreignTable="PUR_VNDR_HDR_T" name="PUR_VNDR_TAX_CHG_TR1">
