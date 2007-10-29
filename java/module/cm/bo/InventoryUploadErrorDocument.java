@@ -1,6 +1,8 @@
 package org.kuali.module.cams.bo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
@@ -16,11 +18,14 @@ public class InventoryUploadErrorDocument extends PersistableBusinessObjectBase 
 
     private DocumentHeader documentHeader;
 
+    private List<InventoryUploadErrorDetail> inventoryUploadErrorDetails;
+    
 	/**
 	 * Default constructor.
 	 */
 	public InventoryUploadErrorDocument() {
-
+        inventoryUploadErrorDetails = new ArrayList<InventoryUploadErrorDetail>();
+        
 	}
 
 	/**
@@ -106,12 +111,29 @@ public class InventoryUploadErrorDocument extends PersistableBusinessObjectBase 
 		this.documentHeader = documentHeader;
 	}
 
-	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("documentNumber", this.documentNumber);
-	    return m;
+    /**
+     * Gets the inventoryUploadErrorDetails attribute. 
+     * @return Returns the inventoryUploadErrorDetails.
+     */
+    public List<InventoryUploadErrorDetail> getInventoryUploadErrorDetails() {
+        return inventoryUploadErrorDetails;
     }
+
+    /**
+     * Sets the inventoryUploadErrorDetails attribute value.
+     * @param inventoryUploadErrorDetails The inventoryUploadErrorDetails to set.
+     */
+    public void setInventoryUploadErrorDetails(List<InventoryUploadErrorDetail> inventoryUploadErrorDetails) {
+        this.inventoryUploadErrorDetails = inventoryUploadErrorDetails;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
+        m.put("documentNumber", this.documentNumber);
+        return m;
+    }
+
 }

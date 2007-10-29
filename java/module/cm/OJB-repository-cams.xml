@@ -1205,48 +1205,6 @@
 	</reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.TaggingUploadHeader" table="CM_TAG_UPLD_HDR_T">
-	<field-descriptor name="uploaderUniversalIdentifier" column="AST_UPLDR_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="uploaderSequenceNumber" column="AST_UPLDR_SEQ_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="tagUploadTimestamp" column="AST_TAG_UPLD_TS" jdbc-type="TIMESTAMP"/>
-
-    <collection-descriptor name="taggingUploadDetails" element-class-ref="org.kuali.module.cams.bo.TaggingUploadDetail" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <orderby name="uploadRowNumber" sort="ASC" />
-        <inverse-foreignkey field-ref="uploaderUniversalIdentifier" />
-        <inverse-foreignkey field-ref="uploaderSequenceNumber" />
-    </collection-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.cams.bo.TaggingUploadDetail" table="CM_TAG_UPLD_DTL_T">
-	<field-descriptor name="uploaderUniversalIdentifier" column="AST_UPLDR_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="uploaderSequenceNumber" column="AST_UPLDR_SEQ_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
-	<field-descriptor name="uploadRowNumber" column="AST_UPLD_ROW_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="uploadRowText" column="AST_UPLD_ROW_TXT" jdbc-type="VARCHAR"/>
-	<field-descriptor name="uploadErrorIndicator" column="AST_UPLD_ERR_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.cams.bo.TaggingUploadErrorDetail" table="CM_TAG_ERR_DTL_T">
-	<field-descriptor name="uploaderUniversalIdentifier" column="AST_UPLDR_UNVL_ID" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="uploaderSequenceNumber" column="AST_UPLDR_SEQ_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
-	<field-descriptor name="uploadRowNumber" column="AST_UPLD_ROW_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="errorCorrectionStatusCode" column="AST_ERRCOR_STAT_CD" jdbc-type="VARCHAR"/>
-	<field-descriptor name="correctedRowText" column="AST_COR_ROW_TXT" jdbc-type="VARCHAR"/>
-	<field-descriptor name="correctorUniversalIdentifier" column="AST_COR_UNVL_ID" jdbc-type="VARCHAR"/>
-	<field-descriptor name="tagCorrectionTimestamp" column="AST_TAG_COR_TS" jdbc-type="TIMESTAMP"/>
-
-	<reference-descriptor name="taggingUploadDetail" class-ref="org.kuali.module.cams.bo.TaggingUploadDetail" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="uploaderUniversalIdentifier" />
-		<foreignkey field-ref="uploaderSequenceNumber" />
-		<foreignkey field-ref="uploadRowNumber" />
-	</reference-descriptor>
-</class-descriptor>
-
 <class-descriptor class="org.kuali.module.cams.bo.TopsUpdate" table="CM_TPS_UPDT_T">
 	<field-descriptor name="beginningOriginationCode" column="AST_BEG_ORGN_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="beginningCapitalAssetNumber" column="AST_BEG_AST_NBR" jdbc-type="BIGINT" primarykey="true" index="true"/>
