@@ -2833,7 +2833,7 @@
         SH_PARM_DESC="Some documents provide the functionality to send notes to another user using a workflow FYI or acknowledge functionality. This parameter specifies the default action that will be used when sending notes. This parameter should be one of the following 2 values: &quot;K&quot; for acknowledge or &quot;F&quot; for fyi. Depending on the notes and workflow service implementation, other values may be possible (see edu.iu.uis.eden.EdenConstants javadocs for details)."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="SEND_NOTE_WORKFLOW_NOTIFICATION_ACTIONS"
-        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="K" SH_PARM_TYP_CD="CONFG"
+        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="F" SH_PARM_TYP_CD="CONFG"
         VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3D18DDCF2E831108E043814FD8811108"
         SH_PARM_CONS_CD="A"
