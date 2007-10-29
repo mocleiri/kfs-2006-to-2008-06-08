@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
 
         <businessRulesClass>org.kuali.module.chart.rules.ProjectCodeRule</businessRulesClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -34,22 +34,22 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ProjectCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiProjectCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PROJ</documentTypeCode>
 
-        <label>Project Code</label>
+        <label>Project Code Maintenance Document</label>
+        <shortLabel>ProjectMaintDoc</shortLabel>
 
         <summary>Project Code maintenance document</summary>
         <description>Document used to create or update Project Code objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Project" parameterName="PROJECT" />
-
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_PROJECT_CODE" />
         <lockingKeys>
             <field attributeName="code" />
         </lockingKeys>
 
         <defaultExistenceChecks>
             <reference attributeName="chartOfAccounts" activeIndicatorAttributeName="finChartOfAccountActiveIndicator" attributeToHighlightOnFail="chartOfAccountsCode" />
-            <reference attributeName="projectManagerUniversal" activeIndicatorAttributeName="activeForAnyModule" attributeToHighlightOnFail="projectManagerUniversal.personUserIdentifier" />
+            <reference attributeName="projectManagerUniversal" activeIndicatorAttributeName="activeKualiUser" attributeToHighlightOnFail="projectManagerUniversal.personUserIdentifier" />
             <reference attributeName="organization" activeIndicatorAttributeName="organizationActiveIndicator" attributeToHighlightOnFail="organizationCode" />
         </defaultExistenceChecks>
 
