@@ -1177,6 +1177,14 @@
 	<reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="documentNumber" />
 	</reference-descriptor>
+	
+	<collection-descriptor name="inventoryUploadErrorDetails" element-class-ref="org.kuali.module.cams.bo.InventoryUploadErrorDetail" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+    <orderby name="uploadRowNumber" sort="ASC" />
+		<query-customizer class="org.kuali.kfs.dao.ojb.OjbQueryCustomizer">
+			<attribute attribute-name="uploaderUniversalIdentifier" attribute-value="parent.uploaderUniversalIdentifier" />
+			<attribute attribute-name="uploaderSequenceNumber" attribute-value="parent.uploaderSequenceNumber" />
+		</query-customizer>
+  </collection-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.cams.bo.InventoryUploadErrorDetail" table="CM_INVN_ERR_DTL_T">
