@@ -5060,46 +5060,31 @@
         <column name="CONS_FIN_REPORT_SORT_CD" primaryKey="true"
             size="2" type="VARCHAR"/>
         <column name="FIN_CONS_OBJ_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CURR_BDLN_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ACTLS_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ENCUM_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
-        <unique name="FP_BAL_BY_CONS_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="FP_BAL_BY_LEVEL_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJ_LEVEL_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_REPORT_SORT_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CURR_BDLN_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ACTLS_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ENCUM_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="TYP_FIN_REPORT_SORT_CD" size="2" type="VARCHAR"/>
-        <unique name="FP_BAL_BY_LEVEL_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="FP_BAL_BY_OBJ_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CURR_BDLN_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ACTLS_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ENCUM_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FIN_REPORT_SORT_CD" size="2" type="VARCHAR"/>
-        <unique name="FP_BAL_BY_OBJ_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="FP_BANK_ACCOUNT_T">
         <column name="FDOC_BANK_CD" primaryKey="true" size="4" type="VARCHAR"/>
@@ -5635,7 +5620,7 @@
             size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FDOC_GRP_CD" size="2" type="VARCHAR"/>
-        <column name="FDOC_NM" size="40" type="VARCHAR"/>
+        <column name="FDOC_NM" size="255" type="VARCHAR"/>
         <column name="FIN_ELIM_ELGBL_CD" size="1" type="VARCHAR"/>
         <column name="FDOC_TYP_ACTIVE_CD" size="1" type="VARCHAR"/>
         <column name="FDOC_RTNG_RULE_CD" size="1" type="VARCHAR"/>
@@ -6169,8 +6154,6 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CURR_BDLN_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ACTLS_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -6178,9 +6161,6 @@
         <column name="TIMESTAMP" type="DATE"/>
         <column name="FIN_REPORT_SORT_CD" size="1" type="VARCHAR"/>
         <column name="FIN_OBJ_TYP_CD" size="2" type="VARCHAR"/>
-        <unique name="FP_INTERIM1_CONS_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="FP_INTERIM1_LEVEL_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
@@ -6190,8 +6170,6 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CURR_BDLN_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ACTLS_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -6199,9 +6177,6 @@
         <column name="TIMESTAMP" type="DATE"/>
         <column name="FIN_REPORT_SORT_CD" size="2" type="VARCHAR"/>
         <column name="FIN_OBJ_LEVEL_CD" size="4" type="VARCHAR"/>
-        <unique name="FP_INTERIM1_LEVEL_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="FP_INTERIM1_OBJ_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
@@ -6211,16 +6186,11 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CURR_BDLN_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ACTLS_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ENCUM_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="TIMESTAMP" type="DATE"/>
-        <unique name="FP_INTERIM1_OBJ_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="FP_INTERIM2_CONS_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
@@ -6230,8 +6200,6 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CURR_BDLN_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ACTLS_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -6241,9 +6209,6 @@
         <column name="FIN_OBJ_TYP_CD" size="2" type="VARCHAR"/>
         <column name="CONS_FIN_REPORT_SORT_CD" size="2" type="VARCHAR"/>
         <column name="FIN_CONS_OBJ_CD" size="4" type="VARCHAR"/>
-        <unique name="FP_INTERIM2_CONS_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="FP_INT_BILL_DOC_T">
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
@@ -7492,8 +7457,6 @@
         <column name="FS_ORIGIN_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <column name="TRN_ENTR_SEQ_NBR" primaryKey="true" size="5" type="DECIMAL"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" size="7" type="VARCHAR"/>
@@ -7521,9 +7484,6 @@
         <column name="ACCT_SF_FINOBJ_CD" size="4" type="VARCHAR"/>
         <column name="TRN_ENTR_OFST_CD" size="1" type="VARCHAR"/>
         <column name="TRNENTR_PROCESS_TM" type="DATE"/>
-        <unique name="GL_PENDING_ENTRY_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="GL_PENDING_ENTRY_T">
         <column name="FS_ORIGIN_CD" primaryKey="true" size="2" type="VARCHAR"/>
@@ -13335,7 +13295,6 @@
     <view name="AP_PMT_RQST_V" viewdefinition="SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        rq.PMT_RQST_ID,  &#xa;        FDOC_NBR,  &#xa;        rq.OBJ_ID,  &#xa;        INV_NBR,  &#xa;        PO_ID,  &#xa;        PMT_RQST_STAT_CD,  &#xa;        PMT_HLD_IND,  &#xa;        PMT_RQST_CNCL_IND,  &#xa;        VNDR_NM, &#xa;        VNDR_CUST_NBR,  &#xa;        PMT_RQST_PAY_DT,  &#xa;        PMT_EXTRT_DT,  &#xa;        PMT_PD_DT, &#xa;&#x9;&#x9;SUM( CASE WHEN item.ITM_EXTND_PRC IS NULL THEN 0.00 ELSE item.ITM_EXTND_PRC END ) AS TOTAL_AMOUNT &#xa; FROM AP_PMT_RQST_T rq, AP_PMT_RQST_ITM_T item &#xa; WHERE rq.PMT_RQST_ID = item.PMT_RQST_ID &#xa; GROUP BY AP_PUR_DOC_LNK_ID, rq.PMT_RQST_ID, FDOC_NBR, rq.OBJ_ID, &#xa;          INV_NBR, PO_ID, PMT_RQST_STAT_CD, PMT_HLD_IND, PMT_RQST_CNCL_IND, &#xa;          VNDR_NM, VNDR_CUST_NBR, PMT_RQST_PAY_DT, PMT_EXTRT_DT, PMT_PD_DT "/>
     <view name="CA_OBJECT_CODE_V" viewdefinition="(&#xa;SELECT&#xa;        C.UNIV_FISCAL_YR,&#xa;        FIN_COA_CD,&#xa;        FIN_OBJECT_CD,&#xa;        FIN_OBJ_CD_NM,&#xa;        FIN_OBJ_CD_SHRT_NM,&#xa;        FIN_OBJ_LEVEL_CD,&#xa;        RPTS_TO_FIN_COA_CD,&#xa;        RPTS_TO_FIN_OBJ_CD ,&#xa;        FIN_OBJ_TYP_CD,&#xa;        FIN_OBJ_SUB_TYP_CD,&#xa;        HIST_FIN_OBJECT_CD,&#xa;        FIN_OBJ_ACTIVE_CD,&#xa;        FOBJ_BDGT_AGGR_CD,&#xa;        FOBJ_MNXFR_ELIM_CD,&#xa;        FIN_FED_FUNDED_CD,&#xa;        NXT_YR_FIN_OBJ_CD&#xa;FROM CA_OBJECT_CODE_T C, SH_UNIV_DATE_T S&#xa;WHERE C.UNIV_FISCAL_YR = S.UNIV_FISCAL_YR AND UNIV_DT = TRUNC(SYSDATE)&#xa;)&#xa; &#xa; &#xa; "/>
     <view name="CA_SUB_OBJECT_CD_V" viewdefinition="(&#xa;SELECT&#xa;        C.UNIV_FISCAL_YR,&#xa;        FIN_COA_CD,&#xa;        ACCOUNT_NBR,&#xa;        FIN_OBJECT_CD,&#xa;        FIN_SUB_OBJ_CD,&#xa;        FIN_SUB_OBJ_CD_NM,&#xa;        FIN_SUBOBJ_SHRT_NM,&#xa;        FIN_SUBOBJ_ACTV_CD&#xa;FROM CA_SUB_OBJECT_CD_T C, SH_UNIV_DATE_T S&#xa;WHERE C.UNIV_FISCAL_YR = S.UNIV_FISCAL_YR AND UNIV_DT = TRUNC(SYSDATE)&#xa;)&#xa; &#xa; &#xa; "/>
-    <view name="FS_CODES_V" viewdefinition="(&#xa;SELECT DISTINCT&#xa;        CODE&#xa;FROM&#xa;        FS_CODES_DESC_T&#xa;)&#xa; &#xa; &#xa; &#xa; "/>
     <view name="PUR_PO_V" viewdefinition="( &#xa;SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        PO_ID,  &#xa;        PO_CUR_IND,  &#xa;        FDOC_NBR,  &#xa;        OBJ_ID  &#xa;FROM PUR_PO_T &#xa;)&#xa; "/>
     <view name="PUR_REQS_V" viewdefinition="( &#xa;SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        REQS_ID, &#xa;        FDOC_NBR,  &#xa;        OBJ_ID  &#xa;FROM PUR_REQS_T &#xa;)&#xa; "/>
     <sequence name="AP_ELCTRNC_INV_LOAD_SUM_ID" nextval="1002"/>
@@ -13415,7 +13374,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2040"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2060"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317060"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317080"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="3932"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -13423,7 +13382,7 @@
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2000"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="11656"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357709"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563357729"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151636"/>
     <sequence name="SEQ_TRANSACTION_TST" nextval="100"/>
