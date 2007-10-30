@@ -67,7 +67,6 @@ CREATE TABLE CA_PRIOR_YR_ACCT_T(
         CG_CFDA_NBR                    VARCHAR2(6),
         ACCT_OFF_CMP_IND               VARCHAR2(1),
         ACCT_CLOSED_IND                VARCHAR2(1),
-        PGM_CD                         VARCHAR2(6),
      CONSTRAINT CA_PRIOR_YR_ACCT_TP1 PRIMARY KEY (
         FIN_COA_CD,
         ACCOUNT_NBR),
