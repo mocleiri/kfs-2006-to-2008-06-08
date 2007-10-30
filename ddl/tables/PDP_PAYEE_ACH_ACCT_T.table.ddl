@@ -10,7 +10,7 @@ CREATE TABLE PDP_PAYEE_ACH_ACCT_T(
         VNDR_DTL_ASND_ID               NUMBER(10),
         DV_PAYEE_ID_NBR                VARCHAR2(10),
         PERSON_UNVL_ID                 VARCHAR2(10),
-        PAYEE_SSN_NBR                  VARCHAR2(9),
+        PAYEE_SSN_NBR                  VARCHAR2(255),
         PAYEE_FEIN_NBR                 VARCHAR2(9),
         PAYEE_ID_TYP_CD                VARCHAR2(1),
         PSD_TRN_CD                     VARCHAR2(4),
