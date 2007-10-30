@@ -197,7 +197,7 @@
 	<field-descriptor name="entryDate" column="AR_ENTRY_DT" jdbc-type="DATE"/>
 	<field-descriptor name="financialDocumentExplanationText" column="FDOC_EXPLAIN_TXT" jdbc-type="VARCHAR"/>
 
-	<reference-descriptor name="document" class-ref="org.kuali.module.ar.bo.CashControl" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="cashControl" class-ref="org.kuali.module.ar.bo.CashControl" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="documentNumber" />
 	</reference-descriptor>
 	<reference-descriptor name="customer" class-ref="org.kuali.module.ar.bo.Customer" auto-retrieve="true" auto-update="none" auto-delete="none">
@@ -272,9 +272,6 @@
 	<field-descriptor name="customerPaymentMediumCode" column="CUST_PMT_MEDIUM_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="cashControlTotalAmount" column="AR_CSHCTRL_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 
-	<reference-descriptor name="document" class-ref="org.kuali.module.ar.bo.CashControlDetail" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="documentNumber" />
-	</reference-descriptor>
 	<reference-descriptor name="universityFiscalPeriod" class-ref="org.kuali.module.chart.bo.AccountingPeriod" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="universityFiscalYear" />
 		<foreignkey field-ref="universityFiscalPeriodCode" />
@@ -443,9 +440,6 @@
 	<reference-descriptor name="customerSpecialProcessing" class-ref="org.kuali.module.ar.bo.CustomerProcessingType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="customerSpecialProcessingCode" />
 	</reference-descriptor>
-    <reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="documentNumber" />
-    </reference-descriptor>
     <collection-descriptor name="invoiceDetails" element-class-ref="org.kuali.module.ar.bo.InvoiceDetail" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
         <orderby name="invoiceItemNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />

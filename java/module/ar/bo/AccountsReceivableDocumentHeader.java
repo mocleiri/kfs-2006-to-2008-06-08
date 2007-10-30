@@ -20,7 +20,7 @@ public class AccountsReceivableDocumentHeader extends PersistableBusinessObjectB
 	private Date entryDate;
 	private String financialDocumentExplanationText;
 
-    private CashControl document;
+    private CashControl cashControl;
 	private Customer customer;
 	private Chart processingChartOfAccount;
 	private Org processingOrganization;
@@ -160,23 +160,23 @@ public class AccountsReceivableDocumentHeader extends PersistableBusinessObjectB
 
 
 	/**
-	 * Gets the document attribute.
+	 * Gets the cashControl attribute.
 	 * 
-	 * @return Returns the document
+	 * @return Returns the cashControl
 	 * 
 	 */
-	public CashControl getDocument() { 
-		return document;
+	public CashControl getCashControl() { 
+		return cashControl;
 	}
 
 	/**
-	 * Sets the document attribute.
+	 * Sets the cashControl attribute.
 	 * 
-	 * @param document The document to set.
+	 * @param cashControl The cashControl to set.
 	 * @deprecated
 	 */
-	public void setDocument(CashControl document) {
-		this.document = document;
+	public void setCashControl(CashControl cashControl) {
+		this.cashControl = cashControl;
 	}
 
 	/**

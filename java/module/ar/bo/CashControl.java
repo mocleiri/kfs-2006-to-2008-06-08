@@ -20,7 +20,6 @@ public class CashControl extends PersistableBusinessObjectBase {
 	private String customerPaymentMediumCode;
 	private KualiDecimal cashControlTotalAmount;
 
-    private CashControlDetail document;
 	private AccountingPeriod universityFiscalPeriod;
     private AccountsReceivableDocumentHeader accountsReceivableDocumentHeader;
 
@@ -157,27 +156,6 @@ public class CashControl extends PersistableBusinessObjectBase {
 	 */
 	public void setCashControlTotalAmount(KualiDecimal cashControlTotalAmount) {
 		this.cashControlTotalAmount = cashControlTotalAmount;
-	}
-
-
-	/**
-	 * Gets the document attribute.
-	 * 
-	 * @return Returns the document
-	 * 
-	 */
-	public CashControlDetail getDocument() { 
-		return document;
-	}
-
-	/**
-	 * Sets the document attribute.
-	 * 
-	 * @param document The document to set.
-	 * @deprecated
-	 */
-	public void setDocument(CashControlDetail document) {
-		this.document = document;
 	}
 
 	/**

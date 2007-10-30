@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.AccountingPeriod;
@@ -45,7 +44,6 @@ public class InvoiceDocument extends PersistableBusinessObjectBase {
 	private Chart billByChartOfAccount;
 	private Org billedByOrganization;
 	private CustomerProcessingType customerSpecialProcessing;
-    private DocumentHeader documentHeader;
 
     private List<InvoiceDetail> invoiceDetails;
     
@@ -618,23 +616,6 @@ public class InvoiceDocument extends PersistableBusinessObjectBase {
 	public void setCustomerSpecialProcessing(CustomerProcessingType customerSpecialProcessing) {
 		this.customerSpecialProcessing = customerSpecialProcessing;
 	}
-
-    /**
-     * Gets the documentHeader attribute. 
-     * @return Returns the documentHeader.
-     */
-    public DocumentHeader getDocumentHeader() {
-        return documentHeader;
-    }
-
-    /**
-     * Sets the documentHeader attribute value.
-     * @param documentHeader The documentHeader to set.
-     * @deprecated
-     */
-    public void setDocumentHeader(DocumentHeader documentHeader) {
-        this.documentHeader = documentHeader;
-    }    
 
     /**
      * Gets the invoiceDetails attribute. 
