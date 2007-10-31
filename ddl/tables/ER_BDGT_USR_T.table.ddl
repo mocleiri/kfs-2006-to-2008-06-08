@@ -16,7 +16,6 @@
 CREATE TABLE ER_BDGT_USR_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_BDGT_USR_TN1 NOT NULL,
         BDGT_USR_SEQ_NBR               NUMBER(4,0) CONSTRAINT ER_BDGT_USR_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_BDGT_USR_TN3 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1,
         BDGT_USR_CRTE_TS               DATE,
         EMP_FSCL_CMP_CD                VARCHAR2(2),
@@ -35,8 +34,7 @@ CREATE TABLE ER_BDGT_USR_T(
         PRSN_UNVL_ID                   VARCHAR2(10),
      CONSTRAINT ER_BDGT_USR_TP1 PRIMARY KEY (
         RDOC_NBR,
-        BDGT_USR_SEQ_NBR),
-     CONSTRAINT ER_BDGT_USR_TC0 UNIQUE (OBJ_ID)
+        BDGT_USR_SEQ_NBR)
 )
 /
 

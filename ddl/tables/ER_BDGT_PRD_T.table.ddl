@@ -16,15 +16,13 @@
 CREATE TABLE ER_BDGT_PRD_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_BDGT_PRD_TN1 NOT NULL,
         BDGT_PRD_SEQ_NBR               NUMBER(2,0) CONSTRAINT ER_BDGT_PRD_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_BDGT_PRD_TN3 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1,
         BDGT_PRD_BEG_DT                DATE,
         BDGT_PRD_END_DT                DATE,
         BDGT_PRD_PTCPNTS_NBR           NUMBER(3,0),
      CONSTRAINT ER_BDGT_PRD_TP1 PRIMARY KEY (
         RDOC_NBR,
-        BDGT_PRD_SEQ_NBR),
-     CONSTRAINT ER_BDGT_PRD_TC0 UNIQUE (OBJ_ID)
+        BDGT_PRD_SEQ_NBR)
 )
 /
 

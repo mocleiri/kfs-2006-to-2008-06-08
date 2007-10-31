@@ -15,7 +15,6 @@
  */
 CREATE TABLE ER_RF_BDGT_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_BDGT_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_BDGT_TN3 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_BDGT_TN4 NOT NULL,
         RF_BDGT_MAX_PRD_NBR            NUMBER(2,0),
         RF_BDGT_MIN_PRD_NBR            NUMBER(2,0),
@@ -29,8 +28,7 @@ CREATE TABLE ER_RF_BDGT_T(
         RF_BGT_TOT_IDC_AMT             NUMBER(19,4),
         RF_BGT_TOT_STRT_DT             DATE,
      CONSTRAINT ER_RF_BDGT_TP1 PRIMARY KEY (
-        RDOC_NBR),
-        CONSTRAINT ER_RF_BDGT_TC0 UNIQUE (OBJ_ID)
+        RDOC_NBR)
 )
 /
 

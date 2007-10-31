@@ -15,7 +15,6 @@
  */
 CREATE TABLE ER_BDGT_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_BDGT_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_BDGT_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1,
         AGNCY_MOD_IND                  VARCHAR2(1),
         BDGT_3RD_PRTY_CST_SHR_IND      VARCHAR2(1),
@@ -37,8 +36,7 @@ CREATE TABLE ER_BDGT_T(
         BDGT_TYP_CD_TXT                VARCHAR2(40), 
         BDGT_PARNT_TRK_NBR             VARCHAR2(14),
      CONSTRAINT ER_BDGT_TP1 PRIMARY KEY (
-        RDOC_NBR),
-     CONSTRAINT ER_BDGT_TC0 UNIQUE (OBJ_ID)
+        RDOC_NBR)
 )
 /
 
