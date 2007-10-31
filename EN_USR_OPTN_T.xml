@@ -53,10 +53,10 @@
         PRSN_OPTN_ID="CLEAR_FYI_COL_SHOW_NEW" PRSN_OPTN_VAL="yes"/>
     <EN_USR_OPTN_T DB_LOCK_VER_NBR="1" PRSN_EN_ID="6162502038"
         PRSN_OPTN_ID="DELEGATOR_FILTER" PRSN_OPTN_VAL="Secondary Delegators on Action List Page"/>
-    <EN_USR_OPTN_T DB_LOCK_VER_NBR="1" PRSN_EN_ID="6162502038"
-        PRSN_OPTN_ID="DocSearch.LastSearch.Holding0" PRSN_OPTN_VAL=",,routeHeaderId=316826,,superUserSearch=NO"/>
-    <EN_USR_OPTN_T DB_LOCK_VER_NBR="5" PRSN_EN_ID="6162502038"
-        PRSN_OPTN_ID="DocSearch.LastSearch.Order" PRSN_OPTN_VAL="DocSearch.LastSearch.Holding4,DocSearch.LastSearch.Holding3,DocSearch.LastSearch.Holding2,DocSearch.LastSearch.Holding1,DocSearch.LastSearch.Holding0"/>
+    <EN_USR_OPTN_T DB_LOCK_VER_NBR="2" PRSN_EN_ID="6162502038"
+        PRSN_OPTN_ID="DocSearch.LastSearch.Holding0" PRSN_OPTN_VAL=",,routeHeaderId=317085,,superUserSearch=NO"/>
+    <EN_USR_OPTN_T DB_LOCK_VER_NBR="6" PRSN_EN_ID="6162502038"
+        PRSN_OPTN_ID="DocSearch.LastSearch.Order" PRSN_OPTN_VAL="DocSearch.LastSearch.Holding0,DocSearch.LastSearch.Holding4,DocSearch.LastSearch.Holding3,DocSearch.LastSearch.Holding2,DocSearch.LastSearch.Holding1"/>
     <EN_USR_OPTN_T DB_LOCK_VER_NBR="1" PRSN_EN_ID="4333007056"
         PRSN_OPTN_ID="RELOAD_ACTION_LIST11917089849061000" PRSN_OPTN_VAL="true"/>
     <EN_USR_OPTN_T DB_LOCK_VER_NBR="1" PRSN_EN_ID="4333007056"
