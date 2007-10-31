@@ -329,7 +329,7 @@
 <class-descriptor class="org.kuali.module.financial.bo.GECSourceAccountingLine" table="FP_ACCT_LINES_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="sequenceNumber" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" />
-    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_LN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_CLASS_NM" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="amount" column="FDOC_LINE_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="referenceOriginCode" column="FS_REF_ORIGIN_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="referenceNumber" column="FDOC_REF_NBR" jdbc-type="VARCHAR" />
@@ -398,19 +398,13 @@
 
     <reference-descriptor name="referenceType" class-ref="org.kuali.core.bo.DocumentType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="referenceTypeCode" />
-    </reference-descriptor>
-    
-    <reference-descriptor name="salesTax" class-ref="org.kuali.module.financial.bo.SalesTax" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="false">
-    	<foreignkey field-ref="documentNumber"/>
-    	<foreignkey field-ref="financialDocumentLineTypeCode"/>
-    	<foreignkey field-ref="sequenceNumber"/>
     </reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.financial.bo.GECTargetAccountingLine" table="FP_ACCT_LINES_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="sequenceNumber" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" />
-    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_LN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_CLASS_NM" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="amount" column="FDOC_LINE_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="referenceOriginCode" column="FS_REF_ORIGIN_CD" jdbc-type="VARCHAR" />
     <field-descriptor name="referenceNumber" column="FDOC_REF_NBR" jdbc-type="VARCHAR" />
@@ -479,12 +473,6 @@
 
     <reference-descriptor name="referenceType" class-ref="org.kuali.core.bo.DocumentType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <foreignkey field-ref="referenceTypeCode" />
-    </reference-descriptor>
-    
-    <reference-descriptor name="salesTax" class-ref="org.kuali.module.financial.bo.SalesTax" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="false">
-    	<foreignkey field-ref="documentNumber"/>
-    	<foreignkey field-ref="financialDocumentLineTypeCode"/>
-    	<foreignkey field-ref="sequenceNumber"/>
     </reference-descriptor>
 </class-descriptor>
 
@@ -646,7 +634,7 @@
     <!-- collection references -->
     <!--  common collection references -->
     <!--  one sided document, so we only need to deal with the source lines -->
-    <collection-descriptor name="sourceAccountingLines" element-class-ref="org.kuali.module.financial.bo.VoucherSourceAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true">
+    <collection-descriptor name="sourceAccountingLines" proxy="false" element-class-ref="org.kuali.kfs.bo.SourceAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <orderby name="sequenceNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
 				<query-customizer class="org.kuali.kfs.dao.ojb.OjbQueryCustomizer">
@@ -752,10 +740,6 @@
     <reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="object" auto-delete="object">
         <foreignkey field-ref="documentNumber" />
     </reference-descriptor>
-    
-    <reference-descriptor name="cashReceiptHeader" class-ref="org.kuali.module.financial.bo.CashReceiptHeader" auto-retrieve="true" auto-update="object" auto-delete="object">
-    	<foreignkey field-ref="documentNumber" />
-    </reference-descriptor>
 
     <reference-descriptor name="accountingPeriod" class-ref="org.kuali.module.chart.bo.AccountingPeriod" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="postingYear" />
@@ -784,16 +768,14 @@
     </collection-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.financial.bo.CheckBase" table="FP_CHECK_DTL_T">
+<class-descriptor class="org.kuali.module.financial.bo.CheckBase" table="FP_CHECKS_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="financialDocumentTypeCode" column="FDOC_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="cashieringRecordSource" column="FDOC_COLUMN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="sequenceId" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" />
     <field-descriptor name="amount" column="FDOC_CHCK_AMT" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" jdbc-type="DECIMAL" />
     <field-descriptor name="description" column="FDOC_CHCK_DESC" jdbc-type="VARCHAR" />
     <field-descriptor name="checkDate" column="FDOC_CHCK_DT" jdbc-type="DATE" />
     <field-descriptor name="checkNumber" column="FDOC_CHCK_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="financialDocumentDepositLineNumber" column="FDOC_DPST_LN_NBR" jdbc-type="INTEGER" />
+    <field-descriptor name="interimDepositAmount" column="FDOC_INTRM_DPST_IND" conversion="org.kuali.core.util.OjbCharBooleanConversion" jdbc-type="VARCHAR" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" locking="true" column="VER_NBR" jdbc-type="BIGINT" />
 </class-descriptor>
@@ -1111,7 +1093,7 @@
         <foreignkey field-ref="financialDocumentDepositLineNumber" />
     </reference-descriptor>
 
-    <reference-descriptor name="cashReceiptHeader" class-ref="org.kuali.module.financial.bo.CashReceiptHeader" auto-retrieve="true" auto-update="object" auto-delete="object">
+    <reference-descriptor name="cashReceiptHeader" class-ref="org.kuali.module.financial.bo.CashReceiptHeader" auto-retrieve="true" auto-update="true" auto-delete="true">
         <foreignkey field-ref="financialDocumentCashReceiptNumber" />
     </reference-descriptor>
 </class-descriptor>
@@ -1596,6 +1578,45 @@
     <field-descriptor name="disbursementVoucherForeignCurrencyTypeCode" column="DV_FCRNCY_TYP_CD" jdbc-type="VARCHAR" />
 </class-descriptor>
 
+<class-descriptor class="org.kuali.module.financial.bo.ProcurementCardDefault" table="FP_PRCRMNT_DFLT_T">
+    <field-descriptor name="purchasingCreditCardNumber" column="PURCH_CCRD_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
+    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
+    <field-descriptor name="purchasingCreditCardUserName" column="PURCH_CCRD_USR_NM" jdbc-type="VARCHAR" />
+    <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" />
+    <field-descriptor name="financialObjectCode" column="FIN_OBJECT_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="subAccountNumber" column="SUB_ACCT_NBR" jdbc-type="VARCHAR" />
+    <field-descriptor name="financialSubObjectCode" column="FIN_SUB_OBJ_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="projectCode" column="PROJECT_CD" jdbc-type="VARCHAR" />
+    <field-descriptor name="purchasingCreditCardActiveIndicator" column="PURCH_CCRD_ACTV_IND" jdbc-type="CHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion" />
+    <reference-descriptor name="chartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <foreignkey field-ref="chartOfAccountsCode" />
+    </reference-descriptor>
+    <reference-descriptor name="account" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <foreignkey field-ref="chartOfAccountsCode" />
+        <foreignkey field-ref="accountNumber" />
+    </reference-descriptor>
+    <reference-descriptor name="subAccount" class-ref="org.kuali.module.chart.bo.SubAccount" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <foreignkey field-ref="chartOfAccountsCode" />
+        <foreignkey field-ref="accountNumber" />
+        <foreignkey field-ref="subAccountNumber" />
+    </reference-descriptor>
+    <reference-descriptor name="objectCode" class-ref="org.kuali.module.chart.bo.ObjectCodeCurrent" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <foreignkey field-ref="chartOfAccountsCode" />
+        <foreignkey field-ref="financialObjectCode" />
+    </reference-descriptor>
+    <reference-descriptor name="subObjectCode" class-ref="org.kuali.module.chart.bo.SubObjCdCurrent" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <foreignkey field-ref="chartOfAccountsCode" />
+        <foreignkey field-ref="accountNumber" />
+        <foreignkey field-ref="financialObjectCode" />
+        <foreignkey field-ref="financialSubObjectCode" />
+    </reference-descriptor>
+    <reference-descriptor name="project" class-ref="org.kuali.module.chart.bo.ProjectCode" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <foreignkey field-ref="projectCode" />
+    </reference-descriptor>
+</class-descriptor>
+
 <class-descriptor class="org.kuali.module.financial.document.ProcurementCardDocument" table="FP_PRCRMNT_DOC_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
@@ -1779,7 +1800,7 @@
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="financialDocumentTransactionLineNumber" column="FDOC_TRN_LN_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
     <field-descriptor name="sequenceNumber" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
-    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_LN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_CLASS_NM" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" />
@@ -1836,7 +1857,7 @@
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="financialDocumentTransactionLineNumber" column="FDOC_TRN_LN_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
     <field-descriptor name="sequenceNumber" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
-    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_LN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_CLASS_NM" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" />
@@ -2031,7 +2052,7 @@
     <reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="object" auto-delete="object">
         <foreignkey field-ref="documentNumber" />
     </reference-descriptor>
-    <collection-descriptor name="sourceAccountingLines" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true">
+    <collection-descriptor name="sourceAccountingLines" proxy="false" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <orderby name="sequenceNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
 				<query-customizer class="org.kuali.kfs.dao.ojb.OjbQueryCustomizer">
@@ -2039,7 +2060,7 @@
 				</query-customizer>
     </collection-descriptor>
 
-    <collection-descriptor name="targetAccountingLines" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true">
+    <collection-descriptor name="targetAccountingLines" proxy="false" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <orderby name="sequenceNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
 				<query-customizer class="org.kuali.kfs.dao.ojb.OjbQueryCustomizer">
@@ -2067,7 +2088,7 @@
     <reference-descriptor name="documentHeader" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="object" auto-delete="object">
         <foreignkey field-ref="documentNumber" />
     </reference-descriptor>
-    <collection-descriptor name="sourceAccountingLines" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true">
+    <collection-descriptor name="sourceAccountingLines" proxy="false" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <orderby name="sequenceNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
 				<query-customizer class="org.kuali.kfs.dao.ojb.OjbQueryCustomizer">
@@ -2075,7 +2096,7 @@
 				</query-customizer>
     </collection-descriptor>
 
-    <collection-descriptor name="targetAccountingLines" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true">
+    <collection-descriptor name="targetAccountingLines" proxy="false" element-class-ref="org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
         <orderby name="sequenceNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
 				<query-customizer class="org.kuali.kfs.dao.ojb.OjbQueryCustomizer">
@@ -2114,7 +2135,7 @@
 <class-descriptor class="org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine" table="FP_BDGT_ADJ_DTL_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="sequenceNumber" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
-    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_LN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_CLASS_NM" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="budgetAdjustmentPeriodCode" column="BDGT_ADJ_PRD_CD" jdbc-type="VARCHAR" index="true" />
@@ -2174,7 +2195,7 @@
 <class-descriptor class="org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine" table="FP_BDGT_ADJ_DTL_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="sequenceNumber" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" index="true" />
-    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_LN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
+    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_CLASS_NM" jdbc-type="VARCHAR" primarykey="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="budgetAdjustmentPeriodCode" column="BDGT_ADJ_PRD_CD" jdbc-type="VARCHAR" index="true" />
@@ -2259,7 +2280,7 @@
 <class-descriptor class="org.kuali.module.financial.bo.CurrencyDetail" table="FP_CURRENCY_DTL_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="financialDocumentTypeCode" column="FDOC_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="cashieringRecordSource" column="FDOC_COLUMN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="financialDocumentColumnTypeCode" column="FDOC_COLUMN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="financialDocumentHundredDollarAmount" column="FDOC_100_DLR_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
@@ -2330,7 +2351,7 @@
 <class-descriptor class="org.kuali.module.financial.bo.CoinDetail" table="FP_COIN_DTL_T">
     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="financialDocumentTypeCode" column="FDOC_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="cashieringRecordSource" column="FDOC_COLUMN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
+    <field-descriptor name="financialDocumentColumnTypeCode" column="FDOC_COLUMN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
     <field-descriptor name="financialDocumentFiftyCentAmount" column="FDOC_50_CENT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
@@ -2340,99 +2361,5 @@
     <field-descriptor name="financialDocumentOneCentAmount" column="FDOC_1_CENT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="financialDocumentOtherCentAmount" column="FDOC_OTHR_CENT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
     <field-descriptor name="financialDocumentHundredCentAmount" column="FDOC_100_CENT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.financial.bo.CashieringItemInProcess" table="FP_CASHIER_ITM_IN_PROC_T">
-	<field-descriptor name="workgroupName" column="WRKGRP_NM" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="itemIdentifier" column="ITM_ID" jdbc-type="INTEGER" primarykey="true" index="true" autoincrement="true" sequence-name="FP_CASHIER_ITM_IN_PROC_T_SEQ" />
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="itemAmount" column="ITM_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	<field-descriptor name="itemReducedAmount" column="ITM_RDCD_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	<field-descriptor name="itemRemainingAmount" column="ITM_TOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	<field-descriptor name="itemOpenDate" column="ITM_OPEN_DT" jdbc-type="DATE"/>
-	<field-descriptor name="itemClosedDate" column="ITM_CLOSED_DT" jdbc-type="DATE"/>
-	<field-descriptor name="itemDescription" column="ITM_DESC" jdbc-type="VARCHAR"/>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.financial.bo.VoucherSourceAccountingLine" table="FP_ACCT_LINES_T">
-    <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="sequenceNumber" column="FDOC_LINE_NBR" jdbc-type="INTEGER" primarykey="true" />
-    <field-descriptor name="financialDocumentLineTypeCode" column="FDOC_LN_TYP_CD" jdbc-type="VARCHAR" primarykey="true" />
-    <field-descriptor name="amount" column="FDOC_LINE_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
-    <field-descriptor name="referenceOriginCode" column="FS_REF_ORIGIN_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="referenceNumber" column="FDOC_REF_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="referenceTypeCode" column="FDOC_REF_TYP_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="overrideCode" column="FDOC_OVERRIDE_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="financialDocumentLineDescription" column="FDOC_LINE_DESC" jdbc-type="VARCHAR" />
-    <field-descriptor name="organizationReferenceId" column="ORG_REFERENCE_ID" jdbc-type="VARCHAR" />
-    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="debitCreditCode" column="FDOC_LINE_DBCR_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="encumbranceUpdateCode" column="TRN_ENCUM_UPDT_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
-    <field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="accountNumber" column="ACCOUNT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="financialObjectCode" column="FIN_OBJECT_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="subAccountNumber" column="SUB_ACCT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="financialSubObjectCode" column="FIN_SUB_OBJ_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="projectCode" column="PROJECT_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="balanceTypeCode" column="FIN_BALANCE_TYP_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="objectTypeCode" column="FIN_OBJ_TYP_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
-
-    <reference-descriptor name="chart" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="chartOfAccountsCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="account" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="chartOfAccountsCode" />
-        <foreignkey field-ref="accountNumber" />
-    </reference-descriptor>
-
-    <reference-descriptor name="objectCode" class-ref="org.kuali.module.chart.bo.ObjectCode" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="postingYear" />
-        <foreignkey field-ref="chartOfAccountsCode" />
-        <foreignkey field-ref="financialObjectCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="subAccount" class-ref="org.kuali.module.chart.bo.SubAccount" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="chartOfAccountsCode" />
-        <foreignkey field-ref="accountNumber" />
-        <foreignkey field-ref="subAccountNumber" />
-    </reference-descriptor>
-
-    <reference-descriptor name="subObjectCode" class-ref="org.kuali.module.chart.bo.SubObjCd" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="postingYear" />
-        <foreignkey field-ref="chartOfAccountsCode" />
-        <foreignkey field-ref="accountNumber" />
-        <foreignkey field-ref="financialObjectCode" />
-        <foreignkey field-ref="financialSubObjectCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="project" class-ref="org.kuali.module.chart.bo.ProjectCode" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="projectCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="balanceTyp" class-ref="org.kuali.module.chart.bo.codes.BalanceTyp" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="balanceTypeCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="objectType" class-ref="org.kuali.module.chart.bo.ObjectType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="objectTypeCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="referenceOrigin" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="referenceOriginCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="referenceType" class-ref="org.kuali.core.bo.DocumentType" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="referenceTypeCode" />
-    </reference-descriptor>
-    
-    <reference-descriptor name="salesTax" class-ref="org.kuali.module.financial.bo.SalesTax" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="false">
-    	<foreignkey field-ref="documentNumber"/>
-    	<foreignkey field-ref="financialDocumentLineTypeCode"/>
-    	<foreignkey field-ref="sequenceNumber"/>
-    </reference-descriptor>
 </class-descriptor>
 </descriptor-repository>
