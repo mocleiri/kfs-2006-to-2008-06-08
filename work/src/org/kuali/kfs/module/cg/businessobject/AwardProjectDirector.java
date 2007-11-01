@@ -18,40 +18,43 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.user.UniversalUser;
 
 /**
- * This class represents an association between an award and a project director. It's like a reference to the project director from
- * the award. This way an award can maintain a collection of these references instead of owning project directors directly.
+ * 
  */
-public class AwardProjectDirector extends PersistableBusinessObjectBase implements Primaryable, CGProjectDirector, Inactivateable {
+public class AwardProjectDirector extends PersistableBusinessObjectBase {
 
     private String personUniversalIdentifier;
     private Long proposalNumber;
     private boolean awardPrimaryProjectDirectorIndicator;
     private String awardProjectDirectorProjectTitle;
-    private boolean active = true;
 
     private ProjectDirector projectDirector;
 
     /**
-     * Default no-args constructor.
+     * Default constructor.
      */
     public AwardProjectDirector() {
-        // Struts needs this instance to populate the secondary key, personUserIdentifier.
-        projectDirector = new ProjectDirector();
+
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getPersonUniversalIdentifier()
+     * Gets the personUniversalIdentifier attribute.
+     * 
+     * @return Returns the personUniversalIdentifier
+     * 
      */
     public String getPersonUniversalIdentifier() {
         return personUniversalIdentifier;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setPersonUniversalIdentifier(java.lang.String)
+     * Sets the personUniversalIdentifier attribute.
+     * 
+     * @param personUniversalIdentifier The personUniversalIdentifier to set.
+     * 
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
@@ -59,14 +62,20 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
 
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getProposalNumber()
+     * Gets the proposalNumber attribute.
+     * 
+     * @return Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setProposalNumber(java.lang.Long)
+     * Sets the proposalNumber attribute.
+     * 
+     * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -77,6 +86,7 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
      * Gets the awardPrimaryProjectDirectorIndicator attribute.
      * 
      * @return Returns the awardPrimaryProjectDirectorIndicator
+     * 
      */
     public boolean isAwardPrimaryProjectDirectorIndicator() {
         return awardPrimaryProjectDirectorIndicator;
@@ -87,6 +97,7 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
      * Sets the awardPrimaryProjectDirectorIndicator attribute.
      * 
      * @param awardPrimaryProjectDirectorIndicator The awardPrimaryProjectDirectorIndicator to set.
+     * 
      */
     public void setAwardPrimaryProjectDirectorIndicator(boolean awardPrimaryProjectDirectorIndicator) {
         this.awardPrimaryProjectDirectorIndicator = awardPrimaryProjectDirectorIndicator;
@@ -97,6 +108,7 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
      * Gets the awardProjectDirectorProjectTitle attribute.
      * 
      * @return Returns the awardProjectDirectorProjectTitle
+     * 
      */
     public String getAwardProjectDirectorProjectTitle() {
         return awardProjectDirectorProjectTitle;
@@ -106,51 +118,31 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
      * Sets the awardProjectDirectorProjectTitle attribute.
      * 
      * @param awardProjectDirectorProjectTitle The awardProjectDirectorProjectTitle to set.
+     * 
      */
     public void setAwardProjectDirectorProjectTitle(String awardProjectDirectorProjectTitle) {
         this.awardProjectDirectorProjectTitle = awardProjectDirectorProjectTitle;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getProjectDirector()
+     * @return the projectDirector.
      */
     public ProjectDirector getProjectDirector() {
         return projectDirector;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setProjectDirector(org.kuali.module.cg.bo.ProjectDirector)
+     * Sets the projectDirector.
+     * @param projectDirector the projectDirector to set
+     * @deprecated required by UniversalUserServiceImpl.isUniversalUserProperty() for PojoPropertyUtilsBean.getPropertyDescriptor()
      */
     public void setProjectDirector(ProjectDirector projectDirector) {
         this.projectDirector = projectDirector;
     }
 
     /**
-     * @see Primaryable#isPrimary()
-     */
-    public boolean isPrimary() {
-        return isAwardPrimaryProjectDirectorIndicator();
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#isActive()
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
-    @SuppressWarnings("unchecked")
-    @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("personUniversalIdentifier", this.personUniversalIdentifier);
