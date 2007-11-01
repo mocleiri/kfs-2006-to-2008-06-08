@@ -33,15 +33,18 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ChartMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiChartMaintenanceDocument</documentTypeName>
         <documentTypeCode>COAT</documentTypeCode>
 
-        <label>Chart</label>
+        <label>Chart Maintenance Document</label>
+        <shortLabel>ChMainDoc</shortLabel>
 
         <summary>Chart maintenance document</summary>
         <description>Document used to create or update Chart objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Chart" parameterName="CHART" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_CHART" />
         
+        <allowsCopy>true</allowsCopy>
+
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
         </lockingKeys>

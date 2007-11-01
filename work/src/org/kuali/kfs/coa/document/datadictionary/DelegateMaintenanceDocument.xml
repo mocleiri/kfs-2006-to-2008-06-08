@@ -21,7 +21,7 @@
 <dictionaryEntry>
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.Delegate</businessObjectClass>
-        <maintainableClass>org.kuali.module.chart.maintenance.KualiDelegateMaintainableImpl</maintainableClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
         <businessRulesClass>org.kuali.module.chart.rules.DelegateRule</businessRulesClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.DelegatePreRules</preRulesCheckClass>
@@ -35,24 +35,26 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>DelegateMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiAccountDelegateMaintenanceDocument</documentTypeName>
         <documentTypeCode>ADEL</documentTypeCode>
-        <label>Account Delegate</label>
+        <label>Account Delegate Maintenance Document</label>
+        <shortLabel>AcctDelMaintDoc</shortLabel>
         <summary>Account Delegate Maintenance Document</summary>
         <description>Maintenance document which allows you to create, remove or modify Account Delegates.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Delegate" parameterName="ACCOUNT_DELEGATE" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT_DELEGATE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
             <field attributeName="accountNumber" />
-            <field attributeName="financialDocumentTypeCode" />
             <field attributeName="accountDelegateSystemId" />
         </lockingKeys>
 
         <defaultExistenceChecks>
             <reference attributeName="account" attributeToHighlightOnFail="accountNumber" />
             <reference attributeName="accountDelegate" attributeToHighlightOnFail="accountDelegate.personUserIdentifier" />
-            <reference attributeName="documentType" attributeToHighlightOnFail="financialDocumentTypeCode" />
+            <reference attributeName="documentType" attributeToHighlightOnFail="financialDocumentTypeCode" activeIndicatorAttributeName="finDocumentTypeActiveIndicator" />
         </defaultExistenceChecks>
 
         <maintainableSections>

@@ -18,7 +18,6 @@ package org.kuali.module.financial.document;
 import static org.kuali.kfs.KFSConstants.FROM;
 import static org.kuali.kfs.KFSConstants.TO;
 
-import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.kfs.bo.AccountingLineParser;
@@ -33,7 +32,7 @@ import org.kuali.module.financial.bo.GeneralErrorCorrectionDocumentAccountingLin
  * will eventually post transactions to the G/L. It integrates with workflow and also contains two groupings of accounting lines:
  * from and to. From lines are the source lines, to lines are the target lines.
  */
-public class GeneralErrorCorrectionDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
+public class GeneralErrorCorrectionDocument extends AccountingDocumentBase implements Copyable, Correctable {
     /**
      * Initializes the array lists and some basic info.
      */
@@ -84,6 +83,6 @@ public class GeneralErrorCorrectionDocument extends AccountingDocumentBase imple
     public Class getTargetAccountingLineClass() {
         return GECTargetAccountingLine.class;
     }
-
-
+    
+    
 }
