@@ -16,19 +16,28 @@
 package org.kuali.module.financial.rules;
 
 import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.CAPITAL_OBJECT_SUB_TYPE_CODES;
+import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING;
+import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.RESTRICTED_FUND_GROUP_CODES;
+import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.RESTRICTED_OBJECT_LEVEL_CODES;
+import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_CODES;
+import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
+import static org.kuali.module.financial.rules.InternalBillingDocumentRuleConstants.RESTRICTED_SUB_FUND_GROUP_CODES;
 
 import org.kuali.core.document.Document;
+import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.ExceptionUtils;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.service.ParameterEvaluator;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.rules.AttributeReference;
+import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.financial.document.InternalBillingDocument;
 
 /**
@@ -38,6 +47,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
 
     /**
      * @see IsDebitUtils#isDebitConsideringSection(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * 
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
@@ -153,8 +163,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * @return whether the given AccountingLine's ObjectCode is a capital one.
      */
     private boolean isCapitalObject(AccountingLine accountingLine) {
-        ParameterEvaluator evaluator = SpringContext.getBean(ParameterService.class).getParameterEvaluator(InternalBillingDocument.class, CAPITAL_OBJECT_SUB_TYPE_CODES, accountingLine.getObjectCode().getFinancialObjectSubTypeCode());
-        return evaluator.evaluationSucceeds();
+        return getParameterRule(INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING, CAPITAL_OBJECT_SUB_TYPE_CODES).succeedsRule(accountingLine.getObjectCode().getFinancialObjectSubTypeCode());
     }
 
     /**
@@ -188,5 +197,108 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
             retval &= getDictionaryValidationService().isBusinessObjectValid(internalBillingDocument.getItem(i), propertyName);
         }
         return retval;
+    }
+
+    /**
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
+        KualiParameterRule combinedRule = getObjectTypeRule();
+        AttributeReference direct = createObjectCodeAttributeReference(accountingLine);
+        AttributeReference indirect = createObjectTypeAttributeReference(accountingLine);
+        boolean allowed = indirectRuleSucceeds(combinedRule, direct, indirect);
+        if (allowed) {
+            allowed &= super.isObjectTypeAllowed(accountingLine);
+        }
+        return allowed;
+    }
+
+    /**
+     * @return the object type APC rule for IB
+     */
+    protected KualiParameterRule getObjectTypeRule() {
+        return KualiParameterRule.and(getGlobalObjectTypeRule(), getParameterRule(INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_TYPE_CODES));
+    }
+
+    /**
+     * Overrides the parent to make sure that the chosen object code's object sub-type code isn't restricted according to the APC.
+     * 
+     * @see org.kuali.core.rule.AddAccountingLineRule#isObjectSubTypeAllowed(AccountingLine)
+     */
+    @Override
+    public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
+        boolean allowed = super.isObjectSubTypeAllowed(accountingLine);
+        if (allowed) {
+            KualiParameterRule parameterRule = getParameterRule(INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_SUB_TYPE_CODES);
+            AttributeReference direct = createObjectCodeAttributeReference(accountingLine);
+            AttributeReference indirect = new AttributeReference(ObjectCode.class, KFSPropertyConstants.FINANCIAL_OBJECT_SUB_TYPE_CODE, accountingLine.getObjectCode().getFinancialObjectSubTypeCode());
+            allowed &= indirectRuleSucceeds(parameterRule, direct, indirect);
+        }
+        return allowed;
+    }
+
+    /**
+     * Overrides the parent's implementation to check to make sure that the provided object code's level isn't a contract and grants
+     * level.
+     * 
+     * @see FinancialDocumentRuleBase#isObjectLevelAllowed(AccountingLine)
+     */
+    @Override
+    public boolean isObjectLevelAllowed(AccountingLine accountingLine) {
+        boolean allowed = super.isObjectLevelAllowed(accountingLine);
+        if (allowed) {
+            KualiParameterRule parameterRule = getParameterRule(INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_LEVEL_CODES);
+            AttributeReference direct = createObjectCodeAttributeReference(accountingLine);
+            AttributeReference indirect = new AttributeReference(ObjectCode.class, KFSPropertyConstants.FINANCIAL_OBJECT_LEVEL_CODE, accountingLine.getObjectCode().getFinancialObjectLevelCode());
+            allowed &= indirectRuleSucceeds(parameterRule, direct, indirect);
+        }
+        return allowed;
+    }
+
+    /**
+     * This implementation overrides the parent to check and make sure that the fund group is not a Loan fund group.
+     * 
+     * @see FinancialDocumentRuleBase#isFundGroupAllowed(AccountingLine)
+     */
+    @Override
+    public boolean isFundGroupAllowed(AccountingLine accountingLine) {
+        boolean allowed = super.isFundGroupAllowed(accountingLine);
+        if (allowed) {
+            KualiParameterRule parameterRule = getParameterRule(INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING, RESTRICTED_FUND_GROUP_CODES);
+            AttributeReference direct = createAccountNumberAttributeReference(accountingLine);
+            AttributeReference indirect = new AttributeReference(SubFundGroup.class, KFSPropertyConstants.FUND_GROUP_CODE, accountingLine.getAccount().getSubFundGroup().getFundGroupCode());
+            allowed &= indirectRuleSucceeds(parameterRule, direct, indirect);
+            // This calls for double indirection, but I'm not sure if such an error message would be more user friendly.
+        }
+        return allowed;
+    }
+
+    /**
+     * Creates an AttributeReference for the account number of the given AccountingLine.
+     * 
+     * @param accountingLine
+     * @return an AttributeReference for the account number of the given AccountingLine.
+     */
+    private static AttributeReference createAccountNumberAttributeReference(AccountingLine accountingLine) {
+        return new AttributeReference(SourceAccountingLine.class, KFSPropertyConstants.ACCOUNT_NUMBER, accountingLine.getAccountNumber());
+    }
+
+    /**
+     * Overrides the parent's implementation to check and make sure that the sub fund group is not the Retire Indebt or the
+     * Investment Plant sub fund group.
+     * 
+     * @see FinancialDocumentRuleBase#isSubFundGroupAllowed(AccountingLine)
+     */
+    @Override
+    public boolean isSubFundGroupAllowed(AccountingLine accountingLine) {
+        boolean allowed = super.isSubFundGroupAllowed(accountingLine);
+        if (allowed) {
+            KualiParameterRule parameterRule = getParameterRule(INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING, RESTRICTED_SUB_FUND_GROUP_CODES);
+            AttributeReference direct = createAccountNumberAttributeReference(accountingLine);
+            AttributeReference indirect = new AttributeReference(Account.class, KFSPropertyConstants.SUB_FUND_GROUP_CODE, accountingLine.getAccount().getSubFundGroupCode());
+            allowed &= indirectRuleSucceeds(parameterRule, direct, indirect);
+        }
+        return allowed;
     }
 }

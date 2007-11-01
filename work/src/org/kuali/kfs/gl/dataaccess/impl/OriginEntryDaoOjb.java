@@ -28,11 +28,9 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.gl.bo.OriginEntryFull;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
 
@@ -57,7 +55,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     private static final String TRANSACTION_LEDGER_ENTRY_DESCRIPTION = "transactionLedgerEntryDescription";
     private static final String TRANSACTION_LEDGER_ENTRY_AMOUNT = "transactionLedgerEntryAmount";
     private static final String TRANSACTION_DEBIT_CREDIT_CODE = "transactionDebitCreditCode";
-
+    
     private Class entryClass;
 
     public void setEntryClass(Class entryClass) {
@@ -65,8 +63,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * Gets the entryClass attribute.
-     * 
+     * Gets the entryClass attribute. 
      * @return Returns the entryClass.
      */
     public Class getEntryClass() {
@@ -82,10 +79,9 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
 
         Criteria crit = new Criteria();
         crit.addEqualTo(OriginEntryDaoOjb.ENTRY_GROUP_ID, groupId);
-        if (isCredit) {
+        if ( isCredit ) {
             crit.addEqualTo(OriginEntryDaoOjb.TRANSACTION_DEBIT_CREDIT_CODE, KFSConstants.GL_CREDIT_CODE);
-        }
-        else {
+        } else {
             crit.addNotEqualTo(OriginEntryDaoOjb.TRANSACTION_DEBIT_CREDIT_CODE, KFSConstants.GL_CREDIT_CODE);
         }
 
@@ -93,11 +89,10 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         q.setAttributes(new String[] { "SUM(" + OriginEntryDaoOjb.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" });
 
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
-        if (i.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(i);
-            return (KualiDecimal) data[0];
-        }
-        else {
+        if ( i.hasNext() ) {
+            Object[] data = (Object[])i.next();
+            return (KualiDecimal)data[0];
+        } else {
             return null;
         }
     }
@@ -112,22 +107,20 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         q.setAttributes(new String[] { "count(*)" });
 
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
-        if (i.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(i);
-
+        if ( i.hasNext() ) {
+            Object[] data = (Object[])i.next();
             if (data[0] instanceof BigDecimal) {
-                return ((BigDecimal) data[0]).intValue();
+                return ((BigDecimal)data[0]).intValue();
+            } else {
+                return ((Long)data[0]).intValue();
             }
-            else {
-                return ((Long) data[0]).intValue();
-            }
-        }
-        else {
+        } else {
             return null;
         }
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.OriginEntryDao#getGroupCounts()
      */
     public Iterator getGroupCounts() {
@@ -143,6 +136,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.OriginEntryDao#deleteEntry(org.kuali.module.gl.bo.OriginEntry)
      */
     public void deleteEntry(OriginEntry oe) {
@@ -152,6 +146,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.OriginEntryDao#getDocumentsByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public Iterator getDocumentsByGroup(OriginEntryGroup oeg) {
@@ -161,7 +156,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         criteria.addEqualTo(ENTRY_GROUP_ID, oeg.getId());
 
         ReportQueryByCriteria q = QueryFactory.newReportQuery(entryClass, criteria);
-        q.setAttributes(new String[] { KFSPropertyConstants.DOCUMENT_NUMBER, "financialDocumentTypeCode", "financialSystemOriginationCode" });
+        q.setAttributes(new String[] { KFSPropertyConstants.DOCUMENT_NUMBER,"financialDocumentTypeCode","financialSystemOriginationCode" });
 
         q.setDistinct(true);
 
@@ -169,9 +164,10 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.OriginEntryDao#getMatchingEntries(java.util.Map)
      */
-    public Iterator<OriginEntryFull> getMatchingEntries(Map searchCriteria) {
+    public Iterator<OriginEntry> getMatchingEntries(Map searchCriteria) {
         LOG.debug("getMatchingEntries() started");
 
         Criteria criteria = new Criteria();
@@ -185,13 +181,13 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
 
-    public Iterator<OriginEntryFull> getBadBalanceEntries(Collection groups) {
+    public Iterator<OriginEntry> getBadBalanceEntries(Collection groups) {
         LOG.debug("getBadBalanceEntries() started");
 
-        if (groups.size() <= 0) {
+        if(groups.size()<=0) {
             return null;
         }
-
+        
         Collection ids = new ArrayList();
         for (Iterator iter = groups.iterator(); iter.hasNext();) {
             OriginEntryGroup element = (OriginEntryGroup) iter.next();
@@ -229,14 +225,10 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     /**
      * This method is special because of the order by. It is used in the scrubber. The getMatchingEntries wouldn't work because of
      * the required order by.
+     * 
      */
-    public <T> Iterator<T> getEntriesByGroup(OriginEntryGroup oeg, int sort) {
+    public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup oeg, int sort) {
         LOG.debug("getEntriesByGroup() started");
-
-        // clear cache because the GLCP document class saves to the origin entry table and
-        // reads from it (via this method) in the same transaction. If the clearCache line is
-        // deleted, then the references to OriginEntries returned by this method will be null.
-        getPersistenceBrokerTemplate().clearCache();
 
         Criteria criteria = new Criteria();
         criteria.addEqualTo(ENTRY_GROUP_ID, oeg.getId());
@@ -268,17 +260,15 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
             qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_DESCRIPTION);
             qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_AMOUNT);
             qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);
-        }
-        else if (sort == OriginEntryDao.SORT_REPORT) {
+        } else if (sort == OriginEntryDao.SORT_REPORT ) {
             qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
             qbc.addOrderByAscending(FINANCIAL_SYSTEM_ORIGINATION_CODE);
             qbc.addOrderByAscending(KFSPropertyConstants.DOCUMENT_NUMBER);
-            qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);
+            qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);            
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
             qbc.addOrderByAscending(ACCOUNT_NUMBER);
             qbc.addOrderByAscending(FINANCIAL_OBJECT_CODE);
-        }
-        else if (sort == OriginEntryDao.SORT_LISTING_REPORT) {
+        } else if(sort == OriginEntryDao.SORT_LISTING_REPORT ) {
             qbc.addOrderByAscending(UNIVERSITY_FISCAL_YEAR);
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
             qbc.addOrderByAscending(ACCOUNT_NUMBER);
@@ -289,7 +279,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
             qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
             qbc.addOrderByAscending(FINANCIAL_SYSTEM_ORIGINATION_CODE);
             qbc.addOrderByAscending(KFSPropertyConstants.DOCUMENT_NUMBER);
-            qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_DESCRIPTION);
+            qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_DESCRIPTION);            
         }
         else {
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
@@ -313,13 +303,12 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
      * 
      * @return
      */
-    public Collection<OriginEntryFull> testingGetAllEntries() {
+    public Collection<OriginEntry> testingGetAllEntries() {
         LOG.debug("testingGetAllEntries() started");
 
         Criteria criteria = new Criteria();
         QueryByCriteria qbc = QueryFactory.newQuery(entryClass, criteria);
         qbc.addOrderByAscending(ENTRY_GROUP_ID);
-        qbc.addOrderByAscending(ENTRY_ID);
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
     }
 
@@ -359,12 +348,13 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.OriginEntryDao#deleteGroups(java.util.Collection)
      */
     public void deleteGroups(Collection<OriginEntryGroup> groups) {
         LOG.debug("deleteGroups() started");
-
-        if (groups == null || groups.size() <= 0) {
+        
+        if(groups == null || groups.size()<=0) {
             return;
         }
 
@@ -387,9 +377,10 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.OriginEntryDao#getMatchingEntriesByCollection(java.util.Map)
      */
-    public Collection<OriginEntryFull> getMatchingEntriesByCollection(Map searchCriteria) {
+    public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria) {
         LOG.debug("getMatchingEntries() started");
 
         Criteria criteria = new Criteria();
@@ -408,8 +399,8 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
      */
     public Iterator getSummaryByGroupId(Collection groupIdList) {
         LOG.debug("getSummaryByGroupId() started");
-
-        if (groupIdList == null || groupIdList.size() <= 0) {
+        
+        if(groupIdList == null || groupIdList.size()<=0) {
             return null;
         }
 
@@ -439,12 +430,12 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
     }
 
-    public OriginEntryFull getExactMatchingEntry(Integer entryId) {
+    public OriginEntry getExactMatchingEntry(Integer entryId) {
         LOG.debug("getMatchingEntries() started");
-        OriginEntryFull oe = new OriginEntryFull();
+        OriginEntry oe = new OriginEntry();
         // in case of no matching entry
         try {
-            oe = (OriginEntryFull) getPersistenceBrokerTemplate().getObjectById(entryClass, entryId);
+            oe = (OriginEntry) getPersistenceBrokerTemplate().getObjectById(entryClass, entryId);
 
         }
         catch (Exception e) {
@@ -459,7 +450,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     public Iterator getPosterOutputSummaryByGroupId(Collection groups) {
         LOG.debug("getPosterInputSummaryByGroupId() started");
 
-        if (groups == null || groups.size() <= 0) {
+        if(groups == null || groups.size()<=0) {
             return null;
         }
 
@@ -475,9 +466,24 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
 
         ReportQueryByCriteria query = QueryFactory.newReportQuery(entryClass, criteria);
 
-        String attributeList[] = { KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, fundGroupCode, KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" };
+        String attributeList[] = {
+                KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE,
+                KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, 
+                KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, 
+                fundGroupCode, 
+                KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, 
+                KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, 
+                "sum(" + KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")"
+        };
 
-        String groupList[] = { KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, fundGroupCode, KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE };
+        String groupList[] = {
+                KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, 
+                KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, 
+                KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, 
+                fundGroupCode, 
+                KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, 
+                KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE
+        };
 
         query.setAttributes(attributeList);
         query.addGroupBy(groupList);
