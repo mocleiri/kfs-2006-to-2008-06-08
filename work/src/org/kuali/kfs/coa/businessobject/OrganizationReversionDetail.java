@@ -50,6 +50,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -59,6 +60,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -69,6 +71,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -78,6 +81,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -88,6 +92,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationCode attribute.
      * 
      * @return Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -97,6 +102,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -107,6 +113,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionCategoryCode attribute.
      * 
      * @return Returns the organizationReversionCategoryCode
+     * 
      */
     public String getOrganizationReversionCategoryCode() {
         return organizationReversionCategoryCode;
@@ -116,6 +123,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationReversionCategoryCode attribute.
      * 
      * @param organizationReversionCategoryCode The organizationReversionCategoryCode to set.
+     * 
      */
     public void setOrganizationReversionCategoryCode(String organizationReversionCategoryCode) {
         this.organizationReversionCategoryCode = organizationReversionCategoryCode;
@@ -126,6 +134,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionCode attribute.
      * 
      * @return Returns the organizationReversionCode
+     * 
      */
     public String getOrganizationReversionCode() {
         return organizationReversionCode;
@@ -135,6 +144,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationReversionCode attribute.
      * 
      * @param organizationReversionCode The organizationReversionCode to set.
+     * 
      */
     public void setOrganizationReversionCode(String organizationReversionCode) {
         this.organizationReversionCode = organizationReversionCode;
@@ -145,6 +155,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionObjectCode attribute.
      * 
      * @return Returns the organizationReversionObjectCode
+     * 
      */
     public String getOrganizationReversionObjectCode() {
         return organizationReversionObjectCode;
@@ -154,6 +165,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationReversionObjectCode attribute.
      * 
      * @param organizationReversionObjectCode The organizationReversionObjectCode to set.
+     * 
      */
     public void setOrganizationReversionObjectCode(String organizationReversionObjectCode) {
         this.organizationReversionObjectCode = organizationReversionObjectCode;
@@ -164,6 +176,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionObject attribute.
      * 
      * @return Returns the organizationReversionObject
+     * 
      */
     public ObjectCode getOrganizationReversionObject() {
         return organizationReversionObject;
@@ -183,6 +196,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public Org getOrganization() {
         return organization;
@@ -202,6 +216,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;

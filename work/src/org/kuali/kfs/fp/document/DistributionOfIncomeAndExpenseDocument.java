@@ -16,7 +16,6 @@
 
 package org.kuali.module.financial.document;
 
-import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.kfs.KFSConstants;
@@ -27,7 +26,7 @@ import org.kuali.kfs.document.AccountingDocumentBase;
  * The Distribution of Income and Expense (DI) document is used to distribute income or expense, or assets and liabilities. Amounts
  * being distributed are usually the result of an accumulation of transactions that need to be divided up between various accounts.
  */
-public class DistributionOfIncomeAndExpenseDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
+public class DistributionOfIncomeAndExpenseDocument extends AccountingDocumentBase implements Copyable, Correctable{
 
     /**
      * Constructs a DistributionOfIncomeAndExpenseDocument.java.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 import org.kuali.module.financial.document.AdvanceDepositDocument;
@@ -50,7 +50,7 @@ public class AdvanceDepositAction extends KualiAccountingDocumentActionBase {
             AdvanceDepositDocument adDoc = adForm.getAdvanceDepositDocument();
 
             adDoc.setTotalAdvanceDepositAmount(calculateAdvanceDepositTotal(adDoc)); // recalc b/c changes to the amounts could
-            // have happened
+                                                                                        // have happened
         }
 
         // proceed as usual
@@ -84,7 +84,7 @@ public class AdvanceDepositAction extends KualiAccountingDocumentActionBase {
             adForm.setNewAdvanceDeposit(new AdvanceDepositDetail());
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -105,7 +105,7 @@ public class AdvanceDepositAction extends KualiAccountingDocumentActionBase {
         // delete advanceDeposit
         adDoc.removeAdvanceDeposit(deleteIndex);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -115,9 +115,9 @@ public class AdvanceDepositAction extends KualiAccountingDocumentActionBase {
      * @return boolean
      */
     private boolean validateNewAdvanceDeposit(AdvanceDepositDetail advanceDeposit) {
-        GlobalVariables.getErrorMap().addToErrorPath(KFSPropertyConstants.NEW_ADVANCE_DEPOSIT);
+        GlobalVariables.getErrorMap().addToErrorPath(PropertyConstants.NEW_ADVANCE_DEPOSIT);
         boolean isValid = AdvanceDepositDocumentRuleUtil.validateAdvanceDeposit(advanceDeposit);
-        GlobalVariables.getErrorMap().removeFromErrorPath(KFSPropertyConstants.NEW_ADVANCE_DEPOSIT);
+        GlobalVariables.getErrorMap().removeFromErrorPath(PropertyConstants.NEW_ADVANCE_DEPOSIT);
         return isValid;
     }
 

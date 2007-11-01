@@ -32,14 +32,16 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>AgencyTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiContractsAndGrantsAgencyTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>AGTY</documentTypeCode>
 
-        <label>Agency Type</label>
+        <label>Agency Type Maintenance Document</label>
+        <shortLabel>AgencyTypeMaintenanceDocument</shortLabel>
 
         <summary>Agency Type maintenance document</summary>
         <description>Document used to create or update Agency Type objects</description>
-        <help parameterNamespace="KFS-CG" parameterDetailType="AgencyType" parameterName="AGENCY_TYPE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="code" />

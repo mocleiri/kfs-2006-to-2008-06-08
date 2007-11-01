@@ -23,8 +23,6 @@
         <businessObjectClass>org.kuali.module.cg.bo.Subcontractor</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-		<businessRulesClass>org.kuali.module.cg.rules.SubcontractorRule</businessRulesClass>
-
         <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
@@ -34,14 +32,16 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>SubcontractorMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiContractsAndGrantsSubcontractorMaintenanceDocument</documentTypeName>
         <documentTypeCode>SUBC</documentTypeCode>
 
-        <label>Sub-Contractor</label>
+        <label>Subcontractor Maintenance Document</label>
+        <shortLabel>SubcontractorMainDoc</shortLabel>
 
         <summary>Subcontractor Maintenance Document</summary>
         <description>Document used to create or update Subcontractor objects</description>
-        <help parameterNamespace="KFS-CG" parameterDetailType="Subcontractor" parameterName="SUBCONTRACTOR" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="subcontractorNumber" />
@@ -50,9 +50,7 @@
         <maintainableSections>
             <maintainableSection title="Edit Subcontractor">
                 <maintainableItems>
-                    <maintainableField name="subcontractorNumber" required="true" readOnly="true">
-                        <defaultValueFinderClass>org.kuali.module.cg.lookup.valuefinder.NextSubcontractorNumberFinder</defaultValueFinderClass>
-                    </maintainableField>
+                    <maintainableField name="subcontractorNumber" required="true" />
                     <maintainableField name="subcontractorName" required="true" />
                     <maintainableField name="subcontractorAddressLine1" required="true" />
                     <maintainableField name="subcontractorAddressLine2" />

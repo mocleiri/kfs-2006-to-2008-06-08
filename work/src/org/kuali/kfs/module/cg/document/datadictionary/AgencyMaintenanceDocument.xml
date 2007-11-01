@@ -32,14 +32,16 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>AgencyMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiContractsAndGrantsAgencyMaintenanceDocument</documentTypeName>
         <documentTypeCode>AGCY</documentTypeCode>
 
-        <label>Agency</label>
+        <label>Agency Maintenance Document</label>
+        <shortLabel>AgencyMaintDoc</shortLabel>
 
         <summary>Agency Maintenance Document</summary>
         <description>Document used to create or update Agency objects</description>
-        <help parameterNamespace="KFS-CG" parameterDetailType="Agency" parameterName="AGENCY" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="agencyNumber" />
@@ -52,9 +54,7 @@
         <maintainableSections>
             <maintainableSection title="Edit Agency">
                 <maintainableItems>
-                    <maintainableField name="agencyNumber" required="true" readOnly="true" >
-                           <defaultValueFinderClass>org.kuali.module.cg.lookup.valuefinder.NextAgencyNumberFinder</defaultValueFinderClass>
-                    </maintainableField>
+                    <maintainableField name="agencyNumber" required="true" />
                     <maintainableField name="reportingName" required="true" />
                     <maintainableField name="fullName" required="true" />
                     <maintainableField name="agencyTypeCode" required="true" />

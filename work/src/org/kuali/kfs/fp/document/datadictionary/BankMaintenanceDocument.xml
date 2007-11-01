@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>BankMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiBankMaintenanceDocument</documentTypeName>
         <documentTypeCode>BANK</documentTypeCode>
 
-        <label>Bank</label>
+        <label>Bank Maintenance Document</label>
+        <shortLabel>BankMaintDoc</shortLabel>
 
         <summary>Bank maintenance document</summary>
         <description>Document used to create or update Bank objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="Bank" parameterName="BANK" />
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_BANK" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="financialDocumentBankCode" />

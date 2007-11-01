@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,12 @@ package org.kuali.module.gl.bo;
 
 import java.sql.Date;
 
-import org.kuali.core.bo.DocumentType;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectType;
-import org.kuali.module.chart.bo.SubAccount;
-import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 public interface Transaction {
@@ -95,12 +92,6 @@ public interface Transaction {
     public Options getOption();
 
     public ObjectType getObjectType();
-
+    
     public void refreshNonUpdateableReferences();
-
-    public SubAccount getSubAccount();
-
-    public SubObjCd getFinancialSubObject();
-
-    public DocumentType getDocumentType();
 }
