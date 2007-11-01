@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/gl/web/TestDataGeneratorTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +23,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.KualiTestBase;
+import org.kuali.PropertyConstants;
 import org.kuali.module.gl.bo.AccountBalance;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.test.KualiTestBase;
 
 /**
  * This class...
+ * 
+ * 
  */
 public class TestDataGeneratorTest extends KualiTestBase {
 
@@ -101,25 +105,25 @@ public class TestDataGeneratorTest extends KualiTestBase {
     protected List getLookupFields(boolean isExtended) {
         List lookupFields = new ArrayList();
 
-        lookupFields.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        lookupFields.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        lookupFields.add(KFSPropertyConstants.ACCOUNT_NUMBER);
-        lookupFields.add(KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE);
-        lookupFields.add(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
+        lookupFields.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        lookupFields.add(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        lookupFields.add(PropertyConstants.ACCOUNT_NUMBER);
+        lookupFields.add(PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE);
+        lookupFields.add(PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
         lookupFields.add("dummyBusinessObject.consolidationOption");
         lookupFields.add("dummyBusinessObject.pendingEntryOption");
 
         // include the extended fields
         if (isExtended) {
-            lookupFields.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-            lookupFields.add(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
-            lookupFields.add(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
+            lookupFields.add(PropertyConstants.SUB_ACCOUNT_NUMBER);
+            lookupFields.add(PropertyConstants.FINANCIAL_OBJECT_CODE);
+            lookupFields.add(PropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
 
-            lookupFields.add(KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE);
-            lookupFields.add(KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE);
-            lookupFields.add(KFSPropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE);
-            lookupFields.add(KFSPropertyConstants.DOCUMENT_NUMBER);
-            lookupFields.add(KFSPropertyConstants.ORGANIZATION_DOCUMENT_NUMBER);
+            lookupFields.add(PropertyConstants.FINANCIAL_OBJECT_TYPE_CODE);
+            lookupFields.add(PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE);
+            lookupFields.add(PropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE);
+            lookupFields.add(PropertyConstants.DOCUMENT_NUMBER);
+            lookupFields.add(PropertyConstants.ORGANIZATION_DOCUMENT_NUMBER);
         }
         return lookupFields;
     }

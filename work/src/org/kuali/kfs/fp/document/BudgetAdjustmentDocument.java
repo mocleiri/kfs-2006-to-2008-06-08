@@ -1,56 +1,54 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.document;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
-import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.web.format.CurrencyFormatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLineParser;
 import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine;
-import org.kuali.module.financial.bo.FiscalYearFunctionControl;
-import org.kuali.module.financial.rules.BudgetAdjustmentDocumentRule;
-import org.kuali.module.financial.service.FiscalYearFunctionControlService;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.module.financial.rules.BudgetAdjustmentDocumentRuleConstants;
+import org.kuali.module.financial.rules.TransactionalDocumentRuleUtil;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This is the business object that represents the BudgetAdjustment document in Kuali.
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetAdjustmentDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
+public class BudgetAdjustmentDocument extends TransactionalDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetAdjustmentDocument.class);
 
     private Integer nextPositionSourceLineNumber;
@@ -63,73 +61,13 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
         super();
     }
 
-
-    /*******************************************************************************************************************************
-     * BA Documents should only do SF checking on PLEs with a Balance Type of 'CB' - not 'BB' or 'MB'.
-     * 
-     * @Override
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
-     */
-    public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
-        List<GeneralLedgerPendingEntry> pendingLedgerEntries = new ArrayList();
-
-        GeneralLedgerPendingEntrySequenceHelper glpeSequenceHelper = new GeneralLedgerPendingEntrySequenceHelper();
-        BudgetAdjustmentDocumentRule budgetAdjustmentDocumentRule = new BudgetAdjustmentDocumentRule();
-
-        BudgetAdjustmentDocument copiedBa = (BudgetAdjustmentDocument) ObjectUtils.deepCopy(this);
-        copiedBa.getGeneralLedgerPendingEntries().clear();
-        for (BudgetAdjustmentAccountingLine fromLine : (List<BudgetAdjustmentAccountingLine>) copiedBa.getSourceAccountingLines()) {
-            budgetAdjustmentDocumentRule.processGenerateGeneralLedgerPendingEntries(copiedBa, fromLine, glpeSequenceHelper);
-        }
-
-
-        for (GeneralLedgerPendingEntry ple : copiedBa.getGeneralLedgerPendingEntries()) {
-            if (!KFSConstants.BALANCE_TYPE_BASE_BUDGET.equals(ple.getFinancialBalanceTypeCode()) && !KFSConstants.BALANCE_TYPE_MONTHLY_BUDGET.equals(ple.getFinancialBalanceTypeCode())) {
-                pendingLedgerEntries.add(ple);
-            }
-        }
-        return pendingLedgerEntries;
-    }
-
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
-     */
-    @Override
-    public Class getSourceAccountingLineClass() {
-        return BudgetAdjustmentSourceAccountingLine.class;
-    }
-
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLineClass()
-     */
-    @Override
-    public Class getTargetAccountingLineClass() {
-        return BudgetAdjustmentTargetAccountingLine.class;
-    }
-
-
     /**
      * generic, shared logic used to iniate a ba document
      */
     public void initiateDocument() {
-        // setting default posting year. Trying to set currentYear first if it's allowed, if it isn't,
-        // just set first allowed year. Note: allowedYears will never be empty because then
-        // BudgetAdjustmentDocumentAuthorizer.canInitiate would have failed.
-        List allowedYears = SpringContext.getBean(FiscalYearFunctionControlService.class).getBudgetAdjustmentAllowedYears();
-        Integer currentYearParam = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
-
-        FiscalYearFunctionControl fiscalYearFunctionControl = new FiscalYearFunctionControl();
-        fiscalYearFunctionControl.setUniversityFiscalYear(currentYearParam);
-
-        // use 'this.postingYear =' because setPostingYear has logic we want to circumvent on initiateDocument
-        if (allowedYears.contains(fiscalYearFunctionControl)) {
-            this.postingYear = currentYearParam;
-        }
-        else {
-            this.postingYear = ((FiscalYearFunctionControl) allowedYears.get(0)).getUniversityFiscalYear();
-        }
+        // setting default posting year
+        Integer currentYearParam = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
+        setPostingYear(currentYearParam);
     }
 
     /**
@@ -162,7 +100,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total current budget amount from the source lines.
-     * 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetTotal() {
@@ -177,17 +114,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * This method retrieves the total current budget amount formatted as currency.
-     * 
-     * @return String
-     */
-    public String getCurrencyFormattedSourceCurrentBudgetTotal() {
-        return (String) new CurrencyFormatter().format(getSourceCurrentBudgetTotal());
-    }
-
-    /**
      * Returns the total current budget income amount from the source lines.
-     * 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetIncomeTotal() {
@@ -195,7 +122,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isIncome(line)) {
+            if (TransactionalDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -205,7 +132,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total current budget expense amount from the source lines.
-     * 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetExpenseTotal() {
@@ -213,7 +139,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isExpense(line)) {
+            if (TransactionalDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -223,7 +149,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total current budget amount from the target lines.
-     * 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetTotal() {
@@ -238,17 +163,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * This method retrieves the total current budget amount formatted as currency.
-     * 
-     * @return String
-     */
-    public String getCurrencyFormattedTargetCurrentBudgetTotal() {
-        return (String) new CurrencyFormatter().format(getTargetCurrentBudgetTotal());
-    }
-
-    /**
      * Returns the total current budget income amount from the target lines.
-     * 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetIncomeTotal() {
@@ -256,7 +171,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isIncome(line)) {
+            if (TransactionalDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -266,7 +181,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total current budget expense amount from the target lines.
-     * 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetExpenseTotal() {
@@ -274,7 +188,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isExpense(line)) {
+            if (TransactionalDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getCurrentBudgetAdjustmentAmount());
             }
         }
@@ -284,7 +198,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total base budget amount from the source lines.
-     * 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetTotal() {
@@ -298,19 +211,8 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
         return baseBudgetTotal;
     }
 
-
-    /**
-     * This method retrieves the total base budget amount formatted as currency.
-     * 
-     * @return String
-     */
-    public String getCurrencyFormattedSourceBaseBudgetTotal() {
-        return (String) new CurrencyFormatter().format(getSourceBaseBudgetTotal());
-    }
-
     /**
      * Returns the total base budget income amount from the source lines.
-     * 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetIncomeTotal() {
@@ -318,7 +220,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isIncome(line)) {
+            if (TransactionalDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -328,7 +230,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total base budget expense amount from the source lines.
-     * 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetExpenseTotal() {
@@ -336,7 +237,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isExpense(line)) {
+            if (TransactionalDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -346,7 +247,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total base budget amount from the target lines.
-     * 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetTotal() {
@@ -361,17 +261,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * This method retrieves the total base budget amount formatted as currency.
-     * 
-     * @return String
-     */
-    public String getCurrencyFormattedTargetBaseBudgetTotal() {
-        return (String) new CurrencyFormatter().format(getTargetBaseBudgetTotal());
-    }
-
-    /**
      * Returns the total base budget income amount from the target lines.
-     * 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetIncomeTotal() {
@@ -379,7 +269,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isIncome(line)) {
+            if (TransactionalDocumentRuleUtil.isIncome(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -389,7 +279,6 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
     /**
      * Returns the total base budget expense amount from the target lines.
-     * 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetExpenseTotal() {
@@ -397,7 +286,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            if (AccountingDocumentRuleUtil.isExpense(line)) {
+            if (TransactionalDocumentRuleUtil.isExpense(line)) {
                 total = total.add(line.getBaseBudgetAdjustmentAmount());
             }
         }
@@ -406,24 +295,22 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * Same as default implementation but uses getTargetCurrentBudgetTotal and getSourceCurrentBudgetTotal instead.
-     * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
-     * @return KualiDecimal
+     * @see org.kuali.core.document.TransactionalDocumentBase#getTotalDollarAmount()
      */
     @Override
     public KualiDecimal getTotalDollarAmount() {
-        return getTargetCurrentBudgetTotal().equals(KualiDecimal.ZERO) ? getSourceCurrentBudgetTotal() : getTargetCurrentBudgetTotal();
+        // TODO Auto-generated method stub
+        return super.getTotalDollarAmount();
     }
 
     /**
      * Negate accounting line budget amounts.
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#toErrorCorrection()
+     * @see org.kuali.core.document.TransactionalDocumentBase#convertIntoErrorCorrection()
      */
     @Override
-    public void toErrorCorrection() throws WorkflowException {
-        super.toErrorCorrection();
+    public void convertIntoErrorCorrection() throws WorkflowException {
+        super.convertIntoErrorCorrection();
 
         if (this.getSourceAccountingLines() != null) {
             for (Iterator iter = this.getSourceAccountingLines().iterator(); iter.hasNext();) {
@@ -467,17 +354,18 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
+     * 
      * @see org.kuali.core.document.DocumentBase#toStringMapper()
      */
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
@@ -485,8 +373,8 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * The base checks that the posting year is the current year, not a requirement for the ba document.
-     * 
+     * The base checks that the posting year is the current year, not a requirement
+     * for the ba document.
      * @see org.kuali.core.document.TransactionalDocumentBase#getAllowsCopy()
      */
     @Override
@@ -495,8 +383,8 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * The base checks that the posting year is the current year, not a requirement for the ba document.
-     * 
+     * The base checks that the posting year is the current year, not a requirement
+     * for the ba document.
      * @see org.kuali.core.document.TransactionalDocumentBase#getAllowsErrorCorrection()
      */
     @Override
@@ -505,39 +393,18 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getNullOrReasonNotToCopy(java.lang.String, boolean)
      */
     @Override
-    public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.BudgetAdjustmentDocumentConstants.SOURCE_BA;
+    protected String getNullOrReasonNotToCopy(String actionGerund, boolean ddAllows) {
+        return null;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getNullOrReasonNotToErrorCorrect()
      */
     @Override
-    public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.BudgetAdjustmentDocumentConstants.TARGET_BA;
+    protected String getNullOrReasonNotToErrorCorrect() {
+        return null;
     }
-
-    /**
-     * @see org.kuali.core.document.DocumentBase#populateDocumentForRouting()
-     */
-    @Override
-    public void populateDocumentForRouting() {
-        super.populateDocumentForRouting();
-
-        // set amount fields of line for routing to current amount field
-        for (Iterator iter = this.getSourceAccountingLines().iterator(); iter.hasNext();) {
-            BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            line.setAmount(line.getCurrentBudgetAdjustmentAmount());
-        }
-
-        for (Iterator iter = this.getTargetAccountingLines().iterator(); iter.hasNext();) {
-            BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
-            line.setAmount(line.getCurrentBudgetAdjustmentAmount());
-        }
-    }
-
-
 }

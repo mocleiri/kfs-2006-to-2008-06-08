@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ResponsibilityCenter.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +19,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class ResponsibilityCenter extends PersistableBusinessObjectBase {
+public class ResponsibilityCenter extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -40,6 +42,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Gets the responsibilityCenterCode attribute.
      * 
      * @return Returns the responsibilityCenterCode
+     * 
      */
     public String getResponsibilityCenterCode() {
         return responsibilityCenterCode;
@@ -49,6 +52,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Sets the responsibilityCenterCode attribute.
      * 
      * @param responsibilityCenterCode The responsibilityCenterCode to set.
+     * 
      */
     public void setResponsibilityCenterCode(String responsibilityCenterCode) {
         this.responsibilityCenterCode = responsibilityCenterCode;
@@ -58,6 +62,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Gets the responsibilityCenterName attribute.
      * 
      * @return Returns the responsibilityCenterName
+     * 
      */
     public String getResponsibilityCenterName() {
         return responsibilityCenterName;
@@ -67,6 +72,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Sets the responsibilityCenterName attribute.
      * 
      * @param responsibilityCenterName The responsibilityCenterName to set.
+     * 
      */
     public void setResponsibilityCenterName(String responsibilityCenterName) {
         this.responsibilityCenterName = responsibilityCenterName;
@@ -76,6 +82,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Gets the responsibilityCenterShortName attribute.
      * 
      * @return Returns the responsibilityCenterShortName
+     * 
      */
     public String getResponsibilityCenterShortName() {
         return responsibilityCenterShortName;
@@ -85,6 +92,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Sets the responsibilityCenterShortName attribute.
      * 
      * @param responsibilityCenterShortName The responsibilityCenterShortName to set.
+     * 
      */
     public void setResponsibilityCenterShortName(String responsibilityCenterShortName) {
         this.responsibilityCenterShortName = responsibilityCenterShortName;
@@ -94,6 +102,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Gets the responsibilityCenterActiveIndicator attribute.
      * 
      * @return Returns the responsibilityCenterActiveIndicator
+     * 
      */
     public boolean getResponsibilityCenterActiveIndicator() {
         return responsibilityCenterActiveIndicator;
@@ -103,6 +112,7 @@ public class ResponsibilityCenter extends PersistableBusinessObjectBase {
      * Sets the _responsibilityCenterActiveIndicator_ attribute.
      * 
      * @param _responsibilityCenterActiveIndicator_ The _responsibilityCenterActiveIndicator_ to set.
+     * 
      */
     public void setResponsibilityCenterActiveIndicator(boolean responsibilityCenterActiveIndicator) {
         this.responsibilityCenterActiveIndicator = responsibilityCenterActiveIndicator;

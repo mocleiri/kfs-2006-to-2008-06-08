@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/SalesTax.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +21,16 @@ package org.kuali.module.financial.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class SalesTax extends PersistableBusinessObjectBase {
+public class SalesTax extends BusinessObjectBase {
 
     private String documentNumber;
     private String financialDocumentLineTypeCode;
@@ -53,6 +55,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the documentNumber attribute.
      * 
      * @return Returns the documentNumber
+     * 
      */
     public String getDocumentNumber() {
         return documentNumber;
@@ -62,6 +65,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the documentNumber attribute.
      * 
      * @param documentNumber The documentNumber to set.
+     * 
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -72,6 +76,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the financialDocumentLineTypeCode attribute.
      * 
      * @return Returns the financialDocumentLineTypeCode
+     * 
      */
     public String getFinancialDocumentLineTypeCode() {
         return financialDocumentLineTypeCode;
@@ -81,6 +86,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the financialDocumentLineTypeCode attribute.
      * 
      * @param financialDocumentLineTypeCode The financialDocumentLineTypeCode to set.
+     * 
      */
     public void setFinancialDocumentLineTypeCode(String financialDocumentLineTypeCode) {
         this.financialDocumentLineTypeCode = financialDocumentLineTypeCode;
@@ -91,6 +97,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the financialDocumentLineNumber attribute.
      * 
      * @return Returns the financialDocumentLineNumber
+     * 
      */
     public Integer getFinancialDocumentLineNumber() {
         return financialDocumentLineNumber;
@@ -100,6 +107,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the financialDocumentLineNumber attribute.
      * 
      * @param financialDocumentLineNumber The financialDocumentLineNumber to set.
+     * 
      */
     public void setFinancialDocumentLineNumber(Integer financialDocumentLineNumber) {
         this.financialDocumentLineNumber = financialDocumentLineNumber;
@@ -110,6 +118,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -119,6 +128,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -129,6 +139,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the accountNumber attribute.
      * 
      * @return Returns the accountNumber
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -138,6 +149,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the accountNumber attribute.
      * 
      * @param accountNumber The accountNumber to set.
+     * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -148,6 +160,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the financialDocumentGrossSalesAmount attribute.
      * 
      * @return Returns the financialDocumentGrossSalesAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentGrossSalesAmount() {
         return financialDocumentGrossSalesAmount;
@@ -157,6 +170,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the financialDocumentGrossSalesAmount attribute.
      * 
      * @param financialDocumentGrossSalesAmount The financialDocumentGrossSalesAmount to set.
+     * 
      */
     public void setFinancialDocumentGrossSalesAmount(KualiDecimal financialDocumentGrossSalesAmount) {
         this.financialDocumentGrossSalesAmount = financialDocumentGrossSalesAmount;
@@ -167,6 +181,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the financialDocumentTaxableSalesAmount attribute.
      * 
      * @return Returns the financialDocumentTaxableSalesAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentTaxableSalesAmount() {
         return financialDocumentTaxableSalesAmount;
@@ -176,6 +191,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the financialDocumentTaxableSalesAmount attribute.
      * 
      * @param financialDocumentTaxableSalesAmount The financialDocumentTaxableSalesAmount to set.
+     * 
      */
     public void setFinancialDocumentTaxableSalesAmount(KualiDecimal financialDocumentTaxableSalesAmount) {
         this.financialDocumentTaxableSalesAmount = financialDocumentTaxableSalesAmount;
@@ -186,6 +202,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the financialDocumentSaleDate attribute.
      * 
      * @return Returns the financialDocumentSaleDate
+     * 
      */
     public Date getFinancialDocumentSaleDate() {
         return financialDocumentSaleDate;
@@ -195,6 +212,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Sets the financialDocumentSaleDate attribute.
      * 
      * @param financialDocumentSaleDate The financialDocumentSaleDate to set.
+     * 
      */
     public void setFinancialDocumentSaleDate(Date financialDocumentSaleDate) {
         this.financialDocumentSaleDate = financialDocumentSaleDate;
@@ -205,6 +223,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the account attribute.
      * 
      * @return Returns the account
+     * 
      */
     public Account getAccount() {
         return account;
@@ -224,6 +243,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -244,7 +264,7 @@ public class SalesTax extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("financialDocumentLineTypeCode", this.financialDocumentLineTypeCode);
         if (this.financialDocumentLineNumber != null) {
             m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());

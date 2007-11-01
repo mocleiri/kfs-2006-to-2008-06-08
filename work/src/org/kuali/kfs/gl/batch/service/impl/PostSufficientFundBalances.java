@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,17 @@ package org.kuali.module.gl.batch.poster.impl;
 
 import java.util.Date;
 
-import org.apache.ojb.broker.metadata.MetadataManager;
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.SufficientFundBalances;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.SufficientFundBalancesDao;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * 
+ * 
+ */
 public class PostSufficientFundBalances implements PostTransaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostSufficientFundBalances.class);
 
@@ -49,27 +49,27 @@ public class PostSufficientFundBalances implements PostTransaction {
     public String post(Transaction t, int mode, Date postDate) {
         LOG.debug("post() started");
 
-        String returnCode = GLConstants.UPDATE_CODE;
+        String returnCode = "U";
 
-        if (KFSConstants.SF_TYPE_NO_CHECKING.equals(t.getAccount().getAccountSufficientFundsCode())) {
+        if (Constants.SF_TYPE_NO_CHECKING.equals(t.getAccount().getAccountSufficientFundsCode())) {
             // Don't need to post
-            return GLConstants.EMPTY_CODE;
+            return "";
         }
 
         // Get the Sufficient funds code
         // Sufficient Funds Code
         String sufficientFundsObjectCode = null;
-        if (KFSConstants.SF_TYPE_OBJECT.equals(t.getAccount().getAccountSufficientFundsCode())) {
+        if (Constants.SF_TYPE_OBJECT.equals(t.getAccount().getAccountSufficientFundsCode())) {
             sufficientFundsObjectCode = t.getFinancialObjectCode();
         }
-        else if (KFSConstants.SF_TYPE_LEVEL.equals(t.getAccount().getAccountSufficientFundsCode())) {
+        else if (Constants.SF_TYPE_LEVEL.equals(t.getAccount().getAccountSufficientFundsCode())) {
             sufficientFundsObjectCode = t.getFinancialObject().getFinancialObjectLevelCode();
         }
-        else if (KFSConstants.SF_TYPE_CONSOLIDATION.equals(t.getAccount().getAccountSufficientFundsCode())) {
+        else if (Constants.SF_TYPE_CONSOLIDATION.equals(t.getAccount().getAccountSufficientFundsCode())) {
             sufficientFundsObjectCode = t.getFinancialObject().getFinancialObjectLevel().getFinancialConsolidationObjectCode();
         }
-        else if (KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(t.getAccount().getAccountSufficientFundsCode()) || KFSConstants.SF_TYPE_ACCOUNT.equals(t.getAccount().getAccountSufficientFundsCode())) {
-            sufficientFundsObjectCode = GLConstants.getSpaceFinancialObjectCode();
+        else if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(t.getAccount().getAccountSufficientFundsCode()) || Constants.SF_TYPE_ACCOUNT.equals(t.getAccount().getAccountSufficientFundsCode())) {
+            sufficientFundsObjectCode = "    ";
         }
         else {
             return "E:Invalid sufficient funds code (" + t.getAccount().getAccountSufficientFundsCode() + ")";
@@ -78,7 +78,7 @@ public class PostSufficientFundBalances implements PostTransaction {
         // Look to see if there is a sufficient funds record for this
         SufficientFundBalances sfBalance = sufficientFundBalancesDao.getByPrimaryId(t.getUniversityFiscalYear(), t.getChartOfAccountsCode(), t.getAccountNumber(), sufficientFundsObjectCode);
         if (sfBalance == null) {
-            returnCode = GLConstants.INSERT_CODE;
+            returnCode = "I";
             sfBalance = new SufficientFundBalances();
             sfBalance.setUniversityFiscalYear(t.getUniversityFiscalYear());
             sfBalance.setChartOfAccountsCode(t.getChartOfAccountsCode());
@@ -90,7 +90,7 @@ public class PostSufficientFundBalances implements PostTransaction {
             sfBalance.setAccountSufficientFundsCode(t.getAccount().getAccountSufficientFundsCode());
         }
 
-        if (KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(t.getAccount().getAccountSufficientFundsCode())) {
+        if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(t.getAccount().getAccountSufficientFundsCode())) {
             // 2640-PROCESS-CASH
             if (t.getFinancialBalanceTypeCode().equals(t.getOption().getActualFinancialBalanceTypeCd())) {
                 if (t.getFinancialObjectCode().equals(t.getChart().getFinancialCashObjectCode()) || t.getFinancialObjectCode().equals(t.getChart().getFinAccountsPayableObjectCode())) {
@@ -99,27 +99,27 @@ public class PostSufficientFundBalances implements PostTransaction {
                 }
                 else {
                     // No need to post this
-                    return GLConstants.EMPTY_CODE;
+                    return "";
                 }
             }
-            else if (t.getFinancialBalanceTypeCode().equals(t.getOption().getExtrnlEncumFinBalanceTypCd()) || t.getFinancialBalanceTypeCode().equals(t.getOption().getIntrnlEncumFinBalanceTypCd()) || t.getFinancialBalanceTypeCode().equals(t.getOption().getPreencumbranceFinBalTypeCd()) || t.getOption().getCostShareEncumbranceBalanceTypeCd().equals(t.getFinancialBalanceTypeCode())) {
-                if (t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpenditureexpCd()) || t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpendNotExpCode()) || t.getOption().getFinancialObjectTypeTransferExpenseCd().equals(t.getFinancialObjectTypeCode()) || t.getOption().getFinObjTypeExpNotExpendCode().equals(t.getFinancialObjectTypeCode())) {
+            else if (t.getFinancialBalanceTypeCode().equals(t.getOption().getExtrnlEncumFinBalanceTypCd()) || t.getFinancialBalanceTypeCode().equals(t.getOption().getIntrnlEncumFinBalanceTypCd()) || t.getFinancialBalanceTypeCode().equals(t.getOption().getPreencumbranceFinBalTypeCd()) || t.getOption().getCostShareEncumbranceBalanceTypeCode().equals(t.getFinancialBalanceTypeCode())) {
+                if (t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpenditureexpCd()) || t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpendNotExpCode()) || t.getOption().getFinancialObjectTypeTransferExpenseCode().equals(t.getFinancialObjectTypeCode()) || t.getOption().getFinObjTypeExpNotExpendCode().equals(t.getFinancialObjectTypeCode())) {
                     // 2462-PROCESS-CASH-ENCUMBRANCE
                     updateEncumbranceAmount(t.getTransactionDebitCreditCode(), sfBalance, t.getTransactionLedgerEntryAmount());
                 }
                 else {
                     // No need to post this
-                    return GLConstants.EMPTY_CODE;
+                    return "";
                 }
             }
             else {
                 // No need to post this
-                return GLConstants.EMPTY_CODE;
+                return "";
             }
         }
         else {
             // 2630-PROCESS-OBJECT-OR-ACCOUNT
-            if (t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpenditureexpCd()) || t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpendNotExpCode()) || t.getOption().getFinancialObjectTypeTransferExpenseCd().equals(t.getFinancialObjectTypeCode()) || t.getOption().getFinObjTypeExpNotExpendCode().equals(t.getFinancialObjectTypeCode())) {
+            if (t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpenditureexpCd()) || t.getFinancialObjectTypeCode().equals(t.getOption().getFinObjTypeExpendNotExpCode()) || t.getOption().getFinancialObjectTypeTransferExpenseCode().equals(t.getFinancialObjectTypeCode()) || t.getOption().getFinObjTypeExpNotExpendCode().equals(t.getFinancialObjectTypeCode())) {
                 if (t.getFinancialBalanceTypeCode().equals(t.getOption().getActualFinancialBalanceTypeCd())) {
                     // 2631-PROCESS-OBJTACCT-ACTUAL
                     updateExpendedAmount(t.getTransactionDebitCreditCode(), sfBalance, t.getTransactionLedgerEntryAmount());
@@ -133,12 +133,12 @@ public class PostSufficientFundBalances implements PostTransaction {
                 }
                 else {
                     // No need to post this
-                    return GLConstants.EMPTY_CODE;
+                    return "";
                 }
             }
             else {
                 // No need to post this
-                return GLConstants.EMPTY_CODE;
+                return "";
             }
         }
 
@@ -150,10 +150,10 @@ public class PostSufficientFundBalances implements PostTransaction {
 
     // 2631-PROCESS-OBJTACCT-ACTUAL
     private void updateExpendedAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimal amount) {
-        if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
+        if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             bal.setAccountActualExpenditureAmt(bal.getAccountActualExpenditureAmt().subtract(amount));
         }
-        else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode) || KFSConstants.GL_BUDGET_CODE.equals(debitCreditCode)) {
+        else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode) || Constants.GL_BUDGET_CODE.equals(debitCreditCode)) {
             bal.setAccountActualExpenditureAmt(bal.getAccountActualExpenditureAmt().add(amount));
         }
     }
@@ -161,25 +161,25 @@ public class PostSufficientFundBalances implements PostTransaction {
     // 2642-PROCESS-CASH-ENCUMBRANCE
     // 2632-PROCESS-OBJTACCT-ENCMBRNC
     private void updateEncumbranceAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimal amount) {
-        if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
+        if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             bal.setAccountEncumbranceAmount(bal.getAccountEncumbranceAmount().subtract(amount));
         }
-        else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode) || KFSConstants.GL_BUDGET_CODE.equals(debitCreditCode)) {
+        else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode) || Constants.GL_BUDGET_CODE.equals(debitCreditCode)) {
             bal.setAccountEncumbranceAmount(bal.getAccountEncumbranceAmount().add(amount));
         }
     }
 
     // 2641-PROCESS-CASH-ACTUAL
     private void updateBudgetAmount(String debitCreditCode, SufficientFundBalances bal, KualiDecimal amount) {
-        if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
+        if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             bal.setCurrentBudgetBalanceAmount(bal.getCurrentBudgetBalanceAmount().subtract(amount));
         }
-        else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode) || KFSConstants.GL_BUDGET_CODE.equals(debitCreditCode)) {
+        else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode) || Constants.GL_BUDGET_CODE.equals(debitCreditCode)) {
             bal.setCurrentBudgetBalanceAmount(bal.getCurrentBudgetBalanceAmount().add(amount));
         }
     }
 
     public String getDestinationName() {
-        return MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(SufficientFundBalances.class).getFullTableName();
+        return "GL_SF_BALANCES_T";
     }
 }

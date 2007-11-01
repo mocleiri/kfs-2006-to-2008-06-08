@@ -13,22 +13,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
 	htmlFormAction="researchRoutingFormNotes" headerDispatch="refresh"
-	feedbackKey="app.krafeedback.link" headerTabActive="notes" 
-	renderMultipart="true" showTabButtons="true">
+	feedbackKey="app.krafeedback.link" headerTabActive="notes" renderMultipart="true" >
 	
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 
 	<kra-rf:routingFormHiddenDocumentFields includeDocumenHeaderIdFields="true" />
-	
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Notes" altText="page help"/>
-	</div>	
 
 	<kra-rf:routingFormNotes />
 	
+	<kul:documentControls transactionalDocument="false" suppressRoutingControls="true" viewOnly="true" /> <!--  viewOnly="true" effectively hides the save button -->
+
 </kul:documentPage>

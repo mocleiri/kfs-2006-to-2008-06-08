@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/FiscalYearFunctionControl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +20,18 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
+public class FiscalYearFunctionControl extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String financialSystemFunctionControlCode;
     private boolean financialSystemFunctionActiveIndicator;
 
     private FunctionControlCode functionControl;
-    private Options universityFiscal;
 
     /**
      * Default constructor.
@@ -44,6 +44,7 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
      * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -53,6 +54,7 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -63,6 +65,7 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
      * Gets the financialSystemFunctionControlCode attribute.
      * 
      * @return Returns the financialSystemFunctionControlCode
+     * 
      */
     public String getFinancialSystemFunctionControlCode() {
         return financialSystemFunctionControlCode;
@@ -72,6 +75,7 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
      * Sets the financialSystemFunctionControlCode attribute.
      * 
      * @param financialSystemFunctionControlCode The financialSystemFunctionControlCode to set.
+     * 
      */
     public void setFinancialSystemFunctionControlCode(String financialSystemFunctionControlCode) {
         this.financialSystemFunctionControlCode = financialSystemFunctionControlCode;
@@ -82,6 +86,7 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
      * Gets the financialSystemFunctionActiveIndicator attribute.
      * 
      * @return Returns the financialSystemFunctionActiveIndicator
+     * 
      */
     public boolean isFinancialSystemFunctionActiveIndicator() {
         return financialSystemFunctionActiveIndicator;
@@ -92,6 +97,7 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
      * Sets the financialSystemFunctionActiveIndicator attribute.
      * 
      * @param financialSystemFunctionActiveIndicator The financialSystemFunctionActiveIndicator to set.
+     * 
      */
     public void setFinancialSystemFunctionActiveIndicator(boolean financialSystemFunctionActiveIndicator) {
         this.financialSystemFunctionActiveIndicator = financialSystemFunctionActiveIndicator;
@@ -133,7 +139,7 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
 
         return equal;
     }
-
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -144,24 +150,6 @@ public class FiscalYearFunctionControl extends PersistableBusinessObjectBase {
         }
         m.put("financialSystemFunctionControlCode", this.financialSystemFunctionControlCode);
         return m;
-    }
-
-    /**
-     * Gets the universityFiscal attribute.
-     * 
-     * @return Returns the universityFiscal.
-     */
-    public Options getUniversityFiscal() {
-        return universityFiscal;
-    }
-
-    /**
-     * Sets the universityFiscal attribute value.
-     * 
-     * @param universityFiscal The universityFiscal to set.
-     */
-    public void setUniversityFiscal(Options universityFiscal) {
-        this.universityFiscal = universityFiscal;
     }
 
 }

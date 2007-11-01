@@ -1,5 +1,5 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,9 +24,8 @@
 
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 
-	<kra-b:budgetHiddenDocumentFields includeDocumenHeaderIdFields="true"	includeTaskPeriodLists="true" />
-  <html:hidden property="budgetDocument.budget.budgetProjectDirectorUniversalIdentifier" />
-  
+	<kra-b:budgetHiddenDocumentFields includeDocumenHeaderIdFields="true"
+		includeTaskPeriodLists="true" />
 
 	<kra-b:budgetNonpersonnelCopyOver />
 

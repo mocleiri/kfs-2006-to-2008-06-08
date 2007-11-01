@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/AccountManagerRouteOption.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +20,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
+public class AccountManagerRouteOption extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -44,6 +46,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -53,6 +56,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -63,6 +67,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Gets the accountNumber attribute.
      * 
      * @return Returns the accountNumber
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -72,6 +77,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Sets the accountNumber attribute.
      * 
      * @param accountNumber The accountNumber to set.
+     * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -82,6 +88,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Gets the personUniversalIdentifier attribute.
      * 
      * @return Returns the personUniversalIdentifier
+     * 
      */
     public String getPersonUniversalIdentifier() {
         return personUniversalIdentifier;
@@ -91,6 +98,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Sets the personUniversalIdentifier attribute.
      * 
      * @param personUniversalIdentifier The personUniversalIdentifier to set.
+     * 
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
@@ -101,6 +109,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Gets the accountManagerRouteOptionIndicator attribute.
      * 
      * @return Returns the accountManagerRouteOptionIndicator
+     * 
      */
     public boolean isAccountManagerRouteOptionIndicator() {
         return accountManagerRouteOptionIndicator;
@@ -111,6 +120,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Sets the accountManagerRouteOptionIndicator attribute.
      * 
      * @param accountManagerRouteOptionIndicator The accountManagerRouteOptionIndicator to set.
+     * 
      */
     public void setAccountManagerRouteOptionIndicator(boolean accountManagerRouteOptionIndicator) {
         this.accountManagerRouteOptionIndicator = accountManagerRouteOptionIndicator;
@@ -121,6 +131,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Gets the account attribute.
      * 
      * @return Returns the account
+     * 
      */
     public Account getAccount() {
         return account;
@@ -140,6 +151,7 @@ public class AccountManagerRouteOption extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;

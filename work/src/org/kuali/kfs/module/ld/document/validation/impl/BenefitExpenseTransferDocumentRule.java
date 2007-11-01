@@ -15,192 +15,327 @@
  */
 package org.kuali.module.labor.rules;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.Document;
-import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.util.ErrorMap;
+import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.chart.bo.Account;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.LaborKeyConstants;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
-import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;
-import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
 import org.kuali.module.labor.bo.LaborObject;
-import org.kuali.module.labor.document.LaborExpenseTransferDocumentBase;
-import org.kuali.module.labor.document.LaborLedgerPostingDocument;
-import org.kuali.module.labor.util.LaborPendingEntryGenerator;
+import org.kuali.module.labor.bo.PositionObjectBenefit;
+import org.kuali.module.labor.document.BenefitExpenseTransferDocument;
 
 /**
  * Business rule(s) applicable to Benefit Expense Transfer documents.
  */
 public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocumentRules {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BenefitExpenseTransferDocumentRule.class);
 
-    /**
-     * Constructs a BenefitExpenseTransferDocumentRule.java.
-     */
     public BenefitExpenseTransferDocumentRule() {
-        super();
+    }
+
+    protected boolean AddAccountingLineBusinessRules(AccountingDocument accountingDocument, AccountingLine accountingLine) {
+        return processCustomAddAccountingLineBusinessRules(accountingDocument, accountingLine);
     }
 
     /**
-     * Overrides the method in class laborExpenseTransferDocumentRules in order validate the object code is a fringe benefit object
-     * code and that the source and target lines have the same account number.
+     * The following criteria will be validated here:
+     * Account must be valid. Object code must be valid. Object code must be a labor object code.
+     * The object code must exist in the ld_labor_obj_t table. 
+     * The field finobj_frngslry_cd for the object code in the ld_labor_obj_t table must have a value of "F". 
+     * Sub-account, if specified, must be valid for account. Sub-object, if
+     * specified, must be valid for account and object code. Position must be valid for fiscal year. FIS enforces this by a direct
+     * lookup of the PeopleSoft HRMS position data table. Kuali cannot do this. (See issue 12.) Amount must not be zero.
+     * -------------------------------------------------------------------------------------------------------- 
+     ! Only fringe benefit labor object codes are allowed on this document. 
+     ! The document must have at least one “FROM” segment and one “TO” segment. 
+     ! The total amount on the “FROM” side must equal the total amount on the “TO” side. 
+     Testing - Transfers cannot be made between two different fringe benefit labor object codes. 
+     ??  Only the “Account” and “Amount” fields may be edited in the “TO” zone. 
+     * The Justification field is required and should include as much pertinent detail as possible. 
+     * The Fiscal Year field on this eDoc is used differently as compared to other TP documents. In the Benefit Transfer document, this field is
+     * used to load the appropriate data onto the Labor Ledger Balance screen. Pending Ledger Entries are created immediately as
+     * part of the routing process. In addition to creating pending entries with a balance type of “AC” the Benefit Transfer
+     * document requires that a pending entry be created with a balance type of “A2”. Only allow a transfer of benefit dollars up to
+     * the amount that already exist in the labor ledger detail for a given pay period. Check must exist that verifies the “TO”
+     * account accepts fringes. If no benefits allowed provide error message. Allow an override flag to allow the fringe to be
+     * transferred to the account. Allow a negative amount to be moved from one account to another but do not allow a negative
+     * amount to be created when the balance is positive.
      * 
-     * @param accountingDocument
-     * @param accountingLine
-     * @return boolean false when an error is found in any validation
-     * @see org.kuali.kfs.rules.AccountingDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.kfs.document.AccountingDocument,
-     *      org.kuali.kfs.bo.AccountingLine)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine)
+     * @param TransactionalDocument
+     * @param AccountingLine
+     * @return
      */
     @Override
     protected boolean processCustomAddAccountingLineBusinessRules(AccountingDocument accountingDocument, AccountingLine accountingLine) {
-        boolean isValid = super.processCustomAddAccountingLineBusinessRules(accountingDocument, accountingLine);
 
-        // only fringe benefit labor object codes are allowed on the benefit expense transfer document
-        if (!isFringeBenefitObjectCode(accountingLine)) {
-            reportError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, LaborKeyConstants.INVALID_FRINGE_OBJECT_CODE_ERROR, accountingLine.getAccountNumber());
-            isValid = false;
-        }
+        // Transfers cannot be made between two different fringe benefit labor object codes.
+        AccountingDocument benefitDoc = (AccountingDocument) accountingDocument;
+        List<AccountingLine> accountingLines = new ArrayList();
+        Collection<PositionObjectBenefit> positionObjectBenefits;
 
-        // Only check this rule for source accounting lines
-        boolean isTargetLine = accountingLine.isTargetAccountingLine();
-        if (!isTargetLine) {
-            // ensure the accounts in source accounting lines are same
-            if (!hasSameAccount(accountingDocument, accountingLine)) {
-                reportError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, LaborKeyConstants.ERROR_ACCOUNT_NOT_SAME);
-                isValid = false;
+        accountingLines.addAll(benefitDoc.getSourceAccountingLines());
+        accountingLines.addAll(benefitDoc.getTargetAccountingLines());
+
+        for (AccountingLine lines : accountingLines) {
+            if ((accountingLine.getFinancialObjectCode() != null) && (lines.getFinancialObjectCode() != null)) {
+
+                if (!accountingLine.getFinancialObjectCode().equals(lines.getFinancialObjectCode())) {
+                    reportError(PropertyConstants.ACCOUNT, KeyConstants.Labor.DISTINCT_OBJECT_CODE_ERROR, accountingLine.getAccountNumber());
+                    return false;
+                }
             }
         }
 
-        return isValid;
+        // Retrieve the labor object code to make sure it is fringe.
+        // It must have a value of "F".
+
+        ErrorMap errorMap = GlobalVariables.getErrorMap();
+        Map fieldValues = new HashMap();
+        fieldValues.put("financialObjectCode", accountingLine.getFinancialObjectCode().toString());
+        ArrayList laborObjects = (ArrayList) SpringServiceLocator.getBusinessObjectService().findMatching(LaborObject.class, fieldValues);
+
+        // Check if the object code is labor related
+        if (laborObjects.size() == 0) {
+            reportError(PropertyConstants.ACCOUNT, KeyConstants.Labor.LABOR_OBJECT_MISSING_OBJECT_CODE_ERROR, accountingLine.getAccountNumber());
+            return false;
+        }
+
+        // Check for fringe status
+        LaborObject laborObject = (LaborObject) laborObjects.get(0);
+        String FringeOrSalaryCode = laborObject.getFinancialObjectFringeOrSalaryCode();
+
+        if (!FringeOrSalaryCode.equals(LaborConstants.BenefitExpenseTransfer.LABOR_LEDGER_BENEFIT_CODE)) {
+            reportError(PropertyConstants.ACCOUNT, KeyConstants.Labor.INVALID_FRINGE_OBJECT_CODE_ERROR, accountingLine.getAccountNumber());
+            return false;
+        }
+
+        ExpenseTransferAccountingLine benefitExpenseTransferAccountingLine = (ExpenseTransferAccountingLine) accountingLine;
+
+        // Validate the accounting year
+        fieldValues.clear();
+        fieldValues.put("universityFiscalYear", benefitExpenseTransferAccountingLine.getPayrollEndDateFiscalYear());
+        AccountingPeriod accountingPeriod = new AccountingPeriod();
+        if (SpringServiceLocator.getBusinessObjectService().countMatching(AccountingPeriod.class, fieldValues) == 0) {
+            reportError(PropertyConstants.ACCOUNT, KeyConstants.Labor.INVALID_PAY_YEAR);
+            return false;
+        }
+
+        // Validate the accounting period code
+        fieldValues.clear();
+        fieldValues.put("universityFiscalPeriodCode", benefitExpenseTransferAccountingLine.getPayrollEndDateFiscalPeriodCode());
+        accountingPeriod = new AccountingPeriod();
+        if (SpringServiceLocator.getBusinessObjectService().countMatching(AccountingPeriod.class, fieldValues) == 0) {
+            reportError(PropertyConstants.ACCOUNT, KeyConstants.Labor.INVALID_PAY_PERIOD_CODE);
+            return false;
+        }
+        
+        return true;
     }
 
     /**
-     * Validates the target and source lines have the same object code.
+     * This document specific routing business rule check calls the check that makes sure that the budget year is consistent for all
+     * accounting lines.
      * 
-     * @param document
-     * @return boolean false when the source and target lines have different object codes.
-     * @see org.kuali.module.labor.rules.LaborExpenseTransferDocumentRules#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
+     * @see org.kuali.core.rule.DocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
      */
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
+
         boolean isValid = super.processCustomRouteDocumentBusinessRules(document);
 
-        LaborExpenseTransferDocumentBase expenseTransferDocument = (LaborExpenseTransferDocumentBase) document;
+        BenefitExpenseTransferDocument setDoc = (BenefitExpenseTransferDocument) document;
 
-        // benefit transfers cannot be made between two different fringe benefit labor object codes.
+        List sourceLines = new ArrayList();
+        List targetLines = new ArrayList();
+
+        // set source and target accounting lines
+        sourceLines.addAll(setDoc.getSourceAccountingLines());
+        targetLines.addAll(setDoc.getTargetAccountingLines());
+
+        // check to ensure totals of accounting lines in source and target sections match
         if (isValid) {
-            boolean hasSameFringeBenefitObjectCodes = hasSameFringeBenefitObjectCodes(expenseTransferDocument);
-            if (!hasSameFringeBenefitObjectCodes) {
-                reportError(KFSPropertyConstants.TARGET_ACCOUNTING_LINES, LaborKeyConstants.DISTINCT_OBJECT_CODE_ERROR);
-                isValid = false;
-            }
+            isValid = isAccountingLineTotalsMatch(sourceLines, targetLines);
+        }
+
+        // check to ensure totals of accounting lines in source and target sections match by pay FY + pay period
+        if (isValid) {
+            isValid = isAccountingLineTotalsMatchByPayFYAndPayPeriod(sourceLines, targetLines);
         }
 
         return isValid;
     }
 
     /**
-     * Generates the expense pending entries.
-     * 
-     * @param document LaborLedgerPostingDocument type
-     * @param accountingLine AccountingLine type
-     * @return boolean
-     * @see org.kuali.module.labor.rules.LaborExpenseTransferDocumentRules#processGenerateLaborLedgerPendingEntries(org.kuali.module.labor.document.LaborLedgerPostingDocument,
-     *      org.kuali.module.labor.bo.ExpenseTransferAccountingLine, org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
+     * @param sourceLines
+     * @param targetLines
+     * @return
      */
-    @Override
-    public boolean processGenerateLaborLedgerPendingEntries(LaborLedgerPostingDocument document, AccountingLine accountingLine, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
-        LOG.info("started processGenerateLaborLedgerPendingEntries()");
+    private boolean isAccountingLineTotalsMatch(List sourceLines, List targetLines) {
 
-        ExpenseTransferAccountingLine expenseTransferAccountingLine = (ExpenseTransferAccountingLine) accountingLine;
-        List<LaborLedgerPendingEntry> expensePendingEntries = LaborPendingEntryGenerator.generateExpensePendingEntries(document, expenseTransferAccountingLine, sequenceHelper);
-        document.getLaborLedgerPendingEntries().addAll(expensePendingEntries);
+        boolean isValid = true;
 
-        return true;
-    }
+        AccountingLine line = null;
 
-    /**
-     * Determines whether the object code of given accounting line is a fringe benefit labor object code
-     * 
-     * @param accountingLine the given accounting line
-     * @return true if the object code of given accounting line is a fringe benefit labor object code; otherwise, false
-     */
-    private boolean isFringeBenefitObjectCode(AccountingLine accountingLine) {
-        LOG.debug("started isFringeBenefitObjectCode");
-        ExpenseTransferAccountingLine expenseTransferAccountingLine = (ExpenseTransferAccountingLine) accountingLine;
+        // totals for the from and to lines.
+        KualiDecimal sourceLinesAmount = new KualiDecimal(0);
+        KualiDecimal targetLinesAmount = new KualiDecimal(0);
 
-        LaborObject laborObject = expenseTransferAccountingLine.getLaborObject();
-        if (laborObject == null) {
-            return false;
+        // sum source lines
+        for (Iterator i = sourceLines.iterator(); i.hasNext();) {
+            line = (ExpenseTransferAccountingLine) i.next();
+            sourceLinesAmount = sourceLinesAmount.add(line.getAmount());
         }
 
-        String fringeOrSalaryCode = laborObject.getFinancialObjectFringeOrSalaryCode();
-        return StringUtils.equals(LaborConstants.BenefitExpenseTransfer.LABOR_LEDGER_BENEFIT_CODE, fringeOrSalaryCode);
+        // sum target lines
+        for (Iterator i = targetLines.iterator(); i.hasNext();) {
+            line = (ExpenseTransferAccountingLine) i.next();
+            targetLinesAmount = targetLinesAmount.add(line.getAmount());
+        }
+
+        // if totals don't match, then add error message
+        if (sourceLinesAmount.compareTo(targetLinesAmount) != 0) {
+            isValid = false;
+            reportError(PropertyConstants.SOURCE_ACCOUNTING_LINES, KeyConstants.Labor.ACCOUNTING_LINE_TOTALS_MISMATCH_ERROR);
+        }
+
+        return isValid;
     }
 
     /**
-     * Determines whether the given accouting line has the same account as the source accounting lines
-     * 
-     * @param accountingDocument the given accouting document
-     * @param accountingLine the given accounting line
-     * @return true if the given accouting line has the same account as the source accounting lines; otherwise, false
+     * @param sourceLines
+     * @param targetLines
+     * @return
      */
-    private boolean hasSameAccount(AccountingDocument accountingDocument, AccountingLine accountingLine) {
-        LOG.debug("started hasSameAccount(AccountingDocument, AccountingLine)");
+    private boolean isAccountingLineTotalsMatchByPayFYAndPayPeriod(List sourceLines, List targetLines) {
 
-        LaborExpenseTransferDocumentBase expenseTransferDocument = (LaborExpenseTransferDocumentBase) accountingDocument;
-        List<ExpenseTransferSourceAccountingLine> sourceAccountingLines = expenseTransferDocument.getSourceAccountingLines();
+        boolean isValid = true;
 
-        Account cachedAccount = accountingLine.getAccount();
-        for (AccountingLine sourceAccountingLine : sourceAccountingLines) {
-            Account account = sourceAccountingLine.getAccount();
+        Map sourceLinesMap = new HashMap();
+        Map targetLinesMap = new HashMap();
 
-            // account number was not retrieved correctly, so the two statements are used to populate the fields manually
-            account.setChartOfAccountsCode(sourceAccountingLine.getChartOfAccountsCode());
-            account.setAccountNumber(sourceAccountingLine.getAccountNumber());
+        // sum source lines by pay fy and pay period, store in map by key PayFY+PayPeriod
+        sourceLinesMap = sumAccountingLineAmountsByPayFYAndPayPeriod(sourceLines);
 
-            if (!account.equals(cachedAccount)) {
-                return false;
+        // sum source lines by pay fy and pay period, store in map by key PayFY+PayPeriod
+        targetLinesMap = sumAccountingLineAmountsByPayFYAndPayPeriod(targetLines);
+
+        // if totals don't match by PayFY+PayPeriod categories, then add error message
+        if (compareAccountingLineTotalsByPayFYAndPayPeriod(sourceLinesMap, targetLinesMap) == false) {
+            isValid = false;
+            reportError(PropertyConstants.SOURCE_ACCOUNTING_LINES, KeyConstants.Labor.ACCOUNTING_LINE_TOTALS_BY_PAYFY_PAYPERIOD_MISMATCH_ERROR);
+        }
+
+        return isValid;
+    }
+
+
+    private boolean compareAccountingLineTotalsByPayFYAndPayPeriod(Map sourceLinesMap, Map targetLinesMap) {
+
+        boolean isValid = true;
+        Map.Entry entry = null;
+        String currentKey = null;
+        KualiDecimal sourceLinesAmount = new KualiDecimal(0);
+        KualiDecimal targetLinesAmount = new KualiDecimal(0);
+
+
+        // Loop through source lines comparing against target lines
+        for (Iterator i = sourceLinesMap.entrySet().iterator(); i.hasNext() && isValid;) {
+            // initialize
+            entry = (Map.Entry) i.next();
+            currentKey = (String) entry.getKey();
+            sourceLinesAmount = (KualiDecimal) entry.getValue();
+
+            if (targetLinesMap.containsKey(currentKey)) {
+                targetLinesAmount = (KualiDecimal) targetLinesMap.get(currentKey);
+
+                if (sourceLinesAmount.compareTo(targetLinesAmount) != 0) {
+                    isValid = false;
+                }
+
+            }
+            else {
+                isValid = false;
             }
         }
 
-        return true;
+        /*
+         * Now loop through target lines comparing against source lines. This finds missing entries from either direction (source or
+         * target)
+         */
+        for (Iterator i = targetLinesMap.entrySet().iterator(); i.hasNext() && isValid;) {
+            // initialize
+            entry = (Map.Entry) i.next();
+            currentKey = (String) entry.getKey();
+            targetLinesAmount = (KualiDecimal) entry.getValue();
+
+            if (sourceLinesMap.containsKey(currentKey)) {
+                sourceLinesAmount = (KualiDecimal) sourceLinesMap.get(currentKey);
+
+                if (targetLinesAmount.compareTo(sourceLinesAmount) != 0) {
+                    isValid = false;
+                }
+
+            }
+            else {
+                isValid = false;
+            }
+        }
+
+
+        return isValid;
     }
 
-    /**
-     * Determines whether target accouting lines have the same fringe benefit object codes as source accounting lines
-     * 
-     * @param accountingDocument the given accounting document
-     * @return true if target accouting lines have the same fringe benefit object codes as source accounting lines; otherwise, false
-     */
-    protected boolean hasSameFringeBenefitObjectCodes(AccountingDocument accountingDocument) {
-        LOG.debug("started hasSameFringeBenefitObjectCodes(accountingDocument)");
-        LaborExpenseTransferDocumentBase expenseTransferDocument = (LaborExpenseTransferDocumentBase) accountingDocument;
+    private Map sumAccountingLineAmountsByPayFYAndPayPeriod(List accountingLines) {
 
-        Set<String> objectCodesFromSourceLine = new HashSet<String>();
-        for (Object sourceAccountingLine : expenseTransferDocument.getSourceAccountingLines()) {
-            AccountingLine line = (AccountingLine) sourceAccountingLine;
-            objectCodesFromSourceLine.add(line.getFinancialObjectCode());
+        ExpenseTransferAccountingLine line = null;
+        KualiDecimal linesAmount = new KualiDecimal(0);
+        Map linesMap = new HashMap();
+        String payFYPeriodKey = null;
+
+        // go through source lines adding amounts to appropriate place in map
+        for (Iterator i = accountingLines.iterator(); i.hasNext();) {
+            // initialize
+            line = (ExpenseTransferAccountingLine) i.next();
+            linesAmount = new KualiDecimal(0);
+
+            // create hash key
+            payFYPeriodKey = createPayFYPeriodKey(line.getPayrollEndDateFiscalYear(), line.getPayrollEndDateFiscalPeriodCode());
+
+            // if entry exists, pull from hash
+            if (linesMap.containsKey(payFYPeriodKey)) {
+                linesAmount = (KualiDecimal) linesMap.get(payFYPeriodKey);
+            }
+
+            // update and store
+            linesAmount = linesAmount.add(line.getAmount());
+            linesMap.put(payFYPeriodKey, linesAmount);
         }
 
-        Set<String> objectCodesFromTargetLine = new HashSet<String>();
-        for (Object targetAccountingLine : expenseTransferDocument.getTargetAccountingLines()) {
-            AccountingLine line = (AccountingLine) targetAccountingLine;
-            objectCodesFromTargetLine.add(line.getFinancialObjectCode());
-        }
+        return linesMap;
+    }
 
-        if (objectCodesFromSourceLine.size() != objectCodesFromTargetLine.size()) {
-            return false;
-        }
+    private String createPayFYPeriodKey(Integer payFiscalYear, String payPeriodCode) {
 
-        return objectCodesFromSourceLine.containsAll(objectCodesFromTargetLine);
+        StringBuffer payFYPeriodKey = new StringBuffer();
+
+        payFYPeriodKey.append(payFiscalYear);
+        payFYPeriodKey.append(payPeriodCode);
+
+        return payFYPeriodKey.toString();
     }
 }

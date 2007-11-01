@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +35,12 @@ import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
 import org.kuali.module.kra.budget.service.BudgetModularService;
 import org.kuali.module.kra.budget.service.BudgetNonpersonnelService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelFormHelper;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * This class provides implementations for BudgetModularService interface
+ * 
+ * 
+ */
 public class BudgetModularServiceImpl implements BudgetModularService {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetModularServiceImpl.class);
@@ -47,8 +52,6 @@ public class BudgetModularServiceImpl implements BudgetModularService {
      * @see org.kuali.module.kra.budget.service.BudgetModularService#generateModularBudget(org.kuali.module.kra.budget.bo.Budget)
      */
     public void generateModularBudget(Budget budget) {
-
-        budgetNonpersonnelService.refreshNonpersonnelObjectCode(budget.getNonpersonnelItems());
 
         List nonpersonnelCategories = new ArrayList();
         try {
@@ -63,8 +66,8 @@ public class BudgetModularServiceImpl implements BudgetModularService {
     }
 
     /**
-     * @see org.kuali.module.kra.budget.service.BudgetModularService#generateModularBudget(org.kuali.module.kra.budget.bo.Budget,
-     *      List nonpersonnelCategories)
+     * @see org.kuali.module.kra.budget.service.BudgetModularService#generateModularBudget(org.kuali.module.kra.budget.bo.Budget, List
+     *      nonpersonnelCategories)
      */
     public void generateModularBudget(Budget budget, List nonpersonnelCategories) {
 
@@ -143,7 +146,7 @@ public class BudgetModularServiceImpl implements BudgetModularService {
 
         BudgetModular modularBudget;
         if (ObjectUtils.isNotNull(budget.getModularBudget())) { // If modular budget already present in budget, just rebuild that
-            // one.
+                                                                // one.
             modularBudget = budget.getModularBudget();
             if (modularBudget.getBudgetModularIncrementAmount() == null) { // Might not be stored
                 modularBudget.setBudgetModularIncrementAmount(modularAgencyHelper.getBudgetModularIncrementAmount());
@@ -449,6 +452,8 @@ public class BudgetModularServiceImpl implements BudgetModularService {
 
     /**
      * This class encapsulates agency-related information needed to process Modular Budget objects.
+     * 
+     * 
      */
     private class ModularAgencyHelper {
         private KualiInteger budgetModularIncrementAmount;

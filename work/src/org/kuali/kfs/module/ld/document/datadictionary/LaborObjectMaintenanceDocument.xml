@@ -35,11 +35,14 @@
 		<documentTypeName>KualiLaborObjectMaintenanceDocument</documentTypeName>
 		<documentTypeCode>LOBJ</documentTypeCode>
 
-		<label>Labor Object Code</label>
+		<label>Labor Object Maintenance Document</label>
+		<shortLabel>Lab Obj Maint Doc</shortLabel>
 		
-		<summary>Labor Object Code Maintenance Document</summary>
+		<summary>Labor Object Maintenance Document</summary>
 		<description>Document used to create or update Labor objects</description>
-        <help parameterNamespace="KFS-LD" parameterDetailType="LaborObject" parameterName="LABOR_OBJECT_BENEFITS" />
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_LABOR_OBJECT" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
 			<field attributeName="universityFiscalYear" />
@@ -48,6 +51,7 @@
 		</lockingKeys>         
 
         <defaultExistenceChecks>
+            <reference attributeName="universityFiscalYear" attributeToHighlightOnFail="universityFiscalYear" />
             <reference attributeName="chartOfAccounts" attributeToHighlightOnFail="chartOfAccountsCode" />          
             <reference attributeName="financialObject" attributeToHighlightOnFail="financialObjectCode" />
         </defaultExistenceChecks>
@@ -58,12 +62,7 @@
 	            	<maintainableField name="universityFiscalYear" required="true" />
 	            	<maintainableField name="chartOfAccountsCode" required="true" />
 	            	<maintainableField name="financialObjectCode" required="true"/>
-	            	<maintainableField name="detailPositionRequiredIndicator" />
-                    <maintainableField name="financialObjectFringeOrSalaryCode" />
-                    <maintainableField name="financialObjectHoursRequiredIndicator" />
-                    <maintainableField name="financialObjectPayTypeCode" />
-                    <maintainableField name="positionObjectGroupCode" />   
-	            	<maintainableField name="versionNumber" />
+	            	<maintainableField name="versionNumber" required="false"/>
 	         	</maintainableItems>
 	        </maintainableSection>
 	    </maintainableSections>

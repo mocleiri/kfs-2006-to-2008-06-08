@@ -41,10 +41,10 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.service.AccountingPeriodService;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.fixtures.UserNameFixture;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentVersionMonitor;
@@ -55,7 +55,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
 
 public final class AccountingDocumentTestUtils extends KualiTestBase {
     private static Logger LOG = Logger.getLogger(AccountingDocumentTestUtils.class);
-
+    
     public void testPlaceholder() {
         assertTrue("Test needs to have at least one test.", true);
     }
@@ -128,14 +128,14 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             assertTrue(failedAsExpected);
         }
     }
-
+    
     public static void testConvertIntoErrorCorrection_errorCorrectionDisallowed(AccountingDocument document, DataDictionaryService dataDictionaryService) throws Exception {
         // change the dataDictionary to disallow errorCorrection
         DataDictionary d = dataDictionaryService.getDataDictionary();
         Class documentClass = document.getClass();
-        boolean originalValue = ((TransactionalDocumentEntry) d.getDocumentEntry(documentClass.getName())).getAllowsErrorCorrection();
+        boolean originalValue = ((TransactionalDocumentEntry)d.getDocumentEntry(documentClass.getName())).getAllowsErrorCorrection();
         try {
-            ((TransactionalDocumentEntry) d.getDocumentEntry(documentClass.getName())).setAllowsErrorCorrection(false);
+            ((TransactionalDocumentEntry)d.getDocumentEntry(documentClass.getName())).setAllowsErrorCorrection(false);
 
             boolean failedAsExpected = false;
             try {
@@ -148,7 +148,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             assertTrue(failedAsExpected);
         }
         finally {
-            ((TransactionalDocumentEntry) d.getDocumentEntry(documentClass.getName())).setAllowsErrorCorrection(originalValue);
+            ((TransactionalDocumentEntry)d.getDocumentEntry(documentClass.getName())).setAllowsErrorCorrection(originalValue);
         }
     }
 
@@ -175,8 +175,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testRouteDocument(AccountingDocument document, DocumentService documentService) throws Exception {
         document.prepareForSave();
@@ -189,8 +189,9 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
+     * 
      */
 
     public static void testConvertIntoErrorCorrection(AccountingDocument document, int expectedPrePECount, DocumentService documentService, TransactionalDocumentDictionaryService dictionaryService) throws Exception {
@@ -211,7 +212,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             String preCorrectCorrectsId = document.getDocumentHeader().getFinancialDocumentInErrorNumber();
 
             int preCorrectPECount = document.getGeneralLedgerPendingEntries().size();
-            // int preCorrectNoteCount = document.getDocumentHeader().getNotes().size();
+//            int preCorrectNoteCount = document.getDocumentHeader().getNotes().size();
 
             List<? extends SourceAccountingLine> preCorrectSourceLines = (List<? extends SourceAccountingLine>) ObjectUtils.deepCopy(new ArrayList(document.getSourceAccountingLines()));
             List<? extends TargetAccountingLine> preCorrectTargetLines = (List<? extends TargetAccountingLine>) ObjectUtils.deepCopy(new ArrayList(document.getTargetAccountingLines()));
@@ -220,7 +221,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             assertNull(preCorrectCorrectsId);
 
             assertEquals(expectedPrePECount, preCorrectPECount);
-            // assertEquals(0, preCorrectNoteCount);
+//            assertEquals(0, preCorrectNoteCount);
 
             // do the error correction
             ((Correctable) document).toErrorCorrection();
@@ -232,13 +233,13 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
             int postCorrectPECount = document.getGeneralLedgerPendingEntries().size();
             LOG.debug("postcorrect PE count = " + postCorrectPECount);
             assertEquals(0, postCorrectPECount);
-            // TODO: revisit this is it still needed
-            // // count 1 note, compare to "correction" text
-            // int postCorrectNoteCount = document.getDocumentHeader().getNotes().size();
-            // assertEquals(1, postCorrectNoteCount);
-            // DocumentNote note = document.getDocumentHeader().getNote(0);
-            // LOG.debug("postcorrect note text = " + note.getFinancialDocumentNoteText());
-            // assertTrue(note.getFinancialDocumentNoteText().indexOf("correction") != -1);
+              //TODO: revisit this is it still needed
+//            // count 1 note, compare to "correction" text
+//            int postCorrectNoteCount = document.getDocumentHeader().getNotes().size();
+//            assertEquals(1, postCorrectNoteCount);
+//            DocumentNote note = document.getDocumentHeader().getNote(0);
+//            LOG.debug("postcorrect note text = " + note.getFinancialDocumentNoteText());
+//            assertTrue(note.getFinancialDocumentNoteText().indexOf("correction") != -1);
             // correctsId should be equal to old id
             String correctsId = document.getDocumentHeader().getFinancialDocumentInErrorNumber();
             LOG.debug("postcorrect correctsId = " + correctsId);
@@ -269,8 +270,8 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testSaveDocument(AccountingDocument document, DocumentService documentService) throws Exception {
         // get document parameter
@@ -281,14 +282,13 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
 
         // retrieve
         AccountingDocument result = (AccountingDocument) documentService.getByDocumentHeaderId(document.getDocumentNumber());
-
         // verify
         assertMatch(document, result);
     }
 
     /**
-     * @ShouldCommitTransactions needed for this test
-     * @see ShouldCommitTransactions
+     * @TestsWorkflowViaDatabase needed for this test
+     * @see TestsWorkflowViaDatabase
      */
     public static void testConvertIntoCopy(AccountingDocument document, DocumentService documentService, int expectedPrePECount) throws Exception {
         // save the original doc, wait for status change
@@ -301,7 +301,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
         String preCopyCopiedFromId = document.getDocumentHeader().getFinancialDocumentTemplateNumber();
 
         int preCopyPECount = document.getGeneralLedgerPendingEntries().size();
-        // int preCopyNoteCount = document.getDocumentHeader().getNotes().size();
+//        int preCopyNoteCount = document.getDocumentHeader().getNotes().size();
         String preCopyStatus = document.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus();
 
         List<? extends SourceAccountingLine> preCopySourceLines = (List<? extends SourceAccountingLine>) ObjectUtils.deepCopy((ArrayList) document.getSourceAccountingLines());
@@ -311,7 +311,7 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
         assertNull(preCopyCopiedFromId);
 
         assertEquals(expectedPrePECount, preCopyPECount);
-        // assertEquals(0, preCopyNoteCount);
+//        assertEquals(0, preCopyNoteCount);
         assertEquals("R", preCopyStatus);
         // do the copy
         ((Copyable) document).toCopy();
@@ -325,13 +325,13 @@ public final class AccountingDocumentTestUtils extends KualiTestBase {
         // pending entries should be cleared
         int postCopyPECount = document.getGeneralLedgerPendingEntries().size();
         assertEquals(0, postCopyPECount);
-
-        // TODO: revisit this is it still needed
+        
+        //TODO: revisit this is it still needed
         // count 1 note, compare to "copied" text
-        // int postCopyNoteCount = document.getDocumentHeader().getNotes().size();
-        // assertEquals(1, postCopyNoteCount);
-        // DocumentNote note = document.getDocumentHeader().getNote(0);
-        // assertTrue(note.getFinancialDocumentNoteText().indexOf("copied from") != -1);
+//        int postCopyNoteCount = document.getDocumentHeader().getNotes().size();
+//        assertEquals(1, postCopyNoteCount);
+//        DocumentNote note = document.getDocumentHeader().getNote(0);
+//        assertTrue(note.getFinancialDocumentNoteText().indexOf("copied from") != -1);
         // copiedFrom should be equal to old id
         String copiedFromId = document.getDocumentHeader().getFinancialDocumentTemplateNumber();
         assertEquals(preCopyId, copiedFromId);

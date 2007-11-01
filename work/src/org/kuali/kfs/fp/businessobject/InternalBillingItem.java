@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/InternalBillingItem.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +20,15 @@ package org.kuali.module.financial.bo;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
  * Internal Billing Item Business Object
+ * 
+ * 
  */
-public class InternalBillingItem extends PersistableBusinessObjectBase {
+public class InternalBillingItem extends BusinessObjectBase {
 
     private static final long serialVersionUID = -2830091652446423539L;
     private String documentNumber;

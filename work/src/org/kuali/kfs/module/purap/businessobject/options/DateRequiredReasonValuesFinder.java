@@ -23,29 +23,22 @@ import java.util.List;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.bo.DeliveryRequiredDateReason;
 
-/**
- * Value Finder for Date Required Reasons.
- */
 public class DateRequiredReasonValuesFinder extends KeyValuesBase {
 
-    /**
-     * Returns code/description pairs of all Date Required Reasons.
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
-     */
     public List getKeyValues() {
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         Collection codes = boService.findAll(DeliveryRequiredDateReason.class);
         List labels = new ArrayList();
         labels.add(new KeyLabelPair("", ""));
         for (Iterator iter = codes.iterator(); iter.hasNext();) {
-            DeliveryRequiredDateReason reason = (DeliveryRequiredDateReason) iter.next();
-            labels.add(new KeyLabelPair(reason.getDeliveryRequiredDateReasonCode(), reason.getDeliveryRequiredDateReasonCode() + " - " + reason.getDeliveryRequiredDateReasonDescription()));
+            DeliveryRequiredDateReason reason = (DeliveryRequiredDateReason)iter.next();
+            labels.add(new KeyLabelPair(reason.getDeliveryRequiredDateReasonCode(), 
+                    reason.getDeliveryRequiredDateReasonCode() + " - " + reason.getDeliveryRequiredDateReasonDescription()));
         }
-
         return labels;
     }
 }

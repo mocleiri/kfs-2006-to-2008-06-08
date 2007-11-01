@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service;
 
@@ -21,59 +28,34 @@ import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
+/**
+ * @author Laran Evans <lc278@cornell.edu>
+ * @version $Id: OriginEntryGroupService.java,v 1.7.2.1 2006-07-26 21:51:40 abyrne Exp $
+ */
+
 public interface OriginEntryGroupService {
-    public Collection getGroupsFromSource(String sourceCode);
-
     /**
-     * Mark a group as don't process
+     * Create the backup group which has all the entries from
+     * all the groups where all the flags are set Y.
      * 
-     * @param groupId
-     */
-    public void dontProcessGroup(Integer groupId);
-
-    /**
-     * Marks all backup groups (source code BACK) in the database so that they will not be scrubbed when the nightly scrubber step
-     * runs again.
-     */
-    public void markScrubbableBackupGroupsAsUnscrubbable();
-
-    /**
-     * Marks all postable scrubber valid groups (source code SCV) in the database so that they will not be posted when the main
-     * posted runs
-     */
-    public void markPostableScrubberValidGroupsAsUnpostable();
-
-    /**
-     * Marks all of the origin entry groups that would be returned from getIcrGroupsToPost() as don't process
-     */
-    public void markPostableIcrGroupsAsUnpostable();
-
-    /**
-     * Get the newest scrubber error group
-     * 
-     * @return
-     */
-    public OriginEntryGroup getNewestScrubberErrorGroup();
-
-    /**
-     * Create the backup group which has all the entries from all the groups where all the flags are set Y.
      */
     public void createBackupGroup();
 
     /**
-     * Create the backup group which has all the entries from all the groups where all the flags are set Y.
-     */
-    public void createLaborBackupGroup();
-
-
-    /**
-     * Delete all the groups (and entries) where the group is this many days old or older
+     * Delete all the groups (and entries) where the
+     * group is this many days old or older
      * 
      * @param days
      */
     public void deleteOlderGroups(int days);
 
-    public void deleteGroups(Collection<OriginEntryGroup> groupsToDelete);
+    /**
+     * Get a group by its id
+     * 
+     * @param groupId
+     * @return
+     */
+    public OriginEntryGroup getOriginEntryGroup(String groupId);
 
     /**
      * Get groups that match
@@ -87,31 +69,15 @@ public interface OriginEntryGroupService {
 
     public Collection getGroupsToPost();
 
-    /**
-     * get entry groups to be posted that have the given group source code
-     * 
-     * @param entryGroupSourceCode the given group source code
-     * @return the entry groups to be posted that have the given group source code
-     */
-    public Collection getGroupsToPost(String entryGroupSourceCode);
-
     public Collection getIcrGroupsToPost();
 
     /**
-     * Gets a collection of all scrubbable backup groups (i.e. scrub, valid, process indicators all true)
-     * 
-     * @return
-     */
-    public Collection<OriginEntryGroup> getAllScrubbableBackupGroups();
-
-    /**
-     * Get all the unscrubbed backup groups for Labor
+     * Get all the unscrubbed backup groups
      * 
      * @param backupDate
      * @return
      */
-    public Collection getLaborBackupGroups(Date backupDate);
-
+    public Collection getBackupGroups(Date backupDate);
 
     /**
      * Get all the groups that need to be put into the backup group
@@ -139,18 +105,6 @@ public interface OriginEntryGroupService {
      * @param group
      */
     public void save(OriginEntryGroup group);
-
+    
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id);
-
-    public Collection getAllOriginEntryGroup();
-
-    public Collection getRecentGroupsByDays(int days);
-
-    /**
-     * Returns whether the group indicated with the group ID still exists within the system
-     * 
-     * @param groupId
-     * @return
-     */
-    public boolean getGroupExists(Integer groupId);
 }

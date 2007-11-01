@@ -37,10 +37,10 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.labor.bo.EmployeeFunding;
 import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
+import org.kuali.module.labor.rules.DebitCreditUtil;
 import org.kuali.module.labor.service.LaborInquiryOptionsService;
 import org.kuali.module.labor.service.LaborLedgerBalanceService;
 import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
-import org.kuali.module.labor.util.DebitCreditUtil;
 import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.web.inquirable.EmployeeFundingInquirableImpl;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,8 +160,7 @@ public class EmployeeFundingLookupableHelperServiceImpl extends AbstractLookupab
     }
 
     /**
-     * update the amount of the given employee funding with the given pending entry
-     * 
+     * update the amount of the given employee funding with the given pending entry 
      * @param employeeFunding the given employee funding
      * @param pendingEntry the given pending entry
      */
@@ -180,7 +179,6 @@ public class EmployeeFundingLookupableHelperServiceImpl extends AbstractLookupab
 
     /**
      * determine whether the given pending entry is qualified to be processed as an employee funding
-     * 
      * @param pendingEntry the given pending entry
      * @return true if the given pending entry is qualified to be processed as an employee funding; otherwise, false
      */

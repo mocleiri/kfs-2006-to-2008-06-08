@@ -22,11 +22,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
@@ -37,13 +34,13 @@ import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.CreditMemoCreateService;
 import org.kuali.module.purap.service.CreditMemoService;
+import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
+import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.PaymentRequestService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
-import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.bo.VendorAddress;
 import org.kuali.module.vendor.bo.VendorDetail;
@@ -64,8 +61,8 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
      */
     public void populateDocumentAfterInit(CreditMemoDocument cmDocument) {
 
-        // make a call to search for expired/closed accounts
-        HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList = SpringContext.getBean(AccountsPayableService.class).getExpiredOrClosedAccountList(cmDocument);
+        //make a call to search for expired/closed accounts
+        HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList = SpringContext.getBean(AccountsPayableService.class).getExpiredOrClosedAccountList( cmDocument );
 
         if (cmDocument.isSourceDocumentPaymentRequest()) {
             populateDocumentFromPreq(cmDocument, expiredOrClosedAccountList);
@@ -78,13 +75,12 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
         }
 
         populateDocumentDescription(cmDocument);
-
-        // write a note for expired/closed accounts if any exist and add a message stating there were expired/closed accounts at the
-        // top of the document
+        
+        //write a note for expired/closed accounts if any exist and add a message stating there were expired/closed accounts at the top of the document
         SpringContext.getBean(AccountsPayableService.class).generateExpiredOrClosedAccountNote(cmDocument, expiredOrClosedAccountList);
-
-        // set indicator so a message is displayed for accounts that were replaced due to expired/closed status
-        if (!expiredOrClosedAccountList.isEmpty()) {
+        
+        //set indicator so a message is displayed for accounts that were replaced due to expired/closed status
+        if(!expiredOrClosedAccountList.isEmpty()){
             cmDocument.setContinuationAccountIndicator(true);
         }
 
@@ -97,7 +93,6 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
      */
     protected void populateDocumentFromPreq(CreditMemoDocument cmDocument, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
         PaymentRequestDocument paymentRequestDocument = SpringContext.getBean(PaymentRequestService.class).getPaymentRequestById(cmDocument.getPaymentRequestIdentifier());
-        cmDocument.getDocumentHeader().setOrganizationDocumentNumber(paymentRequestDocument.getDocumentHeader().getOrganizationDocumentNumber());
         cmDocument.setPaymentRequestDocument(paymentRequestDocument);
         cmDocument.setPurchaseOrderDocument(paymentRequestDocument.getPurchaseOrderDocument());
 
@@ -115,7 +110,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
         cmDocument.setVendorCountryCode(paymentRequestDocument.getVendorCountryCode());
         cmDocument.setAccountsPayablePurchasingDocumentLinkIdentifier(paymentRequestDocument.getAccountsPayablePurchasingDocumentLinkIdentifier());
 
-        // prep the item lines (also collect warnings for later display) this is only done on paymentRequest
+        //prep the item lines (also collect warnings for later display) this is only done on paymentRequest
         convertMoneyToPercent(paymentRequestDocument);
         populateItemLinesFromPreq(cmDocument, expiredOrClosedAccountList);
     }
@@ -128,9 +123,14 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
     protected void populateItemLinesFromPreq(CreditMemoDocument cmDocument, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
         PaymentRequestDocument preqDocument = cmDocument.getPaymentRequestDocument();
 
-        for (PaymentRequestItem preqItemToTemplate : (List<PaymentRequestItem>) preqDocument.getItems()) {
-            if (preqItemToTemplate.getItemType().isItemTypeAboveTheLineIndicator()) {
-                cmDocument.getItems().add(new CreditMemoItem(cmDocument, preqItemToTemplate, preqItemToTemplate.getPurchaseOrderItem(), expiredOrClosedAccountList));
+        List<PurchaseOrderItem> invoicedItems = creditMemoService.getPOInvoicedItems(cmDocument.getPurchaseOrderDocument());
+        for (PurchaseOrderItem poItem : invoicedItems) {
+            PaymentRequestItem preqItemToTemplate = (PaymentRequestItem) preqDocument.getItemByLineNumber(poItem.getItemLineNumber());
+
+            if (preqItemToTemplate != null && preqItemToTemplate.getItemType().isItemTypeAboveTheLineIndicator()) {
+                if (preqItemToTemplate.getExtendedPrice().isNonZero()) {
+                    cmDocument.getItems().add(new CreditMemoItem(cmDocument, preqItemToTemplate, poItem, expiredOrClosedAccountList));
+                }
             }
         }
 
@@ -146,7 +146,6 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
     protected void populateDocumentFromPO(CreditMemoDocument cmDocument, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
         PurchaseOrderDocument purchaseOrderDocument = (SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(cmDocument.getPurchaseOrderIdentifier()));
         cmDocument.setPurchaseOrderDocument(purchaseOrderDocument);
-        cmDocument.getDocumentHeader().setOrganizationDocumentNumber(purchaseOrderDocument.getDocumentHeader().getOrganizationDocumentNumber());
 
         cmDocument.setVendorHeaderGeneratedIdentifier(purchaseOrderDocument.getVendorHeaderGeneratedIdentifier());
         cmDocument.setVendorDetailAssignedIdentifier(purchaseOrderDocument.getVendorDetailAssignedIdentifier());
@@ -171,7 +170,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
             cmDocument.setVendorPostalCode(purchaseOrderDocument.getVendorPostalCode());
             cmDocument.setVendorCountryCode(purchaseOrderDocument.getVendorCountryCode());
         }
-
+        
         populateItemLinesFromPO(cmDocument, expiredOrClosedAccountList);
     }
 
@@ -188,6 +187,8 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
 
         // add below the line items
         SpringContext.getBean(PurapService.class).addBelowLineItems(cmDocument);
+        
+        // TODO (KULPURAP-1571: ckirschenman) account distribution?
     }
 
     /**
@@ -218,7 +219,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
 
         cmDocument.setVendorAddressGeneratedIdentifier(vendorAddress.getVendorAddressGeneratedIdentifier());
         cmDocument.templateVendorAddress(vendorAddress);
-
+        
         // add below the line items
         SpringContext.getBean(PurapService.class).addBelowLineItems(cmDocument);
     }
@@ -247,7 +248,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
                     KualiDecimal accountAmount = account.getAmount();
                     BigDecimal tmpPercent = BigDecimal.ZERO;
                     KualiDecimal extendedPrice = item.getExtendedPrice();
-                    tmpPercent = accountAmount.bigDecimalValue().divide(extendedPrice.bigDecimalValue(), PurapConstants.PRORATION_SCALE.intValue(), KualiDecimal.ROUND_BEHAVIOR);
+                    tmpPercent = accountAmount.bigDecimalValue().divide(extendedPrice.bigDecimalValue(),PurapConstants.PRORATION_SCALE.intValue(), KualiDecimal.ROUND_BEHAVIOR);
                     // test that the above amount is correct, if so just check that the total of all these matches the item total
 
                     KualiDecimal calcAmount = new KualiDecimal(tmpPercent.multiply(extendedPrice.bigDecimalValue()));
@@ -276,7 +277,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
             }
         }
     }
-
+    
     /**
      * Defaults the document description based on the cm type.
      * 
@@ -289,12 +290,6 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
         }
         else {
             description = "PO: " + cmDocument.getPurchaseOrderDocument().getPurapDocumentIdentifier() + " Vendor: " + cmDocument.getVendorName();
-        }
-
-        // trim description if longer than whats specified in the data dictionary
-        int noteTextMaxLength = SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(DocumentHeader.class, KFSPropertyConstants.FINANCIAL_DOCUMENT_DESCRIPTION).intValue();
-        if (noteTextMaxLength < description.length()) {
-            description = description.substring(0, noteTextMaxLength);
         }
 
         cmDocument.getDocumentHeader().setFinancialDocumentDescription(description);

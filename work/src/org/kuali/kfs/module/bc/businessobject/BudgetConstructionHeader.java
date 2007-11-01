@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionHeader.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +19,23 @@
 package org.kuali.module.budget.bo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
+public class BudgetConstructionHeader extends BusinessObjectBase {
 
     private String documentNumber;
     private Integer universityFiscalYear;
@@ -56,8 +55,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     private UniversalUser budgetTransactionLockUser;
     private Org organizationLevelOrganization;
     private DocumentHeader financialDocument;
-    private BudgetConstructionAccountReports budgetConstructionAccountReports;
-
+    
     private List budgetConstructionAccountSelect;
 
     /**
@@ -72,6 +70,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the documentNumber attribute.
      * 
      * @return Returns the documentNumber
+     * 
      */
     public String getDocumentNumber() {
         return documentNumber;
@@ -81,6 +80,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the documentNumber attribute.
      * 
      * @param documentNumber The documentNumber to set.
+     * 
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -91,6 +91,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -100,6 +101,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -110,6 +112,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -119,6 +122,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -129,6 +133,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the accountNumber attribute.
      * 
      * @return Returns the accountNumber
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -138,6 +143,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the accountNumber attribute.
      * 
      * @param accountNumber The accountNumber to set.
+     * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -148,6 +154,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the subAccountNumber attribute.
      * 
      * @return Returns the subAccountNumber
+     * 
      */
     public String getSubAccountNumber() {
         return subAccountNumber;
@@ -157,6 +164,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the subAccountNumber attribute.
      * 
      * @param subAccountNumber The subAccountNumber to set.
+     * 
      */
     public void setSubAccountNumber(String subAccountNumber) {
         this.subAccountNumber = subAccountNumber;
@@ -167,6 +175,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the organizationLevelCode attribute.
      * 
      * @return Returns the organizationLevelCode
+     * 
      */
     public Integer getOrganizationLevelCode() {
         return organizationLevelCode;
@@ -176,6 +185,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the organizationLevelCode attribute.
      * 
      * @param organizationLevelCode The organizationLevelCode to set.
+     * 
      */
     public void setOrganizationLevelCode(Integer organizationLevelCode) {
         this.organizationLevelCode = organizationLevelCode;
@@ -186,6 +196,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the organizationLevelChartOfAccountsCode attribute.
      * 
      * @return Returns the organizationLevelChartOfAccountsCode
+     * 
      */
     public String getOrganizationLevelChartOfAccountsCode() {
         return organizationLevelChartOfAccountsCode;
@@ -195,6 +206,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the organizationLevelChartOfAccountsCode attribute.
      * 
      * @param organizationLevelChartOfAccountsCode The organizationLevelChartOfAccountsCode to set.
+     * 
      */
     public void setOrganizationLevelChartOfAccountsCode(String organizationLevelChartOfAccountsCode) {
         this.organizationLevelChartOfAccountsCode = organizationLevelChartOfAccountsCode;
@@ -205,6 +217,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the organizationLevelOrganizationCode attribute.
      * 
      * @return Returns the organizationLevelOrganizationCode
+     * 
      */
     public String getOrganizationLevelOrganizationCode() {
         return organizationLevelOrganizationCode;
@@ -214,6 +227,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the organizationLevelOrganizationCode attribute.
      * 
      * @param organizationLevelOrganizationCode The organizationLevelOrganizationCode to set.
+     * 
      */
     public void setOrganizationLevelOrganizationCode(String organizationLevelOrganizationCode) {
         this.organizationLevelOrganizationCode = organizationLevelOrganizationCode;
@@ -224,6 +238,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the budgetLockUserIdentifier attribute.
      * 
      * @return Returns the budgetLockUserIdentifier
+     * 
      */
     public String getBudgetLockUserIdentifier() {
         return budgetLockUserIdentifier;
@@ -233,6 +248,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the budgetLockUserIdentifier attribute.
      * 
      * @param budgetLockUserIdentifier The budgetLockUserIdentifier to set.
+     * 
      */
     public void setBudgetLockUserIdentifier(String budgetLockUserIdentifier) {
         this.budgetLockUserIdentifier = budgetLockUserIdentifier;
@@ -243,6 +259,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the budgetTransactionLockUserIdentifier attribute.
      * 
      * @return Returns the budgetTransactionLockUserIdentifier
+     * 
      */
     public String getBudgetTransactionLockUserIdentifier() {
         return budgetTransactionLockUserIdentifier;
@@ -252,6 +269,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the budgetTransactionLockUserIdentifier attribute.
      * 
      * @param budgetTransactionLockUserIdentifier The budgetTransactionLockUserIdentifier to set.
+     * 
      */
     public void setBudgetTransactionLockUserIdentifier(String budgetTransactionLockUserIdentifier) {
         this.budgetTransactionLockUserIdentifier = budgetTransactionLockUserIdentifier;
@@ -262,6 +280,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -281,6 +300,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the account attribute.
      * 
      * @return Returns the account
+     * 
      */
     public Account getAccount() {
         return account;
@@ -295,9 +315,9 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     public void setAccount(Account account) {
         this.account = account;
     }
-
+    
     public UniversalUser getBudgetLockUser() {
-        budgetLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
+        budgetLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetLockUserIdentifier, budgetLockUser);
         return budgetLockUser;
     }
 
@@ -315,6 +335,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Gets the budgetConstructionAccountSelect list.
      * 
      * @return Returns the budgetConstructionAccountSelect list
+     * 
      */
     public List getBudgetConstructionAccountSelect() {
         return budgetConstructionAccountSelect;
@@ -324,13 +345,14 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
      * Sets the budgetConstructionAccountSelect list.
      * 
      * @param budgetConstructionAccountSelect The budgetConstructionAccountSelect list to set.
+     * 
      */
     public void setBudgetConstructionAccountSelect(List budgetConstructionAccountSelect) {
         this.budgetConstructionAccountSelect = budgetConstructionAccountSelect;
     }
 
     public UniversalUser getBudgetTransactionLockUser() {
-        budgetTransactionLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
+        budgetTransactionLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(budgetTransactionLockUserIdentifier, budgetTransactionLockUser);
         return budgetTransactionLockUser;
     }
 
@@ -382,8 +404,7 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the financialDocument attribute.
-     * 
+     * Gets the financialDocument attribute. 
      * @return Returns the financialDocument.
      */
     public DocumentHeader getFinancialDocument() {
@@ -392,55 +413,19 @@ public class BudgetConstructionHeader extends PersistableBusinessObjectBase {
 
     /**
      * Sets the financialDocument attribute value.
-     * 
      * @param financialDocument The financialDocument to set.
      * @deprecated
      */
     public void setFinancialDocument(DocumentHeader financialDocument) {
         this.financialDocument = financialDocument;
-    }
-
-    /**
-     * Gets the budgetConstructionAccountReports attribute.
-     * 
-     * @return Returns the budgetConstructionAccountReports.
-     */
-    public BudgetConstructionAccountReports getBudgetConstructionAccountReports() {
-        return budgetConstructionAccountReports;
-    }
-
-    /**
-     * Sets the budgetConstructionAccountReports attribute value.
-     * 
-     * @param budgetConstructionAccountReports The budgetConstructionAccountReports to set.
-     */
-    public void setBudgetConstructionAccountReports(BudgetConstructionAccountReports budgetConstructionAccountReports) {
-        this.budgetConstructionAccountReports = budgetConstructionAccountReports;
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("documentNumber", getDocumentNumber());
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-        simpleValues.put("chartOfAccountsCode", getChartOfAccountsCode());
-        simpleValues.put("accountNumber", getAccountNumber());
-        simpleValues.put("subAccountNumber", getSubAccountNumber());
-
-        return simpleValues;
-    }
-
+    }    
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }

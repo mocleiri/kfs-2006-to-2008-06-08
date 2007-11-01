@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,25 @@ package org.kuali.module.financial.service.impl;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import org.kuali.Constants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.financial.bo.OffsetAccount;
 import org.kuali.module.financial.exceptions.InvalidFlexibleOffsetException;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
-import org.kuali.module.gl.bo.OriginEntryFull;
-import org.springframework.transaction.annotation.Transactional;
+import org.kuali.module.gl.bo.OriginEntry;
 
 /**
  * This class implements FlexibleOffsetAccountService.
+ * 
+ * 
  */
-@Transactional
 public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(FlexibleOffsetAccountServiceImpl.class);
 
@@ -44,7 +44,6 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
     private AccountService accountService;
     private ObjectCodeService objectCodeService;
     private DateTimeService dateTimeService;
-    private ParameterService parameterService;
 
     /**
      * @see FlexibleOffsetAccountService#getByPrimaryIdIfEnabled
@@ -67,13 +66,16 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
      */
     public boolean getEnabled() {
         LOG.debug("getEnabled() started");
-        return parameterService.getIndicatorParameter(OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
+
+        // KualiConfigurationService needs to be gotten dynamically here so TransferOfFundsDocumentRuleTest can mock it.
+        return SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
     }
 
     /**
-     * @see org.kuali.module.financial.service.FlexibleOffsetAccountService#updateOffset(org.kuali.module.gl.bo.OriginEntryFull)
+     * 
+     * @see org.kuali.module.financial.service.FlexibleOffsetAccountService#updateOffset(org.kuali.module.gl.bo.OriginEntry)
      */
-    public boolean updateOffset(OriginEntryFull originEntry) {
+    public boolean updateOffset(OriginEntry originEntry) {
         LOG.debug("setBusinessObjectService() started");
 
         if (!getEnabled()) {
@@ -125,8 +127,8 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
         originEntry.setChartOfAccountsCode(offsetChartOfAccountsCode);
 
         // blank out the sub account and sub object since the account has been replaced
-        originEntry.setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
-        originEntry.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
+        originEntry.setSubAccountNumber(Constants.DASHES_SUB_ACCOUNT_NUMBER);
+        originEntry.setFinancialSubObjectCode(Constants.DASHES_SUB_OBJECT_CODE);
         return true;
     }
 
@@ -157,9 +159,5 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
 
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
-    }
-
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
     }
 }

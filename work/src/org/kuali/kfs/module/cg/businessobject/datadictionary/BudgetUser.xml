@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +22,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetUser">
 
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Personnel Inquiry</title>
@@ -29,8 +31,7 @@
                 <field attributeName="user.personUniversalIdentifier" />
                 <field attributeName="user.personUserIdentifier" />
                 <field attributeName="user.personName" />
-                <field attributeName="user.campusCode" />
-                <field attributeName="user.primaryDepartmentCode" />
+                <field attributeName="user.deptid" />
                 <field attributeName="user.employeeStatusCode" />
                 <field attributeName="user.employeeTypeCode" />
             </inquiryFields></inquirySection></inquirySections>
@@ -108,7 +109,7 @@
 
                 <maxLength>15</maxLength>
                 <validationPattern>
-                    <anyCharacter  allowWhitespace="true"/>
+                    <anyCharacter />
                 </validationPattern>
 
                 <control>
@@ -125,7 +126,7 @@
 
                 <maxLength>15</maxLength>
                 <validationPattern>
-                    <anyCharacter  allowWhitespace="true" />
+                    <anyCharacter />
                 </validationPattern>
 
                 <control>
@@ -322,10 +323,7 @@
                 <description>Project Director Name</description>
             </attributeReference>
 
-			<attributeReference name="user.campusCode" sourceClassName="org.kuali.core.bo.Campus" sourceAttributeName="campusCode">
-			</attributeReference>
-
-            <attributeReference name="user.primaryDepartmentCode" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="primaryDepartmentCode">
+            <attributeReference name="user.deptid" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="deptid">
                 <label>Dept ID</label>
                 <shortLabel>Dept ID</shortLabel>
                 <summary>Dept ID</summary>
@@ -345,19 +343,8 @@
                 <summary>Employee Type</summary>
                 <description>Employee Type</description>
             </attributeReference>
-
-            <attributeReference name="delete" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean" />
-
         </attributes>
-
-        <relationships>
-            <relationship objectAttributeName="user" >
-                <primitiveAttribute sourceName="personUniversalIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="user.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="user.personName" targetName="personName" />
-            </relationship>
-		</relationships>
-
+        
         <objectLabel>Budget User/Personnel</objectLabel>
     </businessObject>
 

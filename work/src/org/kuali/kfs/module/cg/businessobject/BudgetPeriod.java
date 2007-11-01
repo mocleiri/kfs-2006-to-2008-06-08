@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +22,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
 
-public class BudgetPeriod extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetPeriod extends BusinessObjectBase implements Comparable {
     private static final long serialVersionUID = -479888264761887048L;
 
     private String documentNumber;
@@ -42,13 +44,13 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
     public BudgetPeriod() {
         super();
     }
-
+    
     public BudgetPeriod(String documentNumber, Integer budgetPeriodSequenceNumber) {
         this();
         this.documentNumber = documentNumber;
         this.budgetPeriodSequenceNumber = budgetPeriodSequenceNumber;
     }
-
+    
     public BudgetPeriod(BudgetPeriod template) {
         this();
         this.documentNumber = template.getDocumentNumber();
@@ -57,7 +59,7 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
         this.budgetPeriodEndDate = template.getBudgetPeriodEndDate();
         this.budgetPeriodParticipantsNumber = template.getBudgetPeriodParticipantsNumber();
     }
-
+    
     /**
      * @return Returns the budgetNumber.
      */
@@ -134,7 +136,7 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
 
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("budgetPeriodSequenceNumber", this.budgetPeriodSequenceNumber);
         return m;
     }
@@ -168,8 +170,7 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
             if (this.getClass().equals(obj.getClass())) {
                 BudgetPeriod other = (BudgetPeriod) obj;
 
-                if (this.getDocumentNumber().equals(other.getDocumentNumber()) && this.getBudgetPeriodSequenceNumber().equals(other.getBudgetPeriodSequenceNumber()) && ((this.getBudgetPeriodBeginDate() == null && other.getBudgetPeriodEndDate() == null) || this.getBudgetPeriodBeginDate().equals(other.getBudgetPeriodBeginDate())) && ((this.getBudgetPeriodEndDate() == null && other.getBudgetPeriodEndDate() == null) || this.getBudgetPeriodEndDate().equals(other.getBudgetPeriodEndDate()))) {
-
+                if (this.getDocumentNumber().equals(other.getDocumentNumber()) && this.getBudgetPeriodSequenceNumber().equals(other.getBudgetPeriodSequenceNumber()) && this.getBudgetPeriodBeginDate().equals(other.getBudgetPeriodBeginDate()) && this.getBudgetPeriodEndDate().equals(other.getBudgetPeriodEndDate())) {
                     equal = true;
                 }
             }
