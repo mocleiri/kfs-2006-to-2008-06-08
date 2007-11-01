@@ -379,7 +379,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user pressed on the Close Order button on a Purchase Order page to Close the PO. It will
+     * Invoked when the user pressed on the Close Order button on a Purchase Order page to Close the PO. It will
      * display the question page to the user to ask whether the user really wants to close the PO and ask the user to enter a reason
      * in the text area. If the user has entered the reason, it will invoke a service method to do the processing for closing a PO,
      * then display a Single Confirmation page to inform the user that the PO Close Document has been routed.
@@ -399,7 +399,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user pressed on the Payment Hold button on a Purchase Order page to put the PO on hold. It
+     * Is invoked when the user pressed on the Payment Hold button on a Purchase Order page to put the PO on hold. It
      * will display the question page to the user to ask whether the user really wants to put the PO on hold and ask the user to
      * enter a reason in the text area. If the user has entered the reason, it will invoke a service method to do the processing for
      * putting a PO on hold, then display a Single Confirmation page to inform the user that the PO Payment Hold Document has been
@@ -420,7 +420,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user pressed on the Remove Hold button on a Payment Hold PO page to remove the PO from hold.
+     * Is invoked when the user pressed on the Remove Hold button on a Payment Hold PO page to remove the PO from hold.
      * It will display the question page to the user to ask whether the user really wants to remove the PO from hold and ask the
      * user to enter a reason in the text area. If the user has entered the reason, it will invoke a service method to do the
      * processing for removing a PO from hold, then display a Single Confirmation page to inform the user that the PO Remove Hold
@@ -450,7 +450,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user pressed on the Open Order button on a Purchase Order page that has status "Close" to
+     * Is invoked when the user pressed on the Open Order button on a Purchase Order page that has status "Close" to
      * reopen the PO. It will display the question page to the user to ask whether the user really wants to reopen the PO and ask
      * the user to enter a reason in the text area. If the user has entered the reason, it will invoke the a service method to do
      * the processing for reopening a PO, then display a Single Confirmation page to inform the user that the
@@ -472,7 +472,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user pressed on the Amend button on a Purchase Order page to amend the PO. It will display
+     * Is invoked when the user pressed on the Amend button on a Purchase Order page to amend the PO. It will display
      * the question page to the user to ask whether the user really wants to amend the PO and ask the user to enter a reason in the
      * text area. If the user has entered the reason, it will invoke a service method to do the processing for amending the PO, then
      * display a Single Confirmation page to inform the user that the <code>PurchaseOrderAmendmentDocument</code> has been routed.
@@ -493,7 +493,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user pressed on the Void button on a Purchase Order page to void the PO. It will display the
+     * Is invoked when the user pressed on the Void button on a Purchase Order page to void the PO. It will display the
      * question page to the user to ask whether the user really wants to void the PO and ask the user to enter a reason in the text
      * area. If the user has entered the reason, it will invoke a service method to do the processing for voiding the PO, then
      * display a Single Confirmation page to inform the user that the <code>PurchaseOrderVoidDocument</code> has been routed.
@@ -549,7 +549,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is executed when the user clicks on the "print" button on a Purchase Order Print Document page. On a non
+     * Is executed when the user clicks on the "print" button on a Purchase Order Print Document page. On a non
      * javascript enabled browser, it will display a page with 2 buttons. One is to display the PDF, the other is to view the PO
      * tabbed page where the PO document statuses, buttons, etc have already been updated (the updates of those occurred while the
      * <code>performPurchaseOrderFirstTransmitViaPrinting</code> method is invoked. On a javascript enabled browser, it will
@@ -829,7 +829,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user clicks on the Select All button on a Purchase Order Retransmit document. It will select
+     * Is invoked when the user clicks on the Select All button on a Purchase Order Retransmit document. It will select
      * the checkboxes of all the items to be included in the retransmission of the PO.
      * 
      * @param mapping An ActionMapping
@@ -851,7 +851,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user clicks on the Deselect All button on a Purchase Order Retransmit document. It will
+     * Is invoked when the user clicks on the Deselect All button on a Purchase Order Retransmit document. It will
      * uncheck the checkboxes of all the items to be excluded from the retransmission of the PO.
      * 
      * @param mapping An ActionMapping
@@ -873,7 +873,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
     }
 
     /**
-     * This method is invoked when the user clicks on the Retransmit button on both the PO tabbed page and on the Purchase Order
+     * Is invoked when the user clicks on the Retransmit button on both the PO tabbed page and on the Purchase Order
      * Retransmit Document page, which is essentially a PO tabbed page with the other irrelevant tabs being hidden. If it was
      * invoked from the PO tabbed page, if the PO's pending indicator is false, this method will invoke a method in the
      * PurchaseOrderService to update the flags, create the PurchaseOrderRetransmitDocument and route it. If the routing was
