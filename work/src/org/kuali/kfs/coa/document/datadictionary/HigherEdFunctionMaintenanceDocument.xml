@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>HigherEdFunctionMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiHigherEdFunctionMaintenanceDocument</documentTypeName>
         <documentTypeCode>HEFN</documentTypeCode>
 
-        <label>Higher Education Function</label>
+        <label>Higher Education Function Maintenance Document</label>
+        <shortLabel>HigherEdFunctionMaintDoc</shortLabel>
 
         <summary>Higher Education Function maintenance document</summary>
         <description>Document used to create or update Higher Education Function objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="HigherEdFunction" parameterName="HIGHER_EDUCATION_FUNCTION" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_HIGHER_EDUCATION_FUNCTION" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="financialHigherEdFunctionCd" />

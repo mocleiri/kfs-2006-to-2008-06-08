@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>PurchaseOrderVendorChoiceMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiPoVendorChoiceMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMVC</documentTypeCode>
 
-        <label>Purchase Order Vendor Choice</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="PurchaseOrderVendorChoice" parameterName="PURCHASE_ORDER_VENDOR_CHOICE" />
+        <label>Purchase Order Vendor Choice Maintenance Document</label>
+        <shortLabel>PO Vendor Choice Maint Doc</shortLabel>
+
+        <summary>Purchase Order Vendor Choice Maintenance Document</summary>
+        <description>Document used to create or update Purchase Order Vendor Choice objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="purchaseOrderVendorChoiceCode" />
@@ -47,7 +52,7 @@
                 <maintainableItems>
                 	<maintainableField name="purchaseOrderVendorChoiceCode" required="true"/>
                 	<maintainableField name="purchaseOrderVendorChoiceDescription" required="true"/>
-                    <maintainableField name="active" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

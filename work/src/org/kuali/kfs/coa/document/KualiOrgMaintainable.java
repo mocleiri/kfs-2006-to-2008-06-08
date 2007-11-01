@@ -20,16 +20,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.maintenance.KualiMaintainableImpl;
-import org.kuali.core.maintenance.Maintainable;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.web.ui.Field;
 import org.kuali.core.web.ui.Row;
 import org.kuali.core.web.ui.Section;
+import org.kuali.core.maintenance.KualiMaintainableImpl;
 import org.kuali.kfs.KFSPropertyConstants;
 
 /**
- * This class overrides the getCoreSections method to provide specific field conversions for the postal code
+ * 
+ * 
+ * 
  */
+
 public class KualiOrgMaintainable extends KualiMaintainableImpl {
 
     private static final long serialVersionUID = -3182120468758958991L;
@@ -37,11 +40,11 @@ public class KualiOrgMaintainable extends KualiMaintainableImpl {
     public static final String KUALI_ORG_SECTION = "Edit Organization Code";
 
     /**
-     * Provides special field conversions for the Org.organizationZipCode
+     *
      * 
-     * @see org.kuali.core.maintenance.Maintainable#getCoreSections(org.kuali.core.maintenance.Maintainable)
+     * @see org.kuali.core.maintenance.Maintainable#getCoreSections()
      */
-    public List getCoreSections(Maintainable oldMaintainable) {
+    public List getCoreSections() {
 
         boolean fieldFound = false;
         boolean sectionFound = false;
@@ -49,7 +52,7 @@ public class KualiOrgMaintainable extends KualiMaintainableImpl {
         String orgPostalCodeFieldName = KFSPropertyConstants.ORGANIZATION_ZIP_CODE;
 
         // walk the sections
-        List sections = super.getCoreSections(oldMaintainable);
+        List sections = super.getCoreSections();
         for (Iterator sectionIterator = sections.iterator(); sectionIterator.hasNext();) {
             Section section = (Section) sectionIterator.next();
 
@@ -77,15 +80,15 @@ public class KualiOrgMaintainable extends KualiMaintainableImpl {
 
                             // build the fieldConversions for the UserID field lookup
                             Map fieldConversions = new HashMap();
-                            fieldConversions.put(KFSPropertyConstants.POSTAL_ZIP_CODE, KFSPropertyConstants.ORGANIZATION_ZIP_CODE);
-                            fieldConversions.put(KFSPropertyConstants.POSTAL_STATE_CODE, KFSPropertyConstants.ORGANIZATION_STATE_CODE);
-                            fieldConversions.put(KFSPropertyConstants.POSTAL_CITY_NAME, KFSPropertyConstants.ORGANIZATION_CITY_NAME);
-
-
+                            fieldConversions.put(KFSPropertyConstants.POSTAL_ZIP_CODE, KFSPropertyConstants.ORGANIZATION_ZIP_CODE );
+                            fieldConversions.put(KFSPropertyConstants.POSTAL_STATE_CODE, KFSPropertyConstants.ORGANIZATION_STATE_CODE );
+                            fieldConversions.put(KFSPropertyConstants.POSTAL_CITY_NAME, KFSPropertyConstants.ORGANIZATION_CITY_NAME );
+                            
+                            
                             // add the fieldConversions, lookupParameters and the lookup class
                             field.setFieldConversions(fieldConversions);
-                            // field.setLookupParameters(lookupParameters);
-                            // field.setQuickFinderClassNameImpl(UniversalUser.class.getName());
+                            //field.setLookupParameters(lookupParameters);
+                            //field.setQuickFinderClassNameImpl(UniversalUser.class.getName());
                         }
                     }
                 }

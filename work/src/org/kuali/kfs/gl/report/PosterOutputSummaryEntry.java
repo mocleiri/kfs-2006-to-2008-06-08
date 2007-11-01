@@ -15,16 +15,13 @@
  */
 package org.kuali.module.gl.util;
 
-import java.util.List;
-
 import org.apache.commons.lang.ArrayUtils;
-import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.service.ObjectTypeService;
 
 public class PosterOutputSummaryEntry implements Comparable {
+    private static String[] assetExpenseObjectTypeCodeList = new String[] { "AS", "EE", "ES", "EX", "TE" };
+
     private Integer universityFiscalYear;
     private String fiscalPeriodCode;
     private String balanceTypeCode;
@@ -35,21 +32,11 @@ public class PosterOutputSummaryEntry implements Comparable {
     private KualiDecimal budgetAmount;
     private KualiDecimal netAmount;
 
-    private final String[] assetExpenseObjectTypeCodes;
-
     public PosterOutputSummaryEntry() {
         creditAmount = KualiDecimal.ZERO;
         debitAmount = KualiDecimal.ZERO;
         budgetAmount = KualiDecimal.ZERO;
         netAmount = KualiDecimal.ZERO;
-
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-
-        ObjectTypeService objectTypeService = (ObjectTypeService) SpringContext.getBean(ObjectTypeService.class);
-        List<String> objectTypes = objectTypeService.getCurrentYearExpenseObjectTypes();
-        objectTypes.add(objectTypeService.getCurrentYearAssetObjectType());
-
-        assetExpenseObjectTypeCodes = objectTypes.toArray(new String[0]);
     }
 
     public String getKey() {
@@ -80,7 +67,7 @@ public class PosterOutputSummaryEntry implements Comparable {
 
         if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             setCreditAmount(creditAmount.add(amount));
-            if (ArrayUtils.contains(assetExpenseObjectTypeCodes, objectTypeCode)) {
+            if (ArrayUtils.contains(assetExpenseObjectTypeCodeList, objectTypeCode)) {
                 setNetAmount(netAmount.subtract(amount));
             }
             else {
@@ -89,7 +76,7 @@ public class PosterOutputSummaryEntry implements Comparable {
         }
         else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode)) {
             setDebitAmount(debitAmount.add(amount));
-            if (ArrayUtils.contains(assetExpenseObjectTypeCodes, objectTypeCode)) {
+            if (ArrayUtils.contains(assetExpenseObjectTypeCodeList, objectTypeCode)) {
                 setNetAmount(netAmount.add(amount));
             }
             else {
@@ -123,7 +110,7 @@ public class PosterOutputSummaryEntry implements Comparable {
 
         return getKey().compareTo(tempPosterOutputSummaryEntry.getKey());
     }
-
+    
     public static PosterOutputSummaryEntry buildPosterOutputSummaryEntry(Object[] entrySummary) {
         PosterOutputSummaryEntry posterOutputSummaryEntry = new PosterOutputSummaryEntry();
         int indexOfField = 0;
@@ -156,7 +143,7 @@ public class PosterOutputSummaryEntry implements Comparable {
         KualiDecimal amount = new KualiDecimal(entry);
 
         posterOutputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);
-
+        
         return posterOutputSummaryEntry;
     }
 

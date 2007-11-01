@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>UniversityBudgetOfficeFunctionMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiUniversityBudgetOfficeFunctionMaintenanceDocument</documentTypeName>
         <documentTypeCode>UFUN</documentTypeCode>
 
-        <label>University Budget Office Function</label>
+        <label>University Budget Office Function Maintenance Document</label>
+        <shortLabel>Univ Budget Office Function Maint Doc</shortLabel>
 
         <summary>University Budget Office Function Maintenance Document</summary>
         <description>Document used to create or update University Budget Office Function Maintenance Document objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="UniversityBudgetOfficeFunction" parameterName="UNIVERSITY_BUDGET_OFFICE_FUNCTION" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_UNIVERSITY_BUDGET_OFFICE_FUNCTION" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="financialUniversityBudgetOfficeFunctionCode" />

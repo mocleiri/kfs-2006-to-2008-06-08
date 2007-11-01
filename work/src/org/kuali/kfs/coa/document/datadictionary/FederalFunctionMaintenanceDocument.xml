@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>FederalFunctionMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiFederalFunctionMaintenanceDocument</documentTypeName>
         <documentTypeCode>FFUN</documentTypeCode>
 
-        <label>Federal Function</label>
+        <label>Federal Function Maintenance Document</label>
+        <shortLabel>Federal Function Maint Doc</shortLabel>
 
         <summary>Federal Function Maintenance Document</summary>
         <description>Document used to create or update Federal Function Maintenance Document objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="FederalFunction" parameterName="FEDERAL_FUNCTION" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_FEDERAL_FUNCTION" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="financialFederalFunctionCode" />

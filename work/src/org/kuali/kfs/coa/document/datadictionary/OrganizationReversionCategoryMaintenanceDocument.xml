@@ -32,14 +32,16 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>OrganizationReversionCategoryMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOrganizationReversionCategoryMaintenanceDocument</documentTypeName>
         <documentTypeCode>ORGC</documentTypeCode>
 
-        <label>Organization Reversion Category</label>
+        <label>Organization Reversion Category Maintenance Document</label>
+        <shortLabel>organizationReversionCategoryMaintDoc</shortLabel>
 
         <summary>organizationReversionCategory maintenance document</summary>
         <description>Document used to create or update organizationReversionCategory objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="OrganizationReversionCategory" parameterName="ORGANIZATION_REVERSION_CATEGORY" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="organizationReversionCategoryCode" />

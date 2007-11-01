@@ -28,10 +28,6 @@
   <html:hidden property="document.subcontractorNextSequenceNumber" />
 
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
-	
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Project Details" altText="page help"/>
-	</div>
 
 	<kra-rf:routingFormProjectDetailsCostShare editingMode="${KualiForm.editingMode}" />
 
@@ -49,12 +45,5 @@
         </tbody></table>
         
           <kul:documentControls transactionalDocument="false" suppressRoutingControls="true" viewOnly="${KualiForm.editingMode['viewOnly']}" />
-<SCRIPT type="text/javascript">
-var kualiForm = document.forms['KualiForm'];
-var kualiElements = kualiForm.elements;
-</SCRIPT>
-<script language="javascript" src="scripts/research/researchDocument.js"></script>
-<script language="javascript" src="dwr/interface/SubcontractorService.js"></script>
-<script language="javascript" src="dwr/interface/AccountService.js"></script>
         
 </kul:documentPage>

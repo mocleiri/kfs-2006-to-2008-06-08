@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
             <title>Account Status (Current Funds) Balance Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
-				<field attributeName="annualActualAmount" />
+				<field attributeName="month1Amount" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
@@ -60,27 +60,37 @@
             </lookupFields>
 
             <resultFields>
-                <field attributeName="universityFiscalYear" />
-                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
                 <field attributeName="subAccountNumber" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />
-				<field attributeName="positionNumber" />				
 				<field attributeName="personName" />
-				<field attributeName="july1BudgetAmount" />
-				<field attributeName="annualActualAmount" />
+				<field attributeName="positionNumber" />				
+				<field attributeName="month1Amount" />
 				<field attributeName="outstandingEncum" />
-				<field attributeName="variance" />
             </resultFields>
         </lookup>
 
         <attributes>
-            <attributeReference name="positionNumber" sourceClassName="org.kuali.module.labor.bo.PositionData" sourceAttributeName="positionNumber"/>
-			
+            <attribute name="positionNumber" forceUppercase="true">
+                <label>Position</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>positionNumber</summary>
+                <description>positionNumber description...</description>
+			</attribute>
+
             <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
                 <label>Fiscal Year</label>
                 <shortLabel>Fiscal Year</shortLabel>
+                <description>Identifies the Fiscal Year to which the balances apply.</description>
             </attributeReference>
 
             <attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber" />          
@@ -99,10 +109,12 @@
             <attributeReference name="financialBeginningBalanceLineAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Beginning Balance Line Amount</label>
                 <shortLabel>Beginning Balance Line Amount</shortLabel>
+                <summary>BeginningBalanceLineAmount</summary>
+                <description>beginningBalanceLineAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
 			
-            <attributeReference name="annualActualAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
+            <attributeReference name="month1Amount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>YTD Actual</label>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
@@ -110,14 +122,8 @@
             <attributeReference name="outstandingEncum" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Outstanding Encum</label>
                 <shortLabel>Outstanding Encum</shortLabel>
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
-            </attributeReference>
-
-			<attributeReference name="july1BudgetAmount" sourceClassName="org.kuali.module.labor.bo.July1PositionFunding" sourceAttributeName="july1BudgetAmount" />
-
-			<attributeReference name="variance" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Variance</label>
-                <shortLabel>Variance</shortLabel>
+                <summary>Outstanding Encumberances</summary>
+                <description>OutstandingEncum description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
 			
@@ -126,10 +132,14 @@
             <attributeReference name="dummyBusinessObject.genericAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Year End Close</label>
                 <shortLabel>Year End Close</shortLabel>
+                <summary>Year End Close</summary>
+                <description>Year End Close Amount...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
 			
-            <attributeReference name="dummyBusinessObject.consolidationOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="consolidationOption"/>
+            <attributeReference name="dummyBusinessObject.consolidationOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="consolidationOption">
+                <description>Radioboxes that specify either Consolidation or Detail balances. If Detail is selected, balances are displayed by Chart, Account Number, Sub-Account Number, Object Code, and Sub-Object Code. If Consolidation is selected, the amounts are aggregated by Chart, Account Number, and Object Code.</description>
+            </attributeReference>
 			
             <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="pendingEntryOption" />
 
@@ -143,6 +153,9 @@
                 <control>
                     <text size="13" />
                 </control>
+
+                <summary>emplid</summary>
+                <description>emplid description...</description>
 			</attribute>
 
 			<attribute name="personName" forceUppercase="true">
@@ -157,6 +170,10 @@
 					<text size="40" />
 					-->
 				</control>
+
+				<summary>Person</summary>
+				<description>Name</description>
+
 			</attribute>
 
         </attributes>

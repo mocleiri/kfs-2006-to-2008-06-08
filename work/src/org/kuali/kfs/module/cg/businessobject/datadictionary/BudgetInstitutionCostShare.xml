@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Institution Cost Share</title>
@@ -158,7 +158,7 @@
         <objectLabel>Budget Institution Party Cost Share</objectLabel>
         <objectDescription>Budget Institution Party Cost Share is the institution party cost share for your Budget.</objectDescription>
         
-        <objectHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="INSTITUTION_COST_SHARE" />
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetInstitutionCostShareHelp" />
 
     </businessObject>
 </dictionaryEntry>
