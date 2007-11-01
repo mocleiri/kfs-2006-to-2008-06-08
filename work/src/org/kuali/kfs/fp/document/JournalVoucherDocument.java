@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,23 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.kfs.KFSConstants.EMPTY_STRING;
-import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
-import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.BALANCE_TYPE;
+import static org.kuali.Constants.EMPTY_STRING;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
+import static org.kuali.PropertyConstants.BALANCE_TYPE;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
+import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.financial.bo.JournalVoucherAccountingLineParser;
-import org.kuali.module.financial.bo.VoucherSourceAccountingLine;
 import org.kuali.module.gl.util.SufficientFundsItem;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -45,8 +41,10 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * eventually post transactions to the G/L. It integrates with workflow and contains a single group of accounting lines. The Journal
  * Voucher is unique in that we only make use of one accounting line list: the source accounting lines seeing as a JV only records
  * accounting lines as debits or credits.
+ * 
+ * 
  */
-public class JournalVoucherDocument extends AccountingDocumentBase implements VoucherDocument, Copyable, Correctable, AmountTotaling {
+public class JournalVoucherDocument extends TransactionalDocumentBase implements VoucherDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(JournalVoucherDocument.class);
 
     // document specific attributes
@@ -63,7 +61,8 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#checkSufficientFunds()
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#checkSufficientFunds()
      */
     @Override
     public List<SufficientFundsItem> checkSufficientFunds() {
@@ -71,14 +70,6 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
 
         // This document does not do sufficient funds checking
         return new ArrayList<SufficientFundsItem>();
-    }
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
-     */
-    @Override
-    public Class getSourceAccountingLineClass() {
-        return VoucherSourceAccountingLine.class;
     }
 
     /**
@@ -197,28 +188,28 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
     }
 
     /**
-     * This method determines the "total" for the JV document. If the selected balance type is an offset generation, then the method
-     * returns the total debits amount when it is greater than the total credit amount. otherwise, it returns total credit amount.
-     * When selected balance type is not an offset generation, the method returns the sum of all accounting line debit amounts.
+     * This method determines the "total" for the JV document. If the selected balance type is an offset generation, then the total
+     * is calculated by subtracting the debit accounting lines from the credit accounting lines. Otherwise, the total is just the
+     * sum of all accounting line amounts.
      * 
      * @return KualiDecimal the total of the JV document.
      */
-    public KualiDecimal getTotalDollarAmount() {
+    public KualiDecimal getTotal() {
 
         KualiDecimal total = new KualiDecimal(0);
+        AccountingLineBase al = null;
 
         this.refreshReferenceObject("balanceType");
 
-        if (this.balanceType.isFinancialOffsetGenerationIndicator()) {
-            if (getCreditTotal().isGreaterThan(getDebitTotal())) {
-                total = getCreditTotal();
-            }
-            else {
-                total = getDebitTotal();
-            }
+        if (this.balanceType.isFinancialOffsetGenerationIndicator()) { // credits and debits mode
+            total = getCreditTotal().subtract(getDebitTotal());
         }
-        else {
-            total = getDebitTotal();
+        else { // single amount mode
+            Iterator iter = sourceAccountingLines.iterator();
+            while (iter.hasNext()) {
+                al = (AccountingLineBase) iter.next();
+                total = total.add(al.getAmount());
+            }
         }
         return total;
     }
@@ -234,12 +225,19 @@ public class JournalVoucherDocument extends AccountingDocumentBase implements Vo
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#toErrorCorrection()
+     * Overrides to call super, and then makes sure this is an error correction. If it is an error correction, it calls the JV
+     * specific error correction helper method.
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#performConversion(int)
      */
     @Override
-    public void toErrorCorrection() throws WorkflowException {
-        super.toErrorCorrection();
-        processJournalVoucherErrorCorrections();
+    protected void performConversion(int operation) throws WorkflowException {
+        super.performConversion(operation);
+
+        // process special for error corrections
+        if (ERROR_CORRECTING == operation) {
+            processJournalVoucherErrorCorrections();
+        }
     }
 
     /**

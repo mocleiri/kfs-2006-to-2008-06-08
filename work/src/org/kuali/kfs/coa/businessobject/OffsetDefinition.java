@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OffsetDefinition.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +19,15 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
+import org.kuali.core.document.DocumentType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
  * 
  */
-public class OffsetDefinition extends PersistableBusinessObjectBase {
+public class OffsetDefinition extends BusinessObjectBase {
 
     private static final long serialVersionUID = -6150010338773403021L;
 
@@ -52,6 +54,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -61,6 +64,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -70,6 +74,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Gets the universityFiscal attribute.
      * 
      * @return Returns the universityFiscal
+     * 
      */
     public Options getUniversityFiscal() {
         return universityFiscal;
@@ -89,6 +94,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Gets the financialDocumentTypeCode attribute.
      * 
      * @return Returns the financialDocumentTypeCode
+     * 
      */
 
     public String getFinancialDocumentTypeCode() {
@@ -99,6 +105,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Sets the financialDocumentTypeCode attribute.
      * 
      * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
+     * 
      */
     public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
         this.financialDocumentTypeCode = financialDocumentTypeCode;
@@ -108,6 +115,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Gets the financialBalanceTypeCode attribute.
      * 
      * @return Returns the financialBalanceTypeCode
+     * 
      */
     public String getFinancialBalanceTypeCode() {
         return financialBalanceTypeCode;
@@ -117,6 +125,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Sets the financialBalanceTypeCode attribute.
      * 
      * @param financialBalanceTypeCode The financialBalanceTypeCode to set.
+     * 
      */
     public void setFinancialBalanceTypeCode(String financialBalanceTypeCode) {
         this.financialBalanceTypeCode = financialBalanceTypeCode;
@@ -145,6 +154,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Gets the financialObjectCode attribute.
      * 
      * @return Returns the financialObjectCode
+     * 
      */
 
     public String getFinancialObjectCode() {
@@ -164,6 +174,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Gets the financialObject attribute.
      * 
      * @return Returns the financialObject
+     * 
      */
 
     public ObjectCode getFinancialObject() {
@@ -184,6 +195,7 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
 
     public String getChartOfAccountsCode() {
@@ -194,15 +206,18 @@ public class OffsetDefinition extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
     }
 
     /**
+     * 
      * Gets the chartOfAccounts object
      * 
      * @return a Chart object
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;

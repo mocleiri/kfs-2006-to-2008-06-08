@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 The Kuali Foundation.
- * 
+ *
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.opensource.org/licenses/ecl1.php
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,12 +16,14 @@
 package org.kuali.kfs.context;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -47,9 +49,9 @@ public class SpringContext {
     private static ConfigurableApplicationContext applicationContext;
     private static Set<Class> SINGLETON_TYPES = new HashSet<Class>();
     private static Set<String> SINGLETON_NAMES = new HashSet<String>();
-    private static Map<Class, Object> SINGLETON_BEANS_BY_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class, Object>());
-    private static Map<String, Object> SINGLETON_BEANS_BY_NAME_CACHE = Collections.synchronizedMap(new HashMap<String, Object>());
-    private static Map<Class, Map> SINGLETON_BEANS_OF_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class, Map>());
+    private static Map<Class,Object> SINGLETON_BEANS_BY_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class,Object>());
+    private static Map<String,Object> SINGLETON_BEANS_BY_NAME_CACHE = Collections.synchronizedMap(new HashMap<String,Object>());
+    private static Map<Class,Map> SINGLETON_BEANS_OF_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class,Map>());
 
     /**
      * Use this method to retrieve a spring bean when one of the following is the case. Pass in the type of the service interface,
@@ -69,7 +71,7 @@ public class SpringContext {
         verifyProperInitialization();
         T bean = null;
         if (SINGLETON_BEANS_BY_TYPE_CACHE.containsKey(type)) {
-            bean = (T) SINGLETON_BEANS_BY_TYPE_CACHE.get(type);
+            bean = (T)SINGLETON_BEANS_BY_TYPE_CACHE.get(type);
         }
         else {
             try {
@@ -98,7 +100,7 @@ public class SpringContext {
         }
         return bean;
     }
-
+    
     /**
      * Use this method to retrieve all beans of a give type in our spring context. Pass in the type of the service interface, NOT
      * the service implementation.
@@ -124,13 +126,13 @@ public class SpringContext {
         }
         return beansOfType;
     }
-
+    
     @SuppressWarnings("unchecked")
     private static <T> T getBean(Class<T> type, String name) {
         verifyProperInitialization();
         T bean = null;
         if (SINGLETON_BEANS_BY_NAME_CACHE.containsKey(name)) {
-            bean = (T) SINGLETON_BEANS_BY_NAME_CACHE.get(name);
+            bean = (T)SINGLETON_BEANS_BY_NAME_CACHE.get(name);
         }
         else {
             try {
@@ -162,7 +164,7 @@ public class SpringContext {
         return false;
     }
 
-    public static List<MethodCacheInterceptor> getMethodCacheInterceptors() {
+    protected static List<MethodCacheInterceptor> getMethodCacheInterceptors() {
         List<MethodCacheInterceptor> methodCacheInterceptors = new ArrayList();
         methodCacheInterceptors.add(getBean(MethodCacheInterceptor.class));
         methodCacheInterceptors.add(KNSServiceLocator.getBean(MethodCacheInterceptor.class));
@@ -190,6 +192,14 @@ public class SpringContext {
         applicationContext.close();
     }
 
+    public static String getStringConfigurationProperty(String propertyName) {
+        return ResourceBundle.getBundle(PropertyLoadingFactoryBean.CONFIGURATION_FILE_NAME).getString(propertyName);
+    }
+
+    protected static List<String> getListConfigurationProperty(String propertyName) {
+        return Arrays.asList(getStringConfigurationProperty(propertyName).split(","));
+    }
+
     private static void verifyProperInitialization() {
         if (applicationContext == null) {
             throw new RuntimeException("Spring not initialized properly.  Initialization has begun and the application context is null." + "Probably spring loaded bean is trying to use KNSServiceLocator before the application context is initialized.");
@@ -200,7 +210,7 @@ public class SpringContext {
         List<String> springConfigurationFiles = new ArrayList<String>();
         springConfigurationFiles.add(APPLICATION_CONTEXT_DEFINITION);
         for (int i = 0; i < propertyNames.length; i++) {
-            springConfigurationFiles.addAll(PropertyLoadingFactoryBean.getBaseListProperty(propertyNames[i]));
+            springConfigurationFiles.addAll(getListConfigurationProperty(propertyNames[i]));
         }
         return springConfigurationFiles.toArray(new String[] {});
     }

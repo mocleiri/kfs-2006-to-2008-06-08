@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/BalanceTyp.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.codes.BalanceTyp">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Balance Type Inquiry</title>
@@ -71,6 +73,9 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary>Balance Type Code</summary>
+                <description>The type of balance this offsetting definition is relevant for.</description>
             </attribute>
 
             <attribute name="name" forceUppercase="true">
@@ -83,6 +88,9 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>Balance Type Name</summary>
+                <description>Balance Type Name...</description>
             </attribute>
 
             <attribute name="financialBalanceTypeShortNm" forceUppercase="true">
@@ -95,16 +103,23 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>Balance Type Short Name</summary>
+                <description>Balance Type Short Name...</description>
             </attribute>
 
             <attributeReference name="financialOffsetGenerationIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Offset Generation</label>
                 <shortLabel>Offset Gen</shortLabel>
+                <summary>Offset Generation</summary>
+                <description>Offset Generation...</description>
             </attributeReference>
 
             <attributeReference name="finBalanceTypeEncumIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Encumbrance</label>
                 <shortLabel>Encumbrance</shortLabel>
+                <summary>Encumbrance</summary>
+                <description>Encumbrance...</description>
             </attributeReference>
 
             <attributeReference name="objectId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="objectId" />

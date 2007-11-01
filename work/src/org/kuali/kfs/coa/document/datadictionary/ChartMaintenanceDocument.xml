@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
         <businessRulesClass>org.kuali.module.chart.rules.ChartRule</businessRulesClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,14 +33,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ChartMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiChartMaintenanceDocument</documentTypeName>
         <documentTypeCode>COAT</documentTypeCode>
 
-        <label>Chart</label>
+        <label>Chart Maintenance Document</label>
+        <shortLabel>ChMainDoc</shortLabel>
 
         <summary>Chart maintenance document</summary>
         <description>Document used to create or update Chart objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Chart" parameterName="CHART" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_CHART" />
         
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />

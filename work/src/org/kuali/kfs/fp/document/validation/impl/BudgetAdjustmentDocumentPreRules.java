@@ -15,23 +15,14 @@
  */
 package org.kuali.module.financial.rules;
 
-import java.util.Map;
-
-import org.kuali.core.authorization.AuthorizationConstants;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.rules.PreRulesContinuationBase;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentAuthorizationService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
-import org.kuali.module.financial.document.authorization.BudgetAdjustmentDocumentAuthorizer;
-import org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService;
 
 /**
  * Checks warnings and prompt conditions for ba document.
@@ -41,10 +32,6 @@ public class BudgetAdjustmentDocumentPreRules extends PreRulesContinuationBase {
 
 
     /**
-     * Execute pre-rules for BudgetAdjustmentDocument
-     * 
-     * @document document with pre-rules being applied
-     * @return true if pre-rules fire without problem
      * @see org.kuali.core.rules.PreRulesContinuationBase#doRules(org.kuali.core.document.MaintenanceDocument)
      */
     public boolean doRules(Document document) {
@@ -61,30 +48,24 @@ public class BudgetAdjustmentDocumentPreRules extends PreRulesContinuationBase {
      * Calls service to determine if any labor object codes are present on the ba document. If so, asks the user if they want the
      * system to automatically generate the benefit lines. If Yes, calls service to generate the accounting lines.
      * 
-     * @param budgetDocument submitted budget document
-     * @return true if labor benefits generation question is NOT asked
+     * @param budgetDocument
+     * @return
      */
     private boolean askLaborBenefitsGeneration(BudgetAdjustmentDocument budgetDocument) {
         // before prompting, check the document contains one or more labor object codes
-        boolean hasLaborObjectCodes = SpringContext.getBean(BudgetAdjustmentLaborBenefitsService.class).hasLaborObjectCodes(budgetDocument);
+        boolean hasLaborObjectCodes = SpringServiceLocator.getBudgetAdjustmentLaborBenefitsService().hasLaborObjectCodes(budgetDocument);
 
-        // and check that the user can edit the document
-        String documentTypeName = SpringContext.getBean(DataDictionaryService.class).getDocumentTypeNameByClass(BudgetAdjustmentDocument.class);
-        BudgetAdjustmentDocumentAuthorizer budgetAdjustmentDocumentAuthorizer = (BudgetAdjustmentDocumentAuthorizer) SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer(documentTypeName);
-        UniversalUser universalUser = GlobalVariables.getUserSession().getUniversalUser();
-        Map map = budgetAdjustmentDocumentAuthorizer.getEditMode(budgetDocument, universalUser, budgetDocument.getSourceAccountingLines(), budgetDocument.getTargetAccountingLines());
-
-        if (map.containsKey(AuthorizationConstants.EditMode.FULL_ENTRY) && hasLaborObjectCodes) {
-            String questionText = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSKeyConstants.QUESTION_GENERATE_LABOR_BENEFIT_LINES);
-            boolean generateBenefits = super.askOrAnalyzeYesNoQuestion(KFSConstants.BudgetAdjustmentDocumentConstants.GENERATE_BENEFITS_QUESTION_ID, questionText);
+        if (hasLaborObjectCodes) {
+            String questionText = SpringServiceLocator.getKualiConfigurationService().getPropertyString(KeyConstants.QUESTION_GENERATE_LABOR_BENEFIT_LINES);
+            boolean generateBenefits = super.askOrAnalyzeYesNoQuestion(Constants.BudgetAdjustmentDocumentConstants.GENERATE_BENEFITS_QUESTION_ID, questionText);
             if (generateBenefits) {
-                SpringContext.getBean(BudgetAdjustmentLaborBenefitsService.class).generateLaborBenefitsAccountingLines(budgetDocument);
+                SpringServiceLocator.getBudgetAdjustmentLaborBenefitsService().generateLaborBenefitsAccountingLines(budgetDocument);
                 // update baselines in form
                 ((KualiAccountingDocumentFormBase) form).setBaselineSourceAccountingLines(budgetDocument.getSourceAccountingLines());
                 ((KualiAccountingDocumentFormBase) form).setBaselineTargetAccountingLines(budgetDocument.getTargetAccountingLines());
 
                 // return to document after lines are generated
-                super.event.setActionForwardName(KFSConstants.MAPPING_BASIC);
+                super.event.setActionForwardName(Constants.MAPPING_BASIC);
                 return false;
             }
         }

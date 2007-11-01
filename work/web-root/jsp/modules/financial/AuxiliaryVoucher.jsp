@@ -1,5 +1,5 @@
 <%--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp" %>
+<%@ include file="/jsp/core/tldHeader.jsp" %>
 
-<kul:documentPage showDocumentInfo="true" htmlFormAction="financialAuxiliaryVoucher" documentTypeName="AuxiliaryVoucherDocument" renderMultipart="true" showTabButtons="true">
+<kul:documentPage showDocumentInfo="true" htmlFormAction="financialAuxiliaryVoucher" documentTypeName="KualiAuxiliaryVoucherDocument" renderMultipart="true" showTabButtons="true">
 		<%-- derive displayReadOnly value --%>
 		<c:set var="readOnly" value="${!empty KualiForm.editingMode['viewOnly']}" />
 
@@ -31,7 +31,7 @@
 
         <kul:documentOverview editingMode="${KualiForm.editingMode}"/>
 		<!-- AUXILIARY VOUCHER SPECIFIC FIELDS -->
-		<kul:tab tabTitle="Auxiliary Voucher Details" defaultOpen="true" tabErrorKey="${KFSConstants.EDIT_AUXILIARY_VOUCHER_ERRORS}" >
+		<kul:tab tabTitle="Auxiliary Voucher Details" defaultOpen="true" tabErrorKey="${Constants.EDIT_AUXILIARY_VOUCHER_ERRORS}" >
 	    	
 	    	<div class="tab-container" align="center">
 		<div class="h2-container">
@@ -42,7 +42,7 @@
               <tr>
                 <th width="35%" class="bord-l-b">
                   <div align="right">
-                    <kul:htmlAttributeLabel attributeEntry="${DataDictionary.AuxiliaryVoucherDocument.attributes.accountingPeriod}" useShortLabel="false" />
+                    <kul:htmlAttributeLabel attributeEntry="${DataDictionary.KualiAuxiliaryVoucherDocument.attributes.accountingPeriod}" useShortLabel="false" />
                   </div>
                 </th>
                 <td class="datacell-nowrap">
@@ -70,13 +70,13 @@
               <tr>
                   <th width="35%" class="bord-l-b">
                       <div align="right">
-                          <kul:htmlAttributeLabel attributeEntry="${DataDictionary.AuxiliaryVoucherDocument.attributes.typeCode}" useShortLabel="false" />
+                          <kul:htmlAttributeLabel attributeEntry="${DataDictionary.KualiAuxiliaryVoucherDocument.attributes.typeCode}" useShortLabel="false" />
                           <html:hidden property="originalVoucherType" />
                       </div>
                   </th>
                   <td class="datacell-nowrap">
          	          <kul:htmlControlAttribute
-					    	attributeEntry="${DataDictionary.AuxiliaryVoucherDocument.attributes.typeCode}"
+					    	attributeEntry="${DataDictionary.KualiAuxiliaryVoucherDocument.attributes.typeCode}"
                             property="document.typeCode"
                             readOnly="${readOnly}" 
                             readOnlyAlternateDisplay="${KualiForm.formattedAuxiliaryVoucherType}" 
@@ -87,24 +87,24 @@
                   </td>
               </tr>
               <c:choose>
-                  <c:when test="${empty KualiForm.document.typeCode || KualiForm.document.typeCode == KFSConstants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE}">
+                  <c:when test="${empty KualiForm.document.typeCode || KualiForm.document.typeCode == Constants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE}">
                   </c:when>                  
                   <c:otherwise>
                       <c:set var="reversalReadOnly" value="${readOnly}"/>
                       <c:if test="${!reversalReadOnly}">  <!--  if we're already readOnly b/c of authz permissions, then we want to stay that way -->
-	                      <c:if test="${KualiForm.document.typeCode == KFSConstants.AuxiliaryVoucher.RECODE_DOC_TYPE}">
+	                      <c:if test="${KualiForm.document.typeCode == Constants.AuxiliaryVoucher.RECODE_DOC_TYPE}">
 						      <c:set var="reversalReadOnly" value="true"/>
 	                      </c:if>
 	                  </c:if>
                       <tr>
                           <kul:htmlAttributeHeaderCell
-                                  attributeEntry="${DataDictionary.AuxiliaryVoucherDocument.attributes.reversalDate}"
+                                  attributeEntry="${DataDictionary.KualiAuxiliaryVoucherDocument.attributes.reversalDate}"
                                   horizontal="true"
                                   width="35%"
                                   />
                           <td class="datacell-nowrap">
                               <kul:htmlControlAttribute
-                                      attributeEntry="${DataDictionary.AuxiliaryVoucherDocument.attributes.reversalDate}"
+                                      attributeEntry="${DataDictionary.KualiAuxiliaryVoucherDocument.attributes.reversalDate}"
                                       datePicker="true"
                                       property="document.reversalDate"
                                       readOnly="${reversalReadOnly}"
@@ -122,7 +122,7 @@
             isDebitCreditAmount="true" 
             editingMode="${KualiForm.editingMode}"
             editableAccounts="${KualiForm.editableAccounts}"/>
-		<gl:generalLedgerPendingEntries/>
+		<kul:generalLedgerPendingEntries/>
 
 		<kul:notes/>
 						

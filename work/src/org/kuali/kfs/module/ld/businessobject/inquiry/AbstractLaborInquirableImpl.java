@@ -32,8 +32,8 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.inquiry.KfsInquirableImpl;
 import org.kuali.module.chart.bo.KualiSystemCode;
+import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.module.labor.LaborConstants;
 
 /**
  * This class is the template class for the customized inqurable implementations used to generate balance inquiry screens.
@@ -145,7 +145,7 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
                 }
 
                 Object keyValue = ObjectUtils.getPropertyValue(businessObject, keyConversion);
-                keyValue = (keyValue == null) ? Constant.EMPTY_STRING : keyValue.toString();
+                keyValue = (keyValue == null) ? Constant.EMPTY_STRING : keyValue.toString();               
 
                 // convert the key value and name into the given ones
                 Object tempKeyValue = this.getKeyValue(keyName, keyValue);
@@ -228,9 +228,7 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
      * 
      * @param parameter the current parameter map
      */
-    protected void addMoreParameters(Properties parameter, String attributeName) {
-        return;
-    }
+    protected abstract void addMoreParameters(Properties parameter, String attributeName);
 
     /**
      * This method determines whether the input name-value pair is exclusive from the processing
@@ -255,7 +253,7 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
         }
         return false;
     }
-
+    
     /**
      * This method determines whether the input name-value pair is exclusive to be a link
      * 
@@ -267,7 +265,7 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
 
         if (keyName != null && keyValue != null) {
 
-            if (isExclusiveField(keyName, keyValue)) {
+            if (isExclusiveField(keyName, keyValue)){
                 return true;
             }
             else if (keyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(KFSConstants.getDashSubAccountNumber())) {
@@ -280,9 +278,6 @@ public abstract class AbstractLaborInquirableImpl extends KfsInquirableImpl {
                 return true;
             }
             else if (keyName.equals(KFSPropertyConstants.POSITION_NUMBER) && keyValue.equals(KFSConstants.getDashPositionNumber())) {
-                return true;
-            }
-            else if (keyName.equals(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE) && keyValue.equals(LaborConstants.BalanceInquiries.BALANCE_TYPE_AC_AND_A21)) {
                 return true;
             }
         }
