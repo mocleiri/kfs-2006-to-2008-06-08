@@ -4,6 +4,7 @@
     <PUR_VNDR_CNTCT_T DOBJ_MAINT_CD_ACTV_IND="Y"
         OBJ_ID="B4D4FDDE-99A1-ED2E-26C6-EB479F997ADC" VER_NBR="5"
         VNDR_ATTN_NM="ACCOUNTS RECEIVABLE DEPARTMENT"
+        VNDR_CNTCT_CMNT_TXT="Make sure you have a customer number"
         VNDR_CNTCT_EMAIL_ADDR="AccountsReceivable@abcCleaning.com"
         VNDR_CNTCT_GNRTD_ID="1000" VNDR_CNTCT_NM="Kelly Adams"
         VNDR_CNTCT_TYP_CD="AR" VNDR_CNTRY_CD="US"

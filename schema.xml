@@ -7465,8 +7465,6 @@
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ORG_LEVEL_CD" size="7" type="DECIMAL"/>
         <column name="ORG_FIN_COA_CD" size="2" type="VARCHAR"/>
@@ -7474,9 +7472,6 @@
         <column name="FDOC_STATUS_CD" size="2" type="VARCHAR"/>
         <column name="FDOC_INITIATOR_ID" size="10" type="VARCHAR"/>
         <column name="FDOC_CREATE_DT" type="DATE"/>
-        <unique name="LD_BCN_ACCTSEL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_ACCTSEL_TI2">
             <index-column name="FDOC_NBR"/>
             <index-column name="UNIV_FISCAL_YR"/>
@@ -8078,13 +8073,8 @@
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ORG_LEVEL_CD" required="true" size="7" type="DECIMAL"/>
-        <unique name="LD_BCN_BUILD_POS_SEL01_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_BUILD_POS_SEL01_MTI2">
             <index-column name="ORG_CD"/>
             <index-column name="FIN_COA_CD"/>
@@ -8471,13 +8461,8 @@
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PERSON_NM" size="50" type="VARCHAR"/>
-        <unique name="LD_BCN_INCUMBENT_SEL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_INTINCBNT_T">
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
@@ -8732,8 +8717,6 @@
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column default="SYS_GUID()" name="OBJ_ID" required="true"
-            size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="IU_POSITION_TYPE" size="2" type="VARCHAR"/>
         <column name="POS_DEPTID" size="10" type="VARCHAR"/>
@@ -8742,9 +8725,6 @@
         <column name="GRADE" size="3" type="VARCHAR"/>
         <column name="POS_DESCR" size="30" type="VARCHAR"/>
         <column name="PERSON_NM" size="50" type="VARCHAR"/>
-        <unique name="LD_BCN_POS_SEL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_POS_SEL_TI2">
             <index-column name="POSITION_NBR"/>
             <index-column name="UNIV_FISCAL_YR"/>
