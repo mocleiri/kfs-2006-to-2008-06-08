@@ -15,14 +15,25 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.kfs.KFSKeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_SUB_TYPE_CODE;
+import static org.kuali.kfs.KFSKeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE;
+import static org.kuali.kfs.KFSKeyConstants.GeneralErrorCorrection.ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_WITH_SUB_TYPE_CODE;
+import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_NUMBER;
 import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_ORIGIN_CODE;
+import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.COMBINED_RESTRICTED_OBJECT_SUB_TYPE_CODES;
+import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.COMBINED_RESTRICTED_OBJECT_TYPE_CODES;
+import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.GENERAL_ERROR_CORRECTION_SECURITY_GROUPING;
+import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.RESTRICTED_OBJECT_SUB_TYPE_CODES;
+import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
 import static org.kuali.module.financial.rules.GeneralErrorCorrectionDocumentRuleConstants.TRANSACTION_LEDGER_ENTRY_DESCRIPTION_DELIMITER;
+import static org.kuali.module.financial.rules.NonCheckDisbursementDocumentRuleConstants.NON_CHECK_DISBURSEMENT_SECURITY_GROUPING;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.service.DataDictionaryService;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.util.GlobalVariables;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.SourceAccountingLine;
@@ -30,15 +41,32 @@ import org.kuali.kfs.bo.TargetAccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.financial.document.GeneralErrorCorrectionDocument;
 
 /**
  * Business rule(s) applicable to <code>{@link org.kuali.module.financial.document.GeneralErrorCorrectionDocument}</code>
  * instances.
  */
 public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBase {
+
+    /**
+     * Convenience method for accessing the most-likely requested security grouping
+     * 
+     * @return String
+     */
+    protected String getDefaultParameterNamespace() {
+        return KFSConstants.FINANCIAL_NAMESPACE;
+    }
+    
+    /**
+     * Convenience method for accessing the most-likely requested detail type code
+     * 
+     * @return String
+     */
+    protected String getDefaultParameterDetailTypeCode() {
+        return KFSConstants.Components.GENERAL_ERROR_CORRECTION_DOC;
+    }    
+    
 
     /**
      * Convenience method for accessing delimiter for the <code>TransactionLedgerEntryDescription</code> of a
@@ -72,7 +100,9 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
     }
 
     /**
-     * @see IsDebitUtils#isDebitConsideringSectionAndTypePositiveOnly(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see IsDebitUtils#isDebitConsideringSectionAndTypePositiveOnly(FinancialDocumentRuleBase, FinancialDocument,
+     *      AccountingLine)
+     * 
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
@@ -174,7 +204,41 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
      * @return boolean
      */
     protected boolean isObjectTypeAndObjectSubTypeAllowed(ObjectCode code) {
-        return SpringContext.getBean(ParameterService.class).getParameterEvaluator(GeneralErrorCorrectionDocument.class, GeneralErrorCorrectionDocumentRuleConstants.VALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE, GeneralErrorCorrectionDocumentRuleConstants.INVALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE, code.getFinancialObjectTypeCode(), code.getFinancialObjectSubTypeCode()).evaluateAndAddError(SourceAccountingLine.class, "objectCode.financialObjectSubTypeCode", KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
+        boolean retval = true;
+
+        if (!getKualiConfigurationService().evaluateConstrainedParameter(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.GENERAL_ERROR_CORRECTION_DOC, COMBINED_RESTRICTED_OBJECT_TYPE_CODES, code.getFinancialObjectTypeCode(), code.getFinancialObjectSubTypeCode())) {
+            // add message
+            GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_WITH_SUB_TYPE_CODE, new String[] { code.getFinancialObjectCode(), code.getFinancialObjectTypeCode(), code.getFinancialObjectSubTypeCode() });
+            retval = false;
+        }
+
+        return retval;
+    }
+
+    /**
+     * Overrides to perform the universal rule in the super class in addition to General Error Correction specific rules. This
+     * method leverages the APC for checking restricted object type values.
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
+        boolean valid = true;
+
+        valid &= super.isObjectTypeAllowed(accountingLine);
+
+        if (valid) {
+            ObjectCode objectCode = accountingLine.getObjectCode();
+
+            if (failsRule( RESTRICTED_OBJECT_TYPE_CODES, objectCode.getFinancialObjectTypeCode())) {
+                valid = false;
+
+                // add message
+                GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
+            }
+        }
+
+        return valid;
     }
 
     /**
@@ -204,6 +268,32 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
             putRequiredPropertyError(boe, REFERENCE_NUMBER);
             valid = false;
         }
+        return valid;
+    }
+
+    /**
+     * Overrides to perform the universal rule in the super class in addition to General Error Correction specific rules. This
+     * method leverages the APC for checking restricted object sub type values.
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectSubTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
+        boolean valid = true;
+
+        valid &= super.isObjectSubTypeAllowed(accountingLine);
+
+        if (valid) {
+            ObjectCode objectCode = accountingLine.getObjectCode();
+
+            if (failsRule( RESTRICTED_OBJECT_SUB_TYPE_CODES, objectCode.getFinancialObjectSubTypeCode())) {
+                valid = false;
+
+                // add message
+                GlobalVariables.getErrorMap().putError(FINANCIAL_OBJECT_CODE, ERROR_DOCUMENT_GENERAL_ERROR_CORRECTION_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
+            }
+        }
+
         return valid;
     }
 }
