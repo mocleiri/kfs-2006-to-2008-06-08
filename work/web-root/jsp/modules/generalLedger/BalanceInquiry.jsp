@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 
 <kul:page lookup="true" showDocumentInfo="false"
 	htmlFormAction="glBalanceInquiry"
@@ -38,7 +38,7 @@
 
 	<table width="100%">
 		<tr>
-			<td width="1%"><img src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" width="20"
+			<td width="1%"><img src="images/pixel_clear.gif" alt="" width="20"
 				height="20"></td>
 
 			<td><c:if test="${param.inquiryFlag != 'true'}">
@@ -52,19 +52,19 @@
 					<c:set var="ActionName" value="glBalanceInquiry.do" scope="request" />
 					<c:set var="IsLookupDisplay" value="true" scope="request" />
 
-					<kul:rowDisplay rows="${FieldRows}" />
+					<kul:newrowdisplay rows="${FieldRows}" />
 
 					<tr align=center>
 						<td height="30" colspan=2 class="infoline"><html:image
 							property="methodToCall.search" value="search"
-							src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_search.gif" styleClass="tinybutton"
+							src="images/buttonsmall_search.gif" styleClass="tinybutton"
 							alt="search" title="search" border="0" /> <html:image
 							property="methodToCall.clearValues" value="clearValues"
-							src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_clear.gif" styleClass="tinybutton"
+							src="images/buttonsmall_clear.gif" styleClass="tinybutton"
 							alt="clear" title="clear" border="0" /> <c:if test="${KualiForm.formKey!=''}">
 							<a
 								href='<c:out value="${KualiForm.backLocation}?methodToCall=refresh&docFormKey=${KualiForm.formKey}" />' title="cancel">
-							<img src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif" class="tinybutton"
+							<img src="images/buttonsmall_cancel.gif" class="tinybutton"
 								border="0" alt="cancel" title="cancel" /></a>
 						</c:if> <!-- Optional extra button --> <c:if
 							test="${not empty KualiForm.lookupable.extraButtonSource}">
@@ -123,22 +123,26 @@
 			<br />
 			<br />
 
-			<c:if test="${!empty reqSearchResultsSize }">
+			<c:if test="${reqSearchResultsActualSize>0}">
+				<c:out value="${reqSearchResultsActualSize}" /> items found.
+	        </c:if>
 	        
 	        <display:table class="datatable-100" cellspacing="0"
 				cellpadding="0" name="${reqSearchResults}" id="row"
 				export="true" pagesize="100" defaultsort="1" decorator="org.kuali.module.gl.web.BalanceInquiryTableDecorator"
-				requestURI="glBalanceInquiry.do?methodToCall=viewResults&reqSearchResultsSize=${reqSearchResultsSize}&searchResultKey=${searchResultKey}">
+				requestURI="glBalanceInquiry.do?methodToCall=viewResults&reqSearchResultsActualSize=${reqSearchResultsActualSize}&searchResultKey=${searchResultKey}">
 				
-				<c:set var="columnLength" value="${fn:length(row.columns)-13}" />
 				<c:forEach items="${row.columns}" var="column" begin="1" varStatus="status">
-   				    <c:if test="${status.index > 0}">
+				
+					<c:choose>
+					
+						<c:when test="${status.index > 0}">
 					
 							<c:choose>
 		
 								<c:when test="${column.formatter.implementationClass == 'org.kuali.core.web.format.CurrencyFormatter'}">
 		
-									<display:column class="numbercell" sortable="true" media="${(status.index < columnLength) ? 'all' : 'csv excel xml'}"
+									<display:column class="numbercell" sortable="true" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
 										decorator="org.kuali.core.web.ui.FormatAwareDecorator"
 										title="${column.columnTitle}" comparator="${column.comparator}">
 										
@@ -165,7 +169,7 @@
 		
 											<display:column class="infocell" sortable="${column.sortable}"
 												decorator="org.kuali.core.web.ui.FormatAwareDecorator"
-												title="${column.columnTitle}" media="${(status.index < columnLength) ? 'all' : 'csv excel xml'}"
+												title="${column.columnTitle}" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
 												comparator="${column.comparator}">
 		
 												<a href="<c:out value="${column.propertyURL}"/>" title="${column.propertyValue}"
@@ -179,7 +183,7 @@
 											
 											<display:column class="infocell" sortable="${column.sortable}"
 												decorator="org.kuali.core.web.ui.FormatAwareDecorator"
-												title="${column.columnTitle}" media="${(status.index < columnLength) ? 'all' : 'csv excel xml'}"
+												title="${column.columnTitle}" media="${(status.index < 11) ? 'all' : 'csv excel xml'}"
 												comparator="${column.comparator}">
 												
 												<c:if test="${column.columnTitle == 'Project Code'}">
@@ -200,13 +204,16 @@
 								</c:otherwise>
 		
 							</c:choose>
-				    </c:if>	
+					
+						</c:when>
+						
+					</c:choose>
+					
 				</c:forEach>
 				
 			</display:table>
 			</td>
-			</c:if>
-			<td width="1%"><img src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" height="20"
+			<td width="1%"><img src="images/pixel_clear.gif" alt="" height="20"
 				width="20"></td>
 		</tr>
 	</table>

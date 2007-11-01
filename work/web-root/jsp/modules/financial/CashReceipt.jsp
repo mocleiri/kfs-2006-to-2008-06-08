@@ -1,5 +1,5 @@
 <%--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -18,22 +18,17 @@
 <c:set var="displayHidden" value="false" />
 <c:set var="checkDetailMode" value="${KualiForm.checkEntryDetailMode}" />
 <c:set var="cashReceiptAttributes"
-	value="${DataDictionary['CashReceiptDocument'].attributes}" />
+	value="${DataDictionary['KualiCashReceiptDocument'].attributes}" />
 <c:set var="readOnly"
 	value="${!empty KualiForm.editingMode['viewOnly']}" />
 <kul:documentPage showDocumentInfo="true"
 	htmlFormAction="financialCashReceipt"
-	documentTypeName="CashReceiptDocument" renderMultipart="true"
+	documentTypeName="KualiCashReceiptDocument" renderMultipart="true"
 	showTabButtons="true">
 	<cr:printCoverSheet />
 	<kul:hiddenDocumentFields />
 	<html:hidden property="document.nextCheckSequenceId" />
 	<html:hidden property="document.checkEntryMode" />
-  <html:hidden property="document.cashReceiptHeader.documentNumber" />
-  <html:hidden property="document.cashReceiptHeader.workgroupName" />
-  <html:hidden property="document.cashReceiptHeader.objectId" />
-  <html:hidden property="document.cashReceiptHeader.versionNumber" />
-  <html:hidden property="document.cashReceiptHeader.depositDate" />
 	<html:hidden property="checkTotal" />
 	<c:set var="docStatusMessage"
 		value="${KualiForm.financialDocumentStatusMessage}" />
@@ -44,7 +39,7 @@
 	<c:set var="cashDrawerStatusMessage"
 		value="${KualiForm.cashDrawerStatusMessage}" />
 	<c:if test="${!empty cashDrawerStatusMessage}">
-		<div align="left"><span style="color: #ff0000;"><b>${KualiForm.cashDrawerStatusMessage}</b></span>
+		<div align="left"><font color="red"><b>${KualiForm.cashDrawerStatusMessage}</b></font>
 		</div>
 		<br>
 	</c:if>
@@ -58,7 +53,7 @@
     </SCRIPT>
 	<html:hidden write="false" property="document.campusLocationCode" />
 	<kul:tab tabTitle="Cash Reconciliation" defaultOpen="true"
-		tabErrorKey="${KFSConstants.EDIT_CASH_RECEIPT_CASH_RECONCILIATION_ERRORS}">
+		tabErrorKey="${Constants.EDIT_CASH_RECEIPT_CASH_RECONCILIATION_ERRORS}">
 		<div class="tab-container" align=center>
 		<div class="h2-container">
 		<h2>Cash Reconciliation</h2>
@@ -72,7 +67,7 @@
 						useShortLabel="false" /></div>
 					</th>
 					<c:if test="${readOnly}">
-						<td>${KualiForm.document.currencyFormattedTotalCheckAmount} <html:hidden
+						<td>$${KualiForm.document.currencyFormattedTotalCheckAmount} <html:hidden
 							write="false" property="document.totalCheckAmount" /> <html:hidden
 							write="false" property="checkEntryMode" /></td>
 					</c:if>
@@ -80,7 +75,7 @@
 						<td><c:if test="${!checkDetailMode}">
 							<kul:htmlControlAttribute property="document.totalCheckAmount"
 								attributeEntry="${cashReceiptAttributes.totalCheckAmount}" />
-						</c:if> <c:if test="${checkDetailMode}"> ${KualiForm.document.currencyFormattedTotalCheckAmount} 
+						</c:if> <c:if test="${checkDetailMode}"> $${KualiForm.document.currencyFormattedTotalCheckAmount} 
 	        		<html:hidden write="false"
 								property="document.totalCheckAmount" />
 						</c:if>
@@ -102,7 +97,13 @@
 						attributeEntry="${cashReceiptAttributes.totalCashAmount}"
 						useShortLabel="false" /></strong></div>
 					</th>
-					<td width="35%" align="left" valign="middle">${KualiForm.document.currencyFormattedTotalCashAmount}</td>
+					<td width="35%" align="left" valign="middle"><c:if
+						test="${readOnly}"> $${KualiForm.document.currencyFormattedTotalCashAmount} <html:hidden
+							write="false" property="document.totalCashAmount" />
+					</c:if> <c:if test="${!readOnly}">
+						<kul:htmlControlAttribute property="document.totalCashAmount"
+							attributeEntry="${cashReceiptAttributes.totalCashAmount}" styleClass="amount" />
+					</c:if></td>
 				</tr>
 				<tr>
 					<th>
@@ -110,15 +111,21 @@
 						attributeEntry="${cashReceiptAttributes.totalCoinAmount}"
 						useShortLabel="false" /></strong></div>
 					</th>
-					<td width="35%" align="left" valign="middle">${KualiForm.document.currencyFormattedTotalCoinAmount}</td>
+					<td width="35%" align="left" valign="middle"><c:if
+						test="${readOnly}"> $${KualiForm.document.currencyFormattedTotalCoinAmount} <html:hidden
+							write="false" property="document.totalCoinAmount" />
+					</c:if> <c:if test="${!readOnly}">
+						<kul:htmlControlAttribute property="document.totalCoinAmount"
+							attributeEntry="${cashReceiptAttributes.totalCoinAmount}" styleClass="amount" />
+					</c:if></td>
 				</tr>
 				<tr>
 					<th>
 					<div align="right"><strong><kul:htmlAttributeLabel
-						attributeEntry="${cashReceiptAttributes.totalDollarAmount}"
-						useShortLabel="false" /></strong></div>
+						attributeEntry="${cashReceiptAttributes.sumTotalAmount}"
+						useShortLabel="false" skipHelpUrl="true" /></strong></div>
 					</th>
-					<td width="35%" align="left" valign="middle">${KualiForm.document.currencyFormattedSumTotalAmount}&nbsp;&nbsp;&nbsp;
+					<td width="35%" align="left" valign="middle">$${KualiForm.document.currencyFormattedSumTotalAmount}&nbsp;&nbsp;&nbsp;
 					<c:if test="${!readOnly}">
 						<html:image src="${ConfigProperties.externalizable.images.url}tinybutton-recalculate.gif"
 							styleClass="tinybutton" alt="recalculate total" title="recalculate total" />
@@ -128,14 +135,6 @@
 		</table>
 		</div>
 	</kul:tab>
-  <kul:tab tabTitle="Currency and Coin Detail" defaultOpen="true" tabErrorKey="${KFSConstants.EDIT_CASH_RECEIPT_CURRENCY_COIN_ERRORS}">
-    <div class="tab-container" align="center">
-      <div class="h2-container">
-        <h2>Currency and Coin Detail</h2>
-      </div>
-      <fin:currencyCoinLine currencyProperty="document.currencyDetail" coinProperty="document.coinDetail" readOnly="false" editingMode="${KualiForm.editingMode}" />
-    </div>
-  </kul:tab>
 	<cr:checkLines checkDetailMode="${checkDetailMode}"
 		editingMode="${KualiForm.editingMode}"
 		totalAmount="${KualiForm.cashReceiptDocument.currencyFormattedTotalCheckAmount}"
