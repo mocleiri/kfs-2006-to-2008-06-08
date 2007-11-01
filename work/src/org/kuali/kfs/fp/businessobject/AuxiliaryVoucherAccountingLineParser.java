@@ -17,6 +17,7 @@
 package org.kuali.module.financial.bo;
 
 import static org.kuali.kfs.KFSKeyConstants.AccountingLineParser.ERROR_INVALID_PROPERTY_VALUE;
+import static org.kuali.kfs.KFSKeyConstants.AccountingLineParser.ERROR_TOO_MANY_AMOUNTS;
 import static org.kuali.kfs.KFSPropertyConstants.ACCOUNT_NUMBER;
 import static org.kuali.kfs.KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.CREDIT;
@@ -24,6 +25,7 @@ import static org.kuali.kfs.KFSPropertyConstants.DEBIT;
 import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.kfs.KFSPropertyConstants.OVERRIDE_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.SUB_ACCOUNT_NUMBER;
 

@@ -35,6 +35,7 @@ import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_9_LINE
 import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.kfs.KFSPropertyConstants.OVERRIDE_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.SUB_ACCOUNT_NUMBER;
 
@@ -43,11 +44,14 @@ import org.kuali.kfs.bo.AccountingLineParserBase;
 
 /**
  * <code>BudgetAdjustmentDocument</code> accounting line parser
+ * 
+ * 
  */
 public class BudgetAdjustmentAccountingLineParser extends AccountingLineParserBase {
     private static final String[] AD_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, CURRENT_BUDGET_ADJUSTMENT_AMOUNT, BASE_BUDGET_ADJUSTMENT_AMOUNT, FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT };
 
     /**
+     * 
      * Constructs a AdvanceDepositAccountingLineParser.java.
      */
     public BudgetAdjustmentAccountingLineParser() {
@@ -63,6 +67,7 @@ public class BudgetAdjustmentAccountingLineParser extends AccountingLineParserBa
     }
 
     /**
+     * 
      * @see org.kuali.core.bo.AccountingLineParser#getTargetAccountingLineFormat()
      */
     @Override
