@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -191,6 +191,7 @@ public class IsDebitTestUtils {
     }
 
     /**
+     * 
      * @param documentTypeService
      * @param dataDicitionaryService
      * @param financialDocument
@@ -201,7 +202,7 @@ public class IsDebitTestUtils {
      */
     public static boolean isDebit(DocumentTypeService documentTypeService, DataDictionaryService dataDicitionaryService, AccountingDocument financialDocument, AccountingLine accountingLine) throws InstantiationException, IllegalAccessException {
         String documentTypeName = documentTypeService.getDocumentTypeNameByClass(financialDocument.getClass());
-        AccountingLineRule rule = (AccountingLineRule) dataDicitionaryService.getDataDictionary().getDocumentEntry(documentTypeName).getBusinessRulesClass().newInstance();
+        AccountingLineRule rule = (AccountingLineRule) dataDicitionaryService.getDataDictionary().getBusinessRulesClass(documentTypeName).newInstance();
 
         return rule.isDebit(financialDocument, accountingLine);
     }

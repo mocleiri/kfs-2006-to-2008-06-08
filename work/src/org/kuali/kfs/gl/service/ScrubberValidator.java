@@ -31,7 +31,7 @@ public interface ScrubberValidator {
      * @param universityRunDate Date of scrubber run
      * @return List of Message objects based for warnings or errors that happened when validating the transaction
      */
-    public List<Message> validateTransaction(OriginEntry originEntry, OriginEntry scrubbedEntry, UniversityDate universityRunDate, boolean laborIndicator);
+    public List<Message> validateTransaction(OriginEntry originEntry, OriginEntry scrubbedEntry, UniversityDate universityRunDate, boolean validateAccountIndicator);
 
     /**
      * Validate a transaction for use in balance inquiry
@@ -39,11 +39,4 @@ public interface ScrubberValidator {
      * @param entry Input transaction
      */
     public void validateForInquiry(GeneralLedgerPendingEntry entry);
-
-    /**
-     * This method gives the scrubber step a way to populate the origin entry lookup service on validators that need it
-     * 
-     * @param originEntryableLookupService
-     */
-    public void setReferenceLookup(OriginEntryLookupService originEntryLookupService);
 }

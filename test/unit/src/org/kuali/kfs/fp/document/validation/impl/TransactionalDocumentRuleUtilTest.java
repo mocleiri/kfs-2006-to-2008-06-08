@@ -15,25 +15,25 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.core.util.SpringServiceLocator.getBalanceTypService;
 import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapEmpty;
 
-import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.chart.service.AccountingPeriodService;
-import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.financial.document.JournalVoucherDocument;
-import org.kuali.test.ConfigureContext;
-
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 /**
  * Class for unit testing the functionality of <code>{@link TransactionalDocumentRuleUtil}</code>
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
 
     private static final String DOES_NOT_MATTER = "doesNotMatter";
@@ -41,8 +41,8 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
     private static long ONE_DAY_MILLIS = 24 * 60 * 60 * 1000L;
 
 
-    private final String ANNUAL_BALANCE_PERIOD_CODE = "AB";
-    private final Integer CURRENT_FISCAL_YEAR = new Integer("2004");
+    private final String ANNUAL_BALANCE_PERIOD_CODE="AB";
+    private final Integer CURRENT_FISCAL_YEAR= new Integer("2004");
 
 
     // /////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * @return String
      */
     protected String getErrorPropertyName() {
-        return KFSConstants.GLOBAL_ERRORS;
+        return Constants.GLOBAL_ERRORS;
     }
 
     /**
@@ -63,7 +63,7 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * @return String
      */
     protected String getActiveBalanceType() {
-        return KFSConstants.BALANCE_TYPE_ACTUAL;
+        return Constants.BALANCE_TYPE_ACTUAL;
     }
 
     /**
@@ -72,7 +72,7 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * @return String
      */
     protected String getInactiveBalanceType() {
-        return KFSConstants.BALANCE_TYPE_ACTUAL;
+        return Constants.BALANCE_TYPE_ACTUAL;
     }
 
 
@@ -82,7 +82,7 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * @return AccountingPeriod
      */
     public AccountingPeriod getAnnualBalanceAccountingPeriod() {
-        return SpringContext.getBean(AccountingPeriodService.class).getByPeriod(ANNUAL_BALANCE_PERIOD_CODE, CURRENT_FISCAL_YEAR);
+        return getAccountingPeriodService().getByPeriod(ANNUAL_BALANCE_PERIOD_CODE, CURRENT_FISCAL_YEAR);
     }
 
     /**
@@ -100,21 +100,21 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * @return Timestamp
      */
     private java.sql.Date getSqlDateYesterday() {
-        return new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime() - ONE_DAY_MILLIS);
+        return new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime() - ONE_DAY_MILLIS);
     }
 
     /**
      * Fixture accessor method for getting a <code>{@link java.sql.Date}</code> instance that is in the future.
      */
     private java.sql.Date getSqlDateTomorrow() {
-        return new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime() + ONE_DAY_MILLIS);
+        return new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime() + ONE_DAY_MILLIS);
     }
 
     /**
      * @return today's java.sql.Date
      */
     private java.sql.Date getSqlDateToday() {
-        return new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime());
+        return new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime());
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -163,10 +163,10 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
         BalanceTyp balanceType = null;
 
         if (btStr != null) {
-            balanceType = SpringContext.getBean(BalanceTypService.class).getBalanceTypByCode(btStr);
+            balanceType = getBalanceTypService().getBalanceTypByCode(btStr);
         }
         assertGlobalErrorMapEmpty();
-        boolean result = AccountingDocumentRuleUtil.isValidBalanceType(balanceType, "code");
+        boolean result = AccountingDocumentRuleUtil.isValidBalanceType(balanceType,"code");
         if (expected) {
             assertGlobalErrorMapEmpty();
         }
@@ -178,7 +178,6 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleUtil#isValidOpenAccountingPeriod
      */
-    // @RelatesTo(JiraIssue.KULRNE4926)
     public void testIsValidOpenAccountingPeriod_Open() {
         testIsValidOpenAccountingPeriod(getAnnualBalanceAccountingPeriod(), true);
     }
@@ -197,7 +196,6 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      * 
      * @see org.kuali.module.financial.rules.TransactionalDocumentRuleUtil#isValidOpenAccountingPeriod
      */
-    // @RelatesTo(JiraIssue.KULRNE4926)
     public void testIsValidOpenAccountingPeriod_Null() {
         testIsValidOpenAccountingPeriod(null, false);
     }
@@ -211,7 +209,7 @@ public class TransactionalDocumentRuleUtilTest extends KualiTestBase {
      */
     protected void testIsValidOpenAccountingPeriod(AccountingPeriod period, boolean expected) {
         assertGlobalErrorMapEmpty();
-        boolean result = AccountingDocumentRuleUtil.isValidOpenAccountingPeriod(period, JournalVoucherDocument.class, KFSPropertyConstants.ACCOUNTING_PERIOD, DOES_NOT_MATTER);
+        boolean result = AccountingDocumentRuleUtil.isValidOpenAccountingPeriod(period, JournalVoucherDocument.class, PropertyConstants.ACCOUNTING_PERIOD, DOES_NOT_MATTER);
         if (expected) {
             assertGlobalErrorMapEmpty();
         }

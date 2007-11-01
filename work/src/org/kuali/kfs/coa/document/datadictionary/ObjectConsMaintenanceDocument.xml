@@ -33,16 +33,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ObjectConsMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiObjectConsMaintenanceDocument</documentTypeName>
         <documentTypeCode>OBJC</documentTypeCode>
-        
-        <webScriptFile>../dwr/interface/ObjectCodeService.js</webScriptFile>
-        <webScriptFile>../scripts/chart/objConsDocument.js</webScriptFile>
-        
-        <label>Object Consolidation</label>
+        <label>Object Consolidation Maintenance Document</label>
+        <shortLabel>ObjConsMaintDoc</shortLabel>
         <summary>Object Consolidation Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Object Consolidations, or modify existing Object Consolidations.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="ObjectCons" parameterName="OBJECT_CONSOLIDATION" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_OBJECT_CONSOLIDATION" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -63,8 +62,7 @@
                     <maintainableField name="finConsolidationObjActiveIndicator" >
                         <defaultValue>true</defaultValue>
                     </maintainableField>
-                    <maintainableField name="financialEliminationsObjectCode" required="true" webUILeaveFieldFunction="updateObjectName" />
-                    <maintainableField name="financialEliminationsObject.financialObjectCodeName" required="true" readOnly="true" />
+                    <maintainableField name="financialEliminationsObjectCode" required="true" />
                     <maintainableField name="financialReportingSortCode" required="true" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
