@@ -15,93 +15,72 @@
  */
 package org.kuali.module.cg.rules;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.kuali.core.bo.PersistableBusinessObject;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Proposal;
 import org.kuali.module.cg.bo.ProposalOrganization;
-import org.kuali.module.cg.bo.ProposalProjectDirector;
-import org.kuali.module.cg.bo.ProposalSubcontractor;
+import org.kuali.PropertyConstants;
+import org.kuali.KeyConstants;
 
 /**
  * Rules for the Proposal maintenance document.
  */
-public class ProposalRule extends CGMaintenanceDocumentRuleBase {
-    protected static Logger LOG = org.apache.log4j.Logger.getLogger(ProposalRule.class);
+public class ProposalRule extends MaintenanceDocumentRuleBase {
 
-    private Proposal newProposalCopy;
+    // private Proposal oldProposal;
+    private Proposal newProposal;
 
     @Override
-    protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument documentCopy) {
-        LOG.info("Entering ProposalRule.processCustomSaveDocumentBusinessRules");
-        processCustomRouteDocumentBusinessRules(documentCopy); // chain call but ignore success
-        LOG.info("Leaving ProposalRule.processCustomSaveDocumentBusinessRules");
+    protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
+        processCustomRouteDocumentBusinessRules(document);
         return true; // save despite error messages
     }
 
     @Override
-    protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument documentCopy) {
-        LOG.info("Entering ProposalRule.processCustomRouteDocumentBusinessRules");
+    protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
+        setupConvenienceObjects();
         boolean success = true;
-        success &= checkEndAfterBegin(newProposalCopy.getProposalBeginningDate(), newProposalCopy.getProposalEndingDate(), KFSPropertyConstants.PROPOSAL_ENDING_DATE);
-        success &= checkPrimary(newProposalCopy.getProposalOrganizations(), ProposalOrganization.class, KFSPropertyConstants.PROPOSAL_ORGANIZATIONS, Proposal.class);
-        success &= checkPrimary(newProposalCopy.getProposalProjectDirectors(), ProposalProjectDirector.class, KFSPropertyConstants.PROPOSAL_PROJECT_DIRECTORS, Proposal.class);
-        success &= checkProjectDirectorsExist(newProposalCopy.getProposalProjectDirectors(), ProposalProjectDirector.class, KFSPropertyConstants.PROPOSAL_PROJECT_DIRECTORS);
-        success &= checkProjectDirectorsStatuses(newProposalCopy.getProposalProjectDirectors(), ProposalProjectDirector.class, KFSPropertyConstants.PROPOSAL_PROJECT_DIRECTORS);
-        success &= checkFederalPassThrough(newProposalCopy.getProposalFederalPassThroughIndicator(), newProposalCopy.getAgency(), newProposalCopy.getFederalPassThroughAgencyNumber(), Proposal.class, KFSPropertyConstants.PROPOSAL_FEDERAL_PASS_THROUGH_INDICATOR);
-        success &= checkAgencyNotEqualToFederalPassThroughAgency(newProposalCopy.getAgency(), newProposalCopy.getFederalPassThroughAgency(), KFSPropertyConstants.AGENCY_NUMBER, KFSPropertyConstants.FEDERAL_PASS_THROUGH_AGENCY_NUMBER);
-        LOG.info("Leaving ProposalRule.processCustomRouteDocumentBusinessRules");
+        success &= checkOrgs();
         return success;
     }
 
-    /**
-     * @return
-     */
-    @Override
-    public boolean processCustomAddCollectionLineBusinessRules(MaintenanceDocument document, String collectionName, PersistableBusinessObject line) {
-        LOG.debug("Entering ProposalRule.processCustomAddNewCollectionLineBusinessRules( " + collectionName + " )");
+    private boolean checkOrgs() {
         boolean success = true;
-        success &= validateAddSubcontractor(line);
-        LOG.debug("Leaving ProposalRule.processCustomAddNewCollectionLineBusinessRules( " + collectionName + " )");
-        return success;
-    }
-
-    /**
-     * This method takes a look at the new line being added and applies appropriate validation checks if the line is a new line for
-     * the {@link Subcontractor} collection. If the validation checks fail, an appropriate error message will be added to the global
-     * error map and the method will return a value of false.
-     * 
-     * @param addLine New business object values being added.
-     * @return True is the value being added passed all applicable validation rules.
-     */
-    private boolean validateAddSubcontractor(PersistableBusinessObject addLine) {
-        boolean success = true;
-        if (addLine.getClass().isAssignableFrom(ProposalSubcontractor.class)) {
-            ProposalSubcontractor subc = (ProposalSubcontractor) addLine;
-            if (StringUtils.isBlank(subc.getSubcontractorNumber())) {
-                String propertyName = KFSPropertyConstants.SUBCONTRACTOR_NUMBER;
-                String errorKey = KFSKeyConstants.ERROR_PROPOSAL_SUBCONTRACTOR_NUMBER_REQUIRED_FOR_ADD;
-                GlobalVariables.getErrorMap().putError(propertyName, errorKey);
-                success = false;
+        boolean foundPrimary = false;
+        int n = 0;
+        for (ProposalOrganization po : newProposal.getProposalOrganizations()) {
+            String propertyName = PropertyConstants.PROPOSAL_ORGANIZATIONS + "[" + (n++) + "]." + PropertyConstants.ORGANIZATION_CODE;
+            if (po.isProposalPrimaryOrganizationIndicator()) {
+                if (foundPrimary) {
+                    putFieldError(PropertyConstants.PROPOSAL_ORGANIZATIONS, KeyConstants.ERROR_MULTIPLE_PRIMARY_ORGS);
+                    success = false;
+                }
+                foundPrimary = true;
             }
+        }
+        if (!foundPrimary) {
+            putFieldError(PropertyConstants.PROPOSAL_ORGANIZATIONS, KeyConstants.ERROR_NO_PRIMARY_ORG);
+            success = false;
         }
         return success;
     }
 
-    /**
-     * Performs convenience cast for Maintenance framework. Note that the {@link MaintenanceDocumentRule} events provide only a deep
-     * copy of the document (from KualiDocumentEventBase), so these BOs are a copy too. The framework does this to prevent these
-     * rules from changing any data.
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRule#setupConvenienceObjects()
-     */
-    @Override
     public void setupConvenienceObjects() {
-        // oldProposalCopy = (Proposal) super.getOldBo();
-        newProposalCopy = (Proposal) super.getNewBo();
+        // oldProposal = (Proposal) super.getOldBo();
+        newProposal = (Proposal) super.getNewBo();
+    }
+
+    // todo: change the super method to accept var args
+    @Override
+    protected void putFieldError(String propertyName, String errorConstant, String... parameters) {
+        super.putFieldError(propertyName, errorConstant, parameters);
     }
 }

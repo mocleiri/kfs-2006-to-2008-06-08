@@ -24,14 +24,11 @@ import org.kuali.core.web.ui.Field;
 import org.kuali.core.web.ui.Row;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.module.labor.bo.AccountStatusCurrentFunds;
 import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
 import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.bo.LedgerEntry;
 import org.kuali.module.labor.service.LaborInquiryOptionsService;
 import org.kuali.module.labor.service.LaborLedgerBalanceService;
 import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
-import org.kuali.module.labor.util.ObjectUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -41,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborInquiryOptionsServiceImpl.class);
-
     private LaborLedgerPendingEntryService laborLedgerPendingEntryService;
     private LaborLedgerBalanceService laborLedgerBalanceService;
 
@@ -65,7 +61,7 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
         }
         return null;
     }
-
+    
     /**
      * @see org.kuali.module.labor.service.LaborInquiryOptionsService#getSelectedPendingEntryOption(java.util.Map)
      */
@@ -93,13 +89,13 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
     public boolean isConsolidationSelected(Map fieldValues, Collection<Row> rows) {
         boolean isConsolidationSelected = isConsolidationSelected(fieldValues);
 
-        if (!isConsolidationSelected) {
+        if(!isConsolidationSelected){
             Field consolidationField = getConsolidationField(rows);
             consolidationField.setPropertyValue(Constant.DETAIL);
-        }
-        return isConsolidationSelected;
+        }        
+        return isConsolidationSelected;           
     }
-
+    
     /**
      * @see org.kuali.module.labor.service.LaborInquiryOptionsService#isConsolidationSelected(java.util.Map)
      */
@@ -121,56 +117,35 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborInquiryOptionsService#updateLedgerBalanceByPendingLedgerEntry(java.util.Collection,
-     *      java.util.Map, java.lang.String, boolean)
+     * Determines if any of the fields that require a detail view are used
+     * 
+     * @param fieldValues
+     * @param fieldName
      */
-    public void updateLedgerBalanceByPendingLedgerEntry(Collection<LedgerBalance> balanceCollection, Map fieldValues, String pendingEntryOption, boolean isConsolidated) {
-        // determine if search results need to be updated by pending ledger entries
-        if (Constant.ALL_PENDING_ENTRY.equals(pendingEntryOption)) {
-            updateCollection(balanceCollection, fieldValues, false, isConsolidated, LedgerBalance.class);
-        }
-        else if (Constant.APPROVED_PENDING_ENTRY.equals(pendingEntryOption)) {
-            updateCollection(balanceCollection, fieldValues, true, isConsolidated, LedgerBalance.class);
-        }
-    }
-
-    /**
-     * @see org.kuali.module.labor.service.LaborInquiryOptionsService#updateCurrentFundsByPendingLedgerEntry(java.util.Collection,
-     *      java.util.Map, java.lang.String, boolean)
-     */
-    public void updateCurrentFundsByPendingLedgerEntry(Collection<AccountStatusCurrentFunds> balanceCollection, Map fieldValues, String pendingEntryOption, boolean isConsolidated) {
-        // determine if search results need to be updated by pending ledger entries
-        if (Constant.ALL_PENDING_ENTRY.equals(pendingEntryOption)) {
-            updateCollection(balanceCollection, fieldValues, false, isConsolidated, AccountStatusCurrentFunds.class);
-        }
-        else if (Constant.APPROVED_PENDING_ENTRY.equals(pendingEntryOption)) {
-            updateCollection(balanceCollection, fieldValues, true, isConsolidated, AccountStatusCurrentFunds.class);
-        }
+    private boolean isDetailDefaultFieldUsed(Map fieldValues, String fieldName) {
+        return StringUtils.isNotBlank((String) fieldValues.get(fieldName));
     }
 
     /**
      * @see org.kuali.module.labor.service.LaborInquiryOptionsService#updateByPendingLedgerEntry(java.util.Collection,
      *      java.util.Map, java.lang.String, boolean)
      */
-    public void updateLedgerEntryByPendingLedgerEntry(Collection<LedgerEntry> entryCollection, Map fieldValues, String pendingEntryOption) {
+    public void updateByPendingLedgerEntry(Collection entryCollection, Map fieldValues, String pendingEntryOption, boolean isConsolidated) {
+
         // determine if search results need to be updated by pending ledger entries
         if (Constant.ALL_PENDING_ENTRY.equals(pendingEntryOption)) {
-            updateCollection(entryCollection, fieldValues, false, false, LedgerEntry.class);
+            updateEntryCollection(entryCollection, fieldValues, false, isConsolidated);
         }
         else if (Constant.APPROVED_PENDING_ENTRY.equals(pendingEntryOption)) {
-            updateCollection(entryCollection, fieldValues, true, false, LedgerEntry.class);
+            updateEntryCollection(entryCollection, fieldValues, true, isConsolidated);
         }
     }
 
     /**
-     * update a given collection entry with the pending entry obtained from the given field values and isApproved
-     * 
-     * @param entryCollection the given entry collection
-     * @param fieldValues the given field values
-     * @param isApproved indicate if the resulting pending entry has been approved
-     * @param isConsolidated indicate if the collection entries have been consolidated
+     * @see org.kuali.module.labor.service.LaborInquiryOptionsService#updateEntryCollection(java.util.Collection, java.util.Map,
+     *      boolean, boolean)
      */
-    private void updateCollection(Collection entryCollection, Map fieldValues, boolean isApproved, boolean isConsolidated, Class clazz) {
+    public void updateEntryCollection(Collection entryCollection, Map fieldValues, boolean isApproved, boolean isConsolidated) {
         // go through the pending entries to update the balance collection
         Iterator<LaborLedgerPendingEntry> pendingEntryIterator = laborLedgerPendingEntryService.findPendingLedgerEntriesForLedgerBalance(fieldValues, isApproved);
 
@@ -184,49 +159,16 @@ public class LaborInquiryOptionsServiceImpl implements LaborInquiryOptionsServic
                 pendingEntry.setFinancialObjectTypeCode(Constant.CONSOLIDATED_OBJECT_TYPE_CODE);
             }
 
-            if (LedgerBalance.class.isAssignableFrom(clazz)) {
-                try {
-                    LedgerBalance ledgerBalance = laborLedgerBalanceService.findLedgerBalance(entryCollection, pendingEntry);
-                    if (ledgerBalance == null) {
-
-                        Object newLedgerBalance = clazz.newInstance();
-                        ObjectUtil.buildObject(newLedgerBalance, pendingEntry);
-
-                        ledgerBalance = (LedgerBalance) newLedgerBalance;
-                        entryCollection.add(ledgerBalance);
-                    }
-                    laborLedgerBalanceService.updateLedgerBalance(ledgerBalance, pendingEntry);
-                    ledgerBalance.getDummyBusinessObject().setConsolidationOption(isConsolidated ? Constant.CONSOLIDATION : Constant.DETAIL);
-                    ledgerBalance.getDummyBusinessObject().setPendingEntryOption(isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY);
-                }
-                catch (Exception e) {
-                    LOG.error("cannot create a new object of type: " + clazz.getName() + "/n" + e);
-                }
-            }
-            else if (LedgerEntry.class.isAssignableFrom(clazz)) {
-                LedgerEntry ledgerEntry = new LedgerEntry();
-                ObjectUtil.buildObject(ledgerEntry, pendingEntry);
-
-                ledgerEntry.getDummyBusinessObject().setConsolidationOption(isConsolidated ? Constant.CONSOLIDATION : Constant.DETAIL);
-                ledgerEntry.getDummyBusinessObject().setPendingEntryOption(isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY);
-
-                entryCollection.add(ledgerEntry);
+            LedgerBalance ledgerBalance = laborLedgerBalanceService.findLedgerBalance(entryCollection, pendingEntry);
+            if (ledgerBalance == null) {
+                ledgerBalance = laborLedgerBalanceService.addLedgerBalance(entryCollection, pendingEntry);
             }
             else {
-                LOG.warn("The class, " + clazz.getName() + ", is unregistered with the method.");
-                return;
+                laborLedgerBalanceService.updateLedgerBalance(ledgerBalance, pendingEntry);
             }
+            ledgerBalance.getDummyBusinessObject().setConsolidationOption(isConsolidated ? Constant.CONSOLIDATION : Constant.DETAIL);
+            ledgerBalance.getDummyBusinessObject().setPendingEntryOption(isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY);
         }
-    }
-
-    /**
-     * Determines if any of the fields that require a detail view are used
-     * 
-     * @param fieldValues
-     * @param fieldName
-     */
-    private boolean isDetailDefaultFieldUsed(Map fieldValues, String fieldName) {
-        return StringUtils.isNotBlank((String) fieldValues.get(fieldName));
     }
 
     /**
