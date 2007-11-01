@@ -26,24 +26,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.context.TestUtils;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
-import org.kuali.module.gl.GLConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.OriginEntryTestBase;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.util.GeneralLedgerTestHelper;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * IF THIS TEST FAILS, READ https://test.kuali.org/jira/browse/KULRNE-34 regarding reference numbers
  */
-@ConfigureContext
-// @RelatesTo(RelatesTo.JiraIssue.KULRNE5916)
+@WithTestSpringContext
 public class BalanceForwardStepTest extends OriginEntryTestBase {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceForwardStepTest.class);
@@ -59,12 +54,13 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
         super.setUp();
 
         DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM)).getTime()));
+        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "TRANSACTION_DT")).getTime()));
     }
 
     /**
-     * Test the encumbrance forwarding process in one fell swoop. IF THIS TEST FAILS, READ
-     * https://test.kuali.org/jira/browse/KULRNE-34 regarding reference numbers and the year end dates
+     * Test the encumbrance forwarding process in one fell swoop.
+     * 
+     * IF THIS TEST FAILS, READ https://test.kuali.org/jira/browse/KULRNE-34 regarding reference numbers and the year end dates
      * 
      * @throws Exception ## WARNING: DO NOT run this test or rename this method. WARNING ## ## WARNING: This one test takes just
      *         under 3 hours to run WARNING ## ## WARNING: over the vpn. WARNING ##
@@ -73,21 +69,17 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
 
         clearOriginEntryTables();
         BalanceTestHelper.populateBalanceTable();
-
+        
         // Execute the step ...
-        BalanceForwardStep step = SpringContext.getBean(BalanceForwardStep.class);
-        step.execute(getClass().getName());
+        BalanceForwardStep step = (BalanceForwardStep) beanFactory.getBean("glBalanceForwardStep");
+        step.execute();
 
         // load our services.
-        OriginEntryService entryService = SpringContext.getBean(OriginEntryService.class);
-        OriginEntryGroupService groupService = SpringContext.getBean(OriginEntryGroupService.class);
+        OriginEntryService entryService = SpringServiceLocator.getOriginEntryService();
+        OriginEntryGroupService groupService = SpringServiceLocator.getOriginEntryGroupService();
 
         // and verify the output.
-        List fisGeneratedRaw = GeneralLedgerTestHelper.loadOutputOriginEntriesFromClasspath("org/kuali/module/gl/batch/gl_gleacbfb.data.txt", dateTimeService.getCurrentDate());
-        List fisGenerated = new ArrayList();
-        for (Object o : fisGeneratedRaw) {
-            fisGenerated.add(filterOriginEntryLine((String) o));
-        }
+        List fisGenerated = GeneralLedgerTestHelper.loadOutputOriginEntriesFromClasspath("org/kuali/module/gl/batch/gl_gleacbfb.data.txt", dateTimeService.getCurrentDate());
 
         // load our groups.
         Map criteria = new HashMap();
@@ -110,10 +102,10 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
 
             while (kualiGeneratedNonClosedPriorYearAccountEntryIterator.hasNext()) {
 
-                OriginEntryFull entry = (OriginEntryFull) kualiGeneratedNonClosedPriorYearAccountEntryIterator.next();
+                OriginEntry entry = (OriginEntry) kualiGeneratedNonClosedPriorYearAccountEntryIterator.next();
                 String kualiEntryLine = entry.getLine();
 
-                kualiEntryLine = filterOriginEntryLine(kualiEntryLine.substring(0, 173));
+                kualiEntryLine = kualiEntryLine.substring(0, 173);
 
                 if (!fisGenerated.remove(kualiEntryLine)) {
 
@@ -133,8 +125,8 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
             Iterator entryIterator = entryService.getEntriesByGroup(group);
             while (entryIterator.hasNext()) {
 
-                OriginEntryFull entry = (OriginEntryFull) entryIterator.next();
-                String line = filterOriginEntryLine(entry.getLine().substring(0, 173));
+                OriginEntry entry = (OriginEntry) entryIterator.next();
+                String line = entry.getLine().substring(0, 173);
 
                 if (!fisGenerated.remove(line)) {
 
@@ -156,21 +148,16 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
 
     }
 
-
+    
     /**
      * This method resets the application params to values that are appropriate for year end dates
      * 
      * @see org.kuali.module.gl.OriginEntryTestBase#setApplicationConfigurationFlag(java.lang.String, boolean)
      */
     @Override
-    protected void setApplicationConfigurationFlag(Class componentClass, String name, boolean value) throws Exception {
-        super.setApplicationConfigurationFlag(componentClass, name, value);
-        TestUtils.setSystemParameter(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM, "2004-01-01");
-        TestUtils.setSystemParameter(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_FISCAL_YEAR_PARM, "2004");
-    }
-
-    private String filterOriginEntryLine(String line) {
-        // right now, remove the sequence number from this test
-        return line.substring(0, 51) + line.substring(57);
+    protected void setApplicationConfigurationFlag(String name, boolean value) {
+        super.setApplicationConfigurationFlag(name, value);
+        unitTestSqlDao.sqlCommand("update FS_PARM_T set FS_PARM_TXT = '2004-01-01' where FS_SCR_NM = 'fis_gl_year_end.sh' and FS_PARM_NM = 'TRANSACTION_DT'");
+        unitTestSqlDao.sqlCommand("update FS_PARM_T set FS_PARM_TXT = '2004' where FS_SCR_NM = 'fis_gl_year_end.sh' and FS_PARM_NM = 'UNIV_FISCAL_YR'");
     }
 }

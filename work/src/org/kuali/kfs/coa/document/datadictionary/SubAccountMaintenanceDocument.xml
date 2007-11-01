@@ -33,17 +33,18 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>SubAccountMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiSubAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>SACC</documentTypeCode>
 
 		<webScriptFile>../dwr/interface/AccountService.js</webScriptFile>
 		<webScriptFile>../scripts/chart/subAccountDocument.js</webScriptFile>
 
-        <label>Sub-Account</label>
+        <label>Sub-Account Maintenance Document</label>
+        <shortLabel>SubAccountMainDoc</shortLabel>
 
         <summary>Sub-Account maintenance document</summary>
         <description>Document used to create or update Sub-Account objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="SubAccount" parameterName="SUB_ACCOUNT" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_SUB_ACCOUNT" />
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
