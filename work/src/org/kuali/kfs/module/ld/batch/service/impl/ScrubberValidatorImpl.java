@@ -223,10 +223,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
      */
     private Message validateAccount(LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, UniversityDate universityRunDate) {
         LOG.debug("validateAccount() started");
-
-        Calendar today = Calendar.getInstance();
-        today.setTime(universityRunDate.getUniversityDate());
-
+        
         Account account = laborOriginEntry.getAccount();
         boolean suspenseAccountLogicInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.SUSPENSE_ACCOUNT_LOGIC_PARAMETER);
         if (account == null) {
@@ -264,16 +261,29 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         boolean accountFringeExclusionInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.ACCOUNT_FRINGE_EXCLUSION_PARAMETER);
         String[] nonFringeAccountBypassOriginationCodes = SpringContext.getBean(ParameterService.class).getParameterValues(LaborScrubberStep.class, LaborConstants.Scrubber.NON_FRINGE_ACCOUNT_BYPASS_ORIGINATIONS).toArray(new String[] {});
         if (accountFringeExclusionInd && !ObjectHelper.isOneOf(laborOriginEntry.getFinancialSystemOriginationCode(), nonFringeAccountBypassOriginationCodes)) {
-            return checkAccountFringeIndicator(laborOriginEntry, laborWorkingEntry, account, today);
+            return checkAccountFringeIndicator(laborOriginEntry, laborWorkingEntry, account, universityRunDate);
         }
 
         /* Expired/Closed Validation */
-        boolean continuationAccountLogicInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.CONTINUATION_ACCOUNT_LOGIC_PARAMETER);
-        if (continuationAccountLogicInd && (account.getAccountExpirationDate() != null || account.isAccountClosedIndicator())) {
-            String[] continuationAccountBypassOriginationCodes = SpringContext.getBean(ParameterService.class).getParameterValues(LaborScrubberStep.class, LaborConstants.Scrubber.CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES).toArray(new String[] {});
-            String[] continuationAccountBypassBalanceTypeCodes = SpringContext.getBean(BalanceTypService.class).getContinuationAccountBypassBalanceTypeCodes(universityRunDate.getUniversityFiscalYear()).toArray(new String[] {});
-            String[] continuationAccountBypassDocumentTypeCodes = SpringContext.getBean(ParameterService.class).getParameterValues(LaborScrubberStep.class, LaborConstants.Scrubber.CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES).toArray(new String[] {});
+        return handleExpiredClosedAccount(laborOriginEntry.getAccount(), laborOriginEntry, laborWorkingEntry, universityRunDate);
+    }
 
+    /**
+     * Checks the continuation account system indicator. If on checks whether the account is expired or closed, and if so calls the
+     * contination logic.
+     */
+    private Message handleExpiredClosedAccount(Account account, LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, UniversityDate universityRunDate) {
+        boolean continuationAccountLogicInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.CONTINUATION_ACCOUNT_LOGIC_PARAMETER);
+
+        String[] continuationAccountBypassOriginationCodes = SpringContext.getBean(ParameterService.class).getParameterValues(LaborScrubberStep.class, LaborConstants.Scrubber.CONTINUATION_ACCOUNT_BYPASS_ORIGINATION_CODES).toArray(new String[] {});
+        String[] continuationAccountBypassBalanceTypeCodes = SpringContext.getBean(BalanceTypService.class).getContinuationAccountBypassBalanceTypeCodes(universityRunDate.getUniversityFiscalYear()).toArray(new String[] {});
+        String[] continuationAccountBypassDocumentTypeCodes = SpringContext.getBean(ParameterService.class).getParameterValues(LaborScrubberStep.class, LaborConstants.Scrubber.CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPE_CODES).toArray(new String[] {});
+
+        Calendar today = Calendar.getInstance();
+        today.setTime(universityRunDate.getUniversityDate());
+
+        long offsetAccountExpirationTime = getAdjustedAccountExpirationDate(account);
+        if (continuationAccountLogicInd && ((account.getAccountExpirationDate() != null && isExpired(offsetAccountExpirationTime, today)) || account.isAccountClosedIndicator())) {
             // special checks for origination codes that have override ability
             boolean isOverrideOriginCode = ObjectHelper.isOneOf(laborOriginEntry.getFinancialSystemOriginationCode(), continuationAccountBypassOriginationCodes);
             if (isOverrideOriginCode && account.isAccountClosedIndicator()) {
@@ -283,24 +293,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
                 return null;
             }
 
-            return handleExpiredClosedAccount(laborOriginEntry.getAccount(), laborOriginEntry, laborWorkingEntry, today);
-        }
-
-        return null;
-    }
-
-    /**
-     * Checks the continuation account system indicator. If on checks whether the account is expired or closed, and if so calls the
-     * contination logic.
-     */
-    private Message handleExpiredClosedAccount(Account account, LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, Calendar today) {
-        boolean continuationAccountLogicInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.CONTINUATION_ACCOUNT_LOGIC_PARAMETER);
-
-        if (continuationAccountLogicInd) {
-            long offsetAccountExpirationTime = getAdjustedAccountExpirationDate(account);
-            if ((account.getAccountExpirationDate() != null && isExpired(offsetAccountExpirationTime, today)) || account.isAccountClosedIndicator()) {
-                return continuationAccountLogic(account, laborOriginEntry, laborWorkingEntry, today);
-            }
+            return continuationAccountLogic(account, laborOriginEntry, laborWorkingEntry, today);
         }
 
         return null;
@@ -342,7 +335,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
                 laborWorkingEntry.setChartOfAccountsCode(chartCode);
 
                 laborWorkingEntry.setTransactionLedgerEntryDescription(kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_AUTO_FORWARD) + expiredClosedAccount.getChartOfAccountsCode() + expiredClosedAccount.getAccountNumber() + laborOriginEntry.getTransactionLedgerEntryDescription());
-                return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_ACCOUNT_CLOSED_TO) + laborWorkingEntry.getChartOfAccountsCode() + laborWorkingEntry.getAccountNumber(), Message.TYPE_WARNING);
+                return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_ACCOUNT_CLOSED_TO) + " " + laborWorkingEntry.getChartOfAccountsCode() + laborWorkingEntry.getAccountNumber(), Message.TYPE_WARNING);
             }
 
             checkedAccountNumbers.add(chartCode + accountNumber);
@@ -363,7 +356,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
      * For fringe transaction types checks if the account accepts fringe benefits. If not, retrieves the alternative account, then
      * calls expiration checking on either the alternative account or the account passed in.
      */
-    private Message checkAccountFringeIndicator(LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, Account account, Calendar today) {
+    private Message checkAccountFringeIndicator(LaborOriginEntry laborOriginEntry, LaborOriginEntry laborWorkingEntry, Account account, UniversityDate universityRunDate) {
         // check for fringe tranaction type
         Map fieldValues = new HashMap();
         fieldValues.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, laborOriginEntry.getUniversityFiscalYear());
@@ -381,7 +374,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
                 laborWorkingEntry.setAccountNumber(altAccount.getAccountNumber());
                 laborWorkingEntry.setChartOfAccountsCode(altAccount.getChartOfAccountsCode());
 
-                return handleExpiredClosedAccount(altAccount, laborOriginEntry, laborWorkingEntry, today);
+                return handleExpiredClosedAccount(altAccount, laborOriginEntry, laborWorkingEntry, universityRunDate);
             }
 
             // no alt acct, use suspense acct if active
@@ -394,7 +387,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
             return new Message("No alternative account found for non-fringe Account. ", Message.TYPE_FATAL);
         }
 
-        return handleExpiredClosedAccount(account, laborOriginEntry, laborWorkingEntry, today);
+        return handleExpiredClosedAccount(account, laborOriginEntry, laborWorkingEntry, universityRunDate);
     }
 
     /**
