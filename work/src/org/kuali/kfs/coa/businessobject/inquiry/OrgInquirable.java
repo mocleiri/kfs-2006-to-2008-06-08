@@ -25,17 +25,14 @@ import org.kuali.core.web.ui.Section;
 import org.kuali.kfs.inquiry.KfsInquirableImpl;
 import org.kuali.module.chart.bo.Org;
 
-/**
- * This class adds in some new sections for {@link Org} inquiries, specifically Org Hierarchy Org Review Hierarchy
- */
 public class OrgInquirable extends KfsInquirableImpl {
 
     public void addAdditionalSections(List sections, BusinessObject bo) {
         if (bo instanceof Org) {
             Org org = (Org) bo;
-
+            
             List rows = new ArrayList();
-
+            
             Field f = new Field();
             f.setPropertyName("Organization Hierarchy");
             f.setFieldLabel("Organization Hierarchy");
@@ -50,7 +47,7 @@ public class OrgInquirable extends KfsInquirableImpl {
             f.setFieldType(Field.HIDDEN);
             f.setInquiryURL(org.getOrganizationReviewHierarchy());
             rows.add(new Row(f));
-
+            
             Section section = new Section();
             section.setRows(rows);
             section.setSectionTitle("Organization Hierarchy");
@@ -60,3 +57,4 @@ public class OrgInquirable extends KfsInquirableImpl {
 
 
 }
+    
