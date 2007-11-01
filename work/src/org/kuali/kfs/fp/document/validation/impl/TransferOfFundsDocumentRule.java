@@ -15,24 +15,24 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_ACTUAL;
+import static org.kuali.Constants.BALANCE_TYPE_ACTUAL;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
+import org.kuali.core.document.Document;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
 import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.document.TransferOfFundsDocument;
 
 /**
@@ -59,15 +59,15 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
      *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
     protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument financialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
-        Options options = SpringContext.getBean(OptionsService.class).getCurrentYearOptions();
+        Options options = SpringServiceLocator.getOptionsService().getCurrentYearOptions();
 
         explicitEntry.setFinancialBalanceTypeCode(BALANCE_TYPE_ACTUAL);
         if (isExpense(accountingLine)) {
-            explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferExpenseCd());
+            explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferExpenseCode());
         }
         else {
             if (isIncome(accountingLine)) {
-                explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCd());
+                explicitEntry.setFinancialObjectTypeCode(options.getFinancialObjectTypeTransferIncomeCode());
             }
             else {
                 explicitEntry.setFinancialObjectTypeCode(AccountingDocumentRuleUtil.getObjectCodeTypeCodeWithoutSideEffects(accountingLine));
@@ -84,6 +84,7 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
      * </ol>
      * 
      * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * 
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
@@ -130,6 +131,25 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
     }
 
     /**
+     * This document specific routing business rule check calls the check that makes sure that the budget year is consistent for all
+     * accounting lines.
+     * 
+     * @see org.kuali.core.rule.DocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
+     */
+    @Override
+    protected boolean processCustomRouteDocumentBusinessRules(Document document) {
+        boolean isValid = super.processCustomRouteDocumentBusinessRules(document);
+
+        TransferOfFundsDocument tofDoc = (TransferOfFundsDocument) document;
+
+        if (isValid) {
+            isValid = isAllAccountingLinesMatchingBudgetYear(tofDoc);
+        }
+
+        return isValid;
+    }
+
+    /**
      * This is a helper method that wraps the fund group balancing check. This check can be configured by updating the APC that is
      * associated with this check. See the document's specification for details.
      * 
@@ -137,7 +157,8 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
      * @return boolean
      */
     private boolean isFundGroupsBalanceValid(TransferOfFundsDocument tofDoc) {
-        return isFundGroupSetBalanceValid(tofDoc, TransferOfFundsDocument.class, APPLICATION_PARAMETER.FUND_GROUP_BALANCING_SET);
+        String[] fundGroupCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(KUALI_TRANSACTION_PROCESSING_TRANSFER_OF_FUNDS_SECURITY_GROUPING, APPLICATION_PARAMETER.FUND_GROUP_BALANCING_SET);
+        return isFundGroupSetBalanceValid(tofDoc, fundGroupCodes);
     }
 
     /**
@@ -189,12 +210,12 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
 
         if (mandatoryTransferFromAmount.compareTo(mandatoryTransferToAmount) != 0) {
             isValid = false;
-            GlobalVariables.getErrorMap().putError("document.sourceAccountingLines", KFSKeyConstants.ERROR_DOCUMENT_TOF_MANDATORY_TRANSFERS_DO_NOT_BALANCE);
+            GlobalVariables.getErrorMap().putError("document.sourceAccountingLines", KeyConstants.ERROR_DOCUMENT_TOF_MANDATORY_TRANSFERS_DO_NOT_BALANCE);
         }
 
         if (nonMandatoryTransferFromAmount.compareTo(nonMandatoryTransferToAmount) != 0) {
             isValid = false;
-            GlobalVariables.getErrorMap().putError("document.sourceAccountingLines", KFSKeyConstants.ERROR_DOCUMENT_TOF_NON_MANDATORY_TRANSFERS_DO_NOT_BALANCE);
+            GlobalVariables.getErrorMap().putError("document.sourceAccountingLines", KeyConstants.ERROR_DOCUMENT_TOF_NON_MANDATORY_TRANSFERS_DO_NOT_BALANCE);
         }
 
         return isValid;
@@ -206,43 +227,25 @@ public class TransferOfFundsDocumentRule extends AccountingDocumentRuleBase impl
      * 
      * @param accountingLine
      * @return True if the object code's object sub-type code is a mandatory or non-mandatory transfer; false otherwise.
+     * 
      * @see org.kuali.core.rule.AccountingLineRule#isObjectSubTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isObjectSubTypeAllowed(Class documentClass, AccountingLine accountingLine) {
+    public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
         accountingLine.refreshReferenceObject("objectCode");
         String objectSubTypeCode = accountingLine.getObjectCode().getFinancialObjectSubTypeCode();
 
         // make sure a object sub type code exists for this object code
         if (StringUtils.isBlank(objectSubTypeCode)) {
-            GlobalVariables.getErrorMap().putError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_TOF_OBJECT_SUB_TYPE_IS_NULL, accountingLine.getFinancialObjectCode());
+            GlobalVariables.getErrorMap().putError("financialObjectCode", KeyConstants.ERROR_DOCUMENT_TOF_OBJECT_SUB_TYPE_IS_NULL, accountingLine.getFinancialObjectCode());
             return false;
         }
 
         if (!isMandatoryTransfersSubType(objectSubTypeCode) && !isNonMandatoryTransfersSubType(objectSubTypeCode)) {
-            GlobalVariables.getErrorMap().putError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_TOF_OBJECT_SUB_TYPE_NOT_MANDATORY_OR_NON_MANDATORY_TRANSFER, new String[] { accountingLine.getObjectCode().getFinancialObjectSubType().getFinancialObjectSubTypeName(), accountingLine.getFinancialObjectCode() });
+            GlobalVariables.getErrorMap().putError("financialObjectCode", KeyConstants.ERROR_DOCUMENT_TOF_OBJECT_SUB_TYPE_NOT_MANDATORY_OR_NON_MANDATORY_TRANSFER, new String[] { accountingLine.getObjectCode().getFinancialObjectSubType().getFinancialObjectSubTypeName(), accountingLine.getFinancialObjectCode() });
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Overrides the parent to make sure that the chosen object code's object code is Income/Expense
-     * 
-     * @param accountingLine
-     * @return True if the object code's is income or expense, otherwise false.
-     * @see org.kuali.core.rule.AccountingLineRule#isObjectSubTypeAllowed(org.kuali.core.bo.AccountingLine)
-     */
-    @Override
-    public boolean isObjectCodeAllowed(Class documentClass, AccountingLine accountingLine) {
-        boolean isObjectCodeAllowed = super.isObjectCodeAllowed(documentClass, accountingLine);
-
-        if (!isIncome(accountingLine) && !isExpense(accountingLine)) {
-            GlobalVariables.getErrorMap().putError("financialObjectCode", KFSKeyConstants.ERROR_DOCUMENT_TOF_INVALID_OBJECT_TYPE_CODES, new String[] { accountingLine.getObjectCode().getFinancialObjectTypeCode(), accountingLine.getObjectCode().getFinancialObjectSubTypeCode() });
-            isObjectCodeAllowed = false;
-        }
-
-        return isObjectCodeAllowed;
     }
 }
