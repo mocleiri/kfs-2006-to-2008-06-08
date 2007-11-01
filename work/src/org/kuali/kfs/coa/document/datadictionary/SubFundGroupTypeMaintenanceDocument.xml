@@ -34,7 +34,8 @@
         <documentTypeName>SubFundGroupTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>SFGT</documentTypeCode>
 
-        <label>Sub-Fund Group Type</label>
+        <label>Sub-Fund Group Type Maintenance Document</label>
+        <shortLabel>SubFundGroupTypeMaintDoc</shortLabel>
 
         <summary>Sub-Fund Group Type Maintenance Document</summary>
         <description>Document used to create or update Sub Fund Group Type objects</description>

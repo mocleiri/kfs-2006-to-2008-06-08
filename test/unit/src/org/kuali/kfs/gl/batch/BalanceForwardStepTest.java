@@ -1,23 +1,33 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.gl.batch;
 
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,24 +36,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.context.TestUtils;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
-import org.kuali.module.gl.GLConstants;
+import org.kuali.core.exceptions.ApplicationParameterException;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.gl.OriginEntryTestBase;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.util.GeneralLedgerTestHelper;
-import org.kuali.test.ConfigureContext;
 
 /**
- * IF THIS TEST FAILS, READ https://test.kuali.org/jira/browse/KULRNE-34 regarding reference numbers
+ * @author Kuali General Ledger Team (kualigltech@oncourse.iu.edu)
+ * @version $Id$
  */
-@ConfigureContext
-// @RelatesTo(RelatesTo.JiraIssue.KULRNE5916)
 public class BalanceForwardStepTest extends OriginEntryTestBase {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceForwardStepTest.class);
@@ -52,19 +57,38 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
         super();
     }
 
-
-    @Override
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.module.gl.OriginEntryTestBase#setUp()
+     */
     protected void setUp() throws Exception {
 
         super.setUp();
 
-        DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM)).getTime()));
+        try {
+
+            DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateTimeService.currentDate = new Date(transactionDateFormat.parse(kualiConfigurationService.getApplicationParameterValue("fis_gl_year_end.sh", "TRANSACTION_DT")).getTime());
+
+        }
+        catch (ApplicationParameterException e) {
+
+            LOG.error("Unable to get TRANSACTION_DT from kualiConfigurationService");
+            throw new RuntimeException("Unable to get transaction date from kualiConfigurationService", e);
+
+        }
+        catch (ParseException pe) {
+
+            LOG.error("Failed to parse TRANSACTION_DT from kualiConfigurationService");
+            throw new RuntimeException("Unable to get transaction date from kualiConfigurationService", pe);
+
+        }
+
     }
 
     /**
-     * Test the encumbrance forwarding process in one fell swoop. IF THIS TEST FAILS, READ
-     * https://test.kuali.org/jira/browse/KULRNE-34 regarding reference numbers and the year end dates
+     * Test the encumbrance forwarding process in one fell swoop.
      * 
      * @throws Exception ## WARNING: DO NOT run this test or rename this method. WARNING ## ## WARNING: This one test takes just
      *         under 3 hours to run WARNING ## ## WARNING: over the vpn. WARNING ##
@@ -75,19 +99,15 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
         BalanceTestHelper.populateBalanceTable();
 
         // Execute the step ...
-        BalanceForwardStep step = SpringContext.getBean(BalanceForwardStep.class);
-        step.execute(getClass().getName());
+        BalanceForwardStep step = (BalanceForwardStep) beanFactory.getBean("glBalanceForwardStep");
+        step.performStep();
 
         // load our services.
-        OriginEntryService entryService = SpringContext.getBean(OriginEntryService.class);
-        OriginEntryGroupService groupService = SpringContext.getBean(OriginEntryGroupService.class);
+        OriginEntryService entryService = SpringServiceLocator.getOriginEntryService();
+        OriginEntryGroupService groupService = SpringServiceLocator.getOriginEntryGroupService();
 
         // and verify the output.
-        List fisGeneratedRaw = GeneralLedgerTestHelper.loadOutputOriginEntriesFromClasspath("org/kuali/module/gl/batch/gl_gleacbfb.data.txt", dateTimeService.getCurrentDate());
-        List fisGenerated = new ArrayList();
-        for (Object o : fisGeneratedRaw) {
-            fisGenerated.add(filterOriginEntryLine((String) o));
-        }
+        List fisGenerated = GeneralLedgerTestHelper.loadOutputOriginEntriesFromClasspath("org/kuali/module/gl/batch/gl_gleacbfb.data.txt", dateTimeService.currentDate);
 
         // load our groups.
         Map criteria = new HashMap();
@@ -110,10 +130,10 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
 
             while (kualiGeneratedNonClosedPriorYearAccountEntryIterator.hasNext()) {
 
-                OriginEntryFull entry = (OriginEntryFull) kualiGeneratedNonClosedPriorYearAccountEntryIterator.next();
+                OriginEntry entry = (OriginEntry) kualiGeneratedNonClosedPriorYearAccountEntryIterator.next();
                 String kualiEntryLine = entry.getLine();
 
-                kualiEntryLine = filterOriginEntryLine(kualiEntryLine.substring(0, 173));
+                kualiEntryLine = kualiEntryLine.substring(0, 173);
 
                 if (!fisGenerated.remove(kualiEntryLine)) {
 
@@ -133,8 +153,8 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
             Iterator entryIterator = entryService.getEntriesByGroup(group);
             while (entryIterator.hasNext()) {
 
-                OriginEntryFull entry = (OriginEntryFull) entryIterator.next();
-                String line = filterOriginEntryLine(entry.getLine().substring(0, 173));
+                OriginEntry entry = (OriginEntry) entryIterator.next();
+                String line = entry.getLine().substring(0, 173);
 
                 if (!fisGenerated.remove(line)) {
 
@@ -151,26 +171,9 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
 
         // At this point extraEntriesGenerated and shouldBe should both be empty.
         // If they're not then something went wrong.
-        assertTrue("Kuali generated entries that FIS did not generate (see https://test.kuali.org/jira/browse/KULRNE-34 for possible cause):", kualiGeneratedEntriesNotGeneratedByFis.isEmpty());
-        assertTrue("FIS generated entries that Kuali did not generate (see https://test.kuali.org/jira/browse/KULRNE-34 for possible cause):", fisGenerated.isEmpty());
+        assertTrue("Kuali generated entries that FIS did not generate:", kualiGeneratedEntriesNotGeneratedByFis.isEmpty());
+        assertTrue("FIS generated entries that Kuali did not generate:", fisGenerated.isEmpty());
 
     }
 
-
-    /**
-     * This method resets the application params to values that are appropriate for year end dates
-     * 
-     * @see org.kuali.module.gl.OriginEntryTestBase#setApplicationConfigurationFlag(java.lang.String, boolean)
-     */
-    @Override
-    protected void setApplicationConfigurationFlag(Class componentClass, String name, boolean value) throws Exception {
-        super.setApplicationConfigurationFlag(componentClass, name, value);
-        TestUtils.setSystemParameter(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM, "2004-01-01");
-        TestUtils.setSystemParameter(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_FISCAL_YEAR_PARM, "2004");
-    }
-
-    private String filterOriginEntryLine(String line) {
-        // right now, remove the sequence number from this test
-        return line.substring(0, 51) + line.substring(57);
-    }
 }

@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -23,25 +8,24 @@
         <businessObjectClass>org.kuali.module.chart.bo.Chart</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <businessRulesClass>org.kuali.module.chart.rules.ChartRule</businessRulesClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>KUALI_ROLE_MAINTENANCE</workgroup>
+                    <workgroup>KUALI_TABLE_MAINTAINERS</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>ChartMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiChartMaintenanceDocument</documentTypeName>
         <documentTypeCode>COAT</documentTypeCode>
 
-        <label>Chart</label>
+        <label>Chart Maintenance Document</label>
+        <shortLabel>ChMainDoc</shortLabel>
 
         <summary>Chart maintenance document</summary>
         <description>Document used to create or update Chart objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Chart" parameterName="CHART" />
-        
+
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
         </lockingKeys>
@@ -53,12 +37,12 @@
             <reference attributeName="finAccountsReceivableObj" attributeToHighlightOnFail="finAccountsReceivableObjCode" />
             <reference attributeName="incBdgtEliminationsFinObj" attributeToHighlightOnFail="incBdgtEliminationsFinObjCd" />
             <reference attributeName="expBdgtEliminationsFinObj" attributeToHighlightOnFail="expBdgtEliminationsFinObjCd" />
+            <reference attributeName="reportsToChartOfAccounts" attributeToHighlightOnFail="reportsToChartOfAccountsCode" />
             <reference attributeName="finInternalEncumbranceObj" attributeToHighlightOnFail="finInternalEncumbranceObjCd" />
             <reference attributeName="finExternalEncumbranceObj" attributeToHighlightOnFail="finExternalEncumbranceObjCd" />
             <reference attributeName="finPreEncumbranceObject" attributeToHighlightOnFail="finPreEncumbranceObjectCode" />
             <reference attributeName="icrIncomeFinancialObject" attributeToHighlightOnFail="icrIncomeFinancialObjectCode" />
             <reference attributeName="icrExpenseFinancialObject" attributeToHighlightOnFail="icrExpenseFinancialObjectCd" />
-            <reference attributeName="fundBalanceObject" attributeToHighlightOnFail="fundBalanceObject" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -68,7 +52,7 @@
                     <maintainableField name="finCoaManagerUniversalId" required="true" readOnly="true" />
                     <maintainableField name="finCoaManagerUniversal.personUserIdentifier" required="true" />
                     <maintainableField name="finCoaManagerUniversal.personName" required="false" readOnly="true" />
-                    <maintainableField name="finChartOfAccountDescription" required="true" />
+                    <maintainableField name="finChartOfAccountDescription" />
                     <maintainableField name="finChartOfAccountActiveIndicator" />
                     <maintainableField name="financialCashObjectCode" />
                     <maintainableField name="finAccountsPayableObjectCode" />
@@ -81,7 +65,6 @@
                     <maintainableField name="finPreEncumbranceObjectCode" />
                     <maintainableField name="icrIncomeFinancialObjectCode" />
                     <maintainableField name="icrExpenseFinancialObjectCd" />
-                    <maintainableField name="fundBalanceObjectCode" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
