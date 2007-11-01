@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/service/impl/DisbursementVoucherTaxServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,22 +27,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.user.PersonTaxId;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.bo.user.UserId;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.exceptions.ApplicationParameterException;
 import org.kuali.core.exceptions.InfrastructureException;
-import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.MaintenanceDocumentService;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.Payee;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
@@ -50,44 +49,129 @@ import org.kuali.module.financial.service.DisbursementVoucherTaxService;
 
 /**
  * Handles queries and validation on tax id numbers.
+ * 
+ * 
  */
-public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTaxService, DisbursementVoucherRuleConstants {
+public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTaxService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherTaxServiceImpl.class);
 
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
     private BusinessObjectService businessObjectService;
     private MaintenanceDocumentService maintenanceDocumentService;
-    private UniversalUserService universalUserService;
+
+    /**
+     * @see org.kuali.module.financial.service.DisbursementVoucherTaxService#getTaxIDNumberUsage(java.lang.String)
+     */
+    public Integer getTaxIDNumberUsage(String taxIDNumber, String taxpayerTypeCode) {
+        Integer taxIDMatch = DisbursementVoucherTaxService.TAX_NUMBER_NOT_FOUND;
+        if (taxIDNumber == null || taxpayerTypeCode == null) {
+            return taxIDMatch;
+        }
+
+        String institutionFeinNumber = kualiConfigurationService.getPropertyString(KeyConstants.INSTITUTION_TAX_FEIN_NUMBER);
+        if (taxIDNumber.equals(institutionFeinNumber)) {
+            taxIDMatch = DisbursementVoucherTaxService.INSTITUTION_TAX_NUMBER;
+        }
+        else if (isVendorIDNumber(taxIDNumber)) {
+            taxIDMatch = DisbursementVoucherTaxService.TAX_ID_VENDOR;
+        }
+        else if (isPayeeTaxNumber(taxIDNumber, taxpayerTypeCode)) {
+            taxIDMatch = DisbursementVoucherTaxService.TAX_ID_EXISTING_PAYEE;
+        }
+        else if (isPendingPayeeTaxNumber(taxIDNumber, taxpayerTypeCode)) {
+            taxIDMatch = DisbursementVoucherTaxService.TAX_ID_PENDING_PAYEE;
+        }
+        else if (isEmployeeTaxNumber(taxIDNumber)) {
+            taxIDMatch = DisbursementVoucherTaxService.TAX_ID_EMPLOYEE;
+        }
+
+        return taxIDMatch;
+    }
+
+    /**
+     * Checks whether the given tax id number matches a current vendor id number.
+     * 
+     * @param taxIDNumber
+     * @return
+     */
+    private boolean isVendorIDNumber(String taxIDNumber) {
+        boolean isVendorID = false;
+        // TODO: Implement check once Epic is integrated
+
+        return isVendorID;
+    }
+
+    /**
+     * Checks whether the given tax id number matches a current payee tax number.
+     * 
+     * @param taxIDNumber
+     * @return
+     */
+    private boolean isPayeeTaxNumber(String taxIDNumber, String taxpayerTypeCode) {
+        boolean isPayeeNumber = false;
+
+        Map taxIDCrit = new HashMap();
+        taxIDCrit.put("taxIdNumber", taxIDNumber);
+        taxIDCrit.put("taxpayerTypeCode", taxpayerTypeCode);
+        Collection foundPayees = businessObjectService.findMatching(Payee.class, taxIDCrit);
+
+        if (!foundPayees.isEmpty()) {
+            isPayeeNumber = true;
+        }
+
+        return isPayeeNumber;
+    }
+
+    /**
+     * Checks whether the given tax id number matches a pending payee tax number.
+     * 
+     * @param taxIDNumber
+     * @return
+     */
+    private boolean isPendingPayeeTaxNumber(String taxIDNumber, String taxpayerTypeCode) {
+        boolean isPendingPayeeNumber = false;
+        List pendingPayees = maintenanceDocumentService.getPendingObjects(Payee.class);
+
+        for (Iterator iter = pendingPayees.iterator(); iter.hasNext();) {
+            Payee pendingPayee = (Payee) iter.next();
+            if (taxIDNumber.equals(pendingPayee.getTaxIdNumber()) && taxpayerTypeCode.equals(pendingPayee.getTaxpayerTypeCode())) {
+                isPendingPayeeNumber = true;
+            }
+        }
+
+
+        return isPendingPayeeNumber;
+    }
+
+    /**
+     * Checks whether the given tax id number matches a current employee tax number.
+     * 
+     * @param taxIDNumber
+     * @return
+     */
+    private boolean isEmployeeTaxNumber(String taxIDNumber) {
+        boolean isEmployeeNumber = false;
+
+        // TODO: implement LDAP search of tax number to find employee uuid
+
+        return isEmployeeNumber;
+    }
 
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTaxService#getEmployeeNumber(java.lang.String, java.lang.String)
      */
-    public String getUniversalId(String taxIDNumber, String taxpayerTypeCode) {
-        if (TAX_TYPE_FEIN.equals(taxpayerTypeCode)) {
-            return null;
-        }
+    public String getEmployeeNumber(String taxIDNumber, String taxpayerTypeCode) {
+        String employeeNumber = null;
 
-        String universalId = null;
-        UserId userId = (UserId) new PersonTaxId(taxIDNumber);
-        UniversalUser universalUser = null;
 
-        try {
-            universalUser = universalUserService.getUniversalUser(userId);
-        }
-        catch (UserNotFoundException e) {
-        }
-
-        if (universalUser != null) {
-            universalId = universalUser.getPersonUniversalIdentifier();
-        }
-        return universalId;
+        return employeeNumber;
     }
 
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTaxService#getPayeeNumber(java.lang.String, java.lang.String)
      */
-    public String getPayeeId(String taxIDNumber, String taxpayerTypeCode) {
-        String payeeId = null;
+    public String getPayeeNumber(String taxIDNumber, String taxpayerTypeCode) {
+        String payeeNumber = null;
 
         Map taxIDCrit = new HashMap();
         taxIDCrit.put("taxIdNumber", taxIDNumber);
@@ -96,39 +180,40 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
 
         if (!foundPayees.isEmpty()) {
             Payee payee = (Payee) foundPayees.iterator().next();
-            payeeId = payee.getPayeeIdNumber();
+            payeeNumber = payee.getPayeeIdNumber();
         }
 
-        return payeeId;
+        return payeeNumber;
     }
 
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTaxService#getVendorNumber(java.lang.String, java.lang.String)
      */
-    public String getVendorId(String taxIDNumber, String taxpayerTypeCode) {
-        String vendorId = null;
-        // TODO: implement once EPIC is integrated
-        return vendorId;
+    public String getVendorNumber(String taxIDNumber, String taxpayerTypeCode) {
+        String vendorNumber = null;
+
+        return vendorNumber;
     }
 
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTaxService#getPendingPayeeNumber(java.lang.String,
      *      java.lang.String)
      */
-    public String getPendingPayeeId(String taxIDNumber, String taxpayerTypeCode) {
-        String pendingPayeeId = null;
+    public String getPendingPayeeNumber(String taxIDNumber, String taxpayerTypeCode) {
+        String pendingPayeeNumber = null;
 
         List pendingPayees = maintenanceDocumentService.getPendingObjects(Payee.class);
 
         for (Iterator iter = pendingPayees.iterator(); iter.hasNext();) {
             Payee pendingPayee = (Payee) iter.next();
             if (taxIDNumber.equals(pendingPayee.getTaxIdNumber()) && taxpayerTypeCode.equals(pendingPayee.getTaxpayerTypeCode())) {
-                pendingPayeeId = pendingPayee.getPayeeIdNumber();
+                pendingPayeeNumber = pendingPayee.getPayeeIdNumber();
             }
         }
 
-        return pendingPayeeId;
+        return pendingPayeeNumber;
     }
+
 
     /**
      * @see org.kuali.module.financial.service.DisbursementVoucherTaxService#generateNRATaxLines(org.kuali.module.financial.document.DisbursementVoucherDocument)
@@ -183,12 +268,17 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
 
         // generate federal tax line
         if (!(new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent()))) {
-            String federalTaxChart = parameterService.getParameterValue(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.FEDERAL_TAX_PARM_PREFIX + DisbursementVoucherRuleConstants.TAX_PARM_CHART_SUFFIX);
-            String federalTaxAccount = parameterService.getParameterValue(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.FEDERAL_TAX_PARM_PREFIX + DisbursementVoucherRuleConstants.TAX_PARM_ACCOUNT_SUFFIX);
-            String federalTaxObjectCode = parameterService.getParameterValue(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.FEDERAL_TAX_PARM_PREFIX + DisbursementVoucherRuleConstants.TAX_PARM_OBJECT_BY_INCOME_CLASS_SUFFIX, document.getDvNonResidentAlienTax().getIncomeClassCode());
-            if (StringUtils.isBlank(federalTaxChart) || StringUtils.isBlank(federalTaxAccount) || StringUtils.isBlank(federalTaxObjectCode)) {
+            String federalTaxChart;
+            String federalTaxAccount;
+            String federalTaxObjectCode;
+            try {
+                federalTaxChart = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.NRA_TAX_PARM_GROUP_NM, DisbursementVoucherRuleConstants.FEDERAL_TAX_CHART_PARM_NM);
+                federalTaxAccount = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.NRA_TAX_PARM_GROUP_NM, DisbursementVoucherRuleConstants.FEDERAL_TAX_ACCOUNT_PARM_NM);
+                federalTaxObjectCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.NRA_TAX_PARM_GROUP_NM, DisbursementVoucherRuleConstants.FEDERAL_OBJECT_CODE_PARM_PREFIX + document.getDvNonResidentAlienTax().getIncomeClassCode());
+            }
+            catch (ApplicationParameterException e) {
                 LOG.error("Unable to retrieve federal tax parameters.");
-                throw new RuntimeException("Unable to retrieve federal tax parameters.");
+                throw new RuntimeException("Unable to retrieve federal tax parameters.", e);
             }
 
             AccountingLine federalTaxLine = generateTaxAccountingLine(document, federalTaxChart, federalTaxAccount, federalTaxObjectCode, document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent(), taxableAmount);
@@ -207,13 +297,17 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
 
         // generate state tax line
         if (!(new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent()))) {
-            String stateTaxChart = parameterService.getParameterValue(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.STATE_TAX_PARM_PREFIX + DisbursementVoucherRuleConstants.TAX_PARM_CHART_SUFFIX);
-            String stateTaxAccount = parameterService.getParameterValue(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.STATE_TAX_PARM_PREFIX + DisbursementVoucherRuleConstants.TAX_PARM_ACCOUNT_SUFFIX);
-            String stateTaxObjectCode = parameterService.getParameterValues(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.STATE_TAX_PARM_PREFIX + DisbursementVoucherRuleConstants.TAX_PARM_OBJECT_BY_INCOME_CLASS_SUFFIX, document.getDvNonResidentAlienTax().getIncomeClassCode()).get(0);
-
-            if (StringUtils.isBlank(stateTaxChart) || StringUtils.isBlank(stateTaxAccount) || StringUtils.isBlank(stateTaxObjectCode)) {
+            String stateTaxChart;
+            String stateTaxAccount;
+            String stateTaxObjectCode;
+            try {
+                stateTaxChart = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.NRA_TAX_PARM_GROUP_NM, DisbursementVoucherRuleConstants.STATE_TAX_CHART_PARM_NM);
+                stateTaxAccount = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.NRA_TAX_PARM_GROUP_NM, DisbursementVoucherRuleConstants.STATE_TAX_ACCOUNT_PARM_NM);
+                stateTaxObjectCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.NRA_TAX_PARM_GROUP_NM, DisbursementVoucherRuleConstants.STATE_OBJECT_CODE_PARM_PREFIX + document.getDvNonResidentAlienTax().getIncomeClassCode());
+            }
+            catch (ApplicationParameterException e) {
                 LOG.error("Unable to retrieve state tax parameters.");
-                throw new RuntimeException("Unable to retrieve state tax parameters.");
+                throw new RuntimeException("Unable to retrieve state tax parameters.", e);
             }
 
             AccountingLine stateTaxLine = generateTaxAccountingLine(document, stateTaxChart, stateTaxAccount, stateTaxObjectCode, document.getDvNonResidentAlienTax().getStateIncomeTaxPercent(), taxableAmount);
@@ -374,13 +468,13 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
 
         /* make sure payee is nra */
         if (!document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KFSKeyConstants.ERROR_DV_GENERATE_TAX_NOT_NRA);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_NOT_NRA);
             return false;
         }
 
         /* don't generate tax if reference doc is given */
         if (StringUtils.isNotBlank(document.getDvNonResidentAlienTax().getReferenceFinancialDocumentNumber())) {
-            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KFSKeyConstants.ERROR_DV_GENERATE_TAX_DOC_REFERENCE);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_DOC_REFERENCE);
             return false;
         }
 
@@ -388,31 +482,31 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
         // check attributes needed to generate lines
         /* need at least 1 line */
         if (!(document.getSourceAccountingLines().size() >= 1)) {
-            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KFSKeyConstants.ERROR_DV_GENERATE_TAX_NO_SOURCE);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_NO_SOURCE);
             return false;
         }
 
         /* make sure both fed and state tax percents are not 0, in which case there is no need to generate lines */
         if (new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getFederalIncomeTaxPercent()) && new KualiDecimal(0).equals(document.getDvNonResidentAlienTax().getStateIncomeTaxPercent())) {
-            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KFSKeyConstants.ERROR_DV_GENERATE_TAX_BOTH_0);
+            errors.putErrorWithoutFullErrorPath("DVNRATaxErrors", KeyConstants.ERROR_DV_GENERATE_TAX_BOTH_0);
             return false;
         }
 
         /* check total cannot be negative */
-        if (KFSConstants.ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
-            errors.putErrorWithoutFullErrorPath("document.disbVchrCheckTotalAmount", KFSKeyConstants.ERROR_NEGATIVE_OR_ZERO_CHECK_TOTAL);
+        if (Constants.ZERO.compareTo(document.getDisbVchrCheckTotalAmount()) == 1) {
+            errors.putErrorWithoutFullErrorPath("document.disbVchrCheckTotalAmount", KeyConstants.ERROR_NEGATIVE_OR_ZERO_CHECK_TOTAL);
             return false;
         }
 
         /* total accounting lines cannot be negative */
-        if (KFSConstants.ZERO.compareTo(document.getSourceTotal()) == 1) {
-            errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_NEGATIVE_ACCOUNTING_TOTAL);
+        if (Constants.ZERO.compareTo(document.getSourceTotal()) == 1) {
+            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_NEGATIVE_ACCOUNTING_TOTAL);
             return false;
         }
 
         /* total of accounting lines must match check total */
         if (document.getDisbVchrCheckTotalAmount().compareTo(document.getSourceTotal()) != 0) {
-            errors.putErrorWithoutFullErrorPath(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.ERROR_CHECK_ACCOUNTING_TOTAL);
+            errors.putErrorWithoutFullErrorPath(Constants.ACCOUNTING_LINE_ERRORS, KeyConstants.ERROR_CHECK_ACCOUNTING_TOTAL);
             return false;
         }
 
@@ -438,9 +532,18 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
         return taxLineNumbers;
     }
 
+    /**
+     * @return Returns the kualiConfigurationService.
+     */
+    public KualiConfigurationService getKualiConfigurationService() {
+        return kualiConfigurationService;
+    }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    /**
+     * @param kualiConfigurationService The kualiConfigurationService to set.
+     */
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 
     /**
@@ -469,19 +572,5 @@ public class DisbursementVoucherTaxServiceImpl implements DisbursementVoucherTax
      */
     public void setMaintenanceDocumentService(MaintenanceDocumentService maintenanceDocumentService) {
         this.maintenanceDocumentService = maintenanceDocumentService;
-    }
-
-    /**
-     * @return Returns the universalUserService.
-     */
-    public UniversalUserService getUniversalUserService() {
-        return universalUserService;
-    }
-
-    /**
-     * @param universalUserService The universalUserService to set.
-     */
-    public void setUniversalUserService(UniversalUserService universalUserService) {
-        this.universalUserService = universalUserService;
     }
 }

@@ -24,8 +24,10 @@ import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 
 /**
- * This class represents an association between an award and an account. It's like a reference to the account from the award. This
- * way an award can maintain a collection of these references instead of owning accounts directly.
+ * This class represents an association between an award and an account. It's
+ * like a reference to the account from the award. This way an award can
+ * maintain a collection of these references instead of owning accounts 
+ * directly.
  */
 public class AwardAccount extends PersistableBusinessObjectBase implements CGProjectDirector, Inactivateable {
 
@@ -33,8 +35,8 @@ public class AwardAccount extends PersistableBusinessObjectBase implements CGPro
     private String chartOfAccountsCode;
     private String accountNumber;
     private String personUniversalIdentifier;
-    private boolean active = true;
-
+    private boolean active;
+    
     private Account account;
     private Chart chartOfAccounts;
     private ProjectDirector projectDirector;
@@ -137,8 +139,9 @@ public class AwardAccount extends PersistableBusinessObjectBase implements CGPro
      * Sets the account attribute.
      * 
      * @param account The account to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated Setter is required by OJB, but should not be used to modify 
+     * this attribute. This attribute is set on the initial creation of the 
+     * object and should not be changed.
      */
     @Deprecated
     public void setAccount(Account account) {
@@ -158,8 +161,9 @@ public class AwardAccount extends PersistableBusinessObjectBase implements CGPro
      * Sets the chartOfAccounts attribute.
      * 
      * @param chartOfAccounts The chartOfAccounts to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated Setter is required by OJB, but should not be used to modify
+     * this attribute. This attribute is set on the initial creation of the 
+     * object and should not be changed.
      */
     @Deprecated
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -179,8 +183,9 @@ public class AwardAccount extends PersistableBusinessObjectBase implements CGPro
      * Sets the project director attribute
      * 
      * @param projectDirector The projectDirector to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated Setter is required by OJB, but should not be used to modify 
+     * this attribute. This attribute is set on the initial creation of the 
+     * object and should not be changed.
      */
     @Deprecated
     public void setProjectDirector(ProjectDirector projectDirector) {
@@ -221,16 +226,18 @@ public class AwardAccount extends PersistableBusinessObjectBase implements CGPro
     }
 
     /**
+     * 
      * @see org.kuali.core.bo.Inactivateable#isActive()
      */
     public boolean isActive() {
-        return active;
+        return account.isAccountClosedIndicator();
     }
 
     /**
+     * 
      * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
      */
     public void setActive(boolean active) {
-        this.active = true;
+        account.setAccountClosedIndicator(active);
     }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/coa/document/validation/impl/AccountRuleTest.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,29 +22,21 @@ import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapEm
 import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapSize;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.Options;
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.AccountGuideline;
 import org.kuali.module.chart.bo.SubFundGroup;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.WithTestSpringContext;
 
-@ConfigureContext(session = KHUNTLEY)
+@WithTestSpringContext(session = KHUNTLEY)
 public class AccountRuleTest extends ChartRuleTestBase {
 
     private class Accounts {
@@ -53,7 +47,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
             private static final String GOOD2 = "UA";
             private static final String BAD1 = "ZZ";
         }
-
+        
         private class AccountNumber {
             private static final String GOOD1 = "1031400";
             private static final String CLOSED1 = "2231414";
@@ -120,7 +114,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
                 private static final String UNIVERSAL_ID = "1509103107";
                 private static final String USER_ID = "AEMCAFEE";
                 private static final String EMP_ID = "0000000013";
-                private static final String NAME = "Mcafee,Alan";
+                private static final String NAME = "Mcafee, Alan";
                 private static final String EMP_STATUS = "A";
                 private static final String EMP_TYPE = "P";
             }
@@ -129,7 +123,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
                 private static final String UNIVERSAL_ID = "1195901455";
                 private static final String USER_ID = "AAPHAM";
                 private static final String EMP_ID = "0000004686";
-                private static final String NAME = "Pham,Anibal";
+                private static final String NAME = "Pham, Anibal";
                 private static final String EMP_STATUS = "A";
                 private static final String EMP_TYPE = "P";
             }
@@ -138,7 +132,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
                 private static final String UNIVERSAL_ID = "1959008511";
                 private static final String USER_ID = "AHLERS";
                 private static final String EMP_ID = "0000002820";
-                private static final String NAME = "Ahlers,Esteban";
+                private static final String NAME = "Ahlers, Esteban";
                 private static final String EMP_STATUS = "A";
                 private static final String EMP_TYPE = "P";
             }
@@ -344,7 +338,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         AccountRule rule = (AccountRule) setupMaintDocRule(maintDoc, AccountRule.class);
 
         // setup a var with today's date
-        Timestamp today = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp today = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
         today.setTime(DateUtils.truncate(today, Calendar.DAY_OF_MONTH).getTime());
         account.setAccountExpirationDate(today);
         result = rule.areGuidelinesRequired(account);
@@ -376,31 +370,26 @@ public class AccountRuleTest extends ChartRuleTestBase {
         AccountRule rule = (AccountRule) setupMaintDocRule(maintDoc, AccountRule.class);
 
         boolean result;
-        List<String> illegalValues = new ArrayList();
+        String[] illegalValues;
         String accountNumber;
 
         accountNumber = "0100000";
-        illegalValues.add("0");
+        illegalValues = new String[] { "0" };
         result = rule.accountNumberStartsWithAllowedPrefix(accountNumber, illegalValues);
         assertEquals(false, result);
 
         accountNumber = "9999990";
-        illegalValues.clear();
-        illegalValues.add("999999");
+        illegalValues = new String[] { "999999" };
         result = rule.accountNumberStartsWithAllowedPrefix(accountNumber, illegalValues);
         assertEquals(false, result);
 
         accountNumber = "1031400";
-        illegalValues.clear();
-        illegalValues.add("0");
+        illegalValues = new String[] { "0" };
         result = rule.accountNumberStartsWithAllowedPrefix(accountNumber, illegalValues);
         assertEquals(true, result);
 
         accountNumber = "1031400";
-        illegalValues.clear();
-        illegalValues.add("0");
-        illegalValues.add("9");
-        illegalValues.add("Z");
+        illegalValues = new String[] { "0", "9", "Z" };
         result = rule.accountNumberStartsWithAllowedPrefix(accountNumber, illegalValues);
         assertEquals(true, result);
 
@@ -410,7 +399,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         AuthenticationUserId userId = new AuthenticationUserId(userName);
         UniversalUser user = null;
         try {
-            user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(userId);
+            user = SpringServiceLocator.getUniversalUserService().getUniversalUser(userId);
         }
         catch (UserNotFoundException e) {
             assertTrue("An Exception should not be thrown.", false);
@@ -547,7 +536,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
         // restricted status code == T, date set
         newAccount.setAccountRestrictedStatusCode("T");
-        newAccount.setAccountRestrictedStatusDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
+        newAccount.setAccountRestrictedStatusDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
         result = rule.hasTemporaryRestrictedStatusCodeButNoRestrictedStatusDate(newAccount);
         assertEquals("No error should be thrown if code is T but date is null.", false, result);
 
@@ -584,8 +573,8 @@ public class AccountRuleTest extends ChartRuleTestBase {
         user.setEmployeeTypeCode("N");
         result = rule.checkUserStatusAndType(fieldName, user);
         assertEquals("Terminated and Non-Professional staff should fail.", false, result);
-        assertFieldErrorExists(fieldName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACTIVE_REQD_FOR_EMPLOYEE);
-        assertFieldErrorExists(fieldName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_PRO_TYPE_REQD_FOR_EMPLOYEE);
+        assertFieldErrorExists(fieldName, KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACTIVE_REQD_FOR_EMPLOYEE);
+        assertFieldErrorExists(fieldName, KeyConstants.ERROR_DOCUMENT_ACCMAINT_PRO_TYPE_REQD_FOR_EMPLOYEE);
         assertGlobalErrorMapSize(1);
 
     }
@@ -605,7 +594,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         user.setEmployeeTypeCode("N");
         result = rule.checkUserStatusAndType(fieldName, user);
         assertEquals("Active but Non-Professional staff should fail.", false, result);
-        assertFieldErrorExists(fieldName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_PRO_TYPE_REQD_FOR_EMPLOYEE);
+        assertFieldErrorExists(fieldName, KeyConstants.ERROR_DOCUMENT_ACCMAINT_PRO_TYPE_REQD_FOR_EMPLOYEE);
         assertGlobalErrorMapSize(1);
 
     }
@@ -625,7 +614,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         user.setEmployeeTypeCode("P");
         result = rule.checkUserStatusAndType(fieldName, user);
         assertEquals("Terminated but Professional staff should fail.", false, result);
-        assertFieldErrorExists(fieldName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACTIVE_REQD_FOR_EMPLOYEE);
+        assertFieldErrorExists(fieldName, KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACTIVE_REQD_FOR_EMPLOYEE);
         assertGlobalErrorMapSize(1);
 
     }
@@ -710,11 +699,11 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // both users non-null, both populated with same UniversalID
         user1.setPersonUniversalIdentifier(Accounts.User.AhlersEsteban.UNIVERSAL_ID);
         user1.setPersonUserIdentifier(Accounts.User.AhlersEsteban.USER_ID);
-        user1.setPersonPayrollIdentifier(Accounts.User.AhlersEsteban.EMP_ID);
+        user1.setEmplid(Accounts.User.AhlersEsteban.EMP_ID);
         user1.setPersonName(Accounts.User.AhlersEsteban.NAME);
         user2.setPersonUniversalIdentifier(Accounts.User.AhlersEsteban.UNIVERSAL_ID);
         user2.setPersonUserIdentifier(Accounts.User.AhlersEsteban.USER_ID);
-        user2.setPersonPayrollIdentifier(Accounts.User.AhlersEsteban.EMP_ID);
+        user2.setEmplid(Accounts.User.AhlersEsteban.EMP_ID);
         user2.setPersonName(Accounts.User.AhlersEsteban.NAME);
         result = rule.areTwoUsersTheSame(user1, user2);
         assertEquals("User1 and User2 are same person, diff objects, result true", true, result);
@@ -734,11 +723,11 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // both users non-null, each different people
         user1.setPersonUniversalIdentifier(Accounts.User.AhlersEsteban.UNIVERSAL_ID);
         user1.setPersonUserIdentifier(Accounts.User.AhlersEsteban.USER_ID);
-        user1.setPersonPayrollIdentifier(Accounts.User.AhlersEsteban.EMP_ID);
+        user1.setEmplid(Accounts.User.AhlersEsteban.EMP_ID);
         user1.setPersonName(Accounts.User.AhlersEsteban.NAME);
         user2.setPersonUniversalIdentifier(Accounts.User.PhamAnibal.UNIVERSAL_ID);
         user2.setPersonUserIdentifier(Accounts.User.PhamAnibal.USER_ID);
-        user2.setPersonPayrollIdentifier(Accounts.User.PhamAnibal.EMP_ID);
+        user2.setEmplid(Accounts.User.PhamAnibal.EMP_ID);
         user2.setPersonName(Accounts.User.PhamAnibal.NAME);
         result = rule.areTwoUsersTheSame(user1, user2);
         assertEquals("User1 and User2 are different persons, result should be false", false, result);
@@ -772,7 +761,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setReportsToAccountNumber(Accounts.AccountNumber.GOOD1);
         result = rule.checkFringeBenefitAccountRule(newAccount);
         assertEquals("FringeBenefit ChartCode missing causes error.", false, result);
-        assertFieldErrorExists("reportsToChartOfAccountsCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_REQUIRED_IF_FRINGEBENEFIT_FALSE);
+        assertFieldErrorExists("reportsToChartOfAccountsCode", KeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_REQUIRED_IF_FRINGEBENEFIT_FALSE);
         assertGlobalErrorMapSize(1);
 
     }
@@ -790,7 +779,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setReportsToAccountNumber(null);
         result = rule.checkFringeBenefitAccountRule(newAccount);
         assertEquals("FringeBenefit AccountNumber missing causes error.", false, result);
-        assertFieldErrorExists("reportsToAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_REQUIRED_IF_FRINGEBENEFIT_FALSE);
+        assertFieldErrorExists("reportsToAccountNumber", KeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_REQUIRED_IF_FRINGEBENEFIT_FALSE);
         assertGlobalErrorMapSize(1);
 
     }
@@ -808,7 +797,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setReportsToAccountNumber(Accounts.AccountNumber.GOOD1);
         result = rule.checkFringeBenefitAccountRule(newAccount);
         assertEquals("FringeBenefit doesnt exist causes error.", false, result);
-        assertFieldErrorExists("reportsToAccountNumber", KFSKeyConstants.ERROR_EXISTENCE);
+        assertFieldErrorExists("reportsToAccountNumber", KeyConstants.ERROR_EXISTENCE);
         assertGlobalErrorMapSize(1);
 
     }
@@ -826,7 +815,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setReportsToAccountNumber(Accounts.AccountNumber.CLOSED1);
         result = rule.checkFringeBenefitAccountRule(newAccount);
         assertEquals("FringeBenefit Closed causes error.", false, result);
-        assertFieldErrorExists("reportsToAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_MUST_BE_FLAGGED_FRINGEBENEFIT);
+        assertFieldErrorExists("reportsToAccountNumber", KeyConstants.ERROR_DOCUMENT_ACCMAINT_RPTS_TO_ACCT_MUST_BE_FLAGGED_FRINGEBENEFIT);
         assertGlobalErrorMapSize(1);
 
     }
@@ -934,7 +923,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setAccountExpirationDate(null);
         result = rule.checkAccountExpirationDateValidTodayOrEarlier(newAccount);
         assertEquals("Null expiration date should fail.", false, result);
-        assertFieldErrorExists("accountExpirationDate", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CANNOT_BE_CLOSED_EXP_DATE_INVALID);
+        assertFieldErrorExists("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CANNOT_BE_CLOSED_EXP_DATE_INVALID);
         assertGlobalErrorMapSize(1);
 
     }
@@ -971,9 +960,8 @@ public class AccountRuleTest extends ChartRuleTestBase {
         Calendar testCalendar;
         Timestamp testTimestamp;
 
-        // get today's date (or whatever's provided by the DateTimeService)
+        // get today's date
         testCalendar = Calendar.getInstance();
-        testCalendar.setTime(SpringContext.getBean(DateTimeService.class).getCurrentDate());
         testCalendar = DateUtils.truncate(testCalendar, Calendar.DAY_OF_MONTH);
         testTimestamp = new Timestamp(testCalendar.getTimeInMillis());
 
@@ -1004,20 +992,18 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setAccountExpirationDate(testTimestamp);
         result = rule.checkAccountExpirationDateValidTodayOrEarlier(newAccount);
         assertEquals("Arbitrarily late date should pass.", false, result);
-        assertFieldErrorExists("accountExpirationDate", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CANNOT_BE_CLOSED_EXP_DATE_INVALID);
+        assertFieldErrorExists("accountExpirationDate", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CANNOT_BE_CLOSED_EXP_DATE_INVALID);
         assertGlobalErrorMapSize(1);
 
     }
-
-    private void disableBeginBalanceLoadInd() {
-        Options options = SpringContext.getBean(OptionsService.class).getCurrentYearOptions();
-        options.setFinancialBeginBalanceLoadInd(true);
-        SpringContext.getBean(BusinessObjectService.class).save(options);
-    }
-
+private void disableBeginBalanceLoadInd(){
+    Options options=SpringServiceLocator.getOptionsService().getCurrentYearOptions();
+    options.setFinancialBeginBalanceLoadInd(true);
+    SpringServiceLocator.getBusinessObjectService().save(options);
+}
     public void testCheckCloseAccountContinuation_NullContinuationCoaCode() {
 
-        // set preconditions
+        //set preconditions
         disableBeginBalanceLoadInd();
         Account oldAccount = new Account();
 
@@ -1028,21 +1014,21 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // account must be being closed
         oldAccount.setAccountClosedIndicator(false);
         newAccount.setAccountClosedIndicator(true);
-        newAccount.setAccountExpirationDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
+        newAccount.setAccountExpirationDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
 
         // continuation coa code null
         newAccount.setContinuationFinChrtOfAcctCd(null);
         newAccount.setContinuationAccountNumber(Accounts.AccountNumber.GOOD1);
         result = rule.checkCloseAccount(maintDoc);
         assertEquals("Null continuation coa code should fail with one error.", false, result);
-        assertFieldErrorExists("continuationFinChrtOfAcctCd", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CLOSE_CONTINUATION_ACCT_REQD);
+        assertFieldErrorExists("continuationFinChrtOfAcctCd", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CLOSE_CONTINUATION_ACCT_REQD);
         assertGlobalErrorMapSize(1);
 
     }
 
     public void testCheckCloseAccountContinuation_NullContinuationAccountNumber() {
 
-        // set preconditions
+        //set preconditions
         disableBeginBalanceLoadInd();
         Account oldAccount = new Account();
 
@@ -1053,14 +1039,14 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // account must be being closed
         oldAccount.setAccountClosedIndicator(false);
         newAccount.setAccountClosedIndicator(true);
-        newAccount.setAccountExpirationDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
+        newAccount.setAccountExpirationDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
 
         // continuation coa code null
         newAccount.setContinuationFinChrtOfAcctCd(Accounts.ChartCode.GOOD1);
         newAccount.setContinuationAccountNumber(null);
         result = rule.checkCloseAccount(maintDoc);
         assertEquals("Null continuation account number should fail with one error.", false, result);
-        assertFieldErrorExists("continuationAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CLOSE_CONTINUATION_ACCT_REQD);
+        assertFieldErrorExists("continuationAccountNumber", KeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_CLOSE_CONTINUATION_ACCT_REQD);
         assertGlobalErrorMapSize(1);
 
     }
@@ -1076,7 +1062,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // account must be being closed
         oldAccount.setAccountClosedIndicator(true);
         newAccount.setAccountClosedIndicator(true);
-        newAccount.setAccountExpirationDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
+        newAccount.setAccountExpirationDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
 
         // continuation coa code null
         newAccount.setContinuationFinChrtOfAcctCd(Accounts.ChartCode.GOOD1);
@@ -1116,16 +1102,19 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setFinancialIcrSeriesIdentifier(null);
         newAccount.setIndirectCostRcvyFinCoaCode(null);
         newAccount.setIndirectCostRecoveryAcctNbr(null);
-        newAccount.setAccountCfdaNumber(null);
+        newAccount.setCgCatlfFedDomestcAssistNbr(null);
 
         // run the rule
         result = rule.checkCgRequiredFields(newAccount);
         assertEquals("Rule should return false with missing fields.", false, result);
-        assertGlobalErrorMapSize(4);
-        assertFieldErrorExists("acctIndirectCostRcvyTypeCd", KFSKeyConstants.ERROR_REQUIRED);
-        assertFieldErrorExists("financialIcrSeriesIdentifier", KFSKeyConstants.ERROR_REQUIRED);
-        assertFieldErrorExists("indirectCostRcvyFinCoaCode", KFSKeyConstants.ERROR_REQUIRED);
-        assertFieldErrorExists("indirectCostRecoveryAcctNbr", KFSKeyConstants.ERROR_REQUIRED);
+        assertGlobalErrorMapSize(7);
+        assertFieldErrorExists("contractControlFinCoaCode", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("contractControlAccountNumber", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("acctIndirectCostRcvyTypeCd", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("financialIcrSeriesIdentifier", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("indirectCostRcvyFinCoaCode", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("indirectCostRecoveryAcctNbr", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("cgCatlfFedDomestcAssistNbr", KeyConstants.ERROR_REQUIRED);
 
     }
 
@@ -1154,129 +1143,12 @@ public class AccountRuleTest extends ChartRuleTestBase {
         newAccount.setFinancialIcrSeriesIdentifier("001");
         newAccount.setIndirectCostRcvyFinCoaCode(Accounts.ChartCode.GOOD1);
         newAccount.setIndirectCostRecoveryAcctNbr(Accounts.AccountNumber.GOOD1);
-        newAccount.setAccountCfdaNumber("001");
+        newAccount.setCgCatlfFedDomestcAssistNbr("001");
 
         // run the rule
         result = rule.checkCgRequiredFields(newAccount);
         assertGlobalErrorMapEmpty();
         assertEquals("Rule should return true with no missing fields.", true, result);
-    }
-
-    /**
-     * @RelatesTo KULRNE-4662 This test makes sure that if the account has a non-CG subfund group, no fields are allowed to be
-     *            filled in. (The contrary test--that if we have an account with a CG fund group, all fields are now required--
-     *            should be tested by testCGFields_RequiredCGFields_AllPresent()).
-     */
-    @SuppressWarnings("deprecation")
-    public void testCGFields_NotCGSubFund_NoFieldsPresent() {
-        MaintenanceDocument maintDoc = newMaintDoc(newAccount);
-        AccountRule rule = (AccountRule) setupMaintDocRule(maintDoc, AccountRule.class);
-        boolean result;
-
-        // create the populated CG subfundgroup
-        SubFundGroup subFundGroup = new SubFundGroup();
-        subFundGroup.setSubFundGroupCode(Accounts.SubFund.Code.EN1);
-        subFundGroup.setFundGroupCode(Accounts.SubFund.FundGroupCode.EN1);
-        subFundGroup.setSubfundgrpActivityIndicator(true);
-
-        // add the subFundGroup info to Account
-        newAccount.setSubFundGroupCode(Accounts.SubFund.Code.EN1);
-        newAccount.setSubFundGroup(subFundGroup);
-
-        // make sure all the required fields are present, so the rule creates validation errors for all of them
-        newAccount.setContractControlFinCoaCode(Accounts.ChartCode.GOOD1);
-        newAccount.setContractControlAccountNumber(Accounts.AccountNumber.GOOD1);
-        newAccount.setAcctIndirectCostRcvyTypeCd("10");
-        newAccount.setFinancialIcrSeriesIdentifier("001");
-        newAccount.setIndirectCostRcvyFinCoaCode(Accounts.ChartCode.GOOD1);
-        newAccount.setIndirectCostRecoveryAcctNbr(Accounts.AccountNumber.GOOD1);
-        newAccount.setAccountCfdaNumber("001");
-
-        // run the rule
-        result = rule.checkCgRequiredFields(newAccount);
-        assertFieldErrorExists("acctIndirectCostRcvyTypeCd", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CG_FIELDS_FILLED_FOR_NON_CG_ACCOUNT);
-        assertFieldErrorExists("financialIcrSeriesIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CG_FIELDS_FILLED_FOR_NON_CG_ACCOUNT);
-        assertFieldErrorExists("indirectCostRcvyFinCoaCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CG_FIELDS_FILLED_FOR_NON_CG_ACCOUNT);
-        assertFieldErrorExists("indirectCostRecoveryAcctNbr", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CG_FIELDS_FILLED_FOR_NON_CG_ACCOUNT);
-        assertFalse("We do not have a C&G sub fund group, but we have all the fields filled; the rule run result should be false", result);
-    }
-
-    /**
-     * @RelatesTo KULRNE-4662
-     * @RelatesTo KULCG-111 This method makes sure that the new account can act as its own contract control account.
-     */
-    @SuppressWarnings("deprecation")
-    public void testCGFields_AccountCanBeCGAccount() {
-        MaintenanceDocument maintDoc = newMaintDoc(newAccount);
-        AccountRule rule = (AccountRule) setupMaintDocRule(maintDoc, AccountRule.class);
-        boolean result;
-
-        // create the populated CG subfundgroup
-        SubFundGroup subFundGroup = new SubFundGroup();
-        subFundGroup.setSubFundGroupCode(Accounts.SubFund.Code.CG1);
-        subFundGroup.setFundGroupCode(Accounts.SubFund.FundGroupCode.CG1);
-        subFundGroup.setSubfundgrpActivityIndicator(true);
-
-        // add the subFundGroup info to Account
-        newAccount.setSubFundGroupCode(Accounts.SubFund.Code.CG1);
-        newAccount.setSubFundGroup(subFundGroup);
-
-        // set chart of accounts and account #, just for this test run
-        String oldNewAccountChart = newAccount.getChartOfAccountsCode();
-        String oldNewAccountsAcctNum = newAccount.getAccountNumber();
-        newAccount.setChartOfAccountsCode(Accounts.ChartCode.GOOD1);
-        newAccount.setAccountNumber(Accounts.AccountNumber.BAD1);
-
-        // make sure all the required fields are present
-        newAccount.setContractControlFinCoaCode(newAccount.getChartOfAccountsCode());
-        newAccount.setContractControlAccountNumber(newAccount.getAccountNumber());
-        newAccount.setAcctIndirectCostRcvyTypeCd("10");
-        newAccount.setFinancialIcrSeriesIdentifier("001");
-        newAccount.setIndirectCostRcvyFinCoaCode(Accounts.ChartCode.GOOD1);
-        newAccount.setIndirectCostRecoveryAcctNbr(Accounts.AccountNumber.GOOD1);
-        newAccount.setAccountCfdaNumber("001");
-
-        // run the rule
-        result = rule.checkCgRequiredFields(newAccount);
-        assertGlobalErrorMapEmpty();
-        assertTrue("Rule should allow new account to be the contract control account.", result);
-
-        newAccount.setChartOfAccountsCode(oldNewAccountChart);
-        newAccount.setAccountNumber(oldNewAccountsAcctNum);
-    }
-
-    /**
-     * @RelatesTo KULCG-111 This method makes sure that any account specified as the contract control account must actually exist.
-     */
-    @SuppressWarnings("deprecation")
-    public void testCGFields_AccountMustBeReal() {
-        MaintenanceDocument maintDoc = newMaintDoc(newAccount);
-        AccountRule rule = (AccountRule) setupMaintDocRule(maintDoc, AccountRule.class);
-        boolean result;
-
-        // create the populated CG subfundgroup
-        SubFundGroup subFundGroup = new SubFundGroup();
-        subFundGroup.setSubFundGroupCode(Accounts.SubFund.Code.CG1);
-        subFundGroup.setFundGroupCode(Accounts.SubFund.FundGroupCode.CG1);
-        subFundGroup.setSubfundgrpActivityIndicator(true);
-
-        // add the subFundGroup info to Account
-        newAccount.setSubFundGroupCode(Accounts.SubFund.Code.CG1);
-        newAccount.setSubFundGroup(subFundGroup);
-
-        // make sure all the required fields exist...we don't really want to test for that
-        newAccount.setContractControlFinCoaCode(Accounts.ChartCode.BAD1);
-        newAccount.setContractControlAccountNumber(Accounts.AccountNumber.BAD1);
-        newAccount.setAcctIndirectCostRcvyTypeCd("10");
-        newAccount.setFinancialIcrSeriesIdentifier("001");
-        newAccount.setIndirectCostRcvyFinCoaCode(Accounts.ChartCode.GOOD1);
-        newAccount.setIndirectCostRecoveryAcctNbr(Accounts.AccountNumber.GOOD1);
-        newAccount.setAccountCfdaNumber("001");
-
-        // run the rule
-        result = rule.checkCgRequiredFields(newAccount);
-        assertFieldErrorExists("contractControlAccountNumber", KFSKeyConstants.ERROR_EXISTENCE);
-        assertFalse("Rule should require contract account to be real.", result);
     }
 
     @SuppressWarnings("deprecation")
@@ -1365,8 +1237,8 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // run the rule
         result = rule.checkCgIncomeStreamRequired(newAccount);
         assertEquals("CG Account with no Income Stream data should fail.", false, result);
-        assertFieldErrorExists("incomeStreamFinancialCoaCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_COA_CANNOT_BE_EMPTY);
-        assertFieldErrorExists("incomeStreamAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_NBR_CANNOT_BE_EMPTY);
+        assertFieldErrorExists("incomeStreamFinancialCoaCode", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("incomeStreamAccountNumber", KeyConstants.ERROR_REQUIRED);
         assertGlobalErrorMapSize(2);
 
     }
@@ -1397,7 +1269,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // run the rule
         result = rule.checkCgIncomeStreamRequired(newAccount);
         assertEquals("CG Account with invalid Income Stream data should fail.", false, result);
-        assertFieldErrorExists("incomeStreamAccountNumber", KFSKeyConstants.ERROR_EXISTENCE);
+        assertFieldErrorExists("incomeStreamAccountNumber", KeyConstants.ERROR_EXISTENCE);
         assertGlobalErrorMapSize(1);
 
     }
@@ -1428,8 +1300,8 @@ public class AccountRuleTest extends ChartRuleTestBase {
         // run the rule
         result = rule.checkCgIncomeStreamRequired(newAccount);
         assertEquals("GF Account with no Income Stream data should fail.", false, result);
-        assertFieldErrorExists("incomeStreamFinancialCoaCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_COA_CANNOT_BE_EMPTY);
-        assertFieldErrorExists("incomeStreamAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_NBR_CANNOT_BE_EMPTY);
+        assertFieldErrorExists("incomeStreamFinancialCoaCode", KeyConstants.ERROR_REQUIRED);
+        assertFieldErrorExists("incomeStreamAccountNumber", KeyConstants.ERROR_REQUIRED);
         assertGlobalErrorMapSize(2);
 
     }
@@ -1460,7 +1332,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         boolean result;
 
         // get today's date
-        Timestamp todaysDate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp todaysDate = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
 
         // set both expiration dates to null
         oldAccount.setAccountExpirationDate(todaysDate);
@@ -1480,7 +1352,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
         boolean result;
 
         // get today's date
-        Timestamp todaysDate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp todaysDate = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
 
         // set both expiration dates to null
         oldAccount.setAccountExpirationDate(todaysDate);
@@ -1502,7 +1374,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
         // get today's date
         Calendar calendar;
-        Timestamp todaysDate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp todaysDate = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
 
         // old exp date
         calendar = Calendar.getInstance();
@@ -1537,7 +1409,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
         // get today's date
         Calendar calendar;
-        Timestamp todaysDate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp todaysDate = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
 
         // old exp date
         calendar = Calendar.getInstance();
@@ -1579,7 +1451,7 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
         // get today's date
         Calendar calendar;
-        Timestamp todaysDate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp todaysDate = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
 
         // old exp date
         calendar = Calendar.getInstance();
@@ -1610,30 +1482,4 @@ public class AccountRuleTest extends ChartRuleTestBase {
 
     }
 
-    @SuppressWarnings("deprecation")
-    public void testDataDictionaryValidation_AccountPurpose_TooLong() {
-        Account oldAccount = new Account();
-        newAccount.setAccountGuideline(new AccountGuideline());
-        newAccount.getAccountGuideline().setAccountPurposeText("01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "01324567890123456789012345678901324567890132456789012345678901234567890132456789");
-        assertTrue("Purpose text should be more than 400 characters.  (was: " + newAccount.getAccountGuideline().getAccountPurposeText().length() + ")", newAccount.getAccountGuideline().getAccountPurposeText().length() > 400);
-        MaintenanceDocument maintDoc = newMaintDoc(oldAccount, newAccount);
-        AccountRule rule = (AccountRule) setupMaintDocRule(maintDoc, AccountRule.class);
-        rule.processCustomRouteDocumentBusinessRules(maintDoc);
-        // System.out.println( GlobalVariables.getErrorMap().entrySet() );
-        assertFieldErrorExists("accountGuideline.accountPurposeText", KFSKeyConstants.ERROR_MAX_LENGTH);
-    }
-
-    @SuppressWarnings("deprecation")
-    public void testDataDictionaryValidation_AccountPurpose_GoodLength() {
-        Account oldAccount = new Account();
-        newAccount.setAccountGuideline(new AccountGuideline());
-        newAccount.getAccountGuideline().setAccountPurposeText("01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "01324567890123456789012345678901324567890132456789012345678901234567890132456789\r" + "013245678901234567890123456789013245678901324567890123456789012345678901324");
-        System.out.println(newAccount.getAccountGuideline().getAccountPurposeText().length());
-        assertTrue("Purpose text should be <= 400 characters.  (was: " + newAccount.getAccountGuideline().getAccountPurposeText().length() + ")", newAccount.getAccountGuideline().getAccountPurposeText().length() <= 400);
-        MaintenanceDocument maintDoc = newMaintDoc(oldAccount, newAccount);
-        AccountRule rule = (AccountRule) setupMaintDocRule(maintDoc, AccountRule.class);
-        rule.processCustomRouteDocumentBusinessRules(maintDoc);
-        System.out.println(GlobalVariables.getErrorMap().entrySet());
-        assertFieldErrorDoesNotExist("accountGuideline.accountPurposeText", KFSKeyConstants.ERROR_MAX_LENGTH);
-    }
 }

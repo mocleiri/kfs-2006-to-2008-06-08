@@ -21,24 +21,26 @@ import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapSi
 
 import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.SubAccount;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.fixtures.SubAccountFixture;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.UserNameFixture;
 
-@ConfigureContext(session = KHUNTLEY)
+@WithTestSpringContext(session = KHUNTLEY)
 public class SubAccountRuleTest extends ChartRuleTestBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SubAccountRuleTest.class);
 
     private static final String GOOD_CHART = "UA";
     private static final String GOOD_ACCOUNT = "1912201";
+    private static final String BAD_CHART = "ZZ";
+    private static final String BAD_ACCOUNT = "0000000";
     private static final String NEW_SUBACCOUNT_NUMBER = "12345";
     private static final String NEW_SUBACCOUNT_NAME = "A New SubAccount";
 
@@ -46,16 +48,30 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     private static final UserNameFixture GOOD_CG_USERID = UserNameFixture.KCOPLEY;
     private static final UserNameFixture BAD_CG_USERID = UserNameFixture.JHAVENS;
 
+    // CG bad fund group test
+    private static final String BAD_FUND_GRP_CHART = "BL";
+    private static final String BAD_FUND_GRP_ACCOUNT = "2220090";
+
+    // CG bad sub account type test
+    private static final String BAD_SUB_ACCT_TYPE = "ZZ";
+    private static final String GOOD_FUND_GRP_CHART = "4831497";
+    private static final String GOOD_FUND_GRP_ACCOUNT = "BL";
+
+
     SubAccount newSubAccount;
     SubAccount oldSubAccount;
     MaintenanceDocument maintDoc;
 
     /**
+     * 
      * This method creates a new SubAccount, and populates it with the data provided. No fields are required for this method, though
-     * some may be for the rules. This method calls subAccount.refresh() before returning it, so all sub-objects should be
-     * populated, if the keys match any records in the corresponding tables. This method does not populate anything in the contained
-     * A21SubAccount, though it does create a new A21SubAccount. So the A21SubAccount instance will be valid (ie, non-null), but all
-     * of its fields will be default or null.
+     * some may be for the rules.
+     * 
+     * This method calls subAccount.refresh() before returning it, so all sub-objects should be populated, if the keys match any
+     * records in the corresponding tables.
+     * 
+     * This method does not populate anything in the contained A21SubAccount, though it does create a new A21SubAccount. So the
+     * A21SubAccount instance will be valid (ie, non-null), but all of its fields will be default or null.
      * 
      * @param chartOfAccountsCode
      * @param accountNumber
@@ -66,6 +82,7 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
      * @param finReportOrgCode
      * @param finReportingCode
      * @return returns a SubAccount instance populated with the data provided
+     * 
      */
     private SubAccount newSubAccount(String chartOfAccountsCode, String accountNumber, String subAccountNumber, String subAccountName, boolean subAccountActiveIndicator, String finReportChartCode, String finReportOrgCode, String finReportingCode) {
 
@@ -84,10 +101,63 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
         return subAccount;
     }
 
+    /**
+     * 
+     * This method creates a new SubAccount including all A21SubAccount fields, and populates it with the data provided. No fields
+     * are required for this method, though some may be for the rules.
+     * 
+     * This method calls subAccount.refresh() before returning it, so all sub-objects should be populated, if the keys match any
+     * records in the corresponding tables.
+     * 
+     * @param chartOfAccountsCode
+     * @param accountNumber
+     * @param subAccountNumber
+     * @param subAccountName
+     * @param subAccountActiveIndicator
+     * @param finReportChartCode
+     * @param finReportOrgCode
+     * @param finReportingCode
+     * @param subAccountTypeCode
+     * @param icrTypeCode
+     * @param finSeriesId
+     * @param icrChartCode
+     * @param icrAccountNumber
+     * @param offCampusCode
+     * @param costShareChartCode
+     * @param costShareAccountNumber
+     * @param costShareSubAccountNumber
+     * @return returns a SubAccount instance populated with the data provided
+     * 
+     */
+    private SubAccount newA21SubAccount(String chartOfAccountsCode, String accountNumber, String subAccountNumber, String subAccountName, boolean subAccountActiveIndicator, String finReportChartCode, String finReportOrgCode, String finReportingCode, String subAccountTypeCode, String icrTypeCode, String finSeriesId, String icrChartCode, String icrAccountNumber, boolean offCampusCode, String costShareChartCode, String costShareAccountNumber, String costShareSubAccountNumber) {
+
+        SubAccount subAccount;
+
+        subAccount = newSubAccount(chartOfAccountsCode, accountNumber, subAccountNumber, subAccountName, subAccountActiveIndicator, finReportChartCode, finReportOrgCode, finReportingCode);
+
+        subAccount.setA21SubAccount(new A21SubAccount());
+
+        A21SubAccount a21 = subAccount.getA21SubAccount();
+        a21.setChartOfAccountsCode(chartOfAccountsCode);
+        a21.setAccountNumber(accountNumber);
+        a21.setSubAccountTypeCode(subAccountTypeCode);
+        a21.setIndirectCostRecoveryTypeCode(icrTypeCode);
+        a21.setFinancialIcrSeriesIdentifier(finSeriesId);
+        a21.setIndirectCostRecoveryChartOfAccountsCode(icrChartCode);
+        a21.setIndirectCostRecoveryAccountNumber(icrAccountNumber);
+        a21.setOffCampusCode(offCampusCode);
+        a21.setCostShareChartOfAccountCode(costShareChartCode);
+        a21.setCostShareSourceAccountNumber(costShareAccountNumber);
+        a21.setCostShareSourceSubAccountNumber(costShareSubAccountNumber);
+        a21.refresh();
+
+        return subAccount;
+    }
+
     private UniversalUser createKualiUser(String userid) {
         UniversalUser user = new UniversalUser();
         try {
-            user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(userid));
+            user = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(userid));
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -206,6 +276,7 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     }
 
     /**
+     * 
      * This method simulates a user that has permission to deal with CG accounts
      */
     public void testIsCgAuthorized_goodUser() throws UserNotFoundException {
@@ -222,6 +293,7 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     }
 
     /**
+     * 
      * This method simulates a user that does not have permission to deal with CG accounts
      */
     public void testIsCgAuthorized_badUser() throws UserNotFoundException {
@@ -239,8 +311,7 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     public void testCheckCgRules_badFundGroup() {
         SubAccountRule rule = new SubAccountRule();
         // setup rule, document, and bo
-        newSubAccount = SubAccountFixture.SUB_ACCOUNT_WITH_BAD_CG_FUND_GROUP.createSubAccount();
-        newSubAccount.refresh();
+        newSubAccount = newSubAccount(BAD_FUND_GRP_CHART, BAD_FUND_GRP_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null);
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
 
         // confirm that there are no errors to begin with
@@ -251,8 +322,9 @@ public class SubAccountRuleTest extends ChartRuleTestBase {
     public void testCheckCgRules_badA21SubAccountAccountType() throws Exception {
         SubAccountRule rule = new SubAccountRule();
         // setup rule, document, and bo
-        newSubAccount = SubAccountFixture.A21_SUB_ACCOUNT_WITH_BAD_CG_ACCOUNT_TYPE.createSubAccount();
-        newSubAccount.getA21SubAccount().refresh();
+        // newSubAccount = newSubAccount(GOOD_CHART, GOOD_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null,
+        // null);
+        newSubAccount = newA21SubAccount(GOOD_FUND_GRP_CHART, GOOD_FUND_GRP_ACCOUNT, NEW_SUBACCOUNT_NUMBER, NEW_SUBACCOUNT_NAME, true, null, null, null, BAD_SUB_ACCT_TYPE, null, null, null, null, false, null, null, null);
         String fieldName = "a21SubAccount.subAccountTypeCode";
         rule = (SubAccountRule) setupMaintDocRule(newSubAccount, rule.getClass());
         rule.setCgAuthorized(true);
