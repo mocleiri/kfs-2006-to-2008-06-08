@@ -23,11 +23,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.question.ConfirmationQuestion;
+import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.KualiRuleService;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.rule.event.DocumentSystemSaveEvent;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapConstants.PREQDocumentsStrings;
@@ -35,27 +38,31 @@ import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.rule.event.CalculateAccountsPayableEvent;
 import org.kuali.module.purap.service.PaymentRequestService;
-import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.util.PurQuestionCallback;
+import org.kuali.module.purap.web.struts.form.AccountsPayableFormBase;
 import org.kuali.module.purap.web.struts.form.PaymentRequestForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
- * Struts Action for Payment Request document.
+ * This class handles specific Actions requests for the Requisition.
+ * 
  */
 public class PaymentRequestAction extends AccountsPayableActionBase {
     static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PaymentRequestAction.class);
 
     /**
-     * Do initialization for a new payment request.
+     * Do initialization for a new requisition
      * 
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#createDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
     @Override
     protected void createDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
+
         super.createDocument(kualiDocumentFormBase);
+
         ((PaymentRequestDocument) kualiDocumentFormBase.getDocument()).initiateDocument();
+
     }
 
     /**
@@ -64,23 +71,14 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
      */
     @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         PaymentRequestForm preqForm = (PaymentRequestForm) form;
         PaymentRequestDocument document = (PaymentRequestDocument) preqForm.getDocument();
 
         return super.refresh(mapping, form, request, response);
     }
 
-    /**
-     * Executes the continue action on a payment request. Populates and initializes the rest of the payment request besides what was
-     * shown on the init screen.
-     * 
-     * @param mapping An ActionMapping
-     * @param form An ActionForm
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @throws Exception
-     * @return An ActionForward
-     */
+
     public ActionForward continuePREQ(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("continuePREQ() method");
 
@@ -90,38 +88,23 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         // preform duplicate check which will forward to a question prompt if one is found
         ActionForward forward = performDuplicatePaymentRequestCheck(mapping, form, request, response, paymentRequestDocument);
         if (forward != null) {
-
             return forward;
         }
 
         // If we are here either there was no duplicate or there was a duplicate and the user hits continue, in either case we need
         // to validate the business rules
         SpringContext.getBean(PaymentRequestService.class).populateAndSavePaymentRequest(paymentRequestDocument);
-
-        // force calculation
+        
+        //force calculation
         preqForm.setCalculated(false);
 
-        // sort below the line
-        SpringContext.getBean(PurapService.class).sortBelowTheLine(paymentRequestDocument);
-
-        // update the counts on the form
-        preqForm.updateItemCounts();
-
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
+
     }
 
-    /**
-     * Clears the initial fields on the <code>PaymentRequestDocument</code> which should be accessible from the given form.
-     * 
-     * @param mapping An ActionMapping
-     * @param form An ActionForm, which must be a PaymentRequestForm
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @throws Exception
-     * @return An ActionForward
-     */
     public ActionForward clearInitFields(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("clearInitValues() method");
+
         PaymentRequestForm preqForm = (PaymentRequestForm) form;
         PaymentRequestDocument paymentRequestDocument = (PaymentRequestDocument) preqForm.getDocument();
         paymentRequestDocument.clearInitFields();
@@ -130,18 +113,9 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
     }
 
     /**
-     * Calls <code>PaymentRequestService</code> to perform the duplicate payment request check. If one is found, a question is
-     * setup and control is forwarded to the question action method. Coming back from the question prompt the button that was
-     * clicked is checked and if 'no' was selected they are forward back to the page still in init mode.
-     * 
-     * @param mapping An ActionMapping
-     * @param form An ActionForm
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @param paymentRequestDocument The PaymentRequestDocument
-     * @throws Exception
-     * @return An ActionForward
-     * @see org.kuali.module.purap.service.PaymentRequestService
+     * Calls PaymentRequestService to perform the duplicate payment request check. If one is found, a question is setup and control is
+     * forwarded to the question action method. Coming back from the question prompt the button that was clicked is checked and if
+     * 'no' was selected they are forward back to the page still in init mode.
      */
     private ActionForward performDuplicatePaymentRequestCheck(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, PaymentRequestDocument paymentRequestDocument) throws Exception {
         ActionForward forward = null;
@@ -149,7 +123,6 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         if (!duplicateMessages.isEmpty()) {
             Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
             if (question == null) {
-
                 return this.performQuestionWithoutInput(mapping, form, request, response, PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION, duplicateMessages.get(PREQDocumentsStrings.DUPLICATE_INVOICE_QUESTION), KFSConstants.CONFIRMATION_QUESTION, KFSConstants.ROUTE_METHOD, "");
             }
 
@@ -163,15 +136,17 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
         return forward;
     }
 
+
     /**
-     * Puts a payment on hold, prompting for a reason beforehand. This stops further approvals or routing.
+     * This action puts a payment on hold, prompting for a reason before hand.
+     * This stops further approvals or routing.
      * 
-     * @param mapping An ActionMapping
-     * @param form An ActionForm
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
      * @throws Exception
-     * @return An ActionForward
      */
     public ActionForward addHoldOnPayment(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String operation = "Hold ";
@@ -186,14 +161,14 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
     }
 
     /**
-     * Removes a hold on the payment request.
+     * This action removes a hold on the PREQ.
      * 
-     * @param mapping An ActionMapping
-     * @param form An ActionForm
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
      * @throws Exception
-     * @return An ActionForward
      */
     public ActionForward removeHoldFromPayment(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String operation = "Remove ";
@@ -208,14 +183,15 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
     }
 
     /**
-     * This action requests a cancel on a preq, prompting for a reason before hand. This stops further approvals or routing.
+     * This action requests a cancel on a preq, prompting for a reason before hand.
+     * This stops further approvals or routing.
      * 
-     * @param mapping An ActionMapping
-     * @param form An ActionForm
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
      * @throws Exception
-     * @return An ActionForward
      */
     public ActionForward requestCancelOnPayment(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String operation = "Cancel ";
@@ -234,24 +210,27 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
      */
     @Override
     protected PurQuestionCallback cancelPOActionCallbackMethod() {
-
         return new PurQuestionCallback() {
             public void doPostQuestion(AccountsPayableDocument document, String noteText) throws Exception {
-                PaymentRequestDocument preqDocument = (PaymentRequestDocument) document;
+                PaymentRequestDocument preqDocument = (PaymentRequestDocument)document;
+                DocumentService documentService = SpringContext.getBean(DocumentService.class);
                 preqDocument.setReopenPurchaseOrderIndicator(true);
+                //well be saved on cancel I believe
+                //TODO: ckirschenman - delyea is this the right event for this case?
+//                documentService.saveDocument(preqDocument, DocumentSystemSaveEvent.class);
             }
         };
     }
 
     /**
-     * Removes a request for cancel on a payment request.
+     * This action removes a request for cancel on a PREQ.
      * 
-     * @param mapping An ActionMapping
-     * @param form An ActionForm
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
      * @throws Exception
-     * @return An ActionForward
      */
     public ActionForward removeCancelRequestFromPayment(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String operation = "Cancel ";
@@ -266,26 +245,21 @@ public class PaymentRequestAction extends AccountsPayableActionBase {
     }
 
     /**
-     * Calls a service method to calculate for a payment request document.
-     * 
-     * @param apDoc The AccountsPayableDocument
+     * calls a service method to calculate for a payment request document
      */
     @Override
     protected void customCalculate(AccountsPayableDocument apDoc) {
         PaymentRequestDocument preqDoc = (PaymentRequestDocument) apDoc;
-        // set amounts on any empty
+        //set amounts on any empty
         preqDoc.updateExtendedPriceOnItems();
 
-        // notice we're ignoring whether the boolean, because these are just warnings they shouldn't halt anything
+        //notice we're ignoring whether the boolean, because these are just warnings they shouldn't halt anything
         SpringContext.getBean(KualiRuleService.class).applyRules(new CalculateAccountsPayableEvent(preqDoc));
         SpringContext.getBean(PaymentRequestService.class).calculatePaymentRequest(preqDoc, true);
     }
-
-    /**
-     * @see org.kuali.module.purap.web.struts.action.AccountsPayableActionBase#getActionName()
-     */
+    
     @Override
-    public String getActionName() {
+    public String getActionName(){
         return PurapConstants.PAYMENT_REQUEST_ACTION_NAME;
     }
 }

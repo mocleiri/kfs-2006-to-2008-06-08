@@ -20,8 +20,11 @@ import static org.kuali.kfs.KFSConstants.BALANCE_TYPE_PRE_ENCUMBRANCE;
 import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_NUMBER;
 import static org.kuali.kfs.KFSPropertyConstants.REVERSAL_DATE;
 import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
+import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.PRE_ENCUMBRANCE_DOCUMENT_SECURITY_GROUPING;
+import static org.kuali.module.financial.rules.PreEncumbranceDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.Parameter;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.Document;
 import org.kuali.core.service.DataDictionaryService;
@@ -35,6 +38,7 @@ import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
 import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
+import org.kuali.kfs.rules.AttributeReference;
 import org.kuali.kfs.service.HomeOriginationService;
 import org.kuali.module.financial.document.PreEncumbranceDocument;
 
@@ -77,6 +81,7 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
      * document.
      * 
      * @param accountingLine
+     * 
      * @return True if the required external encumbrance reference field is valid, false otherwise.
      */
     private boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
@@ -93,9 +98,25 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
+     * @see FinancialDocumentRuleBase#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
+        Parameter combinedRule = getKualiConfigurationService().mergeParameters(getGlobalObjectTypeRule(), getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.PRE_ENCUMBRANCE_DOC, RESTRICTED_OBJECT_TYPE_CODES));
+        AttributeReference direct = createObjectCodeAttributeReference(accountingLine);
+        AttributeReference indirect = createObjectTypeAttributeReference(accountingLine);
+        boolean allowed = indirectRuleSucceeds(combinedRule, direct, indirect);
+        if (allowed) {
+            allowed &= super.isObjectTypeAllowed(accountingLine);
+        }
+        return allowed;
+    }
+
+    /**
      * Pre Encumbrance document specific business rule checks for the "route document" event.
      * 
      * @param document
+     * 
      * @return boolean True if the rules checks passed, false otherwise.
      */
     @Override
@@ -113,6 +134,7 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
      * If a PreEncumbrance document has a reversal date, it must not be earlier than the current date to route.
      * 
      * @param preEncumbranceDocument
+     * 
      * @return boolean True if this document does not have a reversal date earlier than the current date, false otherwise.
      */
     private boolean isReversalDateValidForRouting(PreEncumbranceDocument preEncumbranceDocument) {
@@ -124,6 +146,7 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
      * PreEncumbrance documents require at least one accounting line in either section for routing.
      * 
      * @param financialDocument
+     * 
      * @return boolean True if the number of accounting lines are valid for routing, false otherwise.
      */
     @Override
@@ -178,6 +201,7 @@ public class PreEncumbranceDocumentRule extends AccountingDocumentRuleBase {
      * limits only to expense object type codes
      * 
      * @see IsDebitUtils#isDebitConsideringSection(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * 
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
      */

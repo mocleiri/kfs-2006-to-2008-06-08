@@ -24,34 +24,21 @@
         <c:set var="fullEntryMode" value="true" scope="request" />
     </c:if>
 
-	<c:if test="${!empty KualiForm.editingMode['amendmentEntry']}">
-		<c:set var="amendmentEntry" value="true" scope="request" />
-	</c:if>
-
-	<c:if test="${!empty KualiForm.editingMode['preRouteChangeable']}">
-		<c:set var="preRouteChangeMode" value="true" scope="request" />
-	</c:if>
-
-	<c:if test="${((KualiForm.editingMode['displayRetransmitTab']) and (KualiForm.document.documentHeader.workflowDocument.routeHeader.docRouteStatus != 'F'))}">
+    <c:if test="${((KualiForm.editingMode['displayRetransmitTab']) and (KualiForm.document.documentHeader.workflowDocument.routeHeader.docRouteStatus != 'F'))}">
         <c:set var="retransmitMode" value="true" scope="request" />
     </c:if>
     
     <kul:hiddenDocumentFields excludePostingYear="true" />
 
     <purap:hiddenPurapFields />
-    <!-- need this for persistence -->
-    <html:hidden property="purchaseOrderIdentifier" />
     <!-- TODO move this to where? -->
     <html:hidden property="document.requisitionIdentifier" />
     <html:hidden property="document.purchaseOrderCurrentIndicator" />
     <html:hidden property="document.pendingActionIndicator" />
-    <html:hidden property="document.purchaseOrderLastTransmitDate" />
-    <html:hidden property="document.contractManagerCode" />
-    
+
     <c:if test="${empty KualiForm.editingMode['amendmentEntry']}">
         <kul:documentOverview editingMode="${KualiForm.editingMode}"
             includePostingYear="true"
-            fiscalYearReadOnly="true"
             postingYearAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" >
 
             <purap:purapDocumentDetail
@@ -65,7 +52,6 @@
         <c:set target="${KualiForm.accountingLineEditingMode}" property="fullEntry" value="true" />
         <kul:documentOverview editingMode="${KualiForm.accountingLineEditingMode}"
             includePostingYear="true"
-            fiscalYearReadOnly="true"
             postingYearAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" >
 
             <purap:purapDocumentDetail
@@ -93,8 +79,7 @@
 
     <purap:puritems itemAttributes="${DataDictionary.PurchaseOrderItem.attributes}"
         accountingLineAttributes="${DataDictionary.PurchaseOrderAccount.attributes}"
-        camsAttributes="${DataDictionary.PurchaseOrderItemCapitalAsset.attributes}" 
-        extraHiddenItemFields="documentNumber"/> 
+        camsAttributes="${DataDictionary.PurchaseOrderItemCapitalAsset.attributes}" /> 
      
     <purap:paymentinfo
         documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}" 
@@ -110,20 +95,25 @@
         itemAttributes="${DataDictionary.PurchaseOrderItem.attributes}"
     	documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" />  
 	
-	<%--
 	<c:if test="${KualiForm.document.statusCode eq 'INPR' || KualiForm.document.statusCode eq 'QUOT'}">
 	    <purap:quotes
 	        documentAttributes="${DataDictionary.PurchaseOrderDocument.attributes}"
 	        vendorQuoteAttributes="${DataDictionary.PurchaseOrderVendorQuote.attributes}"
 	        isPurchaseOrderAwarded="${KualiForm.document.purchaseOrderAwarded}" />
 	</c:if>
-	--%>
 
     <purap:relatedDocuments
             documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
 
     <purap:paymentHistory
             documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
+
+    <purap:statushistory 
+        documentAttributes="${DataDictionary.PurchaseOrderStatusHistory.attributes}">
+          <html:messages id="warnings" property="statusHistoryWarning" message="true">
+            &nbsp;&nbsp;&nbsp;<bean:write name="warnings"/><br><br>
+          </html:messages>       
+    </purap:statushistory>
 
     <gl:generalLedgerPendingEntries />
 
