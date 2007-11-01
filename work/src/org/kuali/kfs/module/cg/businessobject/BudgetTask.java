@@ -24,6 +24,8 @@ import org.kuali.kfs.KFSPropertyConstants;
 
 /**
  * Account Business Object
+ * 
+ * 
  */
 public class BudgetTask extends PersistableBusinessObjectBase implements Comparable {
 
@@ -42,7 +44,7 @@ public class BudgetTask extends PersistableBusinessObjectBase implements Compara
         this.documentNumber = documentNumber;
         this.budgetTaskSequenceNumber = budgetTaskSequenceNumber;
     }
-
+    
     public BudgetTask(BudgetTask template) {
         this.documentNumber = template.getDocumentNumber();
         this.budgetTaskSequenceNumber = template.getBudgetTaskSequenceNumber();

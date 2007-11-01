@@ -42,10 +42,9 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
     }
 
     /**
-     * Populates the key fields for BudgetAbstractPeriodCostShare object. This could be done on object creation, unfortunatly at
-     * that time we don't have budgetCostShareSequenceNumber set yet (object is created on page load, while sequence number is set
-     * on pressing "add" on the page). Thus we opted for this solution.
-     * 
+     * Populates the key fields for BudgetAbstractPeriodCostShare object. This could be done on object creation, unfortunatly at that time
+     * we don't have budgetCostShareSequenceNumber set yet (object is created on page load, while sequence number is set on pressing "add"
+     * on the page). Thus we opted for this solution.
      * @param documentNumber
      * @param periods
      * @param budgetAbstractCostShare
@@ -62,17 +61,16 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
             budgetAbstractPeriodCostShare.setBudgetPeriodSequenceNumber(period.getBudgetPeriodSequenceNumber());
         }
     }
-
+    
     public abstract List getBudgetPeriodCostShare();
-
     public abstract void setBudgetPeriodCostShare(List budgetPeriodCostShare);
-
     public abstract BudgetAbstractPeriodCostShare getBudgetPeriodCostShareItem(int index);
-
+    
     /**
      * Gets the documentNumber attribute.
      * 
      * @return Returns the documentNumber
+     * 
      */
     public String getDocumentNumber() {
         return documentNumber;
@@ -82,6 +80,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
      * Sets the documentNumber attribute.
      * 
      * @param documentNumber The documentNumber to set.
+     * 
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -91,6 +90,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
      * Gets the budgetThirdPartyCostShareSequenceNumber attribute.
      * 
      * @return Returns the budgetThirdPartyCostShareSequenceNumber
+     * 
      */
     public Integer getBudgetCostShareSequenceNumber() {
         return budgetCostShareSequenceNumber;
@@ -100,6 +100,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
      * Sets the budgetThirdPartyCostShareSequenceNumber attribute.
      * 
      * @param budgetThirdPartyCostShareSequenceNumber The budgetThirdPartyCostShareSequenceNumber to set.
+     * 
      */
     public void setBudgetCostShareSequenceNumber(Integer budgetThirdPartyCostShareSequenceNumber) {
         this.budgetCostShareSequenceNumber = budgetThirdPartyCostShareSequenceNumber;
@@ -109,6 +110,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
      * Gets the budgetThirdPartyCostShareDescription attribute.
      * 
      * @return Returns the budgetThirdPartyCostShareDescription
+     * 
      */
     public String getBudgetCostShareDescription() {
         return budgetCostShareDescription;
@@ -118,6 +120,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
      * Sets the budgetThirdPartyCostShareDescription attribute.
      * 
      * @param budgetThirdPartyCostShareDescription The budgetThirdPartyCostShareDescription to set.
+     * 
      */
     public void setBudgetCostShareDescription(String budgetThirdPartyCostShareDescription) {
         this.budgetCostShareDescription = budgetThirdPartyCostShareDescription;
