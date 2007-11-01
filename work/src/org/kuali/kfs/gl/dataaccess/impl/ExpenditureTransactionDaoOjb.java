@@ -66,7 +66,7 @@ public class ExpenditureTransactionDaoOjb extends PlatformAwareDaoBaseOjb implem
         crit.addEqualTo(PROJECT_CODE, t.getProjectCode());
 
         if (t.getOrganizationReferenceId() == null) {
-            crit.addEqualTo(ORGANIZATION_REFERENCE_ID, GLConstants.getDashOrganizationReferenceId());
+            crit.addEqualTo(ORGANIZATION_REFERENCE_ID, GLConstants.DASH_ORGANIZATION_REFERENCE_ID);
         }
         else {
             crit.addEqualTo("organizationReferenceId", t.getOrganizationReferenceId());
@@ -101,20 +101,5 @@ public class ExpenditureTransactionDaoOjb extends PlatformAwareDaoBaseOjb implem
         LOG.debug("save() started");
 
         getPersistenceBrokerTemplate().store(et);
-    }
-
-    /**
-     * @see org.kuali.module.gl.dao.ExpenditureTransactionDao#deleteAllExpenditureTransactions()
-     */
-    public void deleteAllExpenditureTransactions() {
-        LOG.debug("deleteAllExpenditureTransactions() started");
-        Iterator<ExpenditureTransaction> i = getAllExpenditureTransactions();
-        while (i.hasNext()) {
-            ExpenditureTransaction et = i.next();
-            if (LOG.isInfoEnabled()) {
-                LOG.info("The following ExpenditureTransaction was deleted: " + et.toString());
-            }
-            delete(et);
-        }
     }
 }

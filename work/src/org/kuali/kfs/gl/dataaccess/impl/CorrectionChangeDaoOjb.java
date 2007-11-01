@@ -21,7 +21,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.dao.CorrectionChangeDao;
 
@@ -29,6 +28,7 @@ public class CorrectionChangeDaoOjb extends PlatformAwareDaoBaseOjb implements C
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeDaoOjb.class);
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeDao#delete(org.kuali.module.gl.bo.CorrectionChange)
      */
     public void delete(CorrectionChange spec) {
@@ -38,14 +38,14 @@ public class CorrectionChangeDaoOjb extends PlatformAwareDaoBaseOjb implements C
     }
 
     /**
-     * @see org.kuali.module.gl.dao.CorrectionChangeDao#findByDocumentHeaderIdAndCorrectionGroupNumber(java.lang.String,
-     *      java.lang.Integer)
+     * 
+     * @see org.kuali.module.gl.dao.CorrectionChangeDao#findByDocumentHeaderIdAndCorrectionGroupNumber(java.lang.String, java.lang.Integer)
      */
     public List findByDocumentHeaderIdAndCorrectionGroupNumber(String documentNumber, Integer correctionGroupLineNumber) {
         LOG.debug("findByDocumentHeaderIdAndCorrectionGroupNumber() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("financialDocumentNumber", documentNumber);
         criteria.addEqualTo("correctionChangeGroupLineNumber", correctionGroupLineNumber);
 
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChange.class, criteria);
@@ -54,6 +54,7 @@ public class CorrectionChangeDaoOjb extends PlatformAwareDaoBaseOjb implements C
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeDao#save(org.kuali.module.gl.bo.CorrectionChange)
      */
     public void save(CorrectionChange spec) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
 package org.kuali.module.financial.service;
 
 import org.kuali.module.financial.bo.OffsetAccount;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 
 /**
  * This interface defines methods that a FlexibleOffsetAccount Service must provide.
+ * 
+ * 
  */
 public interface FlexibleOffsetAccountService {
 
@@ -44,11 +46,12 @@ public interface FlexibleOffsetAccountService {
 
     /**
      * This method will apply the flexible offset account if necessary. It will only change the chart, account, sub account and sub
-     * object on the transaction. If the flexible offset isn't enabled or valid for this transaction, it will be unchanged. It
-     * throws a FlexibleOffset
+     * object on the transaction. If the flexible offset isn't enabled or valid for this transaction, it will be unchanged.
+     * 
+     * It throws a FlexibleOffset
      * 
      * @param transaction
      * @return true if transaction was changed, false if not
      */
-    public boolean updateOffset(OriginEntryFull transaction);
+    public boolean updateOffset(OriginEntry transaction);
 }

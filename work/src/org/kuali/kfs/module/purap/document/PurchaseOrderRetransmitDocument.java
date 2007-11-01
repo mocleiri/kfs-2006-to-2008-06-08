@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,11 @@
 
 package org.kuali.module.purap.document;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.kuali.core.rule.event.KualiDocumentEvent;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.bo.PurchaseOrderItem;
+import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
 
@@ -42,46 +38,28 @@ public class PurchaseOrderRetransmitDocument extends PurchaseOrderDocument {
     }
 
     public void customPrepareForSave(KualiDocumentEvent event) {
-        // do not set the accounts in sourceAccountingLines; this document should not create GL entries
-    }
-
-    /**
-     * Adds up the total amount of the items selected by the user for retransmit, then return the amount.
-     * 
-     * @return KualiDecimal the total amount of the items selected by the user for retransmit.
-     */
-    public KualiDecimal getTotalDollarAmountForRetransmit() {
-        // We should only add up the amount of the items that were selected for retransmit.
-        KualiDecimal total = new KualiDecimal(BigDecimal.ZERO);
-        for (PurchaseOrderItem item : (List<PurchaseOrderItem>) getItems()) {
-            if (item.isItemSelectedForRetransmitIndicator()) {
-                KualiDecimal extendedPrice = item.getExtendedPrice();
-                KualiDecimal itemTotal = (extendedPrice != null) ? extendedPrice : KualiDecimal.ZERO;
-                total = total.add(itemTotal);
-            }
-        }
-
-        return total;
+        //do not set the accounts in sourceAccountingLines; this document should not create GL entries
     }
 
     @Override
     public void handleRouteStatusChange() {
         super.handleRouteStatusChange();
-
+        
         // DOCUMENT PROCESSED
         if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
             SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForApprovedPODocuments(this);
             setPurchaseOrderLastTransmitDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
-            SpringContext.getBean(PurapService.class).updateStatus(this, PurapConstants.PurchaseOrderStatuses.OPEN);
+            SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, PurapConstants.PurchaseOrderStatuses.OPEN );
             SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
         }
         // DOCUMENT DISAPPROVED
         else if (getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedChangePODocuments(this);
+            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedPODocuments(this);
+            SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
         }
         // DOCUMENT CANCELED
         else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForCancelledChangePODocuments(this);
+            // TODO code
         }
 
     }

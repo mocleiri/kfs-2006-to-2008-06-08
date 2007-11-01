@@ -32,6 +32,8 @@ import org.kuali.module.financial.service.AccountPresenceService;
 /**
  * This class helps implement AccountingLine overrides. It is not persisted itself, but it simplifies working with the persisted
  * codes. Instances break the code into components. Static methods help with the AccountingLine.
+ * 
+ * 
  */
 public class AccountingLineOverride {
 
@@ -254,7 +256,7 @@ public class AccountingLineOverride {
      */
     public static void populateFromInput(AccountingLine line) {
         // todo: this logic won't work if a single account checkbox might also stands for NON_FRINGE_ACCOUNT_USED; needs thought
-
+        
         Set overrideInputComponents = new HashSet();
         if (line.getAccountExpiredOverride()) {
             overrideInputComponents.add(COMPONENT.EXPIRED_ACCOUNT);
@@ -314,7 +316,7 @@ public class AccountingLineOverride {
     public static boolean needsExpiredAccountOverride(Account account) {
         return !ObjectUtils.isNull(account) && !account.isAccountClosedIndicator() && account.isExpired();
     }
-
+    
     /**
      * Returns whether the given account needs an expired account override.
      * 

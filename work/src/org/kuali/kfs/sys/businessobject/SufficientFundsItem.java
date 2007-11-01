@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@ package org.kuali.module.gl.util;
 
 import java.io.Serializable;
 
+import org.kuali.Constants;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectType;
@@ -62,30 +61,8 @@ public class SufficientFundsItem implements Serializable, Comparable {
         add(tran);
     }
 
-    public SufficientFundsItem(Options universityFiscalYear, AccountingLine accountLine, String sufficientFundsObjectCode) {
-
-        amount = KualiDecimal.ZERO;
-        year = universityFiscalYear;
-        account = accountLine.getAccount();
-        financialObject = accountLine.getObjectCode();
-        financialObjectType = accountLine.getObjectType();
-        this.sufficientFundsObjectCode = sufficientFundsObjectCode;
-        this.balanceTyp = accountLine.getBalanceTyp();
-
-        add(accountLine);
-    }
-
-    public void add(AccountingLine a) {
-        if (a.getObjectType().getFinObjectTypeDebitcreditCd().equals(a.getDebitCreditCode()) || KFSConstants.EMPTY_STRING.equals(a.getDebitCreditCode())) {
-            amount = amount.add(a.getAmount());
-        }
-        else {
-            amount = amount.subtract(a.getAmount());
-        }
-    }
-
     public void add(Transaction t) {
-        if (t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode()) || KFSConstants.EMPTY_STRING.equals(t.getTransactionDebitCreditCode())) {
+        if (t.getObjectType().getFinObjectTypeDebitcreditCd().equals(t.getTransactionDebitCreditCode()) || Constants.EMPTY_STRING.equals(t.getTransactionDebitCreditCode())) {
             amount = amount.add(t.getTransactionLedgerEntryAmount());
         }
         else {

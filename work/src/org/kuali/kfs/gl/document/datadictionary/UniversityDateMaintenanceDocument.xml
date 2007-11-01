@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.gl.bo.UniversityDate</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,22 +32,20 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>UniversityDateMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiUniversityDateMaintenanceDocument</documentTypeName>
         <documentTypeCode>UDAT</documentTypeCode>
 
-        <label>University Date</label>
+        <label>University Date Maintenance Document</label>
+        <shortLabel>UnivDateMaintDoc</shortLabel>
 
         <summary>University Date maintenance document</summary>
         <description>Document used to create or update University Date objects</description>
-        <help parameterNamespace="KFS-GL" parameterDetailType="UniversityDate" parameterName="UNIVERSITY_DATE" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_UNIVERSITY_DATE" />
 
         <lockingKeys>
             <field attributeName="universityDate" />
         </lockingKeys>
-		<defaultExistenceChecks>
-            <reference attributeName="accountingPeriod" attributeToHighlightOnFail="universityFiscalAccountingPeriod" />
-        
-        </defaultExistenceChecks>
+
         <maintainableSections>
             <maintainableSection title="Edit University Date">
                 <maintainableItems>

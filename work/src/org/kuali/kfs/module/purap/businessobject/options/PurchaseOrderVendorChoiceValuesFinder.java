@@ -20,32 +20,34 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.kuali.Constants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.bo.PurchaseOrderVendorChoice;
 
 /**
- * Value Finder for Purchase Order Vendor Choices.
+ * This class returns list containg A = Active or I = Inactive
+ * 
  */
 public class PurchaseOrderVendorChoiceValuesFinder extends KeyValuesBase {
 
-    /**
-     * Returns code/description pairs of all Purchase Order Vendor Choices.
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         Collection codes = boService.findAll(PurchaseOrderVendorChoice.class);
         List labels = new ArrayList();
-        labels.add(new KeyLabelPair(KFSConstants.EMPTY_STRING, KFSConstants.EMPTY_STRING));
+        labels.add(new KeyLabelPair(Constants.EMPTY_STRING, Constants.EMPTY_STRING));
         for (Iterator iter = codes.iterator(); iter.hasNext();) {
             PurchaseOrderVendorChoice povc = (PurchaseOrderVendorChoice) iter.next();
             labels.add(new KeyLabelPair(povc.getPurchaseOrderVendorChoiceCode(), povc.getPurchaseOrderVendorChoiceDescription()));
         }
+
         return labels;
     }
+
 }

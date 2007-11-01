@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.financial.bo.TravelPerDiem</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +32,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>TravelPerDiemMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiTravelPerDiemMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVPD</documentTypeCode>
 
-        <label>Disbursement Voucher Travel Per Diem</label>
+        <label>Travel Per Diem Maintenance Document</label>
+        <shortLabel>Per Diem Maint Doc</shortLabel>
 
         <summary>Travel Per Diem Maintenance Document</summary>
         <description>Document used to create or update Travel Per Diem objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="TravelPerDiem" parameterName="TRAVEL_PER_DIEM" />
+        <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_TRAVEL_PER_DIEM" />
 
         <lockingKeys>
             <field attributeName="fiscalYear" />

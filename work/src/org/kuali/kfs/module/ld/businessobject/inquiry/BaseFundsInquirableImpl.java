@@ -19,21 +19,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import org.kuali.core.service.BusinessObjectDictionaryService;
+import org.kuali.core.service.LookupService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
+import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.bo.LaborCalculatedSalaryFoundationTracker;
 
 /**
  * This class is used to generate the URL for the user-defined attributes for the Base Funds screen. It is entended the
  * KualiInquirableImpl class, so it covers both the default implementation and customized implemetnation.
+ * 
+ * 
  */
 public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BaseFundsInquirableImpl.class);
 
+    private BusinessObjectDictionaryService dataDictionary;
+    private LookupService lookupService;
+    private Class businessObjectClass;
+
     /**
+     * 
      * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#buildUserDefinedAttributeKeyList()
      */
     protected List buildUserDefinedAttributeKeyList() {
@@ -43,36 +53,33 @@ public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
         keys.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
         keys.add(KFSPropertyConstants.ACCOUNT_NUMBER);
         keys.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
-        keys.add(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
+        keys.add(KFSPropertyConstants.OBJECT_CODE);
+        keys.add(KFSPropertyConstants.SUB_OBJECT_CODE);
+        keys.add(KFSPropertyConstants.CSF_AMOUNT);
 
         return keys;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getUserDefinedAttributeMap()
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getUserDefinedAttributeMap()
      */
     protected Map getUserDefinedAttributeMap() {
         Map userDefinedAttributeMap = new HashMap();
-        userDefinedAttributeMap.put(KFSPropertyConstants.CSF_AMOUNT, KFSPropertyConstants.CSF_AMOUNT);
+        userDefinedAttributeMap.put("csfAmount", "csfAmount");        
         return userDefinedAttributeMap;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getAttributeName(java.lang.String)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getAttributeName(java.lang.String)
      */
     protected String getAttributeName(String attributeName) {
         return attributeName;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
      */
     protected Object getKeyValue(String keyName, Object keyValue) {
-        if (keyValue.toString().startsWith("-")) {
-            return keyValue;
-        }
-
         if (isExclusiveField(keyName, keyValue)) {
             keyValue = Constant.EMPTY_STRING;
         }
@@ -80,30 +87,42 @@ public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getKeyName(java.lang.String)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyName(java.lang.String)
      */
     protected String getKeyName(String keyName) {
+        keyName = BusinessObjectFieldConverter.convertToTransactionPropertyName(keyName);
         return keyName;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getLookupableImplAttributeName()
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getLookupableImplAttributeName()
      */
     protected String getLookupableImplAttributeName() {
-        return LaborConstants.LookupableBeanKeys.CSF_TRACKER;
+        return "CSFTrackerBalanceLookupable";
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getBaseUrl()
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
+        // TODO: investigate change to this constant
         return KFSConstants.GL_MODIFIED_INQUIRY_ACTION;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getInquiryBusinessObjectClass(java.lang.String)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getInquiryBusinessObjectClass(String)
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
-        return LaborCalculatedSalaryFoundationTracker.class;
+        return CalculatedSalaryFoundationTracker.class;
+    }
+
+    /**
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
+     */
+    protected void addMoreParameters(Properties parameter, String attributeName) {
+        parameter.put(KFSConstants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
+
+        String periodCode = (String) getUserDefinedAttributeMap().get(attributeName);
+        parameter.put(KFSConstants.UNIVERSITY_FISCAL_PERIOD_CODE_PROPERTY_NAME, periodCode);
     }
 }
