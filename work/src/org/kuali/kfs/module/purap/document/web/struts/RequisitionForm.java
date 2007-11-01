@@ -15,32 +15,38 @@
  */
 package org.kuali.module.purap.web.struts.form;
 
-import java.math.BigDecimal;
-
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.module.purap.bo.PurApItem;
-import org.kuali.module.purap.bo.RequisitionAccount;
+import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.document.RequisitionDocument;
 
 /**
- * Struts Action Form for Requisition document.
+ * This class is the form class for the Requisition document. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the Requisition document.
+ * 
  */
 public class RequisitionForm extends PurchasingFormBase {
 
     /**
-     * Constructs a RequisitionForm instance and sets up the appropriately casted document.
+     * Constructs a RequisitionForm instance and sets up the appropriately casted document. 
      */
     public RequisitionForm() {
         super();
         setDocument(new RequisitionDocument());
+        this.setNewPurchasingItemLine(setupNewPurchasingItemLine());
     }
 
+    /**
+     * @return Returns the internalBillingDocument.
+     */
     public RequisitionDocument getRequisitionDocument() {
         return (RequisitionDocument) getDocument();
     }
 
+    /**
+     * @param internalBillingDocument The internalBillingDocument to set.
+     */
     public void setRequisitionDocument(RequisitionDocument requisitionDocument) {
         setDocument(requisitionDocument);
     }
@@ -48,26 +54,22 @@ public class RequisitionForm extends PurchasingFormBase {
     /**
      * @see org.kuali.core.web.struts.form.KualiForm#getAdditionalDocInfo1()
      */
-    @Override
     public KeyLabelPair getAdditionalDocInfo1() {
         if (ObjectUtils.isNotNull(this.getRequisitionDocument().getPurapDocumentIdentifier())) {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.purapDocumentIdentifier", ((RequisitionDocument) this.getDocument()).getPurapDocumentIdentifier().toString());
-        }
-        else {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.purapDocumentIdentifier", "Not Available");
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.purapDocumentIdentifier", ((RequisitionDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
+        } else {
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.purapDocumentIdentifier", "Not Available");
         }
     }
 
     /**
      * @see org.kuali.core.web.struts.form.KualiForm#getAdditionalDocInfo2()
      */
-    @Override
     public KeyLabelPair getAdditionalDocInfo2() {
         if (ObjectUtils.isNotNull(this.getRequisitionDocument().getStatus())) {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.statusCode", ((RequisitionDocument) this.getDocument()).getStatus().getStatusDescription());
-        }
-        else {
-            return new KeyLabelPair("DataDictionary.RequisitionDocument.attributes.statusCode", "Not Available");
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.statusCode", ((RequisitionDocument)this.getDocument()).getStatus().getStatusDescription());
+        } else {
+            return new KeyLabelPair("DataDictionary.KualiRequisitionDocument.attributes.statusCode", "Not Available");
         }
     }
 
@@ -75,26 +77,9 @@ public class RequisitionForm extends PurchasingFormBase {
      * @see org.kuali.module.purap.web.struts.form.PurchasingFormBase#setupNewPurchasingItemLine()
      */
     @Override
-    public PurApItem setupNewPurchasingItemLine() {
-        RequisitionItem ri = new RequisitionItem();
-        return ri;
+    public PurchasingApItem setupNewPurchasingItemLine() {
+        return new RequisitionItem();
     }
-
-    /**
-     * @see org.kuali.module.purap.web.struts.form.PurchasingFormBase#setupNewPurchasingAccountingLine()
-     */
-    @Override
-    public RequisitionAccount setupNewPurchasingAccountingLine() {
-        return new RequisitionAccount();
-    }
-
-    /**
-     * @see org.kuali.module.purap.web.struts.form.PurchasingFormBase#setupNewAccountDistributionAccountingLine()
-     */
-    @Override
-    public RequisitionAccount setupNewAccountDistributionAccountingLine() {
-        RequisitionAccount account = setupNewPurchasingAccountingLine();
-        account.setAccountLinePercent(new BigDecimal(100));
-        return account;
-    }
+    
+    
 }

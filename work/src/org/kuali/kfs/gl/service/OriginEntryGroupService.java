@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,13 @@ import java.util.Map;
 
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
+/**
+ *  
+ * @version $Id: OriginEntryGroupService.java,v 1.13.2.6 2007-02-10 11:37:34 j2eemgr Exp $
+ */
+
 public interface OriginEntryGroupService {
-    public Collection getGroupsFromSource(String sourceCode);
+    public Collection getGroupsFromSourceForDate(String sourceCode, Date date);
 
     /**
      * Mark a group as don't process
@@ -30,23 +35,6 @@ public interface OriginEntryGroupService {
      * @param groupId
      */
     public void dontProcessGroup(Integer groupId);
-
-    /**
-     * Marks all backup groups (source code BACK) in the database so that they will not be scrubbed when the nightly scrubber step
-     * runs again.
-     */
-    public void markScrubbableBackupGroupsAsUnscrubbable();
-
-    /**
-     * Marks all postable scrubber valid groups (source code SCV) in the database so that they will not be posted when the main
-     * posted runs
-     */
-    public void markPostableScrubberValidGroupsAsUnpostable();
-
-    /**
-     * Marks all of the origin entry groups that would be returned from getIcrGroupsToPost() as don't process
-     */
-    public void markPostableIcrGroupsAsUnpostable();
 
     /**
      * Get the newest scrubber error group
@@ -57,14 +45,9 @@ public interface OriginEntryGroupService {
 
     /**
      * Create the backup group which has all the entries from all the groups where all the flags are set Y.
+     * 
      */
     public void createBackupGroup();
-
-    /**
-     * Create the backup group which has all the entries from all the groups where all the flags are set Y.
-     */
-    public void createLaborBackupGroup();
-
 
     /**
      * Delete all the groups (and entries) where the group is this many days old or older
@@ -72,8 +55,6 @@ public interface OriginEntryGroupService {
      * @param days
      */
     public void deleteOlderGroups(int days);
-
-    public void deleteGroups(Collection<OriginEntryGroup> groupsToDelete);
 
     /**
      * Get groups that match
@@ -87,31 +68,15 @@ public interface OriginEntryGroupService {
 
     public Collection getGroupsToPost();
 
-    /**
-     * get entry groups to be posted that have the given group source code
-     * 
-     * @param entryGroupSourceCode the given group source code
-     * @return the entry groups to be posted that have the given group source code
-     */
-    public Collection getGroupsToPost(String entryGroupSourceCode);
-
     public Collection getIcrGroupsToPost();
 
     /**
-     * Gets a collection of all scrubbable backup groups (i.e. scrub, valid, process indicators all true)
-     * 
-     * @return
-     */
-    public Collection<OriginEntryGroup> getAllScrubbableBackupGroups();
-
-    /**
-     * Get all the unscrubbed backup groups for Labor
+     * Get all the unscrubbed backup groups
      * 
      * @param backupDate
      * @return
      */
-    public Collection getLaborBackupGroups(Date backupDate);
-
+    public Collection getBackupGroups(Date backupDate);
 
     /**
      * Get all the groups that need to be put into the backup group
@@ -145,12 +110,4 @@ public interface OriginEntryGroupService {
     public Collection getAllOriginEntryGroup();
 
     public Collection getRecentGroupsByDays(int days);
-
-    /**
-     * Returns whether the group indicated with the group ID still exists within the system
-     * 
-     * @param groupId
-     * @return
-     */
-    public boolean getGroupExists(Integer groupId);
 }

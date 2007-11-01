@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@
 -->
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.SubObjCd">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Sub-Object Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
@@ -38,21 +38,23 @@
                 <field attributeName="financialSubObjectCodeName" />
                 <field attributeName="financialSubObjectActiveIndicator" />
                 <field attributeName="financialSubObjectCdshortNm" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Sub-Object Code Lookup</title>
-			<menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.SubObjCdGlobal"><img src="${kr.externalizable.images.url}tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.SubObjCd"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
             </menubar>
+
             <instructions>Lookup a Sub-Object Code</instructions>
 
             <defaultSort attributeName="financialSubObjectCode" sortAscending="true" />
 
             <lookupFields>
                 <lookupField attributeName="universityFiscalYear" required="false">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
+                    <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.FiscalYearFinder</defaultValueFinderClass>
                 </lookupField>
                 <lookupField attributeName="accountNumber" />
                 <lookupField attributeName="chartOfAccountsCode" />
@@ -79,21 +81,25 @@
         <attributes>
             <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
                 <required>true</required>
+                <summary>University Fiscal Year</summary>
             </attributeReference>
 
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
                 <control>
-                    <text size="2" />
+                    <text size="2" />                    
                 </control>
+				<summary>Chart Of Accounts Code</summary>
             </attributeReference>
 
             <attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
                 <required>true</required>
+                <summary>Object Code</summary>
             </attributeReference>
 
             <attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">
                 <required>true</required>
+                <summary>Account Number</summary>
             </attributeReference>
 
             <attribute name="financialSubObjectCode" forceUppercase="true">
@@ -109,6 +115,11 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>
+                    The code to define this sub-object. This is the code that should be entered in the sub-object field of the accounting line on financial documents.
+                </description>
             </attribute>
 
             <attribute name="financialSubObjectCodeName" forceUppercase="true">
@@ -124,6 +135,11 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>
+                    The long descriptive name of this Sub-object Code. This name will appear on the accounting line in financial documents as well as in searches and reports.
+                </description>
             </attribute>
 
             <attribute name="financialSubObjectCdshortNm" forceUppercase="true">
@@ -139,6 +155,13 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    The abbreviated name for this Sub-object Code. This name may be used in reports where there is not enough space to accommodate the Sub-object Code Name.
+                </description>
             </attribute>
 
             <attributeReference name="financialSubObjectActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
@@ -146,8 +169,6 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>Sub-Object Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

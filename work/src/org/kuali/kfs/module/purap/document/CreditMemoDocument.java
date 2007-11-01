@@ -16,45 +16,33 @@
 
 package org.kuali.module.purap.document;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.Note;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.Document;
-import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.NoteService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.workflow.service.WorkflowDocumentService;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ConciseXmlDocumentConversionService;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapParameterConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapConstants.CREDIT_MEMO_TYPE_LABELS;
-import org.kuali.module.purap.PurapConstants.CreditMemoStatuses;
-import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
-import org.kuali.module.purap.PurapWorkflowConstants.CreditMemoDocument.NodeDetailEnum;
+import org.kuali.module.purap.PurapConstants.CreditMemoTypes;
 import org.kuali.module.purap.bo.CreditMemoItem;
-import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
-import org.kuali.module.purap.service.AccountsPayableDocumentSpecificService;
-import org.kuali.module.purap.service.AccountsPayableService;
-import org.kuali.module.purap.service.CreditMemoCreateService;
-import org.kuali.module.purap.service.CreditMemoService;
-import org.kuali.module.purap.service.PaymentRequestService;
-import org.kuali.module.purap.service.PurapService;
+import org.kuali.module.purap.bo.CreditMemoStatusHistory;
+import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.module.vendor.util.VendorUtils;
 
-import edu.iu.uis.eden.exception.WorkflowException;
+
+
+
+
 
 /**
- * Credit Memo Document Business Object. Contains the fields associated with the main document table.
+ * Credit Memo Document
  */
 public class CreditMemoDocument extends AccountsPayableDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CreditMemoDocument.class);
@@ -65,86 +53,21 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     private KualiDecimal creditMemoAmount;
     private Timestamp creditMemoPaidTimestamp;
     private String itemMiscellaneousCreditDescription;
+    private String purchaseOrderNotes;
     private Date purchaseOrderEndDate;
-
-    private PaymentRequestDocument paymentRequestDocument;
+    
+    private String creditMemoType; /* not persisted */
+    
+    private PurchaseOrderDocument purchaseOrder;
+    private PaymentRequestDocument paymentRequest;
 
     /**
-     * Default constructor.
-     */
-    public CreditMemoDocument() {
+	 * Default constructor.
+	 */
+	public CreditMemoDocument() {
         super();
     }
-
-    /**
-     * @see org.kuali.core.document.DocumentBase#getDocumentRepresentationForSerialization()
-     */
-    @Override
-    protected Document getDocumentRepresentationForSerialization() {
-        return SpringContext.getBean(ConciseXmlDocumentConversionService.class).getDocumentForSerialization(this);
-    }
-
-    public boolean isSourceDocumentPaymentRequest() {
-        return getPaymentRequestIdentifier() != null;
-    }
-
-    public boolean isSourceDocumentPurchaseOrder() {
-        return (!isSourceDocumentPaymentRequest()) && (getPurchaseOrderIdentifier() != null);
-    }
-
-    public boolean isSourceVendor() {
-        return (!isSourceDocumentPaymentRequest()) && (!isSourceDocumentPurchaseOrder());
-    }
-
-    /**
-     * Initializes the values for a new document.
-     */
-    public void initiateDocument() {
-        LOG.debug("initiateDocument() started");
-        setStatusCode(PurapConstants.CreditMemoStatuses.INITIATE);
-
-        UniversalUser currentUser = (UniversalUser) GlobalVariables.getUserSession().getUniversalUser();
-        setAccountsPayableProcessorIdentifier(currentUser.getPersonUniversalIdentifier());
-        setProcessingCampusCode(currentUser.getCampusCode());
-    }
-
-    /**
-     * Clear out the initially populated fields.
-     */
-    public void clearInitFields() {
-        LOG.debug("clearDocument() started");
-
-        // Clearing document overview fields
-        getDocumentHeader().setFinancialDocumentDescription(null);
-        getDocumentHeader().setExplanation(null);
-        getDocumentHeader().setFinancialDocumentTotalAmount(null);
-        getDocumentHeader().setOrganizationDocumentNumber(null);
-
-        // Clearing document Init fields
-        setPurchaseOrderIdentifier(null);
-        setCreditMemoNumber(null);
-        setCreditMemoDate(null);
-        setCreditMemoAmount(null);
-        setVendorNumber(null);
-        setPaymentRequestIdentifier(null);
-    }
-
-    /**
-     * Returns the type of the Credit Memo that was selected on the init screen. It is based on them entering the Vendor, PO or PREQ #.
-     * 
-     * @return Vendor, PO or PREQ
-     */
-    public String getCreditMemoType() {
-        String type = CREDIT_MEMO_TYPE_LABELS.TYPE_VENDOR;
-        if (isSourceDocumentPaymentRequest()) {
-            type = CREDIT_MEMO_TYPE_LABELS.TYPE_PREQ;
-        }
-        else if (isSourceDocumentPurchaseOrder()) {
-            type = CREDIT_MEMO_TYPE_LABELS.TYPE_PO;
-        }
-        return type;
-    }
-
+    
     /**
      * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
      */
@@ -153,36 +76,149 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
         return true;
     }
 
-    /**
-     * Determines if the purchase order has notes, using the note service.
-     * 
-     * @return - true if po has notes, false if po does not have notes
-     */
-    public boolean getPurchaseOrderNotes() {
-        boolean hasNotes = false;
-
-        ArrayList poNotes = SpringContext.getBean(NoteService.class).getByRemoteObjectId((this.getPurchaseOrderIdentifier()).toString());
-        if (poNotes.size() > 0) {
-            hasNotes = true;
-        }
-
-        return hasNotes;
+    public void refreshAllReferences() {
+        super.refreshAllReferences();
+        this.refreshReferenceObject("paymentRequest");
     }
-
+    
     /**
-     * Performs extended price calculation and sets on item if extended price is empty.
+     * Perform logic needed to initiate CM Document
      */
-    public void updateExtendedPriceOnItems() {
-        for (CreditMemoItem item : (List<CreditMemoItem>) getItems()) {
-            item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
+    public void initiateDocument() {
+        LOG.debug("initiateDocument() started");
+        this.setStatusCode( PurapConstants.CreditMemoStatuses.INITIATE );
+  
+        //TODO: Change this one:
+        this.setAccountsPayableProcessorIdentifier("TBD");
+        UniversalUser currentUser = (UniversalUser)GlobalVariables.getUserSession().getUniversalUser();
+        this.setAccountsPayableProcessorIdentifier(currentUser.getPersonUniversalIdentifier());
+        // paymentRequest.setProcessedCampusCode(u.getCampusCd());
+        //paymentRequest.setAccountsPayableProcessorId(u.getId());
+        //this.setStatusCode( PurapConstants.PaymentRequestStatuses.IN_PROCESS )
+       // this.setInitialized(true);
+   //     this.refreshAllReferences();
+        
+        
+    }
+    
+    /**
+     * Perform logic needed to initiate CM Document
+     */
+   /*
+    public void CreateDocument() {
+        
 
-            if ((ObjectUtils.isNull(item.getExtendedPrice()) || (KualiDecimal.ZERO.compareTo(item.getExtendedPrice()) == 0)) && item.getItemType().isQuantityBasedGeneralLedgerIndicator()) {
-                KualiDecimal newExtendedPrice = item.calculateExtendedPrice();
-                item.setExtendedPrice(newExtendedPrice);
+        //for now just populate with essentials
+        cm.setNumber(creditMemoNumber);
+        cm.setDate(new Timestamp(creditMemoDate.getTime()));
+        cm.setAmount(creditMemoAmount);
+        cm.setCreditMemoStatus((CreditMemoStatus) referenceService.getCode("CreditMemoStatus", EpicConstants.CM_STAT_IN_PROCESS));
+        cm.setCreateDate(new Timestamp((new Date()).getTime()));
+        cm.setAccountsPayableProcessorUser(u);
+        cm.setProcessCampusCode(u.getCampusCd());
+
+        
+        //create a new doc header and set it in the credit memo
+        String docName = applicationSettingService.getString("EDEN_DOCUMENT_CREDIT");
+        String orgDocNumber = "";
+        if (cm.getPaymentRequest() != null) {
+          orgDocNumber = cm.getPaymentRequest().getDocumentHeader().getOrganizationDocumentNumber();
+        } else if (cm.getPurchaseOrder() != null) {
+          orgDocNumber = cm.getPurchaseOrder().getDocumentHeader().getOrganizationDocumentNumber();
+        }
+        DocumentHeader dh = routingService.createDocumentHeader(docName, orgDocNumber, cm.getTotalCredit(), u);
+        cm.setDocumentHeader(dh);
+        
+        // IF po create line items for all the items that have invoiced quantities
+        if (po != null) {
+          if ( preq != null ) {
+            // Get the lines from the preq
+            for (Iterator iter = invoicedPoItems.iterator(); iter.hasNext();) {
+              Integer nbr = (Integer)iter.next();
+              PaymentRequestItem preqItemToUse = preq.getItem(nbr.intValue());
+              if (preqItemToUse != null) {
+                // Only get items that are 'ITEM' type items and that are invoiced on PREQ
+                if ( (EpicConstants.ITEM_TYPE_ITEM_CODE.equals(preqItemToUse.getItemType().getCode())) &&
+                     ( (preqItemToUse.getInvoiceQuantity() != null) || 
+                       (zero.compareTo(preqItemToUse.getExtendedPrice()) != 0) ) ) {
+                  cm.getItems().add(new CreditMemoItem(cm, preqItemToUse));
+                }
+              }
             }
+          } else {
+            // Get the lines from the po
+            for (Iterator iter = invoicedPoItems.iterator(); iter.hasNext();) {
+              Integer nbr = (Integer)iter.next();
+
+              cm.getItems().add(new CreditMemoItem(cm, po.getItem(nbr.intValue())));
+            }
+          }
         }
+
+        // Always create line items for Restocking Fee and Misc (add these after 'ITEM' type)
+        cm.getItems().add(newEmptyLineItem(cm, EpicConstants.ITEM_TYPE_RESTCK_FEE_CODE, new Integer(904)));
+        cm.getItems().add(newEmptyLineItem(cm, EpicConstants.ITEM_TYPE_MISC_CRDT_CODE, new Integer(905)));
+
+        // distribute accounts to non-item type items
+        // we distribute based on the source document items and amounts
+        List displayItems = cm.getSourceDocumentItemsDisplayItems();
+        List displayAccounts = cm.getDisplayAccountsFromDisplayItems(displayItems);
+        BigDecimal sourceDocTotalAmount = zero;
+        for (Iterator displayItemIter = displayItems.iterator(); displayItemIter.hasNext();) {
+          DisplayItem displayItem = (DisplayItem) displayItemIter.next();
+          sourceDocTotalAmount = sourceDocTotalAmount.add(displayItem.getAmount());
+        }
+        
+        cm.distributeAccountsToNonItems(displayAccounts,sourceDocTotalAmount);
+        SERVICELOG.debug("create() ended");
+        return cm;
+      }
+        
+      
+        
+    }
+*/
+    public void populateCreditMemoVendorFileds(String vendorNumber){
+    //VendorDetail vd = SpringServiceLocator.getVendorService().getVendorDetail(VendorUtils.getVendorHeaderId(this.getVendorNumber()), VendorUtils.getVendorDetailId(this.getVendorNumber()));
+        VendorDetail vd = SpringServiceLocator.getVendorService().getVendorDetail(VendorUtils.getVendorHeaderId(vendorNumber), VendorUtils.getVendorDetailId(vendorNumber));
+    if (ObjectUtils.isNotNull(vd)) {
+        this.setVendorDetail(vd);
+        this.setVendorHeaderGeneratedIdentifier(vd.getVendorHeaderGeneratedIdentifier());
+        this.setVendorDetailAssignedIdentifier(vd.getVendorDetailAssignedIdentifier());
+       // cmDocument.setVendorAddressGeneratedIdentifier(VendorUtils.getVendorHeaderId(cmDocument.getVendorNumber()));
+       // cmDocument.setVendorDetailAssignedIdentifier(VendorUtils.getVendorDetailId(cmDocument.getVendorNumber()));
+        this.setVendorCustomerNumber(vd.getVendorNumber());
+        this.setVendorHeaderGeneratedIdentifier(vd.getVendorHeaderGeneratedIdentifier());
+        this.setVendorDetailAssignedIdentifier(vd.getVendorDetailAssignedIdentifier());
+        this.setVendorName(vd.getVendorName());
+        this.setVendorLine1Address(vd.getDefaultAddressLine1());
+        this.setVendorLine2Address(vd.getDefaultAddressLine1());
+        this.setVendorCityName(vd.getDefaultAddressCity());
+        this.setVendorStateCode(vd.getDefaultAddressStateCode());
+        this.setVendorPostalCode(vd.getDefaultAddressPostalCode());
+        this.setVendorCountryCode(vd.getDefaultAddressCountryCode());
     }
 
+    }
+/**
+ * Perform logic needed to initiate PREQ Document
+ */
+public void clearInitFields() {
+    LOG.debug("clearDocument() started");
+    // Clearing document overview fields
+    this.getDocumentHeader().setFinancialDocumentDescription(null);
+    this.getDocumentHeader().setExplanation(null);
+    this.getDocumentHeader().setFinancialDocumentTotalAmount(null);
+    this.getDocumentHeader().setOrganizationDocumentNumber(null);
+
+    // Clearing document Init fields
+    this.setPurchaseOrderIdentifier(null);
+    this.setCreditMemoNumber(null);
+    this.setCreditMemoDate(null);
+    this.setCreditMemoAmount(null);
+    this.setVendorNumber(null);
+    this.setPaymentRequestIdentifier(null);
+}
     /**
      * @see org.kuali.core.document.DocumentBase#handleRouteStatusChange()
      */
@@ -190,323 +226,255 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
     public void handleRouteStatusChange() {
         LOG.debug("handleRouteStatusChange() started");
         super.handleRouteStatusChange();
-        try {
-            // DOCUMENT PROCESSED
-            if (this.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-                SpringContext.getBean(PurapService.class).updateStatus(this, PurapConstants.CreditMemoStatuses.COMPLETE);
-                SpringContext.getBean(CreditMemoService.class).saveDocumentWithoutValidation(this);
 
-                return;
-            }
-            // DOCUMENT DISAPPROVED
-            else if (this.getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-                String nodeName = SpringContext.getBean(WorkflowDocumentService.class).getCurrentRouteLevelName(getDocumentHeader().getWorkflowDocument());
-                NodeDetails currentNode = NodeDetailEnum.getNodeDetailEnumByName(nodeName);
-                if (ObjectUtils.isNotNull(currentNode)) {
-                    String newStatusCode = currentNode.getDisapprovedStatusCode();
-                    if ((StringUtils.isBlank(newStatusCode)) && ((StringUtils.isBlank(currentNode.getDisapprovedStatusCode())) && ((CreditMemoStatuses.INITIATE.equals(getStatusCode())) || (CreditMemoStatuses.IN_PROCESS.equals(getStatusCode()))))) {
-                        newStatusCode = CreditMemoStatuses.CANCELLED_IN_PROCESS;
-                    }
-                    if (StringUtils.isNotBlank(newStatusCode)) {
-                        SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(this, nodeName);
-                        return;
-                    }
-                }
-                logAndThrowRuntimeException("No status found to set for document being disapproved in node '" + nodeName + "'");
-            }
-            // DOCUMENT CANCELED
-            else if (this.getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-                String currentNodeName = SpringContext.getBean(WorkflowDocumentService.class).getCurrentRouteLevelName(getDocumentHeader().getWorkflowDocument());
-                SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(this, currentNodeName);
-            }
-        }
-        catch (WorkflowException e) {
-            logAndThrowRuntimeException("Error saving routing data while saving document with id " + getDocumentNumber(), e);
-        }
+    }
+
+    @Override
+    public void handleRouteLevelChange() {
+        LOG.debug("handleRouteLevelChange() started");
+        super.handleRouteLevelChange();
+    }
+    
+    /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String)
+     */
+    public void addToStatusHistories( String oldStatus, String newStatus, Note statusHistoryNote ) {
+        CreditMemoStatusHistory cmsh = new CreditMemoStatusHistory( oldStatus, newStatus );
+        this.addStatusHistoryNote( cmsh, statusHistoryNote );
+        this.getStatusHistories().add( cmsh );
     }
 
     /**
-     * Hook point for performing actions that occur after a route level change, in this case; Performs logic necessary after full
-     * entry has been completed when past Adhoc Review, or sets the AP approval date when past AP review.
      * 
-     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#preProcessNodeChange(java.lang.String, java.lang.String)
-     */
-    public boolean processNodeChange(String newNodeName, String oldNodeName) {
-        if (NodeDetailEnum.ADHOC_REVIEW.getName().equals(oldNodeName)) {
-            SpringContext.getBean(PurapService.class).performLogicForFullEntryCompleted(this);
-        }
-        else if (NodeDetailEnum.ACCOUNTS_PAYABLE_REVIEW.getName().equals(oldNodeName)) {
-            setAccountsPayableApprovalDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
-        }
-        return true;
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getNodeDetailEnum(java.lang.String)
-     */
-    public NodeDetails getNodeDetailEnum(String nodeName) {
-        return NodeDetailEnum.getNodeDetailEnumByName(nodeName);
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#saveDocumentFromPostProcessing()
-     */
-    public void saveDocumentFromPostProcessing() {
-        SpringContext.getBean(CreditMemoService.class).saveDocumentWithoutValidation(this);
-    }
-
-    /**
      * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getItemClass()
      */
     @Override
-    public Class<CreditMemoItem> getItemClass() {
+    public Class getItemClass() {
         return CreditMemoItem.class;
     }
-
+    
     /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getPurApSourceDocumentIfPossible()
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getSourceAccountingLineClass()
      */
-    @Override
-    public PurchasingAccountsPayableDocument getPurApSourceDocumentIfPossible() {
-        PurchasingAccountsPayableDocument sourceDocument = null;
-        if (isSourceDocumentPaymentRequest()) {
-            sourceDocument = getPaymentRequestDocument();
-        }
-        else if (isSourceDocumentPurchaseOrder()) {
-            sourceDocument = getPurchaseOrderDocument();
-        }
-        return sourceDocument;
-    }
+//    @Override
+//    public Class getSourceAccountingLineClass() {
+//        return CreditMemoAccount.class;
+//    }
+
 
     /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getPurApSourceDocumentLabelIfPossible()
-     */
-    @Override
-    public String getPurApSourceDocumentLabelIfPossible() {
-        PurchasingAccountsPayableDocument document = getPurApSourceDocumentIfPossible();
-        if (ObjectUtils.isNotNull(document)) {
-            return SpringContext.getBean(DataDictionaryService.class).getDocumentLabelByClass(document.getClass());
-        }
-        return null;
-    }
-
-    /**
-     * Calculates the total of the above the line items
+     * Gets the paymentRequestIdentifier attribute.
      * 
-     * @return KualiDecimal - above the line item total
-     */
-    public KualiDecimal getLineItemTotal() {
-        KualiDecimal lineItemTotal = new KualiDecimal(0);
-
-        for (CreditMemoItem item : (List<CreditMemoItem>) getItems()) {
-            item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
-            if (item.getItemType().isItemTypeAboveTheLineIndicator() && item.getExtendedPrice() != null) {
-                lineItemTotal = lineItemTotal.add(item.getExtendedPrice());
-            }
-        }
-
-        return lineItemTotal;
-    }
-
-    /**
-     * Calculates the credit memo total: Sum of above the line - restocking fees + misc amount
+     * @return Returns the paymentRequestIdentifier
      * 
-     * @return KualiDecimal - credit memo document total
      */
-    public KualiDecimal getGrandTotal() {
-        KualiDecimal grandTotal = new KualiDecimal(0);
-
-        for (CreditMemoItem item : (List<CreditMemoItem>) getItems()) {
-            item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
-
-            if (item.getExtendedPrice() != null) {
-                // make sure restocking fee is negative
-                if (StringUtils.equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_RESTCK_FEE_CODE, item.getItemTypeCode())) {
-                    item.setExtendedPrice(item.getExtendedPrice().abs().negated());
-                }
-                grandTotal = grandTotal.add(item.getExtendedPrice());
-            }
-        }
-
-        return grandTotal;
-    }
-
-    public Integer getPaymentRequestIdentifier() {
+    public Integer getPaymentRequestIdentifier() { 
         return paymentRequestIdentifier;
     }
 
+    /**
+     * Sets the paymentRequestIdentifier attribute.
+     * 
+     * @param paymentRequestIdentifier The paymentRequestIdentifier to set.
+     * 
+     */
     public void setPaymentRequestIdentifier(Integer paymentRequestIdentifier) {
         this.paymentRequestIdentifier = paymentRequestIdentifier;
     }
 
-    public String getCreditMemoNumber() {
+
+    /**
+     * Gets the creditMemoNumber attribute.
+     * 
+     * @return Returns the creditMemoNumber
+     * 
+     */
+    public String getCreditMemoNumber() { 
         return creditMemoNumber;
     }
 
+    /**
+     * Sets the creditMemoNumber attribute.
+     * 
+     * @param creditMemoNumber The creditMemoNumber to set.
+     * 
+     */
     public void setCreditMemoNumber(String creditMemoNumber) {
-        if (creditMemoNumber != null) {
-            creditMemoNumber = creditMemoNumber.toUpperCase();
-        }
-
         this.creditMemoNumber = creditMemoNumber;
     }
 
-    public Date getCreditMemoDate() {
+
+    /**
+     * Gets the creditMemoDate attribute.
+     * 
+     * @return Returns the creditMemoDate
+     * 
+     */
+    public Date getCreditMemoDate() { 
         return creditMemoDate;
     }
 
+    /**
+     * Sets the creditMemoDate attribute.
+     * 
+     * @param creditMemoDate The creditMemoDate to set.
+     * 
+     */
     public void setCreditMemoDate(Date creditMemoDate) {
         this.creditMemoDate = creditMemoDate;
     }
 
-    public KualiDecimal getCreditMemoAmount() {
+    /**
+     * Gets the creditMemoAmount attribute.
+     * 
+     * @return Returns the creditMemoAmount
+     * 
+     */
+    public KualiDecimal getCreditMemoAmount() { 
         return creditMemoAmount;
     }
 
+    /**
+     * Sets the creditMemoAmount attribute.
+     * 
+     * @param creditMemoAmount The creditMemoAmount to set.
+     * 
+     */
     public void setCreditMemoAmount(KualiDecimal creditMemoAmount) {
         this.creditMemoAmount = creditMemoAmount;
     }
 
-    public String getItemMiscellaneousCreditDescription() {
+    /**
+     * Gets the itemMiscellaneousCreditDescription attribute.
+     * 
+     * @return Returns the itemMiscellaneousCreditDescription
+     * 
+     */
+    public String getItemMiscellaneousCreditDescription() { 
         return itemMiscellaneousCreditDescription;
     }
 
+    /**
+     * Sets the itemMiscellaneousCreditDescription attribute.
+     * 
+     * @param itemMiscellaneousCreditDescription The itemMiscellaneousCreditDescription to set.
+     * 
+     */
     public void setItemMiscellaneousCreditDescription(String itemMiscellaneousCreditDescription) {
         this.itemMiscellaneousCreditDescription = itemMiscellaneousCreditDescription;
     }
 
+
+    /**
+     * Gets the creditMemoPaidTimestamp attribute. 
+     * @return Returns the creditMemoPaidTimestamp.
+     */
     public Timestamp getCreditMemoPaidTimestamp() {
         return creditMemoPaidTimestamp;
     }
 
+    /**
+     * Sets the creditMemoPaidTimestamp attribute value.
+     * @param creditMemoPaidTimestamp The creditMemoPaidTimestamp to set.
+     */
     public void setCreditMemoPaidTimestamp(Timestamp creditMemoPaidTimestamp) {
         this.creditMemoPaidTimestamp = creditMemoPaidTimestamp;
     }
 
-    public PaymentRequestDocument getPaymentRequestDocument() {
-        if ((ObjectUtils.isNull(paymentRequestDocument)) && (ObjectUtils.isNotNull(getPaymentRequestIdentifier()))) {
-            setPaymentRequestDocument(SpringContext.getBean(PaymentRequestService.class).getPaymentRequestById(getPaymentRequestIdentifier()));
-        }
-        return this.paymentRequestDocument;
-    }
-
-    public void setPaymentRequestDocument(PaymentRequestDocument paymentRequestDocument) {
-        if (ObjectUtils.isNull(paymentRequestDocument)) {
-            // KULPURAP-1185 - do not blank out input, instead throw an error
-            // setPaymentRequestIdentifier(null);
-            this.paymentRequestDocument = null;
-        }
-        else {
-            setPaymentRequestIdentifier(paymentRequestDocument.getPurapDocumentIdentifier());
-            this.paymentRequestDocument = paymentRequestDocument;
-        }
-    }
 
     /**
-     * AS A REPLACEMENT USE getPaymentRequestDocument()
+     * Gets the paymentRequest attribute.
      * 
-     * @deprecated
+     * @return Returns the paymentRequest
+     * 
      */
-    public PaymentRequestDocument getPaymentRequest() {
-        return getPaymentRequestDocument();
+    public PaymentRequestDocument getPaymentRequest() { 
+        return paymentRequest;
     }
-
+    
     /**
-     * AS A REPLACEMENT USE setPaymentRequestDocument(PaymentRequestDocument)
-     * 
-     * @deprecated
-     */
-    public void setPaymentRequest(PaymentRequestDocument paymentRequest) {
-        setPaymentRequestDocument(paymentRequest);
-    }
-
-    /**
-     * AS A REPLACEMENT USE getPurchaseOrderDocument()
-     * 
-     * @deprecated
+     * Gets the purchaseOrder attribute. 
+     * @return Returns the purchaseOrder.
      */
     public PurchaseOrderDocument getPurchaseOrder() {
-        return getPurchaseOrderDocument();
+        return purchaseOrder;
     }
 
     /**
-     * AS A REPLACEMENT USE setPurchaseOrderDocument(PurchaseOrderDocument)
-     * 
-     * @deprecated
+     * Sets the purchaseOrder attribute value.
+     * @param purchaseOrder The purchaseOrder to set.
      */
     public void setPurchaseOrder(PurchaseOrderDocument purchaseOrder) {
-        setPurchaseOrderDocument(purchaseOrder);
+        this.purchaseOrder = purchaseOrder;
+    }
+    
+    /**
+     * Gets the purchaseOrderNotes attribute. 
+     * @return Returns the purchaseOrderNotes.
+     */
+    public String getPurchaseOrderNotes() {
+        ArrayList poNotes = SpringServiceLocator.getNoteService().getByRemoteObjectId((this.getPurchaseOrderIdentifier()).toString());
+
+        if (poNotes.size() > 0) {
+            return "Yes";
+        }
+        return "No";
     }
 
+    /**
+     * Sets the purchaseOrderNotes attribute value.
+     * 
+     * @param purchaseOrderNotes The purchaseOrderNotes to set.
+     */
+    public void setPurchaseOrderNotes(String purchaseOrderNotes) {
+        this.purchaseOrderNotes = purchaseOrderNotes;
+    }
+
+    /**
+     * Gets the purchaseOrderEndDate attribute. 
+     * @return Returns the purchaseOrderEndDate.
+     */
     public Date getPurchaseOrderEndDate() {
         return purchaseOrderEndDate;
     }
 
+    /**
+     * Sets the purchaseOrderEndDate attribute value.
+     * @param purchaseOrderEndDate The purchaseOrderEndDate to set.
+     */
     public void setPurchaseOrderEndDate(Date purchaseOrderEndDate) {
         this.purchaseOrderEndDate = purchaseOrderEndDate;
     }
 
     /**
-     * USED FOR ROUTING ONLY
+     * This returns the type of the Credit Memo that was selected on the
+     * init screen.  It is based on them entering the Vendor, PO or PREQ #.
      * 
-     * @deprecated
+     * @return Vendor, PO or PREQ
      */
-    public String getStatusDescription() {
-        return "";
-    }
-
-    /**
-     * USED FOR ROUTING ONLY
-     * 
-     * @deprecated
-     */
-    public void setStatusDescription(String statusDescription) {
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getPoDocumentTypeForAccountsPayableDocumentApprove()
-     */
-    public String getPoDocumentTypeForAccountsPayableDocumentCancel() {
-        return PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_CLOSE_DOCUMENT;
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getInitialAmount()
-     */
-    public KualiDecimal getInitialAmount() {
-        return this.getCreditMemoAmount();
-    }
-
-    /**
-     * Credit Memo document is first populated on Continue AP Event, and then prepareForSave continues.
-     * 
-     * @see org.kuali.core.document.Document#prepareForSave(org.kuali.core.rule.event.KualiDocumentEvent)
-     */
-    @Override
-    public void prepareForSave(KualiDocumentEvent event) {
-
-        // first populate, then call super
-        if (event instanceof ContinueAccountsPayableEvent) {
-            SpringContext.getBean(CreditMemoCreateService.class).populateDocumentAfterInit(this);
+    public String getCreditMemoType() {
+        if ( this.getPaymentRequestIdentifier() != null ) {
+          return CreditMemoTypes.TYPE_PREQ;
+        } else if ( this.getPurchaseOrderIdentifier() != null ) {
+          return CreditMemoTypes.TYPE_PO;
+        } else {
+          return CreditMemoTypes.TYPE_VENDOR;
         }
+      }
 
-        super.prepareForSave(event);
+    /**
+     * Sets the creditMemoType attribute value.
+     * @param creditMemoType The creditMemoType to set.
+     */
+    public void setCreditMemoType(String creditMemoType) {
+        this.creditMemoType = creditMemoType;
     }
 
     /**
-     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#isAttachmentRequired()
+     * Sets the paymentRequest attribute value.
+     * @param paymentRequest The paymentRequest to set.
      */
-    @Override
-    protected boolean isAttachmentRequired() {
-        return StringUtils.equalsIgnoreCase("Y", SpringContext.getBean(ParameterService.class).getParameterValue(CreditMemoDocument.class, PurapParameterConstants.PURAP_CM_REQUIRE_ATTACHMENT));
+    public void setPaymentRequest(PaymentRequestDocument paymentRequest) {
+        this.paymentRequest = paymentRequest;
     }
-
-    /**
-     * @see org.kuali.module.purap.document.AccountsPayableDocument#getDocumentSpecificService()
-     */
-    @Override
-    public AccountsPayableDocumentSpecificService getDocumentSpecificService() {
-        return SpringContext.getBean(CreditMemoService.class);
-    }
-
-}
+ }

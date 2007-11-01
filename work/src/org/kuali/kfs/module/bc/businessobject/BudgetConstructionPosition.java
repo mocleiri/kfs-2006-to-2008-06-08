@@ -19,18 +19,13 @@ package org.kuali.module.budget.bo;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.TypedArrayList;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.ResponsibilityCenter;
 
 /**
@@ -38,128 +33,133 @@ import org.kuali.module.chart.bo.ResponsibilityCenter;
  */
 public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
-    private String positionNumber;
-    private Integer universityFiscalYear;
-    private Date positionEffectiveDate;
-    private String positionEffectiveStatus;
-    private String positionStatus;
-    private boolean budgetedPosition;
-    private boolean confidentialPosition;
-    private BigDecimal positionStandardHoursDefault;
-    private String positionRegularTemporary;
-    private BigDecimal positionFullTimeEquivalency;
-    private Integer iuNormalWorkMonths;
-    private Integer iuPayMonths;
-    private String positionDescription;
-    private String setidDepartment;
-    private String positionDepartmentIdentifier;
-    private String responsibilityCenterCode;
-    private String positionUnionCode;
-    private String positionSalaryPlanDefault;
-    private String positionGradeDefault;
-    private String setidJobCode;
-    private String jobCode;
-    private String jobCodeDescription;
-    private String setidSalary;
-    private String iuDefaultObjectCode;
-    private String iuPositionType;
-    private String positionLockUserIdentifier;
+	private String positionNumber;
+	private Integer universityFiscalYear;
+	private Date positionEffectiveDate;
+	private String positionEffectiveStatus;
+	private String positionStatus;
+	private boolean budgetedPosition;
+	private boolean confidentialPosition;
+	private BigDecimal positionStandardHoursDefault;
+	private String positionRegularTemporary;
+	private BigDecimal positionFullTimeEquivalency;
+	private Integer iuNormalWorkMonths;
+	private Integer iuPayMonths;
+	private String positionDescription;
+	private String setidDepartment;
+	private String positionDepartmentIdentifier;
+	private String responsibilityCenterCode;
+	private String positionUnionCode;
+	private String positionSalaryPlanDefault;
+	private String positionGradeDefault;
+	private String setidJobCode;
+	private String jobCode;
+	private String jobCodeDescription;
+	private String setidSalary;
+	private String iuDefaultObjectCode;
+	private String iuPositionType;
+	private String positionLockUserIdentifier;
 
     private Options universityFiscal;
     private List pendingBudgetConstructionAppointmentFunding;
     private List budgetConstructionPositionSelect;
     private ResponsibilityCenter responsibilityCenter;
     private UniversalUser positionLockUser;
-
-    /**
-     * Default constructor.
-     */
-    public BudgetConstructionPosition() {
+    
+	/**
+	 * Default constructor.
+	 */
+	public BudgetConstructionPosition() {
         budgetConstructionPositionSelect = new ArrayList();
-        setPendingBudgetConstructionAppointmentFunding(new TypedArrayList(PendingBudgetConstructionAppointmentFunding.class));
+        pendingBudgetConstructionAppointmentFunding = new ArrayList();;
 
-    }
-
+	}
 
     /**
      * Computes the positionFullTimeEquivalency attribute.
      * 
      * @return Returns the compute positionFullTimeEquivalency
+     * 
      */
-    public static BigDecimal getCalculatedBCPositionFTE(BigDecimal positionStandardHoursDefault, Integer iuNormalWorkMonths, Integer iuPayMonths) {
-        if (iuPayMonths > 0) {
-            BigDecimal temp1 = positionStandardHoursDefault.divide(new BigDecimal(40), 4, KualiDecimal.ROUND_BEHAVIOR);
-            BigDecimal temp2 = new BigDecimal(iuNormalWorkMonths).divide(new BigDecimal(iuPayMonths), 4, KualiDecimal.ROUND_BEHAVIOR);
-            BigDecimal result = temp1.multiply(temp2);
-            result = result.setScale(2, KualiDecimal.ROUND_BEHAVIOR);
+    public static BigDecimal getCalculatedBCPositionFTE(BigDecimal positionStandardHoursDefault, Integer iuNormalWorkMonths, Integer iuPayMonths ) { 
+        if (iuPayMonths > 0){
+            BigDecimal temp1 = positionStandardHoursDefault.divide(new BigDecimal(40),4, BigDecimal.ROUND_DOWN );
+            BigDecimal temp2 = new BigDecimal(iuNormalWorkMonths).divide(new BigDecimal(iuPayMonths), 4, BigDecimal.ROUND_DOWN );
+            BigDecimal result = temp1.multiply(temp2) ;
+            result = result.setScale(2, BigDecimal.ROUND_DOWN);
             return result;
-        }
-        else {
+        }else{
             return BigDecimal.valueOf(0.0);
         }
     }
 
+ 
+    
+	/**
+	 * Gets the positionNumber attribute.
+	 * 
+	 * @return Returns the positionNumber
+	 * 
+	 */
+	public String getPositionNumber() { 
+		return positionNumber;
+	}
 
+	/**
+	 * Sets the positionNumber attribute.
+	 * 
+	 * @param positionNumber The positionNumber to set.
+	 * 
+	 */
+	public void setPositionNumber(String positionNumber) {
+		this.positionNumber = positionNumber;
+	}
+
+
+	/**
+	 * Gets the universityFiscalYear attribute.
+	 * 
+	 * @return Returns the universityFiscalYear
+	 * 
+	 */
+	public Integer getUniversityFiscalYear() { 
+		return universityFiscalYear;
+	}
+
+	/**
+	 * Sets the universityFiscalYear attribute.
+	 * 
+	 * @param universityFiscalYear The universityFiscalYear to set.
+	 * 
+	 */
+	public void setUniversityFiscalYear(Integer universityFiscalYear) {
+		this.universityFiscalYear = universityFiscalYear;
+	}
+
+
+	/**
+	 * Gets the positionEffectiveDate attribute.
+	 * 
+	 * @return Returns the positionEffectiveDate
+	 * 
+	 */
+	public Date getPositionEffectiveDate() { 
+		return positionEffectiveDate;
+	}
+
+	/**
+	 * Sets the positionEffectiveDate attribute.
+	 * 
+	 * @param positionEffectiveDate The positionEffectiveDate to set.
+	 * 
+	 */
+	public void setPositionEffectiveDate(Date positionEffectiveDate) {
+		this.positionEffectiveDate = positionEffectiveDate;
+	}
+
+   
     /**
-     * Gets the positionNumber attribute.
-     * 
-     * @return Returns the positionNumber
-     */
-    public String getPositionNumber() {
-        return positionNumber;
-    }
-
-    /**
-     * Sets the positionNumber attribute.
-     * 
-     * @param positionNumber The positionNumber to set.
-     */
-    public void setPositionNumber(String positionNumber) {
-        this.positionNumber = positionNumber;
-    }
-
-
-    /**
-     * Gets the universityFiscalYear attribute.
-     * 
-     * @return Returns the universityFiscalYear
-     */
-    public Integer getUniversityFiscalYear() {
-        return universityFiscalYear;
-    }
-
-    /**
-     * Sets the universityFiscalYear attribute.
-     * 
-     * @param universityFiscalYear The universityFiscalYear to set.
-     */
-    public void setUniversityFiscalYear(Integer universityFiscalYear) {
-        this.universityFiscalYear = universityFiscalYear;
-    }
-
-
-    /**
-     * Gets the positionEffectiveDate attribute.
-     * 
-     * @return Returns the positionEffectiveDate
-     */
-    public Date getPositionEffectiveDate() {
-        return positionEffectiveDate;
-    }
-
-    /**
-     * Sets the positionEffectiveDate attribute.
-     * 
-     * @param positionEffectiveDate The positionEffectiveDate to set.
-     */
-    public void setPositionEffectiveDate(Date positionEffectiveDate) {
-        this.positionEffectiveDate = positionEffectiveDate;
-    }
-
-
-    /**
-     * Gets the positionEffectiveStatus attribute.
-     * 
+     * Gets the positionEffectiveStatus attribute. 
      * @return Returns the positionEffectiveStatus.
      */
     public String getPositionEffectiveStatus() {
@@ -168,7 +168,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
     /**
      * Sets the positionEffectiveStatus attribute value.
-     * 
      * @param positionEffectiveStatus The positionEffectiveStatus to set.
      */
     public void setPositionEffectiveStatus(String positionEffectiveStatus) {
@@ -176,8 +175,7 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the positionStatus attribute.
-     * 
+     * Gets the positionStatus attribute. 
      * @return Returns the positionStatus.
      */
     public String getPositionStatus() {
@@ -186,7 +184,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
     /**
      * Sets the positionStatus attribute value.
-     * 
      * @param positionStatus The positionStatus to set.
      */
     public void setPositionStatus(String positionStatus) {
@@ -194,8 +191,7 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the budgetedPosition attribute.
-     * 
+     * Gets the budgetedPosition attribute. 
      * @return Returns the budgetedPosition.
      */
     public boolean isBudgetedPosition() {
@@ -204,7 +200,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
     /**
      * Sets the budgetedPosition attribute value.
-     * 
      * @param budgetedPosition The budgetedPosition to set.
      */
     public void setBudgetedPosition(boolean budgetedPosition) {
@@ -212,8 +207,7 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the confidentialPosition attribute.
-     * 
+     * Gets the confidentialPosition attribute. 
      * @return Returns the confidentialPosition.
      */
     public boolean isConfidentialPosition() {
@@ -222,7 +216,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
     /**
      * Sets the confidentialPosition attribute value.
-     * 
      * @param confidentialPosition The confidentialPosition to set.
      */
     public void setConfidentialPosition(boolean confidentialPosition) {
@@ -230,372 +223,411 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the positionStandardHoursDefault attribute.
-     * 
-     * @return Returns the positionStandardHoursDefault
-     */
-    public BigDecimal getPositionStandardHoursDefault() {
-        return positionStandardHoursDefault;
-    }
+	 * Gets the positionStandardHoursDefault attribute.
+	 * 
+	 * @return Returns the positionStandardHoursDefault
+	 * 
+	 */
+	public BigDecimal getPositionStandardHoursDefault() { 
+		return positionStandardHoursDefault;
+	}
 
-    /**
-     * Sets the positionStandardHoursDefault attribute.
-     * 
-     * @param positionStandardHoursDefault The positionStandardHoursDefault to set.
-     */
-    public void setPositionStandardHoursDefault(BigDecimal positionStandardHoursDefault) {
-        this.positionStandardHoursDefault = positionStandardHoursDefault;
-    }
-
-
-    /**
-     * Gets the positionRegularTemporary attribute.
-     * 
-     * @return Returns the positionRegularTemporary
-     */
-    public String getPositionRegularTemporary() {
-        return positionRegularTemporary;
-    }
-
-    /**
-     * Sets the positionRegularTemporary attribute.
-     * 
-     * @param positionRegularTemporary The positionRegularTemporary to set.
-     */
-    public void setPositionRegularTemporary(String positionRegularTemporary) {
-        this.positionRegularTemporary = positionRegularTemporary;
-    }
+	/**
+	 * Sets the positionStandardHoursDefault attribute.
+	 * 
+	 * @param positionStandardHoursDefault The positionStandardHoursDefault to set.
+	 * 
+	 */
+	public void setPositionStandardHoursDefault(BigDecimal positionStandardHoursDefault) {
+		this.positionStandardHoursDefault = positionStandardHoursDefault;
+	}
 
 
-    /**
-     * Gets the positionFullTimeEquivalency attribute.
-     * 
-     * @return Returns the positionFullTimeEquivalency
-     */
-    public BigDecimal getPositionFullTimeEquivalency() {
-        return positionFullTimeEquivalency;
-    }
+	/**
+	 * Gets the positionRegularTemporary attribute.
+	 * 
+	 * @return Returns the positionRegularTemporary
+	 * 
+	 */
+	public String getPositionRegularTemporary() { 
+		return positionRegularTemporary;
+	}
 
-    /**
-     * Sets the positionFullTimeEquivalency attribute.
-     * 
-     * @param positionFullTimeEquivalency The positionFullTimeEquivalency to set.
-     */
-    public void setPositionFullTimeEquivalency(BigDecimal positionFullTimeEquivalency) {
-        this.positionFullTimeEquivalency = positionFullTimeEquivalency;
-    }
-
-
-    /**
-     * Gets the iuNormalWorkMonths attribute.
-     * 
-     * @return Returns the iuNormalWorkMonths
-     */
-    public Integer getIuNormalWorkMonths() {
-        return iuNormalWorkMonths;
-    }
-
-    /**
-     * Sets the iuNormalWorkMonths attribute.
-     * 
-     * @param iuNormalWorkMonths The iuNormalWorkMonths to set.
-     */
-    public void setIuNormalWorkMonths(Integer iuNormalWorkMonths) {
-        this.iuNormalWorkMonths = iuNormalWorkMonths;
-    }
+	/**
+	 * Sets the positionRegularTemporary attribute.
+	 * 
+	 * @param positionRegularTemporary The positionRegularTemporary to set.
+	 * 
+	 */
+	public void setPositionRegularTemporary(String positionRegularTemporary) {
+		this.positionRegularTemporary = positionRegularTemporary;
+	}
 
 
-    /**
-     * Gets the iuPayMonths attribute.
-     * 
-     * @return Returns the iuPayMonths
-     */
-    public Integer getIuPayMonths() {
-        return iuPayMonths;
-    }
+	/**
+	 * Gets the positionFullTimeEquivalency attribute.
+	 * 
+	 * @return Returns the positionFullTimeEquivalency
+	 * 
+	 */
+	public BigDecimal getPositionFullTimeEquivalency() { 
+		return positionFullTimeEquivalency;
+	}
 
-    /**
-     * Sets the iuPayMonths attribute.
-     * 
-     * @param iuPayMonths The iuPayMonths to set.
-     */
-    public void setIuPayMonths(Integer iuPayMonths) {
-        this.iuPayMonths = iuPayMonths;
-    }
-
-
-    /**
-     * Gets the positionDescription attribute.
-     * 
-     * @return Returns the positionDescription
-     */
-    public String getPositionDescription() {
-        return positionDescription;
-    }
-
-    /**
-     * Sets the positionDescription attribute.
-     * 
-     * @param positionDescription The positionDescription to set.
-     */
-    public void setPositionDescription(String positionDescription) {
-        this.positionDescription = positionDescription;
-    }
+	/**
+	 * Sets the positionFullTimeEquivalency attribute.
+	 * 
+	 * @param positionFullTimeEquivalency The positionFullTimeEquivalency to set.
+	 * 
+	 */
+	public void setPositionFullTimeEquivalency(BigDecimal positionFullTimeEquivalency) {
+		this.positionFullTimeEquivalency = positionFullTimeEquivalency;
+	}
 
 
-    /**
-     * Gets the setidDepartment attribute.
-     * 
-     * @return Returns the setidDepartment
-     */
-    public String getSetidDepartment() {
-        return setidDepartment;
-    }
+	/**
+	 * Gets the iuNormalWorkMonths attribute.
+	 * 
+	 * @return Returns the iuNormalWorkMonths
+	 * 
+	 */
+	public Integer getIuNormalWorkMonths() { 
+		return iuNormalWorkMonths;
+	}
 
-    /**
-     * Sets the setidDepartment attribute.
-     * 
-     * @param setidDepartment The setidDepartment to set.
-     */
-    public void setSetidDepartment(String setidDepartment) {
-        this.setidDepartment = setidDepartment;
-    }
-
-
-    /**
-     * Gets the positionDepartmentIdentifier attribute.
-     * 
-     * @return Returns the positionDepartmentIdentifier
-     */
-    public String getPositionDepartmentIdentifier() {
-        return positionDepartmentIdentifier;
-    }
-
-    /**
-     * Sets the positionDepartmentIdentifier attribute.
-     * 
-     * @param positionDepartmentIdentifier The positionDepartmentIdentifier to set.
-     */
-    public void setPositionDepartmentIdentifier(String positionDepartmentIdentifier) {
-        this.positionDepartmentIdentifier = positionDepartmentIdentifier;
-    }
+	/**
+	 * Sets the iuNormalWorkMonths attribute.
+	 * 
+	 * @param iuNormalWorkMonths The iuNormalWorkMonths to set.
+	 * 
+	 */
+	public void setIuNormalWorkMonths(Integer iuNormalWorkMonths) {
+		this.iuNormalWorkMonths = iuNormalWorkMonths;
+	}
 
 
-    /**
-     * Gets the responsibilityCenterCode attribute.
-     * 
-     * @return Returns the responsibilityCenterCode
-     */
-    public String getResponsibilityCenterCode() {
-        return responsibilityCenterCode;
-    }
+	/**
+	 * Gets the iuPayMonths attribute.
+	 * 
+	 * @return Returns the iuPayMonths
+	 * 
+	 */
+	public Integer getIuPayMonths() { 
+		return iuPayMonths;
+	}
 
-    /**
-     * Sets the responsibilityCenterCode attribute.
-     * 
-     * @param responsibilityCenterCode The responsibilityCenterCode to set.
-     */
-    public void setResponsibilityCenterCode(String responsibilityCenterCode) {
-        this.responsibilityCenterCode = responsibilityCenterCode;
-    }
-
-
-    /**
-     * Gets the positionUnionCode attribute.
-     * 
-     * @return Returns the positionUnionCode
-     */
-    public String getPositionUnionCode() {
-        return positionUnionCode;
-    }
-
-    /**
-     * Sets the positionUnionCode attribute.
-     * 
-     * @param positionUnionCode The positionUnionCode to set.
-     */
-    public void setPositionUnionCode(String positionUnionCode) {
-        this.positionUnionCode = positionUnionCode;
-    }
+	/**
+	 * Sets the iuPayMonths attribute.
+	 * 
+	 * @param iuPayMonths The iuPayMonths to set.
+	 * 
+	 */
+	public void setIuPayMonths(Integer iuPayMonths) {
+		this.iuPayMonths = iuPayMonths;
+	}
 
 
-    /**
-     * Gets the positionSalaryPlanDefault attribute.
-     * 
-     * @return Returns the positionSalaryPlanDefault
-     */
-    public String getPositionSalaryPlanDefault() {
-        return positionSalaryPlanDefault;
-    }
+	/**
+	 * Gets the positionDescription attribute.
+	 * 
+	 * @return Returns the positionDescription
+	 * 
+	 */
+	public String getPositionDescription() { 
+		return positionDescription;
+	}
 
-    /**
-     * Sets the positionSalaryPlanDefault attribute.
-     * 
-     * @param positionSalaryPlanDefault The positionSalaryPlanDefault to set.
-     */
-    public void setPositionSalaryPlanDefault(String positionSalaryPlanDefault) {
-        this.positionSalaryPlanDefault = positionSalaryPlanDefault;
-    }
-
-
-    /**
-     * Gets the positionGradeDefault attribute.
-     * 
-     * @return Returns the positionGradeDefault
-     */
-    public String getPositionGradeDefault() {
-        return positionGradeDefault;
-    }
-
-    /**
-     * Sets the positionGradeDefault attribute.
-     * 
-     * @param positionGradeDefault The positionGradeDefault to set.
-     */
-    public void setPositionGradeDefault(String positionGradeDefault) {
-        this.positionGradeDefault = positionGradeDefault;
-    }
+	/**
+	 * Sets the positionDescription attribute.
+	 * 
+	 * @param positionDescription The positionDescription to set.
+	 * 
+	 */
+	public void setPositionDescription(String positionDescription) {
+		this.positionDescription = positionDescription;
+	}
 
 
-    /**
-     * Gets the setidJobCode attribute.
-     * 
-     * @return Returns the setidJobCode
-     */
-    public String getSetidJobCode() {
-        return setidJobCode;
-    }
+	/**
+	 * Gets the setidDepartment attribute.
+	 * 
+	 * @return Returns the setidDepartment
+	 * 
+	 */
+	public String getSetidDepartment() { 
+		return setidDepartment;
+	}
 
-    /**
-     * Sets the setidJobCode attribute.
-     * 
-     * @param setidJobCode The setidJobCode to set.
-     */
-    public void setSetidJobCode(String setidJobCode) {
-        this.setidJobCode = setidJobCode;
-    }
-
-
-    /**
-     * Gets the jobCode attribute.
-     * 
-     * @return Returns the jobCode
-     */
-    public String getJobCode() {
-        return jobCode;
-    }
-
-    /**
-     * Sets the jobCode attribute.
-     * 
-     * @param jobCode The jobCode to set.
-     */
-    public void setJobCode(String jobCode) {
-        this.jobCode = jobCode;
-    }
+	/**
+	 * Sets the setidDepartment attribute.
+	 * 
+	 * @param setidDepartment The setidDepartment to set.
+	 * 
+	 */
+	public void setSetidDepartment(String setidDepartment) {
+		this.setidDepartment = setidDepartment;
+	}
 
 
-    /**
-     * Gets the jobCodeDescription attribute.
-     * 
-     * @return Returns the jobCodeDescription
-     */
-    public String getJobCodeDescription() {
-        return jobCodeDescription;
-    }
+	/**
+	 * Gets the positionDepartmentIdentifier attribute.
+	 * 
+	 * @return Returns the positionDepartmentIdentifier
+	 * 
+	 */
+	public String getPositionDepartmentIdentifier() { 
+		return positionDepartmentIdentifier;
+	}
 
-    /**
-     * Sets the jobCodeDescription attribute.
-     * 
-     * @param jobCodeDescription The jobCodeDescription to set.
-     */
-    public void setJobCodeDescription(String jobCodeDescription) {
-        this.jobCodeDescription = jobCodeDescription;
-    }
-
-
-    /**
-     * Gets the setidSalary attribute.
-     * 
-     * @return Returns the setidSalary
-     */
-    public String getSetidSalary() {
-        return setidSalary;
-    }
-
-    /**
-     * Sets the setidSalary attribute.
-     * 
-     * @param setidSalary The setidSalary to set.
-     */
-    public void setSetidSalary(String setidSalary) {
-        this.setidSalary = setidSalary;
-    }
+	/**
+	 * Sets the positionDepartmentIdentifier attribute.
+	 * 
+	 * @param positionDepartmentIdentifier The positionDepartmentIdentifier to set.
+	 * 
+	 */
+	public void setPositionDepartmentIdentifier(String positionDepartmentIdentifier) {
+		this.positionDepartmentIdentifier = positionDepartmentIdentifier;
+	}
 
 
-    /**
-     * Gets the iuDefaultObjectCode attribute.
-     * 
-     * @return Returns the iuDefaultObjectCode
-     */
-    public String getIuDefaultObjectCode() {
-        return iuDefaultObjectCode;
-    }
+	/**
+	 * Gets the responsibilityCenterCode attribute.
+	 * 
+	 * @return Returns the responsibilityCenterCode
+	 * 
+	 */
+	public String getResponsibilityCenterCode() { 
+		return responsibilityCenterCode;
+	}
 
-    /**
-     * Sets the iuDefaultObjectCode attribute.
-     * 
-     * @param iuDefaultObjectCode The iuDefaultObjectCode to set.
-     */
-    public void setIuDefaultObjectCode(String iuDefaultObjectCode) {
-        this.iuDefaultObjectCode = iuDefaultObjectCode;
-    }
-
-
-    /**
-     * Gets the iuPositionType attribute.
-     * 
-     * @return Returns the iuPositionType
-     */
-    public String getIuPositionType() {
-        return iuPositionType;
-    }
-
-    /**
-     * Sets the iuPositionType attribute.
-     * 
-     * @param iuPositionType The iuPositionType to set.
-     */
-    public void setIuPositionType(String iuPositionType) {
-        this.iuPositionType = iuPositionType;
-    }
+	/**
+	 * Sets the responsibilityCenterCode attribute.
+	 * 
+	 * @param responsibilityCenterCode The responsibilityCenterCode to set.
+	 * 
+	 */
+	public void setResponsibilityCenterCode(String responsibilityCenterCode) {
+		this.responsibilityCenterCode = responsibilityCenterCode;
+	}
 
 
-    /**
-     * Gets the positionLockUserIdentifier attribute.
-     * 
-     * @return Returns the positionLockUserIdentifier
-     */
-    public String getPositionLockUserIdentifier() {
-        return positionLockUserIdentifier;
-    }
+	/**
+	 * Gets the positionUnionCode attribute.
+	 * 
+	 * @return Returns the positionUnionCode
+	 * 
+	 */
+	public String getPositionUnionCode() { 
+		return positionUnionCode;
+	}
 
-    /**
-     * Sets the positionLockUserIdentifier attribute.
-     * 
-     * @param positionLockUserIdentifier The positionLockUserIdentifier to set.
-     */
-    public void setPositionLockUserIdentifier(String positionLockUserIdentifier) {
-        this.positionLockUserIdentifier = positionLockUserIdentifier;
-    }
+	/**
+	 * Sets the positionUnionCode attribute.
+	 * 
+	 * @param positionUnionCode The positionUnionCode to set.
+	 * 
+	 */
+	public void setPositionUnionCode(String positionUnionCode) {
+		this.positionUnionCode = positionUnionCode;
+	}
+
+
+	/**
+	 * Gets the positionSalaryPlanDefault attribute.
+	 * 
+	 * @return Returns the positionSalaryPlanDefault
+	 * 
+	 */
+	public String getPositionSalaryPlanDefault() { 
+		return positionSalaryPlanDefault;
+	}
+
+	/**
+	 * Sets the positionSalaryPlanDefault attribute.
+	 * 
+	 * @param positionSalaryPlanDefault The positionSalaryPlanDefault to set.
+	 * 
+	 */
+	public void setPositionSalaryPlanDefault(String positionSalaryPlanDefault) {
+		this.positionSalaryPlanDefault = positionSalaryPlanDefault;
+	}
+
+
+	/**
+	 * Gets the positionGradeDefault attribute.
+	 * 
+	 * @return Returns the positionGradeDefault
+	 * 
+	 */
+	public String getPositionGradeDefault() { 
+		return positionGradeDefault;
+	}
+
+	/**
+	 * Sets the positionGradeDefault attribute.
+	 * 
+	 * @param positionGradeDefault The positionGradeDefault to set.
+	 * 
+	 */
+	public void setPositionGradeDefault(String positionGradeDefault) {
+		this.positionGradeDefault = positionGradeDefault;
+	}
+
+
+	/**
+	 * Gets the setidJobCode attribute.
+	 * 
+	 * @return Returns the setidJobCode
+	 * 
+	 */
+	public String getSetidJobCode() { 
+		return setidJobCode;
+	}
+
+	/**
+	 * Sets the setidJobCode attribute.
+	 * 
+	 * @param setidJobCode The setidJobCode to set.
+	 * 
+	 */
+	public void setSetidJobCode(String setidJobCode) {
+		this.setidJobCode = setidJobCode;
+	}
+
+
+	/**
+	 * Gets the jobCode attribute.
+	 * 
+	 * @return Returns the jobCode
+	 * 
+	 */
+	public String getJobCode() { 
+		return jobCode;
+	}
+
+	/**
+	 * Sets the jobCode attribute.
+	 * 
+	 * @param jobCode The jobCode to set.
+	 * 
+	 */
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
+	}
+
+
+	/**
+	 * Gets the jobCodeDescription attribute.
+	 * 
+	 * @return Returns the jobCodeDescription
+	 * 
+	 */
+	public String getJobCodeDescription() { 
+		return jobCodeDescription;
+	}
+
+	/**
+	 * Sets the jobCodeDescription attribute.
+	 * 
+	 * @param jobCodeDescription The jobCodeDescription to set.
+	 * 
+	 */
+	public void setJobCodeDescription(String jobCodeDescription) {
+		this.jobCodeDescription = jobCodeDescription;
+	}
+
+
+	/**
+	 * Gets the setidSalary attribute.
+	 * 
+	 * @return Returns the setidSalary
+	 * 
+	 */
+	public String getSetidSalary() { 
+		return setidSalary;
+	}
+
+	/**
+	 * Sets the setidSalary attribute.
+	 * 
+	 * @param setidSalary The setidSalary to set.
+	 * 
+	 */
+	public void setSetidSalary(String setidSalary) {
+		this.setidSalary = setidSalary;
+	}
+
+
+	/**
+	 * Gets the iuDefaultObjectCode attribute.
+	 * 
+	 * @return Returns the iuDefaultObjectCode
+	 * 
+	 */
+	public String getIuDefaultObjectCode() { 
+		return iuDefaultObjectCode;
+	}
+
+	/**
+	 * Sets the iuDefaultObjectCode attribute.
+	 * 
+	 * @param iuDefaultObjectCode The iuDefaultObjectCode to set.
+	 * 
+	 */
+	public void setIuDefaultObjectCode(String iuDefaultObjectCode) {
+		this.iuDefaultObjectCode = iuDefaultObjectCode;
+	}
+
+
+	/**
+	 * Gets the iuPositionType attribute.
+	 * 
+	 * @return Returns the iuPositionType
+	 * 
+	 */
+	public String getIuPositionType() { 
+		return iuPositionType;
+	}
+
+	/**
+	 * Sets the iuPositionType attribute.
+	 * 
+	 * @param iuPositionType The iuPositionType to set.
+	 * 
+	 */
+	public void setIuPositionType(String iuPositionType) {
+		this.iuPositionType = iuPositionType;
+	}
+
+
+	/**
+	 * Gets the positionLockUserIdentifier attribute.
+	 * 
+	 * @return Returns the positionLockUserIdentifier
+	 * 
+	 */
+	public String getPositionLockUserIdentifier() { 
+		return positionLockUserIdentifier;
+	}
+
+	/**
+	 * Sets the positionLockUserIdentifier attribute.
+	 * 
+	 * @param positionLockUserIdentifier The positionLockUserIdentifier to set.
+	 * 
+	 */
+	public void setPositionLockUserIdentifier(String positionLockUserIdentifier) {
+		this.positionLockUserIdentifier = positionLockUserIdentifier;
+	}
 
 
     /**
      * Gets the pendingBudgetConstructionAppointmentFunding list.
      * 
      * @return Returns the pendingBudgetConstructionAppointmentFunding list
+     * 
      */
-    public List getPendingBudgetConstructionAppointmentFunding() {
+    public List getPendingBudgetConstructionAppointmentFunding() { 
         return pendingBudgetConstructionAppointmentFunding;
     }
 
@@ -609,28 +641,28 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
         this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
     }
 
-    /**
-     * Gets the budgetConstructionPositionSelect list.
-     * 
-     * @return Returns the budgetConstructionPositionSelect list
-     */
-    public List getBudgetConstructionPositionSelect() {
-        return budgetConstructionPositionSelect;
-    }
+	/**
+	 * Gets the budgetConstructionPositionSelect list.
+	 * 
+	 * @return Returns the budgetConstructionPositionSelect list
+	 * 
+	 */
+	public List getBudgetConstructionPositionSelect() { 
+		return budgetConstructionPositionSelect;
+	}
+
+	/**
+	 * Sets the budgetConstructionPositionSelect list.
+	 * 
+	 * @param budgetConstructionPositionSelect The budgetConstructionPositionSelect list to set.
+	 * @deprecated
+	 */
+	public void setBudgetConstructionPositionSelect(List budgetConstructionPositionSelect) {
+		this.budgetConstructionPositionSelect = budgetConstructionPositionSelect;
+	}
 
     /**
-     * Sets the budgetConstructionPositionSelect list.
-     * 
-     * @param budgetConstructionPositionSelect The budgetConstructionPositionSelect list to set.
-     * @deprecated
-     */
-    public void setBudgetConstructionPositionSelect(List budgetConstructionPositionSelect) {
-        this.budgetConstructionPositionSelect = budgetConstructionPositionSelect;
-    }
-
-    /**
-     * Gets the responsibilityCenter attribute.
-     * 
+     * Gets the responsibilityCenter attribute. 
      * @return Returns the responsibilityCenter.
      */
     public ResponsibilityCenter getResponsibilityCenter() {
@@ -639,7 +671,6 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
     /**
      * Sets the responsibilityCenter attribute value.
-     * 
      * @param responsibilityCenter The responsibilityCenter to set.
      * @deprecated
      */
@@ -648,12 +679,11 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the positionLockUser attribute value.
-     * 
+     * Gets the positionLockUser attribute value. 
      * @return Returns the positionLockUser
      */
     public UniversalUser getPositionLockUser() {
-        positionLockUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(positionLockUserIdentifier, positionLockUser);
+        positionLockUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(positionLockUserIdentifier, positionLockUser);
         return positionLockUser;
     }
 
@@ -668,8 +698,7 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the universityFiscal attribute.
-     * 
+     * Gets the universityFiscal attribute. 
      * @return Returns the universityFiscal.
      */
     public Options getUniversityFiscal() {
@@ -678,43 +707,17 @@ public class BudgetConstructionPosition extends PersistableBusinessObjectBase {
 
     /**
      * Sets the universityFiscal attribute value.
-     * 
      * @param universityFiscal The universityFiscal to set.
      */
     public void setUniversityFiscal(Options universityFiscal) {
         this.universityFiscal = universityFiscal;
     }
-
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-
-        List managedLists = super.buildListOfDeletionAwareLists();
-        managedLists.add(getPendingBudgetConstructionAppointmentFunding());
-        return managedLists;
-    }
-
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
-
-        simpleValues.put("positionNumber", getPositionNumber());
-        simpleValues.put("universityFiscalYear", getUniversityFiscalYear());
-
-        return simpleValues;
-    }
-
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("positionNumber", this.positionNumber);
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());

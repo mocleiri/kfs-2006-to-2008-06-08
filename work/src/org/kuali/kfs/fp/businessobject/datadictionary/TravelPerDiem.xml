@@ -22,7 +22,7 @@
 
 
         <inquiry>
-            <title>Disbursement Voucher Travel Per Diem Inquiry</title>
+            <title>Travel Per Diem Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="fiscalYear" />
@@ -32,7 +32,7 @@
         </inquiry>
 
         <lookup>
-            <title>Disbursement Voucher Travel Per Diem Lookup</title>
+            <title>Travel Per Diem Lookup</title>
 
             <instructions>Lookup a Travel Per Diem Category</instructions>
 
@@ -66,6 +66,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The fiscal year of the budget for the travel per diem.</description>
             </attribute>
 
             <attribute name="perDiemCountryName" forceUppercase="false">
@@ -77,6 +80,9 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The country for the travel per diem.</description>
             </attribute>
 
             <attribute name="perDiemCountryText" forceUppercase="false">
@@ -88,11 +94,13 @@
                 <control>
                     <text size="75" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The country URL for the travel per diem.</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
         </attributes>
-        <objectLabel>Disbursement Voucher Travel Per Diem</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

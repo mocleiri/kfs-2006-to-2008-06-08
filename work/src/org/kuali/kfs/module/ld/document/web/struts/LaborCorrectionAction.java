@@ -51,7 +51,7 @@ import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.bo.CorrectionCriteria;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.document.CorrectionDocument;
@@ -64,7 +64,6 @@ import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.util.CorrectionDocumentUtils;
 import org.kuali.module.gl.web.struts.action.CorrectionAction;
 import org.kuali.module.gl.web.struts.form.CorrectionForm;
-import org.kuali.module.labor.LaborKeyConstants;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.document.LaborCorrectionDocument;
 import org.kuali.module.labor.service.LaborCorrectionDocumentService;
@@ -73,23 +72,18 @@ import org.kuali.module.labor.web.optionfinder.CorrectionLaborGroupEntriesFinder
 import org.kuali.module.labor.web.optionfinder.LaborOriginEntryFieldFinder;
 import org.kuali.module.labor.web.struts.form.LaborCorrectionForm;
 
-/**
- * Struts Action Class for the Labor Ledger Correction Process.
- */
-public class LaborCorrectionAction extends CorrectionAction {
+public class LaborCorrectionAction extends CorrectionAction{
 
     LaborOriginEntryService laborOriginEntryService = SpringContext.getBean(LaborOriginEntryService.class);
-
-    /**
-     * This needs to be done just in case they decide to excute.
-     * 
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#excute(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
+  
+    
+    
+    
+    
+    
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("execute() started");
-
+        
         CorrectionForm correctionForm = (CorrectionForm) form;
 
         // Init our services once
@@ -103,10 +97,9 @@ public class LaborCorrectionAction extends CorrectionAction {
         CorrectionForm rForm = (CorrectionForm) form;
         LOG.debug("execute() methodToCall: " + rForm.getMethodToCall());
 
-        Collection<OriginEntryFull> persistedOriginEntries = null;
-
-        // If we are called from the docHandler or reload, ignore the persisted origin entries because we are either creating a new
-        // document
+        Collection<OriginEntry> persistedOriginEntries = null;
+        
+        // If we are called from the docHandler or reload, ignore the persisted origin entries because we are either creating a new document
         // or loading an old one
         if (!(KFSConstants.DOC_HANDLER_METHOD.equals(rForm.getMethodToCall()) || KFSConstants.RELOAD_METHOD_TO_CALL.equals(rForm.getMethodToCall()))) {
             restoreSystemAndEditMethod(rForm);
@@ -114,26 +107,26 @@ public class LaborCorrectionAction extends CorrectionAction {
             if (!rForm.isRestrictedFunctionalityMode()) {
                 if (StringUtils.isNotBlank(rForm.getGlcpSearchResultsSequenceNumber())) {
                     rForm.setAllEntries(SpringContext.getBean(GlCorrectionProcessOriginEntryService.class).retrieveAllEntries(rForm.getGlcpSearchResultsSequenceNumber()));
-                    if (rForm.getAllEntries() == null) {
+                    if (rForm.getAllEntries() == null) { 
                         rForm.setDisplayEntries(null);
                     }
                     else {
-                        rForm.setDisplayEntries(new ArrayList<OriginEntryFull>(rForm.getAllEntries()));
+                        rForm.setDisplayEntries(new ArrayList<OriginEntry> (rForm.getAllEntries()));
                     }
-
+                
                     if ((!"showOutputGroup".equals(rForm.getMethodToCall())) && rForm.getShowOutputFlag()) {
                         // reapply the any criteria to pare down the list if the match criteria only flag is checked
                         CorrectionDocument document = rForm.getCorrectionDocument();
                         List<CorrectionChangeGroup> groups = document.getCorrectionChangeGroup();
                         updateEntriesFromCriteria(rForm, rForm.isRestrictedFunctionalityMode());
                     }
-
+                    
                     if (!KFSConstants.TableRenderConstants.SORT_METHOD.equals(rForm.getMethodToCall())) {
                         // if sorting, we'll let the action take care of the sorting
                         KualiTableRenderFormMetadata originEntrySearchResultTableMetadata = rForm.getOriginEntrySearchResultTableMetadata();
                         if (originEntrySearchResultTableMetadata.getPreviouslySortedColumnIndex() != -1) {
                             List<Column> columns = SpringContext.getBean(LaborCorrectionDocumentService.class).getTableRenderColumnMetadata(rForm.getDocument().getDocumentNumber());
-
+                             
                             String propertyToSortName = columns.get(originEntrySearchResultTableMetadata.getPreviouslySortedColumnIndex()).getPropertyName();
                             Comparator valueComparator = columns.get(originEntrySearchResultTableMetadata.getPreviouslySortedColumnIndex()).getValueComparator();
                             sortList(rForm.getDisplayEntries(), propertyToSortName, valueComparator, originEntrySearchResultTableMetadata.isSortDescending());
@@ -152,13 +145,7 @@ public class LaborCorrectionAction extends CorrectionAction {
         return af;
     }
 
-    /**
-     * This needs to be done just in case they decide to save.
-     * 
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#save(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
+    
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("save() started");
 
@@ -181,7 +168,7 @@ public class LaborCorrectionAction extends CorrectionAction {
         if (!checkInputGroupPersistedForDocumentSave(laborCorrectionForm)) {
             return mapping.findForward(KFSConstants.MAPPING_BASIC);
         }
-
+        
         // Populate document
         document.setCorrectionTypeCode(laborCorrectionForm.getEditMethod());
         document.setCorrectionSelection(laborCorrectionForm.getMatchCriteriaOnly());
@@ -197,15 +184,15 @@ public class LaborCorrectionAction extends CorrectionAction {
         document.setCorrectionOutputGroupId(null);
 
         SpringContext.getBean(LaborCorrectionDocumentService.class).persistOriginEntryGroupsForDocumentSave(document, laborCorrectionForm);
-
+        
         LOG.debug("save() doc type name: " + laborCorrectionForm.getDocTypeName());
         return super.save(mapping, form, request, response);
     }
 
-
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#uploadFile(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+    
+    
+    /*
+     * Upload a file
      */
     public ActionForward uploadFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException, Exception {
         LOG.debug("uploadFile() started");
@@ -232,15 +219,14 @@ public class LaborCorrectionAction extends CorrectionAction {
                 lineNumber++;
                 if (!StringUtils.isEmpty(currentLine)) {
                     try {
-
+                        
                         // Check for short lines - Skip the record
-                        // KULLAB-379: LLCP should accept file upload rows even if the record length is not right padded to the full
-                        // length
-                        /*
-                         * if (currentLine.length() < LaborConstants.LLCP_MAX_LENGTH) {
-                         * GlobalVariables.getErrorMap().putError("systemAndEditMethod",
-                         * KFSKeyConstants.Labor.LLCP_UPLOAD_FILE_INVALID_RECORD_SIZE_ERROR); errorsLoading = true; break; }
-                         */
+                        // KULLAB-379: LLCP should accept file upload rows even if the record length is not right padded to the full length
+                        /*if (currentLine.length() < LaborConstants.LLCP_MAX_LENGTH) {
+                            GlobalVariables.getErrorMap().putError("systemAndEditMethod", KFSKeyConstants.Labor.LLCP_UPLOAD_FILE_INVALID_RECORD_SIZE_ERROR);                            
+                            errorsLoading = true;
+                            break;
+                        }*/                      
                         LaborOriginEntry entryFromFile = new LaborOriginEntry();
                         entryFromFile.setFromTextFile(currentLine, lineNumber);
                         entryFromFile.setEntryGroupId(newOriginEntryGroup.getId());
@@ -264,14 +250,16 @@ public class LaborCorrectionAction extends CorrectionAction {
             correctionForm.setDataLoadedFlag(false);
             document.setCorrectionInputGroupId(newOriginEntryGroup.getId());
             correctionForm.setInputFileName(fullFileName);
-
+            
             if (CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionForm.getEditMethod())) {
                 // the group size is not suitable for manual editing because it is too large
                 if (recordCountFunctionalityLimit == CorrectionDocumentUtils.RECORD_COUNT_FUNCTIONALITY_LIMIT_IS_NONE) {
-                    GlobalVariables.getErrorMap().putError("systemAndEditMethod", KFSKeyConstants.ERROR_GL_ERROR_CORRECTION_UNABLE_TO_MANUAL_EDIT_ANY_GROUP);
+                    GlobalVariables.getErrorMap().putError("systemAndEditMethod",
+                            KFSKeyConstants.ERROR_GL_ERROR_CORRECTION_UNABLE_TO_MANUAL_EDIT_ANY_GROUP);
                 }
                 else {
-                    GlobalVariables.getErrorMap().putError("systemAndEditMethod", KFSKeyConstants.ERROR_GL_ERROR_CORRECTION_UNABLE_TO_MANUAL_EDIT_LARGE_GROUP, String.valueOf(recordCountFunctionalityLimit));
+                    GlobalVariables.getErrorMap().putError("systemAndEditMethod",
+                            KFSKeyConstants.ERROR_GL_ERROR_CORRECTION_UNABLE_TO_MANUAL_EDIT_LARGE_GROUP, String.valueOf(recordCountFunctionalityLimit));
                 }
             }
         }
@@ -283,7 +271,7 @@ public class LaborCorrectionAction extends CorrectionAction {
                 correctionForm.setInputFileName(fullFileName);
                 document.setCorrectionInputGroupId(newOriginEntryGroup.getId());
                 loadAllEntries(newOriginEntryGroup.getId(), correctionForm);
-
+    
                 if (CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(correctionForm.getEditMethod())) {
                     correctionForm.setEditableFlag(false);
                     correctionForm.setManualEditFlag(true);
@@ -299,11 +287,11 @@ public class LaborCorrectionAction extends CorrectionAction {
         }
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
-
-
+    
+    
     /**
-     * Show all entries for Manual edit with groupId and persist these entries to the DB The restricted functionality mode flag MUST
-     * BE SET PRIOR TO CALLING this method.
+     * Show all entries for Manual edit with groupId and persist these entries to the DB
+     * The restricted functionality mode flag MUST BE SET PRIOR TO CALLING this method.
      * 
      * @param groupId
      * @param correctionForm
@@ -315,33 +303,32 @@ public class LaborCorrectionAction extends CorrectionAction {
         if (!correctionForm.isRestrictedFunctionalityMode()) {
             CorrectionDocument document = correctionForm.getCorrectionDocument();
             List<LaborOriginEntry> laborSearchResults = laborOriginEntryService.getEntriesByGroupId(groupId);
-            List<OriginEntryFull> searchResults = new ArrayList();
+            List<OriginEntry> searchResults = new ArrayList();
             searchResults.addAll(laborSearchResults);
-
+            
             correctionForm.setAllEntries(searchResults);
-            correctionForm.setDisplayEntries(new ArrayList<OriginEntryFull>(searchResults));
+            correctionForm.setDisplayEntries(new ArrayList<OriginEntry> (searchResults));
 
             updateDocumentSummary(document, correctionForm.getAllEntries(), correctionForm.isRestrictedFunctionalityMode());
-
+            
             // if not in restricted functionality mode, then we can store these results temporarily in the GLCP origin entry service
             SequenceAccessorService sequenceAccessorService = SpringContext.getBean(SequenceAccessorService.class);
             String glcpSearchResultsSequenceNumber = String.valueOf(sequenceAccessorService.getNextAvailableSequenceNumber(KFSConstants.LOOKUP_RESULTS_SEQUENCE));
-
+            
             SpringContext.getBean(GlCorrectionProcessOriginEntryService.class).persistAllEntries(glcpSearchResultsSequenceNumber, searchResults);
             correctionForm.setGlcpSearchResultsSequenceNumber(glcpSearchResultsSequenceNumber);
-
+        
             int maxRowsPerPage = CorrectionDocumentUtils.getRecordsPerPage();
             KualiTableRenderFormMetadata originEntrySearchResultTableMetadata = correctionForm.getOriginEntrySearchResultTableMetadata();
             originEntrySearchResultTableMetadata.jumpToFirstPage(correctionForm.getDisplayEntries().size(), maxRowsPerPage);
             originEntrySearchResultTableMetadata.setColumnToSortIndex(-1);
         }
     }
-
-
+    
+    
     /**
      * Save a changed row in the group
      */
-
     public ActionForward saveManualEntry(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("saveManualEdit() started");
 
@@ -352,8 +339,8 @@ public class LaborCorrectionAction extends CorrectionAction {
             int entryId = laborCorrectionForm.getLaborEntryForManualEdit().getEntryId();
 
             // Find it and replace it with the one from the edit spot
-            for (Iterator<OriginEntryFull> iter = laborCorrectionForm.getAllEntries().iterator(); iter.hasNext();) {
-                OriginEntryFull element = iter.next();
+            for (Iterator<OriginEntry> iter = laborCorrectionForm.getAllEntries().iterator(); iter.hasNext();) {
+                OriginEntry element = iter.next();
                 if (element.getEntryId() == entryId) {
                     iter.remove();
                 }
@@ -364,13 +351,13 @@ public class LaborCorrectionAction extends CorrectionAction {
 
             // we've modified the list of all entries, so repersist it
             SpringContext.getBean(GlCorrectionProcessOriginEntryService.class).persistAllEntries(laborCorrectionForm.getGlcpSearchResultsSequenceNumber(), laborCorrectionForm.getAllEntries());
-            // laborCorrectionForm.setDisplayEntries(null);
+            //laborCorrectionForm.setDisplayEntries(null);
             laborCorrectionForm.setDisplayEntries(laborCorrectionForm.getAllEntries());
-
+            
             if (laborCorrectionForm.getShowOutputFlag()) {
                 removeNonMatchingEntries(laborCorrectionForm.getDisplayEntries(), document.getCorrectionChangeGroup());
             }
-
+            
             // Clear out the additional row
             laborCorrectionForm.clearLaborEntryForManualEdit();
         }
@@ -383,8 +370,8 @@ public class LaborCorrectionAction extends CorrectionAction {
 
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
-
-
+    
+    
     /**
      * Add a new row to the group
      */
@@ -415,34 +402,29 @@ public class LaborCorrectionAction extends CorrectionAction {
 
         // we've modified the list of all entries, so repersist it
         SpringContext.getBean(GlCorrectionProcessOriginEntryService.class).persistAllEntries(laborCorrectionForm.getGlcpSearchResultsSequenceNumber(), laborCorrectionForm.getAllEntries());
-        laborCorrectionForm.setDisplayEntries(new ArrayList<OriginEntryFull>(laborCorrectionForm.getAllEntries()));
+        laborCorrectionForm.setDisplayEntries(new ArrayList<OriginEntry>(laborCorrectionForm.getAllEntries()));
         if (laborCorrectionForm.getShowOutputFlag()) {
             removeNonMatchingEntries(laborCorrectionForm.getDisplayEntries(), document.getCorrectionChangeGroup());
         }
-
+        
         // list has changed, we'll need to repage and resort
         applyPagingAndSortingFromPreviousPageView(laborCorrectionForm);
-
+        
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#manualEdit(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+
     @Override
     public ActionForward manualEdit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-
+        // TODO Auto-generated method stub
+        
         LaborCorrectionForm laborCorrectionForm = (LaborCorrectionForm) form;
         laborCorrectionForm.clearLaborEntryForManualEdit();
-
+        
         return super.manualEdit(mapping, form, request, response);
     }
 
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#editManualEntry(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+
     @Override
     public ActionForward editManualEntry(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("editManualEdit() started");
@@ -470,13 +452,8 @@ public class LaborCorrectionAction extends CorrectionAction {
 
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
-
-    /**
-     * This method is for validation of Labor Origin Entry
-     * 
-     * @param laborCorrectionForm
-     * @return boolean
-     */
+    
+    
     protected boolean validLaborOriginEntry(LaborCorrectionForm laborCorrectionForm) {
         LOG.debug("validOriginEntry() started");
 
@@ -528,21 +505,17 @@ public class LaborCorrectionAction extends CorrectionAction {
 
         return valid;
     }
-
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#removeNonMatchingEntries(java.util.Collection,
-     *      java.util.Collection)
-     */
-    protected void removeNonMatchingEntries(Collection<OriginEntryFull> entries, Collection<CorrectionChangeGroup> groups) {
-        Iterator<OriginEntryFull> loei = entries.iterator();
+    
+    protected void removeNonMatchingEntries(Collection<OriginEntry> entries, Collection<CorrectionChangeGroup> groups) {
+        Iterator<OriginEntry> loei = entries.iterator();
         while (loei.hasNext()) {
-            OriginEntryFull oe = loei.next();
+            OriginEntry oe = loei.next();
             if (!CorrectionDocumentUtils.doesLaborEntryMatchAnyCriteriaGroups(oe, groups)) {
                 loei.remove();
             }
         }
     }
-
+    
     /**
      * Validate all the correction groups
      * 
@@ -588,10 +561,8 @@ public class LaborCorrectionAction extends CorrectionAction {
     }
 
     /**
-     * This method is for loading loadPersistedInputGroup
+     * Show all entries for Manual edit with groupId and persist these entries to the DB
      * 
-     * @param correctionForm
-     * @throws Exception
      */
     protected void loadPersistedInputGroup(CorrectionForm correctionForm) throws Exception {
 
@@ -600,17 +571,17 @@ public class LaborCorrectionAction extends CorrectionAction {
 
         int recordCountFunctionalityLimit = CorrectionDocumentUtils.getRecordCountFunctionalityLimit();
         LaborCorrectionDocumentService laborCorrectionDocumentService = SpringContext.getBean(LaborCorrectionDocumentService.class);
-
+        
         if (!laborCorrectionDocumentService.areInputOriginEntriesPersisted(document)) {
             // the input origin entry group has been purged from the system
             laborCorrectionForm.setPersistedOriginEntriesMissing(true);
             laborCorrectionForm.setRestrictedFunctionalityMode(true);
             return;
         }
-
+        
         laborCorrectionForm.setPersistedOriginEntriesMissing(false);
         List<LaborOriginEntry> laborSearchResults = laborCorrectionDocumentService.retrievePersistedInputOriginEntries(document, recordCountFunctionalityLimit);
-        List<OriginEntryFull> searchResults = new ArrayList();
+        List<OriginEntry> searchResults = new ArrayList();
         searchResults.addAll(laborSearchResults);
         if (searchResults == null) {
             // null when the origin entry list is too large (i.e. in restricted functionality mode)
@@ -619,30 +590,26 @@ public class LaborCorrectionAction extends CorrectionAction {
         }
         else {
             laborCorrectionForm.setAllEntries(searchResults);
-            laborCorrectionForm.setDisplayEntries(new ArrayList<OriginEntryFull>(searchResults));
+            laborCorrectionForm.setDisplayEntries(new ArrayList<OriginEntry> (searchResults));
 
             updateDocumentSummary(document, laborCorrectionForm.getAllEntries(), false);
-
+            
             // if not in restricted functionality mode, then we can store these results temporarily in the GLCP origin entry service
             SequenceAccessorService sequenceAccessorService = SpringContext.getBean(SequenceAccessorService.class);
             String glcpSearchResultsSequenceNumber = String.valueOf(sequenceAccessorService.getNextAvailableSequenceNumber(KFSConstants.LOOKUP_RESULTS_SEQUENCE));
-
+            
             SpringContext.getBean(GlCorrectionProcessOriginEntryService.class).persistAllEntries(glcpSearchResultsSequenceNumber, searchResults);
             laborCorrectionForm.setGlcpSearchResultsSequenceNumber(glcpSearchResultsSequenceNumber);
-
+        
             int maxRowsPerPage = CorrectionDocumentUtils.getRecordsPerPage();
             KualiTableRenderFormMetadata originEntrySearchResultTableMetadata = laborCorrectionForm.getOriginEntrySearchResultTableMetadata();
             originEntrySearchResultTableMetadata.jumpToFirstPage(laborCorrectionForm.getDisplayEntries().size(), maxRowsPerPage);
             originEntrySearchResultTableMetadata.setColumnToSortIndex(-1);
         }
     }
-
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#loadPersistedOutputGroup(org.kuali.module.gl.web.struts.form.CorrectionForm,
-     *      boolean)
-     */
+    
     protected void loadPersistedOutputGroup(CorrectionForm correctionForm, boolean setSequentialIds) throws Exception {
-        LaborCorrectionForm laborCorrectionForm = (LaborCorrectionForm) correctionForm;
+        LaborCorrectionForm laborCorrectionForm = (LaborCorrectionForm) correctionForm; 
         LaborCorrectionDocument document = laborCorrectionForm.getLaborCorrectionDocument();
 
         LaborCorrectionDocumentService laborCorrectionDocumentService = SpringContext.getBean(LaborCorrectionDocumentService.class);
@@ -652,9 +619,9 @@ public class LaborCorrectionAction extends CorrectionAction {
             laborCorrectionForm.setRestrictedFunctionalityMode(true);
             return;
         }
-
+        
         laborCorrectionForm.setPersistedOriginEntriesMissing(false);
-
+        
         int recordCountFunctionalityLimit;
         if (CorrectionDocumentService.CORRECTION_TYPE_MANUAL.equals(laborCorrectionForm.getEditMethod())) {
             // with manual edits, rows may have been added so that the list goes would go into restricted func mode
@@ -664,17 +631,17 @@ public class LaborCorrectionAction extends CorrectionAction {
         else {
             recordCountFunctionalityLimit = CorrectionDocumentUtils.getRecordCountFunctionalityLimit();
         }
-
+        
         List<LaborOriginEntry> laborSearchResults = laborCorrectionDocumentService.retrievePersistedOutputOriginEntries(document, recordCountFunctionalityLimit);
-        List<OriginEntryFull> searchResults = new ArrayList();
+        List<OriginEntry> searchResults = new ArrayList();
         searchResults.addAll(laborSearchResults);
-
+        
         if (searchResults == null) {
             // null when the origin entry list is too large (i.e. in restricted functionality mode)
             laborCorrectionForm.setRestrictedFunctionalityMode(true);
-
+            
             KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
-
+            
             CorrectionDocumentAuthorizer cda = new CorrectionDocumentAuthorizer();
             Map editingMode = cda.getEditMode(document, GlobalVariables.getUserSession().getUniversalUser());
             if (editingMode.containsKey(AuthorizationConstants.TransactionalEditMode.FULL_ENTRY) || workflowDocument.stateIsCanceled()) {
@@ -685,34 +652,32 @@ public class LaborCorrectionAction extends CorrectionAction {
         }
         else {
             laborCorrectionForm.setAllEntries(searchResults);
-            laborCorrectionForm.setDisplayEntries(new ArrayList<OriginEntryFull>(searchResults));
+            laborCorrectionForm.setDisplayEntries(new ArrayList<OriginEntry> (searchResults));
 
             if (setSequentialIds) {
                 CorrectionDocumentUtils.setSequentialEntryIds(laborCorrectionForm.getAllEntries());
             }
-
+            
             // if we can display the entries (i.e. not restricted functionality mode), then recompute the summary
             updateDocumentSummary(document, laborCorrectionForm.getAllEntries(), false);
-
+            
             // if not in restricted functionality mode, then we can store these results temporarily in the GLCP origin entry service
             SequenceAccessorService sequenceAccessorService = SpringContext.getBean(SequenceAccessorService.class);
             String glcpSearchResultsSequenceNumber = String.valueOf(sequenceAccessorService.getNextAvailableSequenceNumber(KFSConstants.LOOKUP_RESULTS_SEQUENCE));
-
+            
             SpringContext.getBean(GlCorrectionProcessOriginEntryService.class).persistAllEntries(glcpSearchResultsSequenceNumber, searchResults);
             laborCorrectionForm.setGlcpSearchResultsSequenceNumber(glcpSearchResultsSequenceNumber);
-
+        
             int maxRowsPerPage = CorrectionDocumentUtils.getRecordsPerPage();
             KualiTableRenderFormMetadata originEntrySearchResultTableMetadata = laborCorrectionForm.getOriginEntrySearchResultTableMetadata();
             originEntrySearchResultTableMetadata.jumpToFirstPage(laborCorrectionForm.getDisplayEntries().size(), maxRowsPerPage);
             originEntrySearchResultTableMetadata.setColumnToSortIndex(-1);
         }
     }
+    
 
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#prepareForRoute(org.kuali.module.gl.web.struts.form.CorrectionForm)
-     */
     protected boolean prepareForRoute(CorrectionForm correctionForm) throws Exception {
-
+        
         LaborCorrectionForm laborCorrectionForm = (LaborCorrectionForm) correctionForm;
         LaborCorrectionDocument document = laborCorrectionForm.getLaborCorrectionDocument();
 
@@ -741,21 +706,21 @@ public class LaborCorrectionAction extends CorrectionAction {
         if (!checkOriginEntryGroupSelectionBeforeRouting(document)) {
             return false;
         }
-
+        
         // were the system and edit methods inappropriately changed?
         if (GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_GL_ERROR_CORRECTION_INVALID_SYSTEM_OR_EDIT_METHOD_CHANGE)) {
             return false;
         }
-
+        
         // was the input group inappropriately changed?
         if (GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_GL_ERROR_CORRECTION_INVALID_INPUT_GROUP_CHANGE)) {
             return false;
         }
-
+        
         if (!validGroupsItemsForDocumentSave(laborCorrectionForm)) {
             return false;
         }
-
+        
         // If it is criteria, are all the criteria valid?
         if (CorrectionDocumentService.CORRECTION_TYPE_CRITERIA.equals(laborCorrectionForm.getEditMethod())) {
             if (!validChangeGroups(laborCorrectionForm)) {
@@ -766,7 +731,7 @@ public class LaborCorrectionAction extends CorrectionAction {
         if (!checkRestrictedFunctionalityModeForManualEdit(laborCorrectionForm)) {
             return false;
         }
-
+        
         if (!checkInputGroupPersistedForDocumentSave(laborCorrectionForm)) {
             return false;
         }
@@ -783,35 +748,32 @@ public class LaborCorrectionAction extends CorrectionAction {
             // If it is manual edit, we don't need to save any correction groups
             document.getCorrectionChangeGroup().clear();
         }
-
+        
         // Populate document
         document.setCorrectionTypeCode(laborCorrectionForm.getEditMethod());
         document.setCorrectionSelection(laborCorrectionForm.getMatchCriteriaOnly());
         document.setCorrectionFileDelete(!laborCorrectionForm.getProcessInBatch());
         document.setCorrectionInputFileName(laborCorrectionForm.getInputFileName());
         document.setCorrectionOutputFileName(null); // this field is never used
-
+        
         // we'll populate the output group id when the doc has a route level change
         document.setCorrectionOutputGroupId(null);
 
         SpringContext.getBean(LaborCorrectionDocumentService.class).persistOriginEntryGroupsForDocumentSave(document, laborCorrectionForm);
-
+        
         return true;
     }
 
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#saveToDesktop(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     public ActionForward saveToDesktop(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws IOException {
         LOG.debug("saveToDesktop() started");
 
         LaborCorrectionForm laborCorrectionForm = (LaborCorrectionForm) form;
 
         if (checkOriginEntryGroupSelection(laborCorrectionForm)) {
-            if (laborCorrectionForm.isInputGroupIdFromLastDocumentLoadIsMissing() && laborCorrectionForm.getInputGroupIdFromLastDocumentLoad() != null && laborCorrectionForm.getInputGroupIdFromLastDocumentLoad().equals(laborCorrectionForm.getInputGroupId())) {
+            if (laborCorrectionForm.isInputGroupIdFromLastDocumentLoadIsMissing() && laborCorrectionForm.getInputGroupIdFromLastDocumentLoad() != null 
+                    && laborCorrectionForm.getInputGroupIdFromLastDocumentLoad().equals(laborCorrectionForm.getInputGroupId())) {
                 if (laborCorrectionForm.isPersistedOriginEntriesMissing()) {
-                    GlobalVariables.getErrorMap().putError("documentsInSystem", LaborKeyConstants.ERROR_LABOR_ERROR_CORRECTION_PERSISTED_ORIGIN_ENTRIES_MISSING);
+                    GlobalVariables.getErrorMap().putError("documentsInSystem", KFSKeyConstants.Labor.ERROR_LABOR_ERROR_CORRECTION_PERSISTED_ORIGIN_ENTRIES_MISSING);
                     return mapping.findForward(KFSConstants.MAPPING_BASIC);
                 }
                 else {
@@ -822,37 +784,37 @@ public class LaborCorrectionAction extends CorrectionAction {
                     response.setHeader("Expires", "0");
                     response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
                     response.setHeader("Pragma", "public");
-
+                    
                     BufferedOutputStream bw = new BufferedOutputStream(response.getOutputStream());
-
+                    
                     SpringContext.getBean(CorrectionDocumentService.class).writePersistedInputOriginEntriesToStream((CorrectionDocument) laborCorrectionForm.getDocument(), bw);
-
+                    
                     bw.flush();
                     bw.close();
-
+                    
                     return null;
                 }
             }
             else {
                 OriginEntryGroup oeg = CorrectionAction.originEntryGroupService.getExactMatchingEntryGroup(laborCorrectionForm.getInputGroupId());
-
+    
                 String fileName = oeg.getSource().getCode() + oeg.getId().toString() + "_" + oeg.getDate().toString() + ".txt";
-
+    
                 // set response
                 response.setContentType("application/txt");
                 response.setHeader("Content-disposition", "attachment; filename=" + fileName);
                 response.setHeader("Expires", "0");
                 response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
                 response.setHeader("Pragma", "public");
-
+    
                 BufferedOutputStream bw = new BufferedOutputStream(response.getOutputStream());
-
+    
                 // write to output
                 laborOriginEntryService.flatFile(laborCorrectionForm.getInputGroupId(), bw);
-
+    
                 bw.flush();
                 bw.close();
-
+    
                 return null;
             }
         }
@@ -860,11 +822,7 @@ public class LaborCorrectionAction extends CorrectionAction {
             return mapping.findForward(KFSConstants.MAPPING_BASIC);
         }
     }
-
-    /**
-     * @see org.kuali.core.web.struts.action.KualiTableRenderAction#sort(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+    
     public ActionForward sort(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LaborCorrectionForm correctionForm = (LaborCorrectionForm) form;
         int maxRowsPerPage = CorrectionDocumentUtils.getRecordsPerPage();
@@ -872,55 +830,50 @@ public class LaborCorrectionAction extends CorrectionAction {
         KualiTableRenderFormMetadata originEntrySearchResultTableMetadata = correctionForm.getOriginEntrySearchResultTableMetadata();
 
         List<Column> columns = SpringContext.getBean(LaborCorrectionDocumentService.class).getTableRenderColumnMetadata(correctionForm.getDocument().getDocumentNumber());
-
+        
         String propertyToSortName = columns.get(originEntrySearchResultTableMetadata.getColumnToSortIndex()).getPropertyName();
         Comparator valueComparator = columns.get(originEntrySearchResultTableMetadata.getColumnToSortIndex()).getValueComparator();
-
+        
         boolean sortDescending = false;
         if (originEntrySearchResultTableMetadata.getPreviouslySortedColumnIndex() == originEntrySearchResultTableMetadata.getColumnToSortIndex()) {
             // clicked sort on the same column that was previously sorted, so we will reverse the sort order
             sortDescending = !originEntrySearchResultTableMetadata.isSortDescending();
             originEntrySearchResultTableMetadata.setSortDescending(sortDescending);
         }
-
+        
         originEntrySearchResultTableMetadata.setSortDescending(sortDescending);
         // sort the list now so that it will be rendered correctly
         sortList(correctionForm.getDisplayEntries(), propertyToSortName, valueComparator, sortDescending);
-
+        
         // sorting, so go back to the first page
         originEntrySearchResultTableMetadata.jumpToFirstPage(correctionForm.getDisplayEntries().size(), maxRowsPerPage);
-
+        
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#applyPagingAndSortingFromPreviousPageView(org.kuali.module.gl.web.struts.form.CorrectionForm)
-     */
     protected void applyPagingAndSortingFromPreviousPageView(CorrectionForm correctionForm) {
         LaborCorrectionForm laborCorrectionForm = (LaborCorrectionForm) correctionForm;
         KualiTableRenderFormMetadata originEntrySearchResultTableMetadata = laborCorrectionForm.getOriginEntrySearchResultTableMetadata();
         if (originEntrySearchResultTableMetadata.getPreviouslySortedColumnIndex() != -1) {
-
+            
             List<Column> columns = SpringContext.getBean(LaborCorrectionDocumentService.class).getTableRenderColumnMetadata(laborCorrectionForm.getDocument().getDocumentNumber());
-
+            
             String propertyToSortName = columns.get(originEntrySearchResultTableMetadata.getPreviouslySortedColumnIndex()).getPropertyName();
             Comparator valueComparator = columns.get(originEntrySearchResultTableMetadata.getPreviouslySortedColumnIndex()).getValueComparator();
             sortList(laborCorrectionForm.getDisplayEntries(), propertyToSortName, valueComparator, originEntrySearchResultTableMetadata.isSortDescending());
         }
-
+        
         int maxRowsPerPage = CorrectionDocumentUtils.getRecordsPerPage();
         originEntrySearchResultTableMetadata.jumpToPage(originEntrySearchResultTableMetadata.getViewedPageNumber(), laborCorrectionForm.getDisplayEntries().size(), maxRowsPerPage);
     }
-
-    /**
-     * @see org.kuali.module.gl.web.struts.action.CorrectionAction#checkInputGroupPersistedForDocumentSave(org.kuali.module.gl.web.struts.form.CorrectionForm)
-     */
+    
     protected boolean checkInputGroupPersistedForDocumentSave(CorrectionForm correctionForm) {
         boolean present;
         LaborCorrectionForm laborCorrectionForm = (LaborCorrectionForm) correctionForm;
-        KualiWorkflowDocument workflowDocument = laborCorrectionForm.getDocument().getDocumentHeader().getWorkflowDocument();
-        if (workflowDocument.stateIsInitiated() || (workflowDocument.stateIsSaved() && (laborCorrectionForm.getInputGroupIdFromLastDocumentLoad() == null || !laborCorrectionForm.getInputGroupIdFromLastDocumentLoad().equals(laborCorrectionForm.getInputGroupId())))) {
-            present = originEntryGroupService.getGroupExists(((LaborCorrectionDocument) laborCorrectionForm.getDocument()).getCorrectionInputGroupId());
+        KualiWorkflowDocument workflowDocument = laborCorrectionForm.getDocument().getDocumentHeader().getWorkflowDocument(); 
+        if (workflowDocument.stateIsInitiated() || (workflowDocument.stateIsSaved() && 
+                (laborCorrectionForm.getInputGroupIdFromLastDocumentLoad() == null || !laborCorrectionForm.getInputGroupIdFromLastDocumentLoad().equals(laborCorrectionForm.getInputGroupId())))) {
+            present = originEntryGroupService.getGroupExists(((LaborCorrectionDocument) laborCorrectionForm.getDocument()).getCorrectionInputGroupId()); 
         }
         else {
             present = SpringContext.getBean(CorrectionDocumentService.class).areInputOriginEntriesPersisted((LaborCorrectionDocument) laborCorrectionForm.getDocument());
@@ -930,7 +883,7 @@ public class LaborCorrectionAction extends CorrectionAction {
         }
         return present;
     }
-
+    
     /**
      * Called when selecting the system and method. If this button is pressed, the document should be reset as if it is the first
      * time it was pressed.
@@ -949,19 +902,18 @@ public class LaborCorrectionAction extends CorrectionAction {
             document.setCorrectionOutputGroupId(null);
             document.setCorrectionCreditTotalAmount(null);
             document.setCorrectionDebitTotalAmount(null);
-            document.setCorrectionBudgetTotalAmount(null);
             document.setCorrectionRowCount(null);
             document.getCorrectionChangeGroup().clear();
-
+            
             laborCorrectionForm.setDataLoadedFlag(false);
             laborCorrectionForm.setDeleteFileFlag(false);
             laborCorrectionForm.setEditableFlag(false);
             laborCorrectionForm.setManualEditFlag(false);
             laborCorrectionForm.setShowOutputFlag(false);
-            laborCorrectionForm.setAllEntries(new ArrayList<OriginEntryFull>());
+            laborCorrectionForm.setAllEntries(new ArrayList<OriginEntry>());
             laborCorrectionForm.setRestrictedFunctionalityMode(false);
             laborCorrectionForm.setProcessInBatch(true);
-
+            
             if (CorrectionDocumentService.SYSTEM_DATABASE.equals(laborCorrectionForm.getChooseSystem())) {
                 // if users choose database, then get the list of origin entry groups and set the default
 
@@ -991,7 +943,7 @@ public class LaborCorrectionAction extends CorrectionAction {
         laborCorrectionForm.setPreviousChooseSystem(laborCorrectionForm.getChooseSystem());
         laborCorrectionForm.setPreviousEditMethod(laborCorrectionForm.getEditMethod());
         laborCorrectionForm.setPreviousInputGroupId(null);
-
+        
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 }

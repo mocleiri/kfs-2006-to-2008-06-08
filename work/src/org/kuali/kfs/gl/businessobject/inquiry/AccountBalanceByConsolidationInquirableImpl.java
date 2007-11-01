@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.service.LookupService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.AccountBalanceByLevel;
 import org.kuali.module.gl.web.Constant;
 
 /**
  * This class is used to generate the URL for the user-defined attributes for the account balace by consolidation screen. It is
  * entended the KualiInquirableImpl class, so it covers both the default implementation and customized implemetnation.
+ * 
+ * 
  */
 public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByConsolidationInquirableImpl.class);
@@ -46,10 +47,10 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
     protected List buildUserDefinedAttributeKeyList() {
         List keys = new ArrayList();
 
-        keys.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        keys.add(KFSPropertyConstants.ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        keys.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        keys.add(PropertyConstants.ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        keys.add(PropertyConstants.SUB_ACCOUNT_NUMBER);
         keys.add("financialObject.financialObjectLevel.financialConsolidationObject.finConsolidationObjectCode");
         keys.add(Constant.COST_SHARE_OPTION);
         keys.add(Constant.CONSOLIDATION_OPTION);
@@ -65,7 +66,7 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
         Map userDefinedAttributeMap = new HashMap();
         // userDefinedAttributeMap.put("financialObject.financialObjectLevel.financialConsolidationObject.financialConsolidationObjectCode",
         // "");
-        userDefinedAttributeMap.put(GLConstants.DummyBusinessObject.LINK_BUTTON_OPTION, "");
+        userDefinedAttributeMap.put("dummyBusinessObject.linkButtonOption", "");
         return userDefinedAttributeMap;
     }
 
@@ -107,7 +108,7 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
-        return KFSConstants.GL_MODIFIED_INQUIRY_ACTION;
+        return Constants.GL_MODIFIED_INQUIRY_ACTION;
     }
 
     /**
@@ -115,7 +116,7 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
         Class c = null;
-        if (GLConstants.DummyBusinessObject.LINK_BUTTON_OPTION.equals(attributeName)) {
+        if ("dummyBusinessObject.linkButtonOption".equals(attributeName)) {
             c = AccountBalanceByLevel.class;
         }
         return c;
@@ -125,6 +126,6 @@ public class AccountBalanceByConsolidationInquirableImpl extends AbstractGLInqui
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
      */
     protected void addMoreParameters(Properties parameter, String attributeName) {
-        parameter.put(KFSConstants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
+        parameter.put(Constants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
     }
 }

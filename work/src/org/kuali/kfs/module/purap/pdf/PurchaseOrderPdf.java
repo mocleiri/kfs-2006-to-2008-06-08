@@ -1,18 +1,3 @@
-/*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.purap.pdf;
 
 import java.io.ByteArrayOutputStream;
@@ -29,13 +14,11 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.document.PurchaseOrderRetransmitDocument;
 import org.kuali.module.purap.exceptions.PurError;
 
 import com.lowagie.text.Chunk;
@@ -223,7 +206,9 @@ public class PurchaseOrderPdf extends PurapPdf {
     }
 
     /**
-     * This method creates the purchase order pdf, and pass in null as the retransmitItems List because it doesn't need retransmit.
+     * 
+     * This method creates the purchase order pdf, and pass in null as the retransmitItems List because it doesn't
+     * need retransmit.
      * 
      * @param po
      * @param document
@@ -560,11 +545,10 @@ public class PurchaseOrderPdf extends PurapPdf {
                 String description = (poi.getItemCatalogNumber() != null) ? poi.getItemCatalogNumber().trim() + " - " : "";
                 description = description + ((poi.getItemDescription() != null) ? poi.getItemDescription().trim() : "");
                 if (StringUtils.isNotBlank(description)) {
-                    if (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_FREIGHT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SHIP_AND_HAND_CODE)) {
+                    if (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)) {
                         // If this is a full order discount or trade-in item, we add the item type description to the description.
                         description = poi.getItemType().getItemTypeDescription() + " - " + description;
                     }
-
                 }
 
                 // Above the line item types items display the line number; other types don't.
@@ -612,14 +596,8 @@ public class PurchaseOrderPdf extends PurapPdf {
         tableCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         itemsTable.addCell(tableCell);
         itemsTable.addCell(" ");
-        KualiDecimal totalDollarAmount = new KualiDecimal(BigDecimal.ZERO);
-        if (po instanceof PurchaseOrderRetransmitDocument) {
-            totalDollarAmount = ((PurchaseOrderRetransmitDocument) po).getTotalDollarAmountForRetransmit();
-        }
-        else {
-            totalDollarAmount = po.getTotalDollarAmount();
-        }
-        tableCell = new PdfPCell(new Paragraph(numberFormat.format(totalDollarAmount) + " ", cour_10_normal));
+        // getTotalCost() calculates based on the items in the po, so works for retransmit.
+        tableCell = new PdfPCell(new Paragraph(numberFormat.format(po.getTotalDollarAmount()) + " ", cour_10_normal));
         tableCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         itemsTable.addCell(tableCell);
         // Blank line after totals
@@ -762,7 +740,7 @@ public class PurchaseOrderPdf extends PurapPdf {
                 LOG.debug("lineItemDisplaysOnPdf() Item type is " + poi.getItemType().getItemTypeCode() + " OrderQuantity and unit price are both null. Display on pdf.");
                 return true;
             }
-            if ((poi.getItemType().isAmountBasedGeneralLedgerIndicator() && ((poi.getItemUnitPrice() != null) && (poi.getItemUnitPrice().compareTo(zero.bigDecimalValue()) >= 0))) || (((poi.getItemType().isQuantityBasedGeneralLedgerIndicator()) && (poi.getItemQuantity().isGreaterThan(zero))) && (poi.getItemUnitPrice() != null))) {
+            if ((poi.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SERVICE_CODE) && ((poi.getItemUnitPrice() != null) && (poi.getItemUnitPrice().compareTo(zero.bigDecimalValue()) >= 0))) || (((!poi.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SERVICE_CODE)) && (poi.getItemQuantity().isGreaterThan(zero))) && (poi.getItemUnitPrice() != null))) {
                 LOG.debug("lineItemDisplaysOnPdf() Item type is " + poi.getItemType().getItemTypeCode() + " OrderQuantity is " + poi.getItemQuantity() + ". Unit price is " + poi.getItemUnitPrice() + ". Display on pdf.");
                 return true;
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,17 @@ package org.kuali.module.financial.bo;
 
 import java.util.Map;
 
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
 
 
 /**
  * Special case <code>{@link SourceAccountingLine}</code> type for
  * <code>{@link org.kuali.module.financial.document.BudgetAdjustmentDocument}</code>
+ * 
+ * 
  */
 public class BudgetAdjustmentSourceAccountingLine extends SourceAccountingLine implements BudgetAdjustmentAccountingLine {
 
@@ -46,12 +48,18 @@ public class BudgetAdjustmentSourceAccountingLine extends SourceAccountingLine i
     private KualiDecimal financialDocumentMonth12LineAmount;
     private boolean fringeBenefitIndicator;
 
+    /**
+     * This constructor needs to initialize the ojbConcreteClass attribute such that it sets it to its class name. This is how OJB
+     * knows what grouping of objects to work with.
+     */
     public BudgetAdjustmentSourceAccountingLine() {
         super();
+        super.ojbConcreteClass = this.getClass().getName();
         BudgetAdjustmentAccountingLineUtil.init(this);
     }
 
     /**
+     * 
      * @see org.kuali.core.bo.AccountingLineBase#getValuesMap()
      */
     @Override
@@ -62,6 +70,7 @@ public class BudgetAdjustmentSourceAccountingLine extends SourceAccountingLine i
     }
 
     /**
+     * 
      * @see org.kuali.core.bo.AccountingLineBase#copyFrom(org.kuali.core.bo.AccountingLine)
      */
     @Override

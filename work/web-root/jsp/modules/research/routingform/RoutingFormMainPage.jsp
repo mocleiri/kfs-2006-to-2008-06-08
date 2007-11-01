@@ -24,10 +24,6 @@
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS_LESS_DOCUMENT}" />
 
     <kra-rf:routingFormHiddenDocumentFields includeRoutingFormMainPage="true" />
-    
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Main Page" altText="page help"/>
-	</div>    
 
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 
@@ -45,14 +41,5 @@
     </table>
 
     <kul:documentControls transactionalDocument="false" suppressRoutingControls="true" viewOnly="${KualiForm.editingMode['viewOnly']}" />
-
-<SCRIPT type="text/javascript">
-var kualiForm = document.forms['KualiForm'];
-var kualiElements = kualiForm.elements;
-</SCRIPT>
-<script language="javascript" src="scripts/research/researchDocument.js"></script>
-<script language="javascript" src="dwr/interface/AgencyService.js"></script>
-<script language="javascript" src="dwr/interface/CfdaService.js"></script>
-<script language="javascript" src="dwr/interface/ProjectDirectorService.js"></script>
 
 </kul:documentPage>

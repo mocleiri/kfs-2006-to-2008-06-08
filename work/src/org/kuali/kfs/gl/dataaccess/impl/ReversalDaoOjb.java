@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Reversal;
@@ -81,9 +80,8 @@ public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalD
 
         Iterator iter = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
         if (iter.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(iter);
+            Object[] data = (Object[]) iter.next();
             BigDecimal max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
-
             if (max == null) {
                 return 0;
             }
@@ -136,11 +134,32 @@ public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalD
     }
 
     /**
-     * Deletes a reversal record
      * 
-     * @param re reversal to delete
-     * @see org.kuali.module.gl.dao.ReversalDao#delete(org.kuali.module.gl.bo.Reversal)
+     * @see org.kuali.module.gl.dao.ReversalDao#getSummaryByDate(java.util.Date)
      */
+    public Iterator getSummaryByDate(Date before) {
+        LOG.debug("getSummaryByDate() started");
+
+        Criteria crit = new Criteria();
+        crit.addLessOrEqualThan(KFSPropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, new java.sql.Date(before.getTime()));
+    
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(Reversal.class, crit);
+
+        String attributeList[] = { KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(" + KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE + ")" };
+
+        String groupList[] = { KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE };
+
+        query.setAttributes(attributeList);
+        query.addGroupBy(groupList);
+
+        // add the sorting criteria
+        for (int i = 0; i < groupList.length; i++) {
+            query.addOrderByAscending(groupList[i]);
+        }
+
+        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
+    }
+
     public void delete(Reversal re) {
         LOG.debug("delete() started");
 

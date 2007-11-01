@@ -31,6 +31,8 @@ import edu.iu.uis.eden.routeheader.StandardDocumentContent;
 
 /**
  * This class contains various utility methods for doing tests on workflow attributes.
+ * 
+ * 
  */
 public class KualiAttributeTestUtil {
 
@@ -43,6 +45,7 @@ public class KualiAttributeTestUtil {
     public static final String PURCHASE_ORDER_DOCUMENT = "PurchaseOrderDocument_AmountTest.xml";
 
     /**
+     * 
      * This method loads a document XML from a file in this directory, and loads it into a DocumentContent class, which is then
      * returned.
      * 
@@ -66,9 +69,7 @@ public class KualiAttributeTestUtil {
         docType.setName(docTypeName);
         docRouteHeaderValue.setDocumentTypeId(docType.getDocumentTypeId());
         routeContext.setDocument(docRouteHeaderValue);
-        StandardDocumentContent newContent = new StandardDocumentContent(readerToString(reader), routeContext);
-        routeContext.setDocumentContent(newContent);
-        return newContent;
+        return new StandardDocumentContent(readerToString(reader), routeContext);
     }
 
     private static String readerToString(Reader is) throws IOException {

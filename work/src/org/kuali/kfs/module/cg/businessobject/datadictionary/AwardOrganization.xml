@@ -92,6 +92,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>awardPrimaryOrganizationIndicator</summary>
+                <description>awardPrimaryOrganizationIndicator description...</description>
 			</attribute>
 
         </attributes>

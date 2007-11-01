@@ -18,17 +18,19 @@ package org.kuali.module.gl.web.inquirable;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.Transaction;
 
 /**
  * This class provides a placeholder that can connect General Ledger business object with financial document in the presentation
  * tier. The typical method is to generate url for the inquirable financial document.
+ * 
+ * 
  */
 public class InquirableFinancialDocument {
 
-    private KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+    private KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
 
     /**
      * get the url of inquirable financial document for the given transaction

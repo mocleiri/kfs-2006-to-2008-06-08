@@ -15,16 +15,15 @@
  */
 package org.kuali.module.labor.service;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
+import org.kuali.module.labor.bo.PendingLedgerEntry;
 import org.kuali.module.labor.document.LaborLedgerPostingDocument;
 
 /**
- * Defines methods that must be implemented by classes providing a LaborLedgerPendingEntryServiceImpl.
+ * This interface defines methods that a LaborLedgerPendingEntry Service must provide
  */
 public interface LaborLedgerPendingEntryService {
 
@@ -34,15 +33,21 @@ public interface LaborLedgerPendingEntryService {
      * @param account
      * @return
      */
+
     public boolean hasPendingLaborLedgerEntry(Account account);
 
     /**
-     * determine if there is any pending entry that has not been processed for the given criteria
+     * This method checks that the given employee has any labor ledger entries?
      * 
-     * @param fieldValues the given search criteria
-     * @return true if there is one or more pending entries that have not been processed for the given criteria; otherwise, false
+     * @param emplid
+     * @return
      */
-    public boolean hasPendingLaborLedgerEntry(Map fieldValues);
+    public boolean hasPendingLaborLedgerEntry(String emplid);
+
+    /**
+     * This method clears cancelled/disapproved entries to clear pending labor entries
+     */
+    public void deleteEntriesForCancelledOrDisapprovedDocuments();
 
     /**
      * This method generates labor ledger pending entries.
@@ -57,7 +62,7 @@ public interface LaborLedgerPendingEntryService {
      * 
      * @return all approved pending entries
      */
-    public Iterator<LaborLedgerPendingEntry> findApprovedPendingLedgerEntries();
+    public Iterator<PendingLedgerEntry> findApprovedPendingLedgerEntries();
 
     /**
      * Delete the pending entries with the given financial document approved code
@@ -65,27 +70,4 @@ public interface LaborLedgerPendingEntryService {
      * @param approvedCode
      */
     public void deleteByFinancialDocumentApprovedCode(String financialDocumentApprovedCode);
-
-    /**
-     * This method checks for pending ledger entries that match the current balance inquiry
-     * 
-     * @param emplid
-     * @return
-     */
-    public Iterator findPendingLedgerEntriesForLedgerBalance(Map fieldValues, boolean isApproved);
-
-    /**
-     * Use fieldValues to create a query for matching records of <code>{@link LaborLedgerPendingEntry}</code> instances
-     * 
-     * @param fieldValues properties to match against
-     * @param isApproved Retrieve approved or unapproved entries?
-     */
-    public Collection findPendingEntries(Map fieldValues, boolean isApproved);
-
-    /**
-     * delete pending entries with the given document header id
-     * 
-     * @param documentHeaderId
-     */
-    public void delete(String documentHeaderId);
 }

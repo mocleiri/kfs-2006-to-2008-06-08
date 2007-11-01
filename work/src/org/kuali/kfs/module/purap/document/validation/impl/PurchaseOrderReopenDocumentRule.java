@@ -23,6 +23,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
@@ -31,8 +32,6 @@ import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapParameterConstants;
@@ -40,11 +39,7 @@ import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
-import org.kuali.module.purap.service.PurchaseOrderService;
 
-/**
- * Rules for Purchase Order Reopen document creation.
- */
 public class PurchaseOrderReopenDocumentRule extends PurchasingDocumentRuleBase {
 
     /**
@@ -57,9 +52,6 @@ public class PurchaseOrderReopenDocumentRule extends PurchasingDocumentRuleBase 
         return isValid &= processValidation(porDocument);
     }
 
-    /**
-     * @see org.kuali.core.rules.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
-     */
     @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
         boolean isValid = true;
@@ -67,9 +59,6 @@ public class PurchaseOrderReopenDocumentRule extends PurchasingDocumentRuleBase 
         return isValid &= processValidation(porDocument);
     }
 
-    /**
-     * @see org.kuali.core.rules.DocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.rule.event.ApproveDocumentEvent)
-     */
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(ApproveDocumentEvent approveEvent) {
         boolean isValid = true;
@@ -77,36 +66,27 @@ public class PurchaseOrderReopenDocumentRule extends PurchasingDocumentRuleBase 
         return isValid &= processValidation(porDocument);
     }
 
-    /**
-     * Central method to control the processing of rule checks. Checks that the purchase order document is not null, that it is in
-     * the correct status, and that the user is in the purchasing workgroup.
-     * 
-     * @param document A PurchaseOrderDocument. (A PurchasePaymentCloseDocument at this point.)
-     * @return True if the document passes all the validations.
-     */
     private boolean processValidation(PurchaseOrderDocument document) {
         boolean valid = true;
 
         // Check that the PO is not null
         if (ObjectUtils.isNull(document)) {
             throw new ValidationException("Purchase Order Reopen document was null on validation.");
-        }
-        else {
+        } else {
             // TODO: Get this from Business Rules.
             // Check the PO status.
-            PurchaseOrderDocument currentPO = SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(document.getPurapDocumentIdentifier());
-            if (!StringUtils.equalsIgnoreCase(currentPO.getStatusCode(), PurapConstants.PurchaseOrderStatuses.CLOSED) && !StringUtils.equalsIgnoreCase(currentPO.getStatusCode(), PurapConstants.PurchaseOrderStatuses.PENDING_REOPEN)) {
+            if (!StringUtils.equalsIgnoreCase( document.getStatusCode(), PurapConstants.PurchaseOrderStatuses.CLOSED )) {
                 valid = false;
-                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.STATUS_CODE, PurapKeyConstants.ERROR_PURCHASE_ORDER_STATUS_INCORRECT, PurapConstants.PurchaseOrderStatuses.CLOSED);
-            }
-
+                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.STATUS_CODE, PurapKeyConstants.ERROR_PURCHASE_ORDER_STATUS_INCORRECT, PurapConstants.PurchaseOrderStatuses.CLOSED );
+            }           
+            
             // Check that the user is in purchasing workgroup.
             String initiatorNetworkId = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
             UniversalUserService uus = SpringContext.getBean(UniversalUserService.class);
             UniversalUser user = null;
             try {
                 user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
-                String purchasingGroup = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
+                String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
                 if (!uus.isMember(user, purchasingGroup)) {
                     valid = false;
                     GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURAP_DOC_ID, PurapKeyConstants.ERROR_USER_NONPURCHASING);
@@ -114,24 +94,37 @@ public class PurchaseOrderReopenDocumentRule extends PurchasingDocumentRuleBase 
             }
             catch (UserNotFoundException ue) {
                 valid = false;
-            }
+            }  
         }
         return valid;
     }
 
-    /**
-     * @see org.kuali.module.purap.rules.PurapAccountingDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.kfs.document.AccountingDocument,
-     *      org.kuali.kfs.bo.AccountingLine, org.kuali.kfs.bo.GeneralLedgerPendingEntry)
-     */
     @Override
     protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument accountingDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         super.customizeExplicitGeneralLedgerPendingEntry(accountingDocument, accountingLine, explicitEntry);
-        PurchaseOrderDocument po = (PurchaseOrderDocument) accountingDocument;
-        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(po, accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_DEBIT_CODE, PurapDocTypeCodes.PO_DOCUMENT, true);
+        PurchaseOrderDocument po = (PurchaseOrderDocument)accountingDocument;
+        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(po, 
+                accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_DEBIT_CODE, PurapDocTypeCodes.PO_DOCUMENT, true);
+        explicitEntry.setFinancialDocumentTypeCode(PurapDocTypeCodes.PO_REOPEN_DOCUMENT);  //don't think i should have to override this, but default isn't getting the right PO doc
 
-        // don't think i should have to override this, but default isn't getting the right PO doc
-        explicitEntry.setFinancialDocumentTypeCode(PurapDocTypeCodes.PO_REOPEN_DOCUMENT);
-        explicitEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
+
+//        purapCustomizeGeneralLedgerPendingEntry(po, accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_DEBIT_CODE, true);
+//        
+//        explicitEntry.setTransactionLedgerEntryDescription(entryDescription(po.getVendorName()));
+//        explicitEntry.setFinancialDocumentTypeCode(PO_REOPEN);  //don't think i should have to override this, but default isn't getting the right PO doc
+//        
+//        UniversityDate uDate = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+//        if (po.getPostingYear().compareTo(uDate.getUniversityFiscalYear()) > 0) {
+//            //USE NEXT AS SET ON PO; POs can be forward dated to not encumber until next fiscal year
+//            explicitEntry.setUniversityFiscalYear(po.getPostingYear());
+//            explicitEntry.setUniversityFiscalPeriodCode(MONTH1);
+//        }
+//        else {
+//            //USE CURRENT; don't use FY on PO in case it's a prior year
+//            explicitEntry.setUniversityFiscalYear(uDate.getUniversityFiscalYear());
+//            explicitEntry.setUniversityFiscalPeriodCode(uDate.getUniversityFiscalAccountingPeriod());
+//            //TODO do we need to update the doc posting year?
+//        }
     }
 
 }

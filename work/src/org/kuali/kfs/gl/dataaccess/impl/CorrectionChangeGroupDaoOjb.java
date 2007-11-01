@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeGroupDaoOjb.class);
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#delete(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void delete(CorrectionChangeGroup group) {
@@ -38,6 +39,7 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumber(java.lang.String)
      */
     public Collection findByDocumentNumber(String documentNumber) {
@@ -50,8 +52,8 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     }
 
     /**
-     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumberAndCorrectionChangeGroupNumber(java.lang.String,
-     *      java.lang.Integer)
+     * 
+     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumberAndCorrectionChangeGroupNumber(java.lang.String, java.lang.Integer)
      */
     public CorrectionChangeGroup findByDocumentNumberAndCorrectionChangeGroupNumber(String documentNumber, Integer CorrectionChangeGroupNumber) {
         LOG.debug("findByDocumentNumberAndCorrectionChangeGroupNumber() started");
@@ -59,13 +61,14 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
         Criteria criteria = new Criteria();
         criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
         criteria.addEqualTo("correctionChangeGroupLineNumber", CorrectionChangeGroupNumber);
-
+     
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChangeGroup.class, criteria);
 
         return (CorrectionChangeGroup) getPersistenceBrokerTemplate().getObjectByQuery(query);
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#save(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void save(CorrectionChangeGroup group) {

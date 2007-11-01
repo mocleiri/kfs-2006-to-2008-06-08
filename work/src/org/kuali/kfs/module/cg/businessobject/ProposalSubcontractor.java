@@ -18,23 +18,21 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
+import org.kuali.module.kra.routingform.bo.RoutingFormSubcontractor;
 
 /**
  * 
  */
-public class ProposalSubcontractor extends PersistableBusinessObjectBase implements Inactivateable {
+public class ProposalSubcontractor extends PersistableBusinessObjectBase {
 
     private String proposalSubcontractorNumber;
     private Long proposalNumber;
     private String subcontractorNumber;
     private KualiDecimal proposalSubcontractorAmount;
     private String proposalSubcontractorDescription;
-    private boolean active = true;
-
+    
     private Subcontractor subcontractor;
 
     /**
@@ -45,9 +43,22 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
     }
 
     /**
+     * Constructs a ProposalSubcontractor with a Proposal Number and uses a RoutingFormSubcontractor as a template.
+     * @param proposalNumber The proposalNumber for the Proposal that this ProposalSubcontractor will be associated with
+     * @param routingFormSubcontractor The routingFormSubcontractor that will act as a template for this ProposalSubcontractor
+     */
+    public ProposalSubcontractor(Long proposalNumber, RoutingFormSubcontractor routingFormSubcontractor) {
+        this.setProposalNumber(proposalNumber);
+        this.setProposalSubcontractorNumber(routingFormSubcontractor.getRoutingFormSubcontractorSequenceNumber().toString());
+        this.setSubcontractorNumber(routingFormSubcontractor.getRoutingFormSubcontractorNumber());
+        this.setProposalSubcontractorAmount(routingFormSubcontractor.getRoutingFormSubcontractorAmount().kualiDecimalValue());
+    }
+    
+    /**
      * Gets the proposalSubcontractorNumber attribute.
      * 
      * @return Returns the proposalSubcontractorNumber
+     * 
      */
     public String getProposalSubcontractorNumber() {
         return proposalSubcontractorNumber;
@@ -57,6 +68,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the proposalSubcontractorNumber attribute.
      * 
      * @param proposalSubcontractorNumber The proposalSubcontractorNumber to set.
+     * 
      */
     public void setProposalSubcontractorNumber(String proposalSubcontractorNumber) {
         this.proposalSubcontractorNumber = proposalSubcontractorNumber;
@@ -67,6 +79,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Gets the proposalNumber attribute.
      * 
      * @return Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
@@ -76,6 +89,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the proposalNumber attribute.
      * 
      * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -86,6 +100,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Gets the subcontractorNumber attribute.
      * 
      * @return Returns the subcontractorNumber
+     * 
      */
     public String getSubcontractorNumber() {
         return subcontractorNumber;
@@ -95,6 +110,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the subcontractorNumber attribute.
      * 
      * @param subcontractorNumber The subcontractorNumber to set.
+     * 
      */
     public void setSubcontractorNumber(String subcontractorNumber) {
         this.subcontractorNumber = subcontractorNumber;
@@ -105,6 +121,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Gets the proposalSubcontractorAmount attribute.
      * 
      * @return Returns the proposalSubcontractorAmount
+     * 
      */
     public KualiDecimal getProposalSubcontractorAmount() {
         return proposalSubcontractorAmount;
@@ -114,14 +131,14 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the proposalSubcontractorAmount attribute.
      * 
      * @param proposalSubcontractorAmount The proposalSubcontractorAmount to set.
+     * 
      */
     public void setProposalSubcontractorAmount(KualiDecimal proposalSubcontractorAmount) {
         this.proposalSubcontractorAmount = proposalSubcontractorAmount;
     }
 
     /**
-     * Gets the proposalSubcontractorDescription attribute.
-     * 
+     * Gets the proposalSubcontractorDescription attribute. 
      * @return Returns the proposalSubcontractorDescription.
      */
     public String getProposalSubcontractorDescription() {
@@ -130,29 +147,10 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
 
     /**
      * Sets the proposalSubcontractorDescription attribute value.
-     * 
      * @param proposalSubcontractorDescription The proposalSubcontractorDescription to set.
      */
     public void setProposalSubcontractorDescription(String proposalSubcontractorDescription) {
         this.proposalSubcontractorDescription = proposalSubcontractorDescription;
-    }
-
-    /**
-     * Gets the active attribute.
-     * 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * 
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**
@@ -168,8 +166,8 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      */
     public void setSubcontractor(Subcontractor subcontractor) {
         this.subcontractor = subcontractor;
-    }
-
+    }    
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -181,18 +179,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
         }
         m.put("subcontractorNumber", this.subcontractorNumber);
         return m;
-    }
+    }    
 
-    /**
-     * This can be displayed by Proposal.xml lookup results.
-     * 
-     * @see Object#toString()
-     */
-    @Override
-    public String toString() {
-        // todo: get "nonexistent" from ApplicationResources.properties via KFSKeyConstants?
-        String name = ObjectUtils.isNull(getSubcontractor()) ? "nonexistent" : getSubcontractor().getSubcontractorName();
-        String description = getProposalSubcontractorDescription() == null ? "" : " " + getProposalSubcontractorDescription();
-        return name + " " + getProposalSubcontractorAmount() + description;
-    }
+
 }

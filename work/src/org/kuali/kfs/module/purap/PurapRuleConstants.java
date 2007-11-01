@@ -21,16 +21,11 @@ package org.kuali.module.purap;
 public class PurapRuleConstants {
 
     // GROUP NAMES
-    public static String CREDIT_MEMO_RULES_GROUP = "Kuali.Purchasing.CreditMemoDocument";
+    public static String PURAP_ADMIN_GROUP = "PurapAdminGroup";
 
     // RULE NAMES
-    public static final String ALLOW_ENCUMBER_NEXT_YEAR_DAYS = "ALLOW_ENCUMBER_NEXT_YEAR_DAYS";
-    public static final String ALLOW_APO_NEXT_FY_DAYS = "ALLOW_APO_NEXT_FY_DAYS";
-    public static final String ALLOW_BACKPOST_DAYS = "ALLOW_BACKPOST_DAYS";
+    public static final String PURAP_DOCUMENT_PO_ACTIONS = "PURAP.DOCUMENT.PO.ACTIONS";
+    public static final String PURAP_DOCUMENT_PREQ_ACTIONS = "PURAP.DOCUMENT.PO.ACTIONS";
+    public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = "PURAP.DOCUMENT.ASSIGN.CM.ACTIONS";
 
-    public static final String INVALID_OBJECT_LEVELS_BY_OBJECT_TYPE_PARM_NM = "INVALID_OBJECT_LEVELS_BY_OBJECT_TYPE";
-    public static final String VALID_OBJECT_LEVELS_BY_OBJECT_TYPE_PARM_NM = "VALID_OBJECT_LEVELS_BY_OBJECT_TYPE";
-    public static final String RESTRICTED_OBJECT_SUB_TYPE_PARM_NM = "OBJECT_SUB_TYPES";
-
-    public static final String PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO = "REQ_AND_PO_VENDOR_TYPES";
 }

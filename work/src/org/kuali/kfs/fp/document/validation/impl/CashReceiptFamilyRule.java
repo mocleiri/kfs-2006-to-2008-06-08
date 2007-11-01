@@ -15,25 +15,27 @@
  */
 package org.kuali.module.financial.rules;
 
-import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
-
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.KFSKeyConstants.CashReceipt;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.ObjLevel;
+import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.document.CashReceiptFamilyBase;
-import org.kuali.module.financial.service.CashDrawerService;
-import org.kuali.module.financial.service.CashReceiptService;
+
+import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH.DOCUMENT_ERROR_PREFIX;
 
 /**
  * Business rule(s) shared amongst to CashReceipt-related documents.
@@ -71,8 +73,8 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         if (valid) {
             CashReceiptFamilyBase crd = (CashReceiptFamilyBase) approveEvent.getDocument();
 
-            String unitName = SpringContext.getBean(CashReceiptService.class).getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
-            CashDrawer cd = SpringContext.getBean(CashDrawerService.class).getByWorkgroupName(unitName, false);
+            String unitName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
+            CashDrawer cd = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(unitName, false);
             if (cd == null) {
                 throw new IllegalStateException("There is no cash drawer associated with unitName '" + unitName + "' from cash receipt " + crd.getDocumentNumber());
             }
@@ -111,6 +113,106 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         }
 
         return isValid;
+    }
+
+    /**
+     * Overrides to perform the universal rule in the super class in addition to CashReceipt specific rules. This method leverages
+     * the APC for checking restricted object type values.
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
+        boolean valid = true;
+
+        valid &= super.isObjectTypeAllowed(accountingLine);
+
+        if (valid) {
+            KualiParameterRule rule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(KUALI_TRANSACTION_PROCESSING_CASH_RECEIPT_SECURITY_GROUPING, RESTRICTED_OBJECT_TYPE_CODES);
+
+            ObjectCode objectCode = accountingLine.getObjectCode();
+            if (ObjectUtils.isNull(objectCode)) {
+                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+            }
+
+            if (rule.failsRule(objectCode.getFinancialObjectTypeCode())) {
+                valid = false;
+
+                // add message
+                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_TYPE_CODE_FOR_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectTypeCode() });
+            }
+        }
+
+        return valid;
+    }
+
+    /**
+     * Overrides to validate specific object codes for the Cash Receipt document. This method leverages the APC for checking
+     * restricted object consolidation values.
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectConsolidationAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectConsolidationAllowed(AccountingLine accountingLine) {
+        boolean valid = true;
+
+        valid &= super.isObjectConsolidationAllowed(accountingLine);
+
+        if (valid) {
+            KualiParameterRule rule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(KUALI_TRANSACTION_PROCESSING_CASH_RECEIPT_SECURITY_GROUPING, RESTRICTED_CONSOLIDATED_OBJECT_CODES);
+
+            ObjectCode objectCode = accountingLine.getObjectCode();
+            if (ObjectUtils.isNull(objectCode)) {
+                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+            }
+
+            ObjLevel objectLevel = objectCode.getFinancialObjectLevel();
+            if (ObjectUtils.isNull(objectCode)) {
+                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+            }
+
+            String consolidatedObjectCode = objectLevel.getConsolidatedObjectCode();
+
+            if (rule.failsRule(consolidatedObjectCode)) {
+                valid = false;
+
+                // add message
+                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_CONSOLIDATED_OBJECT_CODE, new String[] { objectCode.getFinancialObjectCode(), objectLevel.getFinancialObjectLevelCode(), consolidatedObjectCode });
+            }
+        }
+
+        return valid;
+    }
+
+    /**
+     * Overrides to perform the universal rule in the super class in addition to CashReceipt specific rules. This method leverages
+     * the APC for checking restricted object sub type values.
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectSubTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
+        boolean valid = true;
+
+        valid &= super.isObjectSubTypeAllowed(accountingLine);
+
+        if (valid) {
+            KualiParameterRule rule = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterRule(KUALI_TRANSACTION_PROCESSING_CASH_RECEIPT_SECURITY_GROUPING, RESTRICTED_OBJECT_SUB_TYPE_CODES);
+
+            ObjectCode objectCode = accountingLine.getObjectCode();
+            if (ObjectUtils.isNull(objectCode)) {
+                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+            }
+
+            if (rule.failsRule(objectCode.getFinancialObjectSubTypeCode())) {
+                valid = false;
+
+                // add message
+                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_INVALID_OBJECT_SUB_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectCode.getFinancialObjectSubTypeCode() });
+            }
+        }
+
+        return valid;
     }
 
     /**
@@ -155,6 +257,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
 
     /**
      * @see IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * 
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
