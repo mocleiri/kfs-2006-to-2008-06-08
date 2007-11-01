@@ -36,11 +36,12 @@
 		<documentTypeName>KualiLaborBenefitsCalculationMaintenanceDocument</documentTypeName>
 		<documentTypeCode>BCAL</documentTypeCode>
 
-		<label>Labor Benefits Calculation</label>
+		<label>Benefits Calculation Maintenance Document</label>
+		<shortLabel>Benefit Calc Maint Doc</shortLabel>
 		
-		<summary>Labor Calculation Maintenance Document</summary>
-		<description>Document used to create or update Labor calculations.</description>
-        <help parameterNamespace="KFS-LD" parameterDetailType="BenefitsCalculation" parameterName="LABOR_BENEFITS_CALCULATION" />
+		<summary>Benefits Calculation Maintenance Document</summary>
+		<description>Document used to create or update Benefit calculations.</description>
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_LABOR_BENEFIT_CALCULATION" />
 
         <lockingKeys>
 			<field attributeName="universityFiscalYear" />
@@ -56,13 +57,13 @@
         </defaultExistenceChecks>
 
 	    <maintainableSections>
-	        <maintainableSection title="Edit Labor Calculation">
+	        <maintainableSection title="Edit Benefit Calculation">
 	        	<maintainableItems>
 	            	<maintainableField name="universityFiscalYear" required="true" />
 	            	<maintainableField name="chartOfAccountsCode" required="true" />
 	            	<maintainableField name="positionBenefitTypeCode" required="true"/>
-	            	<maintainableField name="positionFringeBenefitObjectCode" required="true"/>
-	            	<maintainableField name="positionFringeBenefitPercent" required="true"/>
+	            	<maintainableField name="positionFringeBenefitObjectCode" required="false"/>
+	            	<maintainableField name="positionFringeBenefitPercent" required="false"/>
 	            	<maintainableField name="versionNumber" />
 	         	</maintainableItems>
 	        </maintainableSection>

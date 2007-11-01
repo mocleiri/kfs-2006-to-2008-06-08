@@ -1,27 +1,34 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
-
-import org.kuali.kfs.ParameterKeyConstants;
 
 
 /**
  * Holds constants for disbursement voucher and payee documents.
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public interface DisbursementVoucherRuleConstants extends ParameterKeyConstants {
+public interface DisbursementVoucherRuleConstants {
 
     // payment methods
     public static String PAYMENT_METHOD_CHECK = "P";
@@ -45,83 +52,57 @@ public interface DisbursementVoucherRuleConstants extends ParameterKeyConstants 
     // document location
     public static String NO_DOCUMENTATION_LOCATION = "N";
 
+    // apc security group constants
+    public static String DV_DOCUMENT_PARAMETERS_GROUP_NM = "DVDocumentParameters";
+    public static String GLOBAL_FIELD_RESTRICTIONS_GROUP_NM = "DVGlobalFieldRestrictions";
+    public static String PAYMENT_OBJECT_LEVEL_GROUP_NM = "DVPaymentObjectLevelRestrictions";
+    public static String PAYMENT_OBJECT_CODE_GROUP_NM = "DVPaymentObjectCodeRestrictions";
+    public static String OBJECT_CODE_PAYMENT_GROUP_NM = "DVObjectCodePaymentRestrictions";
+    public static String OBJECT_LEVEL_PAYMENT_GROUP_NM = "DVObjectLevelPaymentRestrictions";
+    public static String PAYEE_PAYMENT_GROUP_NM = "DVPayeePaymentTypeRestrictions";
+    public static String ALIEN_INDICATOR_DOC_LOCATION_GROUP_NM = "DVAlienIndicatorDocLocationRestrictions";
+    public static String ALIEN_INDICATOR_PAYMENT_GROUP_NM = "DVAlienIndicatorPaymentRestrictions";
+    public static String CAMPUS_DOC_LOCATION_GROUP_NM = "DVCampusDocLocationRestrictions";
+    public static String PAYMENT_DOC_LOCATION_GROUP_NM = "DVPaymentDocLocationRestrictions";
+    public static String PAYMENT_SUB_FUND_GROUP_NM = "DVPaymentSubFundRestrictions";
+    public static String SUB_FUND_OBJECT_SUB_TYPE_GROUP_NM = "DVSubFundObjectSubTypeRestrictions";
+    public static String NRA_TAX_PARM_GROUP_NM = "DVNRATaxParameters";
 
-    public static class DocumentStatusCodes {
-        public static String APPROVED = "A";
-        public static String EXTRACTED = "E";
-    }
-
-    public static class PaymentReasonCodes {
-        public static String PRIZE = "A";
-        public static String OUT_OF_POCKET = "B";
-        public static String RESEARCH_PARTICIPANT = "C";
-        public static String DECEDENT = "D";
-        public static String SERVICES = "E";
-        public static String REFUND = "F";
-        public static String UTILITIES = "G";
-        public static String MEDICAL = "H";
-        public static String REVOLVING_FUND = "K";
-        public static String CONTRACTUAL_AGREEMENTS = "L";
-        public static String MOVING = "M";
-        public static String TRAVEL_NONEMPLOYEE = "N";
-        public static String TRAVEL_PREPAID = "P";
-        public static String ROYALTIES = "R";
-        public static String RENTAL_PAYMENT = "T";
-        public static String SUBSCRIPTIONS = "W";
-        public static String TRAVEL_HONORARIUM = "X";
-        public static String CLAIMS = "Z";
-    }
-
-    public static class DvPdpExtractGroup {
-        public static String DV_PDP_ORG_CODE = "PRE_DISBURSEMENT_EXTRACT_ORGANIZATION";
-        public static String DV_PDP_SBUNT_CODE = "PRE_DISBURSEMENT_EXTRACT_SUB_UNIT";
-        public static String DV_PDP_USER_ID = "PRE_DISBURSEMENT_EXTRACT_USER";
-    }
-
-    // system parameter parameter constants
-    public static final String OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_TYPES";
-    public static final String OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_LEVELS";
-    public static final String OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_SUB_TYPES";
-    public static final String SUB_FUND_GLOBAL_RESTRICTION_PARM_NM = "SUB_FUND_GROUPS";
-    public static final String FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM = "HIGHER_ED_FUNCTIONS";
-
-    public static final String VALID_DOC_LOC_BY_PAYMENT_REASON_PARM = "VALID_DOCUMENTATION_LOCATIONS_BY_PAYMENT_REASON";
-    public static final String VALID_DOC_LOC_BY_CAMPUS_PARM = "VALID_DOCUMENTATION_LOCATIONS_BY_CAMPUS";
-    public static final String VALID_OBJ_LEVEL_BY_PAYMENT_REASON_PARM = "VALID_OBJECT_LEVELS_BY_PAYMENT_REASON";
-    public static final String VALID_OBJ_CODE_BY_PAYMENT_REASON_PARM = "VALID_OBJECT_CODES_BY_PAYMENT_REASON";
-    public static final String VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM = "VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP";
-    public static final String VALID_PAYMENT_REASONS_BY_PAYEE_TYPE_PARM = "VALID_PAYMENT_REASONS_BY_PAYEE_TYPE";
-    public static final String VALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON_PARM = "VALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON";
-
-    public static final String INVALID_DOC_LOC_BY_PAYMENT_REASON_PARM = "INVALID_DOCUMENTATION_LOCATIONS_BY_PAYMENT_REASON";
-    public static final String INVALID_DOC_LOC_BY_CAMPUS_PARM = "INVALID_DOCUMENTATION_LOCATIONS_BY_CAMPUS";
-    public static final String INVALID_OBJ_LEVEL_BY_PAYMENT_REASON_PARM = "INVALID_OBJECT_LEVELS_BY_PAYMENT_REASON";
-    public static final String INVALID_OBJ_CODE_BY_PAYMENT_REASON_PARM = "INVALID_OBJECT_CODES_BY_PAYMENT_REASON";
-    public static final String INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM = "INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP";
-    public static final String INVALID_PAYMENT_REASONS_BY_PAYEE_TYPE_PARM = "INVALID_PAYMENT_REASONS_BY_PAYEE_TYPE";
-    public static final String INVALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON_PARM = "INVALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON";
-
-    public static final String FEDERAL_TAX_PARM_PREFIX = "NON_RESIDENT_ALIEN_TAX_FEDERAL_";
-    public static final String STATE_TAX_PARM_PREFIX = "NON_RESIDENT_ALIEN_TAX_STATE_";
-    public static final String TAX_PARM_ACCOUNT_SUFFIX = "ACCOUNT";
-    public static final String TAX_PARM_CHART_SUFFIX = "CHART";
-    public static final String TAX_PARM_OBJECT_BY_INCOME_CLASS_SUFFIX = "OBJECT_CODE_BY_INCOME_CLASS";
-    public static final String ALIEN_INDICATOR_CHECKED_PARM_NM = "NON_RESIDENT_ALIEN_DOCUMENTATION_LOCATIONS";
-    public static final String ALIEN_PAYMENT_REASONS_PARM_NM = "NON_RESIDENT_ALIEN_PAYMENT_REASONS";
-    public static final String TRAVEL_PER_DIEM_MESSAGE_PARM_NM = "TRAVEL_PER_DIEM_LINK_PAGE_MESSAGE";
-    public static final String DEFAULT_DOC_LOCATION_PARM_NM = "DEFAULT_DOCUMENTATION_LOCATION";
-    public static final String ALLOW_OBJECT_CODE_EDITS = "ALLOW_ENROUTE_EDIT_OBJECT_CODES_IND";
-    public static final String TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM = "TAX_DOCUMENTATION_LOCATION_CODE";
-    public static final String W9_OWNERSHIP_TYPES_PARM_NM = "W9_OWNERSHIP_TYPES";
-    public static final String NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM = "NONEMPLOYEE_TRAVEL_PAYMENT_REASONS";
-    public static final String NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_PARM_NM = "NONEMPLOYEE_TRAVEL_ACTUAL_MILEAGE_LIMIT_IND";
-    public static final String PREPAID_TRAVEL_PAY_REASONS_PARM_NM = "PREPAID_TRAVEL_PAYMENT_REASONS";
-    public static final String REVOLVING_FUND_PAY_REASONS_PARM_NM = "REVOLVING_FUND_PAYMENT_REASONS";
-    public static final String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
-    public static final String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
-    public static final String PERFORM_PREPAID_EMPL_PARM_NM = "CHECK_PREPAID_ACTIVE_EMPLOYEE_IND";
-    public static final String CHECK_EMPLOYEE_PAID_OUTSIDE_PAYROLL_PARM_NM = "CHECK_EMPLOYEE_PAID_OUTSIDE_PAYROLL_IND";
-    public static final String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
+    // apc parameter constants
+    public static String OBJECT_CODE_PARM_PREFIX = "OBJECT_CODE_";
+    public static String OBJECT_LEVEL_PARM_PREFIX = "OBJECT_LEVEL_";
+    public static String PAYMENT_PARM_PREFIX = "PAYMENT_REASON_";
+    public static String OBJECT_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_TYPE_RESTRICTIONS";
+    public static String OBJECT_LEVEL_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_LEVEL_RESTRICTIONS";
+    public static String OBJECT_SUB_TYPE_GLOBAL_RESTRICTION_PARM_NM = "OBJECT_SUB_TYPE_RESTRICTIONS";
+    public static String SUB_FUND_GLOBAL_RESTRICTION_PARM_NM = "SUB_FUND_RESTRICTIONS";
+    public static String FUNCTION_CODE_GLOBAL_RESTRICTION_PARM_NM = "FUNCTION_CODE_RESTRICTIONS";
+    public static String EMPLOYEE_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_E";
+    public static String DVPAYEE_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_P";
+    public static String VENDOR_PAYEE_PAYMENT_PARM = "PAYEE_TYPE_V";
+    public static String FEDERAL_TAX_ACCOUNT_PARM_NM = "FEDERAL_TAX_ACCOUNT";
+    public static String STATE_TAX_ACCOUNT_PARM_NM = "STATE_TAX_ACCOUNT";
+    public static String FEDERAL_TAX_CHART_PARM_NM = "FEDERAL_TAX_CHART";
+    public static String STATE_TAX_CHART_PARM_NM = "STATE_TAX_CHART";
+    public static String FEDERAL_OBJECT_CODE_PARM_PREFIX = "FEDERAL_OBJECT_CODE_";
+    public static String STATE_OBJECT_CODE_PARM_PREFIX = "STATE_OBJECT_CODE_";
+    public static String ALIEN_INDICATOR_CHECKED_PARM_NM = "ALIEN_INDICATOR_CHECKED";
+    public static String CAMPUS_CODE_PARM_PREFIX = "CAMPUS_CODE_";
+    public static String SUB_FUND_CODE_PARM_PREFIX = "SUB_FUND_";
+    public static String TRAVEL_PER_DIEM_MESSAGE_PARM_NM = "TRAVEL_PER_DIEM_LINK_PAGE_MESSAGE";
+    public static String DEFAULT_DOC_LOCATION_PARM_NM = "DEFAULT_DOCUMENTATION_LOCATION";
+    public static String ALLOW_OBJECT_CODE_EDITS = "ALLOW_ROUTE_OBJECT_CODE_EDITS";
+    public static String TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM = "TAX_DOCUMENTATION_LOCATION_CODE";
+    public static String W9_OWNERSHIP_TYPES_PARM_NM = "W9_OWNERSHIP_TYPES";
+    public static String NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM = "NONEMPLOYEE_TRAVEL_PAYMENT_REASONS";
+    public static String PREPAID_TRAVEL_PAY_REASONS_PARM_NM = "PREPAID_TRAVEL_PAYMENT_REASONS";
+    public static String REVOLVING_FUND_PAY_REASONS_PARM_NM = "REVOLVING_FUND_PAYMENT_REASONS";
+    public static String RESEARCH_PAY_REASONS_PARM_NM = "RESEARCH_PAYMENT_REASONS";
+    public static String RESEARCH_CHECK_LIMIT_AMOUNT_PARM_NM = "RESEARCH_NON_VENDOR_PAY_LIMIT_AMOUNT";
+    public static String PERFORM_PREPAID_EMPL_PARM_NM = "PERFORM_PREPAID_ACTIVE_EMPLOPYEE_IND";
+    public static String PERFORM_EMPL_OUTSIDE_PAYROLL_PARM_NM = "RFORM_EMPL_PAID_OUTSIDE_PAYROLL_IND";
+    public static String MOVING_PAY_REASONS_PARM_NM = "MOVING_PAYMENT_REASONS";
+    public static String SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES_PARM_NM = "SWITCH_DEBIT_CREDIT_ACCOUNT_TYPES";
 
     public static String TAX_TYPE_SSN = "1";
     public static String TAX_TYPE_FEIN = "0";

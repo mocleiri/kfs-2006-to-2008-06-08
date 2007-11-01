@@ -38,14 +38,6 @@ public interface CreditMemoService extends AccountsPayableDocumentSpecificServic
     public Iterator<CreditMemoDocument> getCreditMemosToExtract(String chartCode);
 
     /**
-     * Get a credit memo
-     * 
-     * @param documentNumber
-     * @return
-     */
-    public CreditMemoDocument getCreditMemoByDocumentNumber(String documentNumber);
-
-    /**
      * Retrieves the Credit Memo document by document number.
      */
     public CreditMemoDocument getCreditMemoDocumentById(Integer purchasingDocumentIdentifier);
@@ -145,5 +137,5 @@ public interface CreditMemoService extends AccountsPayableDocumentSpecificServic
      * @param cm
      * @param processDate
      */
-    public void markPaid(CreditMemoDocument cm, Date processDate);
+    public void markPaid(CreditMemoDocument cm,Date processDate);
 }

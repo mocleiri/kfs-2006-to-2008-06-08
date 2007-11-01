@@ -29,16 +29,19 @@
 		<authorizations>
 			<authorization action="initiate">
 				<workgroups>
-					<workgroup>PURAP_PUR_ADMIN</workgroup>
+					<workgroup>kualiUniversalGroup</workgroup>
 				</workgroups>
 			</authorization>
 		</authorizations>
 
-		<documentTypeName>CampusParameterMaintenanceDocument</documentTypeName>
+		<documentTypeName>KualiCampusParametersMaintenanceDocument</documentTypeName>
 		<documentTypeCode>PMCP</documentTypeCode>
 
-		<label>Campus Parameter</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="CampusParameter" parameterName="CAMPUS_PARAMETER" />
+		<label>Campus Parameter Maintenance Document</label>
+		<shortLabel>Campus Parameter Maint Doc</shortLabel>
+
+		<summary>Campus Parameter Maintenance Document</summary>
+		<description>Document used to create or update Campus Parameter objects</description>
 
         <lockingKeys>
 			<field attributeName="campusCode" />

@@ -21,14 +21,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 
 /**
  * The values are the same as the disbursementVoucherDocumentationLocationCode in the DisbursementVoucherDocumentationLocation
  * class.
+ * 
+ * 
  */
 public class DocumentationLocationCodeDescriptionFormatter extends CodeDescriptionFormatterBase {
     @Override
@@ -41,7 +42,7 @@ public class DocumentationLocationCodeDescriptionFormatter extends CodeDescripti
         Map<String, PersistableBusinessObject> map = new HashMap<String, PersistableBusinessObject>();
         Map<String, Object> criteria = new HashMap<String, Object>();
         criteria.put(KFSConstants.DISBURSEMENT_VOUCHER_DOCUMENTATION_LOCATION_CODE_PROPERTY_NAME, values);
-        Collection<DisbursementVoucherDocumentationLocation> coll = SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(DisbursementVoucherDocumentationLocation.class, criteria, "versionNumber", true);
+        Collection<DisbursementVoucherDocumentationLocation> coll = SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(DisbursementVoucherDocumentationLocation.class, criteria, "versionNumber", true);
         // by sorting on ver #, we can guarantee that the most recent value will remain in the map (assuming the iterator returns
         // BOs in order)
         for (DisbursementVoucherDocumentationLocation dvdl : coll) {

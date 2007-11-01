@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.ReportingCodesRule</businessRulesClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,13 +33,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ReportingCodesMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiReportingCodesMaintenanceDocument</documentTypeName>
         <documentTypeCode>RPTC</documentTypeCode>
-        <label>Financial Reporting Code</label>
+        <label>Financial Reporting Code Maintenance Document</label>
+        <shortLabel>FinRptCdMaintDoc</shortLabel>
         <summary>Financial Reporting Code Maintenance Document</summary>
         <description>Maintenance document which allows you to create, remove or modify Financial Reporting Codes.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="ReportingCodes" parameterName="FINANCIAL_REPORTING_CODE" />
-
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_FINANCIAL_REPORTING_CODE" />
+        
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
             <field attributeName="organizationCode" />
@@ -63,7 +64,7 @@
                     <maintainableField name="universalUser.personUserIdentifier" required="true" />
                     <maintainableField name="universalUser.personName" required="false" readOnly="true" />
                     <maintainableField name="financialReportsToReportingCode" required="true" />
-                    <maintainableField name="versionNumber" />
+                    <maintainableField name="versionNumber" required="true" />
 
                 </maintainableItems>
             </maintainableSection>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import java.util.Map;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.dao.EncumbranceDao;
 import org.kuali.module.gl.service.EncumbranceService;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ */
 public class EncumbranceServiceImpl implements EncumbranceService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceServiceImpl.class);
 
