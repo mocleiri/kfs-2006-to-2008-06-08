@@ -15,7 +15,11 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.module.financial.rules.ServiceBillingDocumentRuleConstants.RESTRICTED_OBJECT_TYPE_CODES;
+import static org.kuali.module.financial.rules.ServiceBillingDocumentRuleConstants.SERVICE_BILLING_DOCUMENT_SECURITY_GROUPING;
+
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSPropertyConstants;
@@ -62,6 +66,14 @@ public class ServiceBillingDocumentRule extends InternalBillingDocumentRule {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @see org.kuali.module.financial.rules.InternalBillingDocumentRule#getObjectTypeRule()
+     */
+    @Override
+    protected KualiParameterRule getObjectTypeRule() {
+        return KualiParameterRule.and(super.getObjectTypeRule(), getParameterRule(SERVICE_BILLING_DOCUMENT_SECURITY_GROUPING, RESTRICTED_OBJECT_TYPE_CODES));
     }
 
     /**
