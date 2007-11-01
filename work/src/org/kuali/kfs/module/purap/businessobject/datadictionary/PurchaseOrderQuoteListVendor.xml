@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.PurchaseOrderQuoteListVendor">
+
 
         <inquiry>
             <title>Purchase Order Quote List Vendor Inquiry</title>
@@ -67,6 +68,8 @@
                     <text size="11" />
                 </control>
 
+                <summary>purchaseOrderQuoteListIdentifier</summary>
+                <description>purchaseOrderQuoteListIdentifier description...</description>
 			</attribute>
 
             <attribute name="vendorDetailAssignedIdentifier" forceUppercase="true">
@@ -77,9 +80,11 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="12" />
                 </control>
 
+                <summary>vendorDetailAssignedIdentifier</summary>
+                <description>vendorDetailAssignedIdentifier description...</description>
 			</attribute>
 
             <attribute name="vendorHeaderGeneratedIdentifier" forceUppercase="true">
@@ -90,9 +95,11 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="12" />
                 </control>
 
+                <summary>vendorHeaderGeneratedIdentifier</summary>
+                <description>vendorHeaderGeneratedIdentifier description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -106,13 +113,9 @@
                     <text size="10" />
                 </control>
 
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
 			</attribute>
-
-			<attributeReference name="vendorDetail.vendorName" sourceClassName="org.kuali.module.vendor.bo.VendorDetail" sourceAttributeName="vendorName">
-				<control>
-					<lookupReadonly />
-				</control>
-			</attributeReference>
 
         </attributes>
     </businessObject>

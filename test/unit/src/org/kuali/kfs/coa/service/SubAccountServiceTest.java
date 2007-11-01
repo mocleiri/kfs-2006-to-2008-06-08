@@ -1,42 +1,60 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.service;
 
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.SubAccount;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.fixtures.SubAccountFixture;
+import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the SubAccount service.
+ * 
+ * @author Kuali Nervous System Team ()
  */
-@ConfigureContext
-public class SubAccountServiceTest extends KualiTestBase {
+@WithTestSpringContext
+public class SubAccountServiceTest extends KualiTestBaseWithFixtures {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SubAccountServiceTest.class);
 
-    private final static SubAccount subAccount = SubAccountFixture.VALID_SUB_ACCOUNT.createSubAccount();
+    private SubAccountService subAccountService;
+    private final static String CHART = "BA";
+    private final static String ACCOUNT = "6044900";
+    private final static String SUB_ACCOUNT = "ARREC";
 
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        setSubAccountService((SubAccountService) SpringServiceLocator.getSubAccountService());
+    }
 
     public void testA21SubAccount() {
-        SubAccount sa = SpringContext.getBean(SubAccountService.class).getByPrimaryId(subAccount.getChartOfAccountsCode(), subAccount.getAccountNumber(), subAccount.getSubAccountNumber());
+        SubAccount sa;
 
-        assertTrue("expect to find this sub account: " + subAccount.getChartOfAccountsCode() + "/" + subAccount.getAccountNumber() + "/" + subAccount.getSubAccountNumber(), ObjectUtils.isNotNull(sa));
+        sa = subAccountService.getByPrimaryId(CHART, ACCOUNT, SUB_ACCOUNT);
+
+        assertTrue("expect to find this sub account: " + CHART + "/" + ACCOUNT + "/" + SUB_ACCOUNT, ObjectUtils.isNotNull(sa));
         A21SubAccount a21 = sa.getA21SubAccount();
         assertTrue("expect this to have a21subaccount", ObjectUtils.isNotNull(a21));
         a21.getIndirectCostRecoveryAccount();
@@ -44,28 +62,25 @@ public class SubAccountServiceTest extends KualiTestBase {
 
     public void testGetByPrimaryId() throws Exception {
         SubAccount sa = new SubAccount();
-        sa.setAccountNumber(subAccount.getAccountNumber());
-        sa.setChartOfAccountsCode(subAccount.getChartOfAccountsCode());
-        sa.setSubAccountNumber(subAccount.getSubAccountNumber());
+        sa.setAccountNumber(ACCOUNT);
+        sa.setChartOfAccountsCode(CHART);
+        sa.setSubAccountNumber(SUB_ACCOUNT);
 
-        SubAccount retrieved = SpringContext.getBean(SubAccountService.class).getByPrimaryId(subAccount.getChartOfAccountsCode(), subAccount.getAccountNumber(), subAccount.getSubAccountNumber());
+
+        SubAccount retrieved = subAccountService.getByPrimaryId(CHART, ACCOUNT, SUB_ACCOUNT);
         assertTrue("Didn't retrieve sub account", ObjectUtils.isNotNull(retrieved));
-        assertEquals("Wrong chart", subAccount.getChartOfAccountsCode(), retrieved.getChartOfAccountsCode());
-        assertEquals("Wrong account", subAccount.getAccountNumber(), retrieved.getAccountNumber());
-        assertEquals("Wrong Sub account number", subAccount.getSubAccountNumber(), retrieved.getSubAccountNumber());
+        assertEquals("Wrong chart", CHART, retrieved.getChartOfAccountsCode());
+        assertEquals("Wrong account", ACCOUNT, retrieved.getAccountNumber());
+        assertEquals("Wrong Sub account number", SUB_ACCOUNT, retrieved.getSubAccountNumber());
     }
 
-    public void testGetByPrimaryIdWithCaching() throws Exception {
-        SubAccount sa = new SubAccount();
-        sa.setAccountNumber(subAccount.getAccountNumber());
-        sa.setChartOfAccountsCode(subAccount.getChartOfAccountsCode());
-        sa.setSubAccountNumber(subAccount.getSubAccountNumber());
-
-        SubAccount retrieved = SpringContext.getBean(SubAccountService.class).getByPrimaryIdWithCaching(subAccount.getChartOfAccountsCode(), subAccount.getAccountNumber(), subAccount.getSubAccountNumber());
-        assertTrue("Didn't retrieve sub account", ObjectUtils.isNotNull(retrieved));
-        assertEquals("Wrong chart", subAccount.getChartOfAccountsCode(), retrieved.getChartOfAccountsCode());
-        assertEquals("Wrong account", subAccount.getAccountNumber(), retrieved.getAccountNumber());
-        assertEquals("Wrong Sub account number", subAccount.getSubAccountNumber(), retrieved.getSubAccountNumber());
+    /**
+     * Sets the subAccountService attribute value.
+     * 
+     * @param subAccountService The subAccountService to set.
+     */
+    public void setSubAccountService(SubAccountService subAccountService) {
+        this.subAccountService = subAccountService;
     }
 
 

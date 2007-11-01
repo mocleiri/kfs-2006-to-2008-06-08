@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.ElectronicInvoiceLoadSummary">
+
 
         <inquiry>
             <title>Electronic Invoice Load Summary Inquiry</title>
@@ -79,6 +80,8 @@
                     <text size="16" />
                 </control>
 
+                <summary>accountsPayableElectronicInvoiceLoadSummaryIdentifier</summary>
+                <description>accountsPayableElectronicInvoiceLoadSummaryIdentifier description...</description>
 			</attribute>
 
             <attribute name="fileProcessDate" forceUppercase="true">
@@ -92,6 +95,8 @@
                     <text size="9" />
                 </control>
 
+                <summary>fileProcessDate</summary>
+                <description>fileProcessDate description...</description>
 			</attribute>
 
             <attribute name="invoiceLoadFailAmount" forceUppercase="true">
@@ -105,6 +110,8 @@
                     <text size="32" />
                 </control>
 
+                <summary>invoiceLoadFailAmount</summary>
+                <description>invoiceLoadFailAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceLoadFailCount" forceUppercase="true">
@@ -118,6 +125,8 @@
                     <text size="6" />
                 </control>
 
+                <summary>invoiceLoadFailCount</summary>
+                <description>invoiceLoadFailCount description...</description>
 			</attribute>
 
             <attribute name="invoiceLoadSuccessAmount" forceUppercase="true">
@@ -131,6 +140,8 @@
                     <text size="32" />
                 </control>
 
+                <summary>invoiceLoadSuccessAmount</summary>
+                <description>invoiceLoadSuccessAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceLoadSuccessCount" forceUppercase="true">
@@ -144,6 +155,8 @@
                     <text size="6" />
                 </control>
 
+                <summary>invoiceLoadSuccessCount</summary>
+                <description>invoiceLoadSuccessCount description...</description>
 			</attribute>
 
             <attribute name="vendorDunsNumber" forceUppercase="true">
@@ -157,6 +170,8 @@
                     <text size="52" />
                 </control>
 
+                <summary>vendorDunsNumber</summary>
+                <description>vendorDunsNumber description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -170,6 +185,8 @@
                     <text size="10" />
                 </control>
 
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
 			</attribute>
 
         </attributes>

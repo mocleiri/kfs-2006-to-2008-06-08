@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
         <inquiry>
             <title>Contracts and Grants Security</title>
 
-            <inquirySections><inquirySection title="Security Details"><inquiryFields>
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="kualiUser.personUniversalIdentifier" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
@@ -58,6 +58,9 @@
                 <control>
                     <text size="50" />
                 </control>
+
+                <summary>Universal UserID.</summary>
+                <description>Universal UserID.</description>
             </attribute>
         </attributes>
     </businessObject>

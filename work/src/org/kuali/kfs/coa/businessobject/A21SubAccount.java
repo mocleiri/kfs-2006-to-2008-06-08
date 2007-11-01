@@ -1,30 +1,39 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.codes.ICRTypeCode;
 
 /**
- * 
+ * @author Kuali Nervous System Team ()
  */
-public class A21SubAccount extends PersistableBusinessObjectBase {
+public class A21SubAccount extends BusinessObjectBase {
 
     private static final long serialVersionUID = 2983753447370117974L;
 
@@ -47,8 +56,6 @@ public class A21SubAccount extends PersistableBusinessObjectBase {
     private Account costShareAccount;
     private SubAccount costShareSourceSubAccount;
     private ICRTypeCode icrTypeCode;
-    private Chart chartOfAccounts;
-    private Account account;
 
     /**
      * 
@@ -388,44 +395,6 @@ public class A21SubAccount extends PersistableBusinessObjectBase {
      */
     public void setOffCampusCode(boolean offCampusCode) {
         this.offCampusCode = offCampusCode;
-    }
-
-    /**
-     * Gets the account attribute.
-     * 
-     * @return Returns the account.
-     */
-    public Account getAccount() {
-        return account;
-    }
-
-    /**
-     * Sets the account attribute value.
-     * 
-     * @param account The account to set.
-     * @deprecated
-     */
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    /**
-     * Gets the chartOfAccounts attribute.
-     * 
-     * @return Returns the chartOfAccounts.
-     */
-    public Chart getChartOfAccounts() {
-        return chartOfAccounts;
-    }
-
-    /**
-     * Sets the chartOfAccounts attribute value.
-     * 
-     * @param chartOfAccounts The chartOfAccounts to set.
-     * @deprecated
-     */
-    public void setChartOfAccounts(Chart chartOfAccounts) {
-        this.chartOfAccounts = chartOfAccounts;
     }
 
     /*
