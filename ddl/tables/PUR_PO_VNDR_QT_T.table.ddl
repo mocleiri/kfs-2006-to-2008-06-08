@@ -36,7 +36,7 @@ CREATE TABLE PUR_PO_VNDR_QT_T(
         PO_QT_STAT_CD                  VARCHAR2(4),
         PO_QT_AWD_DT                   DATE,
         PO_QT_RANK_NBR                 VARCHAR2(3),
-        VNDR_CNTRY_CD                  VARCHAR2(4),
+        VNDR_CNTRY_CD                  VARCHAR2(2),
      CONSTRAINT PUR_PO_VNDR_QT_TP1 PRIMARY KEY (
         FDOC_NBR,
         PO_VNDR_QT_ID),

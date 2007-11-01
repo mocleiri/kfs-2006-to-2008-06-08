@@ -27,7 +27,7 @@ CREATE TABLE AP_CRDT_MEMO_T(
         VNDR_CTY_NM                    VARCHAR2(45), 
         VNDR_ST_CD                     VARCHAR2(2), 
         VNDR_PSTL_CD                   VARCHAR2(20), 
-        VNDR_CNTRY_CD                  VARCHAR2(4), 
+        VNDR_CNTRY_CD                  VARCHAR2(2), 
         PO_ID                          NUMBER(9),
         PO_ENCUM_FSCL_YR               NUMBER(4), 
         PMT_RQST_ID                    NUMBER(9),
