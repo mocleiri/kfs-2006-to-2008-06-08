@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,82 +15,79 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE5;
-import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertEquality;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertInequality;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
+import org.kuali.Constants;
+import org.kuali.workflow.WorkflowTestUtils;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.TransactionalDocumentDictionaryService;
+import org.kuali.core.document.DocumentNote;
+import org.kuali.core.document.TransactionalDocument;
+import org.kuali.core.document.TransactionalDocumentTestBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.chart.service.AccountingPeriodService;
-import org.kuali.test.ConfigureContext;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
 import org.kuali.test.DocumentTestUtils;
+import org.kuali.test.TestsWorkflowViaDatabase;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
+import static org.kuali.test.fixtures.AccountingLineFixture.LINE5;
+import org.kuali.test.fixtures.UserNameFixture;
+import static org.kuali.test.fixtures.UserNameFixture.DFOGLE;
 import org.kuali.test.monitor.ChangeMonitor;
 import org.kuali.test.monitor.DocumentStatusMonitor;
 import org.kuali.test.monitor.DocumentWorkflowStatusMonitor;
-import org.kuali.workflow.WorkflowTestUtils;
 
 import edu.iu.uis.eden.EdenConstants;
-
 /**
  * This class is used to test JournalVoucherDocument.
+ * 
+ * 
  */
-@ConfigureContext(session = DFOGLE)
-public class JournalVoucherDocumentTest extends KualiTestBase {
+@WithTestSpringContext(session = DFOGLE)
+public class JournalVoucherDocumentTest extends TransactionalDocumentTestBase {
 
-    public static final Class<JournalVoucherDocument> DOCUMENT_CLASS = JournalVoucherDocument.class;
-
-    private JournalVoucherDocument buildDocument() throws Exception {
-        // put accounting lines into document parameter for later
-        JournalVoucherDocument document = (JournalVoucherDocument) getDocumentParameterFixture();
-
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceFixture.addAsSourceTo(document);
-        }
-
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetFixture.addAsTargetTo(document);
-        }
-        document.setBalanceTypeCode(KFSConstants.BALANCE_TYPE_ACTUAL);
-        return document;
+    /**
+     * Override to set the balance type on the document.<br/>
+     * 
+     * <p>
+     * This is probably not the best way to do this. Matt suggested that a specific <code>{@link DocumentParameter}</code>
+     * definition be made to handle the fixtures and the <code>{@link Document}</code> creation if more fields are added and
+     * <code>{@link JournalVoucherDocument}</code> becomes more complex and demanding. Something like a
+     * <code>JournalVoucherDocumentParameter</code> would probably work to remedy this. For specific details look at the
+     * <code>{@link DisbursementVoucherDocumentTest}</code> that Matt worked on.
+     * </p>
+     * 
+     * @see org.kuali.core.document.DocumentTestBase#buildDocument()
+     * @see org.kuali.module.financial.document.DisbursementDocumentTest
+     * @see org.kuali.test.parameters.DisbursementVoucherDocumentParameter
+     * @return Document used in test methods that require a specific <code>{@link Document}</code> instance.
+     */
+    protected Document buildDocument() throws Exception {
+        JournalVoucherDocument jvDoc = (JournalVoucherDocument) super.buildDocument();
+        jvDoc.setBalanceTypeCode(Constants.BALANCE_TYPE_ACTUAL);
+        return jvDoc;
     }
 
     /**
      * Had to override b/c there are too many differences between the JV and the standard document structure (i.e. GLPEs generate
      * differently, routing isn't standard, etc).
      * 
-     * @see org.kuali.core.document.AccountingDocumentTestBase#testConvertIntoCopy()
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoCopy()
      */
-    // @RelatesTo(JiraIssue.KULRNE4926)
-    @ConfigureContext(session = DFOGLE, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public void testConvertIntoCopy() throws Exception {
         // save the original doc, wait for status change
-        AccountingDocument document = buildDocument();
-        SpringContext.getBean(DocumentService.class).routeDocument(document, "saving copy source document", null);
+        TransactionalDocument document = (TransactionalDocument) buildDocument();
+        getDocumentService().routeDocument(document, "saving copy source document", null);
         // collect some preCopy data
-        String preCopyId = document.getDocumentNumber();
+        String preCopyId = document.getFinancialDocumentNumber();
         String preCopyCopiedFromId = document.getDocumentHeader().getFinancialDocumentTemplateNumber();
 
         int preCopyPECount = document.getGeneralLedgerPendingEntries().size();
-        // int preCopyNoteCount = document.getDocumentHeader().getNotes().size();
+        int preCopyNoteCount = document.getDocumentHeader().getNotes().size();
 
         ArrayList preCopySourceLines = (ArrayList) ObjectUtils.deepCopy((ArrayList) document.getSourceAccountingLines());
         ArrayList preCopyTargetLines = (ArrayList) ObjectUtils.deepCopy((ArrayList) document.getTargetAccountingLines());
@@ -99,24 +96,23 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
         assertNull(preCopyCopiedFromId);
 
         assertEquals(1, preCopyPECount);
-        // assertEquals(0, preCopyNoteCount);
+        assertEquals(0, preCopyNoteCount);
 
         // do the copy
-        ((Copyable) document).toCopy();
+        document.convertIntoCopy();
         // compare to preCopy state
 
-        String postCopyId = document.getDocumentNumber();
+        String postCopyId = document.getFinancialDocumentNumber();
         assertFalse(postCopyId.equals(preCopyId));
         // verify that docStatus has changed
         // pending entries should be cleared
         int postCopyPECount = document.getGeneralLedgerPendingEntries().size();
         assertEquals(0, postCopyPECount);
-        // TODO: revisit this is it still needed
         // count 1 note, compare to "copied" text
-        // int postCopyNoteCount = document.getDocumentHeader().getNotes().size();
-        // assertEquals(1, postCopyNoteCount);
-        // DocumentNote note = document.getDocumentHeader().getNote(0);
-        // assertTrue(note.getFinancialDocumentNoteText().indexOf("copied from") != -1);
+        int postCopyNoteCount = document.getDocumentHeader().getNotes().size();
+        assertEquals(1, postCopyNoteCount);
+        DocumentNote note = document.getDocumentHeader().getNote(0);
+        assertTrue(note.getFinancialDocumentNoteText().indexOf("copied from") != -1);
         // copiedFrom should be equal to old id
         String copiedFromId = document.getDocumentHeader().getFinancialDocumentTemplateNumber();
         assertEquals(preCopyId, copiedFromId);
@@ -127,7 +123,7 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
             SourceAccountingLine preCopyLine = (SourceAccountingLine) preCopySourceLines.get(i);
             SourceAccountingLine postCopyLine = (SourceAccountingLine) postCopySourceLines.get(i);
 
-            assertInequality(preCopyLine.getDocumentNumber(), postCopyLine.getDocumentNumber());
+            assertInequality(preCopyLine.getFinancialDocumentNumber(), postCopyLine.getFinancialDocumentNumber());
             assertEquality(preCopyLine.getAmount(), postCopyLine.getAmount());
         }
 
@@ -137,7 +133,7 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
             TargetAccountingLine preCopyLine = (TargetAccountingLine) preCopyTargetLines.get(i);
             TargetAccountingLine postCopyLine = (TargetAccountingLine) postCopyTargetLines.get(i);
 
-            assertInequality(preCopyLine.getDocumentNumber(), postCopyLine.getDocumentNumber());
+            assertInequality(preCopyLine.getFinancialDocumentNumber(), postCopyLine.getFinancialDocumentNumber());
             assertEquality(preCopyLine.getAmount(), postCopyLine.getAmount());
         }
     }
@@ -146,19 +142,18 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
      * Had to override b/c there are too many differences between the JV and the standard document structure (i.e. GLPEs generate
      * differently, routing isn't standard, etc).
      * 
-     * @see org.kuali.core.document.AccountingDocumentTestBase#testConvertIntoErrorCorrection()
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#testConvertIntoErrorCorrection()
      */
-    // @RelatesTo(JiraIssue.KULRNE4926)
-    @ConfigureContext(session = DFOGLE, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocument document = buildDocument();
+        TransactionalDocument document = (TransactionalDocument) buildDocument();
 
         // replace the broken sourceLines with one that lets the test succeed
         KualiDecimal balance = new KualiDecimal("21.12");
         ArrayList sourceLines = new ArrayList();
         {
             SourceAccountingLine sourceLine = new SourceAccountingLine();
-            sourceLine.setDocumentNumber(document.getDocumentNumber());
+            sourceLine.setFinancialDocumentNumber(document.getFinancialDocumentNumber());
             sourceLine.setSequenceNumber(new Integer(0));
             sourceLine.setChartOfAccountsCode("BL");
             sourceLine.setAccountNumber("1031400");
@@ -172,19 +167,19 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
         document.setSourceAccountingLines(sourceLines);
 
 
-        String documentHeaderId = document.getDocumentNumber();
+        String documentHeaderId = document.getFinancialDocumentNumber();
         // route the original doc, wait for status change
-        SpringContext.getBean(DocumentService.class).routeDocument(document, "saving errorCorrection source document", null);
+        getDocumentService().routeDocument(document, "saving errorCorrection source document", null);
         // jv docs go straight to final
-        DocumentWorkflowStatusMonitor routeMonitor = new DocumentWorkflowStatusMonitor(SpringContext.getBean(DocumentService.class), documentHeaderId, "F");
+        DocumentWorkflowStatusMonitor routeMonitor = new DocumentWorkflowStatusMonitor(getDocumentService(), documentHeaderId, "F");
         assertTrue(ChangeMonitor.waitUntilChange(routeMonitor, 240, 5));
-        document = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(documentHeaderId);
+        document = (TransactionalDocument) getDocumentService().getByDocumentHeaderId(documentHeaderId);
         // collect some preCorrect data
-        String preCorrectId = document.getDocumentNumber();
+        String preCorrectId = document.getFinancialDocumentNumber();
         String preCorrectCorrectsId = document.getDocumentHeader().getFinancialDocumentInErrorNumber();
 
         int preCorrectPECount = document.getGeneralLedgerPendingEntries().size();
-        // int preCorrectNoteCount = document.getDocumentHeader().getNotes().size();
+        int preCorrectNoteCount = document.getDocumentHeader().getNotes().size();
         String preCorrectStatus = document.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus();
 
         ArrayList preCorrectSourceLines = (ArrayList) ObjectUtils.deepCopy(new ArrayList(document.getSourceAccountingLines()));
@@ -193,23 +188,23 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
         assertNotNull(preCorrectId);
         assertNull(preCorrectCorrectsId);
 
-        // assertEquals(0, preCorrectNoteCount);
+        assertEquals(1, preCorrectPECount);
+        assertEquals(0, preCorrectNoteCount);
         assertEquals("F", preCorrectStatus);
         // do the copy
-        ((Correctable) document).toErrorCorrection();
+        document.convertIntoErrorCorrection();
         // compare to preCorrect state
 
-        String postCorrectId = document.getDocumentNumber();
+        String postCorrectId = document.getFinancialDocumentNumber();
         assertFalse(postCorrectId.equals(preCorrectId));
         // pending entries should be cleared
         int postCorrectPECount = document.getGeneralLedgerPendingEntries().size();
         assertEquals(0, postCorrectPECount);
-        // TODO: revisit this is it still needed
         // count 1 note, compare to "correction" text
-        // int postCorrectNoteCount = document.getDocumentHeader().getNotes().size();
-        // assertEquals(1, postCorrectNoteCount);
-        // DocumentNote note = document.getDocumentHeader().getNote(0);
-        // assertTrue(note.getFinancialDocumentNoteText().indexOf("correction") != -1);
+        int postCorrectNoteCount = document.getDocumentHeader().getNotes().size();
+        assertEquals(1, postCorrectNoteCount);
+        DocumentNote note = document.getDocumentHeader().getNote(0);
+        assertTrue(note.getFinancialDocumentNoteText().indexOf("correction") != -1);
         // correctsId should be equal to old id
         String correctsId = document.getDocumentHeader().getFinancialDocumentInErrorNumber();
         assertEquals(preCorrectId, correctsId);
@@ -220,7 +215,7 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
             SourceAccountingLine preCorrectLine = (SourceAccountingLine) preCorrectSourceLines.get(i);
             SourceAccountingLine postCorrectLine = (SourceAccountingLine) postCorrectSourceLines.get(i);
 
-            assertEquality(postCorrectId, postCorrectLine.getDocumentNumber());
+            assertEquality(postCorrectId, postCorrectLine.getFinancialDocumentNumber());
             assertEquality(preCorrectLine.getAmount().negated(), postCorrectLine.getAmount());
         }
 
@@ -230,7 +225,7 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
             TargetAccountingLine preCorrectLine = (TargetAccountingLine) preCorrectTargetLines.get(i);
             TargetAccountingLine postCorrectLine = (TargetAccountingLine) postCorrectTargetLines.get(i);
 
-            assertEquality(postCorrectId, postCorrectLine.getDocumentNumber());
+            assertEquality(postCorrectId, postCorrectLine.getFinancialDocumentNumber());
             assertEquality(preCorrectLine.getAmount().negated(), postCorrectLine.getAmount());
         }
     }
@@ -240,94 +235,53 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
      * 
      * @see org.kuali.core.document.DocumentTestBase#testRouteDocument()
      */
-    // @RelatesTo(JiraIssue.KULRNE4926)
-    @ConfigureContext(session = DFOGLE, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public void testRouteDocument() throws Exception {
         // save the original doc, wait for status change
         Document document = buildDocument();
         assertFalse("R".equals(document.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus()));
-        SpringContext.getBean(DocumentService.class).routeDocument(document, "saving copy source document", null);
+        getDocumentService().routeDocument(document, "saving copy source document", null);
         // jv docs go straight to final
         WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
         // also check the Kuali (not Workflow) document status
-        DocumentStatusMonitor statusMonitor = new DocumentStatusMonitor(SpringContext.getBean(DocumentService.class), document.getDocumentHeader().getDocumentNumber(), KFSConstants.DocumentStatusCodes.APPROVED);
+        DocumentStatusMonitor statusMonitor = new DocumentStatusMonitor(getDocumentService(), document.getDocumentHeader().getFinancialDocumentNumber(), Constants.DocumentStatusCodes.APPROVED);
         assertTrue(ChangeMonitor.waitUntilChange(statusMonitor, 240, 5));
     }
 
-    private Document getDocumentParameterFixture() throws Exception {
-        return DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+    /**
+     * 
+     * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
+     */
+    public Document getDocumentParameterFixture() throws Exception {
+        return DocumentTestUtils.createTransactionalDocument(getDocumentService(), JournalVoucherDocument.class, 2007, "06");
     }
 
-    private List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
+     */
+    public List getTargetAccountingLineParametersFromFixtures() {
         ArrayList list = new ArrayList();
         return list;
     }
 
-    private List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
+     */
+    @Override
+    public List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
+	List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
         list.add(LINE5);
         return list;
     }
 
-
-    public final void testAddAccountingLine() throws Exception {
-        List<SourceAccountingLine> sourceLines = generateSouceAccountingLines();
-        List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
-        int expectedSourceTotal = sourceLines.size();
-        int expectedTargetTotal = targetLines.size();
-        JournalVoucherDocument document = DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DOCUMENT_CLASS);
-        document.setBalanceTypeCode(KFSConstants.BALANCE_TYPE_ACTUAL);
-
-        AccountingDocumentTestUtils.testAddAccountingLine(document, sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
+     */
+    @Override
+    public UserNameFixture getUserName() {
+        return DFOGLE;
     }
-
-    public final void testGetNewDocument() throws Exception {
-        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, SpringContext.getBean(DocumentService.class));
-    }
-
-    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-
-    }
-
-    public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
-    }
-
-    public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-    }
-
-    public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class), SpringContext.getBean(AccountingPeriodService.class));
-    }
-
-    // @RelatesTo(JiraIssue.KULRNE4926)
-    @ConfigureContext(session = DFOGLE, shouldCommitTransactions = true)
-    public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
-    }
-
-
-    // test util methods
-    private List<SourceAccountingLine> generateSouceAccountingLines() throws Exception {
-        List<SourceAccountingLine> sourceLines = new ArrayList<SourceAccountingLine>();
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceLines.add(sourceFixture.createSourceAccountingLine());
-        }
-
-        return sourceLines;
-    }
-
-    private List<TargetAccountingLine> generateTargetAccountingLines() throws Exception {
-        List<TargetAccountingLine> targetLines = new ArrayList<TargetAccountingLine>();
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetLines.add(targetFixture.createTargetAccountingLine());
-        }
-
-        return targetLines;
-    }
-
-
 }

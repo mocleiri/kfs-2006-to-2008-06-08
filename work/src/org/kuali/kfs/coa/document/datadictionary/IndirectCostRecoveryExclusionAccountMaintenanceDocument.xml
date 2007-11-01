@@ -33,12 +33,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>IndirectCostRecoveryExclusionAccountMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiIndirectCostRecoveryExclusionAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ICRA</documentTypeCode>
-        <label>Indirect Cost Recovery Exclusion Account</label>
+        <label>Indirect Cost Recovery Exclusion Account Maintenance Document</label>
+        <shortLabel>ICRExclusionAccountMaintenanceDoc</shortLabel>
         <summary>Indirect Cost Recovery Exclusion Account Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Indirect Cost Recovery Exclusion Accounts, or modify existing Indirect Cost Recovery Exclusion Accounts.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="IndirectCostRecoveryExclusionAccount" parameterName="INDIRECT_COST_RECOVERY_EXCLUSION_BY_ACCOUNT" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_INDIRECT_COST_RECOVERY_EXCLUSION_BY_ACCOUNT" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />

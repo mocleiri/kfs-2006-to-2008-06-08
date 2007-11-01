@@ -18,7 +18,6 @@ package org.kuali.module.chart.bo;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.impl.PersistenceStructureServiceImpl;
 import org.kuali.kfs.bo.Options;
 
 /**
@@ -28,33 +27,11 @@ public class SubObjCd extends PersistableBusinessObjectBase {
 
     private static final long serialVersionUID = -5292158248714650271L;
 
-    static {
-        PersistenceStructureServiceImpl.referenceConversionMap.put(SubObjCd.class, SubObjCdCurrent.class);
-    }
-
     /**
      * Default no-arg constructor.
      */
     public SubObjCd() {
 
-    }
-
-    /**
-     * Constructs an active SubObjCd.java with the given primary key.
-     * 
-     * @param universityFiscalYear
-     * @param chartOfAccountsCode
-     * @param accountNumber
-     * @param financialObjectCode
-     * @param financialSubObjectCode
-     */
-    public SubObjCd(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectCode, String financialSubObjectCode) {
-        this.universityFiscalYear = universityFiscalYear;
-        this.chartOfAccountsCode = chartOfAccountsCode;
-        this.accountNumber = accountNumber;
-        this.financialObjectCode = financialObjectCode;
-        this.financialSubObjectCode = financialSubObjectCode;
-        this.financialSubObjectActiveIndicator = true;
     }
 
     private String chartOfAccountsCode;
@@ -103,6 +80,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @deprecated
      */
     public void setFinancialObject(ObjectCode financialObject) {
@@ -113,6 +91,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Gets the financialSubObjectCodeName attribute.
      * 
      * @return Returns the financialSubObjectCodeName
+     * 
      */
     public String getFinancialSubObjectCodeName() {
         return financialSubObjectCodeName;
@@ -122,6 +101,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Sets the financialSubObjectCodeName attribute.
      * 
      * @param financialSubObjectCodeName The financialSubObjectCodeName to set.
+     * 
      */
     public void setFinancialSubObjectCodeName(String financialSubObjectCodeName) {
         this.financialSubObjectCodeName = financialSubObjectCodeName;
@@ -131,6 +111,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Gets the financialSubObjectCdshortNm attribute.
      * 
      * @return Returns the financialSubObjectCdshortNm
+     * 
      */
     public String getFinancialSubObjectCdshortNm() {
         return financialSubObjectCdshortNm;
@@ -140,6 +121,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Sets the financialSubObjectCdshortNm attribute.
      * 
      * @param financialSubObjectCdshortNm The financialSubObjectCdshortNm to set.
+     * 
      */
     public void setFinancialSubObjectCdshortNm(String financialSubObjectCdshortNm) {
         this.financialSubObjectCdshortNm = financialSubObjectCdshortNm;
@@ -149,6 +131,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Gets the financialSubObjectActiveIndicator attribute.
      * 
      * @return Returns the financialSubObjectActiveIndicator
+     * 
      */
     public boolean isFinancialSubObjectActiveIndicator() {
         return financialSubObjectActiveIndicator;
@@ -158,6 +141,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Sets the financialSubObjectActiveIndicator attribute.
      * 
      * @param financialSubObjectActiveIndicator The financialSubObjectActiveIndicator to set.
+     * 
      */
     public void setFinancialSubObjectActiveIndicator(boolean financialSubObjectActiveIndicator) {
         this.financialSubObjectActiveIndicator = financialSubObjectActiveIndicator;
@@ -167,6 +151,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Gets the universityFiscal attribute.
      * 
      * @return Returns the universityFiscal
+     * 
      */
     public Options getUniversityFiscal() {
         return universityFiscal;
@@ -186,6 +171,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -205,6 +191,7 @@ public class SubObjCd extends PersistableBusinessObjectBase {
      * Gets the account attribute.
      * 
      * @return Returns the account
+     * 
      */
     public Account getAccount() {
         return account;

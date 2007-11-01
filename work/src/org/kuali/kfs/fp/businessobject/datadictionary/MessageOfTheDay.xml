@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.MessageOfTheDay">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Message Of The Day Inquiry</title>
@@ -54,6 +54,8 @@
             <attributeReference name="financialSystemOriginationCode" sourceClassName="org.kuali.kfs.bo.OriginationCode" sourceAttributeName="financialSystemOriginationCode">
                 <label>Financial System Origination Code</label>
                 <shortLabel>Code</shortLabel>
+                <summary>Financial System Origination Code</summary>
+                <description>The code uniquely identifying a particular origination.</description>
             </attributeReference>
 
             <attribute name="financialSystemMessageOfTheDayText" forceUppercase="false">
@@ -66,13 +68,16 @@
                 <control>
                     <textarea rows="5" cols="40" />
                 </control>
+
+
+                <summary>Message Of The Day</summary>
+                <description>Message Of The Day...</description>
             </attribute>
 
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Message Of The Day</objectLabel>
     </businessObject>
 </dictionaryEntry>
 
