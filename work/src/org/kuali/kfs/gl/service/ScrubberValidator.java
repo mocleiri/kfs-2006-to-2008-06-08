@@ -18,7 +18,8 @@ package org.kuali.module.gl.service;
 import java.util.List;
 
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.bo.CollectorDetail;
+import org.kuali.module.gl.bo.OriginEntryable;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.util.Message;
 
@@ -31,7 +32,7 @@ public interface ScrubberValidator {
      * @param universityRunDate Date of scrubber run
      * @return List of Message objects based for warnings or errors that happened when validating the transaction
      */
-    public List<Message> validateTransaction(OriginEntry originEntry, OriginEntry scrubbedEntry, UniversityDate universityRunDate, boolean laborIndicator);
+    public List<Message> validateTransaction(OriginEntryable originEntry, OriginEntryable scrubbedEntry, UniversityDate universityRunDate, boolean validateAccountIndicator);
 
     /**
      * Validate a transaction for use in balance inquiry
@@ -39,11 +40,11 @@ public interface ScrubberValidator {
      * @param entry Input transaction
      */
     public void validateForInquiry(GeneralLedgerPendingEntry entry);
-
+    
     /**
-     * This method gives the scrubber step a way to populate the origin entry lookup service on validators that need it
      * 
+     * This method gives the scrubber step a way to populate the origin entry lookup service on validators that need it
      * @param originEntryableLookupService
      */
-    public void setReferenceLookup(OriginEntryLookupService originEntryLookupService);
+    public void setReferenceLookup(OriginEntryableLookupService originEntryableLookupService);
 }

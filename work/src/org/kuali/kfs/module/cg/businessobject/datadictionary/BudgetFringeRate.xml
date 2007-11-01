@@ -22,7 +22,7 @@
 
 
         <inquiry>
-            <title>Budget Fringe Rate Inquiry</title>
+            <title>Budget Fringe Rate</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="documentNumber" />
@@ -36,7 +36,7 @@
         </inquiry>
 
         <lookup>
-            <title>Budget Fringe Rate Lookup</title>
+            <title>Budget Fringe Rate</title>
 
             <instructions>Lookup a Budget Fringe Rate</instructions>
 
@@ -189,7 +189,7 @@
         <objectLabel>Budget Fringe Rates</objectLabel>
         <objectDescription>Fringe rates for the Budget.</objectDescription>
         
-        <objectHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="RATES" />
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetRatesHelp" />
 
     </businessObject>
 </dictionaryEntry>
