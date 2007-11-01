@@ -51,21 +51,19 @@ import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
 import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.bo.VoucherSourceAccountingLine;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 
 /**
@@ -166,12 +164,11 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     protected KualiDecimal getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine accountingLine) {
         LOG.debug("getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine) - start");
         KualiDecimal returnKualiDecimal;
-
-        String budgetCodes = SpringContext.getBean(OptionsService.class).getOptions(accountingLine.getPostingYear()).getBudgetCheckingBalanceTypeCd();
-        if (budgetCodes.contains(accountingLine.getBalanceTypeCode())) {
+            
+        String budgetCodes = SpringServiceLocator.getOptionsService().getOptions(accountingLine.getPostingYear()).getBudgetCheckingBalanceTypeCd();
+        if (budgetCodes.contains(accountingLine.getBalanceTypeCode())) { 
             returnKualiDecimal = accountingLine.getAmount();
-        }
-        else {
+        } else {
             returnKualiDecimal = accountingLine.getAmount().abs();
         }
         LOG.debug("getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine) - end");
@@ -361,7 +358,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isObjectCodeAllowed(org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isObjectCodeAllowed(Class documentClass, AccountingLine accountingLine) {
+    public boolean isObjectCodeAllowed(AccountingLine accountingLine) {
         return true;
     }
 
@@ -373,7 +370,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @param accountingLine
      * @return boolean True if the fields are filled in, true if the balance type is not EXTERNAL ENCUMBRANCE, false otherwise.
      */
-    protected boolean isExternalEncumbranceSpecificBusinessRulesValid(AccountingLine accountingLine) {
+    private boolean isExternalEncumbranceSpecificBusinessRulesValid(AccountingLine accountingLine) {
         // make sure that the line contains a proper balance type like it should
         BalanceTyp balanceType = accountingLine.getBalanceTyp();
         if (!AccountingDocumentRuleUtil.isValidBalanceType(balanceType, GENERIC_CODE_PROPERTY_NAME)) {
@@ -396,10 +393,10 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @param accountingLine
      * @return True if all of the required external encumbrance reference fields are valid, false otherwise.
      */
-    protected boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
+    private boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
         boolean valid = true;
 
-        BusinessObjectEntry boe = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(VoucherSourceAccountingLine.class.getName());
+        BusinessObjectEntry boe = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(SourceAccountingLine.class.getName());
         if (StringUtils.isEmpty(accountingLine.getReferenceOriginCode())) {
             putRequiredPropertyError(boe, REFERENCE_ORIGIN_CODE);
             valid = false;
@@ -423,13 +420,13 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * @see org.kuali.core.rule.AddAccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isObjectTypeAllowed(Class documentClass, AccountingLine accountingLine) {
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
         String objectTypeCode = accountingLine.getObjectTypeCode();
         if (StringUtils.isNotBlank(objectTypeCode)) {
             return true;
         }
         else {
-            String label = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(ObjectType.class.getName()).getAttributeDefinition(GENERIC_CODE_PROPERTY_NAME).getLabel();
+            String label = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(ObjectType.class.getName()).getAttributeDefinition(GENERIC_CODE_PROPERTY_NAME).getLabel();
             GlobalVariables.getErrorMap().putError(OBJECT_TYPE_CODE_PROPERTY_NAME, ERROR_REQUIRED, label);
             return false;
         }
@@ -459,6 +456,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
+     * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(FinancialDocument,
      *      org.kuali.core.bo.SourceAccountingLine)
      */
@@ -502,7 +500,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     // KualiDecimal lineAmount = sourceAccountingLine.getAmount();
     // String financialObjectTypeCode = sourceAccountingLine.getObjectTypeCode();
     // String sufficientFundsObjectCode =
-    // SpringContext.getBean(SufficientFundsService.class).getSufficientFundsObjectCode(sourceAccountingLine.getObjectCode(),accountSufficientFundsCode);
+    // SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(sourceAccountingLine.getObjectCode(),accountSufficientFundsCode);
     //
     // item = buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode,
     // sufficientFundsObjectCode, debitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear,

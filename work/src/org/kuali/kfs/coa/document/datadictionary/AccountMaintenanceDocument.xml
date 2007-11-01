@@ -33,17 +33,18 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>AccountMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ACCT</documentTypeCode>
 
 		<webScriptFile>../dwr/interface/SubFundGroupService.js</webScriptFile>
 		<webScriptFile>../scripts/chart/accountDocument.js</webScriptFile>
 
-        <label>Account</label>
+        <label>Account Maintenance Document</label>
+        <shortLabel>AcctMaintDoc</shortLabel>
 
         <summary>Account maintenance document</summary>
         <description>Document used to create or update Account objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Account" parameterName="ACCOUNT" />
+		<help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT" />
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -67,6 +68,8 @@
             <reference attributeName="accountManagerUser" attributeToHighlightOnFail="accountManagerUser.personUserIdentifier" />
             <reference attributeName="accountRestrictedStatus" attributeToHighlightOnFail="accountRestrictedStatusCode" />
             <reference attributeName="subFundGroup" attributeToHighlightOnFail="subFundGroupCode" />
+            <!--  comment program out if not in use at your institution -->
+            <reference attributeName="program" activeIndicatorAttributeName="programActiveIndicator" attributeToHighlightOnFail="programCode" />
             <reference attributeName="budgetRecordingLevel" activeIndicatorAttributeName="active" attributeToHighlightOnFail="budgetRecordingLevelCode" />
             <reference attributeName="acctIndirectCostRcvyType" activeIndicatorAttributeName="active" attributeToHighlightOnFail="acctIndirectCostRcvyTypeCd" />
         </defaultExistenceChecks>
@@ -86,12 +89,18 @@
                     <maintainableField name="accountExpirationDate" required="false" />
                     <maintainableField name="accountZipCode" required="true" />
                     <maintainableField name="accountCityName" required="true" />
-                    <maintainableField name="accountStateCode" required="true" />
+                    <maintainableField name="accountStateCode" required="true">
+                        <defaultValue>IN</defaultValue>
+                    </maintainableField>
                     <maintainableField name="accountStreetAddress" required="true" />
                     <maintainableField name="accountOffCampusIndicator" required="false" />
                     <maintainableField name="accountClosedIndicator" required="false" />
-                    <maintainableField name="accountTypeCode" required="true" />
+                    <maintainableField name="accountTypeCode" required="true">
+                    	<defaultValue>NA</defaultValue>
+                    </maintainableField>
                     <maintainableField name="subFundGroupCode" required="true" webUILeaveFieldFunction="onblur_subFundGroup" webUILeaveFieldCallbackFunction="checkRestrictedStatusCode_Callback" />
+                    <!--  comment programCode out if not in use at your institution -->
+                    <maintainableField name="programCode" required="false" />
                     <maintainableField name="accountsFringesBnftIndicator" required="false">
                         <defaultValue>true</defaultValue>
                     </maintainableField>
