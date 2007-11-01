@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-DROP TABLE GL_ID_BILL_T;
 CREATE TABLE GL_ID_BILL_T(
         UNIV_FISCAL_PRD_CD             VARCHAR2(2) CONSTRAINT GL_ID_BILL_TN1 NOT NULL,
-        UNIV_FISCAL_YR                 NUMBER(7) CONSTRAINT GL_ID_BILL_TN2 NOT NULL,
+        UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT GL_ID_BILL_TN2 NOT NULL,
         CREATE_DT                      DATE CONSTRAINT GL_ID_BILL_TN3 NOT NULL,
         CREATE_SEQ                     VARCHAR2(8) CONSTRAINT GL_ID_BILL_TN4 NOT NULL,
         FIN_COA_CD                     VARCHAR2(2) CONSTRAINT GL_ID_BILL_TN5 NOT NULL,
