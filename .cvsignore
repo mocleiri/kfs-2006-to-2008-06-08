@@ -6,4 +6,3 @@ ${test.xml.results.directory}
 *.zip
 spy.log
 batch-results
-temp

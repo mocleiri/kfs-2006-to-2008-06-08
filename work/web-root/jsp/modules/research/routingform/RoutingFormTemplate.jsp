@@ -25,10 +25,6 @@
 	
 	<kra-rf:routingFormHiddenDocumentFields />
 	
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Template" altText="page help"/>
-	</div>
-	
 	<kra-rf:routingFormTemplate />
 	
 </kul:documentPage>
