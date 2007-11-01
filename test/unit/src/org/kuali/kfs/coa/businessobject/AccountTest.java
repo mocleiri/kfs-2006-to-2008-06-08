@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.bo;
 
@@ -19,33 +26,42 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBaseWithSpring;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class...
+ * 
+ * @author Kuali Nervous System Team ()
  */
-@ConfigureContext
-public class AccountTest extends KualiTestBase {
+@WithTestSpringContext
+public class AccountTest extends KualiTestBaseWithSpring {
 
-    private static final String TEST_DATE_1_TODAY = "04/22/2002 07:48 PM";
-    private static final String TEST_DATE_1_YESTERDAY = "04/21/2002 07:48 PM";
-    private static final String TEST_DATE_1_TOMORROW = "04/23/2002 07:48 PM";
+    private static final String TEST_DATE_1_TODAY = "2002-04-22 19:48:23";
+    private static final String TEST_DATE_1_YESTERDAY = "2002-04-21 19:48:23";
+    private static final String TEST_DATE_1_TOMORROW = "2002-04-23 19:48:23";
 
-    private static final String TEST_DATE_2_TODAY = "04/22/2002 10:23 AM";
-    private static final String TEST_DATE_2_YESTERDAY = "04/21/2002 10:23 AM";
-    private static final String TEST_DATE_2_TOMORROW = "04/23/2002 10:23 AM";
+    private static final String TEST_DATE_2_TODAY = "2002-04-22 10:23:08";
+    private static final String TEST_DATE_2_YESTERDAY = "2002-04-21 10:23:08";
+    private static final String TEST_DATE_2_TOMORROW = "2002-04-23 10:23:08";
 
-    private static final String TEST_DATE_3_TODAY = "04/22/2002 06:14 AM";
-    private static final String TEST_DATE_3_YESTERDAY = "04/21/2002 06:14 AM";
-    private static final String TEST_DATE_3_TOMORROW = "04/23/2002 06:14 AM";
+    private static final String TEST_DATE_3_TODAY = "2002-04-22 06:14:55";
+    private static final String TEST_DATE_3_YESTERDAY = "2002-04-21 06:14:55";
+    private static final String TEST_DATE_3_TOMORROW = "2002-04-23 06:14:55";
+
+    private DateTimeService dateTimeService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        dateTimeService = SpringServiceLocator.getDateTimeService();
+    }
 
     // pass this a name, and it returns a setup timestamp instance
-    private Timestamp getTimestamp(String timestampString) {
+    private Timestamp getNamedTimestamp(String timestampString) {
         Timestamp timestamp;
         try {
-            timestamp = SpringContext.getBean(DateTimeService.class).convertToSqlTimestamp(timestampString);
+            timestamp = dateTimeService.convertToSqlTimestamp(timestampString);
         }
         catch (ParseException e) {
             assertNull("Timestamp String was not parseable", e);
@@ -57,15 +73,15 @@ public class AccountTest extends KualiTestBase {
     // since all the tests are doing the same thing, this is centralized
     private void doTest(String expirationDateString, String testDateString, boolean expectedResult) {
 
-        Timestamp expirationDate = getTimestamp(expirationDateString);
-        Timestamp testDate = getTimestamp(testDateString);
+        Timestamp expirationDate = getNamedTimestamp(expirationDateString);
+        Timestamp testDate = getNamedTimestamp(testDateString);
 
         // setup the account, and set its expiration date
         Account account = new Account();
         account.setAccountExpirationDate(expirationDate);
 
         // test against isExpired, and get the result
-        boolean actualResult = account.isExpired(SpringContext.getBean(DateTimeService.class).getCalendar(testDate));
+        boolean actualResult = account.isExpired(dateTimeService.getCalendar(testDate));
 
         // compare the result to what was expected
         assertEquals(expectedResult, actualResult);

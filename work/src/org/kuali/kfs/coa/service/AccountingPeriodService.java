@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.service;
 
@@ -23,6 +30,8 @@ import org.kuali.module.chart.bo.AccountingPeriod;
 /**
  * This service interface defines methods necessary for retreiving fully populated AccountingPeriod business objects from the
  * database that are necessary for transaction processing in the application.
+ * 
+ * @author Kuali Financial Transactions Red Team ()
  */
 public interface AccountingPeriodService {
     /**
@@ -40,6 +49,7 @@ public interface AccountingPeriodService {
     public Collection getOpenAccountingPeriods();
 
     /**
+     * 
      * This method retrieves an individual AccountingPeriod based on the period and fiscal year
      * 
      * @param periodCode
@@ -55,15 +65,4 @@ public interface AccountingPeriodService {
      * @return period that matches the date
      */
     public AccountingPeriod getByDate(Date date);
-
-    /**
-     * This method compares two accounting periods, hopefully by comparing their closing dates. If a is earlier than b, it should
-     * return a negative number; if a is later, it should return a positive number; and if the closing dates are equal, it should
-     * return a 0.
-     * 
-     * @param a the first accounting period to compare
-     * @param b the second accounting period to compare
-     * @return an integer representing which is earlier or later, or if they occur simultaneously
-     */
-    public int compareAccountingPeriodsByDate(AccountingPeriod a, AccountingPeriod b);
 }
