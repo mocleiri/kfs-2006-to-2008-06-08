@@ -25,30 +25,29 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.rule.event.KualiDocumentEvent;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ConciseXmlDocumentConversionService;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.PurapWorkflowConstants.PaymentRequestDocument.NodeDetailEnum;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PaymentRequestItem;
+import org.kuali.module.purap.bo.PaymentRequestStatusHistory;
+import org.kuali.module.purap.bo.PaymentRequestView;
 import org.kuali.module.purap.bo.PurApAccountingLine;
-import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.RecurringPaymentType;
 import org.kuali.module.purap.rule.event.ContinueAccountsPayableEvent;
@@ -57,6 +56,7 @@ import org.kuali.module.purap.service.AccountsPayableService;
 import org.kuali.module.purap.service.PaymentRequestService;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
+import org.kuali.module.purap.service.PurchaseOrderService;
 import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.VendorPropertyConstants;
@@ -69,12 +69,14 @@ import org.kuali.module.vendor.service.VendorService;
 import edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO;
 import edu.iu.uis.eden.exception.WorkflowException;
 
+
 /**
- * Payment Request Document Business Object. Contains the fields associated with the main document table.
+ * Payment Request Document
  */
 public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PaymentRequestDocument.class);
 
+    private String purchaseOrderClassificationTypeDescription;
     private Date invoiceDate;
     private String invoiceNumber;
     private KualiDecimal vendorInvoiceAmount;
@@ -96,36 +98,31 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     private Integer alternateVendorHeaderGeneratedIdentifier;
     private Integer alternateVendorDetailAssignedIdentifier;
     private String purchaseOrderNotes;
-    private String recurringPaymentTypeCode;
+    private boolean closePurchaseOrderIndicator;
+    private boolean reopenPurchaseOrderIndicator;  
 
     // NOT PERSISTED IN DB
+    private String recurringPaymentTypeCode;
     private String vendorShippingTitleCode;
     private Date purchaseOrderEndDate;
-
+    
     // BELOW USED BY ROUTING
     private Integer requisitionIdentifier;
-
+    
     // REFERENCE OBJECTS
     private PaymentTermType vendorPaymentTerms;
     private ShippingPaymentTerms vendorShippingPaymentTerms;
     private PurchaseOrderCostSource paymentRequestCostSource;
     private RecurringPaymentType recurringPaymentType;
-
-
+    
+   
     /**
-     * Default constructor.
-     */
-    public PaymentRequestDocument() {
+	 * Default constructor.
+	 */
+	public PaymentRequestDocument() {
         super();
     }
 
-    /**
-     * @see org.kuali.core.document.DocumentBase#getDocumentRepresentationForSerialization()
-     */
-    @Override
-    protected Document getDocumentRepresentationForSerialization() {
-        return SpringContext.getBean(ConciseXmlDocumentConversionService.class).getDocumentForSerialization(this);
-    }
 
     /**
      * @see org.kuali.core.bo.PersistableBusinessObjectBase#isBoNotesSupport()
@@ -135,10 +132,19 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         return true;
     }
 
+
+    /**
+     * Gets the requisitionIdentifier attribute. 
+     * @return Returns the requisitionIdentifier.
+     */
     public Integer getRequisitionIdentifier() {
         return requisitionIdentifier;
     }
 
+    /**
+     * Sets the requisitionIdentifier attribute value.
+     * @param requisitionIdentifier The requisitionIdentifier to set.
+     */
     public void setRequisitionIdentifier(Integer requisitionIdentifier) {
         this.requisitionIdentifier = requisitionIdentifier;
     }
@@ -152,100 +158,260 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         super.populateDocumentForRouting();
     }
 
-    public Date getInvoiceDate() {
+    /**
+     * Gets the purchaseOrderClassificationTypeDescription attribute. 
+     * @return Returns the purchaseOrderClassificationTypeDescription.
+     */
+    public String getPurchaseOrderClassificationTypeDescription() {
+        return purchaseOrderClassificationTypeDescription;
+    }
+
+    /**
+     * Sets the purchaseOrderClassificationTypeDescription attribute value.
+     * @param purchaseOrderClassificationTypeDescription The purchaseOrderClassificationTypeDescription to set.
+     */
+    public void setPurchaseOrderClassificationTypeDescription(String purchaseOrderClassificationTypeDescription) {
+        this.purchaseOrderClassificationTypeDescription = purchaseOrderClassificationTypeDescription;
+    }
+    
+    /**
+     * Gets the invoiceDate attribute.
+     * 
+     * @return Returns the invoiceDate
+     * 
+     */
+    public Date getInvoiceDate() { 
         return invoiceDate;
     }
 
+    /**
+     * Sets the invoiceDate attribute.
+     * 
+     * @param invoiceDate The invoiceDate to set.
+     * 
+     */
     public void setInvoiceDate(Date invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 
-    public String getInvoiceNumber() {
+
+    /**
+     * Gets the invoiceNumber attribute.
+     * 
+     * @return Returns the invoiceNumber
+     * 
+     */
+    public String getInvoiceNumber() { 
         return invoiceNumber;
     }
 
+    /**
+     * Sets the invoiceNumber attribute.
+     * 
+     * @param invoiceNumber The invoiceNumber to set.
+     * 
+     */
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public KualiDecimal getVendorInvoiceAmount() {
+
+    /**
+     * Gets the vendorInvoiceAmount attribute.
+     * 
+     * @return Returns the vendorInvoiceAmount
+     * 
+     */
+    public KualiDecimal getVendorInvoiceAmount() { 
         return vendorInvoiceAmount;
     }
 
+    /**
+     * Sets the vendorInvoiceAmount attribute.
+     * 
+     * @param vendorInvoiceAmount The vendorInvoiceAmount to set.
+     * 
+     */
     public void setVendorInvoiceAmount(KualiDecimal vendorInvoiceAmount) {
         this.vendorInvoiceAmount = vendorInvoiceAmount;
     }
 
-    public String getVendorPaymentTermsCode() {
+
+    /**
+     * Gets the vendorPaymentTermsCode attribute.
+     * 
+     * @return Returns the vendorPaymentTermsCode
+     * 
+     */
+    public String getVendorPaymentTermsCode() { 
         return vendorPaymentTermsCode;
     }
 
+    /**
+     * Sets the vendorPaymentTermsCode attribute.
+     * 
+     * @param vendorPaymentTermsCode The vendorPaymentTermsCode to set.
+     * 
+     */
     public void setVendorPaymentTermsCode(String vendorPaymentTermsCode) {
         this.vendorPaymentTermsCode = vendorPaymentTermsCode;
     }
-
+    /**
+     * Gets the vendorPaymentTerms attribute.
+     * 
+     * @return Returns the vendorPaymentTerms
+     * 
+     */
     public PaymentTermType getVendorPaymentTerms() {
         if (ObjectUtils.isNull(vendorPaymentTerms)) {
             refreshReferenceObject(VendorPropertyConstants.VENDOR_PAYMENT_TERMS);
         }
         return vendorPaymentTerms;
     }
-
+    /**
+     * Sets the vendorPaymentTerms attribute.
+     * 
+     * @param vendorPaymentTerms The vendorPaymentTerms to set.
+     * 
+     */
     public void setVendorPaymentTerms(PaymentTermType vendorPaymentTerms) {
         this.vendorPaymentTerms = vendorPaymentTerms;
     }
-
-    public String getVendorShippingPaymentTermsCode() {
+    
+    /**
+     * Gets the vendorShippingPaymentTermsCode attribute.
+     * 
+     * @return Returns the vendorShippingPaymentTermsCode
+     * 
+     */
+    public String getVendorShippingPaymentTermsCode() { 
         if (ObjectUtils.isNull(vendorPaymentTerms)) {
             refreshReferenceObject(VendorPropertyConstants.VENDOR_SHIPPING_PAYMENT_TERMS);
         }
         return vendorShippingPaymentTermsCode;
     }
 
+    /**
+     * Sets the vendorShippingPaymentTermsCode attribute.
+     * 
+     * @param vendorShippingPaymentTermsCode The vendorShippingPaymentTermsCode to set.
+     * 
+     */
     public void setVendorShippingPaymentTermsCode(String vendorShippingPaymentTermsCode) {
         this.vendorShippingPaymentTermsCode = vendorShippingPaymentTermsCode;
     }
 
-    public Date getPaymentRequestPayDate() {
+
+    /**
+     * Gets the paymentRequestPayDate attribute.
+     * 
+     * @return Returns the paymentRequestPayDate
+     * 
+     */
+    public Date getPaymentRequestPayDate() { 
         return paymentRequestPayDate;
     }
 
+    /**
+     * Sets the paymentRequestPayDate attribute.
+     * 
+     * @param paymentRequestPayDate The paymentRequestPayDate to set.
+     * 
+     */
     public void setPaymentRequestPayDate(Date paymentRequestPayDate) {
         this.paymentRequestPayDate = paymentRequestPayDate;
     }
 
-    public String getPaymentRequestCostSourceCode() {
+
+    /**
+     * Gets the paymentRequestCostSourceCode attribute.
+     * 
+     * @return Returns the paymentRequestCostSourceCode
+     * 
+     */
+    public String getPaymentRequestCostSourceCode() { 
         return paymentRequestCostSourceCode;
     }
 
+    /**
+     * Sets the paymentRequestCostSourceCode attribute.
+     * 
+     * @param paymentRequestCostSourceCode The paymentRequestCostSourceCode to set.
+     * 
+     */
     public void setPaymentRequestCostSourceCode(String paymentRequestCostSourceCode) {
         this.paymentRequestCostSourceCode = paymentRequestCostSourceCode;
     }
 
-    public boolean getPaymentRequestedCancelIndicator() {
+
+    /**
+     * Gets the paymentRequestedCancelIndicator attribute.
+     * 
+     * @return Returns the paymentRequestedCancelIndicator
+     * 
+     */
+    public boolean getPaymentRequestedCancelIndicator() { 
         return paymentRequestedCancelIndicator;
     }
 
-    public boolean isPaymentRequestedCancelIndicator() {
+    /**
+     * Gets the paymentRequestedCancelIndicator attribute.
+     * 
+     * @return Returns the paymentRequestedCancelIndicator
+     * 
+     */
+    public boolean isPaymentRequestedCancelIndicator() { 
         return paymentRequestedCancelIndicator;
     }
 
+    /**
+     * Sets the paymentRequestedCancelIndicator attribute.
+     * 
+     * @param paymentRequestedCancelIndicator The paymentRequestedCancelIndicator to set.
+     * 
+     */
     public void setPaymentRequestedCancelIndicator(boolean paymentRequestedCancelIndicator) {
         this.paymentRequestedCancelIndicator = paymentRequestedCancelIndicator;
     }
 
-    public boolean getPaymentAttachmentIndicator() {
+
+    /**
+     * Gets the paymentAttachmentIndicator attribute.
+     * 
+     * @return Returns the paymentAttachmentIndicator
+     * 
+     */
+    public boolean getPaymentAttachmentIndicator() { 
         return paymentAttachmentIndicator;
     }
 
+    /**
+     * Sets the paymentAttachmentIndicator attribute.
+     * 
+     * @param paymentAttachmentIndicator The paymentAttachmentIndicator to set.
+     * 
+     */
     public void setPaymentAttachmentIndicator(boolean paymentAttachmentIndicator) {
         this.paymentAttachmentIndicator = paymentAttachmentIndicator;
     }
 
-    public boolean getImmediatePaymentIndicator() {
+
+    /**
+     * Gets the immediatePaymentIndicator attribute.
+     * 
+     * @return Returns the immediatePaymentIndicator
+     * 
+     */
+    public boolean getImmediatePaymentIndicator() { 
         return immediatePaymentIndicator;
     }
 
+    /**
+     * Sets the immediatePaymentIndicator attribute.
+     * 
+     * @param immediatePaymentIndicator The immediatePaymentIndicator to set.
+     * 
+     */
     public void setImmediatePaymentIndicator(boolean immediatePaymentIndicator) {
         this.immediatePaymentIndicator = immediatePaymentIndicator;
     }
@@ -274,113 +440,254 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         this.specialHandlingInstructionLine3Text = specialHandlingInstructionLine3Text;
     }
 
+
+    /**
+     * Gets the paymentPaidDate attribute. 
+     * @return Returns the paymentPaidDate.
+     */
     public Date getPaymentPaidDate() {
         return paymentPaidDate;
     }
 
+    /**
+     * Sets the paymentPaidDate attribute value.
+     * @param paymentPaidDate The paymentPaidDate to set.
+     */
     public void setPaymentPaidDate(Date paymentPaidDate) {
         this.paymentPaidDate = paymentPaidDate;
     }
 
+    /**
+     * Gets the paymentRequestElectronicInvoiceIndicator attribute. 
+     * @return Returns the paymentRequestElectronicInvoiceIndicator.
+     */
     public boolean getPaymentRequestElectronicInvoiceIndicator() {
         return paymentRequestElectronicInvoiceIndicator;
     }
 
+    /**
+     * Sets the paymentRequestElectronicInvoiceIndicator attribute value.
+     * @param paymentRequestElectronicInvoiceIndicator The paymentRequestElectronicInvoiceIndicator to set.
+     */
     public void setPaymentRequestElectronicInvoiceIndicator(boolean paymentRequestElectronicInvoiceIndicator) {
         this.paymentRequestElectronicInvoiceIndicator = paymentRequestElectronicInvoiceIndicator;
     }
 
-    public String getAccountsPayableRequestCancelIdentifier() {
+
+    /**
+     * Gets the accountsPayableRequestCancelIdentifier attribute.
+     * 
+     * @return Returns the accountsPayableRequestCancelIdentifier
+     * 
+     */
+    public String getAccountsPayableRequestCancelIdentifier() { 
         return accountsPayableRequestCancelIdentifier;
     }
 
+    /**
+     * Sets the accountsPayableRequestCancelIdentifier attribute.
+     * 
+     * @param accountsPayableRequestCancelIdentifier The accountsPayableRequestCancelIdentifier to set.
+     * 
+     */
     public void setAccountsPayableRequestCancelIdentifier(String accountsPayableRequestCancelIdentifier) {
         this.accountsPayableRequestCancelIdentifier = accountsPayableRequestCancelIdentifier;
     }
 
-    public Integer getOriginalVendorHeaderGeneratedIdentifier() {
+
+    /**
+     * Gets the originalVendorHeaderGeneratedIdentifier attribute.
+     * 
+     * @return Returns the originalVendorHeaderGeneratedIdentifier
+     * 
+     */
+    public Integer getOriginalVendorHeaderGeneratedIdentifier() { 
         return originalVendorHeaderGeneratedIdentifier;
     }
 
+    /**
+     * Sets the originalVendorHeaderGeneratedIdentifier attribute.
+     * 
+     * @param originalVendorHeaderGeneratedIdentifier The originalVendorHeaderGeneratedIdentifier to set.
+     * 
+     */
     public void setOriginalVendorHeaderGeneratedIdentifier(Integer originalVendorHeaderGeneratedIdentifier) {
         this.originalVendorHeaderGeneratedIdentifier = originalVendorHeaderGeneratedIdentifier;
     }
 
-    public Integer getOriginalVendorDetailAssignedIdentifier() {
+
+    /**
+     * Gets the originalVendorDetailAssignedIdentifier attribute.
+     * 
+     * @return Returns the originalVendorDetailAssignedIdentifier
+     * 
+     */
+    public Integer getOriginalVendorDetailAssignedIdentifier() { 
         return originalVendorDetailAssignedIdentifier;
     }
 
+    /**
+     * Sets the originalVendorDetailAssignedIdentifier attribute.
+     * 
+     * @param originalVendorDetailAssignedIdentifier The originalVendorDetailAssignedIdentifier to set.
+     * 
+     */
     public void setOriginalVendorDetailAssignedIdentifier(Integer originalVendorDetailAssignedIdentifier) {
         this.originalVendorDetailAssignedIdentifier = originalVendorDetailAssignedIdentifier;
     }
 
-    public Integer getAlternateVendorHeaderGeneratedIdentifier() {
+
+    /**
+     * Gets the alternateVendorHeaderGeneratedIdentifier attribute.
+     * 
+     * @return Returns the alternateVendorHeaderGeneratedIdentifier
+     * 
+     */
+    public Integer getAlternateVendorHeaderGeneratedIdentifier() { 
         return alternateVendorHeaderGeneratedIdentifier;
     }
 
+    /**
+     * Sets the alternateVendorHeaderGeneratedIdentifier attribute.
+     * 
+     * @param alternateVendorHeaderGeneratedIdentifier The alternateVendorHeaderGeneratedIdentifier to set.
+     * 
+     */
     public void setAlternateVendorHeaderGeneratedIdentifier(Integer alternateVendorHeaderGeneratedIdentifier) {
         this.alternateVendorHeaderGeneratedIdentifier = alternateVendorHeaderGeneratedIdentifier;
     }
 
-    public Integer getAlternateVendorDetailAssignedIdentifier() {
+
+    /**
+     * Gets the alternateVendorDetailAssignedIdentifier attribute.
+     * 
+     * @return Returns the alternateVendorDetailAssignedIdentifier
+     * 
+     */
+    public Integer getAlternateVendorDetailAssignedIdentifier() { 
         return alternateVendorDetailAssignedIdentifier;
     }
 
+    /**
+     * Sets the alternateVendorDetailAssignedIdentifier attribute.
+     * 
+     * @param alternateVendorDetailAssignedIdentifier The alternateVendorDetailAssignedIdentifier to set.
+     * 
+     */
     public void setAlternateVendorDetailAssignedIdentifier(Integer alternateVendorDetailAssignedIdentifier) {
         this.alternateVendorDetailAssignedIdentifier = alternateVendorDetailAssignedIdentifier;
     }
 
+    /**
+     * Gets the vendorShippingPaymentTerms attribute. 
+     * @return Returns the vendorShippingPaymentTerms.
+     */
     public ShippingPaymentTerms getVendorShippingPaymentTerms() {
         return vendorShippingPaymentTerms;
     }
 
+
+    /**
+     * Sets the vendorShippingPaymentTerms attribute value.
+     * @param vendorShippingPaymentTerms The vendorShippingPaymentTerms to set.
+     */
     public void setVendorShippingPaymentTerms(ShippingPaymentTerms vendorShippingPaymentTerms) {
         this.vendorShippingPaymentTerms = vendorShippingPaymentTerms;
     }
 
     public String getVendorShippingTitleCode() {
-        // TODO (KULPURAP-1575) f2f: this should be printing the decription instead of the code; do we need the reference object?
+        //TODO (KULPURAP-1575) f2f: this should be printing the decription instead of the code; do we need the reference object?
         if (ObjectUtils.isNotNull(this.getPurchaseOrderDocument())) {
             return this.getPurchaseOrderDocument().getVendorShippingTitleCode();
         }
         return vendorShippingTitleCode;
     }
 
+
     public void setVendorShippingTitleCode(String vendorShippingTitleCode) {
         this.vendorShippingTitleCode = vendorShippingTitleCode;
     }
+    
+    /**
+     * Gets the purchaseOrderEndDate attribute. 
+     * @return Returns the purchaseOrderEndDate.
+     */
 
     public Date getPurchaseOrderEndDate() {
         return purchaseOrderEndDate;
     }
 
+    /**
+     * Sets the purchaseOrderEndDate attribute value.
+     * @param purchaseOrderEndDate The purchaseOrderEndDate to set.
+     */
     public void setPurchaseOrderEndDate(Date purchaseOrderEndDate) {
         this.purchaseOrderEndDate = purchaseOrderEndDate;
     }
 
     /**
+     * Gets the closePurchaseOrderIndicator attribute. 
+     * @return Returns the closePurchaseOrderIndicator.
+     */
+    public boolean isClosePurchaseOrderIndicator() {
+        return closePurchaseOrderIndicator;
+    }
+
+    /**
+     * Sets the closePurchaseOrderIndicator attribute value.
+     * @param closePurchaseOrderIndicator The closePurchaseOrderIndicator to set.
+     */
+    public void setClosePurchaseOrderIndicator(boolean closePurchaseOrderIndicator) {
+        this.closePurchaseOrderIndicator = closePurchaseOrderIndicator;
+    }
+
+    /**
+     * Gets the reopenPurchaseOrderIndicator attribute. 
+     * @return Returns the reopenPurchaseOrderIndicator.
+     */
+    public boolean isReopenPurchaseOrderIndicator() {
+        return reopenPurchaseOrderIndicator;
+    }
+
+    /**
+     * Sets the reopenPurchaseOrderIndicator attribute value.
+     * @param reopenPurchaseOrderIndicator The reopenPurchaseOrderIndicator to set.
+     */
+    public void setReopenPurchaseOrderIndicator(boolean reopenPurchaseOrderIndicator) {
+        this.reopenPurchaseOrderIndicator = reopenPurchaseOrderIndicator;
+    }    
+    
+    /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addToStatusHistories(java.lang.String, java.lang.String)
+     */
+    public void addToStatusHistories( String oldStatus, String newStatus ) {
+        PaymentRequestStatusHistory prsh = new PaymentRequestStatusHistory( oldStatus, newStatus );
+        this.getStatusHistories().add( prsh );
+    }
+    
+    /**
      * Perform logic needed to initiate PREQ Document
      */
     public void initiateDocument() {
         LOG.debug("initiateDocument() started");
-        UniversalUser currentUser = (UniversalUser) GlobalVariables.getUserSession().getUniversalUser();
-        this.setStatusCode(PurapConstants.PaymentRequestStatuses.INITIATE);
+        UniversalUser currentUser = (UniversalUser)GlobalVariables.getUserSession().getUniversalUser();
+        this.setStatusCode( PurapConstants.PaymentRequestStatuses.INITIATE );
         this.setAccountsPayableProcessorIdentifier(currentUser.getPersonUniversalIdentifier());
         this.setProcessingCampusCode(currentUser.getCampusCode());
         this.refreshNonUpdateableReferences();
     }
-
+    
     /**
-     * Perform logic needed to clear the initial fields on a PREQ Document
+     * Perform logic needed to initiate PREQ Document
      */
     public void clearInitFields() {
         LOG.debug("clearDocument() started");
-        // Clearing document overview fields
+        // Clearing document overview fields 
         this.getDocumentHeader().setFinancialDocumentDescription(null);
         this.getDocumentHeader().setExplanation(null);
         this.getDocumentHeader().setFinancialDocumentTotalAmount(null);
         this.getDocumentHeader().setOrganizationDocumentNumber(null);
-
+    
         // Clearing document Init fields
         this.setPurchaseOrderIdentifier(null);
         this.setInvoiceNumber(null);
@@ -390,42 +697,30 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         this.setSpecialHandlingInstructionLine2Text(null);
         this.setSpecialHandlingInstructionLine3Text(null);
     }
-
+  
     /**
-     * Populates a preq from a PO - delegate method
-     * 
-     * @param po -
+     * TODO (KULPURAP-436: ctk) this should be cleaned up
+     * This method populates a preq from po
+     * @param po
      */
     public void populatePaymentRequestFromPurchaseOrder(PurchaseOrderDocument po) {
-        populatePaymentRequestFromPurchaseOrder(po, new HashMap<String, ExpiredOrClosedAccountEntry>());
-    }
-
-
-    /**
-     * Populates a preq from a PO
-     * 
-     * @param po Purchase Order Document used for populating the PREQ
-     * @param expiredOrClosedAccountList a list of closed or expired accounts
-     */
-    public void populatePaymentRequestFromPurchaseOrder(PurchaseOrderDocument po, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
         this.setPurchaseOrderIdentifier(po.getPurapDocumentIdentifier());
-        this.getDocumentHeader().setOrganizationDocumentNumber(po.getDocumentHeader().getOrganizationDocumentNumber());
         this.setPostingYear(po.getPostingYear());
         this.setVendorCustomerNumber(po.getVendorCustomerNumber());
-        if (po.getPurchaseOrderCostSource() != null) {
+        if (po.getPurchaseOrderCostSource() != null ){
             this.setPaymentRequestCostSource(po.getPurchaseOrderCostSource());
-            this.setPaymentRequestCostSourceCode(po.getPurchaseOrderCostSourceCode());
+            this.setPaymentRequestCostSourceCode(po.getPurchaseOrderCostSourceCode()); 
         }
-        if (po.getVendorShippingPaymentTerms() != null) {
+        if (po.getVendorShippingPaymentTerms()!= null){
             this.setVendorShippingPaymentTerms(po.getVendorShippingPaymentTerms());
             this.setVendorShippingPaymentTermsCode(po.getVendorShippingPaymentTermsCode());
         }
-
-        if (po.getRecurringPaymentType() != null) {
+        
+        if (po.getRecurringPaymentType() !=null){
             this.setRecurringPaymentType(po.getRecurringPaymentType());
             this.setRecurringPaymentTypeCode(po.getRecurringPaymentTypeCode());
         }
-
+        
         this.setVendorHeaderGeneratedIdentifier(po.getVendorHeaderGeneratedIdentifier());
         this.setVendorDetailAssignedIdentifier(po.getVendorDetailAssignedIdentifier());
         this.setVendorCustomerNumber(po.getVendorCustomerNumber());
@@ -441,96 +736,155 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         else {
             // set address from PO
             this.setVendorAddressGeneratedIdentifier(po.getVendorAddressGeneratedIdentifier());
-            this.setVendorLine1Address(po.getVendorLine1Address());
-            this.setVendorLine2Address(po.getVendorLine2Address());
-            this.setVendorCityName(po.getVendorCityName());
-            this.setVendorStateCode(po.getVendorStateCode());
-            this.setVendorPostalCode(po.getVendorPostalCode());
-            this.setVendorCountryCode(po.getVendorCountryCode());
+        this.setVendorLine1Address(po.getVendorLine1Address());
+        this.setVendorLine2Address(po.getVendorLine2Address());
+        this.setVendorCityName(po.getVendorCityName());
+        this.setVendorStateCode(po.getVendorStateCode());
+        this.setVendorPostalCode(po.getVendorPostalCode());
+        this.setVendorCountryCode(po.getVendorCountryCode());
         }
 
-        if ((po.getVendorPaymentTerms() == null) || ("".equals(po.getVendorPaymentTerms().getVendorPaymentTermsCode()))) {
+        if ((po.getVendorPaymentTerms() == null) || ("".equals(po.getVendorPaymentTerms().getVendorPaymentTermsCode())) ) {
             this.setVendorPaymentTerms(new PaymentTermType());
             this.vendorPaymentTerms.setVendorPaymentTermsCode("");
-        }
-        else {
+        } else {
             this.setVendorPaymentTermsCode(po.getVendorPaymentTermsCode());
             this.setVendorPaymentTerms(po.getVendorPaymentTerms());
         }
         this.setPaymentRequestPayDate(SpringContext.getBean(PaymentRequestService.class).calculatePayDate(this.getInvoiceDate(), this.getVendorPaymentTerms()));
-
-        AccountsPayableService accountsPayableService = SpringContext.getBean(AccountsPayableService.class);
-        for (PurchaseOrderItem poi : (List<PurchaseOrderItem>) po.getItems()) {
-            // check to make sure it's eligible for payment (i.e. active and has encumberance available
-            if (getDocumentSpecificService().poItemEligibleForAp(this, poi)) {
-                this.getItems().add(new PaymentRequestItem(poi, this, expiredOrClosedAccountList));
+        for (PurchaseOrderItem poi : (List<PurchaseOrderItem>)po.getItems()) {
+            //TODO (KULPURAP-1393: ctk) add this back if we end up building the list of items at every load
+//            if(poi.isItemActiveIndicator()) {
+                this.getItems().add(new PaymentRequestItem(poi,this));                
+//            }
             }
-        }
-        // add missing below the line
+        //add missing below the line
         SpringContext.getBean(PurapService.class).addBelowLineItems(this);
         this.setAccountsPayablePurchasingDocumentLinkIdentifier(po.getAccountsPayablePurchasingDocumentLinkIdentifier());
 
         this.refreshNonUpdateableReferences();
     }
+    
+   
+    /**
+     * TODO (KULPURAP-1575) this should be cleaned up.. it is also a replica of the method above except it performs account replacement
+     * This method populates a preq from po
+     * @param po
+     */
+    public void populatePaymentRequestFromPurchaseOrder(PurchaseOrderDocument po, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
+        this.setPurchaseOrderIdentifier(po.getPurapDocumentIdentifier());
+        this.setPostingYear(po.getPostingYear());
+        this.setVendorCustomerNumber(po.getVendorCustomerNumber());
+        if (po.getPurchaseOrderCostSource() != null ){
+            this.setPaymentRequestCostSource(po.getPurchaseOrderCostSource());
+            this.setPaymentRequestCostSourceCode(po.getPurchaseOrderCostSourceCode()); 
+        }
+        if (po.getVendorShippingPaymentTerms()!= null){
+            this.setVendorShippingPaymentTerms(po.getVendorShippingPaymentTerms());
+            this.setVendorShippingPaymentTermsCode(po.getVendorShippingPaymentTermsCode());
+        }
+        
+        if (po.getRecurringPaymentType() !=null){
+            this.setRecurringPaymentType(po.getRecurringPaymentType());
+            this.setRecurringPaymentTypeCode(po.getRecurringPaymentTypeCode());
+        }
+        
+        this.setVendorHeaderGeneratedIdentifier(po.getVendorHeaderGeneratedIdentifier());
+        this.setVendorDetailAssignedIdentifier(po.getVendorDetailAssignedIdentifier());
+        this.setVendorCustomerNumber(po.getVendorCustomerNumber());
+        this.setVendorName(po.getVendorName());
+
+        // populate preq vendor address with the default remit address type for the vendor if found
+        String userCampus = GlobalVariables.getUserSession().getUniversalUser().getCampusCode();
+        VendorAddress vendorAddress = SpringContext.getBean(VendorService.class).getVendorDefaultAddress(po.getVendorHeaderGeneratedIdentifier(), po.getVendorDetailAssignedIdentifier(), VendorConstants.AddressTypes.REMIT, userCampus);
+        if (vendorAddress != null) {
+            this.templateVendorAddress(vendorAddress);
+            this.setVendorAddressGeneratedIdentifier(vendorAddress.getVendorAddressGeneratedIdentifier());
+        }
+        else {
+            // set address from PO
+            this.setVendorAddressGeneratedIdentifier(po.getVendorAddressGeneratedIdentifier());
+        this.setVendorLine1Address(po.getVendorLine1Address());
+        this.setVendorLine2Address(po.getVendorLine2Address());
+        this.setVendorCityName(po.getVendorCityName());
+        this.setVendorStateCode(po.getVendorStateCode());
+        this.setVendorPostalCode(po.getVendorPostalCode());
+        this.setVendorCountryCode(po.getVendorCountryCode());
+        }
+
+        if ((po.getVendorPaymentTerms() == null) || ("".equals(po.getVendorPaymentTerms().getVendorPaymentTermsCode())) ) {
+            this.setVendorPaymentTerms(new PaymentTermType());
+            this.vendorPaymentTerms.setVendorPaymentTermsCode("");
+        } else {
+            this.setVendorPaymentTermsCode(po.getVendorPaymentTermsCode());
+            this.setVendorPaymentTerms(po.getVendorPaymentTerms());
+        }
+        this.setPaymentRequestPayDate(SpringContext.getBean(PaymentRequestService.class).calculatePayDate(this.getInvoiceDate(), this.getVendorPaymentTerms()));
+        for (PurchaseOrderItem poi : (List<PurchaseOrderItem>)po.getItems()) {
+            //TODO (KULPURAP-1393: ctk) add this back if we end up building the list of items at every load
+//            if(poi.isItemActiveIndicator()) {
+                this.getItems().add(new PaymentRequestItem(poi,this, expiredOrClosedAccountList));                
+//              }
+        }
+        //add missing below the line
+        SpringContext.getBean(PurapService.class).addBelowLineItems(this);
+        this.setAccountsPayablePurchasingDocumentLinkIdentifier(po.getAccountsPayablePurchasingDocumentLinkIdentifier());
+
+        this.refreshNonUpdateableReferences();
+    }
+   
 
     /**
      * @see org.kuali.core.document.DocumentBase#getDocumentTitle()
      */
     @Override
     public String getDocumentTitle() {
-        String specificTitle = SpringContext.getBean(ParameterService.class).getParameterValue(PaymentRequestDocument.class, PurapParameterConstants.PURAP_OVERRIDE_PREQ_DOC_TITLE);
-        if (StringUtils.equalsIgnoreCase(specificTitle, Boolean.TRUE.toString())) {
+        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST, PurapParameterConstants.PURAP_OVERRIDE_PREQ_DOC_TITLE);
+        if (StringUtils.equalsIgnoreCase(specificTitle,Boolean.TRUE.toString())) {
             return getCustomDocumentTitle();
         }
         return super.getDocumentTitle();
     }
-
-    /**
-     * Returns a custom document title based on the workflow document title. Depending on what route level the document is currently
-     * in, the PO, vendor, amount, account number, dept, campus may be added to the documents title.
-     * 
-     * @return - Customized document title text dependent upon route level.
-     */
+    
     private String getCustomDocumentTitle() {
-        try {
-            // set the workflow document title
+        try{
+            //set the workflow document title
             String poNumber = getPurchaseOrderIdentifier().toString();
-            String vendorName = StringUtils.trimToEmpty(getVendorName());
+            String vendorName = StringUtils.trimToEmpty( getVendorName() );
             String preqAmount = getGrandTotal().toString();
-            String indicator = getTitleIndicator();
-
+            String indicator = getTitleIndicator();        
+            
             String documentTitle = new StringBuffer("PO: ").append(poNumber).append(" Vendor: ").append(vendorName).append(" Amount: ").append(preqAmount).append(" ").append(indicator).toString();
             String[] nodeNames = getDocumentHeader().getWorkflowDocument().getNodeNames();
-            if ((nodeNames.length == 1) && (NodeDetailEnum.VENDOR_TAX_REVIEW.getName().equals(nodeNames[0]))) {
+            if ( (nodeNames.length == 1) && (NodeDetailEnum.VENDOR_TAX_REVIEW.getName().equals(nodeNames[0])) ) {
                 // tax review
-                // grab the first account
+                //grab the first account
                 PurApAccountingLine theAccount = getFirstAccount();
-                // setup variables
-                String deliveryCampus = StringUtils.trimToEmpty((getProcessingCampus() != null ? getProcessingCampus().getCampusShortName() : ""));
+                //setup variables
+                String deliveryCampus = StringUtils.trimToEmpty( (getProcessingCampus() != null ? getProcessingCampus().getCampusShortName() : "") );        
                 String accountNumber = (theAccount != null ? StringUtils.trimToEmpty(theAccount.getAccountNumber()) : "");
-                String department = (theAccount != null ? StringUtils.trimToEmpty((((theAccount.getAccount() != null) && (theAccount.getAccount().getOrganization() != null)) ? theAccount.getAccount().getOrganization().getOrganizationName() : "")) : "");
+                String department = (theAccount != null ? StringUtils.trimToEmpty((( (theAccount.getAccount() != null) && (theAccount.getAccount().getOrganization() != null) ) ? theAccount.getAccount().getOrganization().getOrganizationName() : "")) : "");
                 documentTitle = new StringBuffer("Vendor: ").append(vendorName).append(" PO: ").append(poNumber).append(" Account Number: ").append(accountNumber).append(" Dept: ").append(department).append(" Delivery Campus: ").append(deliveryCampus).toString();
             }
             return documentTitle;
-        }
-        catch (WorkflowException e) {
+        }catch (WorkflowException e) {
             LOG.error("Error updating Payment Request document: " + e.getMessage());
             throw new RuntimeException("Error updating Payment Request document: " + e.getMessage());
         }
     }
 
     /**
-     * Returns the first payment item's first account (assuming the item list is sequentially ordered).
+     * This method returns the first payment item's first account (assuming the item list is sequentially ordered).
      * 
-     * @return - Accounting Line object for first account of first payment item.
+     * @return
      */
-    private PurApAccountingLine getFirstAccount() {
+    private PurApAccountingLine getFirstAccount(){
         // loop through items, and pick the first item
-        if ((getItems() != null) && (!getItems().isEmpty())) {
+        if ( (getItems() != null) && (!getItems().isEmpty()) ) {
             PaymentRequestItem itemToUse = null;
             for (Iterator iter = getItems().iterator(); iter.hasNext();) {
                 PaymentRequestItem item = (PaymentRequestItem) iter.next();
-                if ((item.isConsideredEntered()) && ((item.getSourceAccountingLines() != null) && (!item.getSourceAccountingLines().isEmpty()))) {
+                if ( (item.isConsideredEntered()) && ( (item.getSourceAccountingLines() != null) && (!item.getSourceAccountingLines().isEmpty()) ) ) {
                     // accounting lines are not empty so pick the first account
                     PurApAccountingLine accountLine = item.getSourceAccountingLine(0);
                     accountLine.refreshNonUpdateableReferences();
@@ -542,11 +896,11 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
 
     /**
-     * Determines the indicator text that will appear in the workflow document title
+     * This method determines the indicator text that will appear in the workflow document title
      * 
-     * @return - Text of hold or request cancel
+     * @return
      */
-    private String getTitleIndicator() {
+    private String getTitleIndicator(){
         if (isHoldIndicator()) {
             return PurapConstants.PaymentRequestIndicatorText.HOLD;
         }
@@ -567,7 +921,7 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
             // DOCUMENT PROCESSED
             if (this.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
                 if (!PaymentRequestStatuses.AUTO_APPROVED.equals(getStatusCode())) {
-                    SpringContext.getBean(PurapService.class).updateStatus(this, PurapConstants.PaymentRequestStatuses.DEPARTMENT_APPROVED);
+                    SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, PurapConstants.PaymentRequestStatuses.DEPARTMENT_APPROVED);
                     populateDocumentForRouting();
                     SpringContext.getBean(PaymentRequestService.class).saveDocumentWithoutValidation(this);
                     return;
@@ -579,14 +933,20 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
                 NodeDetails currentNode = NodeDetailEnum.getNodeDetailEnumByName(nodeName);
                 if (ObjectUtils.isNotNull(currentNode)) {
                     String newStatusCode = currentNode.getDisapprovedStatusCode();
-                    if ((StringUtils.isBlank(newStatusCode)) && ((StringUtils.isBlank(currentNode.getDisapprovedStatusCode())) && ((PaymentRequestStatuses.INITIATE.equals(getStatusCode())) || (PaymentRequestStatuses.IN_PROCESS.equals(getStatusCode()))))) {
+                    if ( (StringUtils.isBlank(newStatusCode)) && 
+                         ( (StringUtils.isBlank(currentNode.getDisapprovedStatusCode())) && ( (PaymentRequestStatuses.INITIATE.equals(getStatusCode())) || (PaymentRequestStatuses.IN_PROCESS.equals(getStatusCode())) ) ) ) {
                         newStatusCode = PaymentRequestStatuses.CANCELLED_IN_PROCESS;
                     }
                     if (StringUtils.isNotBlank(newStatusCode)) {
+//                        
+//                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, newStatusCode);
+//                        
+//                        SpringContext.getBean(PaymentRequestService.class).saveDocumentWithoutValidation(this);
                         SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(this, nodeName);
                         return;
                     }
                 }
+                // TODO (KULPURAP-1579: ctk) delyea - what to do in a disapproval where no status to set exists?
                 logAndThrowRuntimeException("No status found to set for document being disapproved in node '" + nodeName + "'");
             }
             // DOCUMENT CANCELED
@@ -596,12 +956,13 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
                 if (ObjectUtils.isNotNull(currentNode)) {
                     String cancelledStatusCode = currentNode.getDisapprovedStatusCode();
                     if (StringUtils.isNotBlank(cancelledStatusCode)) {
-                        SpringContext.getBean(PurapService.class).updateStatus(this, cancelledStatusCode);
+                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, cancelledStatusCode);
                         SpringContext.getBean(PaymentRequestService.class).saveDocumentWithoutValidation(this);
                         return;
                     }
                 }
-                logAndThrowRuntimeException("No status found to set for document being canceled in node '" + currentNode + "'");
+                // TODO (KULPURAP-1579: ctk) delyea - what to do in a cancel where no status to set exists?
+                LOG.warn("No status found to set for document being disapproved in node '" + currentNodeName + "'");
             }
         }
         catch (WorkflowException e) {
@@ -609,25 +970,20 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         }
     }
 
-    /**
-     * Generates correcting entries to the GL if accounts are modified.
-     * 
-     * @see org.kuali.core.document.Document#doActionTaken(edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO)
-     */
     @Override
     public void doActionTaken(ActionTakenEventVO event) {
         super.doActionTaken(event);
         KualiWorkflowDocument workflowDocument = getDocumentHeader().getWorkflowDocument();
         try {
-            String currentNode = null;
-            if (workflowDocument.getNodeNames().length > 0) {
-                currentNode = workflowDocument.getNodeNames()[0];
-            }
+            String currentNode = workflowDocument.getNodeNames()[0];
 
             // everything in the below list requires correcting entries to be written to the GL
             if (NodeDetailEnum.getNodesRequiringCorrectingGeneralLedgerEntries().contains(currentNode)) {
                 if (NodeDetailEnum.ACCOUNT_REVIEW.getName().equals(currentNode)) {
-                    SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesModifyPaymentRequest(this);
+                    //TODO remove this config (for testing only) hjs
+                    if (SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST,"GL_MODIFY")) {
+                        SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesModifyPaymentRequest(this);
+                    }
                 }
             }
         }
@@ -652,27 +1008,23 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         }
         return true;
     }
-
+    
     /**
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getNodeDetailEnum(java.lang.String)
      */
     public NodeDetails getNodeDetailEnum(String nodeName) {
         return NodeDetailEnum.getNodeDetailEnumByName(nodeName);
     }
-
+    
     /**
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#saveDocumentFromPostProcessing()
      */
     public void saveDocumentFromPostProcessing() {
         SpringContext.getBean(PaymentRequestService.class).saveDocumentWithoutValidation(this);
-
-        // if we've hit full entry completed then close/reopen po
-        if (PurapConstants.PaymentRequestStatuses.STATUS_ORDER.isFullDocumentEntryCompleted(this.getStatusCode()) && this.isClosePurchaseOrderIndicator()) {
-            SpringContext.getBean(PurapService.class).performLogicForCloseReopenPO(this);
-        }
     }
 
     /**
+     * 
      * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getItemClass()
      */
     @Override
@@ -696,20 +1048,35 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         return SpringContext.getBean(DataDictionaryService.class).getDocumentLabelByClass(PurchaseOrderDocument.class);
     }
 
+    /**
+     * Gets the purchaseOrderNotes attribute. 
+     * @return Returns the purchaseOrderNotes.
+     */
     public String getPurchaseOrderNotes() {
-
-        ArrayList poNotes = (ArrayList) this.getPurchaseOrderDocument().getBoNotes();
-
+        
+        ArrayList poNotes = SpringContext.getBean(PurchaseOrderService.class).getPurchaseOrderNotes(this.getPurchaseOrderIdentifier());
+        
         if (poNotes.size() > 0) {
             return "Yes";
         }
         return "No";
     }
 
+    /**
+     * Sets the purchaseOrderNotes attribute value.
+     * 
+     * @param purchaseOrderNotes The purchaseOrderNotes to set.
+     */
     public void setPurchaseOrderNotes(String purchaseOrderNotes) {
         this.purchaseOrderNotes = purchaseOrderNotes;
     }
 
+
+    @Override
+    public List<PaymentRequestView> getRelatedPaymentRequestViews() {
+        return null;
+    }
+    
     public String getRecurringPaymentTypeCode() {
         return recurringPaymentTypeCode;
     }
@@ -719,72 +1086,90 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
 
     /**
-     * Returns the total encumbered amount from the purchase order excluding below the line.
-     * 
+     * Get the total encumbered amount from the purchase order excluding 
+     * below the line
      * @return Total cost excluding below the line
      */
     public KualiDecimal getItemTotalPoEncumbranceAmount() {
-        // get total from po excluding below the line and inactive
-        return this.getPurchaseOrderDocument().getTotalDollarAmount(false, false);
-    }
-
+      //get total from po excluding below the line and inactive
+      return this.getPurchaseOrderDocument().getTotalDollarAmount(false, false);
+    }    
+    
     public KualiDecimal getItemTotalPoEncumbranceAmountRelieved() {
         return getItemTotalPoEncumbranceAmountRelieved(false);
     }
-
+    /**
+     * 
+     * This method is just a stub for now
+     * @return
+     */
     public KualiDecimal getItemTotalPoEncumbranceAmountRelieved(boolean includeBelowTheLine) {
-
+        
         KualiDecimal total = KualiDecimal.ZERO;
-
-        for (PaymentRequestItem item : (List<PaymentRequestItem>) getItems()) {
+        
+        for (PaymentRequestItem item : (List<PaymentRequestItem>)getItems()) {
             ItemType it = item.getItemType();
-            if (includeBelowTheLine || it.isItemTypeAboveTheLineIndicator()) {
+            if(includeBelowTheLine || it.isItemTypeAboveTheLineIndicator()) {
                 total = total.add(item.getPurchaseOrderItemEncumbranceRelievedAmount());
             }
         }
         return total;
     }
-
+    
+    /**
+     * 
+     * Get the total for just the line items
+     * @return the line item total
+     */
     public KualiDecimal getLineItemTotal() {
         return this.getTotalDollarAmountAboveLineItems();
     }
-
+    
+    
+    /**
+     * 
+     * This method gets the grand total
+     * @return
+     */    
     public KualiDecimal getGrandTotal() {
         return this.getTotalDollarAmount();
     }
-
+    
+    /**
+     * this method get the total excluding discount
+     * @return
+     */
     public KualiDecimal getGrandTotalExcludingDiscount() {
-        String[] discountCode = new String[] { PurapConstants.ItemTypeCodes.ITEM_TYPE_PMT_TERMS_DISCOUNT_CODE };
+        String[] discountCode = new String[]{PurapConstants.ItemTypeCodes.ITEM_TYPE_PMT_TERMS_DISCOUNT_CODE};
         return this.getTotalDollarAmountWithExclusions(discountCode, true);
     }
-
+    
+    /**
+     * this method returns true if has discount
+     */
     public boolean isDiscount() {
-        return SpringContext.getBean(PaymentRequestService.class).hasDiscountItem(this);
+        return SpringContext.getBean(PaymentRequestService.class).hasDiscountItem(this); 
     }
-
+    
     /**
      * The total that was paid on the po excluding below the line
-     * 
      * @return total paid
+     * 
      */
     public KualiDecimal getItemTotalPoPaidAmount() {
         KualiDecimal total = KualiDecimal.ZERO;
-        for (PaymentRequestItem item : (List<PaymentRequestItem>) getItems()) {
+        for (PaymentRequestItem item : (List<PaymentRequestItem>)getItems()) {
             ItemType iT = item.getItemType();
-            if (iT.isItemTypeAboveTheLineIndicator()) {
+            if(iT.isItemTypeAboveTheLineIndicator()) {
                 KualiDecimal itemPaid = item.getPurchaseOrderItemPaidAmount();
-                total = total.add(itemPaid);
+                total=total.add(itemPaid);
             }
         }
         return total;
     }
 
-    /**
-     * Returns the name of who requested cancel.
-     * 
-     * @return - name of who requested cancel.
-     */
-    public String getAccountsPayableRequestCancelPersonName() {
+    //Helper methods
+    public String getAccountsPayableRequestCancelPersonName(){
         String personName = null;
         try {
             UniversalUser user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(getAccountsPayableRequestCancelIdentifier());
@@ -793,42 +1178,46 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         catch (UserNotFoundException unfe) {
             personName = "";
         }
-
+        
         return personName;
     }
 
-    /**
-     * Exists due to a setter requirement by the htmlControlAttribute
-     * 
-     * @param amount - total po amount paid
+    /** 
+     * This method is here due to a setter requirement by the htmlControlAttribute
+     * @param amount
      */
-    public void setItemTotalPoPaidAmount(KualiDecimal amount) {
-        // do nothing
+    public void setItemTotalPoPaidAmount(KualiDecimal amount){
+        //do nothing
     }
 
-    /**
-     * Exists due to a setter requirement by the htmlControlAttribute
-     * 
-     * @param amount - total po encumbrance
+    /** 
+     * This method is here due to a setter requirement by the htmlControlAttribute
+     * @param amount
+     */
+    public void setGrandTotalExcludingDiscount(KualiDecimal amount) {
+        //do nothing
+    }  
+    /** 
+     * This method is here due to a setter requirement by the htmlControlAttribute
+     * @param amount
      */
     public void setItemTotalPoEncumbranceAmount(KualiDecimal amount) {
-        // do nothing
-    }
+        //do nothing
+    }    
 
-    /**
-     * Exists due to a setter requirement by the htmlControlAttribute
-     * 
-     * @param amount - total po encumbrance amount relieved
+    /** 
+     * This method is here due to a setter requirement by the htmlControlAttribute
+     * @param amount
      */
     public void setItemTotalPoEncumbranceAmountRelieved(KualiDecimal amount) {
-        // do nothing
+        //do nothing
     }
 
     /**
-     * Determinines the route levels for a given document.
+     * A helper method for determining the route levels for a given document.
      * 
-     * @param workflowDocument - work flow document
-     * @return List - list of route levels
+     * @param workflowDocument
+     * @return List
      */
     protected List getCurrentRouteLevels(KualiWorkflowDocument workflowDocument) {
         try {
@@ -839,21 +1228,26 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
         }
     }
 
-    /**
-     * Updates the extended price for each payment request item.
-     */
+    
     public void updateExtendedPriceOnItems() {
-        for (PaymentRequestItem item : (List<PaymentRequestItem>) this.getItems()) {
-            if ((ObjectUtils.isNull(item.getExtendedPrice()) || (KualiDecimal.ZERO.compareTo(item.getExtendedPrice()) == 0)) && item.getItemType().isQuantityBasedGeneralLedgerIndicator()) {
+        for (PaymentRequestItem item : (List<PaymentRequestItem>)this.getItems()) {
+            if((ObjectUtils.isNull(item.getExtendedPrice())||(KualiDecimal.ZERO.compareTo(item.getExtendedPrice())==0)) &&
+               item.getItemType().isQuantityBasedGeneralLedgerIndicator()) {
                 KualiDecimal newExtendedPrice = item.calculateExtendedPrice();
                 item.setExtendedPrice(newExtendedPrice);
             }
         }
     }
-
+    /**
+     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getSourceAccountingLineClass()
+     */
+//    @Override
+//    public Class getSourceAccountingLineClass() {
+//        return PaymentRequestAccount.class;
+//    }
+    
     /**
      * USED FOR ROUTING ONLY
-     * 
      * @deprecated
      */
     public String getStatusDescription() {
@@ -862,29 +1256,48 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
 
     /**
      * USED FOR ROUTING ONLY
-     * 
      * @deprecated
      */
     public void setStatusDescription(String statusDescription) {
     }
-
+   
+    /**
+     * Gets the recurringPaymentType attribute. 
+     * @return Returns the recurringPaymentType.
+     */
     public RecurringPaymentType getRecurringPaymentType() {
-        if (ObjectUtils.isNull(recurringPaymentType)) {
-            refreshReferenceObject(PurapPropertyConstants.RECURRING_PAYMENT_TYPE);
-        }
         return recurringPaymentType;
     }
 
+    /**
+     * Sets the recurringPaymentType attribute value.
+     * @param recurringPaymentType The recurringPaymentType to set.
+     */
     public void setRecurringPaymentType(RecurringPaymentType recurringPaymentType) {
         this.recurringPaymentType = recurringPaymentType;
     }
 
+    /**
+     * Gets the paymentRequestCostSource attribute. 
+     * @return Returns the paymentRequestCostSource.
+     */
     public PurchaseOrderCostSource getPaymentRequestCostSource() {
         return paymentRequestCostSource;
     }
 
+    /**
+     * Sets the paymentRequestCostSource attribute value.
+     * @param paymentRequestCostSource The paymentRequestCostSource to set.
+     */
     public void setPaymentRequestCostSource(PurchaseOrderCostSource paymentRequestCostSource) {
         this.paymentRequestCostSource = paymentRequestCostSource;
+    }
+
+    /**
+     * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getPoDocumentTypeForAccountsPayableDocumentApprove()
+     */
+    public String getPoDocumentTypeForAccountsPayableDocumentApprove() {
+        return PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_CLOSE_DOCUMENT;
     }
 
     /**
@@ -895,54 +1308,38 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
 
     /**
+     * 
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#getInitialAmount()
      */
-    public KualiDecimal getInitialAmount() {
+    public KualiDecimal getInitialAmount(){
         return this.getVendorInvoiceAmount();
     }
 
-    /**
-     * Populates the payment request document, then continues with preparing for save.
-     * 
-     * @see org.kuali.core.document.Document#prepareForSave(org.kuali.core.rule.event.KualiDocumentEvent)
-     */
+
     @Override
     public void prepareForSave(KualiDocumentEvent event) {
-
-        // first populate, then call super
-        if (event instanceof ContinueAccountsPayableEvent) {
+        
+        //first populate, then call super
+        if(event instanceof ContinueAccountsPayableEvent){
             SpringContext.getBean(PaymentRequestService.class).populatePaymentRequest(this);
         }
-
+        
         super.prepareForSave(event);
     }
+
 
     /**
      * @see org.kuali.module.purap.document.AccountsPayableDocumentBase#isAttachmentRequired()
      */
     @Override
     protected boolean isAttachmentRequired() {
-        return StringUtils.equalsIgnoreCase("Y", SpringContext.getBean(ParameterService.class).getParameterValue(PaymentRequestDocument.class, PurapParameterConstants.PURAP_PREQ_REQUIRE_ATTACHMENT));
-    }
+        return StringUtils.equalsIgnoreCase("Y", SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, PurapConstants.Components.PAYMENT_REQUEST, PurapParameterConstants.PURAP_PREQ_REQUIRE_ATTACHMENT));
+	}
 
-    /**
-     * @see org.kuali.module.purap.document.AccountsPayableDocument#getDocumentSpecificService()
-     */
+
     @Override
     public AccountsPayableDocumentSpecificService getDocumentSpecificService() {
-        return (AccountsPayableDocumentSpecificService) SpringContext.getBean(PaymentRequestService.class);
+        return (AccountsPayableDocumentSpecificService)SpringContext.getBean(PaymentRequestService.class);
     }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocumentBase#getItem(int)
-     */
-    @Override
-    public PurApItem getItem(int pos) {
-        PaymentRequestItem item = (PaymentRequestItem) super.getItem(pos);
-        if (item.getPaymentRequest() == null) {
-            item.setPaymentRequest(this);
-        }
-        return item;
-    }
-
+   
 }
