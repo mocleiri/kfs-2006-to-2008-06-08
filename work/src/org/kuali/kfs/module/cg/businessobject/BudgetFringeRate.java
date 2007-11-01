@@ -18,6 +18,8 @@ package org.kuali.module.kra.budget.bo;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
@@ -25,6 +27,8 @@ import org.kuali.kfs.KFSPropertyConstants;
 
 /**
  * Budget Fringe Rate Business Object
+ * 
+ * 
  */
 public class BudgetFringeRate extends PersistableBusinessObjectBase {
 
@@ -45,7 +49,7 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
         super();
         appointmentType = new AppointmentType();
     }
-
+    
     public BudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode) {
         this();
         this.documentNumber = documentNumber;
@@ -96,8 +100,8 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
     }
 
     /*
-     * (non-Javadoc) Doesn't compare timestamps
-     * 
+     * (non-Javadoc)
+     * Doesn't compare timestamps 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {

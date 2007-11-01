@@ -20,6 +20,8 @@ import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants;
 
 /**
  * Holds constants for <code>{@link org.kuali.module.financial.document.GeneralErrorCorrectionDocument}</code> business rules.
+ * 
+ * 
  */
 public interface GeneralErrorCorrectionDocumentRuleConstants extends AccountingDocumentRuleBaseConstants {
     // Security grouping constants used to do application parameter lookups
@@ -28,8 +30,8 @@ public interface GeneralErrorCorrectionDocumentRuleConstants extends AccountingD
     // Application parameter lookup constants to be used in conjunction with the grouping constants above
     public static final String RESTRICTED_OBJECT_TYPE_CODES = "OBJECT_TYPES";
     public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "OBJECT_SUB_TYPES";
-    public static final String INVALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE = "INVALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE";
-    public static final String VALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE = "VALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE";
+    public static final String COMBINED_RESTRICTED_OBJECT_TYPE_CODES = "INVALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE";
+    public static final String COMBINED_RESTRICTED_OBJECT_SUB_TYPE_CODES = "VALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE";
 
     public static final String TRANSACTION_LEDGER_ENTRY_DESCRIPTION_DELIMITER = "+";
 }
