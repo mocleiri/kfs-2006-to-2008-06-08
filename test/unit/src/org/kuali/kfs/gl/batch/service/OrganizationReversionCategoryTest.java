@@ -17,18 +17,20 @@ package org.kuali.module.gl.service.impl.orgreversion;
 
 import java.util.Map;
 
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.chart.service.OrganizationReversionService;
 import org.kuali.module.gl.service.OrganizationReversionCategoryLogic;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class OrganizationReversionCategoryTest extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrganizationReversionCategoryTest.class);
 
+    private BeanFactory beanFactory;
     private OrganizationReversionService organizationReversionService;
     private Map<String, OrganizationReversionCategoryLogic> categories;
     private ObjectCodeService objectCodeService;
@@ -37,10 +39,10 @@ public class OrganizationReversionCategoryTest extends KualiTestBase {
     public void setUp() throws Exception {
         super.setUp();
 
-        Map<String, OrganizationReversionService> orgRevServiceBeans = SpringContext.getBeansOfType(OrganizationReversionService.class);
-        organizationReversionService = orgRevServiceBeans.get("organizationReversionService");
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        organizationReversionService = (OrganizationReversionService) beanFactory.getBean("organizationReversionService");
         categories = organizationReversionService.getCategories();
-        objectCodeService = SpringContext.getBean(ObjectCodeService.class);
+        objectCodeService = SpringServiceLocator.getObjectCodeService();
     }
 
     public void testC01Reversion() {

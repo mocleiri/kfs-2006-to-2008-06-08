@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 
 
         <inquiry>
-            <title>Disbursement Voucher Documentation Location Inquiry</title>
+            <title>Documentation Location Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="disbursementVoucherDocumentationLocationCode" />
@@ -32,7 +32,7 @@
         </inquiry>
 
         <lookup>
-            <title>Disbursement Voucher Documentation Location Lookup</title>
+            <title>Documentation Location Lookup</title>
 
             <instructions>Lookup a Disbursement Voucher Documentation Location</instructions>
 
@@ -65,6 +65,9 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The code uniquely identify a documentation location.</description>
             </attribute>
 
             <attribute name="disbursementVoucherDocumentationLocationName" forceUppercase="false">
@@ -76,6 +79,11 @@
                 <control>
                     <text size="25" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>
+                    The name of the location where the documentation will be kept.
+                </description>
             </attribute>
 
             <attribute name="disbursementVoucherDocumentationLocationAddress" forceUppercase="false">
@@ -87,12 +95,16 @@
                 <control>
                     <textarea rows="4" cols="60" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>
+                    The address of the location where the documentation will be kept.
+                </description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Disbursement Voucher Documentation Location</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

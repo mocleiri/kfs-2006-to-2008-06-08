@@ -20,12 +20,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
@@ -37,16 +36,18 @@ import org.kuali.module.kra.document.ResearchDocument;
 
 /**
  * This class...
+ * 
+ * 
  */
 public class BudgetDocumentRule extends ResearchDocumentRuleBase {
-
+    
     BudgetPersonnelRule budgetPersonnelRule = new BudgetPersonnelRule();
     BudgetParametersRule budgetParametersRule = new BudgetParametersRule();
     BudgetCostShareRule budgetCostShareRule = new BudgetCostShareRule();
     BudgetAuditRule budgetAuditRule = new BudgetAuditRule();
     BudgetModularRule budgetModularRule = new BudgetModularRule();
     BudgetIndirectCostRule budgetIndirectCostRule = new BudgetIndirectCostRule();
-
+    
     /**
      * Checks business rules related to adding a Period. This method exists so that these checks can be run on update manually.
      * 
@@ -67,27 +68,27 @@ public class BudgetDocumentRule extends ResearchDocumentRuleBase {
 
         for (Iterator iter = nonpersonnelItems.iterator(); iter.hasNext(); i++) {
             BudgetNonpersonnel budgetNonpersonnel = (BudgetNonpersonnel) iter.next();
-
-            DataDictionaryService dataDictionaryService = SpringContext.getBean(DataDictionaryService.class);
+            
+            DataDictionaryService dataDictionaryService = SpringServiceLocator.getDataDictionaryService();
 
             if (StringUtils.isEmpty(budgetNonpersonnel.getBudgetNonpersonnelSubCategoryCode())) {
-                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetNonpersonnelSubCategoryCode", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetNonpersonnelSubCategoryCode"));
+                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetNonpersonnelSubCategoryCode", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetNonpersonnelSubCategoryCode"));
                 valid = false;
             }
             if (budgetNonpersonnel.getBudgetNonpersonnelCategoryCode().equals("SC") && budgetNonpersonnel.getBudgetNonpersonnelDescription() == null) {
-                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetNonpersonnelDescription", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetNonpersonnelDescription"));
+                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetNonpersonnelDescription", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetNonpersonnelDescription"));
                 valid = false;
             }
             if (budgetNonpersonnel.getAgencyRequestAmount() == null) {
-                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].agencyRequestAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "agencyRequestAmount"));
+                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].agencyRequestAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "agencyRequestAmount"));
                 valid = false;
             }
             if (budget.isInstitutionCostShareIndicator() && budgetNonpersonnel.getBudgetInstitutionCostShareAmount() == null) {
-                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetInstitutionCostShareAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetInstitutionCostShareAmount"));
+                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetInstitutionCostShareAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetInstitutionCostShareAmount"));
                 valid = false;
             }
             if (budget.isBudgetThirdPartyCostShareIndicator() && budgetNonpersonnel.getBudgetThirdPartyCostShareAmount() == null) {
-                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetThirdPartyCostShareAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetThirdPartyCostShareAmount"));
+                GlobalVariables.getErrorMap().putError("document.budget.nonpersonnelItem[" + i + "].budgetThirdPartyCostShareAmount", KeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeErrorLabel(budgetNonpersonnel.getClass(), "budgetThirdPartyCostShareAmount"));
                 valid = false;
             }
         }
@@ -114,7 +115,7 @@ public class BudgetDocumentRule extends ResearchDocumentRuleBase {
         budgetDocument.getBudget().setAllUserAppointmentTasks(new ArrayList());
         budgetDocument.getBudget().setAllUserAppointmentTaskPeriods(new ArrayList());
 
-        SpringContext.getBean(DictionaryValidationService.class).validateDocumentRecursively(budgetDocument, 0);
+        SpringServiceLocator.getDictionaryValidationService().validateDocumentRecursively(budgetDocument, 1);
 
         valid &= GlobalVariables.getErrorMap().isEmpty();
         valid &= budgetParametersRule.isParametersValid(budgetDocument);
@@ -126,11 +127,11 @@ public class BudgetDocumentRule extends ResearchDocumentRuleBase {
 
         return valid;
     }
-
+    
     public boolean processRunAuditBusinessRules(Document document) {
         return budgetAuditRule.processRunAuditBusinessRules(document);
     }
-
+    
     public boolean processEnterModularBusinessRules(Document document) {
         return budgetModularRule.processEnterModularBusinessRules(document);
     }
@@ -148,7 +149,7 @@ public class BudgetDocumentRule extends ResearchDocumentRuleBase {
     }
 
     public boolean processInsertPersonnelBusinessRules(Document document, BudgetUser newBudgetUser, boolean isToBeNamed) {
-        return budgetPersonnelRule.processInsertPersonnelBusinessRules(((BudgetDocument) document).getBudget().getPersonnel(), newBudgetUser, isToBeNamed);
+        return budgetPersonnelRule.processInsertPersonnelBusinessRules(((BudgetDocument)document).getBudget().getPersonnel(), newBudgetUser, isToBeNamed);
     }
 
     public boolean processSavePersonnelBusinessRules(List personnel) {
@@ -174,7 +175,7 @@ public class BudgetDocumentRule extends ResearchDocumentRuleBase {
     public boolean isTaskListValid(List tasks) {
         return budgetParametersRule.isTaskListValid(tasks);
     }
-
+    
     public boolean verifyPersonnelRequiredFields(Document document) {
         return budgetPersonnelRule.verifyRequiredFields(document);
     }
