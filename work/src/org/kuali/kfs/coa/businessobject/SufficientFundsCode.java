@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 package org.kuali.module.chart.bo.codes;
 
-import org.kuali.core.bo.KualiCodeBase;
+import org.kuali.module.chart.bo.KualiSystemCode;
 
 /**
- * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ * This class...
+ * 
+ * 
  */
-public class SufficientFundsCode extends KualiCodeBase {
-
+public class SufficientFundsCode extends KualiSystemCode {
 
 }

@@ -20,16 +20,18 @@ import java.util.Map;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class is the JUnit test case applied on the BusinessObjectHandler class
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class OJBUtilityTest extends KualiTestBase {
 
     // test cases for buildPropertyMap method

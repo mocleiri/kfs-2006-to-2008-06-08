@@ -26,60 +26,64 @@ import org.kuali.kfs.KFSPropertyConstants;
  */
 public class RoutingFormConflictOfInterest extends PersistableBusinessObjectBase {
 
-    private String documentNumber;
-    private String routingFormConflictOfInterestDescription;
+	private String documentNumber;
+	private String routingFormConflictOfInterestDescription;
 
-    /**
-     * Default constructor.
-     */
-    public RoutingFormConflictOfInterest() {
+	/**
+	 * Default constructor.
+	 */
+	public RoutingFormConflictOfInterest() {
 
-    }
+	}
 
-    /**
-     * Gets the documentNumber attribute.
-     * 
-     * @return Returns the documentNumber
-     */
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
+	/**
+	 * Gets the documentNumber attribute.
+	 * 
+	 * @return Returns the documentNumber
+	 * 
+	 */
+	public String getDocumentNumber() { 
+		return documentNumber;
+	}
 
-    /**
-     * Sets the documentNumber attribute.
-     * 
-     * @param documentNumber The documentNumber to set.
-     */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-
-    /**
-     * Gets the routingFormConflictOfInterestDescription attribute.
-     * 
-     * @return Returns the routingFormConflictOfInterestDescription
-     */
-    public String getRoutingFormConflictOfInterestDescription() {
-        return routingFormConflictOfInterestDescription;
-    }
-
-    /**
-     * Sets the routingFormConflictOfInterestDescription attribute.
-     * 
-     * @param routingFormConflictOfInterestDescription The routingFormConflictOfInterestDescription to set.
-     */
-    public void setRoutingFormConflictOfInterestDescription(String routingFormConflictOfInterestDescription) {
-        this.routingFormConflictOfInterestDescription = routingFormConflictOfInterestDescription;
-    }
+	/**
+	 * Sets the documentNumber attribute.
+	 * 
+	 * @param documentNumber The documentNumber to set.
+	 * 
+	 */
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
+	}
 
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the routingFormConflictOfInterestDescription attribute.
+	 * 
+	 * @return Returns the routingFormConflictOfInterestDescription
+	 * 
+	 */
+	public String getRoutingFormConflictOfInterestDescription() { 
+		return routingFormConflictOfInterestDescription;
+	}
+
+	/**
+	 * Sets the routingFormConflictOfInterestDescription attribute.
+	 * 
+	 * @param routingFormConflictOfInterestDescription The routingFormConflictOfInterestDescription to set.
+	 * 
+	 */
+	public void setRoutingFormConflictOfInterestDescription(String routingFormConflictOfInterestDescription) {
+		this.routingFormConflictOfInterestDescription = routingFormConflictOfInterestDescription;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
-        return m;
+	    return m;
     }
 }

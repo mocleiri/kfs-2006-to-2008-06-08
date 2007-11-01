@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ public class ObjectLevelRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method should be overridden to provide custom rules for processing document routing
      * 
      * @param document
@@ -49,6 +50,7 @@ public class ObjectLevelRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method checks to see if the Object Consolidation code matches a pre-existing Object Level code that is already entered.
      * If it does it returns false with an error
      * 
