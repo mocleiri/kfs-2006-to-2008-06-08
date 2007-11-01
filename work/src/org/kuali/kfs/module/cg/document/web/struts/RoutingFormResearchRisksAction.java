@@ -24,15 +24,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 
 /**
  * This class handles Actions for the Research Risks page.
+ * 
+ * 
  */
 public class RoutingFormResearchRisksAction extends RoutingFormAction {
-
+    
     /**
      * Add a research risk study to the list.
      * 
@@ -46,7 +49,7 @@ public class RoutingFormResearchRisksAction extends RoutingFormAction {
     public ActionForward insertRoutingFormResearchRiskStudy(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
         routingForm.getRoutingFormDocument().getRoutingFormResearchRisks().get(getSelectedLine(request)).addNewResearchRiskStudyToList();
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -64,14 +67,13 @@ public class RoutingFormResearchRisksAction extends RoutingFormAction {
         RoutingForm routingForm = (RoutingForm) form;
 
         // Remove the item from the list.
-        String tabToDeleteStr = super.getTabToToggle(request);
-        int tabToDelete = Integer.parseInt(tabToDeleteStr);
+        int tabToDelete = super.getTabToToggle(request);
         int lineToDelete = super.getLineToDelete(request);
         routingForm.getRoutingFormDocument().getRoutingFormResearchRisks().get(tabToDelete).getResearchRiskStudies().remove(lineToDelete);
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
-
+    
     @Override
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
