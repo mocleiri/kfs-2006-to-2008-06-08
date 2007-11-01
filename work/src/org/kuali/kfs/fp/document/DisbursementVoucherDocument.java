@@ -1,51 +1,48 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.document;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.KualiRuleService;
-import org.kuali.core.service.PersistenceService;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.lookup.keyvalues.DisbursementVoucherDocumentationLocationValuesFinder;
+import org.kuali.core.lookup.keyvalues.PaymentMethodValuesFinder;
+import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.chart.bo.ChartUser;
-import org.kuali.module.chart.service.ObjectTypeService;
-import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
@@ -54,19 +51,14 @@ import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceDetail;
 import org.kuali.module.financial.bo.DisbursementVoucherPreConferenceRegistrant;
 import org.kuali.module.financial.bo.DisbursementVoucherWireTransfer;
 import org.kuali.module.financial.bo.Payee;
-import org.kuali.module.financial.lookup.keyvalues.DisbursementVoucherDocumentationLocationValuesFinder;
-import org.kuali.module.financial.lookup.keyvalues.PaymentMethodValuesFinder;
-import org.kuali.module.financial.rules.DisbursementVoucherDocumentRule;
 import org.kuali.module.financial.rules.DisbursementVoucherRuleConstants;
-import org.kuali.module.financial.service.DisbursementVoucherTaxService;
-import org.kuali.module.financial.service.FlexibleOffsetAccountService;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
- * This is the business object that represents the DisbursementVoucher document in Kuali.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class DisbursementVoucherDocument extends AccountingDocumentBase implements Copyable, AmountTotaling {
+public class DisbursementVoucherDocument extends TransactionalDocumentBase {
     private Integer finDocNextRegistrantLineNbr;
     private String disbVchrContactPersonName;
     private String disbVchrContactPhoneNumber;
@@ -108,55 +100,13 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         dvPayeeDetail = new DisbursementVoucherPayeeDetail();
         dvPreConferenceDetail = new DisbursementVoucherPreConferenceDetail();
         dvWireTransfer = new DisbursementVoucherWireTransfer();
-        disbVchrCheckTotalAmount = new KualiDecimal(0);
     }
-
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getPendingLedgerEntriesForSufficientFundsChecking()
-     */
-    @Override
-    public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
-        List<GeneralLedgerPendingEntry> ples = new ArrayList();
-
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        FlexibleOffsetAccountService flexibleOffsetAccountService = SpringContext.getBean(FlexibleOffsetAccountService.class);
-
-        ObjectTypeService objectTypeService = (ObjectTypeService) SpringContext.getBean(ObjectTypeService.class);
-
-        for (GeneralLedgerPendingEntry ple : this.getGeneralLedgerPendingEntries()) {
-            List<String> expenseObjectTypes = objectTypeService.getExpenseObjectTypes(ple.getUniversityFiscalYear());
-            if (expenseObjectTypes.contains(ple.getFinancialObjectTypeCode())) {
-                // is an expense object type, keep checking
-                ple.refreshNonUpdateableReferences();
-                if (ple.getAccount().isPendingAcctSufficientFundsIndicator() && ple.getAccount().getAccountSufficientFundsCode().equals(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT)) {
-                    // is a cash account
-                    if (flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinancialCashObjectCode()) == null && flexibleOffsetAccountService.getByPrimaryIdIfEnabled(ple.getChartOfAccountsCode(), ple.getAccountNumber(), ple.getChart().getFinAccountsPayableObjectCode()) == null) {
-                        // does not have a flexible offset for cash or liability, set the object code to cash and add to list of
-                        // PLEs to check for SF
-
-                        ple = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(ple);
-                        ple.setFinancialObjectCode(ple.getChart().getFinancialCashObjectCode());
-                        ple.setTransactionDebitCreditCode(ple.getTransactionDebitCreditCode().equals(KFSConstants.GL_DEBIT_CODE) ? KFSConstants.GL_CREDIT_CODE : KFSConstants.GL_DEBIT_CODE);
-                        ples.add(ple);
-                    }
-
-                }
-                else {
-                    // is not a cash account, process as normal
-                    ples.add(ple);
-                }
-            }
-        }
-
-        return ples;
-    }
-
 
     /**
      * Gets the finDocNextRegistrantLineNbr attribute.
      * 
-     * @return Returns the finDocNextRegistrantLineNbr
+     * @return - Returns the finDocNextRegistrantLineNbr
+     *  
      */
     public Integer getFinDocNextRegistrantLineNbr() {
         return finDocNextRegistrantLineNbr;
@@ -166,7 +116,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the finDocNextRegistrantLineNbr attribute.
      * 
-     * @param finDocNextRegistrantLineNbr The finDocNextRegistrantLineNbr to set.
+     * @param - finDocNextRegistrantLineNbr The finDocNextRegistrantLineNbr to set.
+     *  
      */
     public void setFinDocNextRegistrantLineNbr(Integer finDocNextRegistrantLineNbr) {
         this.finDocNextRegistrantLineNbr = finDocNextRegistrantLineNbr;
@@ -175,7 +126,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrContactPersonName attribute.
      * 
-     * @return Returns the disbVchrContactPersonName
+     * @return - Returns the disbVchrContactPersonName
+     *  
      */
     public String getDisbVchrContactPersonName() {
         return disbVchrContactPersonName;
@@ -185,7 +137,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrContactPersonName attribute.
      * 
-     * @param disbVchrContactPersonName The disbVchrContactPersonName to set.
+     * @param - disbVchrContactPersonName The disbVchrContactPersonName to set.
+     *  
      */
     public void setDisbVchrContactPersonName(String disbVchrContactPersonName) {
         this.disbVchrContactPersonName = disbVchrContactPersonName;
@@ -194,7 +147,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrContactPhoneNumber attribute.
      * 
-     * @return Returns the disbVchrContactPhoneNumber
+     * @return - Returns the disbVchrContactPhoneNumber
+     *  
      */
     public String getDisbVchrContactPhoneNumber() {
         return disbVchrContactPhoneNumber;
@@ -204,7 +158,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrContactPhoneNumber attribute.
      * 
-     * @param disbVchrContactPhoneNumber The disbVchrContactPhoneNumber to set.
+     * @param - disbVchrContactPhoneNumber The disbVchrContactPhoneNumber to set.
+     *  
      */
     public void setDisbVchrContactPhoneNumber(String disbVchrContactPhoneNumber) {
         this.disbVchrContactPhoneNumber = disbVchrContactPhoneNumber;
@@ -213,7 +168,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrContactEmailId attribute.
      * 
-     * @return Returns the disbVchrContactEmailId
+     * @return - Returns the disbVchrContactEmailId
+     *  
      */
     public String getDisbVchrContactEmailId() {
         return disbVchrContactEmailId;
@@ -223,7 +179,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrContactEmailId attribute.
      * 
-     * @param disbVchrContactEmailId The disbVchrContactEmailId to set.
+     * @param - disbVchrContactEmailId The disbVchrContactEmailId to set.
+     *  
      */
     public void setDisbVchrContactEmailId(String disbVchrContactEmailId) {
         this.disbVchrContactEmailId = disbVchrContactEmailId;
@@ -232,7 +189,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbursementVoucherDueDate attribute.
      * 
-     * @return Returns the disbursementVoucherDueDate
+     * @return - Returns the disbursementVoucherDueDate
+     *  
      */
     public Date getDisbursementVoucherDueDate() {
         return disbursementVoucherDueDate;
@@ -242,7 +200,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbursementVoucherDueDate attribute.
      * 
-     * @param disbursementVoucherDueDate The disbursementVoucherDueDate to set.
+     * @param - disbursementVoucherDueDate The disbursementVoucherDueDate to set.
+     *  
      */
     public void setDisbursementVoucherDueDate(Date disbursementVoucherDueDate) {
         this.disbursementVoucherDueDate = disbursementVoucherDueDate;
@@ -251,7 +210,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrAttachmentCode attribute.
      * 
-     * @return Returns the disbVchrAttachmentCode
+     * @return - Returns the disbVchrAttachmentCode
+     *  
      */
     public boolean isDisbVchrAttachmentCode() {
         return disbVchrAttachmentCode;
@@ -261,7 +221,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrAttachmentCode attribute.
      * 
-     * @param disbVchrAttachmentCode The disbVchrAttachmentCode to set.
+     * @param - disbVchrAttachmentCode The disbVchrAttachmentCode to set.
+     *  
      */
     public void setDisbVchrAttachmentCode(boolean disbVchrAttachmentCode) {
         this.disbVchrAttachmentCode = disbVchrAttachmentCode;
@@ -270,7 +231,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrSpecialHandlingCode attribute.
      * 
-     * @return Returns the disbVchrSpecialHandlingCode
+     * @return - Returns the disbVchrSpecialHandlingCode
+     *  
      */
     public boolean isDisbVchrSpecialHandlingCode() {
         return disbVchrSpecialHandlingCode;
@@ -280,7 +242,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrSpecialHandlingCode attribute.
      * 
-     * @param disbVchrSpecialHandlingCode The disbVchrSpecialHandlingCode to set.
+     * @param - disbVchrSpecialHandlingCode The disbVchrSpecialHandlingCode to set.
+     *  
      */
     public void setDisbVchrSpecialHandlingCode(boolean disbVchrSpecialHandlingCode) {
         this.disbVchrSpecialHandlingCode = disbVchrSpecialHandlingCode;
@@ -289,7 +252,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrCheckTotalAmount attribute.
      * 
-     * @return Returns the disbVchrCheckTotalAmount
+     * @return - Returns the disbVchrCheckTotalAmount
+     *  
      */
     public KualiDecimal getDisbVchrCheckTotalAmount() {
         return disbVchrCheckTotalAmount;
@@ -299,18 +263,18 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrCheckTotalAmount attribute.
      * 
-     * @param disbVchrCheckTotalAmount The disbVchrCheckTotalAmount to set.
+     * @param - disbVchrCheckTotalAmount The disbVchrCheckTotalAmount to set.
+     *  
      */
     public void setDisbVchrCheckTotalAmount(KualiDecimal disbVchrCheckTotalAmount) {
-        if (disbVchrCheckTotalAmount != null) {
-            this.disbVchrCheckTotalAmount = disbVchrCheckTotalAmount;
-        }
+        this.disbVchrCheckTotalAmount = disbVchrCheckTotalAmount;
     }
 
     /**
      * Gets the disbVchrForeignCurrencyInd attribute.
      * 
-     * @return Returns the disbVchrForeignCurrencyInd
+     * @return - Returns the disbVchrForeignCurrencyInd
+     *  
      */
     public boolean isDisbVchrForeignCurrencyInd() {
         return disbVchrForeignCurrencyInd;
@@ -320,7 +284,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrForeignCurrencyInd attribute.
      * 
-     * @param disbVchrForeignCurrencyInd The disbVchrForeignCurrencyInd to set.
+     * @param - disbVchrForeignCurrencyInd The disbVchrForeignCurrencyInd to set.
+     *  
      */
     public void setDisbVchrForeignCurrencyInd(boolean disbVchrForeignCurrencyInd) {
         this.disbVchrForeignCurrencyInd = disbVchrForeignCurrencyInd;
@@ -329,7 +294,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbursementVoucherDocumentationLocationCode attribute.
      * 
-     * @return Returns the disbursementVoucherDocumentationLocationCode
+     * @return - Returns the disbursementVoucherDocumentationLocationCode
+     *  
      */
     public String getDisbursementVoucherDocumentationLocationCode() {
         return disbursementVoucherDocumentationLocationCode;
@@ -339,7 +305,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbursementVoucherDocumentationLocationCode attribute.
      * 
-     * @param disbursementVoucherDocumentationLocationCode The disbursementVoucherDocumentationLocationCode to set.
+     * @param - disbursementVoucherDocumentationLocationCode The disbursementVoucherDocumentationLocationCode to set.
+     *  
      */
     public void setDisbursementVoucherDocumentationLocationCode(String disbursementVoucherDocumentationLocationCode) {
         this.disbursementVoucherDocumentationLocationCode = disbursementVoucherDocumentationLocationCode;
@@ -348,7 +315,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrCheckStubText attribute.
      * 
-     * @return Returns the disbVchrCheckStubText
+     * @return - Returns the disbVchrCheckStubText
+     *  
      */
     public String getDisbVchrCheckStubText() {
         return disbVchrCheckStubText;
@@ -358,7 +326,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrCheckStubText attribute.
      * 
-     * @param disbVchrCheckStubText The disbVchrCheckStubText to set.
+     * @param - disbVchrCheckStubText The disbVchrCheckStubText to set.
+     *  
      */
     public void setDisbVchrCheckStubText(String disbVchrCheckStubText) {
         this.disbVchrCheckStubText = disbVchrCheckStubText;
@@ -367,7 +336,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the dvCheckStubOverflowCode attribute.
      * 
-     * @return Returns the dvCheckStubOverflowCode
+     * @return - Returns the dvCheckStubOverflowCode
+     *  
      */
     public boolean getDvCheckStubOverflowCode() {
         return dvCheckStubOverflowCode;
@@ -377,7 +347,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the dvCheckStubOverflowCode attribute.
      * 
-     * @param dvCheckStubOverflowCode The dvCheckStubOverflowCode to set.
+     * @param - dvCheckStubOverflowCode The dvCheckStubOverflowCode to set.
+     *  
      */
     public void setDvCheckStubOverflowCode(boolean dvCheckStubOverflowCode) {
         this.dvCheckStubOverflowCode = dvCheckStubOverflowCode;
@@ -386,7 +357,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the campusCode attribute.
      * 
-     * @return Returns the campusCode
+     * @return - Returns the campusCode
+     *  
      */
     public String getCampusCode() {
         return campusCode;
@@ -396,7 +368,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the campusCode attribute.
      * 
-     * @param campusCode The campusCode to set.
+     * @param - campusCode The campusCode to set.
+     *  
      */
     public void setCampusCode(String campusCode) {
         this.campusCode = campusCode;
@@ -405,7 +378,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrPayeeTaxControlCode attribute.
      * 
-     * @return Returns the disbVchrPayeeTaxControlCode
+     * @return - Returns the disbVchrPayeeTaxControlCode
+     *  
      */
     public String getDisbVchrPayeeTaxControlCode() {
         return disbVchrPayeeTaxControlCode;
@@ -415,7 +389,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrPayeeTaxControlCode attribute.
      * 
-     * @param disbVchrPayeeTaxControlCode The disbVchrPayeeTaxControlCode to set.
+     * @param - disbVchrPayeeTaxControlCode The disbVchrPayeeTaxControlCode to set.
+     *  
      */
     public void setDisbVchrPayeeTaxControlCode(String disbVchrPayeeTaxControlCode) {
         this.disbVchrPayeeTaxControlCode = disbVchrPayeeTaxControlCode;
@@ -424,7 +399,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrPayeeChangedInd attribute.
      * 
-     * @return Returns the disbVchrPayeeChangedInd
+     * @return - Returns the disbVchrPayeeChangedInd
+     *  
      */
     public boolean isDisbVchrPayeeChangedInd() {
         return disbVchrPayeeChangedInd;
@@ -434,7 +410,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrPayeeChangedInd attribute.
      * 
-     * @param disbVchrPayeeChangedInd The disbVchrPayeeChangedInd to set.
+     * @param - disbVchrPayeeChangedInd The disbVchrPayeeChangedInd to set.
+     *  
      */
     public void setDisbVchrPayeeChangedInd(boolean disbVchrPayeeChangedInd) {
         this.disbVchrPayeeChangedInd = disbVchrPayeeChangedInd;
@@ -443,7 +420,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbursementVoucherCheckNbr attribute.
      * 
-     * @return Returns the disbursementVoucherCheckNbr
+     * @return - Returns the disbursementVoucherCheckNbr
+     *  
      */
     public String getDisbursementVoucherCheckNbr() {
         return disbursementVoucherCheckNbr;
@@ -453,7 +431,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbursementVoucherCheckNbr attribute.
      * 
-     * @param disbursementVoucherCheckNbr The disbursementVoucherCheckNbr to set.
+     * @param - disbursementVoucherCheckNbr The disbursementVoucherCheckNbr to set.
+     *  
      */
     public void setDisbursementVoucherCheckNbr(String disbursementVoucherCheckNbr) {
         this.disbursementVoucherCheckNbr = disbursementVoucherCheckNbr;
@@ -462,7 +441,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbursementVoucherCheckDate attribute.
      * 
-     * @return Returns the disbursementVoucherCheckDate
+     * @return - Returns the disbursementVoucherCheckDate
+     *  
      */
     public Timestamp getDisbursementVoucherCheckDate() {
         return disbursementVoucherCheckDate;
@@ -472,7 +452,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbursementVoucherCheckDate attribute.
      * 
-     * @param disbursementVoucherCheckDate The disbursementVoucherCheckDate to set.
+     * @param - disbursementVoucherCheckDate The disbursementVoucherCheckDate to set.
+     *  
      */
     public void setDisbursementVoucherCheckDate(Timestamp disbursementVoucherCheckDate) {
         this.disbursementVoucherCheckDate = disbursementVoucherCheckDate;
@@ -481,7 +462,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrPayeeW9CompleteCode attribute.
      * 
-     * @return Returns the disbVchrPayeeW9CompleteCode
+     * @return - Returns the disbVchrPayeeW9CompleteCode
+     *  
      */
     public boolean getDisbVchrPayeeW9CompleteCode() {
         return disbVchrPayeeW9CompleteCode;
@@ -491,7 +473,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrPayeeW9CompleteCode attribute.
      * 
-     * @param disbVchrPayeeW9CompleteCode The disbVchrPayeeW9CompleteCode to set.
+     * @param - disbVchrPayeeW9CompleteCode The disbVchrPayeeW9CompleteCode to set.
+     *  
      */
     public void setDisbVchrPayeeW9CompleteCode(boolean disbVchrPayeeW9CompleteCode) {
         this.disbVchrPayeeW9CompleteCode = disbVchrPayeeW9CompleteCode;
@@ -500,7 +483,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrPaymentMethodCode attribute.
      * 
-     * @return Returns the disbVchrPaymentMethodCode
+     * @return - Returns the disbVchrPaymentMethodCode
+     *  
      */
     public String getDisbVchrPaymentMethodCode() {
         return disbVchrPaymentMethodCode;
@@ -510,7 +494,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrPaymentMethodCode attribute.
      * 
-     * @param disbVchrPaymentMethodCode The disbVchrPaymentMethodCode to set.
+     * @param - disbVchrPaymentMethodCode The disbVchrPaymentMethodCode to set.
+     *  
      */
     public void setDisbVchrPaymentMethodCode(String disbVchrPaymentMethodCode) {
         this.disbVchrPaymentMethodCode = disbVchrPaymentMethodCode;
@@ -519,7 +504,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the financialDocument attribute.
      * 
-     * @return Returns the financialDocument
+     * @return - Returns the financialDocument
+     *  
      */
     public DocumentHeader getFinancialDocument() {
         return financialDocument;
@@ -529,7 +515,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the financialDocument attribute.
      * 
-     * @param financialDocument The financialDocument to set.
+     * @param - financialDocument The financialDocument to set.
      * @deprecated
      */
     public void setFinancialDocument(DocumentHeader financialDocument) {
@@ -539,7 +525,8 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Gets the disbVchrDocumentationLoc attribute.
      * 
-     * @return Returns the disbVchrDocumentationLoc
+     * @return - Returns the disbVchrDocumentationLoc
+     *  
      */
     public DisbursementVoucherDocumentationLocation getDisbVchrDocumentationLoc() {
         return disbVchrDocumentationLoc;
@@ -549,7 +536,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Sets the disbVchrDocumentationLoc attribute.
      * 
-     * @param disbVchrDocumentationLoc The disbVchrDocumentationLoc to set.
+     * @param - disbVchrDocumentationLoc The disbVchrDocumentationLoc to set.
      * @deprecated
      */
     public void setDisbVchrDocumentationLoc(DisbursementVoucherDocumentationLocation disbVchrDocumentationLoc) {
@@ -651,30 +638,39 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         this.getDvPreConferenceDetail().getDvPreConferenceRegistrants().add(line);
         this.finDocNextRegistrantLineNbr = new Integer(getFinDocNextRegistrantLineNbr().intValue() + 1);
     }
-
+    
     /**
      * Returns the name associated with the payment method code
-     * 
-     * @return String
+     * @return
      */
-    public String getDisbVchrPaymentMethodName() {
+    public String getDisbVchrPaymentMethodName(){
         return new PaymentMethodValuesFinder().getKeyLabel(disbVchrPaymentMethodCode);
     }
-
-    public void setDisbVchrPaymentMethodName(String method) {
+    
+    public void setDisbVchrPaymentMethodName(String method){
     }
-
+    
     /**
      * Returns the name associated with the documentation location name
-     * 
-     * @return String
+     * @return
      */
-    public String getDisbursementVoucherDocumentationLocationName() {
+    public String getDisbursementVoucherDocumentationLocationName(){
         return new DisbursementVoucherDocumentationLocationValuesFinder().getKeyLabel(disbursementVoucherDocumentationLocationCode);
     }
-
-    public void setDisbursementVoucherDocumentationLocationName(String name) {
+    
+    public void setDisbursementVoucherDocumentationLocationName(String name){
     }
+    
+    
+
+    /**
+     * @see org.kuali.core.document.Document#handleRouteStatusChange(java.lang.String)
+     */
+    public void handleRouteStatusChange(String newRouteStatus) {
+        // TODO Auto-generated method stub
+
+    }
+
 
     /**
      * Convenience method to set dv payee detail fields based on a given Payee.
@@ -706,7 +702,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * Convenience method to set dv payee detail fields based on a given Employee.
      * 
-     * @param employee
+     * @param payee
      */
     public void templateEmployee(UniversalUser employee) {
         if (employee == null) {
@@ -716,7 +712,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         this.getDvPayeeDetail().setDisbursementVoucherPayeeTypeCode(DisbursementVoucherRuleConstants.DV_PAYEE_TYPE_EMPLOYEE);
         this.getDvPayeeDetail().setDisbVchrPayeeIdNumber(employee.getPersonUniversalIdentifier());
         this.getDvPayeeDetail().setDisbVchrPayeePersonName(employee.getPersonName());
-        this.getDvPayeeDetail().setDisbVchrPayeeLine1Addr(employee.getCampusCode() + "-" + employee.getPrimaryDepartmentCode());
+        this.getDvPayeeDetail().setDisbVchrPayeeLine1Addr(employee.getDeptid());
         this.getDvPayeeDetail().setDisbVchrPayeeLine2Addr("");
         this.getDvPayeeDetail().setDisbVchrPayeeCityName(employee.getCampus().getCampusName() + " CAMPUS");
         this.getDvPayeeDetail().setDisbVchrPayeeStateCode("");
@@ -733,29 +729,24 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
     /**
      * @see org.kuali.core.document.Document#prepareForSave()
      */
-    @Override
     public void prepareForSave() {
-        if (this instanceof AmountTotaling) {
-            getDocumentHeader().setFinancialDocumentTotalAmount(((AmountTotaling) this).getTotalDollarAmount());
-        }
-
         if (dvWireTransfer != null) {
-            dvWireTransfer.setDocumentNumber(this.documentNumber);
+            dvWireTransfer.setFinancialDocumentNumber(this.financialDocumentNumber);
         }
 
         if (dvNonResidentAlienTax != null) {
-            dvNonResidentAlienTax.setDocumentNumber(this.documentNumber);
+            dvNonResidentAlienTax.setFinancialDocumentNumber(this.financialDocumentNumber);
         }
 
-        dvPayeeDetail.setDocumentNumber(this.documentNumber);
+        dvPayeeDetail.setFinancialDocumentNumber(this.financialDocumentNumber);
 
         if (dvNonEmployeeTravel != null) {
-            dvNonEmployeeTravel.setDocumentNumber(this.documentNumber);
+            dvNonEmployeeTravel.setFinancialDocumentNumber(this.financialDocumentNumber);
             dvNonEmployeeTravel.setTotalTravelAmount(dvNonEmployeeTravel.getTotalTravelAmount());
         }
 
         if (dvPreConferenceDetail != null) {
-            dvPreConferenceDetail.setDocumentNumber(this.documentNumber);
+            dvPreConferenceDetail.setFinancialDocumentNumber(this.financialDocumentNumber);
             dvPreConferenceDetail.setDisbVchrConferenceTotalAmt(dvPreConferenceDetail.getDisbVchrConferenceTotalAmt());
         }
     }
@@ -765,36 +756,39 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
      * should not be persisted.
      */
     private void cleanDocumentData() {
-        // TODO: warren: this method ain't called!!! maybe this should be called by prepare for save above
-        if (!DisbursementVoucherRuleConstants.PAYMENT_METHOD_WIRE.equals(this.getDisbVchrPaymentMethodCode()) && !DisbursementVoucherRuleConstants.PAYMENT_METHOD_DRAFT.equals(this.getDisbVchrPaymentMethodCode())) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvWireTransfer);
+        if (!DisbursementVoucherRuleConstants.PAYMENT_METHOD_WIRE.equals(this.getDisbVchrPaymentMethodCode())
+                && !DisbursementVoucherRuleConstants.PAYMENT_METHOD_DRAFT.equals(this.getDisbVchrPaymentMethodCode())) {
+            SpringServiceLocator.getBusinessObjectService().delete(dvWireTransfer);
             dvWireTransfer = null;
         }
 
         if (!dvPayeeDetail.isDisbVchrAlienPaymentCode()) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvNonResidentAlienTax);
+            SpringServiceLocator.getBusinessObjectService().delete(dvNonResidentAlienTax);
             dvNonResidentAlienTax = null;
         }
 
-        DisbursementVoucherDocumentRule dvDocRule = (DisbursementVoucherDocumentRule) SpringContext.getBean(KualiRuleService.class).getBusinessRulesInstance(this, DisbursementVoucherDocumentRule.class);
-
-        if (!dvDocRule.isTravelNonEmplPaymentReason(this)) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvNonEmployeeTravel);
+        String[] travelNonEmplPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService()
+                .getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM,
+                        DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+        if (!RulesUtils.makeSet(travelNonEmplPaymentReasonCodes).contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
+            SpringServiceLocator.getBusinessObjectService().delete(dvNonEmployeeTravel);
             dvNonEmployeeTravel = null;
         }
 
-        if (!dvDocRule.isTravelPrepaidPaymentReason(this)) {
-            SpringContext.getBean(BusinessObjectService.class).delete(dvPreConferenceDetail);
+        String[] travelPrepaidPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService()
+                .getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM,
+                        DisbursementVoucherRuleConstants.PREPAID_TRAVEL_PAY_REASONS_PARM_NM);
+        if (!RulesUtils.makeSet(travelPrepaidPaymentReasonCodes).contains(dvPayeeDetail.getDisbVchrPaymentReasonCode())) {
+            SpringServiceLocator.getBusinessObjectService().delete(dvPreConferenceDetail);
             dvPreConferenceDetail = null;
         }
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#toCopy()
+     * @see org.kuali.core.document.TransactionalDocumentBase#convertIntoCopy()
      */
-    @Override
-    public void toCopy() throws WorkflowException {
-        super.toCopy();
+    public void convertIntoCopy() throws WorkflowException {
+        super.convertIntoCopy();
         initiateDocument();
 
         // clear fields
@@ -811,21 +805,23 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         setDisbVchrPayeeTaxControlCode("");
 
         // clear nra
-        SpringContext.getBean(DisbursementVoucherTaxService.class).clearNRATaxLines(this);
+        SpringServiceLocator.getDisbursementVoucherTaxService().clearNRATaxLines(this);
         setDvNonResidentAlienTax(new DisbursementVoucherNonResidentAlienTax());
 
         // clear waive wire
+        setDvNonEmployeeTravel(new DisbursementVoucherNonEmployeeTravel());
+        setDvPreConferenceDetail(new DisbursementVoucherPreConferenceDetail());
         getDvWireTransfer().setDisbursementVoucherWireTransferFeeWaiverIndicator(false);
-
+        
         // check payee id number to see if still valid, if so retrieve their last information and set in the detail inform.
         if (getDvPayeeDetail().isPayee() && !StringUtils.isBlank(getDvPayeeDetail().getDisbVchrPayeeIdNumber())) {
             Payee payee = new Payee();
             payee.setPayeeIdNumber(getDvPayeeDetail().getDisbVchrPayeeIdNumber());
-            Map keys = SpringContext.getBean(PersistenceService.class).getPrimaryKeyFieldValues(payee);
-            payee = (Payee) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(Payee.class, keys);
+            Map keys = SpringServiceLocator.getPersistenceService().getPrimaryKeyFieldValues(payee);
+            payee = (Payee) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(Payee.class, keys);
             if (payee == null) {
                 getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
-                GlobalVariables.getMessageList().add(KFSKeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
+                GlobalVariables.getMessageList().add(KeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
             }
             else {
                 templatePayee(payee);
@@ -836,10 +832,10 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         if (getDvPayeeDetail().isEmployee() && !StringUtils.isBlank(getDvPayeeDetail().getDisbVchrPayeeIdNumber())) {
             UniversalUser employee = new UniversalUser();
             employee.setPersonUniversalIdentifier(getDvPayeeDetail().getDisbVchrPayeeIdNumber());
-            employee = (UniversalUser) SpringContext.getBean(BusinessObjectService.class).retrieve(employee);
+            employee = (UniversalUser) SpringServiceLocator.getBusinessObjectService().retrieve(employee);
             if (employee == null) {
                 getDvPayeeDetail().setDisbVchrPayeeIdNumber("");
-                GlobalVariables.getMessageList().add(KFSKeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
+                GlobalVariables.getMessageList().add(KeyConstants.WARNING_DV_PAYEE_NONEXISTANT_CLEARED);
             }
             else {
                 templateEmployee(employee);
@@ -853,25 +849,24 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
      * generic, shared logic used to iniate a dv document
      */
     public void initiateDocument() {
-        UniversalUser currentUser = GlobalVariables.getUserSession().getUniversalUser();
+        KualiUser currentUser = GlobalVariables.getUserSession().getKualiUser();
         setDisbVchrContactPersonName(currentUser.getPersonName());
-        setCampusCode(((ChartUser) currentUser.getModuleUser(ChartUser.MODULE_ID)).getOrganization().getOrganizationPhysicalCampusCode());
+        setCampusCode(currentUser.getOrganization().getOrganizationPhysicalCampusCode());
 
         // due date
-        Calendar calendar = SpringContext.getBean(DateTimeService.class).getCurrentCalendar();
+        Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         setDisbursementVoucherDueDate(new Date(calendar.getTimeInMillis()));
 
         // default doc location
-        if (StringUtils.isBlank(getDisbursementVoucherDocumentationLocationCode())) {
-            setDisbursementVoucherDocumentationLocationCode(SpringContext.getBean(ParameterService.class).getParameterValue(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.DEFAULT_DOC_LOCATION_PARM_NM));
-        }
+        setDisbursementVoucherDocumentationLocationCode(SpringServiceLocator.getKualiConfigurationService()
+                .getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM,
+                        DisbursementVoucherRuleConstants.DEFAULT_DOC_LOCATION_PARM_NM));
     }
 
     /**
      * @see org.kuali.core.document.DocumentBase#buildListOfDeletionAwareLists()
      */
-    @Override
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
 
@@ -885,24 +880,5 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         }
 
         return managedLists;
-    }
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
-     */
-    @Override
-    public AccountingLineParser getAccountingLineParser() {
-        return new BasicFormatWithLineDescriptionAccountingLineParser();
-    }
-
-    /**
-     * Returns check total.
-     * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
-     * @return KualiDecimal
-     */
-    @Override
-    public KualiDecimal getTotalDollarAmount() {
-        return this.getDisbVchrCheckTotalAmount();
     }
 }

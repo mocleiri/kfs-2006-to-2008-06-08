@@ -24,18 +24,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Agency;
 import org.kuali.module.cg.bo.ProjectDirector;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.module.kra.bo.AdhocOrg;
+import org.kuali.module.kra.bo.AdhocPerson;
+import org.kuali.module.kra.bo.AdhocWorkgroup;
 
 /**
+ * 
  * This class...
+ * 
+ * 
  */
 public class Budget extends PersistableBusinessObjectBase {
 
@@ -66,7 +68,6 @@ public class Budget extends PersistableBusinessObjectBase {
     private Agency budgetAgency;
     private Agency federalPassThroughAgency;
     private ProjectDirector projectDirector;
-    private UniversalUser universalUser;
     private BudgetModular modularBudget;
     private List tasks;
     private List periods;
@@ -85,12 +86,12 @@ public class Budget extends PersistableBusinessObjectBase {
     private List allInstitutionCostSharePeriods;
     private List allThirdPartyCostSharePeriods;
     private List<BudgetIndirectCostLookup> budgetIndirectCostLookups;
-
+    
     public Budget() {
         super();
 
-        budgetPersonnelInflationRate = new KualiDecimal(SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.RESEARCH_ADMINISTRATION_DOCUMENT.class, KraConstants.DEFAULT_PERSONNEL_INFLATION_RATE));
-        budgetNonpersonnelInflationRate = new KualiDecimal(SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.RESEARCH_ADMINISTRATION_DOCUMENT.class, KraConstants.DEFAULT_NONPERSONNEL_INFLATION_RATE));
+        budgetPersonnelInflationRate = new KualiDecimal(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "defaultPersonnelInflationRate"));
+        budgetNonpersonnelInflationRate = new KualiDecimal(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "defaultNonpersonnelInflationRate"));
 
         tasks = new ArrayList();
         periods = new ArrayList();
@@ -456,13 +457,15 @@ public class Budget extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @return Returns the graduate assistant rates
      */
-    public List<BudgetGraduateAssistantRate> getGraduateAssistantRates() {
+    public List getGraduateAssistantRates() {
         return graduateAssistantRates;
     }
 
     /**
+     * 
      * @param graduateAssistantRates The graduate assistant rates to set
      */
     public void setGraduateAssistantRates(List graduateAssistantRates) {
@@ -668,7 +671,7 @@ public class Budget extends PersistableBusinessObjectBase {
         String[] array = this.getBudgetTypeCodeText().split("-");
         return array;
     }
-
+    
     public void addBudgetTypeCode(String budgetTypeCode) {
         this.setBudgetTypeCodeText(this.getBudgetTypeCodeText() + "-" + budgetTypeCode);
     }
@@ -925,23 +928,15 @@ public class Budget extends PersistableBusinessObjectBase {
     public void setBudgetIndirectCostLookups(List<BudgetIndirectCostLookup> budgetIndirectCostLookupList) {
         this.budgetIndirectCostLookups = budgetIndirectCostLookupList;
     }
-
+    
     public List<BudgetIndirectCostLookup> getBudgetIndirectCostLookups() {
         return this.budgetIndirectCostLookups;
     }
-
+    
     public BudgetIndirectCostLookup getBudgetIndirectCostLookup(int index) {
         while (this.getBudgetIndirectCostLookups().size() <= index) {
             this.getBudgetIndirectCostLookups().add(new BudgetIndirectCostLookup());
         }
         return this.getBudgetIndirectCostLookups().get(index);
-    }
-
-    public UniversalUser getUniversalUser() {
-        return universalUser;
-    }
-
-    public void setUniversalUser(UniversalUser universalUser) {
-        this.universalUser = universalUser;
     }
 }

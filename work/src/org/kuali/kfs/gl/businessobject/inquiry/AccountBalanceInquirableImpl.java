@@ -26,14 +26,16 @@ import org.kuali.core.service.LookupService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.web.Constant;
 
 /**
  * This class is used to generate the URL for the user-defined attributes for available account balace screen. It is entended the
  * AbstractGLInquirableImpl class, so it covers both the default implementation and customized implemetnation.
+ * 
+ * 
  */
 public class AccountBalanceInquirableImpl extends AbstractGLInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceInquirableImpl.class);
@@ -66,7 +68,7 @@ public class AccountBalanceInquirableImpl extends AbstractGLInquirableImpl {
     protected Map getUserDefinedAttributeMap() {
         Map userDefinedAttributeMap = new HashMap();
 
-        OptionsService os = SpringContext.getBean(OptionsService.class);
+        OptionsService os = SpringServiceLocator.getOptionsService();
         Options o = os.getCurrentYearOptions();
 
         userDefinedAttributeMap.put(KFSPropertyConstants.CURRENT_BUDGET_LINE_BALANCE_AMOUNT, Constant.BALANCE_TYPE_CB);

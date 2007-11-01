@@ -27,8 +27,6 @@ import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterEvaluator;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.financial.bo.DisbursementVoucherNonEmployeeTravel;
 import org.kuali.module.financial.bo.DisbursementVoucherWireTransfer;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
@@ -36,6 +34,8 @@ import org.kuali.module.financial.lookup.keyvalues.PaymentReasonValuesFinder;
 
 /**
  * Checks warnings and prompt conditions for dv document.
+ * 
+ * 
  */
 public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBase implements DisbursementVoucherRuleConstants {
     private KualiConfigurationService kualiConfiguration;
@@ -71,6 +71,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvDocument
@@ -81,20 +82,16 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
 
         DisbursementVoucherNonEmployeeTravel dvNonEmplTrav = dvDocument.getDvNonEmployeeTravel();
 
-        String paymentReasonCode = dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode();
-        ParameterEvaluator travelNonEmplPaymentReasonEvaluator = SpringContext.getBean(ParameterService.class).getParameterEvaluator(DisbursementVoucherDocument.class, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM, paymentReasonCode);
-        if (hasNonEmployeeTravelValues(dvNonEmplTrav) && !travelNonEmplPaymentReasonEvaluator.evaluationSucceeds()) {
+        List<String> travelNonEmplPaymentReasonCodes = SpringContext.getBean(KualiConfigurationService.class).getParameterValuesAsList(KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.DISBURSEMENT_VOUCHER_DOC, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+
+        if (hasNonEmployeeTravelValues(dvNonEmplTrav) && !travelNonEmplPaymentReasonCodes.contains(dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
             String questionText = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSKeyConstants.QUESTION_CLEAR_UNNEEDED_TAB);
 
             PaymentReasonValuesFinder payReasonValues = new PaymentReasonValuesFinder();
             List<KeyLabelPair> reasons = payReasonValues.getKeyValues();
             String nonEmplTravReasonStr = dvDocument.getDvPayeeDetail().getDisbVchrPaymentReasonCode();
 
-            List<String> travelNonEmplPaymentReasonCodes = SpringContext.getBean(ParameterService.class).getParameterValues(DisbursementVoucherDocument.class, NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM, paymentReasonCode);
-
             for (KeyLabelPair r : reasons) {
-                // TODO: warren: what if there are multiple codes?, I think this code's under the assumption that there's only one
-                // non-employee travel payment reason
                 if (r.getKey().equals(travelNonEmplPaymentReasonCodes.get(0))) {
                     nonEmplTravReasonStr = r.getLabel();
                 }
@@ -121,6 +118,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvNonEmplTrav
@@ -163,6 +161,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvNonEmplTrav
@@ -173,6 +172,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvNonEmplTrav
@@ -183,6 +183,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvDocument
@@ -216,7 +217,10 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
-     * This method... NOTE: Currently does not validate based on only required fields. Checks all fields within tab for data.
+     * 
+     * This method...
+     * 
+     * NOTE: Currently does not validate based on only required fields. Checks all fields within tab for data.
      * 
      * @param dvForeignDraft
      * @return True if foreign draft tab contains any data in any fields.
@@ -232,6 +236,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvForeignDraft
@@ -242,6 +247,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvDocument
@@ -275,7 +281,10 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
-     * This method... NOTE: Currently does not validate based on only required fields. Checks all fields within tab for data.
+     * 
+     * This method...
+     * 
+     * NOTE: Currently does not validate based on only required fields. Checks all fields within tab for data.
      * 
      * @param dvWireTransfer
      * @return True if wire transfer tab contains any data in any fields.
@@ -300,6 +309,7 @@ public class DisbursementVoucherDocumentPreRules extends PreRulesContinuationBas
     }
 
     /**
+     * 
      * This method...
      * 
      * @param dvWireTransfer
