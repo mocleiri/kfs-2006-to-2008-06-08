@@ -25,6 +25,7 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
 import org.kuali.kfs.batch.BatchInputFileTypeBase;
 import org.kuali.module.gl.service.CollectorHelperService;
 
@@ -38,23 +39,18 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
     private CollectorHelperService collectorHelperService;
 
     /**
-     * Returns the identifier of the Collector's file type
-     * 
-     * @return the Collector's file type identifier
      * @see org.kuali.kfs.batch.BatchInputFileType#getFileTypeIdentifer()
      */
     public String getFileTypeIdentifer() {
         return KFSConstants.COLLECTOR_FILE_TYPE_INDENTIFIER;
     }
 
-    /**
-     * Returns the class associated with the authorization workgroup for the input type, in this case CollectorStep
-     * 
-     * @return the CollectorStep class
-     * @see org.kuali.kfs.batch.BatchInputType#getUploadWorkgroupParameterComponent()
-     */
-    public Class getUploadWorkgroupParameterComponent() {
-        return CollectorStep.class;
+    public String getWorkgroupParameterNamespace() {
+        return KFSConstants.SystemGroupParameterNames.COLLECTOR_FILE_TYPE_PARAMETER_NAMESPACE;
+    }
+    
+    public String getWorkgroupParameterComponent() {
+        return KFSConstants.SystemGroupParameterNames.COLLECTOR_FILE_TYPE_PARAMETER_COMPONENT;
     }
 
     /**
@@ -80,7 +76,7 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
             fileName += "_" + userIdentifier;
         }
         fileName += "_" + buf.toString();
-
+        
         // remove spaces in filename
         fileName = StringUtils.remove(fileName, " ");
 
@@ -97,7 +93,7 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
 
         String userIdentifier = user.getPersonUserIdentifier();
         userIdentifier = StringUtils.remove(userIdentifier, " ");
-
+        
         String[] fileNameParts = StringUtils.split(batchFile.getName(), "_");
         if (fileNameParts.length > 4) {
             if (fileNameParts[3].equalsIgnoreCase(userIdentifier.toLowerCase())) {
@@ -109,9 +105,6 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
     }
 
     /**
-     * Checks that the file contents parsed from the file are valid Collector data
-     * 
-     * @return true if valid, false if not
      * @see org.kuali.kfs.batch.BatchInputFileType#validate(java.lang.Object)
      */
     public boolean validate(Object parsedFileContents) {
@@ -119,14 +112,11 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
         if (isValid) {
             isValid = collectorHelperService.checkTrailerTotals((CollectorBatch) parsedFileContents, null);
         }
-
+        
         return isValid;
     }
 
     /**
-     * Returns the Collector's title key
-     * 
-     * @return the title key for the Collector
      * @see org.kuali.kfs.batch.BatchInputFileType#getTitleKey()
      */
     public String getTitleKey() {

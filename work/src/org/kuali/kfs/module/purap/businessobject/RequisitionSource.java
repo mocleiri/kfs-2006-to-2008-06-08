@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/RequisitionSource.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,55 +20,92 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Requisition Source Business Object.
+ * 
  */
-public class RequisitionSource extends PersistableBusinessObjectBase {
+public class RequisitionSource extends BusinessObjectBase {
 
-    private String requisitionSourceCode;
-    private String requisitionSourceDescription;
-    private boolean active;
+	private String requisitionSourceCode;
+	private String requisitionSourceDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public RequisitionSource() {
+	/**
+	 * Default constructor.
+	 */
+	public RequisitionSource() {
 
-    }
+	}
 
-    public String getRequisitionSourceCode() {
-        return requisitionSourceCode;
-    }
+	/**
+	 * Gets the requisitionSourceCode attribute.
+	 * 
+	 * @return Returns the requisitionSourceCode
+	 * 
+	 */
+	public String getRequisitionSourceCode() { 
+		return requisitionSourceCode;
+	}
 
-    public void setRequisitionSourceCode(String requisitionSourceCode) {
-        this.requisitionSourceCode = requisitionSourceCode;
-    }
+	/**
+	 * Sets the requisitionSourceCode attribute.
+	 * 
+	 * @param requisitionSourceCode The requisitionSourceCode to set.
+	 * 
+	 */
+	public void setRequisitionSourceCode(String requisitionSourceCode) {
+		this.requisitionSourceCode = requisitionSourceCode;
+	}
 
-    public String getRequisitionSourceDescription() {
-        return requisitionSourceDescription;
-    }
 
-    public void setRequisitionSourceDescription(String requisitionSourceDescription) {
-        this.requisitionSourceDescription = requisitionSourceDescription;
-    }
+	/**
+	 * Gets the requisitionSourceDescription attribute.
+	 * 
+	 * @return Returns the requisitionSourceDescription
+	 * 
+	 */
+	public String getRequisitionSourceDescription() { 
+		return requisitionSourceDescription;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Sets the requisitionSourceDescription attribute.
+	 * 
+	 * @param requisitionSourceDescription The requisitionSourceDescription to set.
+	 * 
+	 */
+	public void setRequisitionSourceDescription(String requisitionSourceDescription) {
+		this.requisitionSourceDescription = requisitionSourceDescription;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("requisitionSourceCode", this.requisitionSourceCode);
-        return m;
+	    return m;
     }
-
 }

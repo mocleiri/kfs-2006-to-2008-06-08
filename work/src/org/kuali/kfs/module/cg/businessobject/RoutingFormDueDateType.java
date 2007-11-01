@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormDueDateType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,101 +15,120 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.kuali.module.kra.routingform.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
-public class RoutingFormDueDateType extends PersistableBusinessObjectBase {
+/**
+ * 
+ */
+public class RoutingFormDueDateType extends BusinessObjectBase {
 
-    private String documentNumber;
-    private String dueDateTypeCode;
+	private String routingFormDueDateTypeCode;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
+	private Integer routingFormApprovalLeadTime;
+	private String routingFormDueDateDescription;
 
-    private DueDateType dueDateType;
+	/**
+	 * Default constructor.
+	 */
+	public RoutingFormDueDateType() {
 
-    /**
-     * Default constructor.
-     */
-    public RoutingFormDueDateType() {
+	}
 
-    }
+	/**
+	 * Gets the routingFormDueDateTypeCode attribute.
+	 * 
+	 * @return Returns the routingFormDueDateTypeCode
+	 * 
+	 */
+	public String getRoutingFormDueDateTypeCode() { 
+		return routingFormDueDateTypeCode;
+	}
 
-    /**
-     * Constructs a RoutingFormDueDateType.
-     * 
-     * @param documentNumber
-     * @param dueDateType
-     */
-    public RoutingFormDueDateType(String documentNumber, DueDateType dueDateType) {
-        this();
-        this.documentNumber = documentNumber;
-        this.dueDateTypeCode = dueDateType.getDueDateTypeCode();
-        this.dueDateType = dueDateType;
-    }
-
-    /**
-     * Gets the documentNumber attribute.
-     * 
-     * @return Returns the documentNumber
-     */
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    /**
-     * Sets the documentNumber attribute.
-     * 
-     * @param documentNumber The documentNumber to set.
-     */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
+	/**
+	 * Sets the routingFormDueDateTypeCode attribute.
+	 * 
+	 * @param routingFormDueDateTypeCode The routingFormDueDateTypeCode to set.
+	 * 
+	 */
+	public void setRoutingFormDueDateTypeCode(String routingFormDueDateTypeCode) {
+		this.routingFormDueDateTypeCode = routingFormDueDateTypeCode;
+	}
 
 
-    /**
-     * Gets the dueDateTypeCode attribute.
-     * 
-     * @return Returns the dueDateTypeCode
-     */
-    public String getDueDateTypeCode() {
-        return dueDateTypeCode;
-    }
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * Sets the dueDateTypeCode attribute.
-     * 
-     * @param dueDateTypeCode The dueDateTypeCode to set.
-     */
-    public void setDueDateTypeCode(String dueDateTypeCode) {
-        this.dueDateTypeCode = dueDateTypeCode;
-    }
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * Gets the dueDateType attribute.
-     * 
-     * @return Returns the dueDateType
-     */
-    public DueDateType getDueDateType() {
-        return dueDateType;
-    }
 
-    /**
-     * Sets the dueDateType attribute.
-     * 
-     * @param dueDateType The dueDateType to set.
-     */
-    public void setDueDateType(DueDateType dueDateType) {
-        this.dueDateType = dueDateType;
-    }
+	/**
+	 * Gets the routingFormApprovalLeadTime attribute.
+	 * 
+	 * @return Returns the routingFormApprovalLeadTime
+	 * 
+	 */
+	public Integer getRoutingFormApprovalLeadTime() { 
+		return routingFormApprovalLeadTime;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-        m.put("documentNumber", this.documentNumber);
-        m.put("dueDateTypeCode", this.dueDateTypeCode);
-        return m;
+	/**
+	 * Sets the routingFormApprovalLeadTime attribute.
+	 * 
+	 * @param routingFormApprovalLeadTime The routingFormApprovalLeadTime to set.
+	 * 
+	 */
+	public void setRoutingFormApprovalLeadTime(Integer routingFormApprovalLeadTime) {
+		this.routingFormApprovalLeadTime = routingFormApprovalLeadTime;
+	}
+
+
+	/**
+	 * Gets the routingFormDueDateDescription attribute.
+	 * 
+	 * @return Returns the routingFormDueDateDescription
+	 * 
+	 */
+	public String getRoutingFormDueDateDescription() { 
+		return routingFormDueDateDescription;
+	}
+
+	/**
+	 * Sets the routingFormDueDateDescription attribute.
+	 * 
+	 * @param routingFormDueDateDescription The routingFormDueDateDescription to set.
+	 * 
+	 */
+	public void setRoutingFormDueDateDescription(String routingFormDueDateDescription) {
+		this.routingFormDueDateDescription = routingFormDueDateDescription;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        m.put("routingFormDueDateTypeCode", this.routingFormDueDateTypeCode);
+	    return m;
     }
 }

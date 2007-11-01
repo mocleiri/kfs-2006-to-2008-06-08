@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/Carrier.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,51 +20,92 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Carrier Business Object.
+ * 
  */
-public class Carrier extends PersistableBusinessObjectBase {
+public class Carrier extends BusinessObjectBase {
 
-    private String carrierCode;
-    private String carrierDescription;
-    private boolean active;
+	private String carrierCode;
+	private String carrierDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    public Carrier() {
+	/**
+	 * Default constructor.
+	 */
+	public Carrier() {
 
-    }
+	}
 
-    public String getCarrierCode() {
-        return carrierCode;
-    }
+	/**
+	 * Gets the carrierCode attribute.
+	 * 
+	 * @return Returns the carrierCode
+	 * 
+	 */
+	public String getCarrierCode() { 
+		return carrierCode;
+	}
 
-    public void setCarrierCode(String carrierCode) {
-        this.carrierCode = carrierCode;
-    }
+	/**
+	 * Sets the carrierCode attribute.
+	 * 
+	 * @param carrierCode The carrierCode to set.
+	 * 
+	 */
+	public void setCarrierCode(String carrierCode) {
+		this.carrierCode = carrierCode;
+	}
 
-    public String getCarrierDescription() {
-        return carrierDescription;
-    }
 
-    public void setCarrierDescription(String carrierDescription) {
-        this.carrierDescription = carrierDescription;
-    }
+	/**
+	 * Gets the carrierDescription attribute.
+	 * 
+	 * @return Returns the carrierDescription
+	 * 
+	 */
+	public String getCarrierDescription() { 
+		return carrierDescription;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Sets the carrierDescription attribute.
+	 * 
+	 * @param carrierDescription The carrierDescription to set.
+	 * 
+	 */
+	public void setCarrierDescription(String carrierDescription) {
+		this.carrierDescription = carrierDescription;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("carrierCode", this.carrierCode);
-        return m;
+	    return m;
     }
 }

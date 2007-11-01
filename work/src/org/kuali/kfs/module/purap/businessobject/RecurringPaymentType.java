@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/RecurringPaymentType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,53 +20,86 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Recurring Payment Type Business Object.
+ * 
  */
-public class RecurringPaymentType extends PersistableBusinessObjectBase {
+public class RecurringPaymentType extends BusinessObjectBase {
 
-    private String recurringPaymentTypeCode;
-    private String recurringPaymentTypeDescription;
-    private boolean active;
+	private String recurringPaymentTypeCode;
+	private String recurringPaymentTypeDescription;
+    private boolean dataObjectMaintenanceCodeActiveIndicator;
+    
+	/**
+	 * Default constructor.
+	 */
+	public RecurringPaymentType() {
+
+	}
+
+	/**
+	 * Gets the recurringPaymentTypeCode attribute.
+	 * 
+	 * @return Returns the recurringPaymentTypeCode
+	 * 
+	 */
+	public String getRecurringPaymentTypeCode() { 
+		return recurringPaymentTypeCode;
+	}
+
+	/**
+	 * Sets the recurringPaymentTypeCode attribute.
+	 * 
+	 * @param recurringPaymentTypeCode The recurringPaymentTypeCode to set.
+	 * 
+	 */
+	public void setRecurringPaymentTypeCode(String recurringPaymentTypeCode) {
+		this.recurringPaymentTypeCode = recurringPaymentTypeCode;
+	}
+
+
+	/**
+	 * Gets the recurringPaymentTypeDescription attribute.
+	 * 
+	 * @return Returns the recurringPaymentTypeDescription
+	 * 
+	 */
+	public String getRecurringPaymentTypeDescription() { 
+		return recurringPaymentTypeDescription;
+	}
+
+	/**
+	 * Sets the recurringPaymentTypeDescription attribute.
+	 * 
+	 * @param recurringPaymentTypeDescription The recurringPaymentTypeDescription to set.
+	 * 
+	 */
+	public void setRecurringPaymentTypeDescription(String recurringPaymentTypeDescription) {
+		this.recurringPaymentTypeDescription = recurringPaymentTypeDescription;
+	}
 
     /**
-     * Default constructor.
+     * Gets the dataObjectMaintenanceCodeActiveIndicator attribute. 
+     * @return Returns the dataObjectMaintenanceCodeActiveIndicator.
      */
-    public RecurringPaymentType() {
-
+    public boolean isDataObjectMaintenanceCodeActiveIndicator() {
+        return dataObjectMaintenanceCodeActiveIndicator;
     }
 
-    public String getRecurringPaymentTypeCode() {
-        return recurringPaymentTypeCode;
-    }
-
-    public void setRecurringPaymentTypeCode(String recurringPaymentTypeCode) {
-        this.recurringPaymentTypeCode = recurringPaymentTypeCode;
-    }
-
-    public String getRecurringPaymentTypeDescription() {
-        return recurringPaymentTypeDescription;
-    }
-
-    public void setRecurringPaymentTypeDescription(String recurringPaymentTypeDescription) {
-        this.recurringPaymentTypeDescription = recurringPaymentTypeDescription;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    /**
+     * Sets the dataObjectMaintenanceCodeActiveIndicator attribute value.
+     * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+     */
+    public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+        this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
     }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("recurringPaymentTypeCode", this.recurringPaymentTypeCode);
         return m;
     }

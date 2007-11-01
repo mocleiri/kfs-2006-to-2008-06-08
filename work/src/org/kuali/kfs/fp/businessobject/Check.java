@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +20,11 @@ package org.kuali.module.financial.bo;
 import java.sql.Date;
 
 import org.apache.ojb.broker.PersistenceBrokerAware;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.util.KualiDecimal;
 
 
-public interface Check extends PersistableBusinessObject, PersistenceBrokerAware {
+public interface Check extends BusinessObject, PersistenceBrokerAware {
 
     /**
      * Gets the checkDate attribute.
@@ -112,46 +114,17 @@ public interface Check extends PersistableBusinessObject, PersistenceBrokerAware
 
 
     /**
-     * Sets the financialDocumentDepositLineNumber.
+     * Sets the interimDepositAmount.
      * 
-     * @param financialDocumentDepositLineNumber
+     * @param interimDepositAmount
      */
-    public void setFinancialDocumentDepositLineNumber(Integer financialDocumentDepositLineNumber);
+    public void setInterimDepositAmount(boolean interimDepositAmount);
 
     /**
-     * Gets the financialDocumentDepositLineNumber attribute.
-     * 
-     * @return Returns the financialDocumentDepositLineNumber.
+     * @return interimDepositAmount value
      */
-    public Integer getFinancialDocumentDepositLineNumber();
+    public boolean isInterimDepositAmount();
 
-    /**
-     * Returns the document type that created this record.
-     * 
-     * @return the document type of the creating document.
-     */
-    public String getFinancialDocumentTypeCode();
-
-    /**
-     * Sets the kind of document that created this check
-     * 
-     * @param financialDocumentTypeCode
-     */
-    public void setFinancialDocumentTypeCode(String financialDocumentTypeCode);
-
-    /**
-     * Gets the code that describes where this cashiering record came from
-     * 
-     * @return the cashiering record source
-     */
-    public String getCashieringRecordSource();
-
-    /**
-     * Sets the source of this cashiering record.
-     * 
-     * @param cashieringRecordSource
-     */
-    public void setCashieringRecordSource(String cashieringRecordSource);
 
     /**
      * @param other

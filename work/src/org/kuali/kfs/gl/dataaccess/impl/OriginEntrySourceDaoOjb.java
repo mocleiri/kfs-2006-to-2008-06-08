@@ -38,6 +38,7 @@ public class OriginEntrySourceDaoOjb extends PlatformAwareDaoBaseOjb implements 
     private static final String UNIVERSITY_FISCAL_PERIOD_CODE = "universityFiscalPeriodCode";
     private static final String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
     private static final String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
+    private static final String FINANCIAL_DOCUMENT_NUMBER = "financialDocumentNumber";
     private static final String TRANSACTION_LEDGER_ENTRY_SEQUENCE_NUMBER = "transactionLedgerEntrySequenceNumber";
 
     public OriginEntrySourceDaoOjb() {

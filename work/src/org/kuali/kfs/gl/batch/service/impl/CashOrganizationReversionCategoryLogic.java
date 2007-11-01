@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,10 @@ public class CashOrganizationReversionCategoryLogic implements OrganizationRever
     public boolean containsObjectCode(ObjectCode oc) {
         LOG.debug("containsObjectCode() started");
 
-        ObjectCode chartCashObject = oc.getChartOfAccounts().getFinancialCashObject();
-        return (chartCashObject.getChartOfAccountsCode().equals(oc.getChartOfAccountsCode()) && chartCashObject.getFinancialObjectCode().equals(oc.getFinancialObjectCode()));
+        if (oc.getChartOfAccounts().getFinancialCashObject().equals(oc.getObjectCode())) {
+            return true;
+        }
+        return false;
     }
 
     public String getCode() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.kuali.kfs.batch;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,8 +29,8 @@ import org.kuali.core.mail.MailMessage;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.MailService;
+import org.kuali.core.util.log4j.NDCFilter;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.NDCFilter;
 import org.kuali.kfs.service.SchedulerService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -47,24 +48,27 @@ public class JobListener implements org.quartz.JobListener {
      * @see org.quartz.JobListener#jobWasExecuted(org.quartz.JobExecutionContext, org.quartz.JobExecutionException)
      */
     public void jobWasExecuted(JobExecutionContext jobExecutionContext, JobExecutionException jobExecutionException) {
-        if (jobExecutionContext.getJobInstance() instanceof Job) {
-            if (!((Job) jobExecutionContext.getJobInstance()).isNotRunnable()) {
-                notify(jobExecutionContext, schedulerService.getStatus(jobExecutionContext.getJobDetail()));
+        if (!((Job) jobExecutionContext.getJobInstance()).isNotRunnable()) {
+            String jobStatus = null;
+            String customMessage = null;
+            if (jobExecutionException != null) {
+                jobStatus = SchedulerService.FAILED_JOB_STATUS_CODE;
+                schedulerService.updateStatus(jobExecutionContext.getJobDetail(), jobStatus);
             }
-            completeLogging(jobExecutionContext);
+            
+            notify(jobExecutionContext, jobExecutionContext.getJobDetail().getJobDataMap().getString(SchedulerService.JOB_STATUS_PARAMETER) );
         }
+        completeLogging(jobExecutionContext);
     }
 
     /**
      * @see org.quartz.JobListener#jobToBeExecuted(org.quartz.JobExecutionContext)
      */
     public void jobToBeExecuted(JobExecutionContext jobExecutionContext) {
-        if (jobExecutionContext.getJobInstance() instanceof Job) {
-            schedulerService.initializeJob(jobExecutionContext.getJobDetail().getName(), (Job) jobExecutionContext.getJobInstance());
-            initializeLogging(jobExecutionContext);
-            if (schedulerService.shouldNotRun(jobExecutionContext.getJobDetail())) {
-                ((Job) jobExecutionContext.getJobInstance()).setNotRunnable(true);
-            }
+        schedulerService.initializeJob(jobExecutionContext.getJobDetail().getName(), (Job) jobExecutionContext.getJobInstance());
+        initializeLogging(jobExecutionContext);
+        if (schedulerService.shouldNotRun(jobExecutionContext.getJobDetail())) {
+            ((Job) jobExecutionContext.getJobInstance()).setNotRunnable(true);
         }
     }
 
@@ -72,15 +76,13 @@ public class JobListener implements org.quartz.JobListener {
      * @see org.quartz.JobListener#jobExecutionVetoed(org.quartz.JobExecutionContext)
      */
     public void jobExecutionVetoed(JobExecutionContext jobExecutionContext) {
-        if (jobExecutionContext.getJobInstance() instanceof Job) {
-            throw new UnsupportedOperationException("JobListener does not implement jobExecutionVetoed(JobExecutionContext jobExecutionContext)");
-        }
+        throw new UnsupportedOperationException("JobListener does not implement jobExecutionVetoed(JobExecutionContext jobExecutionContext)");
     }
 
     private void initializeLogging(JobExecutionContext jobExecutionContext) {
         try {
             Calendar startTimeCalendar = dateTimeService.getCurrentCalendar();
-            StringBuffer nestedDiagnosticContext = new StringBuffer(jobExecutionContext.getJobDetail().getName()).append("-").append(dateTimeService.toString(startTimeCalendar.getTime(), "yyyyMMdd-HH-mm-ss-S"));
+            StringBuffer nestedDiagnosticContext = new StringBuffer(jobExecutionContext.getJobDetail().getName()).append("-").append(new SimpleDateFormat("yyyyMMdd-HH-mm-ss-S").format(startTimeCalendar.getTime()));
             ((Job) jobExecutionContext.getJobInstance()).setNdcAppender(new FileAppender(Logger.getRootLogger().getAppender("LogFile").getLayout(), getLogFileName(nestedDiagnosticContext.toString())));
             ((Job) jobExecutionContext.getJobInstance()).getNdcAppender().addFilter(new NDCFilter(nestedDiagnosticContext.toString()));
             Logger.getRootLogger().addAppender(((Job) jobExecutionContext.getJobInstance()).getNdcAppender());
@@ -110,7 +112,7 @@ public class JobListener implements org.quartz.JobListener {
             StringBuffer mailMessageSubject = new StringBuffer(configurationService.getPropertyString(KFSConstants.ENVIRONMENT_KEY)).append(": ").append(jobExecutionContext.getJobDetail().getGroup()).append(": ").append(jobExecutionContext.getJobDetail().getName());
             MailMessage mailMessage = new MailMessage();
             mailMessage.setFromAddress(mailService.getBatchMailingList());
-            if (jobExecutionContext.getMergedJobDataMap().containsKey(REQUESTOR_EMAIL_ADDRESS_KEY) && !StringUtils.isBlank(jobExecutionContext.getMergedJobDataMap().getString(REQUESTOR_EMAIL_ADDRESS_KEY))) {
+            if (jobExecutionContext.getMergedJobDataMap().containsKey(REQUESTOR_EMAIL_ADDRESS_KEY) && !StringUtils.isBlank( jobExecutionContext.getMergedJobDataMap().getString(REQUESTOR_EMAIL_ADDRESS_KEY) ) ) {
                 mailMessage.addToAddress(jobExecutionContext.getMergedJobDataMap().getString(REQUESTOR_EMAIL_ADDRESS_KEY));
             }
             if (SchedulerService.FAILED_JOB_STATUS_CODE.equals(jobStatus) || SchedulerService.CANCELLED_JOB_STATUS_CODE.equals(jobStatus)) {

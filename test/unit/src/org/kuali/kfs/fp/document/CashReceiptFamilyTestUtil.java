@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/fp/document/CashReceiptFamilyTestUtil.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +17,11 @@
  */
 package org.kuali.module.financial.util;
 
+import org.kuali.core.bo.SourceAccountingLine;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.WithTestSpringContext;
 
-@ConfigureContext
+@WithTestSpringContext
 public class CashReceiptFamilyTestUtil {
 
     public static SourceAccountingLine buildSourceAccountingLine(String documentNumber, Integer postingYear, Integer sequenceNumber) {
@@ -32,7 +34,7 @@ public class CashReceiptFamilyTestUtil {
         line.setDocumentNumber(documentNumber);
         line.setSequenceNumber(sequenceNumber);
         line.refresh();
-
+        
         return line;
     }
 }

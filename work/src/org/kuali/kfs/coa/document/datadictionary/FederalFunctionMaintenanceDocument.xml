@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.chart.bo.FederalFunction</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,15 +32,16 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>FederalFunctionMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiFederalFunctionMaintenanceDocument</documentTypeName>
         <documentTypeCode>FFUN</documentTypeCode>
 
-        <label>Federal Function</label>
+        <label>Federal Function Maintenance Document</label>
+        <shortLabel>Federal Function Maint Doc</shortLabel>
 
         <summary>Federal Function Maintenance Document</summary>
         <description>Document used to create or update Federal Function Maintenance Document objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="FederalFunction" parameterName="FEDERAL_FUNCTION" />
-
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_FEDERAL_FUNCTION" />
+        
         <lockingKeys>
             <field attributeName="financialFederalFunctionCode" />
         </lockingKeys>

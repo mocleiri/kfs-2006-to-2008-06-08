@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/VendorStipulation.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,66 +20,117 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Vendor Stipulation Business Object.
+ * 
  */
-public class VendorStipulation extends PersistableBusinessObjectBase {
+public class VendorStipulation extends BusinessObjectBase {
 
-    private Integer vendorStipulationIdentifier;
-    private String vendorStipulationName;
-    private String vendorStipulationDescription;
-    private boolean active;
+	private Integer vendorStipulationIdentifier;
+	private String vendorStipulationName;
+	private String vendorStipulationDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public VendorStipulation() {
+	/**
+	 * Default constructor.
+	 */
+	public VendorStipulation() {
 
-    }
+	}
 
-    public Integer getVendorStipulationIdentifier() {
-        return vendorStipulationIdentifier;
-    }
+	/**
+	 * Gets the vendorStipulationIdentifier attribute.
+	 * 
+	 * @return Returns the vendorStipulationIdentifier
+	 * 
+	 */
+	public Integer getVendorStipulationIdentifier() { 
+		return vendorStipulationIdentifier;
+	}
 
-    public void setVendorStipulationIdentifier(Integer vendorStipulationIdentifier) {
-        this.vendorStipulationIdentifier = vendorStipulationIdentifier;
-    }
+	/**
+	 * Sets the vendorStipulationIdentifier attribute.
+	 * 
+	 * @param vendorStipulationIdentifier The vendorStipulationIdentifier to set.
+	 * 
+	 */
+	public void setVendorStipulationIdentifier(Integer vendorStipulationIdentifier) {
+		this.vendorStipulationIdentifier = vendorStipulationIdentifier;
+	}
 
-    public String getVendorStipulationName() {
-        return vendorStipulationName;
-    }
 
-    public void setVendorStipulationName(String vendorStipulationName) {
-        this.vendorStipulationName = vendorStipulationName;
-    }
+	/**
+	 * Gets the vendorStipulationName attribute.
+	 * 
+	 * @return Returns the vendorStipulationName
+	 * 
+	 */
+	public String getVendorStipulationName() { 
+		return vendorStipulationName;
+	}
 
-    public String getVendorStipulationDescription() {
-        return vendorStipulationDescription;
-    }
+	/**
+	 * Sets the vendorStipulationName attribute.
+	 * 
+	 * @param vendorStipulationName The vendorStipulationName to set.
+	 * 
+	 */
+	public void setVendorStipulationName(String vendorStipulationName) {
+		this.vendorStipulationName = vendorStipulationName;
+	}
 
-    public void setVendorStipulationDescription(String vendorStipulationDescription) {
-        this.vendorStipulationDescription = vendorStipulationDescription;
-    }
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Gets the vendorStipulationDescription attribute.
+	 * 
+	 * @return Returns the vendorStipulationDescription
+	 * 
+	 */
+	public String getVendorStipulationDescription() { 
+		return vendorStipulationDescription;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Sets the vendorStipulationDescription attribute.
+	 * 
+	 * @param vendorStipulationDescription The vendorStipulationDescription to set.
+	 * 
+	 */
+	public void setVendorStipulationDescription(String vendorStipulationDescription) {
+		this.vendorStipulationDescription = vendorStipulationDescription;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.vendorStipulationIdentifier != null) {
             m.put("vendorStipulationIdentifier", this.vendorStipulationIdentifier.toString());
         }
         return m;
     }
-
 }

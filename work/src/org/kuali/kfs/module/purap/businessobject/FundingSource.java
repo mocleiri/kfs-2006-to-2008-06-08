@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/FundingSource.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,54 +20,92 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Funding Source Business Object.
+ * 
  */
-public class FundingSource extends PersistableBusinessObjectBase {
+public class FundingSource extends BusinessObjectBase {
 
-    private String fundingSourceCode;
-    private String fundingSourceDescription;
-    private boolean active;
+	private String fundingSourceCode;
+	private String fundingSourceDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public FundingSource() {
+	/**
+	 * Default constructor.
+	 */
+	public FundingSource() {
 
-    }
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Gets the fundingSourceCode attribute.
+	 * 
+	 * @return Returns the fundingSourceCode
+	 * 
+	 */
+	public String getFundingSourceCode() { 
+		return fundingSourceCode;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Sets the fundingSourceCode attribute.
+	 * 
+	 * @param fundingSourceCode The fundingSourceCode to set.
+	 * 
+	 */
+	public void setFundingSourceCode(String fundingSourceCode) {
+		this.fundingSourceCode = fundingSourceCode;
+	}
 
-    public String getFundingSourceCode() {
-        return fundingSourceCode;
-    }
 
-    public void setFundingSourceCode(String fundingSourceCode) {
-        this.fundingSourceCode = fundingSourceCode;
-    }
+	/**
+	 * Gets the fundingSourceDescription attribute.
+	 * 
+	 * @return Returns the fundingSourceDescription
+	 * 
+	 */
+	public String getFundingSourceDescription() { 
+		return fundingSourceDescription;
+	}
 
-    public String getFundingSourceDescription() {
-        return fundingSourceDescription;
-    }
+	/**
+	 * Sets the fundingSourceDescription attribute.
+	 * 
+	 * @param fundingSourceDescription The fundingSourceDescription to set.
+	 * 
+	 */
+	public void setFundingSourceDescription(String fundingSourceDescription) {
+		this.fundingSourceDescription = fundingSourceDescription;
+	}
 
-    public void setFundingSourceDescription(String fundingSourceDescription) {
-        this.fundingSourceDescription = fundingSourceDescription;
-    }
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("fundingSourceCode", this.fundingSourceCode);
-        return m;
+	    return m;
     }
 }

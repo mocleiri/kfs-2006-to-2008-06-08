@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PaymentRequestStatus.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +18,94 @@
 
 package org.kuali.module.purap.bo;
 
+import java.util.LinkedHashMap;
+
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Payment Request Status Business Object.
+ * 
  */
-public class PaymentRequestStatus extends Status {
+public class PaymentRequestStatus extends BusinessObjectBase {
 
-    /**
-     * Default constructor.
-     */
-    public PaymentRequestStatus() {
-        super();
-        super.ojbConcreteClass = this.getClass().getName();
+	private String paymentRequestStatusCode;
+	private String paymentRequestStatusDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
+
+	/**
+	 * Default constructor.
+	 */
+	public PaymentRequestStatus() {
+
+	}
+
+	/**
+	 * Gets the paymentRequestStatusCode attribute.
+	 * 
+	 * @return Returns the paymentRequestStatusCode
+	 * 
+	 */
+	public String getPaymentRequestStatusCode() { 
+		return paymentRequestStatusCode;
+	}
+
+	/**
+	 * Sets the paymentRequestStatusCode attribute.
+	 * 
+	 * @param paymentRequestStatusCode The paymentRequestStatusCode to set.
+	 * 
+	 */
+	public void setPaymentRequestStatusCode(String paymentRequestStatusCode) {
+		this.paymentRequestStatusCode = paymentRequestStatusCode;
+	}
+
+
+	/**
+	 * Gets the paymentRequestStatusDescription attribute.
+	 * 
+	 * @return Returns the paymentRequestStatusDescription
+	 * 
+	 */
+	public String getPaymentRequestStatusDescription() { 
+		return paymentRequestStatusDescription;
+	}
+
+	/**
+	 * Sets the paymentRequestStatusDescription attribute.
+	 * 
+	 * @param paymentRequestStatusDescription The paymentRequestStatusDescription to set.
+	 * 
+	 */
+	public void setPaymentRequestStatusDescription(String paymentRequestStatusDescription) {
+		this.paymentRequestStatusDescription = paymentRequestStatusDescription;
+	}
+
+
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        m.put("paymentRequestStatusCode", this.paymentRequestStatusCode);
+	    return m;
     }
-
 }

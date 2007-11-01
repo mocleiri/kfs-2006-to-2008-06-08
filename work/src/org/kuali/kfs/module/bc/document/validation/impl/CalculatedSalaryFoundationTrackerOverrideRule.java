@@ -19,29 +19,27 @@ import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.CalculatedSalaryFoundationTrackerOverride;
 import org.kuali.module.budget.service.CalculatedSalaryFoundationTrackerOverrideService;
-import org.kuali.module.financial.service.UniversityDateService;
 
 public class CalculatedSalaryFoundationTrackerOverrideRule extends MaintenanceDocumentRuleBase {
-
+    
     private CalculatedSalaryFoundationTrackerOverride oldCalculatedSalaryFoundationTrackerOverride;
     private CalculatedSalaryFoundationTrackerOverride newCalculatedSalaryFoundationTrackerOverride;
-    private CalculatedSalaryFoundationTrackerOverrideService calculatedSalaryFoundationTrackerOverrideService;
-
+    private CalculatedSalaryFoundationTrackerOverrideService calculatedSalaryFoundationTrackerOverrideService;    
     public CalculatedSalaryFoundationTrackerOverrideRule() {
         super();
-
+        
         // Pseudo-inject some services.
         //
         // This approach is being used to make it simpler to convert the Rule classes
         // to spring-managed with these services injected by Spring at some later date.
         // When this happens, just remove these calls to the setters with
-        // SpringContext, and configure the bean defs for spring.
-        this.setCalculatedSalaryFoundationTrackerOverrideService(SpringContext.getBean(CalculatedSalaryFoundationTrackerOverrideService.class));
+        // SpringServiceLocator, and configure the bean defs for spring.
+        this.setCalculatedSalaryFoundationTrackerOverrideService(SpringServiceLocator.getCalculatedSalaryFoundationTrackerOverrideService());
     }
-
+    
     /**
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
@@ -54,7 +52,7 @@ public class CalculatedSalaryFoundationTrackerOverrideRule extends MaintenanceDo
 
         return success;
     }
-
+    
     /**
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
@@ -66,22 +64,22 @@ public class CalculatedSalaryFoundationTrackerOverrideRule extends MaintenanceDo
         checkPositionIsValid();
         return success;
     }
-
+    
     private void setupConvenienceObjects(MaintenanceDocument document) {
-
+        
         // setup oldAccount convenience objects, make sure all possible sub-objects are populated
         oldCalculatedSalaryFoundationTrackerOverride = (CalculatedSalaryFoundationTrackerOverride) super.getOldBo();
-
+        
         // setup newAccount convenience objects, make sure all possible sub-objects are populated
         newCalculatedSalaryFoundationTrackerOverride = (CalculatedSalaryFoundationTrackerOverride) super.getNewBo();
     }
-
+    
     private boolean checkFiscalYearIsCurrent(MaintenanceDocument document) {
         boolean success = true;
 
         if ((ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear())) && (document.isNew())) {
 
-            Integer currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+            Integer currentFiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
             Integer universityFiscalYear = newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear();
             if (!(universityFiscalYear.equals(currentFiscalYear))) {
                 putFieldError("universityFiscalYear", KFSKeyConstants.ERROR_FISCAL_YEAR_NOT_CURRENT, "Fiscal Year");
@@ -90,49 +88,54 @@ public class CalculatedSalaryFoundationTrackerOverrideRule extends MaintenanceDo
         }
         return success;
     }
-
+ 
     private boolean checkAppointmentIsValid() {
         boolean success = true;
-
-        if ((ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getEmplid())) && (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getPositionNumber())) && (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear()))) {
-
+        
+        if (
+                (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getEmplid()) )&&
+                (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getPositionNumber()) )&&
+                (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear()) )
+        ){
+            
             String emplid = newCalculatedSalaryFoundationTrackerOverride.getEmplid();
             String positionNumber = newCalculatedSalaryFoundationTrackerOverride.getPositionNumber();
             Integer universityFiscalYear = newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear();
-            boolean result = calculatedSalaryFoundationTrackerOverrideService.isValidAppointment(universityFiscalYear, positionNumber, emplid);
-            if (!result) {
+            boolean result = calculatedSalaryFoundationTrackerOverrideService.isValidAppointment( universityFiscalYear,  positionNumber,  emplid);
+            if (!result){
                 putFieldError("emplid", KFSKeyConstants.ERROR_INVALID_APPOINTMENT, "Employee Id");
                 success &= false;
             }
-        }
-        else {
+        }else{
             putFieldError("emplid", KFSKeyConstants.ERROR_INVALID_APPOINTMENT, "Employee Id");
             success &= false;
         }
         return success;
     }
-
+    
     private boolean checkPositionIsValid() {
         boolean success = true;
-
-        if ((ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getPositionNumber())) && (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear()))) {
-
+        
+        if (
+                (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getPositionNumber()) )&&
+                (ObjectUtils.isNotNull(newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear()) )
+        ){
+            
             String emplid = newCalculatedSalaryFoundationTrackerOverride.getEmplid();
             String positionNumber = newCalculatedSalaryFoundationTrackerOverride.getPositionNumber();
             Integer universityFiscalYear = newCalculatedSalaryFoundationTrackerOverride.getUniversityFiscalYear();
-            boolean result = calculatedSalaryFoundationTrackerOverrideService.isValidAppointment(universityFiscalYear, positionNumber, emplid);
-            if (!result) {
+            boolean result = calculatedSalaryFoundationTrackerOverrideService.isValidAppointment( universityFiscalYear,  positionNumber,  emplid);
+            if (!result){
                 putFieldError("positionNumber", KFSKeyConstants.ERROR_INVALID_POSITION, "Position Number");
                 success &= false;
             }
-        }
-        else {
+        }else{
             putFieldError("positionNumber", KFSKeyConstants.ERROR_INVALID_POSITION, "Position Number");
             success &= false;
         }
         return success;
     }
-
+    
     /**
      * Sets the calculatedSalaryFoundationTrackerOverrideService attribute value.
      * 

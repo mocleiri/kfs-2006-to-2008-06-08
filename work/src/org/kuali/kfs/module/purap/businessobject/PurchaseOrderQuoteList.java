@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderQuoteList.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,77 +19,105 @@
 package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.TypedArrayList;
-import org.kuali.module.vendor.bo.ContractManager;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Purchase Order Quote List Business Object.
+ * 
  */
-public class PurchaseOrderQuoteList extends PersistableBusinessObjectBase {
+public class PurchaseOrderQuoteList extends BusinessObjectBase {
 
-    private Integer purchaseOrderQuoteListIdentifier;
-    private String purchaseOrderQuoteListName;
-    private Integer contractManagerCode;
-
+	private Integer purchaseOrderQuoteListIdentifier;
+	private String purchaseOrderQuoteListName;
+	private Integer contractManagerCode;
+    
     private ContractManager contractManager;
 
-    private List<PurchaseOrderQuoteListVendor> quoteListVendors;
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderQuoteList() {
 
-    /**
-     * Default constructor.
-     */
-    public PurchaseOrderQuoteList() {
-        quoteListVendors = new TypedArrayList(PurchaseOrderQuoteListVendor.class);
-    }
+	}
 
-    public Integer getPurchaseOrderQuoteListIdentifier() {
-        return purchaseOrderQuoteListIdentifier;
-    }
+	/**
+	 * Gets the purchaseOrderQuoteListIdentifier attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteListIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderQuoteListIdentifier() { 
+		return purchaseOrderQuoteListIdentifier;
+	}
 
-    public void setPurchaseOrderQuoteListIdentifier(Integer purchaseOrderQuoteListIdentifier) {
-        this.purchaseOrderQuoteListIdentifier = purchaseOrderQuoteListIdentifier;
-    }
+	/**
+	 * Sets the purchaseOrderQuoteListIdentifier attribute.
+	 * 
+	 * @param purchaseOrderQuoteListIdentifier The purchaseOrderQuoteListIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteListIdentifier(Integer purchaseOrderQuoteListIdentifier) {
+		this.purchaseOrderQuoteListIdentifier = purchaseOrderQuoteListIdentifier;
+	}
 
-    public String getPurchaseOrderQuoteListName() {
-        return purchaseOrderQuoteListName;
-    }
 
-    public void setPurchaseOrderQuoteListName(String purchaseOrderQuoteListName) {
-        this.purchaseOrderQuoteListName = purchaseOrderQuoteListName;
-    }
+	/**
+	 * Gets the purchaseOrderQuoteListName attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteListName
+	 * 
+	 */
+	public String getPurchaseOrderQuoteListName() { 
+		return purchaseOrderQuoteListName;
+	}
 
-    public Integer getContractManagerCode() {
-        return contractManagerCode;
-    }
+	/**
+	 * Sets the purchaseOrderQuoteListName attribute.
+	 * 
+	 * @param purchaseOrderQuoteListName The purchaseOrderQuoteListName to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteListName(String purchaseOrderQuoteListName) {
+		this.purchaseOrderQuoteListName = purchaseOrderQuoteListName;
+	}
 
-    public void setContractManagerCode(Integer contractManagerCode) {
-        this.contractManagerCode = contractManagerCode;
-    }
 
-    public List<PurchaseOrderQuoteListVendor> getQuoteListVendors() {
-        return quoteListVendors;
-    }
+	/**
+	 * Gets the contractManagerCode attribute.
+	 * 
+	 * @return Returns the contractManagerCode
+	 * 
+	 */
+	public Integer getContractManagerCode() { 
+		return contractManagerCode;
+	}
 
-    public void setQuoteListVendors(List<PurchaseOrderQuoteListVendor> quoteListVendors) {
-        this.quoteListVendors = quoteListVendors;
-    }
+	/**
+	 * Sets the contractManagerCode attribute.
+	 * 
+	 * @param contractManagerCode The contractManagerCode to set.
+	 * 
+	 */
+	public void setContractManagerCode(Integer contractManagerCode) {
+		this.contractManagerCode = contractManagerCode;
+	}
 
-    public ContractManager getContractManager() {
-        return contractManager;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.purchaseOrderQuoteListIdentifier != null) {
             m.put("purchaseOrderQuoteListIdentifier", this.purchaseOrderQuoteListIdentifier.toString());
         }
-        return m;
+	    return m;
     }
 
+    /**
+     * Gets the contractManager attribute. 
+     * @return Returns the contractManager.
+     */
+    public ContractManager getContractManager() {
+        return contractManager;
+    }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/NegativePaymentRequestApprovalLimit.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,116 +20,207 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
- * Negative Payment Request Approval Limit Business Object. Maintenance document for setting limits for the auto-approve PREQ batch
- * job.
+ * 
  */
-public class NegativePaymentRequestApprovalLimit extends PersistableBusinessObjectBase {
+public class NegativePaymentRequestApprovalLimit extends BusinessObjectBase {
 
-    private Integer negativePaymentRequestApprovalLimitIdentifier;
-    private String chartOfAccountsCode;
-    private String organizationCode;
-    private String accountNumber;
-    private KualiDecimal negativePaymentRequestApprovalLimitAmount;
+	private Integer negativePaymentRequestApprovalLimitIdentifier;
+	private String chartOfAccountsCode;
+	private String organizationCode;
+	private String accountNumber;
+	private KualiDecimal negativePaymentRequestApprovalLimitAmount;
 
     private Chart chartOfAccounts;
-    private Account account;
-    private Org organization;
+	private Account account;
+	private Org organization;
 
-    /**
-     * Default constructor.
-     */
-    public NegativePaymentRequestApprovalLimit() {
+	/**
+	 * Default constructor.
+	 */
+	public NegativePaymentRequestApprovalLimit() {
 
-    }
+	}
 
-    public Account getAccount() {
-        return account;
-    }
+	/**
+	 * Gets the negativePaymentRequestApprovalLimitIdentifier attribute.
+	 * 
+	 * @return Returns the negativePaymentRequestApprovalLimitIdentifier
+	 * 
+	 */
+	public Integer getNegativePaymentRequestApprovalLimitIdentifier() { 
+		return negativePaymentRequestApprovalLimitIdentifier;
+	}
 
-    /**
-     * @deprecated
-     */
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+	/**
+	 * Sets the negativePaymentRequestApprovalLimitIdentifier attribute.
+	 * 
+	 * @param negativePaymentRequestApprovalLimitIdentifier The negativePaymentRequestApprovalLimitIdentifier to set.
+	 * 
+	 */
+	public void setNegativePaymentRequestApprovalLimitIdentifier(Integer negativePaymentRequestApprovalLimitIdentifier) {
+		this.negativePaymentRequestApprovalLimitIdentifier = negativePaymentRequestApprovalLimitIdentifier;
+	}
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
+	/**
+	 * Gets the chartOfAccountsCode attribute.
+	 * 
+	 * @return Returns the chartOfAccountsCode
+	 * 
+	 */
+	public String getChartOfAccountsCode() { 
+		return chartOfAccountsCode;
+	}
 
-    public Chart getChartOfAccounts() {
-        return chartOfAccounts;
-    }
+	/**
+	 * Sets the chartOfAccountsCode attribute.
+	 * 
+	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * 
+	 */
+	public void setChartOfAccountsCode(String chartOfAccountsCode) {
+		this.chartOfAccountsCode = chartOfAccountsCode;
+	}
 
-    /**
-     * @deprecated
-     */
-    public void setChartOfAccounts(Chart chartOfAccounts) {
-        this.chartOfAccounts = chartOfAccounts;
-    }
 
-    public String getChartOfAccountsCode() {
-        return chartOfAccountsCode;
-    }
+	/**
+	 * Gets the organizationCode attribute.
+	 * 
+	 * @return Returns the organizationCode
+	 * 
+	 */
+	public String getOrganizationCode() { 
+		return organizationCode;
+	}
 
-    public void setChartOfAccountsCode(String chartOfAccountsCode) {
-        this.chartOfAccountsCode = chartOfAccountsCode;
-    }
+	/**
+	 * Sets the organizationCode attribute.
+	 * 
+	 * @param organizationCode The organizationCode to set.
+	 * 
+	 */
+	public void setOrganizationCode(String organizationCode) {
+		this.organizationCode = organizationCode;
+	}
 
-    public KualiDecimal getNegativePaymentRequestApprovalLimitAmount() {
-        return negativePaymentRequestApprovalLimitAmount;
-    }
 
-    public void setNegativePaymentRequestApprovalLimitAmount(KualiDecimal negativePaymentRequestApprovalLimitAmount) {
-        this.negativePaymentRequestApprovalLimitAmount = negativePaymentRequestApprovalLimitAmount;
-    }
+	/**
+	 * Gets the accountNumber attribute.
+	 * 
+	 * @return Returns the accountNumber
+	 * 
+	 */
+	public String getAccountNumber() { 
+		return accountNumber;
+	}
 
-    public Integer getNegativePaymentRequestApprovalLimitIdentifier() {
-        return negativePaymentRequestApprovalLimitIdentifier;
-    }
+	/**
+	 * Sets the accountNumber attribute.
+	 * 
+	 * @param accountNumber The accountNumber to set.
+	 * 
+	 */
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 
-    public void setNegativePaymentRequestApprovalLimitIdentifier(Integer negativePaymentRequestApprovalLimitIdentifier) {
-        this.negativePaymentRequestApprovalLimitIdentifier = negativePaymentRequestApprovalLimitIdentifier;
-    }
 
-    public Org getOrganization() {
-        return organization;
-    }
+	/**
+	 * Gets the negativePaymentRequestApprovalLimitAmount attribute.
+	 * 
+	 * @return Returns the negativePaymentRequestApprovalLimitAmount
+	 * 
+	 */
+	public KualiDecimal getNegativePaymentRequestApprovalLimitAmount() { 
+		return negativePaymentRequestApprovalLimitAmount;
+	}
 
-    /**
-     * @deprecated
-     */
-    public void setOrganization(Org organization) {
-        this.organization = organization;
-    }
+	/**
+	 * Sets the negativePaymentRequestApprovalLimitAmount attribute.
+	 * 
+	 * @param negativePaymentRequestApprovalLimitAmount The negativePaymentRequestApprovalLimitAmount to set.
+	 * 
+	 */
+	public void setNegativePaymentRequestApprovalLimitAmount(KualiDecimal negativePaymentRequestApprovalLimitAmount) {
+		this.negativePaymentRequestApprovalLimitAmount = negativePaymentRequestApprovalLimitAmount;
+	}
 
-    public String getOrganizationCode() {
-        return organizationCode;
-    }
 
-    public void setOrganizationCode(String organizationCode) {
-        this.organizationCode = organizationCode;
-    }
+	/**
+	 * Gets the chartOfAccounts attribute.
+	 * 
+	 * @return Returns the chartOfAccounts
+	 * 
+	 */
+	public Chart getChartOfAccounts() { 
+		return chartOfAccounts;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Sets the chartOfAccounts attribute.
+	 * 
+	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
+	 */
+	public void setChartOfAccounts(Chart chartOfAccounts) {
+		this.chartOfAccounts = chartOfAccounts;
+	}
+
+	/**
+	 * Gets the account attribute.
+	 * 
+	 * @return Returns the account
+	 * 
+	 */
+	public Account getAccount() { 
+		return account;
+	}
+
+	/**
+	 * Sets the account attribute.
+	 * 
+	 * @param account The account to set.
+	 * @deprecated
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * Gets the organization attribute.
+	 * 
+	 * @return Returns the organization
+	 * 
+	 */
+	public Org getOrganization() { 
+		return organization;
+	}
+
+	/**
+	 * Sets the organization attribute.
+	 * 
+	 * @param organization The organization to set.
+	 * @deprecated
+	 */
+	public void setOrganization(Org organization) {
+		this.organization = organization;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.negativePaymentRequestApprovalLimitIdentifier != null) {
             m.put("negativePaymentRequestApprovalLimitIdentifier", this.negativePaymentRequestApprovalLimitIdentifier.toString());
         }
-        return m;
+	    return m;
     }
 }

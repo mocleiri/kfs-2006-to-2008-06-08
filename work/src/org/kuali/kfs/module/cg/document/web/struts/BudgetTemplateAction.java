@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,18 +25,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.core.document.Copyable;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.bo.AdhocOrg;
-import org.kuali.module.kra.bo.AdhocPerson;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.bo.BudgetAdHocOrg;
+import org.kuali.module.kra.budget.bo.BudgetAdHocPermission;
 import org.kuali.module.kra.budget.document.BudgetDocument;
-import org.kuali.module.kra.budget.service.BudgetIndirectCostService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
 /**
  * This class handles Actions for the Budget Template page.
+ * 
+ * 
  */
 public class BudgetTemplateAction extends BudgetAction {
+
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetTemplateAction.class);
 
     /**
@@ -54,26 +57,26 @@ public class BudgetTemplateAction extends BudgetAction {
         BudgetForm budgetForm = (BudgetForm) form;
         BudgetDocument budgetDoc = budgetForm.getBudgetDocument();
 
-        ((Copyable) budgetDoc).toCopy();
-
-        // Check if ad-hoc permissions to be copied over
+        BudgetDocument copyDoc = (BudgetDocument) budgetDoc.copy();
+        
+//      Check if ad-hoc permissions to be copied over
         if (!budgetForm.isIncludeAdHocPermissions()) {
-            budgetDoc.setAdhocPersons(new ArrayList<AdhocPerson>());
-            budgetDoc.setAdhocOrgs(new ArrayList<AdhocOrg>());
+            copyDoc.getBudget().setAdHocPermissions(new ArrayList<BudgetAdHocPermission>());
+            copyDoc.getBudget().setAdHocOrgs(new ArrayList<BudgetAdHocOrg>());
         }
-
-        // Check if budget fringe rates to be copied over
+        
+//      Check if budget fringe rates to be copied over
         if (!budgetForm.isIncludeBudgetIdcRates()) {
-            budgetDoc.getBudget().getIndirectCost().setBudgetManualRateIndicator("N");
-            SpringContext.getBean(BudgetIndirectCostService.class).setupIndirectCostRates(budgetDoc.getBudget());
+            copyDoc.getBudget().getIndirectCost().setBudgetManualRateIndicator("N");
+            SpringServiceLocator.getBudgetIndirectCostService().setupIndirectCostRates(copyDoc.getBudget());
         }
-
-        budgetForm.setBudgetDocument(budgetDoc);
-        budgetForm.setDocId(budgetDoc.getDocumentNumber());
+        
+        budgetForm.setBudgetDocument(copyDoc);
+        budgetForm.setDocId(copyDoc.getDocumentNumber());
 
         budgetForm.getBudgetDocument().setCleanseBudgetOnSave(false);
         super.save(mapping, form, request, response);
-
+        
         budgetForm.getBudgetDocument().setCleanseBudgetOnSave(true);
         super.load(mapping, form, request, response);
 
