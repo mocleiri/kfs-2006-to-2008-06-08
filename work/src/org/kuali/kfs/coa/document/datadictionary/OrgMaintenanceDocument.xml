@@ -34,17 +34,19 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>OrgMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOrganizationMaintenanceDocument</documentTypeName>
         <documentTypeCode>ORGN</documentTypeCode>
 
-		<webScriptFile>../dwr/interface/PostalZipCodeService.js</webScriptFile>
-		<webScriptFile>../scripts/chart/organizationDocument.js</webScriptFile>
+		<webScriptFile>chart/organizationDocument.js</webScriptFile>
 		
-        <label>Organization</label>
+        <label>Organization Maintenance Document</label>
+        <shortLabel>OrgMainDoc</shortLabel>
 
         <summary>Organization maintenance document</summary>
         <description>Document used to create or update Organization objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Org" parameterName="ORGANIZATION" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ORGANIZATION_CODE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -57,6 +59,7 @@
             <reference attributeName="responsibilityCenter" activeIndicatorAttributeName="responsibilityCenterActiveIndicator" attributeToHighlightOnFail="responsibilityCenterCode" />
             <reference attributeName="organizationPhysicalCampus" attributeToHighlightOnFail="organizationPhysicalCampusCode" />
             <reference attributeName="organizationType" attributeToHighlightOnFail="organizationTypeCode" />
+            <reference attributeName="organizationDefaultAccount" activeIndicatorAttributeName="accountClosedIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="organizationDefaultAccountNumber" />
             <reference attributeName="postalZip" attributeToHighlightOnFail="organizationZipCode" />
             <reference attributeName="organizationCountry" attributeToHighlightOnFail="organizationCountryCode" />
             <!-- need to prevent validation for case where reports-to org cites the current organization
@@ -78,7 +81,7 @@
                     <maintainableField name="responsibilityCenterCode" required="true" />
                     <maintainableField name="organizationPhysicalCampusCode" required="true" />
                     <maintainableField name="organizationTypeCode" required="true" />
-                    <maintainableField name="organizationDefaultAccountNumber" required="false" />
+                    <maintainableField name="organizationDefaultAccountNumber" required="true" />
                     <maintainableField name="organizationZipCode" required="true" webUILeaveFieldFunction="updateLocation" webUILeaveFieldCallbackFunction="updateLocation_Callback"/>
                     <maintainableField name="organizationLine1Address" required="true" />
                     <maintainableField name="organizationLine2Address" required="false" />
