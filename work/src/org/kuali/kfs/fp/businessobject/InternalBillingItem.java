@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,18 @@ package org.kuali.module.financial.bo;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
  * Internal Billing Item Business Object
+ * 
+ * 
  */
-public class InternalBillingItem extends PersistableBusinessObjectBase {
+public class InternalBillingItem extends BusinessObjectBase {
 
     private static final long serialVersionUID = -2830091652446423539L;
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer itemSequenceId;
     private String itemStockNumber;
     private String itemStockDescription;
@@ -45,22 +47,22 @@ public class InternalBillingItem extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber.
+     * @return Returns the financialDocumentNumber.
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
 
     /**
-     * Sets the documentNumber attribute value.
+     * Sets the financialDocumentNumber attribute value.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
@@ -219,7 +221,7 @@ public class InternalBillingItem extends PersistableBusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put("docHeaderId", getDocumentNumber());
+        m.put("docHeaderId", getFinancialDocumentNumber());
         m.put("itemSequenceId", getItemSequenceId());
 
         return m;
