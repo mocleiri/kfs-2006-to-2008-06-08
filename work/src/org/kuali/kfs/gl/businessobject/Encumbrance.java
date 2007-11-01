@@ -52,7 +52,6 @@ public class Encumbrance extends PersistableBusinessObjectBase {
     private Date transactionEncumbranceDate;
     private KualiDecimal accountLineEncumbranceAmount;
     private KualiDecimal accountLineEncumbranceClosedAmount;
-    private KualiDecimal accountLineEncumbranceOutstandingAmount;
     private String accountLineEncumbrancePurgeCode;
     private Date timestamp;
 
@@ -135,13 +134,6 @@ public class Encumbrance extends PersistableBusinessObjectBase {
      */
     public KualiDecimal getAccountLineEncumbranceClosedAmount() {
         return accountLineEncumbranceClosedAmount;
-    }
-
-    public void setAccountLineEncumbranceOutstandingAmount() {
-    }
-
-    public KualiDecimal getAccountLineEncumbranceOutstandingAmount() {
-        return accountLineEncumbranceAmount.subtract(accountLineEncumbranceClosedAmount);
     }
 
     /**

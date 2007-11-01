@@ -15,8 +15,12 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.saveDocument;
+import static org.kuali.core.util.SpringServiceLocator.getAccountingPeriodService;
+import static org.kuali.core.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.core.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.core.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
+import static org.kuali.module.financial.document.AccountingDocumentTestUtils.saveDocument;
 import static org.kuali.test.fixtures.AccountingLineFixture.LINE7;
 import static org.kuali.test.fixtures.UserNameFixture.CSWINSON;
 import static org.kuali.test.fixtures.UserNameFixture.HSCHREIN;
@@ -31,20 +35,19 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.DocumentService;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
-import org.kuali.test.ConfigureContext;
 import org.kuali.test.DocumentTestUtils;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.TestsWorkflowViaDatabase;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
 import org.kuali.workflow.WorkflowTestUtils;
 
@@ -52,9 +55,10 @@ import edu.iu.uis.eden.EdenConstants;
 
 /**
  * This class is used to test DisbursementVoucherDocument.
+ * 
+ * 
  */
-@ConfigureContext(session = HSCHREIN)
-// @RelatesTo(RelatesTo.JiraIssue.KULRNE5908)
+@WithTestSpringContext(session = HSCHREIN)
 public class DisbursementVoucherDocumentTest extends KualiTestBase {
 
     public static final Class<DisbursementVoucherDocument> DOCUMENT_CLASS = DisbursementVoucherDocument.class;
@@ -89,7 +93,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
 
         dvParameter.setDisbVchrContactPersonName(GlobalVariables.getUserSession().getUniversalUser().getPersonName());
         // set to tomorrow
-        Calendar calendar = SpringContext.getBean(DateTimeService.class).getCurrentCalendar();
+        Calendar calendar = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.clear(Calendar.MILLISECOND);
         calendar.clear(Calendar.SECOND);
@@ -110,46 +114,45 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
 
     }
 
-    @ConfigureContext(session = HSCHREIN, shouldCommitTransactions = true)
-    // @RelatesTo(RelatesTo.JiraIssue.KULRNE4834)
+    @TestsWorkflowViaDatabase
     public final void testWorkflowRouting() throws Exception {
         // save and route the document
         Document document = buildDocument();
         final String docId = document.getDocumentNumber();
-        SpringContext.getBean(DocumentService.class).routeDocument(document, "routing test doc", null);
+        getDocumentService().routeDocument(document, "routing test doc", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
 
         // the document should now be routed to VPUTMAN as Fiscal Officer
         changeCurrentUser(VPUTMAN);
-        document = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ACCOUNT_REVIEW));
         assertTrue("Document should be enroute.", document.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
         assertTrue("VPUTMAN should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        SpringContext.getBean(DocumentService.class).approveDocument(document, "Test approving as VPUTMAN", null);
+        getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null);
 
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
         // now doc should be in Org Review routing to CSWINSON
         changeCurrentUser(CSWINSON);
-        document = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ORG_REVIEW));
         assertTrue("CSWINSON should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        SpringContext.getBean(DocumentService.class).approveDocument(document, "Test approving as CSWINSON", null);
+        getDocumentService().approveDocument(document, "Test approving as CSWINSON", null);
 
         // this is going to skip a bunch of other routing and end up at campus code
         WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), CAMPUS_CODE);
 
         // doc should be in "Campus Code" routing to MYLARGE
         changeCurrentUser(MYLARGE);
-        document = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, CAMPUS_CODE));
         assertTrue("Should have an approve request.", document.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        SpringContext.getBean(DocumentService.class).approveDocument(document, "Approve", null);
+        getDocumentService().approveDocument(document, "Approve", null);
 
         WorkflowTestUtils.waitForStatusChange(document.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
 
         changeCurrentUser(VPUTMAN);
-        document = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        document = getDocumentService().getByDocumentHeaderId(docId);
         assertTrue("Document should now be final.", document.getDocumentHeader().getWorkflowDocument().stateIsFinal());
     }
 
@@ -158,7 +161,7 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
     }
 
     private Document getDocumentParameterFixture() throws Exception {
-        DisbursementVoucherDocument document = DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DisbursementVoucherDocument.class);
+        DisbursementVoucherDocument document = DocumentTestUtils.createDocument(getDocumentService(), DisbursementVoucherDocument.class);
         DisbursementVoucherPayeeDetail payeeDetail = new DisbursementVoucherPayeeDetail();
         payeeDetail.setDisbVchrPayeeIdNumber("P000178071");
         payeeDetail.setDisbVchrPayeePersonName("Jerry Neal");
@@ -231,42 +234,42 @@ public class DisbursementVoucherDocumentTest extends KualiTestBase {
         List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
         int expectedSourceTotal = sourceLines.size();
         int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
     }
 
     public final void testGetNewDocument() throws Exception {
-        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, SpringContext.getBean(DocumentService.class));
+        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
 
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
+        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
 
     }
 
-    @ConfigureContext(session = HSCHREIN, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
+        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
     }
 
-    @ConfigureContext(session = HSCHREIN, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testSaveDocument() throws Exception {
         // get document parameter
         AccountingDocument document = buildDocument();
         document.prepareForSave();
 
         // save
-        saveDocument(document, SpringContext.getBean(DocumentService.class));
+        saveDocument(document, getDocumentService());
 
         // retrieve
-        AccountingDocument result = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(document.getDocumentNumber());
+        AccountingDocument result = (AccountingDocument) getDocumentService().getByDocumentHeaderId(document.getDocumentNumber());
         // verify
         assertMatch(document, result);
 
     }
 
-    @ConfigureContext(session = HSCHREIN, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), SpringContext.getBean(DocumentService.class), getExpectedPrePeCount());
+        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
     }
 
     // test util methods

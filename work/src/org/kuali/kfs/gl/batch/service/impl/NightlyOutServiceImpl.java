@@ -22,7 +22,7 @@ import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.service.NightlyOutService;
@@ -46,6 +46,7 @@ public class NightlyOutServiceImpl implements NightlyOutService {
 
     /**
      * Constructs a NightlyOutServiceImpl.java.
+     * 
      */
     public NightlyOutServiceImpl() {
     }
@@ -53,7 +54,7 @@ public class NightlyOutServiceImpl implements NightlyOutService {
     public void deleteCopiedPendingLedgerEntries() {
         LOG.debug("deleteCopiedPendingLedgerEntries() started");
 
-        generalLedgerPendingEntryService.deleteByFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+        generalLedgerPendingEntryService.deleteByFinancialDocumentApprovedCode(KFSConstants.DV_PAYMENT_REASON_NONEMPLOYEE_HONORARIUM);
     }
 
     /**
@@ -76,13 +77,13 @@ public class NightlyOutServiceImpl implements NightlyOutService {
             saveAsOriginEntry(pendingEntry, group);
 
             // update the pending entry to indicate it has been copied
-            pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+            pendingEntry.setFinancialDocumentApprovedCode("X");
             pendingEntry.setTransactionDate(today);
             generalLedgerPendingEntryService.save(pendingEntry);
         }
 
         // Print reports
-        reportService.generatePendingEntryReport(today, group);
+        reportService.generatePendingEntryReport(today,group);
         reportService.generatePendingEntryLedgerSummaryReport(today, group);
     }
 
@@ -90,7 +91,7 @@ public class NightlyOutServiceImpl implements NightlyOutService {
      * save pending ledger entry as origin entry
      */
     private void saveAsOriginEntry(GeneralLedgerPendingEntry pendingEntry, OriginEntryGroup group) {
-        OriginEntryFull originEntry = new OriginEntryFull(pendingEntry);
+        OriginEntry originEntry = new OriginEntry(pendingEntry);
         originEntry.setGroup(group);
 
         originEntryService.createEntry(originEntry, group);
