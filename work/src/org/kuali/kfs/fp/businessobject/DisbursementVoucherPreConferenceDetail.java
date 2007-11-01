@@ -52,6 +52,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Gets the documentNumber attribute.
      * 
      * @return Returns the documentNumber
+     * 
      */
     public String getDocumentNumber() {
         return documentNumber;
@@ -80,6 +81,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the documentNumber attribute.
      * 
      * @param documentNumber The documentNumber to set.
+     * 
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -89,6 +91,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Gets the dvConferenceDestinationName attribute.
      * 
      * @return Returns the dvConferenceDestinationName
+     * 
      */
     public String getDvConferenceDestinationName() {
         return dvConferenceDestinationName;
@@ -99,6 +102,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the dvConferenceDestinationName attribute.
      * 
      * @param dvConferenceDestinationName The dvConferenceDestinationName to set.
+     * 
      */
     public void setDvConferenceDestinationName(String dvConferenceDestinationName) {
         this.dvConferenceDestinationName = dvConferenceDestinationName;
@@ -108,6 +112,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Gets the disbVchrConferenceStartDate attribute.
      * 
      * @return Returns the disbVchrConferenceStartDate
+     * 
      */
     public Date getDisbVchrConferenceStartDate() {
         return disbVchrConferenceStartDate;
@@ -118,6 +123,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrConferenceStartDate attribute.
      * 
      * @param disbVchrConferenceStartDate The disbVchrConferenceStartDate to set.
+     * 
      */
     public void setDisbVchrConferenceStartDate(Date disbVchrConferenceStartDate) {
         this.disbVchrConferenceStartDate = disbVchrConferenceStartDate;
@@ -127,6 +133,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Gets the disbVchrConferenceEndDate attribute.
      * 
      * @return Returns the disbVchrConferenceEndDate
+     * 
      */
     public Date getDisbVchrConferenceEndDate() {
         return disbVchrConferenceEndDate;
@@ -137,6 +144,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrConferenceEndDate attribute.
      * 
      * @param disbVchrConferenceEndDate The disbVchrConferenceEndDate to set.
+     * 
      */
     public void setDisbVchrConferenceEndDate(Date disbVchrConferenceEndDate) {
         this.disbVchrConferenceEndDate = disbVchrConferenceEndDate;
@@ -146,6 +154,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Gets the disbVchrConferenceTotalAmt attribute.
      * 
      * @return Returns the disbVchrConferenceTotalAmt
+     * 
      */
     public KualiDecimal getDisbVchrConferenceTotalAmt() {
         KualiDecimal totalConferenceAmount = new KualiDecimal(0);
@@ -165,6 +174,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrConferenceTotalAmt attribute.
      * 
      * @param disbVchrConferenceTotalAmt The disbVchrConferenceTotalAmt to set.
+     * 
      */
     public void setDisbVchrConferenceTotalAmt(KualiDecimal disbVchrConferenceTotalAmt) {
         this.disbVchrConferenceTotalAmt = disbVchrConferenceTotalAmt;
@@ -174,6 +184,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Gets the disbVchrExpenseCode attribute.
      * 
      * @return Returns the disbVchrExpenseCode
+     * 
      */
     public String getDisbVchrExpenseCode() {
         return disbVchrExpenseCode;
@@ -184,6 +195,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrExpenseCode attribute.
      * 
      * @param disbVchrExpenseCode The disbVchrExpenseCode to set.
+     * 
      */
     public void setDisbVchrExpenseCode(String disbVchrExpenseCode) {
         this.disbVchrExpenseCode = disbVchrExpenseCode;
