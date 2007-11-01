@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,30 +19,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.lookup.LookupableSpringContext;
+import org.kuali.module.gl.GLSpringBeansRegistry;
 import org.kuali.module.gl.bo.AccountBalance;
-import org.kuali.module.gl.bo.AccountBalanceByConsolidation;
 import org.kuali.module.gl.service.AccountBalanceService;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.test.ConfigureContext;
 
 /**
  * This class contains the test cases that can be applied to the method in AccountBalanceLookupableImpl class.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupableHelperServiceTestBase {
 
     private AccountBalanceService accountBalanceService;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        setAccountBalanceService(SpringContext.getBean(AccountBalanceService.class));
-        lookupableHelperServiceImpl = LookupableSpringContext.getLookupableHelperService("glAccountBalanceLookupableHelperService");
-        lookupableHelperServiceImpl.setBusinessObjectClass(AccountBalanceByConsolidation.class);
+        setAccountBalanceService((AccountBalanceService) beanFactory.getBean(GLSpringBeansRegistry.glAccountBalanceService));
+        lookupableHelperServiceImpl = (AccountBalanceLookupableHelperServiceImpl) beanFactory.getBean(GLSpringBeansRegistry.glAccountBalanceLookupableHelperService);
+        lookupableHelperServiceImpl.setBusinessObjectClass(AccountBalance.class);
     }
 
     /**
@@ -94,40 +93,46 @@ public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupa
      * @throws Exception
      */
     public void testConsolidationOption() throws Exception {
-        // ensure the transaction data does not exist in enty table. Otherwise, execption may be raised
-        testDataGenerator.generateTransactionData(pendingEntry);
-        AccountBalance accountBalanceOne = new AccountBalance(pendingEntry);
+        try {
+            // ensure the transaction data does not exist in enty table. Otherwise, execption may be raised
+            testDataGenerator.generateTransactionData(pendingEntry);
+            AccountBalance accountBalanceOne = new AccountBalance(pendingEntry);
 
-        insertNewRecord(accountBalanceOne);
+            insertNewRecord(accountBalanceOne);
 
-        // get the number of the search results before adding the second record into database
-        Map fieldValues = getLookupFieldValues(accountBalanceOne, true);
-        fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.CONSOLIDATION);
+            // get the number of the search results before adding the second record into database
+            Map fieldValues = getLookupFieldValues(accountBalanceOne, true);
+            fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.CONSOLIDATION);
 
-        List searchResults = lookupableHelperServiceImpl.getSearchResults(fieldValues);
-        int numOfFirstResults = searchResults.size();
+            List searchResults = lookupableHelperServiceImpl.getSearchResults(fieldValues);
+            int numOfFirstResults = searchResults.size();
 
-        String subAccountNumber = testDataGenerator.getPropertyValue("genericSubAccountNumber");
-        pendingEntry.setSubAccountNumber(subAccountNumber);
-        AccountBalance accountBalanceTwo = new AccountBalance(pendingEntry);
+            String subAccountNumber = testDataGenerator.getPropertyValue("genericSubAccountNumber");
+            pendingEntry.setSubAccountNumber(subAccountNumber);
+            AccountBalance accountBalanceTwo = new AccountBalance(pendingEntry);
 
-        insertNewRecord(accountBalanceTwo);
+            insertNewRecord(accountBalanceTwo);
 
-        // test if the second record is consolidated with others
-        fieldValues = getLookupFieldValues(accountBalanceOne, true);
-        fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.CONSOLIDATION);
+            // test if the second record is consolidated with others
+            fieldValues = getLookupFieldValues(accountBalanceOne, true);
+            fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.CONSOLIDATION);
 
-        searchResults = lookupableHelperServiceImpl.getSearchResults(fieldValues);
-        int numOfSecondResults = searchResults.size();
-        assertTrue(numOfSecondResults == numOfFirstResults);
+            searchResults = lookupableHelperServiceImpl.getSearchResults(fieldValues);
+            int numOfSecondResults = searchResults.size();
+            assertTrue(numOfSecondResults == numOfFirstResults);
 
-        // test if the search results appear in details
-        fieldValues = getLookupFieldValues(accountBalanceOne, false);
-        fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
+            // test if the search results appear in details
+            fieldValues = getLookupFieldValues(accountBalanceOne, false);
+            fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
 
-        searchResults = lookupableHelperServiceImpl.getSearchResults(fieldValues);
-        int numOfThirdResults = searchResults.size();
-        assertTrue(numOfSecondResults < numOfThirdResults);
+            searchResults = lookupableHelperServiceImpl.getSearchResults(fieldValues);
+            int numOfThirdResults = searchResults.size();
+            assertTrue(numOfSecondResults < numOfThirdResults);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
     }
 
     /**

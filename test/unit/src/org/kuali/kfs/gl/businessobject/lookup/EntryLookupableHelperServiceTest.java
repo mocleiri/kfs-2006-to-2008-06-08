@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.lookup.LookupableSpringContext;
+import org.kuali.module.gl.GLSpringBeansRegistry;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EntryDao;
-import org.kuali.test.ConfigureContext;
 
 /**
  * This class contains the test cases that can be applied to the method in EntryLookupableImpl class.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class EntryLookupableHelperServiceTest extends AbstractGLLookupableHelperServiceTestBase {
 
     private EntryDao entryDao;
@@ -43,8 +44,8 @@ public class EntryLookupableHelperServiceTest extends AbstractGLLookupableHelper
     protected void setUp() throws Exception {
         super.setUp();
 
-        entryDao = SpringContext.getBean(EntryDao.class);
-        lookupableHelperServiceImpl = LookupableSpringContext.getLookupableHelperService("glEntryLookupableHelperService");
+        entryDao = (EntryDao) beanFactory.getBean(GLSpringBeansRegistry.glEntryDao);
+        lookupableHelperServiceImpl = (EntryLookupableHelperServiceImpl) beanFactory.getBean(GLSpringBeansRegistry.glEntryLookupableHelperService);
         lookupableHelperServiceImpl.setBusinessObjectClass(Entry.class);
     }
 
