@@ -57,12 +57,6 @@
 		<property name="jobNames">
 			<list>
 				<value>fiscalYearMakerJob</value>
-				<value>populatePriorYearDataJob</value>
-			</list>
-		</property>
-		<property name="triggerNames">
-			<list>
-				<value>populatePriorYearDataJobTrigger</value>
 			</list>
 		</property>
 	</bean>
@@ -136,22 +130,13 @@
 		<property name="organizationDao">
 			<ref bean="organizationDao" />
 		</property>
-        <property name="parameterService" ref="parameterService" />
+        <property name="configService" ref="kualiConfigurationService" />
         <property name="chartService" ref="chartService" />
 	</bean>
 
 	<bean id="priorYearAccountService" class="org.kuali.module.chart.service.impl.PriorYearAccountServiceImpl">
 		<property name="priorYearAccountDao">
 			<ref bean="priorYearAccountDao" />
-		</property>
-		<property name="priorYearAccountDaoJdbc">
-			<ref bean="priorYearAccountDaoJdbc" />
-		</property>
-	</bean>
-
-	<bean id="priorYearOrganizationService" class="org.kuali.module.chart.service.impl.PriorYearOrganizationServiceImpl">
-		<property name="priorYearOrganizationDao">
-			<ref bean="priorYearOrganizationDao" />
 		</property>
 	</bean>
 
@@ -168,12 +153,6 @@
 		<property name="balanceTypeDao">
 			<ref bean="balanceTypeDao" />
 		</property>
-		<property name="optionsDao">
-            <ref bean="optionsDao" />
-        </property>
-        <property name="universityDateService">
-            <ref bean="universityDateService" />
-        </property>
 	</bean>
 
 	<bean id="accountingPeriodService" class="org.kuali.module.chart.service.impl.AccountingPeriodServiceImpl">
@@ -183,7 +162,7 @@
 	</bean>
 
 	<bean id="subFundGroupService" class="org.kuali.module.chart.service.impl.SubFundGroupServiceImpl">
-		<property name="parameterService" ref="parameterService" />
+		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="dataDictionaryService" ref="dataDictionaryService" />
 		<property name="subFundGroupDao" ref="subFundGroupDao" />
 	</bean>
@@ -209,6 +188,9 @@
 	<bean id="organizationReversionService" class="org.kuali.module.chart.service.impl.OrganizationReversionServiceImpl">
 		<property name="organizationReversionDao">
 			<ref bean="organizationReversionDao" />
+		</property>
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 	</bean>
 
@@ -241,10 +223,6 @@
 	<bean id="balanceTypeDao" parent="platformAwareDao" class="org.kuali.module.chart.dao.ojb.BalanceTypeDaoOjb" />
 
 	<bean id="priorYearAccountDao" parent="platformAwareDao" class="org.kuali.module.chart.dao.ojb.PriorYearAccountDaoOjb" />
-
-	<bean id="priorYearAccountDaoJdbc" parent="platformAwareDaoJdbc" class="org.kuali.module.chart.dao.jdbc.PriorYearAccountDaoJdbc" />
-
-	<bean id="priorYearOrganizationDao" parent="platformAwareDaoJdbc" class="org.kuali.module.chart.dao.jdbc.PriorYearOrganizationDaoJdbc" />
 
 	<bean id="subFundGroupDao" parent="platformAwareDao" class="org.kuali.module.chart.dao.ojb.SubFundGroupDaoOjb" />
 
@@ -360,6 +338,12 @@
 		</property>
 	</bean>
 
+	<bean id="workflow-org.kuali.module.chart.bo.Program-Lookupable" parent="workflowLookupable" singleton="false">
+		<property name="businessObjectClassName">
+			<value>org.kuali.module.chart.bo.Program</value>
+		</property>
+	</bean>
+
 	<bean id="workflow-org.kuali.module.chart.bo.HigherEdFunction-Lookupable" parent="workflowLookupable" singleton="false">
 		<property name="businessObjectClassName">
 			<value>org.kuali.module.chart.bo.HigherEdFunction</value>
@@ -392,7 +376,11 @@
 		</property>
 	</bean>
 	
-	<bean id="fiscalYearMakerStep" class="org.kuali.module.chart.batch.FiscalYearMakerStep" parent="step">
+    <bean id="chartStep" parent="step" abstract="true">
+        <property name="namespace" value="KFS-CA" />
+    </bean>
+
+	<bean id="fiscalYearMakerStep" class="org.kuali.module.chart.batch.FiscalYearMakerStep" parent="chartStep">
 		<property name="dateMakerService">
 			<ref bean="dateMakerService" />
 		</property>
@@ -406,31 +394,10 @@
 		</property>
 	</bean>
 	
-	<bean id="updatePriorYearDataStep" class="org.kuali.module.chart.batch.UpdatePriorYearDataStep" parent="step">
-		<property name="priorYearOrganizationService">
-			<ref bean="priorYearOrganizationService" />
-		</property>
-		<property name="priorYearAccountService">
-			<ref bean="priorYearAccountService" />
-		</property>
-	</bean>
-	
-	<bean id="populatePriorYearDataJob" parent="scheduledJobDescriptor">
-		<property name="steps">
-			<list>
-				<ref bean="updatePriorYearDataStep" />
-			</list>
-		</property>
-	</bean>
-	
-	<bean id="populatePriorYearDataJobTrigger" parent="cronTrigger">
-		<property name="jobName" value="populatePriorYearDataJob" />
-		<property name="cronExpression" value="00 00 00 30 6 ?" />
-	</bean>
-
-	<bean id="fiscalYearStartDate" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    	<property name="staticField"><value>org.kuali.module.chart.dao.ojb.FiscalYearMakersDaoOjb.START_JULY</value>
-    	</property>
+		<bean id="fiscalYearStartDate"
+	      class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+	      <property name="staticField"><value>org.kuali.module.chart.dao.ojb.FiscalYearMakersDaoOjb.START_JULY</value>
+	      </property>
 	</bean>
 	
 	
@@ -482,9 +449,6 @@
             <entry key="org.kuali.module.chart.bo.AccountingPeriod">
               <value>org.kuali.module.chart.bo.AccountingPeriod</value>
             </entry>    
-            <entry key="org.kuali.module.chart.bo.IcrAutomatedEntry">
-              <value>org.kuali.module.chart.bo.IcrAutomatedEntry</value>
-            </entry>    
             <entry key="org.kuali.module.gl.bo.UniversityDate">
               <value>org.kuali.module.gl.bo.UniversityDate</value>
             </entry>    
@@ -515,12 +479,6 @@
                 <value>org.kuali.kfs.bo.Options</value>
               </list>
             </entry>
-            <entry key="org.kuali.module.labor.bo.LaborObject">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-                <value>org.kuali.module.chart.bo.ObjectCode</value>
-              </list>
-            </entry>
             <entry key="org.kuali.module.chart.bo.OffsetDefinition">
               <list>
                 <value>org.kuali.kfs.bo.Options</value>
@@ -539,11 +497,6 @@
               </list>
             </entry>
             <entry key="org.kuali.module.chart.bo.AccountingPeriod">
-              <list>
-                <value>org.kuali.kfs.bo.Options</value>
-              </list>
-            </entry>
-            <entry key="org.kuali.module.chart.bo.IcrAutomatedEntry">
               <list>
                 <value>org.kuali.kfs.bo.Options</value>
               </list>
