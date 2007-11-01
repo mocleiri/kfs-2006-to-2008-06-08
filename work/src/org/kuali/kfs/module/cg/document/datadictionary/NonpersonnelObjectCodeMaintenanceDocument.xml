@@ -35,20 +35,17 @@
         <documentTypeName>KualiNonpersonnelObjectCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>NPOC</documentTypeCode>
 
-        <label>Non-Personnel Object Code</label>
+        <label>Object Code Maintenance Document</label>
+        <shortLabel>OCMainDoc</shortLabel>
         <summary>Object Code maintenance document</summary>
         <description>Document used to create or update Object Code objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="NonpersonnelObjectCode" parameterName="NONPERSONNEL_OBJECT_CODE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="budgetNonpersonnelCategoryCode" />
             <field attributeName="budgetNonpersonnelSubCategoryCode" />
         </lockingKeys>
-        
-        <defaultExistenceChecks>
-        	<reference attributeName="nonpersonnelCategory" activeIndicatorAttributeName="active" attributeToHighlightOnFail="budgetNonpersonnelCategoryCode" />
-        	<reference attributeName="nonpersonnelSubCategory" activeIndicatorAttributeName="active" attributeToHighlightOnFail="budgetNonpersonnelSubCategoryCode" />
-        </defaultExistenceChecks>
 
         <maintainableSections>
             <maintainableSection title="Edit Nonpersonnel Object Code">
@@ -56,7 +53,7 @@
                     <maintainableField name="budgetNonpersonnelCategoryCode" required="true" />
                     <maintainableField name="budgetNonpersonnelSubCategoryCode" required="true" />
                     <maintainableField name="budgetNonpersonnelObjectCode" required="true" />
-					<maintainableField name="active">
+					<maintainableField name="active" required="true">
 						<defaultValue>true</defaultValue>
 					</maintainableField>
                     <maintainableField name="versionNumber" />

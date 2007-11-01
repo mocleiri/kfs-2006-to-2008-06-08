@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package org.kuali.module.financial.document;
 
+import org.kuali.Constants;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.document.AccountingDocumentBase;
 
 /**
@@ -29,7 +29,7 @@ import org.kuali.kfs.document.AccountingDocumentBase;
  * fund groups which are not required either by the terms of a loan or by other external agreements. These transfers are the most
  * commonly used throughout the university.
  */
-public class TransferOfFundsDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
+public class TransferOfFundsDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling{
     private static final long serialVersionUID = -3871133713027969492L;
 
     /**
@@ -42,18 +42,18 @@ public class TransferOfFundsDocument extends AccountingDocumentBase implements C
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.FROM;
+        return Constants.FROM;
     }
 
     /**
      * Overrides the base implementation to return "To".
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
      */
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.TO;
+        return Constants.TO;
     }
 }

@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>RecurringPaymentTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiRecurringPaymentTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMRP</documentTypeCode>
 
-        <label>Recurring Payment Type</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="RecurringPaymentType" parameterName="RECURRING_PAYMENT_TYPE" />
+        <label>Recurring Payment Type Maintenance Document</label>
+        <shortLabel>Recurring Payment Type Maint Doc</shortLabel>
+
+        <summary>Recurring Payment Type Maintenance Document</summary>
+        <description>Document used to create or update Recurring Payment Type objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="recurringPaymentTypeCode" />
@@ -47,7 +52,7 @@
                 <maintainableItems>
                     <maintainableField name="recurringPaymentTypeCode" required="true" />
                     <maintainableField name="recurringPaymentTypeDescription" required="true" />
-                    <maintainableField name="active" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

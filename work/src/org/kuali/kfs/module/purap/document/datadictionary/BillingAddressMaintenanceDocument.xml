@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>BillingAddressMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiBillingAddressMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMBA</documentTypeCode>
 
-        <label>Billing Address</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="BillingAddress" parameterName="BILLING_ADDRESS" />
+        <label>Billing Address Maintenance Document</label>
+        <shortLabel>Billing Address Maint Doc</shortLabel>
+
+        <summary>Billing Address Maintenance Document</summary>
+        <description>Document used to create or update Billing Address objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="billingCampusCode" />
@@ -54,9 +59,7 @@
                     <maintainableField name="billingPostalCode" required="true"/>
                     <maintainableField name="billingCountryCode" required="true"/>
                     <maintainableField name="billingPhoneNumber" required="true"/>
-                    <maintainableField name="active">
-                    	<defaultValue>true</defaultValue>
-                     </maintainableField>
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

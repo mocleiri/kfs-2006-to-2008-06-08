@@ -15,47 +15,30 @@
  */
 package org.kuali.module.purap.dao.ojb;
 
-import java.util.Iterator;
-
 import org.apache.ojb.broker.query.Criteria;
-import org.apache.ojb.broker.query.ReportQueryByCriteria;
+import org.apache.ojb.broker.query.QueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.TransactionalServiceUtils;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.dao.RequisitionDao;
 import org.kuali.module.purap.document.RequisitionDocument;
 
+
 /**
- * OJB implementation of RequisitionDao.
+ * This class is the OJB implementation of the ProjectCodeDao interface.
  */
 public class RequisitionDaoOjb extends PlatformAwareDaoBaseOjb implements RequisitionDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(RequisitionDaoOjb.class);
 
-    /**
-     * @see org.kuali.module.purap.dao.RequisitionDao#getDocumentNumberForRequisitionId(java.lang.Integer)
-     */
-    public String getDocumentNumberForRequisitionId(Integer id) {
+    public RequisitionDocument getRequisitionById(Integer id) {
         Criteria criteria = new Criteria();
         criteria.addEqualTo(PurapPropertyConstants.PURAP_DOC_ID, id);
 
-        ReportQueryByCriteria rqbc = new ReportQueryByCriteria(RequisitionDocument.class, criteria);
-        rqbc.setAttributes(new String[] { KFSPropertyConstants.DOCUMENT_NUMBER });
-        rqbc.addOrderByAscending(KFSPropertyConstants.DOCUMENT_NUMBER);
-        Iterator iter = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(rqbc);
-        if (iter.hasNext()) {
-            Object[] cols = (Object[]) iter.next();
-            if (iter.hasNext()) {
-                // the iterator should have held only a single doc id of data but it holds 2 or more
-                String errorMsg = "Expected single document number for given criteria but multiple (at least 2) were returned";
-                LOG.error(errorMsg);
-                TransactionalServiceUtils.exhaustIterator(iter);
-                throw new RuntimeException();
-            }
-            // at this part of the code, we know there's no more elements in iterator
-            return (String) cols[0];
+        RequisitionDocument r = (RequisitionDocument) getPersistenceBrokerTemplate().getObjectByQuery(
+            new QueryByCriteria(RequisitionDocument.class, criteria));
+        if (r != null) {
+            r.refreshAllReferences();
         }
-        return null;
-    }
+        return r;
+      }
 
 }

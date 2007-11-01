@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 	
-        <documentTypeName>PurchaseOrderQuoteListMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiQuoteListsMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMQT</documentTypeCode>
 
-        <label>Purchase Order Quote List</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="PurchaseOrderQuoteList" parameterName="PURCHASE_ORDER_QUOTE_LIST" />
+        <label>Quote List Maintenance Document</label>
+        <shortLabel>Quote List Maint Doc</shortLabel>
+
+        <summary>Quote List Maintenance Document</summary>
+        <description>Document used to create or update Quote List objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="purchaseOrderQuoteListIdentifier" />
@@ -45,25 +50,12 @@
         <maintainableSections>
             <maintainableSection title="Edit Quote List">
                 <maintainableItems>
+                    <maintainableField name="purchaseOrderQuoteListIdentifier" required="true" />
                     <maintainableField name="purchaseOrderQuoteListName" required="true" />
                     <maintainableField name="contractManagerCode" required="true" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
-			<maintainableSection title="Vendors">
-				<maintainableItems>
-					<maintainableCollection name="quoteListVendors" businessObjectClass="org.kuali.module.purap.bo.PurchaseOrderQuoteListVendor" sourceClassName="org.kuali.module.vendor.bo.VendorDetail" sourceAttributeName="quoteListVendors" summaryTitle="Vendor" >
-						<maintainableField name="vendorDetail.vendorName" template="vendorName" readOnlyAfterAdd="true" />
-						<!-- Hidden Fields -->
-						<maintainableField name="vendorHeaderGeneratedIdentifier" template="vendorHeaderGeneratedIdentifier" />
-						<maintainableField name="vendorDetailAssignedIdentifier" template="vendorDetailAssignedIdentifier" />
-                        <summaryFields>
-                            <summaryField name="vendorHeaderGeneratedIdentifier" />
-                            <summaryField name="vendorDetailAssignedIdentifier" />
-                        </summaryFields>
-   					</maintainableCollection>
-				</maintainableItems>
-			</maintainableSection>
         </maintainableSections>
     </maintenanceDocument>
 </dictionaryEntry>

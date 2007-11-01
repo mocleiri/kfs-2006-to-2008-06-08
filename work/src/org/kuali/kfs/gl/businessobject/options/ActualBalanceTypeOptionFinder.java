@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.lookup.valueFinder.ValueFinder;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.OptionsService;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.chart.service.BalanceTypService;
@@ -35,7 +35,7 @@ public class GLActualBalanceTypeOptionFinder extends KeyValuesBase implements Va
      * @see org.kuali.core.lookup.valueFinder.ValueFinder#getValue()
      */
     public String getValue() {
-        OptionsService os = SpringContext.getBean(OptionsService.class);
+        OptionsService os = SpringServiceLocator.getOptionsService();
         Options o = os.getCurrentYearOptions();
 
         return o.getActualFinancialBalanceTypeCd();
@@ -47,7 +47,7 @@ public class GLActualBalanceTypeOptionFinder extends KeyValuesBase implements Va
     public List getKeyValues() {
         List labels = new ArrayList();
 
-        BalanceTypService bts = SpringContext.getBean(BalanceTypService.class);
+        BalanceTypService bts = SpringServiceLocator.getBalanceTypService();
         Collection c = bts.getAllBalanceTyps();
 
         for (Iterator iter = c.iterator(); iter.hasNext();) {

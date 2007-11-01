@@ -32,14 +32,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ProposalPurposeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiContractsAndGrantsProposalPurposeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PURP</documentTypeCode>
 
-        <label>Proposal Purpose</label>
+        <label>Proposal Purpose Maintenance Document</label>
+        <shortLabel>ProposalPurposeMaintDoc</shortLabel>
 
         <summary>Proposal Purpose Maintenance Document</summary>
         <description>Document used to create or update Proposal Purpose objects</description>
-        <help parameterNamespace="KFS-CG" parameterDetailType="ProposalPurpose" parameterName="PROPOSAL_PURPOSE" />
 
         <lockingKeys>
             <field attributeName="proposalPurposeCode" />

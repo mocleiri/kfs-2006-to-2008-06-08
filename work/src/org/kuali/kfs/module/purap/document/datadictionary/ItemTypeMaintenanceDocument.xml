@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>ItemTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiItemTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMIT</documentTypeCode>
 
-        <label>Item Type</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="ItemType" parameterName="ITEM_TYPE" />
+        <label>Item Type Maintenance Document</label>
+        <shortLabel>Item Type Maint Doc</shortLabel>
+
+        <summary>Item Type Maintenance Document</summary>
+        <description>Document used to create or update Item Type objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="itemTypeCode" />
@@ -47,11 +52,7 @@
                 <maintainableItems>
                     <maintainableField name="itemTypeCode" required="true" />
                 	<maintainableField name="itemTypeDescription" required="true" />
-                	<maintainableField name="quantityBasedGeneralLedgerIndicator" />
-                	<maintainableField name="itemTypeAboveTheLineIndicator" />
-                	<maintainableField name="active" >
-                		<defaultValue>true</defaultValue>
-                	</maintainableField>
+                	<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

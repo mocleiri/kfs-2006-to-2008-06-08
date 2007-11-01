@@ -35,11 +35,13 @@
         <documentTypeName>KualiNonpersonnelCategoryMaintenanceDocument</documentTypeName>
         <documentTypeCode>NPC</documentTypeCode>
 
-        <label>Non-Personnel Category</label>
+        <label>Nonpersonnel Category Maintenance Document</label>
+        <shortLabel>NonpersonnelCategoryMainDoc</shortLabel>
 
         <summary>Nonpersonnel Category maintenance document</summary>
         <description>Document used to create or update Nonpersonnel Category objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="NonpersonnelCategory" parameterName="NONPERSONNEL_CATEGORY" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="code" />
@@ -51,7 +53,7 @@
                     <maintainableField name="code" required="true" />
                     <maintainableField name="name" required="true" />
                     <maintainableField name="sortNumber" required="false" />
-					<maintainableField name="active">
+					<maintainableField name="active" required="true">
 						<defaultValue>true</defaultValue>
 					</maintainableField>
                     <maintainableField name="versionNumber" />

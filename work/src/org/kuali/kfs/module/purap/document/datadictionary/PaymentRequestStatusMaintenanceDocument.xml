@@ -27,27 +27,32 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_AP_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>PaymentRequestStatusMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiPaymentRequestStatusMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMPR</documentTypeCode>
 
-        <label>Payment Request Status</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="PaymentRequestStatus" parameterName="PAYMENT_REQUEST_STATUS" />
+        <label>Payment Request Status Maintenance Document</label>
+        <shortLabel>Payment Request Status Maint Doc</shortLabel>
+
+        <summary>Payment Request Status Maintenance Document</summary>
+        <description>Document used to create or update Payment Request Status objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
-            <field attributeName="statusCode" />
+            <field attributeName="paymentRequestStatusCode" />
         </lockingKeys>
 
         <maintainableSections>
             <maintainableSection title="Edit Payment Request Status">
                 <maintainableItems>
-                    <maintainableField name="statusCode" required="true" />
-                    <maintainableField name="statusDescription" required="true" />
-                    <maintainableField name="active" readOnly="true" />
+                    <maintainableField name="paymentRequestStatusCode" required="true" />
+                    <maintainableField name="paymentRequestStatusDescription" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />       
                 </maintainableItems>
             </maintainableSection>

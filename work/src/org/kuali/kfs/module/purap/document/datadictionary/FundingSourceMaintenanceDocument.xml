@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>FundingSourceMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiFundingSourceMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMFS</documentTypeCode>
 
-        <label>Funding Source</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="FundingSource" parameterName="FUNDING_SOURCE" />
+        <label>Funding Source Maintenance Document</label>
+        <shortLabel>Funding Source Maint Doc</shortLabel>
+
+        <summary>Funding Source Maintenance Document</summary>
+        <description>Document used to create or update Funding Source objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="fundingSourceCode" />
@@ -47,9 +52,7 @@
                 <maintainableItems>
                     <maintainableField name="fundingSourceCode" required="true" />
                 	<maintainableField name="fundingSourceDescription" required="true" />
-                	<maintainableField name="active">
-                		<defaultValue>true</defaultValue>
-                	</maintainableField>
+                	<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

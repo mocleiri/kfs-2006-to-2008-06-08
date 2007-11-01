@@ -35,24 +35,26 @@
         <documentTypeName>KualiNonpersonnelSubCategoryMaintenanceDocument</documentTypeName>
         <documentTypeCode>NPSC</documentTypeCode>
 
-        <label>Non-Personnel Sub-Category</label>
+        <label>Nonpersonnel Sub Category Maintenance Document</label>
+        <shortLabel>NprsSubCtgryMainDoc</shortLabel>
 
         <summary>Nonpersonnel Sub Category maintenance document</summary>
         <description>Document used to create or update Nonpersonnel Sub Category objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="NonpersonnelSubCategory" parameterName="NONPERSONNEL_SUB_CATEGORY" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="code" />
         </lockingKeys>
 
         <maintainableSections>
-            <maintainableSection title="Edit Nonpersonnel Sub Category">
+            <maintainableSection title="Edit Fund Group Code">
                 <maintainableItems>
                     <maintainableField name="code" required="true" />
                     <maintainableField name="name" required="true" />
                     <maintainableField name="nonpersonnelMtdcExcludedIndicator" required="false" />
                     <maintainableField name="nonpersonnelModularExcludedIndicator" required="false" />
-					<maintainableField name="active" >
+					<maintainableField name="active" required="true">
 						<defaultValue>true</defaultValue>
 					</maintainableField>
                     <maintainableField name="versionNumber" />
