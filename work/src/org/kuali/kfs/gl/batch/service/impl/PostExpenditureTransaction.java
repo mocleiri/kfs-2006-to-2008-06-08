@@ -17,7 +17,6 @@ package org.kuali.module.gl.batch.poster.impl;
 
 import java.util.Date;
 
-import org.apache.ojb.broker.metadata.MetadataManager;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
@@ -79,7 +78,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
 
         // Is the ICR indicator set and the ICR Series identifier set?
         // Is the period code a non-balance period? If so, continue, if not, we aren't posting this transaction
-        if (objectType.isFinObjectTypeIcrSelectionIndicator() && StringUtils.hasText(account.getFinancialIcrSeriesIdentifier()) && (!KFSConstants.PERIOD_CODE_ANNUAL_BALANCE.equals(universityFiscalPeriodCode)) && (!KFSConstants.PERIOD_CODE_BEGINNING_BALANCE.equals(universityFiscalPeriodCode)) && (!KFSConstants.PERIOD_CODE_CG_BEGINNING_BALANCE.equals(universityFiscalPeriodCode))) {
+        if (objectType.isFinObjectTypeIcrSelectionIndicator() && StringUtils.hasText(account.getFinancialIcrSeriesIdentifier()) && (!KFSConstants.PERIOD_CODE_ANNUAL_BALNCE.equals(universityFiscalPeriodCode)) && (!KFSConstants.PERIOD_CODE_BEGINNING_BALNCE.equals(universityFiscalPeriodCode)) && (!KFSConstants.PERIOD_CODE_CG_BEGINNING_BALNCE.equals(universityFiscalPeriodCode))) {
             // Continue on the posting process
 
             // Check the sub account type code. A21 subaccounts with the type of CS don't get posted
@@ -91,7 +90,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
             }
 
             // Do we exclude this account from ICR because account/object is in the table?
-            IndirectCostRecoveryExclusionAccount excAccount = indirectCostRecoveryExclusionAccountDao.getByPrimaryKey(account.getChartOfAccountsCode(), account.getAccountNumber(), objectCode.getChartOfAccountsCode(), objectCode.getFinancialObjectCode());
+            IndirectCostRecoveryExclusionAccount excAccount = indirectCostRecoveryExclusionAccountDao.getByPrimaryKey(account.getChartOfAccountsCode(), account.getAccountNumber(), objectCode.getReportsToChartOfAccountsCode(), objectCode.getReportsToFinancialObjectCode());
             if (excAccount != null) {
                 // No need to post this
                 LOG.debug("isIcrTransaction() ICR Excluded account - not posted");
@@ -104,32 +103,14 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
             }
             else {
                 // If the ICR type code is empty or 10, don't post
-
-                // TODO: use type 10 constant
                 if ((!StringUtils.hasText(account.getAcctIndirectCostRcvyTypeCd())) || KFSConstants.MONTH10.equals(account.getAcctIndirectCostRcvyTypeCd())) {
                     // No need to post this
                     LOG.debug("isIcrTransaction() ICR type is null or 10 - not posted");
                     return false;
                 }
 
-                // If the type is excluded, don't post. First step finds the top level object code...
-                ObjectCode currentObjectCode = objectCode;
-                boolean foundIt = false;
-                while (!foundIt) {
-                    if (currentObjectCode.getChartOfAccountsCode().equals(currentObjectCode.getReportsToChartOfAccountsCode()) && currentObjectCode.getFinancialObjectCode().equals(currentObjectCode.getReportsToFinancialObjectCode())) {
-                        foundIt = true;
-                    }
-                    else {
-                        if (currentObjectCode.getReportsToFinancialObject() == null) {
-                            foundIt = true;
-                        }
-                        else {
-                            currentObjectCode = currentObjectCode.getReportsToFinancialObject();
-                        }
-                    }
-                }
-                // second step checks if the top level object code is to be excluded...
-                IndirectCostRecoveryExclusionType excType = indirectCostRecoveryExclusionTypeDao.getByPrimaryKey(account.getAcctIndirectCostRcvyTypeCd(), currentObjectCode.getChartOfAccountsCode(), currentObjectCode.getFinancialObjectCode());
+                // If the type is excluded, don't post
+                IndirectCostRecoveryExclusionType excType = indirectCostRecoveryExclusionTypeDao.getByPrimaryKey(account.getAcctIndirectCostRcvyTypeCd(), objectCode.getReportsToChartOfAccountsCode(), objectCode.getReportsToFinancialObjectCode());
                 if (excType != null) {
                     // No need to post this
                     LOG.debug("isIcrTransaction() ICR Excluded type - not posted");
@@ -156,23 +137,22 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
         if (isIcrTransaction(t.getObjectType(), t.getAccount(), t.getSubAccountNumber(), t.getFinancialObject(), t.getUniversityFiscalPeriodCode())) {
             return postTransaction(t, mode, postDate);
         }
-        return GLConstants.EMPTY_CODE;
+        return "";
     }
 
     private String postTransaction(Transaction t, int mode, Date postDate) {
         LOG.debug("postTransaction() started");
 
-        String returnCode = GLConstants.UPDATE_CODE;
+        String returnCode = "U";
 
         ExpenditureTransaction et = expenditureTransactionDao.getByTransaction(t);
         if (et == null) {
-            LOG.warn("Posting expenditure transation");
             et = new ExpenditureTransaction(t);
-            returnCode = GLConstants.INSERT_CODE;
+            returnCode = "I";
         }
 
-        if (org.apache.commons.lang.StringUtils.isBlank(t.getOrganizationReferenceId())) {
-            et.setOrganizationReferenceId(GLConstants.getDashOrganizationReferenceId());
+        if (t.getOrganizationReferenceId() == null) {
+            et.setOrganizationReferenceId(GLConstants.DASH_ORGANIZATION_REFERENCE_ID);
         }
 
         if (KFSConstants.GL_DEBIT_CODE.equals(t.getTransactionDebitCreditCode()) || KFSConstants.GL_BUDGET_CODE.equals(t.getTransactionDebitCreditCode())) {
@@ -188,6 +168,6 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
     }
 
     public String getDestinationName() {
-        return MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(ExpenditureTransaction.class).getFullTableName();
+        return "GL_EXPEND_TRN_T";
     }
 }
