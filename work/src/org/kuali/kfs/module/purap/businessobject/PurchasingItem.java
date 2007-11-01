@@ -15,9 +15,7 @@
  */
 package org.kuali.module.purap.bo;
 
-/**
- * Purchasing Item Interface.
- */
-public interface PurchasingItem extends PurApItem {
+
+public interface PurchasingItem extends PurchasingApItem {
 
 }

@@ -1,173 +1,315 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
-
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE1;
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.TransactionalDocumentDictionaryService;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.chart.service.AccountingPeriodService;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.DocumentTestUtils;
-import org.kuali.test.fixtures.AccountingLineFixture;
-import org.kuali.test.fixtures.UserNameFixture;
+import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.test.parameters.AccountingLineParameter;
+import org.kuali.test.parameters.DocumentParameter;
+import org.kuali.test.parameters.TransactionalDocumentParameter;
+import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.TestsWorkflowViaDatabase;
+import org.kuali.workflow.WorkflowTestUtils;
+
+import edu.iu.uis.eden.EdenConstants;
+import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
 
 /**
  * This class is used to test TransferOfFundsDocument.
+ * 
+ * @author Kuali Nervous System Team ()
  */
-@ConfigureContext(session = KHUNTLEY)
-public class TransferOfFundsDocumentTest extends KualiTestBase {
-    public static final Class<TransferOfFundsDocument> DOCUMENT_CLASS = TransferOfFundsDocument.class;
+@WithTestSpringContext
+public class TransferOfFundsDocumentTest extends TransactionalDocumentTestBase {
+    public static final String COLLECTION_NAME = "TransferOfFundsDocumentTest.collection1";
+    public static final String USER_NAME = "user1";
+    public static final String DOCUMENT_PARAMETER = "documentParameter5";
+
+    private static final String USER_INIT = "user_unprivileged";
+    private static final String USER_APPROVE1 = "user_accountSet1";
+    private static final String USER_APPROVE2 = "user_accountSet2";
 
     // The set of Route Nodes that the test document will progress through
+
+    private static final String ADHOC = "Adhoc Routing";
     private static final String ACCOUNT_REVIEW = "Account Review";
     private static final String ORG_REVIEW = "Org Review";
+    private static final String SUB_FUND = "Sub Fund";
 
 
-    private Document getDocumentParameterFixture() throws Exception {
-        return DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), TransferOfFundsDocument.class);
+    private static final String[] FIXTURE_COLLECTION_NAMES = { COLLECTION_NAME };
+
+    // AccountingLineParameter fixture members
+    private AccountingLineParameter _sourceLine1;
+    private AccountingLineParameter _sourceLine2;
+    private AccountingLineParameter _sourceLine3;
+    private AccountingLineParameter _targetLine1;
+    private AccountingLineParameter _targetLine2;
+    private AccountingLineParameter _targetLine3;
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Fixture Methods Start Here //
+    // /////////////////////////////////////////////////////////////////////////
+    public String[] getFixtureCollectionNames() {
+        return FIXTURE_COLLECTION_NAMES;
     }
 
-    private List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE1);
-        // list.add( LINE2 );
-        // list.add( LINE3 );
+    /**
+     * Fixture method to obtain a <code>@{link SourceAccountingLine}</code> instance that is for a different account than the current user belongs to.
+     * 
+     * @return SourceAccountingLine
+     */
+    protected SourceAccountingLine getSourceAccountingLineDifferentAccount() {
+        return (SourceAccountingLine) getSourceLine1().createLine();
+    }
+
+    /**
+     * Fixture method to obtain a <code>@{link TargetAccountingLine}</code> instance that is for a different account than the current user belongs to.
+     * 
+     * @return TargetAccountingLine
+     */
+    protected TargetAccountingLine getTargetAccountingLineDifferentAccount() {
+        return (TargetAccountingLine) getTargetLine1().createLine();
+    }
+
+    /**
+     * Accessor method for sourceLine1 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @return AccountingLineParameter fixture to get
+     */
+    public AccountingLineParameter getSourceLine1() {
+        return _sourceLine1;
+    }
+
+    /**
+     * Accessor method for sourceLine1 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @param AccountingLineParameter fixture to set
+     */
+    public void setSourceLine1(AccountingLineParameter p) {
+        _sourceLine1 = p;
+    }
+
+    /**
+     * Accessor method for sourceLine2 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @return AccountingLineParameter fixture to get
+     */
+    public AccountingLineParameter getSourceLine2() {
+        return _sourceLine2;
+    }
+
+    /**
+     * Accessor method for sourceLine2 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @param AccountingLineParameter fixture to set
+     */
+    public void setSourceLine2(AccountingLineParameter p) {
+        _sourceLine2 = p;
+    }
+
+    /**
+     * Accessor method for sourceLine3 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @return AccountingLineParameter fixture to get
+     */
+    public AccountingLineParameter getSourceLine3() {
+        return _sourceLine3;
+    }
+
+    /**
+     * Accessor method for sourceLine3 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @param AccountingLineParameter fixture to set
+     */
+    public void setSourceLine3(AccountingLineParameter p) {
+        _sourceLine3 = p;
+    }
+
+    /**
+     * Accessor method for targetLine1 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @return AccountingLineParameter fixture to get
+     */
+    public AccountingLineParameter getTargetLine1() {
+        return _targetLine1;
+    }
+
+    /**
+     * Accessor method for targetLine1 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @param AccountingLineParameter fixture to set
+     */
+    public void setTargetLine1(AccountingLineParameter p) {
+        _targetLine1 = p;
+    }
+
+    /**
+     * Accessor method for targetLine2 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @return AccountingLineParameter fixture to get
+     */
+    public AccountingLineParameter getTargetLine2() {
+        return _targetLine2;
+    }
+
+    /**
+     * Accessor method for targetLine2 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @param AccountingLineParameter fixture to set
+     */
+    public void setTargetLine2(AccountingLineParameter p) {
+        _targetLine2 = p;
+    }
+
+    /**
+     * Accessor method for targetLine3 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @return AccountingLineParameter fixture to get
+     */
+    public AccountingLineParameter getTargetLine3() {
+        return _targetLine3;
+    }
+
+    /**
+     * Accessor method for targetLine3 <code>{@link AccountingLineParameter}</code> fixture.
+     * 
+     * @param AccountingLineParameter fixture to set
+     */
+    public void setTargetLine3(AccountingLineParameter p) {
+        _targetLine3 = p;
+    }
+
+    /**
+     * 
+     * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
+     */
+    public DocumentParameter getDocumentParameterFixture() {
+        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    }
+
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
+     */
+    public List getTargetAccountingLineParametersFromFixtures() {
+        ArrayList list = new ArrayList();
+        list.add(getTargetLine1());
+        // list.add( getTargetLine2() );
+        // list.add( getTargetLine3() );
         return list;
     }
 
-    private List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE1);
-        // list.add( LINE2 );
-        // list.add( LINE3 );
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
+     */
+    public List getSourceAccountingLineParametersFromFixtures() {
+        ArrayList list = new ArrayList();
+        list.add(getSourceLine1());
+        // list.add( getSourceLine2() );
+        // list.add( getSourceLine3() );
         return list;
     }
 
-    private void approve(String docHeaderId, UserNameFixture user, String expectedNode) throws Exception {
-        changeCurrentUser(user);
-        AccountingDocumentTestUtils.approve(docHeaderId, user, expectedNode, SpringContext.getBean(DocumentService.class));
+    /**
+     * User name fixture to be used for this test.
+     * 
+     * @param String name of user to use.
+     */
+    protected String getTestUserName() {
+        return getUserName();
     }
 
-    private Document buildDocumentForWorkflowRoutingTest() throws Exception {
-        AccountingDocument document = buildDocument();
-        AccountingLineFixture.LINE2_TOF.addAsSourceTo(document);
-        AccountingLineFixture.LINE2_TOF.addAsTargetTo(document);
-        return document;
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
+     */
+    public String getUserName() {
+        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // Fixture Methods End Here //
+    // /////////////////////////////////////////////////////////////////////////
 
-    public final void testAddAccountingLine() throws Exception {
-        List<SourceAccountingLine> sourceLines = generateSouceAccountingLines();
-        List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
-        int expectedSourceTotal = sourceLines.size();
-        int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+    @TestsWorkflowViaDatabase
+    public void testWorkflowRouting() throws Exception {
+        NetworkIdVO VPUTMAN = new NetworkIdVO("VPUTMAN");
+        NetworkIdVO RORENFRO = new NetworkIdVO("RORENFRO");
+        NetworkIdVO CSWINSON = new NetworkIdVO("CSWINSON");
+        NetworkIdVO RRUFFNER = new NetworkIdVO("RRUFFNER");
+        NetworkIdVO SEASON = new NetworkIdVO("SEASON");
+
+        // save and route the document
+        Document document = buildDocument();
+        routeDocument(document);
+
+        WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
+
+        // the document should now be routed to VPUTMAN and RORENFRO as Fiscal Officers
+        KualiWorkflowDocument wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
+        assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ACCOUNT_REVIEW));
+        assertTrue("Document should be enroute.", wfDoc.stateIsEnroute());
+        assertTrue("VPUTMAN should have an approve request.", wfDoc.isApprovalRequested());
+        getDocumentService().approveDocument(document, "Test approving as VPUTMAN", null);
+
+        WorkflowTestUtils.waitForApproveRequest(wfDoc, RORENFRO.getNetworkId());
+        wfDoc = WorkflowTestUtils.refreshDocument(document, RORENFRO);
+        assertTrue("RORENFRO should have an approve request.", wfDoc.isApprovalRequested());
+        getDocumentService().approveDocument(document, "Test approving as RORENFRO", null);
+
+        WorkflowTestUtils.waitForNodeChange(document.getDocumentHeader().getWorkflowDocument(), ORG_REVIEW);
+
+        // now doc should be in Org Review routing to CSWINSON, RRUFFNER, and SEASON
+        wfDoc = WorkflowTestUtils.refreshDocument(document, CSWINSON);
+        assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(document, ORG_REVIEW));
+        assertTrue("CSWINSON should have an approve request.", wfDoc.isApprovalRequested());
+        getDocumentService().approveDocument(document, "Test approving as CSWINSON", null);
+
+        WorkflowTestUtils.waitForApproveRequest(wfDoc, RRUFFNER.getNetworkId());
+        wfDoc = WorkflowTestUtils.refreshDocument(document, RRUFFNER);
+        assertTrue("RRUFFNER should have an approve request.", wfDoc.isApprovalRequested());
+        getDocumentService().approveDocument(document, "Test approving as RRUFFNER", null);
+
+        WorkflowTestUtils.waitForApproveRequest(wfDoc, SEASON.getNetworkId());
+        wfDoc = WorkflowTestUtils.refreshDocument(document, SEASON);
+        assertTrue("SEASON should have an approve request.", wfDoc.isApprovalRequested());
+        getDocumentService().approveDocument(document, "Test approving as SEASON", null);
+
+
+        // TODO once the sub fund node has been added, add code here to test it...
+
+        WorkflowTestUtils.waitForStatusChange(wfDoc, EdenConstants.ROUTE_HEADER_FINAL_CD);
+
+        wfDoc = WorkflowTestUtils.refreshDocument(document, VPUTMAN);
+        assertTrue("Document should now be final.", wfDoc.stateIsFinal());
     }
 
-    public final void testGetNewDocument() throws Exception {
-        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, SpringContext.getBean(DocumentService.class));
-    }
-
-    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-
-    }
-
-    public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
-    }
-
-    public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-    }
-
-    public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class), SpringContext.getBean(AccountingPeriodService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), SpringContext.getBean(DocumentService.class), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), SpringContext.getBean(DocumentService.class), getExpectedPrePeCount());
-    }
-
-    // test util methods
-    private List<SourceAccountingLine> generateSouceAccountingLines() throws Exception {
-        List<SourceAccountingLine> sourceLines = new ArrayList<SourceAccountingLine>();
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceLines.add(sourceFixture.createSourceAccountingLine());
-        }
-
-        return sourceLines;
-    }
-
-    private List<TargetAccountingLine> generateTargetAccountingLines() throws Exception {
-        List<TargetAccountingLine> targetLines = new ArrayList<TargetAccountingLine>();
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetLines.add(targetFixture.createTargetAccountingLine());
-        }
-
-        return targetLines;
-    }
-
-    private TransferOfFundsDocument buildDocument() throws Exception {
-        // put accounting lines into document parameter for later
-        TransferOfFundsDocument document = (TransferOfFundsDocument) getDocumentParameterFixture();
-
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceFixture.addAsSourceTo(document);
-        }
-
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetFixture.addAsTargetTo(document);
-        }
-
-        return document;
-    }
-
-    private int getExpectedPrePeCount() {
-        return 4;
-    }
 }

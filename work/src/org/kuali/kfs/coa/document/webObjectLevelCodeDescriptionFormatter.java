@@ -20,14 +20,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjLevel;
 
 /**
  * This class...
+ * 
+ * 
  */
 public class ObjectLevelCodeDescriptionFormatter extends CodeDescriptionFormatterBase {
 
@@ -51,9 +52,9 @@ public class ObjectLevelCodeDescriptionFormatter extends CodeDescriptionFormatte
     @Override
     protected Map<String, PersistableBusinessObject> getValuesToBusinessObjectsMap(Set values) {
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put(KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, chartOfAccountsCode);
-        criteria.put(KFSConstants.FINANCIAL_OBJECT_LEVEL_CODE_PROPERTY_NAME, values);
-        Collection<ObjLevel> coll = SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(ObjLevel.class, criteria, KFSConstants.VERSION_NUMBER, true);
+        criteria.put(Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, chartOfAccountsCode);
+        criteria.put(Constants.FINANCIAL_OBJECT_LEVEL_CODE_PROPERTY_NAME, values);
+        Collection<ObjLevel> coll = SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(ObjLevel.class, criteria, Constants.VERSION_NUMBER, true);
 
         Map<String, PersistableBusinessObject> results = new HashMap<String, PersistableBusinessObject>();
         // TODO: worry about version #s

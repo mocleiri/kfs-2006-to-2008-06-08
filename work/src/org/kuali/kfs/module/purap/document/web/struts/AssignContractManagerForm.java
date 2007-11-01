@@ -19,12 +19,13 @@ import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.purap.document.AssignContractManagerDocument;
 
 /**
- * Struts Action Form for Contract Manager Assignment Document.
+ * This class is the form class for the assign a contract manager.
+ * 
  */
 public class AssignContractManagerForm extends KualiTransactionalDocumentFormBase {
 
     /**
-     * Constructs a AssignContractManagerForm instance
+     * Constructs a AssignContractManagerForm instance 
      */
     public AssignContractManagerForm() {
         super();
