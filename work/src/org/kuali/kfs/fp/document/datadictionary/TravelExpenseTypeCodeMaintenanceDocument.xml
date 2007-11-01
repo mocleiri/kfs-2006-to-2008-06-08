@@ -35,7 +35,8 @@
         <documentTypeName>TravelExpenseTypeCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVET</documentTypeCode>
 
-        <label>Disbursement Voucher Travel Expense Type</label>
+        <label>Travel Expense Type Code Maintenance Document</label>
+        <shortLabel>Tr Expense Type Maint Doc</shortLabel>
 
         <summary>Travel Expense Type Code Maintenance Document</summary>
         <description>Document used to create or update Travel Expense Type objects</description>

@@ -35,10 +35,11 @@
 
         <documentTypeName>MandatoryTransferEliminationCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>MTE</documentTypeCode>
-        <label>Mandatory Transfer Elimination</label>
+        <label>Mandatory Transfer Elimination Code Maintenance Document</label>
+        <shortLabel>MandTransferElimCodeMaintDoc</shortLabel>
         <summary>Mandatory Transfer EliminationCode Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Mandatory Transfer Elimination Codes, or modify existing Mandatory Transfer Elimination Codes.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="MandatoryTransferEliminationCode" parameterName="MANDATORY_TRANSFER_ELIMINATION" />
+        <help parameterNamespace="KFS-CA" parameterDetailType="ManditoryTransferElimination" parameterName="MANDATORY_TRANSFER_ELIMINATION" />
 
         <lockingKeys>
             <field attributeName="code" />
