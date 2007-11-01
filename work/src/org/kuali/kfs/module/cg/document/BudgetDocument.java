@@ -27,17 +27,14 @@ import org.kuali.core.bo.user.AuthenticationUserId;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.IllegalObjectStateException;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.PersistenceService;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.DocumentInitiator;
 import org.kuali.core.workflow.KualiDocumentXmlMaterializer;
 import org.kuali.core.workflow.KualiTransactionalDocumentInformation;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.chart.service.ChartUserService;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.bo.AdhocOrg;
 import org.kuali.module.kra.budget.bo.Budget;
@@ -47,11 +44,12 @@ import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
-import org.kuali.module.kra.budget.service.BudgetService;
 import org.kuali.module.kra.document.ResearchDocumentBase;
 
 /**
  * Budget
+ * 
+ * 
  */
 public class BudgetDocument extends ResearchDocumentBase {
     private static final Logger LOG = Logger.getLogger(BudgetDocument.class);
@@ -87,25 +85,25 @@ public class BudgetDocument extends ResearchDocumentBase {
     }
 
     public void initialize() {
-        SpringContext.getBean(BudgetService.class).initializeBudget(this);
+        SpringServiceLocator.getBudgetService().initializeBudget(this);
     }
-
-    // TODO Can't use this just yet - need to ensure that rules are run prior to this being called
-    // /**
-    // * Budget Document specific logic to perform prior to saving.
-    // *
-    // * @see org.kuali.core.document.DocumentBase#prepareForSave()
-    // */
-    // @Override
-    // public void prepareForSave() {
-    // super.prepareForSave();
-    // try {
-    // SpringContext.getBean(BudgetService.class).prepareBudgetForSave(this);
-    // } catch (WorkflowException e) {
-    // throw new RuntimeException("no document found for documentNumber '" + this.documentHeader + "'", e);
-    // }
-    // }
-
+    
+    //TODO Can't use this just yet - need to ensure that rules are run prior to this being called
+//    /**
+//     * Budget Document specific logic to perform prior to saving.
+//     * 
+//     * @see org.kuali.core.document.DocumentBase#prepareForSave()
+//     */
+//    @Override
+//    public void prepareForSave() {
+//        super.prepareForSave();
+//        try {
+//            SpringServiceLocator.getBudgetService().prepareBudgetForSave(this);
+//        } catch (WorkflowException e) {
+//            throw new RuntimeException("no document found for documentNumber '" + this.documentHeader + "'", e);
+//        }
+//    }
+    
     /**
      * @param o
      */
@@ -233,9 +231,9 @@ public class BudgetDocument extends ResearchDocumentBase {
     public void addInstitutionCostShare(List<BudgetPeriod> periods, BudgetInstitutionCostShare budgetInstitutionCostShare) {
         budgetInstitutionCostShare.setBudgetCostShareSequenceNumber(this.getInstitutionCostShareNextSequenceNumber());
         budgetInstitutionCostShare.populateKeyFields(this.getDocumentNumber(), periods);
-
+        
         this.budget.getInstitutionCostShareItems().add(budgetInstitutionCostShare);
-
+        
         setInstitutionCostShareNextSequenceNumber(new Integer(getInstitutionCostShareNextSequenceNumber().intValue() + 1));
     }
 
@@ -244,7 +242,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         budgetThirdPartyCostShare.populateKeyFields(this.getDocumentNumber(), periods);
 
         this.budget.getThirdPartyCostShareItems().add(budgetThirdPartyCostShare);
-
+        
         setThirdPartyCostShareNextSequenceNumber(new Integer(getThirdPartyCostShareNextSequenceNumber().intValue() + 1));
     }
 
@@ -319,7 +317,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     public void setThirdPartyCostShareNextSequenceNumber(Integer budgetThirdPartyCostShareNextSequenceNumber) {
         this.thirdPartyCostShareNextSequenceNumber = budgetThirdPartyCostShareNextSequenceNumber;
     }
-
+    
     public String getPeriodToDelete() {
         return periodToDelete;
     }
@@ -327,7 +325,7 @@ public class BudgetDocument extends ResearchDocumentBase {
     public void setPeriodToDelete(String periodToDelete) {
         this.periodToDelete = periodToDelete;
     }
-
+    
     public String getTaskToDelete() {
         return taskToDelete;
     }
@@ -339,11 +337,11 @@ public class BudgetDocument extends ResearchDocumentBase {
     @Override
     public List buildListOfDeletionAwareLists() {
         List list = new ArrayList();
-
+        
         list.add(this.getAdhocPersons());
-        list.add(this.getAdhocOrgs());
+        list.add(this.getAdhocOrgs()); 
         list.add(this.getAdhocWorkgroups());
-
+            
         Budget budget = this.getBudget();
         list.add(budget.getNonpersonnelItems());
         list.add(budget.getAllUserAppointmentTaskPeriods(this.isForceRefreshOfBOSubListsForSave()));
@@ -357,36 +355,34 @@ public class BudgetDocument extends ResearchDocumentBase {
         list.add(budget.getInstitutionCostShareItems());
 
         list.add(budget.getInstitutionCostSharePersonnelItems());
-
+        
         if (budget.getIndirectCost() != null && budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems() != null) {
             list.add(budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems());
-        }
-        else {
+        } else {
             list.add(new ArrayList());
         }
-
+        
         if (budget.getModularBudget() != null) {
             list.add(budget.getModularBudget().getBudgetModularPeriods());
-        }
-        else {
+        } else {
             list.add(new ArrayList());
         }
 
-        // Lots of FKs from previous collections point to these two, so they need to handled last
+        //Lots of FKs from previous collections point to these two, so they need to handled last
         list.add(budget.getTasks());
         list.add(budget.getPeriods());
 
-
+        
         return list;
     }
-
+    
     @Override
     public void populateDocumentForRouting() {
         KualiTransactionalDocumentInformation transInfo = new KualiTransactionalDocumentInformation();
         DocumentInitiator initiator = new DocumentInitiator();
         String initiatorNetworkId = documentHeader.getWorkflowDocument().getInitiatorNetworkId();
         try {
-            UniversalUser initiatorUser = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(initiatorNetworkId));
+            UniversalUser initiatorUser = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(initiatorNetworkId));
             initiator.setUniversalUser(initiatorUser);
         }
         catch (UserNotFoundException e) {
@@ -398,23 +394,23 @@ public class BudgetDocument extends ResearchDocumentBase {
         xmlWrapper.setKualiTransactionalDocumentInformation(transInfo);
         documentHeader.getWorkflowDocument().setApplicationContent(generateDocumentContent());
     }
-
+    
     public String generateDocumentContent() {
         List referenceObjects = new ArrayList();
         referenceObjects.add("personnel");
         referenceObjects.add("institutionCostShareItems");
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(budget, referenceObjects);
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budget, referenceObjects);
         this.refreshReferenceObject("adhocOrgs");
-
+        
         StringBuffer xml = new StringBuffer("<documentContent>");
         xml.append(buildProjectDirectorReportXml(false));
         xml.append(buildCostShareOrgReportXml(false));
         xml.append(buildAdhocOrgReportXml(false));
         xml.append("</documentContent>");
-
+        
         return xml.toString();
     }
-
+    
     /**
      * Build the xml to use when generating the workflow routing report.
      * 
@@ -428,7 +424,7 @@ public class BudgetDocument extends ResearchDocumentBase {
             xml.append("<documentContent>");
         }
         BudgetUser projectDirector = null;
-
+        
         for (Iterator iter = this.getBudget().getPersonnel().iterator(); iter.hasNext();) {
             BudgetUser person = (BudgetUser) iter.next();
             if (person.isPersonProjectDirectorIndicator()) {
@@ -436,7 +432,7 @@ public class BudgetDocument extends ResearchDocumentBase {
                 break;
             }
         }
-
+        
         if (ObjectUtils.isNotNull(projectDirector) && ObjectUtils.isNotNull(projectDirector.getUser())) {
             if (!this.getBudget().isProjectDirectorToBeNamedIndicator()) {
                 xml.append("<projectDirector>");
@@ -448,9 +444,8 @@ public class BudgetDocument extends ResearchDocumentBase {
                 xml.append(projectDirector.getFiscalCampusCode());
                 xml.append("</chartOfAccountsCode><organizationCode>");
                 if (StringUtils.isBlank(projectDirector.getPrimaryDepartmentCode())) {
-                    xml.append(SpringContext.getBean(ChartUserService.class).getDefaultOrganizationCode(projectDirector.getUser()));
-                }
-                else {
+                    xml.append(SpringServiceLocator.getChartUserService().getDefaultOrganizationCode(new ChartUser(projectDirector.getUser())));
+                } else {
                     xml.append(projectDirector.getPrimaryDepartmentCode());
                 }
                 xml.append("</organizationCode></chartOrg>");
@@ -461,7 +456,7 @@ public class BudgetDocument extends ResearchDocumentBase {
         }
         return xml.toString();
     }
-
+    
     /**
      * Build the xml to use when generating the workflow org routing report.
      * 
@@ -470,14 +465,15 @@ public class BudgetDocument extends ResearchDocumentBase {
      * @return String
      */
     public String buildCostShareOrgReportXml(boolean encloseContent) {
-
-        String costSharePermissionCode = SpringContext.getBean(ParameterService.class).getParameterValue(BudgetDocument.class, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
-
+        
+        String costSharePermissionCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(
+                KraConstants.KRA_ADMIN_GROUP_NAME, KraConstants.BUDGET_COST_SHARE_PERMISSION_CODE);
+        
         StringBuffer xml = new StringBuffer();
         if (encloseContent) {
             xml.append("<documentContent>");
         }
-
+        
         List costShareItems = this.getBudget().getInstitutionCostShareItems();
         for (Iterator iter = costShareItems.iterator(); iter.hasNext();) {
             BudgetInstitutionCostShare costShare = (BudgetInstitutionCostShare) iter.next();
@@ -496,10 +492,10 @@ public class BudgetDocument extends ResearchDocumentBase {
         if (encloseContent) {
             xml.append("</documentContent>");
         }
-
+        
         return xml.toString();
     }
-
+    
     /**
      * Build the xml to use when generating the workflow org routing report.
      * 
@@ -513,7 +509,7 @@ public class BudgetDocument extends ResearchDocumentBase {
             xml.append("<documentContent>");
         }
         List<AdhocOrg> orgs = this.getAdhocOrgs();
-        for (AdhocOrg org : orgs) {
+        for (AdhocOrg org: orgs) {
             xml.append("<chartOrg><chartOfAccountsCode>");
             xml.append(org.getFiscalCampusCode());
             xml.append("</chartOfAccountsCode><organizationCode>");
