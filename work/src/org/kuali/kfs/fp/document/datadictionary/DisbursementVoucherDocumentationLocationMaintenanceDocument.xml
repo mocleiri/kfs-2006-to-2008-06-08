@@ -35,7 +35,8 @@
         <documentTypeName>DisbursementVoucherDocumentationLocationMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVDL</documentTypeCode>
 
-        <label>Disbursement Voucher Documentation Location</label>
+        <label>Documentation Location Maintenance Document</label>
+        <shortLabel>Doc Loc Maint Doc</shortLabel>
 
         <summary>Documentation Location Maintenance Document</summary>
         <description>Document used to create or update Documentation Location objects</description>

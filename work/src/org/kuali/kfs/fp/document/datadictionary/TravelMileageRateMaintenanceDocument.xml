@@ -35,7 +35,8 @@
         <documentTypeName>TravelMileageRateMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVML</documentTypeCode>
 
-        <label>Disbursement Voucher Travel Mileage Rate</label>
+        <label>Travel Mileage Rate Maintenance Document</label>
+        <shortLabel>Travel Mileage Rate Maint Doc</shortLabel>
 
         <summary>Travel Mileage Rate Maintenance Document</summary>
         <description>Document used to create or update Travel Mileage Rate objects</description>

@@ -34,10 +34,11 @@
 
         <documentTypeName>AcctTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>ATYP</documentTypeCode>
-        <label>Account Type</label>
+        <label>Account Type Maintenance Document</label>
+        <shortLabel>AccountTypeMaintDoc</shortLabel>
         <summary>Account Type Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Account Types, or modify existing Account Types.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="AcctType" parameterName="ACCOUNT_TYPE" />
+        <help parameterNamespace="KFS-CA" parameterDetailType="AccountType" parameterName="ACCOUNT_TYPE" />
 
         <lockingKeys>
             <field attributeName="accountTypeCode" />
