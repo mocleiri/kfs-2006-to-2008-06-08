@@ -22,10 +22,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ojb.broker.metadata.MetadataManager;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.batch.poster.EncumbranceCalculator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
@@ -73,7 +71,7 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
     public String post(Transaction t, int mode, Date postDate) {
         LOG.debug("post() started");
 
-        String returnCode = GLConstants.UPDATE_CODE;
+        String returnCode = "U";
 
         // If the encumbrance update code is space or N, or the object type code is FB
         // we don't need to post an encumbrance
@@ -95,7 +93,7 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
             // Build a new encumbrance record
             enc = new Encumbrance(e);
 
-            returnCode = GLConstants.INSERT_CODE;
+            returnCode = "I";
         }
         else {
             // Use the one retrieved
@@ -103,7 +101,7 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
                 enc.setTransactionEncumbranceDate(t.getTransactionDate());
             }
 
-            returnCode = GLConstants.UPDATE_CODE;
+            returnCode = "U";
         }
 
         updateEncumbrance(t, enc);
@@ -152,6 +150,7 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
     }
 
     /**
+     * 
      * @param t
      * @param enc
      */
@@ -179,9 +178,9 @@ public class PostEncumbrance implements PostTransaction, VerifyTransaction, Encu
     }
 
     public String getDestinationName() {
-        return MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(Encumbrance.class).getFullTableName();
+        return "GL_ENCUMBRANCE_T";
     }
-
+    
 
     public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
