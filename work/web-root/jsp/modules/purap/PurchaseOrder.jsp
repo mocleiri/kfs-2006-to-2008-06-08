@@ -47,6 +47,7 @@
     <html:hidden property="document.pendingActionIndicator" />
     <html:hidden property="document.purchaseOrderLastTransmitDate" />
     <html:hidden property="document.contractManagerCode" />
+    <html:hidden property="document.purchaseOrderAutomaticIndicator" />
     
     <c:if test="${empty KualiForm.editingMode['amendmentEntry']}">
         <kul:documentOverview editingMode="${KualiForm.editingMode}"
