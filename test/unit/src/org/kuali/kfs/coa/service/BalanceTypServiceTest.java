@@ -1,33 +1,44 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.service;
 
 import java.util.HashMap;
 
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the BalanceType service.
+ * 
+ * @author Kuali Nervous System Team ()
  */
-@ConfigureContext
-public class BalanceTypServiceTest extends KualiTestBase {
+@WithTestSpringContext
+public class BalanceTypServiceTest extends KualiTestBaseWithFixtures {
+    BusinessObjectService businessObjectService;
+
     private static final boolean ACTIVE = true;
     private static final boolean BAL_TYPE_ENCUMB = true;
     private static final String BAL_TYPE_CODE = "ZZ";
@@ -38,6 +49,19 @@ public class BalanceTypServiceTest extends KualiTestBase {
     private static final String SHORT_NAME = "Z SHORT";
 
     private static final String ACTUAL_BAL_TYPE_CODE = "AC";
+
+    /**
+     * Performs setup operations before tests are executed.
+     */
+    protected void setUp() throws Exception {
+        super.setUp();
+        businessObjectService = SpringServiceLocator.getBusinessObjectService();
+    }
+
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        businessObjectService = null;
+    }
 
     public void testCreateLookupDelete1() {
         // create
@@ -51,28 +75,30 @@ public class BalanceTypServiceTest extends KualiTestBase {
         bal.setFinancialBalanceTypeShortNm(SHORT_NAME);
         bal.setVersionNumber(VER_NBR);
 
-        SpringContext.getBean(BusinessObjectService.class).save(bal);
+        businessObjectService.save(bal);
 
         // lookup
         HashMap map = new HashMap();
         map.put("code", BAL_TYPE_CODE);
-        BalanceTyp bal2 = (BalanceTyp) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(BalanceTyp.class, map);
+        BalanceTyp bal2 = (BalanceTyp) businessObjectService.findByPrimaryKey(BalanceTyp.class, map);
         assertNotNull("Should be a valid object.", bal2);
         assertEquals("Known-good code results in expected returned Name.", BAL_TYPE_NAME, bal2.getName());
 
         // delete
-        SpringContext.getBean(BusinessObjectService.class).delete(bal2);
+        businessObjectService.delete(bal2);
 
         // try to lookup again
         map = new HashMap();
         map.put("code", BAL_TYPE_CODE);
-        BalanceTyp bal3 = (BalanceTyp) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(BalanceTyp.class, map);
+        BalanceTyp bal3 = (BalanceTyp) businessObjectService.findByPrimaryKey(BalanceTyp.class, map);
         assertNull("Shouldn't be a valid object.", bal3);
     }
 
     /*
-     * Disable this test because no data in database yet RO 9-22-05 public void testActualBalanceTypeLookup() { //test known-good
-     * byCode BalanceTyp bal = SpringContext.getBean(BalanceTypService.class).getActualBalanceTyp(); assertNotNull("Should be a
-     * valid object.", bal); assertEquals(ACTUAL_BAL_TYPE_CODE, bal.getCode()); }
+     * Disable this test because no data in database yet RO 9-22-05
+     * 
+     * public void testActualBalanceTypeLookup() { //test known-good byCode BalanceTyp bal =
+     * SpringServiceLocator.getBalanceTypService().getActualBalanceTyp(); assertNotNull("Should be a valid object.", bal);
+     * assertEquals(ACTUAL_BAL_TYPE_CODE, bal.getCode()); }
      */
 }

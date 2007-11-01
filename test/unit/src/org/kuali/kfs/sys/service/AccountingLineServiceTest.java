@@ -1,57 +1,59 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.core.service;
-
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE2_TOF;
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.service.AccountingLineService;
-import org.kuali.module.financial.document.TransferOfFundsDocument;
-import org.kuali.test.ConfigureContext;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.test.DocumentTestUtils;
+import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the AccountingLine service.
+ * 
+ * @author Kuali Nervous System Team ()
  */
-@ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-public class AccountingLineServiceTest extends KualiTestBase {
+@WithTestSpringContext
+public class AccountingLineServiceTest extends KualiTestBaseWithFixtures {
 
+    private AccountingLineService accountingLineService;
     private SourceAccountingLine sline;
     private TargetAccountingLine tline;
-    private AccountingDocument document;
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
-        document = DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), TransferOfFundsDocument.class);
-        SpringContext.getBean(DocumentService.class).saveDocument(document);
-        LINE2_TOF.addAsSourceTo(document);
-        LINE2_TOF.addAsTargetTo(document);
+        accountingLineService = SpringServiceLocator.getAccountingLineService();
 
-        sline = (SourceAccountingLine) document.getSourceAccountingLine(0);
-        tline = (TargetAccountingLine) document.getTargetAccountingLine(0);
+        // setup line
+        sline = DocumentTestUtils.createSourceLine(TestConstants.Data4.DOC_HDR_ID, TestConstants.Data4.CHART_CODE, TestConstants.Data4.ACCOUNT, TestConstants.Data4.SUBACCOUNT, TestConstants.Data4.OBJECT_CODE, TestConstants.Data4.SUBOBJECT_CODE, TestConstants.Data4.PROJECT_CODE, TestConstants.Data4.POSTING_YEAR.intValue(), TestConstants.Data4.AMOUNT, TestConstants.Data4.SEQUENCE_NUMBER.intValue(), TestConstants.Data4.REF_NUMBER, TestConstants.Data4.REF_TYPE_CODE, TestConstants.Data4.BALANCE_TYPE_CODE, TestConstants.Data4.REF_ORIGIN_CODE, TestConstants.Data4.DEBIT_CREDIT_CODE, TestConstants.Data4.ENCUMBRANCE_UPDATE_CODE, TestConstants.Data4.OBJECT_TYPE_CODE);
+
+        tline = DocumentTestUtils.createTargetLine(TestConstants.Data4.DOC_HDR_ID, TestConstants.Data4.CHART_CODE, TestConstants.Data4.ACCOUNT, TestConstants.Data4.SUBACCOUNT, TestConstants.Data4.OBJECT_CODE, TestConstants.Data4.SUBOBJECT_CODE, TestConstants.Data4.PROJECT_CODE, TestConstants.Data4.POSTING_YEAR.intValue(), TestConstants.Data4.AMOUNT, TestConstants.Data4.SEQUENCE_NUMBER.intValue(), TestConstants.Data4.REF_NUMBER, TestConstants.Data4.REF_TYPE_CODE, TestConstants.Data4.BALANCE_TYPE_CODE, TestConstants.Data4.REF_ORIGIN_CODE, TestConstants.Data4.DEBIT_CREDIT_CODE, TestConstants.Data4.ENCUMBRANCE_UPDATE_CODE, TestConstants.Data4.OBJECT_TYPE_CODE);
     }
 
     /**
@@ -60,23 +62,24 @@ public class AccountingLineServiceTest extends KualiTestBase {
      * @throws Exception
      */
     public void testPersistence() throws Exception {
+        AccountingLine line = null;
+        try {
+            accountingLineService.save(sline);
 
+            List sourceLines = accountingLineService.getByDocumentHeaderId(SourceAccountingLine.class, TestConstants.Data4.DOC_HDR_ID);
+            assertTrue(sourceLines.size() > 0);
 
-        SpringContext.getBean(AccountingLineService.class).save(sline);
+            line = (AccountingLine) sourceLines.get(0);
 
-        List<? extends SourceAccountingLine> sourceLines = SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(SourceAccountingLine.class, document.getDocumentNumber());
-        assertTrue(sourceLines.size() > 0);
-
-        AccountingLine line = sourceLines.get(0);
-
-        assertEquals(LINE2_TOF.chartOfAccountsCode, line.getChartOfAccountsCode());
-        assertEquals(LINE2_TOF.accountNumber, line.getAccountNumber());
-        assertEquals(LINE2_TOF.subAccountNumber, line.getSubAccountNumber());
-        assertEquals(LINE2_TOF.financialObjectCode, line.getFinancialObjectCode());
-        assertEquals(LINE2_TOF.financialSubObjectCode, line.getFinancialSubObjectCode());
-
-        SpringContext.getBean(AccountingLineService.class).deleteAccountingLine((AccountingLine) line);
-
+            assertEquals(TestConstants.Data4.CHART_CODE, line.getChartOfAccountsCode());
+            assertEquals(TestConstants.Data4.ACCOUNT, line.getAccountNumber());
+            assertEquals(TestConstants.Data4.SUBACCOUNT, line.getSubAccountNumber());
+            assertEquals(TestConstants.Data4.OBJECT_CODE, line.getFinancialObjectCode());
+            assertEquals(TestConstants.Data4.SUBOBJECT_CODE, line.getFinancialSubObjectCode());
+        }
+        finally {
+            accountingLineService.deleteAccountingLine((AccountingLineBase) line);
+        }
     }
 
 
@@ -84,13 +87,13 @@ public class AccountingLineServiceTest extends KualiTestBase {
      * Tests reference objects are being corrected refreshed from changed pritive values.
      */
     public void testRefresh() {
-        assertEquals(LINE2_TOF.chartOfAccountsCode, sline.getAccount().getChartOfAccountsCode());
-        assertEquals(LINE2_TOF.accountNumber, sline.getAccount().getAccountNumber());
+        assertEquals(TestConstants.Data4.CHART_CODE, sline.getAccount().getChartOfAccountsCode());
+        assertEquals(TestConstants.Data4.ACCOUNT, sline.getAccount().getAccountNumber());
 
         sline.setAccountNumber(TestConstants.Data4.ACCOUNT2);
         sline.refresh();
 
-        assertEquals(LINE2_TOF.chartOfAccountsCode, sline.getAccount().getChartOfAccountsCode());
+        assertEquals(TestConstants.Data4.CHART_CODE, sline.getAccount().getChartOfAccountsCode());
         assertEquals(TestConstants.Data4.ACCOUNT2, sline.getAccount().getAccountNumber());
 
         sline.setChartOfAccountsCode(TestConstants.Data4.CHART_CODE_BA);
@@ -106,37 +109,39 @@ public class AccountingLineServiceTest extends KualiTestBase {
     // no obvious way to test these separately, since we need to create to test save, need to save to (really) test get, and need
     // to delete so future test-runs can recreate
     public void testLifecycle() throws Exception {
-        String docNumber = document.getDocumentNumber();
         // make sure they dont' exist
-        assertEquals(0, SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(SourceAccountingLine.class, docNumber).size());
-        assertEquals(0, SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(TargetAccountingLine.class, docNumber).size());
+        assertFalse(accountingLineService.getByDocumentHeaderId(SourceAccountingLine.class, TestConstants.Data4.DOC_HDR_ID).size() > 0);
+        assertFalse(accountingLineService.getByDocumentHeaderId(TargetAccountingLine.class, TestConstants.Data4.DOC_HDR_ID).size() > 0);
         List sourceLines = null;
         List targetLines = null;
+        try {
+            // save 'em
+            accountingLineService.save(sline);
+            accountingLineService.save(tline);
 
-        // save 'em
-        SpringContext.getBean(AccountingLineService.class).save(sline);
-        SpringContext.getBean(AccountingLineService.class).save(tline);
+            sourceLines = accountingLineService.getByDocumentHeaderId(SourceAccountingLine.class, TestConstants.Data4.DOC_HDR_ID);
+            targetLines = accountingLineService.getByDocumentHeaderId(TargetAccountingLine.class, TestConstants.Data4.DOC_HDR_ID);
 
-        sourceLines = SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(SourceAccountingLine.class, docNumber);
-        targetLines = SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(TargetAccountingLine.class, docNumber);
-
-        // make sure they got saved
-        assertTrue(sourceLines.size() > 0);
-        assertTrue(targetLines.size() > 0);
-        // delete 'em
-        if (sourceLines != null) {
-            for (Iterator i = sourceLines.iterator(); i.hasNext();) {
-                SpringContext.getBean(AccountingLineService.class).deleteAccountingLine((AccountingLine) i.next());
-            }
+            // make sure they got saved
+            assertTrue(sourceLines.size() > 0);
+            assertTrue(targetLines.size() > 0);
         }
-        if (targetLines != null) {
-            for (Iterator i = targetLines.iterator(); i.hasNext();) {
-                SpringContext.getBean(AccountingLineService.class).deleteAccountingLine((AccountingLine) i.next());
+        finally {
+            // delete 'em
+            if (sourceLines != null) {
+                for (Iterator i = sourceLines.iterator(); i.hasNext();) {
+                    accountingLineService.deleteAccountingLine((AccountingLineBase) i.next());
+                }
             }
-        }
+            if (targetLines != null) {
+                for (Iterator i = targetLines.iterator(); i.hasNext();) {
+                    accountingLineService.deleteAccountingLine((AccountingLineBase) i.next());
+                }
+            }
 
-        // make sure they got deleted
-        assertEquals(0, SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(SourceAccountingLine.class, docNumber).size());
-        assertEquals(0, SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(TargetAccountingLine.class, docNumber).size());
+            // make sure they got deleted
+            assertTrue(accountingLineService.getByDocumentHeaderId(SourceAccountingLine.class, TestConstants.Data4.DOC_HDR_ID).size() == 0);
+            assertTrue(accountingLineService.getByDocumentHeaderId(TargetAccountingLine.class, TestConstants.Data4.DOC_HDR_ID).size() == 0);
+        }
     }
 }

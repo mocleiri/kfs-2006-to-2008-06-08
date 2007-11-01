@@ -1,27 +1,33 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
-import org.kuali.core.workflow.service.KualiWorkflowInfo;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.ServiceBillingControl;
 
 import edu.iu.uis.eden.clientapp.vo.WorkgroupNameIdVO;
@@ -30,6 +36,8 @@ import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This class validates the ServiceBillingControl maintenance document.
+ * 
+ * @author Kuali Financial Transactions Team ()
  */
 public class ServiceBillingControlRule extends MaintenanceDocumentRuleBase {
 
@@ -69,7 +77,7 @@ public class ServiceBillingControlRule extends MaintenanceDocumentRuleBase {
         String name = getNewServiceBillingControl().getWorkgroupName();
         if (StringUtils.isNotBlank(name)) {
             if (!workgroupExistsAndIsActive(name)) {
-                putFieldErrorWithShortLabel(KFSPropertyConstants.WORKGROUP_NAME, KFSKeyConstants.ERROR_EXISTENCE);
+                putFieldErrorWithShortLabel(PropertyConstants.WORKGROUP_NAME, KeyConstants.ERROR_EXISTENCE);
                 return false;
             }
         }
@@ -84,7 +92,7 @@ public class ServiceBillingControlRule extends MaintenanceDocumentRuleBase {
      */
     private static boolean workgroupExistsAndIsActive(String name) {
         try {
-            WorkgroupVO workgroupVo = SpringContext.getBean(KualiWorkflowInfo.class).getWorkgroup(new WorkgroupNameIdVO(name));
+            WorkgroupVO workgroupVo = SpringServiceLocator.getWorkflowInfoService().getWorkgroup(new WorkgroupNameIdVO(name));
             return workgroupVo != null && workgroupVo.isActiveInd();
         }
         catch (WorkflowException e) {
