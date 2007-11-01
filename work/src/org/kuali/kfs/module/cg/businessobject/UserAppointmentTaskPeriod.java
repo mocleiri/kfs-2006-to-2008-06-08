@@ -18,6 +18,8 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
@@ -116,6 +118,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the documentNumber attribute.
      * 
      * @return Returns the documentNumber
+     * 
      */
     public String getDocumentNumber() {
         return documentNumber;
@@ -125,6 +128,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the documentNumber attribute.
      * 
      * @param documentNumber The documentNumber to set.
+     * 
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -134,6 +138,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the budgetTaskSequenceNumber attribute.
      * 
      * @return Returns the budgetTaskSequenceNumber
+     * 
      */
     public Integer getBudgetTaskSequenceNumber() {
         return budgetTaskSequenceNumber;
@@ -143,6 +148,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the budgetTaskSequenceNumber attribute.
      * 
      * @param budgetTaskSequenceNumber The budgetTaskSequenceNumber to set.
+     * 
      */
     public void setBudgetTaskSequenceNumber(Integer budgetTaskSequenceNumber) {
         this.budgetTaskSequenceNumber = budgetTaskSequenceNumber;
@@ -152,6 +158,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the budgetPeriodSequenceNumber attribute.
      * 
      * @return Returns the budgetPeriodSequenceNumber
+     * 
      */
     public Integer getBudgetPeriodSequenceNumber() {
         return budgetPeriodSequenceNumber;
@@ -161,6 +168,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the budgetPeriodSequenceNumber attribute.
      * 
      * @param budgetPeriodSequenceNumber The budgetPeriodSequenceNumber to set.
+     * 
      */
     public void setBudgetPeriodSequenceNumber(Integer budgetPeriodSequenceNumber) {
         this.budgetPeriodSequenceNumber = budgetPeriodSequenceNumber;
@@ -170,6 +178,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the budgetUserSequenceNumber attribute.
      * 
      * @return Returns the budgetUserSequenceNumber
+     * 
      */
     public Integer getBudgetUserSequenceNumber() {
         return budgetUserSequenceNumber;
@@ -179,6 +188,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the budgetUserSequenceNumber attribute.
      * 
      * @param budgetUserSequenceNumber The budgetUserSequenceNumber to set.
+     * 
      */
     public void setBudgetUserSequenceNumber(Integer budgetUserSequenceNumber) {
         this.budgetUserSequenceNumber = budgetUserSequenceNumber;
@@ -188,6 +198,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionAppointmentTypeCode attribute.
      * 
      * @param institutionAppointmentTypeCode The institutionAppointmentTypeCode to set.
+     * 
      */
     public String getInstitutionAppointmentTypeCode() {
         return institutionAppointmentTypeCode;
@@ -197,6 +208,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionAppointmentTypeCode attribute.
      * 
      * @return Returns the institutionAppointmentTypeCode
+     * 
      */
     public void setInstitutionAppointmentTypeCode(String institutionAppointmentTypeCode) {
         this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
@@ -206,6 +218,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the agencyFringeBenefitTotalAmount attribute.
      * 
      * @return Returns the agencyFringeBenefitTotalAmount
+     * 
      */
     public KualiInteger getAgencyFringeBenefitTotalAmount() {
         return agencyFringeBenefitTotalAmount;
@@ -215,6 +228,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the agencyFringeBenefitTotalAmount attribute.
      * 
      * @param agencyFringeBenefitTotalAmount The agencyFringeBenefitTotalAmount to set.
+     * 
      */
     public void setAgencyFringeBenefitTotalAmount(KualiInteger agencyFringeBenefitTotalAmount) {
         this.agencyFringeBenefitTotalAmount = agencyFringeBenefitTotalAmount;
@@ -224,6 +238,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the agencyPercentEffortAmount attribute.
      * 
      * @return Returns the agencyPercentEffortAmount
+     * 
      */
     public KualiInteger getAgencyPercentEffortAmount() {
         return agencyPercentEffortAmount;
@@ -233,6 +248,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the agencyPercentEffortAmount attribute.
      * 
      * @param agencyPercentEffortAmount The agencyPercentEffortAmount to set.
+     * 
      */
     public void setAgencyPercentEffortAmount(KualiInteger agencyPercentEffortAmount) {
         this.agencyPercentEffortAmount = agencyPercentEffortAmount;
@@ -242,6 +258,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the agencyRequestTotalAmount attribute.
      * 
      * @return Returns the agencyRequestTotalAmount
+     * 
      */
     public KualiInteger getAgencyRequestTotalAmount() {
         return agencyRequestTotalAmount;
@@ -251,6 +268,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the agencyRequestTotalAmount attribute.
      * 
      * @param agencyRequestTotalAmount The agencyRequestTotalAmount to set.
+     * 
      */
     public void setAgencyRequestTotalAmount(KualiInteger agencyRequestTotalAmount) {
         this.agencyRequestTotalAmount = agencyRequestTotalAmount;
@@ -260,6 +278,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the personWeeksAmount attribute.
      * 
      * @return Returns the personWeeksAmount
+     * 
      */
     public Integer getPersonWeeksAmount() {
         return personWeeksAmount;
@@ -269,6 +288,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the personWeeksAmount attribute.
      * 
      * @param personWeeksAmount The personWeeksAmount to set.
+     * 
      */
     public void setPersonWeeksAmount(Integer personWeeksAmount) {
         this.personWeeksAmount = personWeeksAmount;
@@ -278,6 +298,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the personWeeksJustificationText attribute.
      * 
      * @return Returns the personWeeksJustificationText
+     * 
      */
     public String getPersonWeeksJustificationText() {
         return personWeeksJustificationText;
@@ -287,6 +308,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the personWeeksJustificationText attribute.
      * 
      * @param personWeeksJustificationText The personWeeksJustificationText to set.
+     * 
      */
     public void setPersonWeeksJustificationText(String personWeeksJustificationText) {
         this.personWeeksJustificationText = personWeeksJustificationText;
@@ -296,6 +318,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionCostShareFringeBenefitTotalAmount attribute.
      * 
      * @return Returns the institutionCostShareFringeBenefitTotalAmount
+     * 
      */
     public KualiInteger getInstitutionCostShareFringeBenefitTotalAmount() {
         return institutionCostShareFringeBenefitTotalAmount;
@@ -305,6 +328,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionCostShareFringeBenefitTotalAmount attribute.
      * 
      * @param institutionCostShareFringeBenefitTotalAmount The institutionCostShareFringeBenefitTotalAmount to set.
+     * 
      */
     public void setInstitutionCostShareFringeBenefitTotalAmount(KualiInteger institutionCostShareFringeBenefitTotalAmount) {
         this.institutionCostShareFringeBenefitTotalAmount = institutionCostShareFringeBenefitTotalAmount;
@@ -314,6 +338,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionCostSharePercentEffortAmount attribute.
      * 
      * @return Returns the institutionCostSharePercentEffortAmount
+     * 
      */
     public KualiInteger getInstitutionCostSharePercentEffortAmount() {
         return institutionCostSharePercentEffortAmount;
@@ -323,6 +348,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionCostSharePercentEffortAmount attribute.
      * 
      * @param institutionCostSharePercentEffortAmount The institutionCostSharePercentEffortAmount to set.
+     * 
      */
     public void setInstitutionCostSharePercentEffortAmount(KualiInteger institutionCostSharePercentEffortAmount) {
         this.institutionCostSharePercentEffortAmount = institutionCostSharePercentEffortAmount;
@@ -332,6 +358,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionCostShareRequestTotalAmount attribute.
      * 
      * @return Returns the institutionCostShareRequestTotalAmount
+     * 
      */
     public KualiInteger getInstitutionCostShareRequestTotalAmount() {
         return institutionCostShareRequestTotalAmount;
@@ -341,6 +368,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionCostShareRequestTotalAmount attribute.
      * 
      * @param institutionCostShareRequestTotalAmount The institutionCostShareRequestTotalAmount to set.
+     * 
      */
     public void setInstitutionCostShareRequestTotalAmount(KualiInteger institutionCostShareRequestTotalAmount) {
         this.institutionCostShareRequestTotalAmount = institutionCostShareRequestTotalAmount;
@@ -350,6 +378,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the userBudgetPeriodSalaryAmount attribute.
      * 
      * @return Returns the userBudgetPeriodSalaryAmount
+     * 
      */
     public KualiInteger getUserBudgetPeriodSalaryAmount() {
         return userBudgetPeriodSalaryAmount;
@@ -359,6 +388,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the userBudgetPeriodSalaryAmount attribute.
      * 
      * @param userBudgetPeriodSalaryAmount The userBudgetPeriodSalaryAmount to set.
+     * 
      */
     public void setUserBudgetPeriodSalaryAmount(KualiInteger userBudgetPeriodSalaryAmount) {
         this.userBudgetPeriodSalaryAmount = userBudgetPeriodSalaryAmount;
@@ -368,6 +398,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the userAgencyHours attribute.
      * 
      * @return Returns the userAgencyHours
+     * 
      */
     public KualiInteger getUserAgencyHours() {
         return userAgencyHours;
@@ -377,6 +408,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the userAgencyHours attribute.
      * 
      * @param userAgencyHours The userAgencyHours to set.
+     * 
      */
     public void setUserAgencyHours(KualiInteger userAgencyHours) {
         this.userAgencyHours = userAgencyHours;
@@ -386,6 +418,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the userHourlyRate attribute.
      * 
      * @return Returns the userHourlyRate
+     * 
      */
     public KualiDecimal getUserHourlyRate() {
         return userHourlyRate;
@@ -395,6 +428,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the userHourlyRate attribute.
      * 
      * @param userHourlyRate The userHourlyRate to set.
+     * 
      */
     public void setUserHourlyRate(KualiDecimal userHourlyRate) {
         this.userHourlyRate = userHourlyRate;
@@ -404,6 +438,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the userInstitutionHours attribute.
      * 
      * @return Returns the userInstitutionHours
+     * 
      */
     public KualiInteger getUserInstitutionHours() {
         return userInstitutionHours;
@@ -413,6 +448,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the userInstitutionHours attribute.
      * 
      * @param userInstitutionHours The userInstitutionHours to set.
+     * 
      */
     public void setUserInstitutionHours(KualiInteger userInstitutionHours) {
         this.userInstitutionHours = userInstitutionHours;
@@ -422,6 +458,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the agencyFullTimeEquivalentPercent attribute.
      * 
      * @return Returns the agencyFullTimeEquivalentPercent
+     * 
      */
     public KualiInteger getAgencyFullTimeEquivalentPercent() {
         return agencyFullTimeEquivalentPercent;
@@ -443,6 +480,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the agencyFullTimeEquivalentPercent attribute.
      * 
      * @param agencyFullTimeEquivalentPercent The agencyFullTimeEquivalentPercent to set.
+     * 
      */
     public void setAgencyFullTimeEquivalentPercent(KualiInteger agencyFullTimeEquivalentPercent) {
         this.agencyFullTimeEquivalentPercent = agencyFullTimeEquivalentPercent;
@@ -452,6 +490,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the agencyHealthInsuranceAmount attribute.
      * 
      * @return Returns the agencyHealthInsuranceAmount
+     * 
      */
     public KualiInteger getAgencyHealthInsuranceAmount() {
         return agencyHealthInsuranceAmount;
@@ -461,6 +500,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the agencyHealthInsuranceAmount attribute.
      * 
      * @param agencyHealthInsuranceAmount The agencyHealthInsuranceAmount to set.
+     * 
      */
     public void setAgencyHealthInsuranceAmount(KualiInteger agencyHealthInsuranceAmount) {
         this.agencyHealthInsuranceAmount = agencyHealthInsuranceAmount;
@@ -470,6 +510,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the agencyRequestedFeesAmount attribute.
      * 
      * @return Returns the agencyRequestedFeesAmount
+     * 
      */
     public KualiInteger getAgencyRequestedFeesAmount() {
         return agencyRequestedFeesAmount;
@@ -479,6 +520,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the agencyRequestedFeesAmount attribute.
      * 
      * @param agencyRequestedFeesAmount The agencyRequestedFeesAmount to set.
+     * 
      */
     public void setAgencyRequestedFeesAmount(KualiInteger agencyRequestedFeesAmount) {
         this.agencyRequestedFeesAmount = agencyRequestedFeesAmount;
@@ -488,6 +530,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the agencySalaryAmount attribute.
      * 
      * @return Returns the agencySalaryAmount
+     * 
      */
     public KualiInteger getAgencySalaryAmount() {
         return agencySalaryAmount;
@@ -497,6 +540,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the agencySalaryAmount attribute.
      * 
      * @param agencySalaryAmount The agencySalaryAmount to set.
+     * 
      */
     public void setAgencySalaryAmount(KualiInteger agencySalaryAmount) {
         this.agencySalaryAmount = agencySalaryAmount;
@@ -506,6 +550,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionFullTimeEquivalentPercent attribute.
      * 
      * @return Returns the institutionFullTimeEquivalentPercent
+     * 
      */
     public KualiInteger getInstitutionFullTimeEquivalentPercent() {
         return institutionFullTimeEquivalentPercent;
@@ -515,6 +560,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionFullTimeEquivalentPercent attribute.
      * 
      * @param institutionFullTimeEquivalentPercent The institutionFullTimeEquivalentPercent to set.
+     * 
      */
     public void setInstitutionFullTimeEquivalentPercent(KualiInteger institutionFullTimeEquivalentPercent) {
         this.institutionFullTimeEquivalentPercent = institutionFullTimeEquivalentPercent;
@@ -524,6 +570,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionHealthInsuranceAmount attribute.
      * 
      * @return Returns the institutionHealthInsuranceAmount
+     * 
      */
     public KualiInteger getInstitutionHealthInsuranceAmount() {
         return institutionHealthInsuranceAmount;
@@ -533,6 +580,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionHealthInsuranceAmount attribute.
      * 
      * @param institutionHealthInsuranceAmount The institutionHealthInsuranceAmount to set.
+     * 
      */
     public void setInstitutionHealthInsuranceAmount(KualiInteger institutionHealthInsuranceAmount) {
         this.institutionHealthInsuranceAmount = institutionHealthInsuranceAmount;
@@ -542,6 +590,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionRequestedFeesAmount attribute.
      * 
      * @return Returns the institutionRequestedFeesAmount
+     * 
      */
     public KualiInteger getInstitutionRequestedFeesAmount() {
         return institutionRequestedFeesAmount;
@@ -551,6 +600,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionRequestedFeesAmount attribute.
      * 
      * @param institutionRequestedFeesAmount The institutionRequestedFeesAmount to set.
+     * 
      */
     public void setInstitutionRequestedFeesAmount(KualiInteger institutionRequestedFeesAmount) {
         this.institutionRequestedFeesAmount = institutionRequestedFeesAmount;
@@ -560,6 +610,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionSalaryAmount attribute.
      * 
      * @return Returns the institutionSalaryAmount
+     * 
      */
     public KualiInteger getInstitutionSalaryAmount() {
         return institutionSalaryAmount;
@@ -569,6 +620,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionSalaryAmount attribute.
      * 
      * @param institutionSalaryAmount The institutionSalaryAmount to set.
+     * 
      */
     public void setInstitutionSalaryAmount(KualiInteger institutionSalaryAmount) {
         this.institutionSalaryAmount = institutionSalaryAmount;
@@ -578,6 +630,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the userCreditHoursNumber attribute.
      * 
      * @return Returns the userCreditHoursNumber
+     * 
      */
     public KualiInteger getUserCreditHoursNumber() {
         return userCreditHoursNumber;
@@ -587,6 +640,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the userCreditHoursNumber attribute.
      * 
      * @param userCreditHoursNumber The userCreditHoursNumber to set.
+     * 
      */
     public void setUserCreditHoursNumber(KualiInteger userCreditHoursNumber) {
         this.userCreditHoursNumber = userCreditHoursNumber;
@@ -596,6 +650,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the userCreditHourAmount attribute.
      * 
      * @return Returns the userCreditHourAmount
+     * 
      */
     public KualiDecimal getUserCreditHourAmount() {
         return userCreditHourAmount;
@@ -605,6 +660,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the userCreditHourAmount attribute.
      * 
      * @param userCreditHourAmount The userCreditHourAmount to set.
+     * 
      */
     public void setUserCreditHourAmount(KualiDecimal userCreditHourAmount) {
         this.userCreditHourAmount = userCreditHourAmount;
@@ -614,6 +670,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the userMiscellaneousFeeAmount attribute.
      * 
      * @return Returns the userMiscellaneousFeeAmount
+     * 
      */
     public KualiInteger getUserMiscellaneousFeeAmount() {
         return userMiscellaneousFeeAmount;
@@ -623,6 +680,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the userMiscellaneousFeeAmount attribute.
      * 
      * @param userMiscellaneousFeeAmount The userMiscellaneousFeeAmount to set.
+     * 
      */
     public void setUserMiscellaneousFeeAmount(KualiInteger userMiscellaneousFeeAmount) {
         this.userMiscellaneousFeeAmount = userMiscellaneousFeeAmount;
@@ -645,6 +703,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Gets the institutionAppointmentType attribute.
      * 
      * @return Returns the institutionAppointmentType
+     * 
      */
     public BudgetFringeRate getBudgetFringeRate() {
         return budgetFringeRate;
@@ -654,6 +713,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
      * Sets the institutionAppointmentType attribute.
      * 
      * @param institutionAppointmentType The institutionAppointmentType to set.
+     * 
      */
     public void setBudgetFringeRate(BudgetFringeRate budgetFringeRate) {
         this.budgetFringeRate = budgetFringeRate;
@@ -983,6 +1043,7 @@ public class UserAppointmentTaskPeriod extends PersistableBusinessObjectBase imp
     }
 
     /**
+     * 
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {

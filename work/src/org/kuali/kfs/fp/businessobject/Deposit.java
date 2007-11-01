@@ -25,7 +25,6 @@ import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.financial.document.CashManagementDocument;
-import org.kuali.module.financial.document.CashReceiptDocument;
 
 
 /**
@@ -43,9 +42,6 @@ public class Deposit extends PersistableBusinessObjectBase {
     // related objects and foreign keys
     private String depositBankCode;
     private String depositBankAccountNumber;
-
-    private CurrencyDetail depositedCurrency;
-    private CoinDetail depositedCoin;
 
     private BankAccount bankAccount;
     private CashManagementDocument cashManagementDocument;
@@ -279,59 +275,5 @@ public class Deposit extends PersistableBusinessObjectBase {
         }
 
         return keysEqual;
-    }
-
-    /**
-     * This method returns whether the given deposit contains the parameter cash receipt document
-     * 
-     * @param crDoc the cash receipt document to look for
-     * @return true if the cash receipt document is part of the deposit, false if otherwise
-     */
-    public boolean containsCashReceipt(CashReceiptDocument crDoc) {
-        boolean result = false;
-        for (int i = 0; i < this.getDepositCashReceiptControl().size() && !result; i++) {
-            DepositCashReceiptControl crCtrl = (DepositCashReceiptControl) getDepositCashReceiptControl().get(i);
-            result = crCtrl.getFinancialDocumentCashReceiptNumber().equals(crDoc.getDocumentNumber());
-        }
-        return result;
-    }
-
-    /**
-     * Gets the depositedCoin attribute.
-     * 
-     * @return Returns the depositedCoin.
-     */
-    public CoinDetail getDepositedCoin() {
-        return depositedCoin;
-    }
-
-
-    /**
-     * Sets the depositedCoin attribute value.
-     * 
-     * @param depositedCoin The depositedCoin to set.
-     */
-    public void setDepositedCoin(CoinDetail depositedCoin) {
-        this.depositedCoin = depositedCoin;
-    }
-
-
-    /**
-     * Gets the depositedCurrency attribute.
-     * 
-     * @return Returns the depositedCurrency.
-     */
-    public CurrencyDetail getDepositedCurrency() {
-        return depositedCurrency;
-    }
-
-
-    /**
-     * Sets the depositedCurrency attribute value.
-     * 
-     * @param depositedCurrency The depositedCurrency to set.
-     */
-    public void setDepositedCurrency(CurrencyDetail depositedCurrency) {
-        this.depositedCurrency = depositedCurrency;
     }
 }

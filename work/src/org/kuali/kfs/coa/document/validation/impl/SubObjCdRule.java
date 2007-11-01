@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,11 +77,15 @@ public class SubObjCdRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method sets the convenience objects like newAccount and oldAccount, so you have short and easy handles to the new and
-     * old objects contained in the maintenance document. It also calls the BusinessObjectBase.refresh(), which will attempt to load
-     * all sub-objects from the DB by their primary keys, if available.
+     * old objects contained in the maintenance document.
+     * 
+     * It also calls the BusinessObjectBase.refresh(), which will attempt to load all sub-objects from the DB by their primary keys,
+     * if available.
      * 
      * @param document - the maintenanceDocument being evaluated
+     * 
      */
     public void setupConvenienceObjects() {
 
