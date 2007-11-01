@@ -35,18 +35,19 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ObjectCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiObjectCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>OBJT</documentTypeCode>
 
 		<webScriptFile>../dwr/interface/ChartService.js</webScriptFile>
 		<webScriptFile>../scripts/kfs/objectInfo.js</webScriptFile>
 
 
-        <label>Object Code</label>
+        <label>Object Code Maintenance Document</label>
+        <shortLabel>OCMainDoc</shortLabel>
 
         <summary>Object Code maintenance document</summary>
         <description>Document used to create or update Object Code objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="ObjectCode" parameterName="OBJECT_CODE" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_OBJECT_CODE" />
 
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
