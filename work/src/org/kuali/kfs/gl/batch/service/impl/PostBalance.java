@@ -19,9 +19,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.Balance;
@@ -97,6 +97,7 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
     }
 
     /**
+     * 
      * @param t
      * @param enc
      */
@@ -131,7 +132,7 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
         // update the balance amount of the cooresponding period
         String period = t.getUniversityFiscalPeriodCode();
         if (period == null) {
-            UniversityDate currentUniversityDate = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+            UniversityDate currentUniversityDate = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
             period = currentUniversityDate.getUniversityFiscalAccountingPeriod();
         }
 
