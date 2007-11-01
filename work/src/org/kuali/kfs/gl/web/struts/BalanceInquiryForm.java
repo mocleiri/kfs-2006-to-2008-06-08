@@ -25,24 +25,24 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.lookup.LookupUtils;
 import org.kuali.core.lookup.Lookupable;
-import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.web.struts.form.LookupForm;
 import org.kuali.core.web.ui.Field;
 import org.kuali.core.web.ui.Row;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.lookup.LookupableSpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.Entry;
 
 /**
  * This class is the action form for balance inquiries.
+ * 
+ * 
  */
 public class BalanceInquiryForm extends LookupForm {
     private static final long serialVersionUID = 1L;
 
-    private static final org.apache.commons.logging.Log LOG = org.apache.commons.logging.LogFactory.getLog(BalanceInquiryForm.class);
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceInquiryForm.class);
 
     private String formKey;
     private String backLocation;
@@ -63,6 +63,9 @@ public class BalanceInquiryForm extends LookupForm {
         super.populate(request);
 
         try {
+            Lookupable localLookupable = null;
+            Lookupable localPendingEntryLookupable = null;
+
             if (StringUtils.isBlank(request.getParameter(KFSConstants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME)) && StringUtils.isBlank(getLookupableImplServiceName())) {
 
                 // get the business object class for the lookup
@@ -75,23 +78,23 @@ public class BalanceInquiryForm extends LookupForm {
                 }
 
                 // call data dictionary service to get lookup impl for bo class
-                String lookupImplID = SpringContext.getBean(BusinessObjectDictionaryService.class).getLookupableID(Class.forName(localBusinessObjectClassName));
+                String lookupImplID = SpringServiceLocator.getBusinessObjectDictionaryService().getLookupableID(Class.forName(localBusinessObjectClassName));
                 if (lookupImplID == null) {
-                    lookupImplID = "lookupable";
+                    lookupImplID = "kualiLookupable";
                 }
 
                 setLookupableImplServiceName(lookupImplID);
             }
-            setLookupable(LookupableSpringContext.getLookupable(getLookupableImplServiceName()));
+            localLookupable = SpringServiceLocator.getLookupable(getLookupableImplServiceName());
 
-            if (getLookupable() == null) {
+            if (localLookupable == null) {
                 LOG.error("Lookup impl not found for lookup impl name " + getLookupableImplServiceName());
                 throw new RuntimeException("Lookup impl not found for lookup impl name " + getLookupableImplServiceName());
             }
 
             // (laran) I put this here to allow the Exception to be thrown if the localLookupable is null.
             if (Entry.class.getName().equals(getBusinessObjectClassName())) {
-                setPendingEntryLookupable(LookupableSpringContext.getLookupable(GLConstants.LookupableBeanKeys.PENDING_ENTRY));
+                localPendingEntryLookupable = SpringServiceLocator.getLookupable(GLConstants.LookupableBeanKeys.PENDING_ENTRY);
             }
 
             if (request.getParameter(KFSConstants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME) != null) {
@@ -114,15 +117,15 @@ public class BalanceInquiryForm extends LookupForm {
             }
 
             // init lookupable with bo class
-            getLookupable().setBusinessObjectClass(Class.forName(getBusinessObjectClassName()));
-            if (null != getPendingEntryLookupable()) {
-                getPendingEntryLookupable().setBusinessObjectClass(GeneralLedgerPendingEntry.class);
+            localLookupable.setBusinessObjectClass(Class.forName(getBusinessObjectClassName()));
+            if (null != localPendingEntryLookupable) {
+                localPendingEntryLookupable.setBusinessObjectClass(GeneralLedgerPendingEntry.class);
             }
 
             Map fieldValues = new HashMap();
             Map formFields = getFields();
             Class boClass = Class.forName(getBusinessObjectClassName());
-            for (Iterator iter = getLookupable().getRows().iterator(); iter.hasNext();) {
+            for (Iterator iter = localLookupable.getRows().iterator(); iter.hasNext();) {
                 Row row = (Row) iter.next();
 
                 for (Iterator iterator = row.getFields().iterator(); iterator.hasNext();) {
@@ -144,8 +147,8 @@ public class BalanceInquiryForm extends LookupForm {
                     fieldValues.put(field.getPropertyName(), field.getPropertyValue());
                 }
             }
-            if (getLookupable().checkForAdditionalFields(fieldValues)) {
-                for (Iterator iter = getLookupable().getRows().iterator(); iter.hasNext();) {
+            if (localLookupable.checkForAdditionalFields(fieldValues)) {
+                for (Iterator iter = localLookupable.getRows().iterator(); iter.hasNext();) {
                     Row row = (Row) iter.next();
 
                     for (Iterator iterator = row.getFields().iterator(); iterator.hasNext();) {
@@ -183,10 +186,12 @@ public class BalanceInquiryForm extends LookupForm {
                 }
             }
             setFieldConversions(fieldConversionMap);
-            getLookupable().setFieldConversions(fieldConversionMap);
-            if (null != getPendingEntryLookupable()) {
-                getPendingEntryLookupable().setFieldConversions(fieldConversionMap);
+            localLookupable.setFieldConversions(fieldConversionMap);
+            if (null != localPendingEntryLookupable) {
+                localPendingEntryLookupable.setFieldConversions(fieldConversionMap);
             }
+            setLookupable(localLookupable);
+            setPendingEntryLookupable(localPendingEntryLookupable);
         }
         catch (ClassNotFoundException e) {
             LOG.error("Business Object class " + getBusinessObjectClassName() + " not found");
@@ -296,7 +301,7 @@ public class BalanceInquiryForm extends LookupForm {
 
 
     /**
-     * @return Returns the lookupable.
+     * @return Returns the kualiLookupable.
      */
     public Lookupable getLookupable() {
         return lookupable;
@@ -304,7 +309,7 @@ public class BalanceInquiryForm extends LookupForm {
 
 
     /**
-     * @param lookupable The lookupable to set.
+     * @param lookupable The kualiLookupable to set.
      */
     public void setLookupable(Lookupable lookupable) {
         this.lookupable = lookupable;

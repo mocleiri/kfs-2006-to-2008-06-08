@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,17 +83,18 @@ public class EntryDaoOjb extends PlatformAwareDaoBaseOjb implements EntryDao {
         q.setAttributes(new String[] { "max(transactionLedgerEntrySequenceNumber)" });
 
         Iterator iter = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
-        // would this work better? max = (BigDecimal) getPersistenceBrokerTemplate().getObjectByQuery(q);
-        BigDecimal max = null;
-        while (iter.hasNext()) {
+        if (iter.hasNext()) {
             Object[] data = (Object[]) iter.next();
-            max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
-        }
-        if (max == null) {
-            return 0;
+            BigDecimal max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
+            if (max == null) {
+                return 0;
+            }
+            else {
+                return max.intValue();
+            }
         }
         else {
-            return max.intValue();
+            return 0;
         }
     }
 

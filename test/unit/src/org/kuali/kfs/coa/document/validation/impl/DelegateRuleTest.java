@@ -24,17 +24,18 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Delegate;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class...
+ * 
+ * 
  */
-@ConfigureContext(session = KHUNTLEY)
+@WithTestSpringContext(session = KHUNTLEY)
 public class DelegateRuleTest extends ChartRuleTestBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DelegateRuleTest.class);
@@ -57,7 +58,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
     private static final String USERID_BAD_1 = "2419205388"; // SROOD=ROOD,SAM N : status=D
 
     // one that has A for status and something else for type
-    private static final String USERID_BAD_2 = "1659102154"; // AAVILES=AVILES,ANTON F
+    private static final String USERID_BAD_2 = "2049507878"; // AJPAYNTE=PAYNTER,AUBREY J
 
     // one that has neither A nor P for status and type
     private static final String USERID_BAD_3 = "4533105209"; // AIAUCOIN=AUCOIN,AMELIA I
@@ -90,6 +91,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
     private MaintenanceDocument maintDoc;
 
     /**
+     * 
      * This method creates a delegate with a minimal set of known-good values.
      * 
      * @return
@@ -111,7 +113,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
         delegate.setFinancialDocumentTypeCode(DOCTYPE_GOOD_1);
         delegate.setAccountDelegateSystemId(USERID_GOOD_1);
 
-        Timestamp today = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp today = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
         delegate.setAccountDelegateStartDate(today);
 
         delegate.refresh();
@@ -278,9 +280,12 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
 
     /**
+     * 
      * This method tests a Delegate that we have setup with all known good values for the required fields, and nothing or the
-     * default for the other fields. This test should always pass, if it does not, then none of the following tests are meaningful,
-     * as the baseline is broken.
+     * default for the other fields.
+     * 
+     * This test should always pass, if it does not, then none of the following tests are meaningful, as the baseline is broken.
+     * 
      */
     public void testCheckSimpleRules_validDelegate() {
         DelegateRule rule = new DelegateRule();
@@ -325,7 +330,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
     public void testCheckSimpleRulesStartDateRule_startDateTomorrow() {
         DelegateRule rule = new DelegateRule();
-        Calendar cal = SpringContext.getBean(DateTimeService.class).getCurrentCalendar();
+        Calendar cal = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
         cal.add(Calendar.DATE, 1);
         Timestamp ts = newTimestamp(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
@@ -351,7 +356,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
 
     public void testCheckSimpleRulesStartDateRule_startDateYesterday() {
         DelegateRule rule = new DelegateRule();
-        Calendar cal = SpringContext.getBean(DateTimeService.class).getCurrentCalendar();
+        Calendar cal = SpringServiceLocator.getDateTimeService().getCurrentCalendar();
         cal.add(Calendar.DATE, -1);
         Timestamp ts = newTimestamp(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
@@ -551,6 +556,7 @@ public class DelegateRuleTest extends ChartRuleTestBase {
     }
 
     /**
+     * 
      * This method simulates a user trying to create a delegate marked as primary when there is already an account with All
      * Documents for the doctype for the chart/account combo
      */

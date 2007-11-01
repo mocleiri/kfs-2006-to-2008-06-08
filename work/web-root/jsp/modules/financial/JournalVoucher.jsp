@@ -1,5 +1,5 @@
 <%--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,22 +13,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
-
+<%@ include file="/jsp/core/tldHeader.jsp"%>
+<%@ taglib prefix="c" uri="/tlds/c.tld"%>
+<%@ taglib uri="/tlds/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/tlds/struts-logic.tld" prefix="logic"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="kul"%>
+<%@ taglib tagdir="/WEB-INF/tags/dd" prefix="dd"%>
 <c:set var="journalVoucherAttributes"
-	value="${DataDictionary['JournalVoucherDocument'].attributes}" />
+	value="${DataDictionary['KualiJournalVoucherDocument'].attributes}" />
 <c:set var="readOnly"
 	value="${!empty KualiForm.editingMode['viewOnly']}" />
 
 <kul:documentPage showDocumentInfo="true"
-	documentTypeName="JournalVoucherDocument"
+	documentTypeName="KualiJournalVoucherDocument"
 	htmlFormAction="financialJournalVoucher" renderMultipart="true"
 	showTabButtons="true">
 	<kul:hiddenDocumentFields />
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 	<!-- JOURNAL VOUCHER SPECIFIC FIELDS -->
 	<kul:tab tabTitle="Journal Voucher Details" defaultOpen="true"
-		tabErrorKey="${KFSConstants.EDIT_JOURNAL_VOUCHER_ERRORS}">
+		tabErrorKey="${Constants.EDIT_JOURNAL_VOUCHER_ERRORS}">
 		<div class="tab-container" align=center>
 		<div class="h2-container">
 		<h2>Journal Voucher Details</h2>
@@ -154,11 +158,11 @@
 	</kul:tab>
 	<fin:voucherAccountingLines
 		isDebitCreditAmount="${KualiForm.selectedBalanceType.financialOffsetGenerationIndicator}"
-		displayExternalEncumbranceFields="${KualiForm.selectedBalanceType.code==KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE}"
+		displayExternalEncumbranceFields="${KualiForm.selectedBalanceType.code==Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE}"
 		editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}"
 		includeObjectTypeCode="true" />
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 	<kul:notes />
 	<kul:adHocRecipients />
 	<kul:routeLog />

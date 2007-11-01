@@ -1,5 +1,7 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/purap/Requisition.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,16 +15,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
+<%@ taglib tagdir="/WEB-INF/tags/purap" prefix="purap"%>
 
 <kul:documentPage showDocumentInfo="true"
-	documentTypeName="RequisitionDocument"
+	documentTypeName="KualiRequisitionDocument"
 	htmlFormAction="purapRequisition" renderMultipart="true"
 	showTabButtons="true">
-
-    <c:if test="${!empty KualiForm.editingMode['fullEntry']}">
-        <c:set var="fullEntryMode" value="true" scope="request" />
-    </c:if>
 
 	<kul:hiddenDocumentFields excludePostingYear="true" />
 
@@ -30,46 +29,33 @@
 
 	<kul:documentOverview editingMode="${KualiForm.editingMode}"
 		includePostingYear="true"
-        fiscalYearReadOnly="true"
-        postingYearAttributes="${DataDictionary.RequisitionDocument.attributes}" >
+        postingYearAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" >
 
     	<purap:purapDocumentDetail
-	    	documentAttributes="${DataDictionary.RequisitionDocument.attributes}"
-	    	detailSectionLabel="Requisition Detail"
-	    	editableFundingSource="true" />
+	    	documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
+	    	detailSectionLabel="Requisition Detail" />
     </kul:documentOverview>
-	
+
     <purap:vendor
-        documentAttributes="${DataDictionary.RequisitionDocument.attributes}"
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
         displayRequisitionFields="true" />
 
-    <purap:puritems itemAttributes="${DataDictionary.RequisitionItem.attributes}"
-    	accountingLineAttributes="${DataDictionary.RequisitionAccount.attributes}" 
-        camsAttributes="${DataDictionary.RequisitionItemCapitalAsset.attributes}" 
-    	displayRequisitionFields="true"/>
+    <purap:items />
 
     <purap:paymentinfo
-        documentAttributes="${DataDictionary.RequisitionDocument.attributes}" />
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
 
     <purap:delivery
-        documentAttributes="${DataDictionary.RequisitionDocument.attributes}" />
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}" />
 
     <purap:additional
-        documentAttributes="${DataDictionary.RequisitionDocument.attributes}"
+        documentAttributes="${DataDictionary.KualiRequisitionDocument.attributes}"
         displayRequisitionFields="true" />
-        
-    <!-- TEMPORARILY DISABLING ACCOUNT SUMMARY FUNCTIONALITY -->
-    <purap:summaryaccounts
-        itemAttributes="${DataDictionary.RequisitionItem.attributes}"
-    	documentAttributes="${DataDictionary.SourceAccountingLine.attributes}" />
 
-    <purap:relatedDocuments
-            documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
-    
-    <purap:paymentHistory
-            documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
-	            
-	<kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}"  allowsNoteFYI="true"/> 
+	<purap:statushistory 
+		documentAttributes="${DataDictionary.RequisitionStatusHistory.attributes}" />
+
+	<kul:notes />
 
 	<kul:adHocRecipients />
 

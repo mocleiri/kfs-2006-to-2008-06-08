@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,17 @@ import java.util.Map;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.gl.bo.OriginEntryFull;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
 /**
  * 
+ * @version $Id: OriginEntryDao.java,v 1.17.2.10 2007-02-10 11:37:33 j2eemgr Exp $
  */
 public interface OriginEntryDao {
     public static final int SORT_DOCUMENT = 1;
     public static final int SORT_ACCOUNT = 2;
     public static final int SORT_REPORT = 3;
-    public static final int SORT_LISTING_REPORT = 4;
+    public static final int SORT_LISTING_REPORT = 4; 
 
     /**
      * Get the total amount of transactions in a group
@@ -71,7 +71,7 @@ public interface OriginEntryDao {
      * @param oeg Group
      * @return Iterator of entries in the specified group
      */
-    public <T> Iterator<T> getEntriesByGroup(OriginEntryGroup oeg, int sort);
+    public Iterator<OriginEntry> getEntriesByGroup(OriginEntryGroup oeg, int sort);
 
     /**
      * Get bad balance entries
@@ -79,7 +79,7 @@ public interface OriginEntryDao {
      * @param groups
      * @return
      */
-    public Iterator<OriginEntryFull> getBadBalanceEntries(Collection groups);
+    public Iterator<OriginEntry> getBadBalanceEntries(Collection groups);
 
     /**
      * Collection of entries that match criteria
@@ -87,7 +87,7 @@ public interface OriginEntryDao {
      * @param searchCriteria Map of field, value pairs
      * @return collection of entries
      */
-    public Collection<OriginEntryFull> getMatchingEntriesByCollection(Map searchCriteria);
+    public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria);
 
     /**
      * Iterator of entries that match criteria
@@ -119,7 +119,7 @@ public interface OriginEntryDao {
     public void saveOriginEntry(OriginEntry entry);
 
 
-    public OriginEntryFull getExactMatchingEntry(Integer entryId);
+    public OriginEntry getExactMatchingEntry(Integer entryId);
 
     /**
      * get the summarized information of the entries that belong to the entry groups with the given group ids
@@ -136,13 +136,12 @@ public interface OriginEntryDao {
      * @return
      */
     public Collection testingGetAllEntries();
-
+    
     /**
      * get the summarized information of poster input entries that belong to the entry groups with the given group id list
      * 
      * @param groups the origin entry groups
      * @return a set of summarized information of poster input entries within the specified groups
-     */
+     */       
     public Iterator getPosterOutputSummaryByGroupId(Collection groups);
-
 }

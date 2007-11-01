@@ -22,7 +22,7 @@
 
 
         <inquiry>
-            <title>Appointment Type Inquiry</title>
+            <title>Appointment Type</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="appointmentTypeCode" />
@@ -123,7 +123,7 @@
                 <shortLabel>Fringe</shortLabel>
 
                 <maxLength>8</maxLength>
-                <inclusiveMax>99</inclusiveMax>
+                <inclusiveMax>999</inclusiveMax>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -141,7 +141,7 @@
                 <shortLabel>Cost Share Fringe</shortLabel>
 
                 <maxLength>8</maxLength>
-                <inclusiveMax>99</inclusiveMax>
+                <inclusiveMax>999</inclusiveMax>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
