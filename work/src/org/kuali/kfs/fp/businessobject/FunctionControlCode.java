@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class FunctionControlCode extends PersistableBusinessObjectBase {
+public class FunctionControlCode extends BusinessObjectBase {
 
     private String financialSystemFunctionControlCode;
     private boolean financialSystemFunctionDefaultIndicator;
@@ -39,7 +39,8 @@ public class FunctionControlCode extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSystemFunctionControlCode attribute.
      * 
-     * @return Returns the financialSystemFunctionControlCode
+     * @return - Returns the financialSystemFunctionControlCode
+     * 
      */
     public String getFinancialSystemFunctionControlCode() {
         return financialSystemFunctionControlCode;
@@ -49,6 +50,7 @@ public class FunctionControlCode extends PersistableBusinessObjectBase {
      * Sets the financialSystemFunctionControlCode attribute.
      * 
      * @param financialSystemFunctionControlCode The financialSystemFunctionControlCode to set.
+     * 
      */
     public void setFinancialSystemFunctionControlCode(String financialSystemFunctionControlCode) {
         this.financialSystemFunctionControlCode = financialSystemFunctionControlCode;
@@ -58,7 +60,8 @@ public class FunctionControlCode extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSystemFunctionDefaultIndicator attribute.
      * 
-     * @return Returns the financialSystemFunctionDefaultIndicator
+     * @return - Returns the financialSystemFunctionDefaultIndicator
+     * 
      */
     public boolean isFinancialSystemFunctionDefaultIndicator() {
         return financialSystemFunctionDefaultIndicator;
@@ -69,6 +72,7 @@ public class FunctionControlCode extends PersistableBusinessObjectBase {
      * Sets the financialSystemFunctionDefaultIndicator attribute.
      * 
      * @param financialSystemFunctionDefaultIndicator The financialSystemFunctionDefaultIndicator to set.
+     * 
      */
     public void setFinancialSystemFunctionDefaultIndicator(boolean financialSystemFunctionDefaultIndicator) {
         this.financialSystemFunctionDefaultIndicator = financialSystemFunctionDefaultIndicator;
@@ -78,7 +82,8 @@ public class FunctionControlCode extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSystemFunctionDescription attribute.
      * 
-     * @return Returns the financialSystemFunctionDescription
+     * @return - Returns the financialSystemFunctionDescription
+     * 
      */
     public String getFinancialSystemFunctionDescription() {
         return financialSystemFunctionDescription;
@@ -88,6 +93,7 @@ public class FunctionControlCode extends PersistableBusinessObjectBase {
      * Sets the financialSystemFunctionDescription attribute.
      * 
      * @param financialSystemFunctionDescription The financialSystemFunctionDescription to set.
+     * 
      */
     public void setFinancialSystemFunctionDescription(String financialSystemFunctionDescription) {
         this.financialSystemFunctionDescription = financialSystemFunctionDescription;

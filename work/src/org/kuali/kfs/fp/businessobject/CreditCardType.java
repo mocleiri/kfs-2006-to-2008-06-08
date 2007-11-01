@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class CreditCardType extends PersistableBusinessObjectBase {
+public class CreditCardType extends BusinessObjectBase {
 
     private String financialDocumentCreditCardTypeCode;
     private String financialDocumentCreditCardCompanyName;
@@ -38,7 +38,8 @@ public class CreditCardType extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCreditCardTypeCode attribute.
      * 
-     * @return Returns the financialDocumentCreditCardTypeCode
+     * @return - Returns the financialDocumentCreditCardTypeCode
+     * 
      */
     public String getFinancialDocumentCreditCardTypeCode() {
         return financialDocumentCreditCardTypeCode;
@@ -48,6 +49,7 @@ public class CreditCardType extends PersistableBusinessObjectBase {
      * Sets the financialDocumentCreditCardTypeCode attribute.
      * 
      * @param financialDocumentCreditCardTypeCode The financialDocumentCreditCardTypeCode to set.
+     * 
      */
     public void setFinancialDocumentCreditCardTypeCode(String financialDocumentCreditCardTypeCode) {
         this.financialDocumentCreditCardTypeCode = financialDocumentCreditCardTypeCode;
@@ -57,7 +59,8 @@ public class CreditCardType extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCreditCardCompanyName attribute.
      * 
-     * @return Returns the financialDocumentCreditCardCompanyName
+     * @return - Returns the financialDocumentCreditCardCompanyName
+     * 
      */
     public String getFinancialDocumentCreditCardCompanyName() {
         return financialDocumentCreditCardCompanyName;
@@ -67,6 +70,7 @@ public class CreditCardType extends PersistableBusinessObjectBase {
      * Sets the financialDocumentCreditCardCompanyName attribute.
      * 
      * @param financialDocumentCreditCardCompanyName The financialDocumentCreditCardCompanyName to set.
+     * 
      */
     public void setFinancialDocumentCreditCardCompanyName(String financialDocumentCreditCardCompanyName) {
         this.financialDocumentCreditCardCompanyName = financialDocumentCreditCardCompanyName;

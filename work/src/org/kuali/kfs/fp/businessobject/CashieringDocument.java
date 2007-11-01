@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,15 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
  * 
  */
-public class CashieringDocument extends PersistableBusinessObjectBase {
+public class CashieringDocument extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String depositFinancialSystemOriginationCode;
     private String financialDocumentDepositNumber;
     private KualiDecimal financialDocumentCheckAmount;
@@ -50,28 +49,31 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
+     * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
     /**
      * Gets the depositFinancialSystemOriginationCode attribute.
      * 
-     * @return Returns the depositFinancialSystemOriginationCode
+     * @return - Returns the depositFinancialSystemOriginationCode
+     * 
      */
     public String getDepositFinancialSystemOriginationCode() {
         return depositFinancialSystemOriginationCode;
@@ -81,6 +83,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the depositFinancialSystemOriginationCode attribute.
      * 
      * @param depositFinancialSystemOriginationCode The depositFinancialSystemOriginationCode to set.
+     * 
      */
     public void setDepositFinancialSystemOriginationCode(String depositFinancialSystemOriginationCode) {
         this.depositFinancialSystemOriginationCode = depositFinancialSystemOriginationCode;
@@ -90,7 +93,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentDepositNumber attribute.
      * 
-     * @return Returns the financialDocumentDepositNumber
+     * @return - Returns the financialDocumentDepositNumber
+     * 
      */
     public String getFinancialDocumentDepositNumber() {
         return financialDocumentDepositNumber;
@@ -100,6 +104,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentDepositNumber attribute.
      * 
      * @param financialDocumentDepositNumber The financialDocumentDepositNumber to set.
+     * 
      */
     public void setFinancialDocumentDepositNumber(String financialDocumentDepositNumber) {
         this.financialDocumentDepositNumber = financialDocumentDepositNumber;
@@ -109,7 +114,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCheckAmount attribute.
      * 
-     * @return Returns the financialDocumentCheckAmount
+     * @return - Returns the financialDocumentCheckAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentCheckAmount() {
         return financialDocumentCheckAmount;
@@ -119,6 +125,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentCheckAmount attribute.
      * 
      * @param financialDocumentCheckAmount The financialDocumentCheckAmount to set.
+     * 
      */
     public void setFinancialDocumentCheckAmount(KualiDecimal financialDocumentCheckAmount) {
         this.financialDocumentCheckAmount = financialDocumentCheckAmount;
@@ -128,7 +135,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentAdvanceDepositAmount attribute.
      * 
-     * @return Returns the financialDocumentAdvanceDepositAmount
+     * @return - Returns the financialDocumentAdvanceDepositAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentAdvanceDepositAmount() {
         return financialDocumentAdvanceDepositAmount;
@@ -138,6 +146,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentAdvanceDepositAmount attribute.
      * 
      * @param financialDocumentAdvanceDepositAmount The financialDocumentAdvanceDepositAmount to set.
+     * 
      */
     public void setFinancialDocumentAdvanceDepositAmount(KualiDecimal financialDocumentAdvanceDepositAmount) {
         this.financialDocumentAdvanceDepositAmount = financialDocumentAdvanceDepositAmount;
@@ -147,7 +156,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentRevolvingFundAmount attribute.
      * 
-     * @return Returns the financialDocumentRevolvingFundAmount
+     * @return - Returns the financialDocumentRevolvingFundAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentRevolvingFundAmount() {
         return financialDocumentRevolvingFundAmount;
@@ -157,6 +167,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentRevolvingFundAmount attribute.
      * 
      * @param financialDocumentRevolvingFundAmount The financialDocumentRevolvingFundAmount to set.
+     * 
      */
     public void setFinancialDocumentRevolvingFundAmount(KualiDecimal financialDocumentRevolvingFundAmount) {
         this.financialDocumentRevolvingFundAmount = financialDocumentRevolvingFundAmount;
@@ -166,7 +177,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentNextCreditCardLineNumber attribute.
      * 
-     * @return Returns the financialDocumentNextCreditCardLineNumber
+     * @return - Returns the financialDocumentNextCreditCardLineNumber
+     * 
      */
     public Integer getFinancialDocumentNextCreditCardLineNumber() {
         return financialDocumentNextCreditCardLineNumber;
@@ -176,6 +188,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentNextCreditCardLineNumber attribute.
      * 
      * @param financialDocumentNextCreditCardLineNumber The financialDocumentNextCreditCardLineNumber to set.
+     * 
      */
     public void setFinancialDocumentNextCreditCardLineNumber(Integer financialDocumentNextCreditCardLineNumber) {
         this.financialDocumentNextCreditCardLineNumber = financialDocumentNextCreditCardLineNumber;
@@ -185,7 +198,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCashAmount attribute.
      * 
-     * @return Returns the financialDocumentCashAmount
+     * @return - Returns the financialDocumentCashAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentCashAmount() {
         return financialDocumentCashAmount;
@@ -195,6 +209,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentCashAmount attribute.
      * 
      * @param financialDocumentCashAmount The financialDocumentCashAmount to set.
+     * 
      */
     public void setFinancialDocumentCashAmount(KualiDecimal financialDocumentCashAmount) {
         this.financialDocumentCashAmount = financialDocumentCashAmount;
@@ -204,7 +219,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentCreditCardAmount attribute.
      * 
-     * @return Returns the financialDocumentCreditCardAmount
+     * @return - Returns the financialDocumentCreditCardAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentCreditCardAmount() {
         return financialDocumentCreditCardAmount;
@@ -214,6 +230,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentCreditCardAmount attribute.
      * 
      * @param financialDocumentCreditCardAmount The financialDocumentCreditCardAmount to set.
+     * 
      */
     public void setFinancialDocumentCreditCardAmount(KualiDecimal financialDocumentCreditCardAmount) {
         this.financialDocumentCreditCardAmount = financialDocumentCreditCardAmount;
@@ -223,7 +240,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentTotalCoinAmount attribute.
      * 
-     * @return Returns the financialDocumentTotalCoinAmount
+     * @return - Returns the financialDocumentTotalCoinAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentTotalCoinAmount() {
         return financialDocumentTotalCoinAmount;
@@ -233,6 +251,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentTotalCoinAmount attribute.
      * 
      * @param financialDocumentTotalCoinAmount The financialDocumentTotalCoinAmount to set.
+     * 
      */
     public void setFinancialDocumentTotalCoinAmount(KualiDecimal financialDocumentTotalCoinAmount) {
         this.financialDocumentTotalCoinAmount = financialDocumentTotalCoinAmount;
@@ -242,7 +261,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentChangeOutAmount attribute.
      * 
-     * @return Returns the financialDocumentChangeOutAmount
+     * @return - Returns the financialDocumentChangeOutAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentChangeOutAmount() {
         return financialDocumentChangeOutAmount;
@@ -252,6 +272,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the financialDocumentChangeOutAmount attribute.
      * 
      * @param financialDocumentChangeOutAmount The financialDocumentChangeOutAmount to set.
+     * 
      */
     public void setFinancialDocumentChangeOutAmount(KualiDecimal financialDocumentChangeOutAmount) {
         this.financialDocumentChangeOutAmount = financialDocumentChangeOutAmount;
@@ -261,7 +282,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the nextCheckLineNumber attribute.
      * 
-     * @return Returns the nextCheckLineNumber
+     * @return - Returns the nextCheckLineNumber
+     * 
      */
     public Integer getNextCheckLineNumber() {
         return nextCheckLineNumber;
@@ -271,6 +293,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the nextCheckLineNumber attribute.
      * 
      * @param nextCheckLineNumber The nextCheckLineNumber to set.
+     * 
      */
     public void setNextCheckLineNumber(Integer nextCheckLineNumber) {
         this.nextCheckLineNumber = nextCheckLineNumber;
@@ -280,7 +303,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the nextAdvanceDepositLineNumber attribute.
      * 
-     * @return Returns the nextAdvanceDepositLineNumber
+     * @return - Returns the nextAdvanceDepositLineNumber
+     * 
      */
     public Integer getNextAdvanceDepositLineNumber() {
         return nextAdvanceDepositLineNumber;
@@ -290,6 +314,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the nextAdvanceDepositLineNumber attribute.
      * 
      * @param nextAdvanceDepositLineNumber The nextAdvanceDepositLineNumber to set.
+     * 
      */
     public void setNextAdvanceDepositLineNumber(Integer nextAdvanceDepositLineNumber) {
         this.nextAdvanceDepositLineNumber = nextAdvanceDepositLineNumber;
@@ -299,7 +324,8 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
     /**
      * Gets the nextRevolvingFundLineNumber attribute.
      * 
-     * @return Returns the nextRevolvingFundLineNumber
+     * @return - Returns the nextRevolvingFundLineNumber
+     * 
      */
     public Integer getNextRevolvingFundLineNumber() {
         return nextRevolvingFundLineNumber;
@@ -309,6 +335,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      * Sets the nextRevolvingFundLineNumber attribute.
      * 
      * @param nextRevolvingFundLineNumber The nextRevolvingFundLineNumber to set.
+     * 
      */
     public void setNextRevolvingFundLineNumber(Integer nextRevolvingFundLineNumber) {
         this.nextRevolvingFundLineNumber = nextRevolvingFundLineNumber;
@@ -320,7 +347,7 @@ public class CashieringDocument extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 }

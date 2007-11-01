@@ -35,11 +35,13 @@
         <documentTypeName>KualiPersonRoleMaintenanceDocument</documentTypeName>
         <documentTypeCode>PRSN</documentTypeCode>
 
-        <label>Person Role</label>
+        <label>Person Role Maintenance Document</label>
+        <shortLabel>PersonRoleMainDoc</shortLabel>
 
         <summary>Person Role maintenance document</summary>
         <description>Document used to create or update Person Role objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="PersonRole" parameterName="PERSON_ROLE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="personRoleCode" />
@@ -51,7 +53,7 @@
                     <maintainableField name="personRoleCode" required="true" />
                     <maintainableField name="personRoleDescription" required="true" />
                     <maintainableField name="personRoleSortNumber" required="false" />
-					<maintainableField name="dataObjectMaintenanceCodeActiveIndicator">
+					<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true">
 						<defaultValue>true</defaultValue>
 					</maintainableField>
                     <maintainableField name="versionNumber" />

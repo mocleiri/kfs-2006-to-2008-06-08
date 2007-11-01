@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,20 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentHeader;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.document.DocumentHeader;
 
 /**
  * 
  */
-public class DistributionDoc extends PersistableBusinessObjectBase {
+public class DistributionDoc extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer finDocumentNextFromLineNbr;
     private Integer finDocumentNextToLineNumber;
     private Integer financialDocumentPostingYear;
     private String finDocumentPostingPeriodCode;
-
+    private String finDocumentExplanationText;
     private DocumentHeader financialDocument;
 
     /**
@@ -43,28 +42,31 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
+     * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
      * Gets the finDocumentNextFromLineNbr attribute.
      * 
-     * @return Returns the finDocumentNextFromLineNbr
+     * @return - Returns the finDocumentNextFromLineNbr
+     * 
      */
     public Integer getFinDocumentNextFromLineNbr() {
         return finDocumentNextFromLineNbr;
@@ -75,6 +77,7 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
      * Sets the finDocumentNextFromLineNbr attribute.
      * 
      * @param finDocumentNextFromLineNbr The finDocumentNextFromLineNbr to set.
+     * 
      */
     public void setFinDocumentNextFromLineNbr(Integer finDocumentNextFromLineNbr) {
         this.finDocumentNextFromLineNbr = finDocumentNextFromLineNbr;
@@ -83,7 +86,8 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentNextToLineNumber attribute.
      * 
-     * @return Returns the finDocumentNextToLineNumber
+     * @return - Returns the finDocumentNextToLineNumber
+     * 
      */
     public Integer getFinDocumentNextToLineNumber() {
         return finDocumentNextToLineNumber;
@@ -94,6 +98,7 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
      * Sets the finDocumentNextToLineNumber attribute.
      * 
      * @param finDocumentNextToLineNumber The finDocumentNextToLineNumber to set.
+     * 
      */
     public void setFinDocumentNextToLineNumber(Integer finDocumentNextToLineNumber) {
         this.finDocumentNextToLineNumber = finDocumentNextToLineNumber;
@@ -102,7 +107,8 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentPostingYear attribute.
      * 
-     * @return Returns the financialDocumentPostingYear
+     * @return - Returns the financialDocumentPostingYear
+     * 
      */
     public Integer getFinancialDocumentPostingYear() {
         return financialDocumentPostingYear;
@@ -113,6 +119,7 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
      * Sets the financialDocumentPostingYear attribute.
      * 
      * @param financialDocumentPostingYear The financialDocumentPostingYear to set.
+     * 
      */
     public void setFinancialDocumentPostingYear(Integer financialDocumentPostingYear) {
         this.financialDocumentPostingYear = financialDocumentPostingYear;
@@ -121,7 +128,8 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentPostingPeriodCode attribute.
      * 
-     * @return Returns the finDocumentPostingPeriodCode
+     * @return - Returns the finDocumentPostingPeriodCode
+     * 
      */
     public String getFinDocumentPostingPeriodCode() {
         return finDocumentPostingPeriodCode;
@@ -132,15 +140,38 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
      * Sets the finDocumentPostingPeriodCode attribute.
      * 
      * @param finDocumentPostingPeriodCode The finDocumentPostingPeriodCode to set.
+     * 
      */
     public void setFinDocumentPostingPeriodCode(String finDocumentPostingPeriodCode) {
         this.finDocumentPostingPeriodCode = finDocumentPostingPeriodCode;
     }
 
     /**
+     * Gets the finDocumentExplanationText attribute.
+     * 
+     * @return - Returns the finDocumentExplanationText
+     * 
+     */
+    public String getFinDocumentExplanationText() {
+        return finDocumentExplanationText;
+    }
+
+
+    /**
+     * Sets the finDocumentExplanationText attribute.
+     * 
+     * @param finDocumentExplanationText The finDocumentExplanationText to set.
+     * 
+     */
+    public void setFinDocumentExplanationText(String finDocumentExplanationText) {
+        this.finDocumentExplanationText = finDocumentExplanationText;
+    }
+
+    /**
      * Gets the financialDocument attribute.
      * 
-     * @return Returns the financialDocument
+     * @return - Returns the financialDocument
+     * 
      */
     public DocumentHeader getFinancialDocument() {
         return financialDocument;
@@ -162,7 +193,7 @@ public class DistributionDoc extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 }

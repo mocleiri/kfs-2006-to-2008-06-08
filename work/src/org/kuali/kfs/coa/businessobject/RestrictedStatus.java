@@ -17,12 +17,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class RestrictedStatus extends PersistableBusinessObjectBase {
+public class RestrictedStatus extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -37,7 +37,8 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
     /**
      * Gets the accountRestrictedStatusCode attribute.
      * 
-     * @return Returns the accountRestrictedStatusCode
+     * @return - Returns the accountRestrictedStatusCode
+     * 
      */
     public String getAccountRestrictedStatusCode() {
         return accountRestrictedStatusCode;
@@ -47,6 +48,7 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
      * Sets the accountRestrictedStatusCode attribute.
      * 
      * @param accountRestrictedStatusCode The accountRestrictedStatusCode to set.
+     * 
      */
     public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
         this.accountRestrictedStatusCode = accountRestrictedStatusCode;
@@ -55,7 +57,8 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
     /**
      * Gets the accountRestrictedStatusName attribute.
      * 
-     * @return Returns the accountRestrictedStatusName
+     * @return - Returns the accountRestrictedStatusName
+     * 
      */
     public String getAccountRestrictedStatusName() {
         return accountRestrictedStatusName;
@@ -65,6 +68,7 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
      * Sets the accountRestrictedStatusName attribute.
      * 
      * @param accountRestrictedStatusName The accountRestrictedStatusName to set.
+     * 
      */
     public void setAccountRestrictedStatusName(String accountRestrictedStatusName) {
         this.accountRestrictedStatusName = accountRestrictedStatusName;

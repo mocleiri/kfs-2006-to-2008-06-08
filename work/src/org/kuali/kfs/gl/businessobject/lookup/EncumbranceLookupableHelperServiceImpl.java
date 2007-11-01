@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.bo.BusinessObject;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
+import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.batch.poster.EncumbranceCalculator;
 import org.kuali.module.gl.bo.Encumbrance;
@@ -30,9 +30,7 @@ import org.kuali.module.gl.service.EncumbranceService;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.inquirable.EncumbranceInquirableImpl;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class EncumbranceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
 
     private EncumbranceCalculator postEncumbrance;
@@ -42,7 +40,7 @@ public class EncumbranceLookupableHelperServiceImpl extends AbstractGLLookupable
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
-    public String getInquiryUrl(BusinessObject businessObject, String propertyName) {
+    public String getInquiryUrl(PersistableBusinessObject businessObject, String propertyName) {
         return (new EncumbranceInquirableImpl()).getInquiryUrl(businessObject, propertyName);
     }
 
@@ -51,8 +49,8 @@ public class EncumbranceLookupableHelperServiceImpl extends AbstractGLLookupable
      */
     @Override
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         // get the pending entry option. This method must be prior to the get search results
         String pendingEntryOption = this.getSelectedPendingEntryOption(fieldValues);

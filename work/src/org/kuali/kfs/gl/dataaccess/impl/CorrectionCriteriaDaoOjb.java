@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionCriteria;
 import org.kuali.module.gl.dao.CorrectionCriteriaDao;
 
@@ -29,6 +28,7 @@ public class CorrectionCriteriaDaoOjb extends PlatformAwareDaoBaseOjb implements
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionCriteriaDaoOjb.class);
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#delete(org.kuali.module.gl.bo.CorrectionCriteria)
      */
     public void delete(CorrectionCriteria criterion) {
@@ -38,14 +38,14 @@ public class CorrectionCriteriaDaoOjb extends PlatformAwareDaoBaseOjb implements
     }
 
     /**
-     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#findByDocumentNumberAndCorrectionGroupNumber(java.lang.String,
-     *      java.lang.Integer)
+     * 
+     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#findByDocumentNumberAndCorrectionGroupNumber(java.lang.String, java.lang.Integer)
      */
     public List findByDocumentNumberAndCorrectionGroupNumber(String documentNumber, Integer correctionGroupLineNumber) {
         LOG.debug("findByDocumentNumberAndCorrectionGroupNumber() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("financialDocumentNumber", documentNumber);
         criteria.addEqualTo("correctionChangeGroupLineNumber", correctionGroupLineNumber);
 
         Class clazz = CorrectionCriteria.class;

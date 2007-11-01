@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -26,20 +27,19 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.core.KualiModule;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.KualiModuleService;
 import org.kuali.core.service.MailService;
+import org.kuali.core.util.spring.NamedOrderedListBean;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.batch.BatchJobStatus;
-import org.kuali.kfs.batch.BatchSpringContext;
 import org.kuali.kfs.batch.Job;
 import org.kuali.kfs.batch.JobDescriptor;
 import org.kuali.kfs.batch.JobListener;
-import org.kuali.kfs.batch.ScheduleStep;
 import org.kuali.kfs.batch.SimpleTriggerDescriptor;
 import org.kuali.kfs.batch.Step;
-import org.kuali.kfs.batch.TriggerDescriptor;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.kfs.service.SchedulerService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.ObjectAlreadyExistsException;
@@ -61,7 +61,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     private Scheduler scheduler;
     private JobListener jobListener;
     private KualiModuleService moduleService;
-    private ParameterService parameterService;
+    private KualiConfigurationService configurationService;
     private DateTimeService dateTimeService;
     private MailService mailService;
 
@@ -87,27 +87,31 @@ public class SchedulerServiceImpl implements SchedulerService {
         catch (SchedulerException e) {
             throw new RuntimeException("SchedulerServiceImpl encountered an exception when trying to register the global job listener", e);
         }
-        for (String jobName : (List<String>) BatchSpringContext.getBatchComponents().get(JobDescriptor.class.getName())) {
-            try {
-                loadJob(BatchSpringContext.getJobDescriptor(jobName));
-            }
-            catch (NoSuchBeanDefinitionException ex) {
-                LOG.error("unable to find job bean definition for job: " + ex.getBeanName(), ex);
+        for (NamedOrderedListBean namedOrderedListBean : SpringServiceLocator.getNamedOrderedListBeans(KFSConstants.JOB_NAMES_LIST_NAME)) {
+            for (String jobName : namedOrderedListBean.getList()) {
+                try {
+                    loadJob(SpringServiceLocator.getJobDescriptor(jobName));
+                }
+                catch (NoSuchBeanDefinitionException ex) {
+                    LOG.error("unable to find job bean definition for job: " + ex.getBeanName(), ex);
+                }
             }
         }
-        for (String triggerName : (List<String>) BatchSpringContext.getBatchComponents().get(TriggerDescriptor.class.getName())) {
-            try {
-                addTrigger(BatchSpringContext.getTriggerDescriptor(triggerName).getTrigger());
-            }
-            catch (NoSuchBeanDefinitionException ex) {
-                LOG.error("unable to find trigger definition: " + ex.getBeanName(), ex);
+        for (NamedOrderedListBean namedOrderedListBean : SpringServiceLocator.getNamedOrderedListBeans(KFSConstants.TRIGGER_NAMES_LIST_NAME)) {
+            for (String triggerName : namedOrderedListBean.getList()) {
+                try {
+                    addTrigger(SpringServiceLocator.getTriggerDescriptor(triggerName).getTrigger());
+                }
+                catch (NoSuchBeanDefinitionException ex) {
+                    LOG.error("unable to find trigger definition: " + ex.getBeanName(), ex);
+                }
             }
         }
         for (KualiModule module : moduleService.getInstalledModules()) {
             LOG.info("Loading scheduled jobs for: " + module.getModuleId());
             for (String jobName : module.getJobNames()) {
                 try {
-                    loadJob(BatchSpringContext.getJobDescriptor(jobName));
+                    loadJob(SpringServiceLocator.getJobDescriptor(jobName));
                 }
                 catch (NoSuchBeanDefinitionException ex) {
                     LOG.error("unable to find job bean definition for job: " + ex.getBeanName(), ex);
@@ -115,7 +119,7 @@ public class SchedulerServiceImpl implements SchedulerService {
             }
             for (String triggerName : module.getTriggerNames()) {
                 try {
-                    addTrigger(BatchSpringContext.getTriggerDescriptor(triggerName).getTrigger());
+                    addTrigger(SpringServiceLocator.getTriggerDescriptor(triggerName).getTrigger());
                 }
                 catch (NoSuchBeanDefinitionException ex) {
                     LOG.error("unable to find trigger definition: " + ex.getBeanName(), ex);
@@ -138,8 +142,8 @@ public class SchedulerServiceImpl implements SchedulerService {
      */
     public void initializeJob(String jobName, Job job) {
         job.setSchedulerService(this);
-        job.setParameterService(parameterService);
-        job.setSteps(BatchSpringContext.getJobDescriptor(jobName).getSteps());
+        job.setConfigurationService(configurationService);
+        job.setSteps((SpringServiceLocator.getJobDescriptor(jobName)).getSteps());
     }
 
     /**
@@ -147,45 +151,16 @@ public class SchedulerServiceImpl implements SchedulerService {
      */
     public boolean hasIncompleteJob() {
         try {
-            StringBuffer log = new StringBuffer("The schedule has incomplete jobs.");
-            boolean hasIncompleteJob = false;
             for (String scheduledJobName : scheduler.getJobNames(SCHEDULED_GROUP)) {
                 JobDetail scheduledJobDetail = getScheduledJobDetail(scheduledJobName);
-                boolean jobIsIncomplete = isIncomplete(scheduledJobDetail);
-                if (jobIsIncomplete) {
-                    log.append("\n\t").append(scheduledJobDetail.getFullName());
-                    hasIncompleteJob = true;
-                }
-            }
-            if (hasIncompleteJob) {
-                LOG.info(log);
-            }
-            return hasIncompleteJob;
-        }
-        catch (SchedulerException e) {
-            throw new RuntimeException("Caught exception while getting list of jobs to check for incompletes", e);
-        }
-    }
-
-    private boolean isIncomplete(JobDetail scheduledJobDetail) {
-        try {
-            if (!SCHEDULE_JOB_NAME.equals(scheduledJobDetail.getName()) && (isPending(scheduledJobDetail) || isScheduled(scheduledJobDetail))) {
-                Trigger[] triggersOfJob = scheduler.getTriggersOfJob(scheduledJobDetail.getName(), SCHEDULED_GROUP);
-                if (triggersOfJob.length > 0) {
-                    for (int triggerIndex = 0; triggerIndex < triggersOfJob.length; triggerIndex++) {
-                        if (triggersOfJob[triggerIndex].getNextFireTime() != null && !isPastScheduleCutoffTime(dateTimeService.getCalendar(triggersOfJob[triggerIndex].getNextFireTime()), false)) {
-                            return true;
-                        }
-                    }
-                }
-                else {
+                if (!SCHEDULE_JOB_NAME.equals(scheduledJobDetail.getName()) && (isPending(scheduledJobDetail) || isScheduled(scheduledJobDetail))) {
                     return true;
                 }
             }
             return false;
         }
         catch (SchedulerException e) {
-            throw new RuntimeException("Caught exception while checking job for completeness: " + scheduledJobDetail.getFullName(), e);
+            throw new RuntimeException("Caught exception while checking for incomplete jobs", e);
         }
     }
 
@@ -193,37 +168,16 @@ public class SchedulerServiceImpl implements SchedulerService {
      * @see org.kuali.kfs.service.SchedulerService#isPastScheduleCutoffTime()
      */
     public boolean isPastScheduleCutoffTime() {
-        return isPastScheduleCutoffTime(dateTimeService.getCurrentCalendar(), true);
-    }
-
-    private boolean isPastScheduleCutoffTime(Calendar dateTime, boolean log) {
         try {
-            Date scheduleCutoffTimeTemp = scheduler.getTriggersOfJob(SCHEDULE_JOB_NAME, SCHEDULED_GROUP)[0].getPreviousFireTime();
-            Calendar scheduleCutoffTime;
-            if (scheduleCutoffTimeTemp == null) {
-                scheduleCutoffTime = dateTimeService.getCurrentCalendar();
+            Calendar scheduleCutoffTime = dateTimeService.getCalendar(scheduler.getTriggersOfJob(SCHEDULE_JOB_NAME, SCHEDULED_GROUP)[0].getPreviousFireTime());
+            String[] scheduleStepCutoffTime = StringUtils.split(configurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME), ":");
+            scheduleCutoffTime.set(GregorianCalendar.HOUR, Integer.parseInt(scheduleStepCutoffTime[0]));
+            scheduleCutoffTime.set(GregorianCalendar.MINUTE, Integer.parseInt(scheduleStepCutoffTime[1]));
+            scheduleCutoffTime.set(GregorianCalendar.SECOND, Integer.parseInt(scheduleStepCutoffTime[2]));
+            if (configurationService.getApplicationParameterIndicator(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY)) {
+                scheduleCutoffTime.add(GregorianCalendar.DAY_OF_YEAR, 1);
             }
-            else {
-                scheduleCutoffTime = dateTimeService.getCalendar(scheduleCutoffTimeTemp);
-            }
-            String[] scheduleStepCutoffTime = StringUtils.split(parameterService.getParameterValue(ScheduleStep.class, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME), ":");
-            scheduleCutoffTime.set(Calendar.HOUR, Integer.parseInt(scheduleStepCutoffTime[0]));
-            scheduleCutoffTime.set(Calendar.MINUTE, Integer.parseInt(scheduleStepCutoffTime[1]));
-            scheduleCutoffTime.set(Calendar.SECOND, Integer.parseInt(scheduleStepCutoffTime[2]));
-            if ("AM".equals(scheduleStepCutoffTime[3].trim())) {
-                scheduleCutoffTime.set(Calendar.AM_PM, Calendar.AM);
-            }
-            else {
-                scheduleCutoffTime.set(Calendar.AM_PM, Calendar.PM);
-            }
-            if (parameterService.getIndicatorParameter(ScheduleStep.class, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY)) {
-                scheduleCutoffTime.add(Calendar.DAY_OF_YEAR, 1);
-            }
-            boolean isPastScheduleCutoffTime = dateTime.after(scheduleCutoffTime);
-            if (log) {
-                LOG.info(new StringBuffer("isPastScheduleCutoffTime=").append(isPastScheduleCutoffTime).append(" : ").append(dateTimeService.toDateTimeString(dateTime.getTime())).append(" / ").append(dateTimeService.toDateTimeString(scheduleCutoffTime.getTime())));
-            }
-            return isPastScheduleCutoffTime;
+            return dateTimeService.getCurrentCalendar().after(scheduleCutoffTime);
         }
         catch (NumberFormatException e) {
             throw new RuntimeException("Caught exception while checking whether we've exceeded the schedule cutoff time", e);
@@ -391,7 +345,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     private void scheduleJob(String groupName, String jobName, int startStep, int endStep, Date startTime, String requestorEmailAddress) {
         try {
             updateStatus(groupName, jobName, SchedulerService.SCHEDULED_JOB_STATUS_CODE);
-            SimpleTriggerDescriptor trigger = new SimpleTriggerDescriptor(jobName, groupName, jobName, dateTimeService);
+            SimpleTriggerDescriptor trigger = new SimpleTriggerDescriptor(jobName, groupName, jobName, getDateTimeService());
             trigger.setStartTime(startTime);
             Trigger qTrigger = trigger.getTrigger();
             qTrigger.getJobDataMap().put(JobListener.REQUESTOR_EMAIL_ADDRESS_KEY, requestorEmailAddress);
@@ -448,7 +402,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     private Map<String, String> getJobDependencies(String jobName) {
-        return BatchSpringContext.getJobDescriptor(jobName).getDependencies();
+        return SpringServiceLocator.getJobDescriptor(jobName).getDependencies();
     }
 
     private boolean isPending(JobDetail jobDetail) {
@@ -493,8 +447,13 @@ public class SchedulerServiceImpl implements SchedulerService {
         this.scheduler = scheduler;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    /**
+     * Sets the configurationService attribute value.
+     * 
+     * @param configurationService The configurationService to set.
+     */
+    public void setConfigurationService(KualiConfigurationService configurationService) {
+        this.configurationService = configurationService;
     }
 
     /**
@@ -524,13 +483,33 @@ public class SchedulerServiceImpl implements SchedulerService {
         this.jobListener = jobListener;
     }
 
+    public KualiConfigurationService getConfigurationService() {
+        return configurationService;
+    }
+
+    public DateTimeService getDateTimeService() {
+        return dateTimeService;
+    }
+
+    public JobListener getJobListener() {
+        return jobListener;
+    }
+
+    public KualiModuleService getModuleService() {
+        return moduleService;
+    }
+
+    public Scheduler getScheduler() {
+        return scheduler;
+    }
+
     public List<BatchJobStatus> getJobs() {
         ArrayList<BatchJobStatus> jobs = new ArrayList<BatchJobStatus>();
         try {
             for (String jobGroup : scheduler.getJobGroupNames()) {
                 for (String jobName : scheduler.getJobNames(jobGroup)) {
                     try {
-                        JobDescriptor jobDescriptor = BatchSpringContext.getJobDescriptor(jobName);
+                        JobDescriptor jobDescriptor = (JobDescriptor) SpringServiceLocator.getBeanFactory().getBean(jobName);
                         JobDetail jobDetail = scheduler.getJobDetail(jobName, jobGroup);
                         jobs.add(new BatchJobStatus(jobDescriptor, jobDetail));
                     }
@@ -561,7 +540,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         try {
             for (String jobName : scheduler.getJobNames(groupName)) {
                 try {
-                    JobDescriptor jobDescriptor = BatchSpringContext.getJobDescriptor(jobName);
+                    JobDescriptor jobDescriptor = (JobDescriptor) SpringServiceLocator.getBeanFactory().getBean(jobName);
                     JobDetail jobDetail = scheduler.getJobDetail(jobName, groupName);
                     jobs.add(new BatchJobStatus(jobDescriptor, jobDetail));
                 }
@@ -681,6 +660,10 @@ public class SchedulerServiceImpl implements SchedulerService {
         BatchJobStatus job = getJob(groupName, jobName);
 
         return getNextStartTime(job);
+    }
+
+    public MailService getMailService() {
+        return mailService;
     }
 
     public void setMailService(MailService mailService) {

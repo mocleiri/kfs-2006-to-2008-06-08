@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package org.kuali.module.financial.document;
 
-import org.kuali.core.document.AmountTotaling;
-
 
 /**
  * Year End version of the <code>DistributionOfIncomeAndExpenseDocument</code> the only functional difference between the YearEnd
  * version and the non-yearEnd version of a document is the glpe's generation.
+ * 
+ * 
  */
-public class YearEndDistributionOfIncomeAndExpenseDocument extends DistributionOfIncomeAndExpenseDocument implements YearEndDocument, AmountTotaling {
+public class YearEndDistributionOfIncomeAndExpenseDocument extends DistributionOfIncomeAndExpenseDocument implements YearEndDocument {
 
     /**
      * Constructs a YearEndDistributionOfIncomeAndExpenseDocument.java.

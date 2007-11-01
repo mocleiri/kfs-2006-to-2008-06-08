@@ -24,19 +24,21 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
+import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 
 public class RoutingFormPersonnelAction extends RoutingFormAction {
     @Override
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
+        RoutingFormDocument routingFormDocument = routingForm.getRoutingFormDocument();
 
-        List<RoutingFormPersonnel> routingFormPersonnel = routingForm.getRoutingFormDocument().getRoutingFormPersonnel();
-
+        List<RoutingFormPersonnel> routingFormPersonnel = routingFormDocument.getRoutingFormPersonnel();
+        
         super.load(mapping, form, request, response);
-
-        routingForm.getRoutingFormDocument().setRoutingFormPersonnel(routingFormPersonnel);
-
+        
+        routingFormDocument.setRoutingFormPersonnel(routingFormPersonnel);
+        
         return super.save(mapping, form, request, response);
     }
 }

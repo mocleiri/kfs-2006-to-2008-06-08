@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,18 @@
  */
 package org.kuali.module.financial.document;
 
-import org.kuali.kfs.bo.AccountingLineParser;
+import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 
 /**
  * This is the business object that represents the ServiceBillingDocument in Kuali. See
  * {@link org.kuali.module.financial.rules.ServiceBillingDocumentRule} for details on how it differs from
  * {@link InternalBillingDocument}.
+ * 
+ * 
  */
 public class ServiceBillingDocument extends InternalBillingDocument {
+    // no difference from superclass
 
     /**
      * @see org.kuali.module.financial.document.InternalBillingDocument#getAccountingLineParser()

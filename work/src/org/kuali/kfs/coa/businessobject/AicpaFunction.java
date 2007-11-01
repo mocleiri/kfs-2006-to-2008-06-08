@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,15 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
+ * 
+ * 
  * Business object for American Institute of Certified Public Accountants (AICPA) function
+ * 
  */
-public class AicpaFunction extends PersistableBusinessObjectBase {
+public class AicpaFunction extends BusinessObjectBase {
 
     private String financialAicpaFunctionCode;
     private String financialAicpaFunctionName;
@@ -38,7 +41,8 @@ public class AicpaFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialAicpaFunctionCode attribute.
      * 
-     * @return Returns the financialAicpaFunctionCode
+     * @return - Returns the financialAicpaFunctionCode
+     * 
      */
     public String getFinancialAicpaFunctionCode() {
         return financialAicpaFunctionCode;
@@ -48,6 +52,7 @@ public class AicpaFunction extends PersistableBusinessObjectBase {
      * Sets the financialAicpaFunctionCode attribute.
      * 
      * @param financialAicpaFunctionCode The financialAicpaFunctionCode to set.
+     * 
      */
     public void setFinancialAicpaFunctionCode(String financialAicpaFunctionCode) {
         this.financialAicpaFunctionCode = financialAicpaFunctionCode;
@@ -57,7 +62,8 @@ public class AicpaFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialAicpaFunctionName attribute.
      * 
-     * @return Returns the financialAicpaFunctionName
+     * @return - Returns the financialAicpaFunctionName
+     * 
      */
     public String getFinancialAicpaFunctionName() {
         return financialAicpaFunctionName;
@@ -67,6 +73,7 @@ public class AicpaFunction extends PersistableBusinessObjectBase {
      * Sets the financialAicpaFunctionName attribute.
      * 
      * @param financialAicpaFunctionName The financialAicpaFunctionName to set.
+     * 
      */
     public void setFinancialAicpaFunctionName(String financialAicpaFunctionName) {
         this.financialAicpaFunctionName = financialAicpaFunctionName;

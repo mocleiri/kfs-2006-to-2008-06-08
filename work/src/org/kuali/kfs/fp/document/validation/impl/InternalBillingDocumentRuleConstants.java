@@ -17,12 +17,15 @@ package org.kuali.module.financial.rules;
 
 /**
  * This class...
+ * 
+ * 
  */
 public class InternalBillingDocumentRuleConstants {
     public static final String INTERNAL_BILLING_DOCUMENT_SECURITY_GROUPING = "Kuali.FinancialTransactionProcessing.InternalBillingDocument";
-    public static final String RESTRICTED_FUND_GROUP_CODES = "FUND_GROUPS";
-    public static final String RESTRICTED_OBJECT_TYPE_CODES = "OBJECT_TYPES";
-    public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "OBJECT_SUB_TYPES";
-    public static final String CAPITAL_OBJECT_SUB_TYPE_CODES = "CAPITAL_OBJECT_SUB_TYPES";
-    public static final String RESTRICTED_OBJECT_LEVEL_CODES = "OBJECT_LEVELS";
+    public static final String RESTRICTED_SUB_FUND_GROUP_CODES = "RestrictedSubFundGroupCodes";
+    public static final String RESTRICTED_FUND_GROUP_CODES = "RestrictedFundGroupCodes";
+    public static final String RESTRICTED_OBJECT_TYPE_CODES = "RestrictedObjectTypeCodes";
+    public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "RestrictedObjectSubTypeCodes";
+    public static final String CAPITAL_OBJECT_SUB_TYPE_CODES = "CapitalObjectSubTypeCodes";
+    public static final String RESTRICTED_OBJECT_LEVEL_CODES = "RestrictedObjectLevelCodes";
 }

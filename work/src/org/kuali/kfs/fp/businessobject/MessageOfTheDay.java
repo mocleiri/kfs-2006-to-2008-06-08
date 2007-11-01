@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,15 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.OriginationCode;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class MessageOfTheDay extends PersistableBusinessObjectBase {
+public class MessageOfTheDay extends BusinessObjectBase {
 
     private String financialSystemOriginationCode;
     private String financialSystemMessageOfTheDayText;
-
-    private OriginationCode financialSystemOrigination;
 
     /**
      * Default constructor.
@@ -41,7 +38,8 @@ public class MessageOfTheDay extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSystemOriginationCode attribute.
      * 
-     * @return Returns the financialSystemOriginationCode
+     * @return - Returns the financialSystemOriginationCode
+     * 
      */
     public String getFinancialSystemOriginationCode() {
         return financialSystemOriginationCode;
@@ -51,6 +49,7 @@ public class MessageOfTheDay extends PersistableBusinessObjectBase {
      * Sets the financialSystemOriginationCode attribute.
      * 
      * @param financialSystemOriginationCode The financialSystemOriginationCode to set.
+     * 
      */
     public void setFinancialSystemOriginationCode(String financialSystemOriginationCode) {
         this.financialSystemOriginationCode = financialSystemOriginationCode;
@@ -60,7 +59,8 @@ public class MessageOfTheDay extends PersistableBusinessObjectBase {
     /**
      * Gets the financialSystemMessageOfTheDayText attribute.
      * 
-     * @return Returns the financialSystemMessageOfTheDayText
+     * @return - Returns the financialSystemMessageOfTheDayText
+     * 
      */
     public String getFinancialSystemMessageOfTheDayText() {
         return financialSystemMessageOfTheDayText;
@@ -70,29 +70,12 @@ public class MessageOfTheDay extends PersistableBusinessObjectBase {
      * Sets the financialSystemMessageOfTheDayText attribute.
      * 
      * @param financialSystemMessageOfTheDayText The financialSystemMessageOfTheDayText to set.
+     * 
      */
     public void setFinancialSystemMessageOfTheDayText(String financialSystemMessageOfTheDayText) {
         this.financialSystemMessageOfTheDayText = financialSystemMessageOfTheDayText;
     }
 
-    /**
-     * Gets the financialSystemOrigination attribute.
-     * 
-     * @return Returns the financialSystemOrigination.
-     */
-    public OriginationCode getFinancialSystemOrigination() {
-        return financialSystemOrigination;
-    }
-
-    /**
-     * Sets the financialSystemOrigination attribute value.
-     * 
-     * @param financialSystemOrigination The financialSystemOrigination to set.
-     * @deprecated
-     */
-    public void setFinancialSystemOrigination(OriginationCode financialSystemOrigination) {
-        this.financialSystemOrigination = financialSystemOrigination;
-    }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
@@ -102,5 +85,4 @@ public class MessageOfTheDay extends PersistableBusinessObjectBase {
         m.put("financialSystemOriginationCode", this.financialSystemOriginationCode);
         return m;
     }
-
 }

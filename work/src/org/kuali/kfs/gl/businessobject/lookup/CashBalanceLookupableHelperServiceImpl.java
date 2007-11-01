@@ -21,12 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.bo.BusinessObject;
+import org.kuali.Constants;
+import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.CashBalance;
@@ -36,18 +35,17 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.CashBalanceInquirableImpl;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private BalanceCalculator postBalance;
     private BalanceService balanceService;
+    private DateTimeService dateTimeService;
 
     /**
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
-    public String getInquiryUrl(BusinessObject bo, String propertyName) {
+    public String getInquiryUrl(PersistableBusinessObject bo, String propertyName) {
         return (new CashBalanceInquirableImpl()).getInquiryUrl(bo, propertyName);
     }
 
@@ -56,8 +54,8 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
      */
     @Override
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         // get the pending entry option. This method must be prior to the get search results
         String pendingEntryOption = getSelectedPendingEntryOption(fieldValues);
@@ -140,7 +138,7 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
         // convert the field names of balance object into corresponding ones of pending entry object
         Map pendingEntryFieldValues = BusinessObjectFieldConverter.convertToTransactionFieldValues(fieldValues);
 
-        UniversityDate today = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate today = dateTimeService.getCurrentUniversityDate();
         String currentFiscalPeriodCode = today.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = today.getUniversityFiscalYear();
 
@@ -205,4 +203,12 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
         this.balanceService = balanceService;
     }
 
+    /**
+     * Sets the dateTimeService attribute value
+     * 
+     * @param dateTimeService The dateTimeService to set
+     */
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
+    }
 }
