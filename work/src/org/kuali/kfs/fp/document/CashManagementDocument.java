@@ -23,22 +23,18 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.core.service.DateTimeService;
+import org.kuali.Constants.DepositConstants;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.KFSConstants.DepositConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.CashDrawer;
-import org.kuali.module.financial.bo.CashieringItemInProcess;
-import org.kuali.module.financial.bo.CashieringTransaction;
-import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.Deposit;
-import org.kuali.module.financial.service.CashDrawerService;
-import org.kuali.module.financial.service.CashManagementService;
+import org.kuali.PropertyConstants;
 
 /**
  * This class represents the CashManagementDocument.
+ * 
+ * 
  */
 public class CashManagementDocument extends AccountingDocumentBase {
     private static final long serialVersionUID = 7475843770851900297L;
@@ -49,10 +45,6 @@ public class CashManagementDocument extends AccountingDocumentBase {
 
     private List<Deposit> deposits;
 
-    private List<Check> checks;
-
-    private transient CashieringTransaction currentTransaction;
-    private CashDrawer cashDrawer;
 
     /**
      * Default constructor.
@@ -60,8 +52,6 @@ public class CashManagementDocument extends AccountingDocumentBase {
     public CashManagementDocument() {
         super();
         deposits = new ArrayList<Deposit>();
-        checks = new ArrayList<Check>();
-        this.resetCurrentTransaction();
     }
 
 
@@ -102,7 +92,10 @@ public class CashManagementDocument extends AccountingDocumentBase {
      * Derives and returns the cash drawer status for the document's workgroup
      */
     public String getCashDrawerStatus() {
-        return getCashDrawer().getStatusCode();
+        CashDrawer drawer = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(getWorkgroupName(), true);
+        String statusCode = drawer.getStatusCode();
+
+        return statusCode;
     }
 
     /**
@@ -206,6 +199,7 @@ public class CashManagementDocument extends AccountingDocumentBase {
         }
     }
 
+
     /**
      * @see org.kuali.core.document.DocumentBase#buildListOfDeletionAwareLists()
      */
@@ -218,71 +212,6 @@ public class CashManagementDocument extends AccountingDocumentBase {
         return managedLists;
     }
 
-
-    /**
-     * Gets the cashDrawer attribute.
-     * 
-     * @return Returns the cashDrawer.
-     */
-    public CashDrawer getCashDrawer() {
-        return cashDrawer;
-        // return cashDrawerService.getByWorkgroupName(this.workgroupName, false);
-    }
-
-    /**
-     * Sets the cashDrawer attribute
-     * 
-     * @param cd the cash drawer to set
-     */
-    public void setCashDrawer(CashDrawer cd) {
-        cashDrawer = cd;
-    }
-
-    /**
-     * Gets the currentTransaction attribute.
-     * 
-     * @return Returns the currentTransaction.
-     */
-    public CashieringTransaction getCurrentTransaction() {
-        return currentTransaction;
-    }
-
-
-    /**
-     * Sets the currentTransaction attribute value.
-     * 
-     * @param currentTransaction The currentTransaction to set.
-     */
-    public void setCurrentTransaction(CashieringTransaction currentTransaction) {
-        this.currentTransaction = currentTransaction;
-    }
-
-    /**
-     * Gets the checks attribute.
-     * 
-     * @return Returns the checks.
-     */
-    public List<Check> getChecks() {
-        return checks;
-    }
-
-    /**
-     * Sets the checks attribute value.
-     * 
-     * @param checks The checks to set.
-     */
-    public void setChecks(List<Check> checks) {
-        this.checks = checks;
-    }
-
-    /**
-     * Add a check to the cash management document
-     * 
-     * @param check
-     */
-    public void addCheck(Check check) {
-        this.checks.add(check);
-    }
 
     /**
      * @see org.kuali.core.document.DocumentBase#handleRouteStatusChange()
@@ -299,11 +228,11 @@ public class CashManagementDocument extends AccountingDocumentBase {
 
         if (kwd.stateIsProcessed()) {
             // all approvals have been processed, finalize everything
-            SpringContext.getBean(CashManagementService.class).finalizeCashManagementDocument(this);
+            SpringServiceLocator.getCashManagementService().finalizeCashManagementDocument(this);
         }
         else if (kwd.stateIsCanceled() || kwd.stateIsDisapproved()) {
             // document has been canceled or disapproved
-            SpringContext.getBean(CashManagementService.class).cancelCashManagementDocument(this);
+            SpringServiceLocator.getCashManagementService().cancelCashManagementDocument(this);
         }
     }
 
@@ -324,20 +253,6 @@ public class CashManagementDocument extends AccountingDocumentBase {
         }
     }
 
-    /**
-     * @see org.kuali.core.document.DocumentBase#processAfterRetrieve()
-     */
-    @Override
-    public void processAfterRetrieve() {
-        super.processAfterRetrieve();
-        // grab the cash drawer
-        if (this.getWorkgroupName() != null) {
-            this.cashDrawer = SpringContext.getBean(CashDrawerService.class).getByWorkgroupName(this.getWorkgroupName(), false);
-            this.resetCurrentTransaction();
-        }
-        SpringContext.getBean(CashManagementService.class).populateCashDetailsForDeposit(this);
-    }
-
 
     /* utility methods */
     /**
@@ -346,26 +261,8 @@ public class CashManagementDocument extends AccountingDocumentBase {
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        m.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         m.put("workgroupName", getWorkgroupName());
         return m;
     }
-
-    /**
-     * This method creates a clean current transaction to be the new current transaction on this document
-     */
-    public void resetCurrentTransaction() {
-        if (this.currentTransaction != null) {
-            this.currentTransaction.setTransactionEnded(SpringContext.getBean(DateTimeService.class).getCurrentDate());
-        }
-        currentTransaction = new CashieringTransaction(workgroupName, referenceFinancialDocumentNumber);
-        if (this.getWorkgroupName() != null) {
-            List<CashieringItemInProcess> openItemsInProcess = SpringContext.getBean(CashManagementService.class).getOpenItemsInProcess(this);
-            if (openItemsInProcess != null) {
-                currentTransaction.setOpenItemsInProcess(openItemsInProcess);
-            }
-            currentTransaction.setNextCheckSequenceId(SpringContext.getBean(CashManagementService.class).selectNextAvailableCheckLineNumber(this.documentNumber));
-        }
-    }
-
 }

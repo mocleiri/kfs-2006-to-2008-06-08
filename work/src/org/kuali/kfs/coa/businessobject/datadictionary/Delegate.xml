@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/Delegate.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.Delegate">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Account Delegate Inquiry</title>
@@ -42,7 +44,7 @@
             <title>Account Delegate Lookup</title>
 
 			<menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.DelegateGlobal"><img src="${kr.externalizable.images.url}tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>&nbsp;<a href="lookup.do?businessObjectClassName=org.kuali.module.chart.bo.OrganizationRoutingModelName&conversionFields=chartOfAccountsCode%3AmodelChartOfAccountsCode%2CorganizationCode%3AmodelOrganizationCode%2CorganizationRoutingModelName%3AmodelName&returnLocation=portal.do&docFormKey=88888888"><img src="${externalizable.images.url}tinybutton-crtnewglob.gif" alt="create new global from model" width="144" height="15"/></a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.DelegateChangeContainer"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
             </menubar>
             
             <instructions>Lookup an Account Delegate</instructions>
@@ -81,24 +83,32 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <description>The code for the Chart of Accounts for an Account. It is part of the primary key. Kuali accommodates more than one Chart of Accounts</description>
+
             </attributeReference>
 
             <attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">
                 <required>true</required>
+                <description>Identifier for a pool of funds assigned to a specific university entity for a specific function.</description>
+
             </attributeReference>
 
             <attributeReference name="financialDocumentTypeCode" 
-            					sourceClassName="org.kuali.core.bo.DocumentType" 
+            					sourceClassName="org.kuali.core.document.DocumentType" 
             					sourceAttributeName="financialDocumentTypeCode" />
 
             <attributeReference name="accountDelegateSystemId" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUniversalIdentifier">
                 <label>Account Delegate Universal ID</label>
                 <shortLabel>UnvlID</shortLabel>
-                <displayLabelAttribute>accountDelegate.personUserIdentifier</displayLabelAttribute>
                 <required>true</required>
                 <control>
                     <hidden />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The Universal ID (ie, unique identifier) of the Account Delegate.</description>
             </attributeReference>
 
             <attributeReference name="accountDelegate.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
@@ -108,6 +118,10 @@
                 <control>
                     <kualiUser universalIdAttributeName="accountDelegateSystemId" userIdAttributeName="accountDelegate.personUserIdentifier" personNameAttributeName="accountDelegate.personName" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The user ID of the designated delegate for the Fiscal Officer for the Account.</description>
             </attributeReference>
 
             <attributeReference name="accountDelegate.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
@@ -117,34 +131,60 @@
                 <control>
                     <hidden />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The Name of the Account Delegate.</description>
             </attributeReference>
 
             <attributeReference name="finDocApprovalFromThisAmt" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Approval From This Amount</label>
+                <label>From Amount</label>
                 <shortLabel>FromAmt</shortLabel>
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Total Amount on the 'From' side of the document.</description>
             </attributeReference>
 
             <attributeReference name="finDocApprovalToThisAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>Approval To This Amount</label>
+                <label>To Amount</label>
                 <shortLabel>ToAmt</shortLabel>
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Total Amount on the 'To' side of the document.</description>
             </attributeReference>
 
             <attributeReference name="accountsDelegatePrmrtIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Account Delegate Primary Route</label>
                 <shortLabel>PrimaryRoute</shortLabel>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
             <attributeReference name="accountDelegateActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Account Delegate Active</label>
                 <shortLabel>DelegateActive</shortLabel>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Radioboxes in the entry form that indicate if the Account delegation is active or inactive. If "Both" is checked in the Lookup, then both "Yes" (active) or "No" (inactive) values are listed in the search.</description>
             </attributeReference>
 
             <attributeReference name="accountDelegateStartDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericTimestamp">
                 <label>Account Delegate Start Date</label>
                 <shortLabel>DelegateStartDt</shortLabel>
                 <required>true</required>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
@@ -154,12 +194,10 @@
         <relationships>
             <relationship objectAttributeName="accountDelegate" >
                 <primitiveAttribute sourceName="accountDelegateSystemId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountDelegate.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountDelegate.personName" targetName="personName" />
             </relationship>
         </relationships>
 
-        <objectLabel>Account Delegate</objectLabel>
+		<objectLabel>Account Delegate</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

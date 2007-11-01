@@ -15,6 +15,12 @@
  */
 package org.kuali.module.gl.dao.ojb;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -23,44 +29,48 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
+import org.kuali.PropertyConstants;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.OptionsService;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.Transaction;
-import org.kuali.module.gl.dao.AccountBalanceConsolidationDao;
 import org.kuali.module.gl.dao.AccountBalanceDao;
-import org.kuali.module.gl.dao.AccountBalanceLevelDao;
-import org.kuali.module.gl.dao.AccountBalanceObjectDao;
 import org.kuali.module.gl.util.OJBUtility;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements AccountBalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceDaoOjb.class);
 
-    private AccountBalanceConsolidationDao accountBalanceConsolidationDao;
-    private AccountBalanceLevelDao accountBalanceLevelDao;
-    private AccountBalanceObjectDao accountBalanceObjectDao;
-
+    private DateTimeService dateTimeService;
+    private OptionsService optionsService;
     static final private String OBJ_TYP_CD = "financialObject.financialObjectTypeCode";
 
+    public AccountBalanceDaoOjb() {
+        super();
+    }
+
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#getByTransaction(org.kuali.module.gl.bo.Transaction)
      */
     public AccountBalance getByTransaction(Transaction t) {
         LOG.debug("getByTransaction() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, t.getUniversityFiscalYear());
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, t.getChartOfAccountsCode());
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, t.getAccountNumber());
-        crit.addEqualTo(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, t.getSubAccountNumber());
-        crit.addEqualTo(KFSPropertyConstants.OBJECT_CODE, t.getFinancialObjectCode());
-        crit.addEqualTo(KFSPropertyConstants.SUB_OBJECT_CODE, t.getFinancialSubObjectCode());
+        crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, t.getUniversityFiscalYear());
+        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, t.getChartOfAccountsCode());
+        crit.addEqualTo(PropertyConstants.ACCOUNT_NUMBER, t.getAccountNumber());
+        crit.addEqualTo(PropertyConstants.SUB_ACCOUNT_NUMBER, t.getSubAccountNumber());
+        crit.addEqualTo(PropertyConstants.OBJECT_CODE, t.getFinancialObjectCode());
+        crit.addEqualTo(PropertyConstants.SUB_OBJECT_CODE, t.getFinancialSubObjectCode());
 
         QueryByCriteria qbc = QueryFactory.newQuery(AccountBalance.class, crit);
         return (AccountBalance) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#save(org.kuali.module.gl.bo.AccountBalance)
      */
     public void save(AccountBalance ab) {
@@ -78,13 +88,30 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
         Criteria criteria = OJBUtility.buildCriteriaFromMap(fieldValues, new AccountBalance());
         ReportQueryByCriteria query = QueryFactory.newReportQuery(AccountBalance.class, criteria);
 
-        String[] attributes = new String[] { KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, KFSPropertyConstants.ACCOUNT_NUMBER, KFSPropertyConstants.OBJECT_CODE, OBJ_TYP_CD, "sum(currentBudgetLineBalanceAmount)", "sum(accountLineActualsBalanceAmount)", "sum(accountLineEncumbranceBalanceAmount)" };
+        String[] attributes = new String[] { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.CHART_OF_ACCOUNTS_CODE, PropertyConstants.ACCOUNT_NUMBER, PropertyConstants.OBJECT_CODE, OBJ_TYP_CD, "sum(currentBudgetLineBalanceAmount)", "sum(accountLineActualsBalanceAmount)", "sum(accountLineEncumbranceBalanceAmount)" };
 
-        String[] groupBy = new String[] { KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, KFSPropertyConstants.ACCOUNT_NUMBER, KFSPropertyConstants.OBJECT_CODE, OBJ_TYP_CD };
+        String[] groupBy = new String[] { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.CHART_OF_ACCOUNTS_CODE, PropertyConstants.ACCOUNT_NUMBER, PropertyConstants.OBJECT_CODE, OBJ_TYP_CD };
 
         query.setAttributes(attributes);
         query.addGroupBy(groupBy);
         OJBUtility.limitResultSize(query);
+
+        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
+    }
+
+    /**
+     * @see org.kuali.module.gl.dao.AccountBalanceDao#getConsolidatedAccountBalanceRecordCount(java.util.Map)
+     */
+    public Iterator getConsolidatedAccountBalanceRecordCount(Map fieldValues) {
+        LOG.debug("getConsolidatedAccountBalanceRecordCount() started");
+
+        Criteria criteria = OJBUtility.buildCriteriaFromMap(fieldValues, new AccountBalance());
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(AccountBalance.class, criteria);
+
+        query.setAttributes(new String[] { "count(*)" });
+
+        String[] groupBy = new String[] { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.CHART_OF_ACCOUNTS_CODE, PropertyConstants.ACCOUNT_NUMBER, PropertyConstants.OBJECT_CODE, OBJ_TYP_CD };
+        query.addGroupBy(groupBy);
 
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
     }
@@ -103,6 +130,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#findAccountBalanceByConsolidationByObjectTypes(java.lang.String[],
      *      java.lang.Integer, java.lang.String, java.lang.String, boolean, boolean, int)
      */
@@ -111,15 +139,19 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
 
         // This is in a new object just to make each class smaller and easier to read
         try {
-            return accountBalanceConsolidationDao.findAccountBalanceByConsolidationObjectTypes(objectTypes, universityFiscalYear, chartOfAccountsCode, accountNumber, isExcludeCostShare, isConsolidated, pendingEntriesCode);
+            Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
+            AccountBalanceConsolidation abc = new AccountBalanceConsolidation(this, optionsService, dateTimeService, c);
+
+            return abc.findAccountBalanceByConsolidationObjectTypes(objectTypes, universityFiscalYear, chartOfAccountsCode, accountNumber, isExcludeCostShare, isConsolidated, pendingEntriesCode);
         }
         catch (Exception e) {
             LOG.error("findAccountBalanceByConsolidation() " + e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#findAccountBalanceByLevel(java.lang.Integer, java.lang.String,
      *      java.lang.String, java.lang.String, boolean, boolean, int)
      */
@@ -128,15 +160,19 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
 
         // This is in a new object just to make each class smaller and easier to read
         try {
-            return accountBalanceLevelDao.findAccountBalanceByLevel(universityFiscalYear, chartOfAccountsCode, accountNumber, financialConsolidationObjectCode, isCostShareExcluded, isConsolidated, pendingEntriesCode);
+            Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
+            AccountBalanceLevel abl = new AccountBalanceLevel(this, optionsService, dateTimeService, c);
+
+            return abl.findAccountBalanceByLevel(universityFiscalYear, chartOfAccountsCode, accountNumber, financialConsolidationObjectCode, isCostShareExcluded, isConsolidated, pendingEntriesCode);
         }
-        catch (Exception ex) {
-            LOG.error("findAccountBalanceByLevel() " + ex.getMessage(), ex);
-            throw new RuntimeException("error executing findAccountBalanceByLevel()", ex);
+        catch (Exception e) {
+            LOG.error("findAccountBalanceByLevel() " + e.getMessage(), e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#findAccountBalanceByObject(java.lang.Integer, java.lang.String,
      *      java.lang.String, java.lang.String, java.lang.String, boolean, boolean, int)
      */
@@ -145,23 +181,27 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
 
         // This is in a new object just to make each class smaller and easier to read
         try {
-            return accountBalanceObjectDao.findAccountBalanceByObject(universityFiscalYear, chartOfAccountsCode, accountNumber, financialObjectLevelCode, financialReportingSortCode, isCostShareExcluded, isConsolidated, pendingEntriesCode);
+            Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
+            AccountBalanceObject abo = new AccountBalanceObject(this, optionsService, dateTimeService, c);
+
+            return abo.findAccountBalanceByObject(universityFiscalYear, chartOfAccountsCode, accountNumber, financialObjectLevelCode, financialReportingSortCode, isCostShareExcluded, isConsolidated, pendingEntriesCode);
         }
-        catch (Exception ex) {
-            LOG.error("findAccountBalanceByObject() " + ex.getMessage(), ex);
-            throw new RuntimeException(ex.getMessage(), ex);
+        catch (Exception e) {
+            LOG.error("findAccountBalanceByObject() " + e.getMessage(), e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#purgeYearByChart(java.lang.String, int)
      */
     public void purgeYearByChart(String chartOfAccountsCode, int year) {
         LOG.debug("purgeYearByChart() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        criteria.addLessThan(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, new Integer(year));
+        criteria.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
+        criteria.addLessThan(PropertyConstants.UNIVERSITY_FISCAL_YEAR, new Integer(year));
 
         getPersistenceBrokerTemplate().deleteByQuery(new QueryByCriteria(AccountBalance.class, criteria));
 
@@ -171,27 +211,126 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
         getPersistenceBrokerTemplate().clearCache();
     }
 
-    public AccountBalanceConsolidationDao getAccountBalanceConsolidationDao() {
-        return accountBalanceConsolidationDao;
+    /**
+     * Delete cost share pending entries.
+     * 
+     * This method is package protected for a reason
+     * 
+     */
+    void deleteCostSharePendingEntries() {
+        sqlCommand("DELETE FROM gl_pending_entry_mt WHERE OBJ_ID IN (SELECT g.OBJ_ID FROM gl_pending_entry_mt g,ca_a21_sub_acct_t a WHERE (a.fin_coa_cd = g.fin_coa_cd " + "AND a.account_nbr = g.account_nbr AND a.sub_acct_nbr = g.sub_acct_nbr AND a.sub_acct_typ_cd = 'CS') AND g.person_unvl_id = " + Thread.currentThread().getId() + ")");
     }
 
-    public void setAccountBalanceConsolidationDao(AccountBalanceConsolidationDao accountBalanceConsolidationDao) {
-        this.accountBalanceConsolidationDao = accountBalanceConsolidationDao;
+    /**
+     * Count pending entries.
+     * 
+     * This method is package protected for a reason
+     * 
+     * @return count
+     */
+    int countPendingEntries() {
+        List results = sqlSelect("select count(*) as COUNT from gl_pending_entry_mt WHERE person_unvl_id = " +  + Thread.currentThread().getId());
+        Map row0 = (Map) results.get(0);
+        BigDecimal count = (BigDecimal) row0.get("COUNT");
+        return count.intValue();
     }
 
-    public AccountBalanceLevelDao getAccountBalanceLevelDao() {
-        return accountBalanceLevelDao;
+    /**
+     * Clean up bad data in the pending entries
+     * 
+     * This method is package protected for a reason
+     * 
+     * @param universityFiscalYear fiscal year
+     */
+    void cleanUpPendingEntries(Integer universityFiscalYear) {
+        // Clean up the data
+        sqlCommand("update GL_PENDING_ENTRY_MT set univ_fiscal_yr = " + universityFiscalYear + " where PERSON_UNVL_ID = " + Thread.currentThread().getId());
+        sqlCommand("update gl_pending_entry_mt set SUB_ACCT_NBR = '-----' where (SUB_ACCT_NBR is null or SUB_ACCT_NBR = '     ')");
     }
 
-    public void setAccountBalanceLevelDao(AccountBalanceLevelDao accountBalanceLevelDao) {
-        this.accountBalanceLevelDao = accountBalanceLevelDao;
+    /**
+     * Run a sql command
+     * 
+     * This method is package protected for a reason
+     * 
+     * @param sql Sql to run
+     * 
+     * @return number of rows updated
+     */
+    int sqlCommand(String sql) {
+        LOG.info("sqlCommand() started: " + sql);
+
+        Statement stmt = null;
+
+        try {
+            Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
+            stmt = c.createStatement();
+            return stmt.executeUpdate(sql);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Unable to execute: " + e.getMessage());
+        }
+        finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (Exception e) {
+                throw new RuntimeException("Unable to close connection: " + e.getMessage());
+            }
+        }
     }
 
-    public AccountBalanceObjectDao getAccountBalanceObjectDao() {
-        return accountBalanceObjectDao;
+    /**
+     * Run a sql select
+     * 
+     * This method is package protected for a reason
+     * 
+     * @param sql Sql to run
+     * @return List of rows returned. Each item is a Map where the key is the field name, value is the field value
+     */
+    List sqlSelect(String sql) {
+        LOG.debug("sqlSelect() started");
+
+        Statement stmt = null;
+
+        try {
+            Connection c = getPersistenceBroker(true).serviceConnectionManager().getConnection();
+            stmt = c.createStatement();
+
+            ResultSet rs = stmt.executeQuery(sql);
+            List result = new ArrayList();
+            while (rs.next()) {
+                Map row = new HashMap();
+                int numColumns = rs.getMetaData().getColumnCount();
+                for (int i = 1; i <= numColumns; i++) {
+                    row.put(rs.getMetaData().getColumnName(i).toUpperCase(), rs.getObject(i));
+                }
+                result.add(row);
+            }
+            return result;
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Unable to execute: " + e.getMessage());
+        }
+        finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            catch (Exception e) {
+                throw new RuntimeException("Unable to close connection: " + e.getMessage());
+            }
+        }
     }
 
-    public void setAccountBalanceObjectDao(AccountBalanceObjectDao accountBalanceObjectDao) {
-        this.accountBalanceObjectDao = accountBalanceObjectDao;
+    public void setDateTimeService(DateTimeService dts) {
+        dateTimeService = dts;
+    }
+
+    public void setOptionsService(OptionsService os) {
+        optionsService = os;
     }
 }

@@ -15,7 +15,7 @@
 --%>
 <%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
-<kul:page lookup="true" showDocumentInfo="false"
+<kul:page showDocumentInfo="false"
 	htmlFormAction="glModifiedInquiry"
 	headerMenuBar="${KualiForm.lookupable.htmlMenuBar}"
 	headerTitle="Lookup" docTitle="" transactionalDocument="false">
@@ -91,13 +91,16 @@
 						return with no value </a>
 					</c:if>
 				</logic-el:present></div>
-			</c:if> <c:if test="${!empty reqSearchResultsSize}">  
-					 
+			</c:if> <c:if test="${reqSearchResultsActualSize>0}">
+
+				<c:out value="${reqSearchResultsActualSize}" /> items found.  
+					
+	      		</c:if> 
 				<c:set var="exporting" value="${!empty param['d-16544-e']}" scope="request"/>
 	      		<display:table class="datatable-100" cellspacing="0"
 				cellpadding="0" name="${reqSearchResults}" id="row" export="true"
 				pagesize="100" defaultsort="1"
-				requestURI="glModifiedInquiry.do?methodToCall=viewResults&reqSearchResultsSize=${reqSearchResultsSize}&searchResultKey=${searchResultKey}">
+				requestURI="glModifiedInquiry.do?methodToCall=viewResults&reqSearchResultsActualSize=${reqSearchResultsActualSize}&searchResultKey=${searchResultKey}">
 
 				<c:forEach items="${row.columns}" var="column">
 
@@ -172,7 +175,6 @@
 				</c:forEach>
 
 			</display:table></td>
-			</c:if>
 			<td width="1%"><img src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" height="20"
 				width="20"></td>
 		</tr>
