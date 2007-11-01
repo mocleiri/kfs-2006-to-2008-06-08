@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 CREATE TABLE ER_RF_PROJ_TYP_T(
-        PROJ_TYP_CD                    VARCHAR2(70) CONSTRAINT ER_RF_PROJ_TYP_TN1 NOT NULL,
+        PROJ_TYP_CD                    VARCHAR2(1) CONSTRAINT ER_RF_PROJ_TYP_TN1 NOT NULL,
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_PROJ_TYP_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_PROJ_TYP_TN4 NOT NULL,
         PROJ_TYP_SEL_IND               VARCHAR2(1),

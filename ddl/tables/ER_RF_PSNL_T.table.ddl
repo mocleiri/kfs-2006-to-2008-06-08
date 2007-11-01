@@ -32,7 +32,7 @@ CREATE TABLE ER_RF_PSNL_T(
         PRSN_CTY_NM                    VARCHAR2(30),
         PRSN_CNTY_NM                   VARCHAR2(30),
         PRSN_ST_CD                     VARCHAR2(2),
-        PRSN_CNTRY_CD                  VARCHAR2(40),
+        PRSN_CNTRY_CD                  VARCHAR2(2),
         PRSN_ZIP_CD                    VARCHAR2(10),
         PRSN_PHN_NBR                   VARCHAR2(10),
         PRSN_FAX_NBR                   VARCHAR2(10),

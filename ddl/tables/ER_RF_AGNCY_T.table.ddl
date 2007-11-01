@@ -18,7 +18,7 @@ CREATE TABLE ER_RF_AGNCY_T(
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_AGNCY_TN3 NOT NULL,
         AGNCY_ADDR_DESC                VARCHAR2(500),
         AGNCY_CNTCT_NM                 VARCHAR2(50),
-        AGNCY_CNTRY_CD                 VARCHAR2(40),
+        AGNCY_CNTRY_CD                 VARCHAR2(2),
         AGNCY_CTY_NM                   VARCHAR2(30),
         AGNCY_DSK_ACMPY_IND            VARCHAR2(1),
         AGNCY_ELCTRNC_SUBM_IND         VARCHAR2(1),

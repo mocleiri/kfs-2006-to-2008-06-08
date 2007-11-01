@@ -21,7 +21,7 @@ CREATE TABLE ER_BDGT_IDC_T(
         BDGT_IDC_JSTF_TXT              VARCHAR2(250),
         BDGT_MAN_MTDC_IND              VARCHAR2(1),
         BDGT_MAN_RT_IND                VARCHAR2(1),
-        BDGT_PRPS_CD                   VARCHAR2(2),
+        BDGT_PRPS_CD                   VARCHAR2(1),
         BDGT_URCV_IDC_IND              VARCHAR2(1),
      CONSTRAINT ER_BDGT_IDC_TP1 PRIMARY KEY (
         RDOC_NBR)
