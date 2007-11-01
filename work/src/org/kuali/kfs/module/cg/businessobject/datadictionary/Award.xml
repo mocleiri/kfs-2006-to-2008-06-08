@@ -32,7 +32,7 @@
                         <field attributeName="agency.reportingName" />
                         <field attributeName="awardProjectTitle" />
                         <field attributeName="awardStatusCode" />
-
+                        <field attributeName="agencyAwardNumber" />
                         <field attributeName="awardBeginningDate" />
                         <field attributeName="awardEndingDate" />
                         <field attributeName="awardEntryDate" />
@@ -44,7 +44,6 @@
                         <field attributeName="agencyFuture1Amount" />
                         <field attributeName="agencyFuture2Amount" />
                         <field attributeName="agencyFuture3Amount" />
-
                         <field attributeName="grantDescriptionCode" />
                         <field attributeName="awardAddendumNumber" />
                         <field attributeName="proposalAwardTypeCode" />
@@ -54,12 +53,10 @@
                         <field attributeName="federalPassThroughAgencyNumber" />
                         <field attributeName="federalPassThroughAgency.fullName" />
                         <field attributeName="federalPassThroughFundedAmount" />
-
                         <field attributeName="workgroupName" />
                         <field attributeName="kualiGroupNames" />
                         <field attributeName="agencyAnalystName" />
                         <field attributeName="analystTelephoneNumber" />
-
                         <field attributeName="letterOfCreditFundGroupCode" />
                         <field attributeName="awardDocumentNumber" />
                         <field attributeName="awardCommentText" />
@@ -100,7 +97,7 @@
                             <field attributeName="subcontractorNumber" />
                             <field attributeName="subcontractor.subcontractorName" />
                             <field attributeName="awardSubcontractorDescription" />
-                            <field attributeName="subcontractorAmount"/>
+                            <field attributeName="awardSubcontractorAmount"/>
                             <inquirySummaryFields>
                                 <inquirySummaryField attributeName="subcontractor.subcontractorName" />
                                 <inquirySummaryField attributeName="awardSubcontractorAmount" />
@@ -125,7 +122,6 @@
         </inquiry>
 
         <lookup>
-            <lookupableID>awardLookupable</lookupableID>
             <title>Award Lookup</title>
 
             <instructions>Look up an Award</instructions>
@@ -172,34 +168,20 @@
         <titleAttribute>proposalNumber</titleAttribute>
 
         <attributes>
-        
-        	<!-- Following 2 attributes only used for labels for Workflow Doc Search -->
-            <attributeReference name="routingChart"  sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="chartOfAccountsCode">
-            	<label>Chart</label>
-            	<shortLabel>Chart</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-            </attributeReference>
-
-            <attributeReference name="routingOrg"  sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="organizationCode">
-            	<label>Organization</label>
-            	<shortLabel>Org</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-            </attributeReference>
 
 			<attributeReference name="kualiGroupNames" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBigText">
 				<label>Kuali Workgroup Users</label>
 				<shortLabel>Kuali Workgroup Users</shortLabel>
+				
+				<summary>Kuali Workgroup Users Names</summary>
+				<description>Collection of names of individuals associated with this awards financial system workgroup.</description>
 			</attributeReference>
 			
 			<attributeReference name="primaryAwardOrganization.organizationCode" sourceClassName="org.kuali.module.cg.bo.AwardOrganization" sourceAttributeName="organizationCode" >
 				<label>Primary Organization Code</label>
 				<shortLabel>Primary Org Cd</shortLabel>
+				<summary>Primary Organization Code</summary>
+				<description>Insert desc here...</description>
 			</attributeReference>
 
             <attributeReference name="proposal.proposalNumber"  sourceClassName="org.kuali.module.cg.bo.Proposal" sourceAttributeName="proposalNumber">
@@ -217,33 +199,45 @@
                 <control>
                     <text size="14" />
                 </control>
+
+            	<summary>Award Proposal Number</summary>
+            	<description>Award Proposal Number description...</description>
             </attribute>
 
             <attributeReference name="awardAccounts.account.accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber">
 				<label>Award Account Number</label>
 				<shortLabel>Acct Num</shortLabel>
+				<summary>Award Project Director ID</summary>
+   				<description>Insert desc here...</description>
             </attributeReference>
 
             <attributeReference name="awardOrganizations.organization.organizationCode" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="organizationCode">
 				<label>Organization Code</label>
 				<shortLabel>Org Cd</shortLabel>
+				<summary>Award Organization Code</summary>
             </attributeReference>
             
             <attributeReference name="awardSubcontractors.subcontractor.subcontractorNumber" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorNumber">
 				<label>Subcontractor Number</label>
 				<shortLabel>Subcontr Num</shortLabel>
+				<summary>Award Subcontractor Number</summary>
+   				<description>Insert desc here...</description>
             </attributeReference>
 			
             <attributeReference name="awardProjectDirectors.projectDirector.personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProjectDirector" sourceAttributeName="personUniversalIdentifier">
 				<label>Project Director ID</label>
 				<shortLabel>Proj Dir ID</shortLabel>
+				<summary>Award Project Director ID</summary>
+   				<description>Insert desc here...</description>
             </attributeReference>
 			
             <attributeReference name="proposal.grantNumber" sourceClassName="org.kuali.module.cg.bo.Proposal" sourceAttributeName="grantNumber">
+				<summary>Proposal Grant Number</summary>
             </attributeReference>
 
             <attributeReference name="agency.fullName" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="fullName">
                 <label>Agency Name</label>
+				<summary>Agency Name</summary>
             </attributeReference>
 
             <attribute name="agencyAnalystName" forceUppercase="true">
@@ -256,6 +250,24 @@
                 <control>
                     <text size="42" />
                 </control>
+
+                <summary>Agency Analyst Name</summary>
+                <description>agencyAnalystName description...</description>
+			</attribute>
+
+            <attribute name="agencyAwardNumber" forceUppercase="true">
+                <label>Agency Award Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>27</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="29" />
+                </control>
+
+                <summary>Agency Award Number</summary>
+                <description>agencyAwardNumber description...</description>
 			</attribute>
 
             <attributeReference name="agencyFuture1Amount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
@@ -264,6 +276,8 @@
 
                 <exclusiveMin>-0.001</exclusiveMin>
 
+                <summary>Agency Future 1 Amount</summary>
+                <description>agencyFuture1Amount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
@@ -272,6 +286,9 @@
                 <shortLabel>Amount</shortLabel>
 
                 <exclusiveMin>-0.001</exclusiveMin>
+
+                <summary>Agency Future 2 Amount</summary>
+                <description>agencyFuture2Amount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
@@ -281,14 +298,13 @@
 
                 <exclusiveMin>-0.001</exclusiveMin>
 
+                <summary>Agency Future 3 Amount</summary>
+                <description>agencyFuture3Amount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
-            <attributeReference name="agencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
-            </attributeReference>
-            
-            <attributeReference name="agency.reportingName" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="reportingName">
-            </attributeReference>
+            <attributeReference name="agencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber"/>
+            <attributeReference name="agency.reportingName" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="reportingName"/>
 
             <attribute name="analystTelephoneNumber" forceUppercase="true">
                 <label>Analyst Telephone Number</label>
@@ -300,6 +316,9 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>Analyst Telephone Number</summary>
+                <description>analystTelephoneNumber description...</description>
 			</attribute>
 
             <attribute name="awardAddendumNumber" forceUppercase="true">
@@ -312,12 +331,17 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>Award Addendum Number</summary>
+                <description>awardAddendumNumber description...</description>
 			</attribute>
 
             <attributeReference name="awardAllocatedUniversityComputingServicesAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Allocated University Computing Services Amount</label>
                 <shortLabel>Computing Services</shortLabel>
 
+                <summary>Award Allocated University Computing Services Amount</summary>
+                <description>awardAllocatedUniversityComputingServicesAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
@@ -325,12 +349,16 @@
                 <label>Start Date</label>
                 <shortLabel>Start</shortLabel>
 				
+                <summary>Award Beginning Date</summary>
+                <description>awardBeginningDate description...</description>
 			</attributeReference>
 
             <attributeReference name="awardClosingDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericDate">
                 <label>Close Date</label>
                 <shortLabel>Close</shortLabel>
 				
+                <summary>Award Closing Date</summary>
+                <description>awardClosingDate description...</description>
 			</attributeReference>
 
             <attribute name="awardCommentText" forceUppercase="true">
@@ -344,12 +372,16 @@
                     <textarea rows="5" cols="80"/>
                 </control>
 
+                <summary>Award Comment Text</summary>
+                <description>awardCommentText description...</description>
 			</attribute>
 
             <attributeReference name="awardCreateTimestamp" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericTimestamp">
                 <label>Created Timestamp</label>
                 <shortLabel>Created</shortLabel>
 
+                <summary>Award Create Timestamp</summary>
+                <description>awardCreateTimestamp description...</description>
 			</attributeReference>
 
             <attributeReference name="awardDirectCostAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
@@ -358,6 +390,8 @@
 
                 <exclusiveMin>-0.001</exclusiveMin>
 
+                <summary>Award Direct Cost Amount</summary>
+                <description>awardDirectCostAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
@@ -372,16 +406,23 @@
                     <text size="14" />
                 </control>
 
+                <summary>Award Document Number</summary>
+                <description>awardDocumentNumber description...</description>
 			</attribute>
 
             <attributeReference name="awardEndingDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericDate">
                 <label>Stop Date</label>
                 <shortLabel>Stop</shortLabel>
+                <summary>Award Ending Date</summary>
+                <description>awardEndingDate description...</description>
 			</attributeReference>
 
             <attributeReference name="awardEntryDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericDate">
                 <label>Entry Date</label>
                 <shortLabel>Entry</shortLabel>
+
+                <summary>Award Entry Date</summary>
+                <description>awardEntryDate description...</description>
 			</attributeReference>
 
             <attributeReference name="awardIndirectCostAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
@@ -390,12 +431,17 @@
 				
                 <exclusiveMin>-0.001</exclusiveMin>
 
+                <summary>Award Indirect Cost Amount</summary>
+                <description>awardIndirectCostAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
             <attributeReference name="awardLastUpdateDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericDate">
                 <label>Last Update</label>
                 <shortLabel>Update</shortLabel>
+
+                <summary>Award Last Update Date</summary>
+                <description>awardLastUpdateDate description...</description>
 			</attributeReference>
 
             <attribute name="awardProjectTitle">
@@ -408,6 +454,9 @@
                 <control>
                     <textarea rows="5" cols="80"/>
                 </control>
+
+                <summary>Award Project Title</summary>
+                <description>awardProjectTitle description...</description>
 			</attribute>
 
             <attributeReference name="awardPurposeCode" sourceClassName="org.kuali.module.cg.bo.ProposalPurpose" sourceAttributeName="proposalPurposeCode">
@@ -416,6 +465,9 @@
                 <control>
                     <select valuesFinderClass="org.kuali.module.cg.lookup.keyvalues.ProposalPurposeValuesFinder" />
                 </control>
+
+                <summary>Award Purpose Code</summary>
+                <description>A proposal purpose code</description>
             </attributeReference>
 
             <attributeReference name="awardStatusCode" sourceClassName="org.kuali.module.cg.bo.AwardStatus" sourceAttributeName="awardStatusCode">
@@ -423,22 +475,32 @@
                 <control>
                     <select valuesFinderClass="org.kuali.module.cg.lookup.keyvalues.AwardStatusValuesFinder" />
                 </control>
+
             </attributeReference>
+            
 
             <attributeReference name="awardTotalAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Total Amount</label>
                 <shortLabel>Total</shortLabel>
+
+                <summary>Award Total Amount</summary>
+                <description>awardTotalAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
             <attributeReference name="federalFundedAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Federal Funded Amount</label>
                 <shortLabel>Federal</shortLabel>
+
+                <summary>Federal Funded Amount</summary>
+                <description>federalFundedAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
             <attributeReference name="federalPassThroughAgencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
                 <label>Federal Pass Through Agency Number</label>
+
+                <summary>Federal Pass Through Agency Number</summary>
 			</attributeReference>
 			
 			<attributeReference name="federalPassThroughAgency.fullName" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="fullName">
@@ -449,6 +511,9 @@
             <attributeReference name="federalPassThroughFundedAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Federal Pass Through Funded Amount</label>
                 <shortLabel>FPT Amount</shortLabel>
+
+                <summary>Federal Pass Through Funded Amount</summary>
+                <description>federalPassThroughFundedAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
 			</attributeReference>
 
@@ -461,6 +526,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>Federal Pass Through Indicator</summary>
+                <description>federalPassThroughIndicator description...</description>
 			</attribute>
 
             <attribute name="workgroupName" forceUppercase="true">
@@ -473,6 +541,9 @@
                 <control>
                     <text size="72" />
                 </control>
+
+                <summary>Workgroup Name</summary>
+                <description>workgroupName description...</description>
 			</attribute>
 
             <attributeReference name="grantDescriptionCode" sourceClassName="org.kuali.module.cg.bo.GrantDescription" sourceAttributeName="grantDescriptionCode">
@@ -500,6 +571,9 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>Old Proposal Number</summary>
+                <description>oldProposalNumber description...</description>
 			</attribute>
 
             <attributeReference name="proposalAwardTypeCode" sourceClassName="org.kuali.module.cg.bo.ProposalAwardType" sourceAttributeName="proposalAwardTypeCode">
@@ -509,6 +583,8 @@
                     <select valuesFinderClass="org.kuali.module.cg.lookup.keyvalues.ProposalAwardTypeValuesFinder" />
                 </control>
 			</attributeReference>
+
+
 			
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
@@ -519,21 +595,29 @@
                 <label>Project Directors</label>
                 <shortLabel>Project Director</shortLabel>
                 <elementLabel>Project Director</elementLabel>
+                <summary>Award Project Directors</summary>
+                <description>Award principal investigator</description>
             </collection>
             <collection name="awardAccounts">
                 <label>Award Accounts</label>
                 <shortLabel>Accounts</shortLabel>
                 <elementLabel>Account</elementLabel>
+                <summary>Award Accounts</summary>
+                <description>Award Account</description>
             </collection>
             <collection name="awardOrganizations">
                 <label>Award Organizations</label>
                 <shortLabel>Organizations</shortLabel>
                 <elementLabel>Organization</elementLabel>
+                <summary>Award Organizations</summary>
+                <description>Award Organization</description>
             </collection>
             <collection name="awardSubcontractors">
                 <label>Award Subcontractors</label>
                 <shortLabel>Subcontractors</shortLabel>
                 <elementLabel>Subcontractor</elementLabel>
+                <summary>Award Subcontractors</summary>
+                <description>Award Subcontractor</description>
             </collection>
         </collections>
         
@@ -554,6 +638,5 @@
             	<primitiveAttribute sourceName="primaryAwardOrganization.organizationCode" targetName="organizationCode" />
             </relationship>
         </relationships>
-        <objectLabel>Award</objectLabel>
     </businessObject>
 </dictionaryEntry>

@@ -25,11 +25,11 @@ import java.util.Map;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.GlSummary;
 import org.kuali.module.gl.dao.BalanceDao;
@@ -60,6 +60,7 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.service.BalanceService#getGlSummary(int, java.util.List)
      */
     public List getGlSummary(int universityFiscalYear, List<String> balanceTypeCodes) {
@@ -76,11 +77,21 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     /**
-     * This method... Here is an excerpt from the original Oracle trigger: SELECT fin_object_cd FROM gl_balance_t WHERE
-     * univ_fiscal_yr = p_univ_fiscal_yr AND fin_coa_cd = p_fin_coa_cd AND account_nbr = p_account_nbr AND fin_object_cd != '9899'
-     * AND fin_obj_typ_cd IN ('AS', 'LI', 'FB') AND fin_balance_typ_cd = 'AC' GROUP BY fin_object_cd HAVING
-     * ABS(SUM(fin_beg_bal_ln_amt + acln_annl_bal_amt)) > 0); added absolute value function to sum--prevents the case of 2 entries
-     * (1 pos and 1 neg) from canceling each other out and allowing the acct to be closed when it shouldn't be.
+     * 
+     * This method...
+     * 
+     * 
+     * Here is an excerpt from the original Oracle trigger: SELECT fin_object_cd FROM gl_balance_t WHERE univ_fiscal_yr =
+     * p_univ_fiscal_yr AND fin_coa_cd = p_fin_coa_cd AND account_nbr = p_account_nbr AND fin_object_cd != '9899' AND fin_obj_typ_cd
+     * IN ('AS', 'LI', 'FB') AND fin_balance_typ_cd = 'AC' GROUP BY fin_object_cd HAVING ABS(SUM(fin_beg_bal_ln_amt +
+     * acln_annl_bal_amt)) > 0);
+     * 
+     * 
+     * 
+     * added absolute value function to sum--prevents the case of 2 entries (1 pos and 1 neg) from canceling each other out and
+     * allowing the acct to be closed when it shouldn't be.
+     * 
+     * 
      * 
      * @param account
      * @return
@@ -93,7 +104,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public Iterator<Balance> findBalancesForFiscalYear(Integer fiscalYear) {
 
-        return (Iterator<Balance>) balanceDao.findBalancesForFiscalYear(fiscalYear);
+        return (Iterator<Balance>) TransactionalServiceUtils.copyToExternallyUsuableIterator(balanceDao.findBalancesForFiscalYear(fiscalYear));
     }
 
     /**
@@ -101,7 +112,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public boolean hasAssetLiabilityFundBalanceBalances(Account account) {
 
-        Integer fiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
         ArrayList fundBalanceObjectCodes = new ArrayList();
         fundBalanceObjectCodes.add(null == account.getChartOfAccounts() ? null : account.getChartOfAccounts().getFundBalanceObjectCode());
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, fundBalanceObjectCodes, wrap(getAssetLiabilityFundBalanceBalanceTypeCodes()), wrap(getActualBalanceCodes()));
@@ -167,6 +178,7 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     /**
+     * 
      * SELECT SUM(fin_beg_bal_ln_amt + acln_annl_bal_amt) INTO v_y FROM gl_balance_t WHERE univ_fiscal_yr = p_univ_fiscal_yr AND
      * fin_coa_cd = p_fin_coa_cd AND account_nbr = p_account_nbr AND (fin_object_cd = '9899' OR fin_obj_typ_cd IN ('CH', 'IC', 'IN',
      * 'TI')) AND fin_balance_typ_cd = 'AC';
@@ -180,7 +192,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     protected KualiDecimal incomeBalances(Account account) {
 
-        Integer fiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
 
         ArrayList fundBalanceObjectCodes = new ArrayList();
         fundBalanceObjectCodes.add(account.getChartOfAccounts().getFundBalanceObjectCode());
@@ -194,7 +206,9 @@ public class BalanceServiceImpl implements BalanceService {
     /**
      * Here is an excerpt from the original Oracle Trigger: SELECT SUM(fin_beg_bal_ln_amt || acln_annl_bal_amt) INTO v_x FROM
      * gl_balance_t WHERE univ_fiscal_yr = p_univ_fiscal_yr AND fin_coa_cd = p_fin_coa_cd AND account_nbr = p_account_nbr AND
-     * fin_obj_typ_cd IN ('EE', 'ES', 'EX', 'TE') AND fin_balance_typ_cd = 'AC'; This method...
+     * fin_obj_typ_cd IN ('EE', 'ES', 'EX', 'TE') AND fin_balance_typ_cd = 'AC';
+     * 
+     * This method...
      * 
      * @param account
      * @return
@@ -202,7 +216,7 @@ public class BalanceServiceImpl implements BalanceService {
 
     protected KualiDecimal expenseBalances(Account account) {
 
-        Integer fiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, null, wrap(getExpenseObjectTypeCodes()), wrap(getActualBalanceCodes()));
 
         return sumBalances(balances);
@@ -221,9 +235,13 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     /*
-     * check for Encumbrances and base budgets Here is an excerpt from the original Oracle Trigger: SELECT SUM(fin_beg_bal_ln_amt +
-     * acln_annl_bal_amt) INTO v_y FROM gl_balance_t WHERE univ_fiscal_yr = p_univ_fiscal_yr AND fin_coa_cd = p_fin_coa_cd AND
-     * account_nbr = p_account_nbr AND fin_balance_typ_cd IN ('EX', 'IE', 'PE', 'BB'); v_rowcnt := SQL%ROWCOUNT;
+     * check for Encumbrances and base budgets
+     * 
+     * Here is an excerpt from the original Oracle Trigger: SELECT SUM(fin_beg_bal_ln_amt + acln_annl_bal_amt) INTO v_y FROM
+     * gl_balance_t WHERE univ_fiscal_yr = p_univ_fiscal_yr AND fin_coa_cd = p_fin_coa_cd AND account_nbr = p_account_nbr AND
+     * fin_balance_typ_cd IN ('EX', 'IE', 'PE', 'BB'); v_rowcnt := SQL%ROWCOUNT;
+     * 
+     * 
      */
 
     /**
@@ -231,7 +249,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public boolean hasEncumbrancesOrBaseBudgets(Account account) {
 
-        Integer fiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
         Iterator balances = balanceDao.findBalances(account, fiscalYear, null, null, null, wrap(getEncumbranceBaseBudgetBalanceTypeCodes()));
 
         return sumBalances(balances).isNonZero();
@@ -271,8 +289,8 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public Iterator findCashBalance(Map fieldValues, boolean isConsolidated) {
         LOG.debug("findCashBalance() started");
-
-        return balanceDao.findCashBalance(fieldValues, isConsolidated);
+        
+        return TransactionalServiceUtils.copyToExternallyUsuableIterator(balanceDao.findCashBalance(fieldValues, isConsolidated));
     }
 
     /**
@@ -287,7 +305,6 @@ public class BalanceServiceImpl implements BalanceService {
         }
         else {
             Iterator recordCountIterator = balanceDao.getConsolidatedCashBalanceRecordCount(fieldValues);
-            // TODO: WL: why build a list and waste time/memory when we can just iterate through the iterator and do a count?
             List recordCountList = IteratorUtils.toList(recordCountIterator);
             recordCount = recordCountList.size();
         }
@@ -299,7 +316,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     public Iterator findBalance(Map fieldValues, boolean isConsolidated) {
         LOG.debug("findBalance() started");
-        return balanceDao.findBalance(fieldValues, isConsolidated);
+        return TransactionalServiceUtils.copyToExternallyUsuableIterator(balanceDao.findBalance(fieldValues, isConsolidated));
     }
 
     /**
@@ -314,7 +331,6 @@ public class BalanceServiceImpl implements BalanceService {
         }
         else {
             Iterator recordCountIterator = balanceDao.getConsolidatedBalanceRecordCount(fieldValues);
-            // TODO: WL: why build a list and waste time/memory when we can just iterate through the iterator and do a count?
             List recordCountList = IteratorUtils.toList(recordCountIterator);
             recordCount = recordCountList.size();
         }
@@ -335,6 +351,8 @@ public class BalanceServiceImpl implements BalanceService {
 
     /**
      * Private method to load the values from the system options service and store them locally for later use.
+     * 
+     * 
      */
     private void loadConstantsFromOptions() {
         LOG.debug("loadConstantsFromOptions() started");
@@ -345,13 +363,13 @@ public class BalanceServiceImpl implements BalanceService {
         incomeObjectTypeCodes = new String[] { options.getFinObjTypeIncomeNotCashCd(), // IC
                 options.getFinObjectTypeIncomecashCode(), // IN
                 options.getFinObjTypeCshNotIncomeCd(), // CH
-                options.getFinancialObjectTypeTransferIncomeCd() // TI
+                options.getFinancialObjectTypeTransferIncomeCode() // TI
         };
         // String[] expenseObjectTypeCodes = new String[] { "EE", "ES", "EX", "TE" };
         expenseObjectTypeCodes = new String[] { options.getFinObjTypeExpendNotExpCode(), // EE?
                 options.getFinObjTypeExpenditureexpCd(), // ES
                 options.getFinObjTypeExpNotExpendCode(), // EX?
-                options.getFinancialObjectTypeTransferExpenseCd() // TE
+                options.getFinancialObjectTypeTransferExpenseCode() // TE
         };
         // String[] assetLiabilityFundBalanceBalanceTypeCodes = new String[] { "AS", "LI", "FB" };
         assetLiabilityFundBalanceObjectTypeCodes = new String[] { options.getFinancialObjectTypeAssetsCd(), // AS
@@ -362,7 +380,7 @@ public class BalanceServiceImpl implements BalanceService {
         encumbranceBaseBudgetBalanceTypeCodes = new String[] { options.getExtrnlEncumFinBalanceTypCd(), // EX
                 options.getIntrnlEncumFinBalanceTypCd(), // IE
                 options.getPreencumbranceFinBalTypeCd(), // PE
-                options.getBaseBudgetFinancialBalanceTypeCd() // BB
+                options.getBaseBudgetFinancialBalanceTypeCode() // BB
         };
     }
 
@@ -400,40 +418,4 @@ public class BalanceServiceImpl implements BalanceService {
         }
         return encumbranceBaseBudgetBalanceTypeCodes;
     }
-
-    /**
-     * @see org.kuali.module.gl.service.BalanceService#countBalancesForFiscalYear(java.lang.Integer)
-     */
-    public int countBalancesForFiscalYear(Integer year) {
-        return balanceDao.countBalancesForFiscalYear(year);
-    }
-
-    /**
-     * @see org.kuali.module.gl.service.BalanceService#findNominalActivityBalancesForFiscalYear(java.lang.Integer)
-     */
-    public Iterator<Balance> findNominalActivityBalancesForFiscalYear(Integer year) {
-        return balanceDao.findNominalActivityBalancesForFiscalYear(year);
-    }
-
-    /**
-     * @see org.kuali.module.gl.service.BalanceService#findCumulativeBalancesToForwardForFiscalYear(java.lang.Integer)
-     */
-    public Iterator<Balance> findCumulativeBalancesToForwardForFiscalYear(Integer year) {
-        return balanceDao.findCumulativeBalancesToForwardForFiscalYear(year);
-    }
-
-    /**
-     * @see org.kuali.module.gl.service.BalanceService#findGeneralBalancesToForwardForFiscalYear(java.lang.Integer)
-     */
-    public Iterator<Balance> findGeneralBalancesToForwardForFiscalYear(Integer year) {
-        return balanceDao.findGeneralBalancesToForwardForFiscalYear(year);
-    }
-
-    /**
-     * @see org.kuali.module.gl.service.BalanceService#findOrganizationReversionBalancesForFiscalYear(java.lang.Integer, boolean)
-     */
-    public Iterator<Balance> findOrganizationReversionBalancesForFiscalYear(Integer year, boolean endOfYear) {
-        return balanceDao.findOrganizationReversionBalancesForFiscalYear(year, endOfYear);
-    }
-
 }

@@ -1,77 +1,83 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.dao.ojb;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ojb.broker.query.Criteria;
-import org.apache.ojb.broker.query.Query;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.OptionsService;
-import org.kuali.kfs.service.ParameterEvaluator;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.Constants;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.OrganizationReversion;
-import org.kuali.module.chart.service.BalanceTypService;
-import org.kuali.module.chart.service.ObjectTypeService;
-import org.kuali.module.chart.service.SubFundGroupService;
-import org.kuali.module.gl.GLConstants;
-import org.kuali.module.gl.batch.BalanceForwardStep;
-import org.kuali.module.gl.batch.closing.year.service.FilteringBalanceIterator;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.SufficientFundBalances;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.BalanceDao;
-import org.kuali.module.gl.util.OJBUtility;
+import org.kuali.module.gl.util.BusinessObjectHandler;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao {
+/**
+ * @author jsissom
+ * @author Laran Evans <lc278@cornell.edu>
+ * @version $Id: BalanceDaoOjb.java,v 1.31.2.1 2006-07-26 21:51:20 abyrne Exp $
+ */
+public class BalanceDaoOjb extends PersistenceBrokerDaoSupport implements BalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceDaoOjb.class);
-    private ParameterService parameterService;
-    private OptionsService optionsService;
-    private BalanceTypService balanceTypService;
+
+    public BalanceDaoOjb() {
+        super();
+    }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.BalanceDao#getGlSummary(int, java.util.List)
      */
-    public Iterator getGlSummary(int universityFiscalYear, List<String> balanceTypeCodes) {
+    public Iterator getGlSummary(int universityFiscalYear,List<String> balanceTypeCodes) {
         LOG.debug("getGlSummary() started");
 
         Criteria c = new Criteria();
-        c.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
-        c.addIn(KFSPropertyConstants.BALANCE_TYPE_CODE, balanceTypeCodes);
+        c.addEqualTo("universityFiscalYear", universityFiscalYear);
+        c.addIn("balanceTypeCode", balanceTypeCodes);
 
-        String[] attributes = new String[] { "account.subFundGroup.fundGroupCode", "sum(accountLineAnnualBalanceAmount)", "sum(beginningBalanceLineAmount)", "sum(contractsGrantsBeginningBalanceAmount)", "sum(month1Amount)", "sum(month2Amount)", "sum(month3Amount)", "sum(month4Amount)", "sum(month5Amount)", "sum(month6Amount)", "sum(month7Amount)", "sum(month8Amount)", "sum(month9Amount)", "sum(month10Amount)", "sum(month11Amount)", "sum(month12Amount)", "sum(month13Amount)" };
+        String[] attributes = new String[] {
+                "account.subFundGroup.fundGroupCode",
+                "sum(accountLineAnnualBalanceAmount)","sum(beginningBalanceLineAmount)","sum(contractsGrantsBeginningBalanceAmount)",
+                "sum(month1Amount)","sum(month2Amount)","sum(month3Amount)","sum(month4Amount)",
+                "sum(month5Amount)","sum(month6Amount)","sum(month7Amount)","sum(month8Amount)",
+                "sum(month9Amount)","sum(month10Amount)","sum(month11Amount)","sum(month12Amount)",
+                "sum(month13Amount)"
+        };
 
-        String[] groupby = new String[] { "account.subFundGroup.fundGroupCode" };
+        String[] groupby = new String[] {
+                "account.subFundGroup.fundGroupCode"
+        };
 
         ReportQueryByCriteria query = new ReportQueryByCriteria(Balance.class, c);
 
@@ -90,17 +96,55 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
     public Iterator<Balance> findBalancesForFiscalYear(Integer year) {
         LOG.debug("findBalancesForFiscalYear() started");
 
+        // from gleacbfb (balance forward) cobol program
+
+        // 744 002750 DECLARE GLBL_CURSOR CURSOR FOR
+        // 745 002760 SELECT UNIV_FISCAL_YR,
+        // 746 002770 FIN_COA_CD,
+        // 747 002780 ACCOUNT_NBR,
+        // 748 002790 SUB_ACCT_NBR,
+        // 749 002800 FIN_OBJECT_CD,
+        // 750 002810 FIN_SUB_OBJ_CD,
+        // 751 002820 FIN_BALANCE_TYP_CD,
+        // 752 002830 FIN_OBJ_TYP_CD,
+        // 753 002840 ACLN_ANNL_BAL_AMT,
+        // 754 002850 FIN_BEG_BAL_LN_AMT,
+        // 755 002860 CONTR_GR_BB_AC_AMT,
+        // 756 002870 MO1_ACCT_LN_AMT,
+        // 757 002880 MO2_ACCT_LN_AMT,
+        // 758 002890 MO3_ACCT_LN_AMT,
+        // 759 002900 MO4_ACCT_LN_AMT,
+        // 760 002910 MO5_ACCT_LN_AMT,
+        // 761 002920 MO6_ACCT_LN_AMT,
+        // 762 002930 MO7_ACCT_LN_AMT,
+        // 763 002940 MO8_ACCT_LN_AMT,
+        // 764 002950 MO9_ACCT_LN_AMT,
+        // 765 002960 MO10_ACCT_LN_AMT,
+        // 766 002970 MO11_ACCT_LN_AMT,
+        // 767 002980 MO12_ACCT_LN_AMT,
+        // 768 002990 MO13_ACCT_LN_AMT
+        // 769 003000 FROM GL_BALANCE_T
+        // 770 003010 WHERE UNIV_FISCAL_YR = RTRIM(:GLGLBL-UNIV-FISCAL-YR)
+        // 771 003020 ORDER BY FIN_COA_CD,
+        // 772 003030 ACCOUNT_NBR,
+        // 773 003040 SUB_ACCT_NBR,
+        // 774 003050 FIN_OBJECT_CD,
+        // 775 003060 FIN_SUB_OBJ_CD,
+        // 776 003070 FIN_BALANCE_TYP_CD,
+        // 777 003080 FIN_OBJ_TYP_CD
+        // 778 003090 END-EXEC.
+
         Criteria c = new Criteria();
-        c.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, year);
+        c.addEqualTo("universityFiscalYear", year);
 
         QueryByCriteria query = QueryFactory.newQuery(Balance.class, c);
-        query.addOrderByAscending(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.BALANCE_TYPE_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_TYPE_CODE);
+        query.addOrderByAscending("chartOfAccountsCode");
+        query.addOrderByAscending("accountNumber");
+        query.addOrderByAscending("subAccountNumber");
+        query.addOrderByAscending("objectCode");
+        query.addOrderByAscending("subObjectCode");
+        query.addOrderByAscending("balanceTypeCode");
+        query.addOrderByAscending("objectTypeCode");
 
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
@@ -125,14 +169,14 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
         LOG.debug("getBalanceByTransaction() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, t.getUniversityFiscalYear());
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, t.getChartOfAccountsCode());
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, t.getAccountNumber());
-        crit.addEqualTo(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, t.getSubAccountNumber());
-        crit.addEqualTo(KFSPropertyConstants.OBJECT_CODE, t.getFinancialObjectCode());
-        crit.addEqualTo(KFSPropertyConstants.SUB_OBJECT_CODE, t.getFinancialSubObjectCode());
-        crit.addEqualTo(KFSPropertyConstants.BALANCE_TYPE_CODE, t.getFinancialBalanceTypeCode());
-        crit.addEqualTo(KFSPropertyConstants.OBJECT_TYPE_CODE, t.getFinancialObjectTypeCode());
+        crit.addEqualTo("universityFiscalYear", t.getUniversityFiscalYear());
+        crit.addEqualTo("chartOfAccountsCode", t.getChartOfAccountsCode());
+        crit.addEqualTo("accountNumber", t.getAccountNumber());
+        crit.addEqualTo("subAccountNumber", t.getSubAccountNumber());
+        crit.addEqualTo("objectCode", t.getFinancialObjectCode());
+        crit.addEqualTo("subObjectCode", t.getFinancialSubObjectCode());
+        crit.addEqualTo("balanceTypeCode", t.getFinancialBalanceTypeCode());
+        crit.addEqualTo("objectTypeCode", t.getFinancialObjectTypeCode());
 
         QueryByCriteria qbc = QueryFactory.newQuery(Balance.class, crit);
         return (Balance) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
@@ -145,6 +189,7 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
      * @param criteria - the criteria that might have a criterion appended
      * @param name - name of the attribute
      * @param collection - the collection to inspect
+     * 
      */
     private void criteriaBuilder(Criteria criteria, String name, Collection collection) {
         criteriaBuilderHelper(criteria, name, collection, false);
@@ -152,6 +197,7 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
 
     /**
      * Similar to criteriaBuilder, this adds a negative criterion (NOT EQUALS, NOT IN)
+     * 
      */
     private void negatedCriteriaBuilder(Criteria criteria, String name, Collection collection) {
         criteriaBuilderHelper(criteria, name, collection, true);
@@ -162,6 +208,7 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
      * This method provides the implementation for the conveniences methods criteriaBuilder & negatedCriteriaBuilder
      * 
      * @param negate - the criterion will be negated (NOT EQUALS, NOT IN) when this is true
+     * 
      */
     private void criteriaBuilderHelper(Criteria criteria, String name, Collection collection, boolean negate) {
         if (collection != null) {
@@ -192,15 +239,15 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
 
         Criteria criteria = new Criteria();
 
-        criteria.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, account.getAccountNumber());
-        criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, account.getChartOfAccountsCode());
+        criteria.addEqualTo("accountNumber", account.getAccountNumber());
+        criteria.addEqualTo("chartOfAccountsCode", account.getChartOfAccountsCode());
 
-        criteria.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        criteria.addEqualTo("universityFiscalYear", fiscalYear);
 
-        criteriaBuilder(criteria, GLConstants.ColumnNames.OBJECT_TYPE_CODE, objectTypeCodes);
-        criteriaBuilder(criteria, GLConstants.ColumnNames.BALANCE_TYPE_CODE, balanceTypeCodes);
-        criteriaBuilder(criteria, GLConstants.ColumnNames.OBJECT_CODE, includedObjectCodes);
-        negatedCriteriaBuilder(criteria, GLConstants.ColumnNames.OBJECT_CODE, excludedObjectCodes);
+        criteriaBuilder(criteria, "FIN_OBJ_TYP_CD", objectTypeCodes);
+        criteriaBuilder(criteria, "FIN_BALANCE_TYP_CD", balanceTypeCodes);
+        criteriaBuilder(criteria, "FIN_OBJECT_CD", includedObjectCodes);
+        negatedCriteriaBuilder(criteria, "FIN_OBJECT_CD", excludedObjectCodes);
 
         ReportQueryByCriteria query = new ReportQueryByCriteria(Balance.class, criteria);
 
@@ -215,28 +262,33 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
     public Iterator<Balance> findCashBalance(Map fieldValues, boolean isConsolidated) {
         LOG.debug("findCashBalance() started");
 
-        Query query = this.getCashBalanceQuery(fieldValues, isConsolidated);
-        OJBUtility.limitResultSize(query);
-        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-    }
+        Criteria criteria = buildCriteriaFromMap(fieldValues, new Balance(), false);
+        criteria.addEqualTo("balanceTypeCode", "AC");
+        criteria.addEqualToField("chart.financialCashObjectCode", "objectCode");
 
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#getCashBalanceRecordCount(java.util.Map, boolean)
-     */
-    public Integer getDetailedCashBalanceRecordCount(Map fieldValues) {
-        LOG.debug("getDetailedCashBalanceRecordCount() started");
+        ReportQueryByCriteria query = new ReportQueryByCriteria(Balance.class, criteria);
 
-        Query query = this.getCashBalanceQuery(fieldValues, false);
-        return getPersistenceBrokerTemplate().getCount(query);
-    }
+        List attributeList = buildAttributeList(false);
+        List groupByList = buildGroupByList();
 
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#getCashBalanceRecordSize(java.util.Map, boolean)
-     */
-    public Iterator getConsolidatedCashBalanceRecordCount(Map fieldValues) {
-        LOG.debug("getCashBalanceRecordCount() started");
+        // if consolidated, then ignore the following fields
+        if (isConsolidated) {
+            attributeList.remove("subAccountNumber");
+            groupByList.remove("subAccountNumber");
+            attributeList.remove("subObjectCode");
+            groupByList.remove("subObjectCode");
+            attributeList.remove("objectTypeCode");
+            groupByList.remove("objectTypeCode");
+        }
 
-        ReportQueryByCriteria query = this.getCashBalanceCountQuery(fieldValues);
+        // set the selection attributes
+        String[] attributes = (String[]) attributeList.toArray(new String[attributeList.size()]);
+        query.setAttributes(attributes);
+
+        // add the group criteria into the selection statement
+        String[] groupBy = (String[]) groupByList.toArray(new String[groupByList.size()]);
+        query.addGroupBy(groupBy);
+
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
     }
 
@@ -246,84 +298,8 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
     public Iterator<Balance> findBalance(Map fieldValues, boolean isConsolidated) {
         LOG.debug("findBalance() started");
 
-        Query query = this.getBalanceQuery(fieldValues, isConsolidated);
-        OJBUtility.limitResultSize(query);
-
-        if (isConsolidated) {
-            return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-        }
-        return getPersistenceBrokerTemplate().getIteratorByQuery(query);
-    }
-
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#getConsolidatedBalanceRecordCount(java.util.Map)
-     */
-    public Iterator getConsolidatedBalanceRecordCount(Map fieldValues) {
-        LOG.debug("getBalanceRecordCount() started");
-
-        ReportQueryByCriteria query = this.getBalanceCountQuery(fieldValues);
-        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-    }
-
-    private ReportQueryByCriteria getCashBalanceCountQuery(Map fieldValues) {
-        Criteria criteria = buildCriteriaFromMap(fieldValues, new Balance());
-        criteria.addEqualTo(KFSPropertyConstants.BALANCE_TYPE_CODE, KFSConstants.BALANCE_TYPE_ACTUAL);
-        criteria.addEqualToField("chart.financialCashObjectCode", KFSPropertyConstants.OBJECT_CODE);
-
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(Balance.class, criteria);
-
-        List groupByList = buildGroupByList();
-        groupByList.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        groupByList.remove(KFSPropertyConstants.SUB_OBJECT_CODE);
-        groupByList.remove(KFSPropertyConstants.OBJECT_TYPE_CODE);
-
-        // add the group criteria into the selection statement
-        String[] groupBy = (String[]) groupByList.toArray(new String[groupByList.size()]);
-        query.addGroupBy(groupBy);
-
-        // set the selection attributes
-        query.setAttributes(new String[] { "count(*)" });
-
-        return query;
-    }
-
-    // build the query for cash balance search
-    private Query getCashBalanceQuery(Map fieldValues, boolean isConsolidated) {
-        Criteria criteria = buildCriteriaFromMap(fieldValues, new Balance());
-        criteria.addEqualTo(KFSPropertyConstants.BALANCE_TYPE_CODE, KFSConstants.BALANCE_TYPE_ACTUAL);
-        criteria.addEqualToField("chart.financialCashObjectCode", KFSPropertyConstants.OBJECT_CODE);
-
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(Balance.class, criteria);
-        List attributeList = buildAttributeList(false);
-        List groupByList = buildGroupByList();
-
-        // if consolidated, then ignore the following fields
-        if (isConsolidated) {
-            attributeList.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-            groupByList.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-            attributeList.remove(KFSPropertyConstants.SUB_OBJECT_CODE);
-            groupByList.remove(KFSPropertyConstants.SUB_OBJECT_CODE);
-            attributeList.remove(KFSPropertyConstants.OBJECT_TYPE_CODE);
-            groupByList.remove(KFSPropertyConstants.OBJECT_TYPE_CODE);
-        }
-
-        // add the group criteria into the selection statement
-        String[] groupBy = (String[]) groupByList.toArray(new String[groupByList.size()]);
-        query.addGroupBy(groupBy);
-
-        // set the selection attributes
-        String[] attributes = (String[]) attributeList.toArray(new String[attributeList.size()]);
-        query.setAttributes(attributes);
-
-        return query;
-    }
-
-    // build the query for balance search
-    private Query getBalanceQuery(Map fieldValues, boolean isConsolidated) {
-        LOG.debug("getBalanceQuery(Map, boolean) started");
-
-        Criteria criteria = buildCriteriaFromMap(fieldValues, new Balance());
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(Balance.class, criteria);
+        Criteria criteria = buildCriteriaFromMap(fieldValues, new Balance(), false);
+        ReportQueryByCriteria query = new ReportQueryByCriteria(Balance.class, criteria);
 
         // if consolidated, then ignore subaccount number and balance type code
         if (isConsolidated) {
@@ -331,12 +307,12 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
             List groupByList = buildGroupByList();
 
             // ignore subaccount number, sub object code and object type code
-            attributeList.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-            groupByList.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-            attributeList.remove(KFSPropertyConstants.SUB_OBJECT_CODE);
-            groupByList.remove(KFSPropertyConstants.SUB_OBJECT_CODE);
-            attributeList.remove(KFSPropertyConstants.OBJECT_TYPE_CODE);
-            groupByList.remove(KFSPropertyConstants.OBJECT_TYPE_CODE);
+            attributeList.remove("subAccountNumber");
+            groupByList.remove("subAccountNumber");
+            attributeList.remove("subObjectCode");
+            groupByList.remove("subObjectCode");
+            attributeList.remove("objectTypeCode");
+            groupByList.remove("objectTypeCode");
 
             // set the selection attributes
             String[] attributes = (String[]) attributeList.toArray(new String[attributeList.size()]);
@@ -345,28 +321,10 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
             // add the group criteria into the selection statement
             String[] groupBy = (String[]) groupByList.toArray(new String[groupByList.size()]);
             query.addGroupBy(groupBy);
+            return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
         }
 
-        return query;
-    }
-
-    // build the query for balance search
-    private ReportQueryByCriteria getBalanceCountQuery(Map fieldValues) {
-        Criteria criteria = buildCriteriaFromMap(fieldValues, new Balance());
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(Balance.class, criteria);
-
-        // set the selection attributes
-        query.setAttributes(new String[] { "count(*)" });
-
-        List groupByList = buildGroupByList();
-        groupByList.remove(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        groupByList.remove(KFSPropertyConstants.SUB_OBJECT_CODE);
-        groupByList.remove(KFSPropertyConstants.OBJECT_TYPE_CODE);
-
-        // add the group criteria into the selection statement
-        String[] groupBy = (String[]) groupByList.toArray(new String[groupByList.size()]);
-        query.addGroupBy(groupBy);
-        return query;
+        return getPersistenceBrokerTemplate().getIteratorByQuery(query);
     }
 
     /**
@@ -376,29 +334,42 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
      * @param balance
      * @return a query criteria
      */
-    private Criteria buildCriteriaFromMap(Map fieldValues, Balance balance) {
-        Map localFieldValues = new HashMap();
-        localFieldValues.putAll(fieldValues);
+    private Criteria buildCriteriaFromMap(Map fieldValues, Balance balance, boolean isBalanceTypeHandled) {
+        Criteria criteria = BusinessObjectHandler.buildCriteriaFromMap(fieldValues, new Balance());
 
-        Criteria criteria = new Criteria();
+        Iterator propsIter = fieldValues.keySet().iterator();
+        while (propsIter.hasNext()) {
+            String propertyName = (String) propsIter.next();
+            String propertyValue = (String) fieldValues.get(propertyName);
 
-        // handle encumbrance balance type
-        String propertyName = KFSPropertyConstants.BALANCE_TYPE_CODE;
-        if (localFieldValues.containsKey(propertyName)) {
-            String propertyValue = (String) localFieldValues.get(propertyName);
-            if (KFSConstants.AGGREGATE_ENCUMBRANCE_BALANCE_TYPE_CODE.equals(propertyValue)) {
-                localFieldValues.remove(KFSPropertyConstants.BALANCE_TYPE_CODE);
+            // if searchValue is empty and the key is not a valid property ignore
+            if (StringUtils.isBlank(propertyValue) || !(PropertyUtils.isWriteable(balance, propertyName))) {
+                continue;
+            }
 
-                // the year should be part of the results for both the cash balance and regular balance lookupables
-                String universityFiscalYearStr = (String) localFieldValues.get(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-                Integer universityFiscalYear = new Integer(universityFiscalYearStr);
-
-                criteria.addIn(KFSPropertyConstants.BALANCE_TYPE_CODE, balanceTypService.getEncumbranceBalanceTypes(universityFiscalYear));
+            // with this option, the method becomes specific and bad
+            if (isBalanceTypeHandled && propertyValue.equals("EN") && propertyName.equals("balanceTypeCode")) {
+                List balanceTypeCodeList = buildBalanceTypeCodeList();
+                criteria.addIn("balanceTypeCode", balanceTypeCodeList);
             }
         }
-
-        criteria.addAndCriteria(OJBUtility.buildCriteriaFromMap(localFieldValues, new Balance()));
         return criteria;
+    }
+
+    /**
+     * This method builds an balance type code list
+     * 
+     * @return List a balance type code list
+     */
+    private List<String> buildBalanceTypeCodeList() {
+        List balanceTypeCodeList = new ArrayList();
+
+        balanceTypeCodeList.add("EX");
+        balanceTypeCodeList.add("IE");
+        balanceTypeCodeList.add("PE");
+        balanceTypeCodeList.add("CE");
+
+        return balanceTypeCodeList;
     }
 
     /**
@@ -441,14 +412,14 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
     private List<String> buildGroupByList() {
         List attributeList = new ArrayList();
 
-        attributeList.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        attributeList.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        attributeList.add(KFSPropertyConstants.ACCOUNT_NUMBER);
-        attributeList.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        attributeList.add(KFSPropertyConstants.BALANCE_TYPE_CODE);
-        attributeList.add(KFSPropertyConstants.OBJECT_CODE);
-        attributeList.add(KFSPropertyConstants.SUB_OBJECT_CODE);
-        attributeList.add(KFSPropertyConstants.OBJECT_TYPE_CODE);
+        attributeList.add("universityFiscalYear");
+        attributeList.add("chartOfAccountsCode");
+        attributeList.add("accountNumber");
+        attributeList.add("subAccountNumber");
+        attributeList.add("balanceTypeCode");
+        attributeList.add("objectCode");
+        attributeList.add("subObjectCode");
+        attributeList.add("objectTypeCode");
 
         return attributeList;
     }
@@ -457,9 +428,9 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
         LOG.debug("getBalanceByPrimaryId() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, accountNumber);
+        crit.addEqualTo("universityFiscalYear", universityFiscalYear);
+        crit.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
+        crit.addEqualTo("accountNumber", accountNumber);
 
         QueryByCriteria qbc = QueryFactory.newQuery(SufficientFundBalances.class, crit);
         return (Balance) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
@@ -472,13 +443,13 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
      */
     public Balance getCurrentBudgetForObjectCode(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String objectCode) {
         LOG.debug("getCurrentBudgetForObjectCode() started");
-
+        
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, accountNumber);
-        crit.addEqualTo(KFSPropertyConstants.OBJECT_CODE, objectCode);
-        crit.addEqualTo(KFSPropertyConstants.BALANCE_TYPE_CODE, KFSConstants.BALANCE_TYPE_CURRENT_BUDGET);
+        crit.addEqualTo("universityFiscalYear", universityFiscalYear);
+        crit.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
+        crit.addEqualTo("accountNumber", accountNumber);
+        crit.addEqualTo("objectCode", objectCode);
+        crit.addEqualTo("balanceTypeCode", Constants.BALANCE_TYPE_CURRENT_BUDGET);
 
         QueryByCriteria qbc = QueryFactory.newQuery(Balance.class, crit);
         return (Balance) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
@@ -494,7 +465,7 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
      */
     public Iterator<Balance> findAccountBalances(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber) {
         LOG.debug("findAccountBalances() started");
-        return this.findAccountBalances(universityFiscalYear, chartOfAccountsCode, accountNumber, KFSConstants.SF_TYPE_OBJECT);
+        return this.findAccountBalances(universityFiscalYear, chartOfAccountsCode, accountNumber, Constants.SF_TYPE_OBJECT);
     }
 
     /**
@@ -510,22 +481,23 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
         LOG.debug("findAccountBalances() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, universityFiscalYear);
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, accountNumber);
+        crit.addEqualTo("universityFiscalYear", universityFiscalYear);
+        crit.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
+        crit.addEqualTo("accountNumber", accountNumber);
 
         QueryByCriteria qbc = QueryFactory.newQuery(Balance.class, crit);
-        if (KFSConstants.SF_TYPE_OBJECT.equals(sfCode)) {
-            qbc.addOrderByAscending(KFSPropertyConstants.OBJECT_CODE);
+        if (Constants.SF_TYPE_OBJECT.equals(sfCode)) {
+            qbc.addOrderByAscending("objectCode");
         }
-        else if (KFSConstants.SF_TYPE_LEVEL.equals(sfCode)) {
-            qbc.addOrderByAscending(GLConstants.BalanceInquiryDrillDowns.OBJECT_LEVEL_CODE);
+        else if (Constants.SF_TYPE_LEVEL.equals(sfCode)) {
+            qbc.addOrderByAscending("financialObject.financialObjectLevelCode");
         }
-        else if (KFSConstants.SF_TYPE_CONSOLIDATION.equals(sfCode)) {
-            qbc.addOrderByAscending(GLConstants.BalanceInquiryDrillDowns.CONSOLIDATION_OBJECT_CODE);
+        else if (Constants.SF_TYPE_CONSOLIDATION.equals(sfCode)) {
+            qbc.addOrderByAscending("financialObject.financialObjectLevel.financialConsolidationObjectCode");
         }
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
+
 
     /**
      * Purge the sufficient funds balance table by year/chart
@@ -537,8 +509,8 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
         LOG.debug("purgeYearByChart() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-        criteria.addLessThan(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, new Integer(year));
+        criteria.addEqualTo("chartOfAccountsCode", chartOfAccountsCode);
+        criteria.addLessThan("universityFiscalYear", new Integer(year));
 
         getPersistenceBrokerTemplate().deleteByQuery(new QueryByCriteria(Balance.class, criteria));
 
@@ -546,208 +518,5 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
         // remove them from the cache so a future select will retrieve these deleted account balances from
         // the cache and return them. Clearing the cache forces OJB to go to the database again.
         getPersistenceBrokerTemplate().clearCache();
-    }
-
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#countBalancesForFiscalYear(java.lang.Integer)
-     */
-    public int countBalancesForFiscalYear(Integer year) {
-        LOG.debug("countBalancesForFiscalYear() started");
-
-        Criteria c = new Criteria();
-        c.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, year);
-        QueryByCriteria query = QueryFactory.newQuery(Balance.class, c);
-
-        return getPersistenceBrokerTemplate().getCount(query);
-    }
-
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#findNominalActivityBalancesForFiscalYear(java.lang.Integer)
-     */
-    public Iterator<Balance> findNominalActivityBalancesForFiscalYear(Integer year) {
-        LOG.debug("findNominalActivityBalancesForFiscalYear() started");
-
-        Options currentYearOptions = optionsService.getCurrentYearOptions();
-
-        // generate List of nominal activity object type codes
-        ObjectTypeService objectTypeService = SpringContext.getBean(ObjectTypeService.class);
-
-        Criteria c = new Criteria();
-        c.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, year);
-        c.addEqualTo(KFSPropertyConstants.BALANCE_TYPE_CODE, currentYearOptions.getActualFinancialBalanceTypeCd());
-        c.addIn(KFSPropertyConstants.OBJECT_TYPE_CODE, objectTypeService.getNominalActivityClosingAllowedObjectTypes(year));
-        c.addNotEqualTo("accountLineAnnualBalanceAmount", KualiDecimal.ZERO);
-
-        QueryByCriteria query = QueryFactory.newQuery(Balance.class, c);
-        query.addOrderByAscending(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.BALANCE_TYPE_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_TYPE_CODE);
-
-        return getPersistenceBrokerTemplate().getIteratorByQuery(query);
-    }
-
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#findCumulativeBalancesToForwardForFiscalYear(java.lang.Integer)
-     */
-    public Iterator<Balance> findGeneralBalancesToForwardForFiscalYear(Integer year) {
-        ObjectTypeService objectTypeService = SpringContext.getBean(ObjectTypeService.class);
-
-        String[] generalBalanceForwardBalanceTypesArray = parameterService.getParameterValues(BalanceForwardStep.class, GLConstants.BalanceForwardRule.BALANCE_TYPES_TO_ROLL_FORWARD_FOR_BALANCE_SHEET).toArray(new String[] {});
-        List<String> generalBalanceForwardBalanceTypes = new ArrayList<String>();
-        for (String bt : generalBalanceForwardBalanceTypesArray) {
-            generalBalanceForwardBalanceTypes.add(bt);
-        }
-
-        Criteria c = new Criteria();
-        c.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, year);
-        c.addIn(KFSPropertyConstants.BALANCE_TYPE_CODE, generalBalanceForwardBalanceTypes);
-        c.addIn(KFSPropertyConstants.OBJECT_TYPE_CODE, objectTypeService.getGeneralForwardBalanceObjectTypes(year));
-
-        QueryByCriteria query = QueryFactory.newQuery(Balance.class, c);
-        query.addOrderByAscending(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.BALANCE_TYPE_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_TYPE_CODE);
-
-        Iterator<Balance> balances = getPersistenceBrokerTemplate().getIteratorByQuery(query);
-
-        Map<String, FilteringBalanceIterator> balanceIterators = SpringContext.getBeansOfType(FilteringBalanceIterator.class);
-        FilteringBalanceIterator filteredBalances = balanceIterators.get("glBalanceTotalNotZeroIterator");
-        filteredBalances.setBalancesSource(balances);
-
-        return filteredBalances;
-    }
-
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#findGeneralBalancesToForwardForFiscalYear(java.lang.Integer)
-     */
-    public Iterator<Balance> findCumulativeBalancesToForwardForFiscalYear(Integer year) {
-        ObjectTypeService objectTypeService = SpringContext.getBean(ObjectTypeService.class);
-        SubFundGroupService subFundGroupService = SpringContext.getBean(SubFundGroupService.class);
-
-        final String[] subFundGroupsForCumulativeBalanceForwardingArray = parameterService.getParameterValues(BalanceForwardStep.class, GLConstants.BalanceForwardRule.SUB_FUND_GROUPS_FOR_INCEPTION_TO_DATE_REPORTING).toArray(new String[] {});
-        List<String> subFundGroupsForCumulativeBalanceForwarding = new ArrayList<String>();
-        for (String subFundGroup : subFundGroupsForCumulativeBalanceForwardingArray) {
-            subFundGroupsForCumulativeBalanceForwarding.add(subFundGroup);
-        }
-
-        String[] cumulativeBalanceForwardBalanceTypesArray = parameterService.getParameterValues(BalanceForwardStep.class, GLConstants.BalanceForwardRule.BALANCE_TYPES_TO_ROLL_FORWARD_FOR_INCOME_EXPENSE).toArray(new String[] {});
-        List<String> cumulativeBalanceForwardBalanceTypes = new ArrayList<String>();
-        for (String bt : cumulativeBalanceForwardBalanceTypesArray) {
-            cumulativeBalanceForwardBalanceTypes.add(bt);
-        }
-
-        Criteria c = new Criteria();
-        c.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, year);
-        c.addIn(KFSPropertyConstants.BALANCE_TYPE_CODE, cumulativeBalanceForwardBalanceTypes);
-        c.addIn(KFSPropertyConstants.OBJECT_TYPE_CODE, objectTypeService.getCumulativeForwardBalanceObjectTypes(year));
-
-        Criteria forCGCrit = new Criteria();
-        if (parameterService.getIndicatorParameter(Account.class, KFSConstants.ChartApcParms.ACCOUNT_FUND_GROUP_DENOTES_CG)) {
-            forCGCrit.addEqualTo("priorYearAccount.subFundGroup.fundGroupCode", subFundGroupService.getContractsAndGrantsDenotingValue());
-        }
-        else {
-            forCGCrit.addEqualTo("priorYearAccount.subFundGroupCode", subFundGroupService.getContractsAndGrantsDenotingValue());
-        }
-
-        Criteria subFundGroupCrit = new Criteria();
-        subFundGroupCrit.addIn("priorYearAccount.subFundGroupCode", subFundGroupsForCumulativeBalanceForwarding);
-        forCGCrit.addOrCriteria(subFundGroupCrit);
-        c.addAndCriteria(forCGCrit);
-
-        QueryByCriteria query = QueryFactory.newQuery(Balance.class, c);
-        query.addOrderByAscending(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.BALANCE_TYPE_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_TYPE_CODE);
-
-        Iterator<Balance> balances = getPersistenceBrokerTemplate().getIteratorByQuery(query);
-
-        Map<String, FilteringBalanceIterator> balanceIterators = SpringContext.getBeansOfType(FilteringBalanceIterator.class);
-        FilteringBalanceIterator filteredBalances = balanceIterators.get("glBalanceAnnualAndCGTotalNotZeroIterator");
-        filteredBalances.setBalancesSource(balances);
-
-        return filteredBalances;
-    }
-
-    private static final String PARAMETER_PREFIX = "SELECTION_";
-
-    /**
-     * @see org.kuali.module.gl.dao.BalanceDao#findOrganizationReversionBalancesForFiscalYear(java.lang.Integer, boolean)
-     */
-    public Iterator<Balance> findOrganizationReversionBalancesForFiscalYear(Integer year, boolean endOfYear) {
-        LOG.debug("findOrganizationReversionBalancesForFiscalYear() started");
-        Criteria c = new Criteria();
-        c.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, year);
-        ParameterService parameterService = SpringContext.getBean(ParameterService.class);
-        Map<Integer, String> parsedRules = new TreeMap<Integer, String>();
-        int i = 1;
-        boolean moreParams = true;
-        while (moreParams) {
-            if (parameterService.parameterExists(OrganizationReversion.class, PARAMETER_PREFIX + i)) {
-                ParameterEvaluator parameterEvaluator = parameterService.getParameterEvaluator(OrganizationReversion.class, PARAMETER_PREFIX + i);
-                String currentRule = parameterEvaluator.getValue();
-                if (!endOfYear) {
-                    currentRule = currentRule.replaceAll("account\\.", "priorYearAccount.");
-                }
-                if (StringUtils.isNotBlank(currentRule)) {
-                    String propertyName = StringUtils.substringBefore(currentRule, "=");
-                    List<String> ruleValues = Arrays.asList(StringUtils.substringAfter(currentRule, "=").split(";"));
-                    if (propertyName != null && propertyName.length() > 0 && ruleValues.size() > 0 && !StringUtils.isBlank(ruleValues.get(0))) {
-                        if (parameterEvaluator.constraintIsAllow()) {
-                            c.addIn(propertyName, ruleValues);
-                        }
-                        else {
-                            c.addNotIn(propertyName, ruleValues);
-                        }
-                    }
-                }
-            }
-            else {
-                moreParams = false;
-            }
-            i++;
-        }
-        // we only ever calculate on CB, AC, and encumbrance types, so let's only select those
-        Options options = SpringContext.getBean(OptionsService.class).getOptions(year);
-        List organizationReversionBalancesToSelect = new ArrayList();
-        organizationReversionBalancesToSelect.add(options.getActualFinancialBalanceTypeCd());
-        organizationReversionBalancesToSelect.add(options.getFinObjTypeExpenditureexpCd());
-        organizationReversionBalancesToSelect.add(options.getCostShareEncumbranceBalanceTypeCd());
-        organizationReversionBalancesToSelect.add(options.getIntrnlEncumFinBalanceTypCd());
-        organizationReversionBalancesToSelect.add(KFSConstants.BALANCE_TYPE_CURRENT_BUDGET);
-        c.addIn(KFSPropertyConstants.BALANCE_TYPE_CODE, organizationReversionBalancesToSelect);
-        QueryByCriteria query = QueryFactory.newQuery(Balance.class, c);
-        query.addOrderByAscending(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.SUB_OBJECT_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.BALANCE_TYPE_CODE);
-        query.addOrderByAscending(KFSPropertyConstants.OBJECT_TYPE_CODE);
-
-        return getPersistenceBrokerTemplate().getIteratorByQuery(query);
-    }
-
-    public void setOptionsService(OptionsService optionsService) {
-        this.optionsService = optionsService;
-    }
-
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
-    }
-
-    public void setBalanceTypService(BalanceTypService balanceTypService) {
-        this.balanceTypService = balanceTypService;
     }
 }
