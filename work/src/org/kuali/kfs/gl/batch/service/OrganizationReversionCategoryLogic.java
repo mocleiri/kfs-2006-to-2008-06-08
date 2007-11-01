@@ -17,7 +17,11 @@ package org.kuali.module.gl.service;
 
 import org.kuali.module.chart.bo.ObjectCode;
 
+/**
+ * An interface that represents the logic of a category associated with the Organization Reversion Process
+ */
 public interface OrganizationReversionCategoryLogic {
+    
     /**
      * Determine if this object code is contained in this category
      * 
