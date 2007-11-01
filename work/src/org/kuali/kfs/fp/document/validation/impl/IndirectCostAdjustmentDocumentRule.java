@@ -16,13 +16,16 @@
 package org.kuali.module.financial.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.Parameter;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
+import org.kuali.module.chart.bo.ObjectCode;
 
 /**
  * Business rule(s) applicable to IndirectCostAdjustment documents.
@@ -45,8 +48,9 @@ public class IndirectCostAdjustmentDocumentRule extends AccountingDocumentRuleBa
     }
 
     /**
-     * same logic as <code>IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)</code>
-     * but has the following accounting line restrictions: for grant lines(source):
+     * same logic as
+     * <code>IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)</code> but
+     * has the following accounting line restrictions: for grant lines(source):
      * <ol>
      * <li>only allow expense object type codes
      * </ol>
@@ -56,6 +60,7 @@ public class IndirectCostAdjustmentDocumentRule extends AccountingDocumentRuleBa
      * </ol>
      * 
      * @see IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * 
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
      */
@@ -66,6 +71,54 @@ public class IndirectCostAdjustmentDocumentRule extends AccountingDocumentRuleBa
         }
 
         return IsDebitUtils.isDebitConsideringType(this, transactionalDocument, accountingLine);
+    }
+
+    /**
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectSubTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectSubTypeAllowed(AccountingLine accountingLine) {
+        boolean valid = super.isObjectSubTypeAllowed(accountingLine);
+        if (valid) {
+            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.INDIRECT_COST_ADJUSTMENT_DOC, RESTRICTED_SUB_TYPE_GROUP_CODES);
+            String objectSubTypeCode = accountingLine.getObjectCode().getFinancialObjectSubTypeCode();
+
+            ObjectCode objectCode = accountingLine.getObjectCode();
+            if (ObjectUtils.isNull(objectCode)) {
+                accountingLine.refreshReferenceObject(KFSPropertyConstants.OBJECT_CODE);
+            }
+
+            valid = !getKualiConfigurationService().failsRule(rule,objectSubTypeCode);
+
+            if (!valid) {
+                reportError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJ_SUB_TYPE, objectCode.getFinancialObjectCode(), objectSubTypeCode);
+            }
+        }
+        return valid;
+    }
+
+    /**
+     * @see org.kuali.core.rule.AccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
+     */
+    @Override
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
+        boolean valid = super.isObjectTypeAllowed(accountingLine);
+
+        if (valid) {
+            Parameter rule = getParameterRule( KFSConstants.FINANCIAL_NAMESPACE, KFSConstants.Components.INDIRECT_COST_ADJUSTMENT_DOC, RESTRICTED_OBJECT_TYPE_CODES);
+
+            ObjectCode objectCode = accountingLine.getObjectCode();
+
+            String objectTypeCode = objectCode.getFinancialObjectTypeCode();
+
+            valid = !getKualiConfigurationService().failsRule(rule,objectTypeCode);
+            if (!valid) {
+                // add message
+                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.IndirectCostAdjustment.ERROR_DOCUMENT_ICA_INVALID_OBJECT_TYPE_CODE, new String[] { objectCode.getFinancialObjectCode(), objectTypeCode });
+            }
+        }
+
+        return valid;
     }
 
     /**

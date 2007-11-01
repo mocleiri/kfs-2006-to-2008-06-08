@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -30,43 +31,38 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.Delegate;
+import org.kuali.module.chart.bo.ChartUser;
 
 /**
- * Validates content of a <code>{@link AccountDelegate}</code> maintenance document upon triggering of a approve, save, or route
- * event.
+ * Validates content of a <code>{@link AccountDelegate}</code> maintenance document upon triggering of a 
+ * approve, save, or route event.
+ * 
+ * 
  */
 public class DelegateRule extends MaintenanceDocumentRuleBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DelegateRule.class);
     private static final KualiDecimal ZERO = new KualiDecimal(0);
-
+    
     private Delegate oldDelegate;
     private Delegate newDelegate;
 
     /**
      * Constructs a DelegateRule.java.
+     * 
      */
     public DelegateRule() {
         super();
     }
 
     /**
-     * This runs specific rules that are called when a document is saved:
-     * <ul>
-     * <li>{@link DelegateRule#checkSimpleRules()}</li>
-     * <li>{@link DelegateRule#checkOnlyOnePrimaryRoute(MaintenanceDocument)}</li>
-     * <li>{@link DelegateRule#checkDelegateUserRules(MaintenanceDocument)}</li>
-     * </ul>
+     * This method should be overridden to provide custom rules for processing document saving
      * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     * @return doesn't fail on save, even if sub-rules fail
+     * @param document
+     * @return boolean
      */
-    @Override
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
 
         LOG.info("Entering processCustomSaveDocumentBusinessRules()");
@@ -85,15 +81,11 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This runs specific rules that are called when a document is routed:
-     * <ul>
-     * <li>{@link DelegateRule#checkSimpleRules()}</li>
-     * <li>{@link DelegateRule#checkOnlyOnePrimaryRoute(MaintenanceDocument)}</li>
-     * <li>{@link DelegateRule#checkDelegateUserRules(MaintenanceDocument)}</li>
-     * </ul>
      * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     * @return fails if sub-rules fail
+     * This method should be overridden to provide custom rules for processing document routing
+     * 
+     * @param document
+     * @return boolean
      */
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
 
@@ -115,14 +107,10 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This runs specific rules that are called when a document is approved:
-     * <ul>
-     * <li>{@link DelegateRule#checkSimpleRules()}</li>
-     * <li>{@link DelegateRule#checkOnlyOnePrimaryRoute(MaintenanceDocument)}</li>
-     * <li>{@link DelegateRule#checkDelegateUserRules(MaintenanceDocument)}</li>
-     * </ul>
+     * This method should be overridden to provide custom rules for processing document approval.
      * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
+     * @param document
+     * @return booelan
      */
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
 
@@ -143,11 +131,15 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method sets the convenience objects like newAccount and oldAccount, so you have short and easy handles to the new and
-     * old objects contained in the maintenance document. It also calls the BusinessObjectBase.refresh(), which will attempt to load
-     * all sub-objects from the DB by their primary keys, if available.
+     * old objects contained in the maintenance document.
+     * 
+     * It also calls the BusinessObjectBase.refresh(), which will attempt to load all sub-objects from the DB by their primary keys,
+     * if available.
      * 
      * @param document - the maintenanceDocument being evaluated
+     * 
      */
     protected void setupConvenienceObjects(MaintenanceDocument document) {
 
@@ -159,18 +151,6 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
 
-    /**
-     * This checks to see if
-     * <ul>
-     * <li>the delegate start date is valid and they are active</li>
-     * <li>from amount is >= 0</li>
-     * <li>to amount cannot be empty when from amount is filled out</li>
-     * <li>to amount is >= from amount</li>
-     * <li>account cannot be closed</li>
-     * </ul>
-     * 
-     * @return
-     */
     protected boolean checkSimpleRules() {
 
         boolean success = true;
@@ -234,12 +214,8 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    /**
-     * This checks to see if there is already a record for the primary route
-     * 
-     * @param document
-     * @return false if there is a record
-     */
+
+    // checks to see if there is already a record
     protected boolean checkOnlyOnePrimaryRoute(MaintenanceDocument document) {
 
         boolean success = true;
@@ -291,9 +267,9 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
             return success;
         }
 
-        // if a primary already exists for a document type (including ALL), throw an error. However, current business rules
+        // if a primary already exists for a document type (including ALL), throw an error.  However, current business rules
         // should allow a primary for other document types, even if a primary for ALL already exists.
-
+        
         Map whereMap = new HashMap();
         whereMap.put("chartOfAccountsCode", newDelegate.getChartOfAccountsCode());
         whereMap.put("accountNumber", newDelegate.getAccountNumber());
@@ -309,16 +285,10 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
             putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_PRIMARY_ROUTE_ALREADY_EXISTS_FOR_DOCTYPE);
             success &= false;
         }
-
+        
         return success;
     }
 
-    /**
-     * This checks to see if the user is valid and active for this module
-     * 
-     * @param document
-     * @return false if this user is not valid or active for being a delegate
-     */
     protected boolean checkDelegateUserRules(MaintenanceDocument document) {
 
         boolean success = true;
@@ -330,19 +300,19 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         UniversalUser user = newDelegate.getAccountDelegate();
 
         // user must be an active kuali user
-        if (!user.isActiveForModule(ChartUser.MODULE_ID)) {
+        if (!user.isActiveForModule( ChartUser.MODULE_ID ) ) {
             success = false;
             putFieldError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE_KUALI_USER);
         }
-
+        
         // user must be of the allowable statuses (A - Active)
-        if (!SpringContext.getBean(ParameterService.class).getParameterEvaluator(Delegate.class, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_STATUSES, user.getEmployeeStatusCode()).evaluationSucceeds()) {
+        if (apcRuleFails(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT_DELEGATE, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
             success = false;
             putFieldError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE);
         }
-
+        
         // user must be of the allowable types (P - Professional)
-        if (!SpringContext.getBean(ParameterService.class).getParameterEvaluator(Delegate.class, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_TYPES, user.getEmployeeTypeCode()).evaluationSucceeds()) {
+        if (apcRuleFails(KFSConstants.CHART_NAMESPACE,KFSConstants.Components.ACCOUNT_DELEGATE, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
             success = false;
             putFieldError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_PROFESSIONAL);
         }

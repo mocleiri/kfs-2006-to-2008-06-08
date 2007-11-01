@@ -67,7 +67,7 @@
 		<property name="scheduler" ref="scheduler" />
 		<property name="jobListener" ref="jobListener" />
 		<property name="moduleService" ref="kualiModuleService" />
-		<property name="parameterService" ref="parameterService" />
+		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="dateTimeService" ref="dateTimeService" />
 		<property name="mailService" ref="mailService" />		
 	</bean>
@@ -87,8 +87,9 @@
 	</bean>
 
 	<bean id="step" abstract="true">
-		<property name="parameterService" ref="parameterService" />
+		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="dateTimeService" ref="dateTimeService" />
+        <property name="namespace" value="KR-NS" />
 	</bean>
 
 	<bean id="scheduleJob" parent="scheduledJobDescriptor">
@@ -114,13 +115,12 @@
 
   	<bean id="scheduleJobTrigger" parent="cronTrigger">
 		<property name="jobName" value="scheduleJob" />
-		<property name="cronExpression" value="${batch.schedule.cron.expression}" />
+		<property name="cronExpression" value="00 00 23 ? * *" />
 	</bean>
 	
 	<bean id="batchJobStatusLookupableHelperService" class="org.kuali.kfs.lookup.BatchJobStatusLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService">
     	<property name="schedulerService" ref="schedulerService" />
-    	<property name="parameterService" ref="parameterService" />
-    	<property name="configurationService" ref="kualiConfigurationService" />
+    	<property name="configService" ref="kualiConfigurationService" />
     </bean>
 	
 	<bean id="batchJobStatusLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
@@ -169,12 +169,6 @@
 	</bean>
 	<!-- end core batch jobs -->
 	
-	<bean id="parameterService" class="org.kuali.kfs.service.impl.ParameterServiceImpl">
-		<property name="dataDictionaryService" ref="dataDictionaryService" />
-		<property name="moduleService" ref="kualiModuleService" />
-		<property name="businessObjectService" ref="businessObjectService" />
-	</bean>
-	
 	<bean id="kualiCodeService" class="org.kuali.kfs.service.impl.KualiCodeServiceImpl">
 		<property name="kualiCodeDao">
 			<ref bean="kualiCodeDao" />
@@ -200,11 +194,8 @@
 	<bean id="optionsDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.OptionsDaoOjb" />
 	
 	<bean id="generalLedgerPendingEntryDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.GeneralLedgerPendingEntryDaoOjb">
-		<property name="parameterService">
-			<ref bean="parameterService" />
-		</property>
-		<property name="balanceTypService">
-			<ref bean="balanceTypService" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 	</bean>
 
@@ -239,8 +230,8 @@
 		<property name="optionsService">
 			<ref bean="optionsService" />
 		</property>
-		<property name="parameterService">
-			<ref bean="parameterService" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 		<property name="balanceTypeService">
 			<ref bean="balanceTypService" />
@@ -281,18 +272,10 @@
 		</property>
 	</bean>
 
-    <bean id="parameterLookupable" class="org.kuali.core.lookup.KualiLookupableImpl">
-        <property name="lookupableHelperService">
-            <bean id="parameterLookupableHelperService" class="org.kuali.kfs.lookup.ParameterLookupableHelperServiceImpl" parent="lookupableHelperService">
-                <property name="parameterService" ref="parameterService" />
-            </bean>
-        </property>
-    </bean>
-
     <bean id="parameterDetailTypeLookupable" class="org.kuali.core.lookup.KualiLookupableImpl">
         <property name="lookupableHelperService">
-            <bean id="parameterDetailTypeLookupableHelperService" class="org.kuali.kfs.lookup.ParameterDetailTypeLookupableHelperServiceImpl" parent="lookupableHelperService">
-				<property name="parameterService" ref="parameterService" />
+            <bean id="parameterDetailTypeLookupableHelperService" class="org.kuali.kfs.lookup.ParameterDetailTypeLookupableHelperServiceImpl"
+                parent="lookupableHelperService">
             </bean>
         </property>
     </bean>

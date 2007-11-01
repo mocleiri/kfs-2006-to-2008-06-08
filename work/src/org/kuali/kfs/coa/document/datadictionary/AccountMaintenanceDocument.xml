@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@
 <dictionaryEntry>
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.Account</businessObjectClass>
-        <maintainableClass>org.kuali.module.chart.maintenance.KualiAccountMaintainableImpl</maintainableClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiAccountMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.AccountRule</businessRulesClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.AccountPreRules</preRulesCheckClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,17 +33,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>AccountMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ACCT</documentTypeCode>
 
-		<webScriptFile>../dwr/interface/SubFundGroupService.js</webScriptFile>
-		<webScriptFile>../scripts/chart/accountDocument.js</webScriptFile>
-
-        <label>Account</label>
+        <label>Account Maintenance Document</label>
+        <shortLabel>AcctMaintDoc</shortLabel>
 
         <summary>Account maintenance document</summary>
         <description>Document used to create or update Account objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="Account" parameterName="ACCOUNT" />
+		<help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT" />
 
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
@@ -67,8 +65,9 @@
             <reference attributeName="accountManagerUser" attributeToHighlightOnFail="accountManagerUser.personUserIdentifier" />
             <reference attributeName="accountRestrictedStatus" attributeToHighlightOnFail="accountRestrictedStatusCode" />
             <reference attributeName="subFundGroup" attributeToHighlightOnFail="subFundGroupCode" />
+            <!--  comment program out if not in use at your institution -->
+            <reference attributeName="program" activeIndicatorAttributeName="programActiveIndicator" attributeToHighlightOnFail="programCode" />
             <reference attributeName="budgetRecordingLevel" activeIndicatorAttributeName="active" attributeToHighlightOnFail="budgetRecordingLevelCode" />
-            <reference attributeName="acctIndirectCostRcvyType" activeIndicatorAttributeName="active" attributeToHighlightOnFail="acctIndirectCostRcvyTypeCd" />
         </defaultExistenceChecks>
 
         <maintainableSections>
@@ -79,26 +78,29 @@
                     <maintainableField name="accountName" required="true" />
                     <maintainableField name="organizationCode" required="true" />
                     <maintainableField name="accountPhysicalCampusCode" required="true" />
-                    <maintainableField name="accountCreateDate" />
                     <maintainableField name="accountEffectiveDate" required="true">
-                        <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.CurrentDateMMDDYYYYFinder</defaultValueFinderClass>
+                        <defaultValueFinderClass>org.kuali.core.lookup.valueFinder.CurrentDateMMDDYYYYFinder</defaultValueFinderClass>
                     </maintainableField>
                     <maintainableField name="accountExpirationDate" required="false" />
                     <maintainableField name="accountZipCode" required="true" />
                     <maintainableField name="accountCityName" required="true" />
-                    <maintainableField name="accountStateCode" required="true" />
+                    <maintainableField name="accountStateCode" required="true">
+                        <defaultValue>IN</defaultValue>
+                    </maintainableField>
                     <maintainableField name="accountStreetAddress" required="true" />
                     <maintainableField name="accountOffCampusIndicator" required="false" />
                     <maintainableField name="accountClosedIndicator" required="false" />
                     <maintainableField name="accountTypeCode" required="true" />
-                    <maintainableField name="subFundGroupCode" required="true" webUILeaveFieldFunction="onblur_subFundGroup" webUILeaveFieldCallbackFunction="checkRestrictedStatusCode_Callback" />
+                    <maintainableField name="subFundGroupCode" required="true" />
+                    <!--  comment programCode out if not in use at your institution -->
+                    <maintainableField name="programCode" required="false" />
                     <maintainableField name="accountsFringesBnftIndicator" required="false">
                         <defaultValue>true</defaultValue>
                     </maintainableField>
                     <maintainableField name="reportsToChartOfAccountsCode" required="false" />
                     <maintainableField name="reportsToAccountNumber" required="false" />
                     <maintainableField name="financialHigherEdFunctionCd" required="true" />
-                    <maintainableField name="accountRestrictedStatusCode" required="true"  webUILeaveFieldFunction="onblur_accountRestrictedStatusCode" webUILeaveFieldCallbackFunction="checkRestrictedStatusCode_Callback" />
+                    <maintainableField name="accountRestrictedStatusCode" required="true" />
                     <maintainableField name="accountRestrictedStatusDate" required="false" />
                     <maintainableField name="endowmentIncomeAcctFinCoaCd" required="false" />
                     <maintainableField name="endowmentIncomeAccountNumber" required="false" />
@@ -136,13 +138,10 @@
                     <maintainableField name="contractControlFinCoaCode" required="false" />
                     <maintainableField name="contractControlAccountNumber" required="false" />
                     <maintainableField name="acctIndirectCostRcvyTypeCd" required="false" />
-                    <maintainableField name="financialIcrSeriesIdentifier" required="false" >
-                         <overrideLookupClass>org.kuali.module.chart.bo.IcrAutomatedEntry</overrideLookupClass>
-                         <overrideFieldConversions>financialIcrSeriesIdentifier:financialIcrSeriesIdentifier</overrideFieldConversions>
-                    </maintainableField>  
+                    <maintainableField name="financialIcrSeriesIdentifier" required="false" />
                     <maintainableField name="indirectCostRcvyFinCoaCode" required="false" />
                     <maintainableField name="indirectCostRecoveryAcctNbr" required="false" />
-                    <maintainableField name="accountCfdaNumber" required="false" />
+                    <maintainableField name="cgCatlfFedDomestcAssistNbr" required="false" />
                 </maintainableItems>
             </maintainableSection>
             <maintainableSection title="Guidelines And Purpose">

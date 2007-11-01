@@ -36,8 +36,7 @@
 	<html:hidden property="document.vendorDetailAssignedIdentifier" />
 	<html:hidden property="document.accountsPayablePurchasingDocumentLinkIdentifier" />
 	<html:hidden property="document.paymentRequestedCancelIndicator" />
-	<html:hidden property="document.holdIndicator" />
-	<html:hidden property="document.lastActionPerformedByUniversalUserId" />
+	<%--<html:hidden property="document.lastActionPerformedByUniversalUserId" />--%>
    
     <!-- html:hidden property="document.purchaseOrderEncumbranceFiscalYear" / --> 
     <html:hidden property="document.paymentRequestCostSourceCode" />
@@ -95,10 +94,19 @@
 		<purap:relatedDocuments documentAttributes="${DataDictionary.RelatedDocuments.attributes}"/>
            	
 	    <purap:paymentHistory documentAttributes="${DataDictionary.RelatedDocuments.attributes}" />
+
+        <purap:statushistory 
+        	documentAttributes="${DataDictionary.PaymentRequestStatusHistory.attributes}">
+          	<html:messages id="warnings" property="statusHistoryWarning" message="true">
+            	&nbsp;&nbsp;&nbsp;<bean:write name="warnings"/><br><br>
+          	</html:messages>       
+    	</purap:statushistory>
     	
         <gl:generalLedgerPendingEntries />
 
-	    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}"  allowsNoteFYI="true"/>
+	    <kul:notes notesBo="${KualiForm.document.documentBusinessObject.boNotes}" noteType="${Constants.NoteTypeEnum.BUSINESS_OBJECT_NOTE_TYPE}"  allowsNoteFYI="true"/> 
+	    	
+	    < kul:adHocRecipients />
 	
 	    <kul:routeLog />
     	

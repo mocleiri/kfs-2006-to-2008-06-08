@@ -18,7 +18,7 @@
 <beans>
 	<bean id="cgModule" class="org.kuali.core.KualiModule">
 		<property name="moduleId" value="cg" />
-		<property name="moduleName" value="Post-Award" />
+		<property name="moduleName" value="Kuali Contracts and Grants" />
 		<property name="moduleCode" value="CG" />
 		<property name="moduleUserService" ref="cgUserService" />
 		<property name="initializeDataDictionary" value="true" />
@@ -56,11 +56,6 @@
 			<list>
 				<value>closeJob</value>
 				<value>cfdaJob</value>
-			</list>
-		</property>
-		<property name="triggerNames">
-			<list>
-				<value>cfdaJobTrigger</value>
 			</list>
 		</property>
 	</bean>
@@ -107,7 +102,7 @@
     	</property>
 	</bean>
 
-	<bean id="proposalLookupableHelperService" class="org.kuali.module.cg.lookup.ProposalLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService" />
+	<bean id="proposalLookupableHelperService" class="org.kuali.module.cg.lookup.ProposalLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService" />
 
 	<bean id="proposalLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
 		<property name="lookupableHelperService">
@@ -115,7 +110,7 @@
 		</property>
 	</bean>
 
-    <bean id="awardLookupableHelperService" class="org.kuali.module.cg.lookup.AwardLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService" />
+    <bean id="awardLookupableHelperService" class="org.kuali.module.cg.lookup.AwardLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService" />
 
     <bean id="awardLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
         <property name="lookupableHelperService">
@@ -150,20 +145,8 @@
         </property>
     </bean>
 
-	<!-- Workflow Lookupables -->
-    <bean id="workflow-org.kuali.module.cg.bo.Proposal-Lookupable" parent="workflowLookupable" singleton="false">
-        <property name="businessObjectClassName">
-            <value>org.kuali.module.cg.bo.Proposal</value>
-        </property>
-    </bean>
-	
-    <bean id="workflow-org.kuali.module.cg.bo.Agency-Lookupable" parent="workflowLookupable" singleton="false">
-        <property name="businessObjectClassName">
-            <value>org.kuali.module.cg.bo.Agency</value>
-        </property>
-    </bean>
-	
-    <bean id="cfdaBatchStep" class="org.kuali.module.cg.batch.CfdaBatchStep" parent="step">
+    <!-- Batch Steps -->
+    <bean id="cfdaBatchStep" class="org.kuali.module.cg.batch.CfdaBatchStep">
         <property name="cfdaService">
             <ref bean="cfdaService" />
         </property>
@@ -185,24 +168,10 @@
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="cfdaJobTrigger" parent="cronTrigger">
-		<property name="jobName" value="cfdaJob" />
-		<property name="cronExpression" value="00 00 00 1 1,4,7,10  ?" />
-	</bean>
 
-    <bean id="closeBatchStep" class="org.kuali.module.cg.batch.CloseBatchStep" parent="step">
+    <bean id="closeBatchStep" class="org.kuali.module.cg.batch.CloseBatchStep">
         <property name="closeService">
             <ref bean="closeService" />
-        </property>
-        <property name="kualiGroupService">
-            <ref bean="kualiGroupService" />
-        </property>
-        <property name="universalUserService">
-            <ref bean="universalUserService" />
-        </property>
-        <property name="mailService">
-            <ref bean="mailService" />
         </property>
     </bean>
 
