@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,47 +25,31 @@ import java.util.Properties;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 
 /**
  * This class...
+ * 
+ * 
  */
 public class TestDataGenerator {
 
-    private String propertiesFileName;
+    private final String propertiesFileName = "test/src/org/kuali/module/gl/web/data.properties";
     private Properties properties;
 
-    private String messageFileName;
+    private final String messageFileName = "test/src/org/kuali/module/gl/web/message.properties";
     private Properties message;
 
     /**
      * Constructs a TestDataGenerator.java.
      */
     public TestDataGenerator() {
-        this.messageFileName = "test/src/org/kuali/module/gl/web/message.properties";
-        this.propertiesFileName = "test/src/org/kuali/module/gl/web/data.properties";
-
         properties = loadProperties(propertiesFileName);
         message = loadProperties(messageFileName);
     }
-
-    /**
-     * Constructs a TestDataGenerator.java.
-     * 
-     * @param propertiesFileName
-     * @param messageFileName
-     */
-    public TestDataGenerator(String propertiesFileName, String messageFileName) {
-        this.propertiesFileName = propertiesFileName;
-        this.messageFileName = messageFileName;
-
-        properties = loadProperties(propertiesFileName);
-        message = loadProperties(messageFileName);
-    }
-
 
     /**
      * This method generates transaction data for a business object from properties
@@ -100,7 +84,7 @@ public class TestDataGenerator {
      * @return the map of lookup fields and values
      * @throws Exception
      */
-    public Map generateLookupFieldValues(PersistableBusinessObject businessObject) throws Exception {
+    public Map generateLookupFieldValues(BusinessObjectBase businessObject) throws Exception {
         return generateLookupFieldValues(businessObject, null);
     }
 
@@ -111,7 +95,7 @@ public class TestDataGenerator {
      * @return the map of lookup fields and values
      * @throws Exception
      */
-    public Map generateLookupFieldValues(PersistableBusinessObject businessObject, List lookupFields) throws Exception {
+    public Map generateLookupFieldValues(BusinessObjectBase businessObject, List lookupFields) throws Exception {
         Map fieldValues = new HashMap();
 
         boolean isTransaction = (businessObject instanceof Transaction);
@@ -146,6 +130,7 @@ public class TestDataGenerator {
      * This method loads the properties from the property file
      * 
      * @param propertiesFileName the name of file containing the properties
+     * 
      * @return the properties that have been populated
      */
     private Properties loadProperties(String propertiesFileName) {

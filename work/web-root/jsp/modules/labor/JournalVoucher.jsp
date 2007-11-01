@@ -1,5 +1,5 @@
 <%--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -159,9 +159,9 @@
 
 	<fin:voucherAccountingLines
 		isDebitCreditAmount="${KualiForm.selectedBalanceType.financialOffsetGenerationIndicator}"
-		optionalFields="positionNumber,emplid,employeeRecord,earnCode,payGroup,salaryAdministrationPlan,grade,runIdentifier,payPeriodEndDate,payrollEndDateFiscalYear,payrollEndDateFiscalPeriodCode,transactionTotalHours,laborLedgerOriginalChartOfAccountsCode,laborLedgerOriginalAccountNumber,laborLedgerOriginalSubAccountNumber,laborLedgerOriginalFinancialObjectCode,laborLedgerOriginalFinancialSubObjectCode,hrmsCompany,encumbranceUpdateCode,setid"
+		optionalFields="positionNumber,emplid,employeeRecord,earnCode,payGroup,salaryAdministrationPlan,grade,runIdentifier,payPeriodEndDate,payrollEndDateFiscalYear,payrollEndDateFiscalPeriodCode,transactionTotalHours,laborLedgerOriginalChartOfAccountsCode,laborLedgerOriginalAccountNumber,laborLedgerOriginalSubAccountNumber,laborLedgerOriginalFinancialObjectCode,laborLedgerOriginalFinancialSubObjectCode,hrmsCompany,setid"
 		isOptionalFieldsInNewRow="true"
-		displayExternalEncumbranceFields="${KualiForm.selectedBalanceType.finBalanceTypeEncumIndicator}"
+		displayExternalEncumbranceFields="${KualiForm.selectedBalanceType.code==KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE}"
 		editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}"
 		includeObjectTypeCode="true" />
