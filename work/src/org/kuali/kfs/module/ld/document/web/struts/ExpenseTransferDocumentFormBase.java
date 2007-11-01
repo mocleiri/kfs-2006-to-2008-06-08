@@ -23,23 +23,32 @@ import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.OptionsService;
-import org.kuali.module.labor.LaborPropertyConstants;
 import org.kuali.module.labor.bo.LaborAccountingLineOverride;
 
 /**
- * Base Struts Action Form for all expense transfer documents.
+ * This class is the base action form for all expense transfer documents.
  */
 public abstract class ExpenseTransferDocumentFormBase extends LaborDocumentFormBase implements MultipleValueLookupBroker {
 
-    private String lookupResultsSequenceNumber; // Indicates which result set we are using when refreshing/returning from a
-                                                // multi-value lookup.
-    private String lookupResultsBOClassName; // Type of result returned by the multi-value lookup. ?to be persisted in the lookup
-                                                // results service instead?
-    private String lookedUpCollectionName; // The name of the collection looked up (by a multiple value lookup)
+    /**
+     * Used to indicate which result set we're using when refreshing/returning from a multi-value lookup
+     */
+    private String lookupResultsSequenceNumber;
+
+    /**
+     * The type of result returned by the multi-value lookup TODO: to be persisted in the lookup results service instead?
+     */
+    private String lookupResultsBOClassName;
+
+    /**
+     * The name of the collection looked up (by a multiple value lookup)
+     */
+    private String lookedUpCollectionName;
+
     private Integer universityFiscalYear;
 
     /**
-     * Constructs a ExpenseTransferDocumentFormBase instance for the dependent object.
+     * This constructor sets up empty instances for the dependent objects...
      */
     public ExpenseTransferDocumentFormBase() {
         super();
@@ -55,42 +64,42 @@ public abstract class ExpenseTransferDocumentFormBase extends LaborDocumentFormB
     }
 
     /**
-     * @see org.kuali.module.labor.web.struts.form.MultipleValueLookupBroker#getLookupResultsSequenceNumber()
+     * @see MultipleValueLookupBroker#getLookupResultsSequenceNumber()
      */
     public String getLookupResultsSequenceNumber() {
         return lookupResultsSequenceNumber;
     }
 
     /**
-     * @see org.kuali.module.labor.web.struts.form.MultipleValueLookupBroker#setLookupResultsSequenceNumber(java.lang.String)
+     * @see MultipleValueLookupBroker#setLookupResultsSequenceNumber(String)
      */
     public void setLookupResultsSequenceNumber(String lookupResultsSequenceNumber) {
         this.lookupResultsSequenceNumber = lookupResultsSequenceNumber;
     }
 
     /**
-     * @see org.kuali.module.labor.web.struts.form.MultipleValueLookupBroker#getLookupResultsBOClassName()
+     * @see MultipleValueLookupBroker#getLookupResultsBOClassName()
      */
     public String getLookupResultsBOClassName() {
         return lookupResultsBOClassName;
     }
 
     /**
-     * @see org.kuali.module.labor.web.struts.form.MultipleValueLookupBroker#setLookupResultsBOClassName(java.lang.String)
+     * @see MultipleValueLookupBroker#setLookupResultsBOClassName(String)
      */
     public void setLookupResultsBOClassName(String lookupResultsBOClassName) {
         this.lookupResultsBOClassName = lookupResultsBOClassName;
     }
 
     /**
-     * @see org.kuali.module.labor.web.struts.form.MultipleValueLookupBroker#getLookedUpCollectionName()
+     * @see MultipleValueLookupBroker#getLookupedUpCollectionName()
      */
     public String getLookedUpCollectionName() {
         return lookedUpCollectionName;
     }
 
     /**
-     * @see org.kuali.module.labor.web.struts.form.MultipleValueLookupBroker#setLookedUpCollectionName(java.lang.String)
+     * @see MultipleValueLookupBroker#getLookupedUpCollectionName(String)
      */
     public void setLookedUpCollectionName(String lookedUpCollectionName) {
         this.lookedUpCollectionName = lookedUpCollectionName;
@@ -115,14 +124,12 @@ public abstract class ExpenseTransferDocumentFormBase extends LaborDocumentFormB
     }
 
     /**
-     * Populate the search fields with the last search criteria
+     * populate the search fields with the last search criteria
      */
     public abstract void populateSearchFields();
 
     /**
-     * Gets forced read only source fields
-     * 
-     * @return Returns a Map of read only source fields
+     * @see org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase#getForcedReadOnlyFields()
      */
     public Map getForcedReadOnlySourceFields() {
         Map map = super.getForcedReadOnlyFields();
@@ -134,8 +141,8 @@ public abstract class ExpenseTransferDocumentFormBase extends LaborDocumentFormB
         map.put(KFSPropertyConstants.PROJECT_CODE, Boolean.TRUE);
         map.put(KFSPropertyConstants.ORGANIZATION_REFERENCE_ID, Boolean.TRUE);
         map.put(KFSPropertyConstants.POSITION_NUMBER, Boolean.TRUE);
-        map.put(LaborPropertyConstants.PAYROLL_END_DATE_FISCAL_PERIOD_CODE, Boolean.TRUE);
-        map.put(LaborPropertyConstants.PAYROLL_END_DATE_FISCAL_YEAR, Boolean.TRUE);
+        map.put(KFSPropertyConstants.PAYROLL_END_DATE_FISCAL_PERIOD_CODE, Boolean.TRUE);
+        map.put(KFSPropertyConstants.PAYROLL_END_DATE_FISCAL_YEAR, Boolean.TRUE);
         return map;
     }
 
@@ -144,8 +151,8 @@ public abstract class ExpenseTransferDocumentFormBase extends LaborDocumentFormB
      */
     public Map getForcedReadOnlyTargetFields() {
         Map map = super.getForcedReadOnlyFields();
-        map.put(LaborPropertyConstants.PAYROLL_END_DATE_FISCAL_PERIOD_CODE, Boolean.TRUE);
-        map.put(LaborPropertyConstants.PAYROLL_END_DATE_FISCAL_YEAR, Boolean.TRUE);
+        map.put(KFSPropertyConstants.PAYROLL_END_DATE_FISCAL_PERIOD_CODE, Boolean.TRUE);
+        map.put(KFSPropertyConstants.PAYROLL_END_DATE_FISCAL_YEAR, Boolean.TRUE);
         return map;
     }
 
@@ -167,8 +174,7 @@ public abstract class ExpenseTransferDocumentFormBase extends LaborDocumentFormB
     }
 
     /**
-     * Deal with the labor-specific override code to the given source accounting line
-     * 
+     * deal with the labor-specific override code to the given source accounting line
      * @see org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase#populateSourceAccountingLine(org.kuali.kfs.bo.SourceAccountingLine)
      */
     @Override
@@ -178,8 +184,7 @@ public abstract class ExpenseTransferDocumentFormBase extends LaborDocumentFormB
     }
 
     /**
-     * Deal with the labor-specific override code to the given target accounting line
-     * 
+     * deal with the labor-specific override code to the given target accounting line
      * @see org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase#populateTargetAccountingLine(org.kuali.kfs.bo.TargetAccountingLine)
      */
     @Override

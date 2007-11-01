@@ -16,22 +16,18 @@
 package org.kuali.module.kra.budget.rules.budget;
 
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.KraKeyConstants;
 import org.kuali.module.kra.budget.bo.BudgetIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 
 public class BudgetIndirectCostRule {
-
-    protected BudgetIndirectCostRule() {
-    }
-
+    
+    protected BudgetIndirectCostRule() {}
+    
     /**
      * Check indicator logic only.
      * 
@@ -55,7 +51,7 @@ public class BudgetIndirectCostRule {
     protected boolean processSaveIndirectCostBusinessRules(BudgetIndirectCost idc) {
         boolean valid = true;
 
-        SpringContext.getBean(DictionaryValidationService.class).validateBusinessObjectsRecursively(idc, 1);
+        SpringServiceLocator.getDictionaryValidationService().validateBusinessObjectsRecursively(idc, 1);
 
         valid &= GlobalVariables.getErrorMap().isEmpty();
         valid &= verifyUnrecoveredIndirectCost(idc);
@@ -67,7 +63,7 @@ public class BudgetIndirectCostRule {
 
     private boolean verifyManualIndirectCostRate(BudgetIndirectCost idc) {
         boolean valid = true;
-        KualiDecimal maxManualIdcRate = new KualiDecimal(SpringContext.getBean(ParameterService.class).getParameterValue(BudgetDocument.class, KraConstants.INDIRECT_COST_MAX_MANUAL_RATE));
+        KualiDecimal maxManualIdcRate = new KualiDecimal(SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "BudgetIndirectCostMaxManualRate"));
         int i = 0;
         for (BudgetTaskPeriodIndirectCost budgetTaskPeriodIndirectCost : idc.getBudgetTaskPeriodIndirectCostItems()) {
             if (budgetTaskPeriodIndirectCost.getBudgetManualIndirectCostRate().isGreaterThan(maxManualIdcRate)) {
