@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package org.kuali.module.financial.document;
 
-import org.kuali.core.document.AmountTotaling;
-
 /**
  * This is the business object that represents the <code>{@link YearEndDocument}</code> version of
  * <code>{@link GeneralErrorCorrectionDocument}</code> in Kuali. This is a transactional document that will eventually post
@@ -26,7 +24,7 @@ import org.kuali.core.document.AmountTotaling;
  * version except that it has slightly different routing and that it only allows posting to the year end accounting period for a
  * year.
  */
-public class YearEndGeneralErrorCorrectionDocument extends GeneralErrorCorrectionDocument implements YearEndDocument, AmountTotaling {
+public class YearEndGeneralErrorCorrectionDocument extends GeneralErrorCorrectionDocument implements YearEndDocument {
 
     /**
      * Initializes the array lists and some basic info.

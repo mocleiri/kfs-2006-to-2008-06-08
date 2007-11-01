@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>TravelMileageRateMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiTravelMileageRateMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVML</documentTypeCode>
 
-        <label>Disbursement Voucher Travel Mileage Rate</label>
+        <label>Travel Mileage Rate Maintenance Document</label>
+        <shortLabel>Travel Mileage Rate Maint Doc</shortLabel>
 
         <summary>Travel Mileage Rate Maintenance Document</summary>
         <description>Document used to create or update Travel Mileage Rate objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="TravelMileageRate" parameterName="TRAVEL_MILEAGE_RATE" />
+        <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_TRAVEL_MILEAGE_RATE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="disbursementVoucherMileageEffectiveDate" />

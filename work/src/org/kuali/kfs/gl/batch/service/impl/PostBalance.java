@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,24 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.BalanceDao;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+/**
+ * 
+ * 
+ */
 public class PostBalance implements PostTransaction, BalanceCalculator {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostBalance.class);
 
     private BalanceDao balanceDao;
+    private DateTimeService dateTimeService;
 
     /**
      * 
@@ -97,6 +99,7 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
     }
 
     /**
+     * 
      * @param t
      * @param enc
      */
@@ -131,7 +134,7 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
         // update the balance amount of the cooresponding period
         String period = t.getUniversityFiscalPeriodCode();
         if (period == null) {
-            UniversityDate currentUniversityDate = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+            UniversityDate currentUniversityDate = dateTimeService.getCurrentUniversityDate();
             period = currentUniversityDate.getUniversityFiscalAccountingPeriod();
         }
 
@@ -144,5 +147,14 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
 
     public void setBalanceDao(BalanceDao bd) {
         balanceDao = bd;
+    }
+
+    /**
+     * Sets the dateTimeService attribute value.
+     * 
+     * @param dateTimeService The dateTimeService to set.
+     */
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
     }
 }

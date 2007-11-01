@@ -638,8 +638,7 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
             else {
                 equals &= this.subcontractorNumber != null && objCompare.getSubcontractorNumber() != null && this.subcontractorNumber.equals(objCompare.getSubcontractorNumber());
             }
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -647,6 +646,7 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     }
 
     /**
+     * 
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormSubcontractor">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Subcontractor Inquiry</title>
@@ -84,7 +84,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="6" />
+                    <hidden />
                 </control>
 
                 <summary>routingFormSubcontractorNumber</summary>

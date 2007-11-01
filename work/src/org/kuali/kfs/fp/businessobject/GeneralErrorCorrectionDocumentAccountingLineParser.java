@@ -23,6 +23,7 @@ import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_LINE_DESCRIP
 import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.kfs.KFSPropertyConstants.OVERRIDE_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
 import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_NUMBER;
 import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_ORIGIN_CODE;
@@ -35,6 +36,8 @@ import org.kuali.kfs.bo.AccountingLineParserBase;
  * <code>GeneralErrorCorrectionDocument</code> accounting line parser
  * 
  * @see org.kuali.module.financial.document.GeneralErrorCorrectionDocument
+ * 
+ * 
  */
 public class GeneralErrorCorrectionDocumentAccountingLineParser extends AccountingLineParserBase {
     private static final String[] FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, REFERENCE_ORIGIN_CODE, REFERENCE_NUMBER, FINANCIAL_DOCUMENT_LINE_DESCRIPTION, AMOUNT };
