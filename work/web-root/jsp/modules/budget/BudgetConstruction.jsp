@@ -17,17 +17,6 @@
 <c:set var="budgetConstructionAttributes"
 	value="${DataDictionary['KualiBudgetConstructionDocument'].attributes}" />
 
-<c:if test="${KualiForm.pickListClose}">
-<kul:page showDocumentInfo="false"
-	htmlFormAction="budgetBudgetConstruction" renderMultipart="false"
-	showTabButtons="false"
-	docTitle="Budget Construction Document"
-    transactionalDocument="false"
-	>
-</kul:page>
-</c:if>
-
-<c:if test="${!KualiForm.pickListClose}">
 <kul:page showDocumentInfo="true"
 	htmlFormAction="budgetBudgetConstruction" renderMultipart="true"
 	showTabButtons="true"
@@ -40,14 +29,13 @@
 		isTransactionalDocument="false" />
 	<html-el:hidden name="KualiForm" property="returnAnchor" />
 	<html-el:hidden name="KualiForm" property="returnFormKey" />
-	<html-el:hidden name="KualiForm" property="pickListMode" />
 
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 <%--
 		includePostingYear="true"
         postingYearOnChange="submitForm()"
         includePostingYearRefresh="true"
-        postingYearAttributes="${DataDictionary.BudgetAdjustmentDocument.attributes}" />
+        postingYearAttributes="${DataDictionary.KualiBudgetAdjustmentDocument.attributes}" />
 --%>
     <bc:systemInformation />
 
@@ -71,4 +59,3 @@
   var kualiElements = kualiForm.elements;
 </SCRIPT>
 </kul:page>
-</c:if>

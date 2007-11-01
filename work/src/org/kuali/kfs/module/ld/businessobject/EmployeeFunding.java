@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,6 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.labor.LaborConstants;
 
-/**
- * Labor business object for Employee Funding.
- */
 public class EmployeeFunding extends LedgerBalance {
 
     private String personName;
@@ -39,6 +36,7 @@ public class EmployeeFunding extends LedgerBalance {
     private BigDecimal csfTimePercent;
     private BigDecimal csfFullTimeEmploymentQuantity;
     private KualiDecimal csfAmount;
+
     private KualiDecimal currentAmount;
     private KualiDecimal outstandingEncumbrance;
     private KualiDecimal totalAmount;
@@ -56,9 +54,9 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Gets the person name.
+     * This method returns the person name
      * 
-     * @return Returns the PersonName.
+     * @return
      */
     public String getPersonName() {
         UserId empl = new PersonPayrollId(getEmplid());
@@ -75,9 +73,9 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the persons name.
+     * This method set thes persons name
      * 
-     * @param personName The personName to set.
+     * @param personName
      */
 
     public void setPersonName(String personName) {
@@ -85,7 +83,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Gets the csfAmount
+     * Gets the csfAmount attribute.
      * 
      * @return Returns the csfAmount.
      */
@@ -94,7 +92,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the csfAmount.
+     * Sets the csfAmount attribute value.
      * 
      * @param csfAmount The csfAmount to set.
      */
@@ -103,7 +101,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Gets the csfDeleteCode.
+     * Gets the csfDeleteCode attribute.
      * 
      * @return Returns the csfDeleteCode.
      */
@@ -112,7 +110,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the csfDeleteCode.
+     * Sets the csfDeleteCode attribute value.
      * 
      * @param csfDeleteCode The csfDeleteCode to set.
      */
@@ -121,7 +119,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Gets the csfFundingStatusCode.
+     * Gets the csfFundingStatusCode attribute.
      * 
      * @return Returns the csfFundingStatusCode.
      */
@@ -130,7 +128,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the csfFundingStatusCode.
+     * Sets the csfFundingStatusCode attribute value.
      * 
      * @param csfFundingStatusCode The csfFundingStatusCode to set.
      */
@@ -139,7 +137,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Gets the csfTimePercent.
+     * Gets the csfTimePercent attribute.
      * 
      * @return Returns the csfTimePercent.
      */
@@ -148,7 +146,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the csfTimePercent.
+     * Sets the csfTimePercent attribute value.
      * 
      * @param csfTimePercent The csfTimePercent to set.
      */
@@ -157,7 +155,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Gets the currentAmount.
+     * Gets the currentAmount attribute.
      * 
      * @return Returns the currentAmount.
      */
@@ -166,7 +164,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the currentAmount.
+     * Sets the currentAmount attribute value.
      * 
      * @param currentAmount The currentAmount to set.
      */
@@ -175,7 +173,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Gets the outstandingEncumbrance.
+     * Gets the outstandingEncumbrance attribute.
      * 
      * @return Returns the outstandingEncumbrance.
      */
@@ -184,7 +182,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the outstandingEncumbrance.
+     * Sets the outstandingEncumbrance attribute value.
      * 
      * @param outstandingEncumbrance The outstandingEncumbrance to set.
      */
@@ -193,18 +191,18 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Returns a total amount based upon adding any outstanding encumberence records to the annual balance amount.
+     * This method returns a total amount based upon adding any outstanding encumberence records to the annual balance amount.
      * 
-     * @return TotalAmount
+     * @return
      */
     public KualiDecimal getTotalAmount() {
         return this.currentAmount.add(this.outstandingEncumbrance);
     }
 
     /**
-     * Sets the total amount.
+     * This method sets a total amount value
      * 
-     * @param totalAmount The totalAmount to set.
+     * @param totalAmount
      */
     public void setTotalAmount(KualiDecimal totalAmount) {
         this.totalAmount = totalAmount;
@@ -225,7 +223,6 @@ public class EmployeeFunding extends LedgerBalance {
         result = PRIME * result + ((getUniversityFiscalYear() == null) ? 0 : getUniversityFiscalYear().hashCode());
         result = PRIME * result + ((getEmplid() == null) ? 0 : getEmplid().hashCode());
         result = PRIME * result + ((getPositionNumber() == null) ? 0 : getPositionNumber().hashCode());
-
         return result;
     }
 
@@ -267,13 +264,11 @@ public class EmployeeFunding extends LedgerBalance {
         else if (!ObjectUtils.equals(getPositionNumber(), other.getPositionNumber())) {
             return false;
         }
-
         return true;
     }
 
     /**
-     * Gets the csfFullTimeEmploymentQuantity.
-     * 
+     * Gets the csfFullTimeEmploymentQuantity attribute. 
      * @return Returns the csfFullTimeEmploymentQuantity.
      */
     public BigDecimal getCsfFullTimeEmploymentQuantity() {
@@ -281,8 +276,7 @@ public class EmployeeFunding extends LedgerBalance {
     }
 
     /**
-     * Sets the csfFullTimeEmploymentQuantity.
-     * 
+     * Sets the csfFullTimeEmploymentQuantity attribute value.
      * @param csfFullTimeEmploymentQuantity The csfFullTimeEmploymentQuantity to set.
      */
     public void setCsfFullTimeEmploymentQuantity(BigDecimal csfFullTimeEmploymentQuantity) {

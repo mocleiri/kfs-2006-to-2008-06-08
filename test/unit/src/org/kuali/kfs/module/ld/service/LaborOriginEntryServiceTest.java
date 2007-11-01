@@ -30,8 +30,7 @@ import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.util.LedgerEntryHolder;
@@ -40,9 +39,11 @@ import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.util.TestDataPreparator;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborOriginEntryServiceTest extends KualiTestBase {
 
     private Properties properties;
@@ -65,11 +66,12 @@ public class LaborOriginEntryServiceTest extends KualiTestBase {
         fieldNames = properties.getProperty("fieldNames");
         deliminator = properties.getProperty("deliminator");
 
-        laborOriginEntryService = SpringContext.getBean(LaborOriginEntryService.class);
-        originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
+        laborOriginEntryService = (LaborOriginEntryService) beanFactory.getBean("laborOriginEntryService");
+        originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
 
-        Date today = (SpringContext.getBean(DateTimeService.class)).getCurrentSqlDate();
+        Date today = ((DateTimeService) beanFactory.getBean("dateTimeService")).getCurrentSqlDate();
         group1 = originEntryGroupService.createGroup(today, LABOR_MAIN_POSTER_VALID, false, false, false);
         group2 = originEntryGroupService.createGroup(today, LABOR_MAIN_POSTER_VALID, false, false, false);
 
@@ -167,7 +169,7 @@ public class LaborOriginEntryServiceTest extends KualiTestBase {
         outputSummary = laborOriginEntryService.getPosterOutputSummaryByGroups(groups);
         assertEquals(expectedNumber, outputSummary.size());
     }
-
+    
     public void testGetCountOfEntriesInGroups() throws Exception {
         int numberOfTestData = Integer.valueOf(properties.getProperty("getCountOfEntriesInGroups.numOfData"));
         int expectedNumber = Integer.valueOf(properties.getProperty("getCountOfEntriesInGroups.expectedNumOfData"));

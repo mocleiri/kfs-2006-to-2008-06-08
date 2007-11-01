@@ -16,11 +16,13 @@
 package org.kuali.module.cg.lookup.valuefinder;
 
 import org.kuali.core.lookup.valueFinder.ValueFinder;
-import org.kuali.core.service.SequenceAccessorService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.bo.OriginationCode;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * Returns the next Proposal number available.
+ * 
+ * 
  */
 public class NextProposalNumberFinder implements ValueFinder {
 
@@ -30,14 +32,9 @@ public class NextProposalNumberFinder implements ValueFinder {
     public String getValue() {
         return getLongValue().toString();
     }
-
-    /**
-     * Gets the next sequence number as a long.
-     * 
-     * @return
-     */
+    
     public static Long getLongValue() {
         // no constant because this is the only place the sequence name is used
-        return SpringContext.getBean(SequenceAccessorService.class).getNextAvailableSequenceNumber("CGPRPSL_NBR_SEQ");
+        return SpringServiceLocator.getSequenceAccessorService().getNextAvailableSequenceNumber("CGPRPSL_NBR_SEQ");
     }
 }

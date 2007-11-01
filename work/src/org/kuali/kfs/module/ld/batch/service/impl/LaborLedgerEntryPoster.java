@@ -19,19 +19,21 @@ import java.sql.Date;
 
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.batch.poster.PostTransaction;
+import org.kuali.module.gl.batch.poster.impl.PostGlEntry;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.bo.LaborTransaction;
 import org.kuali.module.labor.bo.LedgerEntry;
 import org.kuali.module.labor.service.LaborLedgerEntryService;
+import org.kuali.module.labor.util.ObjectUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The class is used to post a transaction to labor ledger entry table
  */
+
 @Transactional
 public class LaborLedgerEntryPoster implements PostTransaction {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborLedgerEntryPoster.class);
+    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborLedgerEntryPoster.class);    
     private LaborLedgerEntryService laborLedgerEntryService;
 
     /**
@@ -39,16 +41,16 @@ public class LaborLedgerEntryPoster implements PostTransaction {
      */
     public String post(Transaction transaction, int mode, java.util.Date postDate) {
         String operationType = KFSConstants.OperationType.INSERT;
-        LedgerEntry ledgerEntry = new LedgerEntry((LaborTransaction) transaction);
-        // ObjectUtil.buildObject(ledgerEntry, transaction);
-
-        ledgerEntry.setTransactionLedgerEntrySequenceNumber(laborLedgerEntryService.getMaxSequenceNumber(ledgerEntry) + 1);
+        LedgerEntry ledgerEntry = new LedgerEntry();        
+        ObjectUtil.buildObject(ledgerEntry, transaction);
+        
+        ledgerEntry.setTransactionLedgerEntrySequenceNumber(laborLedgerEntryService.getMaxSequenceNumber(ledgerEntry) + 1);        
         ledgerEntry.setTransactionPostingDate(new Date(postDate.getTime()));
-
-        laborLedgerEntryService.save(ledgerEntry);
+        
+        laborLedgerEntryService.save(ledgerEntry);        
         return operationType;
     }
-
+    
     /**
      * @see org.kuali.module.gl.batch.poster.PostTransaction#getDestinationName()
      */
@@ -58,7 +60,6 @@ public class LaborLedgerEntryPoster implements PostTransaction {
 
     /**
      * Sets the laborLedgerEntryService attribute value.
-     * 
      * @param laborLedgerEntryService The laborLedgerEntryService to set.
      */
     public void setLaborLedgerEntryService(LaborLedgerEntryService laborledgerEntryService) {

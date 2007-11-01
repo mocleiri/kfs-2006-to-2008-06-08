@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/AccountDescription.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +22,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.AccountDescription">
 
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <attributes>
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
@@ -39,6 +41,9 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>Campus Description</summary>
+                <description>Campus Description</description>
             </attribute>
 
             <attribute name="organizationDescription" forceUppercase="false">
@@ -53,6 +58,9 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>Organization Description</summary>
+                <description>Organization Description</description>
             </attribute>
 
             <attribute name="responsibilityCenterDescription" forceUppercase="false">
@@ -67,6 +75,9 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>Responsibility Center Description</summary>
+                <description>Responsibility Center Description</description>
             </attribute>
 
             <attribute name="campusCode" forceUppercase="false">
@@ -81,9 +92,12 @@
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CampusValuesFinder" />
                 </control>
+
+                <summary>Campus Code that the Building belongs to.</summary>
+                <description>Campus Code that the Building belongs to.</description>
             </attribute>
 
-            <attribute name="buildingCode" forceUppercase="true">
+            <attribute name="buildingCode" forceUppercase="false">
                 <label>Building Code</label>
                 <shortLabel>BldgCd</shortLabel>
 
@@ -95,6 +109,9 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>Building Code</summary>
+                <description>Building Code</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

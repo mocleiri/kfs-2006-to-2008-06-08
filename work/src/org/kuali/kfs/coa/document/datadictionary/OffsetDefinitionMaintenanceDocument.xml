@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.OffsetDefinitionRule</businessRulesClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,13 +33,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>OffsetDefinitionMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOffsetDefinitionMaintenanceDocument</documentTypeName>
         <documentTypeCode>OFSD</documentTypeCode>
-        <label>Offset Definition</label>
+        <label>Offset Definition Maintenance Document</label>
+        <shortLabel>OffsetDefMaintDoc</shortLabel>
         <summary>Offset Definition Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Offset Definitions, remove exsiting Offset Definitions, or modify existing Offset Definitions.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="OffsetDefinition" parameterName="OFFSET_DEFINITION" />
-
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_OFFSET_DEFINITION" />
+        
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
             <field attributeName="chartOfAccountsCode" />
@@ -53,6 +54,9 @@
             <reference attributeName="financialObject" attributeToHighlightOnFail="financialObjectCode" />
             <reference attributeName="financialBalanceType" attributeToHighlightOnFail="financialBalanceTypeCode" />
         </defaultExistenceChecks>
+        <applyApcRules>
+            <apcRule attributeName="financialObjectCode" apcGroup="ChartMaintenanceEDoc" apcRule="OffsetDefinition.FinancialObjectCode" errorMessage="error.document.offsetDefinitionMaintenance.invalidFinancialObjectCode" />
+        </applyApcRules>
         <maintainableSections>
             <maintainableSection title="Edit Offset Definition">
                 <maintainableItems>
