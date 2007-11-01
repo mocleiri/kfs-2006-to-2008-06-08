@@ -24,9 +24,10 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 public interface OriginEntryGroupDao {
     /**
      * @param sourceCode
+     * @param date
      * @return
      */
-    public Collection<OriginEntryGroup> getGroupsFromSource(String sourceCode);
+    public Collection<OriginEntryGroup> getGroupsFromSourceForDate(String sourceCode, Date date);
 
     /**
      * Get all the groups that are older than a date
@@ -61,20 +62,19 @@ public interface OriginEntryGroupDao {
 
     /**
      * Gets a collection of all backup groups that are scrubbable (i.e. valid, process, scrub indicators all set to true)
-     * 
      * @return
      */
     public Collection<OriginEntryGroup> getAllScrubbableBackupGroups();
-
+    
     /**
-     * Get all the Labor backup groups to scrub
+     * Get all the Labor backup groups to scrub 
      * 
      * @param groupDate
      * @return
      */
-    public Collection getLaborBackupGroups(Date groupDate);
-
-
+    public Collection getLaborBackupGroups(Date groupDate); 
+    
+    
     /**
      * Get all the groups to be copied into the backup group
      * 
@@ -82,7 +82,7 @@ public interface OriginEntryGroupDao {
      * @return
      */
     public Collection getGroupsToBackup(Date groupDate);
-
+    
     /**
      * Get all the groups to be copied into the backup group
      * 
@@ -90,7 +90,7 @@ public interface OriginEntryGroupDao {
      * @return
      */
     public Collection getLaborGroupsToBackup(Date groupDate);
-
+    
     /**
      * Save a group
      * 
