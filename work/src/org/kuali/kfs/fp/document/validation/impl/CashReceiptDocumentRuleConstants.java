@@ -20,6 +20,8 @@ import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants;
 
 /**
  * Holds constants for cash receipts document.
+ * 
+ * 
  */
 public interface CashReceiptDocumentRuleConstants extends AccountingDocumentRuleBaseConstants {
     // Security grouping constants used to do application parameter lookups

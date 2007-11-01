@@ -1,5 +1,5 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -39,11 +39,5 @@
 
 	<kul:documentControls transactionalDocument="false"
 		saveButtonOverride="saveParameters" suppressRoutingControls="true" viewOnly="${KualiForm.editingMode['viewOnly']}" />
-<SCRIPT type="text/javascript">
-var kualiForm = document.forms['KualiForm'];
-var kualiElements = kualiForm.elements;
-</SCRIPT>
-<script language="javascript" src="scripts/research/researchDocument.js"></script>
-<script language="javascript" src="dwr/interface/AgencyService.js"></script>
-<script language="javascript" src="dwr/interface/ProjectDirectorService.js"></script>
+
 </kul:documentPage>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import org.kuali.kfs.KFSConstants;
 
 /**
  * This helper class works in conjunction with the DepositWizardForm to help build the UI for the Deposit Wizard.
+ * 
+ * 
  */
 public class DepositWizardHelper {
     private String selectedValue;
