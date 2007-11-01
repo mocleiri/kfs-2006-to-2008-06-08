@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,24 +21,30 @@ import org.kuali.kfs.KFSConstants.BudgetConstructionConstants.LockStatus;
 import org.kuali.module.budget.bo.BudgetConstructionFundingLock;
 
 /**
- * This class defines a BudgetConstructionLockStatus object. This object is used by many of the methods in the Budget module's
- * LockService as a mechanism to pass status information associated with the various types of locks. LockStatus uses enum values
- * SUCCESS, BY_OTHER, NO_DOOR, OPTIMISTIC_EX, FLOCK_FOUND LockStatus.BY_OTHER usually means one of the *LockOwner attributes is set
- * with the uid associated with the lock. LockStatus.FLOCK_FOUND usually means the set of fundingLocks is also defined. See the
- * LockService methods JavaDoc for more details.
+ * This class defines a BudgetConstructionLockStatus object.
+ * 
+ * This object is used by many of the methods in the Budget module's LockService
+ * as a mechanism to pass status information associated with the various types of
+ * locks.
+ * 
+ * LockStatus uses enum values SUCCESS, BY_OTHER, NO_DOOR, OPTIMISTIC_EX, FLOCK_FOUND
+ * LockStatus.BY_OTHER usually means one of the *LockOwner attributes is set with the uid
+ * associated with the lock. LockStatus.FLOCK_FOUND usually means the set of fundingLocks
+ * is also defined. See the LockService methods JavaDoc for more details. 
  */
-public class BudgetConstructionLockStatus {
+public class BudgetConstructionLockStatus{
 
     private LockStatus lockStatus;
     private String accountLockOwner;
     private String positionLockOwner;
     private String transactionLockOwner;
     private SortedSet<BudgetConstructionFundingLock> fundingLocks;
-
+    
     /**
+     * 
      * Constructs a BudgetConstructionLockStatus object.
      */
-    public BudgetConstructionLockStatus() {
+    public BudgetConstructionLockStatus(){
         lockStatus = LockStatus.NO_DOOR;
         accountLockOwner = null;
         positionLockOwner = null;
@@ -47,17 +53,17 @@ public class BudgetConstructionLockStatus {
     }
 
     /**
-     * This gets the accountLockOwner attribute
-     * 
-     * @return accountLockOwner
+     * This gets the accountLockOwner attribute 
+     *
+     * @return accountLockOwner 
      */
     public String getAccountLockOwner() {
         return accountLockOwner;
     }
 
     /**
-     * This sets the accountLockOwner attribute
-     * 
+     * This sets the accountLockOwner attribute 
+     *
      * @param accountLockOwner
      */
     public void setAccountLockOwner(String accountLockOwner) {
@@ -65,8 +71,8 @@ public class BudgetConstructionLockStatus {
     }
 
     /**
-     * This gets the lockStatus attribute
-     * 
+     *  This gets the lockStatus attribute
+     *
      * @return lockStatus
      */
     public LockStatus getLockStatus() {
@@ -75,7 +81,7 @@ public class BudgetConstructionLockStatus {
 
     /**
      * This sets the lockStatus attribute
-     * 
+     *
      * @param lockStatus
      */
     public void setLockStatus(LockStatus lockStatus) {
@@ -83,8 +89,8 @@ public class BudgetConstructionLockStatus {
     }
 
     /**
-     * This gets the positionLockOwner attribute
-     * 
+     * This gets the positionLockOwner attribute 
+     *
      * @return positionLockOwner
      */
     public String getPositionLockOwner() {
@@ -93,7 +99,7 @@ public class BudgetConstructionLockStatus {
 
     /**
      * This gets the positionLockOwner attribute
-     * 
+     *
      * @param positionLockOwner
      */
     public void setPositionLockOwner(String positionLockOwner) {
@@ -101,8 +107,8 @@ public class BudgetConstructionLockStatus {
     }
 
     /**
-     * This gets the fundingLocks attribute
-     * 
+     * This gets the fundingLocks attribute 
+     *
      * @return fundingLocks
      */
     public SortedSet<BudgetConstructionFundingLock> getFundingLocks() {
@@ -110,8 +116,8 @@ public class BudgetConstructionLockStatus {
     }
 
     /**
-     * This sets the fundingLocks attribute
-     * 
+     * This sets the fundingLocks attribute 
+     *
      * @param fundingLocks
      */
     public void setFundingLocks(SortedSet<BudgetConstructionFundingLock> fundingLocks) {
@@ -120,7 +126,7 @@ public class BudgetConstructionLockStatus {
 
     /**
      * This gets the transactionLockOwner attribute
-     * 
+     *
      * @return ansactionLockOwner
      */
     public String getTransactionLockOwner() {
@@ -129,10 +135,11 @@ public class BudgetConstructionLockStatus {
 
     /**
      * This gets the transactionLockOwner attribute
-     * 
+     *
      * @param transactionLockOwner
      */
     public void setTransactionLockOwner(String transactionLockOwner) {
         this.transactionLockOwner = transactionLockOwner;
     }
 }
+
