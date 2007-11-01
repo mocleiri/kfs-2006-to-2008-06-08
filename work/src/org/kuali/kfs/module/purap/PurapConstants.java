@@ -120,9 +120,8 @@ public class PurapConstants extends JstlConstants {
         public static final String DAPRVD_FISCAL = "DFIS";
         public static final String DAPRVD_CHART = "DCHA";
         public static final String DAPRVD_SEP_OF_DUTY = "DSOD";
-        public static final String DAPRVD_SPECIAL = "DGEN";
         public static final String AWAIT_CONTRACT_MANAGER_ASSGN = "ACMR";
-        public static final String CONTRACT_MANAGER_ASSGN = "CMRA";
+        
     }
 
     public static class POCostSources {
@@ -194,7 +193,6 @@ public class PurapConstants extends JstlConstants {
         public static final String DAPRVD_BUDGET = "DBUD";
         public static final String DAPRVD_CONTRACTS_GRANTS = "DCG";
         public static final String DAPRVD_PURCHASING = "DPUR";
-        public static final String DAPRVD_SPECIAL = "DSPC";
         public static final String CXML_ERROR = "CXER";
         public static final String PENDING_CXML = "CXPE";
         public static final String PENDING_FAX = "FXPE";
