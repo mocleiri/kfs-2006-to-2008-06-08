@@ -39,10 +39,11 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
     private AccountBalanceConsolidationDao accountBalanceConsolidationDao;
     private AccountBalanceLevelDao accountBalanceLevelDao;
     private AccountBalanceObjectDao accountBalanceObjectDao;
-
+    
     static final private String OBJ_TYP_CD = "financialObject.financialObjectTypeCode";
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#getByTransaction(org.kuali.module.gl.bo.Transaction)
      */
     public AccountBalance getByTransaction(Transaction t) {
@@ -61,6 +62,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#save(org.kuali.module.gl.bo.AccountBalance)
      */
     public void save(AccountBalance ab) {
@@ -103,6 +105,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#findAccountBalanceByConsolidationByObjectTypes(java.lang.String[],
      *      java.lang.Integer, java.lang.String, java.lang.String, boolean, boolean, int)
      */
@@ -115,11 +118,12 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
         }
         catch (Exception e) {
             LOG.error("findAccountBalanceByConsolidation() " + e.getMessage(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#findAccountBalanceByLevel(java.lang.Integer, java.lang.String,
      *      java.lang.String, java.lang.String, boolean, boolean, int)
      */
@@ -137,6 +141,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#findAccountBalanceByObject(java.lang.Integer, java.lang.String,
      *      java.lang.String, java.lang.String, java.lang.String, boolean, boolean, int)
      */
@@ -154,6 +159,7 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.AccountBalanceDao#purgeYearByChart(java.lang.String, int)
      */
     public void purgeYearByChart(String chartOfAccountsCode, int year) {
@@ -171,27 +177,30 @@ public class AccountBalanceDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
         getPersistenceBrokerTemplate().clearCache();
     }
 
-    public AccountBalanceConsolidationDao getAccountBalanceConsolidationDao() {
-        return accountBalanceConsolidationDao;
-    }
+	public AccountBalanceConsolidationDao getAccountBalanceConsolidationDao() {
+		return accountBalanceConsolidationDao;
+	}
 
-    public void setAccountBalanceConsolidationDao(AccountBalanceConsolidationDao accountBalanceConsolidationDao) {
-        this.accountBalanceConsolidationDao = accountBalanceConsolidationDao;
-    }
+	public void setAccountBalanceConsolidationDao(
+			AccountBalanceConsolidationDao accountBalanceConsolidationDao) {
+		this.accountBalanceConsolidationDao = accountBalanceConsolidationDao;
+	}
 
-    public AccountBalanceLevelDao getAccountBalanceLevelDao() {
-        return accountBalanceLevelDao;
-    }
+	public AccountBalanceLevelDao getAccountBalanceLevelDao() {
+		return accountBalanceLevelDao;
+	}
 
-    public void setAccountBalanceLevelDao(AccountBalanceLevelDao accountBalanceLevelDao) {
-        this.accountBalanceLevelDao = accountBalanceLevelDao;
-    }
+	public void setAccountBalanceLevelDao(
+			AccountBalanceLevelDao accountBalanceLevelDao) {
+		this.accountBalanceLevelDao = accountBalanceLevelDao;
+	}
 
-    public AccountBalanceObjectDao getAccountBalanceObjectDao() {
-        return accountBalanceObjectDao;
-    }
+	public AccountBalanceObjectDao getAccountBalanceObjectDao() {
+		return accountBalanceObjectDao;
+	}
 
-    public void setAccountBalanceObjectDao(AccountBalanceObjectDao accountBalanceObjectDao) {
-        this.accountBalanceObjectDao = accountBalanceObjectDao;
-    }
+	public void setAccountBalanceObjectDao(
+			AccountBalanceObjectDao accountBalanceObjectDao) {
+		this.accountBalanceObjectDao = accountBalanceObjectDao;
+	}
 }

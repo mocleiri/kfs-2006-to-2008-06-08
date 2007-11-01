@@ -42,7 +42,7 @@ import org.kuali.core.web.ui.Row;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.web.lookupable.AccountBalanceByConsolidationLookupableHelperServiceImpl;
@@ -50,6 +50,8 @@ import org.kuali.module.gl.web.struts.form.BalanceInquiryForm;
 
 /**
  * This class handles Actions for lookup flow
+ * 
+ * 
  */
 
 public class BalanceInquiryAction extends KualiAction {
@@ -62,7 +64,7 @@ public class BalanceInquiryAction extends KualiAction {
 
     public BalanceInquiryAction() {
         super();
-        kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+        kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
     }
 
     private void setTotalTitles() {
@@ -99,9 +101,9 @@ public class BalanceInquiryAction extends KualiAction {
     public ActionForward search(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BalanceInquiryForm lookupForm = (BalanceInquiryForm) form;
 
-        Lookupable lookupable = lookupForm.getLookupable();
+        Lookupable kualiLookupable = lookupForm.getLookupable();
 
-        if (lookupable == null) {
+        if (kualiLookupable == null) {
             LOG.error("Lookupable is null.");
             throw new RuntimeException("Lookupable is null.");
         }
@@ -109,10 +111,10 @@ public class BalanceInquiryAction extends KualiAction {
         Collection displayList = new ArrayList();
         List<ResultRow> resultTable = new ArrayList<ResultRow>();
 
-        lookupable.validateSearchParameters(lookupForm.getFields());
+        kualiLookupable.validateSearchParameters(lookupForm.getFields());
 
         try {
-            displayList = lookupable.performLookup(lookupForm, resultTable, true);
+            displayList = kualiLookupable.performLookup(lookupForm, resultTable, true);
 
             Object[] resultTableAsArray = resultTable.toArray();
 
@@ -122,7 +124,7 @@ public class BalanceInquiryAction extends KualiAction {
             request.setAttribute(KFSConstants.REQUEST_SEARCH_RESULTS_SIZE, totalSize);
 
             // TODO: use inheritance instead of this if statement
-            if (lookupable.getLookupableHelperService() instanceof AccountBalanceByConsolidationLookupableHelperServiceImpl) {
+            if (kualiLookupable.getLookupableHelperService() instanceof AccountBalanceByConsolidationLookupableHelperServiceImpl) {
 
 
                 Collection totalsTable = new ArrayList();
@@ -190,8 +192,8 @@ public class BalanceInquiryAction extends KualiAction {
     @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LookupForm lookupForm = (LookupForm) form;
-        Lookupable lookupable = lookupForm.getLookupable();
-        if (lookupable == null) {
+        Lookupable kualiLookupable = lookupForm.getLookupable();
+        if (kualiLookupable == null) {
             LOG.error("Lookupable is null.");
             throw new RuntimeException("Lookupable is null.");
         }
@@ -199,7 +201,7 @@ public class BalanceInquiryAction extends KualiAction {
         Map fieldValues = new HashMap();
         Map values = lookupForm.getFields();
 
-        for (Iterator iter = lookupable.getRows().iterator(); iter.hasNext();) {
+        for (Iterator iter = kualiLookupable.getRows().iterator(); iter.hasNext();) {
             Row row = (Row) iter.next();
 
             for (Iterator iterator = row.getFields().iterator(); iterator.hasNext();) {
@@ -219,8 +221,8 @@ public class BalanceInquiryAction extends KualiAction {
         fieldValues.put(KFSConstants.DOC_FORM_KEY, lookupForm.getFormKey());
         fieldValues.put(KFSConstants.BACK_LOCATION, lookupForm.getBackLocation());
 
-        if (lookupable.checkForAdditionalFields(fieldValues)) {
-            for (Iterator iter = lookupable.getRows().iterator(); iter.hasNext();) {
+        if (kualiLookupable.checkForAdditionalFields(fieldValues)) {
+            for (Iterator iter = kualiLookupable.getRows().iterator(); iter.hasNext();) {
                 Row row = (Row) iter.next();
                 for (Iterator iterator = row.getFields().iterator(); iterator.hasNext();) {
                     Field field = (Field) iterator.next();
@@ -256,13 +258,13 @@ public class BalanceInquiryAction extends KualiAction {
      */
     public ActionForward clearValues(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         LookupForm lookupForm = (LookupForm) form;
-        Lookupable lookupable = lookupForm.getLookupable();
-        if (lookupable == null) {
+        Lookupable kualiLookupable = lookupForm.getLookupable();
+        if (kualiLookupable == null) {
             LOG.error("Lookupable is null.");
             throw new RuntimeException("Lookupable is null.");
         }
 
-        for (Iterator iter = lookupable.getRows().iterator(); iter.hasNext();) {
+        for (Iterator iter = kualiLookupable.getRows().iterator(); iter.hasNext();) {
             Row row = (Row) iter.next();
             for (Iterator iterator = row.getFields().iterator(); iterator.hasNext();) {
                 Field field = (Field) iterator.next();
