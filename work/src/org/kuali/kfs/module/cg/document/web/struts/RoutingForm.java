@@ -23,9 +23,10 @@ import java.util.Map;
 import org.kuali.core.datadictionary.DataDictionary;
 import org.kuali.core.datadictionary.DocumentEntry;
 import org.kuali.core.service.DataDictionaryService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.web.format.PhoneNumberFormatter;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.web.struts.form.BudgetOverviewFormHelper;
 import org.kuali.module.kra.document.ResearchDocument;
@@ -39,72 +40,71 @@ import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 import org.kuali.module.kra.web.struts.form.ResearchDocumentFormBase;
 
 public class RoutingForm extends ResearchDocumentFormBase {
-
+    
     private boolean auditActivated;
     private int numAuditErrors;
-
-    // Main Page
-    private RoutingFormPersonnel newRoutingFormProjectDirector;
-    private RoutingFormPersonnel newRoutingFormOtherPerson;
-
+    
+    //Main Page
+    private RoutingFormPersonnel newRoutingFormPerson;
     private RoutingFormOrganizationCreditPercent newRoutingFormOrganizationCreditPercent;
-
-    // Project Details
+    
+    //Project Details 
     private RoutingFormInstitutionCostShare newRoutingFormInstitutionCostShare;
     private RoutingFormOtherCostShare newRoutingFormOtherCostShare;
     private RoutingFormSubcontractor newRoutingFormSubcontractor;
     private RoutingFormOrganization newRoutingFormOrganization;
-
-    // Module Links
+    
+    //Module Links
     private String[] selectedBudgetPeriods;
     private boolean allPeriodsSelected;
     private List<BudgetOverviewFormHelper> periodBudgetOverviewFormHelpers;
     private BudgetOverviewFormHelper summaryBudgetOverviewFormHelper;
-
-    // Template properties
+    
+    //Template properties
     private boolean templateAddress;
     private boolean templateAdHocPermissions;
     private boolean templateAdHocApprovers;
-
+    
     // Approvals
     private String approvalsMessage;
-
+    
     private Map systemParametersMap;
-
+    
     /**
      * Used to indicate which result set we're using when refreshing/returning from a multi-value lookup
      */
     private String lookupResultsSequenceNumber;
     /**
-     * The type of result returned by the multi-value lookup TODO: to be persisted in the lookup results service instead? See
-     * https://test.kuali.org/confluence/display/KULRNE/Using+multiple+value+lookups
+     * The type of result returned by the multi-value lookup
+     * 
+     * TODO: to be persisted in the lookup results service instead? See https://test.kuali.org/confluence/display/KULRNE/Using+multiple+value+lookups
      */
     private String lookupResultsBOClassName;
-
+    
     public RoutingForm() {
         super();
-
+       
         DataDictionary dataDictionary = SpringContext.getBean(DataDictionaryService.class).getDataDictionary();
         DocumentEntry budgetDocumentEntry = dataDictionary.getDocumentEntry(org.kuali.module.kra.routingform.document.RoutingFormDocument.class.getName());
         this.setHeaderNavigationTabs(budgetDocumentEntry.getHeaderTabNavigation());
-
+        
         setDocument(new RoutingFormDocument());
-
+        
         periodBudgetOverviewFormHelpers = new ArrayList();
 
         setFormatterType("document.routingFormPersonnel.personPhoneNumber", PhoneNumberFormatter.class);
         setFormatterType("document.routingFormPersonnel.personFaxNumber", PhoneNumberFormatter.class);
     }
-
+    
     @Override
-    public ResearchDocument getResearchDocument() {
+    public ResearchDocument getResearchDocument(){
         return this.getRoutingFormDocument();
     }
-
-    public RoutingFormDocument getRoutingFormDocument() {
-        return (RoutingFormDocument) this.getDocument();
+    
+    public RoutingFormDocument getRoutingFormDocument(){
+        return (RoutingFormDocument)this.getDocument();
     }
-
+    
     public boolean isAuditActivated() {
         return auditActivated;
     }
@@ -112,7 +112,7 @@ public class RoutingForm extends ResearchDocumentFormBase {
     public void setAuditActivated(boolean auditActivated) {
         this.auditActivated = auditActivated;
     }
-
+    
     public int getNumAuditErrors() {
         return numAuditErrors;
     }
@@ -145,20 +145,12 @@ public class RoutingForm extends ResearchDocumentFormBase {
         this.newRoutingFormSubcontractor = newRoutingFormSubcontractor;
     }
 
-    public RoutingFormPersonnel getNewRoutingFormProjectDirector() {
-        return newRoutingFormProjectDirector;
+    public RoutingFormPersonnel getNewRoutingFormPerson() {
+        return newRoutingFormPerson;
     }
 
-    public void setNewRoutingFormProjectDirector(RoutingFormPersonnel newRoutingFormProjectDirector) {
-        this.newRoutingFormProjectDirector = newRoutingFormProjectDirector;
-    }
-
-    public RoutingFormPersonnel getNewRoutingFormOtherPerson() {
-        return newRoutingFormOtherPerson;
-    }
-
-    public void setNewRoutingFormOtherPerson(RoutingFormPersonnel newRoutingFormOtherPerson) {
-        this.newRoutingFormOtherPerson = newRoutingFormOtherPerson;
+    public void setNewRoutingFormPerson(RoutingFormPersonnel newRoutingFormPerson) {
+        this.newRoutingFormPerson = newRoutingFormPerson;
     }
 
     public RoutingFormOrganizationCreditPercent getNewRoutingFormOrganizationCreditPercent() {
@@ -168,7 +160,7 @@ public class RoutingForm extends ResearchDocumentFormBase {
     public void setNewRoutingFormOrganizationCreditPercent(RoutingFormOrganizationCreditPercent newRoutingFormOrganizationCreditPercent) {
         this.newRoutingFormOrganizationCreditPercent = newRoutingFormOrganizationCreditPercent;
     }
-
+    
     public RoutingFormOrganization getNewRoutingFormOrganization() {
         return newRoutingFormOrganization;
     }
@@ -231,7 +223,7 @@ public class RoutingForm extends ResearchDocumentFormBase {
     public void setAllPeriodsSelected(boolean allPeriodsSelected) {
         this.allPeriodsSelected = allPeriodsSelected;
     }
-
+    
     public String getApprovalsMessage() {
         return approvalsMessage;
     }
@@ -241,12 +233,10 @@ public class RoutingForm extends ResearchDocumentFormBase {
     }
 
     /**
-     * Gets the two column size of routingFormProjectTypes, zero based. The result will be rounded up so that the left column has an
-     * additional element for odd sized lists.
-     * 
+     * Gets the two column size of routingFormProjectTypes, zero based. The result will be rounded up so that the left column has an additional element for odd sized lists.
      * @return half size of routingFormProjectTypes, rounded up, zero based
      */
-    public int getRoutingFormProjectTypesSizeByTwoColumns() {
+    public int  getRoutingFormProjectTypesSizeByTwoColumns() {
         return new Double(Math.ceil(getRoutingFormDocument().getRoutingFormProjectTypes().size() / 2.0)).intValue() - 1;
     }
 
@@ -267,27 +257,20 @@ public class RoutingForm extends ResearchDocumentFormBase {
     }
 
     /**
-     * Lazy gets the systemParametersMap attribute. Use it on a jsp or tag as such:
-     * ${KualiForm.systemParametersMap[KraConstants.foobar]}
-     * 
+     * Lazy gets the systemParametersMap attribute. Use it on a jsp or tag as such: ${KualiForm.systemParametersMap[KraConstants.foobar]}
      * @return Returns the systemParametersMap.
      */
     public Map getSystemParametersMap() {
         if (systemParametersMap == null) {
             systemParametersMap = new HashMap();
-
-            ParameterService parameterService = SpringContext.getBean(ParameterService.class);
-            systemParametersMap.put(KraConstants.SUBMISSION_TYPE_CHANGE, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.SUBMISSION_TYPE_CHANGE));
-            systemParametersMap.put(KraConstants.PROJECT_TYPE_OTHER, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.PROJECT_TYPE_OTHER));
-            systemParametersMap.put(KraConstants.PURPOSE_RESEARCH, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.PURPOSE_RESEARCH));
-            systemParametersMap.put(KraConstants.PURPOSE_OTHER, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.PURPOSE_OTHER));
-
-            systemParametersMap.put(KraConstants.CO_PROJECT_DIRECTOR_PARAM, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.CO_PROJECT_DIRECTOR_PARAM));
-            systemParametersMap.put(KraConstants.PROJECT_DIRECTOR_PARAM, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.PROJECT_DIRECTOR_PARAM));
-            systemParametersMap.put(KraConstants.OTHER_PERSON_PARAM, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.OTHER_PERSON_PARAM));
-            systemParametersMap.put(KraConstants.CONTACT_PERSON_PARAM, parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.CONTACT_PERSON_PARAM));
+            
+            KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+            systemParametersMap.put(KraConstants.SUBMISSION_TYPE_CHANGE, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.SUBMISSION_TYPE_CHANGE));
+            systemParametersMap.put(KraConstants.PROJECT_TYPE_OTHER, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PROJECT_TYPE_OTHER));
+            systemParametersMap.put(KraConstants.PURPOSE_RESEARCH, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PURPOSE_RESEARCH));
+            systemParametersMap.put(KraConstants.PURPOSE_OTHER, kualiConfigurationService.getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.ROUTING_FORM, KraConstants.PURPOSE_OTHER));
         }
-
+        
         return systemParametersMap;
     }
 }

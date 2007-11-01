@@ -25,30 +25,13 @@
 <c:if test="${fn:length(KualiForm.document.sourceAccountingLines)>0 || readOnly}">
 	<c:set var="disabled" value="true"/>
 </c:if>
-
-<c:if test="${fn:length(KualiForm.document.targetAccountingLines)>0 || readOnly}">
-	<c:set var="targetDisabled" value="true"/>
-</c:if>
-
-<c:set var="documentTypeName" value="KualiSalaryExpenseTransferDocument"/>
-<c:set var="htmlFormAction" value="laborSalaryExpenseTransfer"/>
-
-<c:if test="${isYearEnd}">
-  <c:set var="documentTypeName" value="KualiYearEndSalaryExpenseTransferDocument"/>
-  <c:set var="htmlFormAction" value="laborYearEndSalaryExpenseTransfer"/>
-</c:if>
-
+		
 <kul:documentPage showDocumentInfo="true"
-    documentTypeName="${documentTypeName}"
-    htmlFormAction="${htmlFormAction}" renderMultipart="true"
+    documentTypeName="KualiSalaryExpenseTransferDocument"
+    htmlFormAction="laborSalaryExpenseTransfer" renderMultipart="true"
     showTabButtons="true">
 
     <html:hidden property="financialBalanceTypeCode" />
-    
-    <c:forEach items="${KualiForm.document.approvalObjectCodeBalances}" var="objCodeBal">
-      <html:hidden property="document.approvalObjectCodeBalances(${objCodeBal.key})"/>
-    </c:forEach>
-    
     <kul:hiddenDocumentFields />
     <kul:documentOverview editingMode="${KualiForm.editingMode}" />
  
@@ -104,7 +87,6 @@
 	                       boClassName="org.kuali.module.labor.bo.LedgerBalanceForSalaryExpenseTransfer"
 	                       actionPath="glBalanceInquiryLookup.do"
 	                       lookupParameters="universityFiscalYear:universityFiscalYear,emplid:emplid,financialBalanceTypeCode:financialBalanceTypeCode"
-	                       tabindexOverride="KualiForm.currentTabIndex"
 	                       hideReturnLink="false" image="buttonsmall_search.gif"/>
 	                </c:if>
 				</td>
@@ -147,7 +129,7 @@
             <%-- When data exists show the copy or delete buttons --%>
             <c:if test="${disabled}">
                 <html:image property="methodToCall.copyAllAccountingLines" src="${ConfigProperties.externalizable.images.url}tinybutton-copyall.gif" title="Copy all Source Accounting Lines" alt="Copy all Source Lines" styleClass="tinybutton"/>
-   			        <html:image property="methodToCall.deleteAllSourceAccountingLines"
+   			        <html:image property="methodToCall.deleteAllAccountingLines"
 					    src="${ConfigProperties.externalizable.images.url}tinybutton-deleteall.gif"
 						title="Delete all Source Accounting Lines"
 						alt="Delete all Source Lines" styleClass="tinybutton" />
@@ -178,12 +160,6 @@
             displayMonthlyAmounts="${displayMonthlyAmountsBoolean}"
             accountingLineAttributes="${accountingLineAttributesMap}">
             <jsp:attribute name="importRowOverride">
-                        <c:if test="${targetDisabled}">
-                          <html:image property="methodToCall.deleteAllTargetAccountingLines"
-					        src="${ConfigProperties.externalizable.images.url}tinybutton-deleteall.gif"
-						    title="Delete all Target Accounting Lines"
-						    alt="Delete all Target Lines" styleClass="tinybutton" />
-						</c:if>    
             </jsp:attribute>
          </ld:importedAccountingLineGroup>
       </table>
