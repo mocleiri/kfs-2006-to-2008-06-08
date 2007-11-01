@@ -27,27 +27,30 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_AP_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>CreditMemoStatusMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiCreditMemoStatusMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMCM</documentTypeCode>
 
-        <label>Credit Memo Status</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="CreditMemoStatus" parameterName="CREDIT_MEMO_STATUS" />
+        <label>Credit Memo Status Maintenance Document</label>
+        <shortLabel>Credit Memo Status Maint Doc</shortLabel>
+
+        <summary>Credit Memo Status Maintenance Document</summary>
+        <description>Document used to create or update Credit Memo Status objects</description>
 
         <lockingKeys>
             <field attributeName="statusCode" />
         </lockingKeys>
-        
+
         <maintainableSections>
             <maintainableSection title="Edit Credit Memo Status">
                 <maintainableItems>
                     <maintainableField name="statusCode" required="true" />
                     <maintainableField name="statusDescription" required="true" />
-                    <maintainableField name="active" readOnly="true" />
+                    <maintainableField name="active" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

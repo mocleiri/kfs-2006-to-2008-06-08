@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>TravelCompanyCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiTravelCompanyCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVIC</documentTypeCode>
 
-        <label>Disbursement Voucher Travel Company</label>
+        <label>Travel Company Code Maintenance Document</label>
+        <shortLabel>Travel Company Maint Doc</shortLabel>
 
         <summary>Travel Company Code Maintenance Document</summary>
         <description>Document used to create or update Travel company code objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="TravelCompanyCode" parameterName="TRAVEL_COMPANY" />
+        <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_TRAVEL_COMPANY" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="code" />

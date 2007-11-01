@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>NonResidentAlienTaxPercentMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiNonResidentAlienTaxPercentMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVOT</documentTypeCode>
 
-        <label>Non-Resident Alien Tax Percent</label>
+        <label>Non Resident Alien Tax Percent Maintenance Document</label>
+        <shortLabel>Tax percent Maint Doc</shortLabel>
 
         <summary>Non resident alien tax percent</summary>
         <description>Document used to create or update Tax Percent objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="NonResidentAlienTaxPercent" parameterName="NON_RESIDENT_ALIEN_TAX_PERCENT" />
+        <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_NON_RESIDENT_ALIEN_TAX_PERCENT" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="incomeClassCode" />

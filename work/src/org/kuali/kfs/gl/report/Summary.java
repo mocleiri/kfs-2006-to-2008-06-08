@@ -15,19 +15,12 @@
  */
 package org.kuali.module.gl.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.kuali.kfs.KFSConstants;
 
 public class Summary implements Comparable {
     /**
      * This number is used by TransactionReport when sorting the list of Summary objects passed to
      * TransactionReport.generateReport(). Lowest number prints first.
      */
-    public static final int TOTAL_RECORD_COUNT_SUMMARY_SORT_ORDER = 1;
-    public static final int SELECTED_RECORD_COUNT_SUMMARY_SORT_ORDER = 2;
-    public static final int SEQUENCE_RECORDS_WRITTEN_SUMMARY_SORT_ORDER = 3;
     private int sortOrder;
 
     /**
@@ -85,7 +78,7 @@ public class Summary implements Comparable {
             return 0;
         }
     }
-
+    
     /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -99,43 +92,6 @@ public class Summary implements Comparable {
         Summary that = (Summary) object;
         return this.description.equals(that.getDescription());
     }
-
-    // build a report summary list for labor general ledger posting
-    public static List<Summary> buildDefualtReportSummary(String destination, int startingOrder) {
-        List<Summary> reportSummary = new ArrayList<Summary>();
-        updateReportSummary(reportSummary, destination, KFSConstants.OperationType.INSERT, 0, startingOrder++);
-        updateReportSummary(reportSummary, destination, KFSConstants.OperationType.UPDATE, 0, startingOrder++);
-        updateReportSummary(reportSummary, destination, KFSConstants.OperationType.DELETE, 0, startingOrder++);
-        return reportSummary;
-    }
-
-    // update the report summary with the given information
-    public static void updateReportSummary(List<Summary> reportSummary, String destinationName, String operationType, int count, int order) {
-        StringBuilder summaryDescription = buildSummaryDescription(destinationName, operationType);
-        updateReportSummary(reportSummary, summaryDescription.toString(), count, order);
-    }
-
-    // update the report summary with the given information
-    public static void updateReportSummary(List<Summary> reportSummary, String summaryDescription, int count, int order) {
-        Summary inputSummary = new Summary(order, summaryDescription, count);
-
-        int index = reportSummary.indexOf(inputSummary);
-        if (index >= 0) {
-            Summary summary = reportSummary.get(index);
-            summary.setCount(summary.getCount() + count);
-        }
-        else {
-            reportSummary.add(inputSummary);
-        }
-    }
-
-    // build the description of summary with the given information
-    public static StringBuilder buildSummaryDescription(String destinationName, String operationType) {
-        StringBuilder summaryDescription = new StringBuilder();
-        summaryDescription.append("Number of ").append(destinationName).append(" records ").append(operationType).append(":");
-        return summaryDescription;
-    }
-
 
     public long getCount() {
         return count;

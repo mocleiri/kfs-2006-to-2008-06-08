@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ResponsibilityCenterMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiResponsibilityCenterMaintenanceDocument</documentTypeName>
         <documentTypeCode>RCEN</documentTypeCode>
 
-        <label>Responsibility Center</label>
+        <label>Responsibility Center Maintenance Document</label>
+        <shortLabel>ResponsibilityCenterMaintDoc</shortLabel>
 
         <summary>Responsibility Center maintenance document</summary>
         <description>Document used to create or update Responsibility Center objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="ResponsibilityCenter" parameterName="RESPONSIBILITY_CENTER" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_RESPONSIBILITY_CENTER" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="responsibilityCenterCode" />

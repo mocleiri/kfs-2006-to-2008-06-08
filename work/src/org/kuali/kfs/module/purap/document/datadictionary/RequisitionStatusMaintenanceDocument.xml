@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>RequisitionStatusMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiRequisitionStatusMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMRS</documentTypeCode>
 
-        <label>Requisition Status</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="RequisitionStatus" parameterName="REQUISITION_STATUS" />
+        <label>Requisition Status Maintenance Document</label>
+        <shortLabel>Requisition Status Maint Doc</shortLabel>
+
+        <summary>Requisition Status Maintenance Document</summary>
+        <description>Document used to create or update Requisition Status objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="statusCode" />
@@ -47,8 +52,9 @@
                 <maintainableItems>
                     <maintainableField name="statusCode" required="true" />
                     <maintainableField name="statusDescription" required="true" />
-                    <maintainableField name="active" readOnly="true" />
-                    <maintainableField name="versionNumber" />                   
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
+                    <maintainableField name="versionNumber" />
+                    
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>

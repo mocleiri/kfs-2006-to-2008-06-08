@@ -27,16 +27,21 @@
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>PurchaseOrderStatusMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiPoStatusMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMPS</documentTypeCode>
 
-        <label>Purchase Order Status</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="PurchaseOrderStatus" parameterName="PURCHASE_ORDER_STATUS" />
+        <label>Purchase Order Status Maintenance Document</label>
+        <shortLabel>Purchase Order Status Maint Doc</shortLabel>
+
+        <summary>Purchase Order Status Maintenance Document</summary>
+        <description>Document used to create or update Purchase Order Status objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="statusCode" />
@@ -47,7 +52,7 @@
                 <maintainableItems>
                     <maintainableField name="statusCode" required="true" />
                     <maintainableField name="statusDescription" required="true" />
-                	<maintainableField name="active" readOnly="true" />
+                	<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" />
                 	<maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

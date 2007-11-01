@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,22 @@
  */
 package org.kuali.module.chart.service;
 
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import static org.kuali.core.util.SpringServiceLocator.*;
+
 import org.kuali.module.chart.bo.Chart;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the Chart service.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class ChartServiceTest extends KualiTestBase {
 
     public void testFindById() {
-        Chart chart = SpringContext.getBean(ChartService.class).getByPrimaryId("UA");
+        Chart chart = getChartService().getByPrimaryId("UA");
         assertEquals("Chart Code should be UA", chart.getChartOfAccountsCode(), "UA");
     }
 }
