@@ -125,7 +125,7 @@ public class LaborOriginEntry extends OriginEntryFull implements LaborTransactio
         setLaborLedgerOriginalSubAccountNumber(t.getLaborLedgerOriginalSubAccountNumber());
         setLaborLedgerOriginalFinancialObjectCode(t.getLaborLedgerOriginalFinancialObjectCode());
         setLaborLedgerOriginalFinancialSubObjectCode(t.getLaborLedgerOriginalFinancialSubObjectCode());
-        setHrmsCompany(getHrmsCompany());
+        setHrmsCompany(t.getHrmsCompany());
         setSetid(t.getSetid());
         setReferenceFinancialDocumentType(t.getReferenceFinancialDocumentType());
         setReferenceFinancialSystemOrigination(t.getReferenceFinancialSystemOrigination());
