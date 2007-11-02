@@ -13,6 +13,24 @@ BEGIN
 END;
 /
 
+-- clear all locks
+
+TRUNCATE TABLE fp_maint_lock_t
+/
+
+-- check parm table for IU hosts/emails
+
+-- INVALID_FILE_TO_ADDRESSES
+-- HARD_EDIT_TO_EMAIL_ADDRESSES
+-- SOFT_EDIT_TO_EMAIL_ADDRESSES
+-- TAX_CANCEL_TO_EMAIL_ADDRESSES
+-- TAX_GROUP_TO_EMAIL_ADDRESSES
+-- NO_PAYMENT_FILE_TO_EMAIL_ADDRESSES
+UPDATE sh_parm_t
+	SET sh_parm_txt = 'fixme@sample.edu'
+  WHERE sh_parm_typ_cd <> 'HELP'
+    AND sh_parm_nm LIKE '%ADDRESSES'
+/
 
 -- clean out non release 2.0 documents and associated entries
 
