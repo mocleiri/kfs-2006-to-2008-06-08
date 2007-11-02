@@ -242,6 +242,7 @@
     <field-descriptor name="nonpersonnelNextSequenceNumber" column="NPRS_NXT_SEQ_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="institutionCostShareNextSequenceNumber" column="INST_CST_SHR_NXT_SEQ_NBR" jdbc-type="INTEGER" />
     <field-descriptor name="thirdPartyCostShareNextSequenceNumber" column="THRD_PRTY_CST_SHR_NXT_SEQ_NBR" jdbc-type="INTEGER" />
+    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
 
     <field-descriptor name="versionNumber" locking="true" column="VER_NBR" jdbc-type="BIGINT" />
 
@@ -620,7 +621,7 @@
 <!--  Routing Form Tables  -->
 <class-descriptor class="org.kuali.module.kra.routingform.document.RoutingFormDocument" table="ER_RF_DOC_T">
     <field-descriptor id="1" name="documentNumber" column="RDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
-
+	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="agencyAdditionalShippingInstructionsIndicator" column="AGNCY_ADDL_SHIP_INST_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="agencyFederalPassThroughNotAvailableIndicator" column="AGNCY_FEDPT_NA_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
