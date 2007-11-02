@@ -1,7 +1,21 @@
 /* KULDBA to Demo */
+/* Disable constraints for the duration of this script */
+DECLARE 
+   CURSOR constraint_cursor IS 
+      SELECT table_name, constraint_name 
+         FROM user_constraints 
+         WHERE constraint_type = 'R'
+           AND status = 'ENABLED';
+BEGIN 
+   FOR r IN constraint_cursor LOOP
+      execute immediate 'ALTER TABLE '||r.table_name||' DISABLE CONSTRAINT '||r.constraint_name; 
+   END LOOP; 
+END;
+/
 
 
--- clean out non release 2.0 documents    
+-- clean out non release 2.0 documents and associated entries
+
 DELETE FROM fp_doc_type_t
   WHERE fdoc_grp_cd IN ( 'AR', 'AN', 'CM', 'CR', 'MO', 'SF' )
      OR FDOC_TYP_ACTIVE_CD = 'N'
@@ -11,10 +25,32 @@ DELETE FROM fp_doc_group_t
   WHERE fdoc_grp_cd NOT IN ( SELECT DISTINCT fdoc_grp_cd FROM fp_doc_type_t )
 /
 
+DELETE FROM ca_acct_delegate_t
+    WHERE fdoc_typ_cd NOT IN ( SELECT fdoc_typ_cd FROM fp_doc_type_t )
+/
+
+DELETE FROM gl_offset_defn_t
+    WHERE fdoc_typ_cd NOT IN ( SELECT fdoc_typ_cd FROM fp_doc_type_t )
+/    
+
+-- NOTE: this will leave the balance table out of sync with the GL entries
+DELETE FROM gl_entry_t
+    WHERE fdoc_typ_cd NOT IN ( SELECT fdoc_typ_cd FROM fp_doc_type_t )
+/    
+
+DELETE FROM gl_encumbrance_t
+    WHERE fdoc_typ_cd NOT IN ( SELECT fdoc_typ_cd FROM fp_doc_type_t )
+/    
+
+DELETE FROM ld_ldgr_entr_t
+    WHERE fdoc_typ_cd NOT IN ( SELECT fdoc_typ_cd FROM fp_doc_type_t )
+/    
+
 
 -- TODO: Clean up workflow document types and versions
 
 DELETE
+--    SELECT *
   FROM en_rte_node_lnk_t a
   WHERE from_rte_node_id IN ( SELECT rte_node_id FROM en_rte_node_t
   WHERE doc_typ_id IN (SELECT doc_typ_id FROM en_doc_typ_t
@@ -52,7 +88,9 @@ DELETE
 /
 
 -- clear out bad document types
-DELETE FROM en_doc_typ_t
+DELETE 
+--SELECT *
+FROM en_doc_typ_t
     WHERE doc_typ_nm LIKE 'Fake%'
        OR doc_typ_nm LIKE 'Test%'
        OR doc_typ_nm LIKE 'MyTest%'
@@ -119,6 +157,12 @@ UPDATE en_appl_cnst_t
 
 
 -- based on above deletions, also update en_wrkgrp_ext_t and en_wrkgrp_ext_dta_t
-DELETE FROM en_wrkgrp_mbr_t where (WRKGRP_ID, WRKGRP_VER_NBR) not in (select WRKGRP_ID, WRKGRP_VER_NBR from en_wrkgrp_t);
-DELETE FROM en_wrkgrp_ext_t where (WRKGRP_ID, WRKGRP_VER_NBR) not in (select WRKGRP_ID, WRKGRP_VER_NBR from en_wrkgrp_t);
-DELETE FROM en_wrkgrp_ext_dta_t where WRKGRP_EXT_ID not in (select WRKGRP_EXT_ID from en_wrkgrp_ext_t);
+DELETE FROM en_wrkgrp_mbr_t where (WRKGRP_ID, WRKGRP_VER_NBR) not in (select WRKGRP_ID, WRKGRP_VER_NBR from en_wrkgrp_t)
+/
+DELETE FROM en_wrkgrp_ext_t where (WRKGRP_ID, WRKGRP_VER_NBR) not in (select WRKGRP_ID, WRKGRP_VER_NBR from en_wrkgrp_t)
+/
+DELETE FROM en_wrkgrp_ext_dta_t where WRKGRP_EXT_ID not in (select WRKGRP_EXT_ID from en_wrkgrp_ext_t)
+/
+COMMIT
+/
+
