@@ -28,6 +28,9 @@ import org.kuali.core.dao.jdbc.PlatformAwareDaoBaseJdbc;
 import org.kuali.module.gl.dao.YearEndDao;
 import org.springframework.jdbc.core.RowMapper;
 
+/**
+ * A JDBC implementation of the YearEndDao, built mainly because OJB is darn slow at some queries
+ */
 public class YearEndDaoJdbc extends PlatformAwareDaoBaseJdbc implements YearEndDao {
 
     // All of the Comparators and RowMappers are stateless, so I can simply create them as variables and avoid unnecessary object
@@ -67,6 +70,10 @@ public class YearEndDaoJdbc extends PlatformAwareDaoBaseJdbc implements YearEndD
     };
 
     /**
+     * Queries the databse to find missing prior year accounts
+     * 
+     * @param balanceFiscalyear the fiscal year of balances to check for missing prior year accounts for
+     * @return a Set of Maps holding the primary keys of missing prior year accounts
      * @see org.kuali.module.gl.dao.YearEndDao#findKeysOfMissingPriorYearAccountsForBalances(java.lang.Integer)
      */
     public Set<Map<String, String>> findKeysOfMissingPriorYearAccountsForBalances(Integer balanceFiscalYear) {
@@ -97,6 +104,10 @@ public class YearEndDaoJdbc extends PlatformAwareDaoBaseJdbc implements YearEndD
     }
 
     /**
+     * Queries the database to find missing sub fund groups
+     * 
+     * @param balanceFiscalYear the fiscal year of the balance to find missing sub fund groups for
+     * @return a Set of Maps holding the primary keys of missing sub fund groups
      * @see org.kuali.module.gl.dao.YearEndDao#findKeysOfMissingSubFundGroupsForBalances(java.lang.Integer)
      */
     public Set<Map<String, String>> findKeysOfMissingSubFundGroupsForBalances(Integer balanceFiscalYear) {
@@ -125,6 +136,10 @@ public class YearEndDaoJdbc extends PlatformAwareDaoBaseJdbc implements YearEndD
     }
 
     /**
+     * Queries the databsae to find missing prior year account records referred to by encumbrance records
+     * 
+     * @param encumbranceFiscalYear the fiscal year of balances to find missing encumbrance records for
+     * @return a Set of Maps holding the primary keys of missing prior year accounts
      * @see org.kuali.module.gl.dao.YearEndDao#findKeysOfMissingPriorYearAccountsForOpenEncumbrances(java.lang.Integer)
      */
     public Set<Map<String, String>> findKeysOfMissingPriorYearAccountsForOpenEncumbrances(Integer encumbranceFiscalYear) {
@@ -133,6 +148,10 @@ public class YearEndDaoJdbc extends PlatformAwareDaoBaseJdbc implements YearEndD
     }
 
     /**
+     * Queries the database to find missing sub fund group records referred to by encumbrances
+     * 
+     * @param  encumbranceFiscalYear the fiscal year of encumbrances to find missing sub fund group records for
+     * @return a Set of Maps holding the primary keys of missing sub fund group records
      * @see org.kuali.module.gl.dao.YearEndDao#findKeysOfMissingSubFundGroupsForOpenEncumbrances(java.lang.Integer)
      */
     public Set<Map<String, String>> findKeysOfMissingSubFundGroupsForOpenEncumbrances(Integer encumbranceFiscalYear) {

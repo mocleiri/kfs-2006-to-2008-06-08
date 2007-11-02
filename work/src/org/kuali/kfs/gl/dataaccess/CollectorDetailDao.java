@@ -17,6 +17,9 @@ package org.kuali.module.gl.dao;
 
 import org.kuali.module.gl.bo.CollectorDetail;
 
+/**
+ * 
+ */
 public interface CollectorDetailDao {
     /**
      * Purge the table by year/chart
@@ -26,6 +29,11 @@ public interface CollectorDetailDao {
      */
     public void purgeYearByChart(String chartOfAccountsCode, int universityFiscalYear);
 
+    /**
+     * 
+     * This method...
+     * @param detail
+     */
     public void save(CollectorDetail detail);
 
     /**
