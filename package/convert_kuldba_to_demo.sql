@@ -1,5 +1,17 @@
 /* KULDBA to Demo */
 
+
+-- clean out non release 2.0 documents    
+DELETE FROM fp_doc_type_t
+  WHERE fdoc_grp_cd IN ( 'AR', 'AN', 'CM', 'CR', 'MO', 'SF' )
+     OR FDOC_TYP_ACTIVE_CD = 'N'
+/
+
+DELETE FROM fp_doc_group_t
+  WHERE fdoc_grp_cd NOT IN ( SELECT DISTINCT fdoc_grp_cd FROM fp_doc_type_t )
+/
+
+
 -- TODO: Clean up workflow document types and versions
 
 DELETE
@@ -103,50 +115,10 @@ UPDATE en_appl_cnst_t
     WHERE appl_cnst_nm = 'Config.Mailer.FromAddress'
 /
 
+-- TODO: cleanup unused workgroups
 
-
-/* TODO 3e) ask jonathan */
-DELETE FROM en_wrkgrp_t
-    WHERE wrkgrp_id NOT IN (
-     '166668'
-    ,'176739'
-    ,'177110'
-    ,'180244'
-    ,'183699'
-    ,'25386'
-    ,'2562'
-    ,'2618'
-    ,'2619'
-    ,'2624'
-    ,'2627'
-    ,'2629'
-    ,'2633'
-    ,'2636'
-    ,'2637'
-    ,'2638'
-    ,'2644'
-    ,'2679'
-    ,'2692'
-    ,'2722'
-    ,'2735'
-    ,'2736'
-    ,'2738'
-    ,'2739'
-    ,'2741'
-    ,'2742'
-    ,'2743'
-    ,'2744'
-    ,'2745'
-    ,'2746'
-    ,'2751'
-    ,'2752'
-    ,'46663'
-    )
-    AND wrkgrp_nm NOT IN (
-        SELECT DISTINCT wrkgrp_nm FROM sh_parm_t
-    )
-/
 
 -- based on above deletions, also update en_wrkgrp_ext_t and en_wrkgrp_ext_dta_t
+DELETE FROM en_wrkgrp_mbr_t where (WRKGRP_ID, WRKGRP_VER_NBR) not in (select WRKGRP_ID, WRKGRP_VER_NBR from en_wrkgrp_t);
 DELETE FROM en_wrkgrp_ext_t where (WRKGRP_ID, WRKGRP_VER_NBR) not in (select WRKGRP_ID, WRKGRP_VER_NBR from en_wrkgrp_t);
 DELETE FROM en_wrkgrp_ext_dta_t where WRKGRP_EXT_ID not in (select WRKGRP_EXT_ID from en_wrkgrp_ext_t);

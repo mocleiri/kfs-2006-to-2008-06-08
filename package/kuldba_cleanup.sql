@@ -37,3 +37,5 @@ UPDATE fp_dv_tax_ctrl_t
    SET dv_tax_ctrl_nm = 'Approved for Employee'
    WHERE dv_payee_txctrl_cd = 'A'
 /
+
+-- TODO: cleanup unused workgroups

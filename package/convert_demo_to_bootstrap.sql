@@ -3,7 +3,8 @@ DECLARE
    CURSOR constraint_cursor IS 
       SELECT table_name, constraint_name 
          FROM user_constraints 
-         WHERE constraint_type = 'R';
+         WHERE constraint_type = 'R'
+           AND status = 'ENABLED';
 BEGIN 
    FOR r IN constraint_cursor LOOP
       execute immediate 'ALTER TABLE '||r.table_name||' DISABLE CONSTRAINT '||r.constraint_name; 
@@ -105,6 +106,7 @@ DECLARE
 	, 'FP_DV_TAX_CTRL_T'
 	, 'FP_DV_TRVL_CO_NM_T'
 	, 'FP_FSCL_YR_CTRL_T'
+    , 'FS_OPTION_T'
 	, 'FP_FUNC_CTRL_CD_T'
 	, 'FP_INC_CLS_T'
 	, 'FP_NRA_TAX_PCT_T'
@@ -159,6 +161,7 @@ DECLARE
 	, 'SH_PARM_TYP_T'
 	, 'SH_STATE_T'
 	, 'SH_UNIV_DATE_T'
+	, 'PUR_CONTR_MGR_T' 
 	);
 BEGIN
   FOR rec IN tables_to_empty LOOP
@@ -168,21 +171,27 @@ BEGIN
 END;
 /
 
-/* TODO: NEED TO RE-INSERT to user and workgroup member table (KULUSER) */
+/* ** Users & Groups ** */
+
+/* RE-INSERT to user and workgroup member table (KULUSER) */
+INSERT INTO fs_universal_usr_t
+("PERSON_UNVL_ID",obj_id,"PERSON_USER_ID","PERSON_NM","PRSN_1ST_NM","PRSN_LST_NM","EMP_STAT_CD","EMP_TYPE_CD","PRSN_TAX_ID_TYP_CD","PRSN_STAFF_IND","PRSN_FAC_IND","PRSN_STU_IND","PRSN_AFLT_IND")
+VALUES
+('KULUSER',SYS_GUID(),'KULUSER','Kuali System User','System User','Kuali','A','P','S','Y','N','N','N')
+/
+/* TODO: add to SH_USR_PROP_T */
+INSERT INTO sh_usr_prop_t
+("PERSON_UNVL_ID","APPL_MOD_ID","USR_PROP_NM","OBJ_ID","VER_NBR","USR_PROP_VAL")
+VALUES
+('KULUSER','chart','active',SYS_GUID(),1,'Y')
+/
+
 insert into EN_WRKGRP_MBR_T (WRKGRP_MBR_PRSN_EN_ID,WRKGRP_ID,WRKGRP_MBR_TYP,WRKGRP_VER_NBR,DB_LOCK_VER_NBR)
-select '0000000000',WRKGRP_ID,'U',WRKGRP_VER_NBR,DB_LOCK_VER_NBR from EN_WRKGRP_T;
+( select 'KULUSER',WRKGRP_ID,'U',WRKGRP_VER_NBR,DB_LOCK_VER_NBR from EN_WRKGRP_T )
+/
 
 COMMIT
 /
-/* TODO: add to SH_USR_PROP_T */
-
-/* ** Users & Groups ** */
-
-delete from FS_UNIVERSAL_USR_T where PERSON_USER_ID <> 'KULUSER';
-delete from SH_USR_PROP_T where person_unvl_id NOT IN (SELECT person_unvl_id from FS_UNIVERSAL_USR_T);
-update SH_USR_PROP_T set PERSON_UNVL_ID = '0000000000';
-update SH_USR_PROP_T set USR_PROP_VAL = 'Y' where USR_PROP_NM = 'active';
-update fs_universal_usr_t set PERSON_UNVL_ID = '0000000000',emp_stat_cd = 'A',emp_type_cd = 'P';
 
 
 /* ** Workflow Constants, Document Types & Rules ** */
@@ -196,208 +205,65 @@ UPDATE en_appl_cnst_t
 
 
 /* ** System Parameters & Rules ** */
+-- blank out rules which contain values from other emptied tables
 
-update SH_PARM_T
-    set SH_PARM_TXT = '0000'
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'DisbursementVoucher'
-      and SH_PARM_NM LIKE 'NON\_RESIDENT\_ALIEN\_TAX\_%OBJECT\_CODE%' ESCAPE '\'
+--SELECT a.sh_parm_nmspc_cd, a.sh_parm_dtl_typ_cd, a.sh_parm_nm, a.sh_parm_typ_cd, a.sh_parm_txt
+--  FROM sh_parm_t a
+  UPDATE sh_parm_t 
+	SET sh_parm_txt = NULL
+  WHERE sh_parm_typ_cd <> 'HELP'
+    AND sh_parm_txt IS NOT NULL
+    AND ( 
+		sh_parm_nm LIKE '%CHARTS'
+	 OR sh_parm_nm LIKE '%CHART'
+	 OR sh_parm_nm LIKE '%CHART_CODE'
+	 OR sh_parm_nm LIKE '%OBJECT_CODE%'
+	 OR sh_parm_nm LIKE '%OBJECT_LEVEL%'
+	 OR sh_parm_nm LIKE '%OBJECT_CONS%'
+	 OR sh_parm_nm LIKE '%CAMPUS%'
+	 OR sh_parm_nm LIKE '%ORIGINATIONS%'
+	 OR sh_parm_nm LIKE '%ACCOUNT%'
+	 OR sh_parm_nm LIKE '%BANK_ACCOUNT%'
+	 OR sh_parm_nm LIKE '%ORGANIZATION'
+	 OR sh_parm_nm LIKE '%USER'
+   )
+   AND sh_parm_nm NOT LIKE '%GROUP'
+   AND sh_parm_nm <> 'SUB_ACCOUNT_TYPES'
+   AND sh_parm_nm NOT LIKE '%OBJECT_SUB_TYPES'
+   AND sh_parm_nm NOT LIKE 'MAX_FILE_SIZE%'
 /
-
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'DisbursementVoucher'
-      and SH_PARM_NM LIKE 'NON\_RESIDENT\_ALIEN\_TAX\_%ACCOUNT' ESCAPE '\'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'DisbursementVoucher'
-      and SH_PARM_NM LIKE 'NON\_RESIDENT\_ALIEN\_TAX\_%CHART' ESCAPE '\'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = '0000'
-    where SH_PARM_NMSPC_CD = 'KFS-GL'
-      and SH_PARM_DTL_TYP_CD = 'ScrubberStep'
-      and SH_PARM_NM LIKE '%OBJECT\_CODE%' ESCAPE '\'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = '0000'
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'BudgetAdjustment'
-      and SH_PARM_NM = 'GLPE_INCOME_TRANSFER_OBJECT_CODE'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = '0000'
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'IndirectCostAdjustment'
-      and SH_PARM_NM LIKE '%OBJECT\_CODE%' ESCAPE '\'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'ProcurementCardCreateDocumentsStep'
-      and SH_PARM_NM LIKE '%ACCOUNT\_NUMBER' ESCAPE '\'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'ProcurementCardCreateDocumentsStep'
-      and SH_PARM_NM LIKE '%CHART\_CODE' ESCAPE '\'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = '0000'
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'ProcurementCardLoadStep'
-      and SH_PARM_NM LIKE '%OBJECT\_CODE' ESCAPE '\'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = '0000'
-    where SH_PARM_NMSPC_CD = 'KFS-GL'
-      and SH_PARM_DTL_TYP_CD = 'Batch'
-      and SH_PARM_NM LIKE '%OBJECT_CODE'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = 'ZZ'
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_TYP_CD = 'CONFG'
-      and SH_PARM_NM LIKE '%DOCUMENTATION%'
-/
-
 COMMIT
 /
 
--- fix up business rules
-
-delete from SH_PARM_T
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'DisbursementVoucher'
-      and SH_PARM_NM = 'INVALID_DOCUMENTATION_LOCATIONS_BY_CAMPUS'
-/
-
--- remove global DV object level restrictions
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'DisbursementVoucher'
-      and SH_PARM_NM = 'OBJECT_LEVELS'
-/
-
--- remove restrictions on DV object codes and levels based on payment reason
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'DisbursementVoucher'
-      and SH_PARM_NM IN ('VALID_OBJECT_CODES_BY_PAYMENT_REASON', 'INVALID_OBJECT_LEVELS_BY_PAYMENT_REASON', 'VALID_OBJECT_LEVELS_BY_PAYMENT_REASON')
-/
-
--- remove IU chart values from GL rules
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-GL'
-      and SH_PARM_DTL_TYP_CD = 'ScrubberStep'
-      and SH_PARM_NM = 'CAPITALIZATION_CHARTS'
-/
-
--- remove IU object level from rule
-delete from SH_PARM_T
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'AuxiliaryVoucher'
-      and SH_PARM_NM = 'COMBINATION_OBJECT_TYPE_OBJECT_SUB_TYPE_OBJECT_LEVEL'
-/
-
--- remove IU object level from rule
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_NM = 'OBJECT_CODES'
-/
-
--- remove IU object consolidation from rule
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_NM = 'OBJECT_CONSOLIDATIONS'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_NM = 'OBJECT_LEVELS'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-CA'
-      and SH_PARM_TYP_CD = 'CONFG'
-      and SH_PARM_DTL_TYP_CD = 'OrganizationReversionCategory'
-/
-
-
-update SH_PARM_T
-    set SH_PARM_TXT = NULL
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'ProcurementCard'
-      and SH_PARM_NM = 'OBJECT_CONSOLIDATIONS'
-/
-
-update SH_PARM_T
-    set SH_PARM_TXT = '0000'
-    where SH_PARM_NMSPC_CD = 'KFS-FP'
-      and SH_PARM_DTL_TYP_CD = 'ProcurementCard'
-      and SH_PARM_NM LIKE '%OBJECT_CODES%'
-/
-
-COMMIT
-/
 
 
 /* ** Reference Data ** */
 
 /* One origin code */
-truncate table fs_origin_code_t;
 insert into FS_ORIGIN_CODE_T values ('01',sys_guid(),1,0,'KULSTG','KUL','KUL',0,0,'0','0',0,0,0,0);
 
 /* Fix home origin table */
 update fs_home_origin_t set fs_home_origin_cd = '01';
 
 /* Fix the sh_campus_t table */
-truncate table sh_campus_t;
-insert into sh_campus_t values ('ZZ',sys_guid(),1,UPPER('Default Campus'),UPPER('Campus'),'F');
+insert into sh_campus_t values ('01',sys_guid(),1,'Default Campus','Campus','F');
 
 /* One motd */
-truncate table fp_motd_t;
-insert into fp_motd_t values ('01',sys_guid(),1,'Using Base Kuali Dataset');
+insert into fp_motd_t values ('01',sys_guid(),1,'Using Bootstrap Kuali Dataset');
 
 
 /* ** Charts & Organizations ** */
-
-/* Since sh_campus_t & ca_rc_t are truncated we need to satisfy constraints accordingly */
-update ca_org_t
-set ORG_PHYS_CMP_CD = 'ZZ'
-/
-update ca_org_t
-set rc_cd = 'NO'
-/
-
-DELETE FROM ca_rc_t
-  WHERE rc_cd <> 'NO'
-/
 
 DELETE FROM ca_org_type_t
    WHERE org_typ_cd NOT IN ( 'C', 'N', 'R', 'U' )
 /
 
+
+/** clean up the options table **/
+
+UPDATE fs_option_t
+	SET univ_fin_coa_cd = NULL
+/
 
 /* ** Chart of Accounts ** */
 
@@ -453,41 +319,9 @@ WHERE sub_fund_grp_cd NOT IN (
 )
 /
 
-/* TODO 1f) */
--- delete some IU specific and testing SFGs
-DELETE FROM ca_sub_fund_grp_t 
-    WHERE sub_fund_grp_cd IN ( 'STUFF', 'SDCI', 'MWISH', 'MCLAR' )
-      OR sub_fund_grp_cd LIKE 'RH%'
-/
-
 DELETE FROM ca_account_type_t
     WHERE acct_typ_cd NOT IN ( 'AI', 'BS', 'EQ', 'NA', 'RA', 'WS' )
 /
-
-DELETE FROM fp_doc_group_t
-  WHERE fdoc_grp_cd IN ( 'AR', 'AN', 'CM', 'CR', 'MO', 'SF' )
-/
-
--- clean out non phase-1 documents    
-DELETE FROM fp_doc_type_t
-  WHERE fdoc_grp_cd IN ( 'AR', 'AN', 'CM', 'CR', 'MO', 'SF' )
-     OR FDOC_TYP_ACTIVE_CD = 'N'
-/
-
-/* offset definition */
-delete from gl_offset_defn_t where univ_fiscal_yr <> '2008';
-delete from gl_offset_defn_t where fin_coa_cd <> 'BL';
--- using ZZ as a template when creating charts via a script
-update gl_offset_defn_t set fin_coa_cd = 'ZZ',fin_object_cd = '0000';
-
-update CA_ACCOUNT_T set ACCT_PHYS_CMP_CD = 'ZZ'
-/
-
-update CA_ACCOUNT_T set SUB_FUND_GRP_CD = 'ZZ'
-/
-
-
-
 
 /* ** Disbursement Voucher Data ** */
 
@@ -495,9 +329,10 @@ update CA_ACCOUNT_T set SUB_FUND_GRP_CD = 'ZZ'
 INSERT INTO fp_dv_doc_loc_t
 (DV_DOC_LOC_CD,OBJ_ID,VER_NBR,DV_DOC_LOC_NM,DV_DOC_LOC_ADDR)
 VALUES
-('ZZ',sys_guid(),1,'Kuali Default DV Doc Loc',NULL)
+('01',sys_guid(),1,'Kuali Default DV Doc Loc',NULL)
 /
 
+-- clear out references to exact object codes
 UPDATE fp_dv_pmt_reas_t 
     SET dv_pmt_reas_desc = SUBSTR( dv_pmt_reas_desc, 1, INSTR( dv_pmt_reas_desc, '.  Some common' ) )
     WHERE dv_pmt_reas_desc LIKE '%.  Some common%'
@@ -519,7 +354,7 @@ UPDATE fp_dv_pmt_reas_t
     WHERE dv_pmt_reas_desc LIKE '%.  Common object%'
 /
 
-/* TODO 1j) */
+
 DELETE FROM fp_dv_trvl_co_nm_t
 WHERE ( dv_exp_cd, dv_exp_co_nm ) NOT IN (
  ( 'A', 'CONTINENTAL/CONTINENTAL EXPRESS' )
@@ -589,31 +424,39 @@ WHERE ( dv_exp_cd, dv_exp_co_nm ) NOT IN (
 /
 
 /* ** Financial Document Data ** */
-/* No kuldba to bootstrap changes */
+/* No demo to bootstrap changes */
 
 
 /* ** Labor Distribution ** */
-/* No kuldba to bootstrap changes */
+/* No demo to bootstrap changes */
 
 
 /* ** Pre-Disbursement Processor ** */
-/* No kuldba to bootstrap changes */
+/* No demo to bootstrap changes */
 
 
 /* ** Vendor ** */
-DELETE FROM pur_contr_mgr_t WHERE contr_mgr_cd NOT IN ( 99 )
-/
+/* No demo to bootstrap changes */
 
 /* ** Purchasing/Accounts Payable ** */
-/* No kuldba to bootstrap changes */
+DELETE FROM pur_contr_mgr_t 
+	WHERE contr_mgr_cd NOT IN ( 99 )
+/
+UPDATE pur_contr_mgr_t 
+	SET contr_mgr_usr_id = 'KULUSER'
+      , contr_mgr_phn_nbr = '(000) 555-1212'
+      , contr_mgr_fax_nbr = '(000) 555-1212'
+/
+COMMIT
+/
 
 
 /* ** Contracts & Grants ** */
-/* No kuldba to bootstrap changes */
+/* No demo to bootstrap changes */
 
 
 /* ** Research Administration ** */
-/* No kuldba to bootstrap changes */
+/* No demo to bootstrap changes */
 
 
 /* Re-enable constraints */
@@ -621,7 +464,8 @@ DECLARE
    CURSOR constraint_cursor IS 
       SELECT table_name, constraint_name 
          FROM user_constraints 
-         WHERE constraint_type = 'R';
+         WHERE constraint_type = 'R'
+           AND status <> 'ENABLED';
 BEGIN 
    FOR r IN constraint_cursor LOOP
       execute immediate 'ALTER TABLE '||r.table_name||' ENABLE CONSTRAINT '||r.constraint_name; 
