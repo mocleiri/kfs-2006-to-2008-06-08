@@ -15,13 +15,15 @@
  */
 CREATE TABLE ER_AGNCY_EXTNS_T(
         CG_AGNCY_NBR                   VARCHAR2(5) CONSTRAINT ER_AGNCY_EXTNS_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_AGNCY_EXTNS_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1,
         AGNCY_MOD_IND                  VARCHAR2(1),
         BDGT_MOD_INCR_AMT              NUMBER(6,0),
         BDGT_PRD_MAX_AMT               NUMBER(7,0),
         AGNCY_NSF_OUT_IND              VARCHAR2(1),
      CONSTRAINT ER_AGNCY_EXTNS_TP1 PRIMARY KEY (
-        CG_AGNCY_NBR)
+        CG_AGNCY_NBR),
+     CONSTRAINT ER_AGNCY_EXTNS_TC0 UNIQUE (OBJ_ID)
 )
 /
 

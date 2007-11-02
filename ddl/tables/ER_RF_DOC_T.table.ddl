@@ -15,6 +15,7 @@
  */
 CREATE TABLE ER_RF_DOC_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_DOC_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_DOC_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_DOC_TN3 NOT NULL,
         AGNCY_ADDL_SHIP_INST_IND       VARCHAR2(1),
         AGNCY_FEDPT_NA_IND             VARCHAR2(1),
@@ -66,6 +67,7 @@ CREATE TABLE ER_RF_DOC_T(
         RF_CFDA_NBR                    VARCHAR2(6),
         RF_PSNL_NXT_SEQ_NBR            NUMBER(2),
      CONSTRAINT ER_RF_DOC_TP1 PRIMARY KEY (
-        RDOC_NBR)
+        RDOC_NBR),
+        CONSTRAINT ER_RF_DOC_TC0 UNIQUE (OBJ_ID)
 )
 /

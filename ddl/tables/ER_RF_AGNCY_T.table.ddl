@@ -15,6 +15,7 @@
  */
 CREATE TABLE ER_RF_AGNCY_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_AGNCY_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_AGNCY_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_AGNCY_TN3 NOT NULL,
         AGNCY_ADDR_DESC                VARCHAR2(500),
         AGNCY_CNTCT_NM                 VARCHAR2(50),
@@ -40,7 +41,8 @@ CREATE TABLE ER_RF_AGNCY_T(
         RF_REQ_CPY_TXT                 VARCHAR2(20),
         RF_SUBMT_DT                    DATE,
      CONSTRAINT ER_RF_AGNCY_TP1 PRIMARY KEY (
-        RDOC_NBR)
+        RDOC_NBR),
+        CONSTRAINT ER_RF_AGNCY_TC0 UNIQUE (OBJ_ID)
 )
 /
 
