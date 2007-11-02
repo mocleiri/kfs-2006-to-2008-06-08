@@ -32,6 +32,9 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.dao.OriginEntryGroupDao;
 
+/**
+ * An OJB specific implementation of OriginEntryGroupDao
+ */
 public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements OriginEntryGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryGroupDaoOjb.class);
 
@@ -42,6 +45,14 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     private static final String VALID = "valid";
     private static final String SCRUB = "scrub";
 
+    /**
+     * Given an origin entry group source type (defined in OriginEntrySource)
+     * 
+     * @param sourceCode the source code of the groups to find
+     * @return a Collection of OriginEntryGroups with the given soruce code
+     * @see org.kuali.module.gl.bo.OriginEntrySource
+     * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getGroupsFromSource(java.lang.String)
+     */
     public Collection<OriginEntryGroup> getGroupsFromSource(String sourceCode) {
         LOG.debug("getGroupsFromSourceForDay() started");
 
@@ -53,6 +64,10 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * Get all the groups that are older than a date
+     * 
+     * @param day the date groups returned should be older than
+     * @return a Collection of origin entry groups older than that date
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getOlderGroups(Date)
      */
     public Collection<OriginEntryGroup> getOlderGroups(Date day) {
@@ -65,6 +80,10 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * Delete all the groups in the list.  Note...it doesn't delete the entries within them, you need
+     * OriginEntryDao.deleteGroups for that
+     * 
+     * @params groups a Collection of origin entry groups to delete
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#deleteGroups(java.util.Collection)
      */
     public void deleteGroups(Collection<OriginEntryGroup> groups) {
@@ -83,6 +102,10 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * Builds an OJB query out of the given map of criteria and fetches all the groups that match the criteria
+     * 
+     * @param searchCriteria a Map of search criteria to form the query
+     * @return a Collection of Origin Entry Groups that match that criteria
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getMatchingGroups(java.util.Map)
      */
     public Collection getMatchingGroups(Map searchCriteria) {
@@ -99,6 +122,10 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * Get all the groups for the poster (that is to say, Groups with "Process" being true)
+     * 
+     * @param groupSourceCode the source code of origin entry groups to return
+     * @return a Collection of origin entry groups that should be processed by the poster
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getPosterGroups(java.lang.String)
      */
     public Collection getPosterGroups(String groupSourceCode) {
@@ -114,6 +141,9 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * Gets a collection of all backup groups that are scrubbable (i.e. valid, process, scrub indicators all set to true)
+     * 
+     * @return a Collection of scrubbable origin entry groups
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getAllScrubbableBackupGroups()
      */
     public Collection<OriginEntryGroup> getAllScrubbableBackupGroups() {
@@ -128,6 +158,10 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * Get all the Labor backup groups to scrub (ie, origin entry groups with source OriginEntrySource.LABOR_BACKUP)
+     * 
+     * @param groupDate this parameter isn't really used
+     * @return a Collection of Labor backup groups
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getLaborBackupGroups(java.sql.Date)
      */
     public Collection getLaborBackupGroups(Date groupDate) {
@@ -145,10 +179,14 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
 
 
     /**
+     * Get all the groups to be copied into the backup group
+     * 
+     * @param groupDate the date returned origin entry groups must have been created on or before
+     * @return a Collection of origin entry groups to backup
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getScrubberGroups(java.sql.Date)
      */
     public Collection getGroupsToBackup(Date groupDate) {
-        LOG.debug("getScrubberGroups() started");
+        LOG.debug("getGroupsToBackup() started");
 
         Criteria criteria = new Criteria();
         criteria.addLessOrEqualThan(DATE, groupDate);
@@ -162,10 +200,17 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
 
 
     /**
+     * Get all the groups to be copied into the backup group...though, notably, this method
+     * does nothing to differentiate labor groups from otherwise normal groups.  One must assume
+     * that processing takes place somewhere else
+     * 
+     * @param groupDate the date returned origin entry groups must have been created on or before
+     * @return a Collection of Labor Origin Entry Groups to backup
+     * 
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getLaborScrubberGroups(java.sql.Date)
      */
     public Collection getLaborGroupsToBackup(Date groupDate) {
-        LOG.debug("getScrubberGroups() started");
+        LOG.debug("getLaborGroupsToBackup() started");
 
         Criteria criteria = new Criteria();
         criteria.addLessOrEqualThan(DATE, groupDate);
@@ -179,6 +224,9 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
 
 
     /**
+     * Saves an origin entry group
+     * 
+     * @param group the group to save
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#save(org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public void save(OriginEntryGroup group) {
@@ -188,6 +236,14 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * We all know that computers aren't naturally exact.  They like to fudge things.  Databases especially.
+     * If you send a database a table name and a primary key on that table, you really never know what you're
+     * going to get, now do you?  But this method makes sure that that rascally database returns the origin
+     * entry group with the primary key of the given group id.  Or null if it can't find anything.  It works
+     * by magic.
+     * 
+     * @param id the id of the origin entry group to return
+     * @return an Origin Entry Group, or null if the exact one couldn't be found
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getExactMatchingEntryGroup(java.lang.Integer)
      */
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id) {
@@ -196,10 +252,10 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
-     * Run a sql command
+     * Run a sql command.  This method takes its connection from the given persistence broker.
      * 
-     * @param sql
-     * @return
+     * @param sql the sql to execute; it must be an update state
+     * @return the result of the execute update
      */
     private int sqlCommand(String sql) {
         LOG.info("sqlCommand() started: " + sql);
