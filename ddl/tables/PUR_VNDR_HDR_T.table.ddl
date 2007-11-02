@@ -18,7 +18,7 @@ CREATE TABLE PUR_VNDR_HDR_T(
         OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT PUR_VNDR_HDR_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PUR_VNDR_HDR_TN3 NOT NULL,
         VNDR_TYP_CD                    VARCHAR2(4) CONSTRAINT PUR_VNDR_HDR_TN4 NOT NULL,
-        VNDR_TAX_NBR                   VARCHAR2(9),
+        VNDR_TAX_NBR                   VARCHAR2(255),
         VNDR_TAX_TYP_CD                VARCHAR2(4),
         VNDR_OWNR_CD                   VARCHAR2(4),
         VNDR_OWNR_CTGRY_CD             VARCHAR2(4),
