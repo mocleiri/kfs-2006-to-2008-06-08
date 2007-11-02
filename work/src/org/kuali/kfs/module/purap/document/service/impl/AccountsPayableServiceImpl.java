@@ -123,15 +123,15 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         // get parameter to see if fiscal officers may see the continuation account warning
         String showContinuationAccountWaringFO = parameterService.getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS);
 
-        // TODO (KULPURAP-1569: dlemus) See if/how we want to allow AP users to view the continuation account warning
         // get parameter to see if ap users may see the continuation account warning
         String showContinuationAccountWaringAP = parameterService.getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapConstants.PURAP_AP_SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS);
 
         // versus doing it in their respective documents (preq, credit memo)
-        // if not initiate or in process and
+        // document is past full entry and
         // user is a fiscal officer and a system parameter is set to allow viewing
         // and if the continuation account indicator is set
-        if (!(PurapConstants.PaymentRequestStatuses.INITIATE.equals(document.getStatusCode()) || PurapConstants.PaymentRequestStatuses.IN_PROCESS.equals(document.getStatusCode()) || PurapConstants.PaymentRequestStatuses.AWAITING_ACCOUNTS_PAYABLE_REVIEW.equals(document.getStatusCode())) && (isFiscalUser(document, user) && "Y".equals(showContinuationAccountWaringFO)) && (document.isContinuationAccountIndicator())) {
+        if (purapService.isFullDocumentEntryCompleted(document) &&
+            (isFiscalUser(document, user) && "Y".equals(showContinuationAccountWaringFO)) && (document.isContinuationAccountIndicator())) {
 
             GlobalVariables.getMessageList().add(PurapKeyConstants.MESSAGE_CLOSED_OR_EXPIRED_ACCOUNTS_REPLACED);
         }
@@ -224,15 +224,7 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         if (po != null) {
             // get list of active accounts
             PurapAccountingService pas = SpringContext.getBean(PurapAccountingService.class);
-            List<PurApItem> apItems = document.getItems();
-            List<PurchaseOrderItem> poItems = po.getItemsActiveOnly();
-            List<PurApItem> poItemsOnDoc = new ArrayList<PurApItem>();
-            for (PurchaseOrderItem purchaseOrderItem : poItems) {
-                if (ObjectUtils.isNotNull(document.getAPItemFromPOItem(purchaseOrderItem))) {
-                    poItemsOnDoc.add(purchaseOrderItem);
-                }
-            }
-            List<SourceAccountingLine> accountList = pas.generateSummary(poItemsOnDoc);
+            List<SourceAccountingLine> accountList = pas.generateSummary(po.getItemsActiveOnly());            
 
             // loop through accounts
             for (SourceAccountingLine poAccountingLine : accountList) {
