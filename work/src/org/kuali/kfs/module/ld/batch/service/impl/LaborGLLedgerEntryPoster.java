@@ -51,7 +51,6 @@ public class LaborGLLedgerEntryPoster implements PostTransaction {
         LaborGeneralLedgerEntry laborGeneralLedgerEntry = new LaborGeneralLedgerEntry();
         ObjectUtil.buildObject(laborGeneralLedgerEntry, transaction);
 
-        laborGeneralLedgerEntry.setTransactionPostingDate(new Date(postDate.getTime()));
         laborGeneralLedgerEntry.setTransactionDate(new Date(postDate.getTime()));
 
         laborGeneralLedgerEntry.setTransactionDebitCreditCode(this.getDebitCreditCode(transaction));
