@@ -31,12 +31,17 @@ import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.bo.SufficientFundBalances;
 import org.kuali.module.gl.dao.SufficientFundsDao;
 
+/**
+ * An OJB implementation of SufficientFundsDao
+ */
 public class SufficientFundsDaoOjb extends PlatformAwareDaoBaseOjb implements SufficientFundsDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsDaoOjb.class);
 
     private static final String YEAR_END_DOC_PREFIX = "YE%";
 
-    // these
+    /**
+     * Constructs a SufficientFundsDaoOjb instance
+     */
     public SufficientFundsDaoOjb() {
     }
 
@@ -323,8 +328,8 @@ public class SufficientFundsDaoOjb extends PlatformAwareDaoBaseOjb implements Su
     /**
      * Purge table by year/chart
      * 
-     * @param chart
-     * @param year
+     * @param chart the chart of sufficient fund balances to purge
+     * @param year the year of sufficient fund balances to purge
      */
     public void purgeYearByChart(String chartOfAccountsCode, int year) {
         LOG.debug("purgeYearByChart() started");
@@ -342,9 +347,12 @@ public class SufficientFundsDaoOjb extends PlatformAwareDaoBaseOjb implements Su
     }
 
     /**
-     * class util methods
+     * This returns the very first value returned by a report query and then makes certain that OJB closes the 
+     * connection that retrieved the query data
+     * 
+     * @param reportQuery the ReportQuery to find the first value for
+     * @return the first value generated from the given query
      */
-
     private KualiDecimal executeReportQuery(ReportQueryByCriteria reportQuery) {
         Iterator iterator = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(reportQuery);
         if (iterator.hasNext()) {
