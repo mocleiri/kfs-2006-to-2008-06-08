@@ -228,8 +228,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         boolean suspenseAccountLogicInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.SUSPENSE_ACCOUNT_LOGIC_PARAMETER);
         if (account == null) {
             if (suspenseAccountLogicInd) {
-                useSuspenseAccount(laborWorkingEntry);
-                return null;
+                return useSuspenseAccount(laborWorkingEntry);
             }
             return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_ACCOUNT_NOT_FOUND) + "(" + laborOriginEntry.getChartOfAccountsCode() + "-" + laborOriginEntry.getAccountNumber() + ")", Message.TYPE_FATAL);
         }
@@ -250,8 +249,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         String[] nonWageSubfundBypassOriginationCodes = SpringContext.getBean(ParameterService.class).getParameterValues(LaborScrubberStep.class, LaborConstants.Scrubber.NON_WAGE_SUB_FUND_BYPASS_ORIGINATIONS).toArray(new String[] {});
         if (subfundWageExclusionInd && !account.getSubFundGroup().isSubFundGroupWagesIndicator() && !ObjectHelper.isOneOf(laborOriginEntry.getFinancialSystemOriginationCode(), nonWageSubfundBypassOriginationCodes)) {
             if (suspenseAccountLogicInd) {
-                useSuspenseAccount(laborWorkingEntry);
-                return null;
+                return useSuspenseAccount(laborWorkingEntry);
             }
 
             return new Message("Sub fund does not accept wages.", Message.TYPE_FATAL);
@@ -334,7 +332,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
                 laborWorkingEntry.setAccountNumber(accountNumber);
                 laborWorkingEntry.setChartOfAccountsCode(chartCode);
 
-                laborWorkingEntry.setTransactionLedgerEntryDescription(kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_AUTO_FORWARD) + expiredClosedAccount.getChartOfAccountsCode() + expiredClosedAccount.getAccountNumber() + laborOriginEntry.getTransactionLedgerEntryDescription());
+                laborWorkingEntry.setTransactionLedgerEntryDescription(kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_AUTO_FORWARD) + " " + expiredClosedAccount.getChartOfAccountsCode() + expiredClosedAccount.getAccountNumber() + laborOriginEntry.getTransactionLedgerEntryDescription());
                 return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_ACCOUNT_CLOSED_TO) + " " + laborWorkingEntry.getChartOfAccountsCode() + laborWorkingEntry.getAccountNumber(), Message.TYPE_WARNING);
             }
 
@@ -344,8 +342,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
         // We failed to find a valid continuation account.
         boolean suspenseAccountLogicInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.SUSPENSE_ACCOUNT_LOGIC_PARAMETER);
         if (suspenseAccountLogicInd) {
-            useSuspenseAccount(laborWorkingEntry);
-            return null;
+            return useSuspenseAccount(laborWorkingEntry);
         }
         else {
             return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_CONTINUATION_ACCOUNT_LIMIT_REACHED), Message.TYPE_FATAL);
@@ -380,8 +377,7 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
             // no alt acct, use suspense acct if active
             boolean suspenseAccountLogicInd = SpringContext.getBean(ParameterService.class).getIndicatorParameter(LaborScrubberStep.class, LaborConstants.Scrubber.SUSPENSE_ACCOUNT_LOGIC_PARAMETER);
             if (suspenseAccountLogicInd) {
-                useSuspenseAccount(laborWorkingEntry);
-                return null;
+                return useSuspenseAccount(laborWorkingEntry);
             }
 
             return new Message("No alternative account found for non-fringe Account. ", Message.TYPE_FATAL);
@@ -435,14 +431,20 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
     /**
      * This method changes account to suspenseAccount
      */
-    private void useSuspenseAccount(LaborOriginEntry workingEntry) {
+    private Message useSuspenseAccount(LaborOriginEntry workingEntry) {
         String suspenseAccountNumber = SpringContext.getBean(ParameterService.class).getParameterValue(LaborScrubberStep.class, LaborConstants.Scrubber.SUSPENSE_ACCOUNT);
         String suspenseCOAcode = SpringContext.getBean(ParameterService.class).getParameterValue(LaborScrubberStep.class, LaborConstants.Scrubber.SUSPENSE_CHART);
         Account account = accountService.getByPrimaryId(suspenseCOAcode, suspenseAccountNumber);
 
+        if (account == null) {
+            return new Message("Suspense account is Invalid.", Message.TYPE_FATAL);
+        }
+        
         workingEntry.setAccount(account);
         workingEntry.setAccountNumber(suspenseAccountNumber);
         workingEntry.setChartOfAccountsCode(suspenseCOAcode);
+        
+        return null;
     }
 
     /**
