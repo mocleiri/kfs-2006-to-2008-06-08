@@ -23,19 +23,19 @@ public interface SufficientFundsDao {
     /**
      * fp_sasfc:49-2...54-3 m113 checking:calculates pfyr_budget
      * 
-     * @param universityFiscalYear
-     * @param chartOfAccountCode
-     * @param accountNumber
-     * @return
+     * @param universityFiscalYear the university fiscal year of sufficient funds balances that will be summarized
+     * @param chartOfAccountCode the chart of accounts code of sufficient fund balance records that will be summarized
+     * @param accountNumber the account number of sufficient fund balances that will be summarized
+     * @return the sum of 
      */
     public KualiDecimal calculateM113PfyrBudget(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber);
 
     /**
      * fp_sasfc:55-2...60-3 m113 checking: calculates pfyr_encum
      * 
-     * @param universityFiscalYear
-     * @param chartOfAccountsCode
-     * @param accountNumber
+     * @param universityFiscalYear the university fiscal year of sufficient funds balances to summarize
+     * @param chartOfAccountsCode the chart of accounts code of sufficient funds balances to summarize
+     * @param accountNumber the account number of sufficient fund balances to summarize
      * @return
      */
     public KualiDecimal calculateM113PfyrEncum(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber);
@@ -43,9 +43,9 @@ public interface SufficientFundsDao {
     /**
      * fp_sasfc:61-2...78-3 m113 checking: calculate pend_actual
      * 
-     * @param universityFiscalYear
-     * @param chartOfAccountsCode
-     * @param accountNumber
+     * @param universityFiscalYear the university fiscal year of sufficient funds balances to summarize
+     * @param chartOfAccountsCode the chart of accounts code of sufficient funds balances to summarize
+     * @param accountNumber the account number of sufficient fund balances to summarize
      * @param specialFinancialObjectCodes
      * @param financialObjectCodeForCashInBank TODO
      * @return
@@ -57,9 +57,9 @@ public interface SufficientFundsDao {
      * 
      * @param isYearEndDocument
      * @param actualFinancialBalanceTypeCd
-     * @param universityFiscalYear
-     * @param chartOfAccountsCode
-     * @param accountNumber
+     * @param universityFiscalYear the university fiscal year of sufficient funds balances to summarize
+     * @param chartOfAccountsCode the chart of accounts code of sufficient funds balances to summarize
+     * @param accountNumber the account number of sufficient fund balances to summarize
      * @param acctSufficientFundsFinObjCd
      * @param expenditureCodes
      * @return
@@ -71,9 +71,9 @@ public interface SufficientFundsDao {
      * 
      * @param isYearEndDocument
      * @param budgetCheckingBalanceTypeCd
-     * @param universityFiscalYear
-     * @param chartOfAccountsCode
-     * @param accountNumber
+     * @param universityFiscalYear the university fiscal year of sufficient funds balances to summarize
+     * @param chartOfAccountsCode the chart of accounts code of sufficient funds balances to summarize
+     * @param accountNumber the account number of sufficient fund balances to summarize
      * @param acctSufficientFundsFinObjCd
      * @param expenditureCodes
      * @return
@@ -87,9 +87,9 @@ public interface SufficientFundsDao {
      * @param extrnlEncumFinBalanceTypCd
      * @param intrnlEncumFinBalanceTypCd
      * @param preencumbranceFinBalTypeCd
-     * @param universityFiscalYear
-     * @param chartOfAccountsCode
-     * @param accountNumber
+     * @param universityFiscalYear the university fiscal year of sufficient funds balances to summarize
+     * @param chartOfAccountsCode the chart of accounts code of sufficient funds balances to summarize
+     * @param accountNumber the account number of sufficient fund balances to summarize
      * @param acctSufficientFundsFinObjCd
      * @param expenditureCodes
      * @return
@@ -99,8 +99,8 @@ public interface SufficientFundsDao {
     /**
      * Purge table by year/chart
      * 
-     * @param chart
-     * @param year
+     * @param chart the chart of sufficient fund records to purge
+     * @param year the year of sufficient fund records to purge
      */
     public void purgeYearByChart(String chart, int year);
 }
