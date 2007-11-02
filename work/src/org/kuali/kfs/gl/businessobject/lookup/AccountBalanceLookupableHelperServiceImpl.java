@@ -22,11 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.core.web.ui.Row;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.service.OptionsService;
@@ -40,11 +39,9 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.AccountBalanceInquirableImpl;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class AccountBalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
-
+    
     private AccountBalanceCalculator postAccountBalance;
     private AccountBalanceService accountBalanceService;
     private OptionsService optionsService;
@@ -61,8 +58,8 @@ public class AccountBalanceLookupableHelperServiceImpl extends AbstractGLLookupa
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         Collection searchResultsCollection = null;
 
@@ -188,9 +185,6 @@ public class AccountBalanceLookupableHelperServiceImpl extends AbstractGLLookupa
         KualiDecimal encumbranceAmount = balance.getAccountLineEncumbranceBalanceAmount();
 
         // determine if the object type code is one of the given codes
-        if (ObjectUtils.isNull(balance.getFinancialObject()) || StringUtils.isBlank(balance.getFinancialObject().getFinancialObjectTypeCode())) {
-            balance.refreshReferenceObject("financialObject"); // refresh if we need to...
-        }
         ObjectCode financialObject = balance.getFinancialObject();
         String objectTypeCode = (financialObject == null) ? Constant.EMPTY_STRING : financialObject.getFinancialObjectTypeCode();
 

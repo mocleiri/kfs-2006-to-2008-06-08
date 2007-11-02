@@ -32,15 +32,17 @@
             </authorization>
         </authorizations>
 
-		<documentTypeName>KualiLaborObjectCodeBenefitMaintenanceDocument</documentTypeName>
+		<documentTypeName>KualiPositionObjectBenefitMaintenanceDocument</documentTypeName>
 		<documentTypeCode>LOBN</documentTypeCode>
 
-		<label>Object Code Benefits Maintenance Document</label>
-		<shortLabel>Object Code Benefit Maint Doc</shortLabel>
+		<label>Position Object Benefit Maintenance Document</label>
+		<shortLabel>Pos Obj Benefit Maint Doc</shortLabel>
 		
-		<summary>Labor Object Code Benefits Maintenance Document</summary>
+		<summary>Position Object Benefit Maintenance Document</summary>
 		<description>Document used to create or update Position Object Benefit objects</description>
-        <help parameterNamespace="KFS-LD" parameterDetailType="LaborObjectBenefit" parameterName="LABOR_OBJECT_BENEFIT" />
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_LABOR_OBJECT_BENEFIT" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
 			<field attributeName="universityFiscalYear" />
@@ -63,7 +65,7 @@
 	            	<maintainableField name="chartOfAccountsCode" required="true" />
 	            	<maintainableField name="financialObjectCode" required="true"/>
 	            	<maintainableField name="financialObjectBenefitsTypeCode" required="true"/>
-	            	<maintainableField name="versionNumber" />
+	            	<maintainableField name="versionNumber" required="false"/>
 	         	</maintainableItems>
 	        </maintainableSection>
 	    </maintainableSections>

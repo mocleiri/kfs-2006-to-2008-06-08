@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,20 @@ package org.kuali.module.chart.service.impl;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.util.spring.Cached;
-import org.kuali.kfs.KFSConstants.ChartApcParms;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.core.service.KualiUserService;
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
-import org.kuali.module.chart.service.ChartService;
 import org.kuali.module.chart.service.OrganizationService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the Org structure. This is the default implementation, that is delivered with Kuali.
+ * 
+ * 
  */
-@Transactional
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
-    private ParameterService parameterService;
-    private ChartService chartService;
-
+    private KualiUserService kualiUserService;
+    
     /**
      * Implements the getByPrimaryId method defined by OrganizationService.
      * 
@@ -55,7 +50,6 @@ public class OrganizationServiceImpl implements OrganizationService {
      * 
      * @see org.kuali.module.chart.service.impl.OrganizationServiceImpl#getByPrimaryId(java.lang.String, java.lang.String)
      */
-    @Cached
     public Org getByPrimaryIdWithCaching(String chartOfAccountsCode, String organizationCode) {
         return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
     }
@@ -83,7 +77,12 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.organizationDao = organizationDao;
     }
 
+    public void setKualiUserService(KualiUserService kualiUserService) {
+        this.kualiUserService = kualiUserService;
+    }    
+    
     /**
+     * 
      * @see org.kuali.module.chart.service.OrganizationService#getActiveAccountsByOrg(java.lang.String, java.lang.String)
      */
     public List getActiveAccountsByOrg(String chartOfAccountsCode, String organizationCode) {
@@ -99,6 +98,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.service.OrganizationService#getActiveChildOrgs(java.lang.String, java.lang.String)
      */
     public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode) {
@@ -112,34 +112,4 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         return organizationDao.getActiveChildOrgs(chartOfAccountsCode, organizationCode);
     }
-
-    public List<Org> getActiveOrgsByType(String organizationTypeCode) {
-        if (StringUtils.isBlank(organizationTypeCode)) {
-            throw new IllegalArgumentException("String parameter organizationTypeCode was null or blank.");
-        }
-
-        return organizationDao.getActiveOrgsByType(organizationTypeCode);
-    }
-
-    /*
-     * returns the chart of accounts code and the orgnization code of the root organization
-     */
-    public String[] getRootOrganizationCode() {
-        String rootChart = getChartService().getUniversityChart().getChartOfAccountsCode();
-        String selfReportsOrgType = SpringContext.getBean(ParameterService.class).getParameterValue(Org.class, ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
-        return (organizationDao.getRootOrganizationCode(rootChart, selfReportsOrgType));
-    }
-
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
-    }
-
-    public ChartService getChartService() {
-        return chartService;
-    }
-
-    public void setChartService(ChartService chartService) {
-        this.chartService = chartService;
-    }
-
 }

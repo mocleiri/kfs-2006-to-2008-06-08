@@ -24,25 +24,20 @@ import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.labor.bo.LedgerEntry;
 import org.kuali.module.labor.dao.LaborLedgerEntryDao;
 
-/**
- * This is the data access object for ledger entry.
- * 
- * @see org.kuali.module.labor.bo.LedgerEntry
- */
 public class LaborLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb implements LaborLedgerEntryDao {
 
     /**
      * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#getMaxSquenceNumber(org.kuali.module.labor.bo.LedgerEntry)
      */
     public Integer getMaxSquenceNumber(LedgerEntry ledgerEntry) {
+        //TODO: this is a piece of duplicate code. We need to refactor it later
         Criteria criteria = new Criteria();
-
+        
         criteria.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, ledgerEntry.getUniversityFiscalYear());
         criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, ledgerEntry.getChartOfAccountsCode());
         criteria.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, ledgerEntry.getAccountNumber());
@@ -60,12 +55,12 @@ public class LaborLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb implements L
         query.setAttributes(new String[] { "max(" + KFSPropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER + ")" });
 
         Iterator iterator = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-        Integer maxSequenceNumber = Integer.valueOf(0);
-
+        Integer maxSequenceNumber = new Integer(0);
+        
         if (iterator.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(iterator);
+            Object[] data = (Object[]) iterator.next();
             if (data[0] != null) {
-                maxSequenceNumber = ((BigDecimal) data[0]).intValue();
+                maxSequenceNumber = ((BigDecimal)data[0]).intValue();
             }
         }
         return maxSequenceNumber;
@@ -79,19 +74,11 @@ public class LaborLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb implements L
 
         QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
-    }
-
+}
     /**
-     * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#save(org.kuali.module.labor.bo.LedgerEntry)
+     * @return the Class type of the business object accessed and managed 
      */
-    public void save(LedgerEntry ledgerEntry) {
-        getPersistenceBrokerTemplate().store(ledgerEntry);
-    }
-
-    /**
-     * @return the Class type of the business object accessed and managed
-     */
-    private Class getEntryClass() {
+    private Class getEntryClass(){
         return LedgerEntry.class;
     }
 }

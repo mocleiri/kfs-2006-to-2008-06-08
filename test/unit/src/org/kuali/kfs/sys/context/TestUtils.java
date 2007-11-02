@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,11 @@ import junit.textui.TestRunner;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.core.bo.Parameter;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.cache.MethodCacheInterceptor;
 import org.kuali.core.util.properties.PropertyTree;
-import org.kuali.kfs.service.ParameterService;
 
 /**
  * This class provides utility methods for use during manual testing.
@@ -181,7 +183,7 @@ public class TestUtils {
 
         return formatted.toString();
     }
-
+    
     public static boolean methodIsCached(Method method, Object[] arguments) {
         for (MethodCacheInterceptor methodCacheInterceptor : SpringContext.getMethodCacheInterceptors()) {
             if (methodCacheInterceptor.containsCacheKey(methodCacheInterceptor.buildCacheKey(method.toString(), arguments))) {
@@ -189,6 +191,14 @@ public class TestUtils {
             }
         }
         return false;
+    }
+    
+    public static void removeCachedMethod(Method method, Object[] arguments) {
+        for (MethodCacheInterceptor methodCacheInterceptor : SpringContext.getMethodCacheInterceptors()) {
+            if (methodCacheInterceptor.containsCacheKey(methodCacheInterceptor.buildCacheKey(method.toString(), arguments))) {
+                methodCacheInterceptor.removeCacheKey(methodCacheInterceptor.buildCacheKey(method.toString(), arguments));
+            }
+        }
     }
 
     private static String buildIndent(int level) {
@@ -281,10 +291,30 @@ public class TestUtils {
     /**
      * This sets a given system parameter and clears the method cache for retrieving the parameter.
      */
-    public static void setSystemParameter(Class componentClass, String parameterName, String parameterText) throws Exception {
-        SpringContext.getBean(ParameterService.class).setParameterForTesting(componentClass, parameterName, parameterText);
-    }
+    public static void setSystemParameter(String parameterNamespace, String parameterDetailTypeCode, String parameterName, String parameterText, boolean isIndicator, boolean isMultipleValue) throws Exception {
+        // retrieve parameter for updating
+        Parameter systemParameter = new Parameter();
+        systemParameter.setParameterNamespaceCode(parameterNamespace);
+        systemParameter.setParameterName(parameterName);
+        systemParameter.setParameterDetailTypeCode(parameterDetailTypeCode);
 
+        systemParameter = (Parameter)SpringContext.getBean(BusinessObjectService.class).retrieve(systemParameter);
+        if (systemParameter == null) {
+            throw new RuntimeException("TestUtils.setSystemParameter()--system parameter not found: "+parameterNamespace+"/"+parameterDetailTypeCode+"/"+parameterName);
+        }
+
+        // update parameter text and store
+        systemParameter.setParameterValue(parameterText);
+        SpringContext.getBean(BusinessObjectService.class).save(systemParameter);
+
+        // clear method cache
+        removeCachedMethod(KualiConfigurationService.class.getMethod("getIndicatorParameter", new Class[] { String.class, String.class, String.class }), new Object[] { parameterNamespace, parameterDetailTypeCode, parameterName });
+        removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValues", new Class[] { String.class, String.class, String.class }), new Object[] { parameterNamespace, parameterDetailTypeCode, parameterName });
+        removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValuesAsList", new Class[] { String.class, String.class, String.class }), new Object[] { parameterNamespace, parameterDetailTypeCode, parameterName });
+        removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValuesAsSet", new Class[] { String.class, String.class, String.class }), new Object[] { parameterNamespace, parameterDetailTypeCode, parameterName });
+        removeCachedMethod(KualiConfigurationService.class.getMethod("getParameterValue", new Class[] { String.class, String.class, String.class }), new Object[] { parameterNamespace, parameterDetailTypeCode, parameterName });
+    }    
+    
     /**
      * Converts an InputStream to a String using UTF-8 encoding.
      * 
@@ -306,14 +336,15 @@ public class TestUtils {
     public static InputStream convertStringToInputStream(String string) throws IOException {
         return IOUtils.toInputStream(string, "UTF-8");
     }
-
+    
     /**
-     * Returns the size of an InputStream by first converting it to an ByteArrayOutputStream and getting the size of it.
+     * Returns the size of an InputStream by first converting it to an ByteArrayOutputStream and
+     * getting the size of it.
      */
     public static int getInputStreamSize(InputStream inputStream) throws IOException {
         ByteArrayOutputStream copiedOutputStream = null;
         IOUtils.copy(inputStream, copiedOutputStream);
-
+        
         return copiedOutputStream.size();
     }
 }

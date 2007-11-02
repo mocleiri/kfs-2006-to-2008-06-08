@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,22 @@
  */
 package org.kuali.module.gl.service;
 
-import org.kuali.module.gl.util.CollectorReportData;
 
-/**
- * This class
- */
 public interface CollectorService {
     /**
-     * performs collection
+     * Given an inputStream to the collector XML, load the data into the origin entry table. If there are errors loading the file,
+     * throw a CollectorLoadException that has a list of all the issues.
      * 
-     * @return status information related to the collection execution
+     * @param inputStream inputStream of collector XML
+     * @return origin entry group ID
      */
-    public CollectorReportData performCollection();
+    public void loadCollectorFile(String fileName);
+
+    /**
+     * Given a group ID, scrub all of the transactions. If there are errors with the data, return a list of them. If there are no
+     * errors, return an empty list.
+     * 
+     * @return string staging directory
+     */
+    public String getStagingDirectory();
 }

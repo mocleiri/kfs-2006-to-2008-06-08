@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/datadictionary/BudgetConstructionMonthly.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionMonthly">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Construction Monthly Inquiry</title>
@@ -158,11 +160,10 @@
 
             <attribute name="financialDocumentMonth10LineAmount" forceUppercase="true">
                 <label>Financial Document Month10 Line Amount</label>
-                <shortLabel>Month 10</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -174,11 +175,10 @@
 
             <attribute name="financialDocumentMonth11LineAmount" forceUppercase="true">
                 <label>Financial Document Month11 Line Amount</label>
-                <shortLabel>Month 11</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -190,11 +190,10 @@
 
             <attribute name="financialDocumentMonth12LineAmount" forceUppercase="true">
                 <label>Financial Document Month12 Line Amount</label>
-                <shortLabel>Month 12</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -206,11 +205,10 @@
 
             <attribute name="financialDocumentMonth1LineAmount" forceUppercase="true">
                 <label>Financial Document Month1 Line Amount</label>
-                <shortLabel>Month 1</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -222,11 +220,10 @@
 
             <attribute name="financialDocumentMonth2LineAmount" forceUppercase="true">
                 <label>Financial Document Month2 Line Amount</label>
-                <shortLabel>Month 2</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -238,11 +235,10 @@
 
             <attribute name="financialDocumentMonth3LineAmount" forceUppercase="true">
                 <label>Financial Document Month3 Line Amount</label>
-                <shortLabel>Month 3</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -254,11 +250,10 @@
 
             <attribute name="financialDocumentMonth4LineAmount" forceUppercase="true">
                 <label>Financial Document Month4 Line Amount</label>
-                <shortLabel>Month 4</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -270,11 +265,10 @@
 
             <attribute name="financialDocumentMonth5LineAmount" forceUppercase="true">
                 <label>Financial Document Month5 Line Amount</label>
-                <shortLabel>Month 5</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -286,11 +280,10 @@
 
             <attribute name="financialDocumentMonth6LineAmount" forceUppercase="true">
                 <label>Financial Document Month6 Line Amount</label>
-                <shortLabel>Month 6</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -302,11 +295,10 @@
 
             <attribute name="financialDocumentMonth7LineAmount" forceUppercase="true">
                 <label>Financial Document Month7 Line Amount</label>
-                <shortLabel>Month 7</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -318,11 +310,10 @@
 
             <attribute name="financialDocumentMonth8LineAmount" forceUppercase="true">
                 <label>Financial Document Month8 Line Amount</label>
-                <shortLabel>Month 8</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -334,11 +325,10 @@
 
             <attribute name="financialDocumentMonth9LineAmount" forceUppercase="true">
                 <label>Financial Document Month9 Line Amount</label>
-                <shortLabel>Month 9</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />

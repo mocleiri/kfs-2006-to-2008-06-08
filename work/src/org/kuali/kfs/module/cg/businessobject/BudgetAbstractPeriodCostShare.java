@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,14 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessObjectBase {
+public abstract class BudgetAbstractPeriodCostShare extends BusinessObjectBase {
 
     protected String documentNumber;
     protected Integer budgetPeriodSequenceNumber;
@@ -43,6 +45,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Gets the documentNumber attribute.
      * 
      * @return Returns the documentNumber
+     * 
      */
     public String getDocumentNumber() {
         return documentNumber;
@@ -52,6 +55,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Sets the documentNumber attribute.
      * 
      * @param documentNumber The documentNumber to set.
+     * 
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -61,6 +65,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Gets the budgetThirdPartyCostShareAmount attribute.
      * 
      * @return Returns the budgetThirdPartyCostShareAmount
+     * 
      */
     public Integer getBudgetPeriodSequenceNumber() {
         return budgetPeriodSequenceNumber;
@@ -70,6 +75,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Sets the budgetThirdPartyCostShareAmount attribute.
      * 
      * @param budgetThirdPartyCostShareAmount The budgetThirdPartyCostShareAmount to set.
+     * 
      */
     public void setBudgetPeriodSequenceNumber(Integer budgetPeriodSequenceNumber) {
         this.budgetPeriodSequenceNumber = budgetPeriodSequenceNumber;
@@ -79,6 +85,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Gets the budgetThirdPartyCostShareAmount attribute.
      * 
      * @return Returns the budgetThirdPartyCostShareAmount
+     * 
      */
     public Integer getBudgetCostShareSequenceNumber() {
         return budgetCostShareSequenceNumber;
@@ -88,6 +95,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Sets the budgetThirdPartyCostShareAmount attribute.
      * 
      * @param budgetThirdPartyCostShareAmount The budgetThirdPartyCostShareAmount to set.
+     * 
      */
     public void setBudgetCostShareSequenceNumber(Integer budgetThirdPartyCostShareSequenceNumber) {
         this.budgetCostShareSequenceNumber = budgetThirdPartyCostShareSequenceNumber;
@@ -97,6 +105,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Gets the budgetThirdPartyCostShareAmount attribute.
      * 
      * @return Returns the budgetThirdPartyCostShareAmount
+     * 
      */
     public KualiInteger getBudgetCostShareAmount() {
         return budgetCostShareAmount;
@@ -106,6 +115,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
      * Sets the budgetThirdPartyCostShareAmount attribute.
      * 
      * @param budgetThirdPartyCostShareAmount The budgetThirdPartyCostShareAmount to set.
+     * 
      */
     public void setBudgetCostShareAmount(KualiInteger budgetThirdPartyCostShareAmount) {
         this.budgetCostShareAmount = budgetThirdPartyCostShareAmount;
@@ -117,7 +127,7 @@ public abstract class BudgetAbstractPeriodCostShare extends PersistableBusinessO
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("budgetPeriodSequenceNumber", this.budgetPeriodSequenceNumber);
         m.put("budgetCostShareSequenceNumber", this.budgetCostShareSequenceNumber);
 

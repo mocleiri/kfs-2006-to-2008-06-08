@@ -22,34 +22,38 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.lookup.LookupableHelperService;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.GLSpringBeansRegistry;
 import org.kuali.module.gl.web.TestDataGenerator;
+import org.kuali.test.KualiTestBase;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
  * This class is a template being used by the test case classes of GL lookupable implementation.
+ * 
+ * 
  */
 public abstract class AbstractGLLookupableHelperServiceTestBase extends KualiTestBase {
 
     protected Date date;
+    protected BeanFactory beanFactory;
     protected GeneralLedgerPendingEntry pendingEntry;
     protected TestDataGenerator testDataGenerator;
-    protected LookupableHelperService lookupableHelperServiceImpl;
+    protected AbstractGLLookupableHelperServiceImpl lookupableHelperServiceImpl;
     protected GeneralLedgerPendingEntryService pendingEntryService;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        date = SpringContext.getBean(DateTimeService.class).getCurrentDate();
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        date = SpringServiceLocator.getDateTimeService().getCurrentDate();
         pendingEntry = new GeneralLedgerPendingEntry();
         testDataGenerator = new TestDataGenerator();
 
-        setPendingEntryService(SpringContext.getBean(GeneralLedgerPendingEntryService.class));
+        setPendingEntryService((GeneralLedgerPendingEntryService) beanFactory.getBean(GLSpringBeansRegistry.generalLedgerPendingEntryService));
     }
 
     /**

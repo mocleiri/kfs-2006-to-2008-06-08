@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/infrastructure/src/org/kuali/kfs/sys/monitor/DocumentWorkflowNodeMonitor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +18,16 @@
 package org.kuali.test.monitor;
 
 import org.kuali.core.bo.user.AuthenticationUserId;
-import org.kuali.core.service.UniversalUserService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.core.workflow.service.WorkflowDocumentService;
-import org.kuali.kfs.context.SpringContext;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * Watches the workflow document and indicates valueChanged when either the status or the current node changes.
+ * 
+ * 
+ * 
  */
 public class DocumentWorkflowNodeMonitor extends ChangeMonitor {
 
@@ -39,7 +42,7 @@ public class DocumentWorkflowNodeMonitor extends ChangeMonitor {
     }
 
     public boolean valueChanged() throws Exception {
-        KualiWorkflowDocument document = SpringContext.getBean(WorkflowDocumentService.class).createWorkflowDocument(docHeaderId, SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(networkId)));
+        KualiWorkflowDocument document = SpringServiceLocator.getWorkflowDocumentService().createWorkflowDocument(docHeaderId, SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(networkId)));
         String currentNodeName = document.getNodeNames()[0];
         // currently in Kuali there is no parallel branching so we can only ever be at one node
         return desiredNodeName.equals(currentNodeName);

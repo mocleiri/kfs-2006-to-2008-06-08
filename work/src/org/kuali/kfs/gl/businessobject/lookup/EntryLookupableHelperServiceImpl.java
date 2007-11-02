@@ -22,16 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.service.EntryService;
@@ -40,9 +38,7 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.EntryInquirableImpl;
 import org.kuali.module.gl.web.inquirable.InquirableFinancialDocument;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EntryLookupableHelperServiceImpl.class);
 
@@ -59,7 +55,7 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
                 int year = Integer.parseInt(valueFiscalYear);
             }
             catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError("universityFiscalYear", KFSKeyConstants.ERROR_CUSTOM, new String[] { "Fiscal Year must be a four-digit number" });
+                GlobalVariables.getErrorMap().putError("universityFiscalYear", KeyConstants.ERROR_CUSTOM, new String[] { "Fiscal Year must be a four-digit number" });
                 throw new ValidationException("errors in search criteria");
             }
         }
@@ -70,7 +66,7 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
      */
     @Override
     public String getInquiryUrl(BusinessObject businessObject, String propertyName) {
-        if (KFSPropertyConstants.DOCUMENT_NUMBER.equals(propertyName)) {
+        if (PropertyConstants.DOCUMENT_NUMBER.equals(propertyName)) {
             if (businessObject instanceof Entry) {
                 Entry entry = (Entry) businessObject;
                 return new InquirableFinancialDocument().getInquirableDocumentUrl(entry);
@@ -84,8 +80,8 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
      */
     @Override
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         // get the pending entry option. This method must be prior to the get search results
         String pendingEntryOption = this.getSelectedPendingEntryOption(fieldValues);
@@ -117,10 +113,10 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
         Iterator pendingEntryIterator = getGeneralLedgerPendingEntryService().findPendingLedgerEntriesForEntry(pendingEntryFieldValues, isApproved);
 
         String pendingOption = isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY;
-        UniversityDate today = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = today.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = today.getUniversityFiscalYear();
-        Date postDate = SpringContext.getBean(DateTimeService.class).getCurrentSqlDate();
+        Date postDate = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
 
         while (pendingEntryIterator.hasNext()) {
             GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) pendingEntryIterator.next();
@@ -138,7 +134,7 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
             entryCollection.add(new Entry(pendingEntry, postDate));
         }
     }
-
+    
     /**
      * Sets the scrubberValidator attribute value.
      * 

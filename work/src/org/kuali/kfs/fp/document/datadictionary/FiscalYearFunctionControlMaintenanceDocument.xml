@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.financial.bo.FiscalYearFunctionControl</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,24 +32,20 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>FiscalYearFunctionControlMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiFiscalYearFunctionControlMaintenanceDocument</documentTypeName>
         <documentTypeCode>BFYC</documentTypeCode>
 
-        <label>Fiscal Year Function Control</label>
+        <label>Fiscal Year Function Control Maintenance Document</label>
+        <shortLabel>FY Function Control Maint Doc</shortLabel>
 
         <summary>Fiscal Year Function Control Maintenance Document</summary>
         <description>Document used to create or update Fiscal Year Function Control objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="FiscalYearFunctionControl" parameterName="FUNCTION_CONTROL_CODE" />
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_FISCAL_YEAR_FUNCTION_CONTROL" />
 
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
             <field attributeName="financialSystemFunctionControlCode" />
         </lockingKeys>
-        
-        <defaultExistenceChecks>
-            <reference attributeName="universityFiscal" attributeToHighlightOnFail="universityFiscalYear" />
-            <reference attributeName="functionControl" attributeToHighlightOnFail="financialSystemFunctionControlCode" />
-        </defaultExistenceChecks>
 
         <maintainableSections>
             <maintainableSection title="Edit Fiscal Year Function Control">

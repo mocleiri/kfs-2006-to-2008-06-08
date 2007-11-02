@@ -23,13 +23,7 @@ import java.util.Map;
 import org.kuali.module.labor.bo.EmployeeFunding;
 import org.kuali.module.labor.bo.LaborBalanceSummary;
 import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.bo.LedgerBalanceForYearEndBalanceForward;
 
-/**
- * This is the data access object for ledger balance.
- * 
- * @see org.kuali.module.labor.bo.LedgerBalance
- */
 public interface LaborLedgerBalanceDao {
 
     /**
@@ -51,14 +45,13 @@ public interface LaborLedgerBalanceDao {
     public Iterator getConsolidatedBalanceRecordCount(Map fieldValues);
 
     /**
-     * @param fiscalYear the given fiscal year
+     * @param fiscalYear the given fiscal year 
      * @return an iterator over all balances for a given fiscal year
      */
     public Iterator<LedgerBalance> findBalancesForFiscalYear(Integer fiscalYear);
 
     /**
      * retrieve the current funds according to the given field values
-     * 
      * @param fieldValues the given field values
      * @return the current funds according to the given field values
      */
@@ -66,15 +59,13 @@ public interface LaborLedgerBalanceDao {
 
     /**
      * retrieve the encumbrance funds according to the given field values
-     * 
      * @param fieldValues the given field values
      * @return the encumbrance funds according to the given field values
      */
     public List<LedgerBalance> findEncumbranceFunds(Map fieldValues);
-
+    
     /**
      * retrieve the current funds according to the given field values
-     * 
      * @param fieldValues the given field values
      * @return the current funds according to the given field values
      */
@@ -82,7 +73,6 @@ public interface LaborLedgerBalanceDao {
 
     /**
      * retrieve the encumbrance funds according to the given field values
-     * 
      * @param fieldValues the given field values
      * @return the encumbrance funds according to the given field values
      */
@@ -90,45 +80,9 @@ public interface LaborLedgerBalanceDao {
 
     /**
      * find the summary of the ledger balances for the given fiscal year and balance types
-     * 
      * @param fiscalYear the given fiscal year
      * @param balanceTypes the given balance type codes
      * @return the ledger balances for the given fiscal year and balance types
      */
     public List<LaborBalanceSummary> findBalanceSummary(Integer fiscalYear, Collection<String> balanceTypes);
-
-    /**
-     * save the given ledger balance into the underlying data store
-     * 
-     * @param ledgerBalance the given ledger balance
-     */
-    public void save(LedgerBalance ledgerBalance);
-
-    /**
-     * @param fiscalYear the given fiscal year
-     * @param fieldValues the given field values
-     * @return an iterator over all balances for a given fiscal year
-     */
-    public Iterator<LedgerBalance> findBalancesForFiscalYear(Integer fiscalYear, Map<String, String> fieldValues);
-
-    /**
-     * @param fiscalYear the given fiscal year
-     * @param fieldValues the input fields and values
-     * @param subFundGroupCodes the given list of qualified sub fund group codes
-     * @param fundGroupCodes the given list of qualified group codes
-     * @return an Iterator over all balances for a given year and search criteria that include the accounts of balances must belong
-     *         to the given sub fund group or fund group
-     */
-    public Iterator<LedgerBalanceForYearEndBalanceForward> findBalancesForFiscalYear(Integer fiscalYear, Map<String, String> fieldValues, List<String> subFundGroupCodes, List<String> fundGroupCodes);
-
-    /**
-     * find the accounts (chart of accounts code + account number) in the given fund groups
-     * 
-     * @param fiscalYear the given fiscal year
-     * @param fieldValues the input fields and values
-     * @param subFundGroupCodes the given list of qualified sub fund group codes
-     * @param fundGroupCodes the given list of qualified group codes
-     * @return the accounts (chart of accounts code + account number) in the given fund groups
-     */
-    public List<List<String>> findAccountsInFundGroups(Integer fiscalYear, Map<String, String> fieldValues, List<String> subFundGroupCodes, List<String> fundGroupCodes);
 }

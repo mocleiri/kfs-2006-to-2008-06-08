@@ -39,6 +39,7 @@
         <documentTypeCode>CM</documentTypeCode>
 
         <label>Credit Memo</label>
+        <shortLabel>CM</shortLabel>
 
         <attributes>
 
@@ -57,7 +58,9 @@
                 <label>Credit Memo Nbr</label>
                 <shortLabel>CM Nbr</shortLabel>
                 <required>true</required>
-
+                <summary>The Credit Memo Number</summary>
+                <description>The credit memo number</description>
+                
             </attributeReference> 
             
 			<attributeReference name="vendorHeaderGeneratedIdentifier"
@@ -77,7 +80,9 @@
                 <shortLabel>Date</shortLabel>
                 
 				<required>true</required>
-
+                
+                <summary>creditMemoDate</summary>
+                <description>creditMemoDate description...</description>
            </attributeReference>
            
 			<attributeReference name="purchaseOrderIdentifier"
@@ -85,7 +90,9 @@
 				sourceAttributeName="purapDocumentIdentifier">
 			    <label>Purchase Order Nbr</label>
 			    <shortLabel>PO Nbr</shortLabel>
-
+			    
+			    <summary>The Purchase Order Number</summary>
+			    <description>The Purchase Order number</description>
 			</attributeReference>
            
 			<attributeReference name="purchaseOrderEndDate"
@@ -93,11 +100,16 @@
 				sourceAttributeName="genericDate">
 			    <label>PO End Date</label> 
 			    <shortLabel>PO End Date</shortLabel> 
+			    <summary>purchaseOrderEndDate</summary> 
+				<description>
+					purchaseOrderEndDate description...
+				</description>
 			</attributeReference> 
+           
 
             <attribute name="creditMemoAmount" forceUppercase="true">
-                <label>Credit Memo Amount from Init Screen</label>
-                <shortLabel>Credit Memo Amt from Init Screen</shortLabel>
+                <label>Credit Memo Amount</label>
+                <shortLabel>Credit Memo Amt</shortLabel>
 
                 <maxLength>19</maxLength>
                 
@@ -109,7 +121,14 @@
                 <control>
                     <text size="21" />
                 </control>
+
+                <summary>creditMemoAmount</summary>
+				<description>
+					creditMemoAmount description...
+				</description>
             </attribute>
+            
+            
 
             <attribute name="creditMemoNumber" forceUppercase="true">
                 <label>Vendor Credit Memo Number</label>
@@ -117,12 +136,17 @@
 
                 <maxLength>35</maxLength>
 				<validationPattern>
-					<anyCharacter allowWhitespace="true" />
+					<anyCharacter />
 				</validationPattern>
 				<required>true</required>
                 <control>
                     <text size="37" />
                 </control>
+
+                <summary>vendorCreditMemoNumber</summary>
+				<description>
+					Vendor CreditMemoNumber description...
+				</description>
             </attribute>
 
 			<attribute name="itemMiscellaneousCreditDescription"
@@ -138,6 +162,11 @@
                 <control>
                     <textarea rows="5" cols="80"/>
                 </control>
+
+                <summary>itemMiscellaneousCreditDescription</summary>
+				<description>
+					itemMiscellaneousCreditDescription description...
+				</description>
             </attribute>
 
 			<attribute name="paymentRequestIdentifier"
@@ -153,6 +182,11 @@
                 <control>
                     <text size="11" />
                 </control>
+
+                <summary>paymentRequestIdentifier</summary>
+				<description>
+					paymentRequestIdentifier description...
+				</description>
             </attribute>
             
             <attribute name="purchaseOrderNotes">
@@ -167,6 +201,11 @@
             	<control>
             		<text size="3"/>
             	</control>
+            	
+            	<summary>PurchaseOrderNotes Indicator</summary>
+				<description>
+					PurchaseOrderNotes description ...
+				</description>
             </attribute>
 			
 			<attribute name="creditMemoType">
@@ -181,6 +220,11 @@
             	<control>
             		<text size="6"/>
             	</control>
+            	
+            	<summary>PurchaseOrderNotes Indicator</summary>
+				<description>
+					PurchaseOrderNotes description ...
+				</description>
             </attribute>
 			
 			<attributeReference name="lineItemTotal"
@@ -190,6 +234,13 @@
 				<shortLabel>
 					Total credit processed prior to restocking fee
 				</shortLabel>
+				<summary>
+					Total credit processed prior to restocking fee
+				</summary>
+				<description>
+					Total credit processed prior to restocking fee
+					description...
+				</description>
 			</attributeReference>
             
 			<attributeReference name="grandTotal"
@@ -197,9 +248,11 @@
 				sourceAttributeName="genericItemAmount">
 				<label>Grand Total</label>
 				<shortLabel>Grand Total</shortLabel>
+				<summary>GrandTotal</summary>
+				<description>GrandTotal description...</description>
 			</attributeReference>
 
-			<attribute name="reopenPurchaseOrderIndicator" forceUppercase="true">
+			<attribute name="closeReopenPoIndicator" forceUppercase="true">
 			    <label>Reopen PO</label>
 			    <shortLabel>Reopen PO</shortLabel>
 			
@@ -208,9 +261,15 @@
 			    <control>
 			        <checkbox />
 			    </control>
+			
+			    <summary>closePoIndicator</summary>
+			    <description>closePoIndicator description...</description>
 			</attribute>
         </attributes>
-		<help parameterNamespace="KFS-PA" parameterDetailType="CreditMemo" parameterName="CREDIT_MEMO" />
+		
+        <summary>Document used for creating CMs.</summary>
+        <description>The Credit Memo document is a...</description>
+
         <allowsCopy>false</allowsCopy>
         <allowsErrorCorrection>false</allowsErrorCorrection>
         

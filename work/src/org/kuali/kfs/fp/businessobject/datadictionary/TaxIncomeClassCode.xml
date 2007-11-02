@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,19 +19,23 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.TaxIncomeClassCode">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Disbursement Voucher Tax Income Class Inquiry</title>
+            <title>Tax Income Class Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Disbursement Voucher Tax Income Class Lookup</title>
+            <title>Tax Income Class Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.TaxIncomeClassCode">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Tax Income Class</instructions>
 
@@ -65,6 +69,9 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The code uniquely identify an income class.</description>
             </attribute>
 
             <attribute name="name" forceUppercase="false">
@@ -76,11 +83,16 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]>
+</summary>
+                <description>
+                    The name of the income tax class
+                </description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
         </attributes>
-        <objectLabel>Disbursement Voucher Tax Income Class</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

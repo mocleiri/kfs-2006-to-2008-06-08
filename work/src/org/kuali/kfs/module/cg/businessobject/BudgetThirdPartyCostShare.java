@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +40,12 @@ public class BudgetThirdPartyCostShare extends BudgetAbstractCostShare {
         this.budgetCostShareDescription = budgetThirdPartyCostShare.getBudgetCostShareDescription();
         this.budgetPeriodCostShare = budgetThirdPartyCostShare.getBudgetPeriodCostShare();
     }
-
+    
     /**
      * Gets the budgetThirdPartyCostShareSourceName attribute.
      * 
      * @return Returns the budgetThirdPartyCostShareSourceName
+     * 
      */
     public String getBudgetCostShareSourceName() {
         return budgetCostShareSourceName;
@@ -52,6 +55,7 @@ public class BudgetThirdPartyCostShare extends BudgetAbstractCostShare {
      * Sets the budgetThirdPartyCostShareSourceName attribute.
      * 
      * @param budgetThirdPartyCostShareSourceName The budgetThirdPartyCostShareSourceName to set.
+     * 
      */
     public void setBudgetCostShareSourceName(String budgetThirdPartyCostShareSourceName) {
         this.budgetCostShareSourceName = budgetThirdPartyCostShareSourceName;
@@ -61,6 +65,7 @@ public class BudgetThirdPartyCostShare extends BudgetAbstractCostShare {
      * Gets the budgetPeriodThirdPartyCostShare attribute.
      * 
      * @return Returns the budgetPeriodThirdPartyCostShare
+     * 
      */
     public List<BudgetPeriodThirdPartyCostShare> getBudgetPeriodCostShare() {
         return budgetPeriodCostShare;
@@ -77,6 +82,7 @@ public class BudgetThirdPartyCostShare extends BudgetAbstractCostShare {
      * Sets the budgetPeriodThirdPartyCostShare attribute.
      * 
      * @param budgetPeriodThirdPartyCostShare The budgetPeriodThirdPartyCostShare to set.
+     * 
      */
     public void setBudgetPeriodCostShare(List budgetPeriodCostShare) {
         this.budgetPeriodCostShare = budgetPeriodCostShare;

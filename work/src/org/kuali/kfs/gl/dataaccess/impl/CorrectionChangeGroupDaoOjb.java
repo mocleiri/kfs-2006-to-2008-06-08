@@ -21,7 +21,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.dao.CorrectionChangeGroupDao;
 
@@ -29,6 +28,7 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeGroupDaoOjb.class);
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#delete(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void delete(CorrectionChangeGroup group) {
@@ -38,11 +38,12 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumber(java.lang.String)
      */
     public Collection findByDocumentNumber(String documentNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("financialDocumentNumber", documentNumber);
 
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChangeGroup.class, criteria);
 
@@ -50,22 +51,23 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     }
 
     /**
-     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumberAndCorrectionChangeGroupNumber(java.lang.String,
-     *      java.lang.Integer)
+     * 
+     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumberAndCorrectionChangeGroupNumber(java.lang.String, java.lang.Integer)
      */
     public CorrectionChangeGroup findByDocumentNumberAndCorrectionChangeGroupNumber(String documentNumber, Integer CorrectionChangeGroupNumber) {
         LOG.debug("findByDocumentNumberAndCorrectionChangeGroupNumber() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("financialDocumentNumber", documentNumber);
         criteria.addEqualTo("correctionChangeGroupLineNumber", CorrectionChangeGroupNumber);
-
+     
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChangeGroup.class, criteria);
 
         return (CorrectionChangeGroup) getPersistenceBrokerTemplate().getObjectByQuery(query);
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#save(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void save(CorrectionChangeGroup group) {

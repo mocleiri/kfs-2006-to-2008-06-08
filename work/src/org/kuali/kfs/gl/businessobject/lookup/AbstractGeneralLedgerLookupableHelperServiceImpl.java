@@ -22,21 +22,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
 import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.core.web.ui.Field;
 import org.kuali.core.web.ui.Row;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
 import org.kuali.module.gl.web.Constant;
 
 public abstract class AbstractGLLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AbstractGLLookupableHelperServiceImpl.class);
-
+    
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
 
     protected GeneralLedgerPendingEntryService getGeneralLedgerPendingEntryService() {
@@ -46,7 +46,7 @@ public abstract class AbstractGLLookupableHelperServiceImpl extends AbstractLook
     public void setGeneralLedgerPendingEntryService(GeneralLedgerPendingEntryService generalLedgerPendingEntryService) {
         this.generalLedgerPendingEntryService = generalLedgerPendingEntryService;
     }
-
+    
     /**
      * This method overides that in parent class so that the maintainance actions are surpressed
      * 
@@ -55,9 +55,9 @@ public abstract class AbstractGLLookupableHelperServiceImpl extends AbstractLook
      */
     @Override
     public String getActionUrls(BusinessObject bo) {
-        return KFSConstants.EMPTY_STRING;
+        return Constants.EMPTY_STRING;
     }
-
+    
     /**
      * This method tests if the user selects to see the general ledager pending entries
      * 
@@ -71,7 +71,7 @@ public abstract class AbstractGLLookupableHelperServiceImpl extends AbstractLook
 
         return pendingEntryOption;
     }
-
+    
     /**
      * This method tests if the user selects to see the reports by monthly or accumulated
      * 
@@ -89,7 +89,7 @@ public abstract class AbstractGLLookupableHelperServiceImpl extends AbstractLook
         }
         return amountViewOption;
     }
-
+    
     /**
      * This method tests if the user selects to see the details or consolidated results
      * 
@@ -107,21 +107,21 @@ public abstract class AbstractGLLookupableHelperServiceImpl extends AbstractLook
         }
 
         // if the subAccountNumber is specified, detail option could be used
-        String subAccountNumber = (String) fieldValues.get(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
+        String subAccountNumber = (String) fieldValues.get(PropertyConstants.SUB_ACCOUNT_NUMBER);
         if (!StringUtils.isBlank(subAccountNumber)) {
             this.changeFieldValue(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
             return false;
         }
 
         // if the subObjectCode is specified, detail option could be used
-        String subObjectCode = (String) fieldValues.get(KFSPropertyConstants.SUB_OBJECT_CODE);
+        String subObjectCode = (String) fieldValues.get(PropertyConstants.SUB_OBJECT_CODE);
         if (!StringUtils.isBlank(subObjectCode)) {
             this.changeFieldValue(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
             return false;
         }
 
         // if the objectTypeCode is specified, detail option could be used
-        String objectTypeCode = (String) fieldValues.get(KFSPropertyConstants.OBJECT_TYPE_CODE);
+        String objectTypeCode = (String) fieldValues.get(PropertyConstants.OBJECT_TYPE_CODE);
         if (!StringUtils.isBlank(objectTypeCode)) {
             this.changeFieldValue(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
             return false;
@@ -147,7 +147,7 @@ public abstract class AbstractGLLookupableHelperServiceImpl extends AbstractLook
         return false;
     }
 
-
+    
     /**
      * build the serach result list from the given collection and the number of all qualified search results
      * 

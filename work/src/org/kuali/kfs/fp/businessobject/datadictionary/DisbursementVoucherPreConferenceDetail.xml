@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.DisbursementVoucherPreConferenceDetail">
 
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
 
@@ -36,6 +36,13 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    The location of the conference.
+                </description>
             </attribute>
 
             <attribute name="disbVchrExpenseCode">
@@ -47,8 +54,15 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.TravelPrePaidExpenseTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.TravelPrePaidExpenseTypeValuesFinder" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    The system code for the type of expense associated with the conference.
+                </description>
             </attribute>
 
             <attribute name="disbVchrConferenceStartDate">
@@ -62,6 +76,13 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    The date on which the conference starts entered directly or selected from the calendar.
+                </description>
             </attribute>
 
             <attribute name="disbVchrConferenceEndDate">
@@ -75,6 +96,13 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    The date on which the conference ends, entered directly or selected from the calendar.
+                </description>
             </attribute>
 
             <attribute name="disbVchrConferenceTotalAmt">
@@ -88,6 +116,13 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    The total amount of the conference fees.
+                </description>
             </attribute>
         </attributes>
     </businessObject>

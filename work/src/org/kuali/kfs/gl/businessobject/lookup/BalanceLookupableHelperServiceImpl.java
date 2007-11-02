@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.bo.Balance;
@@ -33,9 +33,7 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.BalanceInquirableImpl;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private BalanceCalculator postBalance;
     private BalanceService balanceService;
@@ -54,8 +52,8 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
      */
     @Override
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         // get the pending entry option. This method must be prior to the get search results
         String pendingEntryOption = this.getSelectedPendingEntryOption(fieldValues);
@@ -90,13 +88,14 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
      * @param iterator the iterator of search results of balance
      * @param isConsolidated determine if the consolidated result is desired
      * @param pendingEntryOption the given pending entry option that can be no, approved or all
+     * 
      * @return the balance collection
      */
     private Collection buildBalanceCollection(Iterator iterator, boolean isConsolidated, String pendingEntryOption) {
         Collection balanceCollection = null;
 
         if (isConsolidated) {
-            balanceCollection = buildConsolidatedBalanceCollection(iterator, pendingEntryOption);
+            balanceCollection = buildCosolidatedBalanceCollection(iterator, pendingEntryOption);
         }
         else {
             balanceCollection = buildDetailedBalanceCollection(iterator, pendingEntryOption);
@@ -109,9 +108,10 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
      * 
      * @param iterator
      * @param pendingEntryOption the selected pending entry option
+     * 
      * @return the consolidated balance collection
      */
-    private Collection buildConsolidatedBalanceCollection(Iterator iterator, String pendingEntryOption) {
+    private Collection buildCosolidatedBalanceCollection(Iterator iterator, String pendingEntryOption) {
         Collection balanceCollection = new ArrayList();
 
         while (iterator.hasNext()) {
@@ -168,6 +168,7 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
      * 
      * @param iterator the balance iterator
      * @param pendingEntryOption the selected pending entry option
+     * 
      * @return the detailed balance collection
      */
     private Collection buildDetailedBalanceCollection(Iterator iterator, String pendingEntryOption) {
