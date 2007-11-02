@@ -56,7 +56,6 @@ import org.kuali.module.budget.bo.BudgetConstructionHeader;
 import org.kuali.module.budget.bo.BudgetConstructionMonthly;
 import org.kuali.module.budget.bo.BudgetConstructionOrganizationReports;
 import org.kuali.module.budget.bo.BudgetConstructionPosition;
-import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
 import org.kuali.module.budget.bo.CalculatedSalaryFoundationTrackerOverride;
 import org.kuali.module.budget.bo.PendingBudgetConstructionAppointmentFunding;
 import org.kuali.module.budget.bo.PendingBudgetConstructionGeneralLedger;
@@ -71,6 +70,7 @@ import org.kuali.module.financial.bo.FunctionControlCode;
 import org.kuali.module.gl.GLConstants.ColumnNames;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.UniversityDate;
+import org.kuali.module.labor.bo.CalculatedSalaryFoundationTracker;
 import org.kuali.module.labor.bo.LaborObject;
 import org.springframework.dao.DataAccessException;
 
