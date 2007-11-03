@@ -120,20 +120,28 @@ public class DisbursementNumberMaintenanceForm extends ActionForm {
             }
 
             // Check that the Disbursement Numbers are Integers
-            if (!GeneralUtilities.isStringAllNumbers(this.getBeginDisbursementNbr())) {
+            if ( ! GeneralUtilities.isStringAllNumbers(this.getBeginDisbursementNbr()) || (this.getBeginDisbursementNbr().trim().length() == 0) ) {
                 actionErrors.add("errors", new ActionMessage("DisbursementNumberMaintenanceForm.beginDisbursementNbr.invalid"));
             }
-            if (!GeneralUtilities.isStringAllNumbers(this.getEndDisbursementNbr())) {
+            if ( ! GeneralUtilities.isStringAllNumbers(this.getEndDisbursementNbr()) || (this.getEndDisbursementNbr().trim().length() == 0) ) {
                 actionErrors.add("errors", new ActionMessage("DisbursementNumberMaintenanceForm.endDisbursementNbr.invalid"));
             }
 
-            if (!GeneralUtilities.isStringEmpty(this.getLastAssignedDisbNbr())) {
-                if (!GeneralUtilities.isStringAllNumbers(this.getLastAssignedDisbNbr())) {
+            if ( ! GeneralUtilities.isStringEmpty(this.getLastAssignedDisbNbr())) {
+                if ( ! GeneralUtilities.isStringAllNumbers(this.getLastAssignedDisbNbr()) || (this.getLastAssignedDisbNbr().trim().length() == 0) ) {
                     actionErrors.add("errors", new ActionMessage("DisbursementNumberMaintenanceForm.lastAssignedDisburseNbr.invalid"));
                 }
             }
             else {
                 this.setLastAssignedDisbNbr(this.getBeginDisbursementNbr());
+            }
+
+            if ( actionErrors.size() == 0 ) {
+                int start = Integer.parseInt(this.getBeginDisbursementNbr());
+                int end = Integer.parseInt(this.getEndDisbursementNbr());
+                if ( end < start ) {
+                    actionErrors.add("errors", new ActionMessage("DisbursementNumberMaintenanceForm.lastAssignedDisburseNbr.smaller"));
+                }
             }
             if (GeneralUtilities.isStringEmpty(this.getPhysCampusProcCode())) {
                 actionErrors.add("errors", new ActionMessage("DisbursementNumberMaintenanceForm.physCampusProcCode.invalid"));
