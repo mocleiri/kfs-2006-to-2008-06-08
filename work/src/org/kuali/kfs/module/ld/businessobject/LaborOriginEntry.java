@@ -1028,7 +1028,7 @@ public class LaborOriginEntry extends OriginEntryFull implements LaborTransactio
             return getLaborLedgerOriginalFinancialObjectCode();
         }
         else if ("laborLedgerOriginalFinancialSubObjectCode".equals(fieldName)) {
-            return getLaborLedgerOriginalFinancialObjectCode();
+            return getLaborLedgerOriginalFinancialSubObjectCode();
         }
         else if ("hrmsCompany".equals(fieldName)) {
             return getHrmsCompany();
