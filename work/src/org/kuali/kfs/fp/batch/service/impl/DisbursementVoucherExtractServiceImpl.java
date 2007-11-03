@@ -448,7 +448,11 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
                 if (line < (maxNoteLines - 3)) {
                     pnt = new PaymentNoteText();
                     pnt.setCustomerNoteLineNbr(line++);
-                    pnt.setCustomerNoteText(lines[i]);
+                    if ( lines[i].length() > 90 ) {
+                        pnt.setCustomerNoteText(lines[i].substring(0,90));
+                    } else {
+                        pnt.setCustomerNoteText(lines[i]);
+                    }
                     pd.addNote(pnt);
                 }
             }
