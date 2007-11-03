@@ -99,7 +99,14 @@ public class BalanceInquiryAction extends KualiAction {
     }
 
     /**
-     * search - sets the values of the data entered on the form on the jsp into a map and then searches for the results.
+     * Search - sets the values of the data entered on the form on the jsp into a map and then searches for the results.
+     *
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
      */
     public ActionForward search(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BalanceInquiryForm lookupForm = (BalanceInquiryForm) form;
@@ -190,7 +197,9 @@ public class BalanceInquiryAction extends KualiAction {
     }
 
     /**
-     * refresh - is called when one quickFinder returns to the previous one. Sets all the values and performs the new search.
+     * Refresh - is called when one quickFinder returns to the previous one. Sets all the values and performs the new search.
+     * 
+     * @see org.kuali.core.web.struts.action.KualiAction#refresh(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -246,7 +255,14 @@ public class BalanceInquiryAction extends KualiAction {
     }
 
     /**
-     * Just returns as if return with no value was selected.
+     * Returns as if return with no value was selected.
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
      */
     public ActionForward cancel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LookupForm lookupForm = (LookupForm) form;
@@ -257,7 +273,15 @@ public class BalanceInquiryAction extends KualiAction {
 
 
     /**
-     * clearValues - clears the values of all the fields on the jsp.
+     * Clears the values of all the fields on the jsp.
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws ServletException
      */
     public ActionForward clearValues(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         LookupForm lookupForm = (LookupForm) form;
@@ -280,6 +304,16 @@ public class BalanceInquiryAction extends KualiAction {
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
+    /**
+     * View results from balance inquiry action
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     public ActionForward viewResults(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         request.setAttribute(KFSConstants.SEARCH_LIST_REQUEST_KEY, request.getParameter(KFSConstants.SEARCH_LIST_REQUEST_KEY));
         request.setAttribute(KFSConstants.REQUEST_SEARCH_RESULTS, GlobalVariables.getUserSession().retrieveObject(request.getParameter(KFSConstants.SEARCH_LIST_REQUEST_KEY)));
