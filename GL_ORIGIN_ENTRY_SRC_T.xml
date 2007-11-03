@@ -111,6 +111,6 @@
         ENTRY_SRC_CD="LLGL" ENTRY_SRC_NM="Labor Feeds to General Ledger"
         OBJ_ID="39E1D412776FF1E2E043814FD881F1E2" VER_NBR="1"/>
     <GL_ORIGIN_ENTRY_SRC_T DOBJ_MAINT_CD_ACTV_IND="Y" ENTRY_SRC_CD="PDP"
-        ENTRY_SRC_NM="PDP Feeds to General Ledger"
+        ENTRY_SRC_NM="Pre-Disbursement Processor Transactions"
         OBJ_ID="3A0694C9B13D415CE043814FD881415C" VER_NBR="1"/>
 </dataset>

@@ -13334,18 +13334,18 @@
     <sequence name="REQS_STAT_HIST_ID" nextval="1006"/>
     <sequence name="SEQUENCE_EN_USR" nextval="100000000000"/>
     <sequence name="SEQ_ACTION_LIST_OPTN" nextval="1020"/>
-    <sequence name="SEQ_ACTION_REQUEST" nextval="2060"/>
-    <sequence name="SEQ_ACTION_TAKEN" nextval="2080"/>
+    <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
+    <sequence name="SEQ_ACTION_TAKEN" nextval="2100"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317100"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317120"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="3952"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2000"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12676"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357749"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12696"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563357769"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151636"/>
     <sequence name="SEQ_TRANSACTION_TST" nextval="100"/>
