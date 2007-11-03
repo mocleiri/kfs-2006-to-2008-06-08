@@ -37,6 +37,12 @@ public class CollectorDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Co
         descriptorRepository = metadataManager.getGlobalRepository();
     }
 
+    /**
+     * Purge the table by year/chart.  Clears persistence broker template at the end to ensure OJB has to to DB again
+     * to retrieve the post-purged state of the DB. 
+     * 
+     * @see org.kuali.module.gl.dao.CollectorDetailDao#purgeYearByChart(java.lang.String, int)
+     */
     public void purgeYearByChart(String chartOfAccountsCode, int universityFiscalYear) {
         LOG.debug("purgeYearByChart() started");
 
@@ -52,6 +58,11 @@ public class CollectorDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Co
         getPersistenceBrokerTemplate().clearCache();
     }
 
+    /**
+     * Save specific collector detail
+     * 
+     * @see org.kuali.module.gl.dao.CollectorDetailDao#save(org.kuali.module.gl.bo.CollectorDetail)
+     */
     public void save(CollectorDetail detail) {
         LOG.debug("saveOriginEntry() started");
 
@@ -59,6 +70,9 @@ public class CollectorDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Co
     }
 
     /**
+     * Retrieves the DB table name that's mapped to instances of CollectorDetail by finding the class descriptor name from the
+     * class descriptor respository 
+     * 
      * @see org.kuali.module.gl.dao.CollectorDetailDao#retrieveCollectorDetailTableName()
      */
     public String retrieveCollectorDetailTableName() {
