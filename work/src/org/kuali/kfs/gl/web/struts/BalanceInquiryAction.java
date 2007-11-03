@@ -65,6 +65,9 @@ public class BalanceInquiryAction extends KualiAction {
         kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
     }
 
+    /**
+     * Sets up total titles
+     */
     private void setTotalTitles() {
         totalTitles = new String[7];
 
@@ -78,6 +81,11 @@ public class BalanceInquiryAction extends KualiAction {
 
     }
 
+    /**
+     * Returns an array of total titles
+     * 
+     * @return array of total titles
+     */
     private String[] getTotalTitles() {
         if (null == totalTitles) {
             setTotalTitles();
@@ -86,9 +94,6 @@ public class BalanceInquiryAction extends KualiAction {
         return totalTitles;
     }
 
-    /**
-     * Entry point to lookups, forwards to jsp for search render.
-     */
     public ActionForward start(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
