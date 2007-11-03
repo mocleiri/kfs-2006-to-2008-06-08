@@ -231,6 +231,7 @@
 		<property name="parameterService" ref="parameterService"/>
 		<property name="directoryName" value="${staging.directory}/PDP/"/>
 		<property name="paymentGroupService" ref="pdpPaymentGroupService"/>
+		<property name="paymentDetailService" ref="pdpPaymentDetailService"/>
 		<property name="processDao" ref="pdpProcessDao"/>
 		<property name="dateTimeService" ref="dateTimeService"/>
 		<property name="referenceService" ref="pdpReferenceService"/>
