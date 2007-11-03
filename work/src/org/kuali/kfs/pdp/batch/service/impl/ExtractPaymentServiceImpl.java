@@ -381,10 +381,12 @@ public class ExtractPaymentServiceImpl implements ExtractPaymentService {
     }
 
     private void writeBank(BufferedWriter os, int indent, Bank b) throws IOException {
-        writeOpenTagAttribute(os, indent, "bank", "id", b.getId().toString());
-        writeTag(os, indent + 2, "accountNumber", b.getAccountNumber());
-        writeTag(os, indent + 2, "routingNumber", b.getRoutingNumber());
-        writeCloseTag(os, indent, "bank");
+        if ( b != null ) {
+            writeOpenTagAttribute(os, indent, "bank", "id", b.getId().toString());
+            writeTag(os, indent + 2, "accountNumber", b.getAccountNumber());
+            writeTag(os, indent + 2, "routingNumber", b.getRoutingNumber());
+            writeCloseTag(os, indent, "bank");
+        }
     }
 
     private void writeCustomerProfile(BufferedWriter os, int indent, CustomerProfile cp) throws IOException {
