@@ -60,6 +60,22 @@ public class PaymentDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Paym
     }
 
     /**
+     * @see org.kuali.module.pdp.dao.PaymentDetailDao#getByDisbursementNumber(java.lang.Integer)
+     */
+    public Iterator getByDisbursementNumber(Integer disbursementNumber) {
+        LOG.debug("getByDisbursementNumber() started");
+
+        Criteria crit = new Criteria();
+        crit.addEqualTo("paymentGroup.disbursementNbr", disbursementNumber);
+
+        QueryByCriteria q = QueryFactory.newQuery(PaymentDetail.class, crit);
+
+        q.addOrderByDescending("financialDocumentTypeCode");
+
+        return getPersistenceBrokerTemplate().getIteratorByQuery(q);
+    }
+
+    /**
      * @see org.kuali.module.pdp.dao.PaymentDetailDao#getDailyReportData()
      */
     public List<DailyReport> getDailyReportData() {
