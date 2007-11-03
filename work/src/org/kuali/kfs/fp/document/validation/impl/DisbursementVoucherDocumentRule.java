@@ -1510,6 +1510,9 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     /**
      * Rerturns true if accounting line debit
      * 
+     * @param financialDocument submitted accounting document
+     * @param accountingLine accounting line in accounting document
+     * @return true if document is debit
      * @see IsDebitUtils#isDebitConsideringNothingPositiveOnly(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
