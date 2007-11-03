@@ -43,11 +43,6 @@ public class PaymentGroupDaoOjb extends PlatformAwareDaoBaseOjb implements Payme
         super();
     }
 
-    // Inject
-    public void setUniversalUserService(UniversalUserService us) {
-        userService = us;
-    }
-
     /**
      * @see org.kuali.module.pdp.dao.PaymentGroupDao#getDisbursementNumbersByDisbursementType(java.lang.Integer, java.lang.String)
      */
@@ -192,5 +187,10 @@ public class PaymentGroupDaoOjb extends PlatformAwareDaoBaseOjb implements Payme
         catch (UserNotFoundException e) {
             b.setProcessUser(null);
         }
+    }
+
+    // Inject
+    public void setUniversalUserService(UniversalUserService us) {
+        userService = us;
     }
 }
