@@ -25,6 +25,14 @@ public interface PaymentDetailService {
     public PaymentDetail getDetailForEpic(String custPaymentDocNbr, String fdocTypeCode);
 
     /**
+     * Return an iterator of all the payment details for a specific disbursement number
+     * 
+     * @param disbursementNumber
+     * @return
+     */
+    public Iterator getByDisbursementNumber(Integer disbursementNumber);
+
+    /**
      * This will return an iterator of all the cancelled payment details that haven't already been processed
      * 
      * @param organization

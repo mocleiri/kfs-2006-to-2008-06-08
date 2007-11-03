@@ -34,6 +34,15 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
     }
 
     /**
+     * @see org.kuali.module.pdp.service.PaymentDetailService#getByDisbursementNumber(java.lang.Integer)
+     */
+    public Iterator getByDisbursementNumber(Integer disbursementNumber) {
+        LOG.debug("getByDisbursementNumber() started");
+
+        return paymentDetailDao.getByDisbursementNumber(disbursementNumber);
+    }
+
+    /**
      * @see org.kuali.module.pdp.service.PaymentDetailService#get(java.lang.Integer)
      */
     public PaymentDetail get(Integer id) {

@@ -22,14 +22,6 @@ import org.kuali.module.pdp.bo.PaymentGroup;
 import org.kuali.module.pdp.bo.PaymentProcess;
 
 public interface PaymentGroupDao {
-    /**
-     * Get all the payments from a specific process of a certain type
-     * 
-     * @param pid
-     * @param disbursementType
-     * @return
-     */
-    public Iterator getByProcessIdDisbursementType(Integer pid, String disbursementType);
 
     /**
      * Get all the payment groups for a specific disbursement type & status code
@@ -39,6 +31,15 @@ public interface PaymentGroupDao {
      * @return
      */
     public Iterator getByDisbursementTypeStatusCode(String disbursementType, String paymentStatusCode);
+
+    /**
+     * Get all the disbursement numbers for a specific process of a certain type
+     * 
+     * @param pid
+     * @param disbursementType
+     * @return
+     */
+    public List<Integer> getDisbursementNumbersByDisbursementType(Integer pid,String disbursementType);
 
     public Iterator getByProcessId(Integer pid);
 
