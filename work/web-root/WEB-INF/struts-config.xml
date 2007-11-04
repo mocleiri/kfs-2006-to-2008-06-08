@@ -385,7 +385,7 @@
             <forward name="edit" path="/pdp/bank/edit.jsp" />
         </action>
 
-        <action path="/pdp/banksave" name="PdpBankForm" validate="true" input="/pdp/bank/edit.jsp" scope="request" type="org.kuali.module.pdp.action.bank.BankSaveAction">
+        <action path="/pdp/banksave" name="PdpBankForm" validate="false" input="/pdp/bank/edit.jsp" scope="request" type="org.kuali.module.pdp.action.bank.BankSaveAction">
             <forward name="list" path="/pdp/bank.do" />
             <forward name="edit" path="/pdp/bank/edit.jsp" />
         </action>
