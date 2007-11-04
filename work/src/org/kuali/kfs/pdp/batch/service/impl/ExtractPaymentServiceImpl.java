@@ -100,7 +100,11 @@ public class ExtractPaymentServiceImpl implements ExtractPaymentService {
                 writePayee(os, 4, history.getPaymentGroup());
 
                 writeTag(os, 4, "netAmount", history.getPaymentGroup().getNetPaymentAmount().toString());
-                writeTag(os, 4, "disbursementNumber", history.getPaymentGroup().getDisbursementNbr().toString());
+                if ( history.getOrigDisburseNbr() != null ) {
+                    writeTag(os, 4, "disbursementNumber", history.getOrigDisburseNbr().toString());                    
+                } else {
+                    writeTag(os, 4, "disbursementNumber", history.getPaymentGroup().getDisbursementNbr().toString());
+                }
                 writeTag(os, 4, "disbursementType", history.getPaymentGroup().getDisbursementType().getCode());
 
                 writeCloseTag(os, 2, "check");
@@ -217,7 +221,7 @@ public class ExtractPaymentServiceImpl implements ExtractPaymentService {
             writeCloseTag(os, 0, "achPayments");
         }
         catch (IOException ie) {
-            LOG.error("extractChecks() Problem reading file:  " + filename, ie);
+            LOG.error("extractAchPayments() Problem reading file:  " + filename, ie);
             throw new IllegalArgumentException("Error writing to output file: " + ie.getMessage());
         }
         finally {
