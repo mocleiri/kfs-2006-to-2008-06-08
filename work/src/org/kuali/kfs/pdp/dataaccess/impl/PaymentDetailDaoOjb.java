@@ -70,7 +70,8 @@ public class PaymentDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Paym
 
         QueryByCriteria q = QueryFactory.newQuery(PaymentDetail.class, crit);
 
-        q.addOrderByDescending("financialDocumentTypeCode");
+        q.addOrderByAscending("financialDocumentTypeCode");
+        q.addOrderByAscending("custPaymentDocNbr");
 
         return getPersistenceBrokerTemplate().getIteratorByQuery(q);
     }
