@@ -13297,7 +13297,7 @@
     <sequence name="NTE_ID_SEQ" nextval="2060"/>
     <sequence name="ORIGIN_ENTRY_ID_SEQ" nextval="2040"/>
     <sequence name="PDP_ACH_ACCT_GNRTD_ID_SEQ" nextval="10000000"/>
-    <sequence name="PDP_BNK_ID_SEQ" nextval="10000003"/>
+    <sequence name="PDP_BNK_ID_SEQ" nextval="10000004"/>
     <sequence name="PDP_CUST_BNK_ID_SEQ" nextval="10000034"/>
     <sequence name="PDP_CUST_ID_SEQ" nextval="10000016"/>
     <sequence name="PDP_DISB_NBR_RNG_ID_SEQ" nextval="10000003"/>
