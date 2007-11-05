@@ -403,7 +403,6 @@ public class PurchaseOrderForm extends PurchasingFormBase {
             po.refreshDocumentBusinessObject();
         }
 
-        // TODO: RELEASE 3 (KULPURAP-1397 ctk) temporary workaround remove once linked RNE issue is resolved
         for (org.kuali.core.bo.Note note : (java.util.List<org.kuali.core.bo.Note>) po.getDocumentBusinessObject().getBoNotes()) {
             note.refreshReferenceObject("attachment");
         }
