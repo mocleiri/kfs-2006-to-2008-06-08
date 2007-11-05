@@ -346,8 +346,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 
     /**
-     * TODO RELEASE 3 (KULPURAP-2052, delyea) - QUOTE
-     * 
      * @see org.kuali.module.purap.service.PurchaseOrderService#printPurchaseOrderQuoteRequestsListPDF(org.kuali.module.purap.document.PurchaseOrderDocument,
      *      java.io.ByteArrayOutputStream)
      */
@@ -366,8 +364,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     /**
-     * TODO RELEASE 3 (KULPURAP-2052, delyea) - QUOTE
-     * 
      * @see org.kuali.module.purap.service.PurchaseOrderService#printPurchaseOrderQuotePDF(org.kuali.module.purap.document.PurchaseOrderDocument,
      *      org.kuali.module.purap.bo.PurchaseOrderVendorQuote, java.io.ByteArrayOutputStream)
      */
@@ -532,7 +528,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         newPurchaseOrderChangeDocument.setPurchaseOrderCurrentIndicator(false);
         newPurchaseOrderChangeDocument.setPendingActionIndicator(false);
 
-        // TODO f2f: what is this doing?
         // Need to find a way to make the ManageableArrayList to expand and populating the items and
         // accounts, otherwise it will complain about the account on item 1 is missing.
         for (PurApItem item : (List<PurApItem>) newPurchaseOrderChangeDocument.getItems()) {
