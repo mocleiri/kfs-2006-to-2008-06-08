@@ -892,6 +892,9 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
             throw new RuntimeException(PurapConstants.REQ_UNABLE_TO_CREATE_NOTE + " " + e);
         }
 
+        //cancel extracted should not reopen PO
+        paymentRequest.setReopenPurchaseOrderIndicator(false);
+
         // FIXME shouldn't be using springcontext inside a service, but having problems with adding to spring bean file (hjs)
         SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(paymentRequest, "");
         LOG.debug("cancelExtractedPaymentRequest() PREQ " + paymentRequest.getPurapDocumentIdentifier() + " Cancelled Without Workflow");
