@@ -146,26 +146,26 @@
         VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA80A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Object consolidations to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object consolidation 1, object consolidation 2;organization reversion category 2=object consolidation 3,object consolidation 4,object consolidation 5;?"
+        SH_PARM_DESC="Object consolidations to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object consolidation 1, object consolidation 2;organization reversion category 2=object consolidation 3,object consolidation 4,object consolidation 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_EXCLUDE_OBJECT_CONSOLIDATIONS_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA81A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Object levels to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object level 1, object level 2;organization reversion category 2=object level 3,object level 4,object level 5;?"
+        SH_PARM_DESC="Object levels to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object level 1, object level 2;organization reversion category 2=object level 3,object level 4,object level 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_EXCLUDE_OBJECT_LEVELS_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="C02=HRCO"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA82A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Object sub types to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object sub type 1, object sub type 2;organization reversion category 2=object sub type 3,object sub type 4,object sub type 5;?"
+        SH_PARM_DESC="Object sub types to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object sub type 1, object sub type 2;organization reversion category 2=object sub type 3,object sub type 4,object sub type 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_EXCLUDE_OBJECT_SUB_TYPES_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA83A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Object types to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object type 1, object type 2;organization reversion category 2=object type 3,object type 4,object type 5;?"
+        SH_PARM_DESC="Object types to exclude for a given organization reversion category.  Format of list is organization reversion category 1=object type 1, object type 2;organization reversion category 2=object type 3,object type 4,object type 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_EXCLUDE_OBJECT_TYPES_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
@@ -179,7 +179,7 @@
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA85A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Object consolidations to include for a given organization reversion category.  Format of list is organization reversion category 1=object consolidation 1, object consolidation 2;organization reversion category 2=object consolidation 3,object consolidation 4,object consolidation 5;?"
+        SH_PARM_DESC="Object consolidations to include for a given organization reversion category.  Format of list is organization reversion category 1=object consolidation 1, object consolidation 2;organization reversion category 2=object consolidation 3,object consolidation 4,object consolidation 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_INCLUDE_OBJECT_CONSOLIDATIONS_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA"
@@ -187,20 +187,20 @@
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA86A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Object levels to include for a given organization reversion category.  Format of list is organization reversion category 1=object level 1, object level 2;organization reversion category 2=object level 3,object level 4,object level 5;?"
+        SH_PARM_DESC="Object levels to include for a given organization reversion category.  Format of list is organization reversion category 1=object level 1, object level 2;organization reversion category 2=object level 3,object level 4,object level 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_INCLUDE_OBJECT_LEVELS_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="C01=HRCO"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA87A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Object sub types to include for a given organization reversion category.  Format of list is organization reversion category 1=object sub type 1, object sub type 2;organization reversion category 2=object sub type 3,object sub type 4,object sub type 5;?"
+        SH_PARM_DESC="Object sub types to include for a given organization reversion category.  Format of list is organization reversion category 1=object sub type 1, object sub type 2;organization reversion category 2=object sub type 3,object sub type 4,object sub type 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_INCLUDE_OBJECT_SUB_TYPES_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA88A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Object types to include for a given organization reversion category.  Format of list is organization reversion category 1=object type 1, object type 2;organization reversion category 2=object type 3,object type 4,object type 5;?"
+        SH_PARM_DESC="Object types to include for a given organization reversion category.  Format of list is organization reversion category 1=object type 1, object type 2;organization reversion category 2=object type 3,object type 4,object type 5;¿"
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_INCLUDE_OBJECT_TYPES_BY_ORGANIZATION_REVERSION_CATEGORY"
         SH_PARM_NMSPC_CD="KFS-CA"
@@ -239,7 +239,7 @@
         SH_PARM_TXT="AB;BB;CB;" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADA9DA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Restricted object type,  object sub type and object level combinations.  Format of list is object type 1,object sub type 1,object level 1;object type 2=object sub type 2,object level 2;?"
+        SH_PARM_DESC="Restricted object type,  object sub type and object level combinations.  Format of list is object type 1,object sub type 1,object level 1;object type 2=object sub type 2,object level 2;¿"
         SH_PARM_DTL_TYP_CD="AuxiliaryVoucher"
         SH_PARM_NM="COMBINATION_OBJECT_TYPE_OBJECT_SUB_TYPE_OBJECT_LEVEL"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="ES,VA,VADJ"
@@ -335,7 +335,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADAB4A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Campuses by payment reason.  Format of list is payment reason 1=campus 1;payment reason 2=campus 2;?"
+        SH_PARM_DESC="Campuses by payment reason.  Format of list is payment reason 1=campus 1;payment reason 2=campus 2;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="CAMPUS_BY_PAYMENT_REASON" SH_PARM_NMSPC_CD="KFS-FP"
         SH_PARM_TXT="N=BL;P=BL;X=BL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
@@ -409,13 +409,13 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC0A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid documentation location by initiator's campus code.  Format of list is campus 1=documentation location 1, documentation location 2;campus 2=documentation location 3,documentation location 4,documentation location 5;?"
+        SH_PARM_DESC="Invalid documentation location by initiator's campus code.  Format of list is campus 1=documentation location 1, documentation location 2;campus 2=documentation location 3,documentation location 4,documentation location 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_DOCUMENTATION_LOCATIONS_BY_CAMPUS"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC1A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid documentation location by payment reason.  Format of list is payment reason 1=documentation location 1, documentation location 2;payment reason 2=documentation location 3,documentation location 4,documentation location 5;?"
+        SH_PARM_DESC="Invalid documentation location by payment reason.  Format of list is payment reason 1=documentation location 1, documentation location 2;payment reason 2=documentation location 3,documentation location 4,documentation location 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_DOCUMENTATION_LOCATIONS_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP"
@@ -423,19 +423,19 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC2A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid object levels by payment reason.  Format of list is payment reason 1=object level 1, object level 2;payment reason 2=object level 3,object level 4,object level 5;?"
+        SH_PARM_DESC="Invalid object levels by payment reason.  Format of list is payment reason 1=object level 1, object level 2;payment reason 2=object level 3,object level 4,object level 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_OBJECT_LEVELS_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC3A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid object sub types by sub fund group.  Format of list is sub fund group 1=object sub type 1, object sub type 2;sub fund group 2=object sub type 3,object sub type 4,object sub type 5;?"
+        SH_PARM_DESC="Invalid object sub types by sub fund group.  Format of list is sub fund group 1=object sub type 1, object sub type 2;sub fund group 2=object sub type 3,object sub type 4,object sub type 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC4A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid objects by payment reason.  Format of list is payment reason 1=object 1, object 2;payment reason 2=object 3,object 4,object 5;?"
+        SH_PARM_DESC="Invalid objects by payment reason.  Format of list is payment reason 1=object 1, object 2;payment reason 2=object 3,object 4,object 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_OBJECT_CODES_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP"
@@ -443,13 +443,13 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC5A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid payment reasons by payee type.  Format of list is payee type 1=payment reason 1, payment reason 2;payee type 2=payment reason 3,payment reason 4,payment reason 5;?"
+        SH_PARM_DESC="Invalid payment reasons by payee type.  Format of list is payee type 1=payment reason 1, payment reason 2;payee type 2=payment reason 3,payment reason 4,payment reason 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_PAYMENT_REASONS_BY_PAYEE_TYPE"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC6A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid sub fund groups by payment reason.  Format of list is payment reason 1=sub fund group 1, sub fund group 2;payment reason 2=sub fund group 3,sub fund group 4,sub fund group 5;?"
+        SH_PARM_DESC="Invalid sub fund groups by payment reason.  Format of list is payment reason 1=sub fund group 1, sub fund group 2;payment reason 2=sub fund group 3,sub fund group 4,sub fund group 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
@@ -489,7 +489,7 @@
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADACCA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="NRA Federal Tax Line objects by income class.  Format of list is income class 1=object 1;income class 2=object 2;?"
+        SH_PARM_DESC="NRA Federal Tax Line objects by income class.  Format of list is income class 1=object 1;income class 2=object 2;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_FEDERAL_OBJECT_CODE_BY_INCOME_CLASS"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="F=9021;I=9022;R=9022"
@@ -510,7 +510,7 @@
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADACFA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="NRA State Tax Line objects by income class.  Format of list is income class 1=object;income class 2=object;?"
+        SH_PARM_DESC="NRA State Tax Line objects by income class.  Format of list is income class 1=object;income class 2=object;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_STATE_OBJECT_CODE_BY_INCOME_CLASS"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="F=9021;I=9022;R=9022"
@@ -611,7 +611,7 @@
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADADFA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid documentation location by initiator's campus code.  Format of list is campus 1=documentation location 1, documentation location 2;campus 2=documentation location 3,documentation location 4,documentation location 5;?"
+        SH_PARM_DESC="Valid documentation location by initiator's campus code.  Format of list is campus 1=documentation location 1, documentation location 2;campus 2=documentation location 3,documentation location 4,documentation location 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_DOCUMENTATION_LOCATIONS_BY_CAMPUS"
         SH_PARM_NMSPC_CD="KFS-FP"
@@ -619,7 +619,7 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE0A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid documentation location by payment reason.  Format of list is payment reason 1=documentation location 1, documentation location 2;payment reason 2=documentation location 3,documentation location 4,documentation location 5;?"
+        SH_PARM_DESC="Valid documentation location by payment reason.  Format of list is payment reason 1=documentation location 1, documentation location 2;payment reason 2=documentation location 3,documentation location 4,documentation location 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_DOCUMENTATION_LOCATIONS_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP"
@@ -627,14 +627,14 @@
         VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE1A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid objects by payment reason.  Format of list is payment reason 1=object 1, object 2;payment reason 2=object 3,object 4,object 5;?"
+        SH_PARM_DESC="Valid objects by payment reason.  Format of list is payment reason 1=object 1, object 2;payment reason 2=object 3,object 4,object 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_OBJECT_CODES_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="D=4566;M=5070"
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE2A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid object levels by payment reason.  Format of list is payment reason 1=object level 1, object level 2;payment reason 2=object level 3,object level 4,object level 5;?"
+        SH_PARM_DESC="Valid object levels by payment reason.  Format of list is payment reason 1=object level 1, object level 2;payment reason 2=object level 3,object level 4,object level 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_OBJECT_LEVELS_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP"
@@ -642,14 +642,14 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="3" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE3A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid object sub types by sub fund group.  Format of list is sub fund group 1=object sub type 1, object sub type 2;sub fund group 2=object sub type 3,object sub type 4,object sub type 5;?"
+        SH_PARM_DESC="Valid object sub types by sub fund group.  Format of list is sub fund group 1=object sub type 1, object sub type 2;sub fund group 2=object sub type 3,object sub type 4,object sub type 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="LOANFD="
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE4A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid payment reasons by payee type.  Format of list is payee type 1=payment reason 1, payment reason 2;payee type 2=payment reason 3,payment reason 4,payment reason 5;?"
+        SH_PARM_DESC="Valid payment reasons by payee type.  Format of list is payee type 1=payment reason 1, payment reason 2;payee type 2=payment reason 3,payment reason 4,payment reason 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_PAYMENT_REASONS_BY_PAYEE_TYPE"
         SH_PARM_NMSPC_CD="KFS-FP"
@@ -657,7 +657,7 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE5A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid sub fund groups by payment reason.  Format of list is payment reason 1=sub fund group 1, sub fund group 2;payment reason 2=sub fund group 3,sub fund group 4,sub fund group 5;?"
+        SH_PARM_DESC="Valid sub fund groups by payment reason.  Format of list is payment reason 1=sub fund group 1, sub fund group 2;payment reason 2=sub fund group 3,sub fund group 4,sub fund group 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_SUB_FUND_GROUPS_BY_PAYMENT_REASON"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="D="
@@ -733,7 +733,7 @@
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAF6A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid object sub types by object type.  Format of list is object type 1=object sub type 1, object sub type 2;object type 2=object sub type 3,object sub type 4,object sub type 5;?"
+        SH_PARM_DESC="Invalid object sub types by object type.  Format of list is object type 1=object sub type 1, object sub type 2;object type 2=object sub type 3,object sub type 4,object sub type 5;¿"
         SH_PARM_DTL_TYP_CD="GeneralErrorCorrection"
         SH_PARM_NM="INVALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="ES=CF,CM,WO"
@@ -753,7 +753,7 @@
         SH_PARM_TXT="IC" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAF9A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid object sub types by object type.  Format of list is object type 1=object sub type 1, object sub type 2;object type 2=object sub type 3,object sub type 4,object sub type 5;?"
+        SH_PARM_DESC="Valid object sub types by object type.  Format of list is object type 1=object sub type 1, object sub type 2;object type 2=object sub type 3,object sub type 4,object sub type 5;¿"
         SH_PARM_DTL_TYP_CD="GeneralErrorCorrection"
         SH_PARM_NM="VALID_OBJECT_SUB_TYPES_BY_OBJECT_TYPE"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
@@ -872,7 +872,7 @@
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB18A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid objects by MCC code.  Format of list is mcc code 1=object 1, object 2;mcc code 2=object 3,object 4,object 5;?"
+        SH_PARM_DESC="Invalid objects by MCC code.  Format of list is mcc code 1=object 1, object 2;mcc code 2=object 3,object 4,object 5;¿"
         SH_PARM_DTL_TYP_CD="ProcurementCard"
         SH_PARM_NM="INVALID_OBJECT_CODES_BY_MCC_CODE"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_PCAD_USERS"/>
@@ -897,7 +897,7 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_PCAD_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB1CA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid objects by MCC code.  Format of list is mcc code 1=object 1, object 2;mcc code 2=object 3,object 4,object 5;?"
+        SH_PARM_DESC="Valid objects by MCC code.  Format of list is mcc code 1=object 1, object 2;mcc code 2=object 3,object 4,object 5;¿"
         SH_PARM_DTL_TYP_CD="ProcurementCard"
         SH_PARM_NM="VALID_OBJECT_CODES_BY_MCC_CODE"
         SH_PARM_NMSPC_CD="KFS-FP"
@@ -1254,7 +1254,7 @@
         SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB6AA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Capitalization objects by object sub type.  Format of list is object sub type 1=object 1;object sub type 2=object 2;?"
+        SH_PARM_DESC="Capitalization objects by object sub type.  Format of list is object sub type 1=object 1;object sub type 2=object 2;¿"
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="CAPITALIZATION_OBJECT_CODE_BY_OBJECT_SUB_TYPE"
         SH_PARM_NMSPC_CD="KFS-GL"
@@ -1302,7 +1302,7 @@
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB71A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Object codes used cash sufficient funds calculation. The formula is: available cash = cash balance ? current liabilities ? open encumbrances  pending ledger entries. There isn?t a given (or group of) object type, sub-type, level, or consolidation that defines current liabilities so these are the codes that are current liabilities that commonly appear on accounts."
+        SH_PARM_DESC="Object codes used cash sufficient funds calculation. The formula is: available cash = cash balance ¿ current liabilities ¿ open encumbrances  pending ledger entries. There isn¿t a given (or group of) object type, sub-type, level, or consolidation that defines current liabilities so these are the codes that are current liabilities that commonly appear on accounts."
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="SUFFICIENT_FUNDS_CURRENT_LIABILITIES_OBJECT_CODES"
         SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="9040;9041;9050"
@@ -1447,7 +1447,7 @@
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB9FA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Invalid object levels by object type.  Format of list is object type 1=object level 1, object level 2;object type 2=object level 3,object level 4,object level 5;?"
+        SH_PARM_DESC="Invalid object levels by object type.  Format of list is object type 1=object level 1, object level 2;object type 2=object level 3,object level 4,object level 5;¿"
         SH_PARM_DTL_TYP_CD="CreditMemo"
         SH_PARM_NM="INVALID_OBJECT_LEVELS_BY_OBJECT_TYPE"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
@@ -1482,7 +1482,7 @@
         SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBA5A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Valid object levels by object type.  Format of list is object type 1=object level 1, object level 2;object type 2=object level 3,object level 4,object level 5;?"
+        SH_PARM_DESC="Valid object levels by object type.  Format of list is object type 1=object level 1, object level 2;object type 2=object level 3,object level 4,object level 5;¿"
         SH_PARM_DTL_TYP_CD="CreditMemo"
         SH_PARM_NM="VALID_OBJECT_LEVELS_BY_OBJECT_TYPE"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="AS=INV"
@@ -1648,7 +1648,7 @@
         SH_PARM_TXT="FRHT;SPHD" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBBEA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Object codes that when associated with C&amp;G accounts on Purchase Orders will force the PO to route to a C&amp;G workgroup for approval.  Format of list is chart 1=object 1, object 2;chat 2=object 3,object 4,object 5;?"
+        SH_PARM_DESC="Object codes that when associated with C&amp;G accounts on Purchase Orders will force the PO to route to a C&amp;G workgroup for approval.  Format of list is chart 1=object 1, object 2;chat 2=object 3,object 4,object 5;¿"
         SH_PARM_DTL_TYP_CD="PurchaseOrder"
         SH_PARM_NM="CG_ROUTE_OBJECT_CODES_BY_CHART"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="BL=5011,5012"
@@ -1687,7 +1687,7 @@
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBC4A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Object codes that when associated with C&amp;G accounts on Purchase Orders will not force the PO to route to a C&amp;G workgroup for approval.  Format of list is chart 1=object 1, object 2;chat 2=object 3,object 4,object 5;?"
+        SH_PARM_DESC="Object codes that when associated with C&amp;G accounts on Purchase Orders will not force the PO to route to a C&amp;G workgroup for approval.  Format of list is chart 1=object 1, object 2;chat 2=object 3,object 4,object 5;¿"
         SH_PARM_DTL_TYP_CD="PurchaseOrder"
         SH_PARM_NM="NO_CG_ROUTE_OBJECT_CODES_BY_CHART"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
