@@ -3,15 +3,16 @@ Release 2.0
 
 Contents:
 
-kuali-financial-system
+financial-system - Source code and build scripts for the Kuali Financial System.
 
-kuali-rice
+database-import-export - Import tool used to load the base tables and data into an Oracle or MySQL database.
+	demo-data-set
+	bootstrap-data-set
 
-kuali-workflow
+rice - Kuali Rice source code.  Uses Maven 2 to build.  Contains the implementation of the Kuali Nervous System and other base components.
+
+enterprise-workflow - 
 
 patches
 
-database-import-export
-demo-data-set
-bootstrap-data-set
 
