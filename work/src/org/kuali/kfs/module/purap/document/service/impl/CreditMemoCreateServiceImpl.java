@@ -52,7 +52,7 @@ import org.kuali.module.vendor.util.VendorUtils;
 
 
 /**
- * Performs inital population of the credit memo document.
+ * Performs initial population of the credit memo document.
  */
 public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CreditMemoServiceImpl.class);
@@ -91,7 +91,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
     }
 
     /**
-     * Populate Credit Memo of type PREQ.
+     * Populate Credit Memo of type Payment Request.
      * 
      * @param cmDocument - Credit Memo Document to Populate
      */
@@ -139,7 +139,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
     }
 
     /**
-     * Populate Credit Memo of type PO.
+     * Populate Credit Memo of type Purchase Order.
      * 
      * @param cmDocument - Credit Memo Document to Populate
      */
@@ -223,6 +223,11 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
         SpringContext.getBean(PurapService.class).addBelowLineItems(cmDocument);
     }
 
+    /**
+     * Converts the amount to percent and set it to the account.
+     * 
+     * @param pr  The payment request document whose items containing the accounts whose percentage would be set.
+     */
     private void convertMoneyToPercent(PaymentRequestDocument pr) {
         LOG.debug("convertMoneyToPercent() started");
         Collection errors = new ArrayList();
@@ -272,13 +277,12 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
                     GlobalVariables.getErrorMap().putError(item.getItemIdentifierString(), PurapKeyConstants.ERROR_ITEM_ACCOUNTING_DOLLAR_TOTAL, identifier, accountTotal.toString(), item.getExtendedPrice().toString());
                     LOG.debug("Invalid Totals");
                 }
-
             }
         }
     }
 
     /**
-     * Defaults the document description based on the cm type.
+     * Defaults the document description based on the credit memo source type.
      * 
      * @param cmDocument - Credit Memo Document to Populate
      */
@@ -300,20 +304,10 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
         cmDocument.getDocumentHeader().setFinancialDocumentDescription(description);
     }
 
-    /**
-     * Sets the creditMemoService attribute value.
-     * 
-     * @param creditMemoService The creditMemoService to set.
-     */
     public void setCreditMemoService(CreditMemoService creditMemoService) {
         this.creditMemoService = creditMemoService;
     }
 
-    /**
-     * Sets the vendorService attribute value.
-     * 
-     * @param vendorService The vendorService to set.
-     */
     public void setVendorService(VendorService vendorService) {
         this.vendorService = vendorService;
     }
