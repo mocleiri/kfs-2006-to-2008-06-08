@@ -18,6 +18,7 @@ package org.kuali.module.purap.fixtures;
 import org.kuali.core.service.DocumentService;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants.CreditMemoStatuses;
+import org.kuali.module.purap.PurapConstants.PaymentRequestStatuses;
 import org.kuali.module.purap.PurapConstants.PurchaseOrderStatuses;
 import org.kuali.module.purap.PurapConstants.RequisitionStatuses;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
@@ -88,6 +89,21 @@ public enum PurchasingAccountsPayableDocumentFixture {
     PO_WITH_MANUALLY_ENTERED_VENDOR(null, PurchaseOrderStatuses.IN_PROCESS, 1000, 0, "ABC Cleaning Services", "123456 BROAD ST", null, "TRUMANSBURG", "NY", "14886", "US", null, null),
 
     // PAYMENT REQUEST FIXTURES
+    PREQ_ONLY_REQUIRED_FIELDS(null, // purapDocumentIdentifier 
+            PaymentRequestStatuses.IN_PROCESS,  // statusCode
+            1010,   // vendorHeaderGeneratedIdentifier
+            2,   // vendorDetailAssignedIdentifier
+            "DIVISION 2 OF PO BASIC",   // vendorName
+            "9988 8TH STREET",   // vendorLine1Address
+            null,   // vendorLine2Address
+            "A PLACE IN THE SUN",   // vendorCityName
+            "CA",   // vendorStateCode
+            "99888",   // vendorPostalCode
+            "US",   // vendorCountryCode
+            null,   // vendorCustomerNumber
+            null    // accountsPayablePurchasingDocumentLinkIdentifier
+    ),
+    
     // CREDIT MEMO FIXTURES
     CM_ONLY_REQUIRED_FIELDS(null, // purapDocumentIdentifier
             CreditMemoStatuses.IN_PROCESS, // statusCode
