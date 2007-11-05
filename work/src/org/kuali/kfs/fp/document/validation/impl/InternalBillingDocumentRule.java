@@ -37,6 +37,12 @@ import org.kuali.module.financial.document.InternalBillingDocument;
 public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
 
     /**
+     * This method determines if an accounting line is a debit accounting line by calling IsDebitUtils.isDebitConsideringSection().
+     * 
+     * @param transactionalDocument The document containing the accounting line being analyzed.
+     * @param accountingLine The accounting line being reviewed to determine if it is a debit line or not.
+     * @return True if the accounting line is a debit accounting line, false otherwise.
+     * 
      * @see IsDebitUtils#isDebitConsideringSection(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
      * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
@@ -46,7 +52,11 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * Overrides to only disallow zero, allowing negative amounts.
+     * Overrides to only disallow zero, allowing negative amounts.  
+     * 
+     * @param document The document which contains the accounting line being validated.
+     * @param accountingLine The accounting line containing the amount being validated.
+     * @return True if the amount is not zero, false otherwise.
      * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isAmountValid(FinancialDocument, AccountingLine)
      */
@@ -61,6 +71,10 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
+     * @param document 
+     * @param accountingLine 
+     * @return 
+     * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(FinancialDocument,
      *      AccountingLine)
      */
@@ -70,6 +84,10 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
+     * @param document 
+     * @param accountingLine 
+     * @return 
+     * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(FinancialDocument,
      *      AccountingLine)
      */
@@ -79,6 +97,10 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
+     * @param document 
+     * @param accountingLine 
+     * @return 
+     * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(FinancialDocument,
      *      AccountingLine, AccountingLine)
      */
@@ -125,11 +147,12 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
 
     /**
      * Evaluates the object sub type code of the accounting line's object code to determine whether the object code is a capital
-     * object code. If so, and this accounting line is in the income section, then it is not valid. <p/> Note: this is an IU
-     * specific business rule.
+     * object code. If so, and this accounting line is in the income section, then it is not valid. <p/> 
      * 
-     * @param accountingLine
-     * @return whether the given line is valid with respect to capital object codes
+     * Note: this is an IU specific business rule.
+     * 
+     * @param accountingLine The accounting line the object code will be retrieved from.
+     * @return True if the given line is valid with respect to capital object codes.
      */
     private boolean validateCapitalObjectCodes(AccountingLine accountingLine) {
         if (accountingLine.isSourceAccountingLine() && isCapitalObject(accountingLine)) {
@@ -140,8 +163,9 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
         else {
             return true;
         }
-        // todo: phase II
-        // int pendPurchaseCount = 0; // TODO need to do something with this but I have no idea what
+        // TODO phase II
+        // int pendPurchaseCount = 0; 
+        // TODO need to do something with this but I have no idea what
         // if (!SUB_FUND_GROUP_CODE.CODE_EXTAGY.equals(subFundGroupCode) && restrictedCapitalObjectCodes.contains(objectSubTypeCode)
         // && (pendPurchaseCount <= 0))
     }
@@ -149,8 +173,8 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     /**
      * Checks whether the given AccountingLine's ObjectCode is a capital one.
      * 
-     * @param accountingLine
-     * @return whether the given AccountingLine's ObjectCode is a capital one.
+     * @param accountingLine The accounting line the object code will be retrieved from.
+     * @return True if the given accounting line's object code is a capital code, false otherwise.
      */
     private boolean isCapitalObject(AccountingLine accountingLine) {
         ParameterEvaluator evaluator = SpringContext.getBean(ParameterService.class).getParameterEvaluator(InternalBillingDocument.class, CAPITAL_OBJECT_SUB_TYPE_CODES, accountingLine.getObjectCode().getFinancialObjectSubTypeCode());
@@ -158,6 +182,14 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
+     * This method overrides the processCustomRouteDocumentBusinessRules() method in AccountingDocumentRuleBase to 
+     * allow for additional rules to be run prior to routing.  In addition to calling the parent method to perform the 
+     * general business rule checks, this method also performs a validation check on all InternalBillingItems associated 
+     * with the given document.  
+     * 
+     * @param document The document being routed.
+     * @return True if the parent method finds no business rule problems and all associated InternalBillingItems are valid.
+     * 
      * @see FinancialDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
      */
     @Override
@@ -168,9 +200,9 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
         if (success) {
             success &= validateItems((InternalBillingDocument) document);
         }
-        // todo: for phase II, when capital object codes are allowed on expense accounting lines, check that there are any if and
+        // TODO: for phase II, when capital object codes are allowed on expense accounting lines, check that there are any if and
         // only if the Capital Assets tab contains information about the associated capital asset.
-        // todo: for phase II, check that this bills for no more than one capital asset.
+        // TODO: for phase II, check that this bills for no more than one capital asset.
         return success;
     }
 
@@ -178,8 +210,8 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
      * Validates all the InternalBillingItems in the given Document, adding global errors for invalid items. It just uses the
      * DataDictionary validation.
      * 
-     * @param internalBillingDocument
-     * @return whether any items were invalid
+     * @param internalBillingDocument The document the InternalBillingItems will be retrieved from to validate.
+     * @return Whether or not any associated items within the given document are invalid.
      */
     private boolean validateItems(InternalBillingDocument internalBillingDocument) {
         boolean retval = true;
