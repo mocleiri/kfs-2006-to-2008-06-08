@@ -112,37 +112,11 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
     /**
      * Processes rules common to the three custom accounting line rule methods.
      * 
-     * @param accountingLine
-     * @return whether the rule succeeds
+     * @param accountingLine The accounting line the business rules will be applied to.
+     * @return True if the custom business rule succeed, false otherwise.
      */
     private boolean processCommonCustomAccountingLineRules(AccountingLine accountingLine) {
-        boolean success = true;
-        success &= validIndianaStudentFeesNotContinueEduc(accountingLine);
-        if (success) {
-            success &= validateCapitalObjectCodes(accountingLine);
-        }
-        return success;
-    }
-
-    /**
-     * Note: This method implements an IU specific business rule. <p/> This method evaluates the accounting line's object sub type
-     * code for its object code in addition to the accounting line's sub fund group for the account. This didn't fit any of the
-     * interface methods, so this rule was programmed in the "custom rule" method. It only applies to lines in the income section.
-     * 
-     * @param accountingLine
-     * @return whether this rule passes
-     */
-    private boolean validIndianaStudentFeesNotContinueEduc(AccountingLine accountingLine) {
-        String objectSubTypeCode = accountingLine.getObjectCode().getFinancialObjectSubTypeCode();
-        String actualSubFundGroupCode = accountingLine.getAccount().getSubFundGroupCode();
-        String requiredSubFundGroupCode = SUB_FUND_GROUP_CODE.CONTINUE_EDUC;
-
-        if (accountingLine.isSourceAccountingLine() && OBJECT_SUB_TYPE_CODE.STUDENT_FEES.equals(objectSubTypeCode) && !requiredSubFundGroupCode.equals(actualSubFundGroupCode)) {
-            // The user could fix this via either ObjectCode or Account, but we arbitrarily choose the ObjectCode to highlight.
-            reportError(KFSPropertyConstants.OBJECT_CODE, KFSKeyConstants.ERROR_DOCUMENT_INCORRECT_OBJ_CODE_WITH_SUB_FUND_GROUP, accountingLine.getFinancialObjectCode(), objectSubTypeCode, requiredSubFundGroupCode, actualSubFundGroupCode);
-            return false;
-        }
-        return true;
+        return validateCapitalObjectCodes(accountingLine);
     }
 
     /**
