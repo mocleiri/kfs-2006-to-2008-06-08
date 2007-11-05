@@ -1213,7 +1213,6 @@ public class VendorRule extends MaintenanceDocumentRuleBase {
 
 
         // this incoming bo needs to be refreshed because it doesn't have its subobjects setup
-        // TODO RELEASE 3 (KULPURAP-2081) can this be moved up?
         bo.refreshNonUpdateableReferences();
 
         if (bo instanceof VendorAddress) {
@@ -1236,10 +1235,6 @@ public class VendorRule extends MaintenanceDocumentRuleBase {
         }
         if (bo instanceof VendorDefaultAddress) {
             VendorDefaultAddress defaultAddress = (VendorDefaultAddress) bo;
-
-            // TODO RELEASE 3 (KULPURAP-2081) this is a total hack we shouldn't have to set the foreign key here, this should be set
-            // in the parent
-            // in a much more general way see issue KULPURAP-266 for a preliminary discussion
             String parentName = StringUtils.substringBeforeLast(collectionName, ".");
             VendorAddress parent = (VendorAddress) ObjectUtils.getPropertyValue(this.getNewBo(), parentName);
             VendorDetail vendorDetail = (VendorDetail) document.getNewMaintainableObject().getBusinessObject();
