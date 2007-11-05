@@ -54,7 +54,7 @@ public class GeneralErrorCorrectionDocumentRule extends AccountingDocumentRuleBa
      * Helper method for business rules concerning <code>{@link AccountingLine}</code> instances.
      * 
      * @param document submitted accounting document
-     * @param accountingLine accounting line of submitted accouting document
+     * @param accountingLine accounting line of submitted accounting document
      * @return true if object and object sub type are allowed and if required reference fields are valid
      */
     private boolean processGenericAccountingLineBusinessRules(AccountingDocument document, AccountingLine accountingLine) {
