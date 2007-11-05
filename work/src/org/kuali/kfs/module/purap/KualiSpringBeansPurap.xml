@@ -167,6 +167,9 @@
         <property name="purapAccountingService">
             <ref bean="purapAccountingService" />
         </property> 
+        <property name="purchaseOrderService">
+            <ref bean="purchaseOrderService" />
+        </property> 
         <property name="universityDateService">
             <ref bean="universityDateService" />
         </property>
