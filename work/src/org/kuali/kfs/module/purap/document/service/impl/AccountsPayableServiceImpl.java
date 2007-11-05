@@ -160,10 +160,11 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * This method creates and adds a note indicating accounts replaced and what they replaced and attaches it to the document.
+     * Creates and adds a note indicating accounts replaced and what they replaced and attaches it to the document.
      * 
-     * @param document
-     * @param accounts
+     * @param document  The accounts payable document to which we're adding the note.
+     * @param accounts  The HashMap where the keys are the string representations of the chart and account of the 
+     *                  original account and the values are the ExpiredOrClosedAccountEntry.
      */
     private void addContinuationAccountsNote(AccountsPayableDocument document, HashMap<String, ExpiredOrClosedAccountEntry> accounts) {
         String noteText;
@@ -204,11 +205,14 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * This method generates a list of replacement accounts for expired or closed accounts, as well as expired/closed accounts
+     * Generates a list of replacement accounts for expired or closed accounts, as well as expired/closed accounts
      * without a continuation account.
      * 
-     * @param document
-     * @return
+     * @param document  The accounts payable document from which we're obtaining the purchase order id to be used
+     *                  to obtain the purchase order document, whose accounts we'll use to generate the list of
+     *                  replacement accounts for expired or closed accounts.
+     * @return          The HashMap where the keys are the string representations of the chart
+     *                  and account of the original account and the values are the ExpiredOrClosedAccountEntry.
      */
     private HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountsList(AccountsPayableDocument document) {
 
@@ -295,10 +299,10 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * This method creates a chart-account string.
+     * Creates a chart-account string.
      * 
-     * @param ecAccount
-     * @return
+     * @param ecAccount  The account whose chart and account number we're going to use to create the resulting String for this method.
+     * @return           The string representing the chart and account number of the given ecAccount.
      */
     private String createChartAccountString(ExpiredOrClosedAccount ecAccount) {
         StringBuffer buff = new StringBuffer("");
@@ -311,11 +315,11 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * This method determines if the user is a fiscal officer.
+     * Determines if the user is a fiscal officer.
      * 
-     * @param document
-     * @param user
-     * @return
+     * @param document  The document to be used to check the status code and whether the workflow approval is requested.
+     * @param user      The current user.
+     * @return          boolean true if the user is a fiscal officer.
      */
     private boolean isFiscalUser(AccountsPayableDocument document, UniversalUser user) {
         boolean isFiscalUser = false;
@@ -328,7 +332,7 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * Sets ap doc to canceled. If gl entries have been created cancel entries are created.
+     * @see org.kuali.module.purap.service.AccountsPayableService#cancelAccountsPayableDocument(org.kuali.module.purap.document.AccountsPayableDocument, java.lang.String)
      */
     public void cancelAccountsPayableDocument(AccountsPayableDocument apDocument, String currentNodeName) {
         if (purapService.isFullDocumentEntryCompleted(apDocument)) {
@@ -338,10 +342,13 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         accountsPayableDocumentSpecificService.updateStatusByNode(currentNodeName, apDocument);
         apDocument.refreshReferenceObject(PurapPropertyConstants.STATUS);
 
-        // close/reopen po?
+        // close/reopen purchase order.
         accountsPayableDocumentSpecificService.takePurchaseOrderCancelAction(apDocument);
     }
 
+    /**
+     * @see org.kuali.module.purap.service.AccountsPayableService#updateItemList(org.kuali.module.purap.document.AccountsPayableDocument)
+     */
     public void updateItemList(AccountsPayableDocument apDocument) {
         // don't run the following if past full entry
         if (purapService.isFullDocumentEntryCompleted(apDocument)) {
@@ -399,17 +406,15 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
                     }
 
                 }
-
-
             } // else do nothing
             return;
 
-            // finally update encumberances (or try to do it as I'm going
+            // finally update encumbrances
         }
         else if (apDocument instanceof PaymentRequestDocument) {
 
 
-            // get a fresh po
+            // get a fresh purchase order
             PurchaseOrderDocument po = SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(apDocument.getPurchaseOrderIdentifier());
             PaymentRequestDocument preq = (PaymentRequestDocument) apDocument;
 
@@ -443,10 +448,10 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * This method updates fields that could've been changed on ammendment
+     * Updates fields that could've been changed on amendment.
      * 
-     * @param sourceItem
-     * @param destItem
+     * @param sourceItem   The purchase order item from which we're getting the unit price, catalog number and description to be set in the destItem.
+     * @param destItem     The payment request item to which we're setting the unit price, catalog number and description.
      */
     private void updatePossibleAmmendedFields(PurchaseOrderItem sourceItem, PaymentRequestItem destItem) {
         destItem.setPurchaseOrderItemUnitPrice(sourceItem.getItemUnitPrice());
@@ -455,11 +460,11 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * This method updates encumberances
+     * Updates encumberances.
      * 
-     * @param preqItem
-     * @param poItem
-     * @param cmItem
+     * @param preqItem  The payment request item from which we're obtaining the item quantity, unit price and extended price.
+     * @param poItem    The purchase order item from which we're obtaining the invoice total quantity, unit price and invoice total amount.
+     * @param cmItem    The credit memo item whose invoice total quantity, unit price and extended price are to be updated.
      */
     private void updateEncumberances(PaymentRequestItem preqItem, PurchaseOrderItem poItem, CreditMemoItem cmItem) {
         if (poItem.getItemInvoicedTotalQuantity() != null && preqItem.getItemQuantity() != null && poItem.getItemInvoicedTotalQuantity().isLessThan(preqItem.getItemQuantity())) {
@@ -475,10 +480,10 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * This method updates the encumberance related fields.
+     * Updates the encumberance related fields.
      * 
-     * @param purchaseOrderItem
-     * @param cmItem
+     * @param purchaseOrderItem  The purchase order item from which we're obtaining the invoice total quantity, unit price and invoice total amount.
+     * @param cmItem             The credit memo item whose invoice total quantity, unit price and extended price are to be updated.
      */
     private void updateEncumberance(PurchaseOrderItem purchaseOrderItem, CreditMemoItem cmItem) {
         cmItem.setPoInvoicedTotalQuantity(purchaseOrderItem.getItemInvoicedTotalQuantity());
@@ -486,15 +491,16 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         cmItem.setPoExtendedPrice(purchaseOrderItem.getItemInvoicedTotalAmount());
     }
 
+    /**
+     * @see org.kuali.module.purap.service.AccountsPayableService#purchaseOrderItemEligibleForPayment(org.kuali.module.purap.bo.PurchaseOrderItem)
+     */
     public boolean purchaseOrderItemEligibleForPayment(PurchaseOrderItem poi) {
         if (ObjectUtils.isNull(poi)) {
-            // LOG.debug("poi was null");
             throw new RuntimeException("item null in purchaseOrderItemEligibleForPayment ... this should never happen");
         }
 
         // if the po item is not active... skip it
         if (!poi.isItemActiveIndicator()) {
-            // LOG.debug("poi was not active: "+poi.toString());
             return false;
         }
 
@@ -512,7 +518,6 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
             }
             return false;
         }
-
     }
 
 }
