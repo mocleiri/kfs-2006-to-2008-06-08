@@ -693,9 +693,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
             sbFilename.append(System.currentTimeMillis());
             sbFilename.append(".pdf");
 
-            // FIXME RELEASE 3 (hjs) this is very bad; should not be setting the APO indicator to true!!
-            // for testing Generate PO PDF, set the APO to true
-            // po.setPurchaseOrderAutomaticIndicator(true);
             boolean success = SpringContext.getBean(PurchaseOrderService.class).printPurchaseOrderQuotePDF(po, poVendorQuote, baosPDF);
 
             if (!success) {
@@ -757,9 +754,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
             sbFilename.append(System.currentTimeMillis());
             sbFilename.append(".pdf");
 
-            // FIXME RELEASE 3 (hjs) this is very bad; should not be setting the APO indicator to true!!
-            // for testing Generate PO PDF, set the APO to true
-            // po.setPurchaseOrderAutomaticIndicator(true);
             boolean success = SpringContext.getBean(PurchaseOrderService.class).printPurchaseOrderQuoteRequestsListPDF(po, baosPDF);
 
             if (!success) {
@@ -1088,9 +1082,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         return forward;
     }
 
-    /*
-     * TODO RELEASE 3 (KULPURAP-2052, delyea) - QUOTE
-     */
     /**
      * Sets up the PO document for Quote processing.
      * 
@@ -1161,9 +1152,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
-    /*
-     * TODO RELEASE 3 (KULPURAP-2052, delyea) - QUOTE
-     */
     /**
      * Once an awarded Vendor number is present on the PO, verifies the fact, asks the user for confirmation to complete the quoting
      * process with the awarded Vendor, and sets the Vendor information on the purchase order, if confirmation is obtained.
@@ -1264,9 +1252,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
-    /*
-     * TODO RELEASE 3 (KULPURAP-2052, delyea) - QUOTE
-     */
     /**
      * Cancels the process of obtaining quotes. Checks whether any of the quote requests have been transmitted. If none have, tries
      * to obtain confirmation from the user for the cancellation. If confirmation is obtained, clears out the list of Vendors from
