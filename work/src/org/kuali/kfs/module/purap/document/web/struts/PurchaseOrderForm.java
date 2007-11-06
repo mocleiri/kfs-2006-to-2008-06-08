@@ -226,6 +226,7 @@ public class PurchaseOrderForm extends PurchasingFormBase {
             throw new RuntimeException("Workgroup " + authorizedWorkgroup + " not found", e);
         }
 
+        //Temporarily commenting out the check for last transmit date not null
         if (purchaseOrder.getPurchaseOrderLastTransmitDate() != null && purchaseOrder.isPurchaseOrderCurrentIndicator() && !purchaseOrder.isPendingActionIndicator() && purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.OPEN) && (isUserAuthorized || purchaseOrder.getPurchaseOrderAutomaticIndicator())) {
             ExtraButton retransmitButton = (ExtraButton) buttonsMap.get("methodToCall.retransmitPo");
             this.getExtraButtons().add(retransmitButton);
@@ -234,7 +235,7 @@ public class PurchaseOrderForm extends PurchasingFormBase {
         // This is the button to print the pdf on a retransmit document. We're currently sharing the same button image as
         // the button for creating a retransmit document but this may change someday. It should only appear on Retransmit
         // Document.
-        if ((isUserAuthorized || purchaseOrder.getPurchaseOrderAutomaticIndicator()) && this.getEditingMode().containsKey(PurapAuthorizationConstants.PurchaseOrderEditMode.DISPLAY_RETRANSMIT_TAB) && (purchaseOrder instanceof PurchaseOrderRetransmitDocument)) {
+        if ((isUserAuthorized || purchaseOrder.getPurchaseOrderAutomaticIndicator()) && this.getEditingMode().containsKey(PurapAuthorizationConstants.PurchaseOrderEditMode.DISPLAY_RETRANSMIT_TAB) && (documentType.equals(PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_RETRANSMIT_DOCUMENT)) && purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.CHANGE_IN_PROCESS)) {
             ExtraButton printingRetransmitButton = (ExtraButton) buttonsMap.get("methodToCall.printingRetransmitPo");
             this.getExtraButtons().add(printingRetransmitButton);
         }
@@ -247,6 +248,13 @@ public class PurchaseOrderForm extends PurchasingFormBase {
             this.getExtraButtons().add(printButton);
         }
 
+        //This is so that the user can still do the print po if the transmission method is changed to PRINT during amendment, so that
+        //we can fill in the last transmit date to some dates.
+        if (purchaseOrder.getPurchaseOrderTransmissionMethodCode().equals(PurapConstants.POTransmissionMethods.PRINT) && purchaseOrder.getPurchaseOrderLastTransmitDate() == null && purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.OPEN) && purchaseOrder.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus().equals("F")) {
+            ExtraButton printButton = (ExtraButton) buttonsMap.get("methodToCall.firstTransmitPrintPo");
+            this.getExtraButtons().add(printButton);
+        }
+        
         if (purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.CLOSED) && purchaseOrder.isPurchaseOrderCurrentIndicator() && !purchaseOrder.isPendingActionIndicator() && isUserAuthorized) {
             ExtraButton reopenButton = (ExtraButton) buttonsMap.get("methodToCall.reopenPo");
             this.getExtraButtons().add(reopenButton);
