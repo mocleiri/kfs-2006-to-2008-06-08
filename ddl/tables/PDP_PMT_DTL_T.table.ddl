@@ -2,7 +2,7 @@ CREATE TABLE PDP_PMT_DTL_T(
         PMT_DTL_ID                     NUMBER(8) CONSTRAINT PDP_PMT_DTL_TN1 NOT NULL,
         OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PMT_DTL_TN3 NOT NULL, 
-        CUST_PMT_DOC_NBR               VARCHAR2(9),
+        CUST_PMT_DOC_NBR               VARCHAR2(14),
         LST_UPDT_TS                    DATE CONSTRAINT PDP_PMT_DTL_TN4 NOT NULL,
         INV_NBR                        VARCHAR2(25),
         PO_NBR                         VARCHAR2(9),
