@@ -82,7 +82,6 @@ import edu.iu.uis.eden.exception.WorkflowException;
 public class PurchaseOrderAction extends PurchasingActionBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderAction.class);
 
-    // TODO f2f: need a jira for removing the refresh for quotes (3 calls to that method in this class)
     /**
      * @see org.kuali.core.web.struts.action.KualiAction#refresh(org.apache.struts.action.ActionMapping,
      *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -792,10 +791,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         return null;
     }
 
-    /*
-     * TODO PURAP - should this method be transmitting the PO or just setting up the dates? - should this method be saving the
-     * entire PO or just the vendorQuote object (if in fact nothing on the PO is edited)
-     */
     /**
      * Initiates transmission of a PO Quote request.
      * 
@@ -891,7 +886,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         boolean success;
         if (po.isPendingActionIndicator()) {
             success = false;
-            // TODO PURAP - below should be using a propertyName value to show error at a document level.... not field specific
             GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER, PurapKeyConstants.ERROR_PURCHASE_ORDER_IS_PENDING);
         }
         else {
@@ -1103,8 +1097,7 @@ public class PurchaseOrderAction extends PurchasingActionBase {
         }
         document.setStatusCode(PurapConstants.PurchaseOrderStatuses.QUOTE);
         Date currentSqlDate = SpringContext.getBean(DateTimeService.class).getCurrentSqlDate();
-        Date expDate = new Date(currentSqlDate.getTime() + (10 * 24 * 60 * 60 * 1000)); // add 10 days - TODO: need to move this
-                                                                                        // into a DB setting
+        Date expDate = new Date(currentSqlDate.getTime() + (10 * 24 * 60 * 60 * 1000)); // add 10 days 
         document.setPurchaseOrderQuoteDueDate(expDate);
         document.getPurchaseOrderVendorQuotes().clear();
         SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(document);
@@ -1400,10 +1393,6 @@ public class PurchaseOrderAction extends PurchasingActionBase {
 
             // Build out full message.
             if (StringUtils.equals(questionType, PODocumentsStrings.MANUAL_STATUS_CHANGE_QUESTION)) {
-                /*
-                 * THIS MAP MOVED BY DELYEA FROM PurapConstants TO HERE TODO PURAP - The map below is hard coding values that need
-                 * to be coming from the database instead
-                 */
                 Map<String, String> manuallyChangeableStatuses = new HashMap<String, String>();
                 manuallyChangeableStatuses.put(PurchaseOrderStatuses.IN_PROCESS, "In Process");
                 manuallyChangeableStatuses.put(PurchaseOrderStatuses.WAITING_FOR_VENDOR, "Waiting for Vendor");
