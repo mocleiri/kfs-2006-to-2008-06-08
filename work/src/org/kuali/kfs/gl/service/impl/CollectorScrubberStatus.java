@@ -20,7 +20,7 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 
 /**
- * This class represents the status for origin entries through the different orgin entry groups (i.e. input, valid, error, and expired) 
+ * This class represents the status for origin entries through the different origin entry groups (i.e. input, valid, error, and expired) 
  */
 public class CollectorScrubberStatus {
     private OriginEntryGroup inputGroup;
