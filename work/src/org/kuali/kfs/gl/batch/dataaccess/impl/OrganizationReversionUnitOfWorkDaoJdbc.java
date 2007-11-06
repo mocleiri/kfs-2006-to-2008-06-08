@@ -16,12 +16,14 @@
 package org.kuali.module.gl.dao.jdbc;
 
 import org.kuali.core.dao.jdbc.PlatformAwareDaoBaseJdbc;
+import org.kuali.core.dbplatform.RawSQL;
 import org.kuali.module.gl.dao.OrgReversionUnitOfWorkDao;
 
 /**
  * A JDBC implementation of the OrgReversionUnitOfWorkDao...we had to use this because PersistenceService
  * truncated tables, which is something you can't do on tables with primary keys.
  */
+@RawSQL
 public class OrgReversionUnitOfWorkDaoJdbc extends PlatformAwareDaoBaseJdbc implements OrgReversionUnitOfWorkDao {
 
     /**
@@ -29,6 +31,7 @@ public class OrgReversionUnitOfWorkDaoJdbc extends PlatformAwareDaoBaseJdbc impl
      * 
      * @see org.kuali.module.gl.dao.OrgReversionUnitOfWorkDao#destroyAllUnitOfWorkSummaries()
      */
+    @RawSQL
     public void destroyAllUnitOfWorkSummaries() {
         getSimpleJdbcTemplate().update("delete from GL_ORG_RVRSN_CTGRY_AMT_T");
         getSimpleJdbcTemplate().update("delete from GL_ORG_RVRSN_UNIT_WRK_T");
