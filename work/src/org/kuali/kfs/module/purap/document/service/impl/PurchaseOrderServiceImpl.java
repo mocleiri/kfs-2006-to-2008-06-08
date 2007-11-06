@@ -409,9 +409,13 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             SpringContext.getBean(PurApWorkflowIntegrationService.class).takeAllActionsForGivenCriteria(po, "Action taken automatically as part of document initial print transmission by user " + GlobalVariables.getUserSession().getUniversalUser().getPersonName(), NodeDetailEnum.DOCUMENT_TRANSMISSION.getName(), null, KFSConstants.SYSTEM_USER);
         }
         po.setOverrideWorkflowButtons(Boolean.TRUE);
-        attemptSetupOfInitialOpenOfDocument(po);
+        if (po.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.OPEN)) {
+            saveDocumentNoValidation(po);    
+        }
+        else {
+            attemptSetupOfInitialOpenOfDocument(po);
+        }
     }
-
     /**
      * @see org.kuali.module.purap.service.PurchaseOrderService#performPrintPurchaseOrderPDFOnly(java.lang.String,
      *      java.io.ByteArrayOutputStream)
