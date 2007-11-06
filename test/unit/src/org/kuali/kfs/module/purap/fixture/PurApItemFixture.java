@@ -111,8 +111,37 @@ public enum PurApItemFixture {
             false, // itemAssignedToTradeInIndicator
             new KualiDecimal(10000), // extendedPrice
             new KualiDecimal(100) // itemQuantity
+    ), REQ_MULTI_ITEM_QUANTITY(null, // itemIdentifier
+            new Integer(1), // itemLineNumber
+            null, // capitalAssetTransactionTypeCode
+            "PCS", // itemUnitOfMeasureCode
+            "P10M980", // itemCatalogNumber
+            "Copy Paper - 8 1/2 x 11, White, 92, 20lb", // itemDescription
+            "", // itemCapitalAssetNoteText
+            new BigDecimal(30.20), // itemUnitPrice
+            "ITEM", // itemTypeCode
+            "", // itemAuxiliaryPartIdentifier
+            "", // externalOrganizationB2bProductReferenceNumber
+            "", // externalOrganizationB2bProductTypeName
+            false, // itemAssignedToTradeInIndicator
+            new KualiDecimal(604), // extendedPrice
+            new KualiDecimal(20) // itemQuantity
+    ), REQ_MULTI_ITEM_NON_QUANTITY(null, // itemIdentifier
+            new Integer(1), // itemLineNumber
+            null, // capitalAssetTransactionTypeCode
+            "", // itemUnitOfMeasureCode
+            "", // itemCatalogNumber
+            "consulting", // itemDescription
+            "", // itemCapitalAssetNoteText
+            new BigDecimal(5000), // itemUnitPrice
+            "SRVC", // itemTypeCode
+            "", // itemAuxiliaryPartIdentifier
+            "", // externalOrganizationB2bProductReferenceNumber
+            "", // externalOrganizationB2bProductTypeName
+            false, // itemAssignedToTradeInIndicator
+            new KualiDecimal(5000), // extendedPrice
+            null // itemQuantity
     );
-
 
     private Integer itemIdentifier;
     private Integer itemLineNumber;

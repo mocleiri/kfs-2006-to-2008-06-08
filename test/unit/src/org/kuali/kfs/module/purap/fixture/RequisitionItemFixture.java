@@ -36,7 +36,15 @@ public enum RequisitionItemFixture {
             PurApItemFixture.APO_FREIGHT_ITEM_1, // purApItemFixture
             new RequisitionAccountingLineFixture[] { RequisitionAccountingLineFixture.APO_REQ_ACCOUNT_4 } // requisitionAccountMultiFixtures
     ),
-
+    
+    REQ_MULTI_ITEM_QUANTITY(false, // itemRestrictedIndicator
+            PurApItemFixture.REQ_MULTI_ITEM_QUANTITY, // purApItemFixture
+            new RequisitionAccountingLineFixture[] { RequisitionAccountingLineFixture.REQ_ACCOUNT_MULTI_QUANTITY } // requisitionAccountMultiFixtures
+    ),
+    REQ_MULTI_ITEM_NON_QUANTITY(false, // itemRestrictedIndicator
+            PurApItemFixture.REQ_MULTI_ITEM_NON_QUANTITY, // purApItemFixture
+            new RequisitionAccountingLineFixture[] { RequisitionAccountingLineFixture.REQ_ACCOUNT_MULTI_NON_QUANTITY } // requisitionAccountMultiFixtures
+    ),
     REQ_ITEM_NO_APO(false, // itemRestrictedIndicator
             PurApItemFixture.BASIC_QTY_ITEM_NO_APO, // purApItemFixture
             new RequisitionAccountingLineFixture[] { RequisitionAccountingLineFixture.BASIC_REQ_ACCOUNT_1 } // requisitionAccountMultiFixtures
