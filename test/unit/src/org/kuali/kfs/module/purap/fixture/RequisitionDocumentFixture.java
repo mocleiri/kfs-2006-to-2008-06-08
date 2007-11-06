@@ -61,7 +61,32 @@ public enum RequisitionDocumentFixture {
             PurchasingDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purchasingDocumentFixture
             new RequisitionItemFixture[] { RequisitionItemFixture.REQ_QTY_UNRESTRICTED_ITEM_1 } // requisitionItemMultiFixtures
     ),
-
+    REQ_MULTI_QUANTITY(null, // requisitionOrganizationReference1Text
+            null, // requisitionOrganizationReference2Text
+            null, // requisitionOrganizationReference3Text
+            null, // alternate1VendorName
+            null, // alternate2VendorName
+            null, // alternate3VendorName
+            null, // alternate4VendorName
+            null, // alternate5VendorName
+            null, // organizationAutomaticPurchaseOrderLimit
+            PurchasingAccountsPayableDocumentFixture.REQ_MULTI_QUANTITY, // purapDocumentFixture
+            PurchasingDocumentFixture.REQ_MULTI, // purchasingDocumentFixture
+            new RequisitionItemFixture[] { RequisitionItemFixture.REQ_MULTI_ITEM_QUANTITY } // requisitionItemMultiFixtures
+    ),
+    REQ_MULTI_NON_QUANTITY(null, // requisitionOrganizationReference1Text
+            null, // requisitionOrganizationReference2Text
+            null, // requisitionOrganizationReference3Text
+            null, // alternate1VendorName
+            null, // alternate2VendorName
+            null, // alternate3VendorName
+            null, // alternate4VendorName
+            null, // alternate5VendorName
+            null, // organizationAutomaticPurchaseOrderLimit
+            PurchasingAccountsPayableDocumentFixture.REQ_MULTI_NON_QUANTITY, // purapDocumentFixture
+            PurchasingDocumentFixture.REQ_MULTI, // purchasingDocumentFixture
+            new RequisitionItemFixture[] { RequisitionItemFixture.REQ_MULTI_ITEM_NON_QUANTITY } // requisitionItemMultiFixtures
+    ),
     REQ_ALTERNATE_APO(null, // requisitionOrganizationReference1Text
             null, // requisitionOrganizationReference2Text
             null, // requisitionOrganizationReference3Text
