@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.dbplatform.RawSQL;
 import org.kuali.core.util.Guid;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.Options;
@@ -35,6 +36,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 /**
  * Calculate Balance By Object Balance Inquiry Screen
  */
+@RawSQL
 public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase implements AccountBalanceObjectDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceObjectDaoJdbc.class);
 
@@ -53,6 +55,7 @@ public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase imple
      * @see org.kuali.module.gl.dao.AccountBalanceDao#findAccountBalanceByObject(java.lang.Integer, java.lang.String,
      *      java.lang.String, java.lang.String, java.lang.String, boolean, boolean, int)
      */
+    @RawSQL
     public List findAccountBalanceByObject(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectLevelCode, String financialReportingSortCode, boolean isCostShareExcluded, boolean isConsolidated, int pendingEntriesCode) {
         LOG.debug("findAccountBalanceByObject() started");
 
@@ -106,6 +109,7 @@ public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase imple
      * @param options a set of system options
      * @param sessionId the unique web id of the currently inquiring user, used as a key for the temp table
      */
+    @RawSQL
     private void summarizePendingEntriesByObject(Options options, String sessionId) {
         LOG.debug("summarizePendingEntriesByObject() started");
 
@@ -221,6 +225,7 @@ public class AccountBalanceObjectDaoJdbc extends AccountBalanceDaoJdbcBase imple
      * @param pendingEntriesCode whether to summarize all, approved, or no pending entries
      * @return true if any matching pending entries were found, false otherwise
      */
+    @RawSQL
     private boolean getMatchingPendingEntriesByObject(Options options, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectLevelCode, boolean isCostShareExcluded, int pendingEntriesCode, String sessionId) {
         LOG.debug("getMatchingPendingEntriesByObject() started");
 
