@@ -21,6 +21,7 @@ import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 import static org.kuali.test.fixtures.UserNameFixture.RJWEISS;
 import static org.kuali.test.fixtures.UserNameFixture.RORENFRO;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.TransactionalDocumentDictionaryService;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
@@ -99,7 +101,7 @@ public class PurchaseOrderDocumentTest extends KualiTestBase {
         AccountingDocumentTestUtils.routeDocument(poDocument, "saving copy source document", null, documentService);
         WorkflowTestUtils.waitForStatusChange(poDocument.getDocumentHeader().getWorkflowDocument(), "F");        
         //WorkflowTestUtils.waitForNodeChange(poDocument.getDocumentHeader().getWorkflowDocument(), "Open");
-        //assertTrue("Document should now be final.", poDocument.getDocumentHeader().getWorkflowDocument().stateIsFinal());
+        assertTrue("Document should now be final.", poDocument.getDocumentHeader().getWorkflowDocument().stateIsFinal());
     }
 
     @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions=true)
@@ -124,15 +126,13 @@ public class PurchaseOrderDocumentTest extends KualiTestBase {
             Assert.assertEquals(doc1.getPostingPeriodCode(), doc2.getPostingPeriodCode());
         }
         Assert.assertEquals(doc1.getPostingYear(), doc2.getPostingYear());
-        /*
+
         // match important fields in PO
-        Assert.assertEquals(doc1, doc2);
         
         Assert.assertEquals(doc1.getVendorHeaderGeneratedIdentifier(), doc2.getVendorHeaderGeneratedIdentifier());
         Assert.assertEquals(doc1.getVendorDetailAssignedIdentifier(), doc2.getVendorDetailAssignedIdentifier());
         Assert.assertEquals(doc1.getVendorName(), doc2.getVendorName());
         Assert.assertEquals(doc1.getVendorNumber(), doc2.getVendorNumber());
-        Assert.assertEquals(doc1.getAccountsForRouting(), doc2.getAccountsForRouting());
         Assert.assertEquals(doc1.getStatusCode(), doc2.getStatusCode());
 
         Assert.assertEquals(doc1.getChartOfAccountsCode(), doc2.getChartOfAccountsCode());
@@ -149,12 +149,7 @@ public class PurchaseOrderDocumentTest extends KualiTestBase {
         Assert.assertEquals(doc1.getPurchaseOrderPreviousIdentifier(), doc2.getPurchaseOrderPreviousIdentifier());
         Assert.assertEquals(doc1.isPurchaseOrderCurrentIndicator(), doc2.isPurchaseOrderCurrentIndicator());
         Assert.assertEquals(doc1.getPurchaseOrderCreateDate(), doc2.getPurchaseOrderCreateDate());
-        Assert.assertEquals(doc1.getPurchaseOrderLastTransmitDate(), doc2.getPurchaseOrderLastTransmitDate());
-
-        Assert.assertEquals(doc1.getContractManager(), doc2.getContractManager());
-        Assert.assertEquals(doc1.getVendorContract(), doc2.getVendorContract());
-        Assert.assertEquals(doc1.getStatus(), doc2.getStatus());        
-        */
+        Assert.assertEquals(doc1.getPurchaseOrderLastTransmitDate(), doc2.getPurchaseOrderLastTransmitDate());        
     }
     
     private List<PurchaseOrderItem> generateItems() throws Exception {
