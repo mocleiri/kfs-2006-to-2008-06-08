@@ -118,8 +118,34 @@ public enum PurchasingAccountsPayableDocumentFixture {
             "US", // vendorCountryCode
             null, // vendorCustomerNumber
             null), // accountsPayablePurchasingDocumentLinkIdentifier
+    REQ_MULTI_QUANTITY(null, // purapDocumentIdentifier
+            RequisitionStatuses.IN_PROCESS, // statusCode
+            1002, // vendorHeaderGeneratedIdentifier
+            0, // vendorDetailAssignedIdentifier
+            "MK CORPORATION ACTIVE", // vendorName
+            "3894 SOUTH ST", // vendorLine1Address
+            "P.O. BOX 3455", // vendorLine2Address
+            "SPRINGFIELD", // vendorCityName
+            "IL", // vendorStateCode
+            "33555", // vendorPostalCode
+            "US", // vendorCountryCode
+            null, // vendorCustomerNumber
+            null), // accountsPayablePurchasingDocumentLinkIdentifier
+    REQ_MULTI_NON_QUANTITY(null, // purapDocumentIdentifier
+            RequisitionStatuses.IN_PROCESS, // statusCode
+            1016, // vendorHeaderGeneratedIdentifier
+            0, // vendorDetailAssignedIdentifier
+            "PHYSIK INSTRUMENT L.P.", // vendorName
+            "16 AUBURN ST", // vendorLine1Address
+            null, // vendorLine2Address
+            "AUBURN", // vendorCityName
+            "MA", // vendorStateCode
+            "01501", // vendorPostalCode
+            "US", // vendorCountryCode
+            null, // vendorCustomerNumber
+            null), // accountsPayablePurchasingDocumentLinkIdentifier
     ;
-
+    
     public final Integer purapDocumentIdentifier;
     public final String statusCode;
     public final Integer vendorHeaderGeneratedIdentifier;
