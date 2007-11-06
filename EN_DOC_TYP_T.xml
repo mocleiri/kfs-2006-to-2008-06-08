@@ -19,6 +19,16 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="317002" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="5" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_DESC="PayeeAchAccountMaintenanceDocument"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317120"
+        DOC_TYP_LBL_TXT="PayeeAchAccountMaintenanceDocument"
+        DOC_TYP_NM="PayeeAchAccountMaintenanceDocument"
+        DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
     <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
@@ -6281,7 +6291,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="172052" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="3" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="27"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="28"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiSimpleMaintenanceDocument"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
