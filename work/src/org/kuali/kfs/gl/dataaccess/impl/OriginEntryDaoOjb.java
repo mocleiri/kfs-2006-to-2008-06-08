@@ -183,10 +183,10 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * Return an iterator to all documents reference by origin entries in a given group
+     * Return an iterator of keys of all documents referenced by origin entries in a given group
      * 
      * @param oeg Group the origin entry group to find entries in, by origin entry
-     * @return Iterator of Object[] documents in the specified group
+     * @return Iterator of java.lang.Object[] with report data about all of the distinct document numbers/type code/origination code combinations of origin entries in the group
      * @see org.kuali.module.gl.dao.OriginEntryDao#getDocumentsByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public Iterator getDocumentsByGroup(OriginEntryGroup oeg) {
