@@ -94,11 +94,11 @@ public class LedgerReport {
     /**
      * Generate the PDF report with the given information
      * 
-     * @param ledgerEntryHolder
-     * @param reportingDate
-     * @param title
-     * @param fileprefix
-     * @param destinationDirectory
+     * @param ledgerEntryHolder the given holder of ledger entries
+     * @param reportingDate the reporting date
+     * @param title the report title
+     * @param fileprefix the prefix of the generated report file
+     * @param destinationDirectory the directory where the report is located
      */
     private void generatePDFReport(Object ledgerEntryHolder, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
         Document document = new Document(PageSize.A4.rotate());
@@ -133,8 +133,8 @@ public class LedgerReport {
     /**
      * draw a PDF table populated with the data held by ledger entry holder
      * 
-     * @param ledgerEntryHolder
-     * @return
+     * @param ledgerEntryHolder the given holder of ledger entries
+     * @return PdfTable PDF table containing ledger entry information
      */
     public PdfPTable drawPdfTable(Object ledgerEntryHolder) {
         PdfPTable ledgerEntryTable = null;
@@ -149,8 +149,8 @@ public class LedgerReport {
 
     /**
      * Draw a PDF table from a collection
-     * @param entryCollection
-     * @return
+     * @param entryCollection collection of ledger entries
+     * @return PdfTable PDF table containing information about the collection of entries
      */
     private PdfPTable buildPdfTable(Collection entryCollection) {
 
@@ -175,8 +175,8 @@ public class LedgerReport {
 
     /**
      * draw a PDF table from ledger entry holder
-     * @param ledgerEntryHolder
-     * @return
+     * @param ledgerEntryHolder the given holder of ledger entries
+     * @return PdfTable PDF table containing information about the ledget entry holder
      */
     private PdfPTable buildPdfTable(LedgerEntryHolder ledgerEntryHolder) {
         SortedMap ledgerEntries = new TreeMap(ledgerEntryHolder.getLedgerEntries());
@@ -221,7 +221,7 @@ public class LedgerReport {
 
     /**
      * Draw a table with an informative messge, instead of data
-     * @return
+     * @return PdfTable empty PDF table
      */
     private PdfPTable buildEmptyTable() {
         float[] tableWidths = { 100 };
@@ -236,8 +236,9 @@ public class LedgerReport {
 
     /**
      * Add a table header
-     * @param ledgerEntryTable
-     * @param headerFont
+     * 
+     * @param ledgerEntryTable PDF table containing ledger entry information
+     * @param headerFont font for header
      */
     private void addHeader(PdfPTable ledgerEntryTable, Font headerFont) {
 
@@ -275,7 +276,14 @@ public class LedgerReport {
         ledgerEntryTable.addCell(cell);
     }
 
-    // add a row with the given ledger entry into PDF table
+    /**
+     * Add a row with the given ledger entry into PDF table
+     * 
+     * @param ledgerEntryTable PDF table containing ledger entry information
+     * @param ledgerEntry ledger entry
+     * @param textFont font for text
+     * @param isTotal if added row is total row or not
+     */
     private void addRow(PdfPTable ledgerEntryTable, LedgerEntry ledgerEntry, Font textFont, boolean isTotal) {
         PdfPCell cell = null;
         if (isTotal) {
@@ -333,8 +341,8 @@ public class LedgerReport {
     /**
      * Format the given number based on its type: Integer or BigDecimal
      * 
-     * @param number
-     * @return
+     * @param number Integer or BigDecimal to format
+     * @return String number in string format
      */
     private String formatNumber(Number number) {
         DecimalFormat decimalFormat = new DecimalFormat();
@@ -350,6 +358,7 @@ public class LedgerReport {
 
     /**
      * Close the document and release the resource
+     * 
      * @param document
      */
     private void closeDocument(Document document) {
