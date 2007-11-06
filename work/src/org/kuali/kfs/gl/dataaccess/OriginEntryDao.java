@@ -75,10 +75,10 @@ public interface OriginEntryDao {
     public void deleteEntry(OriginEntry oe);
 
     /**
-     * Return an iterator to all documents reference by origin entries in a given group
+     * Return an iterator to all document keys reference by origin entries in a given group
      * 
      * @param oeg Group the origin entry group to find entries in, by origin entry
-     * @return Iterator of Object[] documents in the specified group
+     * @return Iterator of java.lang.Object[] with report data about all of the distinct document numbers/type code/origination code combinations of origin entries in the group
      */
     public Iterator getDocumentsByGroup(OriginEntryGroup oeg);
 
