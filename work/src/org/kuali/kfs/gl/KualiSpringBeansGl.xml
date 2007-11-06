@@ -1366,18 +1366,6 @@
 		</property>
 	</bean>
 
-	<bean id="textFileLoaderStep" class="org.kuali.module.gl.batch.TextFileLoaderStep" parent="step">
-		<property name="originEntryService">
-			<ref bean="originEntryService" />
-		</property>
-	</bean>
-
-	<bean id="textExportStep" class="org.kuali.module.gl.batch.TextExportStep" parent="step">
-		<property name="originEntryService">
-			<ref bean="originEntryService" />
-		</property>
-	</bean>
-
 	<bean id="sufficientFundsSyncStep" class="org.kuali.module.gl.batch.SufficientFundsSyncStep" parent="step">
 		<property name="sufficientFundsSyncService">
 			<ref bean="glSufficientFundsSyncService" />
