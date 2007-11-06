@@ -788,7 +788,7 @@ public class VendorRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * Validates that if US is selcted for the country then the state and zip cannot be empty
+     * Validates that if US is selected for the country then the state and zip cannot be empty
      * 
      * @param addresses VendorAddress which is being validated
      * @return boolean false if the country is United States and there is no state or zip code
@@ -830,7 +830,7 @@ public class VendorRule extends MaintenanceDocumentRuleBase {
         if (ObjectUtils.isNull(addressType)) {
             return false;
         }
-        // Retreiving the Default Address Indicator for this Address Type:
+        // Retrieving the Default Address Indicator for this Address Type:
         return addressType.getVendorDefaultIndicator();
 
     }
@@ -855,7 +855,7 @@ public class VendorRule extends MaintenanceDocumentRuleBase {
         String errorPath = MAINTAINABLE_ERROR_PREFIX + VendorPropertyConstants.VENDOR_ADDRESS + "[" + j + "]";
         GlobalVariables.getErrorMap().addToErrorPath(errorPath);
 
-        // Retreiving the Default Address Indicator for this Address Type:
+        // Retrieving the Default Address Indicator for this Address Type:
         boolean allowDefaultAddressIndicator = findAllowDefaultAddressIndicatorHelper(vendorAddress);
         String addedAddressCampusCode = addedDefaultAddress.getVendorCampusCode();
         String addedAddressTypeCode = vendorAddress.getVendorAddressTypeCode();
@@ -903,7 +903,7 @@ public class VendorRule extends MaintenanceDocumentRuleBase {
         // This is a HashMap to store Address Type Codes and Address Campus Codes for Default Addresses
         HashMap addressTypeDefaultCampus = new HashMap();
 
-        // This is a HashSet for storing only the Address Type Codes which have at leat one default Indicator set to true
+        // This is a HashSet for storing only the Address Type Codes which have at least one default Indicator set to true
         HashSet addressTypesHavingDefaultTrue = new HashSet();
 
         int i = 0;
