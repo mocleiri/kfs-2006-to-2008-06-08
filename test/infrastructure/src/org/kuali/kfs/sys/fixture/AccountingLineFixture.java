@@ -36,8 +36,43 @@ public enum AccountingLineFixture {
 
     DOCUMENT_SERVICE_TEST_LINE(null, null, "BL", "1031400", null, "ADV", "5000", "SSS", "KUL", "Y", "AS", null, null, null, null, GL_DEBIT_CODE, "2.50"), PFIP_SUB_FUND_LINE(2004, null, "BA", "9544900", "AC", null, "9900", null, null, null, null, null, null, "2004", null, null, "1000.00"), SOURCE_LINE(2004, null, "UA", "1912201", "AC", null, "9980", null, "KUL", "F", "AS", null, "01", "2004", "blah", GL_DEBIT_CODE, "1000.00"), EXPENSE_LINE(2004, null, "UA", "1912201", "AC", "BEER", "9900", null, "KUL", "F", "EX", null, "01", "2004", "blah", GL_DEBIT_CODE, "1000.00"), EXPENSE_LINE2(2004, null, "BL", "1031400", "AC", "BLDG", "9900", null, "KUL", "F", "EX", null, null, null, null, GL_DEBIT_CODE, "1000.00"), EXTERNAL_ENCUMBRANCE_LINE(2004, null, "BL", "1031400", "EX", "BLDG", "9900", null, "KUL", "F", "EX", null, "01", "2004", "PE", GL_DEBIT_CODE, "1000.00"),
 
-    FLEXIBLE_EXPENSE_LINE(2004, null, "BL", "2231401", "AC", null, "9900", null, "KUL", "F", "EX", null, "01", "1", "blah", GL_DEBIT_CODE, "1000.00"), CASH_LINE(2004, null, "BA", "6044900", null, null, "8000", null, "BOB", null, "ES", null, null, null, null, null, "1000.00"), LOSSS_ON_RETIRE_LINE(2004, null, "BA", "6044900", null, null, "5137", "CF", "KUL", null, "ES", null, null, null, null, null, "1000.00"), ACCRUED_INCOME_LINE(2004, null, "BA", "6044900", null, null, "8111", null, "KUL", null, "ES", null, "01", "2004", null, null, "1000.00"), ACCRUED_SICK_PAY_LINE(2004, null, "UA", "1912201", null, null, "2998", null, "KUL", null, "ES", null, null, "01", "2004", null, "1000.00"), FUND_BALANCE_LINE(2004, null, "BA", "6044900", null, null, "9899", null, "KUL", null, null, null, null, "01", "2004", GL_DEBIT_CODE, "1000.00"), LINE2_TOF(2004, null, "BL", "1031400", null, null, "1697", null, null, null, "TI", null, null, null, null, null, "1.10"), ;
-
+    FLEXIBLE_EXPENSE_LINE(2004, null, "BL", "2231401", "AC", null, "9900", null, "KUL", "F", "EX", null, "01", "1", "blah", GL_DEBIT_CODE, "1000.00"), CASH_LINE(2004, null, "BA", "6044900", null, null, "8000", null, "BOB", null, "ES", null, null, null, null, null, "1000.00"), LOSSS_ON_RETIRE_LINE(2004, null, "BA", "6044900", null, null, "5137", "CF", "KUL", null, "ES", null, null, null, null, null, "1000.00"), ACCRUED_INCOME_LINE(2004, null, "BA", "6044900", null, null, "8111", null, "KUL", null, "ES", null, "01", "2004", null, null, "1000.00"), ACCRUED_SICK_PAY_LINE(2004, null, "UA", "1912201", null, null, "2998", null, "KUL", null, "ES", null, null, "01", "2004", null, "1000.00"), FUND_BALANCE_LINE(2004, null, "BA", "6044900", null, null, "9899", null, "KUL", null, null, null, null, "01", "2004", GL_DEBIT_CODE, "1000.00"), LINE2_TOF(2004, null, "BL", "1031400", null, null, "1697", null, null, null, "TI", null, null, null, null, null, "1.10"),
+    REQ_ACCOUNT_MULTI_QUANTITY(2004, //postingYear
+            null,                               //sequenceNumber
+            "BL",                               //chartOfAccountsCode
+            "1023200",                    //accountNumber
+            null,                               //balanceTypeCode
+            null,                               //subAccountNumber
+            "4100",                             //financialObjectCode
+            null,                               //financialSubObjectCode
+            null,                              //projectCode
+            null,                                    //encumbranceUpdateCode
+            null,                               //objectTypeCode
+            null,                               //organizationReferenceId
+            null,                               // referenceOriginCode
+            null,                                //referenceNumber
+            null,                             //referenceTypeCode
+            GL_DEBIT_CODE,             //debitCreditCode
+            "100" ),                     // amount
+    REQ_ACCOUNT_MULTI_NON_QUANTITY(2004, //postingYear
+            null,                               //sequenceNumber
+            "BL",                               //chartOfAccountsCode
+            "1023200",                    //accountNumber
+            null,                               //balanceTypeCode
+            null,                               //subAccountNumber
+            "4078",                             //financialObjectCode
+            null,                               //financialSubObjectCode
+            null,                              //projectCode
+            null,                                    //encumbranceUpdateCode
+            null,                               //objectTypeCode
+            null,                               //organizationReferenceId
+            null,                               // referenceOriginCode
+            null,                                //referenceNumber
+            null,                             //referenceTypeCode
+            GL_DEBIT_CODE,             //debitCreditCode
+            "100" ),                     // amount
+    ;
+    
     public final String accountNumber;
     public final String balanceTypeCode;
     public final String chartOfAccountsCode;
