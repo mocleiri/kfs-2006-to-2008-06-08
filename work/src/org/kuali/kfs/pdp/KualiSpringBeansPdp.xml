@@ -152,7 +152,7 @@
 		</property>
 	</bean>
 
-	<bean id="pdpLoadFederalReserveBankDataJob" parent="scheduledJobDescriptor">
+	<bean id="pdpLoadFederalReserveBankDataJob" parent="unscheduledJobDescriptor">
 		<property name="steps">
 			<list>
 				<ref bean="pdpLoadFederalReserveBankDataStep" />
@@ -184,7 +184,7 @@
 		</property>
 	</bean>
 
-	<bean id="pdpExtractChecksJob" parent="scheduledJobDescriptor">
+	<bean id="pdpExtractChecksJob" parent="unscheduledJobDescriptor">
 		<property name="steps">
 			<list>
 				<ref bean="pdpExtractChecksStep" />
