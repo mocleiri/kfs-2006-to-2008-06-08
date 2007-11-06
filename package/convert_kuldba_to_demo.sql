@@ -77,6 +77,23 @@ DELETE
        OR doc_typ_nm LIKE 'MyTest%'
        OR doc_typ_nm LIKE '%TEST%'
        OR doc_typ_nm LIKE 'aintenance%'
+		OR doc_typ_cur_ind = 0
+		OR doc_typ_nm IN ( 
+  'KualiA21LaborDistributionHelpTextMaintenanceDocument'
+, 'KualiA21LaborDistributionReportTypeMaintenanceDocument'
+, 'KualiA21ReportPeriodMaintenanceDocument'
+, 'KualiA21SubAccountMaintenanceDocument'
+, 'KualiBudgetAdjustmentFringeBenefitMoveMaintenanceDocument'
+, 'KualiBudgetConstructionAccountReportsMaintenanceDocument'
+, 'KualiBudgetConstructionAppointmentFundingReasonCodeMaintenanceDocument'
+, 'KualiBudgetConstructionDocument'
+, 'KualiBudgetConstructionDurationMaintenanceDocument'
+, 'KualiBudgetConstructionIntendedIncumbentMaintenanceDocument'
+, 'KualiBudgetConstructionOrganizationReportsMaintenanceDocument'
+, 'KualiBudgetConstructionPositionMaintenanceDocument'
+, 'KualiCalculatedSalaryFoundationTrackerOverrideMaintenanceDocument'
+, 'ProgramMaintenanceDocument'
+)
 )
 )
 /
@@ -90,6 +107,23 @@ DELETE
        OR doc_typ_nm LIKE 'MyTest%'
        OR doc_typ_nm LIKE '%TEST%'
        OR doc_typ_nm LIKE 'aintenance%'
+		OR doc_typ_cur_ind = 0
+		OR doc_typ_nm IN ( 
+  'KualiA21LaborDistributionHelpTextMaintenanceDocument'
+, 'KualiA21LaborDistributionReportTypeMaintenanceDocument'
+, 'KualiA21ReportPeriodMaintenanceDocument'
+, 'KualiA21SubAccountMaintenanceDocument'
+, 'KualiBudgetAdjustmentFringeBenefitMoveMaintenanceDocument'
+, 'KualiBudgetConstructionAccountReportsMaintenanceDocument'
+, 'KualiBudgetConstructionAppointmentFundingReasonCodeMaintenanceDocument'
+, 'KualiBudgetConstructionDocument'
+, 'KualiBudgetConstructionDurationMaintenanceDocument'
+, 'KualiBudgetConstructionIntendedIncumbentMaintenanceDocument'
+, 'KualiBudgetConstructionOrganizationReportsMaintenanceDocument'
+, 'KualiBudgetConstructionPositionMaintenanceDocument'
+, 'KualiCalculatedSalaryFoundationTrackerOverrideMaintenanceDocument'
+, 'ProgramMaintenanceDocument'
+)
 )
 )
 /
@@ -102,6 +136,23 @@ DELETE
        OR doc_typ_nm LIKE 'MyTest%'
        OR doc_typ_nm LIKE '%TEST%'
        OR doc_typ_nm LIKE 'aintenance%'
+		OR doc_typ_cur_ind = 0
+		OR doc_typ_nm IN ( 
+  'KualiA21LaborDistributionHelpTextMaintenanceDocument'
+, 'KualiA21LaborDistributionReportTypeMaintenanceDocument'
+, 'KualiA21ReportPeriodMaintenanceDocument'
+, 'KualiA21SubAccountMaintenanceDocument'
+, 'KualiBudgetAdjustmentFringeBenefitMoveMaintenanceDocument'
+, 'KualiBudgetConstructionAccountReportsMaintenanceDocument'
+, 'KualiBudgetConstructionAppointmentFundingReasonCodeMaintenanceDocument'
+, 'KualiBudgetConstructionDocument'
+, 'KualiBudgetConstructionDurationMaintenanceDocument'
+, 'KualiBudgetConstructionIntendedIncumbentMaintenanceDocument'
+, 'KualiBudgetConstructionOrganizationReportsMaintenanceDocument'
+, 'KualiBudgetConstructionPositionMaintenanceDocument'
+, 'KualiCalculatedSalaryFoundationTrackerOverrideMaintenanceDocument'
+, 'ProgramMaintenanceDocument'
+)
 )
 /
 
@@ -114,6 +165,23 @@ FROM en_doc_typ_t
        OR doc_typ_nm LIKE 'MyTest%'
        OR doc_typ_nm LIKE '%TEST%'
        OR doc_typ_nm LIKE 'aintenance%'
+		OR doc_typ_cur_ind = 0
+		OR doc_typ_nm IN ( 
+  'KualiA21LaborDistributionHelpTextMaintenanceDocument'
+, 'KualiA21LaborDistributionReportTypeMaintenanceDocument'
+, 'KualiA21ReportPeriodMaintenanceDocument'
+, 'KualiA21SubAccountMaintenanceDocument'
+, 'KualiBudgetAdjustmentFringeBenefitMoveMaintenanceDocument'
+, 'KualiBudgetConstructionAccountReportsMaintenanceDocument'
+, 'KualiBudgetConstructionAppointmentFundingReasonCodeMaintenanceDocument'
+, 'KualiBudgetConstructionDocument'
+, 'KualiBudgetConstructionDurationMaintenanceDocument'
+, 'KualiBudgetConstructionIntendedIncumbentMaintenanceDocument'
+, 'KualiBudgetConstructionOrganizationReportsMaintenanceDocument'
+, 'KualiBudgetConstructionPositionMaintenanceDocument'
+, 'KualiCalculatedSalaryFoundationTrackerOverrideMaintenanceDocument'
+, 'ProgramMaintenanceDocument'
+)
 /
 
 -- delete old version document types
