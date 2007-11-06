@@ -723,10 +723,12 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         if (!checkEmptyValue(newAccount.getIncomeStreamFinancialCoaCode())) {
             putFieldError("incomeStreamFinancialCoaCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_COA_CANNOT_BE_EMPTY, new String[] { requiredByLabel, requiredByValue });
             incomeStreamAccountIsValid = false;
+            LOG.info("The income stream chart code is empty and isn't allowed to be.");
         }
         if (!checkEmptyValue(newAccount.getIncomeStreamAccountNumber())) {
             putFieldError("incomeStreamAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_NBR_CANNOT_BE_EMPTY, new String[] { requiredByLabel, requiredByValue });
             incomeStreamAccountIsValid = false;
+            LOG.info("The income stream account number is empty and isn't allowed to be.");
         }
 
         // if both fields aren't present, then we're done
@@ -734,13 +736,30 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             // KULCG-310
             // If the object ID is null then the new account has not yet been saved. It would therefore fail this check even though
             // it satisfies the rule. So, we don't want to check that the reference exists in that case.
-            if (!(newAccount.getIncomeStreamAccountNumber() == newAccount.getAccountNumber() && null == newAccount.getObjectId())) {
-                // do an existence/active test
-                DictionaryValidationService dvService = super.getDictionaryValidationService();
-                boolean referenceExists = dvService.validateReferenceExists(newAccount, "incomeStreamAccount");
-                if (!referenceExists) {
-                    putFieldError("incomeStreamAccountNumber", KFSKeyConstants.ERROR_EXISTENCE, "Income Stream Account: " + newAccount.getIncomeStreamFinancialCoaCode() + "-" + newAccount.getIncomeStreamAccountNumber());
-                    incomeStreamAccountIsValid = false;
+            LOG.info("Income stream account is valid.");
+            LOG.info("newAccount.getIncomeStreamAccountNumber is " + newAccount.getIncomeStreamAccountNumber());
+            LOG.info("newAccount.getAccountNumber is " + newAccount.getAccountNumber());
+            LOG.info("newAccount.getVersionNumber is " + newAccount.getVersionNumber());
+            
+            if(null == newAccount.getVersionNumber()) {
+                if (null != newAccount.getAccountNumber() && !newAccount.getAccountNumber().equals(newAccount.getIncomeStreamAccountNumber())) {
+                    // do an existence/active test
+                    DictionaryValidationService dvService = super.getDictionaryValidationService();
+                    boolean referenceExists = dvService.validateReferenceExists(newAccount, "incomeStreamAccount");
+                    if (!referenceExists) {
+                        putFieldError("incomeStreamAccountNumber", KFSKeyConstants.ERROR_EXISTENCE, "Income Stream Account: " + newAccount.getIncomeStreamFinancialCoaCode() + "-" + newAccount.getIncomeStreamAccountNumber());
+                        incomeStreamAccountIsValid = false;
+                    }
+                }
+            } else {
+                if (newAccount.getIncomeStreamAccountNumber() != newAccount.getAccountNumber()) {
+                    // do an existence/active test
+                    DictionaryValidationService dvService = super.getDictionaryValidationService();
+                    boolean referenceExists = dvService.validateReferenceExists(newAccount, "incomeStreamAccount");
+                    if (!referenceExists) {
+                        putFieldError("incomeStreamAccountNumber", KFSKeyConstants.ERROR_EXISTENCE, "Income Stream Account: " + newAccount.getIncomeStreamFinancialCoaCode() + "-" + newAccount.getIncomeStreamAccountNumber());
+                        incomeStreamAccountIsValid = false;
+                    }
                 }
             }
         }
