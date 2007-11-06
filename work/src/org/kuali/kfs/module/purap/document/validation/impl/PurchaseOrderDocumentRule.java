@@ -230,7 +230,6 @@ public class PurchaseOrderDocumentRule extends PurchasingDocumentRuleBase {
             errorMap.putError(VendorPropertyConstants.VENDOR_NAME, PurapKeyConstants.ERROR_NONEXIST_VENDOR);
         }
         if (StringUtils.isBlank(poDocument.getVendorCountryCode())) {
-            // TODO can't this be done by the data dictionary?
             valid = false;
             errorMap.putError(PurapPropertyConstants.VENDOR_COUNTRY_CODE, KFSKeyConstants.ERROR_REQUIRED);
         }
