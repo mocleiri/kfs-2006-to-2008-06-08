@@ -226,7 +226,6 @@ public class PurchaseOrderForm extends PurchasingFormBase {
             throw new RuntimeException("Workgroup " + authorizedWorkgroup + " not found", e);
         }
 
-        //Temporarily commenting out the check for last transmit date not null
         if (purchaseOrder.getPurchaseOrderLastTransmitDate() != null && purchaseOrder.isPurchaseOrderCurrentIndicator() && !purchaseOrder.isPendingActionIndicator() && purchaseOrder.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.OPEN) && (isUserAuthorized || purchaseOrder.getPurchaseOrderAutomaticIndicator())) {
             ExtraButton retransmitButton = (ExtraButton) buttonsMap.get("methodToCall.retransmitPo");
             this.getExtraButtons().add(retransmitButton);
