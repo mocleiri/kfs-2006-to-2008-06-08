@@ -446,7 +446,6 @@ public class CreditMemoServiceImpl implements CreditMemoService {
             throw new RuntimeException(e.getMessage());
         }
 
-        // FIXME shouldn't be using springcontext inside a service, but having problems with adding to spring bean file (hjs)
         SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(cmDocument, "");
         LOG.debug("cancelExtractedCreditMemo() CM " + cmDocument.getPurapDocumentIdentifier() + " Cancelled Without Workflow");
         LOG.debug("cancelExtractedCreditMemo() ended");
