@@ -208,15 +208,6 @@ public class PurchaseOrderForm extends PurchasingFormBase {
      * Adds buttons to appear on the Purchase Order Form according to certain conditions.
      */
     public void addButtons() {
-        // TODO: Find out and add logic about which buttons to appear in
-        // which condition e.g. we might not want to display the close button
-        // on a PO with status CLOSE or the open button on a PO with status OPEN, etc.
-
-        // TODO: Think about using a MAP with key of 'methodToCall' string and value of ExtraButton object
-        // so that button duplication never occurs.
-        // Only problem would be if same 'methodToCall' string was used on two different button images...
-        // in which case an if-else could be fix
-
         Map buttonsMap = createButtonsMap();
 
         String documentType = this.getDocument().getDocumentHeader().getWorkflowDocument().getDocumentType();
