@@ -51,30 +51,19 @@ public class PrintServiceImpl implements PrintService {
     private static Log LOG = LogFactory.getLog(PrintServiceImpl.class);
     private static final boolean TRANSMISSION_IS_RETRANSMIT = true;
     private static final boolean TRANSMISSION_IS_NOT_RETRANSMIT = !TRANSMISSION_IS_RETRANSMIT;
+
     private ImageDao imageDao;
-    // private PurchaseOrderVendorStipulationsService purchaseOrderVendorStipulationsService;
-    // private VendorService vendorService;
-    // private ReferenceService referenceService;
-    // private PurchaseOrderContractLanguageDao purchaseOrderContractLanguageDao;
-    // private UserService userService;
     private ParameterService parameterService;
     private BusinessObjectService businessObjectService;
-
 
     public void setParameterService(ParameterService parameterService) {
         this.parameterService = parameterService;
     }
 
-    /**
-     * @param imageDao The imageDao to set
-     */
     public void setImageDao(ImageDao imageDao) {
         this.imageDao = imageDao;
     }
 
-    /**
-     * @param businessObjectService The businessObjectService to set
-     */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
     }
@@ -97,14 +86,8 @@ public class PrintServiceImpl implements PrintService {
             String deliveryCampusName = pdfParameters.getCampusParameter().getCampus().getCampusName();
             poQuoteRequestsPdf.generatePOQuoteRequestsListPdf(po, byteArrayOutputStream);
             if (pdfParameters.isUseImage()) {
-                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation()); // Removes
-                // temporary
-                // images;
-                // only
-                // need
-                // to
-                // call
-                // once.
+                // Removes temporary images; only need to call once.
+                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation()); 
             }
         }
         catch (PurError pe) {
@@ -131,25 +114,6 @@ public class PrintServiceImpl implements PrintService {
      * @return Collection of ServiceError objects
      */
     public Collection savePurchaseOrderQuoteRequestsListPdf(PurchaseOrderDocument po) {
-        /*
-         * TODO: Uncomment this method when we find out what to do for Kuali LOG.debug("savePurchaseOrderQuoteRequestsListPdf()
-         * started"); LOG.debug("savePurchaseOrderQuoteRequestsListPdf() started"); String pdfQuotesRequestsListFilename =
-         * "PURAP_PO_"+po.getId().toString()+"_Quotes_Requests_List_"+System.currentTimeMillis()+".pdf";
-         * PurchaseOrderQuoteRequestsPdf poQuoteRequestsPdf = new PurchaseOrderQuoteRequestsPdf(); Collection pdfErrorsIn = new
-         * ArrayList(); Collection pdfErrorsOut = new ArrayList(); String pdfFileLocation =
-         * applicationSettingService.getString("PDF_DIRECTORY"); if (pdfFileLocation == null) {
-         * LOG.debug("savePurchaseOrderQuoteRequestsListPdf() ended"); throw new ConfigurationException("Application Setting
-         * PDF_DIRECTORY is missing."); } try { pdfErrorsIn = poQuoteRequestsPdf.savePOQuoteRequestsListPdf(po, pdfFileLocation,
-         * pdfQuotesRequestsListFilename); } catch (PurError e) { ServiceError se = new ServiceError("errors","error.blank");
-         * se.addParameter(e.getMessage()); pdfErrorsIn.add(se); } finally { try { poQuoteRequestsPdf.deletePdf(pdfFileLocation,
-         * pdfQuotesRequestsListFilename); } catch (Throwable e) { LOG.error("savePurchaseOrderQuoteRequestsListPdf() Error deleting
-         * Quote Requests PDF" + pdfQuotesRequestsListFilename + " - Exception was " + e.getMessage(), e); ServiceError se = new
-         * ServiceError("errors","error.blank"); se.addParameter("Your PO Quote Requests PDF was saved successfully but an error
-         * occurred. Please report this problem to Purchasing"); pdfErrorsIn.add(se); } } if (!pdfErrorsIn.isEmpty()) { for
-         * (Iterator iter = pdfErrorsIn.iterator(); iter.hasNext();) { String errorMessage = (String) iter.next(); ServiceError se =
-         * new ServiceError("pdf.error", errorMessage); pdfErrorsOut.add(se); } } LOG.debug("savePurchaseOrderQuoteRequestsListPdf()
-         * ended"); return pdfErrorsOut;
-         */
         return null;
     }
 
@@ -259,8 +223,7 @@ public class PrintServiceImpl implements PrintService {
         return pdfParameters;
     }
 
-    /*******************************************************************************************************************************
-     * /** Create the Purchase Order Quote Pdf document and send it back to the Action so that it can be dealt with.
+    /** Create the Purchase Order Quote Pdf document and send it back to the Action so that it can be dealt with.
      * 
      * @param po PurchaseOrderDocument that holds the Quote
      * @param povq PurchaseOrderVendorQuote that is being transmitted to
@@ -278,14 +241,8 @@ public class PrintServiceImpl implements PrintService {
             String deliveryCampusName = pdfParameters.getCampusParameter().getCampus().getCampusName();
             poQuotePdf.generatePOQuotePDF(po, povq, deliveryCampusName, pdfParameters.getContractManagerCampusCode(), pdfParameters.getLogoImage(), byteArrayOutputStream, environment);
             if (pdfParameters.isUseImage()) {
-                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation()); // Removes
-                // temporary
-                // images;
-                // only
-                // need
-                // to
-                // call
-                // once.
+                // Removes temporary images; only need to call once.
+                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation());
             }
         }
         catch (PurError pe) {
@@ -325,14 +282,8 @@ public class PrintServiceImpl implements PrintService {
             String deliveryCampusName = pdfParameters.getCampusParameter().getCampus().getCampusName();
             poQuotePdf.savePOQuotePDF(po, povq, pdfParameters.getPdfFileLocation(), pdfQuoteFilename, deliveryCampusName, pdfParameters.getContractManagerCampusCode(), pdfParameters.getLogoImage(), environment);
             if (pdfParameters.isUseImage()) {
-                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation()); // Removes
-                // temporary
-                // images;
-                // only
-                // need
-                // to
-                // call
-                // once.
+                // Removes temporary images; only need to call once.
+                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation());
             }
         }
         catch (PurError e) {
@@ -450,15 +401,8 @@ public class PrintServiceImpl implements PrintService {
             PurchaseOrderPdfParameters pdfParameters = getPurchaseOrderPdfParameters(po);
             poPdf.generatePdf(po, pdfParameters, byteArrayOutputStream, isRetransmit, environment, retransmitItems);
             if (pdfParameters.isUseImage()) {
-                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation()); // Removes
-                // the
-                // temporary
-                // images;
-                // only
-                // need
-                // to
-                // call
-                // once.
+                // Removes temporary images; only need to call once.
+                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation());
             }
         }
         catch (PurError e) {
@@ -508,15 +452,8 @@ public class PrintServiceImpl implements PrintService {
             pdfParameters = getPurchaseOrderPdfParameters(po);
             poPdf.savePdf(po, pdfParameters, isRetransmit, environment);
             if (pdfParameters.isUseImage()) {
-                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation()); // Removes
-                // the
-                // temporary
-                // images;
-                // only
-                // need
-                // to
-                // call
-                // once.
+                // Removes temporary images; only need to call once.
+                imageDao.removeImages(po.getPurapDocumentIdentifier().toString(), pdfParameters.getImageTempLocation());
             }
         }
         catch (PurError e) {
@@ -536,7 +473,6 @@ public class PrintServiceImpl implements PrintService {
                 errors.add("Error while deleting the pdf after savePurchaseOrderPdf" + e.getMessage());
             }
         }
-
 
         LOG.debug("savePurchaseOrderPdf() ended");
         return errors;
