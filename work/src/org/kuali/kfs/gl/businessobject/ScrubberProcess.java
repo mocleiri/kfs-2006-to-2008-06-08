@@ -217,13 +217,6 @@ public class ScrubberProcess {
     public ScrubberStatus scrubCollectorBatch(CollectorBatch batch, CollectorReportData collectorReportData) {
         collectorMode = true;
 
-        /*
-         * / explicit service dependence if (!(originEntryService instanceof MemoryOriginEntryServiceImpl && originEntryGroupService
-         * instanceof MemoryOriginEntryServiceImpl && originEntryGroupService == originEntryService)) { // when doing the collector
-         * scrubbing, we have an explicit dependence on the service implementation of the originEntryGroupService and
-         * originEntryService throw new IllegalStateException("service configuration error: collector scrubbing requires a special
-         * service implementation"); }
-         */
         OriginEntryGroup group = originEntryGroupService.createGroup(batch.getTransmissionDate(), OriginEntrySource.COLLECTOR, false, false, false);
         for (OriginEntryFull originEntry : batch.getOriginEntries()) {
             originEntry.setGroup(group);
