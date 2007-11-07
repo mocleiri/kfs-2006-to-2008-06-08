@@ -22,7 +22,10 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.service.ParameterService;
 import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.test.ConfigureContext;
+import org.kuali.test.suite.AnnotationTestSuite;
+import org.kuali.test.suite.PreCommitSuite;
 
+@AnnotationTestSuite(PreCommitSuite.class)
 @ConfigureContext
 public class SpringAOPUsageTest extends KualiTestBase {
     public void testParameterCacheClearing() throws Exception {
