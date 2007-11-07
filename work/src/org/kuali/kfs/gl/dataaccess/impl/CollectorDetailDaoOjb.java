@@ -27,6 +27,9 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CollectorDetail;
 import org.kuali.module.gl.dao.CollectorDetailDao;
 
+/**
+ * An OJB implementation of the CollectorDetailDao
+ */
 public class CollectorDetailDaoOjb extends PlatformAwareDaoBaseOjb implements CollectorDetailDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CollectorDetailDaoOjb.class);
 
@@ -60,7 +63,7 @@ public class CollectorDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Co
 
     /**
      * Save specific collector detail
-     * 
+     * @param detail the CollectorDetail to save
      * @see org.kuali.module.gl.dao.CollectorDetailDao#save(org.kuali.module.gl.bo.CollectorDetail)
      */
     public void save(CollectorDetail detail) {
@@ -72,7 +75,7 @@ public class CollectorDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Co
     /**
      * Retrieves the DB table name that's mapped to instances of CollectorDetail by finding the class descriptor name from the
      * class descriptor respository 
-     * 
+     * @return the table name where collector details are saved to
      * @see org.kuali.module.gl.dao.CollectorDetailDao#retrieveCollectorDetailTableName()
      */
     public String retrieveCollectorDetailTableName() {
