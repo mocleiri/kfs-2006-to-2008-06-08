@@ -576,29 +576,6 @@
         RULE_ATTRIB_LBL_TXT="Kuali Payment Reason Searchable Attribute"
         RULE_ATTRIB_NM="KualiPaymentReasonSearchableAttribute"
         RULE_ATTRIB_TYP="SearchableXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;searchingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;disbVchrPaymentReasonCode&quot; title=&quot;kuali_dd_label(DisbursementVoucherPayeeDetail)&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;quickfinder appliesTo=&quot;disbVchrPaymentReasonCode&quot; draw=&quot;true&quot; service=&quot;workflow-org.kuali.module.financial.bo.PaymentReasonCode-Lookupable(workflow-code:disbVchrPaymentReasonCode)&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//document/dvPayeeDetail/disbVchrPaymentReasonCode')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/searchingConfig>"/>
-    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="14"
-        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiXmlRuleAttributeImpl"
-        RULE_ATTRIB_DESC="SubFund Group Both Accounting Lines Reporting"
-        RULE_ATTRIB_ID="8951"
-        RULE_ATTRIB_LBL_TXT="SubFund Group Reporting"
-        RULE_ATTRIB_NM="KualiReportingSubFundGroupAttribute"
-        RULE_ATTRIB_TYP="RuleXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;routingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;subFundGroupCode&quot; title=&quot;kuali_dd_label(SubFundGroup)&quot; workflowType=&quot;REPORT&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;validation required=&quot;true&quot;/>&#xd;&#xa;          &lt;quickfinder appliesTo=&quot;subFundGroupCode&quot; draw=&quot;true&quot; service=&quot;workflow-org.kuali.module.chart.bo.SubFundGroup-Lookupable(null)&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//org.kuali.core.bo.SourceAccountingLine/account/subFundGroupCode') = wf:ruledata('subFundGroupCode') or wf:xstreamsafe('//org.kuali.core.bo.TargetAccountingLine/account/subFundGroupCode') = wf:ruledata('subFundGroupCode')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/routingConfig>"/>
-    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="10"
-        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiReportingAccountAttribute"
-        RULE_ATTRIB_DESC="Account Both Accounting Lines Reporting"
-        RULE_ATTRIB_ID="8973"
-        RULE_ATTRIB_LBL_TXT="Account Group Reporting"
-        RULE_ATTRIB_NM="KualiReportingAccountAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
-    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="10"
-        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiReportingChartAttribute"
-        RULE_ATTRIB_DESC="Chart Both Accounting Lines Reporting"
-        RULE_ATTRIB_ID="8976" RULE_ATTRIB_LBL_TXT="Chart Reporting"
-        RULE_ATTRIB_NM="KualiReportingChartAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
-    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="11"
-        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiReportingOrgReviewAttribute"
-        RULE_ATTRIB_DESC="Org Both Accounting Lines Reporting"
-        RULE_ATTRIB_ID="8979" RULE_ATTRIB_LBL_TXT="Org Reporting"
-        RULE_ATTRIB_NM="KualiReportingOrgAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
     <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="17"
         RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiXmlRuleAttributeImpl"
         RULE_ATTRIB_DESC="Fund Group Source Accounting Line Routing"
