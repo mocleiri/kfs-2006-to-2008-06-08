@@ -843,9 +843,6 @@
 		<property name="dataDictionaryService">
 			<ref bean="dataDictionaryService" />
 		</property>
-		<property name="laborInquiryOptionsService">
-			<ref bean="laborInquiryOptionsService" />
-		</property>
 		<property name="laborDao">
 			<ref bean="laborDao" />
 		</property>		
