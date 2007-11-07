@@ -165,7 +165,7 @@ public class CreditMemoServiceImpl implements CreditMemoService {
             if (item.getItemType().isItemTypeAboveTheLineIndicator() && !item.getItemType().isQuantityBasedGeneralLedgerIndicator()) {
                 item.setItemUnitPrice(new BigDecimal(item.getExtendedPrice().toString()));
             }
-            // make restocking fee is negative
+            // make sure restocking fee is negative
             else if (StringUtils.equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_RESTCK_FEE_CODE, item.getItemTypeCode())) {
                 item.setExtendedPrice(item.getExtendedPrice().abs().negated());
                 if (item.getItemUnitPrice() != null) {
@@ -175,8 +175,6 @@ public class CreditMemoServiceImpl implements CreditMemoService {
         }
 
         // proration
-        // TODO (KULPURAP-1575: ckirschenman) move this to the accounts payable service and call, since it is essentially the
-        // easiest case from that
         if (cmDocument.isSourceVendor()) {
             // no proration on vendor
             return;
@@ -282,8 +280,6 @@ public class CreditMemoServiceImpl implements CreditMemoService {
      * @see org.kuali.module.purap.service.CreditMemoService#reopenClosedPO(org.kuali.module.purap.document.CreditMemoDocument)
      */
     public void reopenClosedPO(CreditMemoDocument cmDocument) {
-
-        // TODO (KULPURAP-1576: dlemus) CHRIS/DELYEA - THIS SHOULD HAPPEN WITH GL AND PERCENT CONVERT AT 'route document'
         // reopen PO if closed
         Integer purchaseOrderDocumentId = cmDocument.getPurchaseOrderIdentifier();
         if (cmDocument.isSourceDocumentPaymentRequest() && ObjectUtils.isNull(purchaseOrderDocumentId)) {
@@ -295,7 +291,7 @@ public class CreditMemoServiceImpl implements CreditMemoService {
             PurchaseOrderDocument purchaseOrderDocument = purchaseOrderService.getCurrentPurchaseOrder(purchaseOrderDocumentId);
             // only reopen if the po is not null, it does not have a pending change already scheduled, and it is in closed status
             if (ObjectUtils.isNotNull(purchaseOrderDocument) && (!purchaseOrderDocument.isPendingActionIndicator()) && PurapConstants.PurchaseOrderStatuses.CLOSED.equals(purchaseOrderDocument.getStatusCode())) {
-                // TODO (KULPURAP-1576: dlemus) call reopen purchasing order service method when avaliable
+
             }
         }
     }
@@ -396,11 +392,11 @@ public class CreditMemoServiceImpl implements CreditMemoService {
     }
 
     /**
-     * Updates the status of a credit memo document.
+     * Updates the status of a credit memo document, currently this is used by the cancel action
      * 
      * @param currentNodeName  The string representing the current node to be used to obtain the canceled status code.
      * @param cmDoc            The credit memo document to be updated.
-     * @return                 The string representing the canceledStatusCode.
+     * @return                 The string representing the canceledStatusCode, if empty it is assumed to be not from workflow. 
      */
     private String updateStatusByNode(String currentNodeName, CreditMemoDocument cmDoc) {
         // update the status on the document
