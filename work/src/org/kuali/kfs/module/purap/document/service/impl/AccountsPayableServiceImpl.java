@@ -315,7 +315,7 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
     }
 
     /**
-     * Determines if the user is a fiscal officer.
+     * Determines if the user is a fiscal officer.  Currently this only checks the doc and workflow status for approval requested
      * 
      * @param document  The document to be used to check the status code and whether the workflow approval is requested.
      * @param user      The current user.
@@ -355,7 +355,6 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
             return;
         }
         if (apDocument instanceof CreditMemoDocument) {
-            // TODO: merge this CM code with below PREQ code, it is almost identical
             CreditMemoDocument cm = (CreditMemoDocument) apDocument;
             if (cm.isSourceDocumentPaymentRequest()) {
                 // just update encumberances, items shouldn't change, get to them through po (or through preq)
