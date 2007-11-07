@@ -35,8 +35,6 @@ import org.kuali.core.service.DataDictionaryService;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.test.ConfigureContext;
-import org.kuali.test.suite.RelatesTo;
-import org.kuali.test.suite.RelatesTo.JiraIssue;
 
 @ConfigureContext
 public class DataDictionaryConfigurationTest extends KualiTestBase {
@@ -45,7 +43,6 @@ public class DataDictionaryConfigurationTest extends KualiTestBase {
     private Map<String, Exception> dataDictionaryLoadFailures;
     private Map<String, String> dataDictionaryWarnings;
 
-    @RelatesTo(JiraIssue.KULRNE6047)
     public void testLoadDataDictionaryConfiguration() throws Exception {
         loadDataDictionary();
         StringBuffer failureMessage = new StringBuffer("Unable to load DataDictionaryEntrys for some file locations:");
@@ -62,7 +59,6 @@ public class DataDictionaryConfigurationTest extends KualiTestBase {
         assertTrue(failureMessage.toString(), dataDictionaryLoadFailures.isEmpty());
     }
 
-    @RelatesTo(JiraIssue.KULRNE6048)
     public void testAllDataDictionaryDocumentTypesExistInDocumentTypeTable() throws Exception {
         loadDataDictionary();
         List<String> documentTypeCodes = new ArrayList<String>();
@@ -89,7 +85,6 @@ public class DataDictionaryConfigurationTest extends KualiTestBase {
 
     }
 
-    @RelatesTo(JiraIssue.KULRNE6049)
     public void testAllDataDicitionaryDocumentTypesExistInWorkflowDocumentTypeTable() throws Exception {
         loadDataDictionary();
         List<String> workflowDocumentTypeNames = new ArrayList<String>();
