@@ -15,6 +15,8 @@ public class NonInvoicedDistributionMove extends PersistableBusinessObjectBase {
 	private String referenceFinancialDocumentNumber;
 	private KualiDecimal financialDocumentLineAmount;
 
+    private AccountsReceivableDocumentHeader accountsReceivableDocumentHeader;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -105,17 +107,34 @@ public class NonInvoicedDistributionMove extends PersistableBusinessObjectBase {
 		this.financialDocumentLineAmount = financialDocumentLineAmount;
 	}
 
+    /**
+     * Gets the accountsReceivableDocumentHeader attribute. 
+     * @return Returns the accountsReceivableDocumentHeader.
+     */
+    public AccountsReceivableDocumentHeader getAccountsReceivableDocumentHeader() {
+        return accountsReceivableDocumentHeader;
+    }
 
-	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * Sets the accountsReceivableDocumentHeader attribute value.
+     * @param accountsReceivableDocumentHeader The accountsReceivableDocumentHeader to set.
+     * @deprecated
+     */
+    public void setAccountsReceivableDocumentHeader(AccountsReceivableDocumentHeader accountsReceivableDocumentHeader) {
+        this.accountsReceivableDocumentHeader = accountsReceivableDocumentHeader;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("documentNumber", this.documentNumber);
         if (this.financialDocumentLineNumber != null) {
             m.put("financialDocumentLineNumber", this.financialDocumentLineNumber.toString());
         }
         m.put("referenceFinancialDocumentNumber", this.referenceFinancialDocumentNumber);
-	    return m;
+        return m;
     }
+
 }

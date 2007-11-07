@@ -511,9 +511,6 @@
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="retirementReasonName" column="AST_RETIRE_REAS_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="active" column="ROW_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-	<reference-descriptor name="retirementReason" class-ref="org.kuali.module.cams.bo.AssetRetirementDocument" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="retirementReasonCode" />
-	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.cams.bo.AssetRetirementDocument" table="CM_AST_RETIREDOC_T">

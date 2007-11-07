@@ -69,6 +69,10 @@
 	<field-descriptor name="over30InvoiceAmount" column="OVER30_INV_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="over60InvoiceAmount" column="OVER60_INV_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="over90InvoiceAmount" column="OVER90_INV_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
+
+	<reference-descriptor name="customer" class-ref="org.kuali.module.ar.bo.Customer" auto-retrieve="true" auto-update="none" auto-delete="none">
+		<foreignkey field-ref="customerNumber" />
+	</reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.ar.bo.BankAccountType" table="AR_BANK_ACCT_TYP_T">
@@ -242,6 +246,10 @@
 	<reference-descriptor name="customerParentCompany" class-ref="org.kuali.module.ar.bo.Customer" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="customerParentCompanyNumber" />
 	</reference-descriptor>
+    <collection-descriptor name="customerInternalNotes" element-class-ref="org.kuali.module.ar.bo.CustomerInternalNote" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
+        <orderby name="customerInternalNoteCreateTimestamp" sort="ASC" />
+        <inverse-foreignkey field-ref="customerNumber" />
+    </collection-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.ar.bo.NonAppliedHolding" table="AR_NON_APLD_HLDG_T">
@@ -279,7 +287,7 @@
     <reference-descriptor name="accountsReceivableDocumentHeader" class-ref="org.kuali.module.ar.bo.AccountsReceivableDocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="documentNumber" />
     </reference-descriptor>
-    <collection-descriptor name="cashControlDetails" element-class-ref="org.kuali.module.ar.bo.CashControlDetail" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
+    <collection-descriptor name="cashControlDetails" element-class-ref="org.kuali.module.ar.bo.CashControlDetail" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <orderby name="referenceFinancialDocumentNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
@@ -440,7 +448,7 @@
 	<reference-descriptor name="customerSpecialProcessing" class-ref="org.kuali.module.ar.bo.CustomerProcessingType" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="customerSpecialProcessingCode" />
 	</reference-descriptor>
-    <collection-descriptor name="invoiceDetails" element-class-ref="org.kuali.module.ar.bo.InvoiceDetail" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
+    <collection-descriptor name="invoiceDetails" element-class-ref="org.kuali.module.ar.bo.InvoiceDetail" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <orderby name="invoiceItemNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
@@ -694,7 +702,7 @@
 		<foreignkey field-ref="processingChartOfAccountCode" />
 		<foreignkey field-ref="processingOrganizationCode" />
 	</reference-descriptor>
-    <collection-descriptor name="invoiceOrPaymentItems" element-class-ref="org.kuali.module.ar.bo.InvoiceOrPaymentItem" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none">
+    <collection-descriptor name="invoiceOrPaymentItems" element-class-ref="org.kuali.module.ar.bo.InvoiceOrPaymentItem" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
         <orderby name="invoiceItemNumber" sort="ASC" />
         <inverse-foreignkey field-ref="documentNumber" />
     </collection-descriptor>
@@ -1085,6 +1093,10 @@
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="financialDocumentLineAmount" column="FDOC_LINE_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
+
+    <reference-descriptor name="accountsReceivableDocumentHeader" class-ref="org.kuali.module.ar.bo.AccountsReceivableDocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
+        <foreignkey field-ref="documentNumber" />
+    </reference-descriptor>
 </class-descriptor>
 
 <class-descriptor class="org.kuali.module.ar.bo.NonInvoicedMove" table="AR_NON_INV_MT">

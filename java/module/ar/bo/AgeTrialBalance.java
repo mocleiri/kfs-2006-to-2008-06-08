@@ -18,6 +18,8 @@ public class AgeTrialBalance extends PersistableBusinessObjectBase {
 	private KualiDecimal over60InvoiceAmount;
 	private KualiDecimal over90InvoiceAmount;
 
+    private Customer customer;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -171,14 +173,31 @@ public class AgeTrialBalance extends PersistableBusinessObjectBase {
 		this.over90InvoiceAmount = over90InvoiceAmount;
 	}
 
+    /**
+     * Gets the customer attribute. 
+     * @return Returns the customer.
+     */
+    public Customer getCustomer() {
+        return customer;
+    }
 
-	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
+    /**
+     * Sets the customer attribute value.
+     * @param customer The customer to set.
+     * @deprecated
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("personUniversalIdentifier", this.personUniversalIdentifier);
         m.put("customerNumber", this.customerNumber);
-	    return m;
+        return m;
     }
+
 }

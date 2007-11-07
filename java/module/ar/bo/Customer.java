@@ -2,6 +2,8 @@ package org.kuali.module.ar.bo;
 
 import java.sql.Date;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
@@ -34,11 +36,14 @@ public class Customer extends PersistableBusinessObjectBase {
 
 	private Customer customerParentCompany;
 
+    private List<CustomerInternalNote> customerInternalNotes;
+    
 	/**
 	 * Default constructor.
 	 */
 	public Customer() {
-
+        customerInternalNotes = new ArrayList<CustomerInternalNote>();
+        
 	}
 
 	/**
@@ -480,12 +485,29 @@ public class Customer extends PersistableBusinessObjectBase {
 		this.customerParentCompany = customerParentCompany;
 	}
 
-	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("customerNumber", this.customerNumber);
-	    return m;
+    /**
+     * Gets the customerInternalNotes attribute. 
+     * @return Returns the customerInternalNotes.
+     */
+    public List<CustomerInternalNote> getCustomerInternalNotes() {
+        return customerInternalNotes;
     }
+
+    /**
+     * Sets the customerInternalNotes attribute value.
+     * @param customerInternalNotes The customerInternalNotes to set.
+     */
+    public void setCustomerInternalNotes(List<CustomerInternalNote> customerInternalNotes) {
+        this.customerInternalNotes = customerInternalNotes;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
+        m.put("customerNumber", this.customerNumber);
+        return m;
+    }
+
 }
