@@ -81,8 +81,7 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      *      org.kuali.core.util.KualiDecimal, java.lang.Integer)
      */
     public List<PurApAccountingLine> generateAccountDistributionForProration(List<SourceAccountingLine> accounts, KualiDecimal totalAmount, Integer percentScale) {
-        // TODO: remove this method, use the class one below
-        return null;// generateAccountDistributionForProration(accounts, totalAmount, percentScale, null);
+        return null;
     }
 
     /**
@@ -95,16 +94,12 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
         List<PurApAccountingLine> newAccounts = new ArrayList();
 
         if (totalAmount.isZero()) {
-            throwRuntimeException(methodName, "Purchasing/Accounts Payable account distribution for proration does not allow zero dollar total.");
-            // TODO: check with David is this ok?!
-            // generateAccountDistributionForProrationWithZeroTotal(accounts, percentScale);
-        }
+            throwRuntimeException(methodName, "Purchasing/Accounts Payable account distribution for proration does not allow zero dollar total.");        }
 
         BigDecimal percentTotal = BigDecimal.ZERO;
         BigDecimal totalAmountBigDecimal = totalAmount.bigDecimalValue();
         for (SourceAccountingLine accountingLine : accounts) {
             LOG.debug(methodName + " " + accountingLine.getAccountNumber() + " " + accountingLine.getAmount() + "/" + totalAmountBigDecimal);
-            // TODO: Chris - is this scale ok?
             BigDecimal pct = accountingLine.getAmount().bigDecimalValue().divide(totalAmountBigDecimal, percentScale, BIG_DECIMAL_ROUNDING_MODE);
             pct = pct.multiply(ONE_HUNDRED).stripTrailingZeros();
 
@@ -558,7 +553,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
                     throwRuntimeException(methodName, "Invalid parameter and list of items found while trying to find processable items for dealing with purchasing/accounts payable accounts");
                 }
             }
-            // TODO check to see if we should be allowing null in the extendedPrice (hjs)
             if ((ZERO_TOTALS_NOT_RETURNED_VALUE.equals(useZeroTotals)) && (ObjectUtils.isNull(currentItem.getExtendedPrice()) || ((KualiDecimal.ZERO.compareTo(currentItem.getExtendedPrice())) == 0))) {
                 // if we don't return zero dollar items then skip this one
                 continue;
@@ -574,7 +568,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      * @param document the document
      */
     public void updateAccountAmounts(PurchasingAccountsPayableDocument document) {
-        // TODO: Chris - this should probably be injected instead of using the locator (or put in doc) also don't forget to update
         // the percent at fiscal approve
         // don't update if past the AP review level
         if ((document instanceof PaymentRequestDocument) && SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(document)) {
@@ -593,8 +586,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
      */
     public void updateItemAccountAmounts(PurApItem item) {
         if ((item.getExtendedPrice() != null) && KualiDecimal.ZERO.compareTo(item.getExtendedPrice()) != 0) {
-            // TODO: is this the best sort to use?
-            // Collections.sort( (List)item.getSourceAccountingLines() );
 
             KualiDecimal accountTotal = KualiDecimal.ZERO;
             PurApAccountingLine lastAccount = null;
@@ -621,7 +612,6 @@ public class PurapAccountingServiceImpl implements PurapAccountingService {
     }
 
     public List<PurApAccountingLine> getAccountsFromItem(PurApItem item) {
-        // TODO Auto-generated method stub
         return purApAccountingDao.getAccountingLinesForItem(item);
     }
 
