@@ -857,3 +857,5 @@ FROM en_doc_typ_t
 
 delete from EN_RULE_BASE_VAL_T where RULE_BASE_VAL_CUR_IND = 0
 /
+delete en_doc_typ_t where doc_typ_nm like 'KualiBudgetConstruction%'
+/
