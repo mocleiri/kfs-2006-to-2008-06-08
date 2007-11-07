@@ -67,6 +67,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
+/**
+ * Implementation of PdpExtractService
+ */
 @Transactional
 public class PdpExtractServiceImpl implements PdpExtractService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PdpExtractServiceImpl.class);
@@ -169,7 +172,7 @@ public class PdpExtractServiceImpl implements PdpExtractService {
     }
 
     /**
-     * Get all the payments that could be combined wih credit memos
+     * Get all the payments that could be combined with credit memos
      * 
      * @param campusCode
      * @param puser
