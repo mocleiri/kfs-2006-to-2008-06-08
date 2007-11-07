@@ -570,7 +570,6 @@ public class CreditMemoDocumentRule extends AccountsPayableDocumentRuleBase {
 
     public boolean processCancelAccountsPayableBusinessRules(AccountsPayableDocument document) {
         CreditMemoDocument creditMemoDocument = (CreditMemoDocument) document;
-        // TODO: ckirschenman - we are doing this differently than PREQ but it does basically the same thing - merge
         return SpringContext.getBean(CreditMemoService.class).canCancelCreditMemo(creditMemoDocument, GlobalVariables.getUserSession().getUniversalUser());
     }
 
