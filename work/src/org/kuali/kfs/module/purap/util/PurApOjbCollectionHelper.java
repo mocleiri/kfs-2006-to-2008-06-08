@@ -161,7 +161,7 @@ public class PurApOjbCollectionHelper {
         Iterator iter = fromList.iterator();
         while (iter.hasNext()) {
             PersistableBusinessObject copyLine = (PersistableBusinessObject) iter.next();
-            // FIXME ckirschenman see notes in PurApObjectUtils and KULPURAP-1370 about why it's necessary to call that
+            
             PersistableBusinessObject line = (PersistableBusinessObject) PurApObjectUtils.retrieveObjectWithIdentitcalKey(controlList, copyLine);
             if (ObjectUtils.isNull(line)) {
                 toRemove.add(copyLine);
