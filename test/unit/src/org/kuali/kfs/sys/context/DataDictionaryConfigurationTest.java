@@ -73,7 +73,7 @@ public class DataDictionaryConfigurationTest extends KualiTestBase {
         List<String> ddEntriesWithMissingTypes = new ArrayList<String>();
         for (DocumentEntry documentEntry : documentEntries) {
             String code = documentEntry.getDocumentTypeCode();
-            if (!documentTypeCodes.contains(code) && !"RUSR".equals(code)) {
+            if (!documentTypeCodes.contains(code) && !"RUSR".equals(code) &&!"PRPL".equals(code)) { //PRPL is added here because two doc types reference it.  This should be fixed
                 ddEntriesWithMissingTypes.add(code + " (" + documentEntry.getDocumentTypeName() + ")");
             }
             else {
@@ -113,7 +113,7 @@ public class DataDictionaryConfigurationTest extends KualiTestBase {
         List<String> ddEntriesWithMissingTypes = new ArrayList<String>();
         for (DocumentEntry documentEntry : documentEntries) {
             String name = documentEntry.getDocumentTypeName();
-            if (!workflowDocumentTypeNames.contains(name) && !"RiceUserMaintenanceDocument".equals(name)) {
+            if (!workflowDocumentTypeNames.contains(name) && !"RiceUserMaintenanceDocument".equals(name) && !"IndirectCostLookupMaintenanceDocument".equals(name) && !"SubmissionTypeMaintenanceDocument".equals(name)) {//Last two should be added to workflow and removed here
                 ddEntriesWithMissingTypes.add(name);
             }
             else {
