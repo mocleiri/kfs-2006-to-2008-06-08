@@ -34,6 +34,9 @@ import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EncumbranceDao;
 import org.kuali.module.gl.util.OJBUtility;
 
+/**
+ * An OJB implementation of the EncumbranceDao
+ */
 public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements EncumbranceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceDaoOjb.class);
 
