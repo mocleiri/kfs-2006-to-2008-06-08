@@ -39,7 +39,7 @@ public class PurApObjectUtils {
 
     /**
      * 
-     * This method populates a class using a base class to determine fields
+     * Populates a class using a base class to determine fields
      * @param base the class to determine what fields to copy
      * @param src the source class
      * @param target the target class
@@ -70,7 +70,7 @@ public class PurApObjectUtils {
     
     /**
      * 
-     * returns true if a field is processable
+     * True if a field is processable
      * @param baseClass the base class
      * @param fieldName the field name to detrmine if processable
      * @param excludedFieldNames field names to exclude
@@ -88,7 +88,7 @@ public class PurApObjectUtils {
 
     /**
      * 
-     * tries to copy a field
+     * Attempts to copy a field
      * @param baseClass the base class
      * @param fieldName the field name to determine if processable
      * @param sourceObject source object
@@ -119,7 +119,7 @@ public class PurApObjectUtils {
 
     /**
      * 
-     * This method copies a collection
+     * Copies a collection
      * @param fieldName field to copy
      * @param targetObject the object of the collection
      * @param propertyValue value to copy
@@ -178,7 +178,7 @@ public class PurApObjectUtils {
     }
 
     /**
-     * This method copies based on a class template it does not copy fields in Known Uncopyable Fields
+     * Copies based on a class template it does not copy fields in Known Uncopyable Fields
      * 
      * @param base the base class
      * @param src source
@@ -190,7 +190,7 @@ public class PurApObjectUtils {
 
     /**
      * 
-     * populates from a base class traversing up the object hierarchy.
+     * Populates from a base class traversing up the object hierarchy.
      * @param sourceObject object to copy from
      * @param targetObject object to copy to
      * @param supplementalUncopyableFieldNames fields to exclude
