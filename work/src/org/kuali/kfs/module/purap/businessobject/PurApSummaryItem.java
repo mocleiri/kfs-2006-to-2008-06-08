@@ -25,7 +25,6 @@ public class PurApSummaryItem extends PurApItemBase {
 
     private KualiDecimal estimatedEncumberanceAmount;
 
-    // TODO: abstract PurApItemBase so that this inherits less
     public PurApSummaryItem() {
         this(KualiDecimal.ZERO);
     }
