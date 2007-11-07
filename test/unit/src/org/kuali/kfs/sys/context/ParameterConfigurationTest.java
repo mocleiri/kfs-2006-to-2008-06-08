@@ -27,8 +27,11 @@ import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.rules.ParameterRule;
 import org.kuali.kfs.service.ParameterService;
 import org.kuali.test.ConfigureContext;
+import org.kuali.test.suite.AnnotationTestSuite;
+import org.kuali.test.suite.PreCommitSuite;
 
 @ConfigureContext
+@AnnotationTestSuite(PreCommitSuite.class)
 public class ParameterConfigurationTest extends KualiTestBase {
 
     public void testValidateParameterComponents() throws Exception {
