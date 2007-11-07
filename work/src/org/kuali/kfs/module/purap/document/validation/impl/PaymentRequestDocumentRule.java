@@ -98,7 +98,6 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         boolean valid = super.processValidation(purapDocument);
         PaymentRequestDocument preqDocument = (PaymentRequestDocument) purapDocument;
         valid &= processInvoiceValidation(preqDocument);
-        // TODO (KULPURAP-1575) this check is also in item checks below, we should consolidate these non full entry checks
         if (!SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(purapDocument)) {
             valid &= processPurchaseOrderIDValidation(preqDocument);
         }
@@ -226,7 +225,7 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
-    // TODO (KULPURAP-1575) clean up this method; are the comments really necessary?
+
     protected boolean processPurchaseOrderIDValidation(PaymentRequestDocument document) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -234,13 +233,6 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
 
         Integer POID = document.getPurchaseOrderIdentifier();
 
-        // I think only the current PO can have the pending action indicator to be "Y". For all the other POs with the same PO
-        // number, the pending indicator should be always "N". So, I think we only need to check if for the current PO the
-        // Pending indicator is "Y" and it is not a Retransmit doc, then we don't allow users to create a PREQ. Correct?
-        // Given a PO number, the user enters in the Init screen. For the rule "Error if the PO is not open", we also only
-        // need to check this rule against the current PO, Correct?
-        // PurchaseOrderDocument purchaseOrderDocument =
-        // SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(document.getPurchaseOrderIdentifier());
         PurchaseOrderDocument purchaseOrderDocument = document.getPurchaseOrderDocument();
         if (ObjectUtils.isNull(purchaseOrderDocument)) {
             GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER, PurapKeyConstants.ERROR_PURCHASE_ORDER_NOT_EXIST);
@@ -253,24 +245,7 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         else if (!StringUtils.equals(purchaseOrderDocument.getStatusCode(), PurapConstants.PurchaseOrderStatuses.OPEN)) {
             GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER, PurapKeyConstants.ERROR_PURCHASE_ORDER_NOT_OPEN);
             valid &= false;
-            // if the PO is pending and it is not a Retransmit, we cannot generate a Payment Request for it:
-            // 2007-04-19 15:50:40,750 [http-8080-Processor23] ERROR
-            // org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/kuali-dev].[action] :: Servlet.service() for servlet
-            // action threw exception
-            // java.lang.RuntimeException: transient FlexDoc is null - this should never happen
-            // org.kuali.core.bo.DocumentHeader.getWorkflowDocument(DocumentHeader.java:67)
-            // } else if (purchaseOrderDocument.isPendingActionIndicator() &
-            // !StringUtils.equals(purchaseOrderDocument.getDocumentHeader().getWorkflowDocument().getDocumentType(),
-            // PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_RETRANSMIT_DOCUMENT)){
-            // GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER,
-            // PurapKeyConstants.ERROR_PURCHASE_ORDER_IS_PENDING);
-            // }
-            // else if (purchaseOrderDocument.isPendingActionIndicator() &
-            // !StringUtils.equals(purchaseOrderDocument.getDocumentHeader().getWorkflowDocument().getDocumentType(),
-            // PurapConstants.PurchaseOrderDocTypes.PURCHASE_ORDER_RETRANSMIT_DOCUMENT)){
-            // GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER,
-            // PurapKeyConstants.ERROR_PURCHASE_ORDER_IS_PENDING);
-            // valid &= false;
+            // if the PO is pending and it is not a Retransmit, we cannot generate a Payment Request for it
         }
         else {
             // Verify that there exists at least 1 item left to be invoiced
@@ -563,17 +538,10 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
-    // FIXME (KULPURAP-1582: ckirschenman) refactor this also commenting out errors thrown (also I believe this shouldn't be called
-    // after AP_REVIEW confirm and add check)
     protected boolean validatePaymentRequestReview(PaymentRequestDocument paymentRequest) {
         boolean valid = true;
 
-        // TODO (KULPURAP-1582: ckirschenman) uncomment or replace this with a service invocation when Chris/Dan finished
-        // the calculate method.
-        // this.calculatePaymentRequest(paymentRequest, false);
-
         // if FY > current FY, warn user that payment will happen in current year
-        // TODO (KULPURAP-1582: ckirschenman) Is this really how we should get the "fiscal year" ?
         UniversityDateService universityDateService = SpringContext.getBean(UniversityDateService.class);
         Integer fiscalYear = universityDateService.getCurrentFiscalYear();
         Date closingDate = universityDateService.getLastDateOfFiscalYear(fiscalYear);
@@ -606,14 +574,10 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
                 if (item.getItemType().isAmountBasedGeneralLedgerIndicator()) {
                     String error = "Payment Request " + paymentRequest.getPurapDocumentIdentifier() + ", " + identifier + " has extended price '" + item.getExtendedPrice() + "' but outstanding encumbered amount " + item.getPoOutstandingAmount();
                     LOG.error("validatePaymentRequestReview() " + error);
-                    // TODO (KULPURAP-1582: ckirschenman) I think here we should just display error instead of throwing PurError
-                    // throw new PurError(error);
                 }
                 else {
                     String error = "Payment Request " + paymentRequest.getPurapDocumentIdentifier() + ", " + identifier + " has quantity '" + item.getItemQuantity() + "' but outstanding encumbered quantity " + item.getPoOutstandingQuantity();
                     LOG.error("validatePaymentRequestReview() " + error);
-                    // TODO (KULPURAP-1582: ckirschenman) I think here we should just display error instead of throwing PurError
-                    // throw new PurError(error);
                 }
             }
             else {
@@ -681,7 +645,6 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         // way to do this
         PaymentRequestDocumentActionAuthorizer preqAuth = new PaymentRequestDocumentActionAuthorizer(preq);
         valid = valid &= preqAuth.canCancel();
-        // TODO: ckirschenman - error here!
         return valid;
     }
 }
