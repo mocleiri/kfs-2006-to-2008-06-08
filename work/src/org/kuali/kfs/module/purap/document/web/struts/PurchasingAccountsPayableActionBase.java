@@ -225,7 +225,6 @@ public class PurchasingAccountsPayableActionBase extends KualiAccountingDocument
 
         // add it to the baseline, to prevent generation of spurious update events
         item.getBaselineSourceAccountingLines().remove(accountIndex);
-        // TODO: Chris we should probabl also add to baselineSourceList on form
 
 
         // remove the decorator
