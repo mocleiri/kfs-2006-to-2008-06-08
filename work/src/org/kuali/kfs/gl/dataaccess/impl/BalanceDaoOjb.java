@@ -53,6 +53,9 @@ import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.BalanceDao;
 import org.kuali.module.gl.util.OJBUtility;
 
+/**
+ * An OJB implementation of BalanceDao
+ */
 public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceDaoOjb.class);
     private ParameterService parameterService;
@@ -113,7 +116,7 @@ public class BalanceDaoOjb extends PlatformAwareDaoBaseOjb implements BalanceDao
     }
 
     /**
-     * Saves the balance
+     * Saves a balance
      * @param b a balance to save
      * @see org.kuali.module.gl.dao.BalanceDao#save(org.kuali.module.gl.bo.Balance)
      */
