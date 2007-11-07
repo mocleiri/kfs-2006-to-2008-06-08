@@ -120,7 +120,6 @@ public class PaymentRequestItem extends AccountsPayableItemBase {
      * @return - purchase order item
      */
     public PurchaseOrderItem getPurchaseOrderItem() {
-        // TODO (KULPURAP-1393) look into, this is total hackery but works for now, revisit during QA
         if (ObjectUtils.isNotNull(this.getPurapDocumentIdentifier())) {
             if (ObjectUtils.isNull(this.getPaymentRequest())) {
                 this.refreshReferenceObject(PurapPropertyConstants.PAYMENT_REQUEST);
