@@ -663,7 +663,6 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
             }
 
             if ((item.getSourceAccountingLines().isEmpty()) && (ObjectUtils.isNotNull(item.getExtendedPrice())) && (KualiDecimal.ZERO.compareTo(item.getExtendedPrice()) != 0)) {
-                // TODO: add tax stuff here in 2B
                 if ((StringUtils.equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_PMT_TERMS_DISCOUNT_CODE, item.getItemType().getItemTypeCode())) && (paymentRequestDocument.getGrandTotal() != null) && ((KualiDecimal.ZERO.compareTo(paymentRequestDocument.getGrandTotal()) != 0))) {
 
                     totalAmount = paymentRequestDocument.getGrandTotal();
@@ -697,7 +696,6 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
             // update the item
             purapAccountingService.updateItemAccountAmounts(item);
         }
-        // TODO: delete the following line for a performance gain (update is done on lines that are changed)
         // update again now that distribute is finished. (Note: we may not need this anymore now that I added updateItem line above
         purapAccountingService.updateAccountAmounts(paymentRequestDocument);
     }
@@ -895,7 +893,6 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         //cancel extracted should not reopen PO
         paymentRequest.setReopenPurchaseOrderIndicator(false);
 
-        // FIXME shouldn't be using springcontext inside a service, but having problems with adding to spring bean file (hjs)
         SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(paymentRequest, "");
         LOG.debug("cancelExtractedPaymentRequest() PREQ " + paymentRequest.getPurapDocumentIdentifier() + " Cancelled Without Workflow");
         LOG.debug("cancelExtractedPaymentRequest() ended");
@@ -1070,7 +1067,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
 
         String cancelledStatusCode = "";
         if (StringUtils.isEmpty(currentNodeName)) {
-            // if empty probably not coming from workflow TODO - ckirschenman check status to be sure
+            // if empty probably not coming from workflow
             cancelledStatusCode = PurapConstants.PaymentRequestStatuses.CANCELLED_POST_AP_APPROVE;
         }
         else {
