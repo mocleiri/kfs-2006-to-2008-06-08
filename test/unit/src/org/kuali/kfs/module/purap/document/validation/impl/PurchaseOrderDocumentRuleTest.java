@@ -27,6 +27,8 @@ import org.kuali.module.purap.fixtures.AmountsLimitsFixture;
 import org.kuali.module.purap.fixtures.ItemAccountsFixture;
 import org.kuali.module.purap.fixtures.ItemTypesFixture;
 import org.kuali.test.ConfigureContext;
+import org.kuali.test.suite.RelatesTo;
+import org.kuali.test.suite.RelatesTo.JiraIssue;
 
 @ConfigureContext(session = KHUNTLEY)
 public class PurchaseOrderDocumentRuleTest extends PurapRuleTestBase {
@@ -49,11 +51,13 @@ public class PurchaseOrderDocumentRuleTest extends PurapRuleTestBase {
     /*
      * Tests of validateEmptyItemWithAccounts
      */
+    @RelatesTo(JiraIssue.KULPURAP2135)
     public void testValidateEmptyItemWithAccounts_NullItemWithAccount() {
         PurchaseOrderItem poItem = ItemAccountsFixture.NULL_DESC_NULL_UOM_NULL_PRICE_WTIH_ACCOUNT.populateItem();
         assertFalse(rule.validateEmptyItemWithAccounts(poItem, "Item " + poItem.getItemLineNumber().toString()));
     }
 
+    @RelatesTo(JiraIssue.KULPURAP2135)
     public void testValidateEmptyItemWithAccounts_EmptyItemWithAccount() {
         PurchaseOrderItem poItem = ItemAccountsFixture.EMPTY_DESC_EMPTY_UOM_NULL_PRICE_WITH_ACCOUNT.populateItem();
         assertFalse(rule.validateEmptyItemWithAccounts(poItem, "Item " + poItem.getItemLineNumber().toString()));
