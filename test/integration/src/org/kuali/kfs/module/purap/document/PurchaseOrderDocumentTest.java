@@ -20,6 +20,7 @@ import static org.kuali.module.purap.fixtures.PurchaseOrderItemAccountsFixture.W
 import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 import static org.kuali.test.fixtures.UserNameFixture.RJWEISS;
 import static org.kuali.test.fixtures.UserNameFixture.RORENFRO;
+import static org.kuali.test.fixtures.UserNameFixture.PARKE;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class PurchaseOrderDocumentTest extends KualiTestBase {
         AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildSimpleDocument(), getExpectedPrePeCount(), SpringContext.getBean(DocumentService.class), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions=true)
+    @ConfigureContext(session = PARKE, shouldCommitTransactions=true)
     public final void testRouteDocument() throws Exception {
         PurchaseOrderDocument poDocument = buildSimpleDocument();
         DocumentService documentService = SpringContext.getBean(DocumentService.class);
