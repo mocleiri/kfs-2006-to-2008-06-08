@@ -19,13 +19,16 @@ import static org.kuali.module.financial.document.AccountingDocumentTestUtils.te
 import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 import static org.kuali.test.fixtures.UserNameFixture.RJWEISS;
 import static org.kuali.test.fixtures.UserNameFixture.RORENFRO;
+import static org.kuali.test.fixtures.UserNameFixture.PARKE;
+import static org.kuali.test.fixtures.UserNameFixture.KULUSER;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.TransactionalDocumentDictionaryService;
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.document.AccountingDocumentTestUtils;
@@ -34,7 +37,6 @@ import org.kuali.module.purap.bo.PurchaseOrderView;
 import org.kuali.module.purap.fixtures.CreditMemoDocumentFixture;
 import org.kuali.module.purap.fixtures.CreditMemoItemFixture;
 import org.kuali.module.purap.fixtures.RequisitionDocumentFixture;
-import org.kuali.module.purap.service.CreditMemoService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.test.ConfigureContext;
 import org.kuali.test.DocumentTestUtils;
@@ -46,7 +48,7 @@ import edu.iu.uis.eden.EdenConstants;
 /**
  * This class is used to create and test populated CreditMemo Documents of various kinds.
  */
-@ConfigureContext(session = KHUNTLEY)
+@ConfigureContext(session = KULUSER)
 public class CreditMemoDocumentTest extends KualiTestBase {
     public static final Class<CreditMemoDocument> DOCUMENT_CLASS = CreditMemoDocument.class;
     private static final String ACCOUNT_REVIEW = "Account Review";
@@ -63,8 +65,7 @@ public class CreditMemoDocumentTest extends KualiTestBase {
         CreditMemoDocument = null;
         super.tearDown();      
     }
-    
-    
+       
     private List<CreditMemoItemFixture> getItemParametersFromFixtures() {
         List<CreditMemoItemFixture> list = new ArrayList<CreditMemoItemFixture>();
         list.add(CreditMemoItemFixture.CM_ITEM_NO_APO);
@@ -78,7 +79,7 @@ public class CreditMemoDocumentTest extends KualiTestBase {
     public final void testAddItem() throws Exception {
         List<AccountsPayableItem> items = new ArrayList<AccountsPayableItem>();
         items.add(CreditMemoItemFixture.CM_ITEM_NO_APO.createCreditMemoItem());
-
+        UniversalUser currentUser = (UniversalUser)GlobalVariables.getUserSession().getUniversalUser(); 
         int expectedItemTotal = items.size();
         AccountsPayableDocumentTestUtils.testAddItem((AccountsPayableDocument)DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DOCUMENT_CLASS), items, expectedItemTotal);
     }
@@ -96,7 +97,7 @@ public class CreditMemoDocumentTest extends KualiTestBase {
         AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildSimpleDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions=true)
+    @ConfigureContext(session = KULUSER, shouldCommitTransactions=true)
     public final void testConvertIntoErrorCorrection() throws Exception {
         CreditMemoDocument = buildSimpleDocument();
         AccountingDocumentTestUtils.testConvertIntoErrorCorrection(CreditMemoDocument, getExpectedPrePeCount(), SpringContext.getBean(DocumentService.class), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
