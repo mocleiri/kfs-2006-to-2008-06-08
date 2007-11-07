@@ -10,7 +10,7 @@
         APPL_CNST_NM="DelegateRuleChange.IsGenerateActionRequests"
         APPL_CNST_VAL_TXT="true" DB_LOCK_VER_NBR="0"/>
     <EN_APPL_CNST_T APPL_CNST_NM="Config.Application.AdminUserList"
-        APPL_CNST_VAL_TXT="KWESTERN" DB_LOCK_VER_NBR="1"/>
+        APPL_CNST_VAL_TXT="KULUSER" DB_LOCK_VER_NBR="1"/>
     <EN_APPL_CNST_T APPL_CNST_NM="DocumentSearch.IsRouteLogPopup"
         APPL_CNST_VAL_TXT="false" DB_LOCK_VER_NBR="1"/>
     <EN_APPL_CNST_T APPL_CNST_NM="DocumentSearch.IsDocumentPopup"

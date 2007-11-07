@@ -107,22 +107,19 @@
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Institutionally specified unallowable values for Object Codes."
         SH_PARM_DTL_TYP_CD="ObjectCode" SH_PARM_NM="OBJECT_CODES"
-        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="N/A;A/L"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA77A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Defines the relationship between Document Type(s) and Object Code status (active/inactive) when creating a new offset definition."
         SH_PARM_DTL_TYP_CD="OffsetDefinition"
         SH_PARM_NM="DOCUMENT_TYPES_REQUIRING_ACTIVE_OBJECT_CODES"
-        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="ARIN;ARNI;ARIM;BC"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA7BA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="When a new organization is being created, the default account number is not required for these organization types. This is to avoid a chicken/egg situation where the value for the default account cannot be created until the organization exists."
         SH_PARM_DTL_TYP_CD="Org"
         SH_PARM_NM="ORGANIZATION_TYPES_NOT_REQUIRING_DEFAULT_ACCOUNT"
-        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="C;U"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA7CA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Defines the Organization Type that must report to itself when creating a new organization."
@@ -155,8 +152,7 @@
         SH_PARM_DESC="Object levels to exclude for a given organization reversion category. Format of list is organization reversion category 1=object level 1, object level 2;organization reversion category 2=object level 3,object level 4,object level 5."
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_EXCLUDE_OBJECT_LEVELS_BY_ORGANIZATION_REVERSION_CATEGORY"
-        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="C02=HRCO"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA82A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object sub types to exclude for a given organization reversion category. Format of list is organization reversion category 1=object sub type 1, object sub type 2;organization reversion category 2=object sub type 3,object sub type 4,object sub type 5."
@@ -182,16 +178,13 @@
         SH_PARM_DESC="Object consolidations to include for a given organization reversion category. Format of list is organization reversion category 1=object consolidation 1, object consolidation 2;organization reversion category 2=object consolidation 3,object consolidation 4."
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_INCLUDE_OBJECT_CONSOLIDATIONS_BY_ORGANIZATION_REVERSION_CATEGORY"
-        SH_PARM_NMSPC_CD="KFS-CA"
-        SH_PARM_TXT="C01=CMPN;C02=CMPN;C03=SCHL;C04=CPTL;C05=RSRX;C06=TRSF;C07=TRSF;C08=TRVL;C09=GENX,IDEX;C10=ASEX;C11=ASRE,IDIN,OTRE,SAPR,STFE"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA86A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Object levels to include for a given organization reversion category. Format of list is organization reversion category 1=object level 1, object level 2;organization reversion category 2=object level 3,object level 4,object level 5."
         SH_PARM_DTL_TYP_CD="OrganizationReversionCategory"
         SH_PARM_NM="EXTENDED_DEFINITIONS_INCLUDE_OBJECT_LEVELS_BY_ORGANIZATION_REVERSION_CATEGORY"
-        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="C01=HRCO"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA87A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Object sub types to include for a given organization reversion category. Format of list is organization reversion category 1=object sub type 1, object sub type 2;organization reversion category 2=object sub type 3,object sub type 4,object sub type 5."
@@ -229,27 +222,25 @@
         SH_PARM_DESC="Number of days, after an accounting period has closed, that transactions can be posted back to that period using an Auxiliary Voucher."
         SH_PARM_DTL_TYP_CD="AuxiliaryVoucher"
         SH_PARM_NM="ACCOUNTING_PERIOD_GRACE_PERIOD"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="20"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADA9BA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Restricts available Accounting Period values from the drop-down list on the Auxiliary Voucher document."
         SH_PARM_DTL_TYP_CD="AuxiliaryVoucher"
         SH_PARM_NM="ACCOUNTING_PERIODS" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="AB;BB;CB;" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADA9DA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Restricts object codes that relate to a particular combination of Object Type, Object Sub-type, and Object Level from use on Auxiliary Voucher documents. Format of list is object type 1,object sub type 1,object level 1;object type 2,object sub type 2,object level 2;..."
         SH_PARM_DTL_TYP_CD="AuxiliaryVoucher"
         SH_PARM_NM="COMBINATION_OBJECT_TYPE_OBJECT_SUB_TYPE_OBJECT_LEVEL"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="ES,VA,VADJ"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADA9EA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The offset object code that is used for accruals and adjustments when the document contains accounting lines for more than a single unique account."
         SH_PARM_DTL_TYP_CD="AuxiliaryVoucher"
         SH_PARM_NM="GLPE_OFFSET_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="9897" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADA9FA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on the Auxiliary Voucher document."
@@ -269,8 +260,7 @@
         SH_PARM_DESC="Object code to use for creating the income transfer general ledger pending entries."
         SH_PARM_DTL_TYP_CD="BudgetAdjustment"
         SH_PARM_NM="GLPE_INCOME_TRANSFER_OBJECT_CODE"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="1209"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAA5A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Code(s) restricted from use on a Budget Adjustment document."
@@ -287,7 +277,7 @@
         SH_PARM_DESC="Object Consolidation(s) restricted from use on the Cash Receipt document."
         SH_PARM_DTL_TYP_CD="CashReceipt"
         SH_PARM_NM="OBJECT_CONSOLIDATIONS" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="FDBL" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAAAA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on the Cash Receipt document."
@@ -306,7 +296,7 @@
         SH_PARM_DESC="This is the bank account for the flexible bank offsets of credit card receipt documents. The parameter text must contain the bank code followed by the bank account number, separated by a semi-colon. This parameter is ignored unless the USE_FLEXIBLE_CLAIM_ON_CASH_IND is set to &quot;Y&quot;."
         SH_PARM_DTL_TYP_CD="CreditCardReceipt"
         SH_PARM_NM="CASH_OFFSET_BANK_ACCOUNT" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="TEST;TEST1" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAB0A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on Disbursement Voucher documents."
@@ -333,14 +323,13 @@
         SH_PARM_DESC="Flag that determines (Y/N) if members of the Travel or Disbursement Voucher administrator workgroups can edit object codes on DV documents while enroute in the workflow."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="ALLOW_ENROUTE_EDIT_OBJECT_CODES_IND"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="Y" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="AUTH" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADAB4A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed campus(es) by payment reason for use on Disbursement Voucher. Format of list is payment reason 1=campus 1;payment reason 2=campus 2."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="CAMPUS_BY_PAYMENT_REASON" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="N=BL;P=BL;X=BL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAB5A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator for turning the &quot;employee paid outside of payroll&quot; business rule on or off."
@@ -442,9 +431,7 @@
         SH_PARM_DESC="Invalid objects by payment reason.  Format of list is payment reason 1=object 1, object 2;payment reason 2=object 3,object 4,object 5;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="INVALID_OBJECT_CODES_BY_PAYMENT_REASON"
-        SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="B=4006,4030,4032,4079,4500,4501,4503,4504,4507,4512,4513,4514,4519,4525,4530,4532,4535,4540,4549,4559,4560,4563,4564,4565,4575,4576,4577,4873,4874,5014,5042,5046,5047,5048,5074,5075,5077,5083,5084,5090,5150,5151,5152,5154,5155,B450;Z=5070;E=5070;D=5070;H=5070;C=5070;L=5070;A=5070;F=5070;B=5070;T=5070;K=5070;R=5070;W=5070;P=5070;N=5070;X=5070;G=5070"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAC5A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Defines an invalid relationship between the Payee Type and the Payment Reason(s) listed on the Disbursement Voucher. Format of list is payee type 1=payment reason 1, payment reason 2;payee type 2=payment reason 3,payment reason 4,payment reason 5."
@@ -482,49 +469,42 @@
         SH_PARM_DESC="Allowed Account on the Non-resident Alien Federal Tax line."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_FEDERAL_ACCOUNT"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="9612729"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADACBA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Chart on the Non-resident Alien Federal Tax line."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_FEDERAL_CHART"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="UA"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADACCA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="NRA Federal Tax Line objects by income class.  Format of list is income class 1=object 1;income class 2=object 2;¿"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_FEDERAL_OBJECT_CODE_BY_INCOME_CLASS"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="F=9021;I=9022;R=9022"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADACDA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Account on the Non-resident Alien State Tax line."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_STATE_ACCOUNT"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="9612732"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADACEA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Chart on the Non-resident Alien State Tax line."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_STATE_CHART"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="UA"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADACFA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Object Code(s) on the Non-resident Alien State Tax Line by income class. Format of list is income class 1=object 1;income class 2=object 2."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="NON_RESIDENT_ALIEN_TAX_STATE_OBJECT_CODE_BY_INCOME_CLASS"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="F=9021;I=9022;R=9022"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAD0A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Level(s) restricted from use on the Disbursement Voucher document."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="OBJECT_LEVELS" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="BASR;BASE;BCOM;BCAS;BORE;BFRE;BLIA;FUBL;BGEX;ICOR;HRCO;BASS;CRIN"
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADAD1A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
@@ -543,8 +523,7 @@
         SH_PARM_DESC="Allowed User ID for PDP loads."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_USER"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="KHUNTLEY"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAD6A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Payment reason(s) that trigger Prepaid Travel tab completion and associated rules."
@@ -610,9 +589,7 @@
         SH_PARM_DESC="Defines a valid relationship between the campus code assigned to the KFS user initiating the Disbursement Voucher and the location(s) where the DV and attachments will route. Format of list is campus 1=documentation location 1, documentation location 2;campus 2=documentation location 3,documentation location 4,documentation location 5"
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_DOCUMENTATION_LOCATIONS_BY_CAMPUS"
-        SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="BL=F,N,O,T;EA=A,F,T,N,O;IN=I,F,T,N,O;KO=K,F,T,N,O;NW=W,F,T,N,O;SB=S,F,N,T,O;SE=Z,F,T,N,O"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE0A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Defines a valid relationship between the payment reason listed on the Disbursement Voucher and the location(s) where the DV and attachments will route. Format of list is payment reason 1=documentation location 1, documentation location 2;payment reason 2=documentation location 3,documentation location 4,documentation location 5."
@@ -626,16 +603,13 @@
         SH_PARM_DESC="Defines a valid relationship between the payment reason listed on the Disbursement Voucher and the Object Code(s) on the accounting line of the DV. Format of list is payment reason 1=object level 1, object level 2;payment reason 2=object level 3,object level 4,object level 5."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_OBJECT_CODES_BY_PAYMENT_REASON"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="D=4566;M=5070"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE2A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Defines a valid relationship between the payment reason listed on the Disbursement Voucher and the Object Level(s) on the accounting line of the DV. Format of list is payment reason 1=object level 1, object level 2;payment reason 2=object level 3,object level 4,object level 5."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_OBJECT_LEVELS_BY_PAYMENT_REASON"
-        SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="A=OEXP,NORE,FINA;B=SERV,ADV,COMP,OEXP,PHON,PRIN,R&amp;M,RESA,S&amp;E,TAXP,UTIL,S&amp;S;C=SERV;E=ADV,CREX,DEBT,OEXP,R&amp;M,SASV,SERV,SUPL;F=ACPA,AR,BENF,C&amp;G,DEBT,GIFT,INSS,INVR,OLIA,OTHR,OTHS,TAXP;G=CAP,PHON,RESA,S&amp;E,SASV,TAXP,UTIL;H=SERV,SASV,BENF,CREX,S&amp;E;J=COSV,SERV,CREX;K=COSV,CREX,SERV;L=CAP,R&amp;M,COSV,S&amp;E,RESV;N=TRAV,S&amp;E,OEXP;P=TRAV,S&amp;E,OEXP;R=ADV,S&amp;E,COSV;T=RENT;W=SASV,OEXP,PRIN,RESA,S&amp;E,INV,CAP;Y=R&amp;M;Z=TAXP,ACPA,TAX,S&amp;E,OLIA,DEBT,CASH,CREX"
-        SH_PARM_TYP_CD="VALID" VER_NBR="3" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="3" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE3A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Defines a valid relationship between the Sub-Fund Group and the Object Sub-Type(s) on the Disbursement Voucher document. Format of list is sub fund group 1=object sub type 1, object sub type 2;sub fund group 2=object sub type 3,object sub type 4,object sub type 5."
@@ -701,8 +675,7 @@
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Code(s) restricted from use on any Financial Transaction document."
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="OBJECT_CODES"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="8160;8116;8118;8015;5019"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAEEA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Type(s) restricted from use on any Financial Transaction document."
@@ -714,9 +687,7 @@
         SH_PARM_DESC="Account and Object Code for checking if Sales Tax data is needed for an accounting line. Format of list is account 1:object code 1;account 2:object code 2"
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="SALES_TAX_APPLICABLE_ACCOUNTS_AND_OBJECT_CODES"
-        SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="9612706:9015;9612779:9015;9612704:9015"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADAF0A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Document types for which sales tax should be collected on accounting lines."
@@ -774,7 +745,7 @@
         SH_PARM_DESC="Allowed Object Code for the Grant accounting line on the Indirect Cost Adjustment document."
         SH_PARM_DTL_TYP_CD="IndirectCostAdjustment"
         SH_PARM_NM="GRANT_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="5500" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAFFA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on the Indirect Cost Adjustment document."
@@ -793,7 +764,7 @@
         SH_PARM_DESC="Allowed Object Code for the Receipt accounting line on the Indirect Cost Adjustment document."
         SH_PARM_DTL_TYP_CD="IndirectCostAdjustment"
         SH_PARM_NM="RECEIPT_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="1803" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB02A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Object Sub-Type(s) that indicate Capital Object Codes for use on the Internal Billing Document."
@@ -811,8 +782,7 @@
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Level(s) restricted from use on the Internal Billing document."
         SH_PARM_DTL_TYP_CD="InternalBilling" SH_PARM_NM="OBJECT_LEVELS"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="C&amp;G"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB06A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on the Internal Billing document."
@@ -837,7 +807,7 @@
         SH_PARM_DESC="Object Consolidation(s) restricted from use on the Non-Check Disbursement document."
         SH_PARM_DTL_TYP_CD="NonCheckDisbursement"
         SH_PARM_NM="OBJECT_CONSOLIDATIONS" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="FDBL" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB0DA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on the Non-Check Disbursement document."
@@ -880,7 +850,7 @@
         SH_PARM_DESC="Object Consolidation(s) restricted from use on the Procurement Card document."
         SH_PARM_DTL_TYP_CD="ProcurementCard"
         SH_PARM_NM="OBJECT_CONSOLIDATIONS" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="FDBL" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_PCAD_USERS"/>
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_PCAD_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB1AA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on the Procurement Card document."
@@ -899,9 +869,7 @@
         SH_PARM_DESC="Defines a valid relationship between the Merchant Category Code (MCC) and the Object Code(s) on the Procurement Card document. Format of list is mcc code 1=object 1, object 2;mcc code 2=object 3,object 4,object 5."
         SH_PARM_DTL_TYP_CD="ProcurementCard"
         SH_PARM_NM="VALID_OBJECT_CODES_BY_MCC_CODE"
-        SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="5193=4868,4870,4088,5080,6000,6100,2100,5327,4507,4035,4938;5422=4868,4870,4088,5080,6000,6100,2100,5327,4507,4938,4080;5441=4868,4870,4088,5080,6000,6100,2100,5327,4507,2163;5451=4868,4870,4088,5080,6000,6100,2100,5327,4507;5461=4868,4870,4088,5080,6000,6100,2100,5327,4507;5811=4868,4870,4088,5080,6000,6100,2100,5327,4507;5812=4868,4870,4088,5080,6000,6100,2100,5327,4507;5814=4868,4870,4088,5080,6000,6100,2100,5327,4507"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_PCAD_USERS"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_PCAD_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB1DA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Flag that determines auto approval of the transactions (Y/N) in the Procurement Card document (batch process) to be turned on or off. Used in conjunction with parameter, AUTO_APPROVE_NUMBER_OF_DAYS."
@@ -920,15 +888,13 @@
         SH_PARM_DESC="Account Number to substitute into the transaction, during the Procurement Card batch process, if the account is invalid."
         SH_PARM_DTL_TYP_CD="ProcurementCardCreateDocumentsStep"
         SH_PARM_NM="ERROR_TRANSACTION_ACCOUNT_NUMBER"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="1031400"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB20A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Chart Code to substitute into the transaction, during the Procurement Card batch process, if the account is invalid."
         SH_PARM_DTL_TYP_CD="ProcurementCardCreateDocumentsStep"
         SH_PARM_NM="ERROR_TRANSACTION_CHART_CODE"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="BL"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB21A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator to create a Procurement Card document for each transaction if set to &quot;Y&quot; or a Procurement Card document for each cardholder if set to &quot;N&quot;."
@@ -940,21 +906,19 @@
         SH_PARM_DESC="Clearing account for Procurement Card Batch Process."
         SH_PARM_DTL_TYP_CD="ProcurementCardLoadStep"
         SH_PARM_NM="DEFAULT_TRANSACTION_ACCOUNT"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="1031400"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB23A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Chart to which the clearing account for the Procurement Card Batch Process belongs."
         SH_PARM_DTL_TYP_CD="ProcurementCardLoadStep"
         SH_PARM_NM="DEFAULT_TRANSACTION_CHART" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="BL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB24A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed object code for all charges processed through the Procurement Card Batch process."
         SH_PARM_DTL_TYP_CD="ProcurementCardLoadStep"
         SH_PARM_NM="DEFAULT_TRANSACTION_OBJECT_CODE"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="4190"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB25A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to have permission to do batch uploads for the Procurement Card Document."
@@ -1013,8 +977,7 @@
         SH_PARM_DESC="Object Code for remaining fund balances in the year-end closing process."
         SH_PARM_DTL_TYP_CD="Batch"
         SH_PARM_NM="ANNUAL_CLOSING_FUND_BALANCE_OBJECT_CODE"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="9899"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB3DA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Object Type for remaining fund balances in the year-end closing process."
@@ -1095,22 +1058,19 @@
         SH_PARM_DESC="The object code used to balance external encumbrance entries from the encumbrance closing process."
         SH_PARM_DTL_TYP_CD="EncumbranceForwardStep"
         SH_PARM_NM="OFFSET_OBJECT_CODE_FOR_EXTERNAL_ENCUMBRANCE"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="9892"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB49A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The offset object code used to balance internal encumbrance entries from encumbrance closing process."
         SH_PARM_DTL_TYP_CD="EncumbranceForwardStep"
         SH_PARM_NM="OFFSET_OBJECT_CODE_FOR_INTERNAL_ENCUMBRANCE"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="9891"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB4AA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The offset object code used to balance pre-encumbrance entries from the encumbrance closing process."
         SH_PARM_DTL_TYP_CD="EncumbranceForwardStep"
         SH_PARM_NM="OFFSET_OBJECT_CODE_FOR_PRE_ENCUMBRANCE"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="9890"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB4CA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="E-mail address(es) where notification will be sent in the event of a reconciliation or parse error."
@@ -1129,13 +1089,13 @@
         SH_PARM_DESC="Nominal balances remaining in expense object codes, after other year-end processes are run, are closed to this object code."
         SH_PARM_DTL_TYP_CD="NominalActivityClosingStep"
         SH_PARM_NM="NET_EXPENSE_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="5000" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB51A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Nominal balances remaining in revenue object codes, after other year-end processes are run, are closed to this object code."
         SH_PARM_DTL_TYP_CD="NominalActivityClosingStep"
         SH_PARM_NM="NET_REVENUE_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="1800" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB53A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The balance type to use on the budget reversion ledger entries generated by the Organization Reversion process. In the base Kuali installation, RE is a balance type that end users won't typically be aware of. This allows entries to be posted as an audit trail, but typically doesn't appear on reports or balance inquiry screens."
@@ -1148,7 +1108,7 @@
         SH_PARM_DESC="The object code used to balance the budget ledger entries generated by the Organization Reversion process when carrying forward budget to the new fiscal year."
         SH_PARM_DTL_TYP_CD="OrganizationReversion"
         SH_PARM_NM="CARRY_FORWARD_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-CA"
-        SH_PARM_TXT="0110" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB55A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The balance type to use on the cash reversion ledger entries generated by the Organization Reversion process. In the base Kuali installation, NB is a balance type that end users won't typically be aware of. This allows entries to be posted as an audit trail, but typically doesn't appear on reports or balance inquiry screens.  "
@@ -1174,7 +1134,7 @@
         SH_PARM_DESC="Defines the object code to use for carry-forward if the Carry Forward by Object Code Indicator is not checked in the Organization Reversion Maintenance Document."
         SH_PARM_DTL_TYP_CD="OrganizationReversion"
         SH_PARM_NM="UNALLOCATED_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-CA"
-        SH_PARM_TXT="7900" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB5BA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Document type used for indirect cost recovery origin entries generated by the poster."
@@ -1247,7 +1207,7 @@
         SH_PARM_DESC="Excludes transactions associated with certain chart(s) from consideration for capitalization in the scrubber process."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="CAPITALIZATION_CHARTS" SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="HO" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB67A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Excludes transactions associated with certain document type(s) from consideration for capitalization in the scrubber process."
@@ -1274,9 +1234,7 @@
         SH_PARM_DESC="The plant fund object code(s) to which the generated capitalization will be assigned, by object sub-type(s) of the original transaction, in the scrubber process. Format of list is object sub type 1=object 1;object sub type 2=object 2."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="CAPITALIZATION_OBJECT_CODE_BY_OBJECT_SUB_TYPE"
-        SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="AF=8616;AM=8615;BD=8601;BF=8605;BI=8629;BR=8601;BX=8640;BY=8641;C1=8627;C2=8628;C3=9607;CF=8611;CM=8610;ES=8630;IF=8604;LA=8603;LE=8608;LF=8614;LI=8613;LR=8665;UC=8618;UF=8619"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB6BA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The object sub-type(s) associated with transactions that will be considered as part of the generated capitalization in the scrubber process."
@@ -1297,23 +1255,19 @@
         SH_PARM_DESC="The number of days added to the expiration date of C&amp;G accounts to allow for necessary adjusting entries."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="CG_ACCOUNT_EXPIRATION_EXTENSION_DAYS"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="90"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB6EA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The document type(s) that are allowed to post to expired accounts."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPES"
-        SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="PREQ;ACHC;ACHD;ACHR;CHKC;CHKD;CHKR;TOPS;CD;LOCR"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB6FA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The origination code(s) that are allowed to post to expired accounts. This relates to system feeds."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="CONTINUATION_ACCOUNT_BYPASS_ORIGINATIONS"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="01;02;EU;PL"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB70A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Document types that are not eligible for capitalization, liability, plant indebtedness, or offsets created by the scrubber."
@@ -1326,8 +1280,7 @@
         SH_PARM_DESC="Current liability object codes used in cash sufficient funds calculation. The formula is: available cash = cash balance less current liabilities plus/minus open encumbrances plus/minus pending ledger entries. There isn't a given (or group of) object type, sub-type, level, or consolidation that defines current liabilities so these are the codes that are current liabilities that commonly appear on accounts.  "
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="SUFFICIENT_FUNDS_CURRENT_LIABILITIES_OBJECT_CODES"
-        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="9040;9041;9050"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB72A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Fiscal Year for sufficient funds rebuilder"
@@ -1357,15 +1310,13 @@
         SH_PARM_DESC="The account to which benefits (fringes) are expensed, if the account to which salary is transferred does not accept benefits and no other account number has been provided by the unit."
         SH_PARM_DTL_TYP_CD="SalaryExpenseTransfer"
         SH_PARM_NM="BENEFIT_CLEARING_ACCOUNT_NUMBER"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="9712700"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB85A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The chart to which the Benefit Clearing Account Number belongs."
         SH_PARM_DTL_TYP_CD="SalaryExpenseTransfer"
         SH_PARM_NM="BENEFIT_CLEARING_CHART_OF_ACCOUNTS"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="UA"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB87A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The fiscal year to use as the basis for carrying forward inception to date beginning balances for the labor ledger."
@@ -1415,8 +1366,7 @@
         SH_PARM_DESC="Restricts User ID for PDP loads."
         SH_PARM_DTL_TYP_CD="Batch"
         SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_USER"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="KHUNTLEY"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB92A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Item Type code(s) for below the line items on Credit Memo documents."
@@ -1464,14 +1414,12 @@
         SH_PARM_DESC="Object Consolidation(s) restricted from use on a Credit Memo document."
         SH_PARM_DTL_TYP_CD="CreditMemo"
         SH_PARM_NM="OBJECT_CONSOLIDATIONS" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="CMPN;SCHL;RSRX;ASEX" SH_PARM_TYP_CD="VALID"
-        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBA1A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Level(s) restricted from use on a Credit Memo document."
         SH_PARM_DTL_TYP_CD="CreditMemo" SH_PARM_NM="OBJECT_LEVELS"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="DEPR;ICOE;VADJ;TAX"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBA2A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on a Credit Memo document."
@@ -1495,8 +1443,7 @@
         SH_PARM_DESC="Allowed object levels by object type for use on a Credit Memo document. Format of list is object type 1=object level 1, object level 2;object type 2=object level 3,object level 4,object level 5."
         SH_PARM_DTL_TYP_CD="CreditMemo"
         SH_PARM_NM="VALID_OBJECT_LEVELS_BY_OBJECT_TYPE"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="AS=INV"
-        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBA6A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to initiate payment request and credit memo documents"
@@ -1586,15 +1533,13 @@
         SH_PARM_DESC="Allows the display of a continuation account warning to AP Users on credit memo and payment request documents."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="SHOW_CONTINUATION_ACCOUNT_WARNING_AP_USERS_IND"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBB4A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allows the display of a continuation account warning to fiscal officers on credit memo and payment request documents."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="SHOW_CONTINUATION_ACCOUNT_WARNING_FISCAL_OFFICERS_IND"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBB5A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The number of days after fiscal year-end that a Payment Request is allowed to post to the previous fiscal year if the PO was created in the previous fiscal year."
@@ -1662,8 +1607,7 @@
         SH_PARM_DESC="Object codes that, when associated with Contract &amp; Grant accounts on a Purchase Order, will force the PO to route to a C&amp;G workgroup for approval. Format of list is chart 1=object 1, object 2;chart 2=object 3,object 4,object 5."
         SH_PARM_DTL_TYP_CD="PurchaseOrder"
         SH_PARM_NM="CG_ROUTE_OBJECT_CODES_BY_CHART"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="BL=5011,5012"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBBFA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to initiate Purchase Order Documents."
@@ -2564,8 +2508,7 @@
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Excludes transactions associated with certain chart(s) from consideration as a generated plant fund liability (leasehold equities) in the scrubber process."
         SH_PARM_DTL_TYP_CD="ScrubberStep" SH_PARM_NM="LIABILITY_CHARTS"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="HO"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC84A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Excludes transactions associated with certain document type(s) from consideration as a generated plant fund liability (leasehold equities) in the scrubber process."
@@ -2584,7 +2527,7 @@
         SH_PARM_DESC="The object code to which the generated plant fund liability (leasehold equities) will be assigned in the scrubber process."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="LIABILITY_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="9603" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC87A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The allowable object sub-type(s) associated with transactions that will be considered as part of the generated plant fund liability (leasehold equities) in the scrubber process."
@@ -2633,15 +2576,13 @@
         SH_PARM_DESC="The object code(s) for recording charges in the source account based upon the object code level of the original expense as part of the cost share transfer in the scrubber process. Format of list is Object Level 1=Object Code 1; Object Level 2=Object Code 2; etc."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="COST_SHARE_OBJECT_CODE_BY_OBJECT_LEVEL"
-        SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="ACSA=9920;BASE=9959;BENF=9957;BISA=9925;CAP=9970;CORE=9951;CORI=9912;FINA=9958;HRCO=9930;ICOE=9955;PART=9923;PRSA=9924;RESV=9979;SAAP=9923;TRAN=9959;TRAV=9960;TREX=9959;TRIN=9915;DEFAULT=9940"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC8EA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Object code for the summary cost-share transfer into the contract and grant cost share sub-account that is generated during the scrubber process."
         SH_PARM_DTL_TYP_CD="ScrubberStep"
         SH_PARM_NM="COST_SHARE_OBJECT_CODE" SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="9915" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B75F4C4D8CFE11AE043814FD881E11A"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicates whether or not an attachment is required on a Payment Request to route for fiscal approval."
@@ -2667,8 +2608,7 @@
         SH_PARM_DESC="Part of the Accounts Not Accepting Benefits Exclusion Logic used by the Labor Ledger Scrubber. If yes (Y), the Labor Ledger Scrubber will check for associated benefit accounts. If no (N), the scrubber will proceed with account supplied on transaction."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="ACCOUNTS_NOT_ACCEPTING_FRINGES_IND"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC95A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Part of the Sub-fund Wage Exclusion Logic used by the Labor Ledger Scrubber. If yes (Y), the Labor Ledger Scrubber will check if the sub-fund group of the transaction accepts wages. If no (N), the scrubber will proceed with account supplied on the transaction."
@@ -2681,15 +2621,13 @@
         SH_PARM_DESC="If yes (Y), the Labor Ledger Scrubber will run the continuation account logic. If no (N), the scrubber will check if the suspense account logic is active."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="CONTINUATION_ACCOUNT_LOGIC_IND"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC97A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="If yes (Y), the Labor Ledger Scrubber will attempt to post to the suspense account when no other valid account can be found. If no (N), and no other valid account can be found, the Labor Ledger Scrubber will reject the transaction."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="SUSPENSE_ACCOUNT_LOGIC_IND"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC98A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The balance belonging to this sub-fund group can be forwarded to the new fiscal year by the year-end process."
@@ -2756,7 +2694,7 @@
         SH_PARM_DESC="Identifies the account number to be used on a labor transaction if the original transaction account is excluded from accepting wages or fringes and no other alternate account number is specified, or if the labor transaction account is expired and no valid continuation account can be identified."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="SUSPENSE_ACCOUNT" SH_PARM_NMSPC_CD="KFS-LD"
-        SH_PARM_TXT="6812756" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3C04E894956B30EEE043814FD88130EE"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Maximum upload size for origin entry files within the General Ledger Correction Process. Must be an integer, optionally followed by &quot;K&quot;, &quot;M&quot;, or &quot;G&quot;. (Used by General Ledger Correction Process.)"
@@ -2892,7 +2830,7 @@
         SH_PARM_DESC="Identifies the Chart of Accounts code associated with the SUSPENSE_ACCOUNT_NUMBER parameter."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="SUSPENSE_CHART" SH_PARM_NMSPC_CD="KFS-LD"
-        SH_PARM_TXT="UA" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3D18DDCF2E841108E043814FD8811108"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Specifies balance type codes that are allowed to post to closed fiscal periods."
@@ -2905,16 +2843,13 @@
         SH_PARM_DESC="The origination code(s) that are allowed to post to expired accounts."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="CONTINUATION_ACCOUNT_BYPASS_ORIGINATIONS"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="01;02;EU;PL"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3D18DDCF2E861108E043814FD8811108"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The document type(s) that are allowed to post to expired accounts."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="CONTINUATION_ACCOUNT_BYPASS_DOCUMENT_TYPES"
-        SH_PARM_NMSPC_CD="KFS-LD"
-        SH_PARM_TXT="PREQ;ACHC;ACHD;ACHR;CHKC;CHKD;CHKR;TOPS;CD;LOCR"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3D6644E23E546132E043814FD8816132"
         SH_PARM_CONS_CD="A" SH_PARM_DTL_TYP_CD="OrganizationReversion"
         SH_PARM_NM="ORGANIZATION_REVERSION" SH_PARM_NMSPC_CD="KFS-CA"
@@ -4012,8 +3947,7 @@
         SH_PARM_DESC="The Origination codes that are allowed to bypass the non-fringe account check in the labor scrubber."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="NON_FRINGE_ACCOUNT_BYPASS_ORIGINATIONS"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="01;02"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3D6644E23F046132E043814FD8816132"
         SH_PARM_CONS_CD="A" SH_PARM_DTL_TYP_CD="Building"
         SH_PARM_NM="BUILDING" SH_PARM_NMSPC_CD="KFS-SY"
@@ -4165,8 +4099,7 @@
         SH_PARM_DESC="The Origination codes that are allowed to bypass the non-wage sub-fund check in the labor scrubber."
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="NON_WAGE_SUB_FUND_BYPASS_ORIGINATIONS"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="01;02"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3DE33CDE460AF0D2E043814FD881F0D2"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Valid object sub types by merchant category code.  Format of list is merchant category code 1=object sub type 1,object sub type 2;merchant category code 2=object sub type 3,object sub type 4,object sub type 5;..."
@@ -4198,8 +4131,7 @@
         SH_PARM_DESC="Allowed organization code for loading EPIC payments to process checks."
         SH_PARM_DTL_TYP_CD="Batch"
         SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_ORGANIZATION"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="KUAL"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3E44F99BE97EE04EE043814FD881E04E"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="PDP Sub-Unit Code for loading EPIC payments"
@@ -4212,8 +4144,7 @@
         SH_PARM_DESC="Allowed organization code for loading Disbursement Voucher payments to process checks."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_ORGANIZATION"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="KUAL"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3E44F99BE980E04EE043814FD881E04E"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="PDP Sub-Unit Code for loading DV payments"
