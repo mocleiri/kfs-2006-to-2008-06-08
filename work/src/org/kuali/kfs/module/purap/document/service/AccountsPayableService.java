@@ -65,16 +65,18 @@ public interface AccountsPayableService {
     public void processExpiredOrClosedAccount(PurApAccountingLineBase acctLineBase, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList);
 
     /**
-     * Calls the cancel related functions.
+     * This method cancels a document, it uses DocumentSpecificService to call the actual logic on the PaymentRequestService 
+     * or CreditMemoService as appropriate.  In certain cases it will also reopen a closed PurchaseOrderDocument
      * 
      * @param apDocument       The accounts payable document to be canceled.
      * @param currentNodeName  The string representing the current node, which we'll need when we
-     *                         want to update the document status by node.
+     *                         want to update the document status by node.  Note: if this is blank it is assumed
+     *                         the request is not coming from workflow.
      */
     public void cancelAccountsPayableDocument(AccountsPayableDocument apDocument, String currentNodeName);
 
     /**
-     * Updates the item based on what's eligible to be payed on purchase order.
+     * Updates the item list based on what's eligible to be payed on purchase order.
      * 
      * @param apDocument  The accounts payable document containing the items to be updated.
      */
