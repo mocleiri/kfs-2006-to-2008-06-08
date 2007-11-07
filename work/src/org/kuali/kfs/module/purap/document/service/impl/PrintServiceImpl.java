@@ -229,6 +229,10 @@ public class PrintServiceImpl implements PrintService {
      * @param povq PurchaseOrderVendorQuote that is being transmitted to
      * @param byteArrayOutputStream ByteArrayOutputStream that the action is using
      * @return Collection of ServiceError objects
+     * 
+     * THIS CODE IS NOT USED IN RELEASE 2 BUT THE CODE WAS LEFT IN TO
+     * FACILITATE TURNING IT BACK ON EARLY IN THE DEVELOPMENT CYCLE OF RELEASE 3.
+    * 
      */
     public Collection generatePurchaseOrderQuotePdf(PurchaseOrderDocument po, PurchaseOrderVendorQuote povq, ByteArrayOutputStream byteArrayOutputStream, String environment) {
         LOG.debug("generatePurchaseOrderQuotePdf() started");
@@ -268,6 +272,10 @@ public class PrintServiceImpl implements PrintService {
      * @param po PurchaseOrderDocument that holds the Quote
      * @param povq PurchaseOrderVendorQuote that is being transmitted to
      * @return Collection of ServiceError objects
+     * 
+     * THIS CODE IS NOT USED IN RELEASE 2 BUT THE CODE WAS LEFT IN TO
+     * FACILITATE TURNING IT BACK ON EARLY IN THE DEVELOPMENT CYCLE OF RELEASE 3.
+    * 
      */
     public Collection savePurchaseOrderQuotePdf(PurchaseOrderDocument po, PurchaseOrderVendorQuote povq, String environment) {
         LOG.debug("savePurchaseOrderQuotePdf() started");
