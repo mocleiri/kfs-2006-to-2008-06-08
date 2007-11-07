@@ -283,6 +283,9 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     }
 
     /**
+     * Given a date, finds all origin entry groups that were created on or after that date
+     * @param day the date that defines recency - all qualifying origin entries groups will have been created on or after that day
+     * @return a Collection of OriginEntryGroup records
      * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getRecentGroups(Date)
      */
     public Collection<OriginEntryGroup> getRecentGroups(Date day) {
