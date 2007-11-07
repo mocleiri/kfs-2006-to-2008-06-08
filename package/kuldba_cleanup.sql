@@ -854,3 +854,6 @@ FROM en_doc_typ_t
 )
 		OR doc_typ_cur_ind = 0
 /
+
+delete from EN_RULE_BASE_VAL_T where RULE_BASE_VAL_CUR_IND = 0
+/
