@@ -88,7 +88,7 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
             cmDocument.setContinuationAccountIndicator(true);
         }
 
-    }
+    }   
 
     /**
      * Populate Credit Memo of type Payment Request.
@@ -224,9 +224,9 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
     }
 
     /**
-     * Converts the amount to percent and set it to the account.
+     * Converts the amount to percent and updates the percent field on the CreditMemoAccount
      * 
-     * @param pr  The payment request document whose items containing the accounts whose percentage would be set.
+     * @param pr The payment request document containing the accounts whose percentage would be set.
      */
     private void convertMoneyToPercent(PaymentRequestDocument pr) {
         LOG.debug("convertMoneyToPercent() started");
@@ -240,11 +240,8 @@ public class CreditMemoCreateServiceImpl implements CreditMemoCreateService {
             String identifier = item.getItemIdentifierString();
 
             if (item.getExtendedPrice().isNonZero()) {
-                // Collections.sort((List)item.getAccounts());
 
                 KualiDecimal accountTotal = KualiDecimal.ZERO;
-                // haven't decided if I'm going to round
-                /* PaymentRequestAccount lastAccount = null; */
                 int accountIdentifier = 0;
                 for (Iterator iterator = item.getSourceAccountingLines().iterator(); iterator.hasNext();) {
                     accountIdentifier++;
