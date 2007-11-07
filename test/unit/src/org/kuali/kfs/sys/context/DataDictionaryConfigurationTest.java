@@ -35,7 +35,10 @@ import org.kuali.core.service.DataDictionaryService;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.test.ConfigureContext;
+import org.kuali.test.suite.AnnotationTestSuite;
+import org.kuali.test.suite.PreCommitSuite;
 
+@AnnotationTestSuite(PreCommitSuite.class)
 @ConfigureContext
 public class DataDictionaryConfigurationTest extends KualiTestBase {
     private static final Logger LOG = Logger.getLogger(DataDictionaryConfigurationTest.class);
