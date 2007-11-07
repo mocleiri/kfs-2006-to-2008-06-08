@@ -532,20 +532,6 @@
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="OBJECT_TYPES" SH_PARM_NMSPC_CD="KFS-FP"
         SH_PARM_TXT="CH;ES;FB;IC" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
-    <SH_PARM_T OBJ_ID="3B13485ADAD3A020E043814FD881A020"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Allowed organization code for loading Disbursement Voucher payments to process checks."
-        SH_PARM_DTL_TYP_CD="DisbursementVoucher"
-        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_ORGANIZATION"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="FMOP"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
-    <SH_PARM_T OBJ_ID="3B13485ADAD4A020E043814FD881A020"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="PDP Sub-Unit Code for loading DV payments"
-        SH_PARM_DTL_TYP_CD="DisbursementVoucher"
-        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_SUB_UNIT"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="FIS"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAD5A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed User ID for PDP loads."
@@ -861,8 +847,7 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="URL to launch on Procurement Card document for disputing a transaction."
         SH_PARM_DTL_TYP_CD="ProcurementCard" SH_PARM_NM="DISPUTE_URL"
-        SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="http://www.genetservice.com/"
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="http://kuali.org/"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB18A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
@@ -1399,20 +1384,6 @@
         SH_PARM_DTL_TYP_CD="AssignContractManager"
         SH_PARM_NM="PDF_IMAGE_PREFIX" SH_PARM_NMSPC_CD="KFS-PA"
         SH_PARM_TXT="cm" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
-    <SH_PARM_T OBJ_ID="3B13485ADB8FA020E043814FD881A020"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Allowed organization code for loading EPIC payments to process checks."
-        SH_PARM_DTL_TYP_CD="Batch"
-        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_ORGANIZATION"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="FMOP"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
-    <SH_PARM_T OBJ_ID="3B13485ADB90A020E043814FD881A020"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="PDP Sub-Unit Code for loading EPIC payments"
-        SH_PARM_DTL_TYP_CD="Batch"
-        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_SUB_UNIT"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="EPIC"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB91A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Restricts User ID for PDP loads."
@@ -1563,8 +1534,8 @@
         SH_PARM_DESC="The status inquiry URL to be displayed on the Purap pdf documents."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="PDF_STATUS_INQUIRY_URL" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="http://temporary.status.inquiry.url.org"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_TXT="http://kuali.org/" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBB0A020E043814FD881A020"
         SH_PARM_CONS_CD="A" SH_PARM_DESC="Purchasing Workgroup"
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="PURCHASING_GROUP"
@@ -2731,7 +2702,7 @@
         SH_PARM_DESC="A central administrative email address to send a notice to when a PDP file fails to load properly."
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="HARD_EDIT_TO_EMAIL_ADDRESSES"
-        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="jsissom@indiana.edu"
+        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="kbatch-l@indiana.edu"
         SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3C194BB19767F188E043814FD881F188"
         SH_PARM_CONS_CD="A"
@@ -2744,21 +2715,21 @@
         SH_PARM_DESC="A central administrative email address to send a notice to when PDP finds errors during the file load process. These types of errors do not prevent the file from loading and are for informational purposes."
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="SOFT_EDIT_TO_EMAIL_ADDRESSES"
-        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="jsissom@indiana.edu"
+        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="kbatch-l@indiana.edu"
         SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3C194BB19769F188E043814FD881F188"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Reference in code but not used at this time."
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="TAX_CANCEL_TO_EMAIL_ADDRESSES"
-        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="jsissom@indiana.edu"
+        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="kbatch-l@indiana.edu"
         SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3C194BB1976AF188E043814FD881F188"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Reference in code but not used at this time."
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="TAX_GROUP_TO_EMAIL_ADDRESSES"
-        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="jsissom@indiana.edu"
+        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="kbatch-l@indiana.edu"
         SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3C194BB1976BF188E043814FD881F188"
         SH_PARM_CONS_CD="A"
@@ -2784,7 +2755,7 @@
         SH_PARM_DESC="A central administrative email address to send a notice to when PDP can not determine the customers email address during the file load process."
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="NO_PAYMENT_FILE_TO_EMAIL_ADDRESSES"
-        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="jsissom@indiana.edu"
+        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="kbatch-l@indiana.edu"
         SH_PARM_TYP_CD="CONFG" VER_NBR="0" WRKGRP_NM="KUALI_FMSOPS"/>
     <SH_PARM_T OBJ_ID="3C194BB1976FF188E043814FD881F188"
         SH_PARM_CONS_CD="A"
@@ -4222,4 +4193,32 @@
         SH_PARM_NMSPC_CD="KFS-FP"
         SH_PARM_TXT="default.htm?turl=WordDocuments%2Fyearenddocuments.htm"
         SH_PARM_TYP_CD="HELP" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="3E44F99BE97DE04EE043814FD881E04E"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Allowed organization code for loading EPIC payments to process checks."
+        SH_PARM_DTL_TYP_CD="Batch"
+        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_ORGANIZATION"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="KUAL"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="3E44F99BE97EE04EE043814FD881E04E"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="PDP Sub-Unit Code for loading EPIC payments"
+        SH_PARM_DTL_TYP_CD="Batch"
+        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_SUB_UNIT"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="PRAP"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="3E44F99BE97FE04EE043814FD881E04E"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Allowed organization code for loading Disbursement Voucher payments to process checks."
+        SH_PARM_DTL_TYP_CD="DisbursementVoucher"
+        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_ORGANIZATION"
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="KUAL"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+    <SH_PARM_T OBJ_ID="3E44F99BE980E04EE043814FD881E04E"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="PDP Sub-Unit Code for loading DV payments"
+        SH_PARM_DTL_TYP_CD="DisbursementVoucher"
+        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_SUB_UNIT"
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="DV"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="KUALI_DV_TAXGRP"/>
 </dataset>

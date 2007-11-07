@@ -2,11 +2,11 @@
 <!DOCTYPE dataset SYSTEM "data.dtd">
 <dataset>
     <FP_DV_PMT_REAS_T DV_PMT_REAS_ACTV_IND="Y" DV_PMT_REAS_CD="A"
-        DV_PMT_REAS_DESC="Payments made for Prizes and Awards must be made to Non-employees only.  Awards may not include personal services, contest winnings, and scholarship or fellowship payments.  These payments are generally for punitive damages and/or settlements.  You must enter the fair market value of merchandise that has been won.  For payments of Prizes and Awards to IU Employees, please contact IU Payroll."
+        DV_PMT_REAS_DESC="Payments made for Prizes and Awards must be made to Non-employees only.  Awards may not include personal services, contest winnings, and scholarship or fellowship payments.  These payments are generally for punitive damages and/or settlements.  You must enter the fair market value of merchandise that has been won.  For payments of Prizes and Awards to University Employees, please contact University Payroll."
         DV_PMT_REAS_NM="Prize and/or Award"
         OBJ_ID="190BB72869E20028E043814FD8810028" VER_NBR="1"/>
     <FP_DV_PMT_REAS_T DV_PMT_REAS_ACTV_IND="Y" DV_PMT_REAS_CD="B"
-        DV_PMT_REAS_DESC="Reimbursement for Out of Pocket Expenses may be made to IU employees.  These reimbursements are paid to an individual who incurs out-of-pocket expenses on behalf of their departmental business operations due to an emergency.  This payment reason may not be used in lieu of the procurement process.  A reimbursement should not exceed a total of $500.00.  No travel, meals, or personal service payments may be made using this payment reason."
+        DV_PMT_REAS_DESC="Reimbursement for Out of Pocket Expenses may be made to University employees.  These reimbursements are paid to an individual who incurs out-of-pocket expenses on behalf of their departmental business operations due to an emergency.  This payment reason may not be used in lieu of the procurement process.  A reimbursement should not exceed a total of $500.00.  No travel, meals, or personal service payments may be made using this payment reason."
         DV_PMT_REAS_NM="Reimbursement for Out of Pocket Expense"
         OBJ_ID="190BB72869E30028E043814FD8810028" VER_NBR="1"/>
     <FP_DV_PMT_REAS_T DV_PMT_REAS_ACTV_IND="Y" DV_PMT_REAS_CD="C"
@@ -37,7 +37,7 @@
         DV_PMT_REAS_NM="Payments for Contractual Agreements"
         OBJ_ID="190BB72869EA0028E043814FD8810028" VER_NBR="1"/>
     <FP_DV_PMT_REAS_T DV_PMT_REAS_ACTV_IND="Y" DV_PMT_REAS_CD="M"
-        DV_PMT_REAS_DESC="Moving Reimbursements are payments to new IU employees for relocation/moving expense.  These payments are subject to IU policy on Moving Expenses.  The object code used would be 5070."
+        DV_PMT_REAS_DESC="Moving Reimbursements are payments to new University employees for relocation/moving expense.  These payments are subject to University policy on Moving Expenses.  The object code used would be 5070."
         DV_PMT_REAS_NM="Moving Reimbursement"
         OBJ_ID="190BB72869EB0028E043814FD8810028" VER_NBR="1"/>
     <FP_DV_PMT_REAS_T DV_PMT_REAS_ACTV_IND="Y" DV_PMT_REAS_CD="N"

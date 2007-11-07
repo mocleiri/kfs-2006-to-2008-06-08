@@ -10239,7 +10239,7 @@
         <column name="PMT_DTL_ID" primaryKey="true" size="8" type="DECIMAL"/>
         <column default="NULL" name="OBJ_ID" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CUST_PMT_DOC_NBR" size="9" type="VARCHAR"/>
+        <column name="CUST_PMT_DOC_NBR" size="14" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="INV_NBR" size="25" type="VARCHAR"/>
         <column name="PO_NBR" size="9" type="VARCHAR"/>
@@ -12876,14 +12876,14 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2100"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317140"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317160"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="3952"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2000"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12696"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12716"/>
     <sequence name="SEQ_RTE_NODE" nextval="563357769"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151636"/>

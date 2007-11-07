@@ -3,7 +3,7 @@
 <dataset>
     <PUR_VNDR_STPLTN_T DOBJ_MAINT_CD_ACTV_IND="Y"
         OBJ_ID="DA52BFFA-E002-9B1A-178B-652AD981F88E" VER_NBR="1"
-        VNDR_STPLTN_DESC="By acceptance of this Purchase Order the Supplier warrants that material will be free from defects and fit for use as intended. Supplier accepts all terms included for the items herein and the stated delivery expectations. Please acknowledge by fax 317-274-2499 or email to rmelski@iupui.edu. Your compliance with this directive is imperative."
+        VNDR_STPLTN_DESC="By acceptance of this Purchase Order the Supplier warrants that material will be free from defects and fit for use as intended. Supplier accepts all terms included for the items herein and the stated delivery expectations. Please acknowledge by fax XXX-XXX-XXXX or email to XXXXXXX@XXXXX.XXX. Your compliance with this directive is imperative."
         VNDR_STPLTN_ID="1000" VNDR_STPLTN_NM="Material Acknowledgment"/>
     <PUR_VNDR_STPLTN_T DOBJ_MAINT_CD_ACTV_IND="Y"
         OBJ_ID="4E70DA62-38AD-36A9-25FC-F4B0CD3D18E7" VER_NBR="1"
