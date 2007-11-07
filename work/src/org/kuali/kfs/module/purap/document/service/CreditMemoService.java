@@ -143,16 +143,14 @@ public interface CreditMemoService extends AccountsPayableDocumentSpecificServic
     public boolean canCancelCreditMemo(CreditMemoDocument cmDocument, UniversalUser user);
 
     /**
-     * Resets the extracted date and credit memo paid timestamp to null, then add a note
-     * to the credit memo document and save the credit memo document.
+     * This is called by PDP to cancel a CreditMemoDocument that has already been extracted     
      * @param cmDocument  The credit memo document to be resetted.
      * @param note        The note to be added to the credit memo document.
      */
     public void resetExtractedCreditMemo(CreditMemoDocument cmDocument, String note);
 
     /**
-     * Calls the AccountsPayableService to cancel the document after adding
-     * the given note in the input parameter to the document.
+     * This is called by PDP to cancel a CreditMemoDocument that has already been extracted
      * 
      * @param cmDocument  The credit memo document to be canceled.
      * @param note        The note to be added to the document to be canceled.
