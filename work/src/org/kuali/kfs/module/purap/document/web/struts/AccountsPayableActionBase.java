@@ -407,7 +407,6 @@ public class AccountsPayableActionBase extends PurchasingAccountsPayableActionBa
         AccountsPayableFormBase apForm = (AccountsPayableFormBase) form;
         String operation = "Cancel ";
         PurQuestionCallback callback = cancelCallbackMethod();
-        // TODO: ckirschenman - use a different data structure, Ideally a map that keeps the order things are put into it
         TreeMap<String, PurQuestionCallback> questionsAndCallbacks = new TreeMap<String, PurQuestionCallback>();
         questionsAndCallbacks.put("cancelAP", callback);
         AccountsPayableDocument apDoc = (AccountsPayableDocument) apForm.getDocument();
