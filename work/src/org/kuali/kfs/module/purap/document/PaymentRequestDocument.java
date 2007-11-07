@@ -339,7 +339,6 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
     }
 
     public String getVendorShippingTitleCode() {
-        // TODO (KULPURAP-1575) f2f: this should be printing the decription instead of the code; do we need the reference object?
         if (ObjectUtils.isNotNull(this.getPurchaseOrderDocument())) {
             return this.getPurchaseOrderDocument().getVendorShippingTitleCode();
         }
