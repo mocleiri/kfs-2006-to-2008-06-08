@@ -25,6 +25,9 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.dao.CorrectionChangeGroupDao;
 
+/**
+ * The OJB implementation of CorrectionChangeGroupDao
+ */
 public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb implements CorrectionChangeGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeGroupDaoOjb.class);
 
