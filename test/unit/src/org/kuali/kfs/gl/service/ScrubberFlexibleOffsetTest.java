@@ -34,6 +34,10 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
 
     private ScrubberService scrubberService;
 
+    /**
+     * Sets up the services neede for this test and also sets the date/time service's date time to one minute before midnight January 1, 2006
+     * @see org.kuali.module.gl.OriginEntryTestBase#setUp()
+     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -59,7 +63,7 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
     /**
      * Test to make sure that flexible offset is off when the flag is off
      * 
-     * @throws Exception
+     * @throws Exception thrown if any exception is encountered for any reason
      */
     public void testNonFlexibleOffsetGeneration() throws Exception {
 
@@ -80,11 +84,11 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
         assertOriginEntries(4, output);
     }
 
-    /**
-     * Test it when the flag is on
-     * 
-     * @throws Exception
-     */
+    ///**
+    // * Test it when the flag is on
+    // * 
+    // * @throws Exception thrown if any exception is encountered for any reason
+    // */
     // This test works in Eclipse, but not in Anthil
     // public void testFlexibleOffsetGeneration() throws Exception {
     //
@@ -141,10 +145,16 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
     // scrub(input);
     // assertOriginEntries(4, output);
     // }
+    /**
+     * Updates the ID01 doc type, so that scrubber offsets are generated
+     */
     private void updateDocTypeForScrubberOffsetGeneration() {
         unitTestSqlDao.sqlCommand("update fp_doc_type_t set TRN_SCRBBR_OFST_GEN_IND = 'Y' where fdoc_typ_cd = 'ID01'");
     }
 
+    /**
+     * Creates offset account fixtures for the test
+     */
     private void setOffsetAccounts() {
         unitTestSqlDao.sqlCommand("insert into FP_OFST_ACCT_T (FIN_COA_CD,OBJ_ID,ACCOUNT_NBR,FIN_OFST_OBJ_CD,FIN_OFST_COA_CD,FIN_OFST_ACCT_NBR) values ('BL','" + new Guid().toString() + "','2331473','8000','BA','9120657')");
         unitTestSqlDao.sqlCommand("insert into FP_OFST_ACCT_T (FIN_COA_CD,OBJ_ID,ACCOUNT_NBR,FIN_OFST_OBJ_CD,FIN_OFST_COA_CD,FIN_OFST_ACCT_NBR) values ('BA','" + new Guid().toString() + "','6044900','8000','BL','2231402')");
@@ -152,6 +162,11 @@ public class ScrubberFlexibleOffsetTest extends OriginEntryTestBase {
         unitTestSqlDao.sqlCommand("insert into FP_OFST_ACCT_T (FIN_COA_CD,OBJ_ID,ACCOUNT_NBR,FIN_OFST_OBJ_CD,FIN_OFST_COA_CD,FIN_OFST_ACCT_NBR) values ('BL','" + new Guid().toString() + "','9520004','9899','BL','2231419')");
     }
 
+    /**
+     * Runs the scrubber on a given array of transactions
+     * 
+     * @param inputTransactions String-formatted entries
+     */
     private void scrub(String[] inputTransactions) {
         clearOriginEntryTables();
         loadInputTransactions(OriginEntrySource.BACKUP, inputTransactions, date);
