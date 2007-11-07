@@ -29,6 +29,9 @@ import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EntryDao;
 
+/**
+ * An OJB implementation of EntryDao
+ */
 public class EntryDaoOjb extends PlatformAwareDaoBaseOjb implements EntryDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EntryDaoOjb.class);
 
