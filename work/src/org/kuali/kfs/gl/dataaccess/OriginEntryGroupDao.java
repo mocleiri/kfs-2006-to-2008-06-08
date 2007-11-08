@@ -26,10 +26,10 @@ public interface OriginEntryGroupDao {
      * Given an origin entry group source type (defined in OriginEntrySource)
      * 
      * @param sourceCode the source code of the groups to find
-     * @return a Collection of OriginEntryGroups with the given soruce code
+     * @return a OriginEntryGroup with the given source code and max ORIGIN_ENTRY_GRP_ID
      * @see org.kuali.module.gl.bo.OriginEntrySource
      */
-    public Collection<OriginEntryGroup> getGroupsFromSource(String sourceCode);
+    public OriginEntryGroup getGroupWithMaxIdFromSource(String sourceCode);
 
     /**
      * Get all the groups that are older than a date
