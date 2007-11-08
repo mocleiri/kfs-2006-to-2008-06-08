@@ -116,18 +116,22 @@
 	</target>
 
 	<target name="clean-help" depends="init-property-files" unless="nohelp">
-		<fileset dir="${basedir}">
-			<include name="${help.directory}/**/**" />
-		</fileset>
+		<delete>
+			<fileset dir="${basedir}">
+				<include name="${help.directory}/**" />
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="clean-rice" depends="init-property-files" unless="norice">
-		<fileset dir="${basedir}">
-			<include name="${licenses.directory}/${rice.name}/**/**" />
-			<include name="${webroot.directory}/${rice.application}/**/**" />
-			<include name="${webroot.directory}/${tags.directory}/${rice.application}/**/**" />
-			<include name="${webroot.directory}/${workflow.application}/**/**" />
-		</fileset>
+		<delete>
+			<fileset dir="${basedir}">
+				<include name="${licenses.directory}/${rice.name}/**" />
+				<include name="${webroot.directory}/${rice.application}/**" />
+				<include name="${webroot.directory}/${tags.directory}/${rice.application}/**" />
+				<include name="${webroot.directory}/${workflow.application}/**" />
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="clean-local" if="is.local.build" depends="init-property-files">
