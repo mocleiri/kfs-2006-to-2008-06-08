@@ -560,8 +560,8 @@
         WRKGRP_CUR_IND="1" WRKGRP_DESC="SE-Southeast New Albany Bursar"
         WRKGRP_ID="2588" WRKGRP_NM="KUALI_BRSR_SE"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="1"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="3" DOC_HDR_ID="317085"
-        WRKGRP_ACTV_IND="1" WRKGRP_CUR_IND="1"
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="3" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
         WRKGRP_DESC="Kuali Disbursement Voucher Administrator User Role"
         WRKGRP_ID="2746" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="1"/>
