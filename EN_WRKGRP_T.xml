@@ -573,4 +573,19 @@
         WRKGRP_DESC="Kuali Administrator User Role" WRKGRP_ID="2744"
         WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="5"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="0" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="area 9  for T Shepherd / K Bridgford"
+        WRKGRP_ID="2566" WRKGRP_NM="KUALI_AREA" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1" WRKGRP_DESC="EA Bursar" WRKGRP_ID="2583"
+        WRKGRP_NM="KUALI_BRSR_EA" WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="0" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Senior Financial Analyst Approval for IN"
+        WRKGRP_ID="2664" WRKGRP_NM="KUALI_INSRFA" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1" WRKGRP_DESC="update PCDO accounting defaults"
+        WRKGRP_ID="2733" WRKGRP_NM="KUALI_PCAD_USERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
 </dataset>
