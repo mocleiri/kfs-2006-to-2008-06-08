@@ -19,12 +19,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.dbplatform.KualiDBPlatformOracle;
+import org.kuali.core.dbplatform.RawSQL;
 import org.kuali.core.util.UnitTestSqlDao;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.test.ConfigureContext;
 
 @ConfigureContext
+@RawSQL
 public class MismatchedForeignKeyTest extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(MismatchedForeignKeyTest.class);
 
@@ -46,6 +49,7 @@ public class MismatchedForeignKeyTest extends KualiTestBase {
      * select occurrences where foreign key columns do not match the parent columns in data types or sizes.
      */
     public void testExistingMismatchedForeignKeys() {
+        if ( unitTestSqlDao.getDbPlatform() instanceof KualiDBPlatformOracle ) {
         final List rows = unitTestSqlDao.sqlSelect("SELECT c.table_name AS child_table_name, cc.column_name AS child_column_name, " +
         "rc.table_name AS parent_table_name, rcc.column_name AS parent_column_name, " +
         "DECODE( cols.data_type, 'NUMBER', DECODE( cols.data_precision, NULL, cols.data_type, " + 
@@ -76,7 +80,9 @@ public class MismatchedForeignKeyTest extends KualiTestBase {
         }
 
         assertEquals(failureMessage.toString(), 0, rows.size());
-    
+        } else {
+            System.err.println( "Unable to test as no SQL available to test for this platform.");
+        }    
     }
 
 }
