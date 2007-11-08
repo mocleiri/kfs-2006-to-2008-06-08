@@ -12,7 +12,6 @@ CREATE TABLE CM_AST_TRNFR_DOC_T(
         ORG_OWNER_ACCT_NBR             VARCHAR2(7),
         ORG_TXT                        VARCHAR2(255),
         ORG_INVN_NM                    VARCHAR2(40),
-        TRNFRFND_FSORIG_CD             VARCHAR2(2),
         TRNFR_FND_FDOC_NBR             VARCHAR2(14),
         ORG_CD                         VARCHAR2(4),
         AST_OFFCMP_ADDR                VARCHAR2(30),

@@ -17,7 +17,6 @@ CREATE TABLE CM_AST_RETIREDOC_T(
         AST_RETIR_PHN_NBR              VARCHAR2(13),
         AST_EST_SELL_PRC               NUMBER(19, 2),
         CPTLAST_SALE_PRC               NUMBER(19, 2),
-        CSHRCPT_FS_ORIG_CD             VARCHAR2(2),
         CASH_RCPT_FDOC_NBR             VARCHAR2(14),
         AST_HANDLG_FEE_AMT             NUMBER(19, 2),
         AST_PRVNTMAINT_AMT             NUMBER(19, 2),
