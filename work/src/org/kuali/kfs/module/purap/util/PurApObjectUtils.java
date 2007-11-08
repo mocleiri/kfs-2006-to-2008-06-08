@@ -33,13 +33,18 @@ import org.kuali.core.util.TypedArrayList;
 import org.kuali.core.web.format.FormatException;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.rice.KNSServiceLocator;
-
+/**
+ * Purap Object Utils.
+ * Similar to the nervous system ObjectUtils this class contains methods to reflectively set and get values on
+ * BusinessObjects that are passed in.
+ */
 public class PurApObjectUtils {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurApObjectUtils.class);
 
     /**
      * 
      * Populates a class using a base class to determine fields
+     * 
      * @param base the class to determine what fields to copy
      * @param src the source class
      * @param target the target class
@@ -71,6 +76,7 @@ public class PurApObjectUtils {
     /**
      * 
      * True if a field is processable
+     * 
      * @param baseClass the base class
      * @param fieldName the field name to detrmine if processable
      * @param excludedFieldNames field names to exclude
@@ -120,6 +126,7 @@ public class PurApObjectUtils {
     /**
      * 
      * Copies a collection
+     * 
      * @param fieldName field to copy
      * @param targetObject the object of the collection
      * @param propertyValue value to copy
@@ -191,6 +198,7 @@ public class PurApObjectUtils {
     /**
      * 
      * Populates from a base class traversing up the object hierarchy.
+     * 
      * @param sourceObject object to copy from
      * @param targetObject object to copy to
      * @param supplementalUncopyableFieldNames fields to exclude
