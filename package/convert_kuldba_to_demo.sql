@@ -35,10 +35,11 @@ UPDATE sh_parm_t
 -- clean out non release 2.0 documents and associated entries
 
 DELETE FROM fp_doc_type_t
-  WHERE fdoc_grp_cd IN ( 'AR', 'AN', 'CM', 'CR', 'MO', 'SF' )
+  WHERE (fdoc_grp_cd IN ( 'AR', 'AN', 'CM', 'CR', 'SF' )
      OR fdoc_typ_cd LIKE 'ID__'
      OR fdoc_typ_cd LIKE 'EB__'
-     OR fdoc_nm LIKE 'LEGACY-'
+     OR fdoc_nm LIKE 'LEGACY-')
+	AND fdoc_typ_cd NOT IN ( 'PTYP', 'IDCL' )
 /
 
 DELETE FROM fp_doc_group_t
