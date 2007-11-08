@@ -25,7 +25,7 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
  * An interface of methods to interact with Origin Entry Groups
  */
 public interface OriginEntryGroupService {
-    public Collection getGroupsFromSource(String sourceCode);
+    public OriginEntryGroup getGroupWithMaxIdFromSource(String sourceCode);
 
     /**
      * Mark a group as don't process
