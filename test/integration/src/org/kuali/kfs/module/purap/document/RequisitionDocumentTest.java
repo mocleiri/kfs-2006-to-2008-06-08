@@ -42,7 +42,7 @@ import org.kuali.workflow.WorkflowTestUtils;
 import edu.iu.uis.eden.EdenConstants;
 
 /**
- * This class is used to create and test populated Requisition Documents of various kinds.
+ * Used to create and test populated Requisition Documents of various kinds.
  */
 @ConfigureContext(session = KHUNTLEY)
 public class RequisitionDocumentTest extends KualiTestBase {
@@ -138,6 +138,7 @@ public class RequisitionDocumentTest extends KualiTestBase {
         assertTrue("Document should now be final.", requisitionDocument.getDocumentHeader().getWorkflowDocument().stateIsFinal());
     }
 
+    /*
     @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
     public final void testAPOValid() throws Exception {
         requisitionDocument = RequisitionDocumentFixture.REQ_APO_VALID.createRequisitionDocument();
@@ -165,6 +166,7 @@ public class RequisitionDocumentTest extends KualiTestBase {
         assertNotNull(relatedPOs);
         assertTrue(relatedPOs.size() > 0);
     }
+    */
 
     //
     // @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions=true)
