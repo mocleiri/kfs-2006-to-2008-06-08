@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dataset SYSTEM "data.dtd">
-<dataset>
-    <PUR_REQS_ACCT_T ACCOUNT_NBR="9020650" ACLN_AMT="1000"
-        ACLN_PCT="100" FIN_COA_CD="BA" FIN_OBJECT_CD="8000"
-        OBJ_ID="1761A3E3-B6E7-066E-A1AD-20BECB368E02"
-        REQS_ACCT_ID="1002" REQS_ITM_ID="1002" VER_NBR="12"/>
-</dataset>
