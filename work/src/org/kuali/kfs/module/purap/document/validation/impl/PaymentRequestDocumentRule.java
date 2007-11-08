@@ -56,11 +56,19 @@ import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
 
+/**
+ * Business rule(s) applicable to Payment Request documents.
+ */
 public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase {
 
     private static KualiDecimal zero = new KualiDecimal(0);
     private static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
+    /**
+     * Returns true if full document entry is complete, bypassing further rules.
+     * 
+     * @see org.kuali.module.purap.rules.PurapAccountingDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.kfs.document.AccountingDocument, org.kuali.kfs.bo.AccountingLine)
+     */
     @Override
     protected boolean processCustomAddAccountingLineBusinessRules(AccountingDocument financialDocument, AccountingLine accountingLine) {
         PaymentRequestDocument preq = (PaymentRequestDocument) financialDocument;
@@ -71,6 +79,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
     }
 
     /**
+     * Overriding the accessibility of the accounts only in the case where awaiting ap review, that is because the super
+     * checks enroute and checks if it is the owner while we allow "full entry" until past this stage
+     *
      * @see org.kuali.kfs.rules.AccountingDocumentRuleBase#accountIsAccessible(org.kuali.kfs.document.AccountingDocument,
      *      org.kuali.kfs.bo.AccountingLine)
      */
@@ -107,6 +118,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * @see org.kuali.core.rules.DocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
+     */
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
         boolean isValid = true;
@@ -117,6 +131,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return isValid;
     }
 
+    /**
+     * Ensures source accounting lines amounts are not negative.
+     * 
+     * @param paymentRequestDocument - payment request document to validate
+     * @return
+     */
     private boolean checkNegativeAccounts(PaymentRequestDocument paymentRequestDocument) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -136,6 +156,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * @see org.kuali.module.purap.rule.ContinueAccountsPayableRule#processContinueAccountsPayableBusinessRules(org.kuali.module.purap.document.AccountsPayableDocument)
+     */
     public boolean processContinueAccountsPayableBusinessRules(AccountsPayableDocument apDocument) {
         boolean valid = true;
         PaymentRequestDocument paymentRequestDocument = (PaymentRequestDocument) apDocument;
@@ -145,6 +168,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * @see org.kuali.module.purap.rule.CalculateAccountsPayableRule#processCalculateAccountsPayableBusinessRules(org.kuali.module.purap.document.AccountsPayableDocument)
+     */
     public boolean processCalculateAccountsPayableBusinessRules(AccountsPayableDocument apDocument) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -177,9 +203,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
     }
 
     /**
-     * This method performs any validation for the Invoice tab.
+     * Performs any validation for the Invoice tab.
      * 
-     * @param preqDocument
+     * @param preqDocument - payment request document
      * @return
      */
     public boolean processInvoiceValidation(PaymentRequestDocument preqDocument) {
@@ -206,6 +232,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Performs validation on the vendor on the payment request document.
+     * 
+     * @param preqDocument - payment request document.
+     * @return
+     */
     public boolean processVendorValidation(PaymentRequestDocument preqDocument) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -225,7 +257,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
-
+    /**
+     * Performs various validation on the purchase order.
+     * 
+     * @param document
+     * @return
+     */
     protected boolean processPurchaseOrderIDValidation(PaymentRequestDocument document) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -255,6 +292,13 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Determines if there are items with encumbrances to be invoiced on passed in
+     * purchase order document.
+     * 
+     * @param document - purchase order document
+     * @return
+     */
     public boolean encumberedItemExistsForInvoicing(PurchaseOrderDocument document) {
         boolean zeroDollar = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -284,6 +328,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return !zeroDollar;
     }
 
+    /**
+     * Ensures invoice date does not occur in the future.
+     * 
+     * @param document
+     * @return
+     */
     protected boolean processPaymentRequestDateValidationForContinue(PaymentRequestDocument document) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -298,6 +348,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Validates payment request dates.
+     * 
+     * @param document - payment request document
+     * @return
+     */
     protected boolean validatePaymentRequestDates(PaymentRequestDocument document) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
@@ -308,6 +364,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Validates that the payment request date does not occur in the past.
+     * 
+     * @param document - payment request document
+     * @return
+     */
     boolean validatePayDateNotPast(PaymentRequestDocument document) {
         boolean valid = true;
         java.sql.Date paymentRequestPayDate = document.getPaymentRequestPayDate();
@@ -342,11 +404,11 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
     }
 
     /**
-     * This method checks whether the total of the items' extended price, excluding the item types that can be negative, match with
+     * Validates whether the total of the items' extended price, excluding the item types that can be negative, match with
      * the vendor invoice amount that the user entered at the beginning of the preq creation, and if they don't match, the app will
      * just print a warning to the page that the amounts don't match.
      * 
-     * @param document
+     * @param document - payment request document
      */
     public boolean validateTotals(PaymentRequestDocument document) {
         boolean valid = true;
@@ -362,6 +424,13 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Calculates a total but excludes passed in item types from the totalling.
+     * 
+     * @param itemList - list of purap items
+     * @param excludedItemTypes - list of item types to exclude from totalling
+     * @return
+     */
     private KualiDecimal getTotalExcludingItemTypes(List<PurApItem> itemList, List<String> excludedItemTypes) {
         KualiDecimal total = zero;
         for (PurApItem item : itemList) {
@@ -381,6 +450,11 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return total;
     }
 
+    /**
+     * Flags with an erorr the item totals whos calculated extended price does not equal its extended price.
+     * 
+     * @param itemList - list of purap items
+     */
     private void flagLineItemTotals(List<PurApItem> itemList) {
         for (PurApItem purApItem : itemList) {
             PaymentRequestItem item = (PaymentRequestItem) purApItem;
@@ -393,11 +467,11 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
     }
 
     /**
-     * This method performs item validations for the rules that are only applicable to Payment Request Document. In EPIC, we are
+     * Performs item validations for the rules that are only applicable to Payment Request Document. In EPIC, we are
      * also doing similar steps as in this method within the validateFormatter, which is called upon Save. Therefore now we're also
      * calling the same validations upon Save.
      * 
-     * @param purapDocument
+     * @param purapDocument - purchasing accounts payable document
      * @return
      */
     @Override
@@ -411,6 +485,13 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Calls another validate item method and passes an identifier string from the item.
+     * 
+     * @param paymentRequestDocument - payment request document.
+     * @param item
+     * @return
+     */
     private boolean validateEachItem(PaymentRequestDocument paymentRequestDocument, PaymentRequestItem item) {
         boolean valid = true;
         String identifierString = item.getItemIdentifierString();
@@ -418,6 +499,15 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Performs validation if full document entry not completed and peforms varying item validation.
+     * Such as, above the line, items without accounts, items with accounts.
+     * 
+     * @param paymentRequestDocument - payment request document
+     * @param item - payment request item
+     * @param identifierString - identifier string used to mark in an error map
+     * @return
+     */
     public boolean validateItem(PaymentRequestDocument paymentRequestDocument, PaymentRequestItem item, String identifierString) {
         boolean valid = true;
         // only run item validations if before full entry
@@ -432,6 +522,13 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Validates above the line items.
+     * 
+     * @param item - payment request item
+     * @param identifierString - identifier string used to mark in an error map
+     * @return
+     */
     private boolean validateAboveTheLineItems(PaymentRequestItem item, String identifierString) {
         boolean valid = true;
         // Currently Quantity is allowed to be NULL on screen;
@@ -472,9 +569,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
     }
 
     /**
-     * This method validates that the item must contain at least one account
+     * Validates that the item must contain at least one account
      * 
-     * @param item
+     * @param item - payment request item
      * @return
      */
     public boolean validateItemWithoutAccounts(PaymentRequestItem item, String identifierString) {
@@ -486,6 +583,15 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Validates the totals for the item by account, that the total by each accounting line for the item, matches
+     * the extended price on the item.
+     * 
+     * @param paymentRequestDocument - payment request document
+     * @param item - payment request item to validate
+     * @param identifierString - identifier string used to mark in an error map
+     * @return
+     */
     public boolean validateItemAccounts(PaymentRequestDocument paymentRequestDocument, PaymentRequestItem item, String identifierString) {
         boolean valid = true;
         List<PurApAccountingLine> accountingLines = item.getSourceAccountingLines();
@@ -505,6 +611,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * Validates that a cancel can occur given the current state of the document.
+     * 
+     * @param purapDocument - purchasing accounts payable document
+     * @return
+     */
     public boolean validateCancel(PurchasingAccountsPayableDocument purapDocument) {
         Collection c = new ArrayList();
         boolean valid = true;
@@ -531,6 +643,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * 
+     * 
+     * @param purapDocument - purchasing accounts payable document
+     * @return
+     */
     public boolean validateRouteFiscal(PurchasingAccountsPayableDocument purapDocument) {
         boolean valid = true;
         PaymentRequestDocument paymentRequest = (PaymentRequestDocument) purapDocument;
@@ -538,6 +656,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return valid;
     }
 
+    /**
+     * 
+     * 
+     * @param paymentRequest - payment request document
+     * @return
+     */
     protected boolean validatePaymentRequestReview(PaymentRequestDocument paymentRequest) {
         boolean valid = true;
 
@@ -597,26 +721,12 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         }
         return valid;
     }
-
-    /*
-     * private boolean isDateInPast(Date compareDate) { boolean valid = true; if (compareDate != null) { Calendar c =
-     * SpringContext.getBean(DateTimeService.class).getCurrentCalendar(); c.set(Calendar.HOUR, 12); c.set(Calendar.MINUTE, 0);
-     * c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0); c.set(Calendar.AM_PM, Calendar.AM); Timestamp timeNow = new
-     * Timestamp(c.getTime().getTime()); Calendar c2 = SpringContext.getBean(DateTimeService.class).getCalendar(compareDate);
-     * c2.set(Calendar.HOUR, 11); c2.set(Calendar.MINUTE, 59); c2.set(Calendar.SECOND, 59); c2.set(Calendar.MILLISECOND, 59);
-     * c2.set(Calendar.AM_PM, Calendar.PM); Timestamp testTime = new Timestamp(c2.getTime().getTime()); if
-     * (timeNow.compareTo(testTime) > 0) { valid &= false; } } return valid; } public boolean
-     * isPayDateOver60Days(PaymentRequestDocument paymentRequest) { if (paymentRequest.getPaymentRequestPayDate() != null) { //
-     * Calendar c is a holder for today's date + 60 days Calendar c =
-     * SpringContext.getBean(DateTimeService.class).getCurrentCalendar(); c.set(Calendar.HOUR, 12); c.set(Calendar.MINUTE, 0);
-     * c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0); c.set(Calendar.AM_PM, Calendar.AM); c.add(Calendar.DATE, 60);
-     * Timestamp testTime = new Timestamp(c.getTime().getTime()); // Calendar c2 is a holder for the paymentRequestPayDate Calendar
-     * c2 = SpringContext.getBean(DateTimeService.class).getCalendar(paymentRequest.getPaymentRequestPayDate());
-     * c2.set(Calendar.HOUR, 11); c2.set(Calendar.MINUTE, 59); c2.set(Calendar.SECOND, 59); c2.set(Calendar.MILLISECOND, 59);
-     * c2.set(Calendar.AM_PM, Calendar.PM); Timestamp payDate = new Timestamp(c2.getTime().getTime()); // return whether
-     * paymentRequestPayDate is after today's date return (payDate.compareTo(testTime) > 0); } else { return false; } }
+    
+    /**
+     * Forces general ledger entries to be approved, does not wait for payment request document final approval.
+     * 
+     * @see org.kuali.module.purap.rules.PurapAccountingDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.kfs.document.AccountingDocument, org.kuali.kfs.bo.AccountingLine, org.kuali.kfs.bo.GeneralLedgerPendingEntry)
      */
-
     @Override
     protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument accountingDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
         super.customizeExplicitGeneralLedgerPendingEntry(accountingDocument, accountingLine, explicitEntry);
@@ -629,6 +739,11 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         explicitEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
     }
 
+    /**
+     * Returns true if full document entry is completed and bypasses any further validation, otherwise proceeds as normal.
+     * 
+     * @see org.kuali.module.purap.rules.PurchasingAccountsPayableDocumentRuleBase#verifyAccountPercent(org.kuali.kfs.document.AccountingDocument, java.util.List, java.lang.String)
+     */
     @Override
     protected boolean verifyAccountPercent(AccountingDocument accountingDocument, List<PurApAccountingLine> purAccounts, String itemLineNumber) {
         if (SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted((PaymentRequestDocument) accountingDocument)) {
@@ -637,6 +752,9 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         return super.verifyAccountPercent(accountingDocument, purAccounts, itemLineNumber);
     }
 
+    /**
+     * @see org.kuali.module.purap.rule.CancelAccountsPayableRule#processCancelAccountsPayableBusinessRules(org.kuali.module.purap.document.AccountsPayableDocument)
+     */
     public boolean processCancelAccountsPayableBusinessRules(AccountsPayableDocument document) {
         boolean valid = true;
         PaymentRequestDocument preq = (PaymentRequestDocument) document;
