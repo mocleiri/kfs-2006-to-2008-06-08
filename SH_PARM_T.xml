@@ -387,7 +387,7 @@
         SH_PARM_NM="COVER_SHEET_TEMPLATE_RLINES"
         SH_PARM_NMSPC_CD="KFS-FP"
         SH_PARM_TXT="I hereby certify that the information relating to this FIS (TP) Document requesting payment for expenses is just and correct. I certify that all charges and/or reimbursements pertain to Indiana University business, that the amount is legally due after allowing all just credits and that no part of the same has previously been paid or will be paid by another source. Payee Signature ________________________   Payee Address ________________________ Date: ____________                                                                      ________________________ Account Manager                                                  Payee Phone # ________________________ Signature ______________________________  Payee Tax ID# ________________________"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN KFS-FP"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_DV_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADABEA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on Disbursement Voucher documents with a payment method of F (Foreign Draft)."
