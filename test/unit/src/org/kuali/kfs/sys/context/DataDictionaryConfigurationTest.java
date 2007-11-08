@@ -113,7 +113,7 @@ public class DataDictionaryConfigurationTest extends KualiTestBase {
         List<String> ddEntriesWithMissingTypes = new ArrayList<String>();
         for (DocumentEntry documentEntry : documentEntries) {
             String name = documentEntry.getDocumentTypeName();
-            if (!workflowDocumentTypeNames.contains(name) && !"RiceUserMaintenanceDocument".equals(name) && !"IndirectCostLookupMaintenanceDocument".equals(name) && !"SubmissionTypeMaintenanceDocument".equals(name)) {//Last two should be added to workflow and removed here
+            if (!workflowDocumentTypeNames.contains(name) && !"RiceUserMaintenanceDocument".equals(name)) {
                 ddEntriesWithMissingTypes.add(name);
             }
             else {
