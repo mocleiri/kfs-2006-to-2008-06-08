@@ -164,6 +164,11 @@ public class ParameterConfigurationTest extends KualiTestBase {
             }
         }
 
+        /**
+         * The below commented out code is useful when debugging the test locally, as it allows the errors to be posted
+         * to general error output stream.
+         */
+        
 //        Collections.sort(boParamsMissingFromDB);
 //        Collections.sort(documentParamsMissingFromDB);
 //        Collections.sort(documentHeaderParamsMissingFromDB);
@@ -190,9 +195,17 @@ public class ParameterConfigurationTest extends KualiTestBase {
 //        LOG.info("Total number of documents headers reviewed: "+documentHeaderCount);
 //        LOG.info("Number of missing document header parameters: "+documentHeaderParamsMissingFromDB.size());
 
-        assertEquals("dataDictionaryReferencedParametersExistInParameterTable: " + boParamsMissingFromDB, 0, boParamsMissingFromDB.size());
-        assertEquals("dataDictionaryReferencedParametersExistInParameterTable: " + documentParamsMissingFromDB, 0, documentParamsMissingFromDB.size());
-        assertEquals("dataDictionaryReferencedParametersExistInParameterTable: " + documentHeaderParamsMissingFromDB, 0, documentHeaderParamsMissingFromDB.size());
+        List<String> allMissingParams = new ArrayList<String>();
+        
+        allMissingParams.addAll(boParamsMissingFromDB);
+        allMissingParams.addAll(documentParamsMissingFromDB);
+        allMissingParams.addAll(documentHeaderParamsMissingFromDB);
+
+        assertEquals("dataDictionaryReferencedParametersExistInParameterTable: " + allMissingParams, 0, allMissingParams.size());
+        
+//        assertEquals("dataDictionaryReferencedParametersExistInParameterTable: " + boParamsMissingFromDB, 0, boParamsMissingFromDB.size());
+//        assertEquals("dataDictionaryReferencedParametersExistInParameterTable: " + documentParamsMissingFromDB, 0, documentParamsMissingFromDB.size());
+//        assertEquals("dataDictionaryReferencedParametersExistInParameterTable: " + documentHeaderParamsMissingFromDB, 0, documentHeaderParamsMissingFromDB.size());
         
     }
     
