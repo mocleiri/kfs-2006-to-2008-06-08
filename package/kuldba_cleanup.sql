@@ -1,4 +1,5 @@
 /* Run in KULDBA */
+/* FINAL VERSION WAS NOT TESTED due to some ad hoc SQL between prior and final */
 
 /* 1a) */
 truncate table ER_BDGT_DOC_T;
@@ -9,7 +10,7 @@ DELETE
   FROM en_wrkgrp_ext_dta_t
   WHERE wrkgrp_ext_id IN (SELECT wrkgrp_ext_id FROM en_wrkgrp_ext_t
   WHERE wrkgrp_id IN (SELECT wrkgrp_id FROM en_wrkgrp_t
-    WHERE wrkgrp_nm IN (
+    WHERE (wrkgrp_nm IN (
   '3223ss'
 , '3223ssy'
 , '322hd'
@@ -141,6 +142,17 @@ DELETE
 , 'KUALI_ROLE_CAMS_ADMIN'
 , 'AthContent'
 , 'AthleticContent'
+)
+	AND wrkgrp_nm not in (select wrkgrp_nm from CG_AWD_T)
+	AND wrkgrp_nm not in (select qstn_typ_wrkgrp_nm from ER_QSTN_TYP_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CASHIER_ITM_IN_PROC_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CSH_DRWR_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_SB_CTRL_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from SH_PARM_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select blnkt_appr_wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_RTE_NODE_T)
+	AND wrkgrp_id not in (select rule_rsp_nm from EN_RULE_RSP_T where RULE_RSP_TYP = 'G')
 )
 		OR wrkgrp_cur_ind = 0
 		OR wrkgrp_actv_ind = 0
@@ -151,7 +163,7 @@ DELETE
 DELETE
   FROM en_wrkgrp_ext_t
   WHERE wrkgrp_id IN (SELECT wrkgrp_id FROM en_wrkgrp_t
-    WHERE wrkgrp_nm IN (
+    WHERE (wrkgrp_nm IN (
   '3223ss'
 , '3223ssy'
 , '322hd'
@@ -283,6 +295,17 @@ DELETE
 , 'KUALI_ROLE_CAMS_ADMIN'
 , 'AthContent'
 , 'AthleticContent'
+)
+	AND wrkgrp_nm not in (select wrkgrp_nm from CG_AWD_T)
+	AND wrkgrp_nm not in (select qstn_typ_wrkgrp_nm from ER_QSTN_TYP_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CASHIER_ITM_IN_PROC_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CSH_DRWR_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_SB_CTRL_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from SH_PARM_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select blnkt_appr_wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_RTE_NODE_T)
+	AND wrkgrp_id not in (select rule_rsp_nm from EN_RULE_RSP_T where RULE_RSP_TYP = 'G')
 )
 		OR wrkgrp_cur_ind = 0
 		OR wrkgrp_actv_ind = 0
@@ -292,7 +315,7 @@ DELETE
 DELETE
   FROM en_wrkgrp_mbr_t
   WHERE wrkgrp_id IN (SELECT wrkgrp_id FROM en_wrkgrp_t
-    WHERE wrkgrp_nm IN (
+    WHERE (wrkgrp_nm IN (
   '3223ss'
 , '3223ssy'
 , '322hd'
@@ -424,6 +447,17 @@ DELETE
 , 'KUALI_ROLE_CAMS_ADMIN'
 , 'AthContent'
 , 'AthleticContent'
+)
+	AND wrkgrp_nm not in (select wrkgrp_nm from CG_AWD_T)
+	AND wrkgrp_nm not in (select qstn_typ_wrkgrp_nm from ER_QSTN_TYP_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CASHIER_ITM_IN_PROC_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CSH_DRWR_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_SB_CTRL_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from SH_PARM_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select blnkt_appr_wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_RTE_NODE_T)
+	AND wrkgrp_id not in (select rule_rsp_nm from EN_RULE_RSP_T where RULE_RSP_TYP = 'G')
 )
 		OR wrkgrp_cur_ind = 0
 		OR wrkgrp_actv_ind = 0
@@ -431,7 +465,7 @@ DELETE
 /
 
 DELETE FROM en_wrkgrp_t
-    WHERE wrkgrp_nm IN (
+    WHERE (wrkgrp_nm IN (
   '3223ss'
 , '3223ssy'
 , '322hd'
@@ -564,8 +598,30 @@ DELETE FROM en_wrkgrp_t
 , 'AthContent'
 , 'AthleticContent'
 )
+	AND wrkgrp_nm not in (select wrkgrp_nm from CG_AWD_T)
+	AND wrkgrp_nm not in (select qstn_typ_wrkgrp_nm from ER_QSTN_TYP_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CASHIER_ITM_IN_PROC_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_CSH_DRWR_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from FP_SB_CTRL_T)
+	AND wrkgrp_nm not in (select wrkgrp_nm from SH_PARM_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select blnkt_appr_wrkgrp_id from EN_DOC_TYP_T)
+	AND wrkgrp_id not in (select wrkgrp_id from EN_RTE_NODE_T)
+	AND wrkgrp_id not in (select rule_rsp_nm from EN_RULE_RSP_T where RULE_RSP_TYP = 'G')
+)
 		OR wrkgrp_cur_ind = 0
 		OR wrkgrp_actv_ind = 0
+/
+
+UPDATE en_wrkgrp_t SET doc_hdr_id = -1 WHERE doc_hdr_id != -1
+/
+
+/* put KHUNTLEY in any empty workgroups */
+INSERT INTO en_wrkgrp_mbr_t
+  SELECT '6162502038', wrkgrp_id, 'U', wrkgrp_ver_nbr, 1
+    FROM en_wrkgrp_t
+   WHERE (wrkgrp_id,wrkgrp_ver_nbr) NOT IN
+         (SELECT wrkgrp_id,wrkgrp_ver_nbr FROM en_wrkgrp_mbr_t)
 /
 
 /* 1c) */
@@ -855,7 +911,8 @@ FROM en_doc_typ_t
 		OR doc_typ_cur_ind = 0
 /
 
-delete from EN_RULE_BASE_VAL_T where RULE_BASE_VAL_CUR_IND = 0
-/
 delete en_doc_typ_t where doc_typ_nm like 'KualiBudgetConstruction%'
+/
+
+update sh_parm_t set wrkgrp_nm = 'KUALI_ROLE_DV_ADMIN' where wrkgrp_nm = 'KUALI_ROLE_DV_ADMIN KFS-FP'
 /
