@@ -29,7 +29,6 @@ public class AssetTransferDocument extends PersistableBusinessObjectBase {
 	private String organizationOwnerAccountNumber;
 	private String organizationText;
 	private String organizationInventoryName;
-	private String transferOfFundsOriginationCode;
 	private String transferOfFundsFinancialDocumentNumber;
 	private String organizationCode;
 	private String offCampusAddress;
@@ -43,7 +42,6 @@ public class AssetTransferDocument extends PersistableBusinessObjectBase {
 	private Account organizationOwnerAccount;
 	private Chart organizationOwnerChartOfAccounts;
 	private Org organization;
-    private OriginationCode transferOfFundsOrigination;
     private DocumentHeader transferOfFundsFinancialDocument;
     private State offCampusState;
     private Building building;
@@ -285,28 +283,6 @@ public class AssetTransferDocument extends PersistableBusinessObjectBase {
 	public void setOrganizationInventoryName(String organizationInventoryName) {
 		this.organizationInventoryName = organizationInventoryName;
 	}
-
-
-	/**
-	 * Gets the transferOfFundsOriginationCode attribute.
-	 * 
-	 * @return Returns the transferOfFundsOriginationCode
-	 * 
-	 */
-	public String getTransferOfFundsOriginationCode() { 
-		return transferOfFundsOriginationCode;
-	}
-
-	/**
-	 * Sets the transferOfFundsOriginationCode attribute.
-	 * 
-	 * @param transferOfFundsOriginationCode The transferOfFundsOriginationCode to set.
-	 * 
-	 */
-	public void setTransferOfFundsOriginationCode(String transferOfFundsOriginationCode) {
-		this.transferOfFundsOriginationCode = transferOfFundsOriginationCode;
-	}
-
 
 	/**
 	 * Gets the transferOfFundsFinancialDocumentNumber attribute.
@@ -621,23 +597,6 @@ public class AssetTransferDocument extends PersistableBusinessObjectBase {
      */
     public void setTransferOfFundsFinancialDocument(DocumentHeader transferOfFundsFinancialDocument) {
         this.transferOfFundsFinancialDocument = transferOfFundsFinancialDocument;
-    }
-
-    /**
-     * Gets the transferOfFundsOrigination attribute. 
-     * @return Returns the transferOfFundsOrigination.
-     */
-    public OriginationCode getTransferOfFundsOrigination() {
-        return transferOfFundsOrigination;
-    }
-
-    /**
-     * Sets the transferOfFundsOrigination attribute value.
-     * @param transferOfFundsOrigination The transferOfFundsOrigination to set.
-     * @deprecated
-     */
-    public void setTransferOfFundsOrigination(OriginationCode transferOfFundsOrigination) {
-        this.transferOfFundsOrigination = transferOfFundsOrigination;
     }
 
     /**

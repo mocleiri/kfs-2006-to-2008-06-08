@@ -49,13 +49,11 @@ public class Asset extends PersistableBusinessObjectBase {
 	private String retirementReasonCode;
 	private String retirementPeriodCode;
 	private Integer retirementFiscalYear;
-	private String cashReceiptFinancialSystemOriginationCode;
 	private String cashReceiptFinancialDocumentNumber;
 	private String primaryDepreciationMethodCode;
 	private String secondaryDepreciationMethodCode;
 	private Date estimatedFabricationCompletionDate;
 	private KualiDecimal fabricationEstimatedTotalAmount;
-	private String transferOfFundsOriginationCode;
 	private String transferOfFundsFinancialDocumentNumber;
 	private String insuranceChargeAccountNumber;
 	private String insuranceChartOfAccountsCode;
@@ -88,9 +86,7 @@ public class Asset extends PersistableBusinessObjectBase {
     private Building building;
     private AccountingPeriod retirementPeriod;
     private RetirementReason retirementReason;
-    private OriginationCode cashReceiptFinancialSystemOrigination;
     private DocumentHeader cashReceiptFinancialDocument;
-    private OriginationCode transferOfFundsOrigination;
     private DocumentHeader transferOfFundsFinancialDocument;
    
 	/**
@@ -708,28 +704,6 @@ public class Asset extends PersistableBusinessObjectBase {
 		this.retirementFiscalYear = retirementFiscalYear;
 	}
 
-
-	/**
-	 * Gets the cashReceiptFinancialSystemOriginationCode attribute.
-	 * 
-	 * @return Returns the cashReceiptFinancialSystemOriginationCode
-	 * 
-	 */
-	public String getCashReceiptFinancialSystemOriginationCode() { 
-		return cashReceiptFinancialSystemOriginationCode;
-	}
-
-	/**
-	 * Sets the cashReceiptFinancialSystemOriginationCode attribute.
-	 * 
-	 * @param cashReceiptFinancialSystemOriginationCode The cashReceiptFinancialSystemOriginationCode to set.
-	 * 
-	 */
-	public void setCashReceiptFinancialSystemOriginationCode(String cashReceiptFinancialSystemOriginationCode) {
-		this.cashReceiptFinancialSystemOriginationCode = cashReceiptFinancialSystemOriginationCode;
-	}
-
-
 	/**
 	 * Gets the cashReceiptFinancialDocumentNumber attribute.
 	 * 
@@ -833,28 +807,6 @@ public class Asset extends PersistableBusinessObjectBase {
 	public void setFabricationEstimatedTotalAmount(KualiDecimal fabricationEstimatedTotalAmount) {
 		this.fabricationEstimatedTotalAmount = fabricationEstimatedTotalAmount;
 	}
-
-
-	/**
-	 * Gets the transferOfFundsOriginationCode attribute.
-	 * 
-	 * @return Returns the transferOfFundsOriginationCode
-	 * 
-	 */
-	public String getTransferOfFundsOriginationCode() { 
-		return transferOfFundsOriginationCode;
-	}
-
-	/**
-	 * Sets the transferOfFundsOriginationCode attribute.
-	 * 
-	 * @param transferOfFundsOriginationCode The transferOfFundsOriginationCode to set.
-	 * 
-	 */
-	public void setTransferOfFundsOriginationCode(String transferOfFundsOriginationCode) {
-		this.transferOfFundsOriginationCode = transferOfFundsOriginationCode;
-	}
-
 
 	/**
 	 * Gets the transferOfFundsFinancialDocumentNumber attribute.
@@ -1448,23 +1400,6 @@ public class Asset extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the cashReceiptFinancialSystemOrigination attribute. 
-     * @return Returns the cashReceiptFinancialSystemOrigination.
-     */
-    public OriginationCode getCashReceiptFinancialSystemOrigination() {
-        return cashReceiptFinancialSystemOrigination;
-    }
-
-    /**
-     * Sets the cashReceiptFinancialSystemOrigination attribute value.
-     * @param cashReceiptFinancialSystemOrigination The cashReceiptFinancialSystemOrigination to set.
-     * @deprecated
-     */
-    public void setCashReceiptFinancialSystemOrigination(OriginationCode cashReceiptFinancialSystemOrigination) {
-        this.cashReceiptFinancialSystemOrigination = cashReceiptFinancialSystemOrigination;
-    }
-
-    /**
      * Gets the retirementPeriod attribute. 
      * @return Returns the retirementPeriod.
      */
@@ -1513,23 +1448,6 @@ public class Asset extends PersistableBusinessObjectBase {
      */
     public void setTransferOfFundsFinancialDocument(DocumentHeader transferOfFundsFinancialDocument) {
         this.transferOfFundsFinancialDocument = transferOfFundsFinancialDocument;
-    }
-
-    /**
-     * Gets the transferOfFundsOrigination attribute. 
-     * @return Returns the transferOfFundsOrigination.
-     */
-    public OriginationCode getTransferOfFundsOrigination() {
-        return transferOfFundsOrigination;
-    }
-
-    /**
-     * Sets the transferOfFundsOrigination attribute value.
-     * @param transferOfFundsOrigination The transferOfFundsOrigination to set.
-     * @deprecated
-     */
-    public void setTransferOfFundsOrigination(OriginationCode transferOfFundsOrigination) {
-        this.transferOfFundsOrigination = transferOfFundsOrigination;
     }
 
     /**

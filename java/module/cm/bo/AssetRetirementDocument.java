@@ -33,7 +33,6 @@ public class AssetRetirementDocument extends PersistableBusinessObjectBase {
 	private String retirementPhoneNumber;
 	private KualiDecimal estimatedSellingPrice;
 	private KualiDecimal salePrice;
-	private String cashReceiptFinancialSystemOriginationCode;
 	private String cashReceiptFinancialDocumentNumber;
 	private KualiDecimal handlingFeeAmount;
 	private KualiDecimal preventiveMaintenanceAmount;
@@ -47,7 +46,6 @@ public class AssetRetirementDocument extends PersistableBusinessObjectBase {
     private DocumentHeader cashReceiptFinancialDocument;
     private State retirementState;
     private Country retirementCountry;
-    private OriginationCode cashReceiptFinancialSystemOrigination;
     
 	/**
 	 * Default constructor.
@@ -391,28 +389,6 @@ public class AssetRetirementDocument extends PersistableBusinessObjectBase {
 		this.salePrice = salePrice;
 	}
 
-
-	/**
-	 * Gets the cashReceiptFinancialSystemOriginationCode attribute.
-	 * 
-	 * @return Returns the cashReceiptFinancialSystemOriginationCode
-	 * 
-	 */
-	public String getCashReceiptFinancialSystemOriginationCode() { 
-		return cashReceiptFinancialSystemOriginationCode;
-	}
-
-	/**
-	 * Sets the cashReceiptFinancialSystemOriginationCode attribute.
-	 * 
-	 * @param cashReceiptFinancialSystemOriginationCode The cashReceiptFinancialSystemOriginationCode to set.
-	 * 
-	 */
-	public void setCashReceiptFinancialSystemOriginationCode(String cashReceiptFinancialSystemOriginationCode) {
-		this.cashReceiptFinancialSystemOriginationCode = cashReceiptFinancialSystemOriginationCode;
-	}
-
-
 	/**
 	 * Gets the cashReceiptFinancialDocumentNumber attribute.
 	 * 
@@ -613,23 +589,6 @@ public class AssetRetirementDocument extends PersistableBusinessObjectBase {
      */
     public void setCashReceiptFinancialDocument(DocumentHeader cashReceiptFinancialDocument) {
         this.cashReceiptFinancialDocument = cashReceiptFinancialDocument;
-    }
-
-    /**
-     * Gets the cashReceiptFinancialSystemOrigination attribute. 
-     * @return Returns the cashReceiptFinancialSystemOrigination.
-     */
-    public OriginationCode getCashReceiptFinancialSystemOrigination() {
-        return cashReceiptFinancialSystemOrigination;
-    }
-
-    /**
-     * Sets the cashReceiptFinancialSystemOrigination attribute value.
-     * @param cashReceiptFinancialSystemOrigination The cashReceiptFinancialSystemOrigination to set.
-     * @deprecated
-     */
-    public void setCashReceiptFinancialSystemOrigination(OriginationCode cashReceiptFinancialSystemOrigination) {
-        this.cashReceiptFinancialSystemOrigination = cashReceiptFinancialSystemOrigination;
     }
 
     /**

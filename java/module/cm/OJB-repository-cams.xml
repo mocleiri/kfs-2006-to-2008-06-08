@@ -532,7 +532,6 @@
 	<field-descriptor name="retirementPhoneNumber" column="AST_RETIR_PHN_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="estimatedSellingPrice" column="AST_EST_SELL_PRC" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="salePrice" column="CPTLAST_SALE_PRC" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	<field-descriptor name="cashReceiptFinancialSystemOriginationCode" column="CSHRCPT_FS_ORIG_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="cashReceiptFinancialDocumentNumber" column="CASH_RCPT_FDOC_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="handlingFeeAmount" column="AST_HANDLG_FEE_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="preventiveMaintenanceAmount" column="AST_PRVNTMAINT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
@@ -551,9 +550,6 @@
 	</reference-descriptor>
 	<reference-descriptor name="retirementReason" class-ref="org.kuali.module.cams.bo.RetirementReason" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="retirementReasonCode" />
-	</reference-descriptor>
-	<reference-descriptor name="cashReceiptFinancialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="cashReceiptFinancialSystemOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="cashReceiptFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="cashReceiptFinancialDocumentNumber" />
@@ -580,7 +576,6 @@
 	<field-descriptor name="organizationOwnerAccountNumber" column="ORG_OWNER_ACCT_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="organizationText" column="ORG_TXT" jdbc-type="VARCHAR"/>
 	<field-descriptor name="organizationInventoryName" column="ORG_INVN_NM" jdbc-type="VARCHAR"/>
-	<field-descriptor name="transferOfFundsOriginationCode" column="TRNFRFND_FSORIG_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="transferOfFundsFinancialDocumentNumber" column="TRNFR_FND_FDOC_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="organizationCode" column="ORG_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="offCampusAddress" column="AST_OFFCMP_ADDR" jdbc-type="VARCHAR"/>
@@ -605,9 +600,6 @@
 	<reference-descriptor name="organization" class-ref="org.kuali.module.chart.bo.Org" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="organizationOwnerChartOfAccountsCode" />
 		<foreignkey field-ref="organizationCode" />
-	</reference-descriptor>
-	<reference-descriptor name="transferOfFundsOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="transferOfFundsOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="transferOfFundsFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="transferOfFundsFinancialDocumentNumber" />
@@ -748,13 +740,11 @@
 	<field-descriptor name="retirementReasonCode" column="AST_RETIRE_REAS_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="retirementPeriodCode" column="AST_RETIR_PRD_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="retirementFiscalYear" column="AST_RETIR_FSCL_YR" jdbc-type="INTEGER"/>
-	<field-descriptor name="cashReceiptFinancialSystemOriginationCode" column="CSHRCPT_FS_ORIG_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="cashReceiptFinancialDocumentNumber" column="CASH_RCPT_FDOC_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="primaryDepreciationMethodCode" column="AST_DEPR_MTHD1_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="secondaryDepreciationMethodCode" column="AST_DEPR_MTHD2_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="estimatedFabricationCompletionDate" column="AST_ESTFABRCMPL_DT" jdbc-type="DATE"/>
 	<field-descriptor name="fabricationEstimatedTotalAmount" column="AST_FABRESTTOT_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
-	<field-descriptor name="transferOfFundsOriginationCode" column="TRNFRFND_FSORIG_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="transferOfFundsFinancialDocumentNumber" column="TRNFR_FND_FDOC_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="insuranceChargeAccountNumber" column="AST_INS_ACCT_NBR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="insuranceChartOfAccountsCode" column="AST_INS_COA_CD" jdbc-type="VARCHAR"/>
@@ -823,14 +813,8 @@
 	<reference-descriptor name="retirementReason" class-ref="org.kuali.module.cams.bo.RetirementReason" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="retirementReasonCode" />
 	</reference-descriptor>
-	<reference-descriptor name="cashReceiptFinancialSystemOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="cashReceiptFinancialSystemOriginationCode" />
-	</reference-descriptor>
 	<reference-descriptor name="cashReceiptFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="cashReceiptFinancialDocumentNumber" />
-	</reference-descriptor>
-	<reference-descriptor name="transferOfFundsOrigination" class-ref="org.kuali.kfs.bo.OriginationCode" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="transferOfFundsOriginationCode" />
 	</reference-descriptor>
 	<reference-descriptor name="transferOfFundsFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="transferOfFundsFinancialDocumentNumber" />
