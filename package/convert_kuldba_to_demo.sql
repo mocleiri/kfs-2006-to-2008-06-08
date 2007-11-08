@@ -36,7 +36,9 @@ UPDATE sh_parm_t
 
 DELETE FROM fp_doc_type_t
   WHERE fdoc_grp_cd IN ( 'AR', 'AN', 'CM', 'CR', 'MO', 'SF' )
-     OR FDOC_TYP_ACTIVE_CD = 'N'
+     OR fdoc_typ_cd LIKE 'ID__'
+     OR fdoc_typ_cd LIKE 'EB__'
+     OR fdoc_nm LIKE 'LEGACY-'
 /
 
 DELETE FROM fp_doc_group_t
