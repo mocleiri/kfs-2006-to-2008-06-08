@@ -38,7 +38,7 @@
         </authorizations>
         <documentTypeName>ParameterDetailTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PDTP</documentTypeCode>
-        <label>Parameter Detailed Type</label>
+        <label>Parameter Component</label>
         <summary>Parameter Component Maintenance Document</summary>
         <description>
             This document can be used to create or update parameter components.

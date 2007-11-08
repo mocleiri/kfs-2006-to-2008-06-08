@@ -38,7 +38,7 @@
         </authorizations>
         <documentTypeName>ParameterNamespaceMaintenanceDocument</documentTypeName>
         <documentTypeCode>PNMS</documentTypeCode>
-        <label>Parameter Namespace</label>
+        <label>Parameter Module</label>
         <summary>Module Maintenance Document</summary>
         <description>
             This document can be used to create or update modules.
