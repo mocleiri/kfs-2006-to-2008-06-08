@@ -36,9 +36,10 @@ import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.UniversalUserService;
+import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.pdp.PdpConstants;
 import org.kuali.module.pdp.bo.Batch;
-import org.kuali.module.pdp.bo.CustomerProfile;
 import org.kuali.module.pdp.bo.DailyReport;
 import org.kuali.module.pdp.bo.DisbursementNumberRange;
 import org.kuali.module.pdp.bo.PaymentDetail;
@@ -47,6 +48,7 @@ import org.kuali.module.pdp.bo.PaymentProcess;
 import org.kuali.module.pdp.bo.UserRequired;
 import org.kuali.module.pdp.dao.PaymentDetailDao;
 import org.kuali.module.pdp.service.ReferenceService;
+import org.kuali.module.purap.PurapParameterConstants;
 
 public class PaymentDetailDaoOjb extends PlatformAwareDaoBaseOjb implements PaymentDetailDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PaymentDetailDaoOjb.class);
@@ -54,9 +56,25 @@ public class PaymentDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Paym
     private UniversalUserService userService;
     private ReferenceService referenceService;
     private DateTimeService dateTimeService;
+    private ParameterService parameterService;
 
     public PaymentDetailDaoOjb() {
         super();
+    }
+
+
+    /**
+     * @see org.kuali.module.pdp.dao.PaymentDetailDao#getAchPaymentsWithUnsentEmail()
+     */
+    public Iterator getAchPaymentsWithUnsentEmail() {
+        LOG.debug("getAchPaymentsWithUnsentEmail() started");
+
+        Criteria crit = new Criteria();
+        crit.addEqualTo("paymentGroup.paymentStatusCode", PdpConstants.PaymentStatusCodes.EXTRACTED);
+        crit.addEqualTo("paymentGroup.disbursementTypeCode", PdpConstants.DisbursementTypeCodes.ACH);
+        crit.addIsNull("paymentGroup.adviceEmailSentDate");
+   
+        return getPersistenceBrokerTemplate().getIteratorByQuery(new QueryByCriteria(PaymentDetail.class,crit));
     }
 
     /**
@@ -252,8 +270,12 @@ public class PaymentDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Paym
         Criteria criteria = new Criteria();
         criteria.addEqualTo("custPaymentDocNbr", custPaymentDocNbr);
         criteria.addEqualTo("financialDocumentTypeCode", fdocTypeCode);
-        criteria.addEqualTo("paymentGroup.batch.customerProfile.orgCode", CustomerProfile.EPIC_ORG_CODE);
-        criteria.addEqualTo("paymentGroup.batch.customerProfile.subUnitCode", CustomerProfile.EPIC_SUB_UNIT_CODE);
+
+        String orgCode = parameterService.getParameterValue(ParameterConstants.PURCHASING_BATCH.class, PurapParameterConstants.PURAP_PDP_EPIC_ORG_CODE);
+        String subUnitCode = parameterService.getParameterValue(ParameterConstants.PURCHASING_BATCH.class, PurapParameterConstants.PURAP_PDP_EPIC_SBUNT_CODE);
+
+        criteria.addEqualTo("paymentGroup.batch.customerProfile.orgCode", orgCode);
+        criteria.addEqualTo("paymentGroup.batch.customerProfile.subUnitCode", subUnitCode);
 
         List paymentDetails = (List) getPersistenceBrokerTemplate().getCollectionByQuery(new QueryByCriteria(PaymentDetail.class, criteria));
         PaymentDetail cp = null;
@@ -410,5 +432,9 @@ public class PaymentDetailDaoOjb extends PlatformAwareDaoBaseOjb implements Paym
 
     public void setDateTimeService(DateTimeService dts) {
         dateTimeService = dts;
+    }
+
+    public void setParameterService(ParameterService ps) {
+        parameterService = ps;
     }
 }
