@@ -55,7 +55,7 @@ import org.kuali.workflow.WorkflowTestUtils;
 import edu.iu.uis.eden.EdenConstants;
 
 /**
- * Unit Test Class for Internal Billing Document.
+ * Used to create and test populated Purchase Order Documents of various kinds. 
  */
 @ConfigureContext(session = KHUNTLEY)
 public class PurchaseOrderDocumentTest extends KualiTestBase {
