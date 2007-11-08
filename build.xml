@@ -116,7 +116,7 @@
 	</target>
 
 	<target name="clean-help" depends="init-property-files" unless="nohelp">
-		<delete>
+		<delete failonerror="false">
 			<fileset dir="${basedir}">
 				<include name="${help.directory}/**" />
 			</fileset>
@@ -124,7 +124,7 @@
 	</target>
 
 	<target name="clean-rice" depends="init-property-files" unless="norice">
-		<delete>
+		<delete failonerror="false">
 			<fileset dir="${basedir}">
 				<include name="${licenses.directory}/${rice.name}/**" />
 				<include name="${webroot.directory}/${rice.application}/**" />
