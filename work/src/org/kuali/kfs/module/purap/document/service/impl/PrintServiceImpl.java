@@ -69,11 +69,7 @@ public class PrintServiceImpl implements PrintService {
     }
 
     /**
-     * Create the Purchase Order Quote Requests List Pdf document and send it back to the Action so that it can be dealt with.
-     * 
-     * @param po PurchaseOrder that holds the Quote
-     * @param byteArrayOutputStream ByteArrayOutputStream that the action is using
-     * @return Collection of ServiceError objects
+     * @see org.kuali.module.purap.service.PrintService#generatePurchaseOrderQuoteRequestsListPdf(org.kuali.module.purap.document.PurchaseOrderDocument, java.io.ByteArrayOutputStream)
      */
     public Collection generatePurchaseOrderQuoteRequestsListPdf(PurchaseOrderDocument po, ByteArrayOutputStream byteArrayOutputStream) {
         LOG.debug("generatePurchaseOrderQuoteRequestsListPdf() started");
@@ -108,16 +104,18 @@ public class PrintServiceImpl implements PrintService {
     }
 
     /**
-     * Create the Purchase Order Quote Requests List Pdf document and save it so that it can be faxed in a later process.
-     * 
-     * @param po PurchaseOrderDocument that holds the Quote
-     * @return Collection of ServiceError objects
+     * @see org.kuali.module.purap.service.PrintService#savePurchaseOrderQuoteRequestsListPdf(org.kuali.module.purap.document.PurchaseOrderDocument)
      */
     public Collection savePurchaseOrderQuoteRequestsListPdf(PurchaseOrderDocument po) {
         return null;
     }
 
-
+    /**
+     * Returns the PurchaseOrderPdfParameters given the PurchaseOrderDocument.
+     * 
+     * @param po  The PurchaseOrderDocument object to be used to obtain the PurchaseOrderPdfParameters.
+     * @return    The PurchaseOrderPdfParameters given the PurchaseOrderDocument.
+     */
     private PurchaseOrderPdfParameters getPurchaseOrderQuotePdfParameters(PurchaseOrderDocument po) {
         String key = po.getPurapDocumentIdentifier().toString(); // key can be any string; chose to use the PO number.
         String campusCode = po.getDeliveryCampusCode().toLowerCase();
@@ -172,6 +170,12 @@ public class PrintServiceImpl implements PrintService {
         return pdfParameters;
     }
 
+    /**
+     * Returns the PurchaseOrderPdfParameters given the PurchaseOrderDocument.
+     * 
+     * @param po  The PurchaseOrderDocument object to be used to obtain the PurchaseOrderPdfParameters.
+     * @return    The PurchaseOrderPdfParameters given the PurchaseOrderDocument.
+     */
     private PurchaseOrderPdfParameters getPurchaseOrderQuoteRequestsListPdfParameters(PurchaseOrderDocument po) {
         String key = po.getPurapDocumentIdentifier().toString(); // key can be any string; chose to use the PO number.
         String campusCode = po.getDeliveryCampusCode().toLowerCase();
@@ -223,16 +227,8 @@ public class PrintServiceImpl implements PrintService {
         return pdfParameters;
     }
 
-    /** Create the Purchase Order Quote Pdf document and send it back to the Action so that it can be dealt with.
-     * 
-     * @param po PurchaseOrderDocument that holds the Quote
-     * @param povq PurchaseOrderVendorQuote that is being transmitted to
-     * @param byteArrayOutputStream ByteArrayOutputStream that the action is using
-     * @return Collection of ServiceError objects
-     * 
-     * THIS CODE IS NOT USED IN RELEASE 2 BUT THE CODE WAS LEFT IN TO
-     * FACILITATE TURNING IT BACK ON EARLY IN THE DEVELOPMENT CYCLE OF RELEASE 3.
-    * 
+    /**
+     * @see org.kuali.module.purap.service.PrintService#generatePurchaseOrderQuotePdf(org.kuali.module.purap.document.PurchaseOrderDocument, org.kuali.module.purap.bo.PurchaseOrderVendorQuote, java.io.ByteArrayOutputStream, java.lang.String)
      */
     public Collection generatePurchaseOrderQuotePdf(PurchaseOrderDocument po, PurchaseOrderVendorQuote povq, ByteArrayOutputStream byteArrayOutputStream, String environment) {
         LOG.debug("generatePurchaseOrderQuotePdf() started");
@@ -267,15 +263,7 @@ public class PrintServiceImpl implements PrintService {
     }
 
     /**
-     * Create the Purchase Order Quote Pdf document and save it so that it can be faxed in a later process.
-     * 
-     * @param po PurchaseOrderDocument that holds the Quote
-     * @param povq PurchaseOrderVendorQuote that is being transmitted to
-     * @return Collection of ServiceError objects
-     * 
-     * THIS CODE IS NOT USED IN RELEASE 2 BUT THE CODE WAS LEFT IN TO
-     * FACILITATE TURNING IT BACK ON EARLY IN THE DEVELOPMENT CYCLE OF RELEASE 3.
-    * 
+     * @see org.kuali.module.purap.service.PrintService#savePurchaseOrderQuotePdf(org.kuali.module.purap.document.PurchaseOrderDocument, org.kuali.module.purap.bo.PurchaseOrderVendorQuote, java.lang.String)
      */
     public Collection savePurchaseOrderQuotePdf(PurchaseOrderDocument po, PurchaseOrderVendorQuote povq, String environment) {
         LOG.debug("savePurchaseOrderQuotePdf() started");
@@ -315,7 +303,13 @@ public class PrintServiceImpl implements PrintService {
         LOG.debug("savePurchaseOrderQuotePdf() ended");
         return errors;
     }
-
+    
+    /**
+     * Returns the PurchaseOrderPdfParameters given the PurchaseOrderDocument.
+     * 
+     * @param po  The PurchaseOrderDocument object to be used to obtain the PurchaseOrderPdfParameters.
+     * @return    The PurchaseOrderPdfParameters given the PurchaseOrderDocument.
+     */
     private PurchaseOrderPdfParameters getPurchaseOrderPdfParameters(PurchaseOrderDocument po) {
         String key = po.getPurapDocumentIdentifier().toString(); // key can be any string; chose to use the PO number.
         String campusCode = po.getDeliveryCampusCode().toLowerCase();
@@ -394,11 +388,14 @@ public class PrintServiceImpl implements PrintService {
     }
 
     /**
-     * Create the Purchase Order Pdf document and send it back to the Action so that it can be dealt with.
+     * Creates purchase order pdf document given the input parameters.
      * 
-     * @param po PurchaseOrderDocument that holds the Quote
-     * @param byteArrayOutputStream ByteArrayOutputStream that the action is using
-     * @return Collection of ServiceError objects
+     * @param po                     The PurchaseOrderDocument.
+     * @param byteArrayOutputStream  ByteArrayOutputStream that the action is using, where the pdf will be printed to.
+     * @param isRetransmit           boolean true if this is a retransmit purchase order document.
+     * @param environment            The current environment used (e.g. DEV if it is a development environment).
+     * @param retransmitItems        The items selected by the user to be retransmitted.
+     * @return                       Collection of error strings.
      */
     private Collection generatePurchaseOrderPdf(PurchaseOrderDocument po, ByteArrayOutputStream byteArrayOutputStream, boolean isRetransmit, String environment, List<PurchaseOrderItem> retransmitItems) {
         LOG.debug("generatePurchaseOrderPdf() started");
@@ -442,11 +439,14 @@ public class PrintServiceImpl implements PrintService {
         return generatePurchaseOrderPdf(po, byteArrayOutputStream, TRANSMISSION_IS_RETRANSMIT, environment, retransmitItems);
     }
 
+
     /**
-     * Create the Purchase Order Pdf document and save it so that it can be faxed in a later process.
+     * Saves the purchase order pdf document.
      * 
-     * @param po PurchaseOrderDocument that holds the Quote
-     * @return Collection of ServiceError objects
+     * @param po            The PurchaseOrderDocument.
+     * @param isRetransmit  boolean true if this is a retransmit purchase order document.
+     * @param environment   The current environment used (e.g. DEV if it is a development environment).
+     * @return              Collection of error strings.
      */
     private Collection savePurchaseOrderPdf(PurchaseOrderDocument po, boolean isRetransmit, String environment) {
         LOG.debug("savePurchaseOrderPdf() started");
