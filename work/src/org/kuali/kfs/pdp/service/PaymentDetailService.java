@@ -20,6 +20,13 @@ import java.util.Iterator;
 import org.kuali.module.pdp.bo.PaymentDetail;
 
 public interface PaymentDetailService {
+    /**
+     * Get ACH Payments that need an email
+     * 
+     * @return
+     */
+    public Iterator getAchPaymentsWithUnsentEmail();
+
     public PaymentDetail get(Integer id);
 
     public PaymentDetail getDetailForEpic(String custPaymentDocNbr, String fdocTypeCode);

@@ -34,6 +34,15 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
     }
 
     /**
+     * @see org.kuali.module.pdp.service.PaymentDetailService#getAchPaymentsWithUnsentEmail()
+     */
+    public Iterator getAchPaymentsWithUnsentEmail() {
+        LOG.debug("getAchPaymentsWithUnsentEmail() started");
+
+        return paymentDetailDao.getAchPaymentsWithUnsentEmail();
+    }
+
+    /**
      * @see org.kuali.module.pdp.service.PaymentDetailService#getByDisbursementNumber(java.lang.Integer)
      */
     public Iterator getByDisbursementNumber(Integer disbursementNumber) {
