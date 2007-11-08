@@ -44,7 +44,7 @@ public enum PurchasingDocumentFixture {
             null, // vendorContractGeneratedIdentifier
             null, // vendorNoteText
             "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
+            "knoreceipt-l@indiana.edu", // requestorPersonEmailAddress
             "555-555-5555", // requestorPersonPhoneNumber
             null, // nonInstitutionFundOrgChartOfAccountsCode
             null, // nonInstitutionFundOrganizationCode
@@ -141,7 +141,7 @@ public enum PurchasingDocumentFixture {
             null), // vendorShippingPaymentTermsCode
 
     // PURCHASE ORDER FIXTURES
-    PO_ONLY_REQUIRED_FIELDS("INST", RequisitionSources.STANDARD_ORDER, POTransmissionMethods.NOPRINT, POCostSources.ESTIMATE, null, null, "UA", "PUR", "BL", null, null, null, null, null, null, "RENFROW,ROBERTA G", "test@email.com", "555-555-5555", null, null, null, null, "ADMN", "Administration", "123", "1 big dog", null, "campus", "AK", "46202-5260", "US", "me", null, null, null, null, null, null, null, null, null, "THE UNIVERSITY", "ACCOUNTS PAYABLE", null, "BUTTER NUT", "SC", "47402", "US", "111-111-1111", null, 10, false, null, null, null), ;
+    PO_ONLY_REQUIRED_FIELDS("INST", RequisitionSources.STANDARD_ORDER, POTransmissionMethods.NOPRINT, POCostSources.ESTIMATE, null, null, "UA", "PUR", "BL", null, null, null, null, null, null, "RENFROW,ROBERTA G", "knoreceipt-l@indiana.edu", "555-555-5555", null, null, null, null, "ADMN", "Administration", "123", "1 big dog", null, "campus", "AK", "46202-5260", "US", "me", null, null, null, null, null, null, null, null, null, "THE UNIVERSITY", "ACCOUNTS PAYABLE", null, "BUTTER NUT", "SC", "47402", "US", "111-111-1111", null, 10, false, null, null, null), ;
 
     public final String fundingSourceCode;
     public final String requisitionSourceCode;
