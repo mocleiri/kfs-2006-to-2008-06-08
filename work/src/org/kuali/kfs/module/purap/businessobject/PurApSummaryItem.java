@@ -62,5 +62,4 @@ public class PurApSummaryItem extends PurApItemBase {
     public void resetAccount() {
         // do nothing
     }
-
 }
