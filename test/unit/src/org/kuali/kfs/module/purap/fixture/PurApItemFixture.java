@@ -23,7 +23,7 @@ import org.kuali.module.purap.bo.PurApItem;
 public enum PurApItemFixture {
     BASIC_QTY_ITEM_1(null, // itemIdentifier
             new Integer(1), // itemLineNumber
-            "", // capitalAssetTransactionTypeCode
+            null, // capitalAssetTransactionTypeCode
             "PCS", // itemUnitOfMeasureCode
             "", // itemCatalogNumber
             "description", // itemDescription
@@ -38,7 +38,7 @@ public enum PurApItemFixture {
             new KualiDecimal(1) // itemQuantity
     ), BASIC_QTY_ITEM_2(null, // itemIdentifier
             new Integer(2), // itemLineNumber
-            "", // capitalAssetTransactionTypeCode
+            null, // capitalAssetTransactionTypeCode
             "PCS", // itemUnitOfMeasureCode
             "", // itemCatalogNumber
             "description", // itemDescription
@@ -53,7 +53,7 @@ public enum PurApItemFixture {
             new KualiDecimal(1) // itemQuantity
     ), APO_QTY_ITEM_1(null, // itemIdentifier
             new Integer(1), // itemLineNumber
-            "", // capitalAssetTransactionTypeCode
+            null, // capitalAssetTransactionTypeCode
             "PCS", // itemUnitOfMeasureCode
             "", // itemCatalogNumber
             "description", // itemDescription
@@ -68,7 +68,7 @@ public enum PurApItemFixture {
             new KualiDecimal(500) // itemQuantity
     ), APO_SERVICE_ITEM_1(null, // itemIdentifier
             new Integer(2), // itemLineNumber
-            "", // capitalAssetTransactionTypeCode
+            null, // capitalAssetTransactionTypeCode
             "", // itemUnitOfMeasureCode
             "", // itemCatalogNumber
             "description", // itemDescription
@@ -83,7 +83,7 @@ public enum PurApItemFixture {
             null // itemQuantity
     ), APO_FREIGHT_ITEM_1(null, // itemIdentifier
             new Integer(3), // itemLineNumber
-            "", // capitalAssetTransactionTypeCode
+            null, // capitalAssetTransactionTypeCode
             "", // itemUnitOfMeasureCode
             "", // itemCatalogNumber
             "freight", // itemDescription
@@ -98,7 +98,7 @@ public enum PurApItemFixture {
             null // itemQuantity
     ), BASIC_QTY_ITEM_NO_APO(null, // itemIdentifier
             new Integer(2), // itemLineNumber
-            "", // capitalAssetTransactionTypeCode
+            null, // capitalAssetTransactionTypeCode
             "PCS", // itemUnitOfMeasureCode
             "", // itemCatalogNumber
             "description", // itemDescription
