@@ -110,6 +110,7 @@
 		<property name="universalUserService" ref="universalUserService" />
 		<property name="referenceService" ref="pdpReferenceService" />
 		<property name="dateTimeService" ref="dateTimeService" />
+		<property name="parameterService" ref="parameterService" />
 	</bean>
 
 	<bean id="pdpPaymentDetailSearchDao" parent="platformAwareDao" class="org.kuali.module.pdp.dao.ojb.PaymentDetailSearchDaoOjb">
