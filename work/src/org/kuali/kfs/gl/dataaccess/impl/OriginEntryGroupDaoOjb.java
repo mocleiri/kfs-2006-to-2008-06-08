@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
@@ -44,23 +45,32 @@ public class OriginEntryGroupDaoOjb extends PlatformAwareDaoBaseOjb implements O
     private static final String PROCESS = "process";
     private static final String VALID = "valid";
     private static final String SCRUB = "scrub";
+    private static final String ORIGIN_ENTRY_GRP_ID = "ORIGIN_ENTRY_GRP_ID";
+    private static final String MAX_ORIGIN_ENTRY_GRP_ID = "max(ORIGIN_ENTRY_GRP_ID)";
 
     /**
      * Given an origin entry group source type (defined in OriginEntrySource)
      * 
      * @param sourceCode the source code of the groups to find
-     * @return a Collection of OriginEntryGroups with the given soruce code
+     * @return a OriginEntryGroup with the given source code and max ORIGIN_ENTRY_GRP_ID
      * @see org.kuali.module.gl.bo.OriginEntrySource
-     * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getGroupsFromSource(java.lang.String)
+     * @see org.kuali.module.gl.dao.OriginEntryGroupDao#getGroupWithMaxIdFromSource(java.lang.String)
      */
-    public Collection<OriginEntryGroup> getGroupsFromSource(String sourceCode) {
-        LOG.debug("getGroupsFromSourceForDay() started");
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo(SOURCE_CODE, sourceCode);
-
-        return getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(OriginEntryGroup.class, criteria));
-
+    public OriginEntryGroup getGroupWithMaxIdFromSource(String sourceCode) {
+        LOG.debug("getGroupWithMaxIdFromSource() started");
+        
+        Criteria crit = new Criteria();
+        
+        Criteria subCrit = new Criteria();
+        subCrit.addEqualTo(SOURCE_CODE, sourceCode);
+        ReportQueryByCriteria subQuery = new ReportQueryByCriteria(OriginEntryGroup.class, subCrit);
+        subQuery.setAttributes(new String[]{MAX_ORIGIN_ENTRY_GRP_ID});
+        
+        crit.addGreaterOrEqualThan(ORIGIN_ENTRY_GRP_ID, subQuery);
+        
+        QueryByCriteria qbc = QueryFactory.newQuery(OriginEntryGroup.class, crit);
+        
+        return (OriginEntryGroup) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
     }
 
     /**
