@@ -58,6 +58,13 @@ public interface PaymentDetailDao {
     public Iterator getUnprocessedCancelledDetails(String organization, String subUnit);
 
     /**
+     * This will return all the ACH payments that need an email sent
+     * 
+     * @return
+     */
+    public Iterator getAchPaymentsWithUnsentEmail();
+
+    /**
      * This will return an iterator of all the paid payment details that haven't already been processed
      * 
      * @param organization
