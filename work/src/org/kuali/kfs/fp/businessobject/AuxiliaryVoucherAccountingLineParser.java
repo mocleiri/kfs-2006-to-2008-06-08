@@ -37,7 +37,7 @@ import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.exceptions.AccountingLineParserException;
 
 /**
- * This class is used to parse a <code>AuxiliaryVocherDocument</code> accounting line.
+ * This class is used to parse an <code>AuxiliaryVocherDocument</code> accounting line.
  */
 public class AuxiliaryVoucherAccountingLineParser extends AccountingLineParserBase {
     private static final String[] AV_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, DEBIT, CREDIT };
