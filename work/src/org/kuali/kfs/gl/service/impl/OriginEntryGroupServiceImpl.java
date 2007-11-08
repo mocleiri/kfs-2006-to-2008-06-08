@@ -151,14 +151,14 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     /**
      * Returns all groups created by a given origin entry Source
      * @param sourceCode the source of the origin entry group
-     * @return a Collection of origin entry groups created by that source
+     * @return a OriginEntryGroup with the given source code and max ORIGIN_ENTRY_GRP_ID
      * @see org.kuali.module.gl.bo.OriginEntrySource
      * @see org.kuali.module.gl.service.OriginEntryGroupService#getGroupsFromSource(java.lang.String)
      */
-    public Collection getGroupsFromSource(String sourceCode) {
-        LOG.debug("getGroupsFromSourceForDate() started");
+    public OriginEntryGroup getGroupWithMaxIdFromSource(String sourceCode) {
+        LOG.debug("getGroupWithMaxIdFromSource() started");
 
-        return originEntryGroupDao.getGroupsFromSource(sourceCode);
+        return originEntryGroupDao.getGroupWithMaxIdFromSource(sourceCode);
     }
 
     /**
