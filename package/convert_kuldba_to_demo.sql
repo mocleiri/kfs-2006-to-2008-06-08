@@ -27,7 +27,7 @@ TRUNCATE TABLE fp_maint_lock_t
 -- TAX_GROUP_TO_EMAIL_ADDRESSES
 -- NO_PAYMENT_FILE_TO_EMAIL_ADDRESSES
 UPDATE sh_parm_t
-	SET sh_parm_txt = 'fixme@sample.edu'
+	SET sh_parm_txt = 'knoreceipt-l@indiana.edu'
   WHERE sh_parm_typ_cd <> 'HELP'
     AND sh_parm_nm LIKE '%ADDRESSES'
 /
