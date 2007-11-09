@@ -12,7 +12,8 @@ public class RetirementReason extends PersistableBusinessObjectBase {
 	private String retirementReasonCode;
 	private String retirementReasonName;
 	private boolean active;
-
+    private boolean retirementReasonRestrictionIndicator;
+    
 	/**
 	 * Default constructor.
 	 */
@@ -82,12 +83,29 @@ public class RetirementReason extends PersistableBusinessObjectBase {
 		this.active = active;
 	}
 
-	/**
-	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-	 */
-	protected LinkedHashMap toStringMapper() {
-	    LinkedHashMap m = new LinkedHashMap();	    
-        m.put("retirementReasonCode", this.retirementReasonCode);
-	    return m;
+    /**
+     * Gets the retirementReasonRestrictionIndicator attribute. 
+     * @return Returns the retirementReasonRestrictionIndicator.
+     */
+    public boolean isRetirementReasonRestrictionIndicator() {
+        return retirementReasonRestrictionIndicator;
     }
+
+    /**
+     * Sets the retirementReasonRestrictionIndicator attribute value.
+     * @param retirementReasonRestrictionIndicator The retirementReasonRestrictionIndicator to set.
+     */
+    public void setRetirementReasonRestrictionIndicator(boolean retirementReasonRestrictionIndicator) {
+        this.retirementReasonRestrictionIndicator = retirementReasonRestrictionIndicator;
+    }
+
+    /**
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     */
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap m = new LinkedHashMap();      
+        m.put("retirementReasonCode", this.retirementReasonCode);
+        return m;
+    }
+
 }

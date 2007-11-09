@@ -14,6 +14,7 @@
                         <field attributeName="active" />
                         <field attributeName="retirementReasonCode" />
                         <field attributeName="retirementReasonName" />
+                        <field attributeName="retirementReasonRestrictionIndicator" />
                     </inquiryFields>
                 </inquirySection>
             </inquirySections>  
@@ -34,12 +35,14 @@
                 <lookupField attributeName="active" required="false" />
                 <lookupField attributeName="retirementReasonCode" required="false" />
                 <lookupField attributeName="retirementReasonName" required="false" />
+                <lookupField attributeName="retirementReasonRestrictionIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="active" />
                 <field attributeName="retirementReasonCode" />
                 <field attributeName="retirementReasonName" />
+                <field attributeName="retirementReasonRestrictionIndicator" />
             </resultFields>
         </lookup>
 
@@ -87,6 +90,20 @@
 
                 <summary>retirementReasonName</summary>
                 <description>retirementReasonName description...</description>
+			</attribute>
+
+            <attribute name="retirementReasonRestrictionIndicator" forceUppercase="true">
+                <label>Retirement Reason Restriction Indicator</label>
+                <shortLabel>Retirement Reason Restriction Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>retirementReasonRestrictionIndicator</summary>
+                <description>retirementReasonRestrictionIndicator description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
