@@ -1509,13 +1509,13 @@
 		</property>
 	</bean>
 
-	<bean id="markScrubbableBackupGroupsAsUnscrubbableJob" parent="unscheduledJobDescriptor">
+<!-- <bean id="markScrubbableBackupGroupsAsUnscrubbableJob" parent="unscheduledJobDescriptor">
 		<property name="steps">
 			<list>
 				<ref bean="markScrubbableBackupGroupsAsUnscrubbableStep" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	
 	<bean id="markPostableScrubberValidGroupsAsUnpostableStep" class="org.kuali.module.gl.batch.MarkPostableScrubberValidGroupsAsUnpostableStep" parent="step">
 		<property name="originEntryGroupService">
@@ -1535,7 +1535,7 @@
 		</property>
 	</bean>
 	
-	<bean id="markPostableGroupsAsUnpostableJob" parent="unscheduledJobDescriptor">
+<!-- 	<bean id="markPostableGroupsAsUnpostableJob" parent="unscheduledJobDescriptor">
 		<property name="steps">
 			<list>
 				<ref bean="markPostableScrubberValidGroupsAsUnpostableStep" />
@@ -1543,7 +1543,7 @@
 				<ref bean="deleteAllExpenditureTransactionsStep" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	
 	<bean id="correctionProcessOriginEntryService" class="org.kuali.module.gl.service.impl.GlCorrectionProcessOriginEntryServiceImpl">
 		<property name="businessObjectService">
