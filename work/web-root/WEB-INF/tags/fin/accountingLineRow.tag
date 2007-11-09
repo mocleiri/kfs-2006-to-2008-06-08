@@ -180,12 +180,12 @@
 		accountingLineValuesMap="${accountingLineValuesMap}"
 		anchor="accounting${actionInfix}${actionGroup}LineAnchor${0 + accountingLineIndex}" />
 	<c:set var="details" value="" />
-	
+
 	<fin:accountingLineDataCell dataCellCssClass="${dataCellCssClass}"
 		accountingLine="${accountingLine}"
 		baselineAccountingLine="${baselineAccountingLine}"
 		field="accountNumber" detailFunction="loadAccountInfo"
-		detailField="account.accountName"
+		detailField="account.extension.accountingLineDescription"
 		detailFields="${details}"
 		attributes="${accountingLineAttributes}" lookup="true" inquiry="true"
 		boClassSimpleName="Account"
