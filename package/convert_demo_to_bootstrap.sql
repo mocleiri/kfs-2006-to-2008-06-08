@@ -248,16 +248,16 @@ update fs_home_origin_t set fs_home_origin_cd = '01';
 /* Fix the sh_campus_t table */
 insert into sh_campus_t values ('01',sys_guid(),1,'Default Campus','Campus','F');
 
-/* One motd */
-insert into fp_motd_t values ('01',sys_guid(),1,'Using Bootstrap Kuali Dataset');
-
-
 /* ** Charts & Organizations ** */
 
 DELETE FROM ca_org_type_t
    WHERE org_typ_cd NOT IN ( 'C', 'N', 'R', 'U' )
 /
 
+DELETE FROM ca_rc_t WHERE rc_cd <> 'NO'
+/
+COMMIT
+/
 
 /** clean up the options table **/
 
