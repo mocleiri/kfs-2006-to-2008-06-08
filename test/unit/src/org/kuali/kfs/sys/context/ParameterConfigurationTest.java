@@ -18,7 +18,7 @@ package org.kuali.core.rule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +31,6 @@ import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.datadictionary.DocumentEntry;
 import org.kuali.core.datadictionary.HeaderNavigation;
 import org.kuali.core.datadictionary.HelpDefinition;
-import org.kuali.core.datadictionary.MaintenanceDocumentEntry;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.ObjectUtils;
@@ -137,6 +136,7 @@ public class ParameterConfigurationTest extends KualiTestBase {
         for (DocumentEntry documentEntry : documentEntries) {
             HelpDefinition docHelp = documentEntry.getHelpDefinition();
             if(ObjectUtils.isNotNull(docHelp)) {
+                /*
                 Class paramClass = null;
                 if(documentEntry instanceof MaintenanceDocumentEntry) {
                     paramClass = ((MaintenanceDocumentEntry)documentEntry).getBusinessObjectClass();
@@ -145,6 +145,14 @@ public class ParameterConfigurationTest extends KualiTestBase {
                     paramClass = documentEntry.getDocumentClass();
                 }
                 exists = SpringContext.getBean(ParameterService.class).parameterExists(paramClass, docHelp.getParameterName());
+                */
+                
+                HashMap<String, String> crit = new HashMap<String, String>(3);
+                crit.put("parameterNamespaceCode", docHelp.getParameterNamespace());
+                crit.put("parameterDetailTypeCode", docHelp.getParameterDetailType());
+                crit.put("parameterName", docHelp.getParameterName());
+                exists =  (Parameter) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(Parameter.class, crit) != null;
+                
                 if(!exists) {
                     documentParamsMissingFromDB.add("Document Parameter: " + docHelp.getParameterNamespace() + " - " + docHelp.getParameterName() + " help parameter in " +documentEntry.getDocumentTypeName()+ " is not in the database.");
                     exists = true;
@@ -155,7 +163,14 @@ public class ParameterConfigurationTest extends KualiTestBase {
                 HelpDefinition headerNavHelp = headerNav.getHelpDefinition();
                 if(ObjectUtils.isNotNull(headerNavHelp)) {
                     documentHeaderCount++;
-                    exists = SpringContext.getBean(ParameterService.class).parameterExists(documentEntry.getDocumentClass(), headerNavHelp.getParameterName());
+                    
+                    HashMap<String, String> crit = new HashMap<String, String>(3);
+                    crit.put("parameterNamespaceCode", headerNavHelp.getParameterNamespace());
+                    crit.put("parameterDetailTypeCode", headerNavHelp.getParameterDetailType());
+                    crit.put("parameterName", headerNavHelp.getParameterName());
+                    exists =  (Parameter) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(Parameter.class, crit) != null;
+                    
+                    
                     if(!exists) {
                         documentHeaderParamsMissingFromDB.add("Document Header Parameter: " + headerNavHelp.getParameterNamespace() + " - " + headerNavHelp.getParameterName() + " help parameter in " +documentEntry.getDocumentTypeName()+ " is not in the database.");
                         exists = true;
