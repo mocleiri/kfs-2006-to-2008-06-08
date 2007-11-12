@@ -3,7 +3,7 @@ CREATE TABLE PDP_PAYEE_ACH_ACCT_T(
         OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PAYEE_ACH_ACCT_TN3 NOT NULL,
         BNK_RTNG_NBR                   VARCHAR2(9),
-        BNK_ACCT_NBR                   VARCHAR2(17), 
+        BNK_ACCT_NBR                   VARCHAR2(255), 
         PAYEE_NM                       VARCHAR2(50),
         PAYEE_EMAIL_ADDR               VARCHAR2(43),
         VNDR_HDR_GNRTD_ID              NUMBER(10),
