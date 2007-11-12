@@ -24,7 +24,7 @@
 
   <class-descriptor class="org.kuali.module.pdp.bo.AchAccountNumber" table="PDP_ACH_ACCT_NBR_T">
     <field-descriptor name="id" column="PMT_GRP_ID" jdbc-type="INTEGER" primarykey="true"/>
-    <field-descriptor name="achBankAccountNbr" column="ACH_BNK_ACCT_NBR" jdbc-type="VARCHAR"/>
+    <field-descriptor name="achBankAccountNbr" column="ACH_BNK_ACCT_NBR" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbKualiEncryptDecryptFieldConversion"/>
     <field-descriptor name="lastUpdate" column="LST_UPDT_TS" jdbc-type="TIMESTAMP"/>
     <field-descriptor name="version" column="VER_NBR" jdbc-type="INTEGER" locking="true"/>
   </class-descriptor>
@@ -543,7 +543,7 @@
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
 	<field-descriptor name="bankRoutingNumber" column="BNK_RTNG_NBR" jdbc-type="VARCHAR"/>
-	<field-descriptor name="bankAccountNumber" column="BNK_ACCT_NBR" jdbc-type="VARCHAR"/>
+	<field-descriptor name="bankAccountNumber" column="BNK_ACCT_NBR" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbKualiEncryptDecryptFieldConversion"/>
 	<field-descriptor name="payeeName" column="PAYEE_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="payeeEmailAddress" column="PAYEE_EMAIL_ADDR" jdbc-type="VARCHAR"/>
 	<field-descriptor name="vendorHeaderGeneratedIdentifier" column="VNDR_HDR_GNRTD_ID" jdbc-type="INTEGER"/>
