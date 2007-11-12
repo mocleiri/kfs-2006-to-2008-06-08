@@ -1150,6 +1150,7 @@
 				<entry key="enterpriseFeedJob" value="hardDependency"/>
 				<entry key="collectorJob" value="softDependency" />
 				<entry key="nightlyOutJob" value="hardDependency" />
+				<entry key="laborBatchJob" value="hardDependency" />
 			</map>
 		</property>
 	</bean>	
