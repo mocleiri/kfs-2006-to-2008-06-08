@@ -31,7 +31,7 @@
 
   <class-descriptor class="org.kuali.module.pdp.bo.Bank" table="PDP_BNK_CD_T">
     <field-descriptor name="id" column="BNK_ID" jdbc-type="INTEGER" primarykey="true" sequence-name="PDP_BNK_ID_SEQ" autoincrement="true"/>
-    <field-descriptor name="accountNumber" column="BNK_ACCT_NBR" jdbc-type="VARCHAR"/>
+    <field-descriptor name="accountNumber" column="BNK_ACCT_NBR" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbKualiEncryptDecryptFieldConversion"/>
     <field-descriptor name="active" column="BNK_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
     <field-descriptor name="description" column="BNK_DESC" jdbc-type="VARCHAR"/>
     <field-descriptor name="name" column="BNK_NM" jdbc-type="VARCHAR"/>
