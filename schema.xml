@@ -8232,7 +8232,7 @@
         <column name="BNK_NM" required="true" size="25" type="VARCHAR"/>
         <column name="DISB_TYP_CD" size="4" type="VARCHAR"/>
         <column name="BNK_RTNG_NBR" required="true" size="9" type="VARCHAR"/>
-        <column name="BNK_ACCT_NBR" required="true" size="17" type="VARCHAR"/>
+        <column name="BNK_ACCT_NBR" required="true" size="255" type="VARCHAR"/>
         <column name="BNK_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <column name="LST_UPDT_TS" required="true" type="DATE"/>
         <column name="LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
@@ -11154,9 +11154,9 @@
     <sequence name="SEQUENCE_EN_USR" nextval="100000000000"/>
     <sequence name="SEQ_ACTION_LIST_OPTN" nextval="1020"/>
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
-    <sequence name="SEQ_ACTION_TAKEN" nextval="2100"/>
+    <sequence name="SEQ_ACTION_TAKEN" nextval="2120"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317180"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317200"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="3952"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -11164,7 +11164,7 @@
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2000"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12736"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357769"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563357789"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151636"/>
     <sequence name="SEQ_TRANSACTION_TST" nextval="100"/>
