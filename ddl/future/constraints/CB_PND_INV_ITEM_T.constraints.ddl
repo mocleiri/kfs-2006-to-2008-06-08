@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-ALTER TABLE PEND_NOTE_LINET
-ADD (CONSTRAINT PEND_NOTE_LINETR1 FOREIGN KEY (
-      PO_NUMBER )
-REFERENCES PEND_PURCH_ORDERT ( 
-      PO_NUMBER ))
+ALTER TABLE CB_PND_INV_ITEM_T
+ADD (CONSTRAINT CB_PND_INV_ITEM_TR1 FOREIGN KEY (
+      PO_NUMBER,
+      INVOICE_NUMBER )
+REFERENCES CB_PND_INV_T ( 
+      PO_NUMBER,
+      INVOICE_NUMBER ))
 /

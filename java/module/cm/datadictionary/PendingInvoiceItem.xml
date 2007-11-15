@@ -25,7 +25,6 @@
                         <field attributeName="purchaseOrderNumber" />
                         <field attributeName="purchasingCommodityCode" />
                         <field attributeName="quantityInvoiced" />
-                        <field attributeName="reasonPendingCode" />
                         <field attributeName="transactionTypeCode" />
                         <field attributeName="transactionTypeServiceIndicator" />
                     </inquiryFields>
@@ -61,7 +60,6 @@
                 <lookupField attributeName="purchaseOrderNumber" required="false" />
                 <lookupField attributeName="purchasingCommodityCode" required="false" />
                 <lookupField attributeName="quantityInvoiced" required="false" />
-                <lookupField attributeName="reasonPendingCode" required="false" />
                 <lookupField attributeName="transactionTypeCode" required="false" />
                 <lookupField attributeName="transactionTypeServiceIndicator" required="false" />
             </lookupFields>
@@ -81,7 +79,6 @@
                 <field attributeName="purchaseOrderNumber" />
                 <field attributeName="purchasingCommodityCode" />
                 <field attributeName="quantityInvoiced" />
-                <field attributeName="reasonPendingCode" />
                 <field attributeName="transactionTypeCode" />
                 <field attributeName="transactionTypeServiceIndicator" />
             </resultFields>
@@ -296,21 +293,6 @@
 
                 <summary>quantityInvoiced</summary>
                 <description>quantityInvoiced description...</description>
-			</attribute>
-
-            <attribute name="reasonPendingCode" forceUppercase="true">
-                <label>Reason Pending Code</label>
-                <shortLabel>Code</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="4" />
-                </control>
-
-                <summary>reasonPendingCode</summary>
-                <description>reasonPendingCode description...</description>
 			</attribute>
 
             <attribute name="transactionTypeCode" forceUppercase="true">

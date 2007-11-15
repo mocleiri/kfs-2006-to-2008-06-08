@@ -28,7 +28,6 @@
 	<field-descriptor name="lineItemAdditionalCharge" column="LINE_ITEM_ADDLCHG" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="manufacturerName" column="MANUFACTURER_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchasingCommodityCode" column="PURCH_COMM_CODE" jdbc-type="VARCHAR"/>
-	<field-descriptor name="reasonPendingCode" column="REASON_PEND_CODE" jdbc-type="VARCHAR"/>
 	<field-descriptor name="lineItemDescription" column="LINE_ITEM_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemTypeCode" column="ITM_TYP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="transactionTypeCode" column="CPTL_AST_TRN_TYP_CD" jdbc-type="VARCHAR"/>
@@ -222,7 +221,7 @@
 	<field-descriptor name="noteDescription" column="NOTE_DESCRIPTION" jdbc-type="VARCHAR"/>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingPurchaseOrder" table="PEND_PURCH_ORDERT">
+<class-descriptor class="org.kuali.module.cams.bo.PendingPurchaseOrder" table="CB_PND_PO_T">
 	<field-descriptor name="purchaseOrderNumber" column="PO_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
@@ -238,7 +237,7 @@
 	<field-descriptor name="requestorPersonPhoneNumber" column="RQSTR_PRSN_PHN_NBR" jdbc-type="VARCHAR"/>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingAction" table="PEND_ACTIONT">
+<class-descriptor class="org.kuali.module.cams.bo.PendingAction" table="CB_PND_ACTION_T">
 	<field-descriptor name="actionCode" column="ACTION_CODE" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
@@ -246,7 +245,7 @@
 	<field-descriptor name="active" column="ROW_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingInvoiceAccount" table="PEND_INVOICE_ACCTT">
+<class-descriptor class="org.kuali.module.cams.bo.PendingInvoiceAccount" table="CB_PND_INV_ACCT_T">
 	<field-descriptor name="purchaseOrderNumber" column="PO_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="invoiceNumber" column="INVOICE_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="chartOfAccountsCode" column="FIN_COA_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
@@ -280,7 +279,7 @@
 	</reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingInvoiceItem" table="PEND_INVOICE_ITEMT">
+<class-descriptor class="org.kuali.module.cams.bo.PendingInvoiceItem" table="CB_PND_INV_ITEM_T">
 	<field-descriptor name="purchaseOrderNumber" column="PO_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="invoiceNumber" column="INVOICE_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="lineItemNumber" column="LINE_ITEM_NUMBER" jdbc-type="BIGINT" primarykey="true" index="true"/>
@@ -294,19 +293,14 @@
 	<field-descriptor name="lineItemAdditionalCharge" column="LINE_ITEM_ADDLCHG" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion"/>
 	<field-descriptor name="manufacturerName" column="MANUFACTURER_NM" jdbc-type="VARCHAR"/>
 	<field-descriptor name="purchasingCommodityCode" column="PURCH_COMM_CODE" jdbc-type="VARCHAR"/>
-	<field-descriptor name="reasonPendingCode" column="REASON_PEND_CODE" jdbc-type="VARCHAR"/>
 	<field-descriptor name="lineItemDescription" column="LINE_ITEM_DESC" jdbc-type="VARCHAR"/>
 	<field-descriptor name="itemTypeCode" column="ITM_TYP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="transactionTypeCode" column="CPTL_AST_TRN_TYP_CD" jdbc-type="VARCHAR"/>
 	<field-descriptor name="transactionTypeServiceIndicator" column="CPTL_AST_TRN_TYP_SRVC_IND" jdbc-type="CHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
 	<field-descriptor name="itemAssignedToTradeInIndicator" column="ITM_ASND_TO_TRADE_IN_IND" jdbc-type="CHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-
-	<reference-descriptor name="reasonPending" class-ref="org.kuali.module.cams.bo.PendingReasonCode" auto-retrieve="true" auto-update="none" auto-delete="none">
-		<foreignkey field-ref="reasonPendingCode" />
-	</reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingItemAccount" table="PEND_ITEM_ACCOUNTT">
+<class-descriptor class="org.kuali.module.cams.bo.PendingItemAccount" table="CB_PND_ITM_ACCT_T">
 	<field-descriptor name="purchaseOrderNumber" column="PO_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="invoiceNumber" column="INVOICE_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="lineItemNumber" column="LINE_ITEM_NUMBER" jdbc-type="BIGINT" primarykey="true" index="true"/>
@@ -382,15 +376,7 @@
 	</reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingReasonCode" table="PEND_REASONT">
-	<field-descriptor name="reasonPendingCode" column="REASON_PEND_CODE" jdbc-type="VARCHAR" primarykey="true" index="true"/>
-	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
-	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
-	<field-descriptor name="reasonPendingDescription" column="REASON_PEND_DESC" jdbc-type="VARCHAR"/>
-	<field-descriptor name="active" column="ROW_ACTV_IND" jdbc-type="VARCHAR" conversion="org.kuali.core.util.OjbCharBooleanConversion"/>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.cams.bo.PendingInvoice" table="PEND_INVOICET">
+<class-descriptor class="org.kuali.module.cams.bo.PendingInvoice" table="CB_PND_INV_T">
 	<field-descriptor name="purchaseOrderNumber" column="PO_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="invoiceNumber" column="INVOICE_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
@@ -423,7 +409,7 @@
     </collection-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.PendingPurchaseOrderNote" table="PEND_NOTE_LINET">
+<class-descriptor class="org.kuali.module.cams.bo.PendingPurchaseOrderNote" table="CB_PND_PO_NTE_T">
 	<field-descriptor name="purchaseOrderNumber" column="PO_NUMBER" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="noteLineNumber" column="NOTE_LINE_NUMBER" jdbc-type="BIGINT" primarykey="true" index="true"/>
 	<field-descriptor name="noteTypeCode" column="NOTE_TYP_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>

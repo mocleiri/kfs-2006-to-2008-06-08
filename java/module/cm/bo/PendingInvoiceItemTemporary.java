@@ -22,7 +22,6 @@ public class PendingInvoiceItemTemporary extends PersistableBusinessObjectBase {
 	private KualiDecimal lineItemAdditionalCharge;
 	private String manufacturerName;
 	private String purchasingCommodityCode;
-	private String reasonPendingCode;
 	private String lineItemDescription;
 	private String itemTypeCode;
 	private String transactionTypeCode;
@@ -264,27 +263,6 @@ public class PendingInvoiceItemTemporary extends PersistableBusinessObjectBase {
 	 */
 	public void setPurchasingCommodityCode(String purchasingCommodityCode) {
 		this.purchasingCommodityCode = purchasingCommodityCode;
-	}
-
-
-	/**
-	 * Gets the reasonPendingCode attribute.
-	 * 
-	 * @return Returns the reasonPendingCode
-	 * 
-	 */
-	public String getReasonPendingCode() { 
-		return reasonPendingCode;
-	}
-
-	/**
-	 * Sets the reasonPendingCode attribute.
-	 * 
-	 * @param reasonPendingCode The reasonPendingCode to set.
-	 * 
-	 */
-	public void setReasonPendingCode(String reasonPendingCode) {
-		this.reasonPendingCode = reasonPendingCode;
 	}
 
 
