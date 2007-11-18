@@ -369,4 +369,19 @@ public class PayeeAchAccount extends PersistableBusinessObjectBase {
         this.vendorDetail = vendorDetail;
     }
 
+    public String getVendorNumber() {
+        // using the code from the VendorDetail to generate the vendor number
+        VendorDetail vDUtil = new VendorDetail();
+        vDUtil.setVendorHeaderGeneratedIdentifier(vendorHeaderGeneratedIdentifier);
+        vDUtil.setVendorDetailAssignedIdentifier(vendorDetailAssignedIdentifier);
+        return vDUtil.getVendorNumber();
+    }
+
+    public void setVendorNumber(String vendorNumber) {
+        // using the code from the VendorDetail to set the 2 component fields of the vendor number
+        VendorDetail vDUtil = new VendorDetail();
+        vDUtil.setVendorNumber(vendorNumber);
+        setVendorHeaderGeneratedIdentifier(vDUtil.getVendorHeaderGeneratedIdentifier());
+        setVendorDetailAssignedIdentifier(vDUtil.getVendorDetailAssignedIdentifier());
+    }
 }
