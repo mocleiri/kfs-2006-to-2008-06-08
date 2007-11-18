@@ -16,67 +16,28 @@
 
 package org.kuali.module.purap.document;
 
-import java.util.ArrayList;
 
-import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
-import org.kuali.module.purap.service.PurapGeneralLedgerService;
-import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.service.PurchaseOrderService;
-
-/**
- * Purchase Order Document
- */
 public class PurchaseOrderReopenDocument extends PurchaseOrderDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderReopenDocument.class);
 
     /**
-     * Default constructor.
-     */
-    public PurchaseOrderReopenDocument() {
+	 * Default constructor.
+	 */
+	public PurchaseOrderReopenDocument() {
         super();
-    }
+	}
 
-    @Override
-    public void prepareForSave(KualiDocumentEvent event) {
-        LOG.info("prepareForSave(KualiDocumentEvent) do not create gl entries");
-        setSourceAccountingLines(new ArrayList());
-        setGeneralLedgerPendingEntries(new ArrayList());
-    }
-
-
+    
+    /**
+     * @see org.kuali.core.document.DocumentBase#handleRouteStatusChange()
+     */
     @Override
     public void handleRouteStatusChange() {
-        super.handleRouteStatusChange();
-
-        // DOCUMENT PROCESSED
-        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            // generate GL entries
-            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesReopenPurchaseOrder(this);
-
-            // update indicators
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForApprovedPODocuments(this);
-
-            // set purap status and status history and status history note
-            SpringContext.getBean(PurapService.class).updateStatus(this, PurapConstants.PurchaseOrderStatuses.OPEN);
-            SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
-        }
-        // DOCUMENT DISAPPROVED
-        else if (getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedReopenPODocuments(this);
-        }
-        // DOCUMENT CANCELED
-        else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForCancelledReopenPODocuments(this);
-        }
-
+        
     }
-
-    public NodeDetails getNodeDetailEnum(String newNodeName) {
-        // no statuses to set means no node details
-        return null;
+    
+    @Override
+    public void handleRouteLevelChange() {
+        
     }
-
 }

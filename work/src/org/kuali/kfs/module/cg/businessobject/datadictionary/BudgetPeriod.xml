@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetPeriod">
 
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <attributes>
 
-            <attribute name="documentNumber" forceUppercase="false">
+            <attribute name="documentHeaderId" forceUppercase="false">
                 <label>Document Header Id</label>
                 <shortLabel>Document Id</shortLabel>
 
@@ -53,8 +38,8 @@
             </attribute>
 
             <attribute name="budgetPeriodBeginDate" forceUppercase="false">
-                <label>from</label>
-                <shortLabel>Date</shortLabel>
+                <label>Budget period begin date</label>
+                <shortLabel>Bdgt. Pd. Beg. Date.</shortLabel>
 
                 <maxLength>10</maxLength>
 
@@ -70,8 +55,8 @@
             </attribute>
 
             <attribute name="budgetPeriodEndDate" forceUppercase="false">
-                <label>to</label>
-                <shortLabel>Date</shortLabel>
+                <label>Budget period end date</label>
+                <shortLabel>Bdgt. Pd. End Date.</shortLabel>
 
                 <maxLength>10</maxLength>
 
@@ -87,8 +72,8 @@
             </attribute>
 
             <attribute name="budgetPeriodParticipantsNumber" forceUppercase="false">
-                <label>Number of Participants/Trainees</label>
-                <shortLabel>Number</shortLabel>
+                <label>Budget Period Participants Number</label>
+                <shortLabel>Period Participants No.</shortLabel>
 
                 <maxLength>3</maxLength>
 
@@ -124,7 +109,7 @@
                 </control>
 
                 <summary>objectId summary...</summary>
-                <description>Budget period object identifier</description>
+                <description>Da period for da budget. Duh.</description>
             </attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -149,7 +134,7 @@
         <objectLabel>Budget Periods</objectLabel>
         <objectDescription>Budget Periods are the periods for your Budget.</objectDescription>
         
-        <objectHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="PERIOD" />
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetPeriodHelp" />
 
     </businessObject>
 </dictionaryEntry>

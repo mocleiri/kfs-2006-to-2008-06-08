@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,75 +20,9 @@ import org.kuali.module.purap.document.RequisitionDocument;
 
 public enum RequisitionDocumentFixture {
 
-    REQ_ONLY_REQUIRED_FIELDS(null, // requisitionOrganizationReference1Text
-            null, // requisitionOrganizationReference2Text
-            null, // requisitionOrganizationReference3Text
-            null, // alternate1VendorName
-            null, // alternate2VendorName
-            null, // alternate3VendorName
-            null, // alternate4VendorName
-            null, // alternate5VendorName
-            null, // organizationAutomaticPurchaseOrderLimit
-            PurchasingAccountsPayableDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purapDocumentFixture
-            PurchasingDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purchasingDocumentFixture
-            new RequisitionItemFixture[] { RequisitionItemFixture.REQ_QTY_UNRESTRICTED_ITEM_1 } // requisitionItemMultiFixtures
-    ),
-
-    REQ_NO_APO_VALID(null, // requisitionOrganizationReference1Text
-            null, // requisitionOrganizationReference2Text
-            null, // requisitionOrganizationReference3Text
-            null, // alternate1VendorName
-            null, // alternate2VendorName
-            null, // alternate3VendorName
-            null, // alternate4VendorName
-            null, // alternate5VendorName
-            null, // organizationAutomaticPurchaseOrderLimit
-            PurchasingAccountsPayableDocumentFixture.REQ_VALID_APO, // purapDocumentFixture
-            PurchasingDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purchasingDocumentFixture
-            new RequisitionItemFixture[] { RequisitionItemFixture.REQ_ITEM_NO_APO } // requisitionItemMultiFixtures
-    ),
-
-    REQ_APO_VALID(null, // requisitionOrganizationReference1Text
-            null, // requisitionOrganizationReference2Text
-            null, // requisitionOrganizationReference3Text
-            null, // alternate1VendorName
-            null, // alternate2VendorName
-            null, // alternate3VendorName
-            null, // alternate4VendorName
-            null, // alternate5VendorName
-            null, // organizationAutomaticPurchaseOrderLimit
-            PurchasingAccountsPayableDocumentFixture.REQ_VALID_APO, // purapDocumentFixture
-            PurchasingDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purchasingDocumentFixture
-            new RequisitionItemFixture[] { RequisitionItemFixture.REQ_QTY_UNRESTRICTED_ITEM_1 } // requisitionItemMultiFixtures
-    ),
-
-    REQ_ALTERNATE_APO(null, // requisitionOrganizationReference1Text
-            null, // requisitionOrganizationReference2Text
-            null, // requisitionOrganizationReference3Text
-            null, // alternate1VendorName
-            null, // alternate2VendorName
-            null, // alternate3VendorName
-            null, // alternate4VendorName
-            null, // alternate5VendorName
-            null, // organizationAutomaticPurchaseOrderLimit
-            PurchasingAccountsPayableDocumentFixture.REQ_ALTERNATE_APO, // purapDocumentFixture
-            PurchasingDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purchasingDocumentFixture
-            new RequisitionItemFixture[] { RequisitionItemFixture.REQ_QTY_APO_ITEM_1, RequisitionItemFixture.REQ_SERVICE_APO_ITEM_1, RequisitionItemFixture.REQ_FREIGHT_ITEM_1 } // requisitionItemMultiFixtures
-    ),
-
-    REQ_APO_INVALID_ALTERNATE_VENDOR_NAMES(null, // requisitionOrganizationReference1Text
-            null, // requisitionOrganizationReference2Text
-            null, // requisitionOrganizationReference3Text
-            "NFL Shop", // alternate1VendorName
-            "Dicks Sporting Goods", // alternate2VendorName
-            null, // alternate3VendorName
-            null, // alternate4VendorName
-            null, // alternate5VendorName
-            null, // organizationAutomaticPurchaseOrderLimit
-            PurchasingAccountsPayableDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purapDocumentFixture
-            PurchasingDocumentFixture.REQ_ONLY_REQUIRED_FIELDS, // purchasingDocumentFixture
-            new RequisitionItemFixture[] { RequisitionItemFixture.REQ_QTY_UNRESTRICTED_ITEM_1 } // requisitionItemMultiFixtures
-    );
+    REQ_ONLY_REQUIRED_FIELDS(null, null, null, null, null, null, null, null, null),
+    REQ_BREAK_APO_ENTER_ALTERNATE_VENDOR_NAMES(null, null, null, "NFL Shop", "Dicks Sporting Goods", null, null, null, null),
+    ;
 
     public final String requisitionOrganizationReference1Text;
     public final String requisitionOrganizationReference2Text;
@@ -99,11 +33,17 @@ public enum RequisitionDocumentFixture {
     public final String alternate4VendorName;
     public final String alternate5VendorName;
     public final KualiDecimal organizationAutomaticPurchaseOrderLimit;
-    private PurchasingAccountsPayableDocumentFixture purapDocumentFixture;
-    private PurchasingDocumentFixture purchasingDocumentFixture;
-    private RequisitionItemFixture[] requisitionItemFixtures;
 
-    private RequisitionDocumentFixture(String requisitionOrganizationReference1Text, String requisitionOrganizationReference2Text, String requisitionOrganizationReference3Text, String alternate1VendorName, String alternate2VendorName, String alternate3VendorName, String alternate4VendorName, String alternate5VendorName, KualiDecimal organizationAutomaticPurchaseOrderLimit, PurchasingAccountsPayableDocumentFixture purapDocumentFixture, PurchasingDocumentFixture purchasingDocumentFixture, RequisitionItemFixture[] requisitionItemFixtures) {
+    private RequisitionDocumentFixture(
+            String requisitionOrganizationReference1Text,
+            String requisitionOrganizationReference2Text,
+            String requisitionOrganizationReference3Text,
+            String alternate1VendorName,
+            String alternate2VendorName,
+            String alternate3VendorName,
+            String alternate4VendorName,
+            String alternate5VendorName,
+            KualiDecimal organizationAutomaticPurchaseOrderLimit) {
         this.requisitionOrganizationReference1Text = requisitionOrganizationReference1Text;
         this.requisitionOrganizationReference2Text = requisitionOrganizationReference2Text;
         this.requisitionOrganizationReference3Text = requisitionOrganizationReference3Text;
@@ -113,13 +53,11 @@ public enum RequisitionDocumentFixture {
         this.alternate4VendorName = alternate4VendorName;
         this.alternate5VendorName = alternate5VendorName;
         this.organizationAutomaticPurchaseOrderLimit = organizationAutomaticPurchaseOrderLimit;
-        this.purapDocumentFixture = purapDocumentFixture;
-        this.purchasingDocumentFixture = purchasingDocumentFixture;
-        this.requisitionItemFixtures = requisitionItemFixtures;
     }
 
-    public RequisitionDocument createRequisitionDocument() {
-        RequisitionDocument doc = purchasingDocumentFixture.createRequisitionDocument(purapDocumentFixture);
+    public RequisitionDocument createRequisitionDocument(PurchasingAccountsPayableDocumentFixture purapFixture, 
+            PurchasingDocumentFixture purFixture) {
+        RequisitionDocument doc = purFixture.createRequisitionDocument(purapFixture);
         doc.setRequisitionOrganizationReference1Text(this.requisitionOrganizationReference1Text);
         doc.setRequisitionOrganizationReference2Text(this.requisitionOrganizationReference2Text);
         doc.setRequisitionOrganizationReference3Text(this.requisitionOrganizationReference3Text);
@@ -130,11 +68,9 @@ public enum RequisitionDocumentFixture {
         doc.setAlternate5VendorName(this.alternate5VendorName);
         doc.setOrganizationAutomaticPurchaseOrderLimit(this.organizationAutomaticPurchaseOrderLimit);
 
-        for (RequisitionItemFixture requisitionItemFixture : requisitionItemFixtures) {
-            requisitionItemFixture.addTo(doc);
-        }
-
+        //need to call refresh here to update all references
+        doc.refresh();
         return doc;
     }
-
+    
 }

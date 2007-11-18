@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,44 +19,13 @@ import java.sql.Date;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.fixtures.PurapTestConstants.PO;
 
-/**
- * Fixture class for Purchase Order Document.
- */
 public enum PurchaseOrderDocumentFixture {
 
-    // TODO f2f: fix the REQ id
-    PO_ONLY_REQUIRED_FIELDS(PO.CREATE_DATE, // purchaseOrderCreateDate
-            PO.REQ_ID, // requisitionIdentifier
-            "LPRC", // purchaseOrderVendorChoiceCode
-            null, // recurringPaymentFrequencyCode
-            null, // recurringPaymentAmount
-            null, // recurringPaymentDate
-            null, // initialPaymentAmount
-            null, // initialPaymentDate
-            null, // finalPaymentAmount
-            null, // finalPaymentDate
-            null, // purchaseOrderInitialOpenDate
-            null, // purchaseOrderLastTransmitDate
-            null, // purchaseOrderQuoteDueDate
-            null, // purchaseOrderQuoteTypeCode
-            null, // purchaseOrderQuoteVendorNoteText
-            false, // purchaseOrderConfirmedIndicator
-            null, // purchaseOrderCommodityDescription
-            null, // purchaseOrderPreviousIdentifier
-            null, // alternateVendorHeaderGeneratedIdentifier
-            null, // alternateVendorDetailAssignedIdentifier
-            null, // newQuoteVendorHeaderGeneratedIdentifier
-            null, // newQuoteVendorDetailAssignedIdentifier
-            null, // alternateVendorName
-            true, // purchaseOrderCurrentIndicator
-            false, // pendingActionIndicator
-            null, // purchaseOrderFirstTransmissionDate
-            PurchasingAccountsPayableDocumentFixture.PO_ONLY_REQUIRED_FIELDS, // purapDocumentFixture
-            PurchasingDocumentFixture.PO_ONLY_REQUIRED_FIELDS, // purchasingDocumentFixture
-            new PurchaseOrderItemFixture[] { PurchaseOrderItemFixture.PO_QTY_UNRESTRICTED_ITEM_1 } // purchaseOrderItemMultiFixtures
-    );
+    //TODO f2f: fix the REQ id
+    PO_ONLY_REQUIRED_FIELDS(null, null, "LPRC", null, null, null, null, null, null, null, null, null, 
+            null, null, null, false, null, null, null, null, null, null, null, true, false, null),
+    ;
 
     public final Date purchaseOrderCreateDate;
     public final Integer requisitionIdentifier;
@@ -84,15 +53,34 @@ public enum PurchaseOrderDocumentFixture {
     public final boolean purchaseOrderCurrentIndicator;
     public final boolean pendingActionIndicator;
     public final Date purchaseOrderFirstTransmissionDate;
-    private PurchasingAccountsPayableDocumentFixture purapDocumentFixture;
-    private PurchasingDocumentFixture purchasingDocumentFixture;
-    private PurchaseOrderItemFixture[] purchaseOrderItemFixtures;
 
-    /**
-     * Private Constructor.
-     */
-    private PurchaseOrderDocumentFixture(Date purchaseOrderCreateDate, Integer requisitionIdentifier, String purchaseOrderVendorChoiceCode, String recurringPaymentFrequencyCode, KualiDecimal recurringPaymentAmount, Date recurringPaymentDate, KualiDecimal initialPaymentAmount, Date initialPaymentDate, KualiDecimal finalPaymentAmount, Date finalPaymentDate, Date purchaseOrderInitialOpenDate, Date purchaseOrderLastTransmitDate, Date purchaseOrderQuoteDueDate, String purchaseOrderQuoteTypeCode, String purchaseOrderQuoteVendorNoteText, boolean purchaseOrderConfirmedIndicator, String purchaseOrderCommodityDescription, Integer purchaseOrderPreviousIdentifier, Integer alternateVendorHeaderGeneratedIdentifier, Integer alternateVendorDetailAssignedIdentifier, Integer newQuoteVendorHeaderGeneratedIdentifier, Integer newQuoteVendorDetailAssignedIdentifier, String alternateVendorName, boolean purchaseOrderCurrentIndicator, boolean pendingActionIndicator, Date purchaseOrderFirstTransmissionDate,
-            PurchasingAccountsPayableDocumentFixture purapDocumentFixture, PurchasingDocumentFixture purchasingDocumentFixture, PurchaseOrderItemFixture[] purchaseOrderItemFixtures) {
+    private PurchaseOrderDocumentFixture(
+            Date purchaseOrderCreateDate,
+            Integer requisitionIdentifier,
+            String purchaseOrderVendorChoiceCode,
+            String recurringPaymentFrequencyCode,
+            KualiDecimal recurringPaymentAmount,
+            Date recurringPaymentDate,
+            KualiDecimal initialPaymentAmount,
+            Date initialPaymentDate,
+            KualiDecimal finalPaymentAmount,
+            Date finalPaymentDate,
+            Date purchaseOrderInitialOpenDate,
+            Date purchaseOrderLastTransmitDate,
+            Date purchaseOrderQuoteDueDate,
+            String purchaseOrderQuoteTypeCode,
+            String purchaseOrderQuoteVendorNoteText,
+            boolean purchaseOrderConfirmedIndicator,
+            String purchaseOrderCommodityDescription,
+            Integer purchaseOrderPreviousIdentifier,
+            Integer alternateVendorHeaderGeneratedIdentifier,
+            Integer alternateVendorDetailAssignedIdentifier,
+            Integer newQuoteVendorHeaderGeneratedIdentifier,
+            Integer newQuoteVendorDetailAssignedIdentifier,
+            String alternateVendorName,
+            boolean purchaseOrderCurrentIndicator,
+            boolean pendingActionIndicator,
+            Date purchaseOrderFirstTransmissionDate) {
         this.purchaseOrderCreateDate = purchaseOrderCreateDate;
         this.requisitionIdentifier = requisitionIdentifier;
         this.purchaseOrderVendorChoiceCode = purchaseOrderVendorChoiceCode;
@@ -119,18 +107,11 @@ public enum PurchaseOrderDocumentFixture {
         this.purchaseOrderCurrentIndicator = purchaseOrderCurrentIndicator;
         this.pendingActionIndicator = pendingActionIndicator;
         this.purchaseOrderFirstTransmissionDate = purchaseOrderFirstTransmissionDate;
-        this.purapDocumentFixture = purapDocumentFixture;
-        this.purchasingDocumentFixture = purchasingDocumentFixture;
-        this.purchaseOrderItemFixtures = purchaseOrderItemFixtures;
     }
 
-    /**
-     * Creates a Purchase Order Document using this Fixture.
-     * 
-     * @return the created Purchase Order Document.
-     */
-    public PurchaseOrderDocument createPurchaseOrderDocument() {
-        PurchaseOrderDocument doc = purchasingDocumentFixture.createPurchaseOrderDocument(purapDocumentFixture);
+    public PurchaseOrderDocument createPurchaseOrderDocument(PurchasingAccountsPayableDocumentFixture purapFixture, 
+            PurchasingDocumentFixture purFixture) {
+        PurchaseOrderDocument doc = purFixture.createPurchaseOrderDocument(purapFixture);
         doc.setPurchaseOrderCreateDate(this.purchaseOrderCreateDate);
         doc.setRequisitionIdentifier(this.requisitionIdentifier);
         doc.setPurchaseOrderVendorChoiceCode(this.purchaseOrderVendorChoiceCode);
@@ -157,11 +138,7 @@ public enum PurchaseOrderDocumentFixture {
         doc.setPurchaseOrderCurrentIndicator(this.purchaseOrderCurrentIndicator);
         doc.setPendingActionIndicator(this.pendingActionIndicator);
         doc.setPurchaseOrderFirstTransmissionDate(this.purchaseOrderFirstTransmissionDate);
-
-        for (PurchaseOrderItemFixture purchaseOrderItemFixture : purchaseOrderItemFixtures) {
-            purchaseOrderItemFixture.addTo(doc);
-        }
-
         return doc;
     }
+    
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,25 +22,24 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode;
 
 /**
- * This class creates a new finder for our forms view (creates a drop-down of {@link MandatoryTransferEliminationCode}s)
+ * This class returns list of Budget Aggregation Code type value pairs.
+ * 
+ * 
  */
 public class MandatoryTransferEliminationCodeValuesFinder extends KeyValuesBase {
 
-    /**
-     * Creates a list of {@link MandatoryTransferEliminationCode}s using their code as their key, and their code "-" name as the
-     * display value
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
         // get a list of all Mandatory Transfer Elimination Codes
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         List mteCodes = (List) boService.findAll(MandatoryTransferEliminationCode.class);
 
         // calling comparator.

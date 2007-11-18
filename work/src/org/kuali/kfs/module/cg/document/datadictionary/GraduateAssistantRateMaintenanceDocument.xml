@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -23,7 +8,7 @@
         <businessObjectClass>org.kuali.module.kra.budget.bo.GraduateAssistantRate</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -35,19 +20,15 @@
         <documentTypeName>KualiGraduateAssistantRateMaintenanceDocument</documentTypeName>
         <documentTypeCode>GAR</documentTypeCode>
 
-        <label>Graduate Assistant Rate</label>
+        <label>Graduate Assistant Rate Maintenance Document</label>
+        <shortLabel>GraduateAssistantRateMainDoc</shortLabel>
 
         <summary>Graduate Assistant Rate maintenance document</summary>
         <description>Document used to create or update Graduate Assistant Rate objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="GraduateAssistantRate" parameterName="GRADUATE_ASSISTANT_RATE" />
 
         <lockingKeys>
             <field attributeName="campusCode" />
         </lockingKeys>
-
-        <defaultExistenceChecks>
-            <reference attributeName="campus" attributeToHighlightOnFail="campusCode" />
-        </defaultExistenceChecks>
 
         <maintainableSections>
             <maintainableSection title="Edit Graduate Assistant Rate">
@@ -59,9 +40,7 @@
                     <maintainableField name="campusMaximumPeriod4Rate" required="false" />
                     <maintainableField name="campusMaximumPeriod5Rate" required="false" />
                     <maintainableField name="campusMaximumPeriod6Rate" required="false" />
-					<maintainableField name="active">
-						<defaultValue>true</defaultValue>
-					</maintainableField>
+                    <maintainableField name="active" required="false" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

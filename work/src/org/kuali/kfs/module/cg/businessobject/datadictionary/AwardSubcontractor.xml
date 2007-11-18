@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.AwardSubcontractor">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Award Subcontractor Inquiry</title>
 
-            <inquirySections><inquirySection title="Award Subcontractor Details"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="awardSubcontractorAmendmentNumber" />
                 <field attributeName="awardSubcontractorNumber" />
                 <field attributeName="proposalNumber" />
@@ -33,11 +18,13 @@
                 <field attributeName="subcontractorContactFirstName" />
                 <field attributeName="subcontractorContactLastName" />
                 <field attributeName="subcontractorNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Award Subcontractor Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.AwardSubcontractor">Create New</a>]]></menubar>
 
             <instructions>Look up an Award Subcontractor</instructions>
 
@@ -74,18 +61,10 @@
         </lookup>
 
         <attributes>
-			
-            <attributeReference name="proposalNumber" sourceClassName="org.kuali.module.cg.bo.Award" sourceAttributeName="proposalNumber"/>
-
-            <attributeReference name="subcontractorNumber" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorNumber"/>
-			
-			<attributeReference name="subcontractor.subcontractorName" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorName">
-                <label>Name</label>
-            </attributeReference>
 
             <attribute name="awardSubcontractorAmendmentNumber" forceUppercase="true">
-                <label>Amendment Number</label>
-                <shortLabel>Amendment</shortLabel>
+                <label>Award Subcontractor Amendment Number</label>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -93,11 +72,14 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>awardSubcontractorAmendmentNumber</summary>
+                <description>awardSubcontractorAmendmentNumber description...</description>
 			</attribute>
 
             <attribute name="awardSubcontractorNumber" forceUppercase="true">
-                <label>Subcontractor Number</label>
-                <shortLabel>Subcontractor</shortLabel>
+                <label>Award Subcontractor Number</label>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -105,29 +87,44 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>awardSubcontractorNumber</summary>
+                <description>awardSubcontractorNumber description...</description>
 			</attribute>
 
-			<attribute name="awardSubcontractorDescription">
-                <label>Description</label>
-                <shortLabel>Description</shortLabel>
+            <attribute name="proposalNumber" forceUppercase="true">
+                <label>Proposal Number</label>
+                <shortLabel>Number</shortLabel>
 
-                <maxLength>30</maxLength>
-                <validationPattern>
-                    <anyCharacter allowWhitespace="true" maxLength="30"/>
-                </validationPattern>
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <text size="30" />
+                    <text size="14" />
                 </control>
-            </attribute>
-			
-			<attributeReference name="subcontractorAmount"  sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
-			</attributeReference>	
+
+                <summary>proposalNumber</summary>
+                <description>proposalNumber description...</description>
+			</attribute>
+
+            <attribute name="subcontractorAmount" forceUppercase="true">
+                <label>Subcontractor Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>subcontractorAmount</summary>
+                <description>subcontractorAmount description...</description>
+			</attribute>
 
             <attribute name="subcontractorAuditHistoryText" forceUppercase="true">
-                <label>Audit History</label>
-                <shortLabel>History</shortLabel>
+                <label>Subcontractor Audit History Text</label>
+                <shortLabel>Text</shortLabel>
 
                 <maxLength>2000</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -135,11 +132,14 @@
                 <control>
                     <textarea rows="5" cols="80"/>
                 </control>
+
+                <summary>subcontractorAuditHistoryText</summary>
+                <description>subcontractorAuditHistoryText description...</description>
 			</attribute>
 
             <attribute name="subcontractorContactFirstName" forceUppercase="true">
-                <label>Contact First Name</label>
-                <shortLabel>First Name</shortLabel>
+                <label>Subcontractor Contact First Name</label>
+                <shortLabel>Name</shortLabel>
 
                 <maxLength>15</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -147,11 +147,14 @@
                 <control>
                     <text size="17" />
                 </control>
+
+                <summary>subcontractorContactFirstName</summary>
+                <description>subcontractorContactFirstName description...</description>
 			</attribute>
 
             <attribute name="subcontractorContactLastName" forceUppercase="true">
-                <label>Contact Last Name</label>
-                <shortLabel>Last Name</shortLabel>
+                <label>Subcontractor Contact Last Name</label>
+                <shortLabel>Name</shortLabel>
 
                 <maxLength>25</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -159,12 +162,26 @@
                 <control>
                     <text size="27" />
                 </control>
+
+                <summary>subcontractorContactLastName</summary>
+                <description>subcontractorContactLastName description...</description>
 			</attribute>
 
-            <attributeReference name="newCollectionRecord" 
-                                sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-                                sourceAttributeName="newCollectionRecord" />
-                                
+            <attribute name="subcontractorNumber" forceUppercase="true">
+                <label>Subcontractor Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>subcontractorNumber</summary>
+                <description>subcontractorNumber description...</description>
+			</attribute>
+
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>

@@ -1,70 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
-
+    
 <dictionaryEntry>
-    <maintenanceDocument>
-        <businessObjectClass>org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount</businessObjectClass>
-        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-        <preRulesCheckClass>org.kuali.module.chart.rules.IndirectCostRecoveryExclusionAccountPreRules</preRulesCheckClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+	<maintenanceDocument>
+		<businessObjectClass>org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount</businessObjectClass>
+		<maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
+
+   		<documentAuthorizerClass>org.kuali.core.document.DocumentAuthorizerBase</documentAuthorizerClass>
 
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>KUALI_ROLE_MAINTENANCE</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>IndirectCostRecoveryExclusionAccountMaintenanceDocument</documentTypeName>
-        <documentTypeCode>ICRA</documentTypeCode>
-        <label>Indirect Cost Recovery Exclusion Account</label>
-        <summary>Indirect Cost Recovery Exclusion Account Maintenance Document</summary>
-        <description>Maintenance document which allows you to create new Indirect Cost Recovery Exclusion Accounts, or modify existing Indirect Cost Recovery Exclusion Accounts.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="IndirectCostRecoveryExclusionAccount" parameterName="INDIRECT_COST_RECOVERY_EXCLUSION_BY_ACCOUNT" />
-
+		<documentTypeName>KualiIndirectCostRecoveryExclusionAccountMaintenanceDocument</documentTypeName>
+		<documentTypeCode>IRM</documentTypeCode>
+		<label>Indirect Cost Recovery Exclusion Account Maintenance Document</label>
+		<shortLabel>ICRExclusionAccountMaintenanceDoc</shortLabel>
+		<summary>Indirect Cost Recovery Exclusion Account Maintenance Document</summary>
+		<description>
+			Maintenance document which allows you to create new Indirect Cost Recovery Exclusion Accounts, or modify existing Indirect Cost Recovery Exclusion Accounts.
+		</description>
+		
         <lockingKeys>
-            <field attributeName="chartOfAccountsCode" />
-            <field attributeName="accountNumber" />
-            <field attributeName="financialObjectChartOfAccountCode" />
-            <field attributeName="financialObjectCode" />
-        </lockingKeys>
-
-        <defaultExistenceChecks>
-            <reference attributeName="chart" attributeToHighlightOnFail="chartOfAccountsCode" />
-            <reference attributeName="account" attributeToHighlightOnFail="accountNumber" />
-            <reference attributeName="financialObjectChartOfAccount" attributeToHighlightOnFail="financialObjectChartOfAccountCode" />
-            <reference attributeName="objectCodeCurrent" attributeToHighlightOnFail="financialObjectCode" />
-        </defaultExistenceChecks>
-
-        <maintainableSections>
-            <maintainableSection title="Edit ICR Exclusion Account">
+			<field attributeName="chartOfAccounts.chartOfAccountsCode" />
+			<field attributeName="account.accountNumber" />
+			<field attributeName="objectChartOfAccounts.chartOfAccountsCode" />
+			<field attributeName="object.financialObjectCode" />
+		</lockingKeys>	 		
+		
+		<maintainableSections>
+			<maintainableSection title="Edit ICR Exclusion Account">
                 <maintainableItems>
-                    <maintainableField name="chartOfAccountsCode" required="true" />
-                    <maintainableField name="accountNumber" required="true" />
-                    <maintainableField name="financialObjectChartOfAccountCode" required="true" />
-                    <maintainableField name="financialObjectCode" required="true" />
-                    <maintainableField name="versionNumber" />
+					<maintainableField name="chartOfAccounts.chartOfAccountsCode" required="true" />
+					<maintainableField name="account.accountNumber" required="true" />
+					<maintainableField name="objectChartOfAccounts.chartOfAccountsCode" required="true" />
+					<maintainableField name="object.financialObjectCode" required="true" />
+					<maintainableField name="versionNumber" />
                 </maintainableItems>
-            </maintainableSection>
-        </maintainableSections>
-    </maintenanceDocument>
+			</maintainableSection>
+		</maintainableSections>
+	</maintenanceDocument>
 
 </dictionaryEntry>

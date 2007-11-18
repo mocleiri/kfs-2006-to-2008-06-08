@@ -1,19 +1,4 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Created on Jul 7, 2004
  *
  */
@@ -36,195 +21,192 @@ import org.kuali.core.service.UniversalUserService;
 /**
  * @author jsissom
  * @hibernate.class table="PDP.PDP_CUST_BNK_T"
+ *
  */
-public class CustomerBank implements UserRequired, Serializable, PersistenceBrokerAware {
-    private Integer id; // CUST_BNK_ID
-    private Integer version;
+public class CustomerBank implements UserRequired,Serializable,PersistenceBrokerAware {
+  private Integer id;         //CUST_BNK_ID
+  private Integer version;
 
-    private Integer customerId;
-    private CustomerProfile customerProfile; // CUST_ID
+  private Integer customerId;
+  private CustomerProfile customerProfile;      // CUST_ID
 
-    private Integer bankId;
-    private Bank bank; // BNK_ID
+  private Integer bankId;
+  private Bank bank;                            // BNK_ID
+  
+  private String disbursementTypeCode;
+  private DisbursementType disbursementType;    // DISB_TYP_CD
 
-    private String disbursementTypeCode;
-    private DisbursementType disbursementType; // DISB_TYP_CD
+  private Timestamp lastUpdate; // LST_UPDT_TS
+  private PdpUser lastUpdateUser; 
+  private String lastUpdateUserId; // LST_UPDT_USR_ID
+  
+  /**
+   * 
+   */
+  public CustomerBank() {
+    super();
+  }
 
-    private Timestamp lastUpdate; // LST_UPDT_TS
-    private PdpUser lastUpdateUser;
-    private String lastUpdateUserId; // LST_UPDT_USR_ID
+  public PdpUser getLastUpdateUser() {
+      return lastUpdateUser;
+  }
 
-    /**
-     * 
-     */
-    public CustomerBank() {
-        super();
-    }
+  public void setLastUpdateUser(PdpUser s) {
+      if ( s != null ) {
+          this.lastUpdateUserId = s.getUniversalUser().getPersonUniversalIdentifier();
+      } else {
+          this.lastUpdateUserId = null;
+      }
+      this.lastUpdateUser = s;
+  }
 
-    public PdpUser getLastUpdateUser() {
-        return lastUpdateUser;
-    }
+  public String getLastUpdateUserId() {
+      return lastUpdateUserId;
+  }
 
-    public void setLastUpdateUser(PdpUser s) {
-        if (s != null) {
-            this.lastUpdateUserId = s.getUniversalUser().getPersonUniversalIdentifier();
-        }
-        else {
-            this.lastUpdateUserId = null;
-        }
-        this.lastUpdateUser = s;
-    }
+  public void setLastUpdateUserId(String lastUpdateUserId) {
+    this.lastUpdateUserId = lastUpdateUserId;
+  }
 
-    public String getLastUpdateUserId() {
-        return lastUpdateUserId;
-    }
+  public void updateUser(UniversalUserService userService) throws UserNotFoundException {
+      UniversalUser u = userService.getUniversalUser(lastUpdateUserId);
+      if ( u == null ) {
+          setLastUpdateUser(null);
+      } else {
+          setLastUpdateUser(new PdpUser(u));
+      }
+  }
 
-    public void setLastUpdateUserId(String lastUpdateUserId) {
-        this.lastUpdateUserId = lastUpdateUserId;
-    }
+  /**
+   * @hibernate.many-to-one column="CUST_ID" class="edu.iu.uis.pdp.bo.CustomerProfile" not-null="true"
+   * @return Returns the customerId.
+   */
+  public CustomerProfile getCustomerProfile() {
+    return customerProfile;
+  }
 
-    public void updateUser(UniversalUserService userService) throws UserNotFoundException {
-        UniversalUser u = userService.getUniversalUser(lastUpdateUserId);
-        if (u == null) {
-            setLastUpdateUser(null);
-        }
-        else {
-            setLastUpdateUser(new PdpUser(u));
-        }
-    }
+  /**
+   * @param customerId The customerId to set.
+   */
+  public void setCustomerProfile(CustomerProfile customer) {
+    this.customerProfile = customer;
+  }
 
-    /**
-     * @hibernate.many-to-one column="CUST_ID" class="edu.iu.uis.pdp.bo.CustomerProfile" not-null="true"
-     * @return Returns the customerId.
-     */
-    public CustomerProfile getCustomerProfile() {
-        return customerProfile;
-    }
+  /**
+   * @hibernate.many-to-one column="BNK_ID" class="edu.iu.uis.pdp.bo.Bank" not-null="true"
+   * @return Returns the bankId.
+   */
+  public Bank getBank() {
+    return bank;
+  }
 
-    /**
-     * @param customerId The customerId to set.
-     */
-    public void setCustomerProfile(CustomerProfile customer) {
-        this.customerProfile = customer;
-    }
+  /**
+   * @param bankId The bankId to set.
+   */
+  public void setBank(Bank bank) {
+    this.bank = bank;
+  }
+  /**
+   * @hibernate.many-to-one column="DISB_TYP_CD" class="edu.iu.uis.pdp.bo.DisbursementType" not-null="true"
+   * @return Returns the disbursementType.
+   */
+  public DisbursementType getDisbursementType() {
+    return disbursementType;
+  }
+  /**
+   * @param disbursementType The disbursementType to set.
+   */
+  public void setDisbursementType(DisbursementType disbursementType) {
+    this.disbursementType = disbursementType;
+  }
+  /**
+   * @hibernate.id column="CUST_BNK_ID" generator-class="sequence"
+   * @hibernate.generator-param name="sequence" value="PDP.PDP_CUST_BNK_ID_SEQ" 
+   * @return Returns the id.
+   */
+  public Integer getId() {
+    return id;
+  }
+  /**
+   * @param id The id to set.
+   */
+  public void setId(Integer id) {
+    this.id = id;
+  }
+  /**
+   * @hibernate.version column="VER_NBR"
+   * @return Returns the version.
+   */
+  public Integer getVersion() {
+    return version;
+  }
+  /**
+   * @param ojbVerNbr The ojbVerNbr to set.
+   */
+  public void setVersion(Integer ver) {
+    this.version = ver;
+  }
 
-    /**
-     * @hibernate.many-to-one column="BNK_ID" class="edu.iu.uis.pdp.bo.Bank" not-null="true"
-     * @return Returns the bankId.
-     */
-    public Bank getBank() {
-        return bank;
-    }
+  /**
+   * @hibernate.property column="LST_UPDT_TS" not-null="true"
+   * @return Returns the lastUpdate.
+   */
+  public Timestamp getLastUpdate() {
+    return lastUpdate;
+  }
 
-    /**
-     * @param bankId The bankId to set.
-     */
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
+  /**
+   * @param timestamp
+   */
+  public void setLastUpdate(Timestamp timestamp) {
+    lastUpdate = timestamp;
+  }
 
-    /**
-     * @hibernate.many-to-one column="DISB_TYP_CD" class="edu.iu.uis.pdp.bo.DisbursementType" not-null="true"
-     * @return Returns the disbursementType.
-     */
-    public DisbursementType getDisbursementType() {
-        return disbursementType;
-    }
+  public boolean equals(Object obj) {
+    if (! (obj instanceof CustomerBank) ) { return false; }
+    CustomerBank o = (CustomerBank)obj;
+    return new EqualsBuilder()
+    .append(id, o.getId())
+    .isEquals();
+  }
 
-    /**
-     * @param disbursementType The disbursementType to set.
-     */
-    public void setDisbursementType(DisbursementType disbursementType) {
-        this.disbursementType = disbursementType;
-    }
+  public int hashCode() {
+    return new HashCodeBuilder(83,37)
+      .append(id)
+      .toHashCode();
+  }
 
-    /**
-     * @hibernate.id column="CUST_BNK_ID" generator-class="sequence"
-     * @hibernate.generator-param name="sequence" value="PDP.PDP_CUST_BNK_ID_SEQ"
-     * @return Returns the id.
-     */
-    public Integer getId() {
-        return id;
-    }
+  public String toString() {
+    return new ToStringBuilder(this)
+      .append("id",  this.id)
+      .toString();
+  }
 
-    /**
-     * @param id The id to set.
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void beforeInsert(PersistenceBroker broker) throws PersistenceBrokerException {
+    lastUpdate = new Timestamp( (new Date()).getTime() );
+  }
 
-    /**
-     * @hibernate.version column="VER_NBR"
-     * @return Returns the version.
-     */
-    public Integer getVersion() {
-        return version;
-    }
+  public void afterInsert(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    /**
-     * @param ojbVerNbr The ojbVerNbr to set.
-     */
-    public void setVersion(Integer ver) {
-        this.version = ver;
-    }
+  }
 
-    /**
-     * @hibernate.property column="LST_UPDT_TS" not-null="true"
-     * @return Returns the lastUpdate.
-     */
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
+  public void beforeUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+    lastUpdate = new Timestamp( (new Date()).getTime() );    
+  }
 
-    /**
-     * @param timestamp
-     */
-    public void setLastUpdate(Timestamp timestamp) {
-        lastUpdate = timestamp;
-    }
+  public void afterUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+    
+  }
 
-    public boolean equals(Object obj) {
-        if (!(obj instanceof CustomerBank)) {
-            return false;
-        }
-        CustomerBank o = (CustomerBank) obj;
-        return new EqualsBuilder().append(id, o.getId()).isEquals();
-    }
+  public void beforeDelete(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public int hashCode() {
-        return new HashCodeBuilder(83, 37).append(id).toHashCode();
-    }
+  }
+  
+  public void afterDelete(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public String toString() {
-        return new ToStringBuilder(this).append("id", this.id).toString();
-    }
+  }
 
-    public void beforeInsert(PersistenceBroker broker) throws PersistenceBrokerException {
-        lastUpdate = new Timestamp((new Date()).getTime());
-    }
+  public void afterLookup(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public void afterInsert(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
-
-    public void beforeUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
-        lastUpdate = new Timestamp((new Date()).getTime());
-    }
-
-    public void afterUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
-
-    public void beforeDelete(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
-
-    public void afterDelete(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
-
-    public void afterLookup(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
+  }
 }

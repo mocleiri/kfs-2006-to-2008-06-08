@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.LaborObject">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Labor Object Code Inquiry</title>
+            <title>Labor Object Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="detailPositionRequiredIndicator" />
                 <field attributeName="financialObjectCode" />
@@ -33,11 +18,13 @@
                 <field attributeName="financialObjectPayTypeCode" />
                 <field attributeName="positionObjectGroupCode" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Labor Object Code Lookup</title>
+            <title>Labor Object Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.LaborObject">Create New</a>]]></menubar>
 
             <instructions>Look up a Labor Object</instructions>
 
@@ -50,14 +37,14 @@
             </defaultSort>
 
             <lookupFields>
-                <lookupField attributeName="universityFiscalYear" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="detailPositionRequiredIndicator" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialObjectFringeOrSalaryCode" required="false" />
+                <lookupField attributeName="financialObjectHoursRequiredIndicator" required="false" />
                 <lookupField attributeName="financialObjectPayTypeCode" required="false" />
                 <lookupField attributeName="positionObjectGroupCode" required="false" />
-                <lookupField attributeName="detailPositionRequiredIndicator" required="false" />
-                <lookupField attributeName="financialObjectHoursRequiredIndicator" required="false" />
+                <lookupField attributeName="universityFiscalYear" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -73,9 +60,21 @@
         </lookup>
 
         <attributes>
-			<attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
-			   <label>Chart Of Accounts Code</label>
-			</attributeReference>
+
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
 
             <attribute name="detailPositionRequiredIndicator" forceUppercase="true">
                 <label>Detail Position Required Indicator</label>
@@ -86,14 +85,27 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>detailPositionRequiredIndicator</summary>
+                <description>detailPositionRequiredIndicator description...</description>
 			</attribute>
 
-			<attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
+            <attribute name="financialObjectCode" forceUppercase="true">
                 <label>Financial Object Code</label>
                 <shortLabel>Code</shortLabel>
-            </attributeReference>
 
-			<attribute name="financialObjectFringeOrSalaryCode" forceUppercase="true">
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
+			</attribute>
+
+            <attribute name="financialObjectFringeOrSalaryCode" forceUppercase="true">
                 <label>Financial Object Fringe Or Salary Code</label>
                 <shortLabel>Code</shortLabel>
 
@@ -103,6 +115,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>financialObjectFringeOrSalaryCode</summary>
+                <description>financialObjectFringeOrSalaryCode description...</description>
 			</attribute>
 
             <attribute name="financialObjectHoursRequiredIndicator" forceUppercase="true">
@@ -114,6 +129,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>financialObjectHoursRequiredIndicator</summary>
+                <description>financialObjectHoursRequiredIndicator description...</description>
 			</attribute>
 
             <attribute name="financialObjectPayTypeCode" forceUppercase="true">
@@ -126,12 +144,43 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>financialObjectPayTypeCode</summary>
+                <description>financialObjectPayTypeCode description...</description>
 			</attribute>
 
-            <attributeReference name="positionObjectGroupCode" sourceClassName="org.kuali.module.labor.bo.PositionObjectGroup" sourceAttributeName="positionObjectGroupCode"/>			
-            <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear"/>									
+            <attribute name="positionObjectGroupCode" forceUppercase="true">
+                <label>Position Object Group Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>positionObjectGroupCode</summary>
+                <description>positionObjectGroupCode description...</description>
+			</attribute>
+
+            <attribute name="universityFiscalYear" forceUppercase="true">
+                <label>University Fiscal Year</label>
+                <shortLabel>Year</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>universityFiscalYear</summary>
+                <description>universityFiscalYear description...</description>
+			</attribute>
+
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
         </attributes>
-        <objectLabel>Labor Object Code</objectLabel>
     </businessObject>
 </dictionaryEntry>

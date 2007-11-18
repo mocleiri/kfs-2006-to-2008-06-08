@@ -1,56 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetFringeRate">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
-            <title>Budget Fringe Rate Inquiry</title>
+            <title>Budget Fringe Rate</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="documentNumber" />
-                <field attributeName="institutionAppointmentTypeCode" />
+            <inquiryFields>
+                <field attributeName="documentHeaderId" />
+                <field attributeName="universityAppointmentTypeCode" />
                 <field attributeName="contractsAndGrantsFringeRateAmount" />
-                <field attributeName="institutionCostShareFringeRateAmount" />
+                <field attributeName="universityCostShareFringeRateAmount" />
                 <field attributeName="budgetLastUpdateTimestamp" />
                 <field attributeName="objectId" />
                 <field attributeName="versionNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Budget Fringe Rate Lookup</title>
+            <title>Budget Fringe Rate</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.kra.budget.bo.BudgetFringeRate">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Budget Fringe Rate</instructions>
 
-            <defaultSort attributeName="documentNumber" sortAscending="true" />
+            <defaultSort attributeName="documentHeaderId" sortAscending="true" />
 
             <lookupFields>
-                <lookupField attributeName="institutionAppointmentTypeCode" required="false" />
+                <lookupField attributeName="universityAppointmentTypeCode" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="documentNumber" />
-                <field attributeName="institutionAppointmentTypeCode" />
+                <field attributeName="documentHeaderId" />
+                <field attributeName="universityAppointmentTypeCode" />
                 <field attributeName="contractsAndGrantsFringeRateAmount" />
-                <field attributeName="institutionCostShareFringeRateAmount" />
+                <field attributeName="universityCostShareFringeRateAmount" />
                 <field attributeName="budgetLastUpdateTimestamp" />
                 <field attributeName="objectId" />
                 <field attributeName="versionNumber" />
@@ -59,7 +48,7 @@
 
         <attributes>
 
-            <attribute name="documentNumber" forceUppercase="true">
+            <attribute name="documentHeaderId" forceUppercase="true">
                 <label>Budget Number</label>
                 <shortLabel>Budget Number</shortLabel>
 
@@ -76,7 +65,7 @@
                 <description>Budget Number...</description>
             </attribute>
 
-            <attribute name="institutionAppointmentTypeCode" forceUppercase="false">
+            <attribute name="universityAppointmentTypeCode" forceUppercase="false">
                 <label>Appointment Type Code</label>
                 <shortLabel>Appointment Type Code</shortLabel>
 
@@ -95,9 +84,9 @@
 
             <attribute name="contractsAndGrantsFringeRateAmount" forceUppercase="false">
                 <label>Contract and Grants Fringe Rate Amount</label>
-                <shortLabel>C&amp;G Fringe Rate</shortLabel>
+                <shortLabel>CG Fringe Rate</shortLabel>
 
-                <maxLength>6</maxLength>
+                <maxLength>8</maxLength>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -112,11 +101,11 @@
                 <description>Cost Share Fringe Rate Amount...</description>
             </attribute>
 
-            <attribute name="institutionCostShareFringeRateAmount" forceUppercase="false">
+            <attribute name="universityCostShareFringeRateAmount" forceUppercase="false">
                 <label>Cost Share Fringe Rate Amount</label>
-                <shortLabel>Fringe Rate</shortLabel>
+                <shortLabel>Cost Share</shortLabel>
 
-                <maxLength>6</maxLength>
+                <maxLength>8</maxLength>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -189,7 +178,7 @@
         <objectLabel>Budget Fringe Rates</objectLabel>
         <objectDescription>Fringe rates for the Budget.</objectDescription>
         
-        <objectHelp parameterNamespace="KFS-RA" parameterDetailType="Budget" parameterName="RATES" />
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetRatesHelp" />
 
     </businessObject>
 </dictionaryEntry>

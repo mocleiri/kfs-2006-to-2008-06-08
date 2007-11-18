@@ -33,7 +33,8 @@
         </authorizations>
         <documentTypeName>KualiYearEndBenefitExpenseTransferDocument</documentTypeName>
         <documentTypeCode>YEBT</documentTypeCode>
-        <label>Year End Benefit Expense Transfer</label>
+        <label>Year End Benefit Expense Transfer Document</label>
+        <shortLabel>BTDoc</shortLabel>
         
         <summary>
             <![CDATA[&nbsp;]]>

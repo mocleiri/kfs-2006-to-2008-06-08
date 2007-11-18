@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,16 @@ package org.kuali.kfs.dao.ojb;
 import org.apache.log4j.Logger;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.kfs.bo.HomeOrigination;
 import org.kuali.kfs.dao.HomeOriginationDao;
+import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the HomeOriginationDao interface.
+ * 
+ * 
  */
-public class HomeOriginationDaoOjb extends PlatformAwareDaoBaseOjb implements HomeOriginationDao {
+public class HomeOriginationDaoOjb extends PersistenceBrokerDaoSupport implements HomeOriginationDao {
 
     private static Logger LOG = Logger.getLogger(HomeOriginationDaoOjb.class);
 

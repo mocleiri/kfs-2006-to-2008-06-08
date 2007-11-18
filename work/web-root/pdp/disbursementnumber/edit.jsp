@@ -18,7 +18,7 @@
 <app:getBank active="Y" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html locale="true">
-<link rel="stylesheet" type="text/css"  href="<%= request.getContextPath() %>/pdp/css/pdp_styles.css">
+<link rel="stylesheet" type="text/css"  href="https://docs.onestart.iu.edu/dav/MY/channels/css/styles.css">
   <head>
     <html:base />
     <title>Disbursement Range Maintenance</title>
@@ -49,19 +49,19 @@
         	<div align="center">New Disbursement Range</div>
         </logic:equal>
         <logic:notEqual name="PdpDisbursementNumberMaintenanceForm" property="id" value="0">
-        	<div align="center">Disbursement Range ID: <c:out value="${PdpDisbursementNumberMaintenanceForm.id}"/></div>
+        	<div align="center">Disbursement Range ID: <c:out value="${DisbursementNumberMaintenanceForm.id}"/></div>
         </logic:notEqual>
       </logic:notEmpty>
       </strong>
     </th>
   <tr>
-    <th align="right" valign="top" nowrap="true" width="33%">* Campus Processing Location:</th>
+    <th align="right" valign="top" nowrap="true" width="33%"><font color="red">*</font>Campus Processing Location:</th>
     <td align="left" class="datacell">
       <html:text property="physCampusProcCode" tabindex="1" maxlength="2"/>&nbsp;
     </td>
   </tr>
 	<tr>
-    <th align="right" valign="top" nowrap="true">* Bank:</th>
+    <th align="right" valign="top" nowrap="true"><font color="red">*</font>Bank:</th>
     <td align="left" class="datacell">
     <logic:iterate id="b" name="BankList" indexId="i">
     	<html:radio property="bankId" value="${b.id}" tabindex="2" />
@@ -70,31 +70,31 @@
     </td>
   </tr>
   <tr>
-    <th align="right" valign="top" nowrap="true">* Beginning Disbursement Number:</th>
+    <th align="right" valign="top" nowrap="true"><font color="red">*</font>Beginning Disbursement Number:</th>
     <td align="left" class="datacell">
       <html:text property="beginDisbursementNbr" tabindex="3" maxlength="9"/>&nbsp;
     </td>
   </tr>
   <tr>
-    <th align="right" valign="top" nowrap="true">* Ending Disbursement Number:</th>
+    <th align="right" valign="top" nowrap="true"><font color="red">*</font>Ending Disbursement Number:</th>
     <td align="left" class="datacell">
       <html:text property="endDisbursementNbr" tabindex="4" maxlength="9"/>&nbsp;
     </td>
   </tr>
   <tr>
-	  <th align="right" valign="top" nowrap="true">Last Assigned Disbursement Number:</th>
+	  <th align="right" valign="top" nowrap="true"><font color="red">*</font>Last Assigned Disbursement Number:</th>
 	  <td align="left" class="datacell">
 	    <html:text property="lastAssignedDisbNbr" tabindex="5" maxlength="9"/>&nbsp;
 	  </td>
   </tr>
   <tr>
-    <th align="right" valign="top" nowrap="true">* Range Effective Date:<br>(ex: 01/08/2004)</th>
+    <th align="right" valign="top" nowrap="true"><font color="red">*</font>Range Effective Date:<br>(ex: 01/08/2004)</th>
     <td align="left" class="datacell">
       <html:text property="disbNbrEffectiveDt" tabindex="6" maxlength="10"/>&nbsp;
     </td>
   </tr>
   <tr>
-    <th align="right" valign="top" nowrap="true">* Range Expiration Date:<br>(ex: 01/08/2004)</th>
+    <th align="right" valign="top" nowrap="true"><font color="red">*</font>Range Expiration Date:<br>(ex: 01/08/2004)</th>
     <td align="left" class="datacell">
       <html:text property="disbNbrExpirationDt" tabindex="7" maxlength="10"/>&nbsp;
     </td>

@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.Carrier">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Carrier Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="carrierCode" />
                 <field attributeName="carrierDescription" />
-                <field attributeName="active" />
-            </inquiryFields></inquirySection></inquirySections>
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Carrier Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.Carrier">Create New</a>]]></menubar>
 
             <instructions>Lookup a Carrier</instructions>
 
@@ -44,19 +32,15 @@
             <lookupFields>
                 <lookupField attributeName="carrierCode" required="false" />
                 <lookupField attributeName="carrierDescription" required="false" />
-                <lookupField attributeName="active" required="false" >
-                	<defaultValue>Y</defaultValue>
-                </lookupField>
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="carrierCode" />
                 <field attributeName="carrierDescription" />
-                <field attributeName="active" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
             </resultFields>
         </lookup>
-
-        <titleAttribute>carrierCode</titleAttribute>
 
         <attributes>
 
@@ -71,9 +55,11 @@
                     <text size="6" />
                 </control>
 
+                <summary>carrierCode</summary>
+                <description>carrierCode description...</description>
 			</attribute>
 
-            <attribute name="carrierDescription" forceUppercase="true">
+            <attribute name="carrierDescription" >
                 <label>Carrier Description</label>
                 <shortLabel>Description</shortLabel>
 
@@ -84,13 +70,14 @@
                     <text size="47" />
                 </control>
 
+                <summary>carrierDescription</summary>
+                <description>carrierDescription description...</description>
 			</attribute>
 
-            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
+            <attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Carrier</objectLabel>
     </businessObject>
 </dictionaryEntry>

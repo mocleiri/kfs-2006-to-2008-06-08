@@ -1,29 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.ElectronicInvoiceHeaderInformation">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Electronic Invoice Header Information Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountsPayableElectronicInvoiceLoadSummaryIdentifier" />
                 <field attributeName="epicPurchaseOrderDeliveryCampusCode" />
                 <field attributeName="epicPurchaseOrderIdentifier" />
@@ -82,11 +68,13 @@
                 <field attributeName="vendorDetailAssignedIdentifier" />
                 <field attributeName="vendorDunsNumber" />
                 <field attributeName="vendorHeaderGeneratedIdentifier" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Electronic Invoice Header Information Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.ElectronicInvoiceHeaderInformation">Create New</a>]]></menubar>
 
             <instructions>Lookup an Electronic Invoice Header Information</instructions>
 
@@ -232,6 +220,8 @@
                     <text size="16" />
                 </control>
 
+                <summary>accountsPayableElectronicInvoiceLoadSummaryIdentifier</summary>
+                <description>accountsPayableElectronicInvoiceLoadSummaryIdentifier description...</description>
 			</attribute>
 
             <attribute name="epicPurchaseOrderDeliveryCampusCode" forceUppercase="true">
@@ -245,6 +235,8 @@
                     <text size="4" />
                 </control>
 
+                <summary>epicPurchaseOrderDeliveryCampusCode</summary>
+                <description>epicPurchaseOrderDeliveryCampusCode description...</description>
 			</attribute>
 
             <attribute name="epicPurchaseOrderIdentifier" forceUppercase="true">
@@ -258,6 +250,8 @@
                     <text size="11" />
                 </control>
 
+                <summary>epicPurchaseOrderIdentifier</summary>
+                <description>epicPurchaseOrderIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceAddressName" forceUppercase="true">
@@ -271,6 +265,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceAddressName</summary>
+                <description>invoiceAddressName description...</description>
 			</attribute>
 
             <attribute name="invoiceCustomerNumber" forceUppercase="true">
@@ -284,6 +280,8 @@
                     <text size="52" />
                 </control>
 
+                <summary>invoiceCustomerNumber</summary>
+                <description>invoiceCustomerNumber description...</description>
 			</attribute>
 
             <attribute name="invoiceFileDate" forceUppercase="true">
@@ -297,6 +295,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceFileDate</summary>
+                <description>invoiceFileDate description...</description>
 			</attribute>
 
             <attribute name="invoiceFileDeploymentModeValue" forceUppercase="true">
@@ -310,6 +310,8 @@
                     <text size="52" />
                 </control>
 
+                <summary>invoiceFileDeploymentModeValue</summary>
+                <description>invoiceFileDeploymentModeValue description...</description>
 			</attribute>
 
             <attribute name="invoiceFileDiscountInLineIndicator" forceUppercase="true">
@@ -322,6 +324,8 @@
                     <checkbox />
                 </control>
 
+                <summary>invoiceFileDiscountInLineIndicator</summary>
+                <description>invoiceFileDiscountInLineIndicator description...</description>
 			</attribute>
 
             <attribute name="invoiceFileHeaderTypeIndicator" forceUppercase="true">
@@ -334,6 +338,8 @@
                     <checkbox />
                 </control>
 
+                <summary>invoiceFileHeaderTypeIndicator</summary>
+                <description>invoiceFileHeaderTypeIndicator description...</description>
 			</attribute>
 
             <attribute name="invoiceFileInformationOnlyIndicator" forceUppercase="true">
@@ -346,6 +352,8 @@
                     <checkbox />
                 </control>
 
+                <summary>invoiceFileInformationOnlyIndicator</summary>
+                <description>invoiceFileInformationOnlyIndicator description...</description>
 			</attribute>
 
             <attribute name="invoiceFileName" forceUppercase="true">
@@ -359,6 +367,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceFileName</summary>
+                <description>invoiceFileName description...</description>
 			</attribute>
 
             <attribute name="invoiceFileNumber" forceUppercase="true">
@@ -372,6 +382,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceFileNumber</summary>
+                <description>invoiceFileNumber description...</description>
 			</attribute>
 
             <attribute name="invoiceFileOperationIdentifier" forceUppercase="true">
@@ -385,6 +397,8 @@
                     <text size="52" />
                 </control>
 
+                <summary>invoiceFileOperationIdentifier</summary>
+                <description>invoiceFileOperationIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceFilePurposeIdentifier" forceUppercase="true">
@@ -398,6 +412,8 @@
                     <text size="52" />
                 </control>
 
+                <summary>invoiceFilePurposeIdentifier</summary>
+                <description>invoiceFilePurposeIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceFileShippingInLineIndicator" forceUppercase="true">
@@ -410,6 +426,8 @@
                     <checkbox />
                 </control>
 
+                <summary>invoiceFileShippingInLineIndicator</summary>
+                <description>invoiceFileShippingInLineIndicator description...</description>
 			</attribute>
 
             <attribute name="invoiceFileSpecialHandlingInLineIndicator" forceUppercase="true">
@@ -422,6 +440,8 @@
                     <checkbox />
                 </control>
 
+                <summary>invoiceFileSpecialHandlingInLineIndicator</summary>
+                <description>invoiceFileSpecialHandlingInLineIndicator description...</description>
 			</attribute>
 
             <attribute name="invoiceFileTaxInLineIndicator" forceUppercase="true">
@@ -434,6 +454,8 @@
                     <checkbox />
                 </control>
 
+                <summary>invoiceFileTaxInLineIndicator</summary>
+                <description>invoiceFileTaxInLineIndicator description...</description>
 			</attribute>
 
             <attribute name="invoiceHeaderInformationIdentifier" forceUppercase="true">
@@ -447,6 +469,8 @@
                     <text size="11" />
                 </control>
 
+                <summary>invoiceHeaderInformationIdentifier</summary>
+                <description>invoiceHeaderInformationIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceItemDiscountAmount" forceUppercase="true">
@@ -460,6 +484,8 @@
                     <text size="21" />
                 </control>
 
+                <summary>invoiceItemDiscountAmount</summary>
+                <description>invoiceItemDiscountAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceItemDiscountCurrencyCode" forceUppercase="true">
@@ -473,6 +499,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>invoiceItemDiscountCurrencyCode</summary>
+                <description>invoiceItemDiscountCurrencyCode description...</description>
 			</attribute>
 
             <attribute name="invoiceItemGrossAmount" forceUppercase="true">
@@ -486,6 +514,8 @@
                     <text size="21" />
                 </control>
 
+                <summary>invoiceItemGrossAmount</summary>
+                <description>invoiceItemGrossAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceItemGrossCurrencyCode" forceUppercase="true">
@@ -499,6 +529,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>invoiceItemGrossCurrencyCode</summary>
+                <description>invoiceItemGrossCurrencyCode description...</description>
 			</attribute>
 
             <attribute name="invoiceItemNetAmount" forceUppercase="true">
@@ -512,6 +544,8 @@
                     <text size="21" />
                 </control>
 
+                <summary>invoiceItemNetAmount</summary>
+                <description>invoiceItemNetAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceItemNetCurrencyCode" forceUppercase="true">
@@ -525,6 +559,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>invoiceItemNetCurrencyCode</summary>
+                <description>invoiceItemNetCurrencyCode description...</description>
 			</attribute>
 
             <attribute name="invoiceItemShippingAmount" forceUppercase="true">
@@ -538,6 +574,8 @@
                     <text size="21" />
                 </control>
 
+                <summary>invoiceItemShippingAmount</summary>
+                <description>invoiceItemShippingAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceItemShippingCurrencyCode" forceUppercase="true">
@@ -551,6 +589,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>invoiceItemShippingCurrencyCode</summary>
+                <description>invoiceItemShippingCurrencyCode description...</description>
 			</attribute>
 
             <attribute name="invoiceItemShippingDescription" forceUppercase="true">
@@ -564,6 +604,8 @@
                     <textarea rows="5" cols="80"/>
                 </control>
 
+                <summary>invoiceItemShippingDescription</summary>
+                <description>invoiceItemShippingDescription description...</description>
 			</attribute>
 
             <attribute name="invoiceItemSpecialHandlingAmount" forceUppercase="true">
@@ -577,6 +619,8 @@
                     <text size="21" />
                 </control>
 
+                <summary>invoiceItemSpecialHandlingAmount</summary>
+                <description>invoiceItemSpecialHandlingAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceItemSpecialHandlingCurrencyCode" forceUppercase="true">
@@ -590,6 +634,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>invoiceItemSpecialHandlingCurrencyCode</summary>
+                <description>invoiceItemSpecialHandlingCurrencyCode description...</description>
 			</attribute>
 
             <attribute name="invoiceItemSubTotalAmount" forceUppercase="true">
@@ -603,6 +649,8 @@
                     <text size="21" />
                 </control>
 
+                <summary>invoiceItemSubTotalAmount</summary>
+                <description>invoiceItemSubTotalAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceItemSubTotalCurrencyCode" forceUppercase="true">
@@ -616,6 +664,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>invoiceItemSubTotalCurrencyCode</summary>
+                <description>invoiceItemSubTotalCurrencyCode description...</description>
 			</attribute>
 
             <attribute name="invoiceItemTaxAmount" forceUppercase="true">
@@ -629,6 +679,8 @@
                     <text size="21" />
                 </control>
 
+                <summary>invoiceItemTaxAmount</summary>
+                <description>invoiceItemTaxAmount description...</description>
 			</attribute>
 
             <attribute name="invoiceItemTaxCurrencyCode" forceUppercase="true">
@@ -642,6 +694,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>invoiceItemTaxCurrencyCode</summary>
+                <description>invoiceItemTaxCurrencyCode description...</description>
 			</attribute>
 
             <attribute name="invoiceItemTaxDescription" forceUppercase="true">
@@ -655,6 +709,8 @@
                     <textarea rows="5" cols="80"/>
                 </control>
 
+                <summary>invoiceItemTaxDescription</summary>
+                <description>invoiceItemTaxDescription description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderMasterAgreementInformationDate" forceUppercase="true">
@@ -668,6 +724,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderMasterAgreementInformationDate</summary>
+                <description>invoiceOrderMasterAgreementInformationDate description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderMasterAgreementInformationIdentifier" forceUppercase="true">
@@ -681,6 +739,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderMasterAgreementInformationIdentifier</summary>
+                <description>invoiceOrderMasterAgreementInformationIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderMasterAgreementReferenceDate" forceUppercase="true">
@@ -694,6 +754,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderMasterAgreementReferenceDate</summary>
+                <description>invoiceOrderMasterAgreementReferenceDate description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderMasterAgreementReferenceIdentifier" forceUppercase="true">
@@ -707,6 +769,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderMasterAgreementReferenceIdentifier</summary>
+                <description>invoiceOrderMasterAgreementReferenceIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderPurchaseOrderDate" forceUppercase="true">
@@ -720,6 +784,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderPurchaseOrderDate</summary>
+                <description>invoiceOrderPurchaseOrderDate description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderPurchaseOrderIdentifier" forceUppercase="true">
@@ -733,6 +799,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderPurchaseOrderIdentifier</summary>
+                <description>invoiceOrderPurchaseOrderIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderReferenceDocumentReferencePayloadIdentifier" forceUppercase="true">
@@ -746,6 +814,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderReferenceDocumentReferencePayloadIdentifier</summary>
+                <description>invoiceOrderReferenceDocumentReferencePayloadIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderReferenceDocumentReferenceText" forceUppercase="true">
@@ -759,6 +829,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderReferenceDocumentReferenceText</summary>
+                <description>invoiceOrderReferenceDocumentReferenceText description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderReferenceOrderIdentifier" forceUppercase="true">
@@ -772,6 +844,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderReferenceOrderIdentifier</summary>
+                <description>invoiceOrderReferenceOrderIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceOrderSupplierOrderInformationIdentifier" forceUppercase="true">
@@ -785,6 +859,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoiceOrderSupplierOrderInformationIdentifier</summary>
+                <description>invoiceOrderSupplierOrderInformationIdentifier description...</description>
 			</attribute>
 
             <attribute name="invoiceProcessDate" forceUppercase="true">
@@ -798,6 +874,8 @@
                     <text size="9" />
                 </control>
 
+                <summary>invoiceProcessDate</summary>
+                <description>invoiceProcessDate description...</description>
 			</attribute>
 
             <attribute name="invoicePurchaseOrderNumber" forceUppercase="true">
@@ -811,6 +889,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>invoicePurchaseOrderNumber</summary>
+                <description>invoicePurchaseOrderNumber description...</description>
 			</attribute>
 
             <attribute name="invoiceRejectExtractDate" forceUppercase="true">
@@ -824,6 +904,8 @@
                     <text size="9" />
                 </control>
 
+                <summary>invoiceRejectExtractDate</summary>
+                <description>invoiceRejectExtractDate description...</description>
 			</attribute>
 
             <attribute name="invoiceShipDate" forceUppercase="true">
@@ -837,6 +919,8 @@
                     <text size="9" />
                 </control>
 
+                <summary>invoiceShipDate</summary>
+                <description>invoiceShipDate description...</description>
 			</attribute>
 
             <attribute name="invoiceShipToCityName" forceUppercase="true">
@@ -850,6 +934,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceShipToCityName</summary>
+                <description>invoiceShipToCityName description...</description>
 			</attribute>
 
             <attribute name="invoiceShipToCountryCode" forceUppercase="true">
@@ -863,6 +949,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceShipToCountryCode</summary>
+                <description>invoiceShipToCountryCode description...</description>
 			</attribute>
 
             <attribute name="invoiceShipToLine1Address" forceUppercase="true">
@@ -876,6 +964,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceShipToLine1Address</summary>
+                <description>invoiceShipToLine1Address description...</description>
 			</attribute>
 
             <attribute name="invoiceShipToLine2Address" forceUppercase="true">
@@ -889,6 +979,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceShipToLine2Address</summary>
+                <description>invoiceShipToLine2Address description...</description>
 			</attribute>
 
             <attribute name="invoiceShipToLine3Address" forceUppercase="true">
@@ -902,6 +994,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceShipToLine3Address</summary>
+                <description>invoiceShipToLine3Address description...</description>
 			</attribute>
 
             <attribute name="invoiceShipToPostalCode" forceUppercase="true">
@@ -915,6 +1009,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceShipToPostalCode</summary>
+                <description>invoiceShipToPostalCode description...</description>
 			</attribute>
 
             <attribute name="invoiceShipToStateCode" forceUppercase="true">
@@ -928,6 +1024,8 @@
                     <text size="202" />
                 </control>
 
+                <summary>invoiceShipToStateCode</summary>
+                <description>invoiceShipToStateCode description...</description>
 			</attribute>
 
             <attribute name="vendorDetailAssignedIdentifier" forceUppercase="true">
@@ -941,6 +1039,8 @@
                     <text size="12" />
                 </control>
 
+                <summary>vendorDetailAssignedIdentifier</summary>
+                <description>vendorDetailAssignedIdentifier description...</description>
 			</attribute>
 
             <attribute name="vendorDunsNumber" forceUppercase="true">
@@ -954,6 +1054,8 @@
                     <text size="52" />
                 </control>
 
+                <summary>vendorDunsNumber</summary>
+                <description>vendorDunsNumber description...</description>
 			</attribute>
 
             <attribute name="vendorHeaderGeneratedIdentifier" forceUppercase="true">
@@ -967,6 +1069,8 @@
                     <text size="12" />
                 </control>
 
+                <summary>vendorHeaderGeneratedIdentifier</summary>
+                <description>vendorHeaderGeneratedIdentifier description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -980,6 +1084,8 @@
                     <text size="10" />
                 </control>
 
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
 			</attribute>
 
         </attributes>

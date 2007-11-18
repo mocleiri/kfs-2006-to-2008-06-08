@@ -16,14 +16,17 @@
 package org.kuali.module.purap.rule.event;
 
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.BusinessRule;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.module.financial.bo.Check;
+import org.kuali.module.financial.rule.AddCheckRule;
+import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.rule.AddPurchasingAccountsPayableItemRule;
 
 /**
- * This class represents the add item event. This could be triggered when a user presses the add button for a given document's item
- * line.
+ * This class represents the add item event. This could be triggered when a user presses the add button for a given document's
+ * item line.
  */
 public final class AddPurchasingAccountsPayableItemEvent extends PurchasingAccountsPayableItemEventBase {
     /**
@@ -33,7 +36,7 @@ public final class AddPurchasingAccountsPayableItemEvent extends PurchasingAccou
      * @param document
      * @param accountingLine
      */
-    public AddPurchasingAccountsPayableItemEvent(String errorPathPrefix, Document document, PurApItem item) {
+    public AddPurchasingAccountsPayableItemEvent(String errorPathPrefix, Document document, PurchasingApItem item) {
         super("adding item to document " + getDocumentId(document), errorPathPrefix, document, item);
     }
 

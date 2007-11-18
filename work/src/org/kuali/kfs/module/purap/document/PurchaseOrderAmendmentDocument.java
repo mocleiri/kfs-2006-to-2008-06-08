@@ -16,14 +16,9 @@
 
 package org.kuali.module.purap.document;
 
-import java.util.ArrayList;
-
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.service.PurapGeneralLedgerService;
-import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.service.PurchaseOrderService;
+
+
 
 /**
  * Purchase Order Amendment Document
@@ -32,46 +27,16 @@ public class PurchaseOrderAmendmentDocument extends PurchaseOrderDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderAmendmentDocument.class);
 
     /**
-     * Default constructor.
-     */
-    public PurchaseOrderAmendmentDocument() {
+	 * Default constructor.
+	 */
+	public PurchaseOrderAmendmentDocument() {
         super();
     }
 
     @Override
-    public void prepareForSave(KualiDocumentEvent event) {
-        LOG.info("prepareForSave(KualiDocumentEvent) do not create gl entries");
-        setSourceAccountingLines(new ArrayList());
-        setGeneralLedgerPendingEntries(new ArrayList());
+    public void customPrepareForSave(KualiDocumentEvent event) {
+        //TODO For now, do nothing because amendment should not perform the same save prep as PO
     }
-
-    @Override
-    public void handleRouteStatusChange() {
-        super.handleRouteStatusChange();
-
-        // DOCUMENT PROCESSED
-        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            // generate GL entries
-            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesApproveAmendPurchaseOrder(this);
-
-            // update indicators
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForApprovedPODocuments(this);
-
-            // set purap status and status history and status history note
-            SpringContext.getBean(PurapService.class).updateStatus(this, PurapConstants.PurchaseOrderStatuses.OPEN);
-
-            SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
-        }
-        // DOCUMENT DISAPPROVED
-        else if (getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedChangePODocuments(this);
-            SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
-        }
-        // DOCUMENT CANCELED
-        else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForCancelledChangePODocuments(this);
-            SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
-        }
-    }
-
+    
+    
 }

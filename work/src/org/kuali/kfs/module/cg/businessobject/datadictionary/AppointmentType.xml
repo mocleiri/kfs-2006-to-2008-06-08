@@ -1,43 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.AppointmentType">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
-            <title>Appointment Type Inquiry</title>
+            <title>Appointment Type</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="appointmentTypeCode" />
                 <field attributeName="appointmentTypeDescription" />
                 <field attributeName="appointmentTypeAbbrieviation" />
                 <field attributeName="fringeRateAmount" />
                 <field attributeName="costShareFringeRateAmount" />
                 <field attributeName="relatedAppointmentTypeCode" />
+                <field attributeName="fiscalYear" />
                 <field attributeName="lastUpdate" />
-                <field attributeName="active" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Appointment Type Lookup</title>
+            <title>Appointment Type</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.kra.budget.bo.AppointmentType">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup an Appointment Type</instructions>
 
@@ -46,9 +35,7 @@
             <lookupFields>
                 <lookupField attributeName="appointmentTypeCode" required="false" />
                 <lookupField attributeName="appointmentTypeAbbrieviation" required="false" />
-                <lookupField attributeName="active" required="false">
-                    <defaultValue>Y</defaultValue>
-                </lookupField>
+                <lookupField attributeName="fiscalYear" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -57,8 +44,9 @@
                 <field attributeName="appointmentTypeAbbrieviation" />
                 <field attributeName="fringeRateAmount" />
                 <field attributeName="costShareFringeRateAmount" />
+                <field attributeName="relatedAppointmentTypeCode" />
+                <field attributeName="fiscalYear" />
                 <field attributeName="lastUpdate" />
-                <field attributeName="active" />
             </resultFields>
         </lookup>
         
@@ -68,7 +56,7 @@
 
             <attribute name="appointmentTypeCode" forceUppercase="true">
                 <label>Appointment Type Code</label>
-                <shortLabel>Code</shortLabel>
+                <shortLabel>Appointment Type</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
@@ -84,46 +72,55 @@
             </attribute>
 
             <attribute name="appointmentTypeDescription" forceUppercase="false">
-                <label>Position Name</label>
-                <shortLabel>Name</shortLabel>
+                <label>Appointment Type Description</label>
+                <shortLabel>Description</shortLabel>
 
                 <maxLength>40</maxLength>
-                <validationPattern>
-                    <anyCharacter allowWhitespace="true"/>
-                </validationPattern>
 
                 <control>
                     <text size="40" />
                 </control>
 
                 <summary>Appointment Type Description</summary>
-                <description>A description of the appointment type.</description>
+                <description>Appointment Type Description...</description>
             </attribute>
 
             <attribute name="appointmentTypeAbbrieviation" forceUppercase="false">
                 <label>Appointment Type Abbreviation</label>
-                <shortLabel>Appt Type Abrv</shortLabel>
+                <shortLabel>Abrv</shortLabel>
 
                 <maxLength>25</maxLength>
-                <validationPattern>
-                    <anyCharacter allowWhitespace="true"/>
-                </validationPattern>
 
                 <control>
                     <text size="12" />
                 </control>
 
                 <summary>Appointment Type Abbrieviation</summary>
-                <description>An abbreviation of the appointment type.</description>
+                <description>Appointment Type Abbrieviation...</description>
             </attribute>
 
+            <attribute name="fiscalYear" forceUppercase="false">
+                <label>Fiscal Year</label>
+                <shortLabel>Fscl Year</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern>
+                    <year />
+                </validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>Fiscal Year</summary>
+                <description>Fiscal Year</description>
+            </attribute>
 
             <attribute name="fringeRateAmount" forceUppercase="false">
                 <label>Fringe Rate</label>
-                <shortLabel>Fringe</shortLabel>
+                <shortLabel>Fringe Rate</shortLabel>
 
                 <maxLength>8</maxLength>
-                <inclusiveMax>99</inclusiveMax>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -133,15 +130,14 @@
                 </control>
 
                 <summary>Fringe Rate</summary>
-                <description>This is the fringe benefits rate that is charged on salaries that are booked to the project. The fringe rate is dependent on the employee classification.</description>
+                <description>Fringe Rate</description>
             </attribute>
 
             <attribute name="costShareFringeRateAmount" forceUppercase="false">
                 <label>Cost Share Fringe Rate</label>
-                <shortLabel>Cost Share Fringe</shortLabel>
+                <shortLabel>Cost Share</shortLabel>
 
                 <maxLength>8</maxLength>
-                <inclusiveMax>99</inclusiveMax>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -151,21 +147,31 @@
                 </control>
 
                 <summary>Cost Share Fringe Rate</summary>
-                <description>This is the fringe benefits rate that is charged on cost-shared salaries. The fringe rate is dependent on the employee classification.</description>
+                <description>Cost Share Fringe Rate</description>
             </attribute>
 
-            <attributeReference name="lastUpdate"  sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericTimestamp">
-                <label>Last Update Timestamp</label>
+            <attribute name="lastUpdate" forceUppercase="false">
+                <label>Last Update</label>
                 <shortLabel>Last Update</shortLabel>
-                <summary>Last Update</summary>
-                <description>The date of the most recent change to the fringe benefits rates.</description>
-            </attributeReference>
+
+                <maxLength>10</maxLength>
+
+                <validationPattern>
+                    <date />
+                </validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>lastUpdate summary...</summary>
+                <description>lastUpdate description...</description>
+            </attribute>
             
             <attributeReference name="relatedAppointmentTypeCode" sourceClassName="org.kuali.module.kra.budget.bo.AppointmentType" sourceAttributeName="appointmentTypeCode">
-                <label>Related Appointment Type Code</label>
+                <label>Related AppointmentType Code</label>
                 <shortLabel>Related Appt Type</shortLabel>
-                <summary>Related Appointment Type Code</summary>
-                <description>The Appointment Type Code of a related Appointment Type, used for creating entries for dual appointment types.  For example, an Academic 12- Month appointment could be combined with an Hourly appointment.</description>
+                <summary>The Appointment Type Code of a related Appointment Type, used for creating entries for dual appointment types.  For example, an Academic 12- Month appointment could be combined with an Hourly appointment.</summary>
             </attributeReference>
 
             <attribute name="objectId" forceUppercase="true">
@@ -182,16 +188,30 @@
                     <text size="36" />
                 </control>
 
-                <summary>Object ID</summary>
+                <summary>objectId summary...</summary>
                 <description>objectId description...</description>
             </attribute>
 
-            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
 
-            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
+                <maxLength>10</maxLength>
+
+                <validationPattern>
+                    <numeric />
+                </validationPattern>
+
+                <control>
+                    <text size="-1" />
+                </control>
+
+                <summary>versionNumber summary...</summary>
+                <description>versionNumber description...</description>
+            </attribute>
+
 
         </attributes>
-        <objectLabel>Appointment Type</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

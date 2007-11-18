@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.PriorYearAccount">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Prior Year Account Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountCityName" />
                 <field attributeName="accountClosedIndicator" />
                 <field attributeName="accountCreateDate" />
@@ -56,7 +41,7 @@
                 <field attributeName="awardPeriodEndMonth" />
                 <field attributeName="awardPeriodEndYear" />
                 <field attributeName="budgetRecordingLevelCode" />
-                <field attributeName="accountCfdaNumber" />
+                <field attributeName="cgCatlfFedDomestcAssistNbr" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="continuationFinChrtOfAcctCd" />
@@ -70,7 +55,7 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="forContractsAndGrants" />
+                <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="indirectCostRcvyFinCoaCode" />
@@ -78,14 +63,17 @@
                 <field attributeName="intrnlFinEncumSufficntFndIndicator" />
                 <field attributeName="organizationCode" />
                 <field attributeName="pendingAcctSufficientFundsIndicator" />
+                <field attributeName="programCode" />
                 <field attributeName="reportsToAccountNumber" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="subFundGroupCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Prior Year Account Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.PriorYearAccount">Create New</a>]]></menubar>
 
             <instructions>Look up a Prior Year Account</instructions>
 
@@ -128,7 +116,7 @@
                 <lookupField attributeName="awardPeriodEndMonth" required="false" />
                 <lookupField attributeName="awardPeriodEndYear" required="false" />
                 <lookupField attributeName="budgetRecordingLevelCode" required="false" />
-                <lookupField attributeName="accountCfdaNumber" required="false" />
+                <lookupField attributeName="cgCatlfFedDomestcAssistNbr" required="false" />
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="continuationAccountNumber" required="false" />
                 <lookupField attributeName="continuationFinChrtOfAcctCd" required="false" />
@@ -142,7 +130,7 @@
                 <lookupField attributeName="financialHigherEdFunctionCd" required="false" />
                 <lookupField attributeName="financialIcrSeriesIdentifier" required="false" />
                 <lookupField attributeName="financialObjectivePrsctrlIndicator" required="false" />
-                <lookupField attributeName="forContractsAndGrants" required="false" />
+                <lookupField attributeName="inCg" required="false" />
                 <lookupField attributeName="incomeStreamAccountNumber" required="false" />
                 <lookupField attributeName="incomeStreamFinancialCoaCode" required="false" />
                 <lookupField attributeName="indirectCostRcvyFinCoaCode" required="false" />
@@ -150,6 +138,7 @@
                 <lookupField attributeName="intrnlFinEncumSufficntFndIndicator" required="false" />
                 <lookupField attributeName="organizationCode" required="false" />
                 <lookupField attributeName="pendingAcctSufficientFundsIndicator" required="false" />
+                <lookupField attributeName="programCode" required="false" />
                 <lookupField attributeName="reportsToAccountNumber" required="false" />
                 <lookupField attributeName="reportsToChartOfAccountsCode" required="false" />
                 <lookupField attributeName="subFundGroupCode" required="false" />
@@ -187,7 +176,7 @@
                 <field attributeName="awardPeriodEndMonth" />
                 <field attributeName="awardPeriodEndYear" />
                 <field attributeName="budgetRecordingLevelCode" />
-                <field attributeName="accountCfdaNumber" />
+                <field attributeName="cgCatlfFedDomestcAssistNbr" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="continuationAccountNumber" />
                 <field attributeName="continuationFinChrtOfAcctCd" />
@@ -201,7 +190,7 @@
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialIcrSeriesIdentifier" />
                 <field attributeName="financialObjectivePrsctrlIndicator" />
-                <field attributeName="forContractsAndGrants" />
+                <field attributeName="inCg" />
                 <field attributeName="incomeStreamAccountNumber" />
                 <field attributeName="incomeStreamFinancialCoaCode" />
                 <field attributeName="indirectCostRcvyFinCoaCode" />
@@ -209,6 +198,7 @@
                 <field attributeName="intrnlFinEncumSufficntFndIndicator" />
                 <field attributeName="organizationCode" />
                 <field attributeName="pendingAcctSufficientFundsIndicator" />
+                <field attributeName="programCode" />
                 <field attributeName="reportsToAccountNumber" />
                 <field attributeName="reportsToChartOfAccountsCode" />
                 <field attributeName="subFundGroupCode" />
@@ -227,6 +217,9 @@
                 <control>
                     <text size="27" />
                 </control>
+
+                <summary>accountCityName</summary>
+                <description>accountCityName description...</description>
 			</attribute>
 
             <attribute name="accountClosedIndicator" forceUppercase="true">
@@ -238,6 +231,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>accountClosedIndicator</summary>
+                <description>accountClosedIndicator description...</description>
 			</attribute>
 
             <attribute name="accountCreateDate" forceUppercase="true">
@@ -250,6 +246,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>accountCreateDate</summary>
+                <description>accountCreateDate description...</description>
 			</attribute>
 
             <attribute name="accountEffectiveDate" forceUppercase="true">
@@ -262,6 +261,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>accountEffectiveDate</summary>
+                <description>accountEffectiveDate description...</description>
 			</attribute>
 
             <attribute name="accountExpirationDate" forceUppercase="true">
@@ -274,6 +276,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>accountExpirationDate</summary>
+                <description>accountExpirationDate description...</description>
 			</attribute>
 
             <attribute name="accountFiscalOfficerSystemIdentifier" forceUppercase="true">
@@ -286,6 +291,9 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>accountFiscalOfficerSystemIdentifier</summary>
+                <description>accountFiscalOfficerSystemIdentifier description...</description>
 			</attribute>
 
             <attribute name="accountInFinancialProcessingIndicator" forceUppercase="true">
@@ -297,6 +305,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>accountInFinancialProcessingIndicator</summary>
+                <description>accountInFinancialProcessingIndicator description...</description>
 			</attribute>
 
             <attribute name="accountManagerSystemIdentifier" forceUppercase="true">
@@ -309,6 +320,9 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>accountManagerSystemIdentifier</summary>
+                <description>accountManagerSystemIdentifier description...</description>
 			</attribute>
 
             <attribute name="accountName" forceUppercase="true">
@@ -321,6 +335,9 @@
                 <control>
                     <text size="42" />
                 </control>
+
+                <summary>accountName</summary>
+                <description>accountName description...</description>
 			</attribute>
 
             <attribute name="accountNumber" forceUppercase="true">
@@ -333,6 +350,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
 			</attribute>
 
             <attribute name="accountOffCampusIndicator" forceUppercase="true">
@@ -344,6 +364,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>accountOffCampusIndicator</summary>
+                <description>accountOffCampusIndicator description...</description>
 			</attribute>
 
             <attribute name="accountPhysicalCampusCode" forceUppercase="true">
@@ -356,6 +379,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>accountPhysicalCampusCode</summary>
+                <description>accountPhysicalCampusCode description...</description>
 			</attribute>
 
             <attribute name="accountRestrictedStatusCode" forceUppercase="true">
@@ -368,6 +394,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>accountRestrictedStatusCode</summary>
+                <description>accountRestrictedStatusCode description...</description>
 			</attribute>
 
             <attribute name="accountRestrictedStatusDate" forceUppercase="true">
@@ -380,6 +409,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>accountRestrictedStatusDate</summary>
+                <description>accountRestrictedStatusDate description...</description>
 			</attribute>
 
             <attribute name="accountStateCode" forceUppercase="true">
@@ -392,6 +424,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>accountStateCode</summary>
+                <description>accountStateCode description...</description>
 			</attribute>
 
             <attribute name="accountStreetAddress" forceUppercase="true">
@@ -404,6 +439,9 @@
                 <control>
                     <text size="32" />
                 </control>
+
+                <summary>accountStreetAddress</summary>
+                <description>accountStreetAddress description...</description>
 			</attribute>
 
             <attribute name="accountSufficientFundsCode" forceUppercase="true">
@@ -416,6 +454,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>accountSufficientFundsCode</summary>
+                <description>accountSufficientFundsCode description...</description>
 			</attribute>
 
             <attribute name="accountTypeCode" forceUppercase="true">
@@ -428,6 +469,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>accountTypeCode</summary>
+                <description>accountTypeCode description...</description>
 			</attribute>
 
             <attribute name="accountZipCode" forceUppercase="true">
@@ -440,6 +484,9 @@
                 <control>
                     <text size="13" />
                 </control>
+
+                <summary>accountZipCode</summary>
+                <description>accountZipCode description...</description>
 			</attribute>
 
             <attribute name="accountsFringesBnftIndicator" forceUppercase="true">
@@ -451,6 +498,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>accountsFringesBnftIndicator</summary>
+                <description>accountsFringesBnftIndicator description...</description>
 			</attribute>
 
             <attribute name="accountsSupervisorySystemsIdentifier" forceUppercase="true">
@@ -463,6 +513,9 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>accountsSupervisorySystemsIdentifier</summary>
+                <description>accountsSupervisorySystemsIdentifier description...</description>
 			</attribute>
 
             <attribute name="acctCustomIndCstRcvyExclCd" forceUppercase="true">
@@ -475,6 +528,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>acctCustomIndCstRcvyExclCd</summary>
+                <description>acctCustomIndCstRcvyExclCd description...</description>
 			</attribute>
 
             <attribute name="acctIndirectCostRcvyTypeCd" forceUppercase="true">
@@ -487,6 +543,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>acctIndirectCostRcvyTypeCd</summary>
+                <description>acctIndirectCostRcvyTypeCd description...</description>
 			</attribute>
 
             <attribute name="awardPeriodBeginMonth" forceUppercase="true">
@@ -499,6 +558,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>awardPeriodBeginMonth</summary>
+                <description>awardPeriodBeginMonth description...</description>
 			</attribute>
 
             <attribute name="awardPeriodBeginYear" forceUppercase="true">
@@ -511,6 +573,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>awardPeriodBeginYear</summary>
+                <description>awardPeriodBeginYear description...</description>
 			</attribute>
 
             <attribute name="awardPeriodEndMonth" forceUppercase="true">
@@ -523,6 +588,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>awardPeriodEndMonth</summary>
+                <description>awardPeriodEndMonth description...</description>
 			</attribute>
 
             <attribute name="awardPeriodEndYear" forceUppercase="true">
@@ -535,6 +603,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>awardPeriodEndYear</summary>
+                <description>awardPeriodEndYear description...</description>
 			</attribute>
 
             <attribute name="budgetRecordingLevelCode" forceUppercase="true">
@@ -547,10 +618,13 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>budgetRecordingLevelCode</summary>
+                <description>budgetRecordingLevelCode description...</description>
 			</attribute>
 
-            <attribute name="accountCfdaNumber" forceUppercase="true">
-                <label>Catalog of Federal Domestic Assistance Number</label>
+            <attribute name="cgCatlfFedDomestcAssistNbr" forceUppercase="true">
+                <label>Cg Catlf Fed Domestc Assist Nbr</label>
                 <shortLabel>Nbr</shortLabel>
 
                 <maxLength>6</maxLength>
@@ -559,6 +633,9 @@
                 <control>
                     <text size="8" />
                 </control>
+
+                <summary>cgCatlfFedDomestcAssistNbr</summary>
+                <description>cgCatlfFedDomestcAssistNbr description...</description>
 			</attribute>
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
@@ -571,6 +648,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="continuationAccountNumber" forceUppercase="true">
@@ -583,6 +663,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>continuationAccountNumber</summary>
+                <description>continuationAccountNumber description...</description>
 			</attribute>
 
             <attribute name="continuationFinChrtOfAcctCd" forceUppercase="true">
@@ -595,6 +678,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>continuationFinChrtOfAcctCd</summary>
+                <description>continuationFinChrtOfAcctCd description...</description>
 			</attribute>
 
             <attribute name="contractControlAccountNumber" forceUppercase="true">
@@ -607,6 +693,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>contractControlAccountNumber</summary>
+                <description>contractControlAccountNumber description...</description>
 			</attribute>
 
             <attribute name="contractControlFinCoaCode" forceUppercase="true">
@@ -619,6 +708,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>contractControlFinCoaCode</summary>
+                <description>contractControlFinCoaCode description...</description>
 			</attribute>
 
             <attribute name="endowmentIncomeAccountNumber" forceUppercase="true">
@@ -631,6 +723,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>endowmentIncomeAccountNumber</summary>
+                <description>endowmentIncomeAccountNumber description...</description>
 			</attribute>
 
             <attribute name="endowmentIncomeAcctFinCoaCd" forceUppercase="true">
@@ -643,6 +738,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>endowmentIncomeAcctFinCoaCd</summary>
+                <description>endowmentIncomeAcctFinCoaCd description...</description>
 			</attribute>
 
             <attribute name="expired" forceUppercase="true">
@@ -654,6 +752,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>expired</summary>
+                <description>expired description...</description>
 			</attribute>
 
             <attribute name="extrnlFinEncumSufficntFndIndicator" forceUppercase="true">
@@ -665,6 +766,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>extrnlFinEncumSufficntFndIndicator</summary>
+                <description>extrnlFinEncumSufficntFndIndicator description...</description>
 			</attribute>
 
             <attribute name="finPreencumSufficientFundIndicator" forceUppercase="true">
@@ -676,11 +780,14 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>finPreencumSufficientFundIndicator</summary>
+                <description>finPreencumSufficientFundIndicator description...</description>
 			</attribute>
 
             <attribute name="financialHigherEdFunctionCd" forceUppercase="true">
-                <label>Higher Education Function Code</label>
-                <shortLabel>Higher Ed Func Cd</shortLabel>
+                <label>Financial Higher Ed Function Cd</label>
+                <shortLabel>Cd</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -688,6 +795,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>financialHigherEdFunctionCd</summary>
+                <description>financialHigherEdFunctionCd description...</description>
 			</attribute>
 
             <attribute name="financialIcrSeriesIdentifier" forceUppercase="true">
@@ -700,6 +810,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>financialIcrSeriesIdentifier</summary>
+                <description>financialIcrSeriesIdentifier description...</description>
 			</attribute>
 
             <attribute name="financialObjectivePrsctrlIndicator" forceUppercase="true">
@@ -711,9 +824,12 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>financialObjectivePrsctrlIndicator</summary>
+                <description>financialObjectivePrsctrlIndicator description...</description>
 			</attribute>
 
-            <attribute name="forContractsAndGrants" forceUppercase="true">
+            <attribute name="inCg" forceUppercase="true">
                 <label>In Cg</label>
                 <shortLabel>Cg</shortLabel>
 
@@ -722,6 +838,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>inCg</summary>
+                <description>inCg description...</description>
 			</attribute>
 
             <attribute name="incomeStreamAccountNumber" forceUppercase="true">
@@ -734,6 +853,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>incomeStreamAccountNumber</summary>
+                <description>incomeStreamAccountNumber description...</description>
 			</attribute>
 
             <attribute name="incomeStreamFinancialCoaCode" forceUppercase="true">
@@ -746,6 +868,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>incomeStreamFinancialCoaCode</summary>
+                <description>incomeStreamFinancialCoaCode description...</description>
 			</attribute>
 
             <attribute name="indirectCostRcvyFinCoaCode" forceUppercase="true">
@@ -758,6 +883,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>indirectCostRcvyFinCoaCode</summary>
+                <description>indirectCostRcvyFinCoaCode description...</description>
 			</attribute>
 
             <attribute name="indirectCostRecoveryAcctNbr" forceUppercase="true">
@@ -770,6 +898,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>indirectCostRecoveryAcctNbr</summary>
+                <description>indirectCostRecoveryAcctNbr description...</description>
 			</attribute>
 
             <attribute name="intrnlFinEncumSufficntFndIndicator" forceUppercase="true">
@@ -781,6 +912,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>intrnlFinEncumSufficntFndIndicator</summary>
+                <description>intrnlFinEncumSufficntFndIndicator description...</description>
 			</attribute>
 
             <attribute name="organizationCode" forceUppercase="true">
@@ -793,6 +927,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>organizationCode</summary>
+                <description>organizationCode description...</description>
 			</attribute>
 
             <attribute name="pendingAcctSufficientFundsIndicator" forceUppercase="true">
@@ -804,6 +941,24 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>pendingAcctSufficientFundsIndicator</summary>
+                <description>pendingAcctSufficientFundsIndicator description...</description>
+			</attribute>
+
+            <attribute name="programCode" forceUppercase="true">
+                <label>Program Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>6</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="8" />
+                </control>
+
+                <summary>programCode</summary>
+                <description>programCode description...</description>
 			</attribute>
 
             <attribute name="reportsToAccountNumber" forceUppercase="true">
@@ -816,6 +971,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>reportsToAccountNumber</summary>
+                <description>reportsToAccountNumber description...</description>
 			</attribute>
 
             <attribute name="reportsToChartOfAccountsCode" forceUppercase="true">
@@ -828,6 +986,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>reportsToChartOfAccountsCode</summary>
+                <description>reportsToChartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="subFundGroupCode" forceUppercase="true">
@@ -840,6 +1001,9 @@
                 <control>
                     <text size="8" />
                 </control>
+
+                <summary>subFundGroupCode</summary>
+                <description>subFundGroupCode description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
@@ -849,20 +1013,14 @@
         <relationships>
             <relationship objectAttributeName="accountFiscalOfficerUser" >
                 <primitiveAttribute sourceName="accountFiscalOfficerSystemIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountFiscalOfficerUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountFiscalOfficerUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountSupervisoryUser" >
                 <primitiveAttribute sourceName="accountsSupervisorySystemsIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountSupervisoryUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountSupervisoryUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountManagerUser" >
                 <primitiveAttribute sourceName="accountManagerSystemIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="accountManagerUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="accountManagerUser.personName" targetName="personName" />
             </relationship>
 
             <relationship objectAttributeName="accountGuideline" >
@@ -870,7 +1028,5 @@
                 <primitiveAttribute sourceName="accountNumber" targetName="accountNumber" />
             </relationship>
         </relationships>
-        
-        <objectLabel>Prior Year Account</objectLabel>
     </businessObject>
 </dictionaryEntry>

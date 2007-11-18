@@ -1,99 +1,165 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Requisition Item Capital Asset Business Object.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class RequisitionItemCapitalAsset extends PersistableBusinessObjectBase {
+public class RequisitionItemCapitalAsset extends BusinessObjectBase {
 
-    private Integer requisitionItemCapitalAssetIdentifier;
-    private Integer requisitionItemIdentifier;
-    private Long capitalAssetNumber;
-    private String addCapitalAssetNumber;
+	private Integer requisitionItemCapitalAssetIdentifier;
+	private Integer requisitionIdentifier;
+	private Integer itemLineNumber;
+	private Long capitalAssetNumber;
 
-    private RequisitionItem requisitionItem;
+    private RequisitionItem itemLine;
 
-    /**
-     * Default constructor.
-     */
-    public RequisitionItemCapitalAsset() {
+	/**
+	 * Default constructor.
+	 */
+	public RequisitionItemCapitalAsset() {
 
-    }
+	}
 
-    public Integer getRequisitionItemCapitalAssetIdentifier() {
-        return requisitionItemCapitalAssetIdentifier;
-    }
+	/**
+	 * Gets the requisitionItemCapitalAssetIdentifier attribute.
+	 * 
+	 * @return - Returns the requisitionItemCapitalAssetIdentifier
+	 * 
+	 */
+	public Integer getRequisitionItemCapitalAssetIdentifier() { 
+		return requisitionItemCapitalAssetIdentifier;
+	}
 
-    public void setRequisitionItemCapitalAssetIdentifier(Integer requisitionItemCapitalAssetIdentifier) {
-        this.requisitionItemCapitalAssetIdentifier = requisitionItemCapitalAssetIdentifier;
-    }
+	/**
+	 * Sets the requisitionItemCapitalAssetIdentifier attribute.
+	 * 
+	 * @param - requisitionItemCapitalAssetIdentifier The requisitionItemCapitalAssetIdentifier to set.
+	 * 
+	 */
+	public void setRequisitionItemCapitalAssetIdentifier(Integer requisitionItemCapitalAssetIdentifier) {
+		this.requisitionItemCapitalAssetIdentifier = requisitionItemCapitalAssetIdentifier;
+	}
 
-    public Integer getRequisitionItemIdentifier() {
-        return requisitionItemIdentifier;
-    }
 
-    public void setRequisitionItemIdentifier(Integer requisitionItemIdentifier) {
-        this.requisitionItemIdentifier = requisitionItemIdentifier;
-    }
+	/**
+	 * Gets the requisitionIdentifier attribute.
+	 * 
+	 * @return - Returns the requisitionIdentifier
+	 * 
+	 */
+	public Integer getRequisitionIdentifier() { 
+		return requisitionIdentifier;
+	}
 
-    public Long getCapitalAssetNumber() {
-        return capitalAssetNumber;
-    }
+	/**
+	 * Sets the requisitionIdentifier attribute.
+	 * 
+	 * @param - requisitionIdentifier The requisitionIdentifier to set.
+	 * 
+	 */
+	public void setRequisitionIdentifier(Integer requisitionIdentifier) {
+		this.requisitionIdentifier = requisitionIdentifier;
+	}
 
-    public void setCapitalAssetNumber(Long capitalAssetNumber) {
-        this.capitalAssetNumber = capitalAssetNumber;
-    }
 
-    public RequisitionItem getRequisitionItem() {
-        return requisitionItem;
-    }
+	/**
+	 * Gets the itemLineNumber attribute.
+	 * 
+	 * @return - Returns the itemLineNumber
+	 * 
+	 */
+	public Integer getItemLineNumber() { 
+		return itemLineNumber;
+	}
 
-    public String getAddCapitalAssetNumber() {
-        return addCapitalAssetNumber;
-    }
+	/**
+	 * Sets the itemLineNumber attribute.
+	 * 
+	 * @param - itemLineNumber The itemLineNumber to set.
+	 * 
+	 */
+	public void setItemLineNumber(Integer itemLineNumber) {
+		this.itemLineNumber = itemLineNumber;
+	}
 
-    public void setAddCapitalAssetNumber(String addCapitalAssetNumber) {
-        this.addCapitalAssetNumber = addCapitalAssetNumber;
-    }
 
-    /**
-     * Sets the requisitionItem attribute.
-     * 
-     * @param requisitionItem The requisitionItem to set.
-     * @deprecated
-     */
-    public void setRequisitionItem(RequisitionItem requisitionItem) {
-        this.requisitionItem = requisitionItem;
-    }
+	/**
+	 * Gets the capitalAssetNumber attribute.
+	 * 
+	 * @return - Returns the capitalAssetNumber
+	 * 
+	 */
+	public Long getCapitalAssetNumber() { 
+		return capitalAssetNumber;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Sets the capitalAssetNumber attribute.
+	 * 
+	 * @param - capitalAssetNumber The capitalAssetNumber to set.
+	 * 
+	 */
+	public void setCapitalAssetNumber(Long capitalAssetNumber) {
+		this.capitalAssetNumber = capitalAssetNumber;
+	}
+
+
+	/**
+	 * Gets the itemLine attribute.
+	 * 
+	 * @return - Returns the itemLine
+	 * 
+	 */
+	public RequisitionItem getItemLine() { 
+		return itemLine;
+	}
+
+	/**
+	 * Sets the itemLine attribute.
+	 * 
+	 * @param - itemLine The itemLine to set.
+	 * @deprecated
+	 */
+	public void setItemLine(RequisitionItem itemLine) {
+		this.itemLine = itemLine;
+	}
+
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.requisitionItemCapitalAssetIdentifier != null) {
             m.put("requisitionItemCapitalAssetIdentifier", this.requisitionItemCapitalAssetIdentifier.toString());
         }
-        return m;
+	    return m;
     }
-
 }

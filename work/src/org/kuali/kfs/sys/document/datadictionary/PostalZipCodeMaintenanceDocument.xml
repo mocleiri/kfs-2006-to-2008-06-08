@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>PostalZipCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiPostalZipCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>ZIPC</documentTypeCode>
 
-        <label>Postal Code</label>
+        <label>Postal Code Maintenance Document</label>
+        <shortLabel>ZipMaintDoc</shortLabel>
 
         <summary>Postal Code maintenance document</summary>
         <description>Document used to create or update Postal Code objects</description>
-        <help parameterNamespace="KFS-SY" parameterDetailType="PostalZipCode" parameterName="POSTAL_CODE" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_POSTAL_CODE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="postalZipCode" />

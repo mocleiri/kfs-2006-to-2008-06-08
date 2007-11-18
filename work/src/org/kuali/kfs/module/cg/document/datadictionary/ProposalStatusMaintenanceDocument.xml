@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +25,7 @@
         <businessObjectClass>org.kuali.module.cg.bo.ProposalStatus</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +34,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ProposalStatusMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiProposalStatusMaintenanceDocument</documentTypeName>
         <documentTypeCode>PRST</documentTypeCode>
 
-        <label>Proposal Status</label>
+        <label>Proposal Status Maintenance Document</label>
+        <shortLabel>ProposalStatusMaintDoc</shortLabel>
 
         <summary>Proposal Status Maintenance Document</summary>
         <description>Document used to create or update Proposal Status objects</description>
-        <help parameterNamespace="KFS-CG" parameterDetailType="ProposalStatus" parameterName="PROPOSAL_STATUS" />
 
         <lockingKeys>
             <field attributeName="proposalStatusCode" />

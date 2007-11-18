@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -32,24 +32,21 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>BuildingMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiBuildingMaintenanceDocument</documentTypeName>
         <documentTypeCode>BLDG</documentTypeCode>
 
-        <label>Building</label>
+        <label>Building Maintenance Document</label>
+        <shortLabel>BuildingMaintDoc</shortLabel>
 
         <summary>Building maintenance document</summary>
         <description>Document used to create or update Building objects</description>
-        <help parameterNamespace="KFS-SY" parameterDetailType="Building" parameterName="BUILDING" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="campusCode" />
             <field attributeName="buildingCode" />
         </lockingKeys>
-
-		<defaultExistenceChecks>
-			<reference attributeName="campus" attributeToHighlightOnFail="campusCode" />
-			<reference attributeName="buildingAddressZip" attributeToHighlightOnFail="buildingAddressZipCode" />
-		</defaultExistenceChecks>
 
         <maintainableSections>
             <maintainableSection title="Edit Building">

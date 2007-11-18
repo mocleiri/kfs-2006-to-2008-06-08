@@ -1,19 +1,4 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Created on Aug 19, 2004
  *
  */
@@ -39,82 +24,80 @@ import org.kuali.module.pdp.dao.ProcessDao;
 
 /**
  * @author jsissom
+ *
  */
 public class ProcessDaoOjb extends PlatformAwareDaoBaseOjb implements ProcessDao {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProcessDaoOjb.class);
+  private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProcessDaoOjb.class);
 
-    private UniversalUserService userService;
+  private UniversalUserService userService;
 
-    public void setUniversalUserService(UniversalUserService u) {
-        userService = u;
+  public void setUniversalUserService(UniversalUserService u) {
+    userService = u;
+  }
+
+  public ProcessDaoOjb() {
+    super();
+  }
+
+  public PaymentProcess createProcess(String campusCd, PdpUser processUser) {
+    LOG.debug("createProcess() started");
+
+    Date d = new Date();
+    Timestamp now = new Timestamp(d.getTime());
+
+    PaymentProcess p = new PaymentProcess();
+    p.setCampus(campusCd);
+    p.setProcessUser(processUser);
+    p.setProcessTimestamp(now);
+
+    getPersistenceBrokerTemplate().store(p);
+
+    return p;
+  }
+
+  public PaymentProcess get(Integer procId) {
+    LOG.debug("get() started");
+
+    Criteria c = new Criteria();
+    c.addEqualTo("id",procId);
+
+    PaymentProcess p = (PaymentProcess)getPersistenceBrokerTemplate().getObjectByQuery(new QueryByCriteria(PaymentProcess.class,c));
+    if ( p != null ) {
+      updateProcessUser(p);
+      return p;
+    } else {
+      return null;
     }
+  }
+  public List getMostCurrentProcesses(Integer number) {
+    LOG.debug("get() started");
 
-    public ProcessDaoOjb() {
-        super();
+    Criteria c = new Criteria();
+    GregorianCalendar gc = new GregorianCalendar();
+    gc.setTime(new Date());
+    gc.add(Calendar.MONTH,-4);
+    c.addGreaterOrEqualThan("processTimestamp",new Timestamp(gc.getTimeInMillis()));
+    QueryByCriteria qbc = new QueryByCriteria(PaymentProcess.class,c);
+    qbc.setEndAtIndex(number.intValue());
+    qbc.addOrderByDescending("processTimestamp");
+    List l = (List)getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
+    updateProcessUser(l);
+
+    return l;
+  }
+  
+  private void updateProcessUser(List l) {
+    for (Iterator iter = l.iterator(); iter.hasNext();) {
+      updateProcessUser( (PaymentProcess)iter.next() );
     }
-
-    public PaymentProcess createProcess(String campusCd, PdpUser processUser) {
-        LOG.debug("createProcess() started");
-
-        Date d = new Date();
-        Timestamp now = new Timestamp(d.getTime());
-
-        PaymentProcess p = new PaymentProcess();
-        p.setCampus(campusCd);
-        p.setProcessUser(processUser);
-        p.setProcessTimestamp(now);
-
-        getPersistenceBrokerTemplate().store(p);
-
-        return p;
-    }
-
-    public PaymentProcess get(Integer procId) {
-        LOG.debug("get() started");
-
-        Criteria c = new Criteria();
-        c.addEqualTo("id", procId);
-
-        PaymentProcess p = (PaymentProcess) getPersistenceBrokerTemplate().getObjectByQuery(new QueryByCriteria(PaymentProcess.class, c));
-        if (p != null) {
-            updateProcessUser(p);
-            return p;
-        }
-        else {
-            return null;
-        }
-    }
-
-    public List getMostCurrentProcesses(Integer number) {
-        LOG.debug("get() started");
-
-        Criteria c = new Criteria();
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.setTime(new Date());
-        gc.add(Calendar.MONTH, -4);
-        c.addGreaterOrEqualThan("processTimestamp", new Timestamp(gc.getTimeInMillis()));
-        QueryByCriteria qbc = new QueryByCriteria(PaymentProcess.class, c);
-        qbc.setEndAtIndex(number.intValue());
-        qbc.addOrderByDescending("processTimestamp");
-        List l = (List) getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
-        updateProcessUser(l);
-
-        return l;
-    }
-
-    private void updateProcessUser(List l) {
-        for (Iterator iter = l.iterator(); iter.hasNext();) {
-            updateProcessUser((PaymentProcess) iter.next());
-        }
-    }
-
-    private void updateProcessUser(PaymentProcess b) {
-        UserRequired ur = (UserRequired) b;
-        try {
-            ur.updateUser(userService);
-        }
-        catch (UserNotFoundException e) {
-            b.setProcessUser(null);
-        }
-    }
+  }
+  
+  private void updateProcessUser(PaymentProcess b) {
+      UserRequired ur = (UserRequired)b;
+      try {
+          ur.updateUser(userService);
+      } catch (UserNotFoundException e) {
+          b.setProcessUser(null);
+      }
+  }
 }

@@ -1,94 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionAccountSelect">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Construction Account Select Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="chartOfAccountsCode" />
+            <inquiryFields>
                 <field attributeName="accountNumber" />
-                <field attributeName="subAccountNumber" />
-                <field attributeName="documentNumber" />
+                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialDocumentCreateDate" />
                 <field attributeName="financialDocumentInitiatorIdentifier" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialDocumentStatusCode" />
-                <field attributeName="organizationLevelCode" />
                 <field attributeName="organizationChartOfAccountsCode" />
                 <field attributeName="organizationCode" />
+                <field attributeName="organizationLevelCode" />
                 <field attributeName="personUniversalIdentifier" />
+                <field attributeName="subAccountNumber" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <!-- Use this to include the hidden field personUniversalIdentifier in the search criteria -->
-            <lookupableID>accountSelectLookupable</lookupableID>	        
-
             <title>Budget Construction Account Select Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionAccountSelect">Create New</a>]]></menubar>
 
             <instructions>Look up a Budget Construction Account Select</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
+                    <sortAttribute attributeName="universityFiscalYear" />
                     <sortAttribute attributeName="chartOfAccountsCode" />
                     <sortAttribute attributeName="accountNumber" />                    
-                    <sortAttribute attributeName="subAccountNumber" />
                 </sortAttributes>
             </defaultSort>
 
             <lookupFields>
-                <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="accountNumber" required="false" />
-                <lookupField attributeName="subAccountNumber" required="false" />
-                <lookupField attributeName="financialDocumentStatusCode" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="financialDocumentCreateDate" required="false" />
                 <lookupField attributeName="financialDocumentInitiatorIdentifier" required="false" />
-                <lookupField attributeName="organizationLevelCode" required="false" />
+                <lookupField attributeName="financialDocumentNumber" required="false" />
+                <lookupField attributeName="financialDocumentStatusCode" required="false" />
                 <lookupField attributeName="organizationChartOfAccountsCode" required="false" />
                 <lookupField attributeName="organizationCode" required="false" />
+                <lookupField attributeName="organizationLevelCode" required="false" />
                 <lookupField attributeName="personUniversalIdentifier" required="false" />
+                <lookupField attributeName="subAccountNumber" required="false" />
+                <lookupField attributeName="universityFiscalYear" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="chartOfAccountsCode" noInquiry="true" />
-                <field attributeName="accountNumber" noInquiry="true" />
-                <field attributeName="subAccountNumber" />
-                <field attributeName="financialDocumentStatusCode" />
+                <field attributeName="accountNumber" />
+                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialDocumentCreateDate" />
                 <field attributeName="financialDocumentInitiatorIdentifier" />
-                <field attributeName="organizationLevelCode" />
+                <field attributeName="financialDocumentNumber" />
+                <field attributeName="financialDocumentStatusCode" />
                 <field attributeName="organizationChartOfAccountsCode" />
                 <field attributeName="organizationCode" />
-                <field attributeName="budgetConstructionHeader.budgetLockUser.personUserIdentifier" />
-                <field attributeName="dummyBusinessObject.linkButtonOption" />
+                <field attributeName="organizationLevelCode" />
+                <field attributeName="personUniversalIdentifier" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="universityFiscalYear" />
             </resultFields>
         </lookup>
 
         <attributes>
 
             <attribute name="accountNumber" forceUppercase="true">
-                <label>Account</label>
-                <shortLabel>Account</shortLabel>
+                <label>Account Number</label>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>7</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -102,8 +89,8 @@
 			</attribute>
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
-                <label>Chart</label>
-                <shortLabel>Chart</shortLabel>
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -117,8 +104,8 @@
 			</attribute>
 
             <attribute name="financialDocumentCreateDate" forceUppercase="true">
-                <label>Last Upd</label>
-                <shortLabel>Last Upd</shortLabel>
+                <label>Financial Document Create Date</label>
+                <shortLabel>Date</shortLabel>
 
                 <maxLength>7</maxLength>
                 <validationPattern><date /></validationPattern>
@@ -132,8 +119,8 @@
 			</attribute>
 
             <attribute name="financialDocumentInitiatorIdentifier" forceUppercase="true">
-                <label>Upd by</label>
-                <shortLabel>Upd by</shortLabel>
+                <label>Financial Document Initiator Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
                 <maxLength>10</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -146,8 +133,8 @@
                 <description>financialDocumentInitiatorIdentifier description...</description>
 			</attribute>
 
-            <attribute name="documentNumber" forceUppercase="true">
-                <label>Document Number</label>
+            <attribute name="financialDocumentNumber" forceUppercase="true">
+                <label>Financial Document Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
@@ -157,13 +144,13 @@
                     <text size="16" />
                 </control>
 
-                <summary>documentNumber</summary>
-                <description>documentNumber description...</description>
+                <summary>financialDocumentNumber</summary>
+                <description>financialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="financialDocumentStatusCode" forceUppercase="true">
-                <label>Status</label>
-                <shortLabel>Status</shortLabel>
+                <label>Financial Document Status Code</label>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -177,8 +164,8 @@
 			</attribute>
 
             <attribute name="organizationChartOfAccountsCode" forceUppercase="true">
-                <label>Org Chart</label>
-                <shortLabel>Org Chart</shortLabel>
+                <label>Organization Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -192,8 +179,8 @@
 			</attribute>
 
             <attribute name="organizationCode" forceUppercase="true">
-                <label>Org</label>
-                <shortLabel>Org</shortLabel>
+                <label>Organization Code</label>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -207,8 +194,8 @@
 			</attribute>
 
             <attribute name="organizationLevelCode" forceUppercase="true">
-                <label>Org Level</label>
-                <shortLabel>Org Level</shortLabel>
+                <label>Organization Level Code</label>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>7</maxLength>
                 <validationPattern><numeric /></validationPattern>
@@ -229,7 +216,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="12" />
                 </control>
 
                 <summary>personUniversalIdentifier</summary>
@@ -237,8 +224,8 @@
 			</attribute>
 
             <attribute name="subAccountNumber" forceUppercase="true">
-                <label>Sub Account</label>
-                <shortLabel>Sub Acct</shortLabel>
+                <label>Sub Account Number</label>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>5</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -265,20 +252,6 @@
                 <summary>universityFiscalYear</summary>
                 <description>universityFiscalYear description...</description>
 			</attribute>
-
-			<attributeReference name="budgetConstructionHeader.budgetLockUser.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-				<label>Bdgt. Lock</label>
-				<shortLabel>Bdgt. Lock</shortLabel>
-				<summary>Bdgt. Lock</summary>
-				<description>Bdgt. Lock</description>
-            </attributeReference>
-
-			<attributeReference name="dummyBusinessObject.linkButtonOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="linkButtonOption">
-                <label>Load Document</label>
-                <shortLabel>Load Doc</shortLabel>
-                <summary>Load Document</summary>
-                <description>Load Document ...</description>
-            </attributeReference>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 

@@ -19,21 +19,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import org.kuali.core.service.BusinessObjectDictionaryService;
+import org.kuali.core.service.LookupService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.bo.Options;
+import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
+import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.LedgerBalance;
 
 /**
- * This class is used to generate the URL for the user-defined attributes for the Employee Funding screen. It is entended the
+ * This class is used to generate the URL for the user-defined attributes for the Base Funds screen. It is entended the
  * KualiInquirableImpl class, so it covers both the default implementation and customized implemetnation.
  */
 public class EmployeeFundingInquirableImpl extends AbstractLaborInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EmployeeFundingInquirableImpl.class);
 
+    private BusinessObjectDictionaryService dataDictionary;
+    private LookupService lookupService;
+    private Class businessObjectClass;
+
     /**
+     * 
      * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#buildUserDefinedAttributeKeyList()
      */
     protected List buildUserDefinedAttributeKeyList() {
@@ -42,7 +55,7 @@ public class EmployeeFundingInquirableImpl extends AbstractLaborInquirableImpl {
         keys.add(KFSPropertyConstants.EMPLID);
         keys.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
         keys.add(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
-
+        
         return keys;
     }
 
@@ -50,10 +63,10 @@ public class EmployeeFundingInquirableImpl extends AbstractLaborInquirableImpl {
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getUserDefinedAttributeMap()
      */
     protected Map getUserDefinedAttributeMap() {
-
+               
         Map userDefinedAttributeMap = new HashMap();
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH1_AMOUNT, "");
-        userDefinedAttributeMap.put(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSConstants.BALANCE_TYPE_ACTUAL);
+        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH1_AMOUNT, "");          
+        userDefinedAttributeMap.put(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, LaborConstants.BalanceInquiries.ACTUALS_CODE);          
         return userDefinedAttributeMap;
     }
 
@@ -93,6 +106,7 @@ public class EmployeeFundingInquirableImpl extends AbstractLaborInquirableImpl {
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
+        // TODO: investigate change to this constant
         return KFSConstants.GL_MODIFIED_INQUIRY_ACTION;
     }
 
@@ -101,5 +115,11 @@ public class EmployeeFundingInquirableImpl extends AbstractLaborInquirableImpl {
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
         return LedgerBalance.class;
+    }
+
+    /**
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
+     */
+    protected void addMoreParameters(Properties parameter, String attributeName) {     
     }
 }

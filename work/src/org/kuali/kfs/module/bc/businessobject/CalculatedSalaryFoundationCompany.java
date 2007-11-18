@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/CalculatedSalaryFoundationCompany.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,47 +20,49 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class CalculatedSalaryFoundationCompany extends PersistableBusinessObjectBase {
+public class CalculatedSalaryFoundationCompany extends BusinessObjectBase {
 
-    private String hrmsCompany;
+	private String hrmsCompany;
 
-    /**
-     * Default constructor.
-     */
-    public CalculatedSalaryFoundationCompany() {
+	/**
+	 * Default constructor.
+	 */
+	public CalculatedSalaryFoundationCompany() {
 
-    }
+	}
 
-    /**
-     * Gets the hrmsCompany attribute.
-     * 
-     * @return Returns the hrmsCompany
-     */
-    public String getHrmsCompany() {
-        return hrmsCompany;
-    }
+	/**
+	 * Gets the hrmsCompany attribute.
+	 * 
+	 * @return Returns the hrmsCompany
+	 * 
+	 */
+	public String getHrmsCompany() { 
+		return hrmsCompany;
+	}
 
-    /**
-     * Sets the hrmsCompany attribute.
-     * 
-     * @param hrmsCompany The hrmsCompany to set.
-     */
-    public void setHrmsCompany(String hrmsCompany) {
-        this.hrmsCompany = hrmsCompany;
-    }
+	/**
+	 * Sets the hrmsCompany attribute.
+	 * 
+	 * @param hrmsCompany The hrmsCompany to set.
+	 * 
+	 */
+	public void setHrmsCompany(String hrmsCompany) {
+		this.hrmsCompany = hrmsCompany;
+	}
 
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("hrmsCompany", this.hrmsCompany);
-        return m;
+	    return m;
     }
 }

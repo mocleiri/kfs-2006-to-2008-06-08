@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
@@ -43,7 +43,7 @@ public class GeneralLedgerPendingEntryReport {
     private NumberFormat amountFormat;
     private NumberFormat countFormat;
 
-    public void generateReport(Date runDate, String batchReportsDirectory, SimpleDateFormat sdf, Iterator entries) {
+    public void generateReport(Date runDate,String batchReportsDirectory,SimpleDateFormat sdf,Iterator entries) {
         LOG.debug("generateReport() started");
 
         String title = "PENDING LEDGER ENTRY TABLE";
@@ -62,9 +62,9 @@ public class GeneralLedgerPendingEntryReport {
         countFormat.setMinimumFractionDigits(0);
 
         Document document = new Document(PageSize.A4.rotate());
-
+        
         TransactionReport.PageHelper helper = new TransactionReport.PageHelper();
-
+     
         helper.runDate = runDate;
         helper.headerFont = headerFont;
         helper.title = title;
@@ -79,19 +79,21 @@ public class GeneralLedgerPendingEntryReport {
 
             document.open();
 
-            float[] columnWidths = new float[] { 6, 15, 5, 5, 15, 6, 16, 16, 16 };
+            float[] columnWidths = new float[] {6, 15, 5, 5, 15, 6, 16, 16, 16};
 
             dataTable = new PdfPTable(columnWidths);
             dataTable.setHeaderRows(1);
             dataTable.setWidthPercentage(100);
 
-            String[] columnHeaders = new String[] { "Doc Type", "Document Number", "Bal Type", "COA Code", "Account Number", "Object Code", "Credit", "Debit", "Blank" };
+            String[] columnHeaders = new String[] {
+                    "Doc Type", "Document Number", "Bal Type", "COA Code",
+                    "Account Number", "Object Code", "Credit", "Debit", "Blank" };
 
-            for (int x = 0; x < columnHeaders.length; x++) {
+            for(int x = 0; x < columnHeaders.length; x++) {
                 PdfPCell cell = new PdfPCell(new Phrase(columnHeaders[x], headerFont));
                 dataTable.addCell(cell);
             }
-
+            
             String previousDocumentType = "-1";
             String previousDocumentNumber = "-1";
 
@@ -109,17 +111,17 @@ public class GeneralLedgerPendingEntryReport {
             KualiDecimal totalDocumentDebit = KualiDecimal.ZERO;
             KualiDecimal totalDocumentBlank = KualiDecimal.ZERO;
 
-            OriginEntryFull lastEntry = null;
+            OriginEntry lastEntry = null;
 
             boolean firstAccount = true;
 
-            while (entries.hasNext()) {
-                OriginEntryFull entry = (OriginEntryFull) entries.next();
+            while ( entries.hasNext() ) {
+                OriginEntry entry = (OriginEntry) entries.next();
 
-                String docNumber = entry.getFinancialSystemOriginationCode() + "-" + entry.getDocumentNumber();
+                String docNumber = entry.getFinancialSystemOriginationCode() + "-" + entry.getFinancialDocumentNumber();
 
-                if (!docNumber.equals(previousDocumentNumber) && !"-1".equals(previousDocumentNumber)) {
-                    printTotal("Totals:", totalDocumentCredit, totalDocumentDebit, totalDocumentBlank);
+                if ( ! docNumber.equals(previousDocumentNumber) && ! "-1".equals(previousDocumentNumber) ) {
+                    printTotal("Totals:",totalDocumentCredit,totalDocumentDebit,totalDocumentBlank);
                     totalDocumentCredit = KualiDecimal.ZERO;
                     totalDocumentDebit = KualiDecimal.ZERO;
                     totalDocumentBlank = KualiDecimal.ZERO;
@@ -127,8 +129,8 @@ public class GeneralLedgerPendingEntryReport {
                 }
 
                 // Show doc type totals.
-                if (!entry.getFinancialDocumentTypeCode().equals(previousDocumentType) && !"-1".equals(previousDocumentType)) {
-                    printTotal("Totals for Document Type " + previousDocumentType + " Cnt: " + countFormat.format(totalDocumentTypeCount), totalDocumentTypeCredit, totalDocumentTypeDebit, totalDocumentTypeBlank);
+                if ( !entry.getFinancialDocumentTypeCode().equals(previousDocumentType) && !"-1".equals(previousDocumentType) ) {
+                    printTotal("Totals for Document Type " + previousDocumentType + " Cnt: " + countFormat.format(totalDocumentTypeCount),totalDocumentTypeCredit,totalDocumentTypeDebit,totalDocumentTypeBlank);
                     totalDocumentTypeCredit = KualiDecimal.ZERO;
                     totalDocumentTypeDebit = KualiDecimal.ZERO;
                     totalDocumentTypeBlank = KualiDecimal.ZERO;
@@ -141,7 +143,7 @@ public class GeneralLedgerPendingEntryReport {
                 totalDocumentTypeCount++;
                 totalCount++;
 
-                if (firstAccount) {
+                if ( firstAccount ) {
                     firstAccount = false;
 
                     PdfPCell column = new PdfPCell(new Phrase(entry.getFinancialDocumentTypeCode(), textFont));
@@ -155,8 +157,7 @@ public class GeneralLedgerPendingEntryReport {
                     column = new PdfPCell(new Phrase(entry.getFinancialBalanceTypeCode(), textFont));
                     column.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                     dataTable.addCell(column);
-                }
-                else {
+                } else {
                     PdfPCell column = new PdfPCell(new Phrase(" ", textFont));
                     column.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                     dataTable.addCell(column);
@@ -183,7 +184,7 @@ public class GeneralLedgerPendingEntryReport {
                 dataTable.addCell(column);
 
                 KualiDecimal amount = null;
-                if (KFSConstants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
+                if(Constants.GL_DEBIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
                     amount = entry.getTransactionLedgerEntryAmount();
                     totalDocumentDebit = totalDocumentDebit.add(amount);
                     totalDocumentTypeDebit = totalDocumentTypeDebit.add(amount);
@@ -194,7 +195,7 @@ public class GeneralLedgerPendingEntryReport {
                 dataTable.addCell(column);
 
                 amount = null;
-                if (KFSConstants.GL_CREDIT_CODE.equals(entry.getTransactionDebitCreditCode())) {
+                if ( Constants.GL_CREDIT_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
                     amount = entry.getTransactionLedgerEntryAmount();
                     totalDocumentCredit = totalDocumentCredit.add(amount);
                     totalDocumentTypeCredit = totalDocumentTypeCredit.add(amount);
@@ -205,7 +206,7 @@ public class GeneralLedgerPendingEntryReport {
                 dataTable.addCell(column);
 
                 amount = null;
-                if (KFSConstants.GL_BUDGET_CODE.equals(entry.getTransactionDebitCreditCode())) {
+                if( Constants.GL_BUDGET_CODE.equals(entry.getTransactionDebitCreditCode()) ) {
                     amount = entry.getTransactionLedgerEntryAmount();
                     totalDocumentBlank = totalDocumentBlank.add(amount);
                     totalDocumentTypeBlank = totalDocumentTypeBlank.add(amount);
@@ -218,15 +219,15 @@ public class GeneralLedgerPendingEntryReport {
                 lastEntry = entry;
             }
 
-            if (totalCount > 0) {
-                printTotal("Totals:", totalDocumentCredit, totalDocumentDebit, totalDocumentBlank);
+            if ( totalCount > 0 ) {
+                printTotal("Totals:",totalDocumentCredit,totalDocumentDebit,totalDocumentBlank);
             }
 
-            if (totalCount > 0) {
-                printTotal("Totals for Document Type " + lastEntry.getFinancialDocumentTypeCode() + " Cnt: " + countFormat.format(totalDocumentTypeCount), totalDocumentTypeCredit, totalDocumentTypeDebit, totalDocumentTypeBlank);
+            if ( totalCount > 0 ) {
+                printTotal("Totals for Document Type " + lastEntry.getFinancialDocumentTypeCode() + " Cnt: " + countFormat.format(totalDocumentTypeCount),totalDocumentTypeCredit,totalDocumentTypeDebit,totalDocumentTypeBlank);
             }
 
-            printTotal("Grand Totals Cnt: " + countFormat.format(totalCount), totalCredit, totalDebit, totalBlank);
+            printTotal("Grand Totals Cnt: " + countFormat.format(totalCount),totalCredit,totalDebit,totalBlank);
 
             document.add(dataTable);
         }
@@ -237,7 +238,7 @@ public class GeneralLedgerPendingEntryReport {
         document.close();
     }
 
-    private void printTotal(String title, KualiDecimal credit, KualiDecimal debit, KualiDecimal blank) {
+    private void printTotal(String title,KualiDecimal credit,KualiDecimal debit,KualiDecimal blank) {
         PdfPCell column = new PdfPCell(new Phrase(title, headerFont));
         column.setColspan(6);
         column.setPaddingTop(10.0F);
@@ -261,6 +262,6 @@ public class GeneralLedgerPendingEntryReport {
         column.setPaddingTop(10.0F);
         column.setPaddingBottom(10.0F);
         column.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-        dataTable.addCell(column);
+        dataTable.addCell(column);            
     }
 }
