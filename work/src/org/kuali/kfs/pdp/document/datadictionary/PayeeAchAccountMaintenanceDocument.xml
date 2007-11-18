@@ -64,6 +64,7 @@
                		<maintainableField name="payeeIdentifierTypeCode" required="true" />
                 	<maintainableField name="vendorHeaderGeneratedIdentifier" />
                 	<maintainableField name="vendorDetailAssignedIdentifier" />
+                	<maintainableField name="vendorNumber" />
                 	<maintainableField name="disbVchrPayeeIdNumber" />
                 	<maintainableField name="personUniversalIdentifier" />
  					<maintainableField name="payeeSocialSecurityNumber" >
