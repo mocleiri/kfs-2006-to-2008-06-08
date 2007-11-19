@@ -17,86 +17,77 @@ package org.kuali.module.purap;
 
 /**
  * Property name constants.
+ * 
  */
 public class PurapPropertyConstants {
-
-    public static final String VENDOR_HEADER_GENERATED_ID = "vendorHeaderGeneratedIdentifier";
-
-    // ITEM
-    public static final String ITEM_IDENTIFIER = "itemIdentifier";
-    public static final String ACCOUNTS = "sourceAccountingLines";
-    public static final String QUANTITY = "itemQuantity";
-    public static final String EXTENDED_PRICE = "extendedPrice";
-    public static final String ITEM_TYPE = "itemType";
-    public static final String ITEM = "item";
-    public static final String ITEM_UNIT_PRICE = "itemUnitPrice";
-    public static final String ITEM_DESCRIPTION = "itemDescription";
-    public static final String ITEM_UNIT_OF_MEASURE_CODE = "itemUnitOfMeasureCode";
-    public static final String ITEM_UNIT_OF_MEASURE_DESCRIPTION = "itemUnitOfMeasureDescription";
-    public static final String NEW_PURCHASING_ITEM_LINE = "newPurchasingItemLine";
-
-    // accounting line
-    public static final String ACCOUNT_IDENTIFIER = "accountIdentifier";
-    public static final String ACCOUNT_LINE_PERCENT = "accountLinePercent";
-
+    
     public static final String DATA_OBJ_MAINT_CD_ACTIVE_IND = "dataObjectMaintenanceCodeActiveIndicator";
-
-    // document fields
-    public static final String GENERAL_LEDGER_PENDING_ENTRIES = "generalLedgerPendingEntries";
-
-    // PURCHASING AND ACCOUNTS PAYABLE DOCUMENT BASE
-    public static final String PURAP_DOC_ID = "purapDocumentIdentifier";
-    public static final String OLD_STATUS = "oldStatus";
-    public static final String NEW_STATUS = "newStatus";
-    public static final String STATUS_CODE = "statusCode";
-    public static final String STATUS = "status";
+    
+    public static final String VENDOR_HEADER_PREFIX = "vendorHeader.";
     public static final String VENDOR_NUMBER = "vendorNumber";
-    public static final String VENDOR_POSTAL_CODE = "vendorPostalCode";
-    public static final String VENDOR_COUNTRY_CODE = "vendorCountryCode";
-    public static final String VENDOR_STATE_CODE = "vendorStateCode";
-    public static final String VENDOR_ADDRESS_ID = "vendorAddressGeneratedIdentifier";
+    public static final String VENDOR_FAX_NUMBER = "vendorFaxNumber";
+    public static final String VENDOR_ADDRESS = "vendorAddresses";
+    public static final String VENDOR_DEFAULT_ADDRESS = "vendorDefaultAddresses";
+    public static final String VENDOR_SUPPLIER_DIVERSITIES = "vendorSupplierDiversities";
+    public static final String VENDOR_ADDRESS_STATE = "vendorStateCode";
+    public static final String VENDOR_ADDRESS_STATE_CODE = "vendorAddresses.vendorStateCode";
+    public static final String VENDOR_ADDRESS_ZIP = "vendorZipCode";
+    public static final String VENDOR_ADDRESS_TYPE_CODE = "vendorAddresses.vendorAddressTypeCode";
+    public static final String VENDOR_ADDRESS_EMAIL = "vendorAddresses.vendorAddressEmailAddress";
+    public static final String VENDOR_DEFAULT_ADDRESS_INDICATOR = "vendorDefaultAddressIndicator";
+    public static final String VENDOR_DEFAULT_ADDRESS_CAMPUS = "vendorCampusCode";
+    public static final String VENDOR_SUPPLIER_DIVERSITY_CODE = "vendorSupplierDiversities.vendorSupplierDiversityCode";
+    public static final String VENDOR_FEIN_SSN_INDICATOR = "vendorFeinSocialSecurityNumberIndicator";
+    public static final String VENDOR_TAX_NUMBER_ONLY = "vendorTaxNumber";
+    public static final String VENDOR_NAME = "vendorName";
+    public static final String VENDOR_FIRST_NAME = "vendorFirstName";
+    public static final String VENDOR_LAST_NAME = "vendorLastName";
+    public static final String VENDOR_TAX_NUMBER = "vendorHeader.vendorTaxNumber";
+    public static final String VENDOR_TAX_TYPE_CODE = "vendorHeader.vendorTaxTypeCode";
+    public static final String VENDOR_OWNERSHIP_CODE = "vendorHeader.vendorOwnershipCode";
+    public static final String VENDOR_OWNERSHIP_CATEGORY_CODE = "vendorHeader.vendorOwnershipCategoryCode";
+    public static final String VENDOR_FEDERAL_WITHOLDING_TAX_BEGINNING_DATE = "vendorHeader.vendorFederalWithholdingTaxBeginningDate";
+    public static final String VENDOR_FEDERAL_WITHOLDING_TAX_END_DATE = "vendorHeader.vendorFederalWithholdingTaxEndDate";
+    public static final String VENDOR_TYPE_CODE = "vendorHeader.vendorTypeCode";
+    public static final String VENDOR_W9_RECEIVED_INDICATOR = "vendorHeader.vendorW9ReceivedIndicator";
+    public static final String VENDOR_W8_BEN_RECEIVED_INDICATOR = "vendorHeader.vendorW8BenReceivedIndicator";
+    public static final String VENDOR_DEBARRED_INDICATOR = "vendorHeader.vendorDebarredIndicator";
+    public static final String VENDOR_FOREIGN_INDICATOR = "vendorHeader.vendorForeignIndicator";
+    public static final String VENDOR_INACTIVE_REASON = "vendorInactiveReasonCode";
+    
+    public static final String VENDOR_TAX_TYPE_CODE_WITHOUT_HEADER = "vendorTaxTypeCode";
+    public static final String VENDOR_MIN_ORDER_AMOUNT = "vendorMinimumOrderAmount";
+    public static final String VENDOR_DETAIL_ASSIGNED_ID = "vendorDetailAssignedIdentifier";
+    public static final String VENDOR_HEADER_GENERATED_ID = "vendorHeaderGeneratedIdentifier";
+    public static final String VENDOR_ALIAS_NAME = "vendorAliasName";
+    public static final String VENDOR_ALIAS_NAME_FULL_PATH = "vendorAliases.vendorAliasName";
+    
+    public static final String CONTRACT_LANGUAGE_CREATE_DATE = "contractLanguageCreateDate";
 
-    // PURCHASING DOCUMENT BASE
+    // Vendor contracts
+    public static final String VENDOR_CONTRACT = "vendorContracts";
+    public static final String DEFAULT_APO_LIMIT = "organizationAutomaticPurchaseOrderLimit";
+    public static final String VENDOR_CONTRACT_BEGIN_DATE = "vendorContractBeginningDate";
+    public static final String VENDOR_CONTRACT_END_DATE = "vendorContractEndDate";
+    // Vendor contract organizations
+    public static final String VENDOR_CONTRACT_ORGANIZATION = "vendorContractOrganizations";
+    public static final String ORGANIZATION_APO_LIMIT = "vendorContractPurchaseOrderLimitAmount";
+    
+    // Purchase Order & Requisition
+    public static final String REQUISITION_ID = "identifier";
     public static final String RECURRING_PAYMENT_TYPE_CODE = "recurringPaymentTypeCode";
     public static final String PURCHASE_ORDER_BEGIN_DATE = "purchaseOrderBeginDate";
     public static final String PURCHASE_ORDER_END_DATE = "purchaseOrderEndDate";
-    public static final String PURCHASE_ORDER_TOTAL_LIMIT = "purchaseOrderTotalLimit";
-    public static final String VENDOR_FAX_NUMBER = "vendorFaxNumber";
+    public static final String VENDOR_POSTAL_CODE = "document.vendorPostalCode";
+    public static final String VENDOR_COUNTRY_CODE = "document.vendorCountryCode";
+    public static final String VENDOR_STATE_CODE = "document.vendorStateCode";
+    public static final String PURCHASE_ORDER_TOTAL_LIMIT = "document.purchaseOrderTotalLimit";
+    public static final String REQUISITION_VENDOR_FAX_NUMBER = "document.vendorFaxNumber";
+    public static final String STATUS_CODE = "statusCode";
+    public static final String DOCUMENT_IDENTIFIER = "purapDocumentIdentifier";
     public static final String CONTRACT_MANAGER_CODE = "contractManagerCode";
-    public static final String VENDOR_CONTRACT_ID = "vendorContractGeneratedIdentifier";
-    public static final String PURCHASE_ORDER = "purchaseOrder";
-    public static final String PURCHASE_ORDER_COST_SOURCE = "purchaseOrderCostSource";
-
-    // AP DOCUMENT BASE
-    public static final String PURCHASE_ORDER_IDENTIFIER = "purchaseOrderIdentifier";
-
-    // REQUISITION DOCUMENT
-
-    // PURCHASE ORDER DOCUMENT
-    public static final String PURCHASE_ORDER_CURRENT_INDICATOR = "purchaseOrderCurrentIndicator";
     public static final String VENDOR_STIPULATION = "purchaseOrderVendorStipulations";
-    public static final String QUOTE_TRANSMITTED = "purchaseOrderQuoteTransmitted";
-    public static final String VENDOR_QUOTES = "purchaseOrderVendorQuotes";
-    // Quote Language
-    public static final String PURCHASE_ORDER_QUOTE_LANGUAGE_ID = "purchaseOrderQuoteLanguageIdentifier";
-    // vendor quote
-    public static final String PURCHASE_ORDER_VENDOR_QUOTE_IDENTIFIER = "purchaseOrderVendorQuoteIdentifier";
-    // Stipulations
     public static final String VENDOR_STIPULATION_DESCRIPTION = "vendorStipulationDescription";
-
-    // PAYMENT REQUEST DOCUMENT
-    public static final String INVOICE_DATE = "invoiceDate";
-    public static final String INVOICE_NUMBER = "invoiceNumber";
-    public static final String VENDOR_INVOICE_AMOUNT = "vendorInvoiceAmount";
-    public static final String PAYMENT_REQUEST_PAY_DATE = "paymentRequestPayDate";
-    public static final String GRAND_TOTAL = "grandTotal";
-    public static final String PAYMENT_REQUEST = "paymentRequest";
-    public static final String RECURRING_PAYMENT_TYPE = "recurringPaymentType";
-
-    // CREDIT MEMO DOCUMENT
-    public static final String PAYMENT_REQUEST_ID = "paymentRequestIdentifier";
-    public static final String CREDIT_MEMO_DATE = "creditMemoDate";
-    public static final String CREDIT_MEMO_NUMBER = "creditMemoNumber";
-    public static final String CREDIT_MEMO_AMOUNT = "creditMemoAmount";
-
+    
+    public static final String SOURCE_DOCUMENT_IDENTIFIER  = "sourceDocumentIdentifier";
 }

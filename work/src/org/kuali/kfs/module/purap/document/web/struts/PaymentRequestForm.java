@@ -28,22 +28,20 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapAuthorizationConstants;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
+import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.authorization.PaymentRequestDocumentActionAuthorizer;
-import org.kuali.module.purap.service.PurapService;
 
 /**
- * Struts Action Form for Payment Request document.
+ * This class is the form class for the PaymentRequest document.
  */
 public class PaymentRequestForm extends AccountsPayableFormBase {
 
     private PurchaseOrderVendorStipulation newPurchaseOrderVendorStipulationLine;
-
     /**
-     * Constructs a PaymentRequestForm instance and sets up the appropriately casted document.
+     * Constructs a PurchaseOrderForm instance and sets up the appropriately casted document. 
      */
     public PaymentRequestForm() {
         super();
@@ -52,10 +50,16 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
         setNewPurchaseOrderVendorStipulationLine(new PurchaseOrderVendorStipulation());
     }
 
+    /**
+     * @return Returns the internalBillingDocument.
+     */
     public PaymentRequestDocument getPaymentRequestDocument() {
         return (PaymentRequestDocument) getDocument();
     }
 
+    /**
+     * @param internalBillingDocument The internalBillingDocument to set.
+     */
     public void setPaymentRequestDocument(PaymentRequestDocument purchaseOrderDocument) {
         setDocument(purchaseOrderDocument);
     }
@@ -63,12 +67,10 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
     /**
      * @see org.kuali.core.web.struts.form.KualiForm#getAdditionalDocInfo1()
      */
-    @Override
     public KeyLabelPair getAdditionalDocInfo1() {
         if (ObjectUtils.isNotNull(this.getPaymentRequestDocument().getPurapDocumentIdentifier())) {
-            return new KeyLabelPair("DataDictionary.PaymentRequestDocument.attributes.purapDocumentIdentifier", ((PaymentRequestDocument) this.getDocument()).getPurapDocumentIdentifier().toString());
-        }
-        else {
+            return new KeyLabelPair("DataDictionary.PaymentRequestDocument.attributes.purapDocumentIdentifier", ((PaymentRequestDocument)this.getDocument()).getPurapDocumentIdentifier().toString());
+        } else {
             return new KeyLabelPair("DataDictionary.PaymentRequestDocument.attributes.purapDocumentIdentifier", "Not Available");
         }
     }
@@ -76,12 +78,10 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
     /**
      * @see org.kuali.core.web.struts.form.KualiForm#getAdditionalDocInfo2()
      */
-    @Override
     public KeyLabelPair getAdditionalDocInfo2() {
         if (ObjectUtils.isNotNull(this.getPaymentRequestDocument().getStatus())) {
-            return new KeyLabelPair("DataDictionary.PaymentRequestDocument.attributes.statusCode", ((PaymentRequestDocument) this.getDocument()).getStatus().getStatusDescription());
-        }
-        else {
+            return new KeyLabelPair("DataDictionary.PaymentRequestDocument.attributes.statusCode", ((PaymentRequestDocument)this.getDocument()).getStatus().getStatusDescription());
+        } else {
             return new KeyLabelPair("DataDictionary.PaymentRequestDocument.attributes.statusCode", "Not Available");
         }
     }
@@ -94,21 +94,16 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
         return new PurchaseOrderItem();
     }
 
-    /**
-     * Recreates the purchase order vendor stipulation line using the current user and current date stamp.
-     * 
-     * @return - PO vendor stipulation based on current but with current user and date stamp.
-     */
     public PurchaseOrderVendorStipulation getAndResetNewPurchaseOrderVendorStipulationLine() {
         PurchaseOrderVendorStipulation aPurchaseOrderVendorStipulationLine = getNewPurchaseOrderVendorStipulationLine();
         setNewPurchaseOrderVendorStipulationLine(new PurchaseOrderVendorStipulation());
-
-        // aPurchaseOrderVendorStipulationLine.setDocumentNumber(getPurchaseOrderDocument().getDocumentNumber());
+    
+       // aPurchaseOrderVendorStipulationLine.setDocumentNumber(getPurchaseOrderDocument().getDocumentNumber());
         aPurchaseOrderVendorStipulationLine.setVendorStipulationAuthorEmployeeIdentifier(GlobalVariables.getUserSession().getUniversalUser().getPersonUniversalIdentifier());
         aPurchaseOrderVendorStipulationLine.setVendorStipulationCreateDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
 
         return aPurchaseOrderVendorStipulationLine;
-    }
+}
 
     public PurchaseOrderVendorStipulation getNewPurchaseOrderVendorStipulationLine() {
         return newPurchaseOrderVendorStipulationLine;
@@ -117,48 +112,29 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
     public void setNewPurchaseOrderVendorStipulationLine(PurchaseOrderVendorStipulation newPurchaseOrderVendorStipulationLine) {
         this.newPurchaseOrderVendorStipulationLine = newPurchaseOrderVendorStipulationLine;
     }
-
+    
     /**
-     * Determines if the payment request document has reached the INITIATE status.
-     * 
-     * @return - true if preq is initiated, false otherwise
+     * Gets the initialized attribute. 
+     * @return Returns the initialized.
      */
-    public boolean isPaymentRequestInitiated() {
-        return StringUtils.equals(this.getPaymentRequestDocument().getStatusCode(), PurapConstants.PaymentRequestStatuses.INITIATE);
+   /*
+    public boolean isInitialized() {
+        return initialized;
     }
-
+*/
+   
     /**
-     * Determines if a user is able to close a purchase order. This is used by the checkbox "close PO" on the payment request form.
-     * 
-     * @return - true if able to close a PO, false otherwise
+     * Gets the PaymentRequestInitiated attribute for JSP 
+     * @return Returns the DisplayInitiateTab.
      */
-    public boolean isAbleToClosePurchaseOrder() {
-        boolean valid = false;
+  
+    public boolean isPaymentRequestInitiated() { 
+        return StringUtils.equals(this.getPaymentRequestDocument().getStatusCode(),PurapConstants.PaymentRequestStatuses.INITIATE);
+      } 
 
-        PaymentRequestDocument preq = (PaymentRequestDocument) this.getDocument();
-
-        if (SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(preq) == false && isApUser() && PurapConstants.PurchaseOrderStatuses.OPEN.equals(preq.getPurchaseOrderDocument().getStatusCode())) {
-
-            valid = true;
-        }
-
-        return valid;
-    }
-
+    
     /**
-     * Helper method to indicate if the current document has reached full document entry.
-     * 
-     * @return - true if document has reached full entry, false otherwise
-     */
-    public boolean isFullDocumentEntryCompleted() {
-        PaymentRequestDocument preq = (PaymentRequestDocument) this.getDocument();
-        return SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(preq);
-    }
-
-    /**
-     * Build additional payment request specific buttons and set extraButtons list.
-     * 
-     * @return - list of extra buttons to be displayed to the user
+     * Build additional credit memo specific buttons and set extraButtons list.
      */
     @Override
     public List<ExtraButton> getExtraButtons() {
@@ -177,30 +153,33 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
 
             }
             else {
-                PaymentRequestDocumentActionAuthorizer preqDocAuth = new PaymentRequestDocumentActionAuthorizer(preqDoc);
-
-                // if preq holdable and user can put on hold, show button
-                if (preqDocAuth.canHold()) {
+                PaymentRequestDocumentActionAuthorizer preqDocAuth = 
+                    new PaymentRequestDocumentActionAuthorizer(
+                            preqDoc, 
+                            GlobalVariables.getUserSession().getUniversalUser());
+                
+                //if preq holdable and user can put on hold, show button
+                if (preqDocAuth.canHold()){
                     addExtraButton("methodToCall.addHoldOnPayment", appExternalImageURL + "buttonsmall_hold.gif", "Hold");
                 }
 
-                // if person can remove hold
-                if (preqDocAuth.canRemoveHold()) {
-                    addExtraButton("methodToCall.removeHoldFromPayment", appExternalImageURL + "buttonsmall_removehold.gif", "Remove");
+                //if person can remove hold
+                if (preqDocAuth.canRemoveHold() ){
+                        addExtraButton("methodToCall.removeHoldFromPayment", appExternalImageURL + "buttonsmall_removehold.gif", "Remove");
                 }
 
-                // if preq can have a cancel request and user can submit request cancel, show button
-                if (preqDocAuth.canRequestCancel()) {
+                //if preq can have a cancel request and user can submit request cancel, show button
+                if (preqDocAuth.canRequestCancel()){
                     addExtraButton("methodToCall.requestCancelOnPayment", appExternalImageURL + "buttonsmall_requestcancel.gif", "Cancel");
                 }
-
-                // if person can remove request cancel
-                if (preqDocAuth.canRemoveRequestCancel()) {
+                
+                //if person can remove request cancel
+                if (preqDocAuth.canRemoveRequestCancel()){
                     addExtraButton("methodToCall.removeCancelRequestFromPayment", appExternalImageURL + "buttonsmall_remreqcanc.gif", "Remove");
-                }
+                }                
 
-                // add the calculate button
-                if (preqDocAuth.canCalculate()) {
+                //add the calcuate button
+                if(preqDocAuth.canCalculate()){
                     addExtraButton("methodToCall.calculate", appExternalImageURL + "buttonsmall_calculate.gif", "Calculate");
                 }
             }
@@ -208,5 +187,6 @@ public class PaymentRequestForm extends AccountsPayableFormBase {
 
         return extraButtons;
     }
-
+    
+ 
 }

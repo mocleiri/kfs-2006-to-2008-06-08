@@ -29,14 +29,11 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.kuali.Constants;
 import org.kuali.core.lookup.LookupUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Chart;
-import org.kuali.module.chart.service.ChartService;
 import org.kuali.workflow.KualiWorkflowUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import edu.iu.uis.eden.WorkflowServiceErrorImpl;
 import edu.iu.uis.eden.engine.RouteContext;
@@ -52,6 +49,8 @@ import edu.iu.uis.eden.util.Utilities;
 
 /**
  * KualiChartAttribute which should be used when using charts to do routing
+ * 
+ * 
  */
 public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
 
@@ -75,7 +74,9 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
 
     private static final String ROLE_STRING_DELIMITER = "~!~!~";
 
-    private static final String ORGANIZATION_DOC_TYPE = KualiWorkflowUtils.ORGANIZATION_DOC_TYPE;
+    private static final String MAINTAINABLE_PREFIX = "//newMaintainableObject/businessObject/";
+
+    private static final String ORGANIZATION_DOC_TYPE = "KualiOrganizationMaintenanceDocument";
 
     private String finCoaCd;
 
@@ -91,7 +92,7 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
         rows = new ArrayList();
 
         List fields = new ArrayList();
-        fields.add(KualiWorkflowUtils.buildTextRowWithLookup(Chart.class, KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, FIN_COA_CD_KEY));
+        fields.add(KualiWorkflowUtils.buildTextRowWithLookup(Chart.class, Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, FIN_COA_CD_KEY));
     }
 
     /**
@@ -145,7 +146,7 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
         if (Utilities.isEmpty(getFinCoaCd())) {
             return "";
         }
-        return KualiWorkflowUtils.XML_REPORT_DOC_CONTENT_PREFIX + "<" + CHART_ATTRIBUTE + ">" + "<" + FIN_COA_CD_KEY + ">" + getFinCoaCd() + "</" + FIN_COA_CD_KEY + ">" + "</" + CHART_ATTRIBUTE + ">" + KualiWorkflowUtils.XML_REPORT_DOC_CONTENT_SUFFIX;
+        return "<report><" + CHART_ATTRIBUTE + ">" + "<" + FIN_COA_CD_KEY + ">" + getFinCoaCd() + "</" + FIN_COA_CD_KEY + ">" + "</" + CHART_ATTRIBUTE + "></report>";
     }
 
     /**
@@ -172,7 +173,7 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
      * @return Chart
      */
     private Chart getChart(String finCoaCd) {
-        return SpringContext.getBean(ChartService.class).getByPrimaryId(finCoaCd);
+        return SpringServiceLocator.getChartService().getByPrimaryId(finCoaCd);
     }
 
     /**
@@ -246,11 +247,6 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
         return roleName + ROLE_STRING_DELIMITER + chart;
     }
 
-    private static final String ACCOUNT_GLOBAL_DETAIL_XPATH = "wf:xstreamsafe('" + KualiWorkflowUtils.NEW_MAINTAINABLE_PREFIX + "accountGlobalDetails/org.kuali.module.chart.bo.AccountGlobalDetail/chartOfAccountsCode')";
-    private static final String SUB_OBJECT_CODE_GLOBAL_DETAIL_XPATH = "wf:xstreamsafe('" + KualiWorkflowUtils.NEW_MAINTAINABLE_PREFIX + "subObjCdGlobalDetails/list/org.kuali.module.chart.bo.SubObjCdGlobalDetail/chartOfAccountsCode')";
-    private static final String OBJECT_CODE_GLOBAL_DETAIL_XPATH = "wf:xstreamsafe('" + KualiWorkflowUtils.NEW_MAINTAINABLE_PREFIX + "objectCodeGlobalDetails/list/org.kuali.module.chart.bo.ObjectCodeGlobalDetail/chartOfAccountsCode')";
-    private static final String ORG_REVERSION_GLOBAL_DETAIL_XPATH = "wf:xstreamsafe('" + KualiWorkflowUtils.NEW_MAINTAINABLE_PREFIX + "organizationReversionGlobalOrganizations/list/org.kuali.module.chart.bo.OrganizationReversionGlobalOrganization/chartOfAccountsCode')";
-
     /**
      * @see edu.iu.uis.eden.routetemplate.RoleAttribute#getQualifiedRoleNames(java.lang.String, java.lang.String)
      */
@@ -258,48 +254,24 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
         Set qualifiedRoleNames = new HashSet();
         if (CHART_MANAGER_ROLE_KEY.equals(roleName)) {
             XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
-            List<String> chartCodes = new ArrayList<String>();
-            List<String> chartXPaths = new ArrayList<String>();
-            String docTypeName = docContent.getRouteContext().getDocument().getDocumentType().getName();
+            String chart = null;
+            String chartXPath = null;
+
             try {
                 // the report business is to support Routing Reports, which we
                 // need to work on Chart
-                boolean isReport = ((Boolean) xpath.evaluate(KualiWorkflowUtils.XSTREAM_SAFE_PREFIX + KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + KualiWorkflowUtils.XML_REPORT_DOC_CONTENT_XPATH_PREFIX + KualiWorkflowUtils.XSTREAM_SAFE_SUFFIX, docContent.getDocument(), XPathConstants.BOOLEAN)).booleanValue();
+                boolean isReport = ((Boolean) xpath.evaluate("wf:xstreamsafe('//report')", docContent.getDocument(), XPathConstants.BOOLEAN)).booleanValue();
                 if (isReport) {
-                    chartXPaths.add(KualiWorkflowUtils.XSTREAM_SAFE_PREFIX + KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + KualiWorkflowUtils.XML_REPORT_DOC_CONTENT_XPATH_PREFIX + "/" + CHART_ATTRIBUTE + "/" + FIN_COA_CD_KEY + KualiWorkflowUtils.XSTREAM_SAFE_SUFFIX);
+                    chartXPath = "wf:xstreamsafe('//report/chart')";
                 }
-                else if (KualiWorkflowUtils.ACCOUNT_DELEGATE_GLOBAL_DOC_TYPE.equals(docTypeName)) {
-                    chartXPaths.add(ACCOUNT_GLOBAL_DETAIL_XPATH);
+                else if (KualiWorkflowUtils.ACCOUNT_DELEGATE_GLOBAL_DOC_TYPE.equals(docContent.getRouteContext().getDocument().getDocumentType().getName())) {
+                    chartXPath = "wf:xstreamsafe('" + MAINTAINABLE_PREFIX + "accountChangeDetails/list/org.kuali.module.chart.bo.AccountChangeDetail/chartOfAccountsCode')";
                 }
-                else if (KualiWorkflowUtils.ACCOUNT_CHANGE_DOC_TYPE.equals(docTypeName)) {
-                    chartXPaths.add(ACCOUNT_GLOBAL_DETAIL_XPATH);
+                //  this is the typical path during normal workflow operation
+                else { 
+                    chartXPath = "wf:xstreamsafe('" + MAINTAINABLE_PREFIX + "chartOfAccountsCode')";
                 }
-                else if (KualiWorkflowUtils.SUB_OBJECT_CODE_CHANGE_DOC_TYPE.equals(docTypeName)) {
-                    chartXPaths.add(ACCOUNT_GLOBAL_DETAIL_XPATH);
-                    chartXPaths.add(SUB_OBJECT_CODE_GLOBAL_DETAIL_XPATH);
-                }
-                else if (KualiWorkflowUtils.OBJECT_CODE_CHANGE_DOC_TYPE.equals(docTypeName)) {
-                    chartXPaths.add(OBJECT_CODE_GLOBAL_DETAIL_XPATH);
-                }
-                else if (KualiWorkflowUtils.ORG_REVERSION_CHANGE_DOC_TYPE.equals(docTypeName)) {
-                    chartXPaths.add(ORG_REVERSION_GLOBAL_DETAIL_XPATH);
-                }
-                // this is the typical path during normal workflow operation
-                else {
-                    chartXPaths.add(KualiWorkflowUtils.XSTREAM_SAFE_PREFIX + KualiWorkflowUtils.NEW_MAINTAINABLE_PREFIX + "chartOfAccountsCode" + KualiWorkflowUtils.XSTREAM_SAFE_SUFFIX);
-                }
-                for (String chartXPath : chartXPaths) {
-                    NodeList chartNodes = (NodeList) xpath.evaluate(chartXPath, docContent.getDocument(), XPathConstants.NODESET);
-                    if (chartNodes != null) {
-                        for (int index = 0; index < chartNodes.getLength(); index++) {
-                            Element chartElem = (Element) chartNodes.item(index);
-                            String chartOfAccountsCode = chartElem.getFirstChild().getNodeValue();
-                            if (!StringUtils.isEmpty(chartOfAccountsCode)) {
-                                chartCodes.add(chartOfAccountsCode);
-                            }
-                        }
-                    }
-                }
+                chart = xpath.evaluate(chartXPath, docContent.getDocument());
             }
             catch (XPathExpressionException e) {
                 throw new RuntimeException("Error evaluating xpath expression to locate chart.", e);
@@ -308,9 +280,15 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
                 throw new RuntimeException("An unexpected error occurred while trying to locate the Chart.", e);
             }
 
-            for (String chartCode : chartCodes) {
-                qualifiedRoleNames.add(getQualifiedRoleString(roleName, chartCode));
+            if (StringUtils.isNotEmpty(chart)) {
+                qualifiedRoleNames.add(getQualifiedRoleString(roleName, chart));
             }
+            /*
+             * Document doc = null; doc = XmlHelper.buildJDocument(docContent.getDocument()); List chartElements =
+             * XmlHelper.findElements(doc.getRootElement(), CHART_ATTRIBUTE); for (Iterator iter = chartElements.iterator();
+             * iter.hasNext();) { Element chartElement = (Element)iter.next();
+             * qualifiedRoleNames.add(getQualifiedRoleString(roleName, chartElement.getChild(FIN_COA_CD_KEY).getText())); }
+             */
         }
         else if (UNIVERSITY_CHART_MANAGER_ROLE_KEY.equals(roleName)) {
             qualifiedRoleNames.add(UNIVERSITY_CHART_MANAGER_ROLE_KEY);
@@ -339,7 +317,7 @@ public class KualiChartAttribute implements RoleAttribute, WorkflowAttribute {
             members.add(new AuthenticationUserId(getChart(getUnqualifiedChartFromString(qualifiedRole)).getFinCoaManagerUniversal().getPersonUserIdentifier()));
         }
         else if (UNIVERSITY_CHART_MANAGER_ROLE_KEY.equals(roleName)) {
-            members.add(new AuthenticationUserId(SpringContext.getBean(ChartService.class).getUniversityChart().getFinCoaManagerUniversal().getPersonUserIdentifier()));
+            members.add(new AuthenticationUserId(SpringServiceLocator.getChartService().getUniversityChart().getFinCoaManagerUniversal().getPersonUserIdentifier()));
         }
         return new ResolvedQualifiedRole(roleName, members);
     }

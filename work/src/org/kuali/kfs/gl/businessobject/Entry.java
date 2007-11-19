@@ -22,12 +22,11 @@ import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.bo.OriginationCode;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -39,7 +38,6 @@ import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
- * Represents a G/L entry
  * 
  */
 public class Entry extends PersistableBusinessObjectBase implements Transaction {
@@ -72,6 +70,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
     private String transactionEncumbranceUpdateCode;
     private Date transactionPostingDate;
     private Timestamp transactionDateTimeStamp;
+    private String budgetYear;
 
     // bo references
     private Account account;
@@ -97,36 +96,6 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * Default constructor.
      */
     public Entry() {
-    }
-
-    public Entry(Transaction t) {
-        super();
-
-        setUniversityFiscalYear(t.getUniversityFiscalYear());
-        setChartOfAccountsCode(t.getChartOfAccountsCode());
-        setAccountNumber(t.getAccountNumber());
-        setSubAccountNumber(t.getSubAccountNumber());
-        setFinancialObjectCode(t.getFinancialObjectCode());
-        setFinancialSubObjectCode(t.getFinancialSubObjectCode());
-        setFinancialBalanceTypeCode(t.getFinancialBalanceTypeCode());
-        setFinancialObjectTypeCode(t.getFinancialObjectTypeCode());
-        setUniversityFiscalPeriodCode(t.getUniversityFiscalPeriodCode());
-        setFinancialDocumentTypeCode(t.getFinancialDocumentTypeCode());
-        setFinancialSystemOriginationCode(t.getFinancialSystemOriginationCode());
-        setDocumentNumber(t.getDocumentNumber());
-        setTransactionLedgerEntrySequenceNumber(t.getTransactionLedgerEntrySequenceNumber());
-        setTransactionLedgerEntryDescription(t.getTransactionLedgerEntryDescription());
-        setTransactionLedgerEntryAmount(t.getTransactionLedgerEntryAmount());
-        setTransactionDebitCreditCode(t.getTransactionDebitCreditCode());
-        setTransactionDate(t.getTransactionDate());
-        setOrganizationDocumentNumber(t.getOrganizationDocumentNumber());
-        setProjectCode(t.getProjectCode());
-        setOrganizationReferenceId(t.getOrganizationReferenceId());
-        setReferenceFinancialDocumentTypeCode(t.getReferenceFinancialDocumentTypeCode());
-        setReferenceFinancialSystemOriginationCode(t.getReferenceFinancialSystemOriginationCode());
-        setReferenceFinancialDocumentNumber(t.getReferenceFinancialDocumentNumber());
-        setFinancialDocumentReversalDate(t.getFinancialDocumentReversalDate());
-        setTransactionEncumbranceUpdateCode(t.getTransactionEncumbranceUpdateCode());
     }
 
     public Entry(Transaction t, java.util.Date postDate) {
@@ -162,7 +131,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
             setTransactionPostingDate(new Date(postDate.getTime()));
         }
 
-        Timestamp now = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp now = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
         setTransactionDateTimeStamp(now);
     }
 
@@ -666,6 +635,24 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      */
     public void setTransactionDateTimeStamp(Timestamp transactionDateTimeStamp) {
         this.transactionDateTimeStamp = transactionDateTimeStamp;
+    }
+
+    /**
+     * Gets the budgetYear attribute.
+     * 
+     * @return Returns the budgetYear
+     */
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    /**
+     * Sets the budgetYear attribute.
+     * 
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
     }
 
     public Account getAccount() {
