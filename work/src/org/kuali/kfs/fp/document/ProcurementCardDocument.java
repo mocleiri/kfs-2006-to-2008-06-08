@@ -21,15 +21,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.kuali.PropertyConstants;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.ProcurementCardHolder;
 import org.kuali.module.financial.bo.ProcurementCardSourceAccountingLine;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
@@ -109,7 +108,7 @@ public class ProcurementCardDocument extends AccountingDocumentBase implements A
     /**
      * Override to set the accounting line in the transaction detail object.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#addSourceAccountingLine(SourceAccountingLine)
+     * @see org.kuali.core.document.TransactionalDocument#addSourceAccountingLine(org.kuali.core.bo.SourceAccountingLine)
      */
     @Override
     public void addSourceAccountingLine(SourceAccountingLine sourceLine) {
@@ -130,7 +129,7 @@ public class ProcurementCardDocument extends AccountingDocumentBase implements A
     /**
      * Override to set the accounting line in the transaction detail object.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#addTargetAccountingLine(TargetAccountingLine)
+     * @see org.kuali.core.document.TransactionalDocument#addTargetAccountingLine(org.kuali.core.bo.TargetAccountingLine)
      */
     @Override
     public void addTargetAccountingLine(TargetAccountingLine targetLine) {
@@ -151,7 +150,7 @@ public class ProcurementCardDocument extends AccountingDocumentBase implements A
     /**
      * Override to get source accounting lines out of transactions
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLines()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLines()
      */
     @Override
     public List getSourceAccountingLines() {
@@ -171,7 +170,7 @@ public class ProcurementCardDocument extends AccountingDocumentBase implements A
     /**
      * Override to get target accounting lines out of transactions
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLines()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLines()
      */
     @Override
     public List getTargetAccountingLines() {
@@ -210,19 +209,19 @@ public class ProcurementCardDocument extends AccountingDocumentBase implements A
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 
     @Override
     public void doRouteStatusChange(DocumentRouteStatusChangeVO statusChangeEvent) throws Exception {
         if (EdenConstants.ROUTE_HEADER_ENROUTE_CD.equals(statusChangeEvent.getNewRouteStatus())) {
-            Document retrievedDocument = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(statusChangeEvent.getRouteHeaderId().toString());
+            Document retrievedDocument = SpringServiceLocator.getDocumentService().getByDocumentHeaderId(statusChangeEvent.getRouteHeaderId().toString());
             if (EdenConstants.ROUTE_HEADER_ENROUTE_CD.equals(retrievedDocument.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus()) && !EdenConstants.ROUTE_HEADER_ENROUTE_CD.equals(retrievedDocument.getDocumentHeader().getFinancialDocumentStatusCode())) {
                 throw new RuntimeException("KFS document status is out of sync with Workflow document status");
             }
         }
     }
-
-
+    
+    
 }

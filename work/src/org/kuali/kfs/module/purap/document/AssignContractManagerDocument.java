@@ -16,6 +16,7 @@
 
 package org.kuali.module.purap.document;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,11 +26,12 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DocumentService;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
@@ -46,7 +48,13 @@ import edu.iu.uis.eden.exception.WorkflowException;
 public class AssignContractManagerDocument extends TransactionalDocumentBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AssignContractManagerDocument.class);
 
-    private List<AssignContractManagerDetail> assignContractManagerDetails = new ArrayList();
+    private String documentNumber;
+    private String financialDocumentStatusCode;
+    private String financialDocumentDescription;
+    private KualiDecimal financialDocumentTotalAmount;
+    private String organizationDocumentNumber;
+    private String financialDocumentInErrorNumber;
+    private String financialDocumentTemplateNumber;
 
     // Not persisted (only for labels in tag)
     private String requisitionNumber;
@@ -57,7 +65,12 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
     private String requisitionCreateDate;
     private String firstItemDescription;
     private String firstObjectCode;
+    // TODO (KULPURAP-1570: hjs) remove following field from here, OJB, and database after workflow API to retrieve this is implemented
+    private Date documentFinalDate;
 
+    private List notes;
+
+    private List<AssignContractManagerDetail> assignContractManagerDetails = new ArrayList();
 
     /**
      * Default constructor.
@@ -79,31 +92,15 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
      */
     public void populateDocumentWithRequisitions() {
         LOG.debug("populateDocumentWithRequisitions() Entering method.");
-        
+
         Map fieldValues = new HashMap();
         fieldValues.put(PurapPropertyConstants.STATUS_CODE, PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN);
         List<RequisitionDocument> unassignedRequisitions = new ArrayList(SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(RequisitionDocument.class, fieldValues, PurapPropertyConstants.PURAP_DOC_ID, true));
-        List<String>documentHeaderIds = new ArrayList();
+
         for (RequisitionDocument req : unassignedRequisitions) {
-            documentHeaderIds.add(req.getDocumentNumber());
-        }
-        
-        List<RequisitionDocument> requisitionDocumentsFromDocService = new ArrayList();
-        try {
-            if ( documentHeaderIds.size() > 0 )
-                requisitionDocumentsFromDocService = SpringContext.getBean(DocumentService.class).getDocumentsByListOfDocumentHeaderIds(RequisitionDocument.class, documentHeaderIds);
-        }
-        catch (WorkflowException we) {
-            String errorMsg = "Workflow Exception caught: " + we.getLocalizedMessage();
-            LOG.error(errorMsg, we);
-            throw new RuntimeException(errorMsg, we);
-        }
-  
-        for (RequisitionDocument req : requisitionDocumentsFromDocService) {
             assignContractManagerDetails.add(new AssignContractManagerDetail(this, req));
         }
-
-        LOG.debug("populateDocumentWithRequisitions() Leaving method.");   
+        LOG.debug("populateDocumentWithRequisitions() Leaving method.");
     }
 
     @Override
@@ -122,12 +119,20 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
                     // Get the requisition for this AssignContractManagerDetail.
                     RequisitionDocument req = SpringContext.getBean(RequisitionService.class).getRequisitionById(detail.getRequisitionIdentifier());
 
-                    if (req.getStatusCode().equals(PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN)) {
+                    if (ObjectUtils.isNull(req.getContractManagerCode()) && req.getStatusCode().equals(PurapConstants.RequisitionStatuses.AWAIT_CONTRACT_MANAGER_ASSGN)) {
                         // only update REQ if code is empty and status is correct
-                        SpringContext.getBean(PurapService.class).updateStatus(req, PurapConstants.RequisitionStatuses.CLOSED);
+                        req.setContractManagerCode(detail.getContractManagerCode());
+                        SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(req, PurapConstants.RequisitionStatuses.CLOSED);
                         SpringContext.getBean(RequisitionService.class).saveDocumentWithoutValidation(req);
-                        SpringContext.getBean(PurchaseOrderService.class).createPurchaseOrderDocument(req, this.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId(), detail.getContractManagerCode());
+                        SpringContext.getBean(PurchaseOrderService.class).createPurchaseOrderDocument(req);
 
+                    }
+                    else {
+                        // only send FYI to initiator if code that was already set doesn't match code this doc was trying to set
+                        if (req.getContractManagerCode().compareTo(detail.getContractManagerCode()) != 0) {
+                            isSuccess = false;
+                            failedReqs.append(req.getPurapDocumentIdentifier() + ", ");
+                        }
                     }
                 }
 
@@ -147,7 +152,7 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
                     workflowDoc.appSpecificRouteDocumentToUser(EdenConstants.ACTION_REQUEST_FYI_REQ, currentNodeName, 0, PurapWorkflowConstants.AssignContractManagerDocument.ASSIGN_CONTRACT_DOC_ERROR_COMPLETING_POST_PROCESSING + failedReqs, new NetworkIdVO(workflowDoc.getInitiatorNetworkId()), "Initiator", true);
                 }
                 catch (WorkflowException e) {
-                    // do nothing; document should have processed successfully and problem is with sending FYI
+                    //do nothing; document should have processed successfully and problem is with sending FYI
                 }
             }
         }
@@ -171,7 +176,7 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
     @Override
     public String getDocumentTitle() {
         String title = "";
-        String specificTitle = SpringContext.getBean(ParameterService.class).getParameterValue(AssignContractManagerDocument.class, PurapParameterConstants.PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE);
+        String specificTitle = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapParameterConstants.PURAP_NAMESPACE, PurapParameterConstants.Components.ASSIGN_CONTRACT_MANAGER, PurapParameterConstants.PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE);
         if (StringUtils.equalsIgnoreCase(specificTitle, Boolean.TRUE.toString())) {
             title = PurapWorkflowConstants.AssignContractManagerDocument.WORKFLOW_DOCUMENT_TITLE;
         }
@@ -187,6 +192,78 @@ public class AssignContractManagerDocument extends TransactionalDocumentBase {
 
     public void setAssignContractManagerDetails(List assignContractManagerDetails) {
         this.assignContractManagerDetails = assignContractManagerDetails;
+    }
+
+    public Date getDocumentFinalDate() {
+        return documentFinalDate;
+    }
+
+    public void setDocumentFinalDate(Date documentFinalDate) {
+        this.documentFinalDate = documentFinalDate;
+    }
+
+    public String getFinancialDocumentDescription() {
+        return financialDocumentDescription;
+    }
+
+    public void setFinancialDocumentDescription(String financialDocumentDescription) {
+        this.financialDocumentDescription = financialDocumentDescription;
+    }
+
+    public String getFinancialDocumentInErrorNumber() {
+        return financialDocumentInErrorNumber;
+    }
+
+    public void setFinancialDocumentInErrorNumber(String financialDocumentInErrorNumber) {
+        this.financialDocumentInErrorNumber = financialDocumentInErrorNumber;
+    }
+
+    public String getFinancialDocumentStatusCode() {
+        return financialDocumentStatusCode;
+    }
+
+    public void setFinancialDocumentStatusCode(String financialDocumentStatusCode) {
+        this.financialDocumentStatusCode = financialDocumentStatusCode;
+    }
+
+    public String getFinancialDocumentTemplateNumber() {
+        return financialDocumentTemplateNumber;
+    }
+
+    public void setFinancialDocumentTemplateNumber(String financialDocumentTemplateNumber) {
+        this.financialDocumentTemplateNumber = financialDocumentTemplateNumber;
+    }
+
+    public KualiDecimal getFinancialDocumentTotalAmount() {
+        return financialDocumentTotalAmount;
+    }
+
+    public void setFinancialDocumentTotalAmount(KualiDecimal financialDocumentTotalAmount) {
+        this.financialDocumentTotalAmount = financialDocumentTotalAmount;
+    }
+
+    public List getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List notes) {
+        this.notes = notes;
+    }
+
+    public String getOrganizationDocumentNumber() {
+        return organizationDocumentNumber;
+    }
+
+    public void setOrganizationDocumentNumber(String organizationDocumentNumber) {
+        this.organizationDocumentNumber = organizationDocumentNumber;
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     /**

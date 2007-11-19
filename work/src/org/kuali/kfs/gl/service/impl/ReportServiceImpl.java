@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,17 +28,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.service.OptionsService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.service.OptionsService;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.bo.CorrectionCriteria;
-import org.kuali.module.gl.bo.ExpenditureTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.bo.Transaction;
@@ -51,21 +50,19 @@ import org.kuali.module.gl.service.PosterService;
 import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ReversalService;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 import org.kuali.module.gl.util.BalanceEncumbranceReport;
 import org.kuali.module.gl.util.BalanceReport;
-import org.kuali.module.gl.util.ExpenditureTransactionReport;
 import org.kuali.module.gl.util.GeneralLedgerPendingEntryReport;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.LedgerReport;
-import org.kuali.module.gl.util.Message;
+import org.kuali.module.gl.util.NominalActivityClosingTransactionReport;
 import org.kuali.module.gl.util.PosterOutputSummaryReport;
 import org.kuali.module.gl.util.Summary;
 import org.kuali.module.gl.util.TransactionListingReport;
 import org.kuali.module.gl.util.TransactionReport;
-import org.kuali.module.gl.util.YearEndTransactionReport;
 import org.kuali.module.gl.web.optionfinder.SearchOperatorsFinder;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.ExceptionConverter;
@@ -80,13 +77,12 @@ import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
- * The base implementation of ReportService
  */
-@Transactional
 public class ReportServiceImpl implements ReportService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReportServiceImpl.class);
 
-    String reportsDirectory;
+    String batchReportsDirectory;
+    String onlineReportsDirectory;
     private OriginEntryService originEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private DateTimeService dateTimeService;
@@ -96,44 +92,30 @@ public class ReportServiceImpl implements ReportService {
     private KualiConfigurationService kualiConfigurationService;
     private PersistenceService persistenceService;
 
-    public static final String DATE_FORMAT_STRING = "yyyyMMdd_HHmmss";
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-    /**
-     * Constructs a ReportServiceImpl instance
-     */
     public ReportServiceImpl() {
         super();
     }
 
-    /**
-     * initializes this service
-     */
     public void init() {
-        reportsDirectory = kualiConfigurationService.getPropertyString(KFSConstants.REPORTS_DIRECTORY_KEY);
+        batchReportsDirectory = kualiConfigurationService.getPropertyString(Constants.BATCH_REPORTS_DIRECTORY);
+        onlineReportsDirectory = kualiConfigurationService.getPropertyString(Constants.ONLINE_REPORTS_DIRECTORY);
     }
 
     /**
-     * Generates a ledger summary of pending entries, created by NightlyOut
-     * 
-     * @param runDate the date this nightly out process was run on
-     * @param group the group of origin entries copied from pending entries
      * @see org.kuali.module.gl.service.ReportService#generatePendingEntryReport(java.util.Date)
      */
     public void generatePendingEntryReport(Date runDate, OriginEntryGroup group) {
         LOG.debug("generatePendingEntryReport() started");
 
         GeneralLedgerPendingEntryReport glper = new GeneralLedgerPendingEntryReport();
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
-        glper.generateReport(runDate, reportsDirectory, sdf, originEntryService.getEntriesByGroupReportOrder(group));
+        glper.generateReport(runDate, batchReportsDirectory, sdf, originEntryService.getEntriesByGroupReportOrder(group));
     }
 
     /**
-     * Generates a report on all pending entries, created by Nightly out
      * 
-     * @param runDate the date this nightly out process was run on
-     * @param group the group of origin entries copied from pending entries
-     * @see org.kuali.module.gl.service.ReportService#generatePendingEntryLedgerSummaryReport(java.util.Date,
-     *      org.kuali.module.gl.bo.OriginEntryGroup)
+     * @see org.kuali.module.gl.service.ReportService#generatePendingEntryLedgerSummaryReport(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public void generatePendingEntryLedgerSummaryReport(Date runDate, OriginEntryGroup group) {
         LOG.debug("generatePendingEntryLedgerSummaryReport() started");
@@ -146,16 +128,11 @@ public class ReportServiceImpl implements ReportService {
 
         ledgerEntries = originEntryService.getSummaryByGroupId(g);
 
-        ledgerReport.generateReport(ledgerEntries, runDate, "GLPE Statistics Report", "glpe_ledger", reportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "GLPE Statistics Report", "glpe_ledger", batchReportsDirectory);
     }
 
     /**
-     * Generates the Sufficient Funds Summary Report
      * 
-     * @param reportErrors the errors generated during the sufficient funds process
-     * @param reportSummary a List of summary data generated by the sufficient funds
-     * @param runDate the date of the sufficient funds rebuild process that is being reported
-     * @param mode not really used
      * @see org.kuali.module.gl.service.ReportService#generateSufficientFundsReport(java.util.Map, java.util.List, java.util.Date,
      *      int)
      */
@@ -176,8 +153,7 @@ public class ReportServiceImpl implements ReportService {
         helper.title = title;
 
         try {
-            String filename = reportsDirectory + "/" + fileprefix + "_";
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
+            String filename = batchReportsDirectory + "/" + fileprefix + "_";
 
             filename = filename + sdf.format(runDate);
             filename = filename + ".pdf";
@@ -283,18 +259,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     * Generates the Poster Statistics report
      * 
-     * @param executionDate the actual time of poster execution
-     * @param runDate the time assumed by the poster (sometimes the poster can use a transaction date back
-     * @param reportSummary a Map of statistical counts generated by the poster run being reported on
-     * @param transactionPosters the list of posting algorithms used during the poster run
-     * @param reportErrors a Map of transactions that caused errors during the process
-     * @param mode the mode the poster was being run in
      * @see org.kuali.module.gl.service.ReportService#generatePosterStatisticsReport(java.util.Date, java.util.Map, java.util.Map,
      *      int)
      */
-    public void generatePosterStatisticsReport(Date executionDate, Date runDate, Map<String, Integer> reportSummary, List<PostTransaction> transactionPosters, Map<Transaction, List<Message>> reportErrors, int mode) {
+    public void generatePosterStatisticsReport(Date runDate, Map<String, Integer> reportSummary, List<PostTransaction> transactionPosters, Map<Transaction, List<Message>> reportErrors, int mode) {
         LOG.debug("generatePosterStatisticsReport() started");
 
         // Convert our summary to a list of items for the report
@@ -337,15 +306,11 @@ public class ReportServiceImpl implements ReportService {
             filename = "poster_reversal";
         }
 
-        tr.generateReport(reportErrors, summary, executionDate, title, filename, reportsDirectory);
+        tr.generateReport(reportErrors, summary, runDate, title, filename, batchReportsDirectory);
     }
 
     /**
-     * Generates the ICR Encumbrance Statistics report
      * 
-     * @param runDate the date when the poster process was run
-     * @param totalOfIcrEncumbrances the number of ICR encumbrances processed
-     * @param totalOfEntriesGenerated the number of origin entries generated by this step of the process
      * @see org.kuali.module.gl.service.ReportService#generateIcrEncumrbanceStatisticsReport(java.util.Date, int, int)
      */
     public void generateIcrEncumbranceStatisticsReport(Date runDate, int totalOfIcrEncumbrances, int totalOfEntriesGenerated) {
@@ -358,41 +323,30 @@ public class ReportServiceImpl implements ReportService {
         Map<Transaction, List<Message>> errors = new HashMap<Transaction, List<Message>>();
 
         TransactionReport tr = new TransactionReport();
-        tr.generateReport(errors, reportSummaryList, runDate, "ICR Encumbrance Report", "icr_encumbrance", reportsDirectory);
+        tr.generateReport(errors, reportSummaryList, runDate, "ICR Encumbrance Report", "icr_encumbrance", batchReportsDirectory);
     }
 
     /**
-     * Generates the Poster ICR Statistics report
      * 
-     * @param executionDate the actual time of poster execution
-     * @param runDate the time assumed by the poster (sometimes the poster can use a transaction date back
-     * @param reportErrors a Map of expenditure transactions that caused errors during the process
-     * @param reportExpendTranRetrieved the number of expenditure transactions read by the poster during the ICR run
-     * @param reportExpendTranDeleted the number of expenditure transactions deleted by the poster during the ICR run
-     * @param reportExpendTranKept the number of expenditure transactions saved by the poster during the ICR run
-     * @param reportOriginEntryGenerated the number of origin entry records generated by the process
-     * @see org.kuali.module.gl.service.ReportService#generatePosterIcrStatisticsReport(java.util.Date, java.util.Date,
-     *      java.util.Map, int, int, int, int)
+     * @see org.kuali.module.gl.service.ReportService#generatePosterIcrStatisticsReport(java.util.Date, java.util.Map, int, int,
+     *      int, int)
      */
-    public void generatePosterIcrStatisticsReport(Date executionDate, Date runDate, Map<ExpenditureTransaction, List<Message>> reportErrors, int reportExpendTranRetrieved, int reportExpendTranDeleted, int reportExpendTranKept, int reportOriginEntryGenerated) {
+    public void generatePosterIcrStatisticsReport(Date runDate, Map<Transaction, List<Message>> reportErrors, int reportExpendTranRetrieved, int reportExpendTranDeleted, int reportExpendTranKept, int reportOriginEntryGenerated) {
         LOG.debug("generatePosterIcrStatisticsReport() started");
 
-        List<Summary> summary = new ArrayList();
+        List summary = new ArrayList();
         summary.add(new Summary(1, "Number of GL_EXPEND_TRAN_T records retrieved:", reportExpendTranRetrieved));
         summary.add(new Summary(2, "Number of GL_EXPEND_TRAN_T records deleted:", reportExpendTranDeleted));
         summary.add(new Summary(3, "Number of GL_EXPEND_TRAN_T records kept due to errors:", reportExpendTranKept));
         summary.add(new Summary(4, "", 0));
         summary.add(new Summary(3, "Number of GL_ORIGIN_ENTRY_T records generated:", reportOriginEntryGenerated));
 
-        ExpenditureTransactionReport etr = new ExpenditureTransactionReport();
-        etr.generateReport(reportErrors, summary, executionDate, "ICR Generation Report", "icr_generation", reportsDirectory);
+        TransactionReport tr = new TransactionReport();
+        tr.generateReport(reportErrors, summary, runDate, "ICR Generation Report", "icr_generation", batchReportsDirectory);
     }
 
     /**
-     * Generates Scrubber General Ledger Transaction Summary report as a PDF
      * 
-     * @param runDate Run date of the report
-     * @param groups Groups to summarize for the report
      * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportBatch(java.util.Date, java.util.Collection)
      */
     public void generateScrubberLedgerSummaryReportBatch(Date runDate, Collection groups) {
@@ -404,16 +358,12 @@ public class ReportServiceImpl implements ReportService {
             ledgerEntries = originEntryService.getSummaryByGroupId(groups);
         }
 
-        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger", reportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger", batchReportsDirectory);
     }
 
     /**
-     * Generates the Scrubber General Ledger Transaction Summary report for online viewing
      * 
-     * @param runDate Run date of the report
-     * @param group Group to summarize for the report
-     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date,
-     *      org.kuali.module.gl.bo.OriginEntryGroup)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public void generateScrubberLedgerSummaryReportOnline(Date runDate, OriginEntryGroup group, String documentNumber) {
         LOG.debug("generateScrubberLedgerSummaryReport() started");
@@ -426,15 +376,11 @@ public class ReportServiceImpl implements ReportService {
 
         ledgerEntries = originEntryService.getSummaryByGroupId(g);
 
-        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger_" + documentNumber, reportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "Ledger Report", "scrubber_ledger_" + documentNumber, onlineReportsDirectory);
     }
 
     /**
-     * Generates the crubber Statistics report for batch reports (saves reports as PDFs)
      * 
-     * @param runDate Run date of the report
-     * @param scrubberReport Summary information
-     * @param scrubberReportErrors Map of transactions with errors or warnings
      * @see org.kuali.module.gl.service.ReportService#generateScrubberStatisticsReport(java.util.Date,
      *      org.kuali.module.gl.service.impl.scrubber.ScrubberReportData, java.util.Map)
      */
@@ -449,7 +395,7 @@ public class ReportServiceImpl implements ReportService {
                 StringBuffer sb1 = new StringBuffer();
                 sb1.append(t1.getFinancialDocumentTypeCode());
                 sb1.append(t1.getFinancialSystemOriginationCode());
-                sb1.append(t1.getDocumentNumber());
+                sb1.append(t1.getFinancialDocumentNumber());
                 sb1.append(t1.getChartOfAccountsCode());
                 sb1.append(t1.getAccountNumber());
                 sb1.append(t1.getSubAccountNumber());
@@ -458,7 +404,7 @@ public class ReportServiceImpl implements ReportService {
                 StringBuffer sb2 = new StringBuffer();
                 sb2.append(t2.getFinancialDocumentTypeCode());
                 sb2.append(t2.getFinancialSystemOriginationCode());
-                sb2.append(t2.getDocumentNumber());
+                sb2.append(t2.getFinancialDocumentNumber());
                 sb2.append(t2.getChartOfAccountsCode());
                 sb2.append(t2.getAccountNumber());
                 sb2.append(t2.getSubAccountNumber());
@@ -470,15 +416,11 @@ public class ReportServiceImpl implements ReportService {
         List summary = buildScrubberReportSummary(scrubberReport);
 
         TransactionReport transactionReport = new TransactionReport();
-        transactionReport.generateReport(tranKeys, scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber", reportsDirectory);
+        transactionReport.generateReport(tranKeys, scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber", batchReportsDirectory);
     }
 
     /**
-     * Generates Scrubber Statistics report for online reports
      * 
-     * @param runDate Run date of the report
-     * @param scrubberReport Summary information
-     * @param scrubberReportErrors Map of transactions with errors or warnings
      * @see org.kuali.module.gl.service.ReportService#generateScrubberStatisticsReport(java.util.Date,
      *      org.kuali.module.gl.service.impl.scrubber.ScrubberReportData, java.util.Map)
      */
@@ -488,14 +430,11 @@ public class ReportServiceImpl implements ReportService {
         List summary = buildScrubberReportSummary(scrubberReport);
 
         TransactionReport transactionReport = new TransactionReport();
-        transactionReport.generateReport(scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber_" + documentNumber, reportsDirectory);
+        transactionReport.generateReport(scrubberReportErrors, summary, runDate, "Scrubber Report ", "scrubber_" + documentNumber, onlineReportsDirectory);
     }
 
     /**
-     * Generates the Scrubber Demerger Statistics report
      * 
-     * @param runDate Run date of the report
-     * @param demergerReport Summary information
      * @see org.kuali.module.gl.service.ReportService#generateScrubberDemergerStatisticsReports(java.util.Date,
      *      org.kuali.module.gl.service.impl.scrubber.DemergerReportData)
      */
@@ -507,14 +446,11 @@ public class ReportServiceImpl implements ReportService {
         Map<Transaction, List<Message>> empty = new HashMap<Transaction, List<Message>>();
 
         TransactionReport transactionReport = new TransactionReport();
-        transactionReport.generateReport(empty, summary, runDate, "Demerger Report ", "demerger", reportsDirectory);
+        transactionReport.generateReport(empty, summary, runDate, "Demerger Report ", "demerger", batchReportsDirectory);
     }
 
     /**
-     * Generates the Scrubber Bad Balance listing report
      * 
-     * @param runDate Run date of the report
-     * @param groups Groups to summarize for the report
      * @see org.kuali.module.gl.service.ReportService#generateScrubberBadBalanceTypeListingReport(java.util.Date,
      *      java.util.Collection)
      */
@@ -527,30 +463,20 @@ public class ReportServiceImpl implements ReportService {
         }
 
         TransactionListingReport rept = new TransactionListingReport();
-        rept.generateReport(i, runDate, "Scrubber Input Transactions with Blank Balance Types", "scrubber_badbal", reportsDirectory);
+        rept.generateReport(i, runDate, "Scrubber Input Transactions with Bad Balance Types", "scrubber_badbal", batchReportsDirectory);
     }
 
-    /**
-     * Generates Scrubber Transaction Listing report for online viewing
-     * 
-     * @param runDate Run date of the report
-     * @param validGroup Group with transactions
-     * @see org.kuali.module.gl.service.ReportService#generateScrubberTransactionsOnline(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup, java.lang.String)
-     */
     public void generateScrubberTransactionsOnline(Date runDate, OriginEntryGroup validGroup, String documentNumber) {
         LOG.debug("generateScrubberTransactionsOnline() started");
 
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(validGroup);
 
         TransactionListingReport rept = new TransactionListingReport();
-        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + documentNumber, reportsDirectory);
+        rept.generateReport(ti, runDate, "Output Transaction Listing From the Scrubber", "scrubber_listing_" + documentNumber, onlineReportsDirectory);
     }
 
     /**
-     * Generates the Scrubber Removed Transactions report
      * 
-     * @param runDate Run date of the report
-     * @param errorGroup Group with error transactions
      * @see org.kuali.module.gl.service.ReportService#generateScrubberRemovedTransactions(java.util.Date,
      *      org.kuali.module.gl.bo.OriginEntryGroup)
      */
@@ -560,15 +486,11 @@ public class ReportServiceImpl implements ReportService {
         Iterator ti = originEntryService.getEntriesByGroupListingReportOrder(errorGroup);
 
         TransactionListingReport rept = new TransactionListingReport();
-        rept.generateReport(ti, runDate, "Error Listing - Transactions Removed From the Scrubber", "scrubber_errors", reportsDirectory);
+        rept.generateReport(ti, runDate, "Error Listing - Transactions Remove From the Scrubber", "scrubber_errors", batchReportsDirectory);
     }
 
     /**
-     * Generates the GL Summary report
      * 
-     * @param runDate the run date of the poster service that should be reported
-     * @param options the options of the fiscal year the poster was run
-     * @param reportType the type of the report that should be generated
      * @see org.kuali.module.gl.service.ReportService#generateGlSummary(java.util.Date, int, java.util.List)
      */
     public void generateGlSummary(Date runDate, Options year, String reportType) {
@@ -580,22 +502,18 @@ public class ReportServiceImpl implements ReportService {
         }
         else {
             balanceTypeCodes.add(year.getBudgetCheckingBalanceTypeCd());
-            balanceTypeCodes.add(year.getBaseBudgetFinancialBalanceTypeCd());
-            balanceTypeCodes.add(year.getMonthlyBudgetFinancialBalanceTypeCd());
+            balanceTypeCodes.add(year.getBaseBudgetFinancialBalanceTypeCode());
+            balanceTypeCodes.add(year.getMonthlyBudgetFinancialBalanceTypeCode());
         }
 
         List balances = balanceService.getGlSummary(year.getUniversityFiscalYear(), balanceTypeCodes);
 
         BalanceReport rept = new BalanceReport();
-        rept.generateReport(runDate, balances, year.getUniversityFiscalYearName(), balanceTypeCodes, "glsummary_" + year.getUniversityFiscalYear() + "_" + reportType, reportsDirectory);
+        rept.generateReport(runDate, balances, year.getUniversityFiscalYearName(), balanceTypeCodes, "glsummary_" + year.getUniversityFiscalYear() + "_" + reportType, batchReportsDirectory);
     }
 
     /**
-     * Generates GL Encumbrance Summary report
      * 
-     * @param runDate the run date of the poster service that should be reported
-     * @param options the options of the fiscal year the poster was run
-     * @param reportType the type of the report that should be generated
      * @see org.kuali.module.gl.service.ReportService#generateGlEncumbranceSummary(java.util.Date, int, java.util.List,
      *      java.lang.String)
      */
@@ -606,25 +524,29 @@ public class ReportServiceImpl implements ReportService {
         balanceTypeCodes.add(year.getExtrnlEncumFinBalanceTypCd());
         balanceTypeCodes.add(year.getIntrnlEncumFinBalanceTypCd());
         balanceTypeCodes.add(year.getPreencumbranceFinBalTypeCd());
-        balanceTypeCodes.add(year.getCostShareEncumbranceBalanceTypeCd());
+        balanceTypeCodes.add(year.getCostShareEncumbranceBalanceTypeCode());
 
         List balances = balanceService.getGlSummary(year.getUniversityFiscalYear(), balanceTypeCodes);
 
         BalanceEncumbranceReport rept = new BalanceEncumbranceReport();
-        rept.generateReport(runDate, balances, year.getUniversityFiscalYearName(), balanceTypeCodes, "glsummary_" + year.getUniversityFiscalYear() + "_" + reportType, reportsDirectory);
+        rept.generateReport(runDate, balances, year.getUniversityFiscalYearName(), balanceTypeCodes, "glsummary_" + year.getUniversityFiscalYear() + "_" + reportType, batchReportsDirectory);
     }
 
-    /**
-     * Generates Main Poster Input Transaction Report
-     * 
-     * @param executionDate the actual time of poster execution
-     * @param runDate the time assumed by the poster (sometimes the poster can use a transaction date back in time to redo a failed
-     *        poster run)
-     * @param groups origin entry groups produced by the poster to be reported on
-     * @see org.kuali.module.gl.service.ReportService#generatePosterMainLedgerSummaryReport(java.util.Date, java.util.Date,
-     *      java.util.Collection)
-     */
-    public void generatePosterMainLedgerSummaryReport(Date executionDate, Date runDate, Collection groups) {
+    public void generateYearEndEncumbranceForwardReports(Date runDate, List reportSummary, Map reportErrors, Map ledgerEntries) {
+        LOG.debug("Entering generateYearEndEncumbranceReports()");
+        TransactionReport transactionReport = new TransactionReport();
+        String title = "Encumbrance Closing Report ";
+        transactionReport.generateReport(null, reportSummary, runDate, title, "year_end_encumbrance_closing", batchReportsDirectory);
+    }
+
+    public void generateYearEndBalanceForwardReports(Date runDate, List reportSummary, Map reportErrors, Map ledgerEntries) {
+        LOG.debug("Entering generateYearEndBalanceForwardReports()");
+        TransactionReport transactionReport = new TransactionReport();
+        String title = "Balance Forward Report ";
+        transactionReport.generateReport(null, reportSummary, runDate, title, "year_end_balance_forward", batchReportsDirectory);
+    }
+
+    public void generatePosterMainLedgerSummaryReport(Date runDate, Collection groups) {
         LOG.debug("generatePosterMainLedgerSummaryReport() started");
 
         LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
@@ -633,20 +555,10 @@ public class ReportServiceImpl implements ReportService {
         }
 
         LedgerReport ledgerReport = new LedgerReport();
-        ledgerReport.generateReport(ledgerEntries, executionDate, "Main Poster Input Transactions", "poster_main_ledger", reportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "Main Poster Input Transactions", "poster_main_ledger", batchReportsDirectory);
     }
 
-    /**
-     * Generates the Icr Poster Input Transaction Report
-     * 
-     * @param executionDate the actual time of poster execution
-     * @param runDate the time assumed by the poster (sometimes the poster can use a transaction date back in time to redo a failed
-     *        poster run)
-     * @param groups entry groups produced by the poster to be reported on
-     * @see org.kuali.module.gl.service.ReportService#generatePosterIcrLedgerSummaryReport(java.util.Date, java.util.Date,
-     *      java.util.Collection)
-     */
-    public void generatePosterIcrLedgerSummaryReport(Date executionDate, Date runDate, Collection groups) {
+    public void generatePosterIcrLedgerSummaryReport(Date runDate, Collection groups) {
         LOG.debug("generatePosterIcrLedgerSummaryReport() started");
 
         LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
@@ -655,20 +567,15 @@ public class ReportServiceImpl implements ReportService {
         }
 
         LedgerReport ledgerReport = new LedgerReport();
-        ledgerReport.generateReport(ledgerEntries, executionDate, "ICR Poster Input Transactions", "poster_icr_ledger", reportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "Icr Poster Input Transactions", "poster_icr_ledger", batchReportsDirectory);
     }
 
     /**
-     * NOTE: the implementation of this method only determines whether an iterator has a next element (using hasNext()). It does not
-     * iterate through the array.
-     * @param executionDate the actual time of poster execution
-     * @param runDate the time assumed by the poster (sometimes the poster can use a transaction date back in time to redo a failed
-     *        poster run)
-     * @param groups groups produced by the poster to be reported on
-     * @see org.kuali.module.gl.service.ReportService#generatePosterReversalLedgerSummaryReport(java.util.Date, java.util.Date,
+     * 
+     * @see org.kuali.module.gl.service.ReportService#generatePosterReversalLedgerSummaryReport(java.util.Date,
      *      java.util.Iterator)
      */
-    public void generatePosterReversalLedgerSummaryReport(Date executionDate, Date runDate, Iterator reversals) {
+    public void generatePosterReversalLedgerSummaryReport(Date runDate, Iterator reversals) {
         LOG.debug("generatePosterReversalLedgerSummaryReport() started");
 
         LedgerEntryHolder ledgerEntries = new LedgerEntryHolder();
@@ -677,83 +584,50 @@ public class ReportServiceImpl implements ReportService {
         }
 
         LedgerReport ledgerReport = new LedgerReport();
-        ledgerReport.generateReport(ledgerEntries, executionDate, "Reversal Poster Input Transactions", "poster_reversal_ledger", reportsDirectory);
+        ledgerReport.generateReport(ledgerEntries, runDate, "Reversal Poster Input Transactions", "poster_reversal_ledger", batchReportsDirectory);
     }
 
     /**
-     * Generates the Balance Forward Year-End job Report
      * 
-     * @param reportSummary a List of summarized statistics to report
-     * @param runDate the date of the balance forward run
-     * @param openAccountOriginEntryGroup the origin entry group with balance forwarding origin entries with open accounts
-     * @param closedAccountOriginEntryGroup the origin entry group with balance forwarding origin entries with closed accounts
      * @see org.kuali.module.gl.service.ReportService#generateBalanceForwardStatisticsReport(java.util.List, java.util.Date)
      */
-    public void generateBalanceForwardStatisticsReport(List reportSummary, Date runDate, OriginEntryGroup openAccountOriginEntryGroup, OriginEntryGroup closedAccountOriginEntryGroup) {
+    public void generateBalanceForwardStatisticsReport(List reportSummary, Date runDate) {
         LOG.debug("generateBalanceForwardStatisticsReport() started");
 
-        YearEndTransactionReport transactionReport = new YearEndTransactionReport(YearEndTransactionReport.YearEndReportType.FORWARD_BALANCES_REPORT);
+        TransactionReport transactionReport = new TransactionReport();
         String title = "Balance Forward Report ";
-        transactionReport.generateReport(new HashMap(), new HashMap(), reportSummary, runDate, title, "year_end_balance_forward", reportsDirectory, new Object[] { new Object[] { openAccountOriginEntryGroup, "Open Account Balance Forwards Statistics" }, new Object[] { closedAccountOriginEntryGroup, "Closed Account Balance Fowards Statistics" } });
+        transactionReport.generateReport(new HashMap<Transaction, List<Message>>(), reportSummary, runDate, title, "year_end_balance_forward", batchReportsDirectory);
     }
 
     /**
-     * Generates the encumbrance foward year end job report
      * 
-     * @param jobParameters the parameters that were used by the encumbrance forward job
-     * @param reportSummary a List of summarized statistics to report
-     * @param runDate the date of the encumbrance forward run
-     * @param originEntryGroup the origin entry group that the job placed encumbrance forwarding origin entries into
      * @see org.kuali.module.gl.service.ReportService#generateEncumbranceClosingStatisticsReport(java.util.List, java.util.Date)
      */
-    public void generateEncumbranceClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup originEntryGroup) {
+    public void generateEncumbranceClosingStatisticsReport(List reportSummary, Date runDate) {
         LOG.debug("generateEncumbranceForwardStatisticsReport() started");
 
-        YearEndTransactionReport transactionReport = new YearEndTransactionReport(YearEndTransactionReport.YearEndReportType.FORWARD_ENCUMBERANCES_REPORT);
+        TransactionReport transactionReport = new TransactionReport();
         String title = "Encumbrance Closing Report ";
-        transactionReport.generateReport(jobParameters, new HashMap(), reportSummary, runDate, title, "year_end_encumbrance_closing", reportsDirectory, new Object[] { new Object[] { originEntryGroup, "Encumbrance Forwards Statistics" } });
+        transactionReport.generateReport(new HashMap<Transaction, List<Message>>(), reportSummary, runDate, title, "year_end_encumbrance_closing", batchReportsDirectory);
     }
 
     /**
-     * Generates the Nominal Activity Closing Report
      * 
-     * @param jobParameters the parameters that were used by the nominal activity closing job
-     * @param reportSummary a List of summarized statistics to report
-     * @param runDate the date of the nominal activity closing job run
-     * @param originEntryGroup the origin entry group that the job placed nominal activity closing origin entries into
      * @see org.kuali.module.gl.service.ReportService#generateNominalActivityClosingStatisticsReport(java.util.Map, java.util.List,
      *      java.util.Date)
      */
-    public void generateNominalActivityClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup originEntryGroup) {
+    public void generateNominalActivityClosingStatisticsReport(Map jobParameters, List reportSummary, Date runDate) {
         LOG.debug("generateNominalActivityClosingStatisticsReport() started");
 
-        YearEndTransactionReport transactionReport = new YearEndTransactionReport(YearEndTransactionReport.YearEndReportType.NOMINAL_ACTIVITY_CLOSE_REPORT);
+        NominalActivityClosingTransactionReport transactionReport = new NominalActivityClosingTransactionReport();
         String title = "Nominal Activity Closing Report ";
-        transactionReport.generateReport(jobParameters, null, reportSummary, runDate, title, "year_end_nominal_activity_closing", reportsDirectory, new Object[] { new Object[] { originEntryGroup, "Nominal Activity Closing Statistics" } });
-    }
-
-    /**
-     * This method generates the statistics report of the organization reversion process.
-     * 
-     * @param jobParameters the parameters the org reversion process was run with
-     * @param reportSummary a list of various counts the job went through
-     * @param runDate the date the report was run
-     * @param orgReversionOriginEntryGroup the origin entry group that contains the reversion origin entries
-     * @see org.kuali.module.gl.service.ReportService#generateOrgReversionStatisticsReport(java.util.Map, java.util.List,
-     *      java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
-     */
-    public void generateOrgReversionStatisticsReport(Map jobParameters, List reportSummary, Date runDate, OriginEntryGroup orgReversionOriginEntryGroup) {
-        LOG.debug("generateOrgReversionStatisticsReport() started");
-
-        YearEndTransactionReport transactionReport = new YearEndTransactionReport(YearEndTransactionReport.YearEndReportType.ORGANIZATION_REVERSION_PROCESS_REPORT);
-        String title = "Organization Reversion Process Report ";
-        transactionReport.generateReport(jobParameters, null, reportSummary, runDate, title, "year_end_org_reversion_process", reportsDirectory, new Object[] { new Object[] { orgReversionOriginEntryGroup, "Organization Reversion Statistics" } });
+        transactionReport.generateReport(jobParameters, null, reportSummary, runDate, title, "year_end_nominal_activity_closing", batchReportsDirectory);
     }
 
     /**
      * Generate the header for the scrubber status report.
      * 
-     * @param scrubberReport data about the scrubber run to turn into summaries
+     * @param scrubberReport
      * @return list of report summaries to be printed
      */
     private List<Summary> buildScrubberReportSummary(ScrubberReportData scrubberReport) {
@@ -777,7 +651,7 @@ public class ReportServiceImpl implements ReportService {
     /**
      * Generate the header for the demerger status report.
      * 
-     * @param demergerReport data about the demerger run that needs to be turned into summaries
+     * @param demergerReport
      * @return list of report summaries to be printed
      */
     private List<Summary> buildDemergerReportSummary(DemergerReportData demergerReport) {
@@ -796,18 +670,11 @@ public class ReportServiceImpl implements ReportService {
         return reportSummary;
     }
 
-    /**
-     * A class that helps format a PDF document
-     */
     class SfPageHelper extends PdfPageEventHelper {
         public Date runDate;
         public Font headerFont;
         public String title;
 
-        /**
-         * Writes information to the last page in the document
-         * @see com.lowagie.text.pdf.PdfPageEventHelper#onEndPage(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
-         */
         public void onEndPage(PdfWriter writer, Document document) {
             try {
                 Rectangle page = document.getPageSize();
@@ -836,61 +703,37 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
-
     /**
-     * Generates the Poster Reversal Transactions Listing
-     * 
-     * @param executionDate the actual time of poster execution
-     * @param runDate the time assumed by the poster (sometimes the poster can use a transaction date back in time to redo a failed
-     *        poster run)
-     * @param group Group with valid transactions
-     * @see org.kuali.module.gl.service.ReportService#generatePosterReversalTransactionsListing(java.util.Date, java.util.Date,
-     *      org.kuali.module.gl.bo.OriginEntryGroup)
+     * @see org.kuali.module.gl.service.ReportService#generatePosterReversalTransactionsListing(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup)
      */
-    public void generatePosterReversalTransactionsListing(Date executionDate, Date runDate, OriginEntryGroup originGroup) {
+    public void generatePosterReversalTransactionsListing(Date runDate, OriginEntryGroup originGroup) {
         LOG.debug("generatePosterReversalTransactionsListing() started");
 
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(originGroup);
 
         TransactionListingReport report = new TransactionListingReport();
-        report.generateReport(ti, executionDate, "Reversal Poster Transaction Listing", "poster_reversal_list", reportsDirectory);
+        report.generateReport(ti, runDate, "Reversal Poster Transaction Listing", "poster_reversal_list", batchReportsDirectory);
     }
 
     /**
-     * Generates the Poster Error transaction listing
      * 
-     * @param executionDate the actual time of poster execution
-     * @param runDate the time assumed by the poster (sometimes the poster can use a transaction date back in time to redo a failed
-     *        poster run)
-     * @param group Group with error transactions
-     * @param posterMode Mode the poster is running
-     * @see org.kuali.module.gl.service.ReportService#generatePosterErrorTransactionListing(java.util.Date,
-     *      org.kuali.module.gl.bo.OriginEntryGroup, int)
+     * @see org.kuali.module.gl.service.ReportService#generatePosterErrorTransactionListing(java.util.Date, org.kuali.module.gl.bo.OriginEntryGroup, int)
      */
-    public void generatePosterErrorTransactionListing(Date executionDate, Date runDate, OriginEntryGroup group, int posterMode) {
+    public void generatePosterErrorTransactionListing(Date runDate, OriginEntryGroup group, int posterMode) {
         LOG.debug("generatePosterErrorTransactionListing() started");
 
         Iterator ti = originEntryService.getEntriesByGroupAccountOrder(group);
 
         TransactionListingReport report = new TransactionListingReport();
         if (posterMode == PosterService.MODE_ENTRIES) {
-            report.generateReport(ti, executionDate, "Main Poster Error Transaction Listing", "poster_main_error_list", reportsDirectory);
-        }
-        else if (posterMode == PosterService.MODE_ICR) {
-            report.generateReport(ti, executionDate, "ICR Poster Error Transaction Listing", "poster_icr_error_list", reportsDirectory);
-        }
-        else if (posterMode == PosterService.MODE_REVERSAL) {
-            report.generateReport(ti, executionDate, "Reversal Poster Error Transaction Listing", "poster_reversal_error_list", reportsDirectory);
+            report.generateReport(ti, runDate, "Main Poster Error Transaction Listing", "poster_main_error_list", batchReportsDirectory);
+        } else if ( posterMode == PosterService.MODE_ICR ) {
+            report.generateReport(ti, runDate, "ICR Poster Error Transaction Listing", "poster_icr_error_list", batchReportsDirectory);
+        } else if ( posterMode == PosterService.MODE_REVERSAL ) {
+            report.generateReport(ti, runDate, "Reversal Poster Error Transaction Listing", "poster_reversal_error_list", batchReportsDirectory);
         }
     }
 
-    /**
-     * Generates the on-line GLCP document info report
-     * 
-     * @param cDocument the GLCP document to report on
-     * @param runDate the date the GLCP was created
-     * @see org.kuali.module.gl.service.ReportService#correctionOnlineReport(org.kuali.module.gl.document.CorrectionDocument, java.util.Date)
-     */
     public void correctionOnlineReport(CorrectionDocument cDocument, Date runDate) {
         LOG.debug("correctionOnlineReport() started");
 
@@ -904,11 +747,10 @@ public class ReportServiceImpl implements ReportService {
         SfPageHelper helper = new SfPageHelper();
         helper.runDate = runDate;
         helper.headerFont = headerFont;
-        helper.title = "General Ledger Correction Process Report " + cDocument.getDocumentNumber();
+        helper.title = "General Ledger Correction Process Report " + cDocument.getFinancialDocumentNumber();
 
         try {
-            String filename = reportsDirectory + "/glcp_" + cDocument.getDocumentNumber() + "_";
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STRING);
+            String filename = onlineReportsDirectory + "/glcp_" + cDocument.getFinancialDocumentNumber() + "_";
 
             filename = filename + sdf.format(runDate);
             filename = filename + ".pdf";
@@ -933,17 +775,12 @@ public class ReportServiceImpl implements ReportService {
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
 
-            cell = new PdfPCell(new Phrase("Total Debits: " + cDocument.getCorrectionDebitTotalAmount().toString(), textFont));
+            cell = new PdfPCell(new Phrase("Total Debits/Blanks: " + cDocument.getCorrectionDebitTotalAmount().toString(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
 
             cell = new PdfPCell(new Phrase("Total Credits: " + cDocument.getCorrectionCreditTotalAmount().toString(), textFont));
-            cell.setColspan(2);
-            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-            summary.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("Total No DB/CR: " + cDocument.getCorrectionBudgetTotalAmount().toString(), textFont));
             cell.setColspan(2);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             summary.addCell(cell);
@@ -1003,15 +840,13 @@ public class ReportServiceImpl implements ReportService {
 
             if (cDocument.getCorrectionFileDelete()) {
                 processBatch = "No";
-            }
-            else {
+            } else {
                 processBatch = "Yes";
             }
 
             if (cDocument.getCorrectionSelection()) {
                 outputOnly = "Yes";
-            }
-            else {
+            } else {
                 outputOnly = "No";
             }
 
@@ -1052,7 +887,9 @@ public class ReportServiceImpl implements ReportService {
                     for (Iterator ccri = ccg.getCorrectionCriteria().iterator(); ccri.hasNext();) {
                         CorrectionCriteria cc = (CorrectionCriteria) ccri.next();
 
-                        cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + " operator: " + sof.getKeyLabelMap().get(cc.getCorrectionOperatorCode()) + " value: " + cc.getCorrectionFieldValue(), textFont));
+                        cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + 
+                                " operator: " + sof.getKeyLabelMap().get(cc.getCorrectionOperatorCode()) + 
+                                " value: " + cc.getCorrectionFieldValue(), textFont));
                         cell.setColspan(2);
                         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                         summary.addCell(cell);
@@ -1066,7 +903,8 @@ public class ReportServiceImpl implements ReportService {
                     for (Iterator cchi = ccg.getCorrectionChange().iterator(); cchi.hasNext();) {
                         CorrectionChange cc = (CorrectionChange) cchi.next();
 
-                        cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + " Replacement Value: " + cc.getCorrectionFieldValue(), textFont));
+                        cell = new PdfPCell(new Phrase("Field: " + cc.getCorrectionFieldName() + 
+                                " Replacement Value: " + cc.getCorrectionFieldValue(), textFont));
                         cell.setColspan(2);
                         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                         summary.addCell(cell);
@@ -1086,11 +924,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     * Poster output Summary Report: a summary of the three poster runs (pulling in the transactions from the main, reversal, and
-     * ICR posters) which we use for balancing.
-     * 
-     * @param runDate the date the poster run that is being reported on occurred
-     * @param groups the origin entry groups created by the poster during its run
      * @see org.kuali.module.gl.service.ReportService#generatePosterInputTransactionSummaryReport(java.util.Date,
      *      java.util.Collection)
      */
@@ -1102,7 +935,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
         PosterOutputSummaryReport posterInputSummaryReport = new PosterOutputSummaryReport();
-        posterInputSummaryReport.generateReport(originEntryService.getPosterOutputSummaryByGroupId(groups), runDate, "Poster Output Summary", "poster_output_summary", reportsDirectory);
+        posterInputSummaryReport.generateReport(originEntryService.getPosterOutputSummaryByGroupId(groups), runDate, "Poster Output Summary", "poster_output_summary", batchReportsDirectory);
     }
 
     public void setOriginEntryService(OriginEntryService originEntryService) {

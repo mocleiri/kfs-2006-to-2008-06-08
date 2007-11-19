@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,17 +34,10 @@ import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EncumbranceDao;
 import org.kuali.module.gl.util.OJBUtility;
 
-/**
- * An OJB implementation of the EncumbranceDao
- */
 public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements EncumbranceDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EncumbranceDaoOjb.class);
 
     /**
-     * Returns an encumbrance that would be affected by the given transaction
-     * 
-     * @param t the transaction to find the affected encumbrance for
-     * @return an Encumbrance that would be affected by the posting of the transaction, or null
      * @see org.kuali.module.gl.dao.EncumbranceDao#getEncumbranceByTransaction(org.kuali.module.gl.bo.Transaction)
      */
     public Encumbrance getEncumbranceByTransaction(Transaction t) {
@@ -67,10 +60,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
     }
 
     /**
-     * Returns an Iterator of all encumbrances that need to be closed for the fiscal year
-     * 
-     * @param fiscalYear a fiscal year to find encumbrances for
-     * @return an Iterator of encumbrances to close
      * @see org.kuali.module.gl.dao.EncumbranceDao#getEncumbrancesToClose(java.lang.Integer)
      */
     public Iterator getEncumbrancesToClose(Integer fiscalYear) {
@@ -90,9 +79,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
     }
 
     /**
-     * Saves an encumbrance to the database
-     * 
-     * @param e an encumbrance to save
      * @see org.kuali.module.gl.dao.EncumbranceDao#save(org.kuali.module.gl.bo.Encumbrance)
      */
     public void save(Encumbrance e) {
@@ -102,10 +88,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
     }
 
     /**
-     * Purges the database of all those encumbrances with the given chart and year 
-     * 
-     * @param chartOfAccountsCode the chart of accounts code purged encumbrances will have
-     * @param year the university fiscal year purged encumbrances will have
      * @see org.kuali.module.gl.dao.EncumbranceDao#purgeYearByChart(java.lang.String, int)
      */
     public void purgeYearByChart(String chartOfAccountsCode, int year) {
@@ -126,9 +108,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
     }
 
     /**
-     * fetch all encumbrance records from GL open encumbrance table
-     * 
-     * @return an Iterator with all encumbrances currently in the database
      * @see org.kuali.module.gl.dao.EncumbranceDao#getAllEncumbrances()
      */
     public Iterator getAllEncumbrances() {
@@ -138,12 +117,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
     }
 
     /**
-     * group all encumbrances with/without the given document type code by fiscal year, chart, account, sub-account, object code,
-     * sub object code, and balance type code, and summarize the encumbrance amount and the encumbrance close amount.
-     * 
-     * @param documentTypeCode the given document type code
-     * @param included indicate if all encumbrances with the given document type are included in the results or not
-     * @return an Iterator of arrays of java.lang.Objects holding summarization data about qualifying encumbrances 
      * @see org.kuali.module.gl.dao.EncumbranceDao#getSummarizedEncumbrances(String, boolean)
      */
     public Iterator getSummarizedEncumbrances(String documentTypeCode, boolean included) {
@@ -172,10 +145,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
     }
 
     /**
-     * Queries the database to find all open encumbrances that qualify by the given keys
-     * 
-     * @param fieldValues the input fields and values
-     * @return a collection of open encumbrances
      * @see org.kuali.module.gl.dao.EncumbranceDao#findOpenEncumbrance(java.util.Map)
      */
     public Iterator findOpenEncumbrance(Map fieldValues) {
@@ -187,10 +156,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
     }
 
     /**
-     * Counts the number of open encumbrances that have the keys given in the map
-     * 
-     * @param fieldValues the input fields and values
-     * @return the number of the open encumbrances
      * @see org.kuali.module.gl.dao.EncumbranceDao#getOpenEncumbranceRecordCount(java.util.Map)
      */
     public Integer getOpenEncumbranceRecordCount(Map fieldValues) {
@@ -200,12 +165,7 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
         return getPersistenceBrokerTemplate().getCount(query);
     }
 
-    /**
-     * build the query for encumbrance search
-     * 
-     * @param fieldValues a Map of values to use as keys for the query
-     * @return an OJB query
-     */
+    // build the query for encumbrance search
     private Query getOpenEncumbranceQuery(Map fieldValues) {
         Criteria criteria = OJBUtility.buildCriteriaFromMap(fieldValues, new Encumbrance());
         criteria.addIn(KFSPropertyConstants.BALANCE_TYPE_CODE, Arrays.asList(KFSConstants.ENCUMBRANCE_BALANCE_TYPE));
@@ -214,8 +174,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
 
     /**
      * This method builds the atrribute list used by balance searching
-     * 
-     * @return a List of encumbrance attributes that need to be summed
      */
     private List buildAttributeList() {
         List attributeList = this.buildGroupByList();
@@ -228,8 +186,6 @@ public class EncumbranceDaoOjb extends PlatformAwareDaoBaseOjb implements Encumb
 
     /**
      * This method builds group by attribute list used by balance searching
-     * 
-     * @return a List of encumbrance attributes to search on
      */
     private List buildGroupByList() {
         List attributeList = new ArrayList();

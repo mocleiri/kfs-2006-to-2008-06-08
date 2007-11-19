@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
@@ -27,18 +28,15 @@ import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.KualiGroup;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.cg.service.AwardService;
-import org.kuali.workflow.attribute.AlternateOrgReviewRouting;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
- * Defines a financial award object.
+ * 
  */
-public class Award extends PersistableBusinessObjectBase implements AlternateOrgReviewRouting {
+public class Award extends PersistableBusinessObjectBase {
 
     private Long proposalNumber;
     private Date awardBeginningDate;
@@ -56,6 +54,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
 
     private String awardAddendumNumber;
     private KualiDecimal awardAllocatedUniversityComputingServicesAmount;
+    private String agencyAwardNumber;
     private KualiDecimal federalPassThroughFundedAmount;
     private Date awardEntryDate;
     private KualiDecimal agencyFuture1Amount;
@@ -88,6 +87,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     private List<AwardAccount> awardAccounts;
     private List<AwardSubcontractor> awardSubcontractors;
     private List<AwardOrganization> awardOrganizations;
+
     private Proposal proposal;
     private ProposalAwardType proposalAwardType;
     private AwardStatus awardStatus;
@@ -98,12 +98,11 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     private ProposalPurpose awardPurpose;
     private KualiGroup workgroup;
     private AwardOrganization primaryAwardOrganization;
-    private String routingOrg;
-    private String routingChart;
 
     /**
-     * Default no-args constructor.
+     * Default constructor.
      */
+    // todo: generify TypedArrayList and rename to something appropriate like AlwaysGettableArrayList
     public Award() {
         // Must use TypedArrayList because its get() method automatically grows the array for Struts.
         awardProjectDirectors = new TypedArrayList(AwardProjectDirector.class);
@@ -113,10 +112,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Creates a collection of lists within this award object that should be aware of when the deletion of one of their elements
-     * occurs. This collection is used to refresh the display upon deletion of an element to ensure that the deleted element is not
-     * longer visible on the interface.
-     * 
      * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
      */
     @Override
@@ -129,22 +124,12 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         return managedLists;
     }
 
-    /**
-     * Constructs an Award.
-     * 
-     * @param proposal The associated proposal that the award will be linked to.
-     */
+    
     public Award(Proposal proposal) {
         this();
         populateFromProposal(proposal);
     }
-
-    /**
-     * This method takes all the applicable attributes from the associated proposal object and sets those attributes into their
-     * corresponding award attributes.
-     * 
-     * @param proposal The associated proposal that the award will be linked to.
-     */
+    
     public void populateFromProposal(Proposal proposal) {
         if (ObjectUtils.isNotNull(proposal)) {
             setProposalNumber(proposal.getProposalNumber());
@@ -161,13 +146,12 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
             getAwardOrganizations().clear();
             for (ProposalOrganization pOrg : proposal.getProposalOrganizations()) {
                 AwardOrganization awardOrg = new AwardOrganization();
-                // newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
+                //newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
                 awardOrg.setNewCollectionRecord(true);
                 awardOrg.setProposalNumber(pOrg.getProposalNumber());
                 awardOrg.setChartOfAccountsCode(pOrg.getChartOfAccountsCode());
                 awardOrg.setOrganizationCode(pOrg.getOrganizationCode());
                 awardOrg.setAwardPrimaryOrganizationIndicator(pOrg.isProposalPrimaryOrganizationIndicator());
-                awardOrg.setActive(pOrg.isActive());
                 getAwardOrganizations().add(awardOrg);
             }
 
@@ -175,33 +159,31 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
             getAwardSubcontractors().clear();
             for (ProposalSubcontractor pSubcontractor : proposal.getProposalSubcontractors()) {
                 AwardSubcontractor awardSubcontractor = new AwardSubcontractor();
-                // newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
+                //newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
                 awardSubcontractor.setNewCollectionRecord(true);
                 awardSubcontractor.setProposalNumber(pSubcontractor.getProposalNumber());
                 awardSubcontractor.setAwardSubcontractorNumber(pSubcontractor.getProposalSubcontractorNumber());
                 awardSubcontractor.setSubcontractorAmount(pSubcontractor.getProposalSubcontractorAmount());
                 awardSubcontractor.setAwardSubcontractorDescription(pSubcontractor.getProposalSubcontractorDescription());
                 awardSubcontractor.setSubcontractorNumber(pSubcontractor.getSubcontractorNumber());
-                awardSubcontractor.setActive(pSubcontractor.isActive());
                 getAwardSubcontractors().add(awardSubcontractor);
             }
-
-            // copy proposal project directors to award propject directors
+            
+            //copy proposal project directors to award propject directors
             getAwardProjectDirectors().clear();
-            for (ProposalProjectDirector pDirector : proposal.getProposalProjectDirectors()) {
-                AwardProjectDirector awardDirector = new AwardProjectDirector();
-                // newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
+            for(ProposalProjectDirector pDirector:proposal.getProposalProjectDirectors()){
+                AwardProjectDirector awardDirector= new AwardProjectDirector();
+                //newCollectionRecord is set to true to allow deletion of this record after being populated from proposal
                 awardDirector.setNewCollectionRecord(true);
                 awardDirector.setProposalNumber(pDirector.getProposalNumber());
                 awardDirector.setAwardPrimaryProjectDirectorIndicator(pDirector.isProposalPrimaryProjectDirectorIndicator());
                 awardDirector.setAwardProjectDirectorProjectTitle(pDirector.getProposalProjectDirectorProjectTitle());
                 awardDirector.setPersonUniversalIdentifier(pDirector.getPersonUniversalIdentifier());
-                awardDirector.setActive(pDirector.isActive());
                 getAwardProjectDirectors().add(awardDirector);
             }
         }
     }
-
+    
     /**
      * Gets the proposalNumber attribute.
      * 
@@ -219,6 +201,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
     }
+
 
     /**
      * Gets the awardBeginningDate attribute.
@@ -238,6 +221,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardBeginningDate = awardBeginningDate;
     }
 
+
     /**
      * Gets the awardEndingDate attribute.
      * 
@@ -256,6 +240,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardEndingDate = awardEndingDate;
     }
 
+
     /**
      * Gets the awardTotalAmount attribute.
      * 
@@ -272,7 +257,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * it, the maintenance framework won't display this attribute.
      * 
      * @param awardTotalAmount The awardTotalAmount to set.
-     * @deprecated Should not be used. See method description above.
      */
     @Deprecated
     public void setAwardTotalAmount(KualiDecimal awardTotalAmount) {
@@ -285,8 +269,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * getter.
      * 
      * @param persistenceBroker from OJB
-     * @throws PersistenceBrokerException Thrown by call to super.beforeInsert();
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#beforeInsert(org.apache.ojb.broker.PersistenceBroker)
+     * @throws PersistenceBrokerException
      */
     @Override
     public void beforeInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
@@ -299,14 +282,14 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * a denormalized column that Kuali does not use but needs to maintain with this method because OJB bypasses the getter.
      * 
      * @param persistenceBroker from OJB
-     * @throws PersistenceBrokerException Thrown by call to super.beforeUpdate();
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#beforeUpdate(org.apache.ojb.broker.PersistenceBroker)
+     * @throws PersistenceBrokerException
      */
     @Override
     public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
         super.beforeUpdate(persistenceBroker);
         awardTotalAmount = getAwardTotalAmount();
     }
+
 
     /**
      * Gets the awardAddendumNumber attribute.
@@ -326,6 +309,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardAddendumNumber = awardAddendumNumber;
     }
 
+
     /**
      * Gets the awardAllocatedUniversityComputingServicesAmount attribute.
      * 
@@ -343,6 +327,26 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardAllocatedUniversityComputingServicesAmount(KualiDecimal awardAllocatedUniversityComputingServicesAmount) {
         this.awardAllocatedUniversityComputingServicesAmount = awardAllocatedUniversityComputingServicesAmount;
     }
+
+
+    /**
+     * Gets the agencyAwardNumber attribute.
+     * 
+     * @return Returns the agencyAwardNumber
+     */
+    public String getAgencyAwardNumber() {
+        return agencyAwardNumber;
+    }
+
+    /**
+     * Sets the agencyAwardNumber attribute.
+     * 
+     * @param agencyAwardNumber The agencyAwardNumber to set.
+     */
+    public void setAgencyAwardNumber(String agencyAwardNumber) {
+        this.agencyAwardNumber = agencyAwardNumber;
+    }
+
 
     /**
      * Gets the federalPassThroughFundedAmount attribute.
@@ -362,6 +366,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.federalPassThroughFundedAmount = federalPassThroughFundedAmount;
     }
 
+
     /**
      * Gets the awardEntryDate attribute.
      * 
@@ -379,6 +384,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardEntryDate(Date awardEntryDate) {
         this.awardEntryDate = awardEntryDate;
     }
+
 
     /**
      * Gets the agencyFuture1Amount attribute.
@@ -417,6 +423,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.agencyFuture2Amount = agencyFuture2Amount;
     }
 
+
     /**
      * Gets the agencyFuture3Amount attribute.
      * 
@@ -434,6 +441,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAgencyFuture3Amount(KualiDecimal agencyFuture3Amount) {
         this.agencyFuture3Amount = agencyFuture3Amount;
     }
+
 
     /**
      * Gets the awardDocumentNumber attribute.
@@ -453,6 +461,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardDocumentNumber = awardDocumentNumber;
     }
 
+
     /**
      * Gets the awardLastUpdateDate attribute.
      * 
@@ -470,6 +479,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardLastUpdateDate(Date awardLastUpdateDate) {
         this.awardLastUpdateDate = awardLastUpdateDate;
     }
+
 
     /**
      * Gets the federalPassThroughIndicator attribute.
@@ -489,6 +499,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.federalPassThroughIndicator = federalPassThroughIndicator;
     }
 
+
     /**
      * Gets the oldProposalNumber attribute.
      * 
@@ -506,6 +517,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setOldProposalNumber(String oldProposalNumber) {
         this.oldProposalNumber = oldProposalNumber;
     }
+
 
     /**
      * Gets the awardDirectCostAmount attribute.
@@ -525,6 +537,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardDirectCostAmount = awardDirectCostAmount;
     }
 
+
     /**
      * Gets the awardIndirectCostAmount attribute.
      * 
@@ -542,6 +555,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardIndirectCostAmount(KualiDecimal awardIndirectCostAmount) {
         this.awardIndirectCostAmount = awardIndirectCostAmount;
     }
+
 
     /**
      * Gets the federalFundedAmount attribute.
@@ -561,6 +575,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.federalFundedAmount = federalFundedAmount;
     }
 
+
     /**
      * Gets the awardCreateTimestamp attribute.
      * 
@@ -578,6 +593,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardCreateTimestamp(Timestamp awardCreateTimestamp) {
         this.awardCreateTimestamp = awardCreateTimestamp;
     }
+
 
     /**
      * Gets the awardClosingDate attribute.
@@ -597,6 +613,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardClosingDate = awardClosingDate;
     }
 
+
     /**
      * Gets the proposalAwardTypeCode attribute.
      * 
@@ -614,6 +631,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setProposalAwardTypeCode(String proposalAwardTypeCode) {
         this.proposalAwardTypeCode = proposalAwardTypeCode;
     }
+
 
     /**
      * Gets the workgroupName attribute.
@@ -633,6 +651,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.workgroupName = workgroupName;
     }
 
+
     /**
      * Gets the awardStatusCode attribute.
      * 
@@ -650,6 +669,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardStatusCode(String awardStatusCode) {
         this.awardStatusCode = awardStatusCode;
     }
+
 
     /**
      * Gets the letterOfCreditFundGroupCode attribute.
@@ -669,6 +689,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.letterOfCreditFundGroupCode = letterOfCreditFundGroupCode;
     }
 
+
     /**
      * Gets the grantDescriptionCode attribute.
      * 
@@ -686,6 +707,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setGrantDescriptionCode(String grantDescriptionCode) {
         this.grantDescriptionCode = grantDescriptionCode;
     }
+
 
     /**
      * Gets the agencyNumber attribute.
@@ -705,6 +727,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.agencyNumber = agencyNumber;
     }
 
+
     /**
      * Gets the federalPassThroughAgencyNumber attribute.
      * 
@@ -722,6 +745,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setFederalPassThroughAgencyNumber(String federalPassThroughAgencyNumber) {
         this.federalPassThroughAgencyNumber = federalPassThroughAgencyNumber;
     }
+
 
     /**
      * Gets the agencyAnalystName attribute.
@@ -741,6 +765,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.agencyAnalystName = agencyAnalystName;
     }
 
+
     /**
      * Gets the analystTelephoneNumber attribute.
      * 
@@ -758,6 +783,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAnalystTelephoneNumber(String analystTelephoneNumber) {
         this.analystTelephoneNumber = analystTelephoneNumber;
     }
+
 
     /**
      * Gets the awardProjectTitle attribute.
@@ -777,6 +803,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         this.awardProjectTitle = awardProjectTitle;
     }
 
+
     /**
      * Gets the awardCommentText attribute.
      * 
@@ -794,6 +821,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     public void setAwardCommentText(String awardCommentText) {
         this.awardCommentText = awardCommentText;
     }
+
 
     /**
      * Gets the awardPurposeCode attribute.
@@ -814,8 +842,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Gets the active attribute.
-     * 
+     * Gets the active attribute. 
      * @return Returns the active.
      */
     public boolean isActive() {
@@ -824,7 +851,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
 
     /**
      * Sets the active attribute value.
-     * 
      * @param active The active to set.
      */
     public void setActive(boolean active) {
@@ -844,8 +870,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the proposal attribute.
      * 
      * @param proposal The proposal to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setProposal(Proposal proposal) {
@@ -865,8 +890,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the proposalAwardType attribute.
      * 
      * @param proposalAwardType The proposalAwardType to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setProposalAwardType(ProposalAwardType proposalAwardType) {
@@ -886,8 +910,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the awardStatus attribute.
      * 
      * @param awardStatus The awardStatus to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setAwardStatus(AwardStatus awardStatus) {
@@ -907,8 +930,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the letterOfCreditFundGroup attribute.
      * 
      * @param letterOfCreditFundGroup The letterOfCreditFundGroup to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setLetterOfCreditFundGroup(LetterOfCreditFundGroup letterOfCreditFundGroup) {
@@ -928,8 +950,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the grantDescription attribute.
      * 
      * @param grantDescription The grantDescription to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setGrantDescription(GrantDescription grantDescription) {
@@ -949,8 +970,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the agency attribute.
      * 
      * @param agency The agency to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setAgency(Agency agency) {
@@ -970,8 +990,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the federalPassThroughAgency attribute.
      * 
      * @param federalPassThroughAgency The federalPassThroughAgency to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setFederalPassThroughAgency(Agency federalPassThroughAgency) {
@@ -991,8 +1010,7 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
      * Sets the awardPurpose attribute.
      * 
      * @param awardPurpose The awardPurpose to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setAwardPurpose(ProposalPurpose awardPurpose) {
@@ -1018,8 +1036,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Gets the awardAccounts list.
-     * 
      * @return Returns the awardAccounts.
      */
     public List<AwardAccount> getAwardAccounts() {
@@ -1027,8 +1043,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Sets the awardAccounts list.
-     * 
      * @param awardAccounts The awardAccounts to set.
      */
     public void setAwardAccounts(List<AwardAccount> awardAccounts) {
@@ -1036,8 +1050,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Gets the awardOrganizations list.
-     * 
      * @return Returns the awardOrganizations.
      */
     public List<AwardOrganization> getAwardOrganizations() {
@@ -1045,8 +1057,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Sets the awardOrganizations list.
-     * 
      * @param awardOrganizations The awardOrganizations to set.
      */
     public void setAwardOrganizations(List<AwardOrganization> awardOrganizations) {
@@ -1054,8 +1064,6 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Gets the awardSubcontractors list.
-     * 
      * @return Returns the awardSubcontractors.
      */
     public List<AwardSubcontractor> getAwardSubcontractors() {
@@ -1063,36 +1071,32 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * Sets the awardSubcontractors list.
-     * 
      * @param awardSubcontractors The awardSubcontractors to set.
      */
     public void setAwardSubcontractors(List<AwardSubcontractor> awardSubcontractors) {
         this.awardSubcontractors = awardSubcontractors;
     }
-
     /**
-     * Returns a KualiGroup object whose name is defined by workgroupName.
      * 
+     * Returns a KualiGroup object whose name is defined by workgroupName.
      * @return KualiGroup defined by workgroupName
      */
     public KualiGroup getWorkgroup() {
-        return SpringContext.getBean(AwardService.class).getKualiGroup(workgroupName);
+        return SpringServiceLocator.getAwardService().getKualiGroup(workgroupName);
     }
 
     /**
-     * Sets the local workgroupName attribute to the name of the passed in workgroup object.
      * 
+     * Sets the local workgroupName attribute to the name of the passed in workgroup object.
      * @param workgroup KualiGroup object to use to set the local workgroupName attribute.
      */
     public void setWorkgroup(KualiGroup workgroup) {
         this.workgroupName = workgroup.getGroupName();
     }
-
     /**
-     * This method gets the primary award organization.
+     * This method...
      * 
-     * @return The award organization object marked as primary in the award organizations collection.
+     * @return
      */
     public AwardOrganization getPrimaryAwardOrganization() {
         for (AwardOrganization ao : awardOrganizations) {
@@ -1106,72 +1110,68 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
     }
 
     /**
-     * This method sets the primary award organization.
+     * This method...
      * 
      * @param primaryAwardOrganization
      */
     public void setPrimaryAwardOrganization(AwardOrganization primaryAwardOrganization) {
         this.primaryAwardOrganization = primaryAwardOrganization;
-        this.routingChart = primaryAwardOrganization.getChartOfAccountsCode();
-        this.routingOrg = primaryAwardOrganization.getOrganizationCode();
     }
 
     /**
-     * Retrieves the list of users assigned to the associated workgroup and builds out a string representation of these users for
-     * display purposes. NOTE: This method is used by the Account and Award Inquiry screens to display users of the associated
-     * workgroup. NOTE: This method currently has not other use outside of the Account Inquiry screen.
+     * 
+     * Retrieves the list of users assigned to the associated workgroup and builds out a 
+     * string representation of these users for display purposes.
+     * 
+     * NOTE: This method is used by the Account and Award Inquiry screens to display users of the associated workgroup.
+     * NOTE: This method currently has not other use outside of the Account Inquiry screen.
      * 
      * @return String representation of the users assigned to the associated workgroup.
      */
     public String getKualiGroupNames() {
         StringBuffer names = new StringBuffer(20);
-
+        
         KualiGroup finSysWorkgroup = getWorkgroup();
-
-        if (finSysWorkgroup == null) {
+        
+        if(finSysWorkgroup==null) {
             return "";
-        }
-        else {
+        } else {
             List<String> users = finSysWorkgroup.getGroupUsers();
-            if (users.isEmpty()) {
+            if(users.isEmpty()) {
                 names.append("Workgroup user list is empty");
-            }
-            else {
+            } else {
                 int i = 0;
-                for (String userName : users) {
+                for(String userName : users) {
                     try {
-                        UniversalUser user = SpringContext.getBean(UniversalUserService.class).getUniversalUserByAuthenticationUserId(userName);
+                        UniversalUser user = SpringServiceLocator.getUniversalUserService().getUniversalUserByAuthenticationUserId(userName);
                         names.append(user.getPersonName());
+                    } catch(UserNotFoundException unfe) {
+                        names.append("No User Name Found ("+userName+")");
                     }
-                    catch (UserNotFoundException unfe) {
-                        names.append("No User Name Found (" + userName + ")");
-                    }
-                    if (users.size() > 1) {
+                    if(users.size()>1) {
                         names.append("; ");
                     }
                     i++;
                 }
             }
         }
-
+        
         kualiGroupNames = names.toString();
 
         return kualiGroupNames;
     }
 
     /**
-     * Simple method that simply sets the kualiGroupNames attribute by calling the getter, which performs all the necessary parsing
-     * to retrieve the names.
      * 
-     * @param kualiGroupNames Value to be assigned to the kualiGroupNames attribute. This value is never actually set.
+     * Simple method that simply sets the kualiGroupNames attribute by calling the getter, which 
+     * performs all the necessary parsing to retrieve the names.
+     * @param kualiGroupNames Value to be assigned to the kualiGroupNames attribute.  This value is never actually set.
      */
     public void setKualiGroupNames(String kualiGroupNames) {
         this.kualiGroupNames = getKualiGroupNames();
     }
 
     /**
-     * This method maps the proposal number into a hash map with "proposalNumber" as the identifier.
-     * 
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     @Override
@@ -1184,10 +1184,11 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         return m;
     }
 
+
     /**
-     * Sums the total for all award subcontractors
+     * sums the total for all award subcontractors
      * 
-     * @return Returns the total of all the award subcontractor's amounts
+     * @return Returns the awardTotalAmount
      */
     public KualiDecimal getAwardSubcontractorsTotalAmount() {
         KualiDecimal total = KualiDecimal.ZERO;
@@ -1199,33 +1200,4 @@ public class Award extends PersistableBusinessObjectBase implements AlternateOrg
         }
         return total;
     }
-
-    /**
-     * @see org.kuali.workflow.attribute.AlternateOrgReviewRouting#getRoutingChart()
-     */
-    public String getRoutingChart() {
-        return routingChart;
-    }
-
-    /**
-     * @see org.kuali.workflow.attribute.AlternateOrgReviewRouting#setRoutingChart(java.lang.String)
-     */
-    public void setRoutingChart(String routingChart) {
-        this.routingChart = routingChart;
-    }
-
-    /**
-     * @see org.kuali.workflow.attribute.AlternateOrgReviewRouting#getRoutingOrg()
-     */
-    public String getRoutingOrg() {
-        return routingOrg;
-    }
-
-    /**
-     * @see org.kuali.workflow.attribute.AlternateOrgReviewRouting#setRoutingOrg(java.lang.String)
-     */
-    public void setRoutingOrg(String routingOrg) {
-        this.routingOrg = routingOrg;
-    }
-
 }

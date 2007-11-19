@@ -1,12 +1,12 @@
 /*
  * Copyright 2007 The Kuali Foundation.
- * 
+ *
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.opensource.org/licenses/ecl1.php
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,20 +16,24 @@
 package org.kuali.kfs.context;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.cache.MethodCacheInterceptor;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.service.SchedulerService;
 import org.kuali.kfs.util.MemoryMonitor;
 import org.kuali.rice.KNSServiceLocator;
+import org.kuali.rice.core.Core;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -41,15 +45,18 @@ import uk.ltd.getahead.dwr.create.SpringCreator;
 public class SpringContext {
     private static final Logger LOG = Logger.getLogger(SpringContext.class);
     private static final String APPLICATION_CONTEXT_DEFINITION = "SpringBeans.xml";
+    private static final String CENTRAL_KEW_DATASOURCE_CONTEXT_DEFINITION = "SpringCentralKEWDataSourceBeans.xml";
+    private static final String DATASOURCE_CONTEXT_DEFINITION = "SpringDataSourceBeans.xml";
     private static final String SPRING_SOURCE_FILES_KEY = "spring.source.files";
     private static final String SPRING_TEST_FILES_KEY = "spring.test.files";
+    private static final String SPRING_PLUGIN_FILES_KEY = "spring.plugin.files";
     private static final String MEMORY_MONITOR_THRESHOLD_KEY = "memory.monitor.threshold";
     private static ConfigurableApplicationContext applicationContext;
     private static Set<Class> SINGLETON_TYPES = new HashSet<Class>();
     private static Set<String> SINGLETON_NAMES = new HashSet<String>();
-    private static Map<Class, Object> SINGLETON_BEANS_BY_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class, Object>());
-    private static Map<String, Object> SINGLETON_BEANS_BY_NAME_CACHE = Collections.synchronizedMap(new HashMap<String, Object>());
-    private static Map<Class, Map> SINGLETON_BEANS_OF_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class, Map>());
+    private static Map<Class,Object> SINGLETON_BEANS_BY_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class,Object>());
+    private static Map<String,Object> SINGLETON_BEANS_BY_NAME_CACHE = Collections.synchronizedMap(new HashMap<String,Object>());
+    private static Map<Class,Map> SINGLETON_BEANS_OF_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class,Map>());
 
     /**
      * Use this method to retrieve a spring bean when one of the following is the case. Pass in the type of the service interface,
@@ -60,7 +67,7 @@ public class SpringContext {
      * specific DateTimeService.class as the type. To retrieve the latter, you should specify ConfigurableDateService.class as the
      * type. Unless you are writing a unit test and need to down cast to an implementation, you do not need to cast the result of
      * this method.
-     * 
+     *
      * @param <T>
      * @param type
      * @return an object that has been defined as a bean in our spring context and is of the specified type
@@ -69,7 +76,7 @@ public class SpringContext {
         verifyProperInitialization();
         T bean = null;
         if (SINGLETON_BEANS_BY_TYPE_CACHE.containsKey(type)) {
-            bean = (T) SINGLETON_BEANS_BY_TYPE_CACHE.get(type);
+            bean = (T)SINGLETON_BEANS_BY_TYPE_CACHE.get(type);
         }
         else {
             try {
@@ -102,7 +109,7 @@ public class SpringContext {
     /**
      * Use this method to retrieve all beans of a give type in our spring context. Pass in the type of the service interface, NOT
      * the service implementation.
-     * 
+     *
      * @param <T>
      * @param type
      * @return a map of the spring bean ids / beans that are of the specified type
@@ -130,7 +137,7 @@ public class SpringContext {
         verifyProperInitialization();
         T bean = null;
         if (SINGLETON_BEANS_BY_NAME_CACHE.containsKey(name)) {
-            bean = (T) SINGLETON_BEANS_BY_NAME_CACHE.get(name);
+            bean = (T)SINGLETON_BEANS_BY_NAME_CACHE.get(name);
         }
         else {
             try {
@@ -162,7 +169,7 @@ public class SpringContext {
         return false;
     }
 
-    public static List<MethodCacheInterceptor> getMethodCacheInterceptors() {
+    protected static List<MethodCacheInterceptor> getMethodCacheInterceptors() {
         List<MethodCacheInterceptor> methodCacheInterceptors = new ArrayList();
         methodCacheInterceptors.add(getBean(MethodCacheInterceptor.class));
         methodCacheInterceptors.add(KNSServiceLocator.getBean(MethodCacheInterceptor.class));
@@ -186,8 +193,20 @@ public class SpringContext {
         initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY, SPRING_TEST_FILES_KEY }), false);
     }
 
+    protected static void initializePluginApplicationContext() {
+        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY, SPRING_PLUGIN_FILES_KEY }), false);
+    }
+
     protected static void close() {
         applicationContext.close();
+    }
+
+    public static String getStringConfigurationProperty(String propertyName) {
+        return ResourceBundle.getBundle(PropertyLoadingFactoryBean.CONFIGURATION_FILE_NAME).getString(propertyName);
+    }
+
+    protected static List<String> getListConfigurationProperty(String propertyName) {
+        return Arrays.asList(getStringConfigurationProperty(propertyName).split(","));
     }
 
     private static void verifyProperInitialization() {
@@ -199,8 +218,13 @@ public class SpringContext {
     private static String[] getSpringConfigurationFiles(String[] propertyNames) {
         List<String> springConfigurationFiles = new ArrayList<String>();
         springConfigurationFiles.add(APPLICATION_CONTEXT_DEFINITION);
+        if (Boolean.valueOf(getStringConfigurationProperty(KFSConstants.USE_CENTRAL_WORKFLOW_SERVER))) {
+            springConfigurationFiles.add(CENTRAL_KEW_DATASOURCE_CONTEXT_DEFINITION);
+        } else {
+            springConfigurationFiles.add(DATASOURCE_CONTEXT_DEFINITION);
+        }
         for (int i = 0; i < propertyNames.length; i++) {
-            springConfigurationFiles.addAll(PropertyLoadingFactoryBean.getBaseListProperty(propertyNames[i]));
+            springConfigurationFiles.addAll(getListConfigurationProperty(propertyNames[i]));
         }
         return springConfigurationFiles.toArray(new String[] {});
     }

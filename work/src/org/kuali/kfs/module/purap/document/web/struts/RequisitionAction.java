@@ -18,32 +18,44 @@ package org.kuali.module.purap.web.struts.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.bo.Building;
+import org.kuali.module.purap.bo.VendorAddress;
+import org.kuali.module.purap.bo.VendorContract;
+import org.kuali.module.purap.bo.VendorDetail;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.purap.service.PurapService;
+import org.kuali.module.purap.util.PhoneNumberUtils;
 import org.kuali.module.purap.web.struts.form.RequisitionForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
- * Struts Action for Requisition document.
+ * This class handles specific Actions requests for the Requisition.
+ * 
  */
 public class RequisitionAction extends PurchasingActionBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(RequisitionAction.class);
 
     /**
-     * Does initialization for a new requisition.
+     * Do initialization for a new requisition
      * 
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#createDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
     @Override
     protected void createDocument(KualiDocumentFormBase kualiDocumentFormBase) throws WorkflowException {
+        
         super.createDocument(kualiDocumentFormBase);
+        
         ((RequisitionDocument) kualiDocumentFormBase.getDocument()).initiateDocument();
+        
     }
 
     /**
@@ -52,14 +64,32 @@ public class RequisitionAction extends PurchasingActionBase {
      */
     @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ActionForward forward = super.refresh(mapping, form, request, response);
         RequisitionForm rqForm = (RequisitionForm) form;
         RequisitionDocument document = (RequisitionDocument) rqForm.getDocument();
+        BusinessObjectService businessObjectService = SpringServiceLocator.getBusinessObjectService();
 
-        // super.refresh() must occur before this line to get the correct APO limit
-        document.setOrganizationAutomaticPurchaseOrderLimit(SpringContext.getBean(PurapService.class).getApoLimit(document.getVendorContractGeneratedIdentifier(), document.getChartOfAccountsCode(), document.getOrganizationCode()));
+        // Format phone numbers
+        document.setInstitutionContactPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getInstitutionContactPhoneNumber()));    
+        document.setRequestorPersonPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getRequestorPersonPhoneNumber()));    
+        document.setDeliveryToPhoneNumber(PhoneNumberUtils.formatNumberIfPossible(document.getDeliveryToPhoneNumber()));    
 
-        return forward;
+        return super.refresh(mapping, form, request, response);
+    }
+
+    public ActionForward viewRelatedDocuments(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        LOG.debug("viewRelatedDocuments() enter action");
+
+        //TODO add code
+
+        return mapping.findForward("viewRelatedDocuments");
+    }
+
+    public ActionForward viewPaymentHistory(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        LOG.debug("viewPaymentHistory() enter action");
+
+        //TODO add code
+
+        return mapping.findForward("viewPaymentHistory");
     }
 
 }
