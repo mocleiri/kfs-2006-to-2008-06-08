@@ -37,7 +37,6 @@ import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
-import org.kuali.module.financial.bo.CashReceiptHeader;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CoinDetail;
 import org.kuali.module.financial.bo.CurrencyDetail;
@@ -48,6 +47,7 @@ import org.kuali.module.financial.rule.event.UpdateCheckEvent;
 import org.kuali.module.financial.rules.CashReceiptDocumentRuleUtil;
 import org.kuali.module.financial.service.CashReceiptCoverSheetService;
 import org.kuali.module.financial.service.CashReceiptService;
+import org.kuali.module.financial.service.impl.CashReceiptCoverSheetServiceImpl;
 import org.kuali.module.financial.web.struts.form.CashReceiptForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -316,18 +316,14 @@ public class CashReceiptAction extends KualiAccountingDocumentActionBase {
         String verificationUnit = crs.getCashReceiptVerificationUnitForUser(GlobalVariables.getUserSession().getUniversalUser());
         String campusCode = crs.getCampusCodeForCashReceiptVerificationUnit(verificationUnit);
         crDoc.setCampusLocationCode(campusCode);
-
-        crDoc.setCashReceiptHeader(new CashReceiptHeader());
-        crDoc.getCashReceiptHeader().setDocumentNumber(crDoc.getDocumentNumber());
-        crDoc.getCashReceiptHeader().setWorkgroupName(verificationUnit);
-
+        
         /* initialize currency and coin detail */
         CurrencyDetail currencyDetail = new CurrencyDetail();
         currencyDetail.setCashieringRecordSource(KFSConstants.CurrencyCoinSources.CASH_RECEIPTS);
         currencyDetail.setFinancialDocumentTypeCode(CashReceiptDocument.DOCUMENT_TYPE);
         currencyDetail.setDocumentNumber(crDoc.getDocumentNumber());
         crDoc.setCurrencyDetail(currencyDetail);
-
+        
         CoinDetail coinDetail = new CoinDetail();
         coinDetail.setCashieringRecordSource(KFSConstants.CurrencyCoinSources.CASH_RECEIPTS);
         coinDetail.setFinancialDocumentTypeCode(CashReceiptDocument.DOCUMENT_TYPE);
