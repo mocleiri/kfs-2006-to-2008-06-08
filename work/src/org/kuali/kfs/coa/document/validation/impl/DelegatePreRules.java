@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,21 +26,23 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.chart.bo.Delegate;
 
 /**
- * PreRules checks for the {@link Delegate} that needs to occur while still in the Struts processing. This includes defaults
+ * This class...
+ * 
+ * 
  */
 public class DelegatePreRules implements PreRulesCheck {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DelegatePreRules.class);
 
     /**
+     * 
      * Default no-args constructor.
+     * 
      */
     public DelegatePreRules() {
     }
 
     /**
-     * This method sets some defaults on the {@link Delegate}
-     * 
      * @see org.kuali.core.rule.PreRulesCheck#processPreRuleChecks(org.apache.struts.action.ActionForm,
      *      javax.servlet.http.HttpServletRequest, org.kuali.core.rule.event.PreRulesCheckEvent)
      */
@@ -57,11 +59,6 @@ public class DelegatePreRules implements PreRulesCheck {
         return true;
     }
 
-    /**
-     * This method sets the approval from and to amounts to "0"
-     * 
-     * @param delegate
-     */
     private void setUnconditionalDefaults(Delegate delegate) {
 
         // FROM amount defaults to zero

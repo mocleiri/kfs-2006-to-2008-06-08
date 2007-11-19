@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,67 +15,62 @@
  */
 package org.kuali.module.financial.service;
 
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE18;
-import static org.kuali.test.fixtures.UserNameFixture.MHKOZLOW;
-
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
-import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.DocumentTestUtils;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the Check service.
+ * 
+ * 
  */
-@ConfigureContext(session = MHKOZLOW)
+@WithTestSpringContext
 public class CheckServiceTest extends KualiTestBase {
 
+    private CheckService checkService;
     private Check check;
 
-    private String documentNumber;
+    private final String DOCUMENT_HEADER_ID = "-1";
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
-        documentNumber = createDocument();
+        checkService = SpringServiceLocator.getCheckService();
+
         // setup check
         check = new CheckBase();
-        check.setDocumentNumber(documentNumber);
+        check.setFinancialDocumentNumber(DOCUMENT_HEADER_ID);
         check.setAmount(new KualiDecimal("314.15"));
-        check.setCheckDate(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate());
+        check.setCheckDate(SpringServiceLocator.getDateTimeService().getCurrentSqlDate());
         check.setCheckNumber("2112");
         check.setDescription("test check");
-        check.setFinancialDocumentDepositLineNumber(new Integer(2001));
+        check.setInterimDepositAmount(true);
         check.setSequenceId(new Integer(2001));
-        check.setFinancialDocumentTypeCode("CR");
-        check.setCashieringRecordSource("R");
 
         // clean up remnants of earlier tests
         clearTestData();
     }
 
-    @ConfigureContext(session = MHKOZLOW, shouldCommitTransactions = true)
+
     public void testLifecycle() throws Exception {
         boolean deleteSucceeded = false;
-        List retrievedChecks = SpringContext.getBean(CheckService.class).getByDocumentHeaderId(documentNumber);
+
+        List retrievedChecks = checkService.getByDocumentHeaderId(DOCUMENT_HEADER_ID);
         assertTrue(retrievedChecks.size() == 0);
 
         Check savedCheck = null;
         Check retrievedCheck = null;
         try {
             // save a check
-            savedCheck = SpringContext.getBean(CheckService.class).save(check);
+            savedCheck = checkService.save(check);
 
             // retrieve it
-            retrievedChecks = SpringContext.getBean(CheckService.class).getByDocumentHeaderId(documentNumber);
+            retrievedChecks = checkService.getByDocumentHeaderId(DOCUMENT_HEADER_ID);
             assertTrue(retrievedChecks.size() > 0);
             retrievedCheck = (Check) retrievedChecks.get(0);
 
@@ -85,28 +80,22 @@ public class CheckServiceTest extends KualiTestBase {
         }
         finally {
             // delete it
-            SpringContext.getBean(CheckService.class).deleteCheck(savedCheck);
+            checkService.deleteCheck(savedCheck);
         }
 
         // verify that the delete succeeded
-        retrievedChecks = SpringContext.getBean(CheckService.class).getByDocumentHeaderId(documentNumber);
+        retrievedChecks = checkService.getByDocumentHeaderId(DOCUMENT_HEADER_ID);
         assertTrue(retrievedChecks.size() == 0);
 
     }
 
+
     private void clearTestData() {
-        List retrievedChecks = SpringContext.getBean(CheckService.class).getByDocumentHeaderId(documentNumber);
+        List retrievedChecks = checkService.getByDocumentHeaderId(DOCUMENT_HEADER_ID);
         if (retrievedChecks.size() > 0) {
             for (Iterator i = retrievedChecks.iterator(); i.hasNext();) {
-                SpringContext.getBean(CheckService.class).deleteCheck((Check) i.next());
+                checkService.deleteCheck((Check) i.next());
             }
         }
-    }
-
-    private String createDocument() throws Exception {
-        CashReceiptDocument document = DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), CashReceiptDocument.class);
-        LINE18.addAsSourceTo(document);
-        SpringContext.getBean(DocumentService.class).saveDocument(document);
-        return document.getDocumentNumber();
     }
 }

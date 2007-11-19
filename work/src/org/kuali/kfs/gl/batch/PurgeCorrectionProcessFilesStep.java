@@ -19,31 +19,33 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
+
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.batch.AbstractStep;
+import org.kuali.module.gl.dao.CorrectionDocumentDao;
 import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.CorrectionDocumentService;
+import org.kuali.workflow.KualiWorkflowUtils;
+import edu.iu.uis.eden.exception.WorkflowException;
 
-/**
- * A step to remove old correction document origin entries from the database.
- */
+@Transactional
 public class PurgeCorrectionProcessFilesStep extends AbstractStep {
     private static Logger LOG = Logger.getLogger(PurgeCorrectionProcessFilesStep.class);
+    private CorrectionDocumentDao correctionDocumentDao;
     private CorrectionDocumentService correctionDocumentService;
-
+    
     /**
-     * Runs the process of purging old correction document origin entries from the database.
-     * 
-     * @param jobName the name of the job this step is being run as part of
-     * @return true if the job completed successfully, false if otherwise
      * @see org.kuali.kfs.batch.Step#performStep()
      */
     public boolean execute(String jobName) {
-        int numberOfDaysFinal = Integer.parseInt(getParameterService().getParameterValue(getClass(), "NUMBER_OF_DAYS_FINAL"));
+        int numberOfDaysFinal = Integer.parseInt(getConfigurationService().getParameterValue(getNamespace(), getComponentName(), "NUMBER_OF_DAYS_FINAL"));
         Calendar financialDocumentFinalCalendar = getDateTimeService().getCurrentCalendar();
         financialDocumentFinalCalendar.add(GregorianCalendar.DAY_OF_YEAR, -numberOfDaysFinal);
-        Collection<CorrectionDocument> documentsFinalOnDate = correctionDocumentService.getCorrectionDocumentsFinalizedOn(new Date(financialDocumentFinalCalendar.getTimeInMillis()));
+        Collection<CorrectionDocument> documentsFinalOnDate = correctionDocumentDao.getCorrectionDocumentsFinalizedOn(new Date(financialDocumentFinalCalendar.getTimeInMillis()));
         for (CorrectionDocument document : documentsFinalOnDate) {
             correctionDocumentService.removePersistedInputOriginEntries(document);
             correctionDocumentService.removePersistedOutputOriginEntries(document);
@@ -52,10 +54,16 @@ public class PurgeCorrectionProcessFilesStep extends AbstractStep {
     }
 
     /**
-     * Sets the correctionDocumentService attribute value, allowing the injection of an implementation of that service.
-     * 
+     * Sets the correctionDocumentDao attribute value.
+     * @param correctionDocumentDao The correctionDocumentDao to set.
+     */
+    public void setCorrectionDocumentDao(CorrectionDocumentDao correctionDocumentDao) {
+        this.correctionDocumentDao = correctionDocumentDao;
+    }
+
+    /**
+     * Sets the correctionDocumentService attribute value. For use by Spring.
      * @param correctionDocumentService The correctionDocumentService to set.
-     * @see org.kuali.module.gl.service.CorrectionDocumentService.
      */
     public void setCorrectionDocumentService(CorrectionDocumentService correctionDocumentService) {
         this.correctionDocumentService = correctionDocumentService;
