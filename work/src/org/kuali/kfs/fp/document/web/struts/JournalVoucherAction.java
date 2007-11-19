@@ -26,10 +26,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.authorization.DocumentAuthorizer;
 import org.kuali.core.question.ConfirmationQuestion;
-import org.kuali.core.service.DocumentAuthorizationService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -39,12 +39,10 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelper;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelperBase;
-import org.kuali.module.financial.bo.VoucherSourceAccountingLine;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 import org.kuali.module.financial.document.VoucherDocument;
 import org.kuali.module.financial.web.struts.form.JournalVoucherForm;
@@ -59,13 +57,16 @@ import edu.iu.uis.eden.exception.WorkflowException;
  */
 public class JournalVoucherAction extends VoucherAction {
 
-    // used to determine which way the change balance type action is switching these are local constants only used within this
-    // action class these should not be used outside of this class
-    protected static final int CREDIT_DEBIT_TO_SINGLE_AMT_MODE = 0;
-    protected static final int SINGLE_AMT_TO_CREDIT_DEBIT_MODE = 1;
-    protected static final int EXT_ENCUMB_TO_NON_EXT_ENCUMB = 0;
-    protected static final int NON_EXT_ENCUMB_TO_EXT_ENCUMB = 1;
-    protected static final int NO_MODE_CHANGE = -1;
+    // used to determine which way the change balance type action is switching
+    // these are local constants only used within this action class
+    // these should not be used outside of this class
+    private static final int CREDIT_DEBIT_TO_SINGLE_AMT_MODE = 0;
+    private static final int SINGLE_AMT_TO_CREDIT_DEBIT_MODE = 1;
+    private static final int EXT_ENCUMB_TO_NON_EXT_ENCUMB = 0;
+    private static final int NON_EXT_ENCUMB_TO_EXT_ENCUMB = 1;
+    private static final int NO_MODE_CHANGE = -1;
+    private int balanceTypeAmountChangeMode = NO_MODE_CHANGE;
+    private int balanceTypeExternalEncumbranceChangeMode = NO_MODE_CHANGE;
 
     /**
      * Overrides the parent and then calls the super method after building the array lists for valid accounting periods and balance
@@ -83,14 +84,15 @@ public class JournalVoucherAction extends VoucherAction {
         // now check to see if the balance type was changed and if so, we want to
         // set the method to call so that the appropriate action can be invoked
         // had to do it this way b/c the changing of the drop down causes the page to re-submit
-        // and couldn't use a hidden field called "methodToCall" b/c it screwed everything up
+        // and couldn't use a hidden field called "methodToCall" b/c it screwed everything
+        // up
         ActionForward returnForward;
         if (StringUtils.isNotBlank(journalVoucherForm.getOriginalBalanceType()) && !journalVoucherForm.getSelectedBalanceType().getCode().equals(journalVoucherForm.getOriginalBalanceType())) {
             returnForward = super.dispatchMethod(mapping, form, request, response, KFSConstants.CHANGE_JOURNAL_VOUCHER_BALANCE_TYPE_METHOD);
             // must call this here, because execute in the super method will never have control for this particular action
             // this is called in the parent by super.execute()
             Document document = journalVoucherForm.getDocument();
-            DocumentAuthorizer documentAuthorizer = SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer(document);
+            DocumentAuthorizer documentAuthorizer = SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(document);
             journalVoucherForm.populateAuthorizationFields(documentAuthorizer);
         }
         else { // otherwise call the super
@@ -110,9 +112,7 @@ public class JournalVoucherAction extends VoucherAction {
     public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // process the question but we need to make sure there are lines and then check to see if it's not balanced
         VoucherDocument vDoc = ((VoucherForm) form).getVoucherDocument();
-
-        KualiDecimal balance = vDoc.getCreditTotal().subtract(vDoc.getDebitTotal());
-        if (vDoc.getSourceAccountingLines().size() > 0 && balance.compareTo(KFSConstants.ZERO) != 0) {
+        if (vDoc.getSourceAccountingLines().size() > 0 && ((AmountTotaling) vDoc).getTotalDollarAmount().compareTo(KFSConstants.ZERO) != 0) {
             // it's not in "balance"
             ActionForward returnForward = processRouteOutOfBalanceDocumentConfirmationQuestion(mapping, form, request, response);
 
@@ -137,8 +137,8 @@ public class JournalVoucherAction extends VoucherAction {
         BalanceTyp selectedBalanceType = getPopulatedBalanceTypeInstance(selectedBalanceTypeCode);
         journalVoucherForm.getJournalVoucherDocument().setBalanceTypeCode(selectedBalanceTypeCode);
         journalVoucherForm.getJournalVoucherDocument().setBalanceType(selectedBalanceType); // set the fully populated balance type
-        // object into the form's selected
-        // balance type
+                                                                                            // object into the form's selected
+                                                                                            // balance type
         journalVoucherForm.setSelectedBalanceType(selectedBalanceType);
     }
 
@@ -181,20 +181,21 @@ public class JournalVoucherAction extends VoucherAction {
         JournalVoucherForm journalVoucherForm = (JournalVoucherForm) form;
 
         // figure out which way the balance type is changing
-        int balanceTypeAmountChangeMode = determineBalanceTypeAmountChangeMode(journalVoucherForm);
-        int balanceTypeExternalEncumbranceChangeMode = determineBalanceTypeEncumbranceChangeMode(journalVoucherForm);
+        determineBalanceTypeChangeModes(journalVoucherForm);
 
         // process the question
         if (balanceTypeAmountChangeMode != NO_MODE_CHANGE || balanceTypeExternalEncumbranceChangeMode != NO_MODE_CHANGE) {
             ActionForward returnForward = processChangeBalanceTypeConfirmationQuestion(mapping, form, request, response);
 
             // if not null, then the question component either has control of the flow and needs to ask its questions
-            // or the person choose the "cancel" or "no" button otherwise we have control
+            // or the person choose the "cancel" or "no" button
+            // otherwise we have control
             if (returnForward != null) {
                 return returnForward;
             }
             else {
-                // deal with balance type changes first amount change
+                // deal with balance type changes
+                // first amount change
                 if (balanceTypeAmountChangeMode == CREDIT_DEBIT_TO_SINGLE_AMT_MODE) {
                     switchFromCreditDebitModeToSingleAmountMode(journalVoucherForm);
                 }
@@ -208,7 +209,6 @@ public class JournalVoucherAction extends VoucherAction {
                 }
             }
         }
-
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
@@ -220,38 +220,31 @@ public class JournalVoucherAction extends VoucherAction {
      * @param journalVoucherForm
      * @throws Exception
      */
-    protected int determineBalanceTypeAmountChangeMode(JournalVoucherForm journalVoucherForm) throws Exception {
-        int balanceTypeAmountChangeMode = NO_MODE_CHANGE;
-
+    private void determineBalanceTypeChangeModes(JournalVoucherForm journalVoucherForm) throws Exception {
         // retrieve fully populated balance type instances
         BalanceTyp origBalType = getPopulatedBalanceTypeInstance(journalVoucherForm.getOriginalBalanceType());
         BalanceTyp newBalType = getPopulatedBalanceTypeInstance(journalVoucherForm.getSelectedBalanceType().getCode());
 
-        // figure out which ways we are switching the modes first deal with amount changes
+        // figure out which ways we are switching the modes
+        // first deal with amount changes
         if (origBalType.isFinancialOffsetGenerationIndicator() && !newBalType.isFinancialOffsetGenerationIndicator()) { // credit/debit
+            // mode -->
+            // single
+            // amount
+            // mode
             balanceTypeAmountChangeMode = CREDIT_DEBIT_TO_SINGLE_AMT_MODE;
         }
         else if (!origBalType.isFinancialOffsetGenerationIndicator() && newBalType.isFinancialOffsetGenerationIndicator()) { // single
+            // amount
+            // mode
+            // -->
+            // credit/debit
+            // mode
             balanceTypeAmountChangeMode = SINGLE_AMT_TO_CREDIT_DEBIT_MODE;
         }
-
-        return balanceTypeAmountChangeMode;
-    }
-
-    /**
-     * This method will determine which balance type encumbrance mode to switch to. A change in the balance type selection will
-     * eventually invoke this mechanism, which looks at the old balance type value, and the new balance type value to determine what
-     * the next mode is.
-     * 
-     * @param journalVoucherForm
-     * @throws Exception
-     */
-    protected int determineBalanceTypeEncumbranceChangeMode(JournalVoucherForm journalVoucherForm) throws Exception {
-        int balanceTypeExternalEncumbranceChangeMode = NO_MODE_CHANGE;
-
-        // retrieve fully populated balance type instances
-        BalanceTyp origBalType = getPopulatedBalanceTypeInstance(journalVoucherForm.getOriginalBalanceType());
-        BalanceTyp newBalType = getPopulatedBalanceTypeInstance(journalVoucherForm.getSelectedBalanceType().getCode());
+        else {
+            balanceTypeAmountChangeMode = NO_MODE_CHANGE;
+        }
 
         // then deal with external encumbrance changes
         if (origBalType.getCode().equals(KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE) && !newBalType.getCode().equals(KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
@@ -260,8 +253,9 @@ public class JournalVoucherAction extends VoucherAction {
         else if (!origBalType.getCode().equals(KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE) && newBalType.getCode().equals(KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
             balanceTypeExternalEncumbranceChangeMode = NON_EXT_ENCUMB_TO_EXT_ENCUMB;
         }
-
-        return balanceTypeExternalEncumbranceChangeMode;
+        else {
+            balanceTypeExternalEncumbranceChangeMode = NO_MODE_CHANGE;
+        }
     }
 
     /**
@@ -283,7 +277,7 @@ public class JournalVoucherAction extends VoucherAction {
         // accouting lines, because that is the only impact
         if (jvDoc.getSourceAccountingLines().size() != 0) {
             String question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-            KualiConfigurationService kualiConfiguration = SpringContext.getBean(KualiConfigurationService.class);
+            KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
             if (question == null) { // question hasn't been asked
                 String message = buildBalanceTypeChangeConfirmationMessage(jvForm, kualiConfiguration);
@@ -318,11 +312,6 @@ public class JournalVoucherAction extends VoucherAction {
      */
     private String buildBalanceTypeChangeConfirmationMessage(JournalVoucherForm jvForm, KualiConfigurationService kualiConfiguration) throws Exception {
         String message = new String("");
-
-        // figure out which way the balance type is changing
-        int balanceTypeAmountChangeMode = determineBalanceTypeAmountChangeMode(jvForm);
-        int balanceTypeExternalEncumbranceChangeMode = determineBalanceTypeEncumbranceChangeMode(jvForm);
-
         // grab the right message from the ApplicationResources.properties file depending upon the balance type switching mode
         if (balanceTypeAmountChangeMode == SINGLE_AMT_TO_CREDIT_DEBIT_MODE) {
             message = kualiConfiguration.getPropertyString(KFSKeyConstants.QUESTION_CHANGE_JV_BAL_TYPE_FROM_SINGLE_AMT_TO_CREDIT_DEBIT_MODE);
@@ -376,9 +365,9 @@ public class JournalVoucherAction extends VoucherAction {
      * @param balanceTypeCode
      * @return BalanceTyp
      */
-    protected BalanceTyp getPopulatedBalanceTypeInstance(String balanceTypeCode) {
+    private BalanceTyp getPopulatedBalanceTypeInstance(String balanceTypeCode) {
         // now we have to get the code and the name of the original and new balance types
-        return SpringContext.getBean(BalanceTypService.class).getBalanceTypByCode(balanceTypeCode);
+        return SpringServiceLocator.getBalanceTypService().getBalanceTypByCode(balanceTypeCode);
     }
 
     /**
@@ -399,9 +388,9 @@ public class JournalVoucherAction extends VoucherAction {
 
         KualiDecimal ZERO = new KualiDecimal("0.00");
         for (int i = 0; i < sourceLines.size(); i++) {
-            VoucherSourceAccountingLine sourceLine = (VoucherSourceAccountingLine) sourceLines.get(i);
+            SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
             sourceLine.setAmount(ZERO);
-            sourceLine.setDebitCreditCode(KFSConstants.GL_DEBIT_CODE); // default to debit
+            sourceLine.setDebitCreditCode(null); // will be needed, reset to make sure
 
             helperLines.add(new VoucherAccountingLineHelperBase()); // populate with a fresh new empty object
         }
@@ -420,7 +409,7 @@ public class JournalVoucherAction extends VoucherAction {
         ArrayList sourceLines = (ArrayList) jvDoc.getSourceAccountingLines();
 
         for (int i = 0; i < sourceLines.size(); i++) {
-            VoucherSourceAccountingLine sourceLine = (VoucherSourceAccountingLine) sourceLines.get(i);
+            SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
             sourceLine.setReferenceOriginCode(null); // won't be needed in this mode
             sourceLine.setReferenceNumber(null); // won't be needed in this mode
             sourceLine.setReferenceTypeCode(null); // won't be needed in this mode
@@ -444,7 +433,7 @@ public class JournalVoucherAction extends VoucherAction {
             VoucherAccountingLineHelper helperLine = (VoucherAccountingLineHelper) helperLines.get(i);
             SourceAccountingLine sourceLine = (SourceAccountingLine) sourceLines.get(i);
             sourceLine.setAmount(ZERO);
-            sourceLine.setDebitCreditCode(KFSConstants.GL_DEBIT_CODE); // single sided is always debit
+            sourceLine.setDebitCreditCode(null);
 
             helperLine.setCredit(null); // won't be needed in this mode
             helperLine.setDebit(null); // won't be needed in this mode
@@ -515,7 +504,7 @@ public class JournalVoucherAction extends VoucherAction {
         JournalVoucherDocument jvDoc = jvForm.getJournalVoucherDocument();
 
         String question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-        KualiConfigurationService kualiConfiguration = SpringContext.getBean(KualiConfigurationService.class);
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
         if (question == null) { // question hasn't been asked
             String currencyFormattedDebitTotal = (String) new CurrencyFormatter().format(jvDoc.getDebitTotal());
