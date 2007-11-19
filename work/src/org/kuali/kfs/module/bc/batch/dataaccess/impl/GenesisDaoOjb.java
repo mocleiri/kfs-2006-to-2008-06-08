@@ -18,7 +18,6 @@ package org.kuali.module.budget.dao.ojb;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,30 +26,27 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+// @@TODO: not needed for production code
 import org.apache.commons.beanutils.PropertyUtils;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
-import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.dao.DocumentDao;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.core.util.TransactionalServiceUtils;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.KFSConstants.BudgetConstructionConstants;
 import org.kuali.kfs.KFSConstants.ParameterValues;
-import org.kuali.kfs.context.SpringContext;
-import org.springframework.dao.DataAccessException;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.BudgetConstructionAccountOrganizationHierarchy;
 import org.kuali.module.budget.bo.BudgetConstructionAccountReports;
 import org.kuali.module.budget.bo.BudgetConstructionCalculatedSalaryFoundationTracker;
@@ -67,24 +63,13 @@ import org.kuali.module.budget.document.BudgetConstructionDocument;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.Org;
-import org.kuali.module.chart.service.OrganizationService;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
 import org.kuali.module.financial.bo.FunctionControlCode;
 import org.kuali.module.gl.GLConstants.ColumnNames;
 import org.kuali.module.gl.bo.Balance;
-import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.labor.bo.LaborObject;
 
-import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.KEWServiceLocator;
 import edu.iu.uis.eden.exception.WorkflowException;
-import edu.iu.uis.eden.routeheader.DocumentRouteHeaderValue;
-import edu.iu.uis.eden.routeheader.RouteHeaderService;
-// October, 2007 additions
-import edu.iu.uis.eden.actions.CompleteAction;
-import edu.iu.uis.eden.actions.ActionTakenEvent;
-import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
-import edu.iu.uis.eden.server.BeanConverter;
 
 
 public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb 
@@ -166,8 +151,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
     private WorkflowDocumentService workflowDocumentService;
     private DateTimeService dateTimeService; 
     private DocumentDao documentDao;
-    private RouteHeaderService routeHeaderService = null;
-    
     
     public final Map<String,String> getBudgetConstructionControlFlags (Integer universityFiscalYear)
     {
@@ -214,6 +197,32 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             
     }
     
+    public final String getBudgetConstructionInitiatorID()
+    {
+        //@TODO: The constants and field names below should come from constants files
+        //  the chart and department should be budget construction constants
+        //  the others should be kuali constants
+        final String DEFAULT_ID = "666-666-66";
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(FINANCIAL_CHART_PROPERTY, BUDGET_CZAR_CHART);
+        criteriaID.addEqualTo(ORG_CODE_PROPERTY,BUDGET_CZAR_ORG);
+        criteriaID.addColumnEqualTo(ACCOUNT_CLOSED_INDICATOR_PROPERTY,
+                KFSConstants.ParameterValues.NO);
+        String[] queryAttr = {FISCAL_OFFICER_ID_PROPERTY};
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(Account.class, queryAttr, criteriaID, true);
+        Iterator Results = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        if (!Results.hasNext())
+        {
+            return DEFAULT_ID;
+        }
+        else
+        {  
+           String retID = (String) ((Object[]) Results.next())[0];  
+           return retID;
+        }
+    }
+    
     /*
      * ******************************************************************************
      *   These are utility routines used by all the units
@@ -254,9 +263,9 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             new ReportQueryByCriteria(classID, selectList, criteriaID);
         Iterator resultRows = 
             getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        if (resultRows.hasNext())
+        while (resultRows.hasNext())
         {
-            return(hashCapacity(((Number)((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(resultRows))[0]).intValue()));
+            return(hashCapacity(((BigDecimal)((Object[]) resultRows.next())[0]).intValue()));
         }
         return (new Integer(1));
     }
@@ -271,9 +280,9 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             new ReportQueryByCriteria(classID, selectList, criteriaID);
         Iterator resultRows = 
             getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        if (resultRows.hasNext())
+        while (resultRows.hasNext())
         {
-            return(hashCapacity(((Number)((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(resultRows))[0]).intValue()));
+            return(hashCapacity(((BigDecimal)((Object[]) resultRows.next())[0]).intValue()));
         }
         return (new Integer(1));
     }
@@ -292,42 +301,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             new ReportQueryByCriteria(classID, selectList, criteriaID, true);
         return (getPersistenceBrokerTemplate().getCount(queryID));
     }
-
-  /*
-   * ********************************************************************************
-   *   This routine returns the fiscal year as of the run date.
-   *   Normally, genesis runs in the current fiscal year to build budget construction
-   *   for the coming fiscal year.
-   */   
-    public Integer fiscalYearFromToday()
-    {
-        //  we look up the fiscal year for today's date, and return it
-        //  we return 0 if nothing is found
-        Integer currentFiscalYear = new Integer(0);
-        Date lookUpDate =
-            dateTimeService.getCurrentSqlDateMidnight();
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_DATE,
-                              lookUpDate);
-        String[] attrb = {KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR};
-        ReportQueryByCriteria queryID =
-            new ReportQueryByCriteria(UniversityDate.class, attrb, criteriaID);
-        Iterator resultRow =
-        getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        // there will only be one row.
-        // Oracle will not close the cursor, however, until the iterator has been exhausted
-        if (resultRow.hasNext())
-        {
-            currentFiscalYear = (Integer) ((Number)
-                        ((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(resultRow))[0]).intValue();
-        }
-        //TODO:
-        LOG.debug(String.format("\nreturned from fiscalYearFromToday: %d",
-                currentFiscalYear));
-        //TODO:
-        return currentFiscalYear;
-    }
-    
     
     /*
      * ******************************************************************************  
@@ -774,8 +747,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             // no new documents need to be created
             return;
         }
-        // get the workflow document service
-        setUpRouteHeaderService();
         // take the count of header keys from the GL
         setUpCurrentBCHeaderKeys(BaseYear);
         Integer RequestYear = BaseYear+1;
@@ -807,20 +778,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         }
         createNewDocumentsCleanUp();
     }
- /*  @@TODO:  this is prior to October, 2007, when calling complete stopped running in finite time   
-    private void finalizeBCDocument(BudgetConstructionDocument bcDoc) throws WorkflowException
-    {
-        // this routine reads the actual workflow tables to set the status dates and the final status code
-        // going through the routing procedure took far too much time per document
-        DocumentRouteHeaderValue routeHeader =
-            routeHeaderService.getRouteHeader(bcDoc.getDocumentHeader().getWorkflowDocument().getRouteHeaderId());
-        routeHeader.markDocumentEnroute();
-        routeHeader.markDocumentApproved();
-        routeHeader.markDocumentProcessed();
-        routeHeader.markDocumentFinalized();
-        routeHeaderService.saveRouteHeader(routeHeader);
-    }
-*/    
 
     //  here are the private methods that go with it      
     private void getAndStoreCurrentCSFBCHeaderCandidates(Integer BaseYear)
@@ -844,7 +801,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                 LOG.warn(String.format(
                         "\nskipping creation of document for CSF key: %s %s %s \n(%s)\n",
                         Results[0], Results[1], Results[2], wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
             }
@@ -865,7 +821,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                         newBCHdr.getAccountNumber(),
                         newBCHdr.getSubAccountNumber(),
                         wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
 
@@ -926,7 +881,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                         (String) Results[1],
                         (String) Results[2],
                         wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
             }
@@ -947,7 +901,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                         newBCHdr.getAccountNumber(),
                         newBCHdr.getSubAccountNumber(),
                         wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
 
@@ -1092,26 +1045,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         }
     }
     
-    //@@TODO:  this method was added in October, 2007 in an attempt to speed things up
-    private void saveBCDocumentInWorkflow(BudgetConstructionDocument bcDoc) throws WorkflowException
-    {
-       // first, fetch the DB version of the workflow document saved when Kuali checked for the correct document type 
-        DocumentRouteHeaderValue ourWorkflowDoc = 
-         routeHeaderService.getRouteHeader(bcDoc.getDocumentHeader().getWorkflowDocument().getRouteHeaderId());
-       // next, call the complete method in the document service
-       // WorkflowDocumentService interface has a complete method, but its Kuali counterpart does not
-       // so, we mimic the workflow call here.  complete should be added to Kuali 
-       CompleteAction action = new CompleteAction(ourWorkflowDoc, ourWorkflowDoc.getInitiatorUser(), "created by Genesis");
-       action.recordAction();
-       // there was no need to queue.  we want to mark the document final and save it 
-       ourWorkflowDoc.markDocumentEnroute();
-       ourWorkflowDoc.markDocumentApproved();
-       ourWorkflowDoc.markDocumentProcessed();
-       ourWorkflowDoc.markDocumentFinalized();
-       routeHeaderService.saveRouteHeader(ourWorkflowDoc);
-    }
-
-    
     public void setUpCSFHashStructures(Integer BaseYear)
     {
        // these are the potential document keys in the CSF tracker
@@ -1174,19 +1107,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                 BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION);
         getPersistenceBrokerTemplate().store(newBCHdr);
         documentService.prepareWorkflowDocument(newBCHdr);
-        // this is more efficient than route and does what we want
-        // it calls a document method, not a service
-        // newBCHdr.getDocumentHeader().getWorkflowDocument().complete("created by Genesis");
-        // October, 2007:  refactoring has made BC document creation unacceptably slow
-        // we are going to attempt to streamline the process by by-passing the workflowDocumentActionWebService
-        // (which is called by complete above) and simply saving our document and its action log message directly
-        // using workflowDocumentService routines
-        saveBCDocumentInWorkflow(newBCHdr);
-        //@@TODO: end October 2007 additions
-        //@@TODO: October 2007 deletion
-        // finalizeBCDocument(newBCHdr);
-//        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
-//                                      "created by Genesis",null);
+        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
+                                      "created by Genesis",null);
    }
     
         
@@ -1218,12 +1140,10 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         killOrgQuery.setCriteria(criteriaID);
         getPersistenceBrokerTemplate().deleteByQuery(killOrgQuery);
         getPersistenceBrokerTemplate().clearCache();
-      // this has moved temporarily until the data model is fixed (8/8/2007)  
-        buildNewOrganizationReportsTo();
       // build the account table
         buildNewAccountReportsTo();
       // build the organization table  
-      // buildNewOrganizationReportsTo();
+        buildNewOrganizationReportsTo();
     }
     
     //  private working methods for the BC chart update
@@ -1397,7 +1317,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         //
         // now we fetch the root of the organization tree
         String[] rootNode = 
-            SpringContext.getBean(OrganizationService.class).getRootOrganizationCode();
+            SpringServiceLocator.getOrganizationService().getRootOrganizationCode();
         rootChart = rootNode[0];
         rootOrganization = rootNode[1];
         //
@@ -2036,10 +1956,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
            (KualiDecimal) sqlResult[sqlBeginningBalanceLineAmount];
        BaseAmount = 
            BaseAmount.add((KualiDecimal) sqlResult[sqlAccountLineAnnualBalanceAmount]);
-       KualiInteger DollarBaseAmount = 
-           new KualiInteger(BaseAmount.bigDecimalValue());
-       PBGLObj.setFinancialBeginningBalanceLineAmount(DollarBaseAmount);
-       PBGLObj.setAccountLineAnnualBalanceAmount(KualiInteger.ZERO);
+       PBGLObj.setFinancialBeginningBalanceLineAmount(BaseAmount);
+       PBGLObj.setAccountLineAnnualBalanceAmount(KualiDecimal.ZERO);
        //  ObjectID is set in the BusinessObjectBase on insert and update
        //  but, we must set the version number
        PBGLObj.setVersionNumber(DEFAULT_VERSION_NUMBER);
@@ -2190,9 +2108,9 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
            return;
        }
        PendingBudgetConstructionGeneralLedger matchFromGL = pBGLFromGL.get(TestKey);
-       KualiInteger baseFromCurrentGL = 
+       KualiDecimal baseFromCurrentGL = 
            matchFromGL.getFinancialBeginningBalanceLineAmount();
-       KualiInteger baseFromPBGL = 
+       KualiDecimal baseFromPBGL = 
            currentPBGLInstance.getFinancialBeginningBalanceLineAmount();
        // remove the candidate GL from the hash list
        // it won't match with anything else
@@ -2338,7 +2256,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
           criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
           criteriaID.addColumnEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
                                       problemChart);
-          criteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,problemObject);
+          criteriaID.addEqualTo(KFSPropertyConstants.OBJECT_CODE,problemObject);
           ReportQueryByCriteria queryID = 
               new ReportQueryByCriteria(ObjectCode.class,criteriaID);
           Iterator Results = 
@@ -2352,7 +2270,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                        problemChart,problemObject,BaseYear));
               continue;
           }
-          ObjectCode baseYearObject = (ObjectCode) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(Results);
+          ObjectCode baseYearObject = (ObjectCode) Results.next();
           baseYearObject.setUniversityFiscalYear(RequestYear);
           baseYearObject.setActive(false);
           getPersistenceBrokerTemplate().store(baseYearObject);
@@ -2366,7 +2284,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         Criteria criteriaID = new Criteria();
         criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,RequestYear);
         criteriaID.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,Chart);
-        criteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,ObjectCode);
+        criteriaID.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER,ObjectCode);
         QueryByCriteria queryID = 
             new QueryByCriteria(ObjectCode.class,criteriaID);
         Integer Result = 
@@ -2990,7 +2908,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
        if (ovrdIter.hasNext())
        {
-           BigDecimal resultValue = (BigDecimal) ((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(ovrdIter))[0];
+           BigDecimal resultValue = (BigDecimal) ((Object[]) ovrdIter.next())[0];
            acctCount = acctCount +
                        (Integer) resultValue.intValue();  
        }
@@ -3001,7 +2919,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryCSF);
        if (csfIter.hasNext())
        {
-           BigDecimal resultValue = (BigDecimal) ((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(csfIter))[0];
+           BigDecimal resultValue = (BigDecimal) ((Object[]) csfIter.next())[0];
            acctCount = acctCount +
                        (Integer) resultValue.intValue();  
        }
@@ -3062,16 +2980,35 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         orgRCMap.clear();
     }
     
+    private Integer readOrgRCCount()
+    {
+        String[] selectList = {"COUNT(*)"};
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(Org.class, selectList,
+                    QueryByCriteria.CRITERIA_SELECT_ALL);
+        Iterator resultRow =
+        getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        if (!(resultRow.hasNext()))
+        {
+            return new Integer(0);
+        }
+        else
+        {
+            BigDecimal resultValue = (BigDecimal) ((Object[]) resultRow.next())[0];
+            return (Integer) resultValue.intValue();
+        }
+    }
+    
     private void readOrgRCMap()
     {
+        Integer orgCount = readOrgRCCount();
+        orgRCMap = new HashMap<String,String>(orgCount+3);
         String[] selectList = {KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
                                KFSPropertyConstants.ORGANIZATION_CODE,
                                KFSPropertyConstants.RESPONSIBILITY_CENTER_CODE};
         ReportQueryByCriteria queryID = 
             new ReportQueryByCriteria(Org.class, selectList,
                                       QueryByCriteria.CRITERIA_SELECT_ALL);
-        orgRCMap = new HashMap<String,String>(hashCapacity((Integer)
-                                              getPersistenceBrokerTemplate().getCount(queryID)));
         Iterator resultSet =
             getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
         while (resultSet.hasNext())
@@ -3403,7 +3340,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             (positionNormalWorkMonths.containsKey(positionNumber)?
              positionNormalWorkMonths.get(positionNumber):12);
         // rqstAmount and notOnLeave are used elswhere and defined globally
-        KualiInteger defaultAmount = KualiInteger.ZERO;
+        KualiDecimal defaultAmount = KualiDecimal.ZERO;
         BigDecimal   defaultFractions = new BigDecimal(0);
         //
         PendingBudgetConstructionAppointmentFunding bcaf =
@@ -3539,8 +3476,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         pbGL.setFinancialSubObjectCode(bcsf.getFinancialSubObjectCode());
         pbGL.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_BASE_BUDGET);
         pbGL.setFinancialObjectTypeCode(objectType);
-        pbGL.setAccountLineAnnualBalanceAmount(KualiInteger.ZERO);
-        pbGL.setFinancialBeginningBalanceLineAmount(KualiInteger.ZERO);
+        pbGL.setAccountLineAnnualBalanceAmount(KualiDecimal.ZERO);
+        pbGL.setFinancialBeginningBalanceLineAmount(KualiDecimal.ZERO);
         // store the new PBGL row
         getPersistenceBrokerTemplate().store(pbGL);
         CSFNewGLRows = CSFNewGLRows+1;
@@ -3720,7 +3657,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             String testKey = buildCSFKey(csfRow);
             if (csfOverrideKeys.contains(testKey))
             {
-                continue;
+                break;
             }
             // is the line vacant
             testKey = buildVacantCSFKey(csfRow);
@@ -4120,8 +4057,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
       bcaf.setAppointmentFundingDeleteIndicator(true);
       getPersistenceBrokerTemplate().store(bcaf);
       CSFBCAFRowsMarkedDeleted = CSFBCAFRowsMarkedDeleted+1;
-      // we also need to exhaust the iterator, so OJB will close the cursor (Oracle)
-      TransactionalServiceUtils.exhaustIterator(resultSet);
     }
 
 //     this is an inner class which will store the data we need to perform the rounding,
@@ -4310,8 +4245,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
          */
         try
         {
-            // testANewBCDocument();
-            logAnExistingBCDocument();
+            testANewBCDocument();
         }
         catch (WorkflowException wex)
         {
@@ -4367,27 +4301,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         
     }
     
-    private void logAnExistingBCDocument()
-    throws WorkflowException
-    {
-        Long testDocumentID = new Long(306358);
-        String note1 = new String("this here doc was scoped out by Ernie '07");
-        String note2 = new String("Ernie cameback--left some goobers the first time");
-        String note3 = new String("Ernie bought another ticket--whoowee!");
-        KualiWorkflowDocument workflowDocument = 
-                              workflowDocumentService.createWorkflowDocument(testDocumentID,
-                                                      GlobalVariables.getUserSession().getUniversalUser());
-        // try to write to the log
-        workflowDocument.logDocumentAction(note1);
-        // try writing to the log again
-        workflowDocument.logDocumentAction(note2);
-        // get a fresh "flex doc" for the same ID and try writing a third message
-        workflowDocument =
-            workflowDocumentService.createWorkflowDocument(testDocumentID,
-                    GlobalVariables.getUserSession().getUniversalUser());
-        workflowDocument.logDocumentAction(note3);
-    }
-    
     private void testANewBCDocument()
     throws WorkflowException
     {
@@ -4398,8 +4311,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                                                       delCriteria);
         getPersistenceBrokerTemplate().deleteByQuery(queryID);
         getPersistenceBrokerTemplate().clearCache();
-        // try to get the workflow service that deals with the actual document header
-        setUpRouteHeaderService();
         // set up the Budget Construction Header
         BudgetConstructionDocument newBCHdr;
         newBCHdr = (BudgetConstructionDocument)
@@ -4422,143 +4333,28 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         newBCHdr.setVersionNumber(DEFAULT_VERSION_NUMBER);
         DocumentHeader kualiDocumentHeader = newBCHdr.getDocumentHeader();
         newBCHdr.setDocumentNumber(newBCHdr.getDocumentHeader().getDocumentNumber());
-//   this settting apparently has not effect on workflow
-//        kualiDocumentHeader.setOrganizationDocumentNumber(
-//                            newBCHdr.getUniversityFiscalYear().toString());
+        kualiDocumentHeader.setOrganizationDocumentNumber(
+                            newBCHdr.getUniversityFiscalYear().toString());
         kualiDocumentHeader.setFinancialDocumentStatusCode(
                 KFSConstants.INITIAL_KUALI_DOCUMENT_STATUS_CD);
-        kualiDocumentHeader.setFinancialDocumentStatusCode(
-                EdenConstants.ROUTE_HEADER_FINAL_CD);
         kualiDocumentHeader.setFinancialDocumentTotalAmount(KualiDecimal.ZERO);
         kualiDocumentHeader.setFinancialDocumentDescription(String.format("%s %d %s %s",
                 BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION,
                        newBCHdr.getUniversityFiscalYear(),
                        newBCHdr.getChartOfAccountsCode(),newBCHdr.getAccountNumber()));
-        kualiDocumentHeader.setExplanation(String.format("%s: %s",
-                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION,
-                newBCHdr.getDocumentHeader().getWorkflowDocument().toString()));
-//      do this for a timing check
-        LOG.info(String.format("\nstore %s",
-                 newBCHdr.getDocumentHeader().getWorkflowDocument().getRouteHeaderId()));    
+        kualiDocumentHeader.setExplanation(
+                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION);
         getPersistenceBrokerTemplate().store(newBCHdr);
         documentService.prepareWorkflowDocument(newBCHdr);
-        StringBuffer annotateDoc = new StringBuffer("created by Genesis--test");
-        annotateDoc.append(newBCHdr.getDocumentNumber());
-//  the service does not have a complete method, but the document does        
-//        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
-//                                      annotateDoc.toString(),null);
-//        newBCHdr.getDocumentHeader().getWorkflowDocument().saveDocument(annotateDoc.toString());
-//  this is Eric Westfall's suggestion of 01/18/2007
-//        newBCHdr.getDocumentHeader().getWorkflowDocument().logDocumentAction(annotateDoc.toString());
-//        newBCHdr.getDocumentHeader().getWorkflowDocument().routeDocument(annotateDoc.append(": passed to route").toString());
-//  end of Eric's suggestion
-//  this complete works, but does not fill in some of the dates 
-/*  removed October 2007, when things stopped working in finite time        
-        newBCHdr.getDocumentHeader().getWorkflowDocument().complete(annotateDoc.toString());
-//  OK.  This should have saved the document.  Now, we are going to try to set all the dates and codes
-        finalizeBCDocument(newBCHdr);
-*/
-    saveBCDocumentInWorkflow(newBCHdr);    
-//  do this for a timing check
-        LOG.info(String.format("\nfinished processing %s",
-                 newBCHdr.getDocumentHeader().getWorkflowDocument().getRouteHeaderId()));  
-        Long ourDocID = newBCHdr.getDocumentHeader().getWorkflowDocument().getRouteHeaderId();
-        
-//
-//      try to change the route header itself, so it will have the correct dates and status codes
-        
-//
-//        
+        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
+                                      "created by Genesis",null);
 //        KHUNTLEY does not have superuser privileges
 //        the procurement card does a superUserApprove, and its test uses KULUSER 
 //        KULUSER works for us as well, but for our document the superUser method
 //        apparently goes through the same stages as the route method        
-//        workflowDocumentService.superUserApprove(newBCHdr.getDocumentHeader().getWorkflowDocument(),
-//                "created by Genesis");
+        workflowDocumentService.superUserApprove(newBCHdr.getDocumentHeader().getWorkflowDocument(),
+                "created by Genesis");
    }
- 
-    public Object returnWkflwDocHeader()
-    {   
-        DocumentRouteHeaderValue newDoc = new DocumentRouteHeaderValue();
-        Criteria docCriteria = new Criteria();
-        docCriteria.addEqualTo("routeHeaderId",286968);
-        QueryByCriteria queryID = 
-            new QueryByCriteria(DocumentRouteHeaderValue.class,docCriteria);
-        Iterator<DocumentRouteHeaderValue> itr =
-            getPersistenceBrokerTemplate().getIteratorByQuery(queryID);
-        if (itr.hasNext())
-        {
-           newDoc = TransactionalServiceUtils.retrieveFirstAndExhaustIterator(itr);  
-        }
-        return newDoc;
-    }
-    
-    public void testObjectID ()
-    {
-        FiscalYearFunctionControl fyrCtrl;
-        FiscalYearFunctionControl fyrCtrl1;
-        FiscalYearFunctionControl fyrCtrl2;
-        FiscalYearFunctionControl fyrCtrl3;
-        Integer fiscalYear;
-        String  financialSystemFunctionControlCode; 
-        // get the intial row
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,2008);
-        criteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_SYSTEM_FUNCTION_CONTROL_CODE,"CSFUPD");
-        QueryByCriteria queryID = new QueryByCriteria(FiscalYearFunctionControl.class,criteriaID);
-        fyrCtrl = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectByQuery(queryID);
-        // now get a new object--see if it uses the cache
-        fyrCtrl1 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectByQuery(queryID);
-        LOG.warn(String.format("\ntwo queries by criteria for same row into different object pointers (constant WHERE clauses):\n same Object? %b",
-                 fyrCtrl.equals(fyrCtrl1)));
-        // now get a new object with a different query--see if it uses the cache
-        fiscalYear = fyrCtrl.getUniversityFiscalYear();
-        financialSystemFunctionControlCode = fyrCtrl1.getFinancialSystemFunctionControlCode();
-        Criteria anotherCriteriaID = new Criteria();
-        anotherCriteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,fiscalYear);
-        anotherCriteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_SYSTEM_FUNCTION_CONTROL_CODE,financialSystemFunctionControlCode);
-        QueryByCriteria newQueryID = new QueryByCriteria(FiscalYearFunctionControl.class,anotherCriteriaID);
-        fyrCtrl2 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectByQuery(newQueryID);
-        LOG.warn(String.format("\ntwo queries by criteria for same row into different object pointers (constant WHERE clause,"+
-                 "variable WHERE clause):\n same Object? %b",
-                fyrCtrl.equals(fyrCtrl2)));
-        // finally, try getting it using getObjectByID
-        // we will take a flying leap and guess that we should pass in the object--that's what the code looks like it wants
-        // recall that the PersistenceBrokerTemplate converts PersistenceBrokerException into a DataAccess Exception
-        try
-        {
-        fyrCtrl3 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectById(FiscalYearFunctionControl.class,
-                                                                              fyrCtrl2);
-        LOG.warn(String.format("\ngetObjectById: same Object? %b",
-                fyrCtrl.equals(fyrCtrl3)));
-        }
-        catch (DataAccessException e)
-        {
-            LOG.warn(String.format("\nPersistenceBrokerException when trying to read Identity for pointer fyrCtrl2:\n%s",e));
-        }
-        try
-        {
-        fyrCtrl3 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectById(FiscalYearFunctionControl.class,
-                                                                              fyrCtrl1);
-        LOG.warn(String.format("\ngetObjectById: same Object? %b",
-                fyrCtrl.equals(fyrCtrl3)));
-        }
-        catch (DataAccessException e)
-        {
-            LOG.warn(String.format("\nPersistenceBrokerException when trying to read Identity for pointer fyrCtrl1:\n%s",e));
-        }
-        try
-        {
-        fyrCtrl3 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectById(FiscalYearFunctionControl.class,
-                                                                              fyrCtrl);
-        LOG.warn(String.format("\ngetObjectById: same Object? %b",
-                fyrCtrl.equals(fyrCtrl3)));
-        }
-        catch (DataAccessException e)
-        {
-            LOG.warn(String.format("\nPersistenceBrokerException when trying to read Identity for pointer fyrCtrl:\n%s",e));
-        }
-    }
     
         
 
@@ -4577,14 +4373,5 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
      {
          this.workflowDocumentService = workflowDocumentService;
      }
-     private void setUpRouteHeaderService ()
-     {
-        if (this.routeHeaderService == null)
-        {
-          this.routeHeaderService = 
-              (RouteHeaderService) KEWServiceLocator.getService(KEWServiceLocator.DOC_ROUTE_HEADER_SRV);
-        }
-     }
-     
-     
+    
 }
