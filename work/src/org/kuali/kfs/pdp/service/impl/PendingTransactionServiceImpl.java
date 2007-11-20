@@ -25,10 +25,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.kuali.core.document.Document;
+import org.kuali.core.service.DocumentService;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.AccountingPeriodService;
 import org.kuali.module.chart.service.ChartService;
+import org.kuali.module.chart.service.OffsetDefinitionService;
+import org.kuali.module.financial.bo.OffsetAccount;
+import org.kuali.module.financial.service.FlexibleOffsetAccountService;
 import org.kuali.module.pdp.bo.GlPendingTransaction;
 import org.kuali.module.pdp.bo.PaymentAccountDetail;
 import org.kuali.module.pdp.bo.PaymentDetail;
@@ -37,6 +46,8 @@ import org.kuali.module.pdp.dao.GlPendingTransactionDao;
 import org.kuali.module.pdp.service.GlPendingTransactionService;
 import org.kuali.module.pdp.utilities.GeneralUtilities;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.iu.uis.eden.exception.WorkflowException;
 
 
 @Transactional
@@ -99,9 +110,20 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
         return glPendingTransactionDao.getUnextractedTransactions();
     }
 
+    /**
+     * @see org.kuali.module.pdp.service.GlPendingTransactionService#createProcessPaymentTransaction(org.kuali.module.pdp.bo.PaymentDetail, java.lang.Boolean)
+     */
     public void createProcessPaymentTransaction(PaymentDetail pd, Boolean relieveLiabilities) {
 
         List accountListings = pd.getAccountDetail();
+        
+        Document paymentDetailCreatingDocument = null; 
+        try {
+            paymentDetailCreatingDocument = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(pd.getCustPaymentDocNbr());
+        }
+        catch (WorkflowException we) {
+            LOG.error("Could not find document which generated payment detail: "+pd.toString());
+        }
 
         for (Iterator iter = accountListings.iterator(); iter.hasNext();) {
             PaymentAccountDetail elem = (PaymentAccountDetail) iter.next();
@@ -110,24 +132,33 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             gpt.setFdocRefTypCd("PDP");
             gpt.setFsRefOriginCd("PD");
             gpt.setFsOriginCd("PD");
-            gpt.setFinBalanceTypCd("AC");
+            gpt.setFinancialBalanceTypeCode("AC");
             Date d = new Date((new java.util.Date()).getTime());
             gpt.setTransactionDt(new Timestamp(d.getTime()));
             AccountingPeriod fiscalPeriod = accountingPeriodService.getByDate(d);
-            gpt.setUnivFiscalYr(fiscalPeriod.getUniversityFiscalYear());
+            gpt.setUniversityFiscalYear(fiscalPeriod.getUniversityFiscalYear());
             gpt.setUnivFiscalPrdCd(fiscalPeriod.getUniversityFiscalPeriodCode());
 
-            gpt.setAccountNbr(elem.getAccountNbr());
-            gpt.setSubAccountNbr(elem.getSubAccountNbr());
-            gpt.setFinCoaCd(elem.getFinChartCode());
-            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue())) {
-                Chart chart = chartService.getByPrimaryId(elem.getFinChartCode());
-                gpt.setFinObjectCd(chart.getFinAccountsPayableObjectCode());
-                gpt.setFinSubObjCd("---");
+            gpt.setAccountNumber(elem.getAccountNbr());
+            gpt.setSubAccountNumber(elem.getSubAccountNbr());
+            gpt.setChartOfAccountsCode(elem.getFinChartCode());
+            
+            if (pd.getPaymentGroup().getDisbursementType().getCode().equals("ACH")) {
+                gpt.setFinancialDocumentTypeCode(FDOC_TYP_CD_PROCESS_ACH);
+            }
+            else if (pd.getPaymentGroup().getDisbursementType().getCode().equals("CHCK")) {
+                gpt.setFinancialDocumentTypeCode(FDOC_TYP_CD_PROCESS_CHECK);
+            }
+            gpt.setFdocNbr(pd.getPaymentGroup().getDisbursementNbr().toString());
+            
+            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue()) && paymentDetailCreatingDocument != null) {
+                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), paymentDetailCreatingDocument.getDocumentHeader().getWorkflowDocument().getDocumentType(), gpt.getFinancialBalanceTypeCode());
+                gpt.setFinancialObjectCode(offsetDefinition.getFinancialObjectCode());
+                gpt.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
             }
             else {
-                gpt.setFinObjectCd(elem.getFinObjectCode());
-                gpt.setFinSubObjCd(elem.getFinSubObjectCode());
+                gpt.setFinancialObjectCode(elem.getFinObjectCode());
+                gpt.setFinancialSubObjectCode(elem.getFinSubObjectCode());
             }
             gpt.setProjectCd(elem.getProjectCode());
             if (elem.getAccountNetAmount().signum() >= 0) {
@@ -138,13 +169,6 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             }
             gpt.setAmount(elem.getAccountNetAmount().abs());
 
-            if (pd.getPaymentGroup().getDisbursementType().getCode().equals("ACH")) {
-                gpt.setFdocTypCd(FDOC_TYP_CD_PROCESS_ACH);
-            }
-            else if (pd.getPaymentGroup().getDisbursementType().getCode().equals("CHCK")) {
-                gpt.setFdocTypCd(FDOC_TYP_CD_PROCESS_CHECK);
-            }
-            gpt.setFdocNbr(pd.getPaymentGroup().getDisbursementNbr().toString());
             String trnDesc;
             String payeeName = pd.getPaymentGroup().getPayeeName();
             // removed 2/8/2006 per JIRA KULPDP-32
@@ -177,6 +201,9 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             gpt.setFdocRefNbr(pd.getCustPaymentDocNbr());
 
             glPendingTransactionDao.save(gpt);
+            
+            // update the offset account if necessary
+            SpringContext.getBean(FlexibleOffsetAccountService.class).updateOffset(gpt);
         }
     }
 
@@ -197,30 +224,38 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
 
         for (Iterator iter = accountListings.iterator(); iter.hasNext();) {
             PaymentAccountDetail elem = (PaymentAccountDetail) iter.next();
+            
+            AccountingDocument paymentDetailCreatingDocument = null; 
+            try {
+                paymentDetailCreatingDocument = (AccountingDocument)SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(elem.getPaymentDetail().getCustPaymentDocNbr());
+            }
+            catch (WorkflowException we) {
+                LOG.error("Could not find document which generated payment detail: "+elem.getPaymentDetail().toString());
+            }
 
             GlPendingTransaction gpt = new GlPendingTransaction();
             gpt.setFdocRefTypCd("PDP");
             gpt.setFsRefOriginCd("PD");
             gpt.setFsOriginCd("PD");
-            gpt.setFinBalanceTypCd("AC");
+            gpt.setFinancialBalanceTypeCode("AC");
             Date d = new Date((new java.util.Date()).getTime());
             gpt.setTransactionDt(new Timestamp(d.getTime()));
             AccountingPeriod fiscalPeriod = accountingPeriodService.getByDate(d);
-            gpt.setUnivFiscalYr(fiscalPeriod.getUniversityFiscalYear());
+            gpt.setUniversityFiscalYear(fiscalPeriod.getUniversityFiscalYear());
             gpt.setUnivFiscalPrdCd(fiscalPeriod.getUniversityFiscalPeriodCode());
 
-            gpt.setAccountNbr(elem.getAccountNbr());
-            gpt.setSubAccountNbr(elem.getSubAccountNbr());
-            gpt.setFinCoaCd(elem.getFinChartCode());
+            gpt.setAccountNumber(elem.getAccountNbr());
+            gpt.setSubAccountNumber(elem.getSubAccountNbr());
+            gpt.setChartOfAccountsCode(elem.getFinChartCode());
             Boolean relieveLiabilities = pg.getBatch().getCustomerProfile().getRelieveLiabilities();
-            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue())) {
-                Chart chart = chartService.getByPrimaryId(elem.getFinChartCode());
-                gpt.setFinObjectCd(chart.getFinAccountsPayableObjectCode());
-                gpt.setFinSubObjCd("---");
+            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue()) && paymentDetailCreatingDocument != null) {
+                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), paymentDetailCreatingDocument.getDocumentHeader().getWorkflowDocument().getDocumentType(), gpt.getFinancialBalanceTypeCode());
+                gpt.setFinancialObjectCode(offsetDefinition.getFinancialObjectCode());
+                gpt.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
             }
             else {
-                gpt.setFinObjectCd(elem.getFinObjectCode());
-                gpt.setFinSubObjCd(elem.getFinSubObjectCode());
+                gpt.setFinancialObjectCode(elem.getFinObjectCode());
+                gpt.setFinancialSubObjectCode(elem.getFinSubObjectCode());
             }
             gpt.setProjectCd(elem.getProjectCode());
             gpt.setOrgReferenceId(elem.getOrgReferenceId());
@@ -233,10 +268,10 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
                 gpt.setDebitCrdtCd("D");
             }
             if (pg.getDisbursementType().getCode().equals("ACH")) {
-                gpt.setFdocTypCd(achFdocTypeCode);
+                gpt.setFinancialDocumentTypeCode(achFdocTypeCode);
             }
             else if (pg.getDisbursementType().getCode().equals("CHCK")) {
-                gpt.setFdocTypCd(checkFdocTypeCode);
+                gpt.setFinancialDocumentTypeCode(checkFdocTypeCode);
             }
 
             PaymentDetail pd = elem.getPaymentDetail();
@@ -292,6 +327,9 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             gpt.setFdocRefNbr(pd.getCustPaymentDocNbr());
 
             glPendingTransactionDao.save(gpt);
+            
+            // update the offset account if necessary
+            SpringContext.getBean(FlexibleOffsetAccountService.class).updateOffset(gpt);
         }
     }
 }
