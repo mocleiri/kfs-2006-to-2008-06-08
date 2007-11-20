@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ public abstract class TriggerDescriptor implements BeanNameAware {
     private String group;
     private String jobName;
     private DateTimeService dateTimeService;
-    private boolean testMode = false;
 
     protected abstract void completeTriggerDescription(Trigger trigger);
 
@@ -85,13 +84,5 @@ public abstract class TriggerDescriptor implements BeanNameAware {
 
     protected DateTimeService getDateTimeService() {
         return dateTimeService;
-    }
-
-    public boolean isTestMode() {
-        return testMode;
-    }
-
-    public void setTestMode(boolean testMode) {
-        this.testMode = testMode;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +40,6 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-/**
- * This class represents the functionality needed to generate a Poster Output Summary Report
- */
 public class PosterOutputSummaryReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterOutputSummaryReport.class);
     public static final String PDF_FILE_EXTENSION = ".pdf";
@@ -66,7 +63,7 @@ public class PosterOutputSummaryReport {
      * @param fileprefix the prefix of the generated report file
      * @param destinationDirectory the directory where the report is located
      */
-    public void generateReport(Map<String, PosterOutputSummaryEntry> data, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
+    public void generateReport(Map<String,PosterOutputSummaryEntry> data, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
         Document document = new Document(PageSize.A4.rotate());
 
@@ -86,11 +83,10 @@ public class PosterOutputSummaryReport {
 
             document.open();
 
-            if (data.size() == 0) {
+            if ( data.size() == 0 ) {
                 document.add(buildEmptyTable());
-            }
-            else {
-                printReport(data, document);
+            } else {
+                printReport(data,document);
             }
         }
         catch (Exception de) {
@@ -103,11 +99,6 @@ public class PosterOutputSummaryReport {
         }
     }
 
-    /**
-     * This method returns a new PDF Table for this report
-     * 
-     * @return PdfPTable a new table for this report
-     */
     private PdfPTable newTable() {
         PdfPTable entryTable = new PdfPTable(new float[] { 5, 5, 5, 7, 7, 7, 7 });
         entryTable.setHeaderRows(1);
@@ -117,14 +108,7 @@ public class PosterOutputSummaryReport {
         return entryTable;
     }
 
-    /**
-     * This method populates the information for the poster output summary report
-     * 
-     * @param data map containing poster output summary entries
-     * @param document document object representing actually PDF
-     * @throws DocumentException if there are any problems creating actual PDF document
-     */
-    private void printReport(Map<String, PosterOutputSummaryEntry> data, Document document) throws DocumentException {
+    private void printReport(Map<String,PosterOutputSummaryEntry> data,Document document) throws DocumentException {
 
         PdfPTable entryTable = newTable();
 
@@ -137,10 +121,10 @@ public class PosterOutputSummaryReport {
 
         boolean first = true;
         for (Iterator reportIter = sortedSet.iterator(); reportIter.hasNext();) {
-            String key = (String) reportIter.next();
+            String key = (String)reportIter.next();
             PosterOutputSummaryEntry entry = data.get(key);
 
-            if (first) {
+            if ( first ) {
                 first = false;
                 subTotalPeriodBalanceYear.setUniversityFiscalYear(entry.getUniversityFiscalYear());
                 subTotalPeriodBalanceYear.setBalanceTypeCode(entry.getBalanceTypeCode());
@@ -158,13 +142,13 @@ public class PosterOutputSummaryReport {
             }
 
             // Do we need to print a subtotal?
-            String balanceTypeCode = entry.getBalanceTypeCode();
+            String balanceTypeCode  = entry.getBalanceTypeCode();
             Integer fiscalYear = entry.getUniversityFiscalYear();
             String fiscalPeriod = entry.getFiscalPeriodCode();
 
             boolean newPage = false;
 
-            if ((!fiscalPeriod.equals(subTotalPeriodBalanceYear.getFiscalPeriodCode())) || (!balanceTypeCode.equals(subTotalPeriodBalanceYear.getBalanceTypeCode())) || (!fiscalYear.equals(subTotalPeriodBalanceYear.getUniversityFiscalYear()))) {
+            if ( (! fiscalPeriod.equals(subTotalPeriodBalanceYear.getFiscalPeriodCode())) || (! balanceTypeCode.equals(subTotalPeriodBalanceYear.getBalanceTypeCode())) || (! fiscalYear.equals(subTotalPeriodBalanceYear.getUniversityFiscalYear())) ) {
                 addRow(entryTable, subTotalPeriodBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_PERIOD_BALANCE_SUBTOTAL);
                 subTotalPeriodBalanceYear = new PosterOutputSummaryEntry();
                 subTotalPeriodBalanceYear.setUniversityFiscalYear(entry.getUniversityFiscalYear());
@@ -172,7 +156,7 @@ public class PosterOutputSummaryReport {
                 subTotalPeriodBalanceYear.setFiscalPeriodCode(entry.getFiscalPeriodCode());
             }
 
-            if ((!balanceTypeCode.equals(subTotalBalanceYear.getBalanceTypeCode())) || (!fiscalYear.equals(subTotalBalanceYear.getUniversityFiscalYear()))) {
+            if ( (! balanceTypeCode.equals(subTotalBalanceYear.getBalanceTypeCode())) || (! fiscalYear.equals(subTotalBalanceYear.getUniversityFiscalYear())) ) {
                 addRow(entryTable, subTotalBalanceYear, headerFont, PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL);
                 subTotalBalanceYear = new PosterOutputSummaryEntry();
                 subTotalBalanceYear.setUniversityFiscalYear(fiscalYear);
@@ -180,12 +164,12 @@ public class PosterOutputSummaryReport {
 
                 newPage = true;
             }
-            if (!balanceTypeCode.equals(subTotalBalance.getBalanceTypeCode())) {
+            if ( ! balanceTypeCode.equals(subTotalBalance.getBalanceTypeCode()) ) {
                 addRow(entryTable, subTotalBalance, headerFont, PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL);
                 subTotalBalance = new PosterOutputSummaryEntry();
                 subTotalBalance.setBalanceTypeCode(balanceTypeCode);
             }
-            if (newPage) {
+            if ( newPage ) {
                 document.add(entryTable);
                 document.add(Chunk.NEXTPAGE);
 
@@ -212,11 +196,7 @@ public class PosterOutputSummaryReport {
         document.add(entryTable);
     }
 
-    /**
-     * Returns an empty table
-     * 
-     * @return PdfPTable an empty table
-     */
+    // draw a table with an informative messge, instead of data
     private PdfPTable buildEmptyTable() {
         float[] tableWidths = { 100 };
 
@@ -228,12 +208,7 @@ public class PosterOutputSummaryReport {
         return ledgerEntryTable;
     }
 
-    /**
-     * Adds a table header
-     * 
-     * @param entryTable PdfPTable
-     * @param headerFont
-     */
+    // add a table header
     private void addHeader(PdfPTable entryTable, Font headerFont) {
 
         PdfPCell cell = new PdfPCell(new Phrase("Fiscal Year", headerFont));
@@ -258,38 +233,31 @@ public class PosterOutputSummaryReport {
         entryTable.addCell(cell);
     }
 
-    /**
-     * Add a row with the given ledger entry into PDF table
-     * 
-     * @param entryTable PdfPTable where row is being added too
-     * @param entry poster output summary entry
-     * @param textFont font for text
-     * @param type total type (i.e. year period balance subtotal, year balance subtotal, balance subtotal, total, or detail)
-     */
+    // add a row with the given ledger entry into PDF table
     private void addRow(PdfPTable entryTable, PosterOutputSummaryEntry entry, Font textFont, int type) {
         PdfPCell cell = null;
 
-        if (type == PosterOutputSummaryReport.TYPE_YEAR_PERIOD_BALANCE_SUBTOTAL) {
+        if ( type == PosterOutputSummaryReport.TYPE_YEAR_PERIOD_BALANCE_SUBTOTAL ) {
             cell = new PdfPCell(new Phrase("Subtotal(" + entry.getFiscalPeriodCode() + ", " + entry.getUniversityFiscalYear() + ", " + entry.getBalanceTypeCode() + ")", textFont));
             cell.setColspan(3);
-            entryTable.addCell(cell);
+            entryTable.addCell(cell);        
         }
-        else if (type == PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL) {
+        else if ( type == PosterOutputSummaryReport.TYPE_YEAR_BALANCE_SUBTOTAL ) {
             cell = new PdfPCell(new Phrase("Subtotal(" + entry.getUniversityFiscalYear() + ", " + entry.getBalanceTypeCode() + ")", textFont));
             cell.setColspan(3);
             entryTable.addCell(cell);
         }
-        else if (type == PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL) {
+        else if ( type == PosterOutputSummaryReport.TYPE_BALANCE_SUBTOTAL ) {
             cell = new PdfPCell(new Phrase("Subtotal(" + entry.getBalanceTypeCode() + ")", textFont));
             cell.setColspan(3);
             entryTable.addCell(cell);
         }
-        else if (type == PosterOutputSummaryReport.TYPE_TOTAL) {
+        else if ( type == PosterOutputSummaryReport.TYPE_TOTAL ) {
             cell = new PdfPCell(new Phrase("Total", textFont));
             cell.setColspan(3);
-            entryTable.addCell(cell);
+            entryTable.addCell(cell);            
         }
-        else if (type == PosterOutputSummaryReport.TYPE_DETAIL) {
+        else if ( type == PosterOutputSummaryReport.TYPE_DETAIL) {
             Integer fiscalYear = entry.getUniversityFiscalYear();
             String stringFiscalYear = (fiscalYear != null) ? fiscalYear.toString() : "";
             cell = new PdfPCell(new Phrase(stringFiscalYear, textFont));
@@ -319,11 +287,7 @@ public class PosterOutputSummaryReport {
         entryTable.addCell(cell);
     }
 
-    /**
-     * Format the given number based on its type: Integer or BigDecimal
-     * @param number
-     * @return String formatted BigDecimal or Integer as a String
-     */
+    // format the given number based on its type: Integer or BigDecimal
     private String formatNumber(Number number) {
         DecimalFormat decimalFormat = new DecimalFormat();
 
@@ -336,11 +300,7 @@ public class PosterOutputSummaryReport {
         return decimalFormat.format(number);
     }
 
-    /**
-     * Close the document and release the resource
-     * 
-     * @param document document to be closed
-     */
+    // close the document and release the resource
     private void closeDocument(Document document) {
         try {
             if ((document != null) && document.isOpen()) {

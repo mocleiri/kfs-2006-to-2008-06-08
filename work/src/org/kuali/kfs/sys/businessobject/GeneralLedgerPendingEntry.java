@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
@@ -38,6 +37,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
+import org.kuali.PropertyConstants;
 
 /**
  * The general ledger pending entry structure holds financial transaction info that will post to the general ledger as an entry.
@@ -73,6 +73,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     private String acctSufficientFundsFinObjCd;
     private boolean transactionEntryOffsetIndicator;
     private Date transactionEntryProcessedTs;
+    private String budgetYear;
 
     private DocumentType documentType;
     private DocumentHeader documentHeader;
@@ -82,7 +83,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     private Account account;
     private SubAccount subAccount;
     private ObjectCode financialObject;
-    private SubObjCd financialSubObject;
+    private SubObjCd subObjectCode;
     private BalanceTyp balanceType;
     private ObjectType objectType;
     private A21SubAccount a21SubAccount;
@@ -104,7 +105,9 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     }
 
     /**
-     * Copy constructor Constructs a GeneralLedgerPendingEntry.java.
+     * Copy constructor
+     * 
+     * Constructs a GeneralLedgerPendingEntry.java.
      * 
      * @param original entry to copy
      */
@@ -138,6 +141,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
         acctSufficientFundsFinObjCd = original.acctSufficientFundsFinObjCd;
         transactionEntryOffsetIndicator = original.transactionEntryOffsetIndicator;
         transactionEntryProcessedTs = original.transactionEntryProcessedTs;
+        budgetYear = original.budgetYear;
     }
 
     public DocumentType getReferenceDocumentType() {
@@ -600,6 +604,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
      * Gets the transactionEncumbranceUpdateCode attribute.
      * 
      * @return Returns the transactionEncumbranceUpdateCode
+     * 
      */
     public String getTransactionEncumbranceUpdateCode() {
         return transactionEncumbranceUpdateCode;
@@ -688,6 +693,24 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     }
 
     /**
+     * Gets the budgetYear attribute.
+     * 
+     * @return Returns the budgetYear
+     */
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    /**
+     * Sets the budgetYear attribute.
+     * 
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
+    }
+
+    /**
      * @return Returns the financialSystemOriginationCode.
      */
     public String getFinancialSystemOriginationCode() {
@@ -707,7 +730,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("financialSystemOriginationCode", this.financialSystemOriginationCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (transactionLedgerEntrySequenceNumber == null) {
             m.put("transactionLedgerEntrySequenceNumber", null);
         }
@@ -887,12 +910,12 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
         this.subAccount = subAccount;
     }
 
-    public SubObjCd getFinancialSubObject() {
-        return financialSubObject;
+    public SubObjCd getSubObjectCode() {
+        return subObjectCode;
     }
 
-    public void setFinancialSubObject(SubObjCd financialSubObject) {
-        this.financialSubObject = financialSubObject;
+    public void setSubObjectCode(SubObjCd subObjectCode) {
+        this.subObjectCode = subObjectCode;
     }
 
     public void setAccountingPeriod(AccountingPeriod accountingPeriod) {
@@ -900,22 +923,22 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     }
 
     public boolean isSubAccountNumberBlank() {
-        return subAccountNumber == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankSubAccountNumber().equals(subAccountNumber);
+        return subAccountNumber == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_ACCOUNT_NUMBER.equals(subAccountNumber);
     }
 
     public boolean isFinancialObjectCodeBlank() {
-        return financialObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectCode().equals(financialObjectCode);
+        return financialObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_CODE.equals(financialObjectCode);
     }
 
     public boolean isFinancialSubObjectCodeBlank() {
-        return financialSubObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialSubObjectCode().equals(financialSubObjectCode);
+        return financialSubObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_OBJECT_CODE.equals(financialSubObjectCode);
     }
 
     public boolean isProjectCodeBlank() {
-        return projectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankProjectCode().equals(projectCode);
+        return projectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_PROJECT_STRING.equals(projectCode);
     }
 
     public boolean isFinancialObjectTypeCodeBlank() {
-        return financialObjectTypeCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectType().equals(financialObjectTypeCode);
+        return financialObjectTypeCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_TYPE_CODE.equals(financialObjectTypeCode);
     }
 }

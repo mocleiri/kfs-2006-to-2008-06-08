@@ -24,10 +24,9 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.module.vendor.VendorConstants;
 
 /**
- * Generator of a list of tax payer type value pairs, including an empty one, as opposed to <code>TaxPayerTypeValuesFinder</code>,
- * which does not include an empty pair.
+ * This class returns list of tax payer type value pairs.
  * 
- * @see org.kuali.module.financial.lookup.keyvalues.TaxPayerTypeValuesFinder
+ * 
  */
 public class TaxPayerTypeWithNoneValuesFinder extends KeyValuesBase {
 

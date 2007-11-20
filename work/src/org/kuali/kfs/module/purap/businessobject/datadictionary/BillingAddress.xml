@@ -1,29 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.BillingAddress">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Billing Address Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="billingCampusCode" />
                 <field attributeName="billingName" />
                 <field attributeName="billingLine1Address" />
@@ -33,12 +19,14 @@
                 <field attributeName="billingPostalCode" />
                 <field attributeName="billingCountryCode" />
                 <field attributeName="billingPhoneNumber" />
-                <field attributeName="active" />
-            </inquiryFields></inquirySection></inquirySections>
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Billing Address Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.BillingAddress">Create New</a>]]></menubar>
 
             <instructions>Lookup a Billing Address</instructions>
 
@@ -58,7 +46,7 @@
                 <lookupField attributeName="billingPostalCode" required="false" />
                 <lookupField attributeName="billingCountryCode" required="false" />
                 <lookupField attributeName="billingPhoneNumber" required="false" />
-                <lookupField attributeName="active" required="false" />
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -71,45 +59,88 @@
                 <field attributeName="billingPostalCode" />
                 <field attributeName="billingCountryCode" />
                 <field attributeName="billingPhoneNumber" />
-                <field attributeName="active" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
             </resultFields>
         </lookup>
 
-        <titleAttribute>billingCampusCode</titleAttribute>
-
         <attributes>
 
-			<attributeReference name="billingCampusCode"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy" 
-				sourceAttributeName="campusCode">
-				<label>Billing Campus Code</label>
-			</attributeReference>
-			
-			<attributeReference name="billingCityName"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy" 
-				sourceAttributeName="cityName">
-				<label>Billing City Name</label>
-			</attributeReference>
+            <attribute name="billingCampusCode" forceUppercase="true">
+                <label>Billing Campus Code</label>
+                <shortLabel>Code</shortLabel>
 
-			<attributeReference name="billingCountryCode"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy"
-				sourceAttributeName="countryCode">
-				<label>Billing Country Code</label>
-			</attributeReference>
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-			<attributeReference name="billingLine1Address"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy"
-				sourceAttributeName="line1Address">
-				<label>Billing Line 1 Address</label>
-			</attributeReference>
-			
-			<attributeReference name="billingLine2Address"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy"
-				sourceAttributeName="line2Address">
-				<label>Billing Line 2 Address</label>
-			</attributeReference>			
+                <control>
+                    <text size="4" />
+                </control>
 
-            <attribute name="billingName" forceUppercase="true">
+                <summary>billingCampusCode</summary>
+                <description>billingCampusCode description...</description>
+			</attribute>
+
+            <attribute name="billingCityName">
+                <label>Billing City Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingCityName</summary>
+                <description>billingCityName description...</description>
+			</attribute>
+
+            <attribute name="billingCountryCode" forceUppercase="true">
+                <label>Billing Country Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>billingCountryCode</summary>
+                <description>billingCountryCode description...</description>
+			</attribute>
+
+            <attribute name="billingLine1Address">
+                <label>Billing Line1 Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingLine1Address</summary>
+                <description>billingLine1Address description...</description>
+			</attribute>
+
+            <attribute name="billingLine2Address">
+                <label>Billing Line2 Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingLine2Address</summary>
+                <description>billingLine2Address description...</description>
+			</attribute>
+
+            <attribute name="billingName">
                 <label>Billing Name</label>
                 <shortLabel>Name</shortLabel>
 
@@ -120,31 +151,60 @@
                     <text size="47" />
                 </control>
 
+                <summary>billingName</summary>
+                <description>billingName description...</description>
 			</attribute>
-			
-			<attributeReference name="billingPhoneNumber"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy"
-				sourceAttributeName="phoneNumberWithValidation">
-				<label>Billing Phone Number</label>
-			</attributeReference>
-			
-			<attributeReference name="billingPostalCode"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy"
-				sourceAttributeName="zipCode">
-				<label>Billing Postal Code</label>
-			</attributeReference>						
 
-			<attributeReference name="billingStateCode"
-				sourceClassName="org.kuali.module.vendor.bo.VendorAttributeReferenceDummy"
-				sourceAttributeName="stateCode">
-				<label>Billing State Code</label>
-			</attributeReference>				
+            <attribute name="billingPhoneNumber">
+                <label>Billing Phone Number</label>
+                <shortLabel>Number</shortLabel>
 
-            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingPhoneNumber</summary>
+                <description>billingPhoneNumber description...</description>
+			</attribute>
+
+            <attribute name="billingPostalCode">
+                <label>Billing Postal Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>20</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="22" />
+                </control>
+
+                <summary>billingPostalCode</summary>
+                <description>billingPostalCode description...</description>
+			</attribute>
+
+            <attribute name="billingStateCode" forceUppercase="true">
+                <label>Billing State Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>billingStateCode</summary>
+                <description>billingStateCode description...</description>
+			</attribute>
+
+            <attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
+
         </attributes>
-        <objectLabel>Billing Address</objectLabel>
     </businessObject>
 </dictionaryEntry>

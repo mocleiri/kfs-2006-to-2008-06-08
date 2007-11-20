@@ -1,43 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.ProposalSubcontractor">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Proposal Subcontractor Inquiry</title>
 
-            <inquirySections>
-				<inquirySection title="Proposal Subcontractor Details">
-					<inquiryFields>
-						<field attributeName="proposalNumber" />
-		                <field attributeName="proposalSubcontractorAmount" />
-			            <field attributeName="proposalSubcontractorNumber" />
-			            <field attributeName="subcontractorNumber" />
-			        </inquiryFields>
-				</inquirySection>
-			</inquirySections>
+            <inquiryFields>
+                <field attributeName="proposalNumber" />
+                <field attributeName="proposalSubcontractorAmount" />
+                <field attributeName="proposalSubcontractorNumber" />
+                <field attributeName="subcontractorNumber" />
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Proposal Subcontractor Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.ProposalSubcontractor">Create New</a>]]></menubar>
 
             <instructions>Look up a Proposal Subcontractor</instructions>
 
@@ -66,15 +49,35 @@
 
         <attributes>
 
-            <attributeReference name="proposalNumber"  sourceClassName="org.kuali.module.cg.bo.Proposal" sourceAttributeName="proposalNumber"/>
+            <attribute name="proposalNumber" forceUppercase="true">
+                <label>Proposal Number</label>
+                <shortLabel>Number</shortLabel>
 
-			<attributeReference name="subcontractorNumber" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorNumber"/>
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-			<attributeReference name="proposalSubcontractorAmount"  sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-				<description>Proposal Subcontractor Amount</description>
-				
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
-			</attributeReference>				
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>proposalNumber</summary>
+                <description>proposalNumber description...</description>
+			</attribute>
+
+            <attribute name="proposalSubcontractorAmount" forceUppercase="true">
+                <label>Proposal Subcontractor Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>proposalSubcontractorAmount</summary>
+                <description>proposalSubcontractorAmount description...</description>
+			</attribute>
 
             <attribute name="proposalSubcontractorNumber" forceUppercase="true">
                 <label>Proposal Subcontractor Number</label>
@@ -83,34 +86,29 @@
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
 
-				<control>
+                <control>
                     <text size="4" />
                 </control>
+
+                <summary>proposalSubcontractorNumber</summary>
+                <description>proposalSubcontractorNumber description...</description>
 			</attribute>
 
+            <attribute name="subcontractorNumber" forceUppercase="true">
+                <label>Subcontractor Number</label>
+                <shortLabel>Number</shortLabel>
 
-			<attribute name="proposalSubcontractorDescription">
-                <label>Description</label>
-                <shortLabel>Description</shortLabel>
-
-                <maxLength>30</maxLength>
-                <validationPattern>
-                    <anyCharacter allowWhitespace="true" maxLength="30"/>
-                </validationPattern>
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <text size="30" />
+                    <text size="7" />
                 </control>
-            </attribute>
 
-			<attributeReference name="subcontractor.subcontractorName" sourceClassName="org.kuali.module.cg.bo.Subcontractor" sourceAttributeName="subcontractorName">
-                <label>Name</label>
-            </attributeReference>
+                <summary>subcontractorNumber</summary>
+                <description>subcontractorNumber description...</description>
+			</attribute>
 
-            <attributeReference name="newCollectionRecord"
-                                sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-                                sourceAttributeName="newCollectionRecord" />
-                                
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>

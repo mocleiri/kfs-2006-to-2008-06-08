@@ -18,20 +18,10 @@ package org.kuali.module.labor.batch;
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.labor.service.LaborNightlyOutService;
 
-/**
- * Clean Labor Feed Batch Step.
- */
 public class LaborFeedStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ClearLaborPendingStep.class);
     private LaborNightlyOutService laborNightlyOutService;
 
-    /**
-     * Executes the service copyLaborGenerealLedgerEntries
-     * 
-     * @param String jobName
-     * @return boolean true when success
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String)
-     */
     public boolean execute(String jobName) {
         laborNightlyOutService.copyLaborGenerealLedgerEntries();
         return true;
@@ -45,4 +35,5 @@ public class LaborFeedStep extends AbstractStep {
     public void setLaborNightlyOutService(LaborNightlyOutService laborNightlyOutService) {
         this.laborNightlyOutService = laborNightlyOutService;
     }
+
 }

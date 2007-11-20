@@ -17,21 +17,17 @@ package org.kuali.module.labor.bo;
 
 import org.kuali.module.gl.bo.GlSummary;
 
-/**
- * Labor business object for Labor Balance Summary
- */
 public class LaborBalanceSummary extends GlSummary {
 
     /**
-     * Constructs a LaborBalanceSummary
+     * Constructs a LaborBalanceSummary.java.
      */
     public LaborBalanceSummary() {
         super();
     }
 
     /**
-     * Constructs a LaborBalanceSummary using Object
-     * 
+     * Constructs a LaborBalanceSummary.java.
      * @param data
      */
     public LaborBalanceSummary(Object[] data) {

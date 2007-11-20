@@ -1,36 +1,45 @@
-/*
- * Copyright 2006-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.kra.budget.bo;
+
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
 
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 
-public class BudgetPeriod extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetPeriod extends BusinessObjectBase implements Comparable {
     private static final long serialVersionUID = -479888264761887048L;
 
-    private String documentNumber;
+    private String documentHeaderId;
     private Integer budgetPeriodSequenceNumber;
     private Date budgetPeriodBeginDate;
     private Date budgetPeriodEndDate;
@@ -42,34 +51,28 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
     public BudgetPeriod() {
         super();
     }
-
-    public BudgetPeriod(String documentNumber, Integer budgetPeriodSequenceNumber) {
-        this();
-        this.documentNumber = documentNumber;
-        this.budgetPeriodSequenceNumber = budgetPeriodSequenceNumber;
-    }
-
+    
     public BudgetPeriod(BudgetPeriod template) {
         this();
-        this.documentNumber = template.getDocumentNumber();
+        this.documentHeaderId = template.getDocumentHeaderId();
         this.budgetPeriodSequenceNumber = template.getBudgetPeriodSequenceNumber();
         this.budgetPeriodBeginDate = template.getBudgetPeriodBeginDate();
         this.budgetPeriodEndDate = template.getBudgetPeriodEndDate();
         this.budgetPeriodParticipantsNumber = template.getBudgetPeriodParticipantsNumber();
     }
-
+    
     /**
      * @return Returns the budgetNumber.
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
      * @param budgetNumber The budgetNumber to set.
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
@@ -134,7 +137,7 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
 
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("documentHeaderId", this.documentHeaderId);
         m.put("budgetPeriodSequenceNumber", this.budgetPeriodSequenceNumber);
         return m;
     }
@@ -168,8 +171,7 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
             if (this.getClass().equals(obj.getClass())) {
                 BudgetPeriod other = (BudgetPeriod) obj;
 
-                if (this.getDocumentNumber().equals(other.getDocumentNumber()) && this.getBudgetPeriodSequenceNumber().equals(other.getBudgetPeriodSequenceNumber()) && ((this.getBudgetPeriodBeginDate() == null && other.getBudgetPeriodEndDate() == null) || this.getBudgetPeriodBeginDate().equals(other.getBudgetPeriodBeginDate())) && ((this.getBudgetPeriodEndDate() == null && other.getBudgetPeriodEndDate() == null) || this.getBudgetPeriodEndDate().equals(other.getBudgetPeriodEndDate()))) {
-
+                if (this.getDocumentHeaderId().equals(other.getDocumentHeaderId()) && this.getBudgetPeriodSequenceNumber().equals(other.getBudgetPeriodSequenceNumber()) && this.getBudgetPeriodBeginDate().equals(other.getBudgetPeriodBeginDate()) && this.getBudgetPeriodEndDate().equals(other.getBudgetPeriodEndDate())) {
                     equal = true;
                 }
             }
@@ -179,14 +181,14 @@ public class BudgetPeriod extends PersistableBusinessObjectBase implements Compa
     }
 
     /**
-     * Calcluates hashCode based on current values of documentNumber and budgetPeriodSequenceNumber fields. Somewhat dangerous,
+     * Calcluates hashCode based on current values of documentHeaderId and budgetPeriodSequenceNumber fields. Somewhat dangerous,
      * since those fields are mutable, but I don't expect people to be editing those values directly for Periods stored in hashed
      * datastructures. (this is based on Account.hashCode()) - TAD
      * 
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        String hashString = getDocumentNumber() + "|" + getBudgetPeriodSequenceNumber() + getBudgetPeriodBeginDate() + "|" + getBudgetPeriodEndDate();
+        String hashString = getDocumentHeaderId() + "|" + getBudgetPeriodSequenceNumber() + getBudgetPeriodBeginDate() + "|" + getBudgetPeriodEndDate();
 
         return hashString.hashCode();
     }

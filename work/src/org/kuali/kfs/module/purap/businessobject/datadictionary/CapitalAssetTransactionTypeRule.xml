@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.CapitalAssetTransactionTypeRule">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Capital Asset Transaction Type Rule Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="capitalAssetRelationshipLimitNumber" />
                 <field attributeName="capitalAssetTransactionTypeCode" />
                 <field attributeName="financialObjectSubTypeCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Capital Asset Transaction Type Rule Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.CapitalAssetTransactionTypeRule">Create New</a>]]></menubar>
 
             <instructions>Lookup a Capital Asset Transaction Type Rule</instructions>
 
@@ -67,6 +55,8 @@
                     <text size="5" />
                 </control>
 
+                <summary>capitalAssetRelationshipLimitNumber</summary>
+                <description>capitalAssetRelationshipLimitNumber description...</description>
 			</attribute>
 
             <attribute name="capitalAssetTransactionTypeCode" forceUppercase="true">
@@ -80,6 +70,8 @@
                     <text size="6" />
                 </control>
 
+                <summary>capitalAssetTransactionTypeCode</summary>
+                <description>capitalAssetTransactionTypeCode description...</description>
 			</attribute>
 
             <attribute name="financialObjectSubTypeCode" forceUppercase="true">
@@ -93,6 +85,8 @@
                     <text size="4" />
                 </control>
 
+                <summary>financialObjectSubTypeCode</summary>
+                <description>financialObjectSubTypeCode description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -106,6 +100,8 @@
                     <text size="10" />
                 </control>
 
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
 			</attribute>
 
         </attributes>

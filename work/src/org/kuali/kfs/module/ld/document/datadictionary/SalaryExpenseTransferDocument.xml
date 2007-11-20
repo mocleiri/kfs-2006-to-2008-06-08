@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/document/datadictionary/SalaryExpenseTransferDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,9 +23,8 @@
 <dictionaryEntry>
     <transactionalDocument>
         <documentClass>org.kuali.module.labor.document.SalaryExpenseTransferDocument</documentClass>
-		<businessRulesClass>org.kuali.module.labor.rules.SalaryExpenseTransferDocumentRule</businessRulesClass>
-		
-        <documentAuthorizerClass>org.kuali.module.labor.document.authorization.LaborExpenseDocumentAuthorizerBase</documentAuthorizerClass>
+
+        <documentAuthorizerClass>org.kuali.module.labor.document.LaborDocumentAuthorizer</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,18 +34,15 @@
         </authorizations>
         <documentTypeName>KualiSalaryExpenseTransferDocument</documentTypeName>
         <documentTypeCode>ST</documentTypeCode>
-        <label>Salary Expense Transfer</label>
-        
+        <label>Salary Expense Transfer Document</label>
+        <shortLabel>STDoc</shortLabel>
         <summary>
             <![CDATA[&nbsp;]]>
         </summary>
         <description>
-        	The Salary Expense Transfer document is used to move salaries and staff benefit
-        	charges for a given employee for a particular accounting period (or set of periods)
-        	from one or more accounts to another account (or accounts). This document is used in
-        	the case where an employee's payroll expense was charged to an incorrect account or object code.        	
+        	Salary Expense Transfer Document
         </description>
-        
+        <help securityGroupName="Kuali.FinancialTransactionProcessing.TransferOfFundsDocument" parameterName="FINANCIAL_HELP_TRANSFER_OF_FUNDS_DOCUMENT" />
         <allowsCopy>true</allowsCopy>
         <allowsErrorCorrection>true</allowsErrorCorrection>
     </transactionalDocument>

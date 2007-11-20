@@ -45,29 +45,6 @@ function loadChartInfo(coaCodeFieldName, coaNameFieldName ) {
 	}
 }
 
-function setReportsToChartCode() {
-	// TODO: detect if in lookup or document mode
-	// make AJAX call to get reports-to chart
-	var coaCode = DWRUtil.getValue( "document.newMaintainableObject" + chartCodeSuffix );
-
-	if (coaCode!='') {
-		var dwrReply = {
-			callback:function(data) {
-			if ( data != null && typeof data == 'object' ) {
-				document.getElementsByName("document.newMaintainableObject.reportsToChartOfAccountsCode").item(0).value = data.reportsToChartOfAccountsCode;
-				document.getElementsByName("document.newMaintainableObject.reportsToChartOfAccountsCode").item(0).disabled = true;
-			} else {
-				window.status = "chart not found."; 
-			} },
-			errorHandler:function( errorMessage ) { 
-				window.status = "Unable to get reports-to chart."; 
-			}
-		};
-		ChartService.getByPrimaryId( coaCode, dwrReply );
-	}		
-	
-}
-
 function loadAccountInfo( accountCodeFieldName, accountNameFieldName ) {
     var elPrefix = findElPrefix( accountCodeFieldName );
     var accountCode = DWRUtil.getValue( accountCodeFieldName );
@@ -83,7 +60,7 @@ function loadAccountInfo( accountCodeFieldName, accountNameFieldName ) {
     if (accountCode=='') {
 		clearRecipients(accountNameFieldName);
 	} else if (coaCode=='') {
-		setRecipientValue(accountNameFieldName, wrapError( 'chart code is empty' ), true );
+		setRecipientValue(accountNameFieldName, wrapError( 'chart code is empty' ) );
 	} else {
 		var dwrReply = {
 			callback:function(data) {

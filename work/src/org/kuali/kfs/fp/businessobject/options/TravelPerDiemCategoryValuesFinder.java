@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
-import org.kuali.core.service.KeyValuesService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.bo.TravelPerDiem;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
  * This class returns list of per diem category value pairs.
+ * 
+ * 
  */
 public class TravelPerDiemCategoryValuesFinder extends KeyValuesBase {
 
@@ -38,9 +38,9 @@ public class TravelPerDiemCategoryValuesFinder extends KeyValuesBase {
      */
     public List getKeyValues() {
         Map criteria = new HashMap();
-        criteria.put("fiscalYear", SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear());
+        criteria.put("fiscalYear", SpringServiceLocator.getDateTimeService().getCurrentFiscalYear());
 
-        List boList = (List) SpringContext.getBean(KeyValuesService.class).findMatching(TravelPerDiem.class, criteria);
+        List boList = (List) SpringServiceLocator.getKeyValuesService().findMatching(TravelPerDiem.class, criteria);
         List keyValues = new ArrayList();
         keyValues.add(new KeyLabelPair("", ""));
         for (Iterator iter = boList.iterator(); iter.hasNext();) {

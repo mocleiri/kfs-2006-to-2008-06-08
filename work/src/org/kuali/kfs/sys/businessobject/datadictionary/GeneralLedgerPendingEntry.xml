@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.kfs.bo.GeneralLedgerPendingEntry">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
         <inquiry>
             <title>General Ledger Pending Entry</title>
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
@@ -54,11 +54,12 @@
                 <field attributeName="financialDocumentApprovedCode" />
                 <field attributeName="acctSufficientFundsFinObjCd" />
                 <field attributeName="transactionEntryProcessedTs" />
+                <field attributeName="budgetYear" />
                 <field attributeName="documentHeader.financialDocumentStatusCode" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
         <lookup>
-            <lookupableID>glPendingEntryLookupable</lookupableID>
+            <lookupableID>glPendingEntryLookupableImpl</lookupableID>
             <title>General Ledger Pending Entry Lookup</title>
             <menubar>
                 <![CDATA[&nbsp;]]>
@@ -332,19 +333,9 @@
                 <description>This flags a financial transaction as either a debit or credit.</description>
             </attribute>
 
-            <attribute name="acctSufficientFundsFinObjCd"  forceUppercase="true">
-                <label>Account Sufficient Funds Object Code</label>
-                <shortLabel>acctSufficientFundsFinObjCd</shortLabel>
-                <maxLength>4</maxLength>                
-                <required>false</required>
-                <control>
-                    <text size="4" />
-                </control>
-            </attribute>
+            <attributeReference name="acctSufficientFundsFinObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode" />
             
-            <attributeReference name="projectCode" sourceClassName="org.kuali.module.chart.bo.ProjectCode" sourceAttributeName="code">
-                <required>false</required>
-            </attributeReference>
+            <attributeReference name="projectCode" sourceClassName="org.kuali.module.chart.bo.ProjectCode" sourceAttributeName="code" />
             
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
             
@@ -355,6 +346,17 @@
                 <description>transactionEntryProcessed description...</description>
             </attributeReference>
             
+            <attribute name="budgetYear" forceUppercase="false">
+                <label>Budget Year</label>
+                <shortLabel>Bdgt. Year</shortLabel>
+                <maxLength>4</maxLength>
+                <control>
+                    <text size="6" />
+                </control>
+                <summary>The budget year for this transaction.</summary>
+                <description>This is the budget year associated with this pending ledger entry.</description>
+            </attribute>
+                        
             <attribute name="documentHeader.financialDocumentStatusCode" forceUppercase="false">
 				<label>Pending Entry Approved Indicator</label>
                 <shortLabel>Pending Entry Approved Indicator</shortLabel>

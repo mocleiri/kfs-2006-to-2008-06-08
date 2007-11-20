@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,17 @@ import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import org.kuali.core.service.DocumentService;
+import org.kuali.KeyConstants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.exceptions.AccountingLineParserException;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.document.InternalBillingDocument;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.suite.AnnotationTestSuite;
 import org.kuali.test.suite.CrossSectionSuite;
 
@@ -40,7 +39,7 @@ import org.kuali.test.suite.CrossSectionSuite;
  * Test class for testing <code>{@link AccountingLineParserBase}</code>
  */
 @AnnotationTestSuite(CrossSectionSuite.class)
-@ConfigureContext(session = KHUNTLEY)
+@WithTestSpringContext(session = KHUNTLEY)
 public class AccountingLineParserBaseTest extends KualiTestBase {
 
     private AccountingDocument accountingDocument;
@@ -49,7 +48,7 @@ public class AccountingLineParserBaseTest extends KualiTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        accountingDocument = (AccountingDocument) SpringContext.getBean(DocumentService.class).getNewDocument(InternalBillingDocument.class);
+        accountingDocument = (AccountingDocument) SpringServiceLocator.getDocumentService().getNewDocument(InternalBillingDocument.class);
         parser = accountingDocument.getAccountingLineParser();
     }
 
@@ -67,7 +66,7 @@ public class AccountingLineParserBaseTest extends KualiTestBase {
     }
 
     private static void assertInvalidPropertyValue(AccountingLineParserException e, String expectedErrorParam) {
-        assertEquals(KFSKeyConstants.AccountingLineParser.ERROR_INVALID_PROPERTY_VALUE, e.getErrorKey());
+        assertEquals(KeyConstants.AccountingLineParser.ERROR_INVALID_PROPERTY_VALUE, e.getErrorKey());
         List<String> errorParams = Arrays.asList(e.getErrorParameters());
         assertTrue(errorParams + " contains '" + expectedErrorParam + "'", errorParams.contains(expectedErrorParam));
     }

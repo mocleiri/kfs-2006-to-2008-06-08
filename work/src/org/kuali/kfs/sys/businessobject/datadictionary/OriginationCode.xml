@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.kfs.bo.OriginationCode">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Origination Code Inquiry</title>
@@ -90,7 +90,7 @@
 
             <attribute name="financialSystemOriginationCode" forceUppercase="true">
                 <label>Origination Code</label>
-                <shortLabel>Origin Code</shortLabel>
+                <shortLabel>Orig Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
@@ -162,7 +162,7 @@
 
                 <maxLength>40</maxLength>
                 <validationPattern>
-                    <alphaNumeric allowWhitespace="true"/>
+                    <alphaNumeric />
                 </validationPattern>
 
                 <control>
@@ -329,7 +329,6 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Origination Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

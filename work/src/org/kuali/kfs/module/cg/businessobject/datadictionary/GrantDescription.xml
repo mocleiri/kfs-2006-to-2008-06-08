@@ -1,38 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.GrantDescription">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Grant Description Inquiry</title>
 
-            <inquirySections><inquirySection title="Grant Description Details"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="grantDescription" />
-                <field attributeName="grantDescriptionCode" />
                 <field attributeName="grantDescriptionActiveCode" />
-            </inquiryFields></inquirySection></inquirySections>
+                <field attributeName="grantDescriptionCode" />
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Grant Description Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.cg.bo.GrantDescription">Create New</a>]]></menubar>
 
             <instructions>Look up a Grant Description</instructions>
 
@@ -44,14 +31,14 @@
 
             <lookupFields>
                 <lookupField attributeName="grantDescription" required="false" />
-                <lookupField attributeName="grantDescriptionCode" required="false" />
                 <lookupField attributeName="grantDescriptionActiveCode" required="false" />
+                <lookupField attributeName="grantDescriptionCode" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="grantDescription" />
-                <field attributeName="grantDescriptionCode" />
                 <field attributeName="grantDescriptionActiveCode" />
+                <field attributeName="grantDescriptionCode" />
             </resultFields>
         </lookup>
 
@@ -62,11 +49,29 @@
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>25</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="27" />
                 </control>
+
+                <summary>grantDescription</summary>
+                <description>grantDescription description...</description>
+			</attribute>
+
+            <attribute name="grantDescriptionActiveCode" forceUppercase="true">
+                <label>Grant Description Active Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>1</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="3" />
+                </control>
+
+                <summary>grantDescriptionActiveCode</summary>
+                <description>grantDescriptionActiveCode description...</description>
 			</attribute>
 
             <attribute name="grantDescriptionCode" forceUppercase="true">
@@ -74,26 +79,18 @@
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>3</maxLength>
-                <validationPattern><alphaNumeric /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="5" />
                 </control>
-			</attribute>
-            <attribute name="grantDescriptionActiveCode" forceUppercase="false">
-                <label>Active Indicator</label>
-                <shortLabel>Active Indicator</shortLabel>
 
-                <maxLength>1</maxLength>
-
-                <control>
-                    <checkbox />
-                </control>
+                <summary>grantDescriptionCode</summary>
+                <description>grantDescriptionCode description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Grant Description</objectLabel>
     </businessObject>
 </dictionaryEntry>

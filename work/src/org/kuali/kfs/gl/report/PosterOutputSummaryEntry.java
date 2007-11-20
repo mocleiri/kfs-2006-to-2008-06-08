@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,13 @@
  */
 package org.kuali.module.gl.util;
 
-import java.util.List;
-
 import org.apache.commons.lang.ArrayUtils;
-import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.service.ObjectTypeService;
 
-/**
- * This class represents a poster output summary entry
- */
-public class PosterOutputSummaryEntry implements Comparable {
+public class PosterOutputSummaryEntry implements Comparable{
+    private static String[] assetExpenseObjectTypeCodeList = new String[] { "AS", "EE", "ES", "EX", "TE" };
+
     private Integer universityFiscalYear;
     private String fiscalPeriodCode;
     private String balanceTypeCode;
@@ -38,36 +32,19 @@ public class PosterOutputSummaryEntry implements Comparable {
     private KualiDecimal budgetAmount;
     private KualiDecimal netAmount;
 
-    private final String[] assetExpenseObjectTypeCodes;
-
     public PosterOutputSummaryEntry() {
         creditAmount = KualiDecimal.ZERO;
         debitAmount = KualiDecimal.ZERO;
         budgetAmount = KualiDecimal.ZERO;
         netAmount = KualiDecimal.ZERO;
-
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-
-        ObjectTypeService objectTypeService = (ObjectTypeService) SpringContext.getBean(ObjectTypeService.class);
-        List<String> objectTypes = objectTypeService.getCurrentYearExpenseObjectTypes();
-        objectTypes.add(objectTypeService.getCurrentYearAssetObjectType());
-
-        assetExpenseObjectTypeCodes = objectTypes.toArray(new String[0]);
     }
 
-    /**
-     * This method returns the key for the poster output summary entry
-     * 
-     * @return String returns a string with format "universityFiscalYear-balanceTypeCode-fiscalPeriodCode-fundGroup"
-     */
     public String getKey() {
-        return universityFiscalYear + "-" + balanceTypeCode + "-" + fiscalPeriodCode + "-" + fundGroup;
+        return universityFiscalYear + "-" + balanceTypeCode + "-" + fiscalPeriodCode + "-" + fundGroup; 
     }
 
     /**
-     * Add the amounts of two summary entries
-     * 
-     * @param posterInputSummaryEntry a poster input summary entry which contains the amounts to add to this poster output summary entry 
+     * add the amounts of two summary entries
      */
     public void add(PosterOutputSummaryEntry posterInputSummaryEntry) {
         // calculate the credit amount
@@ -83,28 +60,23 @@ public class PosterOutputSummaryEntry implements Comparable {
         setNetAmount(netAmount.add(posterInputSummaryEntry.getNetAmount()));
     }
 
-
     /**
-     * This method sets the amounts for this poster output summary entry.
-     * 
-     * @param debitCreditCode credit code used to determine whether amounts is debit or credit
-     * @param objectTypeCode object type code associated with amount
-     * @param amount amount to add
+     * add the amounts of two summary entries
      */
     public void setAmount(String debitCreditCode, String objectTypeCode, KualiDecimal amount) {
 
-        if (KFSConstants.GL_CREDIT_CODE.equals(debitCreditCode)) {
+        if (Constants.GL_CREDIT_CODE.equals(debitCreditCode)) {
             setCreditAmount(creditAmount.add(amount));
-            if (ArrayUtils.contains(assetExpenseObjectTypeCodes, objectTypeCode)) {
+            if ( ArrayUtils.contains(assetExpenseObjectTypeCodeList, objectTypeCode) ) {
                 setNetAmount(netAmount.subtract(amount));
             }
             else {
                 setNetAmount(netAmount.add(amount));
             }
         }
-        else if (KFSConstants.GL_DEBIT_CODE.equals(debitCreditCode)) {
+        else if (Constants.GL_DEBIT_CODE.equals(debitCreditCode)) {
             setDebitAmount(debitAmount.add(amount));
-            if (ArrayUtils.contains(assetExpenseObjectTypeCodes, objectTypeCode)) {
+            if ( ArrayUtils.contains(assetExpenseObjectTypeCodeList, objectTypeCode) ) {
                 setNetAmount(netAmount.add(amount));
             }
             else {
@@ -117,73 +89,26 @@ public class PosterOutputSummaryEntry implements Comparable {
         }
     }
 
-    public String toString() {
-        String posterOutputSummaryEntry = "";
-        posterOutputSummaryEntry += "[UniversityFiscalYear: " + this.getUniversityFiscalYear();
-        posterOutputSummaryEntry += ", FiscalPeriodCode: " + this.getFiscalPeriodCode();
-        posterOutputSummaryEntry += ", BalanceTypeCode:" + this.getBalanceTypeCode();
-        posterOutputSummaryEntry += ", FundGroup: " + this.getFundGroup();
-        posterOutputSummaryEntry += ", ObjectTypeCode: " + this.getObjectTypeCode();
-        posterOutputSummaryEntry += ", CreditAmount: " + this.getCreditAmount();
-        posterOutputSummaryEntry += ", DebitAmount: " + this.getDebitAmount();
-        posterOutputSummaryEntry += ", BudgetAmount: " + this.getBudgetAmount();
-        posterOutputSummaryEntry += ", NetAmount: " + this.getNetAmount();
-        posterOutputSummaryEntry += "]";
-
+    public String toString(){
+       String posterOutputSummaryEntry = "";
+       posterOutputSummaryEntry += "[UniversityFiscalYear: " + this.getUniversityFiscalYear();
+       posterOutputSummaryEntry += ", FiscalPeriodCode: " + this.getFiscalPeriodCode();
+       posterOutputSummaryEntry += ", BalanceTypeCode:" + this.getBalanceTypeCode();
+       posterOutputSummaryEntry += ", FundGroup: " + this.getFundGroup();
+       posterOutputSummaryEntry += ", ObjectTypeCode: " + this.getObjectTypeCode();
+       posterOutputSummaryEntry += ", CreditAmount: " + this.getCreditAmount();
+       posterOutputSummaryEntry += ", DebitAmount: " + this.getDebitAmount();
+       posterOutputSummaryEntry += ", BudgetAmount: " + this.getBudgetAmount();
+       posterOutputSummaryEntry += ", NetAmount: " + this.getNetAmount();
+       posterOutputSummaryEntry += "]";
+        
         return posterOutputSummaryEntry;
     }
 
-    /**
-     * Compares this poster output summary entry with another poster output summary entry based on key value
-     * 
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
     public int compareTo(Object anotherPosterOutputSummaryEntry) {
-        PosterOutputSummaryEntry tempPosterOutputSummaryEntry = (PosterOutputSummaryEntry) anotherPosterOutputSummaryEntry;
+        PosterOutputSummaryEntry tempPosterOutputSummaryEntry = (PosterOutputSummaryEntry)anotherPosterOutputSummaryEntry;
 
         return getKey().compareTo(tempPosterOutputSummaryEntry.getKey());
-    }
-
-    /**
-     * This method returns an empty PosterOutputSummaryEntry 
-     * 
-     * @param entrySummary
-     * @return
-     */
-    public static PosterOutputSummaryEntry buildPosterOutputSummaryEntry(Object[] entrySummary) {
-        PosterOutputSummaryEntry posterOutputSummaryEntry = new PosterOutputSummaryEntry();
-        int indexOfField = 0;
-
-        Object tempEntry = entrySummary[indexOfField++];
-        String entry = (tempEntry == null) ? "" : tempEntry.toString();
-        posterOutputSummaryEntry.setBalanceTypeCode(entry);
-
-        tempEntry = entrySummary[indexOfField++];
-        entry = (tempEntry == null) ? null : tempEntry.toString();
-        posterOutputSummaryEntry.setUniversityFiscalYear(new Integer(entry));
-
-        tempEntry = entrySummary[indexOfField++];
-        entry = (tempEntry == null) ? "" : tempEntry.toString();
-        posterOutputSummaryEntry.setFiscalPeriodCode(entry);
-
-        tempEntry = entrySummary[indexOfField++];
-        entry = (tempEntry == null) ? "" : tempEntry.toString();
-        posterOutputSummaryEntry.setFundGroup(entry);
-
-        tempEntry = entrySummary[indexOfField++];
-        String objectTypeCode = (tempEntry == null) ? "" : tempEntry.toString();
-        posterOutputSummaryEntry.setObjectTypeCode(objectTypeCode);
-
-        tempEntry = entrySummary[indexOfField++];
-        String debitCreditCode = (tempEntry == null) ? KFSConstants.GL_BUDGET_CODE : tempEntry.toString();
-
-        tempEntry = entrySummary[indexOfField];
-        entry = (tempEntry == null) ? "0" : tempEntry.toString();
-        KualiDecimal amount = new KualiDecimal(entry);
-
-        posterOutputSummaryEntry.setAmount(debitCreditCode, objectTypeCode, amount);
-
-        return posterOutputSummaryEntry;
     }
 
     public String getFiscalPeriodCode() {

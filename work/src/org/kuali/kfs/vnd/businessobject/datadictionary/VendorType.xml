@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,19 +20,18 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.vendor.bo.VendorType">
 
+
         <inquiry>
             <title>Vendor Type Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="vendorTypeCode" />
                 <field attributeName="vendorTypeDescription" />
-                <field attributeName="vendorAddressTypeRequiredCode" />
                 <field attributeName="vendorTaxNumberRequiredIndicator" />
                 <field attributeName="vendorTypeChangeAllowedIndicator" />
                 <field attributeName="vendorContractAllowedIndicator" />
-                <field attributeName="vendorShowReviewIndicator" />
-                <field attributeName="vendorReviewText" />
-                <field attributeName="active" />
+                <field attributeName="vendorAddressTypeRequiredCode" />
+                <field attributeName="active" />               
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
@@ -50,25 +49,21 @@
             <lookupFields>
                 <lookupField attributeName="vendorTypeCode" required="false"/>
                 <lookupField attributeName="vendorTypeDescription" required="false" />
-                <lookupField attributeName="vendorAddressTypeRequiredCode" required="false" />
                 <lookupField attributeName="vendorTaxNumberRequiredIndicator" required="false" />
                 <lookupField attributeName="vendorTypeChangeAllowedIndicator" required="false" />
                 <lookupField attributeName="vendorContractAllowedIndicator" required="false" />
-                <lookupField attributeName="vendorShowReviewIndicator" />
-                <lookupField attributeName="vendorReviewText" />
+                <lookupField attributeName="vendorAddressTypeRequiredCode" required="false" />
                 <lookupField attributeName="active" required="false"/>               
             </lookupFields>
 
             <resultFields>
                 <field attributeName="vendorTypeCode" />
                 <field attributeName="vendorTypeDescription" />
-                <field attributeName="addressType.vendorAddressTypeDescription" />
                 <field attributeName="vendorTaxNumberRequiredIndicator" />
                 <field attributeName="vendorTypeChangeAllowedIndicator" />
                 <field attributeName="vendorContractAllowedIndicator" />
-                <field attributeName="vendorShowReviewIndicator" />
-                <field attributeName="vendorReviewText" />
-                <field attributeName="active" />
+                <field attributeName="addressType.vendorAddressTypeDescription" />
+                <field attributeName="active" />               
             </resultFields>
         </lookup>
 
@@ -87,6 +82,8 @@
                     <text size="6" />
                 </control>
 
+                <summary>vendorTypeCode</summary>
+                <description>vendorTypeCode description...</description>
 			</attribute>
 
             <attribute name="vendorTypeDescription" forceUppercase="true">
@@ -100,6 +97,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>vendorTypeDescription</summary>
+                <description>vendorTypeDescription description...</description>
 			</attribute>
 			
 			<attributeReference name="vendorTaxNumberRequiredIndicator"
@@ -111,7 +110,9 @@
 				<control>
 					<checkbox />
 				</control>
-
+				
+				<summary>vendorTaxNumberRequiredIndicator</summary>
+				<description>vendorTaxNumberRequiredIndicator description...</description>
 			</attributeReference>
 			
 			<attributeReference name="vendorTypeChangeAllowedIndicator"
@@ -123,7 +124,9 @@
 				<control>
 					<checkbox />
 				</control>
-
+				
+				<summary>vendorTypeChangeAllowedIndicator</summary>
+				<description>vendorTypeChangeAllowedIndicator description...</description>
 			</attributeReference>
 			
 			<attributeReference name="vendorContractAllowedIndicator"
@@ -135,34 +138,11 @@
 				<control>
 					<checkbox />
 				</control>
-
+				
+				<summary>vendorContractAllowedIndicator</summary>
+				<description>vendorContractAllowedIndicator description...</description>
 			</attributeReference>
 											
-			<attributeReference name="vendorShowReviewIndicator"
-					sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-					sourceAttributeName="oneDigitTextCode">
-				<label>Show Review Page</label>
-				<shortLabel>Show Review Page</shortLabel>
-				
-				<control>
-					<checkbox />
-				</control>
-
-			</attributeReference>
-
-            <attribute name="vendorReviewText" forceUppercase="false">
-                <label>Vendor Review Page Text</label>
-                <shortLabel>Review Text</shortLabel>
-
-                <maxLength>4000</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
-
-                <control>
-                    <textarea rows="5" cols="60" />
-                </control>
-
-			</attribute>
-			
             <attributeReference name="vendorAddressTypeRequiredCode" sourceClassName="org.kuali.module.vendor.bo.AddressType" sourceAttributeName="vendorAddressTypeCode">
                 <label>Address Type Required</label>
                 <shortLabel>Address Type Required</shortLabel>
@@ -181,6 +161,5 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Vendor Type</objectLabel>
     </businessObject>
 </dictionaryEntry>

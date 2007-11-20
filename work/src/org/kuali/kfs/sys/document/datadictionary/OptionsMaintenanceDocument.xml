@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>OptionsMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOptionsMaintenanceDocument</documentTypeName>
         <documentTypeCode>SOPT</documentTypeCode>
 
-        <label>System Options</label>
+        <label>System Options Maintenance Document</label>
+        <shortLabel>SystemOptionsMaintenanceDocument</shortLabel>
 
         <summary>SystemOptionsMaintenanceDocument</summary>
         <description>Document used to create or update Options</description>
-        <help parameterNamespace="KFS-SY" parameterDetailType="Options" parameterName="OPTIONS" />
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_SYSTEM_OPTIONS" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
@@ -90,13 +93,7 @@
                     <maintainableField name="financialObjectTypeAssetsCd" required="true" />
                     <maintainableField name="finObjectTypeLiabilitiesCode" required="true" />
                     <maintainableField name="finObjectTypeFundBalanceCd" required="true" />
-	                <maintainableField name="costShareEncumbranceBalanceTypeCd" required="true" />
-	                <maintainableField name="baseBudgetFinancialBalanceTypeCd" required="true" />
-	                <maintainableField name="monthlyBudgetFinancialBalanceTypeCd" required="true" />
-	                <maintainableField name="financialObjectTypeTransferIncomeCd" required="true" />
-	                <maintainableField name="financialObjectTypeTransferExpenseCd" required="true" />
-	                <maintainableField name="nominalFinancialBalanceTypeCd" required="true" />
-	                <maintainableField name="versionNumber" />
+                    <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>

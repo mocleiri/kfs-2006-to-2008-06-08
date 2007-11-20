@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.Closure;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.core.authorization.AuthorizationConstants;
@@ -31,14 +29,11 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.authorization.TransactionalDocumentAuthorizerBase;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.kfs.bo.AccountResponsibility;
 import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ChartUser;
-import org.kuali.module.chart.service.AccountService;
 import org.kuali.workflow.KualiWorkflowUtils.RouteLevelNames;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -46,9 +41,9 @@ import edu.iu.uis.eden.exception.WorkflowException;
 /**
  * DocumentAuthorizer containing common, reusable document-level authorization code for financial (i.e. Transactional) documents
  */
-public class AccountingDocumentAuthorizerBase extends TransactionalDocumentAuthorizerBase implements AccountingDocumentAuthorizer {
+public class AccountingDocumentAuthorizerBase extends TransactionalDocumentAuthorizerBase implements AccountingDocumentAuthorizer{
     private static Log LOG = LogFactory.getLog(AccountingDocumentAuthorizerBase.class);
-
+    
     /**
      * @see org.kuali.core.authorization.FinancialDocumentAuthorizer#getAccountingLineEditableFields(org.kuali.core.document.Document,
      *      org.kuali.core.bo.user.KualiUser)
@@ -72,12 +67,12 @@ public class AccountingDocumentAuthorizerBase extends TransactionalDocumentAutho
      * Note that document types which route straight to final will get an edit mode of VIEW_ONLY or FULL_ENTRY, never EXPENSE_ENTRY,
      * because even if the state is briefly enroute, the route level is never ORG_REVIEW or ACCOUNT_REVIEW.
      * 
-     * @see org.kuali.module.financial.document.authorization.FinancialDocumentAuthorizer#getEditMode(org.kuali.core.document.Document,
-     *      org.kuali.core.bo.user.UniversalUser, java.util.List, java.util.List)
+     *
+     * @see org.kuali.module.financial.document.authorization.FinancialDocumentAuthorizer#getEditMode(org.kuali.core.document.Document, org.kuali.core.bo.user.UniversalUser, java.util.List, java.util.List)
      */
     public Map getEditMode(Document document, UniversalUser user, List sourceAccountingLines, List targetAccountingLines) {
         ChartUser chartUser = (ChartUser) user.getModuleUser(ChartUser.MODULE_ID);
-
+        
         String editMode = AuthorizationConstants.TransactionalEditMode.VIEW_ONLY;
 
         KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
@@ -149,63 +144,18 @@ public class AccountingDocumentAuthorizerBase extends TransactionalDocumentAutho
     }
 
     /**
-     * This class, a simple closure, decides if an account belongs in the editableAccounts map or not: if it does not exist, or if
-     * the account is editable, it will go into the map.
-     */
-    private class AccountResponsibilityClosure implements Closure {
-        private Map editableAccounts;
-        private ChartUser currentUser;
-        private AccountService accountService;
-
-        public AccountResponsibilityClosure(Map editableAccounts, ChartUser currentUser, AccountService accountService) {
-            this.editableAccounts = editableAccounts;
-            this.currentUser = currentUser;
-            this.accountService = accountService;
-        }
-
-        public void execute(Object input) {
-            AccountingLine acctLine = (AccountingLine) input;
-            Account acct = accountService.getByPrimaryId(acctLine.getChartOfAccountsCode(), acctLine.getAccountNumber());
-            if (ObjectUtils.isNotNull(acct)) {
-                if (accountService.hasResponsibilityOnAccount(currentUser.getUniversalUser(), acct)) {
-                    editableAccounts.put(acctLine.getAccountKey(), acct);
-                }
-            }
-            else {
-                editableAccounts.put(acctLine.getAccountKey(), acctLine.getAccountKey());
-            }
-        }
-
-    }
-
-    /**
-     * @see org.kuali.module.financial.document.authorization.FinancialDocumentAuthorizer#getEditableAccounts(org.kuali.core.document.TransactionalDocument,
-     *      org.kuali.module.chart.bo.ChartUser)
+     * @see org.kuali.module.financial.document.authorization.FinancialDocumentAuthorizer#getEditableAccounts(org.kuali.core.document.TransactionalDocument, org.kuali.module.chart.bo.ChartUser)
      */
     public Map getEditableAccounts(TransactionalDocument document, ChartUser user) {
-
         Map editableAccounts = new HashMap();
-        AccountingDocument acctDoc = (AccountingDocument) document;
-        AccountResponsibilityClosure accountResponsibilityClosure = new AccountResponsibilityClosure(editableAccounts, user, SpringContext.getBean(AccountService.class));
 
-        // for every source accounting line, decide if account should be in map
-        CollectionUtils.forAllDo(acctDoc.getSourceAccountingLines(), accountResponsibilityClosure);
-
-        // for every target accounting line, decide if account should be in map
-        CollectionUtils.forAllDo(acctDoc.getTargetAccountingLines(), accountResponsibilityClosure);
-
-        return editableAccounts;
-    }
-
-    /**
-     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizer#getEditableAccounts(java.util.List,
-     *      org.kuali.module.chart.bo.ChartUser)
-     */
-    public Map getEditableAccounts(List<AccountingLine> lines, ChartUser user) {
-        Map editableAccounts = new HashMap();
-        AccountResponsibilityClosure accountResponsibilityClosure = new AccountResponsibilityClosure(editableAccounts, user, SpringContext.getBean(AccountService.class));
-
-        CollectionUtils.forAllDo(lines, accountResponsibilityClosure);
+        // convert AccountResponsibilities HashMap into Account Map
+        for (Iterator i = user.getAccountResponsibilities().entrySet().iterator(); i.hasNext();) {
+            Map.Entry e = (Map.Entry) i.next();
+            AccountResponsibility accountResponsibility = (AccountResponsibility) e.getValue();
+            Account account = accountResponsibility.getAccount();
+            editableAccounts.put(account.getAccountKey(), account);
+        }
 
         return editableAccounts;
     }

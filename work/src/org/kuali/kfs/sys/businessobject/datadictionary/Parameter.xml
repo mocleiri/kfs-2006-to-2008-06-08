@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+    Copyright 2007 The Kuali Foundation.
+    
+    Licensed under the Educational Community License, Version 1.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    
+    http://www.opensource.org/licenses/ecl1.php
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 -->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
@@ -26,7 +26,7 @@
                 <inquirySection title="Parameter Information">
                     <inquiryFields>
                         <field attributeName="parameterNamespace.codeAndDescription" />
-                        <field attributeName="parameterDetailType.parameterDetailTypeName" noInquiry="true" />
+                        <field attributeName="parameterDetailTypeCode" noInquiry="true" />
                         <field attributeName="parameterName" noInquiry="true" />
                         <field attributeName="parameterValue" />
                         <field attributeName="parameterConstraintCode" />
@@ -45,7 +45,7 @@
             <defaultSort attributeName="parameterName" sortAscending="true" />
             <lookupFields>
                 <lookupField attributeName="parameterNamespaceCode" required="false" />
-                <lookupField attributeName="parameterDetailType.parameterDetailTypeName" noLookup="true" />
+                <lookupField attributeName="parameterDetailTypeCode" />
                 <lookupField attributeName="parameterName" noLookup="true" />
                 <lookupField attributeName="parameterValue" />
                 <lookupField attributeName="parameterTypeCode" />
@@ -53,7 +53,7 @@
             </lookupFields>
             <resultFields>
                 <field attributeName="parameterNamespaceCode" forceInquiry="true" />
-                <field attributeName="parameterDetailType.parameterDetailTypeName" noInquiry="true" />
+                <field attributeName="parameterDetailTypeCode" noInquiry="true" />
                 <field attributeName="parameterName" forceInquiry="true" maxLength="60" />
                 <field attributeName="parameterValue" maxLength="40" />
                 <field attributeName="parameterConstraintCode" />
@@ -158,11 +158,6 @@
                 <label>Parameter Type</label>
                 <required>false</required>
             </attributeReference>
-
-            <attributeReference name="parameterDetailType.parameterDetailTypeName" sourceClassName="org.kuali.core.bo.ParameterDetailType" sourceAttributeName="parameterDetailTypeName">
-                <label>Component</label>
-                <required>false</required>
-            </attributeReference>
             
             <attribute name="parameterWorkgroupName">
                 <label>Workgroup</label>
@@ -193,6 +188,5 @@
                 sourceAttributeName="versionNumber"
             />
         </attributes>
-        <objectLabel>Parameter</objectLabel>
     </businessObject>
 </dictionaryEntry>

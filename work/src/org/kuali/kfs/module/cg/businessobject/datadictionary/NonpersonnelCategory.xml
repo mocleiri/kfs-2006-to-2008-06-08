@@ -1,39 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.NonpersonnelCategory">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Non-Personnel Category Inquiry</title>
+            <title>Nonpersonnel Category Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-                <field attributeName="sortNumber" />
                 <field attributeName="active" />
-            </inquiryFields></inquirySection></inquirySections>
+                <field attributeName="sortNumber" />
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Non-Personnel Category Lookup</title>
+            <title>Nonpersonnel Category Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.kra.budget.bo.NonpersonnelCategory">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Nonpersonnel Category</instructions>
 
@@ -48,7 +37,7 @@
             </lookupFields>
 
             <resultFields>
-                <field attributeName="code" noInquiry="true" />
+                <field attributeName="code" />
                 <field attributeName="name" />
                 <field attributeName="active" />
             </resultFields>
@@ -120,6 +109,5 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Non-Personnel Category</objectLabel>
     </businessObject>
 </dictionaryEntry>
