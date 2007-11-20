@@ -183,6 +183,8 @@ public class PdpExtractServiceImpl implements PdpExtractService {
     private Totals extractRegularPaymentsForChart(String campusCode, PdpUser puser, Date processRunDate, Batch batch) {
         Totals t = new Totals();
 
+        List<String> preqsWithCreditMemos = new ArrayList<String>();
+        
         // Get all the matching credit memos
         Iterator<CreditMemoDocument> cmIter = creditMemoService.getCreditMemosToExtract(campusCode);
         while (cmIter.hasNext()) {
@@ -195,6 +197,7 @@ public class PdpExtractServiceImpl implements PdpExtractService {
             KualiDecimal creditMemoAmount = cmd.getCreditMemoAmount();
             KualiDecimal paymentRequestAmount = KualiDecimal.ZERO;
 
+            // find all related PREQ documents which should be bundled with this CM
             Iterator<PaymentRequestDocument> pri = paymentRequestService.getPaymentRequestsToExtractByCM(campusCode, cmd);
             while (pri.hasNext()) {
                 PaymentRequestDocument prd = pri.next();
@@ -202,7 +205,9 @@ public class PdpExtractServiceImpl implements PdpExtractService {
                 prds.add(prd);
             }
 
+            // check if there is anything left to pay
             if (paymentRequestAmount.compareTo(creditMemoAmount) > 0) {
+                // if so, create a payment group and add the CM and PREQ documents
                 PaymentGroup pg = buildPaymentGroup(prds, cmds, batch);
                 paymentGroupService.save(pg);
                 t.count++;
@@ -216,18 +221,26 @@ public class PdpExtractServiceImpl implements PdpExtractService {
                     PaymentRequestDocument element = (PaymentRequestDocument) iter.next();
                     updatePaymentRequest(element, puser, processRunDate);
                 }
+            } else {
+                // put the PREQ documents in this bundle on a "do not process" list for this run
+                // to prevent them from being picked up by the code below
+                for ( PaymentRequestDocument doc : prds ) {
+                    preqsWithCreditMemos.add( doc.getDocumentHeader().getDocumentNumber() );
+                }
             }
         }
 
-        // Get all the payment requests to process
+        // Get all the payment requests to process that do not have credit memos
         Iterator<PaymentRequestDocument> prIter = paymentRequestService.getPaymentRequestToExtractByChart(campusCode);
         while (prIter.hasNext()) {
             PaymentRequestDocument prd = prIter.next();
-
-            PaymentGroup pg = processSinglePaymentRequestDocument(prd, batch, puser, processRunDate);
-
-            t.count = t.count + pg.getPaymentDetails().size();
-            t.totalAmount = t.totalAmount.add(pg.getNetPaymentAmount());
+            // if in the list created above, don't create the payment group
+            if ( !preqsWithCreditMemos.contains( prd.getDocumentHeader().getDocumentNumber() )  ) {
+                PaymentGroup pg = processSinglePaymentRequestDocument(prd, batch, puser, processRunDate);
+    
+                t.count = t.count + pg.getPaymentDetails().size();
+                t.totalAmount = t.totalAmount.add(pg.getNetPaymentAmount());
+            }
         }
 
         return t;
