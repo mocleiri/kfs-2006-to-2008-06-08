@@ -46,6 +46,10 @@
             <field attributeName="achAccountGeneratedIdentifier" />
         </lockingKeys>
 
+        <defaultExistenceChecks>
+            <reference attributeName="bankRouting" attributeToHighlightOnFail="bankRoutingNumber" />        
+        </defaultExistenceChecks>
+
         <maintainableSections>
             <maintainableSection title="Edit Payee ACH Account">
                 <maintainableItems>
