@@ -403,7 +403,7 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
             pnt.setCustomerNoteText("The total per diem amount for your daily expenses is " + dvnet.getDisbVchrPerdiemCalculatedAmt());
             pd.addNote(pnt);
 
-            if (dvnet.getDisbVchrPersonalCarAmount().compareTo(KualiDecimal.ZERO) != 0) {
+            if (dvnet.getDisbVchrPersonalCarAmount() != null && dvnet.getDisbVchrPersonalCarAmount().compareTo(KualiDecimal.ZERO) != 0) {
                 pnt = new PaymentNoteText();
                 pnt.setCustomerNoteLineNbr(line++);
                 pnt.setCustomerNoteText("The total dollar amount for your vehicle mileage is " + dvnet.getDisbVchrPersonalCarAmount());
