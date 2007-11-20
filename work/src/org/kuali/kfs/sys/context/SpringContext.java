@@ -21,11 +21,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.cache.MethodCacheInterceptor;
@@ -33,7 +35,6 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.service.SchedulerService;
 import org.kuali.kfs.util.MemoryMonitor;
 import org.kuali.rice.KNSServiceLocator;
-import org.kuali.rice.core.Core;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -45,7 +46,7 @@ import uk.ltd.getahead.dwr.create.SpringCreator;
 public class SpringContext {
     private static final Logger LOG = Logger.getLogger(SpringContext.class);
     private static final String APPLICATION_CONTEXT_DEFINITION = "SpringBeans.xml";
-    private static final String CENTRAL_KEW_DATASOURCE_CONTEXT_DEFINITION = "SpringCentralKEWDataSourceBeans.xml";
+    private static final String STANDALONE_RICE_DATASOURCE_CONTEXT_DEFINITION = "SpringStandaloneRiceDataSourceBeans.xml";
     private static final String DATASOURCE_CONTEXT_DEFINITION = "SpringDataSourceBeans.xml";
     private static final String SPRING_SOURCE_FILES_KEY = "spring.source.files";
     private static final String SPRING_TEST_FILES_KEY = "spring.test.files";
@@ -219,12 +220,19 @@ public class SpringContext {
         List<String> springConfigurationFiles = new ArrayList<String>();
         springConfigurationFiles.add(APPLICATION_CONTEXT_DEFINITION);
         if (Boolean.valueOf(getStringConfigurationProperty(KFSConstants.USE_CENTRAL_WORKFLOW_SERVER))) {
-            springConfigurationFiles.add(CENTRAL_KEW_DATASOURCE_CONTEXT_DEFINITION);
+            LOG.info("Initializing Spring Context to point to a Standalone Rice installation.");
+            springConfigurationFiles.add(STANDALONE_RICE_DATASOURCE_CONTEXT_DEFINITION);
         } else {
             springConfigurationFiles.add(DATASOURCE_CONTEXT_DEFINITION);
         }
         for (int i = 0; i < propertyNames.length; i++) {
             springConfigurationFiles.addAll(getListConfigurationProperty(propertyNames[i]));
+        }
+        for (Iterator iterator = springConfigurationFiles.iterator(); iterator.hasNext();) {
+            String fileName = (String) iterator.next();
+            if (StringUtils.isEmpty(fileName)) {
+                iterator.remove();
+            }
         }
         return springConfigurationFiles.toArray(new String[] {});
     }
