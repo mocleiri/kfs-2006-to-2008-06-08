@@ -88,7 +88,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
         if (payeeIdTypeCd.equals("E")) {
             payeeUserId = newPayeeAchAccount.getPersonUniversalIdentifier();
             if (payeeUserId == null) {
-                putFieldError("error.required", KFSKeyConstants.ERROR_REQUIRED, "Payee User Id");
+                putFieldError("personUniversalIdentifier", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "personUniversalIdentifier" ));
                 validEntry = false;
             }
             else
@@ -97,8 +97,8 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
         else if (payeeIdTypeCd.equals("V")) {
             vendorGnrtdId = newPayeeAchAccount.getVendorHeaderGeneratedIdentifier();
             vendorAsndId = newPayeeAchAccount.getVendorDetailAssignedIdentifier();
-            if ((vendorGnrtdId == null) | (vendorAsndId == null)) {
-                putFieldError("error.required", KFSKeyConstants.ERROR_REQUIRED, "Vendor");
+            if ((vendorGnrtdId == null) || (vendorAsndId == null)) {
+                putFieldError("vendorHeaderGeneratedIdentifier", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "vendorHeaderGeneratedIdentifier" ));
                 validEntry = false;
             }
             if (validEntry) {
@@ -109,7 +109,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
         else if (payeeIdTypeCd.equals("F")) {
             feinNumber = newPayeeAchAccount.getPayeeFederalEmployerIdentificationNumber();
             if (feinNumber == null) {
-                putFieldError("error.required", KFSKeyConstants.ERROR_REQUIRED, "FEIN Number");
+                putFieldError("payeeFederalEmployerIdentificationNumber", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "payeeFederalEmployerIdentificationNumber" ));
                 validEntry = false;
             }
             else
@@ -118,7 +118,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
         else if (payeeIdTypeCd.equals("S")) {
             ssn = newPayeeAchAccount.getPayeeSocialSecurityNumber();
             if (ssn == null) {
-                putFieldError("error.required", KFSKeyConstants.ERROR_REQUIRED, "Social Security Number");
+                putFieldError("payeeSocialSecurityNumber", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "payeeSocialSecurityNumber" ) );
                 validEntry = false;
             }
             else
@@ -127,7 +127,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
         else if (payeeIdTypeCd.equals("P")) {
             dvPayeeId = newPayeeAchAccount.getDisbVchrPayeeIdNumber();
             if (dvPayeeId == null) {
-                putFieldError("error.required", KFSKeyConstants.ERROR_REQUIRED, "Disbursement Voucher Payee ID");
+                putFieldError("disbVchrPayeeIdNumber", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "disbVchrPayeeIdNumber" ));
                 validEntry = false;
             }
             else
