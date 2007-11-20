@@ -28,12 +28,14 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.module.chart.bo.Account;
+import org.kuali.module.gl.bo.FlexibleAccountUpdateable;
 import org.kuali.module.gl.bo.OriginEntryFull;
 
 /**
  * @author jsissom
  */
-public class GlPendingTransaction implements Serializable {
+public class GlPendingTransaction implements Serializable, FlexibleAccountUpdateable {
     private Integer id; // GL_PENDING_ENTRY_ID NUMBER 8 0
     private String fsOriginCd; // FS_ORIGIN_CD VARCHAR2 2
     private String fdocNbr; // FDOC_NBR VARCHAR2 9
@@ -107,11 +109,11 @@ public class GlPendingTransaction implements Serializable {
         return oe;
     }
 
-    public String getAccountNbr() {
+    public String getAccountNumber() {
         return accountNbr;
     }
 
-    public void setAccountNbr(String accountNbr) {
+    public void setAccountNumber(String accountNbr) {
         this.accountNbr = accountNbr;
     }
 
@@ -187,35 +189,35 @@ public class GlPendingTransaction implements Serializable {
         this.fdocReversalDt = fdocReversalDt;
     }
 
-    public String getFdocTypCd() {
+    public String getFinancialDocumentTypeCode() {
         return fdocTypCd;
     }
 
-    public void setFdocTypCd(String fdocTypCd) {
+    public void setFinancialDocumentTypeCode(String fdocTypCd) {
         this.fdocTypCd = fdocTypCd;
     }
 
-    public String getFinBalanceTypCd() {
+    public String getFinancialBalanceTypeCode() {
         return finBalanceTypCd;
     }
 
-    public void setFinBalanceTypCd(String finBalanceTypCd) {
+    public void setFinancialBalanceTypeCode(String finBalanceTypCd) {
         this.finBalanceTypCd = finBalanceTypCd;
     }
 
-    public String getFinCoaCd() {
+    public String getChartOfAccountsCode() {
         return finCoaCd;
     }
 
-    public void setFinCoaCd(String finCoaCd) {
+    public void setChartOfAccountsCode(String finCoaCd) {
         this.finCoaCd = finCoaCd;
     }
 
-    public String getFinObjectCd() {
+    public String getFinancialObjectCode() {
         return finObjectCd;
     }
 
-    public void setFinObjectCd(String finObjectCd) {
+    public void setFinancialObjectCode(String finObjectCd) {
         this.finObjectCd = finObjectCd;
     }
 
@@ -227,11 +229,11 @@ public class GlPendingTransaction implements Serializable {
         this.finObjTypCd = finObjTypCd;
     }
 
-    public String getFinSubObjCd() {
+    public String getFinancialSubObjectCode() {
         return finSubObjCd;
     }
 
-    public void setFinSubObjCd(String finSubObjCd) {
+    public void setFinancialSubObjectCode(String finSubObjCd) {
         this.finSubObjCd = finSubObjCd;
     }
 
@@ -299,11 +301,11 @@ public class GlPendingTransaction implements Serializable {
         this.sequenceNbr = sequenceNbr;
     }
 
-    public String getSubAccountNbr() {
+    public String getSubAccountNumber() {
         return subAccountNbr;
     }
 
-    public void setSubAccountNbr(String subAccountNbr) {
+    public void setSubAccountNumber(String subAccountNbr) {
         this.subAccountNbr = subAccountNbr;
     }
 
@@ -339,11 +341,11 @@ public class GlPendingTransaction implements Serializable {
         this.univFiscalPrdCd = univFiscalPrdCd;
     }
 
-    public Integer getUnivFiscalYr() {
+    public Integer getUniversityFiscalYear() {
         return univFiscalYr;
     }
 
-    public void setUnivFiscalYr(Integer univFiscalYr) {
+    public void setUniversityFiscalYear(Integer univFiscalYr) {
         this.univFiscalYr = univFiscalYr;
     }
 
@@ -362,4 +364,6 @@ public class GlPendingTransaction implements Serializable {
     public String toString() {
         return new ToStringBuilder(this).append("id", id).toString();
     }
+    
+    public void setAccount(Account a) { /* don't do nada; we're just fulfilling the contract of FlexibleAccountUpdateable */ }
 }
