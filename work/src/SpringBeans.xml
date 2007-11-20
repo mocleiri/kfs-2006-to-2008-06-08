@@ -317,7 +317,7 @@
 		</property>
 	</bean>
 
-	<bean id="kualiConfigurationService" class="org.kuali.core.service.impl.KualiConfigurationServiceImpl" />
+	<bean id="kualiConfigurationService" class="org.kuali.core.service.impl.KualiConfigurationServiceImpl" depends-on="rice"/>
 
 	<bean id="authorizationService" class="org.kuali.core.service.impl.AuthorizationServiceImpl">
 		<property name="dataDictionaryService">
