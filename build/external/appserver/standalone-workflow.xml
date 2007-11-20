@@ -4,6 +4,8 @@
   <param name="dev.mode">false</param>
   <param name="bam.enabled">false</param>
 
+  <param name="ksb.org.quartz.jobStore.tablePrefix">QRTZ_</param>
+
   <param name="transaction.timeout">${transaction.timeout}</param>
 
   <param name="plugin.dir">/opt/j2ee/en-plugins/${environment}</param>
@@ -32,6 +34,9 @@
   <param name="log4j.settings.path">${log4j.settings.file}</param>
   <param name="log4j.settings.reloadInterval">${log4j.reload.minutes}</param>
 
-  <!-- filters? -->
+  <param name="filter.cas.class">org.kuali.core.web.filter.KualiCasFilter</param>
+  <param name="filter.cas.edu.yale.its.tp.cas.client.filter.loginUrl">${application.url}/${cas.application}/login</param>
+  <param name="filter.cas.edu.yale.its.tp.cas.client.filter.validateUrl">${application.url}/${cas.application}/serviceValidate</param>
+  <param name="filtermapping.cas.1">/*</param>
 
 </config>
