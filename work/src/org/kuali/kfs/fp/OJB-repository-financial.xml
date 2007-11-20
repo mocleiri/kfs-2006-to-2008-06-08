@@ -1111,7 +1111,7 @@
         <foreignkey field-ref="financialDocumentDepositLineNumber" />
     </reference-descriptor>
 
-    <reference-descriptor name="cashReceiptHeader" class-ref="org.kuali.module.financial.bo.CashReceiptHeader" auto-retrieve="true" auto-update="object" auto-delete="object">
+    <reference-descriptor name="cashReceiptHeader" class-ref="org.kuali.module.financial.bo.CashReceiptHeader" auto-retrieve="true" auto-update="object" auto-delete="none">
         <foreignkey field-ref="financialDocumentCashReceiptNumber" />
     </reference-descriptor>
 </class-descriptor>
