@@ -894,6 +894,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         paymentRequest.setReopenPurchaseOrderIndicator(false);
 
         SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(paymentRequest, "");
+        this.saveDocumentWithoutValidation(paymentRequest);
         LOG.debug("cancelExtractedPaymentRequest() PREQ " + paymentRequest.getPurapDocumentIdentifier() + " Cancelled Without Workflow");
         LOG.debug("cancelExtractedPaymentRequest() ended");
     }
