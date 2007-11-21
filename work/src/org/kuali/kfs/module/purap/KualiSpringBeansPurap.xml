@@ -330,6 +330,9 @@
 		<property name="dateTimeService">
 			<ref bean="dateTimeService"/>
 		</property>
+		<property name="dvExtractService">
+			<ref bean="disbursementVoucherExtractService" />
+		</property>
 	</bean>
 
 	<bean id="requisitionDao" parent="platformAwareDao" class="org.kuali.module.purap.dao.ojb.RequisitionDaoOjb" />
