@@ -313,9 +313,6 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
 
         String paymentStatus = paymentGroup.getPaymentStatus().getCode();
         if (!(CANCEL_DISBURSEMENT_CD.equals(paymentStatus))) {
-            // if ( ( (EXTRACTED_CD.equals(paymentStatus)) ||
-            // (PENDING_ACH_CD.equals(paymentStatus)) ) &&
-            // (paymentGroup.getDisbursementDate() != null) ) {
             if (((EXTRACTED_CD.equals(paymentStatus)) && (paymentGroup.getDisbursementDate() != null)) || (PENDING_ACH_CD.equals(paymentStatus))) {
                 LOG.debug("cancelDisbursement() Payment status is " + paymentStatus + "; continue with cancel.");
                 List allDisbursementPaymentGroups = paymentGroupDao.getByDisbursementNumber(paymentGroup.getDisbursementNbr());
@@ -367,8 +364,6 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
 
         String paymentStatus = paymentGroup.getPaymentStatus().getCode();
         if (!(OPEN_CD.equals(paymentStatus))) {
-            // if (((EXTRACTED_CD.equals(paymentStatus)) || (PENDING_ACH_CD.equals(paymentStatus))) &&
-            // (paymentGroup.getDisbursementDate() != null)) {
             if (((EXTRACTED_CD.equals(paymentStatus)) && (paymentGroup.getDisbursementDate() != null)) || (PENDING_ACH_CD.equals(paymentStatus))) {
                 LOG.debug("cancelReissueDisbursement() Payment status is " + paymentStatus + "; continue with cancel.");
                 List allDisbursementPaymentGroups = paymentGroupDao.getByDisbursementNumber(paymentGroup.getDisbursementNbr());
@@ -459,6 +454,16 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
             }
         }
 
+        String fromAddressList[] = {mailService.getBatchMailingList()};
+
+        if(fromAddressList.length > 0) {
+            for (int i = 0; i < fromAddressList.length; i++) {
+                if (fromAddressList[i] != null) {
+                    message.setFromAddress(fromAddressList[i].trim());
+                }
+            }
+        }
+        
         StringBuffer body = new StringBuffer();
         if (paymentGroup.getPaymentDetails().size() > 1) {
             body.append("The following payments have been cancelled by the Financial Management Services Tax Department.  The payments were cancelled for the following reason:\n\n");
