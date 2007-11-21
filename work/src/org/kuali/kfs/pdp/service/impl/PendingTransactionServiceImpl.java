@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.kuali.core.document.Document;
 import org.kuali.core.service.DocumentService;
+import org.kuali.core.service.DocumentTypeService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
@@ -152,8 +153,12 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             gpt.setFdocNbr(pd.getPaymentGroup().getDisbursementNbr().toString());
             
             if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue()) && paymentDetailCreatingDocument != null) {
-                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), paymentDetailCreatingDocument.getDocumentHeader().getWorkflowDocument().getDocumentType(), gpt.getFinancialBalanceTypeCode());
-                gpt.setFinancialObjectCode(offsetDefinition.getFinancialObjectCode());
+                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(paymentDetailCreatingDocument.getClass()), gpt.getFinancialBalanceTypeCode());
+                if (offsetDefinition != null) {
+                    gpt.setFinancialObjectCode(offsetDefinition.getFinancialObjectCode());
+                } else {
+                    gpt.setFinancialObjectCode(elem.getFinObjectCode());
+                }
                 gpt.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
             }
             else {
@@ -199,11 +204,11 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
 
             gpt.setOrgReferenceId(elem.getOrgReferenceId());
             gpt.setFdocRefNbr(pd.getCustPaymentDocNbr());
-
-            glPendingTransactionDao.save(gpt);
             
             // update the offset account if necessary
             SpringContext.getBean(FlexibleOffsetAccountService.class).updateOffset(gpt);
+
+            glPendingTransactionDao.save(gpt);
         }
     }
 
