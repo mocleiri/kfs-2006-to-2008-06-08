@@ -5496,6 +5496,9 @@
         <column name="DV_W9_CMPLT_IND" size="1" type="CHAR"/>
         <column name="DV_PMT_MTHD_CD" size="1" type="VARCHAR"/>
         <column name="DV_PAYEE_TYP_CD" size="1" type="VARCHAR"/>
+        <column name="EXTRACT_DT" type="DATE"/>
+        <column name="PAID_DT" type="DATE"/>
+        <column name="CANCEL_DT" type="DATE"/>
         <foreign-key foreignTable="FP_DV_DOC_LOC_T" name="FP_DV_DOC_TR2">
             <reference foreign="DV_DOC_LOC_CD" local="DV_DOC_LOC_CD"/>
         </foreign-key>
@@ -6045,7 +6048,7 @@
     </table>
     <table name="FP_MAINT_LOCK_T">
         <column name="LOCK_REPRESENTATION_TXT" primaryKey="true"
-            size="255" type="VARCHAR"/>
+            size="750" type="VARCHAR"/>
         <column default="NULL" name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FDOC_NBR" required="true" size="14" type="VARCHAR"/>

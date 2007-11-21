@@ -1505,12 +1505,6 @@
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="PDF_DIRECTORY"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="." SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
-    <SH_PARM_T OBJ_ID="3B13485ADBABA020E043814FD881A020"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="The temporary path location for storing images, logo, etc for Purap's pdf file."
-        SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="PDF_IMAGE_TEMP_PATH"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="." SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBACA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator for whether the images for purap pdf documents are available. Y means yes and N means no."
