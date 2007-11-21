@@ -55,7 +55,11 @@
 		
 		<property name="jobNames">
 			<list>
-				<value>laborBatchJob</value>
+				<value>laborNightlyOutJob</value>
+				<value>laborScrubberJob</value>
+				<value>laborPosterJob</value>
+				<value>laborFeedJob</value>
+				<value>clearLaborPendingEntriesJob</value>
 				<value>laborBalanceForwardJob</value>
 			</list>
 		</property>
@@ -425,18 +429,66 @@
 		</property>
 	</bean>
 	
-	<bean id="laborBatchJob" parent="scheduledJobDescriptor">
+	<bean id="laborNightlyOutJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
-				<ref bean="laborNightlyOutStep"/>
-				<ref bean="createLaborBackupGroupStep"/>
-				<ref bean="laborScrubberStep"/>
-				<ref bean="laborPosterStep"/>
-				<ref bean="laborBalanceSummaryStep"/>
-				<ref bean="laborFeedStep" />
-				<ref bean="laborClearGLEntryStep"/>	
-				<ref bean="clearLaborPendingStep"/>
+				<ref bean="laborNightlyOutStep" />
 			</list>
+		</property>
+	</bean>
+	
+	<bean id="laborScrubberJob" parent="scheduledJobDescriptor">
+		<property name="steps">
+			<list>
+				<ref bean="createLaborBackupGroupStep" />
+				<ref bean="laborScrubberStep" />
+			</list>
+		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="laborNightlyOutJob" value="hardDependency"/>
+			</map>
+		</property>
+	</bean>	
+	
+	<bean id="laborPosterJob" parent="scheduledJobDescriptor">
+		<property name="steps">
+			<list>
+				<ref bean="laborPosterStep" />
+				<ref bean="laborBalanceSummaryStep"/>
+			</list>
+		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="laborScrubberJob" value="hardDependency" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="laborFeedJob" parent="scheduledJobDescriptor">
+		<property name="steps">
+			<list>
+				<ref bean="laborFeedStep" />
+			</list>
+		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="laborPosterJob" value="hardDependency" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="clearLaborPendingEntriesJob" parent="scheduledJobDescriptor">
+		<property name="steps">
+			<list>
+				<ref bean="laborClearGLEntryStep" />
+				<ref bean="clearLaborPendingStep" />
+			</list>
+		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="laborFeedJob" value="hardDependency" />
+			</map>
 		</property>
 	</bean>
 	
