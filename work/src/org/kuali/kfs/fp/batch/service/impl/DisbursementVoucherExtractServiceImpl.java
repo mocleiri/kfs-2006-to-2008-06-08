@@ -579,7 +579,7 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
      * @see org.kuali.module.financial.service.DisbursementVoucherExtractService#cancelExtractedDisbursementVoucher(org.kuali.module.financial.document.DisbursementVoucherDocument)
      */
     public void cancelExtractedDisbursementVoucher(DisbursementVoucherDocument dv, java.sql.Date processDate) {
-        if (dv.getCancelDate() != null) {
+        if (dv.getCancelDate() == null) {
             try {
                 BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
                 // set the canceled date
