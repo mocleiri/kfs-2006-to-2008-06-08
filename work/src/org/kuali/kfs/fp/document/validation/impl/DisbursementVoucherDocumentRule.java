@@ -948,9 +948,11 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
     private void validateDocumentationLocation(DisbursementVoucherDocument document) {
         String documentationLocationCode = document.getDisbursementVoucherDocumentationLocationCode();
 
-        // payment reason restrictions
-        getParameterService().getParameterEvaluator(document.getClass(), DisbursementVoucherRuleConstants.VALID_DOC_LOC_BY_PAYMENT_REASON_PARM, DisbursementVoucherRuleConstants.INVALID_DOC_LOC_BY_PAYMENT_REASON_PARM, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), documentationLocationCode).evaluateAndAddError(document.getClass(), KFSPropertyConstants.DISBURSEMENT_VOUCHER_DOCUMENTATION_LOCATION_CODE);
-
+        if (ObjectUtils.isNotNull(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
+            // payment reason restrictions
+            getParameterService().getParameterEvaluator(document.getClass(), DisbursementVoucherRuleConstants.VALID_DOC_LOC_BY_PAYMENT_REASON_PARM, DisbursementVoucherRuleConstants.INVALID_DOC_LOC_BY_PAYMENT_REASON_PARM, document.getDvPayeeDetail().getDisbVchrPaymentReasonCode(), documentationLocationCode).evaluateAndAddError(document.getClass(), KFSPropertyConstants.DISBURSEMENT_VOUCHER_DOCUMENTATION_LOCATION_CODE);
+        }
+    
         // alien indicator restrictions
         if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
             getParameterService().getParameterEvaluator(DisbursementVoucherDocument.class, ALIEN_INDICATOR_CHECKED_PARM_NM, documentationLocationCode).evaluateAndAddError(document.getClass(), KFSPropertyConstants.DISBURSEMENT_VOUCHER_DOCUMENTATION_LOCATION_CODE);
