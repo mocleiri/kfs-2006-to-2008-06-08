@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dataset SYSTEM "data.dtd">
-<dataset>
-    <PDP_PROC_T LST_UPDT_TS="20071112123759" PHYS_CMP_CD="BL"
-        PROC_ID="10000097" PROC_TS="20071112123759"
-        PROC_USR_ID="6162502038" VER_NBR="1"/>
-</dataset>
