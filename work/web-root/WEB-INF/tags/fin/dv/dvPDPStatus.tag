@@ -15,9 +15,9 @@
 --%>
 <%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
-<kul:tab tabTitle="Post Disbursement Processor Status" defaultOpen="false">
+<kul:tab tabTitle="Pre-Disbursement Processor Status" defaultOpen="false">
   <div class="tab-container" align=center > 
-  <div class="h2-container"><h2>Disbursement Voucher Post Disbursement Processor Status</h2></div>
+  <div class="h2-container"><h2>Disbursement Voucher Pre-Disbursement Processor Status</h2></div>
   <c:set var="dvAttributes" value="${DataDictionary.DisbursementVoucherDocument.attributes}" />
   <table style="datatable" cellpadding="0" border="0" summary="DV PDP Status">
     <tr>
