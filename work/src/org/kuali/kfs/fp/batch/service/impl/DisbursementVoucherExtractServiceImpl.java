@@ -34,6 +34,7 @@ import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.service.UniversalUserService;
+import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
@@ -41,6 +42,7 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.rule.event.AccountingDocumentSaveWithNoLedgerEntryGenerationEvent;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
 import org.kuali.kfs.service.ParameterService;
 import org.kuali.kfs.service.impl.ParameterConstants;
@@ -185,9 +187,15 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
         paymentGroupService.save(pg);
 
         if (!testMode) {
-            document.getDocumentHeader().setFinancialDocumentStatusCode(DisbursementVoucherRuleConstants.DocumentStatusCodes.EXTRACTED);
-            document.setExtractDate(new java.sql.Date(processRunDate.getTime()));
-            disbursementVoucherDao.save(document);
+            try {
+                document.getDocumentHeader().setFinancialDocumentStatusCode(DisbursementVoucherRuleConstants.DocumentStatusCodes.EXTRACTED);
+                document.setExtractDate(new java.sql.Date(processRunDate.getTime()));
+                SpringContext.getBean(DocumentService.class).saveDocument(document, AccountingDocumentSaveWithNoLedgerEntryGenerationEvent.class);
+            }
+            catch (WorkflowException we) {
+                LOG.error("Could not save disbursement voucher document #"+document.getDocumentNumber()+": "+we);
+                throw new RuntimeException(we);
+            }
         }
     }
 
@@ -551,23 +559,29 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
 
         Collection<DisbursementVoucherDocument> list = new ArrayList<DisbursementVoucherDocument>();
 
-        Collection docs = disbursementVoucherDao.getDocumentsByHeaderStatus(statusCode);
-        for (Iterator iter = docs.iterator(); iter.hasNext();) {
-            DisbursementVoucherDocument element = (DisbursementVoucherDocument) iter.next();
+        try {
+            Collection docs = SpringContext.getBean(DocumentService.class).findByDocumentHeaderStatusCode(DisbursementVoucherDocument.class, statusCode);
+            for (Iterator iter = docs.iterator(); iter.hasNext();) {
+                DisbursementVoucherDocument element = (DisbursementVoucherDocument) iter.next();
 
-            String dvdCampusCode = element.getCampusCode();
+                String dvdCampusCode = element.getCampusCode();
 
-            DisbursementVoucherPayeeDetail dvpd = element.getDvPayeeDetail();
-            if (dvpd != null) {
-                List<String> campusCodes = parameterService.getParameterValues(DisbursementVoucherDocument.class, CAMPUS_BY_PAYMENT_REASON_PARAM, dvpd.getDisbVchrPaymentReasonCode());
-                if (campusCodes.size() > 0 && StringUtils.isNotBlank(campusCodes.get(0))) {
-                    dvdCampusCode = campusCodes.get(0);
+                DisbursementVoucherPayeeDetail dvpd = element.getDvPayeeDetail();
+                if (dvpd != null) {
+                    List<String> campusCodes = parameterService.getParameterValues(DisbursementVoucherDocument.class, CAMPUS_BY_PAYMENT_REASON_PARAM, dvpd.getDisbVchrPaymentReasonCode());
+                    if (campusCodes.size() > 0 && StringUtils.isNotBlank(campusCodes.get(0))) {
+                        dvdCampusCode = campusCodes.get(0);
+                    }
+                }
+
+                if (dvdCampusCode.equals(campusCode)) {
+                    list.add(element);
                 }
             }
-
-            if (dvdCampusCode.equals(campusCode)) {
-                list.add(element);
-            }
+        }
+        catch (WorkflowException we) {
+            LOG.error("Could not load Disbursement Voucher Documents with status code = "+statusCode+": "+we);
+            throw new RuntimeException(we);
         }
         return list;
     }
@@ -589,17 +603,20 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
                     // generate all the pending entries for the document
                     SpringContext.getBean(GeneralLedgerPendingEntryService.class).generateGeneralLedgerPendingEntries(dv);
                     // for each pending entry, opposite-ify it and reattach it to the document
+                    GeneralLedgerPendingEntrySequenceHelper glpeSeqHelper = new GeneralLedgerPendingEntrySequenceHelper();
                     for (GeneralLedgerPendingEntry glpe: dv.getGeneralLedgerPendingEntries()) {
-                        oppositifyEntry(glpe, boService);
+                        oppositifyEntry(glpe, boService, glpeSeqHelper);
                     }
                 } 
                 else {
                     List<GeneralLedgerPendingEntry> newGLPEs = new ArrayList<GeneralLedgerPendingEntry>();
+                    GeneralLedgerPendingEntrySequenceHelper glpeSeqHelper = new GeneralLedgerPendingEntrySequenceHelper(dv.getGeneralLedgerPendingEntries().size()+1);
                     for (GeneralLedgerPendingEntry glpe: dv.getGeneralLedgerPendingEntries()) {
+                        glpe.refresh();
                         if (glpe.getFinancialDocumentApprovedCode().equals(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED)) {
                             // damn! it got processed! well, make a copy, oppositify, and save
                             GeneralLedgerPendingEntry undoer = new GeneralLedgerPendingEntry(glpe);
-                            oppositifyEntry(undoer, boService);
+                            oppositifyEntry(undoer, boService, glpeSeqHelper);
                             newGLPEs.add(undoer);
                         } else {
                             // just delete the GLPE before anything happens to it
@@ -611,7 +628,7 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
                 // set the financial document status to canceled
                 dv.getDocumentHeader().setFinancialDocumentStatusCode(KFSConstants.DocumentStatusCodes.CANCELLED);
                 // save the document
-                SpringContext.getBean(DocumentService.class).saveDocument(dv);
+                SpringContext.getBean(DocumentService.class).saveDocument(dv, AccountingDocumentSaveWithNoLedgerEntryGenerationEvent.class);
             }
             catch (WorkflowException we) {
                 LOG.error("encountered workflow exception while attempting to save Disbursement Voucher: "+dv.getDocumentNumber()+" "+we);
@@ -625,12 +642,14 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
      * undoes the entries that were already posted for this document
      * @param glpe the general ledger pending entry to undo
      */
-    private void oppositifyEntry(GeneralLedgerPendingEntry glpe, BusinessObjectService boService) {
+    private void oppositifyEntry(GeneralLedgerPendingEntry glpe, BusinessObjectService boService, GeneralLedgerPendingEntrySequenceHelper glpeSeqHelper) {
         if (glpe.getTransactionDebitCreditCode().equals(KFSConstants.GL_CREDIT_CODE)) {
             glpe.setTransactionDebitCreditCode(KFSConstants.GL_DEBIT_CODE);
         } else if (glpe.getTransactionDebitCreditCode().equals(KFSConstants.GL_DEBIT_CODE)) {
             glpe.setTransactionDebitCreditCode(KFSConstants.GL_CREDIT_CODE);
         }
+        glpe.setTransactionLedgerEntrySequenceNumber(glpeSeqHelper.getSequenceCounter());
+        glpeSeqHelper.increment();
         glpe.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
         boService.save(glpe);
     }
@@ -647,7 +666,7 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
             dv.setExtractDate(null);
             dv.setPaidDate(null);
             // 2. save the doc
-            SpringContext.getBean(DocumentService.class).saveDocument(dv);
+            SpringContext.getBean(DocumentService.class).saveDocument(dv, AccountingDocumentSaveWithNoLedgerEntryGenerationEvent.class);
         }
         catch (WorkflowException we) {
             LOG.error("encountered workflow exception while attempting to save Disbursement Voucher: "+dv.getDocumentNumber()+" "+we);
@@ -682,7 +701,7 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
     public void markDisbursementVoucherAsPaid(DisbursementVoucherDocument dv, java.sql.Date processDate) {
         try {
             dv.setPaidDate(processDate);
-            SpringContext.getBean(DocumentService.class).saveDocument(dv);
+            SpringContext.getBean(DocumentService.class).saveDocument(dv, AccountingDocumentSaveWithNoLedgerEntryGenerationEvent.class);
         }
         catch (WorkflowException we) {
             LOG.error("encountered workflow exception while attempting to save Disbursement Voucher: "+dv.getDocumentNumber()+" "+we);
