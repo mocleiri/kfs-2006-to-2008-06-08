@@ -89,7 +89,7 @@
 
 	<target name="clean-project" depends="init-property-files">
 		<delete failonerror="false">
-			<fileset dir="${basedir}" includes="${source.directory}/${configuration.file},${source.directory}/${p6spy.file},${webinf.directory}/${web.file},${lib.directory}/${log4j.library.file},${war.directory}/**/**,${test.directory}/**/**,*.war,*.zip,${help.directory}/**/**,${webroot.directory}/${rice.application}/**/**,${webroot.directory}/${tags.directory}/${rice.application}/**/**,${webroot.directory}/${workflow.application}/**/**,${licenses.directory}/${rice.name}/**/**" />
+			<fileset dir="${basedir}" includes="${source.directory}/${configuration.file},${source.directory}/${p6spy.file},${webinf.directory}/${web.file},${lib.directory}/${log4j.library.file},${war.directory}/**/**,${test.directory}/**/**,*.war,*.zip,${help.directory}/**/**,${webroot.directory}/${rice.application}/**/**,${webroot.directory}/${tags.directory}/${rice.application}/**/**,${webroot.directory}/${workflow.application}/**/**,${licenses.directory}/${rice.name}/**/**,${build.temp.directory}" />
 		</delete>
 	</target>
 
@@ -400,27 +400,25 @@
 	</target>
 
 	<target name="dist-standalone-kew-war" depends="make-source">
-		<property name="kew.build.dir" value="tmp-kew"/>
-		<mkdir dir="${kew.build.dir}"/>
-		<copy todir="${kew.build.dir}/WEB-INF/lib">
+		<copy todir="${build.standalone.directory}/WEB-INF/lib">
 			<fileset dir="${lib.directory}" includes="*.jar"/>
-			<fileset dir="build/external/appserver" includes="*.jar"/>
+			<fileset dir="${build.appserver.directory}" includes="*.jar"/>
 		</copy>
-		<copy todir="${kew.build.dir}/WEB-INF/classes">
-			<fileset dir="build/external/appserver" includes="carol.properties"/>
+		<copy todir="${build.standalone.directory}/WEB-INF/classes">
+			<fileset dir="${build.appserver.directory}" includes="carol.properties"/>
 		</copy>
-		<copy file="build/external/appserver/standalone-kew-web.xml" tofile="${kew.build.dir}/WEB-INF/web.xml"/>
-		<copy todir="${kew.build.dir}">
+		<copy file="build/external/appserver/standalone-kew-web.xml" tofile="${build.standalone.directory}/WEB-INF/web.xml"/>
+		<copy todir="${build.standalone.directory}">
 			<fileset dir="${webroot.directory}/en" excludes="**/CVS/*,.cvsignore"/>
 		</copy>
-		<copy todir="${kew.build.dir}/ksb">
+		<copy todir="${build.standalone.directory}/ksb">
 			<fileset dir="${webroot.directory}/ksb" excludes="**/CVS/*"/>
 		</copy>
-		<copy todir="${kew.build.dir}/WEB-INF/plugins/shared/lib">
+		<copy todir="${build.standalone.directory}/WEB-INF/plugins/shared/lib">
 			<fileset dir="${lib.directory}" includes="rice-shared-*.jar"/>
 		</copy>
 		<jar destfile="en-dev.war">
-			<fileset dir="${kew.build.dir}"/>
+			<fileset dir="${build.standalone.directory}"/>
 		</jar>
 		<echo file="workflow.xml" message="${standalone-workflow}"  />
 	</target>
