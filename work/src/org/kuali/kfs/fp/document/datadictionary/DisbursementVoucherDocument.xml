@@ -365,7 +365,7 @@
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
-                <description>The date on which the Payment was extracted by the Post-Disbursement Processor.</description>
+                <description>The date on which the Payment was extracted by the Pre-Disbursement Processor.</description>
             </attribute>
             
             <attribute name="paidDate">
@@ -383,7 +383,7 @@
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
-                <description>The date on which the Payment was paid by the Post-Disbursement Processor.</description>
+                <description>The date on which the Payment was paid by the Pre-Disbursement Processor.</description>
             </attribute>
 
 			<attribute name="cancelDate">
@@ -401,11 +401,11 @@
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
-                <description>The date on which the Payment was canceled by the Post-Disbursement Processor.</description>
+                <description>The date on which the Payment was canceled by the Pre-Disbursement Processor.</description>
             </attribute>
 
 			<attribute name="disbursementVoucherPdpStatus">
-                <label>Post-Disbursement Processor Status</label>
+                <label>Pre-Disbursement Processor Status</label>
                 <shortLabel>PDP Status</shortLabel>
 
                 <maxLength>15</maxLength>
@@ -419,7 +419,7 @@
                 <summary>
                     <![CDATA[&nbsp;]]>
                 </summary>
-                <description>Current status of this document in relation to the Post-Disbursement Processor.</description>
+                <description>Current status of this document in relation to the Pre-Disbursement Processor.</description>
             </attribute>
             
         </attributes>
