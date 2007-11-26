@@ -40,6 +40,9 @@ CREATE TABLE FP_DV_DOC_T(
         DV_W9_CMPLT_IND                CHAR(1),
         DV_PMT_MTHD_CD                 VARCHAR2(1),
         DV_PAYEE_TYP_CD                VARCHAR2(1),
+        DV_EXTRT_DT                    DATE, 
+        DV_PD_DT                       DATE, 
+        DV_CNCL_DT                     DATE, 
      CONSTRAINT FP_DV_DOC_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT FP_DV_DOC_TC0 UNIQUE (OBJ_ID)
