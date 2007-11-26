@@ -118,12 +118,14 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
 
         List accountListings = pd.getAccountDetail();
         
-        Document paymentDetailCreatingDocument = null; 
-        try {
-            paymentDetailCreatingDocument = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(pd.getCustPaymentDocNbr());
-        }
-        catch (WorkflowException we) {
-            LOG.error("Could not find document which generated payment detail: "+pd.toString());
+        Document paymentDetailCreatingDocument = null;
+        if (pd.getFinancialDocumentTypeCode() != null && pd.getCustPaymentDocNbr().matches("[0-9]+")) {
+            try {
+                paymentDetailCreatingDocument = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(pd.getCustPaymentDocNbr());
+            }
+            catch (WorkflowException we) {
+                LOG.error("Could not find document which generated payment detail: "+pd.toString());
+            }
         }
 
         for (Iterator iter = accountListings.iterator(); iter.hasNext();) {
