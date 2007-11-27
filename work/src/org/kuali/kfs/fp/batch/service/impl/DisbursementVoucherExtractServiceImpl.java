@@ -321,7 +321,7 @@ public class DisbursementVoucherExtractServiceImpl implements DisbursementVouche
         pd.setInvTotShipAmount(new BigDecimal("0"));
         pd.setNetPaymentAmount(document.getDisbVchrCheckTotalAmount().bigDecimalValue());
         pd.setPrimaryCancelledPayment(Boolean.FALSE);
-        pd.setFinancialDocumentTypeCode(DisbursementVoucherDocument.DISBURSEMENT_VOUCHER_DOCUMENT_TYPE);
+        pd.setFinancialDocumentTypeCode(DisbursementVoucherRuleConstants.DOCUMENT_TYPE_CHECKACH);
 
         // Handle accounts
         for (Iterator iter = document.getSourceAccountingLines().iterator(); iter.hasNext();) {
