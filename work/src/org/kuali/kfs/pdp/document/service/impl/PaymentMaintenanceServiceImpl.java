@@ -18,7 +18,6 @@
  */
 package org.kuali.module.pdp.service.impl;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.mail.InvalidAddressException;
@@ -34,6 +33,7 @@ import org.kuali.module.pdp.bo.PaymentChange;
 import org.kuali.module.pdp.bo.PaymentDetail;
 import org.kuali.module.pdp.bo.PaymentGroup;
 import org.kuali.module.pdp.bo.PaymentGroupHistory;
+import org.kuali.module.pdp.bo.PaymentNoteText;
 import org.kuali.module.pdp.bo.PaymentStatus;
 import org.kuali.module.pdp.bo.PdpUser;
 import org.kuali.module.pdp.dao.AchAccountNumberDao;
@@ -128,7 +128,7 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
      * Payment status must be: "open", "held", or "pending/ACH".
      * 
      * @param paymentGroupId (Integer) Primary key of the PaymentGroup that the Payment Detail to be canceled belongs to.
-     * @param paymentDetailId (Integer) Primary key of the PaymentDetail that was actually cancelled.
+     * @param paymentDetailId (Integer) Primary key of the PaymentDetail that was actually canceled.
      * @param note (String) Change note text entered by user.
      * @param user (User) Actor making change.
      */
@@ -169,6 +169,10 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
                     PaymentDetail pd = paymentDetailDao.get(paymentDetailId);
                     if (pd != null) {
                         pd.setPrimaryCancelledPayment(Boolean.TRUE);
+                        PaymentNoteText payNoteText = new PaymentNoteText();
+                        payNoteText.setCustomerNoteLineNbr(pd.getNotes().size()+1);
+                        payNoteText.setCustomerNoteText(note);
+                        pd.addNote(payNoteText);
                     }
                     paymentDetailDao.save(pd);
                     LOG.debug("cancelPendingPayment() Pending payment cancelled; exit method.");
@@ -315,10 +319,9 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
         if (!(CANCEL_DISBURSEMENT_CD.equals(paymentStatus))) {
             if (((EXTRACTED_CD.equals(paymentStatus)) && (paymentGroup.getDisbursementDate() != null)) || (PENDING_ACH_CD.equals(paymentStatus))) {
                 LOG.debug("cancelDisbursement() Payment status is " + paymentStatus + "; continue with cancel.");
-                List allDisbursementPaymentGroups = paymentGroupDao.getByDisbursementNumber(paymentGroup.getDisbursementNbr());
+                List<PaymentGroup> allDisbursementPaymentGroups = paymentGroupDao.getByDisbursementNumber(paymentGroup.getDisbursementNbr());
 
-                for (Iterator iter = allDisbursementPaymentGroups.iterator(); iter.hasNext();) {
-                    PaymentGroup element = (PaymentGroup) iter.next();
+                for (PaymentGroup element : allDisbursementPaymentGroups) {
                     PaymentGroupHistory pgh = new PaymentGroupHistory();
                     if ((element.getDisbursementType() != null) && (element.getDisbursementType().getCode().equals("CHCK"))) {
                         pgh.setPmtCancelExtractStat(new Boolean("False"));
@@ -366,10 +369,9 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
         if (!(OPEN_CD.equals(paymentStatus))) {
             if (((EXTRACTED_CD.equals(paymentStatus)) && (paymentGroup.getDisbursementDate() != null)) || (PENDING_ACH_CD.equals(paymentStatus))) {
                 LOG.debug("cancelReissueDisbursement() Payment status is " + paymentStatus + "; continue with cancel.");
-                List allDisbursementPaymentGroups = paymentGroupDao.getByDisbursementNumber(paymentGroup.getDisbursementNbr());
+                List<PaymentGroup> allDisbursementPaymentGroups = paymentGroupDao.getByDisbursementNumber(paymentGroup.getDisbursementNbr());
 
-                for (Iterator iter = allDisbursementPaymentGroups.iterator(); iter.hasNext();) {
-                    PaymentGroup pg = (PaymentGroup) iter.next();
+                for (PaymentGroup pg : allDisbursementPaymentGroups) {
                     PaymentGroupHistory pgh = new PaymentGroupHistory();
 
                     if ((pg.getDisbursementType() != null) && (pg.getDisbursementType().getCode().equals("CHCK"))) {
@@ -486,8 +488,7 @@ public class PaymentMaintenanceServiceImpl implements PaymentMaintenanceService 
         else {
             body.append("The following payment detail was cancelled:\n\n");
         }
-        for (Iterator iter = paymentGroup.getPaymentDetails().iterator(); iter.hasNext();) {
-            PaymentDetail pd = (PaymentDetail) iter.next();
+        for (PaymentDetail pd : paymentGroup.getPaymentDetails()) {
             body.append("Payee Name: " + paymentGroup.getPayeeName() + "\n");
             body.append("Net Payment Amount: " + pd.getNetPaymentAmount() + "\n");
             body.append("Source Document Number: " + pd.getCustPaymentDocNbr() + "\n");
