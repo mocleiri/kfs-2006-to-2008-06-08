@@ -1,6 +1,5 @@
 create or replace view AR_OPEN_INV_DTL_V as
-select  /*+ FIRST_ROWS */
-        a.fdoc_nbr,
+select  a.fdoc_nbr,
         f.fdoc_typ_cd,
         a.ar_inv_itm_nbr,
         a.fin_coa_cd,
