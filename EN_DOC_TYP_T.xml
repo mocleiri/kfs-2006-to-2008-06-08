@@ -31,6 +31,23 @@
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
     <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/financialDisbursementVoucher.do?methodToCall=docHandler"
+        DOC_TYP_ID="317200" DOC_TYP_LBL_TXT="Disbursement Voucher"
+        DOC_TYP_NM="DisbursementVoucherDocument"
+        DOC_TYP_PARNT_ID="317040"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_PREV_VER="317042" DOC_TYP_RTE_VER_NBR="1"
+        DOC_TYP_VER_NBR="19" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317240" DOC_TYP_LBL_TXT="Asset Object Code"
+        DOC_TYP_NM="AssetObjectCodeMaintenanceDocument"
+        DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
         DOC_TYP_ID="316962" DOC_TYP_LBL_TXT="Ownership Category"
         DOC_TYP_NM="OwnershipCategoryMaintenanceDocument"
@@ -139,7 +156,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="316783" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="3" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="9"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="10"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiFinancialDocument"
         DOC_TYP_HDLR_URL_ADDR="none" DOC_TYP_ID="317040"
@@ -147,8 +164,8 @@
         DOC_TYP_NM="KualiFinancialDocument" DOC_TYP_PARNT_ID="316840"
         DOC_TYP_POST_PRCSR_NM="none" DOC_TYP_PREV_VER="304517"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="9" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
-        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="2"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="0"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/financialDisbursementVoucher.do?methodToCall=docHandler"
         DOC_TYP_ID="317042" DOC_TYP_LBL_TXT="Disbursement Voucher"
         DOC_TYP_NM="DisbursementVoucherDocument"
@@ -734,7 +751,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="93350" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="2" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="28"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="29"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiSimpleMaintenanceDocument"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
@@ -1771,13 +1788,13 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="291366" DOC_TYP_RTE_VER_NBR="2"
         DOC_TYP_VER_NBR="3" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2562" DB_LOCK_VER_NBR="5"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2562" DB_LOCK_VER_NBR="6"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="TestWorkflowKualiDisbursementVoucherDocument"
         DOC_TYP_HDLR_URL_ADDR="_blank" DOC_TYP_ID="294318"
         DOC_TYP_LBL_TXT="Test Disbursement Voucher Document"
         DOC_TYP_NM="TestWorkflowKualiDisbursementVoucherDocument"
-        DOC_TYP_PARNT_ID="317042"
+        DOC_TYP_PARNT_ID="317200"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="169409" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="4" WRKGRP_ID="2562"/>

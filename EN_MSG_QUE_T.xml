@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataset SYSTEM "data.dtd">
+<dataset>
+    <EN_MSG_QUE_T DB_LOCK_VER_NBR="1" MESSAGE_ENTITY_NM="KFS"
+        MESSAGE_QUE_DT="20071126111423" MESSAGE_QUE_ID="2000"
+        MESSAGE_QUE_IP_NBR="129.79.23.70" MESSAGE_QUE_PRIO_NBR="3"
+        MESSAGE_QUE_RTRY_CNT="0" MESSAGE_QUE_STAT_CD="E"
+        MESSAGE_SERVICE_NM="{KFS}OSCacheNotificationService" SERVICE_METHOD_NM="invoke"/>
+</dataset>

@@ -2107,7 +2107,7 @@
         SH_PARM_DESC="Allowed project type(s) that, if selected on the Routing Form document, will result in a C&amp;G proposal being created."
         SH_PARM_DTL_TYP_CD="RoutingForm"
         SH_PARM_NM="CREATE_PROPOSAL_PROJECT_TYPES"
-        SH_PARM_NMSPC_CD="KFS-RA" SH_PARM_TXT="N,C,R,S"
+        SH_PARM_NMSPC_CD="KFS-RA" SH_PARM_TXT="N;C;R;S"
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_KRA_ADMIN"/>
     <SH_PARM_T OBJ_ID="3B13485ADC24A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
