@@ -141,7 +141,6 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
 
     private boolean checkForDuplicateRecord(Map criteria) {
 
-        Integer oldPrimaryKey = oldPayeeAchAccount.getAchAccountGeneratedIdentifier();
         String newPayeeIdTypeCd = newPayeeAchAccount.getPayeeIdentifierTypeCode();
         String newPsdTransactionCd = newPayeeAchAccount.getPsdTransactionCode();
         boolean valid = true;
@@ -152,7 +151,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
         // 3. new payee type code = old payee type code
         // 4. depending of the value of payee type code, new correspoding PayeeId = old corresponding PayeeId
 
-        if ((oldPrimaryKey != null) && newPayeeAchAccount.getAchAccountGeneratedIdentifier().equals(oldPrimaryKey)) {
+        if (newPayeeAchAccount.getAchAccountGeneratedIdentifier() != null && oldPayeeAchAccount.getAchAccountGeneratedIdentifier() != null && newPayeeAchAccount.getAchAccountGeneratedIdentifier().equals(oldPayeeAchAccount.getAchAccountGeneratedIdentifier())) {
             if (newPayeeIdTypeCd.equals(oldPayeeAchAccount.getPayeeIdentifierTypeCode()) && newPsdTransactionCd.equals(oldPayeeAchAccount.getPsdTransactionCode())) {
                 if (newPayeeIdTypeCd.equals("E")) {
                     if (newPayeeAchAccount.getPersonUniversalIdentifier().equals(oldPayeeAchAccount.getPersonUniversalIdentifier()))
