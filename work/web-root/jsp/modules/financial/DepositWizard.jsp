@@ -361,7 +361,8 @@ function checkCheckAllOrNone() {
                     <html:checkbox name="KualiForm" property="depositWizardCashieringCheckHelper[${ctr}].sequenceId" value="${KualiForm.depositableCashieringChecks[ctr].sequenceId}" />
                   </div>
                 </td>
-                <td><strong>${ctr + 1}</strong></td>
+                <%-- if you change the spacing of the table cell below to put the different elements on different lines, giant monkeys will hurt you. Also, the DepositWizard form won't look quite as good --%>
+                <td><strong>${ctr + 1}</strong><html:hidden name="KualiForm" property="depositableCashieringCheck[${ctr}].sequenceId" /></td>
                 <td>
                   <kul:htmlControlAttribute property="depositableCashieringCheck[${ctr}].checkNumber" attributeEntry="${checkAttributes.checkNumber}" readOnly="true" />
                 </td>
