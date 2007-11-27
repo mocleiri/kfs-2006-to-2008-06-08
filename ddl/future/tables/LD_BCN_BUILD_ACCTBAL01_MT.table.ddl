@@ -29,50 +29,43 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_ACCTBAL01_MT
-AS
-    (SELECT  USERENV('SESSIONID') "SESID",
-        org_fin_coa_cd,
-        org_cd,
-        sub_fund_grp_cd,
-        univ_fiscal_yr,
-        fin_coa_cd,
-        account_nbr,
-        sub_acct_nbr,
-        inc_exp_cd,
-        fin_cons_sort_cd,
-        fin_level_sort_cd,
-        fin_object_cd,
-        fin_sub_obj_cd,
-        OBJ_ID,
-        VER_NBR,
-        fin_obj_level_cd,
-        appt_rqst_fte_qty,
-        appt_rqcsf_fte_qty,
-        position_fte_qty "POS_CSF_FTE_QTY",
-        fin_beg_bal_ln_amt,
-        acln_annl_bal_amt,
-        pos_csf_lv_fte_qty
-    FROM ld_bcn_acct_bal_t
-    WHERE 1=2)
-/
-ALTER TABLE LD_BCN_BUILD_ACCTBAL01_MT ADD CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_ACCTBAL01_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN1 NOT NULL,
+        ORG_FIN_COA_CD                 VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN2 NOT NULL,
+        ORG_CD                         VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN3 NOT NULL,
+        SUB_FUND_GRP_CD                VARCHAR2(6) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN4 NOT NULL,
+        UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN5 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN6 NOT NULL,
+        ACCOUNT_NBR                    VARCHAR2(7) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN7 NOT NULL,
+        SUB_ACCT_NBR                   VARCHAR2(5) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN8 NOT NULL,
+        INC_EXP_CD                     VARCHAR2(1) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN9 NOT NULL,
+        FIN_CONS_SORT_CD               VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN10 NOT NULL,
+        FIN_LEVEL_SORT_CD              VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN11 NOT NULL,
+        FIN_OBJECT_CD                  VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN12 NOT NULL,
+        FIN_SUB_OBJ_CD                 VARCHAR2(3) CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN13 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN14 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTN15 NOT NULL,
+        FIN_OBJ_LEVEL_CD               VARCHAR2(4),
+        APPT_RQST_FTE_QTY              NUMBER,
+        APPT_RQCSF_FTE_QTY             NUMBER,
+        POS_CSF_FTE_QTY                NUMBER,
+        FIN_BEG_BAL_LN_AMT             NUMBER(19, 2),
+        ACLN_ANNL_BAL_AMT              NUMBER(19, 2),
+        POS_CSF_LV_FTE_QTY             NUMBER,
+     CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTP1 PRIMARY KEY (
         SESID,
-        org_fin_coa_cd,
-        org_cd,
-        sub_fund_grp_cd,
-        univ_fiscal_yr,
-        fin_coa_cd,
-        account_nbr,
-        sub_acct_nbr,
-        inc_exp_cd,
-        fin_cons_sort_cd,
-        fin_level_sort_cd,
-        fin_object_cd,
-        fin_sub_obj_cd)
+        ORG_FIN_COA_CD,
+        ORG_CD,
+        SUB_FUND_GRP_CD,
+        UNIV_FISCAL_YR,
+        FIN_COA_CD,
+        ACCOUNT_NBR,
+        SUB_ACCT_NBR,
+        INC_EXP_CD,
+        FIN_CONS_SORT_CD,
+        FIN_LEVEL_SORT_CD,
+        FIN_OBJECT_CD,
+        FIN_SUB_OBJ_CD),
+     CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTC0 UNIQUE (OBJ_ID)
+)
 /
-ALTER TABLE LD_BCN_BUILD_ACCTBAL01_MT ADD CONSTRAINT LD_BCN_BUILD_ACCTBAL01_MTC0 UNIQUE (OBJ_ID)
-/
-ALTER TABLE LD_BCN_BUILD_ACCTBAL01_MT MODIFY (OBJ_ID DEFAULT SYS_GUID()); 
-ALTER TABLE LD_BCN_BUILD_ACCTBAL01_MT MODIFY (VER_NBR DEFAULT 1);
-

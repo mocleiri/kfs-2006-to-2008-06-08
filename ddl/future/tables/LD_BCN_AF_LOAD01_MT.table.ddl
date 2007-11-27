@@ -29,36 +29,32 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_AF_LOAD01_MT
-AS
-        (SELECT F.UNIV_FISCAL_YR,
-                F.FIN_COA_CD,
-                F.ACCOUNT_NBR,
-                F.SUB_ACCT_NBR,
-                F.FIN_OBJECT_CD,
-                F.FIN_SUB_OBJ_CD,
-                F.POSITION_NBR,
-                F.EMPLID,
-                F.OBJ_ID,
-                F.VER_NBR,
-                F.APPT_FND_DUR_CD,
-                F.APPT_RQST_CSF_AMT,
-                F.APPT_RQCSF_FTE_QTY,
-                F.APPT_RQCSF_TM_PCT,
-                F.APPT_TOT_INTND_AMT,
-                F.APPT_TOTINTFTE_QTY,
-                F.APPT_RQST_AMT,
-                F.APPT_RQST_TM_PCT,
-                F.APPT_RQST_FTE_QTY,
-                F.APPT_RQST_PAY_RT,
-                F.APPT_FND_DLT_CD,
-                F.APPT_FND_MO,
-                F.FIN_COA_CD "NEW_FIN_COA_CD",
-                F.ACCOUNT_NBR "NEW_ACCOUNT_NBR"
-          FROM  LD_PNDBC_APPTFND_T F
-          WHERE 1=2)
-/
-ALTER TABLE LD_BCN_AF_LOAD01_MT ADD CONSTRAINT LD_BCN_AF_LOAD01_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_AF_LOAD01_MT(
+        UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT LD_BCN_AF_LOAD01_MTN1 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_AF_LOAD01_MTN2 NOT NULL,
+        ACCOUNT_NBR                    VARCHAR2(7) CONSTRAINT LD_BCN_AF_LOAD01_MTN3 NOT NULL,
+        SUB_ACCT_NBR                   VARCHAR2(5) CONSTRAINT LD_BCN_AF_LOAD01_MTN4 NOT NULL,
+        FIN_OBJECT_CD                  VARCHAR2(4) CONSTRAINT LD_BCN_AF_LOAD01_MTN5 NOT NULL,
+        FIN_SUB_OBJ_CD                 VARCHAR2(3) CONSTRAINT LD_BCN_AF_LOAD01_MTN6 NOT NULL,
+        POSITION_NBR                   VARCHAR2(8) CONSTRAINT LD_BCN_AF_LOAD01_MTN7 NOT NULL,
+        EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_AF_LOAD01_MTN8 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT LD_BCN_AF_LOAD01_MTN9 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_AF_LOAD01_MTN10 NOT NULL,
+        APPT_FND_DUR_CD                VARCHAR2(4),
+        APPT_RQST_CSF_AMT              NUMBER(19, 2),
+        APPT_RQCSF_FTE_QTY             NUMBER,
+        APPT_RQCSF_TM_PCT              NUMBER,
+        APPT_TOT_INTND_AMT             NUMBER(19, 2),
+        APPT_TOTINTFTE_QTY             NUMBER,
+        APPT_RQST_AMT                  NUMBER(19, 2),
+        APPT_RQST_TM_PCT               NUMBER,
+        APPT_RQST_FTE_QTY              NUMBER,
+        APPT_RQST_PAY_RT               NUMBER,
+        APPT_FND_DLT_CD                VARCHAR2(1),
+        APPT_FND_MO                    NUMBER(2),
+        NEW_FIN_COA_CD                 VARCHAR2(2),
+        NEW_ACCOUNT_NBR                VARCHAR2(7),
+     CONSTRAINT LD_BCN_AF_LOAD01_MTP1 PRIMARY KEY (
         UNIV_FISCAL_YR,
         FIN_COA_CD,
         ACCOUNT_NBR,
@@ -66,9 +62,7 @@ ALTER TABLE LD_BCN_AF_LOAD01_MT ADD CONSTRAINT LD_BCN_AF_LOAD01_MTP1 PRIMARY KEY
         FIN_OBJECT_CD,
         FIN_SUB_OBJ_CD,
         POSITION_NBR,
-        EMPLID)
+        EMPLID),
+     CONSTRAINT LD_BCN_AF_LOAD01_MTC0 UNIQUE (OBJ_ID)
+)
 /
-ALTER TABLE LD_BCN_AF_LOAD01_MT ADD CONSTRAINT LD_BCN_AF_LOAD01_MTC0 UNIQUE (OBJ_ID)
-/
-ALTER TABLE LD_BCN_AF_LOAD01_MT MODIFY (OBJ_ID DEFAULT SYS_GUID()); 
-ALTER TABLE LD_BCN_AF_LOAD01_MT MODIFY (VER_NBR DEFAULT 1);
