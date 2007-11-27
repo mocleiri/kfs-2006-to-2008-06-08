@@ -369,9 +369,19 @@ public class VendorMaintainableImpl extends KualiMaintainableImpl {
                             Row row = rows.next();
                             if ( row.getFields().size() > 0 ) {
                                 Field field = row.getFields().get(0); 
-                                if (       StringUtils.equals(field.getPropertyName(), VendorPropertyConstants.VENDOR_CONTRACT )
-                                        || StringUtils.equals(field.getPropertyName(), VendorPropertyConstants.VENDOR_CONTRACT_ORGANIZATION ) ) {
+                                if ( StringUtils.equals(field.getPropertyName(), VendorPropertyConstants.VENDOR_CONTRACT ) ) {
                                     rows.remove();
+                                    continue;
+                                }
+                                 if ( StringUtils.equals( field.getFieldType(), "container" ) && field.getContainerName().startsWith(VendorPropertyConstants.VENDOR_CONTRACT+"[") ) {
+                                    Iterator<Row> cRows = field.getContainerRows().iterator();
+                                    while ( cRows.hasNext() ) {
+                                        Field cField = cRows.next().getFields().get(0);
+                                        if ( StringUtils.equals(cField.getPropertyName(), VendorPropertyConstants.VENDOR_CONTRACT_ORGANIZATION ) ) {
+                                            cRows.remove();
+                                            continue;
+                                        }
+                                    }
                                 }
                             }
                         }
