@@ -28,9 +28,12 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.mail.InvalidAddressException;
+import org.kuali.core.mail.MailMessage;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
+import org.kuali.core.service.MailService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
@@ -46,10 +49,12 @@ import org.kuali.module.pdp.bo.PaymentNoteText;
 import org.kuali.module.pdp.bo.PaymentStatus;
 import org.kuali.module.pdp.bo.PdpUser;
 import org.kuali.module.pdp.service.CustomerProfileService;
+import org.kuali.module.pdp.service.EnvironmentService;
 import org.kuali.module.pdp.service.PaymentDetailService;
 import org.kuali.module.pdp.service.PaymentFileService;
 import org.kuali.module.pdp.service.PaymentGroupService;
 import org.kuali.module.pdp.service.ReferenceService;
+import org.kuali.module.pdp.utilities.GeneralUtilities;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.bo.AccountsPayableItemBase;
@@ -86,6 +91,8 @@ public class PdpExtractServiceImpl implements PdpExtractService {
     private CreditMemoService creditMemoService;
     private ReferenceService referenceService;
     private DocumentService documentService;
+    private MailService mailService;
+    private EnvironmentService environmentService;
 
     private PaymentStatus openPaymentStatus;
 
@@ -209,17 +216,23 @@ public class PdpExtractServiceImpl implements PdpExtractService {
             if (paymentRequestAmount.compareTo(creditMemoAmount) > 0) {
                 // if so, create a payment group and add the CM and PREQ documents
                 PaymentGroup pg = buildPaymentGroup(prds, cmds, batch);
-                paymentGroupService.save(pg);
-                t.count++;
-                t.totalAmount = t.totalAmount.add(pg.getNetPaymentAmount());
-
-                for (Iterator iter = cmds.iterator(); iter.hasNext();) {
-                    CreditMemoDocument element = (CreditMemoDocument) iter.next();
-                    updateCreditMemo(element, puser, processRunDate);
-                }
-                for (Iterator iter = prds.iterator(); iter.hasNext();) {
-                    PaymentRequestDocument element = (PaymentRequestDocument) iter.next();
-                    updatePaymentRequest(element, puser, processRunDate);
+                if(validatePaymentGroup(pg)) { 
+                    paymentGroupService.save(pg);
+                    t.count++;
+                    t.totalAmount = t.totalAmount.add(pg.getNetPaymentAmount());
+    
+                    for (CreditMemoDocument element : cmds) {
+                        updateCreditMemo(element, puser, processRunDate);
+                    }
+                    for (PaymentRequestDocument element : prds) {
+                        updatePaymentRequest(element, puser, processRunDate);
+                    }
+                } else {
+                    // stops PREQ documents from being processed by putting them on a "do not process" list
+                    // until validation problems can be resolved
+                    for ( PaymentRequestDocument doc : prds ) {
+                        preqsWithCreditMemos.add( doc.getDocumentHeader().getDocumentNumber() );
+                    }
                 }
             } else {
                 // put the PREQ documents in this bundle on a "do not process" list for this run
@@ -261,12 +274,22 @@ public class PdpExtractServiceImpl implements PdpExtractService {
         prds.add(prd);
 
         PaymentGroup pg = buildPaymentGroup(prds, cmds, batch);
-        paymentGroupService.save(pg);
-        updatePaymentRequest(prd, puser, processRunDate);
+        if(validatePaymentGroup(pg)) {
+            paymentGroupService.save(pg);
+            updatePaymentRequest(prd, puser, processRunDate);
+        }
 
         return pg;
     }
 
+    /**
+     * 
+     * This method...
+     * @param key
+     * @param itemsToProcess
+     * @param typeCode
+     * @return
+     */
     private List<Payment> getByCombineKey(String key, List itemsToProcess, String typeCode) {
         List<Payment> p = new ArrayList<Payment>();
         for (Iterator iter = itemsToProcess.iterator(); iter.hasNext();) {
@@ -280,6 +303,13 @@ public class PdpExtractServiceImpl implements PdpExtractService {
         return p;
     }
 
+    /**
+     * 
+     * This method...
+     * @param key
+     * @param itemsToProcess
+     * @return
+     */
     private List<Payment> getByCombineKey(String key, List itemsToProcess) {
         return getByCombineKey(key, itemsToProcess, null);
     }
@@ -376,18 +406,66 @@ public class PdpExtractServiceImpl implements PdpExtractService {
             pg = populatePaymentGroup(firstPrd, batch);
         }
 
-        for (Iterator iter = prds.iterator(); iter.hasNext();) {
-            PaymentRequestDocument p = (PaymentRequestDocument) iter.next();
-            PaymentDetail pd = populatePaymentDetail(p, batch);
+        for (PaymentRequestDocument pr : prds) {
+            PaymentDetail pd = populatePaymentDetail(pr, batch);
             pg.addPaymentDetails(pd);
         }
-        for (Iterator iter = cmds.iterator(); iter.hasNext();) {
-            CreditMemoDocument c = (CreditMemoDocument) iter.next();
-            PaymentDetail pd = populatePaymentDetail(c, batch);
+        for (CreditMemoDocument cm : cmds) {
+            PaymentDetail pd = populatePaymentDetail(cm, batch);
             pg.addPaymentDetails(pd);
         }
 
         return pg;
+    }
+
+    /**
+     * 
+     * This method...
+     * @param pg
+     * @return
+     */
+    private boolean validatePaymentGroup(PaymentGroup pg) {
+        // Check to see if the payment group has too many note lines to be printed on a check
+        List<PaymentDetail> payDetails = pg.getPaymentDetails();
+        
+        int noteLines = 0;
+        int maxNoteLines = getMaxNoteLines();
+
+        for(PaymentDetail pd : payDetails) {
+            noteLines++; // Add one for each payment detail; summary of each detail is included on check and counts as a line
+            noteLines += pd.getNotes().size(); // get all the possible notes for a given detail
+        }
+        
+        if(noteLines > maxNoteLines) {
+            
+            // compile list of all doc numbers that make up payment group
+            List<String> preqDocIds = new ArrayList<String>();
+            List<String> cmDocIds = new ArrayList<String>();
+            
+            List<PaymentDetail> pds = pg.getPaymentDetails();
+            for(PaymentDetail payDetail : pds) {
+                if("CM".equals(payDetail.getFinancialDocumentTypeCode())) {
+                    cmDocIds.add(payDetail.getCustPaymentDocNbr());
+                } else {
+                    preqDocIds.add(payDetail.getCustPaymentDocNbr());
+                }
+            }
+            
+            // send warning email and prevent group from being processed by returning null
+            sendExceedsMaxNotesWarningEmail(cmDocIds, preqDocIds, noteLines, maxNoteLines);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 
+     * This method...
+     * @return
+     */
+    private int getMaxNoteLines() {
+        return GeneralUtilities.getParameterInteger(parameterService, ParameterConstants.PRE_DISBURSEMENT_ALL.class, PdpConstants.ApplicationParameterKeys.MAX_NOTE_LINES);
     }
 
     /**
@@ -685,6 +763,13 @@ public class PdpExtractServiceImpl implements PdpExtractService {
         return pg;
     }
 
+    /**
+     * 
+     * This method...
+     * @param cmd
+     * @param batch
+     * @return
+     */
     private PaymentGroup populatePaymentGroup(CreditMemoDocument cmd, Batch batch) {
         LOG.debug("populatePaymentGroup() credit memo documentNumber: " + cmd.getDocumentNumber());
         PaymentGroup pg = new PaymentGroup();
@@ -788,6 +873,106 @@ public class PdpExtractServiceImpl implements PdpExtractService {
         return output;
     }
 
+    
+    /**
+     * 
+     * This method...
+     * @param idList
+     * @param lineTotal
+     * @param maxNoteLines
+     */
+    private void sendExceedsMaxNotesWarningEmail(List<String> cmIdList, List<String> preqIdList, int lineTotal, int maxNoteLines) {
+        LOG.debug("sendExceedsMaxNotesWarningEmail() starting");
+
+        // To send email or not send email
+        boolean noEmail = parameterService.getIndicatorParameter(ParameterConstants.PRE_DISBURSEMENT_ALL.class, PdpConstants.ApplicationParameterKeys.NO_PAYMENT_FILE_EMAIL);
+        if (noEmail) {
+            LOG.debug("sendExceedsMaxNotesWarningEmail() sending payment file email is disabled");
+            return;
+        }
+
+        MailMessage message = new MailMessage();
+
+        if (environmentService.isProduction()) {
+            message.setSubject("Error: Maximum rows exceeded on payment bundle");
+        }
+        else {
+            String env = environmentService.getEnvironment();
+            message.setSubject(env + "-Error: Maximum rows exceeded on payment bundle");
+        }
+
+        StringBuffer body = new StringBuffer();
+
+        // Get recipient email address
+        String toAddresses = "kbatch-l@indiana.edu"; // add parameter call to retrieve the email address to contact
+        String toAddressList[] = toAddresses.split(",");
+
+        if (toAddressList.length > 0) {
+            for (int i = 0; i < toAddressList.length; i++) {
+                if (toAddressList[i] != null) {
+                    message.addToAddress(toAddressList[i].trim());
+                }
+            }
+        }
+
+        String ccAddresses = parameterService.getParameterValue(ParameterConstants.PRE_DISBURSEMENT_ALL.class, PdpConstants.ApplicationParameterKeys.SOFT_EDIT_CC);
+        String ccAddressList[] = ccAddresses.split(",");
+
+        for (int i = 0; i < ccAddressList.length; i++) {
+            if (ccAddressList[i] != null) {
+                message.addCcAddress(ccAddressList[i].trim());
+            }
+        }
+
+        String fromAddressList[] = {mailService.getBatchMailingList()};
+
+        if(fromAddressList.length > 0) {
+            for (int i = 0; i < fromAddressList.length; i++) {
+                if (fromAddressList[i] != null) {
+                    message.setFromAddress(fromAddressList[i].trim());
+                }
+            }
+        }
+        
+        body.append("The positive pay bundle associated with the following credit memo(s) and payment request(s) ");
+        body.append("exceeds the row limit. The credit memo(s) may need to be processed as several separate credit ");
+        body.append("memos to reduce the number of rows associated with the positive pay bundle. \n\n");
+        body.append("The Credit Memo Document Id(s) are ");
+        
+        int cmCount = cmIdList.size();
+        for(String id : cmIdList) {
+            body.append(id);
+            if(--cmCount > 0) {
+                body.append(", ");
+            } 
+        }
+        
+        body.append(".  The PREQ Document Id(s) are ");
+        
+        int prCount = preqIdList.size();
+        for(String id : preqIdList) {
+            body.append(id);
+            if(--prCount > 0) {
+                body.append(", ");
+            } 
+        }
+        body.append(".  There were ").append(lineTotal).append(" lines all together, which is more than the ");
+        body.append(maxNoteLines).append(" allowed.");
+        
+        message.setMessage(body.toString());
+        try {
+            mailService.sendMessage(message);
+        }
+        catch (InvalidAddressException e) {
+            LOG.error("sendExceedsMaxNotesWarningEmail() Invalid email address. Message not sent", e);
+        }
+    }
+
+    
+    /**
+     * 
+     * This class...
+     */
     class Payment {
         public static final String CM = "cm";
         public static final String PREQ = "preq";
@@ -975,4 +1160,13 @@ public class PdpExtractServiceImpl implements PdpExtractService {
     public void setDocumentService(DocumentService ds) {
         documentService = ds;
     }
+    
+    public void setMailService(MailService ms) {
+        mailService = ms;
+    }
+
+    public void setEnvironmentService(EnvironmentService es) {
+        environmentService = es;
+    }
+
 }
