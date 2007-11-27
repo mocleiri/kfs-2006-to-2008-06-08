@@ -162,6 +162,7 @@ DECLARE
 	, 'SH_STATE_T'
 	, 'SH_UNIV_DATE_T'
 	, 'PUR_CONTR_MGR_T' 
+    , 'QRTZ_LOCKS'
 	);
 BEGIN
   FOR rec IN tables_to_empty LOOP
