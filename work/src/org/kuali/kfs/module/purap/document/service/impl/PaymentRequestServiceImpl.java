@@ -78,6 +78,7 @@ import org.kuali.module.purap.service.PurchaseOrderService;
 import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
 import org.kuali.module.purap.util.PurApItemUtils;
 import org.kuali.module.vendor.bo.PaymentTermType;
+import org.kuali.rice.KNSServiceLocator;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -885,6 +886,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         try {
             Note cancelNote = documentService.createNoteFromDocument(paymentRequest, note);
             documentService.addNoteToDocument(paymentRequest, cancelNote);
+            KNSServiceLocator.getNoteService().save(cancelNote);
         }
         catch (Exception e) {
             throw new RuntimeException(PurapConstants.REQ_UNABLE_TO_CREATE_NOTE + " " + e);
@@ -893,8 +895,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         //cancel extracted should not reopen PO
         paymentRequest.setReopenPurchaseOrderIndicator(false);
 
-        SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(paymentRequest, "");
-        this.saveDocumentWithoutValidation(paymentRequest);
+        SpringContext.getBean(AccountsPayableService.class).cancelAccountsPayableDocument(paymentRequest, ""); // Performs save, so no explicit save is necessary
         LOG.debug("cancelExtractedPaymentRequest() PREQ " + paymentRequest.getPurapDocumentIdentifier() + " Cancelled Without Workflow");
         LOG.debug("cancelExtractedPaymentRequest() ended");
     }
@@ -914,6 +915,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         try {
             Note resetNote = documentService.createNoteFromDocument(paymentRequest, noteText);
             documentService.addNoteToDocument(paymentRequest, resetNote);
+            KNSServiceLocator.getNoteService().save(resetNote);
         }
         catch (Exception e) {
             throw new RuntimeException(PurapConstants.REQ_UNABLE_TO_CREATE_NOTE + " " + e);
