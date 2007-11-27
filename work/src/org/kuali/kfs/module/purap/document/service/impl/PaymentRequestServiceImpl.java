@@ -157,7 +157,7 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByCM(String campusCode, CreditMemoDocument cmd) {
         LOG.debug("getPaymentRequestsByCM() started");
 
-        return paymentRequestDao.getPaymentRequestsToExtract(campusCode, cmd.getPaymentRequestIdentifier(), cmd.getPurchaseOrderIdentifier(), cmd.getVendorHeaderGeneratedIdentifier(), cmd.getVendorDetailAssignedIdentifier());
+        return paymentRequestDao.getPaymentRequestsToExtract(campusCode, null, null, cmd.getVendorHeaderGeneratedIdentifier(), cmd.getVendorDetailAssignedIdentifier());
     }
 
     /**
