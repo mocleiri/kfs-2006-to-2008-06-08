@@ -117,16 +117,6 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
     public void createProcessPaymentTransaction(PaymentDetail pd, Boolean relieveLiabilities) {
 
         List accountListings = pd.getAccountDetail();
-        
-        Document paymentDetailCreatingDocument = null;
-        if (pd.getFinancialDocumentTypeCode() != null && pd.getCustPaymentDocNbr().matches("[0-9]+")) {
-            try {
-                paymentDetailCreatingDocument = SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(pd.getCustPaymentDocNbr());
-            }
-            catch (WorkflowException we) {
-                LOG.error("Could not find document which generated payment detail: "+pd.toString());
-            }
-        }
 
         for (Iterator iter = accountListings.iterator(); iter.hasNext();) {
             PaymentAccountDetail elem = (PaymentAccountDetail) iter.next();
@@ -154,8 +144,8 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             }
             gpt.setFdocNbr(pd.getPaymentGroup().getDisbursementNbr().toString());
             
-            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue()) && paymentDetailCreatingDocument != null) {
-                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(paymentDetailCreatingDocument.getClass()), gpt.getFinancialBalanceTypeCode());
+            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue()) && pd.getFinancialDocumentTypeCode() != null) {
+                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), pd.getFinancialDocumentTypeCode(), gpt.getFinancialBalanceTypeCode());
                 if (offsetDefinition != null) {
                     gpt.setFinancialObjectCode(offsetDefinition.getFinancialObjectCode());
                 } else {
@@ -231,16 +221,6 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
 
         for (Iterator iter = accountListings.iterator(); iter.hasNext();) {
             PaymentAccountDetail elem = (PaymentAccountDetail) iter.next();
-            
-            AccountingDocument paymentDetailCreatingDocument = null; 
-            if (elem.getPaymentDetail().getFinancialDocumentTypeCode() != null && elem.getPaymentDetail().getCustPaymentDocNbr().matches("[0-9]+")) {
-                try {
-                    paymentDetailCreatingDocument = (AccountingDocument)SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(elem.getPaymentDetail().getCustPaymentDocNbr());
-                }
-                catch (WorkflowException we) {
-                    LOG.error("Could not find document which generated payment detail: "+elem.getPaymentDetail().toString());
-                }
-            }
 
             GlPendingTransaction gpt = new GlPendingTransaction();
             gpt.setFdocRefTypCd("PDP");
@@ -257,8 +237,8 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             gpt.setSubAccountNumber(elem.getSubAccountNbr());
             gpt.setChartOfAccountsCode(elem.getFinChartCode());
             Boolean relieveLiabilities = pg.getBatch().getCustomerProfile().getRelieveLiabilities();
-            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue()) && paymentDetailCreatingDocument != null) {
-                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(paymentDetailCreatingDocument.getClass()), gpt.getFinancialBalanceTypeCode());
+            if ((relieveLiabilities != null) && (relieveLiabilities.booleanValue()) && elem.getPaymentDetail().getFinancialDocumentTypeCode() != null) {
+                OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(gpt.getUniversityFiscalYear(), gpt.getChartOfAccountsCode(), elem.getPaymentDetail().getFinancialDocumentTypeCode(), gpt.getFinancialBalanceTypeCode());
                 gpt.setFinancialObjectCode(offsetDefinition.getFinancialObjectCode());
                 gpt.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
             }
