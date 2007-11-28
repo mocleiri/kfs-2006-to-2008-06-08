@@ -406,6 +406,7 @@
 	<bean id="purchasingPreDisbursementExtractJob" parent="scheduledJobDescriptor">
 		<property name="steps">
 			<list>
+                <ref bean="purchasingPreDisbursementImmediatesExtractStep" />
 				<ref bean="purchasingPreDisbursementExtractStep" />
 			</list>
 		</property>
