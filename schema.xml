@@ -7435,6 +7435,9 @@
         <foreign-key foreignTable="LD_BENEFITS_TYPE_T" name="LD_BENEFITS_CALC_TR3">
             <reference foreign="POS_BENEFIT_TYP_CD" local="POS_BENEFIT_TYP_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="FS_OPTION_T" name="LD_BENEFITS_CALC_TR4">
+            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
+        </foreign-key>
         <unique name="LD_BENEFITS_CALC_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -7811,6 +7814,9 @@
         </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="LD_LABOR_OBJ_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FS_OPTION_T" name="LD_LABOR_OBJ_TR4">
+            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
         </foreign-key>
         <unique name="LD_LABOR_OBJ_TC0">
             <unique-column name="OBJ_ID"/>
