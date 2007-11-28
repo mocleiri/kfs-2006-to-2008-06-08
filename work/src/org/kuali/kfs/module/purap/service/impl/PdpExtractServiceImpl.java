@@ -904,7 +904,7 @@ public class PdpExtractServiceImpl implements PdpExtractService {
         StringBuffer body = new StringBuffer();
 
         // Get recipient email address
-        String toAddresses = "kbatch-l@indiana.edu"; // add parameter call to retrieve the email address to contact
+        String toAddresses = parameterService.getParameterValue(ParameterConstants.PRE_DISBURSEMENT_ALL.class, PdpConstants.ApplicationParameterKeys.PDP_ERROR_EXCEEDS_NOTE_LIMIT_EMAIL);
         String toAddressList[] = toAddresses.split(",");
 
         if (toAddressList.length > 0) {
