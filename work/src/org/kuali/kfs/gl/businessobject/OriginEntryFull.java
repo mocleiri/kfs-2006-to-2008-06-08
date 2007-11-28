@@ -118,7 +118,7 @@ public class OriginEntryFull extends OriginEntryLite implements Transaction, Ori
         setTransactionLedgerEntryDescription(KFSConstants.EMPTY_STRING);
         setTransactionDate(null);
         setTransactionDebitCreditCode(KFSConstants.EMPTY_STRING);
-        setTransactionEncumbranceUpdateCode(KFSConstants.EMPTY_STRING);
+        setTransactionEncumbranceUpdateCode(null);
 
         setOrganizationDocumentNumber(KFSConstants.EMPTY_STRING);
         setOrganizationReferenceId(KFSConstants.EMPTY_STRING);
