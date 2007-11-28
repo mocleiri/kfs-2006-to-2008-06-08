@@ -117,7 +117,7 @@ public class ProcessPdpCancelPaidServiceImpl implements ProcessPdpCancelPaidServ
                     LOG.error("processPdpCancels() DOES NOT EXIST, CANNOT PROCESS - Credit Memo with doc type of " + documentTypeCode + " with id " + documentNumber);
                 }
             }
-            else if (DisbursementVoucherDocument.DISBURSEMENT_VOUCHER_DOCUMENT_TYPE.equals(documentTypeCode)) {
+            else if (DisbursementVoucherRuleConstants.DOCUMENT_TYPE_CHECKACH.equals(documentTypeCode)) {
                 DisbursementVoucherDocument dv = dvExtractService.getDocumentById(documentNumber);
                 if (dv != null) {
                     if (disbursedPayment || primaryCancel) {
@@ -177,7 +177,7 @@ public class ProcessPdpCancelPaidServiceImpl implements ProcessPdpCancelPaidServ
                     LOG.error("processPdpPaids() DOES NOT EXIST, CANNOT PROCESS - Credit Memo with doc type of " + documentTypeCode + " with id " + documentNumber);
                 }
             }
-            else if (documentTypeCode.equals(DisbursementVoucherDocument.DISBURSEMENT_VOUCHER_DOCUMENT_TYPE)) {
+            else if (documentTypeCode.equals(DisbursementVoucherRuleConstants.DOCUMENT_TYPE_CHECKACH)) {
                 DisbursementVoucherDocument dv = dvExtractService.getDocumentById(documentNumber);
                 dvExtractService.markDisbursementVoucherAsPaid(dv, processDate);
             }
