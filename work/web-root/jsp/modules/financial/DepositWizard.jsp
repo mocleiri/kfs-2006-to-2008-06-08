@@ -168,10 +168,7 @@ function checkCheckAllOrNone() {
 					<kul:htmlAttributeHeaderCell literalLabel="Description" scope="col" />
 					<kul:htmlAttributeHeaderCell literalLabel="Create Date" scope="col" />
 					<kul:htmlAttributeHeaderCell literalLabel="Check Total" scope="col" />
-					<%-- <kul:htmlAttributeHeaderCell literalLabel="Currency Total"
-						scope="col" />
-					<kul:htmlAttributeHeaderCell literalLabel="Coin Total" scope="col" /> --%>
-					<kul:htmlAttributeHeaderCell literalLabel="Total" scope="col" />
+					
 				</tr>
 
       <c:if test="${!empty KualiForm.depositableCashReceipts}">
@@ -220,10 +217,7 @@ function checkCheckAllOrNone() {
 						$&nbsp;${cashReceipt.currencyFormattedTotalCheckAmount} <html:hidden
 							property="depositableCashReceipt[${ctr}].totalCheckAmount" /></div>
 						</td>
-						<td>
-						<div align="center">
-						$&nbsp;${cashReceipt.currencyFormattedSumTotalAmount}</div>
-						</td>
+						
 					</tr>
 
 					<c:if test="${cashReceipt.checkCount > 0}">
@@ -241,8 +235,7 @@ function checkCheckAllOrNone() {
 							</td>
 							<td class="infoline"><kul:htmlAttributeLabel
 								attributeEntry="${checkAttributes.amount}" readOnly="true" /></td>
-							<td class="infoline" rowspan="${receipt.checkCount + 1}"
-								colspan="3">&nbsp;</td>
+							
 						</tr>
 
 						<logic:iterate name="cashReceipt" property="checks" id="check"
