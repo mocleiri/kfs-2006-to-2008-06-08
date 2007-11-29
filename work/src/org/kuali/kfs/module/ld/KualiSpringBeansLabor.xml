@@ -154,12 +154,8 @@
     <!-- Section 2: Spring Beans for DAO -->
 
 	<bean id="laborOriginEntryDao" parent="platformAwareDao" class="org.kuali.module.labor.dao.ojb.LaborOriginEntryDaoOjb">
-	    <property name="entryClass">
-            <bean class="java.lang.Class" factory-method="forName">
-                 <constructor-arg value="org.kuali.module.labor.bo.LaborOriginEntry"/>
-            </bean>
-        </property>
-	</bean>
+	    <property name="entryClass" value="org.kuali.module.labor.bo.LaborOriginEntry"/>
+    </bean>
 	
     <bean id="laborLedgerEntryDao" parent="platformAwareDao" class="org.kuali.module.labor.dao.ojb.LaborLedgerEntryDaoOjb" />
 
