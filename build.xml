@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
  Copyright 2005-2007 The Kuali Foundation.
- 
+
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.opensource.org/licenses/ecl1.php
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -79,6 +79,7 @@
 		<loadfile property="log4j" srcfile="${user.home}/${log4j.file}" failonerror="false"><filterchain><expandproperties/></filterchain></loadfile>
 		<loadfile property="log4j" srcfile="${build.external.directory}/${log4j.file}"><filterchain><expandproperties/></filterchain></loadfile>
 		<loadfile property="security" srcfile="${build.external.directory}/${security.file}"><filterchain><expandproperties/></filterchain></loadfile>
+		<loadfile property="standalone-workflow" srcfile="${build.appserver.directory}/standalone-workflow.xml"><filterchain><expandproperties/></filterchain></loadfile>
 	</target>
 
 	<target name="init-make-references" depends="init-properties">
@@ -111,6 +112,8 @@
 				<include name="${test.directory}/**/**" />
 				<include name="*.war" />
 				<include name="*.zip" />
+				<include name="workflow.xml"/>
+				<include name="${build.temp.directory}"/>
 			</fileset>
 		</delete>
 		<delete failonerror="false">
@@ -176,7 +179,7 @@
 		<unzip dest="${webroot.directory}" src="${build.project.directory}/${rice.name}-${rice.version}${rice.output.web.suffix}" />
 		<unzip dest="${licenses.directory}/${rice.name}" src="${build.project.directory}/${rice.name}-${rice.version}${rice.output.licenses.suffix}" />
 	</target>
-	
+
 	<target name="filter-local" if="is.local.build" depends="init-properties">
 		<copy file="${build.appserver.directory}/${carol.file}" todir="${appserver.classes.dir}" overwrite="true" />
 		<copy todir="${appserver.lib.dir}" overwrite="true">
@@ -274,7 +277,7 @@
 		</copy>
 		<jar jarfile="${ant.project.name}-${build.environment}.war" basedir="${war.directory}" compress="false" />
 	</target>
-	
+
 	<target name="continuous-integration" depends="clean,make-tests,test">
 		<fail if="tests.failed" message="Tests failed" />
 	</target>
@@ -286,11 +289,54 @@
 				<pathelement location="${make-source.target.directory}" />
 				<path refid="compile.source.classpath" />
 				<fileset dir="${appserver.classes.dir}" includes="*.jar" />
-			</classpath>		
+			</classpath>
 		</java>
 	</target>
-	
-	
+
+	<target name="dist-plugin" depends="make-source" description="Generates a plugin for standalone KEW">
+		<copy todir="${plugin.classes.directory}">
+			<fileset dir="${make-source.target.directory}"/>
+		</copy>
+		<copy todir="${plugin.lib.directory}">
+			<fileset dir="${lib.directory}">
+				<exclude name="rice-kew-*.jar"/>
+				<exclude name="rice-ksb-*.jar"/>
+				<exclude name="rice-core-*.jar"/>
+				<exclude name="rice-shared-*.jar"/>
+				<exclude name="commons-logging*.jar"/>
+				<exclude name="spring-2*.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${plugin.directory}">
+			<fileset dir="${build.plugin.directory}"/>
+		</copy>
+		<zip basedir="${plugin.directory}" destfile="en-plugins.zip"/>
+	</target>
+
+	<target name="dist-standalone-kew-war" depends="make-source" description="Generates a WAR for running a standalone KEW server">
+		<copy todir="${build.standalone.directory}/WEB-INF/lib">
+			<fileset dir="${lib.directory}" includes="*.jar"/>
+			<fileset dir="${build.appserver.directory}" includes="*.jar"/>
+		</copy>
+		<copy todir="${build.standalone.directory}/WEB-INF/classes">
+			<fileset dir="${build.appserver.directory}" includes="carol.properties"/>
+		</copy>
+		<copy file="build/external/appserver/standalone-kew-web.xml" tofile="${build.standalone.directory}/WEB-INF/web.xml"/>
+		<copy todir="${build.standalone.directory}">
+			<fileset dir="${webroot.directory}/en" excludes="**/CVS/*,.cvsignore"/>
+		</copy>
+		<copy todir="${build.standalone.directory}/ksb">
+			<fileset dir="${webroot.directory}/ksb" excludes="**/CVS/*"/>
+		</copy>
+		<copy todir="${build.standalone.directory}/WEB-INF/plugins/shared/lib">
+			<fileset dir="${lib.directory}" includes="rice-shared-*.jar"/>
+		</copy>
+		<jar destfile="en-dev.war">
+			<fileset dir="${build.standalone.directory}"/>
+		</jar>
+		<echo file="workflow.xml" message="${standalone-workflow}"  />
+	</target>
+
 	<target name="help" depends="init-properties" description="Describe public targets">
 		<echo>--- OVERVIEW ---
 
@@ -308,16 +354,16 @@
 			      build for your machine (you do not need to worry about the rice development section)
 			    - override other property values in ${user.home}/${ant.project.name}-build.properties as needed
 			    - save your changes
-			
+
 			2. run the echo-properties target and review the results
 
 			3. follow the instructions associated with the dist-local target and run that target
-						
+
 			4. right click on the root project directory and select "Refresh"
-			
+
 			5. click the "Run/Stop/Restart MyEclipse Application Servers" button in the "Java (default)" perspective in
 			eclipse to start tomcat
-			
+
 			6. launch a browser and access http://localhost:8080/kuali-dev
 
 	you can override the default log4j settings for your local deployments by copying
@@ -342,7 +388,7 @@
 			clean: removes all build output
 		</echo>
 	</target>
-	
+
 
 	<import file="build-foundation.xml"/>
 
