@@ -24,7 +24,7 @@
 		<property name="configFile" value="org/kuali/kfs/dwr-kfs.xml" />
 	</bean>
 	
-	<bean class="org.kuali.core.datadictionary.spring.DataDictionaryLocationConfigurer">
+	<bean class="org.kuali.core.datadictionary.spring.DataDictionaryLocationConfigurer" depends-on="rice">
 		<property name="dataDictionaryPackages" value="org/kuali/kfs/datadictionary" />
 	</bean>
 	
