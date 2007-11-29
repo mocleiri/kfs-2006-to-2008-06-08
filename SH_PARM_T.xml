@@ -4215,4 +4215,11 @@
         SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_SUB_UNIT"
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="DV"
         SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="KUALI_DV_TAXGRP"/>
+    <SH_PARM_T OBJ_ID="3FFEBD57883B709AE043814FD881709A"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="A central administrative email address to send a notice to when a PDP check bundle contains more notes than are allowed on a check stub.  The associated check bundle is not allowed to load to PDP and is held by the purchasing system until further action can be taken to resolve the problem."
+        SH_PARM_DTL_TYP_CD="All"
+        SH_PARM_NM="PDP_ERROR_EXCEEDS_NOTE_LIMIT_EMAIL_ADDRESSES"
+        SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="kbatch-l@indiana.edu"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
 </dataset>
