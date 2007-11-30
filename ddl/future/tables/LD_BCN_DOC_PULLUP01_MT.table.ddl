@@ -35,7 +35,6 @@ AS
 		hier.univ_fiscal_yr,
 		hier.fin_coa_cd,
 		hier.account_nbr,
-        hier.OBJ_ID,
         hier.VER_NBR,
 		hier.org_fin_coa_cd "SORG_FIN_COA_CD",
 		hier.org_cd  "SORG_CD",
@@ -50,7 +49,4 @@ ALTER TABLE LD_BCN_DOC_PULLUP01_MT ADD CONSTRAINT LD_BCN_DOC_PULLUP01_MTP1 PRIMA
 		fin_coa_cd,
 		account_nbr)
 /
-ALTER TABLE LD_BCN_DOC_PULLUP01_MT ADD CONSTRAINT LD_BCN_DOC_PULLUP01_MTC0 UNIQUE (OBJ_ID)
-/
-ALTER TABLE LD_BCN_DOC_PULLUP01_MT MODIFY (OBJ_ID DEFAULT SYS_GUID()); 
 ALTER TABLE LD_BCN_DOC_PULLUP01_MT MODIFY (VER_NBR DEFAULT 1);

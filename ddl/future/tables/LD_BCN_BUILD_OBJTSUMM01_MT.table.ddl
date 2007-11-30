@@ -40,7 +40,6 @@ AS
 		s.fin_cons_obj_cd,
 		s.fin_obj_level_cd,
 		s.fin_object_cd,
-        s.OBJ_ID,
         s.VER_NBR,
 		s.appt_rqcsf_fte_qty,
 		s.appt_rqst_fte_qty
@@ -58,8 +57,4 @@ ALTER TABLE LD_BCN_BUILD_OBJTSUMM01_MT ADD CONSTRAINT LD_BCN_BUILD_OBJTSUMM01_MT
 		fin_obj_level_cd,
 		fin_object_cd)
 /
-ALTER TABLE LD_BCN_BUILD_OBJTSUMM01_MT ADD CONSTRAINT LD_BCN_BUILD_OBJTSUMM01_MTC0 UNIQUE (OBJ_ID)
-/
-ALTER TABLE LD_BCN_BUILD_OBJTSUMM01_MT MODIFY (OBJ_ID DEFAULT SYS_GUID()); 
 ALTER TABLE LD_BCN_BUILD_OBJTSUMM01_MT MODIFY (VER_NBR DEFAULT 1);
-

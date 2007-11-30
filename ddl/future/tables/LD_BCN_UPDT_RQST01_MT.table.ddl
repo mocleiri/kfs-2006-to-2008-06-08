@@ -37,7 +37,6 @@ AS
 		m.sub_acct_nbr,
 		m.fin_object_cd,
 		m.fin_sub_obj_cd,
-        m.OBJ_ID,
         m.VER_NBR,
 		m.fin_obj_typ_cd,
 		m.acln_annl_bal_amt,
@@ -69,7 +68,4 @@ ALTER TABLE LD_BCN_UPDT_RQST01_MT ADD CONSTRAINT LD_BCN_UPDT_RQST01_MTP1 PRIMARY
 		fin_object_cd,
 		fin_sub_obj_cd)
 /
-ALTER TABLE LD_BCN_UPDT_RQST01_MT ADD CONSTRAINT LD_BCN_UPDT_RQST01_MTC0 UNIQUE (OBJ_ID)
-/
-ALTER TABLE LD_BCN_UPDT_RQST01_MT MODIFY (OBJ_ID DEFAULT SYS_GUID()); 
 ALTER TABLE LD_BCN_UPDT_RQST01_MT MODIFY (VER_NBR DEFAULT 1);

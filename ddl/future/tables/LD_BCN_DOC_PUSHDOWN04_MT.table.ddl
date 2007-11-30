@@ -36,7 +36,6 @@ AS
 		head.fin_coa_cd,
 		head.account_nbr,
 		head.sub_acct_nbr, 
-        head.OBJ_ID,
         head.VER_NBR,
 		hier.org_level_cd,
 		hier.org_level_cd "SEL_ORG_LVL",
@@ -57,7 +56,4 @@ ALTER TABLE LD_BCN_DOC_PUSHDOWN04_MT ADD CONSTRAINT LD_BCN_DOC_PUSHDOWN04_MTP1 P
 		account_nbr,
 		sub_acct_nbr)
 /
-ALTER TABLE LD_BCN_DOC_PUSHDOWN04_MT ADD CONSTRAINT LD_BCN_DOC_PUSHDOWN04_MTC0 UNIQUE (OBJ_ID)
-/
-ALTER TABLE LD_BCN_DOC_PUSHDOWN04_MT MODIFY (OBJ_ID DEFAULT SYS_GUID()); 
 ALTER TABLE LD_BCN_DOC_PUSHDOWN04_MT MODIFY (VER_NBR DEFAULT 1);
