@@ -77,6 +77,7 @@ import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
 import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
 import org.kuali.module.purap.util.PurApItemUtils;
+import org.kuali.module.purap.util.VendorGroupingHelper;
 import org.kuali.module.vendor.bo.PaymentTermType;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -158,6 +159,14 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
         LOG.debug("getPaymentRequestsByCM() started");
 
         return paymentRequestDao.getPaymentRequestsToExtract(campusCode, null, null, cmd.getVendorHeaderGeneratedIdentifier(), cmd.getVendorDetailAssignedIdentifier());
+    }
+
+    
+    
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByVendor(String campusCode, VendorGroupingHelper vendor ) {
+        LOG.debug("getPaymentRequestsByVendor() started");
+
+        return paymentRequestDao.getPaymentRequestsToExtractForVendor(campusCode, vendor );
     }
 
     /**
