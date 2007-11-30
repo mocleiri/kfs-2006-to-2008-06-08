@@ -20,9 +20,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -67,6 +69,7 @@ import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.service.CreditMemoService;
 import org.kuali.module.purap.service.PaymentRequestService;
 import org.kuali.module.purap.service.PdpExtractService;
+import org.kuali.module.purap.util.VendorGroupingHelper;
 import org.kuali.module.vendor.VendorConstants;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -188,74 +191,107 @@ public class PdpExtractServiceImpl implements PdpExtractService {
      * @return
      */
     private Totals extractRegularPaymentsForChart(String campusCode, PdpUser puser, Date processRunDate, Batch batch) {
+        LOG.debug( "START - extractRegularPaymentsForChart()" );
         Totals t = new Totals();
 
-        List<String> preqsWithCreditMemos = new ArrayList<String>();
+        List<String> preqsWithOutstandingCreditMemos = new ArrayList<String>();
         
-        // Get all the matching credit memos
-        Iterator<CreditMemoDocument> cmIter = creditMemoService.getCreditMemosToExtract(campusCode);
-        while (cmIter.hasNext()) {
-            CreditMemoDocument cmd = cmIter.next();
+        // NEW PSEUDOCODE:
+        // get list of all vendor id/detail IDs on eligible CMs
+        // loop over vendor's IDs and get matching lists of CMs and PREQs
+        // if net > 0, generate PDP payment groups and update the documents
+        Set<VendorGroupingHelper> vendors = creditMemoService.getVendorsOnCreditMemosToExtract(campusCode); 
 
-            List<PaymentRequestDocument> prds = new ArrayList<PaymentRequestDocument>();
-            List<CreditMemoDocument> cmds = new ArrayList<CreditMemoDocument>();
-            cmds.add(cmd);
-
-            KualiDecimal creditMemoAmount = cmd.getCreditMemoAmount();
+        List<PaymentRequestDocument> prds = new ArrayList<PaymentRequestDocument>();
+        List<CreditMemoDocument> cmds = new ArrayList<CreditMemoDocument>();
+        for ( VendorGroupingHelper vendor : vendors ) {
+            if ( LOG.isDebugEnabled() ) {
+                LOG.debug( "Processing Vendor: " + vendor );
+            }
+            prds.clear();
+            cmds.clear();
+            KualiDecimal creditMemoAmount = KualiDecimal.ZERO;
             KualiDecimal paymentRequestAmount = KualiDecimal.ZERO;
-
-            // find all related PREQ documents which should be bundled with this CM
-            Iterator<PaymentRequestDocument> pri = paymentRequestService.getPaymentRequestsToExtractByCM(campusCode, cmd);
+            // Get all the matching credit memos
+            Iterator<CreditMemoDocument> cmIter = creditMemoService.getCreditMemosToExtractByVendor(campusCode,vendor);
+            while ( cmIter.hasNext() ) {
+                CreditMemoDocument cmd = cmIter.next();
+                creditMemoAmount = creditMemoAmount.add( cmd.getCreditMemoAmount() );
+                cmds.add(cmd);
+                if ( LOG.isDebugEnabled() ) {
+                    LOG.debug( "Added CM to bundle: " + cmd.getDocumentNumber() + " - $" + cmd.getCreditMemoAmount() );
+                }
+            }
+            // get all matching payment requests
+            Iterator<PaymentRequestDocument> pri = paymentRequestService.getPaymentRequestsToExtractByVendor(campusCode, vendor);
             while (pri.hasNext()) {
                 PaymentRequestDocument prd = pri.next();
                 paymentRequestAmount = paymentRequestAmount.add(prd.getGrandTotal());
                 prds.add(prd);
+                if ( LOG.isDebugEnabled() ) {
+                    LOG.debug( "Added PREQ to bundle: " + prd.getDocumentNumber() + " - $" + prd.getGrandTotal() );
+                }
             }
-
             // check if there is anything left to pay
+            if ( LOG.isDebugEnabled() ) {
+                LOG.debug( "Bundle Total: " + paymentRequestAmount.subtract(creditMemoAmount) );
+            }
             if (paymentRequestAmount.compareTo(creditMemoAmount) > 0) {
                 // if so, create a payment group and add the CM and PREQ documents
                 PaymentGroup pg = buildPaymentGroup(prds, cmds, batch);
                 if(validatePaymentGroup(pg)) { 
                     paymentGroupService.save(pg);
+                    if ( LOG.isDebugEnabled() ) {
+                        LOG.debug( "Created PaymentGroup: " + pg.getId() );
+                    }
+                    
                     t.count++;
                     t.totalAmount = t.totalAmount.add(pg.getNetPaymentAmount());
-    
-                    for (CreditMemoDocument element : cmds) {
-                        updateCreditMemo(element, puser, processRunDate);
+
+                    // mark the CMs and PREQs as processed
+                    for (CreditMemoDocument cm : cmds) {
+                        updateCreditMemo(cm, puser, processRunDate);
                     }
-                    for (PaymentRequestDocument element : prds) {
-                        updatePaymentRequest(element, puser, processRunDate);
+                    for (PaymentRequestDocument pr : prds) {
+                        updatePaymentRequest(pr, puser, processRunDate);
                     }
                 } else {
+                    LOG.debug( "bundle failed validation - NO BUNDLE CREATED" );
                     // stops PREQ documents from being processed by putting them on a "do not process" list
                     // until validation problems can be resolved
                     for ( PaymentRequestDocument doc : prds ) {
-                        preqsWithCreditMemos.add( doc.getDocumentHeader().getDocumentNumber() );
+                        preqsWithOutstandingCreditMemos.add( doc.getDocumentNumber() );
                     }
                 }
             } else {
+                LOG.debug( "bundle net < 0 - NO BUNDLE CREATED" );
                 // put the PREQ documents in this bundle on a "do not process" list for this run
                 // to prevent them from being picked up by the code below
                 for ( PaymentRequestDocument doc : prds ) {
-                    preqsWithCreditMemos.add( doc.getDocumentHeader().getDocumentNumber() );
+                    preqsWithOutstandingCreditMemos.add( doc.getDocumentNumber() );
                 }
             }
         }
+
+        LOG.debug( "processing PREQs without CMs" );
 
         // Get all the payment requests to process that do not have credit memos
         Iterator<PaymentRequestDocument> prIter = paymentRequestService.getPaymentRequestToExtractByChart(campusCode);
         while (prIter.hasNext()) {
             PaymentRequestDocument prd = prIter.next();
             // if in the list created above, don't create the payment group
-            if ( !preqsWithCreditMemos.contains( prd.getDocumentHeader().getDocumentNumber() )  ) {
+            if ( !preqsWithOutstandingCreditMemos.contains( prd.getDocumentNumber() )  ) {
                 PaymentGroup pg = processSinglePaymentRequestDocument(prd, batch, puser, processRunDate);
+                if ( LOG.isDebugEnabled() ) {
+                    LOG.debug( "Added PREQ to solo bundle: " + prd.getDocumentNumber() + " - $" + prd.getGrandTotal() );
+                }
     
                 t.count = t.count + pg.getPaymentDetails().size();
                 t.totalAmount = t.totalAmount.add(pg.getNetPaymentAmount());
             }
         }
 
+        LOG.debug( "END - extractRegularPaymentsForChart()" );
         return t;
     }
 
