@@ -286,7 +286,7 @@
 								<c:out value="${PaymentDetail.requisitionNbr}" />&nbsp;
 							</td>
 			        <td nowrap=nowrap class="datacell">
-			        	<c:out value="${PaymentDetail.paymentGroup.customerIuNbr}"/>
+			        	<c:out value="${PaymentDetail.paymentGroup.customerInstitutionNumber}"/>
 								&nbsp;
 							</td>
 							<td nowrap=nowrap class="datacell">
@@ -385,7 +385,7 @@
 									<c:out value="${item.requisitionNbr}" />&nbsp;
 								</td>
 				        <td nowrap=nowrap class="datacell">
-				        	<c:out value="${PaymentDetail.paymentGroup.customerIuNbr}"/>&nbsp;
+				        	<c:out value="${PaymentDetail.paymentGroup.customerInstitutionNumber}"/>&nbsp;
 								</td>
 								<td nowrap=nowrap class="datacell">
 									<fmt:formatDate value="${item.paymentGroup.paymentDate}" pattern="MM/dd/yyyy" />&nbsp;
@@ -454,7 +454,7 @@
 									<c:out value="${item.requisitionNbr}" />&nbsp;
 								</td>
 				        <td nowrap=nowrap class="datacell">
-				        	<c:out value="${PaymentDetail.paymentGroup.customerIuNbr}"/>&nbsp;
+				        	<c:out value="${PaymentDetail.paymentGroup.customerInstitutionNumber}"/>&nbsp;
 								</td>
 								<td nowrap=nowrap class="datacell">
 									<fmt:formatDate value="${item.paymentGroup.paymentDate}" pattern="MM/dd/yyyy" />&nbsp;
