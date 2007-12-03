@@ -572,6 +572,8 @@ public class PdpExtractServiceImpl implements PdpExtractService {
         pd.setInvTotOtherCreditAmount(creditAmount);
         pd.setInvTotOtherDebitAmount(debitAmount);
 
+        pd.setPrimaryCancelledPayment(Boolean.FALSE);        
+        
         addAccounts(cmd, pd,"CM");
         addNotes(cmd, pd);
         return pd;
@@ -644,6 +646,8 @@ public class PdpExtractServiceImpl implements PdpExtractService {
         pd.setInvTotOtherCreditAmount(creditAmount);
         pd.setInvTotOtherDebitAmount(debitAmount);
 
+        pd.setPrimaryCancelledPayment(Boolean.FALSE);
+        
         addAccounts(prd, pd,"PREQ");
         addNotes(prd, pd);
         return pd;
