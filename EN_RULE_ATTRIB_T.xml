@@ -423,13 +423,13 @@
         RULE_ATTRIB_LBL_TXT="Account SubFund Group Routing"
         RULE_ATTRIB_NM="KualiAccountSubFundGroupAttribute"
         RULE_ATTRIB_TYP="RuleXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;routingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;subFundGroupCode&quot; title=&quot;kuali_dd_label(SubFundGroup)&quot; workflowType=&quot;ALL&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;validation required=&quot;true&quot;/>&#xd;&#xa;          &lt;quickfinder appliesTo=&quot;subFundGroupCode&quot; draw=&quot;true&quot; service=&quot;workflow-org.kuali.module.chart.bo.SubFundGroup-Lookupable(workflow-subFundGroupCode:subFundGroupCode)&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//newMaintainableObject/businessObject/subFundGroupCode') = wf:ruledata('subFundGroupCode')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/routingConfig>"/>
-    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="21"
-        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiXmlSearchableAttributeImpl"
-        RULE_ATTRIB_DESC="KualiAccountSearchAttribute"
+    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="22"
+        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.AccountNumberSearchAttributeImpl"
+        RULE_ATTRIB_DESC="Allows searches on documents with account numbers."
         RULE_ATTRIB_ID="8371"
         RULE_ATTRIB_LBL_TXT="KualiAccountSearchAttribute"
         RULE_ATTRIB_NM="KualiAccountSearchAttribute"
-        RULE_ATTRIB_TYP="SearchableXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;searchingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;accountNumber&quot; title=&quot;kuali_dd_label(SourceAccountingLine)&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;validation required=&quot;false&quot;>&#xd;&#xa;            &lt;regex>^[0-9 ]{1,10}$&lt;/regex>&#xd;&#xa;            &lt;message>Invalid Account Number Value.  Account numbers must be all numeric, with at least one digit.&lt;/message>&#xd;&#xa;          &lt;/validation>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//org.kuali.kfs.bo.SourceAccountingLine/accountNumber') | wf:xstreamsafe('//org.kuali.kfs.bo.TargetAccountingLine/accountNumber')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/searchingConfig>"/>
+        RULE_ATTRIB_TYP="SearchableXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;searchingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;accountNumber&quot; title=&quot;kuali_dd_label(SourceAccountingLine)&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//document/accountNumber')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/searchingConfig>"/>
     <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="9"
         RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiPayeeTaxIdAttribute"
         RULE_ATTRIB_DESC="foo" RULE_ATTRIB_ID="8431"
