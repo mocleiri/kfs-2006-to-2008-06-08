@@ -22,6 +22,7 @@ CREATE TABLE SH_ROOM_T(
         BLDG_ROOM_TYPE                 VARCHAR2(50),
         BLDG_ROOM_DEPT                 VARCHAR2(40),
         BLDG_ROOM_DESC                 VARCHAR2(25),
+        ROW_ACTV_IND                   VARCHAR2(1) CONSTRAINT SH_ROOM_TN6 NOT NULL,
      CONSTRAINT SH_ROOM_TP1 PRIMARY KEY (
         CAMPUS_CD,
         BLDG_CD,

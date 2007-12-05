@@ -24,6 +24,7 @@ CREATE TABLE SH_BUILDING_T(
         BLDG_ADDR_ST_CD                VARCHAR2(2), 
         BLDG_ADDR_ZIP_CD               VARCHAR2(11),  
         ALTRNT_BLDG_CD                 VARCHAR2(4),  
+        ROW_ACTV_IND                   VARCHAR2(1) CONSTRAINT SH_BUILDING_TN5 NOT NULL,
      CONSTRAINT SH_BUILDING_TP1 PRIMARY KEY (
         CAMPUS_CD,
         BLDG_CD),
