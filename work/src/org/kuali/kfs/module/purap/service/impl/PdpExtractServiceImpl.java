@@ -236,7 +236,7 @@ public class PdpExtractServiceImpl implements PdpExtractService {
             if ( LOG.isDebugEnabled() ) {
                 LOG.debug( "Bundle Total: " + paymentRequestAmount.subtract(creditMemoAmount) );
             }
-            if (paymentRequestAmount.compareTo(creditMemoAmount) > 0) {
+            if (paymentRequestAmount.compareTo(creditMemoAmount) >= 0) {
                 // if so, create a payment group and add the CM and PREQ documents
                 PaymentGroup pg = buildPaymentGroup(prds, cmds, batch);
                 if(validatePaymentGroup(pg)) { 
