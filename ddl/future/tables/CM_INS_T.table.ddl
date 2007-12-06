@@ -1,6 +1,6 @@
 CREATE TABLE CM_INS_T(
         CPTLAST_INS_CD                 NUMBER(4) CONSTRAINT CM_INS_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CM_INS_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CM_INS_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CM_INS_TN3 NOT NULL,
         CPTLAST_INSFSCL_YR             NUMBER(4),
         AST_INS_ITM_DESC               VARCHAR2(35),
