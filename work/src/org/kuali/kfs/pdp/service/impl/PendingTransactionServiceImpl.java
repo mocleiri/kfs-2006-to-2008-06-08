@@ -314,11 +314,11 @@ public class GlPendingTransactionServiceImpl implements GlPendingTransactionServ
             gpt.setDescription(trnDesc);
             gpt.setOrgDocNbr(pd.getOrganizationDocNbr());
             gpt.setFdocRefNbr(pd.getCustPaymentDocNbr());
-
-            glPendingTransactionDao.save(gpt);
             
             // update the offset account if necessary
             SpringContext.getBean(FlexibleOffsetAccountService.class).updateOffset(gpt);
+
+            glPendingTransactionDao.save(gpt);
         }
     }
 }
