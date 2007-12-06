@@ -38,7 +38,6 @@ CREATE TABLE CM_CPTLAST_T(
         TRNFR_FND_FDOC_NBR             VARCHAR2(14),
         AST_INS_ACCT_NBR               VARCHAR2(7),
         AST_INS_COA_CD                 VARCHAR2(2),
-        CPTLAST_INS_CD                 NUMBER(4),
         AST_INVN_STAT_CD               VARCHAR2(1),
         CPTLAST_IU_TAG_NBR             VARCHAR2(8),
         CPTLAST_LSTINVN_DT             DATE,
