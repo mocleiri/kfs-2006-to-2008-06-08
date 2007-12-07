@@ -83,9 +83,11 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
             return validEntry;
 
         // Create a query to do a lookup on.
-        Map criteria = new HashMap();
-
+        Map<String,Object> criteria = new HashMap<String,Object>();
+        String identifierField = "";
+        
         if (payeeIdTypeCd.equals("E")) {
+            identifierField = "personUniversalIdentifier";
             payeeUserId = newPayeeAchAccount.getPersonUniversalIdentifier();
             if (payeeUserId == null) {
                 putFieldError("personUniversalIdentifier", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "personUniversalIdentifier" ));
@@ -95,6 +97,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
                 criteria.put("personUniversalIdentifier", payeeUserId);
         }
         else if (payeeIdTypeCd.equals("V")) {
+            identifierField = "vendorHeaderGeneratedIdentifier";
             vendorGnrtdId = newPayeeAchAccount.getVendorHeaderGeneratedIdentifier();
             vendorAsndId = newPayeeAchAccount.getVendorDetailAssignedIdentifier();
             if ((vendorGnrtdId == null) || (vendorAsndId == null)) {
@@ -107,6 +110,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
             }
         }
         else if (payeeIdTypeCd.equals("F")) {
+            identifierField = "payeeFederalEmployerIdentificationNumber";
             feinNumber = newPayeeAchAccount.getPayeeFederalEmployerIdentificationNumber();
             if (feinNumber == null) {
                 putFieldError("payeeFederalEmployerIdentificationNumber", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "payeeFederalEmployerIdentificationNumber" ));
@@ -116,6 +120,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
                 criteria.put("payeeFederalEmployerIdentificationNumber", feinNumber);
         }
         else if (payeeIdTypeCd.equals("S")) {
+            identifierField = "payeeSocialSecurityNumber";
             ssn = newPayeeAchAccount.getPayeeSocialSecurityNumber();
             if (ssn == null) {
                 putFieldError("payeeSocialSecurityNumber", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "payeeSocialSecurityNumber" ) );
@@ -125,6 +130,7 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
                 criteria.put("payeeSocialSecurityNumber", ssn);
         }
         else if (payeeIdTypeCd.equals("P")) {
+            identifierField = "disbVchrPayeeIdNumber";
             dvPayeeId = newPayeeAchAccount.getDisbVchrPayeeIdNumber();
             if (dvPayeeId == null) {
                 putFieldError("disbVchrPayeeIdNumber", KFSKeyConstants.ERROR_REQUIRED, getFieldLabel( "disbVchrPayeeIdNumber" ));
@@ -134,12 +140,12 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
                 criteria.put("disbVchrPayeeIdNumber", dvPayeeId);
         }
         if (validEntry)
-            validEntry &= checkForDuplicateRecord(criteria);
+            validEntry &= checkForDuplicateRecord(criteria, identifierField);
 
         return validEntry;
     }
 
-    private boolean checkForDuplicateRecord(Map criteria) {
+    private boolean checkForDuplicateRecord(Map<String,Object> criteria, String identifierField) {
 
         String newPayeeIdTypeCd = newPayeeAchAccount.getPayeeIdentifierTypeCode();
         String newPsdTransactionCd = newPayeeAchAccount.getPsdTransactionCode();
@@ -180,9 +186,9 @@ public class PayeeAchAccountRule extends MaintenanceDocumentRuleBase {
         criteria.put("psdTransactionCode", newPsdTransactionCd);
         criteria.put("payeeIdentifierTypeCode", newPayeeIdTypeCd);
 
-        List duplRecList = (List) SpringContext.getBean(BusinessObjectService.class).findMatching(PayeeAchAccount.class, criteria);
-        if (!duplRecList.isEmpty()) {
-            putFieldError("error.document.payeeAchAccountMaintenance.duplicateAccount", KFSKeyConstants.ERROR_DOCUMENT_PAYEEACHACCOUNTMAINT_DUPLICATE_RECORD);
+        int matches = SpringContext.getBean(BusinessObjectService.class).countMatching(PayeeAchAccount.class, criteria);
+        if ( matches > 0 ) {
+            putFieldError(identifierField, KFSKeyConstants.ERROR_DOCUMENT_PAYEEACHACCOUNTMAINT_DUPLICATE_RECORD);
             valid = false;
         }
         return valid;
