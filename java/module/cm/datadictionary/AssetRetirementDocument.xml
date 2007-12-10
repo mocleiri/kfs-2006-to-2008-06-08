@@ -14,7 +14,6 @@
                         <field attributeName="buyerDescription" />
                         <field attributeName="campusPoliceDepartmentCaseNumber" />
                         <field attributeName="cashReceiptFinancialDocumentNumber" />
-                        <field attributeName="cashReceiptFinancialSystemOriginationCode" />
                         <field attributeName="documentNumber" />
                         <field attributeName="estimatedSellingPrice" />
                         <field attributeName="handlingFeeAmount" />
@@ -53,7 +52,6 @@
                 <lookupField attributeName="buyerDescription" required="false" />
                 <lookupField attributeName="campusPoliceDepartmentCaseNumber" required="false" />
                 <lookupField attributeName="cashReceiptFinancialDocumentNumber" required="false" />
-                <lookupField attributeName="cashReceiptFinancialSystemOriginationCode" required="false" />
                 <lookupField attributeName="documentNumber" required="false" />
                 <lookupField attributeName="estimatedSellingPrice" required="false" />
                 <lookupField attributeName="handlingFeeAmount" required="false" />
@@ -78,7 +76,6 @@
                 <field attributeName="buyerDescription" />
                 <field attributeName="campusPoliceDepartmentCaseNumber" />
                 <field attributeName="cashReceiptFinancialDocumentNumber" />
-                <field attributeName="cashReceiptFinancialSystemOriginationCode" />
                 <field attributeName="documentNumber" />
                 <field attributeName="estimatedSellingPrice" />
                 <field attributeName="handlingFeeAmount" />
@@ -145,21 +142,6 @@
 
                 <summary>cashReceiptFinancialDocumentNumber</summary>
                 <description>cashReceiptFinancialDocumentNumber description...</description>
-			</attribute>
-
-            <attribute name="cashReceiptFinancialSystemOriginationCode" forceUppercase="true">
-                <label>Cash Receipt Financial System Origination Code</label>
-                <shortLabel>Code</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="4" />
-                </control>
-
-                <summary>cashReceiptFinancialSystemOriginationCode</summary>
-                <description>cashReceiptFinancialSystemOriginationCode description...</description>
 			</attribute>
 
             <attribute name="documentNumber" forceUppercase="true">

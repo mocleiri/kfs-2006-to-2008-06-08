@@ -29,7 +29,6 @@
                         <field attributeName="organizationText" />
                         <field attributeName="representativeUniversalIdentifier" />
                         <field attributeName="transferOfFundsFinancialDocumentNumber" />
-                        <field attributeName="transferOfFundsOriginationCode" />
                     </inquiryFields>
                 </inquirySection>
             </inquirySections>  
@@ -65,7 +64,6 @@
                 <lookupField attributeName="organizationText" required="false" />
                 <lookupField attributeName="representativeUniversalIdentifier" required="false" />
                 <lookupField attributeName="transferOfFundsFinancialDocumentNumber" required="false" />
-                <lookupField attributeName="transferOfFundsOriginationCode" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -87,7 +85,6 @@
                 <field attributeName="organizationText" />
                 <field attributeName="representativeUniversalIdentifier" />
                 <field attributeName="transferOfFundsFinancialDocumentNumber" />
-                <field attributeName="transferOfFundsOriginationCode" />
             </resultFields>
         </lookup>
 
@@ -360,21 +357,6 @@
 
                 <summary>transferOfFundsFinancialDocumentNumber</summary>
                 <description>transferOfFundsFinancialDocumentNumber description...</description>
-			</attribute>
-
-            <attribute name="transferOfFundsOriginationCode" forceUppercase="true">
-                <label>Transfer Of Funds Origination Code</label>
-                <shortLabel>Code</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern><anyCharacter /></validationPattern>
-
-                <control>
-                    <text size="4" />
-                </control>
-
-                <summary>transferOfFundsOriginationCode</summary>
-                <description>transferOfFundsOriginationCode description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
