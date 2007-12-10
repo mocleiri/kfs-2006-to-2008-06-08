@@ -1,6 +1,6 @@
 CREATE TABLE AR_NON_APLD_HLDG_T(
         FDOC_REF_NBR                   VARCHAR2(14) CONSTRAINT AR_NON_APLD_HLDG_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_NON_APLD_HLDG_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT AR_NON_APLD_HLDG_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_NON_APLD_HLDG_TN3 NOT NULL,
         FDOC_LINE_AMT                  NUMBER(19, 2),
         CUST_NBR                       VARCHAR2(9),

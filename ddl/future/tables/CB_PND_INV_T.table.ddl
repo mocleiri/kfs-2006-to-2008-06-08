@@ -1,7 +1,7 @@
 CREATE TABLE CB_PND_INV_T(
         PO_NUMBER                      VARCHAR2(9) CONSTRAINT CB_PND_INV_TN1 NOT NULL,
         INVOICE_NUMBER                 VARCHAR2(14) CONSTRAINT CB_PND_INV_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CB_PND_INV_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CB_PND_INV_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CB_PND_INV_TN4 NOT NULL,
         DOCUMENT_AMT                   NUMBER(19, 2),
         DOCUMENT_DATE                  DATE,

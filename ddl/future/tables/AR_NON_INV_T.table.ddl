@@ -1,7 +1,7 @@
 CREATE TABLE AR_NON_INV_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT AR_NON_INV_TN1 NOT NULL,
         FDOC_LINE_NBR                  NUMBER(7) CONSTRAINT AR_NON_INV_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_NON_INV_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT AR_NON_INV_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_NON_INV_TN4 NOT NULL,
         FDOC_POST_YR                   NUMBER(4),
         FIN_COA_CD                     VARCHAR2(2),

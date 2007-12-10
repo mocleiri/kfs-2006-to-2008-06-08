@@ -1,6 +1,6 @@
 CREATE TABLE AR_DOC_HDR_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT AR_DOC_HDR_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_DOC_HDR_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT AR_DOC_HDR_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_DOC_HDR_TN3 NOT NULL,
         CUST_NBR                       VARCHAR2(9),
         PRCS_FIN_COA_CD                VARCHAR2(2),

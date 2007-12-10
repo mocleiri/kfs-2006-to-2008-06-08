@@ -1,7 +1,7 @@
 CREATE TABLE CM_MULT_AST_DTL_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT CM_MULT_AST_DTL_TN1 NOT NULL,
         FDOC_LINE_NBR                  NUMBER(7) CONSTRAINT CM_MULT_AST_DTL_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CM_MULT_AST_DTL_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CM_MULT_AST_DTL_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CM_MULT_AST_DTL_TN4 NOT NULL,
         CAMPUS_CD                      VARCHAR2(2),
         BLDG_CD                        VARCHAR2(10),

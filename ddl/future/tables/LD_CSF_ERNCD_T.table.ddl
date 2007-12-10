@@ -17,7 +17,7 @@ CREATE TABLE LD_CSF_ERNCD_T(
         PAYGROUP                       VARCHAR2(3) CONSTRAINT LD_CSF_ERNCD_TN1 NOT NULL,
         EFFDT                          DATE CONSTRAINT LD_CSF_ERNCD_TN2 NOT NULL,
         COMPANY                        VARCHAR2(3) CONSTRAINT LD_CSF_ERNCD_TN3 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT LD_CSF_ERNCD_TN4 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT LD_CSF_ERNCD_TN4 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_CSF_ERNCD_TN5 NOT NULL,
         ERNCD_REG_EARNS                VARCHAR2(3),
         DESCR                          VARCHAR2(30),

@@ -16,7 +16,7 @@
 CREATE TABLE AR_INV_DTL_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT AR_INV_DTL_TN1 NOT NULL,
         AR_INV_ITM_NBR                 NUMBER(7) CONSTRAINT AR_INV_DTL_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_INV_DTL_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT AR_INV_DTL_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_INV_DTL_TN4 NOT NULL,
         FIN_COA_CD                     VARCHAR2(2),
         ACCOUNT_NBR                    VARCHAR2(7),

@@ -1,6 +1,6 @@
 CREATE TABLE CB_PND_PO_TEMP_T(
         PO_NUMBER                      VARCHAR2(9) CONSTRAINT CB_PND_PO_TEMP_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CB_PND_PO_TEMP_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CB_PND_PO_TEMP_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CB_PND_PO_TEMP_TN3 NOT NULL,
         REQ_NUMBER                     VARCHAR2(8),
         DEPT_REP                       VARCHAR2(40),

@@ -16,7 +16,7 @@
 CREATE TABLE LD_BCN_POS_T(
         POSITION_NBR                   VARCHAR2(8) CONSTRAINT LD_BCN_POS_TN1 NOT NULL,
         UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT LD_BCN_POS_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT LD_BCN_POS_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT LD_BCN_POS_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_POS_TN4 NOT NULL,
         POS_EFFDT                      DATE,
         POS_EFF_STATUS                 VARCHAR2(1),

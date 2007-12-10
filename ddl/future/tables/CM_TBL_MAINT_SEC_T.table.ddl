@@ -1,6 +1,6 @@
 CREATE TABLE CM_TBL_MAINT_SEC_T(
         CAMPUS_CD                      VARCHAR2(2) CONSTRAINT CM_TBL_MAINT_SEC_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CM_TBL_MAINT_SEC_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CM_TBL_MAINT_SEC_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CM_TBL_MAINT_SEC_TN3 NOT NULL,
         FIN_COA_CD                     VARCHAR2(2),
         ORG_CD                         VARCHAR2(4),

@@ -16,7 +16,7 @@
 CREATE TABLE AR_ORG_OPTION_T(
         FIN_COA_CD                     VARCHAR2(2) CONSTRAINT AR_ORG_OPTION_TN1 NOT NULL,
         ORG_CD                         VARCHAR2(4) CONSTRAINT AR_ORG_OPTION_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT AR_ORG_OPTION_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT AR_ORG_OPTION_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_ORG_OPTION_TN4 NOT NULL,
         PRCS_FIN_COA_CD                VARCHAR2(2),
         PRCS_ORG_CD                    VARCHAR2(4),
