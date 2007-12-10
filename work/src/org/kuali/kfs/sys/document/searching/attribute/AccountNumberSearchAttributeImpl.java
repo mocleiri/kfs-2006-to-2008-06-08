@@ -88,44 +88,24 @@ public class AccountNumberSearchAttributeImpl extends KualiXmlSearchableAttribut
             LOG.error("error parsing docContent: "+docContent, e);
             throw new RuntimeException("Error trying to parse docContent: "+docContent, e);
         }
+        AccountingLineClassDeterminer accountingLineClassDeterminer = new AccountingLineClassDeterminer(document);
         XPath xpath = XPathHelper.newXPath(document);
-        
+                
         try {
-            String documentXPath = KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + KFSPropertyConstants.DOCUMENT + "[@class]");
-            NodeList documentNodes = (NodeList)xpath.evaluate(documentXPath, document, XPathConstants.NODESET);
-            if (documentNodes.getLength() > 0) {
-                String documentClassName = documentNodes.item(0).getAttributes().getNamedItem("class").getTextContent();
-                Class documentClass = Class.forName(documentClassName);
-                if (!AccountingDocument.class.isAssignableFrom(documentClass)) {
-                    throw new IllegalArgumentException("getSourceAccountingLineClassName method of KualiWorkflowUtils requires a documentTypeName String that corresponds to a class that implments AccountingDocument");
-                }
-                
-                String docTypeName = SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(documentClass);
-                AccountingDocument documentInstance = (AccountingDocument) documentClass.newInstance();
-                
-                String sourceLineXPath = KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + documentInstance.getSourceAccountingLineClass().getName());
+            if (accountingLineClassDeterminer.getSourceAccountingLineClassName() != null) {
+                String sourceLineXPath = KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + accountingLineClassDeterminer.getSourceAccountingLineClassName());
                 NodeList sourceLineNodes = (NodeList) xpath.evaluate(sourceLineXPath, document, XPathConstants.NODESET);
                 addSearchableValuesForNodes(sourceLineNodes, storageValues, xpath);
+            }
 
-                String targetLineXPath = KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + documentInstance.getTargetAccountingLineClass().getName());
+            if (accountingLineClassDeterminer.getTargetAccountingLineClassName() != null) {
+                String targetLineXPath = KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + accountingLineClassDeterminer.getTargetAccountingLineClassName());
                 NodeList targetLineNodes = (NodeList) xpath.evaluate(targetLineXPath, document, XPathConstants.NODESET);
                 addSearchableValuesForNodes(targetLineNodes, storageValues, xpath);
             }
         }
         catch (XPathExpressionException e) {
             LOG.error("Could not parse XPath expression: "+e);
-            throw new RuntimeException(e);
-        }
-        catch (ClassNotFoundException e) {
-            LOG.error("Could not find class "+e);
-            throw new RuntimeException(e);
-        }
-        catch (InstantiationException e) {
-            LOG.error("Could not instantiate a class of the given document class: "+e);
-            throw new RuntimeException(e);
-        }
-        catch (IllegalAccessException e) {
-            LOG.error("Illegal Access Exception while instantiating instance of document class: "+e);
             throw new RuntimeException(e);
         }
         
