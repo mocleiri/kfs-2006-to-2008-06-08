@@ -34,6 +34,7 @@ import org.w3c.dom.NodeList;
 
 import edu.iu.uis.eden.engine.RouteContext;
 import edu.iu.uis.eden.routeheader.DocumentContent;
+import edu.iu.uis.eden.routeheader.DocumentRouteHeaderValue;
 import edu.iu.uis.eden.routetemplate.xmlrouting.XPathHelper;
 import edu.iu.uis.eden.util.Utilities;
 
@@ -54,17 +55,20 @@ public class AccountLineReplacingXmlRuleAttribute extends KualiXmlRuleAttributeI
         Element xmlRoot = super.getConfigXML();
         try {
             RouteContext routeContext = RouteContext.getCurrentRouteContext();
-            String docTypeName = routeContext.getDocument().getDocumentType().getName();
-            
-            AccountingLineClassDeterminer accountingLineClassDeterminer = new AccountingLineClassDeterminer(docTypeName);
-            NodeList xpathNodes = getXPathExpressionNodes(xmlRoot);
-            for (int i = 0; i < xpathNodes.getLength(); i++) {
-                Node xpathExpressionNode = xpathNodes.item(i);
-                LOG.debug("original node: "+getStringFromElement(xpathExpressionNode));
-                // update the text in that element
-                updateNode(xpathExpressionNode, accountingLineClassDeterminer);
+            DocumentRouteHeaderValue docHeader = routeContext.getDocument();
+            if (docHeader != null && docHeader.getDocumentType() != null) {
+                String docTypeName = docHeader.getDocumentType().getName();
+                
+                AccountingLineClassDeterminer accountingLineClassDeterminer = new AccountingLineClassDeterminer(docTypeName);
+                NodeList xpathNodes = getXPathExpressionNodes(xmlRoot);
+                for (int i = 0; i < xpathNodes.getLength(); i++) {
+                    Node xpathExpressionNode = xpathNodes.item(i);
+                    LOG.debug("original node: "+getStringFromElement(xpathExpressionNode));
+                    // update the text in that element
+                    updateNode(xpathExpressionNode, accountingLineClassDeterminer);
+                }
+                LOG.debug("resultant xmlRoot = "+getStringFromElement(xmlRoot));
             }
-            LOG.debug("resultant xmlRoot = "+getStringFromElement(xmlRoot));
         }
         catch (TransformerException e) {
             LOG.error("Transformer Exception: "+e);
