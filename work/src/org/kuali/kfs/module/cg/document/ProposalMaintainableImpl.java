@@ -201,6 +201,7 @@ public class ProposalMaintainableImpl extends KualiMaintainableImpl {
      */
     private static void refreshWithSecondaryKey(ProposalProjectDirector ppd) {
         String secondaryKey = null;
+        ppd.refreshReferenceObject("projectDirector");
         if (ObjectUtils.isNotNull(ppd.getProjectDirector())) {
             secondaryKey = ppd.getProjectDirector().getPersonUserIdentifier();
         }
