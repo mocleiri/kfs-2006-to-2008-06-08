@@ -84,9 +84,9 @@
     <EN_APPL_CNST_T APPL_CNST_NM="Config.Application.DelegateLimit"
         APPL_CNST_VAL_TXT="20" DB_LOCK_VER_NBR="0"/>
     <EN_APPL_CNST_T APPL_CNST_NM="Config.Mailer.IPAddress"
-        APPL_CNST_VAL_TXT="129.79.210.114" DB_LOCK_VER_NBR="0"/>
+        APPL_CNST_VAL_TXT="127.0.0.1" DB_LOCK_VER_NBR="0"/>
     <EN_APPL_CNST_T APPL_CNST_NM="Config.Mailer.FromAddress"
-        APPL_CNST_VAL_TXT="knoreceipt-l@indiana.edu" DB_LOCK_VER_NBR="0"/>
+        APPL_CNST_VAL_TXT="KualiEnterpriseWorkflow@yourinstitution.edu" DB_LOCK_VER_NBR="0"/>
     <EN_APPL_CNST_T APPL_CNST_NM="Backdoor.ShowbackDoorLogin"
         APPL_CNST_VAL_TXT="false" DB_LOCK_VER_NBR="1"/>
     <EN_APPL_CNST_T APPL_CNST_NM="Config.Mailer.LastDailyReminderDate"

@@ -31,10 +31,6 @@
         DOC_HDR_EXT_VAL_KEY="documentHeaderOrganizationDocumentNumber" DOC_HDR_ID="316826"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151577" DOC_HDR_EXT_VAL="CLOSED"
         DOC_HDR_EXT_VAL_KEY="requisitionDocumentStatusDescription" DOC_HDR_ID="316826"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151638"
-        DOC_HDR_EXT_VAL_KEY="disbVchrPayeePersonName" DOC_HDR_ID="317221"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151639"
-        DOC_HDR_EXT_VAL_KEY="disbVchrPaymentReasonCode" DOC_HDR_ID="317221"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151578" DOC_HDR_EXT_VAL="CLOS"
         DOC_HDR_EXT_VAL_KEY="requisitionDocumentStatusCode" DOC_HDR_ID="316826"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151580"
@@ -73,4 +69,8 @@
         DOC_HDR_EXT_VAL_KEY="purchaseOrderDocumentCurrentIndicator" DOC_HDR_ID="316828"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151637"
         DOC_HDR_EXT_VAL_KEY="disbVchrPayeeIdNumber" DOC_HDR_ID="317221"/>
+    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151638"
+        DOC_HDR_EXT_VAL_KEY="disbVchrPayeePersonName" DOC_HDR_ID="317221"/>
+    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151639"
+        DOC_HDR_EXT_VAL_KEY="disbVchrPaymentReasonCode" DOC_HDR_ID="317221"/>
 </dataset>
