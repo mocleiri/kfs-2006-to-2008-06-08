@@ -241,14 +241,14 @@ COMMIT
 /* ** Reference Data ** */
 
 /* One origin code */
-insert into FS_ORIGIN_CODE_T values ('01',sys_guid(),1,0,'KULSTG','KUL','KUL',0,0,'0','0',0,0,0,0);
-
+insert into FS_ORIGIN_CODE_T values ('01',sys_guid(),1,0,'KULSTG','KUL','KUL',0,0,'0','0',0,0,0,0)
+/
 /* Fix home origin table */
-update fs_home_origin_t set fs_home_origin_cd = '01';
-
+update fs_home_origin_t set fs_home_origin_cd = '01'
+/
 /* Fix the sh_campus_t table */
-insert into sh_campus_t values ('01',sys_guid(),1,'Default Campus','Campus','F');
-
+insert into sh_campus_t values ('01',sys_guid(),1,'Default Campus','Campus','F')
+/
 /* ** Charts & Organizations ** */
 
 DELETE FROM ca_org_type_t
