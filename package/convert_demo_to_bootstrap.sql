@@ -196,14 +196,50 @@ COMMIT
 /
 
 
-/* ** Workflow Constants, Document Types & Rules ** */
+/* Workflow Constants, Document Types & Rules */
 
 UPDATE en_appl_cnst_t
     SET appl_cnst_val_txt = 'KULUSER'
     WHERE appl_cnst_nm = 'Config.Application.AdminUserList'
 /
-    
-    
+  
+-- remove rules with IU data
+DELETE 
+    FROM KULBOOTSTRAP.EN_RULE_BASE_VAL_T
+    WHERE rule_tmpl_id IN (
+        SELECT RULE_TMPL_ID
+            FROM KULBOOTSTRAP.EN_RULE_TMPL_T
+            WHERE RULE_TMPL_ID IN (
+                SELECT RULE_TMPL_ID
+                    FROM KULBOOTSTRAP.EN_RULE_TMPL_ATTRIB_T
+                    WHERE RULE_ATTRIB_ID IN ( 
+                        SELECT rule_attrib_id 
+                            FROM KULBOOTSTRAP.EN_RULE_ATTRIB_T
+                            WHERE RULE_ATTRIB_NM LIKE '%Campus%'
+                               OR RULE_ATTRIB_NM LIKE '%Content%'
+                               OR RULE_ATTRIB_NM LIKE '%HigherEd%'
+                               OR RULE_ATTRIB_NM LIKE '%Chart%'
+                               OR RULE_ATTRIB_NM LIKE '%FundGroup%'
+                               OR RULE_ATTRIB_NM LIKE '%ObjectCode%'
+                               OR RULE_ATTRIB_NM LIKE '%ProjectCode%'
+                               OR RULE_ATTRIB_NM LIKE '%SubAccount%'
+                               OR RULE_ATTRIB_NM LIKE '%OrgReview%' 
+                               OR RULE_ATTRIB_NM = 'KualiPurchaseOrderRemoveHoldNotification'
+                               OR RULE_ATTRIB_NM = 'KualiPurchaseOrderContractAndGrantsAttribute'
+                               OR RULE_ATTRIB_NM = 'KualiPurchaseOrderBudgetAttribute'
+                    )
+            )
+    )
+    OR RULE_TMPL_ID NOT IN ( SELECT RULE_TMPL_ID FROM EN_RULE_TMPL_T )
+/
+DELETE FROM EN_RULE_EXT_T 
+    WHERE RULE_BASE_VAL_ID NOT IN ( SELECT RULE_BASE_VAL_ID FROM EN_RULE_BASE_VAL_T )
+/
+DELETE FROM EN_RULE_EXT_VAL_T 
+    WHERE RULE_EXT_ID NOT IN ( SELECT RULE_EXT_ID FROM EN_RULE_EXT_T )
+/
+COMMIT
+/
 
 
 /* ** System Parameters & Rules ** */
