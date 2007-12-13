@@ -12,7 +12,7 @@ BEGIN
 END;
 /
 
-/* ** Clear out tables we don't need rows in ** */
+/*  Clear out tables we don't need rows in  */
 
 DECLARE
   CURSOR tables_to_empty IS
@@ -173,7 +173,7 @@ BEGIN
 END;
 /
 
-/* ** Users & Groups ** */
+/*  Users & Groups  */
 
 /* RE-INSERT to user and workgroup member table (KULUSER) */
 INSERT INTO fs_universal_usr_t
@@ -238,11 +238,31 @@ DELETE FROM EN_RULE_EXT_T
 DELETE FROM EN_RULE_EXT_VAL_T 
     WHERE RULE_EXT_ID NOT IN ( SELECT RULE_EXT_ID FROM EN_RULE_EXT_T )
 /
+
+DELETE
+    FROM EN_WRKGRP_T
+    WHERE (
+        WRKGRP_NM LIKE 'KUALI\_DV\_%' ESCAPE '\'
+        OR WRKGRP_NM LIKE '%-Content' ESCAPE '\'
+        OR WRKGRP_NM LIKE 'KUALI\_BRSR%' ESCAPE '\'
+        OR WRKGRP_NM LIKE 'KUALI\_CONTENT%' ESCAPE '\'
+   )
+   AND WRKGRP_NM NOT IN ( 'KUALI_DV_TRAV', 'KUALI_DV_FRN', 'KUALI_DV_WIRE', 'KUALI_DV_PYAUDIT', 'KUALI_DV_TAXGRP' )
+/
+
+DELETE FROM EN_WRKGRP_EXT_T
+    WHERE ( WRKGRP_ID, WRKGRP_VER_NBR ) NOT IN ( SELECT WRKGRP_ID, WRKGRP_VER_NBR FROM EN_WRKGRP_T )
+/
+DELETE FROM EN_WRKGRP_MBR_T
+    WHERE ( WRKGRP_ID, WRKGRP_VER_NBR ) NOT IN ( SELECT WRKGRP_ID, WRKGRP_VER_NBR FROM EN_WRKGRP_T )
+/
+DELETE FROM EN_WRKGRP_EXT_DTA_T
+    WHERE WRKGRP_EXT_ID NOT IN ( SELECT WRKGRP_EXT_ID FROM EN_WRKGRP_EXT_T )
+/
 COMMIT
 /
 
-
-/* ** System Parameters & Rules ** */
+/*  System Parameters & Rules  */
 -- blank out rules which contain values from other emptied tables
 
 --SELECT a.sh_parm_nmspc_cd, a.sh_parm_dtl_typ_cd, a.sh_parm_nm, a.sh_parm_typ_cd, a.sh_parm_txt
@@ -275,7 +295,7 @@ COMMIT
 
 
 
-/* ** Reference Data ** */
+/*  Reference Data  */
 
 /* One origin code */
 insert into FS_ORIGIN_CODE_T values ('01',sys_guid(),1,0,'KULSTG','KUL','KUL',0,0,'0','0',0,0,0,0)
@@ -286,7 +306,7 @@ update fs_home_origin_t set fs_home_origin_cd = '01'
 /* Fix the sh_campus_t table */
 insert into sh_campus_t values ('01',sys_guid(),1,'Default Campus','Campus','F')
 /
-/* ** Charts & Organizations ** */
+/*  Charts & Organizations  */
 
 DELETE FROM ca_org_type_t
    WHERE org_typ_cd NOT IN ( 'C', 'N', 'R', 'U' )
@@ -297,13 +317,13 @@ DELETE FROM ca_rc_t WHERE rc_cd <> 'NO'
 COMMIT
 /
 
-/** clean up the options table **/
+/ clean up the options table /
 
 UPDATE fs_option_t
 	SET univ_fin_coa_cd = NULL
 /
 
-/* ** Chart of Accounts ** */
+/*  Chart of Accounts  */
 
 DELETE FROM ca_obj_sub_type_t
 WHERE fin_obj_sub_typ_cd NOT IN (
@@ -361,7 +381,7 @@ DELETE FROM ca_account_type_t
     WHERE acct_typ_cd NOT IN ( 'AI', 'BS', 'EQ', 'NA', 'RA', 'WS' )
 /
 
-/* ** Disbursement Voucher Data ** */
+/*  Disbursement Voucher Data  */
 
 -- create new DV document location    
 INSERT INTO fp_dv_doc_loc_t
@@ -461,22 +481,22 @@ WHERE ( dv_exp_cd, dv_exp_co_nm ) NOT IN (
 )
 /
 
-/* ** Financial Document Data ** */
+/*  Financial Document Data  */
 /* No demo to bootstrap changes */
 
 
-/* ** Labor Distribution ** */
+/*  Labor Distribution  */
 /* No demo to bootstrap changes */
 
 
-/* ** Pre-Disbursement Processor ** */
+/*  Pre-Disbursement Processor  */
 /* No demo to bootstrap changes */
 
 
-/* ** Vendor ** */
+/*  Vendor  */
 /* No demo to bootstrap changes */
 
-/* ** Purchasing/Accounts Payable ** */
+/*  Purchasing/Accounts Payable  */
 DELETE FROM pur_contr_mgr_t 
 	WHERE contr_mgr_cd NOT IN ( 99 )
 /
@@ -489,11 +509,11 @@ COMMIT
 /
 
 
-/* ** Contracts & Grants ** */
+/*  Contracts & Grants  */
 /* No demo to bootstrap changes */
 
 
-/* ** Research Administration ** */
+/*  Research Administration  */
 /* No demo to bootstrap changes */
 
 
