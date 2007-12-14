@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,29 +22,31 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.bo.KualiSystemCode;
 import org.kuali.core.datadictionary.AttributeDefinition;
 import org.kuali.core.datadictionary.AttributeReferenceDefinition;
 import org.kuali.core.datadictionary.DataDictionaryEntryBase;
-import org.kuali.core.lookup.LookupUtils;
+import org.kuali.core.inquiry.KualiInquirableImpl;
+import org.kuali.core.lookup.KualiLookupableImpl;
 import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.PersistenceStructureService;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.UrlFactory;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.inquiry.KfsInquirableImpl;
-import org.kuali.module.chart.bo.KualiSystemCode;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
 
 /**
  * This class is the template class for the customized inqurable implementations used to generate balance inquiry screens.
+ * 
+ * 
  */
-public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
+public abstract class AbstractGLInquirableImpl extends KualiInquirableImpl {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AbstractGLInquirableImpl.class);
 
     /**
@@ -55,12 +57,12 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
      * @return String url to inquiry
      */
     public String getInquiryUrl(BusinessObject businessObject, String attributeName) {
-        BusinessObjectDictionaryService businessDictionary = SpringContext.getBean(BusinessObjectDictionaryService.class);
-        PersistenceStructureService persistenceStructureService = SpringContext.getBean(PersistenceStructureService.class);
+        BusinessObjectDictionaryService businessDictionary = SpringServiceLocator.getBusinessObjectDictionaryService();
+        PersistenceStructureService persistenceStructureService = SpringServiceLocator.getPersistenceStructureService();
 
-        String baseUrl = KFSConstants.INQUIRY_ACTION;
+        String baseUrl = Constants.INQUIRY_ACTION;
         Properties parameters = new Properties();
-        parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, KFSConstants.START_METHOD);
+        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.START_METHOD);
 
         Object attributeValue = null;
         Class inquiryBusinessObjectClass = null;
@@ -82,14 +84,14 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
         }
         else if (ObjectUtils.isNestedAttribute(attributeName)) {
             if (!"financialObject.financialObjectType.financialReportingSortCode".equals(attributeName)) {
-                inquiryBusinessObjectClass = LookupUtils.getNestedReferenceClass(businessObject, attributeName);
+                inquiryBusinessObjectClass = KualiLookupableImpl.getNestedReferenceClassGl(businessObject, attributeName);
             }
             else {
                 return "";
             }
         }
         else {
-            Map primitiveReference = LookupUtils.getPrimitiveReference(businessObject, attributeName);
+            Map primitiveReference = KualiLookupableImpl.getPrimitiveReference(businessObject, attributeName);
             if (primitiveReference != null && !primitiveReference.isEmpty()) {
                 attributeRefName = (String) primitiveReference.keySet().iterator().next();
                 inquiryBusinessObjectClass = (Class) primitiveReference.get(attributeRefName);
@@ -112,17 +114,17 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
                 inquiryBusinessObjectClass = KualiSystemCode.class;
             }
         }
-        parameters.put(KFSConstants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, inquiryBusinessObjectClass.getName());
+        parameters.put(Constants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, inquiryBusinessObjectClass.getName());
 
         List keys = new ArrayList();
         if (isUserDefinedAttribute) {
             baseUrl = getBaseUrl();
             keys = buildUserDefinedAttributeKeyList();
 
-            parameters.put(KFSConstants.RETURN_LOCATION_PARAMETER, Constant.RETURN_LOCATION_VALUE);
-            parameters.put(KFSConstants.GL_BALANCE_INQUIRY_FLAG, "true");
-            parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, KFSConstants.SEARCH_METHOD);
-            parameters.put(KFSConstants.DOC_FORM_KEY, "88888888");
+            parameters.put(Constants.RETURN_LOCATION_PARAMETER, Constant.RETURN_LOCATION_VALUE);
+            parameters.put(Constants.GL_BALANCE_INQUIRY_FLAG, "true");
+            parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.SEARCH_METHOD);
+            parameters.put(Constants.DOC_FORM_KEY, "88888888");
 
             // add more customized parameters into the current parameter map
             addMoreParameters(parameters, attributeName);
@@ -154,7 +156,6 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
                         keyConversion = persistenceStructureService.getForeignKeyFieldName(businessObject.getClass(), attributeRefName, keyName);
                     }
                 }
-
                 Object keyValue = ObjectUtils.getPropertyValue(businessObject, keyConversion);
                 keyValue = (keyValue == null) ? "" : keyValue.toString();
 
@@ -177,10 +178,10 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
         if (businessObject instanceof AccountBalance) {
             AccountBalance ab = (AccountBalance) businessObject;
             if ("financialObject.financialObjectLevel.financialConsolidationObject.finConsolidationObjectCode".equals(attributeName)) {
-                parameters.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
+                parameters.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
             }
             else if ("financialObject.financialObjectLevel.financialObjectLevelCode".equals(attributeName)) {
-                parameters.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
+                parameters.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, ab.getChartOfAccountsCode());
             }
         }
 
@@ -190,7 +191,7 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
     /**
      * This method builds the inquiry url for user-defined attribute
      * 
-     * @return a List of attribute keys for the inquiry url
+     * @return key list
      */
     protected abstract List buildUserDefinedAttributeKeyList();
 
@@ -266,22 +267,22 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
         if (keyName != null && keyValue != null) {
             String convertedKeyName = BusinessObjectFieldConverter.convertFromTransactionPropertyName(keyName.toString());
 
-            if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
+            if (convertedKeyName.equals(PropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
+            else if (convertedKeyName.equals(PropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
+            else if (convertedKeyName.equals(PropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
                 return true;
             }
-            if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(KFSConstants.getDashSubAccountNumber())) {
+            if (convertedKeyName.equals(PropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constants.DASHES_SUB_ACCOUNT_NUMBER)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(KFSConstants.getDashFinancialSubObjectCode())) {
+            else if (convertedKeyName.equals(PropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constants.DASHES_SUB_OBJECT_CODE)) {
                 return true;
             }
-            else if (convertedKeyName.equals(KFSPropertyConstants.PROJECT_CODE) && keyValue.equals(KFSConstants.getDashProjectCode())) {
+            else if (convertedKeyName.equals(PropertyConstants.PROJECT_CODE) && keyValue.equals(Constants.DASHES_PROJECT_CODE)) {
                 return true;
             }
         }
@@ -291,10 +292,10 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
     /**
      * This method recovers the values of the given keys
      * 
-     * @param fieldValues unconsolidated values
-     * @param keyName a key name that may be in the fieldValues map
-     * @param keyValue a key value that may be in the fieldValues map
-     * @return the original value for a previously consolidated value
+     * @param fieldValues
+     * @param keyName
+     * @param keyValue
+     * @return
      */
     protected String recoverFieldValueFromConsolidation(Map fieldValues, Object keyName, Object keyValue) {
         if (fieldValues == null || keyName == null || keyValue == null) {
@@ -304,26 +305,20 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
         Map convertedFieldValues = BusinessObjectFieldConverter.convertFromTransactionFieldValues(fieldValues);
         String convertedKeyName = BusinessObjectFieldConverter.convertFromTransactionPropertyName(keyName.toString());
 
-        if (convertedKeyName.equals(KFSPropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
+        if (convertedKeyName.equals(PropertyConstants.SUB_ACCOUNT_NUMBER) && keyValue.equals(Constant.CONSOLIDATED_SUB_ACCOUNT_NUMBER)) {
             return this.getValueFromFieldValues(convertedFieldValues, keyName);
         }
-        else if (convertedKeyName.equals(KFSPropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
+        else if (convertedKeyName.equals(PropertyConstants.SUB_OBJECT_CODE) && keyValue.equals(Constant.CONSOLIDATED_SUB_OBJECT_CODE)) {
             return this.getValueFromFieldValues(convertedFieldValues, keyName);
         }
-        else if (convertedKeyName.equals(KFSPropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
+        else if (convertedKeyName.equals(PropertyConstants.OBJECT_TYPE_CODE) && keyValue.equals(Constant.CONSOLIDATED_OBJECT_TYPE_CODE)) {
             return this.getValueFromFieldValues(convertedFieldValues, keyName);
         }
 
         return Constant.EMPTY_STRING;
     }
 
-    /**
-     * Utility method to get the value of the given key from the field values
-     * 
-     * @param fieldValues a Map of key values
-     * @param keyName the name of the key to retrieve the value from
-     * @return the value for the key, or, if not found, an empty String
-     */
+    // get the value of the given key from the field values
     private String getValueFromFieldValues(Map fieldValues, Object keyName) {
         String keyValue = Constant.EMPTY_STRING;
 
@@ -333,32 +328,18 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
         return keyValue;
     }
 
-    /**
-     * This takes a map of field values and then returns it without processing it, making this a sort
-     * of identity method for Maps
-     * 
-     * @param fieldValues field values to return to the user
-     * @return the Map you sent in as a parameter
-     */
     public Map getFieldValues(Map fieldValues) {
         return fieldValues;
     }
 
-    /**
-     * Given the nested name of an attribute in an object, returns the class that attribute will return
-     * 
-     * @param businessObject the business object to find the propery class for
-     * @param attributeName the nested name of the attribute to find the class for
-     * @return the class of the nested attribute
-     */
+    // TODO: not finished
     public Class getNestedInquiryBusinessObjectClass(BusinessObject businessObject, String attributeName) {
-        // TODO: not finished
         Class inquiryBusinessObjectClass = null;
         String entryName = businessObject.getClass().getName();
-        LOG.debug("businessObject: " + entryName);
-        LOG.debug("attributeName: " + attributeName);
+        System.out.println("businessObject: " + entryName);
+        System.out.println("attributeName: " + attributeName);
 
-        DataDictionaryService dataDictionary = SpringContext.getBean(DataDictionaryService.class);
+        DataDictionaryService dataDictionary = SpringServiceLocator.getDataDictionaryService();
         AttributeDefinition attributeDefinition = null;
 
         if (StringUtils.isBlank(attributeName)) {
@@ -368,13 +349,13 @@ public abstract class AbstractGLInquirableImpl extends KfsInquirableImpl {
         DataDictionaryEntryBase entry = (DataDictionaryEntryBase) dataDictionary.getDataDictionary().getDictionaryObjectEntry(entryName);
         if (entry != null) {
             attributeDefinition = entry.getAttributeDefinition(attributeName);
-            inquiryBusinessObjectClass = LookupUtils.getNestedReferenceClass(businessObject, attributeName);
+            inquiryBusinessObjectClass = KualiLookupableImpl.getNestedReferenceClass(businessObject, attributeName);
         }
 
         if (attributeDefinition instanceof AttributeReferenceDefinition) {
             AttributeReferenceDefinition attributeReferenceDefinition = (AttributeReferenceDefinition) attributeDefinition;
-            LOG.debug("Source Classname = " + attributeReferenceDefinition.getSourceClassName());
-            LOG.debug("Source Attribute = " + attributeReferenceDefinition.getSourceAttributeName());
+            System.out.println("Source Classname = " + attributeReferenceDefinition.getSourceClassName());
+            System.out.println("Source Attribute = " + attributeReferenceDefinition.getSourceAttributeName());
 
             try {
                 inquiryBusinessObjectClass = Class.forName(attributeReferenceDefinition.getSourceClassName());

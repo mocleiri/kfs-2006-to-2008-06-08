@@ -15,22 +15,31 @@
  */
 package org.kuali.module.labor.service.impl;
 
+import static org.kuali.module.gl.GLConstants.GlSummaryReport.CURRENT_AND_LAST_YEAR;
+import static org.kuali.module.gl.GLConstants.GlSummaryReport.CURRENT_YEAR_LOWER;
+import static org.kuali.module.gl.GLConstants.GlSummaryReport.CURRENT_YEAR_UPPER;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_ERROR;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_VALID;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_SCRUBBER_VALID;
 import static org.kuali.module.labor.LaborConstants.DestinationNames.ORIGN_ENTRY;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.bo.Options;
+import org.kuali.kfs.service.OptionsService;
+import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -38,15 +47,14 @@ import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.Summary;
+import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.LaborConstants.Poster;
-import org.kuali.module.labor.batch.LaborPosterStep;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.rules.TransactionFieldValidator;
 import org.kuali.module.labor.service.LaborOriginEntryService;
 import org.kuali.module.labor.service.LaborPosterService;
 import org.kuali.module.labor.service.LaborReportService;
 import org.kuali.module.labor.util.MessageBuilder;
-import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.util.ReportRegistry;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,8 +73,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
 
     private LaborReportService laborReportService;
     private DateTimeService dateTimeService;
+    private OptionsService optionsService;
     private VerifyTransaction laborPosterTransactionValidator;
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
 
     private PostTransaction laborLedgerEntryPoster;
     private PostTransaction laborLedgerBalancePoster;
@@ -80,13 +89,47 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      */
     public void postMainEntries() {
         LOG.info("postMainEntries() started");
-
+        
         Date runDate = dateTimeService.getCurrentSqlDate();
         OriginEntryGroup validGroup = originEntryGroupService.createGroup(runDate, LABOR_MAIN_POSTER_VALID, true, false, false);
         OriginEntryGroup invalidGroup = originEntryGroupService.createGroup(runDate, LABOR_MAIN_POSTER_ERROR, false, true, false);
 
         this.postLaborLedgerEntries(validGroup, invalidGroup, runDate);
         this.postLaborGLEntries(validGroup, runDate);
+    }
+
+    /**
+     * @see org.kuali.module.labor.service.LaborPosterService#generateBalanceSummaryReports()
+     */
+    public void generateBalanceSummaryReports() {
+        LOG.info("generateBalanceSummaryReports() started");
+        
+        Date runDate = dateTimeService.getCurrentSqlDate();
+        this.generateBalanceSummaryReports(runDate);
+    }
+
+    /**
+     * @see org.kuali.module.labor.service.LaborPosterService#generateBalanceSummaryReports(java.sql.Date)
+     */
+    public void generateBalanceSummaryReports(Date runDate) {
+        LOG.info("generateBalanceSummaryReports(Date) started");
+        
+        String yearEndPeriodLowerBound = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, GLConstants.Components.POSTER_SUMMARY_REPORT_STEP, CURRENT_YEAR_LOWER);
+        String lastDayOfFiscalYear = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, GLConstants.Components.POSTER_SUMMARY_REPORT_STEP, CURRENT_AND_LAST_YEAR);
+        String yearEndPeriodUpperBound = kualiConfigurationService.getParameterValue(GLConstants.GL_NAMESPACE, GLConstants.Components.POSTER_SUMMARY_REPORT_STEP,CURRENT_YEAR_UPPER);
+
+        Integer currentYear = optionsService.getCurrentYearOptions().getUniversityFiscalYear();       
+        this.generateBalanceSummaryReports(currentYear, runDate);
+
+        // if today is within the lower bound of the year end period, then generate reports for the next fiscal year
+        if (this.isInYearEndLowerBound(runDate, yearEndPeriodLowerBound, lastDayOfFiscalYear)) {
+            this.generateBalanceSummaryReports(currentYear + 1, runDate);
+        }
+       
+        // if today is within the upper bound of the year end period, then generate reports for the last fiscal year
+        if (this.isInYearEndUpperBound(runDate, yearEndPeriodUpperBound, lastDayOfFiscalYear)) {
+            this.generateBalanceSummaryReports(currentYear - 1, runDate);
+        }
     }
 
     /**
@@ -97,8 +140,6 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @param runDate the data when the process is running
      */
     private void postLaborLedgerEntries(OriginEntryGroup validGroup, OriginEntryGroup invalidGroup, Date runDate) {
-        LOG.info("postLaborLedgerEntries() started");
-
         String reportsDirectory = ReportRegistry.getReportsDirectory();
         Map<Transaction, List<Message>> errorMap = new HashMap<Transaction, List<Message>>();
         List<Summary> reportSummary = this.buildReportSummaryForLaborLedgerPosting();
@@ -128,6 +169,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
 
         laborReportService.generateStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_POSTER_STATISTICS, reportsDirectory, runDate);
         laborReportService.generateErrorTransactionListing(invalidGroup, ReportRegistry.LABOR_POSTER_ERROR, reportsDirectory, runDate);
+        
+        // disabled according to the request in KULLAB-471
+        // laborReportService.generateOutputSummaryReport(validGroup, ReportRegistry.LABOR_POSTER_OUTPUT, reportsDirectory, runDate);
     }
 
     /**
@@ -206,14 +250,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @param postDate the data when the transaction is processes
      */
     private void postAsProcessedOriginEntry(LaborOriginEntry originEntry, OriginEntryGroup entryGroup, Date postDate) {
-        LaborOriginEntry newOriginEntry = new LaborOriginEntry();
-
-        ObjectUtil.buildObject(newOriginEntry, originEntry);
-        newOriginEntry.setEntryId(null);
-        newOriginEntry.setEntryGroupId(entryGroup.getId());
-        newOriginEntry.setTransactionPostingDate(postDate);
-
-        laborOriginEntryService.save(newOriginEntry);
+        originEntry.setEntryGroupId(entryGroup.getId());
+        originEntry.setTransactionPostingDate(postDate);
+        laborOriginEntryService.save(originEntry);
     }
 
     /**
@@ -243,13 +282,13 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @param runDate the data when the process is running
      */
     private void postLaborGLEntries(OriginEntryGroup validGroup, Date runDate) {
-        LOG.info("postLaborGLEntries() started");
-
         String reportsDirectory = ReportRegistry.getReportsDirectory();
         List<Summary> reportSummary = this.buildReportSummaryForLaborGLPosting();
         Map<Transaction, List<Message>> errorMap = new HashMap<Transaction, List<Message>>();
 
         Collection<LaborOriginEntry> entries = laborOriginEntryService.getConsolidatedEntryCollectionByGroup(validGroup);
+        laborReportService.generateInputSummaryReport(validGroup, ReportRegistry.LABOR_POSTER_GL_SUMMARY_INPUT, reportsDirectory, runDate);
+
         int numberOfOriginEntries = laborOriginEntryService.getCountOfEntriesInSingleGroup(validGroup);
         int numberOfSelectedOriginEntry = 0;
 
@@ -257,6 +296,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
 
             List<Message> errors = this.isPostableForLaborGLEntry(originEntry);
             if (!errors.isEmpty()) {
+                // disabled according to the request in KULLAB-473
+                // errorMap.put(originEntry, errors);
+                
                 continue;
             }
             String operationType = laborGLLedgerEntryPoster.post(originEntry, 0, runDate);
@@ -313,20 +355,132 @@ public class LaborPosterServiceImpl implements LaborPosterService {
         List<Summary> reportSummary = new ArrayList<Summary>();
 
         String destination = laborGLLedgerEntryPoster.getDestinationName();
-        reportSummary.add(new Summary(reportSummary.size() + LINE_INTERVAL, "", 0));
+        reportSummary.add(new Summary(reportSummary.size() + LINE_INTERVAL, "", 0));        
         Summary.updateReportSummary(reportSummary, destination, KFSConstants.OperationType.INSERT, 0, reportSummary.size() + LINE_INTERVAL);
 
         return reportSummary;
     }
 
+    // generate a set of balance summary reports for actual, budget and encumbrance balances
+    private void generateBalanceSummaryReports(Integer fiscalYear, Date runDate) {
+        String reportsDirectory = ReportRegistry.getReportsDirectory();
+        Options options = optionsService.getOptions(fiscalYear);
+
+        List<String> actualsBalanceTypes = this.getActualBalanceTypes(fiscalYear);
+        laborReportService.generateMonthlyBalanceSummaryReport(fiscalYear, actualsBalanceTypes, ReportRegistry.LABOR_ACTUAL_BALANCE_SUMMARY, reportsDirectory, runDate);
+
+        List<String> budgetBalanceTypes = this.getBudgetBalanceTypes(fiscalYear);
+        laborReportService.generateMonthlyBalanceSummaryReport(fiscalYear, budgetBalanceTypes, ReportRegistry.LABOR_BUDGET_BALANCE_SUMMARY, reportsDirectory, runDate);
+
+        List<String> encumbranceBalanceTypes = this.getEncumbranceBalanceTypes(fiscalYear);
+        laborReportService.generateBalanceSummaryReport(fiscalYear, encumbranceBalanceTypes, ReportRegistry.LABOR_ENCUMBRANCE_SUMMARY, reportsDirectory, runDate);
+    }
+
+    /**
+     * get the encumbrance balance type codes for the given fiscal year
+     * 
+     * @param fiscalYear the given fiscal year
+     * @return the encumbrance balance type codes for the given fiscal year
+     */
+    private List<String> getEncumbranceBalanceTypes(Integer fiscalYear) {
+        Options options = optionsService.getOptions(fiscalYear);
+
+        List<String> balanceTypes = new ArrayList<String>();
+        balanceTypes.add(options.getExtrnlEncumFinBalanceTypCd());
+        balanceTypes.add(options.getIntrnlEncumFinBalanceTypCd());
+        balanceTypes.add(options.getPreencumbranceFinBalTypeCd());
+        balanceTypes.add(options.getCostShareEncumbranceBalanceTypeCd());
+        return balanceTypes;
+    }
+
+    /**
+     * get the actual balance type codes for the given fiscal year
+     * 
+     * @param fiscalYear the given fiscal year
+     * @return the actual balance type codes for the given fiscal year
+     */
+    private List<String> getActualBalanceTypes(Integer fiscalYear) {
+        Options options = optionsService.getOptions(fiscalYear);
+
+        List<String> balanceTypes = new ArrayList<String>();
+        balanceTypes.add(options.getActualFinancialBalanceTypeCd());
+        return balanceTypes;
+    }
+
+    /**
+     * get the budget balance type codes for the given fiscal year
+     * 
+     * @param fiscalYear the given fiscal year
+     * @return the budget balance type codes for the given fiscal year
+     */
+    private List<String> getBudgetBalanceTypes(Integer fiscalYear) {
+        Options options = optionsService.getOptions(fiscalYear);
+
+        List<String> balanceTypes = new ArrayList<String>();
+        balanceTypes.add(options.getBudgetCheckingBalanceTypeCd());
+        balanceTypes.add(options.getBaseBudgetFinancialBalanceTypeCd());
+        balanceTypes.add(options.getMonthlyBudgetFinancialBalanceTypeCd());
+        return balanceTypes;
+    }
+
+    /**
+     * determine if the given date is within the year end period
+     * 
+     * @param runDate the given date
+     * @param yearEndPeriodLowerBound the lower bound date of year end period
+     * @param yearEndPeriodUpperBound the upper bound date of year end period
+     * @param lastDayOfFiscalYear the last day of the current fiscal year
+     * @return true if the given date is within the lower bound of year end period; otherwise, false
+     */
+    private boolean isInYearEndPeriod(Date runDate, String yearEndPeriodLowerBound, String yearEndPeriodUpperBound, String lastDayOfFiscalYear) {
+        return isInYearEndLowerBound(runDate, yearEndPeriodLowerBound, lastDayOfFiscalYear) || isInYearEndUpperBound(runDate, yearEndPeriodUpperBound, lastDayOfFiscalYear);
+    }
+
+    /**
+     * determine if the given date is within the lower bound of year end period
+     * 
+     * @param runDate the given date
+     * @param yearEndPeriodLowerBound the lower bound date of year end period
+     * @param lastDayOfFiscalYear the last day of the current fiscal year
+     * @return true if the given date is within the lower bound of year end period; otherwise, false
+     */
+    private boolean isInYearEndLowerBound(Date runDate, String yearEndPeriodLowerBound, String lastDayOfFiscalYear) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMdd");
+        String today = sdf.format(runDate);
+        return today.compareTo(yearEndPeriodLowerBound) >= 0 && today.compareTo(lastDayOfFiscalYear) <= 0;
+    }
+
+    /**
+     * determine if the given date is within the upper bound of year end period
+     * 
+     * @param runDate the given date
+     * @param yearEndPeriodUpperBound the upper bound date of year end period
+     * @param lastDayOfFiscalYear the last day of the current fiscal year
+     * @return true if the given date is within the upper bound of year end period; otherwise, false
+     */
+    private boolean isInYearEndUpperBound(Date runDate, String yearEndPeriodUpperBound, String lastDayOfFiscalYear) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMdd");
+        String today = sdf.format(runDate);
+
+        String month = StringUtils.mid(lastDayOfFiscalYear, 0, 2);
+        String date = StringUtils.mid(lastDayOfFiscalYear, 2, 2);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, Integer.parseInt(month) - 1);
+        calendar.set(Calendar.DATE, Integer.parseInt(date));
+        calendar.add(Calendar.DATE, 1);
+        String firstDayOfNewFiscalYear = sdf.format(calendar.getTime());
+
+        return today.compareTo(yearEndPeriodUpperBound) <= 0 && today.compareTo(firstDayOfNewFiscalYear) >= 0;
+    }
 
     /**
      * Get a set of the balance type codes that are bypassed by Labor Poster
      * 
      * @return a set of the balance type codes that are bypassed by Labor Poster
      */
-    public List<String> getBalanceTypesNotProcessed() {
-        return parameterService.getParameterValues(LaborPosterStep.class, Poster.BALANCE_TYPES_NOT_PROCESSED);
+    public String[] getBalanceTypesNotProcessed() {
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, LaborConstants.Components.LABOR_POSTER_STEP, Poster.BALANCE_TYPES_NOT_PROCESSED);
     }
 
     /**
@@ -334,8 +488,8 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * 
      * @return a set of the object codes that are bypassed by Labor Poster
      */
-    public List<String> getObjectsNotProcessed() {
-        return parameterService.getParameterValues(LaborPosterStep.class, Poster.OBJECT_CODES_NOT_PROCESSED);
+    public String[] getObjectsNotProcessed() {
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, LaborConstants.Components.LABOR_POSTER_STEP, Poster.OBJECT_CODES_NOT_PROCESSED);
     }
 
     /**
@@ -343,8 +497,8 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * 
      * @return a set of the fiscal period codes that are bypassed by Labor Poster
      */
-    public List<String> getPeriodCodesNotProcessed() {
-        return parameterService.getParameterValues(LaborPosterStep.class, Poster.PERIOD_CODES_NOT_PROCESSED);
+    public String[] getPeriodCodesNotProcessed() {
+        return kualiConfigurationService.getParameterValues(KFSConstants.LABOR_NAMESPACE, LaborConstants.Components.LABOR_POSTER_STEP, Poster.PERIOD_CODES_NOT_PROCESSED);
     }
 
     /**
@@ -356,6 +510,14 @@ public class LaborPosterServiceImpl implements LaborPosterService {
         this.dateTimeService = dateTimeService;
     }
 
+    /**
+     * Sets the kualiConfigurationService attribute value.
+     * 
+     * @param kualiConfigurationService The kualiConfigurationService to set.
+     */
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
+    }
 
     /**
      * Sets the laborLedgerBalancePoster attribute value.
@@ -420,7 +582,12 @@ public class LaborPosterServiceImpl implements LaborPosterService {
         this.laborPosterTransactionValidator = laborPosterTransactionValidator;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    /**
+     * Sets the optionsService attribute value.
+     * 
+     * @param optionsService The optionsService to set.
+     */
+    public void setOptionsService(OptionsService optionsService) {
+        this.optionsService = optionsService;
     }
 }

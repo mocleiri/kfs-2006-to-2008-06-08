@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.lookup.KualiLookupableImpl;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.AccountBalance;
-import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
+import org.kuali.module.gl.bo.DummyBusinessObject;
 import org.kuali.module.gl.service.AccountBalanceService;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.AccountBalanceByLevelInquirableImpl;
 
-/**
- * An extension of KualiLookupableImpl to support the account balance by level inquiry screen
- */
 public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByLevelLookupableImpl.class);
 
@@ -51,7 +48,7 @@ public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
      * @param propertyName the property which links to an inquirable
      * @return String url to inquiry
      */
-    public String getInquiryUrl(PersistableBusinessObject bo, String propertyName) {
+    public String getInquiryUrl(BusinessObject bo, String propertyName) {
         return (new AccountBalanceByLevelInquirableImpl()).getInquiryUrl(bo, propertyName);
     }
 
@@ -64,8 +61,8 @@ public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
     public List getSearchResults(Map fieldValues) {
         LOG.debug("getSearchResults() started");
 
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         BusinessObjectFieldConverter.escapeSingleQuote(fieldValues);
 
@@ -82,17 +79,17 @@ public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
         }
         boolean isConsolidated = Constant.CONSOLIDATION.equals(consolidationOption);
 
-        String chartOfAccountsCode = (String) fieldValues.get(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        String accountNumber = (String) fieldValues.get(KFSPropertyConstants.ACCOUNT_NUMBER);
-        String subAccountNumber = (String) fieldValues.get(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
+        String chartOfAccountsCode = (String) fieldValues.get(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        String accountNumber = (String) fieldValues.get(PropertyConstants.ACCOUNT_NUMBER);
+        String subAccountNumber = (String) fieldValues.get(PropertyConstants.SUB_ACCOUNT_NUMBER);
         String financialConsolidationObjectCode = (String) fieldValues.get(GLConstants.BalanceInquiryDrillDowns.CONSOLIDATION_OBJECT_CODE);
 
         // Dashes means no sub account number
-        if (KFSConstants.getDashSubAccountNumber().equals(subAccountNumber)) {
+        if (Constants.DASHES_SUB_ACCOUNT_NUMBER.equals(subAccountNumber)) {
             subAccountNumber = "";
         }
 
-        String ufy = (String) fieldValues.get(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        String ufy = (String) fieldValues.get(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
 
         // TODO Deal with invalid numbers
         Integer universityFiscalYear = new Integer(Integer.parseInt(ufy));
@@ -103,7 +100,7 @@ public class AccountBalanceByLevelLookupableImpl extends KualiLookupableImpl {
         for (Iterator iter = results.iterator(); iter.hasNext();) {
             AccountBalance ab = (AccountBalance) iter.next();
 
-            TransientBalanceInquiryAttributes dbo = ab.getDummyBusinessObject();
+            DummyBusinessObject dbo = ab.getDummyBusinessObject();
             dbo.setConsolidationOption(consolidationOption);
             dbo.setCostShareOption(costShareOption);
             dbo.setPendingEntryOption(pendingEntryOption);

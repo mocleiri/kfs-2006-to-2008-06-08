@@ -18,12 +18,11 @@
 <beans>
 	<bean id="budgetModule" class="org.kuali.core.KualiModule">
 		<property name="moduleId" value="budget" />
-		<property name="moduleName" value="Budget Construction" />
+		<property name="moduleName" value="Kuali Budget Construction" />
 		<property name="moduleCode" value="BC" />
 		<property name="moduleUserService" ref="budgetUserService" />
-		<property name="initializeDataDictionary" value="true" />
 		<property name="moduleAuthorizer">
-			<bean class="org.kuali.module.budget.authorization.BudgetModuleAuthorizer">
+			<bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">
 				<property name="packagePrefixes">
 					<list>
 						<value>org.kuali.module.budget.</value>
@@ -39,54 +38,14 @@
 		</property>
 		<property name="dataDictionaryPackages">
 			<list>
-				<value>org/kuali/module/budget/datadictionary</value>
-			</list>
-		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/budget/OJB-repository-budget.xml</value>
-			</list>
-		</property>
-		<property name="scriptConfigurationFilePaths">
-			<list>
-				<value>org/kuali/module/budget/dwr-budget.xml</value>
+				<value>org.kuali.module.budget.datadictionary</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean id="budgetUserService" class="org.kuali.module.budget.service.impl.BudgetUserServiceImpl" parent="kualiModuleUserServiceBase">
-	</bean>
-
-	<bean id="budgetDocumentService" class="org.kuali.module.budget.service.impl.BudgetDocumentServiceImpl">
-		<property name="budgetConstructionDao">
-			<ref bean="budgetConstructionDao" />
-		</property>
-	</bean>
-
-	<bean id="budgetOrganizationTreeService" class="org.kuali.module.budget.service.impl.BudgetOrganizationTreeServiceImpl">
-		<property name="budgetConstructionOrganizationReportsService">
-			<ref bean="budgetConstructionOrganizationReportsService" />
-		</property>
-		<property name="businessObjectService">
-			<ref bean="businessObjectService" />
-		</property>
-		<property name="budgetConstructionDao">
-			<ref bean="budgetConstructionDao" />
-		</property>
-		<property name="budgetPullupDao">
-			<ref bean="bcBudgetPullupDao" />
-		</property>
-	</bean>
-
-	<bean id="budgetOrganizationSalarySettingSearchService" class="org.kuali.module.budget.service.impl.OrganizationSalarySettingSearchServiceImpl">
-		<property name="organizationSalarySettingSearchDao">
-			<ref bean="bcOrganizationSalarySettingSearchDao" />
-		</property>
-	</bean>
-
-	<bean id="budgetOrganizationBCDocumentSearchService" class="org.kuali.module.budget.service.impl.OrganizationBCDocumentSearchServiceImpl">
-		<property name="organizationBCDocumentSearchDao">
-			<ref bean="bcOrganizationBCDocumentSearchDao" />
+		<property name="chartUserService">
+			<ref bean="chartUserService" />
 		</property>
 	</bean>
 
@@ -96,123 +55,23 @@
 		</property>
 	</bean>
 
-	<bean id="permissionService" class="org.kuali.module.budget.service.impl.PermissionServiceImpl">
-		<property name="organizationService">
-			<ref bean="organizationService" />
-		</property>
-	</bean>
-
-	<bean id="salarySettingService" class="org.kuali.module.budget.service.impl.SalarySettingServiceImpl">
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
-		</property>
-	</bean>
-
-	<bean id="benefitsCalculationService" class="org.kuali.module.budget.service.impl.BenefitsCalculationServiceImpl">
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
-		</property>
-		<property name="optionsService">
-			<ref bean="optionsService" />
-		</property>
-		<property name="benefitsCalculationDao">
-			<ref bean="benefitsCalculationDao" />
+	<bean id="budgetConstructionDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb">
+		<property name="jcdAlias">
+			<value>dataSource</value>
 		</property>
 	</bean>
 	
-	<bean id="intendedIncumbentSelectLookupableHelperService" class="org.kuali.module.budget.web.lookupable.IntendedIncumbentSelectLookupableHelperServiceImpl" singleton="false">
-		<property name="persistenceStructureService">
-			<ref bean="persistenceStructureService" />
-		</property>
-		<property name="lookupService">
-			<ref bean="lookupService" />
-		</property>
-		<property name="businessObjectDictionaryService">
-			<ref bean="businessObjectDictionaryService" />
-		</property>
-		<property name="businessObjectMetaDataService">
-			<ref bean="businessObjectMetaDataService" />
-		</property>
-		<property name="dataDictionaryService">
-			<ref bean="dataDictionaryService" />
-		</property>		
-	</bean>
-	
-	<bean id="intendedIncumbentSelectLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-		<property name="lookupableHelperService">
-			<ref bean="intendedIncumbentSelectLookupableHelperService" />
-		</property>
-	</bean>	
-	
-	<bean id="positionSelectLookupableHelperService" class="org.kuali.module.budget.web.lookupable.PositionSelectLookupableHelperServiceImpl" singleton="false">
-		<property name="persistenceStructureService">
-			<ref bean="persistenceStructureService" />
-		</property>
-		<property name="lookupService">
-			<ref bean="lookupService" />
-		</property>
-		<property name="businessObjectDictionaryService">
-			<ref bean="businessObjectDictionaryService" />
-		</property>
-		<property name="businessObjectMetaDataService">
-			<ref bean="businessObjectMetaDataService" />
-		</property>
-		<property name="dataDictionaryService">
-			<ref bean="dataDictionaryService" />
-		</property>		
-	</bean>
-
-	<bean id="positionSelectLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-		<property name="lookupableHelperService">
-			<ref bean="positionSelectLookupableHelperService" />
-		</property>
-	</bean>	
-
-	<bean id="accountSelectLookupableHelperService" class="org.kuali.module.budget.web.lookupable.AccountSelectLookupableHelperServiceImpl" singleton="false">
-		<property name="persistenceStructureService">
-			<ref bean="persistenceStructureService" />
-		</property>
-		<property name="lookupService">
-			<ref bean="lookupService" />
-		</property>
-		<property name="businessObjectDictionaryService">
-			<ref bean="businessObjectDictionaryService" />
-		</property>
-		<property name="businessObjectMetaDataService">
-			<ref bean="businessObjectMetaDataService" />
-		</property>
-		<property name="dataDictionaryService">
-			<ref bean="dataDictionaryService" />
-		</property>		
-	</bean>
-
-	<bean id="accountSelectLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
-		<property name="lookupableHelperService">
-			<ref bean="accountSelectLookupableHelperService" />
-		</property>
-	</bean>	
-
-	<bean id="budgetConstructionDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionDaoOjb" />
-	
-	<bean id="bcBudgetConstructionDaoBase" parent="platformAwareDaoJdbc" class="org.kuali.module.budget.dao.jdbc.BudgetConstructionDaoJdbcBase">
-	</bean>
-	
-	<bean id="bcOrganizationSalarySettingSearchDao" parent="bcBudgetConstructionDaoBase" class="org.kuali.module.budget.dao.jdbc.OrganizationSalarySettingSearchDaoJdbc">
-	</bean>
-
-	<bean id="bcOrganizationBCDocumentSearchDao" parent="bcBudgetConstructionDaoBase" class="org.kuali.module.budget.dao.jdbc.OrganizationBCDocumentSearchDaoJdbc">
-	</bean>
-
-	<bean id="bcBudgetPullupDao" parent="bcBudgetConstructionDaoBase" class="org.kuali.module.budget.dao.jdbc.BudgetPullupDaoJdbc">
-	</bean>
-
 	<bean id="budgetConstructionOrganizationReportsService" class="org.kuali.module.budget.service.impl.BudgetConstructionOrganizationReportsServiceImpl">
 		<property name="budgetConstructionOrganizationReportsDao">
 			<ref bean="budgetConstructionOrganizationReportsDao" />
 		</property>
 	</bean>
 
-	<bean id="budgetConstructionOrganizationReportsDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionOrganizationReportsDaoOjb" />
+	<bean id="budgetConstructionOrganizationReportsDao" class="org.kuali.module.budget.dao.ojb.BudgetConstructionOrganizationReportsDaoOjb">
+		<property name="jcdAlias">
+			<value>dataSource</value>
+		</property>
+	</bean>
 		
     <bean id="genesisService" class="org.kuali.module.budget.service.impl.GenesisServiceImpl">
         <property name="genesisDao">
@@ -220,7 +79,10 @@
         </property>
     </bean>
 
-    <bean id="genesisDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.GenesisDaoOjb">
+    <bean id="genesisDao" class="org.kuali.module.budget.dao.ojb.GenesisDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
+        </property>
         <property name="dateTimeService">
         	<ref bean="dateTimeService"/>
         </property>
@@ -232,24 +94,21 @@
         </property>
     </bean>
     
-    <bean id="glBudgetLoadService" class="org.kuali.module.budget.service.impl.GLBudgetLoadServiceImpl">
-        <property name="generalLedgerBudgetLoadDao">
-            <ref bean="generalLedgerBudgetLoadDao" />
+	
+    <bean id="dateMakerService" class="org.kuali.module.budget.service.impl.DateMakerServiceImpl">
+        <property name="fiscalYearMakersDao">
+            <ref bean="fiscalYearMakersDao" />
         </property>
-        <property name="genesisService">
-            <ref bean="genesisService"/>
-        </property>
-    </bean>
-    
-    <bean id="benefitsCalculationDao" parent="bcBudgetConstructionDaoBase" class="org.kuali.module.budget.dao.jdbc.BenefitsCalculationDaoJdbc">
     </bean>
 
-    <bean id="generalLedgerBudgetLoadDao" parent="platformAwareDao" class="org.kuali.module.budget.dao.ojb.GeneralLedgerBudgetLoadDaoOjb">
+    <bean id="fiscalYearMakersDao" class="org.kuali.module.budget.dao.ojb.FiscalYearMakersDaoOjb">
+        <property name="jcdAlias">
+            <value>dataSource</value>
+        </property>
     </bean>
     
+
     <bean id="calculatedSalaryFoundationTrackerOverrideService" class="org.kuali.module.budget.service.impl.CalculatedSalaryFoundationTrackerOverrideServiceImpl">
     </bean>
-    
-    <bean id="genesisBatchStep" class="org.kuali.module.budget.batch.GenesisBatchStep" parent="step"> </bean>
     	
 </beans>

@@ -17,44 +17,34 @@ package org.kuali.module.gl.service;
 
 import java.util.Iterator;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.test.ConfigureContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the GeneralLedgerPending service.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
     private final String docHeaderId = "1003";
 
-    /**
-     * Initalizes the services needef or this test; also, since this test creates a fake document, deletes
-     * any entries from the real version of that document if they exist
-     * @see junit.framework.TestCase#setUp()
-     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         if (generalLedgerPendingEntryService == null) {
-            generalLedgerPendingEntryService = SpringContext.getBean(GeneralLedgerPendingEntryService.class);
+            generalLedgerPendingEntryService = SpringServiceLocator.getGeneralLedgerPendingEntryService();
         }
         // Make sure the document doesn't exist before each test
         generalLedgerPendingEntryService.delete(docHeaderId);
     }
 
-    /**
-     * Tests that pending entries are saved and retrieved properly
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testSave() throws Exception {
         GeneralLedgerPendingEntry testEntry = this.createGeneralLedgerPendingEntry();
         generalLedgerPendingEntryService.save(testEntry);
@@ -63,11 +53,6 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         generalLedgerPendingEntryService.delete(docHeaderId);
     }
 
-    /**
-     * Covers GeneralPendingLedgerEntryService.getByPrimaryId (though, yeah, testSave does too, technically)
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testGetByPrimaryId() throws Exception {
         GeneralLedgerPendingEntry testEntry = this.createGeneralLedgerPendingEntry();
         generalLedgerPendingEntryService.save(testEntry);
@@ -76,11 +61,6 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         generalLedgerPendingEntryService.delete(docHeaderId);
     }
 
-    /**
-     * Covers GeneralLedgerPendingEntryService.delete
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testDelete() throws Exception {
         GeneralLedgerPendingEntry generalLedgerPendingEntry = this.createGeneralLedgerPendingEntry();
         generalLedgerPendingEntryService.save(generalLedgerPendingEntry);
@@ -89,9 +69,6 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         assertNull("Delete didn't delete this entry", generalLedgerPendingEntry);
     }
 
-    /**
-     * Covers GeneralLedgerPendingEntryService.findApprovedPendingLedgerEntries
-     */
     public void testFindApprovedPendingLedgerEntries() {
         try {
             GeneralLedgerPendingEntry generalLedgerPendingEntry = this.createGeneralLedgerPendingEntry();
@@ -115,11 +92,6 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         }
     }
 
-    /**
-     * Creates a pending entry fixture
-     * 
-     * @return a pending entry to test against
-     */
     private GeneralLedgerPendingEntry createGeneralLedgerPendingEntry() {
         GeneralLedgerPendingEntry generalLedgerPendingEntry = new GeneralLedgerPendingEntry();
 
@@ -134,10 +106,9 @@ public class GeneralLedgerPendingEntryServiceTest extends KualiTestBase {
         generalLedgerPendingEntry.setTransactionLedgerEntryAmount(new KualiDecimal("8.8"));
         generalLedgerPendingEntry.setTransactionLedgerEntryDescription("9");
         generalLedgerPendingEntry.setTransactionDebitCreditCode("D");
-        generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime()));
+        generalLedgerPendingEntry.setTransactionDate(new java.sql.Date(SpringServiceLocator.getDateTimeService().getCurrentDate().getTime()));
         generalLedgerPendingEntry.setFinancialDocumentTypeCode("12");
         generalLedgerPendingEntry.setTransactionLedgerEntrySequenceNumber(new Integer(1));
-        generalLedgerPendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
         return generalLedgerPendingEntry;
     }
 }

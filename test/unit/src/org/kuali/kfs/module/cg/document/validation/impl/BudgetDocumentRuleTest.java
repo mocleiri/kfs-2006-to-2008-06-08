@@ -20,20 +20,22 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetTask;
-import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.rules.budget.BudgetDocumentRule;
 import org.kuali.test.ConfigureContext;
 
 
 /**
  * Test basic rule methods of <code>{@link BudgetDocumentRuleBase}</code> convenience class.
+ * 
+ * 
  */
 @ConfigureContext
 public class BudgetDocumentRuleTest extends KualiTestBase {
@@ -48,8 +50,8 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         budgetDocumentRule = new BudgetDocumentRule();
-        MAXIMUM_NUMBER_OF_TASKS = SpringContext.getBean(ParameterService.class).getParameterValue(BudgetDocument.class, KraConstants.MAXIMUM_NUMBER_OF_TASKS);
-        MINIMUM_NUMBER_OF_TASKS = SpringContext.getBean(ParameterService.class).getParameterValue(BudgetDocument.class, KraConstants.MINIMUM_NUMBER_OF_TASKS);
+        MAXIMUM_NUMBER_OF_TASKS = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.MAXIMUM_NUMBER_OF_TASKS);
+        MINIMUM_NUMBER_OF_TASKS = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KraConstants.Components.BUDGET, KraConstants.MINIMUM_NUMBER_OF_TASKS);
     }
 
     public void testValidPeriods() throws Exception {
@@ -57,7 +59,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         period1.setBudgetPeriodBeginDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2006-01-01"));
         period1.setBudgetPeriodEndDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2006-12-31"));
 
-        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1), true);
+        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1));
 
         Map errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.isEmpty());
@@ -66,7 +68,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         period2.setBudgetPeriodBeginDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2006-07-01"));
         period2.setBudgetPeriodEndDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2007-06-30"));
 
-        budgetDocumentRule.isPeriodValid(period2, "period 2", new Integer(1), true);
+        budgetDocumentRule.isPeriodValid(period2, "period 2", new Integer(1));
 
         errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.isEmpty());
@@ -77,7 +79,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         period1.setBudgetPeriodBeginDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2008-01-01"));
         period1.setBudgetPeriodEndDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2008-12-31"));
 
-        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1), true);
+        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1));
 
         Map errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.isEmpty());
@@ -86,7 +88,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         period2.setBudgetPeriodBeginDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2008-02-28"));
         period2.setBudgetPeriodEndDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2009-02-27"));
 
-        budgetDocumentRule.isPeriodValid(period2, "period 2", new Integer(1), true);
+        budgetDocumentRule.isPeriodValid(period2, "period 2", new Integer(1));
 
         errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.isEmpty());
@@ -95,7 +97,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         period3.setBudgetPeriodBeginDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2007-03-31"));
         period3.setBudgetPeriodEndDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2008-02-29"));
 
-        budgetDocumentRule.isPeriodValid(period3, "period 3", new Integer(1), true);
+        budgetDocumentRule.isPeriodValid(period3, "period 3", new Integer(1));
 
         errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.isEmpty());
@@ -106,7 +108,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         period1.setBudgetPeriodBeginDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2009-01-01"));
         period1.setBudgetPeriodEndDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2008-12-31"));
 
-        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1), true);
+        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1));
 
         Map errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.size() == 1);
@@ -117,7 +119,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         period1.setBudgetPeriodBeginDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2007-01-01"));
         period1.setBudgetPeriodEndDate(SpringContext.getBean(DateTimeService.class).convertToSqlDate("2008-12-31"));
 
-        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1), true);
+        budgetDocumentRule.isPeriodValid(period1, "period 1", new Integer(1));
 
         Map errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.size() == 1);
@@ -152,7 +154,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         periodList.add(period4);
         periodList.add(period5);
 
-        budgetDocumentRule.isPeriodListValid(periodList, false, true);
+        budgetDocumentRule.isPeriodListValid(periodList, false);
 
         Map errorMap = GlobalVariables.getErrorMap();
         assertTrue(errorMap.isEmpty());
@@ -192,7 +194,7 @@ public class BudgetDocumentRuleTest extends KualiTestBase {
         periodList.add(period4);
         periodList.add(period5);
 
-        budgetDocumentRule.isPeriodListValid(periodList, false, true);
+        budgetDocumentRule.isPeriodListValid(periodList, false);
 
         Map errorMap = GlobalVariables.getErrorMap();
         assertTrue("should be 4, was " + errorMap.size(), errorMap.size() == 4);
