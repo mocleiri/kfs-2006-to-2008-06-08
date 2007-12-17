@@ -29,19 +29,14 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_EXSALTOT03_MT
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-       bcaf.emplid,
-       bcaf.VER_NBR,  
-       bcaf.appt_fnd_mo "SAL_MTHS",
-       posn.iu_pay_months "SAL_PMTHS"
-	FROM ld_pndbc_apptfnd_t bcaf,
-		ld_bcn_pos_t posn
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_BUILD_EXSALTOT03_MT ADD CONSTRAINT LD_BCN_BUILD_EXSALTOT03_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_EXSALTOT03_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_EXSALTOT03_MTN1 NOT NULL,
+        EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_BUILD_EXSALTOT03_MTN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_EXSALTOT03_MTN3 NOT NULL,
+        SAL_MTHS                       NUMBER(2),
+        SAL_PMTHS                      NUMBER(2),
+     CONSTRAINT LD_BCN_BUILD_EXSALTOT03_MTP1 PRIMARY KEY (
         SESID,
-        emplid)
+        EMPLID)
+)
 /
-ALTER TABLE LD_BCN_BUILD_EXSALTOT03_MT MODIFY (VER_NBR DEFAULT 1);

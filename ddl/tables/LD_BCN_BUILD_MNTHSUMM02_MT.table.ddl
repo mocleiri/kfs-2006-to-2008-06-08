@@ -29,44 +29,38 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_MNTHSUMM02_MT
-NOLOGGING
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-		s.org_fin_coa_cd "SEL_ORG_FIN_COA",
-		s.org_cd "SEL_ORG_CD",
-		s.sub_fund_grp_cd "SEL_SUB_FUND_GRP",
-		c.univ_fiscal_yr,
-		s.fin_coa_cd,
-		s.inc_exp_cd,
-		s.fin_object_cd,
-		s.fin_sub_obj_cd,
-        s.VER_NBR,
-		s.fdoc_ln_mo1_amt,
-		s.fdoc_ln_mo2_amt,
-		s.fdoc_ln_mo3_amt,
-		s.fdoc_ln_mo4_amt,
-		s.fdoc_ln_mo5_amt,
-		s.fdoc_ln_mo6_amt,
-		s.fdoc_ln_mo7_amt,
-		s.fdoc_ln_mo8_amt,
-		s.fdoc_ln_mo9_amt,
-		s.fdoc_ln_mo10_amt,
-		s.fdoc_ln_mo11_amt,
-		s.fdoc_ln_mo12_amt
-	FROM ld_bcn_mnth_summ_t s,
-		ld_bcn_ctrl_list_t c
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_BUILD_MNTHSUMM02_MT ADD CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_MNTHSUMM02_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN1 NOT NULL,
+        SEL_ORG_FIN_COA                VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN2 NOT NULL,
+        SEL_ORG_CD                     VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN3 NOT NULL,
+        SEL_SUB_FUND_GRP               VARCHAR2(6) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN4 NOT NULL,
+        UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN5 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN6 NOT NULL,
+        INC_EXP_CD                     VARCHAR2(1) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN7 NOT NULL,
+        FIN_OBJECT_CD                  VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN8 NOT NULL,
+        FIN_SUB_OBJ_CD                 VARCHAR2(3) CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN9 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTN10 NOT NULL,
+        FDOC_LN_MO1_AMT                NUMBER(19, 2),
+        FDOC_LN_MO2_AMT                NUMBER(19, 2),
+        FDOC_LN_MO3_AMT                NUMBER(19, 2),
+        FDOC_LN_MO4_AMT                NUMBER(19, 2),
+        FDOC_LN_MO5_AMT                NUMBER(19, 2),
+        FDOC_LN_MO6_AMT                NUMBER(19, 2),
+        FDOC_LN_MO7_AMT                NUMBER(19, 2),
+        FDOC_LN_MO8_AMT                NUMBER(19, 2),
+        FDOC_LN_MO9_AMT                NUMBER(19, 2),
+        FDOC_LN_MO10_AMT               NUMBER(19, 2),
+        FDOC_LN_MO11_AMT               NUMBER(19, 2),
+        FDOC_LN_MO12_AMT               NUMBER(19, 2),
+     CONSTRAINT LD_BCN_BUILD_MNTHSUMM02_MTP1 PRIMARY KEY (
         SESID,
-		SEL_ORG_FIN_COA,
-		SEL_ORG_CD,
-		SEL_SUB_FUND_GRP,
-		univ_fiscal_yr,
-		fin_coa_cd,
-		inc_exp_cd,
-		fin_object_cd,
-		fin_sub_obj_cd)
+        SEL_ORG_FIN_COA,
+        SEL_ORG_CD,
+        SEL_SUB_FUND_GRP,
+        UNIV_FISCAL_YR,
+        FIN_COA_CD,
+        INC_EXP_CD,
+        FIN_OBJECT_CD,
+        FIN_SUB_OBJ_CD)
+)
 /
-ALTER TABLE LD_BCN_BUILD_MNTHSUMM02_MT MODIFY (VER_NBR DEFAULT 1);

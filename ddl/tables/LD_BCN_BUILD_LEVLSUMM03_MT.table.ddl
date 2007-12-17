@@ -29,30 +29,26 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_LEVLSUMM03_MT
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-		s.org_fin_coa_cd,
-		s.org_cd,
-		s.sub_fund_grp_cd,
-		s.fin_coa_cd,
-		s.inc_exp_cd,
-		s.fin_cons_obj_cd,
-		s.fin_obj_level_cd,
-        s.VER_NBR,
-		s.appt_rqcsf_fte_qty,
-		s.appt_rqst_fte_qty
-	FROM ld_bcn_levl_summ_t s
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_BUILD_LEVLSUMM03_MT ADD CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_LEVLSUMM03_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN1 NOT NULL,
+        ORG_FIN_COA_CD                 VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN2 NOT NULL,
+        ORG_CD                         VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN3 NOT NULL,
+        SUB_FUND_GRP_CD                VARCHAR2(6) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN4 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN5 NOT NULL,
+        INC_EXP_CD                     VARCHAR2(1) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN6 NOT NULL,
+        FIN_CONS_OBJ_CD                VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN7 NOT NULL,
+        FIN_OBJ_LEVEL_CD               VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN8 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTN9 NOT NULL,
+        APPT_RQCSF_FTE_QTY             NUMBER,
+        APPT_RQST_FTE_QTY              NUMBER,
+     CONSTRAINT LD_BCN_BUILD_LEVLSUMM03_MTP1 PRIMARY KEY (
         SESID,
-		org_fin_coa_cd,
-		org_cd,
-		sub_fund_grp_cd,
-		fin_coa_cd,
-		inc_exp_cd,
-		fin_cons_obj_cd,
-		fin_obj_level_cd)
+        ORG_FIN_COA_CD,
+        ORG_CD,
+        SUB_FUND_GRP_CD,
+        FIN_COA_CD,
+        INC_EXP_CD,
+        FIN_CONS_OBJ_CD,
+        FIN_OBJ_LEVEL_CD)
+)
 /
-ALTER TABLE LD_BCN_BUILD_LEVLSUMM03_MT MODIFY (VER_NBR DEFAULT 1);
