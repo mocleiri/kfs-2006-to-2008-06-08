@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -34,9 +34,14 @@
         <documentTypeName>CloseDocument</documentTypeName>
         <documentTypeCode>CLOS</documentTypeCode>
 
-        <label>Post-Award Close</label>
+        <label>Close</label>
+        <shortLabel>ClosDoc</shortLabel>
 
-        <help parameterNamespace="KFS-CG" parameterDetailType="Close" parameterName="CLOSE" />
+        <summary>
+            <![CDATA[&nbsp;]]>
+        </summary>
+        <description>FILL ME IN.</description>
+        <help parameterNamespace="Kuali.ContractsAndGrants.CloseDocument" parameterName="CG_HELP_CLOSE_DOCUMENT" />
   
         <allowsCopy>false</allowsCopy>
         <allowsErrorCorrection>false</allowsErrorCorrection>

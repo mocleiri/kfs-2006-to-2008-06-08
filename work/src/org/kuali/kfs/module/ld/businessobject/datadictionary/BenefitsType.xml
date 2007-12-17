@@ -1,38 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.BenefitsType">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Labor Benefits Type Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="positionBenefitTypeCode" />
                 <field attributeName="positionBenefitTypeDescription" />
                 <field attributeName="positionBenefitRetirementIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Labor Benefits Type Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.BenefitsType">Create New</a>]]></menubar>
 
             <instructions>Lookup an Benefits Type</instructions>
 
@@ -60,7 +47,7 @@
         <attributes>
 
             <attribute name="positionBenefitRetirementIndicator" forceUppercase="true">
-                <label>Labor Benefits Retirement Indicator</label>
+                <label>Position Benefit Retirement Indicator</label>
                 <shortLabel>Indicator</shortLabel>
 
                 <maxLength>$attribute.maxLength</maxLength>
@@ -68,10 +55,13 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>positionBenefitRetirementIndicator</summary>
+                <description>positionBenefitRetirementIndicator description...</description>
 			</attribute>
 
             <attribute name="positionBenefitTypeCode" forceUppercase="true">
-                <label>Labor Benefits Type Code</label>
+                <label>Position Benefit Type Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
@@ -80,10 +70,13 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>positionBenefitTypeCode</summary>
+                <description>positionBenefitTypeCode description...</description>
 			</attribute>
 
             <attribute name="positionBenefitTypeDescription" forceUppercase="true">
-                <label>Labor Benefits Description</label>
+                <label>Position Benefit Type Description</label>
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>40</maxLength>
@@ -91,6 +84,9 @@
                 <control>
                     <text size="42" />
                 </control>
+
+                <summary>positionBenefitTypeDescription</summary>
+                <description>positionBenefitTypeDescription description...</description>
 			</attribute>
 
           <attributeReference name="versionNumber" 
@@ -98,6 +94,5 @@
                             sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Labor Benefits Type</objectLabel>
     </businessObject>
 </dictionaryEntry>

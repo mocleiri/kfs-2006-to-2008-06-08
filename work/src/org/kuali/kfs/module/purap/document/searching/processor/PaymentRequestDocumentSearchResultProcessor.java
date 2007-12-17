@@ -18,7 +18,9 @@ package org.kuali.workflow.module.purap.docsearch;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.iu.uis.eden.docsearch.DocumentSearchResult;
 import edu.iu.uis.eden.lookupable.Column;
+import edu.iu.uis.eden.lookupable.Field;
 
 public class PaymentRequestDocumentSearchResultProcessor extends PurApDocumentSearchResultProcessor {
 

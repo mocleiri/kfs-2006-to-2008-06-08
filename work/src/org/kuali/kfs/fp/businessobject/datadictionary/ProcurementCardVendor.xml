@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.ProcurementCardVendor">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Procurement Card Transaction Vendor Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="documentNumber" />
+            <inquiryFields>
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialDocumentTransactionLineNumber" />
                 <field attributeName="vendorName" />
                 <field attributeName="transactionMerchantCategoryCode" />
@@ -37,11 +22,11 @@
                 <field attributeName="vendorZipCode" />
                 <field attributeName="versionNumber" />
                 <field attributeName="visaVendorIdentifier" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <attributes>
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
+            <attributeReference name="financialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber" />
 
             <attributeReference name="financialDocumentTransactionLineNumber" sourceClassName="org.kuali.module.financial.bo.ProcurementCardTransactionDetail" sourceAttributeName="financialDocumentTransactionLineNumber" />
 
@@ -54,6 +39,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>transactionMerchantCategoryCode</summary>
+                <description>transactionMerchantCategoryCode description...</description>
             </attribute>
 
             <attribute name="vendorCityName" forceUppercase="true">
@@ -65,6 +53,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary>vendorCityName</summary>
+                <description>vendorCityName description...</description>
             </attribute>
 
             <attribute name="vendorLine1Address" forceUppercase="true">
@@ -76,6 +67,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary>vendorLine1Address</summary>
+                <description>vendorLine1Address description...</description>
             </attribute>
 
             <attribute name="vendorLine2Address" forceUppercase="true">
@@ -87,6 +81,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary>vendorLine2Address</summary>
+                <description>vendorLine2Address description...</description>
             </attribute>
 
             <attribute name="vendorName" forceUppercase="true">
@@ -98,6 +95,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary>vendorName</summary>
+                <description>vendorName description...</description>
             </attribute>
 
             <attribute name="vendorOrderNumber" forceUppercase="true">
@@ -109,6 +109,9 @@
                 <control>
                     <text size="14" />
                 </control>
+
+                <summary>vendorOrderNumber</summary>
+                <description>vendorOrderNumber description...</description>
             </attribute>
 
             <attribute name="vendorStateCode" forceUppercase="true">
@@ -120,6 +123,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>vendorStateCode</summary>
+                <description>vendorStateCode description...</description>
             </attribute>
 
             <attribute name="vendorZipCode" forceUppercase="true">
@@ -131,6 +137,9 @@
                 <control>
                     <text size="22" />
                 </control>
+
+                <summary>vendorZipCode</summary>
+                <description>vendorZipCode description...</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
@@ -144,6 +153,9 @@
                 <control>
                     <text size="18" />
                 </control>
+
+                <summary>visaVendorIdentifier</summary>
+                <description>visaVendorIdentifier description...</description>
             </attribute>
 
         </attributes>

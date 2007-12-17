@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,30 @@
  */
 package org.kuali.module.purap.rules;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts.action.ActionForm;
 import org.kuali.core.document.Document;
+import org.kuali.core.rule.event.PreRulesCheckEvent;
+import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.document.PurchaseOrderDocument;
 
 /**
- * Business rule(s) applicable to the Credit Memo document.
+ * Performs prompts and other pre business rule checks for the Credit Memo Docuemnt.
  */
 public class CreditMemoDocumentPreRules extends AccountsPayableDocumentPreRulesBase {
 
-    /**
-     * Default constructor
-     */
     public CreditMemoDocumentPreRules() {
         super();
     }
 
-    /**
-     * @see org.kuali.core.rules.PreRulesContinuationBase#doRules(org.kuali.core.document.Document)
-     */
     @Override
     public boolean doRules(Document document) {
         return super.doRules(document);
     }
-
-    /**
-     * @see org.kuali.module.purap.rules.AccountsPayableDocumentPreRulesBase#getDocumentName()
-     */
-    @Override
-    public String getDocumentName() {
+    
+    public String getDocumentName(){
         return "Credit Memo";
     }
 }

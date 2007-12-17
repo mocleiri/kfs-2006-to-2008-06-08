@@ -15,19 +15,17 @@
  */
 package org.kuali.module.purap.service;
 
-/**
- * Defines methods that must be implemented by a PdpExtractService implementation.
- */
-public interface PdpExtractService {
 
+public interface PdpExtractService {
     /**
-     * Extract all payments marked immediate. This won't combine any payments with credit memos.
+     * Extract all payments marked immediate.  This won't combine any 
+     * payments with credit memos.
      */
     public void extractImmediatePaymentsOnly();
 
     /**
-     * Extract all payments ready to be paid. This may combine payments with appropriate credit memos
+     * Extract all payments ready to be paid.  This may combine payments
+     * with appropriate credit memos
      */
     public void extractPayments();
-
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,22 +19,24 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.BenefitsCalculation">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Labor Benefits Calculation Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="positionBenefitTypeCode" />
                 <field attributeName="positionFringeBenefitObjectCode" />
                 <field attributeName="positionFringeBenefitPercent" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Labor Benefits Calculation Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.BenefitsCalculation">Create New</a>]]></menubar>
 
             <instructions>Lookup an Benefits Calculation</instructions>
 
@@ -98,6 +100,9 @@
                 <control>
                     <text size="24" />
                 </control>
+
+                <summary>positionFringeBenefitPercent</summary>
+                <description>positionFringeBenefitPercent description...</description>
 			</attribute>
 
           <attributeReference name="versionNumber" 
@@ -105,6 +110,5 @@
                             sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Labor Benefits Calculation</objectLabel>
     </businessObject>
 </dictionaryEntry>
