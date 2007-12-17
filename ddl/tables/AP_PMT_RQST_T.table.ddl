@@ -65,6 +65,7 @@ CREATE TABLE AP_PMT_RQST_T(
         AP_PUR_DOC_LNK_ID              NUMBER(10),
         CLOSE_PO_IND                   VARCHAR2(1), 
         REOPEN_PO_IND                  VARCHAR2(1),
+        VNDR_ADDR_INTL_PROV_NM         VARCHAR2(45),
      CONSTRAINT AP_PMT_RQST_TP1 PRIMARY KEY (
         PMT_RQST_ID),
      CONSTRAINT AP_PMT_RQST_TC0 UNIQUE (OBJ_ID)

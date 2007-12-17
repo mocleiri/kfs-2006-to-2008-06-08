@@ -110,6 +110,7 @@ CREATE TABLE PUR_PO_T(
         PEND_ACTN_IND                  VARCHAR2(1), 
         PO_1ST_TRNS_DT                 DATE,
         AP_PUR_DOC_LNK_ID              NUMBER(10),
+        VNDR_ADDR_INTL_PROV_NM         VARCHAR2(45),
      CONSTRAINT PUR_PO_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT PUR_PO_TC0 UNIQUE (OBJ_ID)

@@ -92,6 +92,7 @@ CREATE TABLE PUR_REQS_T(
         ORG_AUTO_PO_LMT                NUMBER(19,2),
         PO_AUTO_IND                    VARCHAR2(1),
         AP_PUR_DOC_LNK_ID              NUMBER(10),
+        VNDR_ADDR_INTL_PROV_NM         VARCHAR2(45),
      CONSTRAINT PUR_REQS_TP1 PRIMARY KEY (
         REQS_ID),
      CONSTRAINT PUR_REQS_TC0 UNIQUE (OBJ_ID)
