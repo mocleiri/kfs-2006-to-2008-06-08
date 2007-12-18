@@ -16,4 +16,6 @@
     <EN_DOC_HDR_EXT_LONG_T DOC_HDR_EXT_ID="151597"
         DOC_HDR_EXT_VAL="2008"
         DOC_HDR_EXT_VAL_KEY="purchaseOrderDocumentFiscalPostingYear" DOC_HDR_ID="316828"/>
+    <EN_DOC_HDR_EXT_LONG_T DOC_HDR_EXT_ID="151656"
+        DOC_HDR_EXT_VAL_KEY="requisitionDocumentRequisitionId" DOC_HDR_ID="317381"/>
 </dataset>

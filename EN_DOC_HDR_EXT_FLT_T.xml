@@ -11,4 +11,6 @@
         DOC_HDR_EXT_VAL_KEY="documentTotalAmount" DOC_HDR_ID="316828"/>
     <EN_DOC_HDR_EXT_FLT_T DOC_HDR_EXT_ID="151616"
         DOC_HDR_EXT_VAL_KEY="documentTotalAmount" DOC_HDR_ID="316880"/>
+    <EN_DOC_HDR_EXT_FLT_T DOC_HDR_EXT_ID="151669"
+        DOC_HDR_EXT_VAL_KEY="documentTotalAmount" DOC_HDR_ID="317381"/>
 </dataset>

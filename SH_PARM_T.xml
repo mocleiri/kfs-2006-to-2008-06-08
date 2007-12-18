@@ -4245,13 +4245,13 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicates if the EffortCertificationExtractStep should be ran."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
-        SH_PARM_NM="RUN_ID" SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y"
+        SH_PARM_NM="RUN_IND" SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
     <SH_PARM_T OBJ_ID="FC401BAE-1CE7-3469-0371-04EB2BDAF383"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Gives valid/invalid account type codes for the extract balance select."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
-        SH_PARM_NM="ACCOUNT_TYPE_CD_BALANCE_SELECT"
+        SH_PARM_NM="ACCOUNT_TYPE_CODE_BALANCE_SELECT"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="WS"
         SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
     <SH_PARM_T OBJ_ID="5D856E93-F21E-5E99-9995-2BD7179CF723"
@@ -4264,7 +4264,7 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Gives the federal agency type code."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
-        SH_PARM_NM="FEDERAL_AGENCY_TYPE_CD" SH_PARM_NMSPC_CD="KFS-ER"
+        SH_PARM_NM="FEDERAL_AGENCY_TYPE_CODE" SH_PARM_NMSPC_CD="KFS-ER"
         SH_PARM_TXT="F" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
     <SH_PARM_T OBJ_ID="B6EC59FE-7A3A-A435-AB06-24E2BFBA87B7"
         SH_PARM_CONS_CD="A"

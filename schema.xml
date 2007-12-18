@@ -151,6 +151,7 @@
         <column name="CONT_ACCT_IND" size="1" type="VARCHAR"/>
         <column name="CLOSE_PO_IND" size="1" type="VARCHAR"/>
         <column name="REOPEN_PO_IND" size="1" type="VARCHAR"/>
+        <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
         <foreign-key foreignTable="AP_CRDT_MEMO_STAT_T" name="AP_CRDT_MEMO_TR7">
             <reference foreign="CRDT_MEMO_STAT_CD" local="CRDT_MEMO_STAT_CD"/>
         </foreign-key>
@@ -600,6 +601,7 @@
         <column name="AP_PUR_DOC_LNK_ID" size="10" type="DECIMAL"/>
         <column name="CLOSE_PO_IND" size="1" type="VARCHAR"/>
         <column name="REOPEN_PO_IND" size="1" type="VARCHAR"/>
+        <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
         <foreign-key foreignTable="AP_PMT_RQST_STAT_T" name="AP_PMT_RQST_TR2">
             <reference foreign="PMT_RQST_STAT_CD" local="PMT_RQST_STAT_CD"/>
         </foreign-key>
@@ -9276,7 +9278,6 @@
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
         <column name="FIN_BALANCE_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FIN_OBJ_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FDOC_LN_MO1_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FDOC_LN_MO2_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -9301,9 +9302,6 @@
             <reference foreign="FIN_BALANCE_TYP_CD" local="FIN_BALANCE_TYP_CD"/>
             <reference foreign="FIN_OBJ_TYP_CD" local="FIN_OBJ_TYP_CD"/>
         </foreign-key>
-        <unique name="LD_BCNSTR_MONTH_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCNSTR_MONTH_TI2">
             <index-column name="UNIV_FISCAL_YR"/>
             <index-column name="FIN_COA_CD"/>
@@ -10437,14 +10435,10 @@
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="RPTS_TO_FIN_COA_CD" size="2" type="VARCHAR"/>
         <column name="RPTS_TO_ORG_CD" size="4" type="VARCHAR"/>
         <column name="PULL_FLAG" size="5" type="DECIMAL"/>
-        <unique name="LD_BCN_PULLUP_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_RQST_MT">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -11426,7 +11420,6 @@
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
         <column name="FIN_BALANCE_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FIN_OBJ_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FIN_BEG_BAL_LN_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -11455,9 +11448,6 @@
         <foreign-key foreignTable="CA_CHART_T" name="LD_PND_BCNSTR_GL_TR4">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
-        <unique name="LD_PND_BCNSTR_GL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_PND_BCNSTR_GL_TI2">
             <index-column name="UNIV_FISCAL_YR"/>
             <index-column name="FIN_COA_CD"/>
@@ -12985,6 +12975,7 @@
         <column name="PEND_ACTN_IND" size="1" type="VARCHAR"/>
         <column name="PO_1ST_TRNS_DT" type="DATE"/>
         <column name="AP_PUR_DOC_LNK_ID" size="10" type="DECIMAL"/>
+        <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
         <foreign-key foreignTable="CA_CHART_T" name="PUR_PO_TR13">
             <reference foreign="FIN_COA_CD" local="NON_INST_FND_ORG_COA_CD"/>
         </foreign-key>
@@ -13136,6 +13127,7 @@
         <column name="PO_QT_AWD_DT" type="DATE"/>
         <column name="PO_QT_RANK_NBR" size="3" type="VARCHAR"/>
         <column name="VNDR_CNTRY_CD" size="2" type="VARCHAR"/>
+        <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
         <foreign-key foreignTable="PUR_PO_T" name="PUR_PO_VNDR_QT_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
@@ -13385,6 +13377,7 @@
         <column name="ORG_AUTO_PO_LMT" scale="2" size="19" type="DECIMAL"/>
         <column name="PO_AUTO_IND" size="1" type="VARCHAR"/>
         <column name="AP_PUR_DOC_LNK_ID" size="10" type="DECIMAL"/>
+        <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
         <foreign-key foreignTable="CA_CHART_T" name="PUR_REQS_TR13">
             <reference foreign="FIN_COA_CD" local="NON_INST_FND_ORG_COA_CD"/>
         </foreign-key>
@@ -14512,9 +14505,9 @@
     <sequence name="SEQUENCE_EN_USR" nextval="100000000000"/>
     <sequence name="SEQ_ACTION_LIST_OPTN" nextval="1020"/>
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
-    <sequence name="SEQ_ACTION_TAKEN" nextval="2140"/>
+    <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317380"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317420"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -14522,9 +14515,9 @@
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12756"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357869"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563357889"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
-    <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151656"/>
+    <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151676"/>
     <sequence name="SEQ_TRANSACTION_TST" nextval="100"/>
     <sequence name="SERVICE_DEF_SEQ" nextval="2000"/>
     <sequence name="SHPMNT_RCVNG_ID" nextval="1002"/>
