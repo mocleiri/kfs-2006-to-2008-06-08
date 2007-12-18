@@ -29,27 +29,22 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_DOC_PULLUP02_MT
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-		hier.univ_fiscal_yr,
-		hier.fin_coa_cd,
-		hier.account_nbr,
-        hier.VER_NBR,
-		hier.org_level_cd, 
-		hier.org_fin_coa_cd,
-		hier.org_cd,
-		hier.org_fin_coa_cd "SORG_FIN_COA_CD",
-		hier.org_cd  "SORG_CD",
-		pull.pull_flag
-	FROM ld_bcn_acct_org_hier_t hier,
-		ld_bcn_pullup_t pull
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_DOC_PULLUP02_MT ADD CONSTRAINT LD_BCN_DOC_PULLUP02_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_DOC_PULLUP02_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_DOC_PULLUP02_MTN1 NOT NULL,
+        UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT LD_BCN_DOC_PULLUP02_MTN2 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_DOC_PULLUP02_MTN3 NOT NULL,
+        ACCOUNT_NBR                    VARCHAR2(7) CONSTRAINT LD_BCN_DOC_PULLUP02_MTN4 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_DOC_PULLUP02_MTN5 NOT NULL,
+        ORG_LEVEL_CD                   NUMBER(7) CONSTRAINT LD_BCN_DOC_PULLUP02_MTN6 NOT NULL,
+        ORG_FIN_COA_CD                 VARCHAR2(2),
+        ORG_CD                         VARCHAR2(4),
+        SORG_FIN_COA_CD                VARCHAR2(2),
+        SORG_CD                        VARCHAR2(4),
+        PULL_FLAG                      NUMBER(5),
+     CONSTRAINT LD_BCN_DOC_PULLUP02_MTP1 PRIMARY KEY (
         SESID,
-		univ_fiscal_yr,
-		fin_coa_cd,
-		account_nbr)
+        UNIV_FISCAL_YR,
+        FIN_COA_CD,
+        ACCOUNT_NBR)
+)
 /
-ALTER TABLE LD_BCN_DOC_PULLUP02_MT MODIFY (VER_NBR DEFAULT 1);

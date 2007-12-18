@@ -29,22 +29,16 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_POSLIST01_MT
-NOLOGGING
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-		bcaf.emplid,
-        bcaf.VER_NBR,
-		bcsf.pos_csf_amt,
-		bcsf.pos_csf_fte_qty,
-		bcaf.appt_rqst_amt,
-		bcaf.appt_rqst_fte_qty
-	FROM ld_pndbc_apptfnd_t bcaf,
-         ld_bcn_csf_trckr_t bcsf
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_BUILD_POSLIST01_MT ADD CONSTRAINT LD_BCN_BUILD_POSLIST01_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_POSLIST01_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_POSLIST01_MTN1 NOT NULL,
+        EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_BUILD_POSLIST01_MTN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_POSLIST01_MTN3 NOT NULL,
+        POS_CSF_AMT                    NUMBER(19, 2),
+        POS_CSF_FTE_QTY                NUMBER,
+        APPT_RQST_AMT                  NUMBER(19, 2),
+        APPT_RQST_FTE_QTY              NUMBER,
+     CONSTRAINT LD_BCN_BUILD_POSLIST01_MTP1 PRIMARY KEY (
         SESID,
-        emplid)
+        EMPLID)
+)
 /
-ALTER TABLE LD_BCN_BUILD_POSLIST01_MT MODIFY (VER_NBR DEFAULT 1);

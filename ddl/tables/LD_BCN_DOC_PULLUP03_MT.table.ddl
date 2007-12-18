@@ -29,20 +29,15 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_DOC_PULLUP03_MT
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-		head.fdoc_nbr,
-        head.VER_NBR,
-		hier.org_level_cd, 
-		hier.org_fin_coa_cd,
-		hier.org_cd
-	FROM ld_bcn_acct_org_hier_t hier,
-		ld_bcnstr_hdr_t head
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_DOC_PULLUP03_MT ADD CONSTRAINT LD_BCN_DOC_PULLUP03_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_DOC_PULLUP03_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_DOC_PULLUP03_MTN1 NOT NULL,
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT LD_BCN_DOC_PULLUP03_MTN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_DOC_PULLUP03_MTN3 NOT NULL,
+        ORG_LEVEL_CD                   NUMBER(7) CONSTRAINT LD_BCN_DOC_PULLUP03_MTN4 NOT NULL,
+        ORG_FIN_COA_CD                 VARCHAR2(2),
+        ORG_CD                         VARCHAR2(4),
+     CONSTRAINT LD_BCN_DOC_PULLUP03_MTP1 PRIMARY KEY (
         SESID,
-        fdoc_nbr)
+        FDOC_NBR)
+)
 /
-ALTER TABLE LD_BCN_DOC_PULLUP03_MT MODIFY (VER_NBR DEFAULT 1);

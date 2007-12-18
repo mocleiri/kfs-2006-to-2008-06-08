@@ -29,20 +29,16 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_PULLUP01_MT
-AS
-(select USERENV('SESSIONID') as sesid,
-	r.fin_coa_cd,
-	r.org_cd,
-    r.VER_NBR,
-	r.rpts_to_fin_coa_cd,
-	r.rpts_to_org_cd
-from ld_bcn_org_rpts_t r
- where 1 = 2)
-/
-ALTER TABLE LD_BCN_BUILD_PULLUP01_MT ADD CONSTRAINT LD_BCN_BUILD_PULLUP01_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_PULLUP01_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_PULLUP01_MTN1 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_PULLUP01_MTN2 NOT NULL,
+        ORG_CD                         VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_PULLUP01_MTN3 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_PULLUP01_MTN4 NOT NULL,
+        RPTS_TO_FIN_COA_CD             VARCHAR2(2),
+        RPTS_TO_ORG_CD                 VARCHAR2(4),
+     CONSTRAINT LD_BCN_BUILD_PULLUP01_MTP1 PRIMARY KEY (
         SESID,
-	    fin_coa_cd,
-	    org_cd)
+        FIN_COA_CD,
+        ORG_CD)
+)
 /
-ALTER TABLE LD_BCN_BUILD_PULLUP01_MT MODIFY (VER_NBR DEFAULT 1);

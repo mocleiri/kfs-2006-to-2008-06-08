@@ -29,26 +29,20 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_SALTOT01_MT
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-       bcaf.emplid,
-       bcaf.position_nbr,
-       bcaf.VER_NBR,
-       bcaf.appt_rqst_amt "SAL_AMT",
-       bcaf.appt_rqst_tm_pct "SAL_PCT",
-       bcaf.appt_fnd_mo "SAL_MTHS",
-       bcsf.pos_csf_amt,
-       bcsf.pos_csf_tm_pct,
-       posn.iu_pay_months "SAL_PMTHS"
-	FROM ld_pndbc_apptfnd_t bcaf,
-		ld_bcn_csf_trckr_t bcsf,
-		ld_bcn_pos_t posn
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_BUILD_SALTOT01_MT ADD CONSTRAINT LD_BCN_BUILD_SALTOT01_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_SALTOT01_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_SALTOT01_MTN1 NOT NULL,
+        EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_BUILD_SALTOT01_MTN2 NOT NULL,
+        POSITION_NBR                   VARCHAR2(8) CONSTRAINT LD_BCN_BUILD_SALTOT01_MTN3 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_SALTOT01_MTN4 NOT NULL,
+        SAL_AMT                        NUMBER(19, 2),
+        SAL_PCT                        NUMBER,
+        SAL_MTHS                       NUMBER(2),
+        POS_CSF_AMT                    NUMBER(19, 2),
+        POS_CSF_TM_PCT                 NUMBER,
+        SAL_PMTHS                      NUMBER(2),
+      CONSTRAINT LD_BCN_BUILD_SALTOT01_MTP1 PRIMARY KEY (
         SESID,
-        emplid,
-        position_nbr)
+        EMPLID,
+        POSITION_NBR)
+)
 /
-ALTER TABLE LD_BCN_BUILD_SALTOT01_MT MODIFY (VER_NBR DEFAULT 1);

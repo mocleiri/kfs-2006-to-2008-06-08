@@ -29,28 +29,23 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_DOC_PUSHDOWN03_MT
-AS
-	(SELECT USERENV('SESSIONID') "SESID",
-		hier.univ_fiscal_yr,
-		hier.fin_coa_cd,
-		hier.account_nbr,
-        hier.VER_NBR,
-		hier.org_level_cd, 
-		hier.org_level_cd "SEL_ORG_LVL",
-		hier.org_fin_coa_cd "SEL_ORGFIN_COA", 
-		hier.org_cd "SEL_ORG",
-		push.pull_flag "SEL_PULLFLAG",
-		hier.org_fin_coa_cd "LONE_ORGFIN_COA",
-		hier.org_cd "LONE_ORG"
-	FROM ld_bcn_acct_org_hier_t hier,
-		ld_bcn_pullup_t push
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_DOC_PUSHDOWN03_MT ADD CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_DOC_PUSHDOWN03_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTN1 NOT NULL,
+        UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTN2 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTN3 NOT NULL,
+        ACCOUNT_NBR                    VARCHAR2(7) CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTN4 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTN5 NOT NULL,
+        ORG_LEVEL_CD                   NUMBER(7) CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTN6 NOT NULL,
+        SEL_ORG_LVL                    NUMBER(7) CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTN7 NOT NULL,
+        SEL_ORGFIN_COA                 VARCHAR2(2),
+        SEL_ORG                        VARCHAR2(4),
+        SEL_PULLFLAG                   NUMBER(5),
+        LONE_ORGFIN_COA                VARCHAR2(2),
+        LONE_ORG                       VARCHAR2(4),
+     CONSTRAINT LD_BCN_DOC_PUSHDOWN03_MTP1 PRIMARY KEY (
         SESID,
-		univ_fiscal_yr,
-		fin_coa_cd,
-		account_nbr)
+        UNIV_FISCAL_YR,
+        FIN_COA_CD,
+        ACCOUNT_NBR)
+)
 /
-ALTER TABLE LD_BCN_DOC_PUSHDOWN03_MT MODIFY (VER_NBR DEFAULT 1);

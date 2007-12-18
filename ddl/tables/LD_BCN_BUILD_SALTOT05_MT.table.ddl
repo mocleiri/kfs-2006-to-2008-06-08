@@ -29,27 +29,21 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_BUILD_SALTOT05_MT
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-		ctrl.sel_org_fin_coa "ORG_FIN_COA_CD",
-		ctrl.sel_org_cd "ORG_CD",
-		bcaf.emplid,
-        bcaf.VER_NBR,
-		bcsf.pos_csf_amt,
-		bcaf.appt_rqst_amt,
-		bcaf.appt_rqst_fte_qty,
-		bcaf.appt_rqst_amt "INIT_RQST_AMT",
-		bcaf.appt_rqst_fte_qty "INIT_RQST_FTE"
-	FROM ld_pndbc_apptfnd_t bcaf,
-		ld_bcn_csf_trckr_t bcsf,
-		ld_bcn_ctrl_list_t ctrl
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_BUILD_SALTOT05_MT ADD CONSTRAINT LD_BCN_BUILD_SALTOT05_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_BUILD_SALTOT05_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_SALTOT05_MTN1 NOT NULL,
+        ORG_FIN_COA_CD                 VARCHAR2(2) CONSTRAINT LD_BCN_BUILD_SALTOT05_MTN2 NOT NULL,
+        ORG_CD                         VARCHAR2(4) CONSTRAINT LD_BCN_BUILD_SALTOT05_MTN3 NOT NULL,
+        EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_BUILD_SALTOT05_MTN4 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_SALTOT05_MTN5 NOT NULL,
+        POS_CSF_AMT                    NUMBER(19, 2),
+        APPT_RQST_AMT                  NUMBER(19, 2),
+        APPT_RQST_FTE_QTY              NUMBER,
+        INIT_RQST_AMT                  NUMBER(19, 2),
+        INIT_RQST_FTE                  NUMBER,
+     CONSTRAINT LD_BCN_BUILD_SALTOT05_MTP1 PRIMARY KEY (
         SESID,
-		ORG_FIN_COA_CD,
-		ORG_CD,
-		emplid)
+        ORG_FIN_COA_CD,
+        ORG_CD,
+        EMPLID)
+)
 /
-ALTER TABLE LD_BCN_BUILD_SALTOT05_MT MODIFY (VER_NBR DEFAULT 1);

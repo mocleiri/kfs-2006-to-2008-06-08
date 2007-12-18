@@ -43,7 +43,7 @@ CREATE TABLE LD_BCN_BUILD_EXSALTOT05_MT(
         SAL_PMTHS                      NUMBER(2),
         CSF_MTHS                       NUMBER(2),
         CSF_PMTHS                      NUMBER(2),
-		USE_FLAG                       VARCHAR2(1) DEFAULT 'Y',
+		USE_FLAG                       CHAR(1),
      CONSTRAINT LD_BCN_BUILD_EXSALTOT05_MTP1 PRIMARY KEY (
         SESID,
         EMPLID)

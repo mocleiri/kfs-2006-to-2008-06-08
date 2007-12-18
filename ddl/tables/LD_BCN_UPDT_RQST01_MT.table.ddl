@@ -29,43 +29,39 @@ END;
 /
 
 /* create the table */
-CREATE TABLE LD_BCN_UPDT_RQST01_MT
-AS
-	(SELECT  USERENV('SESSIONID') "SESID",
-		m.fin_coa_cd,
-		m.account_nbr,
-		m.sub_acct_nbr,
-		m.fin_object_cd,
-		m.fin_sub_obj_cd,
-        m.VER_NBR,
-		m.fin_obj_typ_cd,
-		m.acln_annl_bal_amt,
-		m.rqst_updt_err_cd,
-		m.fdoc_ln_mo1_amt,
-		m.fdoc_ln_mo2_amt,
-		m.fdoc_ln_mo3_amt,
-		m.fdoc_ln_mo4_amt,
-		m.fdoc_ln_mo5_amt,
-		m.fdoc_ln_mo6_amt,
-		m.fdoc_ln_mo7_amt,
-		m.fdoc_ln_mo8_amt,
-		m.fdoc_ln_mo9_amt,
-		m.fdoc_ln_mo10_amt,
-		m.fdoc_ln_mo11_amt,
-		m.fdoc_ln_mo12_amt,
-		h.fdoc_nbr,
-		h.org_coa_of_lvl_cd,
-		h.org_of_lvl_cd,
-		h.org_level_cd
-	FROM ld_bcn_rqst_mt m, ld_bcnstr_hdr_t h
-	WHERE 1=2)
-/
-ALTER TABLE LD_BCN_UPDT_RQST01_MT ADD CONSTRAINT LD_BCN_UPDT_RQST01_MTP1 PRIMARY KEY (
+CREATE TABLE LD_BCN_UPDT_RQST01_MT(
+        SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_UPDT_RQST01_MTN1 NOT NULL,
+        FIN_COA_CD                     VARCHAR2(2) CONSTRAINT LD_BCN_UPDT_RQST01_MTN2 NOT NULL,
+        ACCOUNT_NBR                    VARCHAR2(7) CONSTRAINT LD_BCN_UPDT_RQST01_MTN3 NOT NULL,
+        SUB_ACCT_NBR                   VARCHAR2(5) CONSTRAINT LD_BCN_UPDT_RQST01_MTN4 NOT NULL,
+        FIN_OBJECT_CD                  VARCHAR2(4) CONSTRAINT LD_BCN_UPDT_RQST01_MTN5 NOT NULL,
+        FIN_SUB_OBJ_CD                 VARCHAR2(3) CONSTRAINT LD_BCN_UPDT_RQST01_MTN6 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_UPDT_RQST01_MTN7 NOT NULL,
+        FIN_OBJ_TYP_CD                 VARCHAR2(2),
+        ACLN_ANNL_BAL_AMT              NUMBER(19, 2),
+        RQST_UPDT_ERR_CD               VARCHAR2(4),
+        FDOC_LN_MO1_AMT                NUMBER(19, 2),
+        FDOC_LN_MO2_AMT                NUMBER(19, 2),
+        FDOC_LN_MO3_AMT                NUMBER(19, 2),
+        FDOC_LN_MO4_AMT                NUMBER(19, 2),
+        FDOC_LN_MO5_AMT                NUMBER(19, 2),
+        FDOC_LN_MO6_AMT                NUMBER(19, 2),
+        FDOC_LN_MO7_AMT                NUMBER(19, 2),
+        FDOC_LN_MO8_AMT                NUMBER(19, 2),
+        FDOC_LN_MO9_AMT                NUMBER(19, 2),
+        FDOC_LN_MO10_AMT               NUMBER(19, 2),
+        FDOC_LN_MO11_AMT               NUMBER(19, 2),
+        FDOC_LN_MO12_AMT               NUMBER(19, 2),
+        FDOC_NBR                       VARCHAR2(14) CONSTRAINT LD_BCN_UPDT_RQST01_MTN8 NOT NULL,
+        ORG_COA_OF_LVL_CD              VARCHAR2(2),
+        ORG_OF_LVL_CD                  VARCHAR2(4),
+        ORG_LEVEL_CD                   NUMBER(7),
+     CONSTRAINT LD_BCN_UPDT_RQST01_MTP1 PRIMARY KEY (
         SESID,
-		fin_coa_cd,
-		account_nbr,
-		sub_acct_nbr,
-		fin_object_cd,
-		fin_sub_obj_cd)
+        FIN_COA_CD,
+        ACCOUNT_NBR,
+        SUB_ACCT_NBR,
+        FIN_OBJECT_CD,
+        FIN_SUB_OBJ_CD)
+)
 /
-ALTER TABLE LD_BCN_UPDT_RQST01_MT MODIFY (VER_NBR DEFAULT 1);
