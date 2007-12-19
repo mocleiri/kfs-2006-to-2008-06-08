@@ -28,6 +28,11 @@
         SH_PARM_DTL_TYP_NM="EffortCertificationCreateStep"
         SH_PARM_NMSPC_CD="KFS-ER" VER_NBR="1"/>
     <SH_PARM_DTL_TYP_T ACTIVE_IND="Y"
+        OBJ_ID="419403FF3182201AE043814FD881201A"
+        SH_PARM_DTL_TYP_CD="OrganizationOptions"
+        SH_PARM_DTL_TYP_NM="OrganizationOptions"
+        SH_PARM_NMSPC_CD="KFS-AR" VER_NBR="1"/>
+    <SH_PARM_DTL_TYP_T ACTIVE_IND="Y"
         OBJ_ID="3B13485ADA01A020E043814FD881A020"
         SH_PARM_DTL_TYP_CD="All" SH_PARM_DTL_TYP_NM="All"
         SH_PARM_NMSPC_CD="KFS-AR" VER_NBR="1"/>

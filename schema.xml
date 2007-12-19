@@ -4526,6 +4526,7 @@
         <column name="MESSAGE_ENTITY_NM" size="10" type="VARCHAR"/>
         <column name="DOC_TYP_EMAIL_XSL" size="255" type="VARCHAR"/>
         <column name="BLNKT_APPR_PLCY" size="10" type="VARCHAR"/>
+        <column name="DOC_TYP_SECURITY_XML" type="CLOB"/>
         <unique name="EN_DOC_TYP_TI1">
             <unique-column name="DOC_TYP_NM"/>
             <unique-column name="DOC_TYP_VER_NBR"/>
@@ -4540,6 +4541,24 @@
         <index name="EN_DOC_TYP_TI4">
             <index-column name="DOC_TYP_PREV_VER"/>
         </index>
+    </table>
+    <table name="EN_EDL_DMP_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="DOC_TYP_NM" required="true" size="255" type="VARCHAR"/>
+        <column name="DOC_RTE_STAT_CD" required="true" size="1" type="CHAR"/>
+        <column name="DOC_MDFN_DT" required="true" type="DATE"/>
+        <column name="DOC_CRTE_DT" required="true" type="DATE"/>
+        <column name="DOC_TTL" size="255" type="VARCHAR"/>
+        <column name="DOC_INITR_ID" required="true" size="30" type="VARCHAR"/>
+        <column name="DOC_CRNT_NODE_NM" required="true" size="30" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+    </table>
+    <table name="EN_EDL_FIELD_DMP_T">
+        <column name="EDL_FIELD_DMP_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="DOC_HDR_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="FLD_NM" required="true" size="255" type="VARCHAR"/>
+        <column name="FLD_VAL" size="4000" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
     </table>
     <table name="EN_EDOCLT_ASSOC_T">
         <column name="EDOCLT_ASSOC_ID" primaryKey="true" size="19" type="DECIMAL"/>
@@ -4626,6 +4645,16 @@
         <column name="VAL_ONE" size="2000" type="VARCHAR"/>
         <column name="VAL_TWO" size="2000" type="VARCHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <index name="EN_MSG_QUE_TI1">
+            <index-column name="MESSAGE_SERVICE_NM"/>
+            <index-column name="SERVICE_METHOD_NM"/>
+        </index>
+        <index name="EN_MSG_QUE_TI2">
+            <index-column name="MESSAGE_ENTITY_NM"/>
+            <index-column name="MESSAGE_QUE_STAT_CD"/>
+            <index-column name="MESSAGE_QUE_IP_NBR"/>
+            <index-column name="MESSAGE_QUE_DT"/>
+        </index>
     </table>
     <table name="EN_ORG_RESP_ID_T">
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
@@ -4634,6 +4663,21 @@
         <column name="ORG_RESP_ID_APRVR_TYP_CD" primaryKey="true"
             size="1" type="CHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+    </table>
+    <table name="EN_RMV_RPLC_DOC_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="OPRN" required="true" size="1" type="CHAR"/>
+        <column name="PRSN_EN_ID" required="true" size="30" type="VARCHAR"/>
+        <column name="RPLC_PRSN_EN_ID" size="30" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+    </table>
+    <table name="EN_RMV_RPLC_RULE_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="RULE_ID" primaryKey="true" size="19" type="DECIMAL"/>
+    </table>
+    <table name="EN_RMV_RPLC_WRKGRP_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="WRKGRP_ID" primaryKey="true" size="14" type="DECIMAL"/>
     </table>
     <table name="EN_RTE_BRCH_PROTO_T">
         <column name="RTE_BRCH_PROTO_ID" primaryKey="true" size="19" type="DECIMAL"/>
@@ -4684,6 +4728,15 @@
         <index name="EN_RTE_BRCH_TI5">
             <index-column name="JOIN_RTE_NODE_INSTN_ID"/>
         </index>
+    </table>
+    <table name="EN_RTE_NODE_CFG_PARM_T">
+        <column name="RTE_NODE_CFG_PARM_ID" primaryKey="true" size="19" type="DECIMAL"/>
+        <column name="RTE_NODE_CFG_PARM_ND" required="true" size="19" type="DECIMAL"/>
+        <column name="RTE_NODE_CFG_PARM_KEY" required="true" size="255" type="VARCHAR"/>
+        <column name="RTE_NODE_CFG_PARM_VAL" size="4000" type="VARCHAR"/>
+        <foreign-key foreignTable="EN_RTE_NODE_T" name="EN_RTE_NODE_CFG_PARM_TR1">
+            <reference foreign="RTE_NODE_ID" local="RTE_NODE_CFG_PARM_ND"/>
+        </foreign-key>
     </table>
     <table name="EN_RTE_NODE_INSTN_LNK_T">
         <column name="FROM_RTE_NODE_INSTN_ID" primaryKey="true"
@@ -4829,6 +4882,12 @@
         <column name="RULE_BASE_VAL_PREV_VER" size="19" type="DECIMAL"/>
         <column name="RULE_BASE_VAL_ACTVN_DT" type="DATE"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <column name="RULE_NM" size="256" type="VARCHAR"/>
+    </table>
+    <table name="EN_RULE_EXPR_T">
+        <column name="RULE_EXPR_ID" primaryKey="true" size="19" type="DECIMAL"/>
+        <column name="RULE_EXPR_TYP" required="true" size="256" type="VARCHAR"/>
+        <column name="RULE_EXPR" size="4000" type="VARCHAR"/>
     </table>
     <table name="EN_RULE_EXT_T">
         <column name="RULE_EXT_ID" primaryKey="true" size="19" type="DECIMAL"/>
@@ -4872,6 +4931,7 @@
         <column name="DSPL_ORD" required="true" size="5" type="DECIMAL"/>
         <column name="DFLT_VAL" size="2000" type="VARCHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <column name="ACTV_IND" required="true" size="1" type="DECIMAL"/>
         <index name="EN_RULE_TMPL_ATTRIB_TI1">
             <index-column name="RULE_TMPL_ID"/>
         </index>
