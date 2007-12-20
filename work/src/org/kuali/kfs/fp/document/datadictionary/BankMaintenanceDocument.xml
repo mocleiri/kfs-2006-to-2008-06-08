@@ -35,7 +35,8 @@
         <documentTypeName>BankMaintenanceDocument</documentTypeName>
         <documentTypeCode>BANK</documentTypeCode>
 
-        <label>Bank</label>
+        <label>Bank Maintenance Document</label>
+        <shortLabel>BankMaintDoc</shortLabel>
 
         <summary>Bank maintenance document</summary>
         <description>Document used to create or update Bank objects</description>

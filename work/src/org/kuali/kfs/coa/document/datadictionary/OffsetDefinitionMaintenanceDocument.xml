@@ -35,7 +35,8 @@
 
         <documentTypeName>OffsetDefinitionMaintenanceDocument</documentTypeName>
         <documentTypeCode>OFSD</documentTypeCode>
-        <label>Offset Definition</label>
+        <label>Offset Definition Maintenance Document</label>
+        <shortLabel>OffsetDefMaintDoc</shortLabel>
         <summary>Offset Definition Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Offset Definitions, remove exsiting Offset Definitions, or modify existing Offset Definitions.</description>
         <help parameterNamespace="KFS-CA" parameterDetailType="OffsetDefinition" parameterName="OFFSET_DEFINITION" />
@@ -53,6 +54,9 @@
             <reference attributeName="financialObject" attributeToHighlightOnFail="financialObjectCode" />
             <reference attributeName="financialBalanceType" attributeToHighlightOnFail="financialBalanceTypeCode" />
         </defaultExistenceChecks>
+        <applyApcRules>
+            <apcRule attributeName="financialObjectCode" parameterNamespace="KFS-CA" parameterName="OffsetDefinition.FinancialObjectCode" errorMessage="error.document.offsetDefinitionMaintenance.invalidFinancialObjectCode" />
+        </applyApcRules>
         <maintainableSections>
             <maintainableSection title="Edit Offset Definition">
                 <maintainableItems>

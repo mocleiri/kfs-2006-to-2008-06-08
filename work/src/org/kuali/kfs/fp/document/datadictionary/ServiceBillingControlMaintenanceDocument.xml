@@ -36,7 +36,8 @@
         <documentTypeName>ServiceBillingControlMaintenanceDocument</documentTypeName>
         <documentTypeCode>SBC</documentTypeCode>
 
-        <label>Service Billing Control</label>
+        <label>Service Billing Control Maintenance Document</label>
+        <shortLabel>ServBillConMainDoc</shortLabel>
 
         <summary>Service Billing Control maintenance document</summary>
         <description>Document used to create or update Service Billing Control objects</description>
