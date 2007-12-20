@@ -35,7 +35,8 @@
         <documentTypeName>FundGroupMaintenanceDocument</documentTypeName>
         <documentTypeCode>FGRP</documentTypeCode>
 
-        <label>Fund Group</label>
+        <label>Fund Group Maintenance Document</label>
+        <shortLabel>FundGroupMainDoc</shortLabel>
 
         <summary>Fund Group maintenance document</summary>
         <description>Document used to create or update Fund Group objects</description>

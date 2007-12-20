@@ -35,11 +35,12 @@
         <documentTypeName>PaymentReasonCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVPR</documentTypeCode>
 
-        <label>Disbursement Voucher Payment Reason</label>
+        <label>Payment Reason Code Maintenance Document</label>
+        <shortLabel>PayReasonMaintDoc</shortLabel>
 
         <summary>Payment Reason Code Maintenance Document</summary>
         <description>Document used to create or update Payment Reason objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="PaymentReasonCode" parameterName="PAYMENT_REASON" />
+        <help parameterNamespace="KFS-FP" parameterDetailType="PaymentReason" parameterName="PAYMENT_REASON" />
 
         <lockingKeys>
             <field attributeName="code" />
