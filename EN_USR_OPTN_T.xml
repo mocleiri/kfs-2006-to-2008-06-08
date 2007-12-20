@@ -409,4 +409,6 @@
         PRSN_OPTN_ID="DocSearch.LastSearch.Holding0" PRSN_OPTN_VAL=",,docTypeFullName=PurchaseOrderQuoteStatusMaintenanceDocument,,superUserSearch=NO"/>
     <EN_USR_OPTN_T DB_LOCK_VER_NBR="1" PRSN_EN_ID="2133704704"
         PRSN_OPTN_ID="DocSearch.LastSearch.Order" PRSN_OPTN_VAL="DocSearch.LastSearch.Holding0"/>
+    <EN_USR_OPTN_T DB_LOCK_VER_NBR="1" PRSN_EN_ID="6162502038"
+        PRSN_OPTN_ID="USE_OUT_BOX" PRSN_OPTN_VAL="yes"/>
 </dataset>

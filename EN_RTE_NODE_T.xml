@@ -586,7 +586,7 @@
         DOC_RTE_MTHD_CD="FR" DOC_RTE_MTHD_NM="RuleTemplate"
         DOC_TYP_ID="2841" RTE_NODE_ID="2002" RTE_NODE_NM="Rule Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2562"/>
-    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="2" DOC_ACTVN_TYP_TXT="S"
         DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="2785"
         RTE_NODE_ID="2004" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2562"/>
@@ -631,7 +631,7 @@
         DOC_TYP_ID="268138" RTE_NODE_ID="563242776"
         RTE_NODE_NM="Org Review"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
-    <EN_RTE_NODE_T DB_LOCK_VER_NBR="39" DOC_ACTVN_TYP_TXT="S"
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="41" DOC_ACTVN_TYP_TXT="S"
         DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="176777"
         RTE_NODE_ID="463517633" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
@@ -2460,4 +2460,21 @@
         DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="317301"
         RTE_NODE_ID="563357862" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="P"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="317420"
+        RTE_NODE_ID="563357889" RTE_NODE_NM="Adhoc Routing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2562"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="P"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="RemoveReplaceWorkgroupTemplate"
+        DOC_TYP_ID="317420" RTE_NODE_ID="563357890"
+        RTE_NODE_NM="Workgroup Approval"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2562"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="P"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR" DOC_RTE_MTHD_NM="RemoveReplaceRuleTemplate"
+        DOC_TYP_ID="317420" RTE_NODE_ID="563357891"
+        RTE_NODE_NM="Rule Approval"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2562"/>
 </dataset>

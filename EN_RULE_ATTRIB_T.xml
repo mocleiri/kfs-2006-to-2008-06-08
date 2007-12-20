@@ -692,6 +692,18 @@
         RULE_ATTRIB_LBL_TXT="Kuali Disbursement Voucher Document PDP Date Range"
         RULE_ATTRIB_NM="KualiDisbursementVoucherPdpDates"
         RULE_ATTRIB_TYP="SearchableXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;searchingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;extractDate&quot; title=&quot;kuali_dd_label(DisbursementVoucherDocument)&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;searchDefinition dataType=&quot;datetime&quot; rangeSearch=&quot;true&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//document/extractDate')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;        &lt;fieldDef name=&quot;paidDate&quot; title=&quot;kuali_dd_label(DisbursementVoucherDocument)&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;searchDefinition dataType=&quot;datetime&quot; rangeSearch=&quot;true&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//document/paidDate')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;        &lt;fieldDef name=&quot;cancelDate&quot; title=&quot;kuali_dd_label(DisbursementVoucherDocument)&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;searchDefinition dataType=&quot;datetime&quot; rangeSearch=&quot;true&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//document/cancelDate')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/searchingConfig>"/>
+    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="1"
+        RULE_ATTRIB_CLS_NM="edu.iu.uis.eden.routetemplate.RemoveReplaceWorkgroupTypeRoutingAttribute"
+        RULE_ATTRIB_DESC="An attribute for routing workgroups that have been changed via the Remove/Replace User document"
+        RULE_ATTRIB_ID="12756"
+        RULE_ATTRIB_LBL_TXT="RemoveReplaceWorkgroupTypeRoutingAttribute"
+        RULE_ATTRIB_NM="RemoveReplaceWorkgroupTypeRoutingAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
+    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="1"
+        RULE_ATTRIB_CLS_NM="edu.iu.uis.eden.routetemplate.RemoveReplaceRuleRoutingAttribute"
+        RULE_ATTRIB_DESC="An attribute for routing rules that have been changed via the Remove/Replace User document"
+        RULE_ATTRIB_ID="12757"
+        RULE_ATTRIB_LBL_TXT="RemoveReplaceRuleRoutingAttribute"
+        RULE_ATTRIB_NM="RemoveReplaceRuleRoutingAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
     <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="7"
         RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiXmlSearchableAttributeImpl"
         RULE_ATTRIB_DESC="Attribute to use to display the Credit Memo Status display value"

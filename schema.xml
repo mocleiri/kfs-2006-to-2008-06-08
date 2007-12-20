@@ -4664,6 +4664,40 @@
             size="1" type="CHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
     </table>
+    <table name="EN_OUT_BOX_ITM_T">
+        <column name="ACTN_ITM_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="ACTN_ITM_PRSN_EN_ID" required="true" size="30" type="VARCHAR"/>
+        <column name="ACTN_ITM_ASND_DT" required="true" type="DATE"/>
+        <column name="ACTN_ITM_RQST_CD" required="true" size="1" type="CHAR"/>
+        <column name="ACTN_RQST_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="DOC_HDR_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="WRKGRP_ID" size="14" type="DECIMAL"/>
+        <column name="ROLE_NM" size="2000" type="VARCHAR"/>
+        <column name="ACTN_ITM_DLGN_PRSN_EN_ID" size="30" type="VARCHAR"/>
+        <column name="ACTN_ITM_DLGN_WRKGRP_ID" size="14" type="DECIMAL"/>
+        <column name="DOC_TTL" size="255" type="VARCHAR"/>
+        <column name="DOC_TYP_LBL_TXT" required="true" size="255" type="VARCHAR"/>
+        <column name="DOC_TYP_HDLR_URL_ADDR" required="true" size="255" type="VARCHAR"/>
+        <column name="DOC_TYP_NM" required="true" size="255" type="VARCHAR"/>
+        <column name="ACTN_ITM_RESP_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="DLGN_TYP" size="1" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <index name="EN_OUT_BOX_ITM_T1">
+            <index-column name="ACTN_ITM_PRSN_EN_ID"/>
+        </index>
+        <index name="EN_OUT_BOX_ITM_TI2">
+            <index-column name="DOC_HDR_ID"/>
+        </index>
+        <index name="EN_OUT_BOX_ITM_TI3">
+            <index-column name="ACTN_RQST_ID"/>
+        </index>
+        <index name="EN_OUT_BOX_ITM_TI4">
+            <index-column name="ACTN_ITM_DLGN_PRSN_EN_ID"/>
+            <index-column name="ACTN_ITM_DLGN_WRKGRP_ID"/>
+            <index-column name="ACTN_ITM_PRSN_EN_ID"/>
+            <index-column name="DLGN_TYP"/>
+        </index>
+    </table>
     <table name="EN_RMV_RPLC_DOC_T">
         <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
         <column name="OPRN" required="true" size="1" type="CHAR"/>
@@ -4866,7 +4900,7 @@
     </table>
     <table name="EN_RULE_BASE_VAL_T">
         <column name="RULE_BASE_VAL_ID" primaryKey="true" size="19" type="DECIMAL"/>
-        <column name="RULE_TMPL_ID" required="true" size="19" type="DECIMAL"/>
+        <column name="RULE_TMPL_ID" size="19" type="DECIMAL"/>
         <column name="RULE_BASE_VAL_ACTV_IND" required="true" size="1" type="DECIMAL"/>
         <column name="RULE_BASE_VAL_DESC" size="2000" type="VARCHAR"/>
         <column name="RULE_BASE_VAL_IGNR_PRVS" required="true" size="1" type="DECIMAL"/>
@@ -4883,6 +4917,10 @@
         <column name="RULE_BASE_VAL_ACTVN_DT" type="DATE"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
         <column name="RULE_NM" size="256" type="VARCHAR"/>
+        <column name="RULE_EXPR_ID" size="19" type="DECIMAL"/>
+        <foreign-key foreignTable="EN_RULE_EXPR_T" name="EN_RULE_BASE_VAL_TR1">
+            <reference foreign="RULE_EXPR_ID" local="RULE_EXPR_ID"/>
+        </foreign-key>
     </table>
     <table name="EN_RULE_EXPR_T">
         <column name="RULE_EXPR_ID" primaryKey="true" size="19" type="DECIMAL"/>
@@ -9745,12 +9783,12 @@
         <column name="SEL_PULL_FLAG" size="7" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
@@ -9762,21 +9800,21 @@
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT03_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="SAL_MTHS" size="2" type="DECIMAL"/>
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT04_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CSF_MTHS" size="2" type="DECIMAL"/>
         <column name="CSF_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT05_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -9792,7 +9830,7 @@
         <column name="USE_FLAG" size="1" type="CHAR"/>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT06_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="ORG_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
@@ -9804,7 +9842,7 @@
         <column name="INIT_RQST_FTE" size="22" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_LEVLSUMM02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="ORG_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="SUB_FUND_GRP_CD" primaryKey="true" size="6" type="VARCHAR"/>
@@ -9818,7 +9856,7 @@
         <column name="POS_CSF_LV_FTE_QTY" size="22" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_LEVLSUMM03_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="ORG_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="SUB_FUND_GRP_CD" primaryKey="true" size="6" type="VARCHAR"/>
@@ -9831,7 +9869,7 @@
         <column name="APPT_RQST_FTE_QTY" size="22" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_MNTHSUMM01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="SEL_ORG_FIN_COA" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="SEL_ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="SEL_SUB_FUND_GRP" primaryKey="true" size="6" type="VARCHAR"/>
@@ -9844,7 +9882,7 @@
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_MNTHSUMM02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="SEL_ORG_FIN_COA" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="SEL_ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="SEL_SUB_FUND_GRP" primaryKey="true" size="6" type="VARCHAR"/>
@@ -9868,7 +9906,7 @@
         <column name="FDOC_LN_MO12_AMT" scale="2" size="19" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_OBJTSUMM01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="ORG_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="SUB_FUND_GRP_CD" primaryKey="true" size="6" type="VARCHAR"/>
@@ -9882,7 +9920,7 @@
         <column name="APPT_RQST_FTE_QTY" size="22" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_OBJTSUMM02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="ORG_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="SUB_FUND_GRP_CD" primaryKey="true" size="6" type="VARCHAR"/>
@@ -9897,7 +9935,7 @@
         <column name="POS_CSF_LV_FTE_QTY" size="22" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_POSLIST01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -9906,7 +9944,7 @@
         <column name="APPT_RQST_FTE_QTY" size="22" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_POS_SEL01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
@@ -9918,7 +9956,7 @@
         </index>
     </table>
     <table name="LD_BCN_BUILD_PULLUP01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
@@ -9926,7 +9964,7 @@
         <column name="RPTS_TO_ORG_CD" size="4" type="VARCHAR"/>
     </table>
     <table name="LD_BCN_BUILD_SALSUMM01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
@@ -9938,21 +9976,21 @@
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALSUMM02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="SAL_MTHS" size="2" type="DECIMAL"/>
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALSUMM03_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CSF_MTHS" size="2" type="DECIMAL"/>
         <column name="CSF_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALSUMM04_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -9966,12 +10004,12 @@
         <column name="CSF_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALSUMM05_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALTOT01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
@@ -9983,21 +10021,21 @@
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALTOT02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="SAL_MTHS" size="2" type="DECIMAL"/>
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALTOT03_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CSF_MTHS" size="2" type="DECIMAL"/>
         <column name="CSF_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALTOT04_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -10012,7 +10050,7 @@
         <column name="CSF_PMTHS" size="2" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALTOT05_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="ORG_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
@@ -10068,7 +10106,7 @@
         <column name="SEL_SUB_FUND_GRP" size="6" type="VARCHAR"/>
     </table>
     <table name="LD_BCN_DOC_PULLUP01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
@@ -10078,7 +10116,7 @@
         <column name="PULL_FLAG" size="5" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_DOC_PULLUP02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
@@ -10091,7 +10129,7 @@
         <column name="PULL_FLAG" size="5" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_DOC_PULLUP03_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ORG_LEVEL_CD" required="true" size="7" type="DECIMAL"/>
@@ -10102,7 +10140,7 @@
         </index>
     </table>
     <table name="LD_BCN_DOC_PUSHDOWN01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
@@ -10113,7 +10151,7 @@
         <column name="PULL_FLAG" size="5" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_DOC_PUSHDOWN02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
@@ -10125,7 +10163,7 @@
         <column name="SEL_PULLFLAG" size="5" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_DOC_PUSHDOWN03_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
@@ -10139,7 +10177,7 @@
         <column name="LONE_ORG" size="4" type="VARCHAR"/>
     </table>
     <table name="LD_BCN_DOC_PUSHDOWN04_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
@@ -10218,7 +10256,7 @@
         </index>
     </table>
     <table name="LD_BCN_LCK_PYRT_ACCT01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
@@ -10597,7 +10635,7 @@
         <column name="REPORT_FLAG" size="7" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_UPDT_RQST01_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
@@ -10625,7 +10663,7 @@
         <column name="ORG_LEVEL_CD" size="7" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_UPDT_RQST02_MT">
-        <column name="SESID" primaryKey="true" size="22" type="DECIMAL"/>
+        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
@@ -14567,15 +14605,18 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317420"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317460"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
+    <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12756"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357889"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12776"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563357909"/>
+    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2020"/>
+    <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151676"/>
     <sequence name="SEQ_TRANSACTION_TST" nextval="100"/>
