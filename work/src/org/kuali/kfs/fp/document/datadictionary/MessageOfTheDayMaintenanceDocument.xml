@@ -35,7 +35,8 @@
         <documentTypeName>MessageOfTheDayMaintenanceDocument</documentTypeName>
         <documentTypeCode>MOTD</documentTypeCode>
 
-        <label>Message Of The Day</label>
+        <label>Message Of The Day Maintenance Document</label>
+        <shortLabel>MessageOfTheDayMaintenanceDocument</shortLabel>
 
         <summary>Message Of The Day maintenance document</summary>
         <description>Document used to create or update Message Of The Day objects</description>

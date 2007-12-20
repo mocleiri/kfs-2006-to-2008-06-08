@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.Chart">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Chart Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="finCoaManagerUniversal.personName" />
                 <field attributeName="finChartOfAccountDescription" />
@@ -41,12 +26,15 @@
                 <field attributeName="finPreEncumbranceObjectCode" />
                 <field attributeName="icrIncomeFinancialObjectCode" />
                 <field attributeName="icrExpenseFinancialObjectCd" />
-                <field attributeName="fundBalanceObjectCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Chart Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.Chart">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Chart</instructions>
 
@@ -94,27 +82,39 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code for the Chart of Accounts for an Account. It is part of the primary key. Kuali accommodates more than one Chart of Accounts.</description>
             </attribute>
 
             <attribute name="codeAndDescription" forceUppercase="false">
                 <label>Chart Code</label>
                 <shortLabel>Chart Code</shortLabel>
 
-                <maxLength>45</maxLength>
+                <maxLength>43</maxLength>
 
                 <control>
-                    <text size="45" />
+                    <text size="43" />
                 </control>
+
+                <summary>Chart Code</summary>
+                <description>Chart Code</description>
+
             </attribute>
 
             <attributeReference name="finCoaManagerUniversalId" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUniversalIdentifier">
                 <label>Chart Manager Employee Id</label>
                 <shortLabel>Chart Manager</shortLabel>
-                <displayLabelAttribute>finCoaManagerUniversal.personUserIdentifier</displayLabelAttribute>
-                <required>true</required>
+                <required>false</required>
                 <control>
                     <hidden />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Chart Manager</description>
             </attributeReference>
 
             <attributeReference name="finCoaManagerUniversal.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
@@ -124,6 +124,10 @@
                 <control>
                     <kualiUser universalIdAttributeName="finCoaManagerUniversalId" userIdAttributeName="finCoaManagerUniversal.personUserIdentifier" personNameAttributeName="finCoaManagerUniversal.personName" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The UserID of the Chart Manager.</description>
             </attributeReference>
 
             <attributeReference name="finCoaManagerUniversal.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
@@ -133,6 +137,10 @@
                 <control>
                     <hidden />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The Name of the Chart Manager.</description>
             </attributeReference>
 
             <attribute name="finChartOfAccountDescription" forceUppercase="false">
@@ -140,15 +148,25 @@
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>40</maxLength>
-                <required>true</required>
+                <required>false</required>
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>A description of the Chart of Accounts. For Search Criteria, select the Help for the Chart Lookup title.</description>
             </attribute>
             <attributeReference name="finChartOfAccountActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
                 <label>Chart Active Indicator</label>
                 <shortLabel>ChartActive</shortLabel>
                 <required>false</required>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Radioboxes in the entry form that indicate if the Chart is active or inactive. If "Both" is checked in the Lookup, then both "Yes" (active) or "No" (inactive) values are listed in the search.</description>
+
             </attributeReference>
 
             <attributeReference name="financialCashObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -161,6 +179,10 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code for the "object" of accounting for a cash transaction.</description>
             </attributeReference>
 
             <attributeReference name="finAccountsPayableObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -173,6 +195,10 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code for the "object" of accounting for an Accounts Payable transaction.</description>
             </attributeReference>
 
             <attributeReference name="incBdgtEliminationsFinObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -185,6 +211,10 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Income Budget Elimination Object Code value used.</description>
             </attributeReference>
 
             <attributeReference name="expBdgtEliminationsFinObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -197,6 +227,10 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Expense Budget Elimination Object Code value used.</description>
             </attributeReference>
 
             <attributeReference name="reportsToChartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
@@ -207,8 +241,14 @@
                 <required>true</required>
 
                 <control>
-                	<text size="2"/>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.ChartValuesFinder" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
             <attributeReference name="finAccountsReceivableObjCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -221,6 +261,12 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
             <attributeReference name="finInternalEncumbranceObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -233,6 +279,12 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
             <attributeReference name="finExternalEncumbranceObjCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -245,6 +297,12 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
             <attributeReference name="finPreEncumbranceObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -257,6 +315,12 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
             <attributeReference name="icrIncomeFinancialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
@@ -269,6 +333,13 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
             <attributeReference name="icrExpenseFinancialObjectCd" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
                 <label>Indirect Cost Recovery Expense Object Code</label>
@@ -280,33 +351,18 @@
                 <control>
                     <text size="4" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
 
-            <attributeReference name="fundBalanceObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode">
-                <label>Fund Balance Object Code</label>
-                <shortLabel>FndBalObjCde</shortLabel>
-
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <text size="4" />
-                </control>
-            </attributeReference>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-
-        <relationships>
-            <relationship objectAttributeName="finCoaManagerUniversal" >
-                <primitiveAttribute sourceName="finCoaManagerUniversalId" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="finCoaManagerUniversal.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="finCoaManagerUniversal.personName" targetName="personName" />
-            </relationship>
-        </relationships>
-
-        <objectLabel>Chart</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

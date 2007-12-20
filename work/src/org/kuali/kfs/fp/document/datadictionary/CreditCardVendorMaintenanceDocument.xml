@@ -35,7 +35,8 @@
         <documentTypeName>CreditCardVendorMaintenanceDocument</documentTypeName>
         <documentTypeCode>CCVN</documentTypeCode>
 
-        <label>Credit Card Vendor</label>
+        <label>Credit Card Vendor Maintenance Document</label>
+        <shortLabel>CreditCardVendorMaintenanceDocument</shortLabel>
 
         <summary>Credit Card Vendor Maintenance Document</summary>
         <description>Document used to create or update a credit card vendor.</description>

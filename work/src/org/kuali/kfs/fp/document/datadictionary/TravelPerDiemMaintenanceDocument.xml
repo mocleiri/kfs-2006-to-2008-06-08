@@ -35,7 +35,8 @@
         <documentTypeName>TravelPerDiemMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVPD</documentTypeCode>
 
-        <label>Disbursement Voucher Travel Per Diem</label>
+        <label>Travel Per Diem Maintenance Document</label>
+        <shortLabel>Per Diem Maint Doc</shortLabel>
 
         <summary>Travel Per Diem Maintenance Document</summary>
         <description>Document used to create or update Travel Per Diem objects</description>
