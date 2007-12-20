@@ -36,10 +36,11 @@
 
         <documentTypeName>IcrAutomatedEntryMaintenanceDocument</documentTypeName>
         <documentTypeCode>ICRE</documentTypeCode>
-        <label>Indirect Cost Recovery Automated Entry</label>
+        <label>Indirect Cost Recovery Automated Entry Maintenance Document</label>
+        <shortLabel>ICRAutotomatedEntryMaintenanceDoc</shortLabel>
         <summary>Indirect Cost Recovery Automated Entry Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Indirect Cost Recovery Automated Entries, or modify existing Indirect Cost Recovery Automated Entries.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="IcrAutomatedEntry" parameterName="INDIRECT_COST_RECOVERY_AUTOMATED_ENTRY" />
+        <help parameterNamespace="KFS-CA" parameterDetailType="IndirectCostRecoveryAutomatedEntry" parameterName="INDIRECT_COST_RECOVERY_AUTOMATED_ENTRY" />
 
         <lockingKeys>
             <field attributeName="universityFiscalYear" />

@@ -37,11 +37,12 @@
         <documentTypeName>ProjectCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PROJ</documentTypeCode>
 
-        <label>Project Code</label>
+        <label>Project Code Maintenance Document</label>
+        <shortLabel>ProjectMaintDoc</shortLabel>
 
         <summary>Project Code maintenance document</summary>
         <description>Document used to create or update Project Code objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="ProjectCode" parameterName="PROJECT" />
+        <help parameterNamespace="KFS-CA" parameterDetailType="Project" parameterName="PROJECT" />
 
         <lockingKeys>
             <field attributeName="code" />
