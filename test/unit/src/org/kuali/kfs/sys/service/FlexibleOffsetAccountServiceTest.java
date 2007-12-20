@@ -1,70 +1,86 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.service;
 
-import static org.kuali.test.fixtures.OffsetAccountFixture.OFFSET_ACCOUNT1;
-import static org.kuali.test.util.KualiTestAssertionUtils.assertSparselyEqualBean;
+import java.lang.reflect.InvocationTargetException;
 
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.context.TestUtils;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.chart.bo.OffsetDefinition;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.OffsetAccount;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBaseWithFixtures;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class...
+ * 
+ * @author Kuali Financial Transactions Team ()
  */
-@ConfigureContext
-public class FlexibleOffsetAccountServiceTest extends KualiTestBase {
+@WithTestSpringContext
+public class FlexibleOffsetAccountServiceTest extends KualiTestBaseWithFixtures {
+    private FlexibleOffsetAccountService service;
 
-    public void testGetByPrimaryId_valid() throws Exception {
-        boolean enabled = SpringContext.getBean(ParameterService.class).getIndicatorParameter(OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
-
-        TestUtils.setSystemParameter(OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, "Y");
-        OffsetAccount offsetAccount = SpringContext.getBean(FlexibleOffsetAccountService.class).getByPrimaryIdIfEnabled(OFFSET_ACCOUNT1.chartOfAccountsCode, OFFSET_ACCOUNT1.accountNumber, OFFSET_ACCOUNT1.financialOffsetObjectCode);
-        if (offsetAccount == null) {
-            throw new RuntimeException("Offset Account came back null, cannot perform asserts.");
-        }
-
-        assertSparselyEqualBean(OFFSET_ACCOUNT1.createOffsetAccount(), offsetAccount);
-        assertEquals(OFFSET_ACCOUNT1.chartOfAccountsCode, offsetAccount.getChart().getChartOfAccountsCode());
-        assertEquals(OFFSET_ACCOUNT1.accountNumber, offsetAccount.getAccount().getAccountNumber());
-        assertEquals(OFFSET_ACCOUNT1.financialOffsetChartOfAccountCode, offsetAccount.getFinancialOffsetChartOfAccount().getChartOfAccountsCode());
-        assertEquals(OFFSET_ACCOUNT1.financialOffsetAccountNumber, offsetAccount.getFinancialOffsetAccount().getAccountNumber());
+    protected void setUp() throws Exception {
+        super.setUp();
+        service = SpringServiceLocator.getFlexibleOffsetAccountService();
     }
 
-    public void testGetByPrimaryId_validDisabled() throws Exception {
-        TestUtils.setSystemParameter(OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, "N");
-        assertNull(SpringContext.getBean(FlexibleOffsetAccountService.class).getByPrimaryIdIfEnabled(OFFSET_ACCOUNT1.chartOfAccountsCode, OFFSET_ACCOUNT1.accountNumber, OFFSET_ACCOUNT1.financialOffsetAccountNumber));
+    public void testGetByPrimaryId_valid() throws NoSuchMethodException, InvocationTargetException {
+        service.setKualiConfigurationService(createMockConfigurationService(true));
+        OffsetAccount offsetAccount = service.getByPrimaryIdIfEnabled(getFixtureString("blChartOfAccounts"), getFixtureString("blFlexAccountNumber"), getFixtureString("tofOffsetObjectCode"));
+        assertSparselyEqualFixture("offsetAccount1", offsetAccount);
+        assertEquals(getFixtureString("blChartOfAccounts"), offsetAccount.getChart().getChartOfAccountsCode());
+        assertEquals(getFixtureString("blFlexAccountNumber"), offsetAccount.getAccount().getAccountNumber());
+        assertEquals(getFixtureString("uaChartOfAccounts"), offsetAccount.getFinancialOffsetChartOfAccount().getChartOfAccountsCode());
+        assertEquals(getFixtureString("uaAccountNumber1"), offsetAccount.getFinancialOffsetAccount().getAccountNumber());
     }
 
-    public void testGetByPrimaryId_invalid() throws Exception {
-        TestUtils.setSystemParameter(OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, "N");
-        assertNull(SpringContext.getBean(FlexibleOffsetAccountService.class).getByPrimaryIdIfEnabled("XX", "XX", "XX"));
+    public void testGetByPrimaryId_validDisabled() throws NoSuchMethodException, InvocationTargetException {
+        service.setKualiConfigurationService(createMockConfigurationService(false));
+        assertNull(service.getByPrimaryIdIfEnabled(getFixtureString("blChartOfAccounts"), getFixtureString("blFlexAccountNumber"), getFixtureString("tofOffsetObjectCode")));
+    }
+
+    public void testGetByPrimaryId_invalid() {
+        service.setKualiConfigurationService(createMockConfigurationService(true));
+        assertNull(service.getByPrimaryIdIfEnabled("XX", "XX", "XX"));
+    }
+
+    public void testSingletonService() {
+        assertSame(service, SpringServiceLocator.getFlexibleOffsetAccountService());
+        SpringServiceLocator.getFlexibleOffsetAccountService().setKualiConfigurationService(createMockConfigurationService(true));
+        assertEquals(true, SpringServiceLocator.getFlexibleOffsetAccountService().getEnabled());
+        SpringServiceLocator.getFlexibleOffsetAccountService().setKualiConfigurationService(createMockConfigurationService(false));
+        assertEquals(false, SpringServiceLocator.getFlexibleOffsetAccountService().getEnabled());
     }
 
     /**
-     * Integration test to the database parameter table (not the mock configuration service).
+     * Integration test to the database parameter table.
      */
     public void testGetEnabled() {
         // This tests that no RuntimeException is thrown because the parameter is missing from the database
         // or contains a value other than Y or N.
-        SpringContext.getBean(FlexibleOffsetAccountService.class).getEnabled();
+        service.getEnabled();
+    }
+
+    private String getFixtureString(String fixtureName) {
+        return (String) getFixtureEntry(fixtureName).createObject();
     }
 }

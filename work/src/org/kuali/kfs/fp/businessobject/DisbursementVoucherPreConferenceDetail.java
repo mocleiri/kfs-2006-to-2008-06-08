@@ -1,17 +1,26 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
@@ -21,17 +30,16 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
- * This class is used to represent a disbursement voucher pre-conference detail.
+ * @author Kuali Financial Transactions Team ()
  */
-public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessObjectBase {
+public class DisbursementVoucherPreConferenceDetail extends BusinessObjectBase {
 
-    private String documentNumber;
+    private String financialDocumentNumber;
     private String dvConferenceDestinationName;
     private Date disbVchrConferenceStartDate;
     private Date disbVchrConferenceEndDate;
@@ -49,12 +57,13 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
+     * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
 
@@ -77,18 +86,20 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
      * Gets the dvConferenceDestinationName attribute.
      * 
-     * @return Returns the dvConferenceDestinationName
+     * @return - Returns the dvConferenceDestinationName
+     * 
      */
     public String getDvConferenceDestinationName() {
         return dvConferenceDestinationName;
@@ -99,6 +110,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the dvConferenceDestinationName attribute.
      * 
      * @param dvConferenceDestinationName The dvConferenceDestinationName to set.
+     * 
      */
     public void setDvConferenceDestinationName(String dvConferenceDestinationName) {
         this.dvConferenceDestinationName = dvConferenceDestinationName;
@@ -107,7 +119,8 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
     /**
      * Gets the disbVchrConferenceStartDate attribute.
      * 
-     * @return Returns the disbVchrConferenceStartDate
+     * @return - Returns the disbVchrConferenceStartDate
+     * 
      */
     public Date getDisbVchrConferenceStartDate() {
         return disbVchrConferenceStartDate;
@@ -118,6 +131,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrConferenceStartDate attribute.
      * 
      * @param disbVchrConferenceStartDate The disbVchrConferenceStartDate to set.
+     * 
      */
     public void setDisbVchrConferenceStartDate(Date disbVchrConferenceStartDate) {
         this.disbVchrConferenceStartDate = disbVchrConferenceStartDate;
@@ -126,7 +140,8 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
     /**
      * Gets the disbVchrConferenceEndDate attribute.
      * 
-     * @return Returns the disbVchrConferenceEndDate
+     * @return - Returns the disbVchrConferenceEndDate
+     * 
      */
     public Date getDisbVchrConferenceEndDate() {
         return disbVchrConferenceEndDate;
@@ -137,6 +152,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrConferenceEndDate attribute.
      * 
      * @param disbVchrConferenceEndDate The disbVchrConferenceEndDate to set.
+     * 
      */
     public void setDisbVchrConferenceEndDate(Date disbVchrConferenceEndDate) {
         this.disbVchrConferenceEndDate = disbVchrConferenceEndDate;
@@ -145,7 +161,8 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
     /**
      * Gets the disbVchrConferenceTotalAmt attribute.
      * 
-     * @return Returns the disbVchrConferenceTotalAmt
+     * @return - Returns the disbVchrConferenceTotalAmt
+     * 
      */
     public KualiDecimal getDisbVchrConferenceTotalAmt() {
         KualiDecimal totalConferenceAmount = new KualiDecimal(0);
@@ -165,6 +182,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrConferenceTotalAmt attribute.
      * 
      * @param disbVchrConferenceTotalAmt The disbVchrConferenceTotalAmt to set.
+     * 
      */
     public void setDisbVchrConferenceTotalAmt(KualiDecimal disbVchrConferenceTotalAmt) {
         this.disbVchrConferenceTotalAmt = disbVchrConferenceTotalAmt;
@@ -173,7 +191,8 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
     /**
      * Gets the disbVchrExpenseCode attribute.
      * 
-     * @return Returns the disbVchrExpenseCode
+     * @return - Returns the disbVchrExpenseCode
+     * 
      */
     public String getDisbVchrExpenseCode() {
         return disbVchrExpenseCode;
@@ -184,6 +203,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      * Sets the disbVchrExpenseCode attribute.
      * 
      * @param disbVchrExpenseCode The disbVchrExpenseCode to set.
+     * 
      */
     public void setDisbVchrExpenseCode(String disbVchrExpenseCode) {
         this.disbVchrExpenseCode = disbVchrExpenseCode;
@@ -194,7 +214,7 @@ public class DisbursementVoucherPreConferenceDetail extends PersistableBusinessO
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         return m;
     }
 }
