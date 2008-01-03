@@ -25,7 +25,7 @@ import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
 
 /**
- * Labor business object for Benefits Calculation.
+ * 
  */
 public class BenefitsCalculation extends PersistableBusinessObjectBase {
 
@@ -34,6 +34,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
     private String positionBenefitTypeCode;
     private KualiPercent positionFringeBenefitPercent;
     private String positionFringeBenefitObjectCode;
+
     private ObjectCode positionFringeBenefitObject;
     private Chart chartOfAccounts;
     private BenefitsType positionBenefitType;
@@ -50,6 +51,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -59,15 +61,18 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
     }
 
+
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -77,15 +82,18 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
     }
 
+
     /**
      * Gets the positionBenefitTypeCode attribute.
      * 
      * @return Returns the positionBenefitTypeCode
+     * 
      */
     public String getPositionBenefitTypeCode() {
         return positionBenefitTypeCode;
@@ -95,15 +103,18 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the positionBenefitTypeCode attribute.
      * 
      * @param positionBenefitTypeCode The positionBenefitTypeCode to set.
+     * 
      */
     public void setPositionBenefitTypeCode(String positionBenefitTypeCode) {
         this.positionBenefitTypeCode = positionBenefitTypeCode;
     }
 
+
     /**
      * Gets the positionFringeBenefitPercent attribute.
      * 
      * @return Returns the positionFringeBenefitPercent
+     * 
      */
     public KualiPercent getPositionFringeBenefitPercent() {
         return positionFringeBenefitPercent;
@@ -113,15 +124,18 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the positionFringeBenefitPercent attribute.
      * 
      * @param positionFringeBenefitPercent The positionFringeBenefitPercent to set.
+     * 
      */
     public void setPositionFringeBenefitPercent(KualiPercent positionFringeBenefitPercent) {
         this.positionFringeBenefitPercent = positionFringeBenefitPercent;
     }
 
+
     /**
      * Gets the positionFringeBenefitObjectCode attribute.
      * 
      * @return Returns the positionFringeBenefitObjectCode
+     * 
      */
     public String getPositionFringeBenefitObjectCode() {
         return positionFringeBenefitObjectCode;
@@ -131,15 +145,18 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Sets the positionFringeBenefitObjectCode attribute.
      * 
      * @param positionFringeBenefitObjectCode The positionFringeBenefitObjectCode to set.
+     * 
      */
     public void setPositionFringeBenefitObjectCode(String positionFringeBenefitObjectCode) {
         this.positionFringeBenefitObjectCode = positionFringeBenefitObjectCode;
     }
 
+
     /**
      * Gets the positionFringeBenefitObject attribute.
      * 
      * @return Returns the positionFringeBenefitObject
+     * 
      */
     public ObjectCode getPositionFringeBenefitObject() {
         return positionFringeBenefitObject;
@@ -159,6 +176,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -221,7 +239,7 @@ public class BenefitsCalculation extends PersistableBusinessObjectBase {
         }
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("positionBenefitTypeCode", this.positionBenefitTypeCode);
-
         return m;
     }
+
 }

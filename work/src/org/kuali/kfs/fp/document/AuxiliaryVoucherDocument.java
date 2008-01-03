@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,26 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.kfs.KFSConstants.EMPTY_STRING;
-import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
-import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
-import static org.kuali.kfs.KFSConstants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE;
-import static org.kuali.kfs.KFSConstants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE;
-import static org.kuali.kfs.KFSConstants.AuxiliaryVoucher.RECODE_DOC_TYPE;
+import static org.kuali.Constants.EMPTY_STRING;
+import static org.kuali.Constants.GL_CREDIT_CODE;
+import static org.kuali.Constants.GL_DEBIT_CODE;
+import static org.kuali.Constants.AuxiliaryVoucher.ACCRUAL_DOC_TYPE;
+import static org.kuali.Constants.AuxiliaryVoucher.ADJUSTMENT_DOC_TYPE;
+import static org.kuali.Constants.AuxiliaryVoucher.RECODE_DOC_TYPE;
 
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
-import org.kuali.core.service.DateTimeService;
+import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLineBase;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLineBase;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.AuxiliaryVoucherAccountingLineParser;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -46,22 +42,24 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * This is the business object that represents the AuxiliaryVoucherDocument in Kuali. This is a transactional document that will
  * eventually post transactions to the G/L. It integrates with workflow and also contains two groupings of accounting lines: Expense
  * and target. Expense is the expense and target is the income lines.
+ * 
+ * 
  */
-public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements VoucherDocument, Copyable, Correctable, AmountTotaling {
+public class AuxiliaryVoucherDocument extends TransactionalDocumentBase implements VoucherDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AuxiliaryVoucherDocument.class);
 
     private String typeCode = ADJUSTMENT_DOC_TYPE;
     private java.sql.Date reversalDate;
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#documentPerformsSufficientFundsCheck()
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#documentPerformsSufficientFundsCheck()
      */
     @Override
     public boolean documentPerformsSufficientFundsCheck() {
         if (isRecodeType()) {
             return super.documentPerformsSufficientFundsCheck();
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -148,7 +146,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(KFSConstants.GL_DEBIT_CODE)) {
+            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(Constants.GL_DEBIT_CODE)) {
                 debitTotal = debitTotal.add(al.getAmount());
             }
         }
@@ -167,7 +165,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(KFSConstants.GL_CREDIT_CODE)) {
+            if (StringUtils.isNotBlank(al.getDebitCreditCode()) && al.getDebitCreditCode().equals(Constants.GL_CREDIT_CODE)) {
                 creditTotal = creditTotal.add(al.getAmount());
             }
         }
@@ -175,14 +173,16 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * Same as default implementation but uses debit / credit totals instead. Meaning it returns either credit or if 0, debit.
+     * This method calculates the difference between the credit and debit total.
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
      * @return KualiDecimal
      */
-    @Override
-    public KualiDecimal getTotalDollarAmount() {
-        return getCreditTotal().equals(KualiDecimal.ZERO) ? getDebitTotal() : getCreditTotal();
+    public KualiDecimal getTotal() {
+        KualiDecimal total = new KualiDecimal(0);
+
+        total = getCreditTotal().subtract(getDebitTotal());
+
+        return total;
     }
 
     /**
@@ -195,7 +195,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
         super.handleRouteStatusChange();
 
         if (this.getDocumentHeader().getWorkflowDocument().stateIsProcessed()) { // only do this stuff if the document has been
-            // processed and approved
+                                                                                    // processed and approved
             // update the reversal data accoringdingly
             updateReversalDate();
         }
@@ -207,7 +207,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
      */
     private void updateReversalDate() {
         if (isAccrualType() || isRecodeType()) {
-            java.sql.Date today = SpringContext.getBean(DateTimeService.class).getCurrentSqlDateMidnight();
+            java.sql.Date today = SpringServiceLocator.getDateTimeService().getCurrentSqlDateMidnight();
             if (getReversalDate().before(today)) {
                 // set the reversal date on the document
                 setReversalDate(today);
@@ -224,7 +224,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -232,7 +232,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
@@ -240,44 +240,71 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#toErrorCorrection()
+     * Checks for a reason why this document should not be copied or error corrected. This is overriden to remove posting year check
+     * per KULEDOCS-1543.
+     * 
+     * @param actionGerund describes the action, "copying" or "error-correction"
+     * @param ddAllows whether the DataDictionary allows this kind of copying for this document
+     * @return a reason not to copy this document, or null if there is no reason
      */
     @Override
-    public void toErrorCorrection() throws WorkflowException {
-        super.toErrorCorrection();
-        processAuxiliaryVoucherErrorCorrections();
+    protected String getNullOrReasonNotToCopy(String actionGerund, boolean ddAllows) {
+
+        if (!ddAllows) {
+            return this.getClass().getName() + " does not support document-level " + actionGerund;
+        }
+
+        // posting year not checked per KULEDOCS-1543.
+
+        return null; // no reason not to copy
+    }
+    /**
+     * Overrides to call super, and then makes sure this is an error correction. If it is an error correction, it calls the AV
+     * specific error correction helper method.
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentBase#performConversion(int)
+     */
+    @Override
+    protected void performConversion(int operation) throws WorkflowException {
+        super.performConversion(operation);
+
+        // process special for error corrections
+        if (ERROR_CORRECTING == operation) {
+            processAuxiliaryVoucherErrorCorrections();
+        }
     }
 
     /**
-     * KULEDOCS-1700 This method iterates over each source line and flip the sign on the amount to nullify the super's effect, then
-     * flip the debit/credit code b/c an error corrected AV flips the debit/credit code.
+     * KULEDOCS-1700
+     * This method iterates over each source line and flip the sign on the amount to
+     * nullify the super's effect, then flip the debit/credit code b/c an error corrected AV flips the debit/credit code.
      */
     private void processAuxiliaryVoucherErrorCorrections() {
         Iterator i = getSourceAccountingLines().iterator();
 
-        int index = 0;
-        while (i.hasNext()) {
-            SourceAccountingLine sLine = (SourceAccountingLine) i.next();
+            int index = 0;
+            while (i.hasNext()) {
+                SourceAccountingLine sLine = (SourceAccountingLine) i.next();
 
-            String debitCreditCode = sLine.getDebitCreditCode();
+                String debitCreditCode = sLine.getDebitCreditCode();
 
-            if (StringUtils.isNotBlank(debitCreditCode)) {
-                // negate the amount to to nullify the effects of the super, b/c super flipped it the first time through
-                sLine.setAmount(sLine.getAmount().negated()); // offsets the effect the super
+                if (StringUtils.isNotBlank(debitCreditCode)) {
+                    // negate the amount to to nullify the effects of the super, b/c super flipped it the first time through
+                    sLine.setAmount(sLine.getAmount().negated()); // offsets the effect the super
 
-                // now just flip the debit/credit code
-                if (GL_DEBIT_CODE.equals(debitCreditCode)) {
-                    sLine.setDebitCreditCode(GL_CREDIT_CODE);
+                    // now just flip the debit/credit code
+                    if (GL_DEBIT_CODE.equals(debitCreditCode)) {
+                        sLine.setDebitCreditCode(GL_CREDIT_CODE);
+                    }
+                    else if (GL_CREDIT_CODE.equals(debitCreditCode)) {
+                        sLine.setDebitCreditCode(GL_DEBIT_CODE);
+                    }
+                    else {
+                        throw new IllegalStateException("SourceAccountingLine at index " + index + " does not have a debit/credit " + "code associated with it.  This should never have occured. Please contact your system administrator.");
+
+                    }
+                    index++;
                 }
-                else if (GL_CREDIT_CODE.equals(debitCreditCode)) {
-                    sLine.setDebitCreditCode(GL_DEBIT_CODE);
-                }
-                else {
-                    throw new IllegalStateException("SourceAccountingLine at index " + index + " does not have a debit/credit " + "code associated with it.  This should never have occured. Please contact your system administrator.");
-
-                }
-                index++;
             }
-        }
     }
 }

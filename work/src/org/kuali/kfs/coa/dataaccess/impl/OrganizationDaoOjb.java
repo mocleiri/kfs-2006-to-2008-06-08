@@ -24,7 +24,6 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.chart.bo.Account;
@@ -37,8 +36,10 @@ import org.kuali.module.chart.dao.OrganizationDao;
 public class OrganizationDaoOjb extends PlatformAwareDaoBaseOjb implements OrganizationDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OrganizationDaoOjb.class);
 
-    /**
-     * @see org.kuali.module.chart.dao.OrganizationDao#getByPrimaryId(java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.dao.OrganizationDao#getByPrimaryId(java.lang.String, java.lang.String)
      */
     public Org getByPrimaryId(String chartOfAccountsCode, String organizationCode) {
         Criteria criteria = new Criteria();
@@ -48,14 +49,17 @@ public class OrganizationDaoOjb extends PlatformAwareDaoBaseOjb implements Organ
         return (Org) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(Org.class, criteria));
     }
 
-    /**
-     * @see org.kuali.module.chart.dao.OrganizationDao#save(org.kuali.module.chart.bo.Org)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.dao.OrganizationDao#save(org.kuali.bo.Org)
      */
     public void save(Org organization) {
         getPersistenceBrokerTemplate().store(organization);
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.dao.OrganizationDao#getActiveAccountsByOrg(java.lang.String, java.lang.String)
      */
     public List getActiveAccountsByOrg(String chartOfAccountsCode, String organizationCode) {
@@ -76,6 +80,7 @@ public class OrganizationDaoOjb extends PlatformAwareDaoBaseOjb implements Organ
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.dao.OrganizationDao#getActiveChildOrgs(java.lang.String, java.lang.String)
      */
     public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode) {
@@ -96,6 +101,7 @@ public class OrganizationDaoOjb extends PlatformAwareDaoBaseOjb implements Organ
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.dao.OrganizationDao#getActiveOrgsByType(java.lang.String)
      */
     public List<Org> getActiveOrgsByType(String organizationTypeCode) {
@@ -105,35 +111,43 @@ public class OrganizationDaoOjb extends PlatformAwareDaoBaseOjb implements Organ
         criteria.addEqualTo("organizationTypeCode", organizationTypeCode);
         criteria.addEqualTo("organizationActiveIndicator", Boolean.TRUE);
 
-        orgs = (List<Org>) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Org.class, criteria));
+        orgs = (List<Org>)getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(Org.class, criteria));
 
         if (orgs.isEmpty() || orgs.size() == 0) {
             return Collections.EMPTY_LIST;
         }
         return orgs;
     }
-
     /**
-     * we insist that the root organization be active
      * 
-     * @see org.kuali.module.chart.dao.OrganizationDao#getRootOrganizationCode(java.lang.String, java.lang.String)
+     *  get the root organization based on the root chart and the organization type
+     *  we insist that the root organization be active
      */
-    public String[] getRootOrganizationCode(String rootChart, String selfReportsOrgTypeCode) {
-        String[] returnValues = { null, null };
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, rootChart);
-        criteria.addEqualTo(KFSPropertyConstants.ORGANIZATION_TYPE_CODE, selfReportsOrgTypeCode);
-        // the root organization must be active
-        criteria.addEqualTo(KFSPropertyConstants.ORGANIZATION_ACTIVE_INDICATOR, KFSConstants.ACTIVE_INDICATOR);
-        String[] attributeList = { KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, KFSPropertyConstants.ORGANIZATION_CODE };
-        ReportQueryByCriteria rptQuery = new ReportQueryByCriteria(Org.class, attributeList, criteria);
-        Iterator Results = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(rptQuery);
-        if (Results.hasNext()) {
-            Object[] returnList = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(Results);
-            returnValues[0] = (String) returnList[0];
-            returnValues[1] = (String) returnList[1];
-        }
-        return returnValues;
+    public String[] getRootOrganizationCode(String rootChart,
+                                            String selfReportsOrgTypeCode)
+    {
+       String[] returnValues = {null, null};
+       Criteria criteria = new Criteria();
+       criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,rootChart);
+       criteria.addEqualTo(KFSPropertyConstants.ORGANIZATION_TYPE_CODE,
+                                             selfReportsOrgTypeCode);
+       //  the root organization must be active
+       criteria.addEqualTo(KFSPropertyConstants.ORGANIZATION_ACTIVE_INDICATOR,
+                           KFSConstants.ACTIVE_INDICATOR);
+       String[] attributeList = {KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
+                                 KFSPropertyConstants.ORGANIZATION_CODE};
+       ReportQueryByCriteria rptQuery = new ReportQueryByCriteria(Org.class,
+                                                                  attributeList,
+                                                                  criteria);
+       Iterator Results = 
+           getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(rptQuery); 
+       if (Results.hasNext())
+       {
+           Object[] returnList = (Object[]) Results.next();
+           returnValues[0] = (String) returnList[0];
+           returnValues[1] = (String) returnList[1];
+       }
+       return returnValues;
     }
 
 }

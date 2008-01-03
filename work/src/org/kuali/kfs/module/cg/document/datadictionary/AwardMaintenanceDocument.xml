@@ -43,11 +43,11 @@
         <webScriptFile>../dwr/interface/SubcontractorService.js</webScriptFile>
 		<webScriptFile>../scripts/cg/proposalDocument.js</webScriptFile>
 
-        <label>Award</label>
+        <label>Award Maintenance Document</label>
+        <shortLabel>AwardMaintDoc</shortLabel>
 
         <summary>Award maintenance document</summary>
         <description>Document used to create or update Award objects</description>
-        <help parameterNamespace="KFS-CG" parameterDetailType="Award" parameterName="AWARD" />
 
         <lockingKeys>
             <field attributeName="proposalNumber" />

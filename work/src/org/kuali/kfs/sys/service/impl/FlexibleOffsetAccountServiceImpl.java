@@ -20,21 +20,21 @@ import java.util.HashMap;
 
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.financial.bo.OffsetAccount;
 import org.kuali.module.financial.exceptions.InvalidFlexibleOffsetException;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
-import org.kuali.module.gl.bo.FlexibleAccountUpdateable;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This is the default implementation of the FlexibleOffsetAccountService interface.
+ * This class implements FlexibleOffsetAccountService.
  */
 @Transactional
 public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountService {
@@ -44,17 +44,8 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
     private AccountService accountService;
     private ObjectCodeService objectCodeService;
     private DateTimeService dateTimeService;
-    private ParameterService parameterService;
 
     /**
-     * This method uses the parameters provided to retrieve an OffsetAccount instance if the flexible offset account flag is
-     * enabled.
-     * 
-     * @param chartOfAccountsCode The chart code used to retrieve the flexible offset account.
-     * @param accountNumber The account number of the flexible offset account being retrieved.
-     * @param financialOffsetObjectCode The offset object code used to retrieve the offset account.
-     * @return A flexible offset account based on the parameters provided, or null if offsets are not enabled.
-     * 
      * @see FlexibleOffsetAccountService#getByPrimaryIdIfEnabled
      */
     public OffsetAccount getByPrimaryIdIfEnabled(String chartOfAccountsCode, String accountNumber, String financialOffsetObjectCode) {
@@ -63,7 +54,7 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
         if (!getEnabled()) {
             return null;
         }
-        HashMap<String,Object> keys = new HashMap();
+        HashMap keys = new HashMap();
         keys.put("chartOfAccountsCode", chartOfAccountsCode);
         keys.put("accountNumber", accountNumber);
         keys.put("financialOffsetObjectCode", financialOffsetObjectCode);
@@ -71,27 +62,20 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
     }
 
     /**
-     * This method queries the parameter table to retrieve the value of the flexible offset flag and returns the resulting value.
-     * 
-     * @return True if flexible offsets are enabled, false otherwise. 
-     * 
      * @see FlexibleOffsetAccountService#getEnabled
      */
     public boolean getEnabled() {
         LOG.debug("getEnabled() started");
-        return parameterService.getIndicatorParameter(OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
+
+        // KualiConfigurationService needs to be gotten dynamically here so TransferOfFundsDocumentRuleTest can mock it.
+        return SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(KFSConstants.KFS_SYSTEM_NAMESPACE, KFSConstants.Components.OFFSET_DEFINITION, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
     }
 
     /**
-     * This method modifies the origin entry provided with values from the associated flexible offset account, which is 
-     * retrieved from the database using values provided by the origin entry.
      * 
-     * @param originEntry The origin entry to be updated with offset account details.
-     * @return False if the flexible offset flag is false, if there is no corresponding flexbile offset account, true otherwise.
-     * 
-     * @see org.kuali.module.financial.service.FlexibleOffsetAccountService#updateOffset(org.kuali.module.gl.bo.OriginEntryFull)
+     * @see org.kuali.module.financial.service.FlexibleOffsetAccountService#updateOffset(org.kuali.module.gl.bo.OriginEntry)
      */
-    public boolean updateOffset(FlexibleAccountUpdateable transaction) {
+    public boolean updateOffset(OriginEntry originEntry) {
         LOG.debug("setBusinessObjectService() started");
 
         if (!getEnabled()) {
@@ -99,16 +83,16 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
         }
         String keyOfErrorMessage = "";
 
-        Integer fiscalYear = transaction.getUniversityFiscalYear();
-        String chartOfAccountsCode = transaction.getChartOfAccountsCode();
-        String accountNumber = transaction.getAccountNumber();
+        Integer fiscalYear = originEntry.getUniversityFiscalYear();
+        String chartOfAccountsCode = originEntry.getChartOfAccountsCode();
+        String accountNumber = originEntry.getAccountNumber();
 
-        String balanceTypeCode = transaction.getFinancialBalanceTypeCode();
-        String documentTypeCode = transaction.getFinancialDocumentTypeCode();
+        String balanceTypeCode = originEntry.getFinancialBalanceTypeCode();
+        String documentTypeCode = originEntry.getFinancialDocumentTypeCode();
 
         // do nothing if there is no the offset account with the given chart of accounts code,
         // account number and offset object code in the offset table.
-        OffsetAccount flexibleOffsetAccount = getByPrimaryIdIfEnabled(chartOfAccountsCode, accountNumber, transaction.getFinancialObjectCode());
+        OffsetAccount flexibleOffsetAccount = getByPrimaryIdIfEnabled(chartOfAccountsCode, accountNumber, originEntry.getFinancialObjectCode());
         if (flexibleOffsetAccount == null) {
             return false;
         }
@@ -131,31 +115,23 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
 
         // If the chart changes, make sure the object code is still valid
         if (!chartOfAccountsCode.equals(offsetChartOfAccountsCode)) {
-            ObjectCode objectCode = objectCodeService.getByPrimaryId(fiscalYear, offsetChartOfAccountsCode, transaction.getFinancialObjectCode());
+            ObjectCode objectCode = objectCodeService.getByPrimaryId(fiscalYear, offsetChartOfAccountsCode, originEntry.getFinancialObjectCode());
             if (objectCode == null) {
-                throw new InvalidFlexibleOffsetException("Invalid Object Code for flexible offset " + fiscalYear + "-" + offsetChartOfAccountsCode + "-" + transaction.getFinancialObjectCode());
+                throw new InvalidFlexibleOffsetException("Invalid Object Code for flexible offset " + fiscalYear + "-" + offsetChartOfAccountsCode + "-" + originEntry.getFinancialObjectCode());
             }
         }
 
         // replace the chart and account of the given transaction with those of the offset account obtained above
-        transaction.setAccount(offsetAccount);
-        transaction.setAccountNumber(offsetAccountNumber);
-        transaction.setChartOfAccountsCode(offsetChartOfAccountsCode);
+        originEntry.setAccount(offsetAccount);
+        originEntry.setAccountNumber(offsetAccountNumber);
+        originEntry.setChartOfAccountsCode(offsetChartOfAccountsCode);
 
         // blank out the sub account and sub object since the account has been replaced
-        transaction.setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
-        transaction.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
+        originEntry.setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
+        originEntry.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
         return true;
     }
 
-    /**
-     * This method determines if an account has expired.  An account has expired if the expiration year of the account is 
-     * less than the run date year or if the date of expiration occurred before the run date provided.
-     * 
-     * @param account The account to be examined.
-     * @param runCalendar The date the expiration date is tested against.
-     * @return True if the account has expired, false otherwise.
-     */
     private boolean isExpired(Account account, Calendar runCalendar) {
 
         Calendar expirationDate = Calendar.getInstance();
@@ -163,49 +139,25 @@ public class FlexibleOffsetAccountServiceImpl implements FlexibleOffsetAccountSe
 
         int expirationYear = expirationDate.get(Calendar.YEAR);
         int runYear = runCalendar.get(Calendar.YEAR);
-        int expirationDay = expirationDate.get(Calendar.DAY_OF_YEAR);
-        int runDay = runCalendar.get(Calendar.DAY_OF_YEAR);
+        int expirationDoy = expirationDate.get(Calendar.DAY_OF_YEAR);
+        int runDoy = runCalendar.get(Calendar.DAY_OF_YEAR);
 
-        return (expirationYear < runYear) || (expirationYear == runYear && expirationDay < runDay);
+        return (expirationYear < runYear) || (expirationYear == runYear && expirationDoy < runDoy);
     }
 
-    /**
-     * Sets the local dateTimeService attribute.
-     * @param dateTimeService The DateTimeService instance to be set.
-     */
     public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
 
-    /**
-     * Sets the local accountService attribute.
-     * @param accountService The AccountService instance to be set.
-     */
     public void setAccountService(AccountService accountService) {
         this.accountService = accountService;
     }
 
-    /**
-     * Sets the local objectCodeService attribute.
-     * @param objectCodeService The ObjectCodeService instance to be set.
-     */
     public void setObjectCodeService(ObjectCodeService objectCodeService) {
         this.objectCodeService = objectCodeService;
     }
 
-    /**
-     * Sets the local businessObjectService attribute.
-     * @param businessObjectService The BusinessObjectService instance to be set.
-     */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
-    }
-
-    /**
-     * Sets the local parameterService attribute.
-     * @param parameterService The ParameterService instance to be set.
-     */
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
     }
 }

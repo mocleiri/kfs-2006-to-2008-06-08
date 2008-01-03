@@ -19,6 +19,7 @@ import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_ERROR;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_MAIN_POSTER_VALID;
 import static org.kuali.module.gl.bo.OriginEntrySource.LABOR_SCRUBBER_VALID;
 import static org.kuali.module.labor.LaborConstants.DestinationNames.ORIGN_ENTRY;
+import static org.kuali.module.labor.LaborConstants.ParameterGroups.POSTER;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -29,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -39,14 +40,12 @@ import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.Summary;
 import org.kuali.module.labor.LaborConstants.Poster;
-import org.kuali.module.labor.batch.LaborPosterStep;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.rules.TransactionFieldValidator;
 import org.kuali.module.labor.service.LaborOriginEntryService;
 import org.kuali.module.labor.service.LaborPosterService;
 import org.kuali.module.labor.service.LaborReportService;
 import org.kuali.module.labor.util.MessageBuilder;
-import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.util.ReportRegistry;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +65,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
     private LaborReportService laborReportService;
     private DateTimeService dateTimeService;
     private VerifyTransaction laborPosterTransactionValidator;
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
 
     private PostTransaction laborLedgerEntryPoster;
     private PostTransaction laborLedgerBalancePoster;
@@ -79,9 +78,8 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @see org.kuali.module.labor.service.LaborPosterService#postMainEntries()
      */
     public void postMainEntries() {
-        LOG.info("postMainEntries() started");
-
         Date runDate = dateTimeService.getCurrentSqlDate();
+
         OriginEntryGroup validGroup = originEntryGroupService.createGroup(runDate, LABOR_MAIN_POSTER_VALID, true, false, false);
         OriginEntryGroup invalidGroup = originEntryGroupService.createGroup(runDate, LABOR_MAIN_POSTER_ERROR, false, true, false);
 
@@ -97,15 +95,11 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @param runDate the data when the process is running
      */
     private void postLaborLedgerEntries(OriginEntryGroup validGroup, OriginEntryGroup invalidGroup, Date runDate) {
-        LOG.info("postLaborLedgerEntries() started");
-
         String reportsDirectory = ReportRegistry.getReportsDirectory();
         Map<Transaction, List<Message>> errorMap = new HashMap<Transaction, List<Message>>();
         List<Summary> reportSummary = this.buildReportSummaryForLaborLedgerPosting();
 
         Collection<OriginEntryGroup> postingGroups = originEntryGroupService.getGroupsToPost(LABOR_SCRUBBER_VALID);
-        laborReportService.generateInputSummaryReport(postingGroups, ReportRegistry.LABOR_POSTER_INPUT, reportsDirectory, runDate);
-
         int numberOfOriginEntry = laborOriginEntryService.getCountOfEntriesInGroups(postingGroups);
         int numberOfSelectedOriginEntry = 0;
 
@@ -127,6 +121,8 @@ public class LaborPosterServiceImpl implements LaborPosterService {
         Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.REPORT_ERROR, errorMap.size(), 0);
 
         laborReportService.generateStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_POSTER_STATISTICS, reportsDirectory, runDate);
+        laborReportService.generateInputSummaryReport(postingGroups, ReportRegistry.LABOR_POSTER_INPUT, reportsDirectory, runDate);
+        laborReportService.generateOutputSummaryReport(validGroup, ReportRegistry.LABOR_POSTER_OUTPUT, reportsDirectory, runDate);
         laborReportService.generateErrorTransactionListing(invalidGroup, ReportRegistry.LABOR_POSTER_ERROR, reportsDirectory, runDate);
     }
 
@@ -166,7 +162,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
             Summary.updateReportSummary(reportSummary, laborLedgerBalancePoster.getDestinationName(), operationOnLedgerBalance, STEP, 0);
         }
         catch (Exception e) {
-            LOG.error("Cannot post the input transaction: " + originEntry + "\n" + e);
+            LOG.error("Cannot post the input transaction." + e);
             return false;
         }
         return true;
@@ -206,14 +202,9 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @param postDate the data when the transaction is processes
      */
     private void postAsProcessedOriginEntry(LaborOriginEntry originEntry, OriginEntryGroup entryGroup, Date postDate) {
-        LaborOriginEntry newOriginEntry = new LaborOriginEntry();
-
-        ObjectUtil.buildObject(newOriginEntry, originEntry);
-        newOriginEntry.setEntryId(null);
-        newOriginEntry.setEntryGroupId(entryGroup.getId());
-        newOriginEntry.setTransactionPostingDate(postDate);
-
-        laborOriginEntryService.save(newOriginEntry);
+        originEntry.setEntryGroupId(entryGroup.getId());
+        originEntry.setTransactionPostingDate(postDate);
+        laborOriginEntryService.save(originEntry);
     }
 
     /**
@@ -243,20 +234,19 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * @param runDate the data when the process is running
      */
     private void postLaborGLEntries(OriginEntryGroup validGroup, Date runDate) {
-        LOG.info("postLaborGLEntries() started");
-
         String reportsDirectory = ReportRegistry.getReportsDirectory();
         List<Summary> reportSummary = this.buildReportSummaryForLaborGLPosting();
         Map<Transaction, List<Message>> errorMap = new HashMap<Transaction, List<Message>>();
 
         Collection<LaborOriginEntry> entries = laborOriginEntryService.getConsolidatedEntryCollectionByGroup(validGroup);
-        int numberOfOriginEntries = laborOriginEntryService.getCountOfEntriesInSingleGroup(validGroup);
+        int numberOfOriginEntry = entries.size();
         int numberOfSelectedOriginEntry = 0;
 
         for (LaborOriginEntry originEntry : entries) {
 
             List<Message> errors = this.isPostableForLaborGLEntry(originEntry);
             if (!errors.isEmpty()) {
+                errorMap.put(originEntry, errors);
                 continue;
             }
             String operationType = laborGLLedgerEntryPoster.post(originEntry, 0, runDate);
@@ -264,7 +254,7 @@ public class LaborPosterServiceImpl implements LaborPosterService {
 
             numberOfSelectedOriginEntry++;
         }
-        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.READ, numberOfOriginEntries, 0);
+        Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.READ, numberOfOriginEntry, 0);
         Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.SELECT, numberOfSelectedOriginEntry, 0);
         Summary.updateReportSummary(reportSummary, ORIGN_ENTRY, KFSConstants.OperationType.REPORT_ERROR, errorMap.size(), 0);
         laborReportService.generateStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_POSTER_GL_SUMMARY, reportsDirectory, runDate);
@@ -314,19 +304,18 @@ public class LaborPosterServiceImpl implements LaborPosterService {
 
         String destination = laborGLLedgerEntryPoster.getDestinationName();
         reportSummary.add(new Summary(reportSummary.size() + LINE_INTERVAL, "", 0));
-        Summary.updateReportSummary(reportSummary, destination, KFSConstants.OperationType.INSERT, 0, reportSummary.size() + LINE_INTERVAL);
+        reportSummary.addAll(Summary.buildDefualtReportSummary(destination, reportSummary.size() + LINE_INTERVAL));
 
         return reportSummary;
     }
-
 
     /**
      * Get a set of the balance type codes that are bypassed by Labor Poster
      * 
      * @return a set of the balance type codes that are bypassed by Labor Poster
      */
-    public List<String> getBalanceTypesNotProcessed() {
-        return parameterService.getParameterValues(LaborPosterStep.class, Poster.BALANCE_TYPES_NOT_PROCESSED);
+    public String[] getBalanceTypesNotProcessed() {
+        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.BALANCE_TYPES_NOT_PROCESSED);
     }
 
     /**
@@ -334,8 +323,8 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * 
      * @return a set of the object codes that are bypassed by Labor Poster
      */
-    public List<String> getObjectsNotProcessed() {
-        return parameterService.getParameterValues(LaborPosterStep.class, Poster.OBJECT_CODES_NOT_PROCESSED);
+    public String[] getObjectsNotProcessed() {
+        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.OBJECT_CODES_NOT_PROCESSED);
     }
 
     /**
@@ -343,8 +332,8 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      * 
      * @return a set of the fiscal period codes that are bypassed by Labor Poster
      */
-    public List<String> getPeriodCodesNotProcessed() {
-        return parameterService.getParameterValues(LaborPosterStep.class, Poster.PERIOD_CODES_NOT_PROCESSED);
+    public String[] getPeriodCodesNotProcessed() {
+        return kualiConfigurationService.getApplicationParameterValues(POSTER, Poster.PERIOD_CODES_NOT_PROCESSED);
     }
 
     /**
@@ -356,6 +345,14 @@ public class LaborPosterServiceImpl implements LaborPosterService {
         this.dateTimeService = dateTimeService;
     }
 
+    /**
+     * Sets the kualiConfigurationService attribute value.
+     * 
+     * @param kualiConfigurationService The kualiConfigurationService to set.
+     */
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
+    }
 
     /**
      * Sets the laborLedgerBalancePoster attribute value.
@@ -418,9 +415,5 @@ public class LaborPosterServiceImpl implements LaborPosterService {
      */
     public void setLaborPosterTransactionValidator(VerifyTransaction laborPosterTransactionValidator) {
         this.laborPosterTransactionValidator = laborPosterTransactionValidator;
-    }
-
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
     }
 }

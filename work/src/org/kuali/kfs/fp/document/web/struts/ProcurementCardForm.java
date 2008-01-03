@@ -16,6 +16,7 @@
 package org.kuali.module.financial.web.struts.form;
 
 import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.DISPUTE_URL_PARM_NM;
+import static org.kuali.module.financial.rules.ProcurementCardDocumentRuleConstants.PCARD_DOCUMENT_PARAMETERS_SEC_GROUP;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,8 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.TypedArrayList;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.module.financial.bo.ProcurementCardTargetAccountingLine;
 import org.kuali.module.financial.document.ProcurementCardDocument;
@@ -91,7 +91,7 @@ public class ProcurementCardForm extends KualiAccountingDocumentFormBase {
      * @return The retreived APC string used for the dispute url.
      */
     public String getDisputeURL() {
-        return SpringContext.getBean(ParameterService.class).getParameterValue(ProcurementCardDocument.class, DISPUTE_URL_PARM_NM);
+        return SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(PCARD_DOCUMENT_PARAMETERS_SEC_GROUP, DISPUTE_URL_PARM_NM);
     }
 
 
