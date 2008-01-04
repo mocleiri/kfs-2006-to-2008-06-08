@@ -109,7 +109,6 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CRDT_MEMO_STAT_DESC" required="true" size="45" type="VARCHAR"/>
-        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="AP_CRDT_MEMO_STAT_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -499,7 +498,6 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PMT_RQST_STAT_DESC" required="true" size="45" type="VARCHAR"/>
-        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="AP_PMT_RQST_STAT_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -12971,7 +12969,6 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PO_STAT_DESC" required="true" size="45" type="VARCHAR"/>
-        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="PUR_PO_STAT_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -13392,7 +13389,6 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="REQS_STAT_DESC" required="true" size="45" type="VARCHAR"/>
-        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="PUR_REQS_STAT_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -14542,6 +14538,7 @@
     <sequence name="CM_ITM_LOC_ID" nextval="1002"/>
     <sequence name="CM_PMT_CHG_ID" nextval="1002"/>
     <sequence name="CM_SYS_ID" nextval="1002"/>
+    <sequence name="CPTLAST_NBR_SEQ" nextval="2000"/>
     <sequence name="CRDT_MEMO_ACCT_ID" nextval="1002"/>
     <sequence name="CRDT_MEMO_ID" nextval="1002"/>
     <sequence name="CRDT_MEMO_ITM_ID" nextval="1002"/>
@@ -14605,7 +14602,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317480"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317500"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -14613,7 +14610,7 @@
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12776"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12796"/>
     <sequence name="SEQ_RTE_NODE" nextval="563357909"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2020"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
