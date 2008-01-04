@@ -51,6 +51,7 @@ CREATE TABLE CM_CPTLAST_T(
         AST_IUPD_CASE_NBR              VARCHAR2(14),
         AST_INVN_SCAN_CD               VARCHAR2(1),
         AST_SIG_CD                     VARCHAR2(1),
+        CPTL_AST_IN_SRVC_DT            DATE,
      CONSTRAINT CM_CPTLAST_TP1 PRIMARY KEY (
         CPTLAST_NBR),
      CONSTRAINT CM_CPTLAST_TC0 UNIQUE (OBJ_ID)
