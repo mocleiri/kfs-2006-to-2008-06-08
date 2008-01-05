@@ -4014,6 +4014,7 @@
         <column name="AST_IUPD_CASE_NBR" size="14" type="VARCHAR"/>
         <column name="AST_INVN_SCAN_CD" size="1" type="VARCHAR"/>
         <column name="AST_SIG_CD" size="1" type="VARCHAR"/>
+        <column name="CPTL_AST_IN_SRVC_DT" type="DATE"/>
         <foreign-key foreignTable="SH_ROOM_T" name="CM_CPTLAST_TR5">
             <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
             <reference foreign="BLDG_CD" local="BLDG_CD"/>
