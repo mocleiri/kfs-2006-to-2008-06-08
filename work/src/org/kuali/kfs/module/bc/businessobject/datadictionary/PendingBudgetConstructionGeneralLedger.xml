@@ -1,52 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.budget.bo.PendingBudgetConstructionGeneralLedger">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Pending Budget Construction General Ledger Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountLineAnnualBalanceAmount" />
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialBalanceTypeCode" />
                 <field attributeName="financialBeginningBalanceLineAmount" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
                 <field attributeName="subAccountNumber" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Pending Budget Construction General Ledger Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.PendingBudgetConstructionGeneralLedger">Create New</a>]]></menubar>
+
             <instructions>Look up a Pending Budget Construction General Ledger</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="documentNumber" />
+                    <sortAttribute attributeName="financialDocumentNumber" />
                 </sortAttributes>
             </defaultSort>
 
@@ -56,7 +43,7 @@
                 <lookupField attributeName="chartOfAccountsCode" required="false" />
                 <lookupField attributeName="financialBalanceTypeCode" required="false" />
                 <lookupField attributeName="financialBeginningBalanceLineAmount" required="false" />
-                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="financialDocumentNumber" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialObjectTypeCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
@@ -70,7 +57,7 @@
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="financialBalanceTypeCode" />
                 <field attributeName="financialBeginningBalanceLineAmount" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
@@ -81,13 +68,12 @@
 
         <attributes>
 
-            <attribute name="accountLineAnnualBalanceAmount" forceUppercase="false">
+            <attribute name="accountLineAnnualBalanceAmount" forceUppercase="true">
                 <label>Account Line Annual Balance Amount</label>
-                <shortLabel>Requested</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="21" />
@@ -99,7 +85,7 @@
 
             <attribute name="accountNumber" forceUppercase="true">
                 <label>Account Number</label>
-                <shortLabel>Account</shortLabel>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>7</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -114,7 +100,7 @@
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
                 <label>Chart Of Accounts Code</label>
-                <shortLabel>Chart</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -129,7 +115,7 @@
 
             <attribute name="financialBalanceTypeCode" forceUppercase="true">
                 <label>Financial Balance Type Code</label>
-                <shortLabel>Bal.Type</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -142,9 +128,9 @@
                 <description>financialBalanceTypeCode description...</description>
 			</attribute>
 
-            <attribute name="financialBeginningBalanceLineAmount" forceUppercase="false">
+            <attribute name="financialBeginningBalanceLineAmount" forceUppercase="true">
                 <label>Financial Beginning Balance Line Amount</label>
-                <shortLabel>Base Budget</shortLabel>
+                <shortLabel>Amount</shortLabel>
 
                 <maxLength>19</maxLength>
                 <validationPattern><floatingPoint /></validationPattern>
@@ -157,23 +143,9 @@
                 <description>financialBeginningBalanceLineAmount description...</description>
 			</attribute>
 
-            <attribute name="percentChange" forceUppercase="false">
-                <label>Percent Change</label>
-                <shortLabel>% Change</shortLabel>
-
-                <maxLength>6</maxLength>
-
-                <control>
-                    <text size="8" />
-                </control>
-
-                <summary>percentChange</summary>
-                <description>percentChange description...</description>
-			</attribute>
-
-            <attribute name="documentNumber" forceUppercase="true">
-                <label>Document Number</label>
-                <shortLabel>Doc.Nbr</shortLabel>
+            <attribute name="financialDocumentNumber" forceUppercase="true">
+                <label>Financial Document Number</label>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -182,17 +154,16 @@
                     <text size="16" />
                 </control>
 
-                <summary>documentNumber</summary>
-                <description>documentNumber description...</description>
+                <summary>financialDocumentNumber</summary>
+                <description>financialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="financialObjectCode" forceUppercase="true">
                 <label>Financial Object Code</label>
-                <shortLabel>Object</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
-                <required>true</required>
 
                 <control>
                     <text size="6" />
@@ -204,7 +175,7 @@
 
             <attribute name="financialObjectTypeCode" forceUppercase="true">
                 <label>Financial Object Type Code</label>
-                <shortLabel>Obj.Type</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -219,7 +190,7 @@
 
             <attribute name="financialSubObjectCode" forceUppercase="true">
                 <label>Financial Sub Object Code</label>
-                <shortLabel>SubObject</shortLabel>
+                <shortLabel>Code</shortLabel>
 
                 <maxLength>3</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -234,7 +205,7 @@
 
             <attribute name="subAccountNumber" forceUppercase="true">
                 <label>Sub Account Number</label>
-                <shortLabel>SubAccount</shortLabel>
+                <shortLabel>Number</shortLabel>
 
                 <maxLength>5</maxLength>
                 <validationPattern><anyCharacter /></validationPattern>
@@ -247,9 +218,9 @@
                 <description>subAccountNumber description...</description>
 			</attribute>
 
-            <attribute name="universityFiscalYear" forceUppercase="false">
+            <attribute name="universityFiscalYear" forceUppercase="true">
                 <label>University Fiscal Year</label>
-                <shortLabel>FY</shortLabel>
+                <shortLabel>Year</shortLabel>
 
                 <maxLength>4</maxLength>
                 <validationPattern><numeric /></validationPattern>

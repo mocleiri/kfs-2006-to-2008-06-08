@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package org.kuali.kfs.exceptions;
  * this class represents an exception that is thrown when a piece of the <code>AccountingLineParser</code> fails
  * 
  * @see org.kuali.core.bo.AccountingLineParser
+ * 
+ * 
  */
 public class AccountingLineParserException extends RuntimeException {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.kuali.kfs.bo;
 import java.io.InputStream;
 import java.util.List;
 
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.kfs.document.AccountingDocument;
 
 /**
@@ -25,16 +26,19 @@ import org.kuali.kfs.document.AccountingDocument;
  */
 public interface AccountingLineParser {
     /**
+     * 
      * @return <code>SourceAccountingLine</code> attribute format
      */
     public String[] getSourceAccountingLineFormat();
 
     /**
+     * 
      * @return <code>TargetAccountingLine</code> attribute format
      */
     public String[] getTargetAccountingLineFormat();
 
     /**
+     * 
      * @param accountingLineClass
      * @return String representation of the <code>String[]</code> attribute format with each attribute seperated by a comma.
      */

@@ -1,29 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.ShipmentReceiving">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Shipment Receiving Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="carrierCode" />
                 <field attributeName="deliveryBuildingCode" />
                 <field attributeName="deliveryBuildingLine1Address" />
@@ -54,11 +40,13 @@
                 <field attributeName="vendorPostalCode" />
                 <field attributeName="vendorShippingPaymentTermsCode" />
                 <field attributeName="vendorStateCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Shipment Receiving Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.ShipmentReceiving">Create New</a>]]></menubar>
 
             <instructions>Lookup an Shipment Receiving</instructions>
 
@@ -148,6 +136,8 @@
                     <text size="6" />
                 </control>
 
+                <summary>carrierCode</summary>
+                <description>carrierCode description...</description>
 			</attribute>
 
             <attribute name="deliveryBuildingCode" forceUppercase="true">
@@ -161,6 +151,8 @@
                     <text size="6" />
                 </control>
 
+                <summary>deliveryBuildingCode</summary>
+                <description>deliveryBuildingCode description...</description>
 			</attribute>
 
             <attribute name="deliveryBuildingLine1Address" forceUppercase="true">
@@ -174,6 +166,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>deliveryBuildingLine1Address</summary>
+                <description>deliveryBuildingLine1Address description...</description>
 			</attribute>
 
             <attribute name="deliveryBuildingLine2Address" forceUppercase="true">
@@ -187,6 +181,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>deliveryBuildingLine2Address</summary>
+                <description>deliveryBuildingLine2Address description...</description>
 			</attribute>
 
             <attribute name="deliveryBuildingName" forceUppercase="true">
@@ -200,6 +196,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>deliveryBuildingName</summary>
+                <description>deliveryBuildingName description...</description>
 			</attribute>
 
             <attribute name="deliveryBuildingRoomNumber" forceUppercase="true">
@@ -213,6 +211,8 @@
                     <text size="10" />
                 </control>
 
+                <summary>deliveryBuildingRoomNumber</summary>
+                <description>deliveryBuildingRoomNumber description...</description>
 			</attribute>
 
             <attribute name="deliveryCampusCode" forceUppercase="true">
@@ -226,6 +226,8 @@
                     <text size="4" />
                 </control>
 
+                <summary>deliveryCampusCode</summary>
+                <description>deliveryCampusCode description...</description>
 			</attribute>
 
             <attribute name="deliveryCityName" forceUppercase="true">
@@ -239,6 +241,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>deliveryCityName</summary>
+                <description>deliveryCityName description...</description>
 			</attribute>
 
             <attribute name="deliveryCountryCode" forceUppercase="true">
@@ -252,6 +256,8 @@
                     <text size="4" />
                 </control>
 
+                <summary>deliveryCountryCode</summary>
+                <description>deliveryCountryCode description...</description>
 			</attribute>
 
             <attribute name="deliveryInstructionText" forceUppercase="true">
@@ -265,6 +271,8 @@
                     <textarea rows="5" cols="80"/>
                 </control>
 
+                <summary>deliveryInstructionText</summary>
+                <description>deliveryInstructionText description...</description>
 			</attribute>
 
             <attribute name="deliveryPostalCode" forceUppercase="true">
@@ -278,6 +286,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>deliveryPostalCode</summary>
+                <description>deliveryPostalCode description...</description>
 			</attribute>
 
             <attribute name="deliveryRequiredDate" forceUppercase="true">
@@ -291,6 +301,8 @@
                     <text size="9" />
                 </control>
 
+                <summary>deliveryRequiredDate</summary>
+                <description>deliveryRequiredDate description...</description>
 			</attribute>
 
             <attribute name="deliveryStateCode" forceUppercase="true">
@@ -304,6 +316,8 @@
                     <text size="4" />
                 </control>
 
+                <summary>deliveryStateCode</summary>
+                <description>deliveryStateCode description...</description>
 			</attribute>
 
             <attribute name="deliveryToEmailAddress" forceUppercase="true">
@@ -317,6 +331,8 @@
                     <text size="102" />
                 </control>
 
+                <summary>deliveryToEmailAddress</summary>
+                <description>deliveryToEmailAddress description...</description>
 			</attribute>
 
             <attribute name="deliveryToName" forceUppercase="true">
@@ -330,6 +346,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>deliveryToName</summary>
+                <description>deliveryToName description...</description>
 			</attribute>
 
             <attribute name="deliveryToPhoneNumber" forceUppercase="true">
@@ -343,6 +361,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>deliveryToPhoneNumber</summary>
+                <description>deliveryToPhoneNumber description...</description>
 			</attribute>
 
             <attribute name="purchaseOrderGeneralDescription" forceUppercase="true">
@@ -356,6 +376,8 @@
                     <textarea rows="5" cols="80"/>
                 </control>
 
+                <summary>purchaseOrderGeneralDescription</summary>
+                <description>purchaseOrderGeneralDescription description...</description>
 			</attribute>
 
             <attribute name="purchaseOrderIdentifier" forceUppercase="true">
@@ -369,6 +391,8 @@
                     <text size="11" />
                 </control>
 
+                <summary>purchaseOrderIdentifier</summary>
+                <description>purchaseOrderIdentifier description...</description>
 			</attribute>
 
             <attribute name="shipmentReceivedDate" forceUppercase="true">
@@ -382,6 +406,8 @@
                     <text size="9" />
                 </control>
 
+                <summary>shipmentReceivedDate</summary>
+                <description>shipmentReceivedDate description...</description>
 			</attribute>
 
             <attribute name="shipmentReceivingIdentifier" forceUppercase="true">
@@ -395,6 +421,8 @@
                     <text size="11" />
                 </control>
 
+                <summary>shipmentReceivingIdentifier</summary>
+                <description>shipmentReceivingIdentifier description...</description>
 			</attribute>
 
             <attribute name="shipmentReceivingNoteText" forceUppercase="true">
@@ -408,6 +436,8 @@
                     <textarea rows="5" cols="80"/>
                 </control>
 
+                <summary>shipmentReceivingNoteText</summary>
+                <description>shipmentReceivingNoteText description...</description>
 			</attribute>
 
             <attribute name="shipmentTrackingNumber" forceUppercase="true">
@@ -421,6 +451,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>shipmentTrackingNumber</summary>
+                <description>shipmentTrackingNumber description...</description>
 			</attribute>
 
             <attribute name="vendorCityName" forceUppercase="true">
@@ -434,6 +466,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>vendorCityName</summary>
+                <description>vendorCityName description...</description>
 			</attribute>
 
             <attribute name="vendorCountryCode" forceUppercase="true">
@@ -447,6 +481,8 @@
                     <text size="6" />
                 </control>
 
+                <summary>vendorCountryCode</summary>
+                <description>vendorCountryCode description...</description>
 			</attribute>
 
             <attribute name="vendorLine1Address" forceUppercase="true">
@@ -460,6 +496,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>vendorLine1Address</summary>
+                <description>vendorLine1Address description...</description>
 			</attribute>
 
             <attribute name="vendorLine2Address" forceUppercase="true">
@@ -473,6 +511,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>vendorLine2Address</summary>
+                <description>vendorLine2Address description...</description>
 			</attribute>
 
             <attribute name="vendorName" forceUppercase="true">
@@ -486,6 +526,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>vendorName</summary>
+                <description>vendorName description...</description>
 			</attribute>
 
             <attribute name="vendorPostalCode" forceUppercase="true">
@@ -499,6 +541,8 @@
                     <text size="22" />
                 </control>
 
+                <summary>vendorPostalCode</summary>
+                <description>vendorPostalCode description...</description>
 			</attribute>
 
             <attribute name="vendorShippingPaymentTermsCode" forceUppercase="true">
@@ -512,6 +556,8 @@
                     <text size="4" />
                 </control>
 
+                <summary>vendorShippingPaymentTermsCode</summary>
+                <description>vendorShippingPaymentTermsCode description...</description>
 			</attribute>
 
             <attribute name="vendorStateCode" forceUppercase="true">
@@ -525,6 +571,8 @@
                     <text size="4" />
                 </control>
 
+                <summary>vendorStateCode</summary>
+                <description>vendorStateCode description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -538,6 +586,8 @@
                     <text size="10" />
                 </control>
 
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
 			</attribute>
 
         </attributes>

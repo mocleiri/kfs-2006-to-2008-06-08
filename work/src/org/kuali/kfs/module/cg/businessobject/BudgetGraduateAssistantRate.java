@@ -1,46 +1,45 @@
-/*
- * Copyright 2006-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.kra.budget.bo;
+
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
 
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
+import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 
-public class BudgetGraduateAssistantRate extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetGraduateAssistantRate extends BusinessObjectBase implements Comparable {
     private static final long serialVersionUID = -5360306689257897228L;
-
-    private String documentNumber;
-    private String campusCode;
-    private KualiDecimal campusMaximumPeriod1Rate;
-    private KualiDecimal campusMaximumPeriod2Rate;
-    private KualiDecimal campusMaximumPeriod3Rate;
-    private KualiDecimal campusMaximumPeriod4Rate;
-    private KualiDecimal campusMaximumPeriod5Rate;
-    private KualiDecimal campusMaximumPeriod6Rate;
-    private Timestamp lastUpdateTimestamp;
-
-    private GraduateAssistantRate graduateAssistantRate;
 
     /**
      * Default no-arg constructor.
@@ -50,19 +49,13 @@ public class BudgetGraduateAssistantRate extends PersistableBusinessObjectBase i
         graduateAssistantRate = new GraduateAssistantRate();
     }
 
-    public BudgetGraduateAssistantRate(String documentNumber, String campusCode) {
-        this();
-        this.documentNumber = documentNumber;
-        this.campusCode = campusCode;
+    public BudgetGraduateAssistantRate(String documentHeaderId, String campusCode, KualiDecimal campusMaximumPeriod1Rate, KualiDecimal campusMaximumPeriod2Rate, KualiDecimal campusMaximumPeriod3Rate, KualiDecimal campusMaximumPeriod4Rate, KualiDecimal campusMaximumPeriod5Rate, KualiDecimal campusMaximumPeriod6Rate, GraduateAssistantRate graduateAssistantRate) {
+        this(documentHeaderId, campusCode, campusMaximumPeriod1Rate, campusMaximumPeriod2Rate, campusMaximumPeriod3Rate, campusMaximumPeriod4Rate, campusMaximumPeriod5Rate, campusMaximumPeriod3Rate, graduateAssistantRate, null, null);
     }
 
-    public BudgetGraduateAssistantRate(String documentNumber, String campusCode, KualiDecimal campusMaximumPeriod1Rate, KualiDecimal campusMaximumPeriod2Rate, KualiDecimal campusMaximumPeriod3Rate, KualiDecimal campusMaximumPeriod4Rate, KualiDecimal campusMaximumPeriod5Rate, KualiDecimal campusMaximumPeriod6Rate, GraduateAssistantRate graduateAssistantRate) {
-        this(documentNumber, campusCode, campusMaximumPeriod1Rate, campusMaximumPeriod2Rate, campusMaximumPeriod3Rate, campusMaximumPeriod4Rate, campusMaximumPeriod5Rate, campusMaximumPeriod3Rate, graduateAssistantRate, null, null);
-    }
-
-    public BudgetGraduateAssistantRate(String documentNumber, String campusCode, KualiDecimal campusMaximumPeriod1Rate, KualiDecimal campusMaximumPeriod2Rate, KualiDecimal campusMaximumPeriod3Rate, KualiDecimal campusMaximumPeriod4Rate, KualiDecimal campusMaximumPeriod5Rate, KualiDecimal campusMaximumPeriod6Rate, GraduateAssistantRate graduateAssistantRate, String objectId, Long versionNumber) {
+    public BudgetGraduateAssistantRate(String documentHeaderId, String campusCode, KualiDecimal campusMaximumPeriod1Rate, KualiDecimal campusMaximumPeriod2Rate, KualiDecimal campusMaximumPeriod3Rate, KualiDecimal campusMaximumPeriod4Rate, KualiDecimal campusMaximumPeriod5Rate, KualiDecimal campusMaximumPeriod6Rate, GraduateAssistantRate graduateAssistantRate, String objectId, Long versionNumber) {
         super();
-        this.documentNumber = documentNumber;
+        this.documentHeaderId = documentHeaderId;
         this.campusCode = campusCode;
         this.campusMaximumPeriod1Rate = campusMaximumPeriod1Rate;
         this.campusMaximumPeriod2Rate = campusMaximumPeriod2Rate;
@@ -76,10 +69,17 @@ public class BudgetGraduateAssistantRate extends PersistableBusinessObjectBase i
     }
 
 
-    public BudgetGraduateAssistantRate(String documentNumber, GraduateAssistantRate gradAssistantRate) {
-        this(documentNumber, gradAssistantRate.getCampusCode(), gradAssistantRate.getCampusMaximumPeriod1Rate(), gradAssistantRate.getCampusMaximumPeriod2Rate(), gradAssistantRate.getCampusMaximumPeriod3Rate(), gradAssistantRate.getCampusMaximumPeriod4Rate(), gradAssistantRate.getCampusMaximumPeriod5Rate(), gradAssistantRate.getCampusMaximumPeriod6Rate(), gradAssistantRate);
-    }
+    private String documentHeaderId;
+    private String campusCode;
+    private KualiDecimal campusMaximumPeriod1Rate;
+    private KualiDecimal campusMaximumPeriod2Rate;
+    private KualiDecimal campusMaximumPeriod3Rate;
+    private KualiDecimal campusMaximumPeriod4Rate;
+    private KualiDecimal campusMaximumPeriod5Rate;
+    private KualiDecimal campusMaximumPeriod6Rate;
+    private Timestamp lastUpdateTimestamp;
 
+    private GraduateAssistantRate graduateAssistantRate;
 
     public String getCampusCode() {
         return campusCode;
@@ -189,14 +189,58 @@ public class BudgetGraduateAssistantRate extends PersistableBusinessObjectBase i
         }
     }
 
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
+    public void afterDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterDelete(persistenceBroker);
+    }
+
+    public void afterInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterInsert(persistenceBroker);
+    }
+
+    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterLookup(persistenceBroker);
+    }
+
+    public void afterUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterUpdate(persistenceBroker);
+    }
+
+    public void beforeDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeDelete(persistenceBroker);
+    }
+
+    public void beforeInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeInsert(persistenceBroker);
+    }
+
+    public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeUpdate(persistenceBroker);
+    }
+
+    public List getExtendedAttributeValues() {
+        // TODO Auto-generated method stub
+        return super.getExtendedAttributeValues();
+    }
+
+    public void setExtendedAttributeValues(List extendedAttributeValues) {
+        // TODO Auto-generated method stub
+        super.setExtendedAttributeValues(extendedAttributeValues);
+    }
 
     protected String toStringBuilder(LinkedHashMap fieldValues) {
         // TODO Auto-generated method stub
@@ -206,9 +250,14 @@ public class BudgetGraduateAssistantRate extends PersistableBusinessObjectBase i
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("documentHeaderId", this.documentHeaderId);
         m.put("campusCode", this.campusCode);
         return m;
+    }
+
+    public void validate() {
+        // TODO Auto-generated method stub
+        super.validate();
     }
 
     /**
@@ -246,57 +295,4 @@ public class BudgetGraduateAssistantRate extends PersistableBusinessObjectBase i
         return this.getCampusCode().compareTo(((BudgetGraduateAssistantRate) o).getCampusCode());
     }
 
-
-    /*
-     * (non-Javadoc) Doesn't compare timestamps
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        boolean equals = true;
-
-        if (ObjectUtils.isNotNull(obj) && obj instanceof BudgetGraduateAssistantRate) {
-            BudgetGraduateAssistantRate objCompare = (BudgetGraduateAssistantRate) obj;
-            equals &= this.documentNumber.equals(objCompare.getDocumentNumber());
-            equals &= this.campusCode.equals(objCompare.getCampusCode());
-
-            if (this.campusMaximumPeriod1Rate == null && objCompare.getCampusMaximumPeriod1Rate() == null) {
-            }
-            else {
-                equals &= this.campusMaximumPeriod1Rate != null && objCompare.getCampusMaximumPeriod1Rate() != null && this.campusMaximumPeriod1Rate.equals(objCompare.getCampusMaximumPeriod1Rate());
-            }
-
-            if (this.campusMaximumPeriod2Rate == null && objCompare.getCampusMaximumPeriod2Rate() == null) {
-            }
-            else {
-                equals &= this.campusMaximumPeriod2Rate != null && objCompare.getCampusMaximumPeriod2Rate() != null && this.campusMaximumPeriod2Rate.equals(objCompare.getCampusMaximumPeriod2Rate());
-            }
-
-            if (this.campusMaximumPeriod3Rate == null && objCompare.getCampusMaximumPeriod3Rate() == null) {
-            }
-            else {
-                equals &= this.campusMaximumPeriod3Rate != null && objCompare.getCampusMaximumPeriod3Rate() != null && this.campusMaximumPeriod3Rate.equals(objCompare.getCampusMaximumPeriod3Rate());
-            }
-
-            if (this.campusMaximumPeriod3Rate == null && objCompare.getCampusMaximumPeriod3Rate() == null) {
-            }
-            else {
-                equals &= this.campusMaximumPeriod4Rate != null && objCompare.getCampusMaximumPeriod4Rate() != null && this.campusMaximumPeriod4Rate.equals(objCompare.getCampusMaximumPeriod4Rate());
-            }
-
-            if (this.campusMaximumPeriod5Rate == null && objCompare.getCampusMaximumPeriod5Rate() == null) {
-            }
-            else {
-                equals &= this.campusMaximumPeriod5Rate != null && objCompare.getCampusMaximumPeriod5Rate() != null && this.campusMaximumPeriod5Rate.equals(objCompare.getCampusMaximumPeriod5Rate());
-            }
-
-            if (this.campusMaximumPeriod6Rate == null && objCompare.getCampusMaximumPeriod6Rate() == null) {
-            }
-            else {
-                equals &= this.campusMaximumPeriod6Rate != null && objCompare.getCampusMaximumPeriod6Rate() != null && this.campusMaximumPeriod6Rate.equals(objCompare.getCampusMaximumPeriod6Rate());
-            }
-        }
-
-        return equals;
-    }
 }

@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.CalculatedSalaryFoundationTracker">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Calculated Salary Foundation Tracker Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountNumber" />
                 <field attributeName="additionalSequence" />
                 <field attributeName="chartOfAccountsCode" />
@@ -44,12 +29,13 @@
                 <field attributeName="positionNumber" />
                 <field attributeName="subAccountNumber" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-        <lookupableID>CSFTrackerBalanceLookupable</lookupableID>
             <title>Calculated Salary Foundation Tracker Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.CalculatedSalaryFoundationTracker">Create New</a>]]></menubar>
 
             <instructions>Look up a Calculated Salary Foundation Tracker</instructions>
 
@@ -58,61 +44,118 @@
                     <sortAttribute attributeName="universityFiscalYear" />
                     <sortAttribute attributeName="chartOfAccountsCode" />
                     <sortAttribute attributeName="accountNumber" />
-                    <sortAttribute attributeName="positionNumber" />
                 </sortAttributes>
             </defaultSort>
 
-			<lookupFields>
-			    <lookupField attributeName="universityFiscalYear" required="true">
-                   <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
-                </lookupField>
-				<lookupField attributeName="chartOfAccountsCode" required="true" />
-                <lookupField attributeName="accountNumber" required="true" />
-                <lookupField attributeName="subAccountNumber" required="false" />
+            <lookupFields>
+                <lookupField attributeName="accountNumber" required="false" />
+                <lookupField attributeName="additionalSequence" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="csfAmount" required="false" />
+                <lookupField attributeName="csfCreateTimestamp" required="false" />
+                <lookupField attributeName="csfDeleteCode" required="false" />
+                <lookupField attributeName="csfFullTimeEmploymentQuantity" required="false" />
+                <lookupField attributeName="csfFundingStatusCode" required="false" />
+                <lookupField attributeName="csfTimePercent" required="false" />
+                <lookupField attributeName="earnCode" required="false" />
+                <lookupField attributeName="effectiveDate" required="false" />
+                <lookupField attributeName="effectiveSequence" required="false" />
+                <lookupField attributeName="emplid" required="false" />
+                <lookupField attributeName="employeeRecord" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="positionNumber" required="false" />
+                <lookupField attributeName="subAccountNumber" required="false" />
+                <lookupField attributeName="universityFiscalYear" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="universityFiscalYear" />
-                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
-                <field attributeName="subAccountNumber" />
-                <field attributeName="financialObjectCode" />
-                <field attributeName="financialSubObjectCode" />
-                <field attributeName="positionNumber" />
-                <field attributeName="personName" />				
+                <field attributeName="additionalSequence" />
+                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="csfAmount" />
+                <field attributeName="csfCreateTimestamp" />
+                <field attributeName="csfDeleteCode" />
+                <field attributeName="csfFullTimeEmploymentQuantity" />
+                <field attributeName="csfFundingStatusCode" />
                 <field attributeName="csfTimePercent" />
                 <field attributeName="earnCode" />
                 <field attributeName="effectiveDate" />
-                <field attributeName="csfFundingStatusCode" />
-                <field attributeName="csfDeleteCode" />
+                <field attributeName="effectiveSequence" />
+                <field attributeName="emplid" />
+                <field attributeName="employeeRecord" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="positionNumber" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="universityFiscalYear" />
             </resultFields>
         </lookup>
 
         <attributes>
-			<attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
-           		<label>Fiscal Year</label>
-           		<shortLabel>Fiscal Year</shortLabel>
-           		<description>Identifies the Fiscal Year.</description>
-     		</attributeReference>
-     		
-			<attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
-			<attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber" />
-            <attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber" />          
-			<attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode" />
-			<attributeReference name="financialSubObjectCode" sourceClassName="org.kuali.module.chart.bo.SubObjCd" sourceAttributeName="financialSubObjectCode" />
-            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
-            <attributeReference name="csfAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>CSF Amount</label>
+            <attribute name="accountNumber" forceUppercase="true">
+                <label>Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
+			</attribute>
+
+            <attribute name="additionalSequence" forceUppercase="true">
+                <label>Additional Sequence</label>
+                <shortLabel>Sequence</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>additionalSequence</summary>
+                <description>additionalSequence description...</description>
+			</attribute>
+
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
+
+            <attribute name="csfAmount" forceUppercase="true">
+                <label>Csf Amount</label>
                 <shortLabel>Amount</shortLabel>
-                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
-            </attributeReference>			
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>csfAmount</summary>
+                <description>csfAmount description...</description>
+			</attribute>
 
             <attribute name="csfCreateTimestamp" forceUppercase="true">
-                <label>CSF Create Timestamp</label>
+                <label>Csf Create Timestamp</label>
                 <shortLabel>Timestamp</shortLabel>
 
                 <maxLength>7</maxLength>
@@ -127,7 +170,7 @@
 			</attribute>
 
             <attribute name="csfDeleteCode" forceUppercase="true">
-                <label>CSF Delete Code</label>
+                <label>Csf Delete Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -142,7 +185,7 @@
 			</attribute>
 
             <attribute name="csfFullTimeEmploymentQuantity" forceUppercase="true">
-                <label>CSF Full Time Employment Quantity</label>
+                <label>Csf Full Time Employment Quantity</label>
                 <shortLabel>Quantity</shortLabel>
 
                 <maxLength>9</maxLength>
@@ -157,7 +200,7 @@
 			</attribute>
 
             <attribute name="csfFundingStatusCode" forceUppercase="true">
-                <label>CSF Funding Status Code</label>
+                <label>Csf Funding Status Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -171,20 +214,22 @@
                 <description>csfFundingStatusCode description...</description>
 			</attribute>
 
-		  <attribute name="csfTimePercent" forceUppercase="true">
-
-                <label>CSF Time Percent</label>
+            <attribute name="csfTimePercent" forceUppercase="true">
+                <label>Csf Time Percent</label>
                 <shortLabel>Percent</shortLabel>
+
                 <maxLength>9</maxLength>
                 <validationPattern><numeric /></validationPattern>
+
                 <control>
                     <text size="11" />
                 </control>
-                <summary>csfTimePercent</summary>
-                <description>csfTimePercent description</description>
-           </attribute>
 
-		   <attribute name="earnCode" forceUppercase="true">
+                <summary>csfTimePercent</summary>
+                <description>csfTimePercent description...</description>
+			</attribute>
+
+            <attribute name="earnCode" forceUppercase="true">
                 <label>Earn Code</label>
                 <shortLabel>Code</shortLabel>
 
@@ -259,6 +304,36 @@
                 <description>employeeRecord description...</description>
 			</attribute>
 
+            <attribute name="financialObjectCode" forceUppercase="true">
+                <label>Financial Object Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
+			</attribute>
+
+            <attribute name="financialSubObjectCode" forceUppercase="true">
+                <label>Financial Sub Object Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
+			</attribute>
+
             <attribute name="positionNumber" forceUppercase="true">
                 <label>Position Number</label>
                 <shortLabel>Number</shortLabel>
@@ -274,23 +349,37 @@
                 <description>positionNumber description...</description>
 			</attribute>
 
-			<attribute name="personName" forceUppercase="true">
-				<label>Person</label>
-				<shortLabel>Name</shortLabel>
+            <attribute name="subAccountNumber" forceUppercase="true">
+                <label>Sub Account Number</label>
+                <shortLabel>Number</shortLabel>
 
-				<maxLength>80</maxLength>
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-				<control>
-					<hidden/>
-					<!-- enable if you want to be able to set the display name separate from the individual name fields
-					<text size="40" />
-					-->
-				</control>
+                <control>
+                    <text size="7" />
+                </control>
 
-				<summary>Display Name</summary>
-				<description>Name</description>
-
+                <summary>subAccountNumber</summary>
+                <description>subAccountNumber description...</description>
 			</attribute>
+
+            <attribute name="universityFiscalYear" forceUppercase="true">
+                <label>University Fiscal Year</label>
+                <shortLabel>Year</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>universityFiscalYear</summary>
+                <description>universityFiscalYear description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
     </businessObject>

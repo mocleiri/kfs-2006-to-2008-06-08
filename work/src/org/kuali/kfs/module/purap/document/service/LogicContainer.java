@@ -16,10 +16,10 @@
 package org.kuali.module.purap.service;
 
 /**
- * Used for containing logic that must be run... usually when faking a user session
+ * This class is used for containing logic that must be run... usually when faking a user session
  */
 public abstract interface LogicContainer {
 
     public abstract Object runLogic(Object[] objects) throws Exception;
-
+    
 }

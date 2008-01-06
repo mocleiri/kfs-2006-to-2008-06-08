@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.kfs.bo.Options">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>System Options Inquiry</title>
@@ -48,12 +48,6 @@
                 <field attributeName="financialObjectTypeAssetsCd" />
                 <field attributeName="finObjectTypeLiabilitiesCode" />
                 <field attributeName="finObjectTypeFundBalanceCd" />
-                <field attributeName="costShareEncumbranceBalanceTypeCd" />
-                <field attributeName="baseBudgetFinancialBalanceTypeCd" />
-                <field attributeName="monthlyBudgetFinancialBalanceTypeCd" />
-                <field attributeName="financialObjectTypeTransferIncomeCd" />
-                <field attributeName="financialObjectTypeTransferExpenseCd" />
-                <field attributeName="nominalFinancialBalanceTypeCd" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
@@ -84,12 +78,6 @@
                 <lookupField attributeName="financialObjectTypeAssetsCd" required="false" />
                 <lookupField attributeName="finObjectTypeLiabilitiesCode" required="false" />
                 <lookupField attributeName="finObjectTypeFundBalanceCd" required="false" />
-                <lookupField attributeName="costShareEncumbranceBalanceTypeCd" required="false" />
-                <lookupField attributeName="baseBudgetFinancialBalanceTypeCd" required="false" />
-                <lookupField attributeName="monthlyBudgetFinancialBalanceTypeCd" required="false" />
-                <lookupField attributeName="financialObjectTypeTransferIncomeCd" required="false" />
-                <lookupField attributeName="financialObjectTypeTransferExpenseCd" required="false" />
-                <lookupField attributeName="nominalFinancialBalanceTypeCd" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -115,12 +103,6 @@
                 <field attributeName="financialObjectTypeAssetsCd" />
                 <field attributeName="finObjectTypeLiabilitiesCode" />
                 <field attributeName="finObjectTypeFundBalanceCd" />
-                <field attributeName="costShareEncumbranceBalanceTypeCd" />
-                <field attributeName="baseBudgetFinancialBalanceTypeCd" />
-                <field attributeName="monthlyBudgetFinancialBalanceTypeCd" />
-                <field attributeName="financialObjectTypeTransferIncomeCd" />
-                <field attributeName="financialObjectTypeTransferExpenseCd" />
-                <field attributeName="nominalFinancialBalanceTypeCd" />
             </resultFields>
         </lookup>
 
@@ -466,113 +448,10 @@
                 <description>Fund Balance Object Type.</description>
             </attribute>
 
-            <attribute name="costShareEncumbranceBalanceTypeCd" forceUppercase="true">
-                <label>Cost Share Encumbrance Balance Type</label>
-                <shortLabel>Cost Share Encumbrance Balance Type</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <alphaNumeric />
-                </validationPattern>
-                <required>true</required>
-                <control>
-                    <text size="2" />
-                </control>
-
-                <summary>Cost Share Encumbrance Balance Type</summary>
-                <description>Cost Share Encumbrance Balance Type.</description>
-            </attribute>
-
-            <attribute name="baseBudgetFinancialBalanceTypeCd" forceUppercase="true">
-                <label>Base Budget Balance Type</label>
-                <shortLabel>Base Budget Balance Type</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <alphaNumeric />
-                </validationPattern>
-                <required>true</required>
-                <control>
-                    <text size="2" />
-                </control>
-
-                <summary>Base Budget Balance Type</summary>
-                <description>Base Budget Balance Type.</description>
-            </attribute>
-
-            <attribute name="monthlyBudgetFinancialBalanceTypeCd" forceUppercase="true">
-                <label>Monthly Budget Balance Type</label>
-                <shortLabel>Monthly Budget Balance Type</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <alphaNumeric />
-                </validationPattern>
-                <required>true</required>
-                <control>
-                    <text size="2" />
-                </control>
-
-                <summary>Monthly Budget Balance Type</summary>
-                <description>Monthly Budget Balance Type.</description>
-            </attribute>
-
-            <attribute name="financialObjectTypeTransferIncomeCd" forceUppercase="true">
-                <label>Transfer In Object Type</label>
-                <shortLabel>Transfer In Object Type</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <alphaNumeric />
-                </validationPattern>
-                <required>true</required>
-                <control>
-                    <text size="2" />
-                </control>
-
-                <summary>Transfer In Object Type</summary>
-                <description>Transfer In Object Type.</description>
-            </attribute>
-
-            <attribute name="financialObjectTypeTransferExpenseCd" forceUppercase="true">
-                <label>Transfer Out Object Type</label>
-                <shortLabel>Transfer Out Object Type</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <alphaNumeric />
-                </validationPattern>
-                <required>true</required>
-                <control>
-                    <text size="2" />
-                </control>
-
-                <summary>Transfer Out Object Type</summary>
-                <description>Transfer Out Object Type.</description>
-            </attribute>
-
-            <attribute name="nominalFinancialBalanceTypeCd" forceUppercase="true">
-                <label>Nominal Closing Balances Balance Type</label>
-                <shortLabel>Nominal Closing Balances Balance Type</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <alphaNumeric />
-                </validationPattern>
-                <required>true</required>
-                <control>
-                    <text size="2" />
-                </control>
-
-                <summary>Nominal Closing Balances Balance Type</summary>
-                <description>Nominal Closing Balances Balance Type.</description>
-            </attribute>
-
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
 
         </attributes>
-        <objectLabel>System Options</objectLabel>
     </businessObject>
 </dictionaryEntry>

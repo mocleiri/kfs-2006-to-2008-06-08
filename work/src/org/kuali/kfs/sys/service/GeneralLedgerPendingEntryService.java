@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
+import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.document.GeneralLedgerPostingDocument;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.gl.bo.Balance;
@@ -29,10 +30,13 @@ import org.kuali.module.gl.bo.Encumbrance;
 
 /**
  * This interface defines methods that a GeneralLedgerPendingEntry Service must provide
+ * 
+ * 
  */
 public interface GeneralLedgerPendingEntryService {
 
     /**
+     * 
      * This method...
      * 
      * @param universityFiscalYears
@@ -44,6 +48,7 @@ public interface GeneralLedgerPendingEntryService {
     public KualiDecimal getCashSummary(List universityFiscalYears, String chartOfAccountsCode, String accountNumber, boolean isDebit);
 
     /**
+     * 
      * This method...
      * 
      * @param universityFiscalYears
@@ -55,6 +60,7 @@ public interface GeneralLedgerPendingEntryService {
     public KualiDecimal getActualSummary(List universityFiscalYears, String chartOfAccountsCode, String accountNumber, boolean isDebit);
 
     /**
+     * 
      * This method...
      * 
      * @param universityFiscalYear
@@ -68,6 +74,7 @@ public interface GeneralLedgerPendingEntryService {
     public KualiDecimal getExpenseSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd);
 
     /**
+     * 
      * This method...
      * 
      * @param universityFiscalYear
@@ -81,6 +88,7 @@ public interface GeneralLedgerPendingEntryService {
     public KualiDecimal getEncumbranceSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd);
 
     /**
+     * 
      * This method...
      * 
      * @param universityFiscalYear
@@ -91,6 +99,11 @@ public interface GeneralLedgerPendingEntryService {
      * @return
      */
     public KualiDecimal getBudgetSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isYearEnd);
+
+    /**
+     * Delete pending entries that have been either cancelled or disapproved.
+     */
+    public void deleteEntriesForCancelledOrDisapprovedDocuments();
 
     /**
      * @param transactionEntrySequenceId
@@ -131,6 +144,7 @@ public interface GeneralLedgerPendingEntryService {
     public void deleteByFinancialDocumentApprovedCode(String financialDocumentApprovedCode);
 
     /**
+     * 
      * Does the given account have any general ledger entries? It is necessary to check this before closing an account.
      * 
      * @param account
@@ -146,6 +160,7 @@ public interface GeneralLedgerPendingEntryService {
     public Iterator findApprovedPendingLedgerEntries();
 
     /**
+     * 
      * This method retrieves all pending ledger entries for the given encumbrance
      * 
      * @param encumbrance the encumbrance entry
@@ -155,6 +170,7 @@ public interface GeneralLedgerPendingEntryService {
     public Iterator findPendingLedgerEntries(Encumbrance encumbrance, boolean isApproved);
 
     /**
+     * 
      * This method retrieves all pending ledger entries for the given encumbrance
      * 
      * @param balance the balance entry
@@ -165,6 +181,7 @@ public interface GeneralLedgerPendingEntryService {
     public Iterator findPendingLedgerEntries(Balance balance, boolean isApproved, boolean isConsolidated);
 
     /**
+     * 
      * This method retrieves all pending ledger entries matching the given entry criteria
      * 
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
@@ -174,6 +191,7 @@ public interface GeneralLedgerPendingEntryService {
     public Iterator findPendingLedgerEntriesForEntry(Map fieldValues, boolean isApproved);
 
     /**
+     * 
      * This method retrieves all pending ledger entries matching the given balance criteria
      * 
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
@@ -183,6 +201,7 @@ public interface GeneralLedgerPendingEntryService {
     public Iterator findPendingLedgerEntriesForBalance(Map fieldValues, boolean isApproved);
 
     /**
+     * 
      * This method retrieves all pending ledger entries that may belong to cash balance in the future
      * 
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
@@ -191,6 +210,7 @@ public interface GeneralLedgerPendingEntryService {
     public Iterator findPendingLedgerEntriesForCashBalance(Map fieldValues, boolean isApproved);
 
     /**
+     * 
      * This method retrieves all pending ledger entries that may belong to encumbrance table in the future
      * 
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
@@ -203,6 +223,7 @@ public interface GeneralLedgerPendingEntryService {
      * 
      * @param fieldValues
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
+     * 
      * @return all pending ledger entries that may belong to encumbrance table
      */
     public Iterator findPendingLedgerEntrySummaryForAccountBalance(Map fieldValues, boolean isApproved);
@@ -212,6 +233,7 @@ public interface GeneralLedgerPendingEntryService {
      * 
      * @param fieldValues
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
+     * 
      * @return all pending ledger entries that may belong to encumbrance table
      */
     public Iterator findPendingLedgerEntriesForAccountBalance(Map fieldValues, boolean isApproved);

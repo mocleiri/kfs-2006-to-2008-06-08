@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,15 @@ package org.kuali.module.labor.batch;
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
-/**
- * Create Labor backup Batch Step.
- */
 public class CreateLaborBackupGroupStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CreateLaborBackupGroupStep.class);
     private OriginEntryGroupService originEntryGroupService;
 
-    /**
-     * Invokes the method that creates labor backup group
-     * 
-     * @param jobName
-     * @return boolean
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String)
-     */
-    public boolean execute(String jobName) {
+    public boolean execute() {
         originEntryGroupService.createLaborBackupGroup();
         return true;
     }
 
-    /**
-     * Sets the Origin Entry Group Service
-     * 
-     * @param oegs
-     */
     public void setOriginEntryGroupService(OriginEntryGroupService oegs) {
         originEntryGroupService = oegs;
     }

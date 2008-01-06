@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
 
 /**
- * Value Finder for Purchase Order Headers.
+ * This class returns list containg A = Active or I = Inactive
  */
 public class PurchaseOrderHeaderValuesFinder extends KeyValuesBase {
 
-    /**
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
         List keyValues = new ArrayList();
@@ -35,4 +35,5 @@ public class PurchaseOrderHeaderValuesFinder extends KeyValuesBase {
         keyValues.add(new KeyLabelPair("Purchase Order", "Purchase Order"));
         return keyValues;
     }
+
 }

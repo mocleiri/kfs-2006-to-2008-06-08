@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@ package org.kuali.test.fixtures;
 import org.kuali.module.financial.bo.OffsetAccount;
 
 public enum OffsetAccountFixture {
-    OFFSET_ACCOUNT1("BL", "2231401", "8000", "UA", "1912201"), ;
+    OFFSET_ACCOUNT1("BL", "2231401", "8000", "UA", "1912201"),
+    ;
 
     public final String accountNumber;
     public final String chartOfAccountsCode;
