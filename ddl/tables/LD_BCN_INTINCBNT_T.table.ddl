@@ -15,7 +15,6 @@
  */
 CREATE TABLE LD_BCN_INTINCBNT_T(
         EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_INTINCBNT_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) CONSTRAINT LD_BCN_INTINCBNT_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_INTINCBNT_TN3 NOT NULL,
         PERSON_NM                      VARCHAR2(50),
         SETID_SALARY                   VARCHAR2(5),
@@ -23,7 +22,6 @@ CREATE TABLE LD_BCN_INTINCBNT_T(
         GRADE                          VARCHAR2(3),
         IU_CLASSIF_LEVEL               VARCHAR2(2),
      CONSTRAINT LD_BCN_INTINCBNT_TP1 PRIMARY KEY (
-        EMPLID),
-     CONSTRAINT LD_BCN_INTINCBNT_TC0 UNIQUE (OBJ_ID)
+        EMPLID)
 )
 /
