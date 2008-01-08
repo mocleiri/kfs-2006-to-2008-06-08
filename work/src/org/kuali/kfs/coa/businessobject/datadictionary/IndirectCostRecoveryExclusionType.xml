@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/IndirectCostRecoveryExclusionType.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,10 +21,10 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.IndirectCostRecoveryExclusionType">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
-            <title>Indirect Cost Recovery Exclusion By Type Inquiry</title>
+            <title>Indirect Cost Recovery Exclusion by Type Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="accountIndirectCostRecoveryTypeCode" />
@@ -32,10 +34,9 @@
         </inquiry>
 
         <lookup>
-        	<lookupableID>indirectCostRecoveryExclusionByTypeLookupable</lookupableID>
-            <title>Indirect Cost Recovery Exclusion By Type Lookup</title>
+            <title>Indirect Cost Recovery Exclusion by Type Lookup</title>
 
-            <instructions>Lookup an Indirect Cost Recovery Exclusion By type</instructions>
+            <instructions>Lookup an Indirect Cost Recovery Exclusion by type</instructions>
 
             <defaultSort attributeName="accountIndirectCostRecoveryTypeCode" sortAscending="true" />
 
@@ -72,6 +73,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>Object Code</summary>
+                <description>Object Code...</description>
             </attribute>
 
 
@@ -80,7 +84,7 @@
 
         </attributes>
         
-        <objectLabel>Indirect Cost Recovery Exclusion By Type</objectLabel>
+        <objectLabel>Indirect Cost Recovery Exclusion by Type</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

@@ -17,7 +17,7 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
@@ -25,9 +25,9 @@ import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 
 /**
- * This class represents a bank account
+ * 
  */
-public class BankAccount extends PersistableBusinessObjectBase {
+public class BankAccount extends BusinessObjectBase {
     private String finDocumentBankAccountDesc;
     private String finDocumentBankAccountNumber;
     private String financialDocumentBankCode;
@@ -54,7 +54,8 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the bank attribute.
      * 
-     * @return Returns the financialDocumentBankCode
+     * @return - Returns the financialDocumentBankCode
+     * 
      */
     public Bank getBank() {
         return bank;
@@ -73,7 +74,8 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the financialDocumentBankCode attribute.
      * 
-     * @return Returns the financialDocumentBankCode
+     * @return - Returns the financialDocumentBankCode
+     * 
      */
     public String getFinancialDocumentBankCode() {
         return financialDocumentBankCode;
@@ -83,6 +85,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
      * Sets the financialDocumentBankCode attribute.
      * 
      * @param financialDocumentBankCode The financialDocumentBankCode to set.
+     * 
      */
     public void setFinancialDocumentBankCode(String financialDocumentBankCode) {
         this.financialDocumentBankCode = financialDocumentBankCode;
@@ -91,7 +94,8 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentBankAccountDesc attribute.
      * 
-     * @return Returns the finDocumentBankAccountDesc
+     * @return - Returns the finDocumentBankAccountDesc
+     * 
      */
     public String getFinDocumentBankAccountDesc() {
         return finDocumentBankAccountDesc;
@@ -101,6 +105,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
      * Sets the finDocumentBankAccountDesc attribute.
      * 
      * @param finDocumentBankAccountDesc The finDocumentBankAccountDesc to set.
+     * 
      */
     public void setFinDocumentBankAccountDesc(String finDocumentBankAccountDesc) {
         this.finDocumentBankAccountDesc = finDocumentBankAccountDesc;
@@ -109,7 +114,8 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the finDocumentBankAccount attribute.
      * 
-     * @return Returns the finDocumentBankAccountNumber
+     * @return - Returns the finDocumentBankAccountNumber
+     * 
      */
     public String getFinDocumentBankAccountNumber() {
         return finDocumentBankAccountNumber;
@@ -119,6 +125,7 @@ public class BankAccount extends PersistableBusinessObjectBase {
      * Sets the finDocumentBankAccountNumber attribute.
      * 
      * @param finDocumentBankAccountNumber The finDocumentBankAccountNumber to set.
+     * 
      */
     public void setFinDocumentBankAccountNumber(String finDocumentBankAccountNumber) {
         this.finDocumentBankAccountNumber = finDocumentBankAccountNumber;
@@ -183,7 +190,8 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the cashOffsetAccount attribute.
      * 
-     * @return Returns the cashOffsetAccount
+     * @return - Returns the cashOffsetAccount
+     * 
      */
     public Account getCashOffsetAccount() {
         return cashOffsetAccount;
@@ -202,7 +210,8 @@ public class BankAccount extends PersistableBusinessObjectBase {
     /**
      * Gets the cashOffsetFinancialChartOfAccount attribute.
      * 
-     * @return Returns the cashOffsetFinancialChartOfAccount
+     * @return - Returns the cashOffsetFinancialChartOfAccount
+     * 
      */
     public Chart getCashOffsetFinancialChartOfAccount() {
         return cashOffsetFinancialChartOfAccount;

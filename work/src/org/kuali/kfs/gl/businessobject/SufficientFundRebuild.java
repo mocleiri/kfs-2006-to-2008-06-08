@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/SufficientFundRebuild.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,13 @@ package org.kuali.module.gl.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 
-
 /**
- * This class represents a sufficient fund rebuild
+ * 
  */
-public class SufficientFundRebuild extends PersistableBusinessObjectBase {
+public class SufficientFundRebuild extends BusinessObjectBase {
 
     public static final String REBUILD_ACCOUNT = "A";
     public static final String REBUILD_OBJECT = "O";
@@ -46,11 +47,6 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
         setFromTextFile(line);
     }
 
-    /**
-     * This method sets this object's attributes from a line
-     * 
-     * @param line with object's attributes
-     */
     public void setFromTextFile(String line) {
 
         // Just in case
@@ -61,10 +57,6 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
         setAccountNumberFinancialObjectCode(line.substring(3, 10).trim());
     }
 
-    /**
-     * This method returns a String representation of this object
-     * @return String representation of this object
-     */
     public String getLine() {
         StringBuffer sb = new StringBuffer();
         sb.append(getField(2, chartOfAccountsCode));
@@ -75,13 +67,6 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
 
     private static String SPACES = "          ";
 
-    /**
-     * This method returns the value passed in with additional spaces if need be.
-     * 
-     * @param size
-     * @param value
-     * @return
-     */
     private String getField(int size, String value) {
         if (value == null) {
             return SPACES.substring(0, size);
@@ -100,6 +85,7 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -109,6 +95,7 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -119,6 +106,7 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
      * Gets the accountFinancialObjectTypeCode attribute.
      * 
      * @return Returns the accountFinancialObjectTypeCode
+     * 
      */
     public String getAccountFinancialObjectTypeCode() {
         return accountFinancialObjectTypeCode;
@@ -128,6 +116,7 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
      * Sets the accountFinancialObjectTypeCode attribute.
      * 
      * @param accountFinancialObjectTypeCode The accountFinancialObjectTypeCode to set.
+     * 
      */
     public void setAccountFinancialObjectTypeCode(String accountFinancialObjectTypeCode) {
         this.accountFinancialObjectTypeCode = accountFinancialObjectTypeCode;
@@ -138,6 +127,7 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
      * Gets the accountNumberFinancialObjectCode attribute.
      * 
      * @return Returns the accountNumberFinancialObjectCode
+     * 
      */
     public String getAccountNumberFinancialObjectCode() {
         return accountNumberFinancialObjectCode;
@@ -147,6 +137,7 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
      * Sets the accountNumberFinancialObjectCode attribute.
      * 
      * @param accountNumberFinancialObjectCode The accountNumberFinancialObjectCode to set.
+     * 
      */
     public void setAccountNumberFinancialObjectCode(String accountNumberFinancialObjectCode) {
         this.accountNumberFinancialObjectCode = accountNumberFinancialObjectCode;
@@ -157,6 +148,7 @@ public class SufficientFundRebuild extends PersistableBusinessObjectBase {
      * Gets the chart attribute.
      * 
      * @return Returns the chart
+     * 
      */
     public Chart getChart() {
         return chart;

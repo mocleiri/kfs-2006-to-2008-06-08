@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,18 +31,18 @@ import edu.iu.uis.eden.routeheader.StandardDocumentContent;
 
 /**
  * This class contains various utility methods for doing tests on workflow attributes.
+ * 
+ * 
  */
 public class KualiAttributeTestUtil {
 
     public static final String RELATIVE_PATH_IN_PROJECT = "test/src/org/kuali/workflow/attribute/";
-    public static final String RELATIVE_PATH_IN_PROJECT_WORKFLOW = "test/src/org/kuali/workflow/";
 
     public static final String TOF_FEMP_SUBCODE_ONELINER = "TransferOfFunds_FEMPSubcode_OneLiner.xml";
-    public static final String TOF_SUB_ACCOUNT_TEST_DOC = "TransferOfFunds_SubAccountTestDoc.xml";
     public static final String PAYEE_MAINTENANCE_NEWDOC = "PayeeMaintenanceDocument_CreateNew.xml";
-    public static final String PURCHASE_ORDER_DOCUMENT = "PurchaseOrderDocument_AmountTest.xml";
 
     /**
+     * 
      * This method loads a document XML from a file in this directory, and loads it into a DocumentContent class, which is then
      * returned.
      * 
@@ -52,23 +52,17 @@ public class KualiAttributeTestUtil {
      * @throws InvalidXmlException
      */
     public static final DocumentContent getDocumentContentFromXmlFile(String fileName, String docTypeName) throws IOException, InvalidXmlException {
-        return getDocumentContentFromXmlFileAndPath(fileName, KualiAttributeTestUtil.RELATIVE_PATH_IN_PROJECT, docTypeName);
-    }
-
-    public static final DocumentContent getDocumentContentFromXmlFileAndPath(String fileName, String path, String docTypeName) throws IOException, InvalidXmlException {
         if (StringUtils.isBlank(fileName)) {
             throw new IllegalArgumentException("The fileName parameter passed in was blank.");
         }
-        BufferedReader reader = new BufferedReader(new FileReader(path + fileName));
+        BufferedReader reader = new BufferedReader(new FileReader(KualiAttributeTestUtil.RELATIVE_PATH_IN_PROJECT + fileName));
         RouteContext routeContext = RouteContext.getCurrentRouteContext();
         DocumentRouteHeaderValue docRouteHeaderValue = new DocumentRouteHeaderValue();
         DocumentType docType = new DocumentType();
         docType.setName(docTypeName);
         docRouteHeaderValue.setDocumentTypeId(docType.getDocumentTypeId());
         routeContext.setDocument(docRouteHeaderValue);
-        StandardDocumentContent newContent = new StandardDocumentContent(readerToString(reader), routeContext);
-        routeContext.setDocumentContent(newContent);
-        return newContent;
+        return new StandardDocumentContent(readerToString(reader), routeContext);
     }
 
     private static String readerToString(Reader is) throws IOException {

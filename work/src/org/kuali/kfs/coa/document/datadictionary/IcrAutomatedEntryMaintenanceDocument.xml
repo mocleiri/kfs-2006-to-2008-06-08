@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.IcrAutomatedEntryRule</businessRulesClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.IcrAutomatedEntryPreRules</preRulesCheckClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
 
         <authorizations>
             <authorization action="initiate">
@@ -34,13 +34,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>IcrAutomatedEntryMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiIcrAutomatedEntryMaintenanceDocument</documentTypeName>
         <documentTypeCode>ICRE</documentTypeCode>
-        <label>Indirect Cost Recovery Automated Entry</label>
+        <label>Indirect Cost Recovery Automated Entry Maintenance Document</label>
+        <shortLabel>ICRAutotomatedEntryMaintenanceDoc</shortLabel>
         <summary>Indirect Cost Recovery Automated Entry Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Indirect Cost Recovery Automated Entries, or modify existing Indirect Cost Recovery Automated Entries.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="IcrAutomatedEntry" parameterName="INDIRECT_COST_RECOVERY_AUTOMATED_ENTRY" />
-
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_INDIRECT_COST_RECOVERY_AUTOMATED_ENTRY" />
+        
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
             <field attributeName="financialIcrSeriesIdentifier" />
@@ -63,9 +64,9 @@
                     <maintainableField name="awardIndrCostRcvyEntryNbr" required="true" />
                     <maintainableField name="chartOfAccountsCode" required="true" />
                     <maintainableField name="accountNumber" required="true" />
-                    <maintainableField name="subAccountNumber" required="false" />
+                    <maintainableField name="subAccountNumber" required="true" />
                     <maintainableField name="financialObjectCode" required="true" />
-                    <maintainableField name="financialSubObjectCode" required="false" />
+                    <maintainableField name="financialSubObjectCode" required="true" />
                     <maintainableField name="offsetBalanceSheetObjectCodeNumber" required="true" />
                     <maintainableField name="transactionDebitIndicator"  />
                     <maintainableField name="awardIndrCostRcvyRatePct" required="true" />

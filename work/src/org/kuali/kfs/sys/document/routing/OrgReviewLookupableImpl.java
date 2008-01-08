@@ -16,7 +16,6 @@
 package org.kuali.workflow.attribute;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,10 +24,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 import edu.iu.uis.eden.EdenConstants;
 import edu.iu.uis.eden.KEWServiceLocator;
-import edu.iu.uis.eden.exception.EdenUserNotFoundException;
 import edu.iu.uis.eden.lookupable.Column;
 import edu.iu.uis.eden.lookupable.Field;
 import edu.iu.uis.eden.lookupable.Row;
@@ -38,13 +37,13 @@ import edu.iu.uis.eden.routetemplate.RuleBaseValues;
 import edu.iu.uis.eden.routetemplate.RuleService;
 import edu.iu.uis.eden.routetemplate.RuleTemplate;
 import edu.iu.uis.eden.routetemplate.RuleTemplateService;
-import edu.iu.uis.eden.user.UserId;
 import edu.iu.uis.eden.util.KeyLabelPair;
 import edu.iu.uis.eden.util.Utilities;
-import edu.iu.uis.eden.workgroup.GroupId;
 
 /**
  * This class provides a lookup for org review hierarchy routing rules.
+ * 
+ * 
  */
 public class OrgReviewLookupableImpl implements WorkflowLookupable {
     private Long ruleTemplateId;
@@ -157,7 +156,7 @@ public class OrgReviewLookupableImpl implements WorkflowLookupable {
                 }
             }
         }
-        Iterator rules = ((RuleService) KEWServiceLocator.getService(KEWServiceLocator.RULE_SERVICE)).search(docTypeSearchName, null, ruleTemplateId, null, null, null, null, null, isActive, attributes, null).iterator();
+        Iterator rules = ((RuleService) KEWServiceLocator.getService(KEWServiceLocator.RULE_SERVICE)).search(docTypeSearchName, null, ruleTemplateId, null, null, null, null, null, isActive, attributes).iterator();
         List displayList = new ArrayList();
         while (rules.hasNext()) {
             displayList.add(new OrgReviewLookupableResult((RuleBaseValues) rules.next()));

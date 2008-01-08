@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class SubFundGroup extends PersistableBusinessObjectBase {
+public class SubFundGroup extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -51,7 +51,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupCode attribute.
      * 
-     * @return Returns the subFundGroupCode
+     * @return - Returns the subFundGroupCode
+     * 
      */
     public String getSubFundGroupCode() {
         return subFundGroupCode;
@@ -69,7 +70,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupDescription attribute.
      * 
-     * @return Returns the subFundGroupDescription
+     * @return - Returns the subFundGroupDescription
+     * 
      */
     public String getSubFundGroupDescription() {
         return subFundGroupDescription;
@@ -79,6 +81,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the subFundGroupDescription attribute.
      * 
      * @param subFundGroupDescription The subFundGroupDescription to set.
+     * 
      */
     public void setSubFundGroupDescription(String subFundGroupDescription) {
         this.subFundGroupDescription = subFundGroupDescription;
@@ -87,7 +90,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the _SubfundgrpActivityIndicator_ attribute.
      * 
-     * @return Returns the _SubfundgrpActivityIndicator_
+     * @return - Returns the _SubfundgrpActivityIndicator_
+     * 
      */
     public boolean getSubfundgrpActivityIndicator() {
         return subfundgrpActivityIndicator;
@@ -97,6 +101,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the _SubfundgrpActivityIndicator_ attribute.
      * 
      * @param _SubfundgrpActivityIndicator_ The _SubfundgrpActivityIndicator_ to set.
+     * 
      */
     public void setSubfundgrpActivityIndicator(boolean _SubfundgrpActivityIndicator_) {
         this.subfundgrpActivityIndicator = _SubfundgrpActivityIndicator_;
@@ -105,7 +110,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupTypeCode attribute.
      * 
-     * @return Returns the subFundGroupTypeCode
+     * @return - Returns the subFundGroupTypeCode
+     * 
      */
     public String getSubFundGroupTypeCode() {
         return subFundGroupTypeCode;
@@ -115,6 +121,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the subFundGroupTypeCode attribute.
      * 
      * @param subFundGroupTypeCode The subFundGroupTypeCode to set.
+     * 
      */
     public void setSubFundGroupTypeCode(String subFundGroupTypeCode) {
         this.subFundGroupTypeCode = subFundGroupTypeCode;
@@ -123,7 +130,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the financialReportingSortCode attribute.
      * 
-     * @return Returns the financialReportingSortCode
+     * @return - Returns the financialReportingSortCode
+     * 
      */
     public String getFinancialReportingSortCode() {
         return financialReportingSortCode;
@@ -133,6 +141,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the financialReportingSortCode attribute.
      * 
      * @param financialReportingSortCode The financialReportingSortCode to set.
+     * 
      */
     public void setFinancialReportingSortCode(String financialReportingSortCode) {
         this.financialReportingSortCode = financialReportingSortCode;
@@ -141,7 +150,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupWagesIndicator attribute.
      * 
-     * @return Returns the subFundGroupWagesIndicator
+     * @return - Returns the subFundGroupWagesIndicator
+     * 
      */
     public boolean isSubFundGroupWagesIndicator() {
         return subFundGroupWagesIndicator;
@@ -151,6 +161,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the subFundGroupWagesIndicator attribute.
      * 
      * @param subFundGroupWagesIndicator The subFundGroupWagesIndicator to set.
+     * 
      */
     public void setSubFundGroupWagesIndicator(boolean subFundGroupWagesIndicator) {
         this.subFundGroupWagesIndicator = subFundGroupWagesIndicator;

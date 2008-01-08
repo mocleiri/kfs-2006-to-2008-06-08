@@ -88,12 +88,11 @@ function organizationNameLookup( anyFieldOnProposalOrganization ) {
 }
 
 function proposalDirectorIDLookup( userIdField ) {
-    var userIdFieldName = userIdField.name;
-    var elPrefix = findElPrefix( userIdFieldName );
+    var elPrefix = findElPrefix( userIdField.name );
 	var userNameFieldName = elPrefix + ".personName";
 	var universalIdFieldName = findElPrefix( elPrefix ) + ".personUniversalIdentifier";
 	
-	loadDirectorInfo( userIdFieldName, universalIdFieldName, userNameFieldName );
+	loadDirectorInfo( userIdField.name, universalIdFieldName, userNameFieldName );
 }
 
 function loadDirectorInfo( userIdFieldName, universalIdFieldName, userNameFieldName ) {

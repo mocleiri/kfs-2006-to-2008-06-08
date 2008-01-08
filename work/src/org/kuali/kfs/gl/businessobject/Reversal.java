@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/Reversal.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +21,10 @@ package org.kuali.module.gl.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -33,11 +34,12 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.PropertyConstants;
 
 /**
- * This class represents a reversal of a transaction
+ * 
  */
-public class Reversal extends PersistableBusinessObjectBase implements Transaction {
+public class Reversal extends BusinessObjectBase implements Transaction {
 
     private Date financialDocumentReversalDate;
     private Integer universityFiscalYear;
@@ -704,7 +706,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
         map.put("universityFiscalPeriodCode", getUniversityFiscalPeriodCode());
         map.put("financialDocumentTypeCode", getFinancialDocumentTypeCode());
         map.put("financialSystemOriginationCode", getFinancialSystemOriginationCode());
-        map.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        map.put(PropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
         map.put("transactionLedgerEntrySequenceNumber", getTransactionLedgerEntrySequenceNumber());
         return map;
     }

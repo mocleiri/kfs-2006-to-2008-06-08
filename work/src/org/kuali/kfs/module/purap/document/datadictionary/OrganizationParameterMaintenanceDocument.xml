@@ -36,8 +36,11 @@
 		<documentTypeName>OrganizationParameterMaintenanceDocument</documentTypeName>
 		<documentTypeCode>PMOP</documentTypeCode>
 
-		<label>Organization Parameter</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="OrganizationParameter" parameterName="ORGANIZATION_PARAMETER" />
+		<label>Organization Parameter Maintenance Document</label>
+		<shortLabel>Organization Parameter Maint Doc</shortLabel>
+
+		<summary>Organization Parameter Maintenance Document</summary>
+		<description>Document used to create or update Organization Parameter objects</description>
 
         <lockingKeys>
 			<field attributeName="chartOfAccountsCode" />
