@@ -20,8 +20,6 @@ CREATE TABLE LD_A21_DETAIL_T(
         FIN_COA_CD                     VARCHAR2(2),
         ORG_CD                         VARCHAR2(4),
         A21_LBR_RPT_NBR                VARCHAR2(3),
-        A21LBR_RPT_PRNT_DT             DATE,
-        A21LBR_RPT_APRV_DT             DATE,
         A21_LBR_DOC_CD                 VARCHAR2(2),
         A21_LBR_FSCL_YR                NUMBER(4),
         EMPLID                         VARCHAR2(11),
