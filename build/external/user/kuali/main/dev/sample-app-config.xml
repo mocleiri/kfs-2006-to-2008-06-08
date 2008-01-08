@@ -1,3 +1,4 @@
+<config>
 	<!-- App specific parameters -->
 	<param name="app.code">kr</param>
 	<param name="app.context.name">${app.code}-${environment}</param>
@@ -30,9 +31,9 @@
 	<param name="workflow.url">${application.url}/en</param>
 	<param name="serviceServletUrl">${application.url}/remoting/</param>
 
-	<param name="datasource.url">jdbc:oracle:thin:@esdb12-k.uits.indiana.edu:1521:KUALI</param>
-	<param name="datasource.username">KRDEV</param>
-	<param name="datasource.password">@dev-rice-password@</param>
+	<param name="datasource.url">@rice-datasource-url@</param>
+	<param name="datasource.username">@rice-datasource-username-dev@</param>
+	<param name="datasource.password">@rice-datasource-password-dev@</param>
 	<param name="datasource.ojb.platform">Oracle9i</param>
 	<param name="datasource.platform">edu.iu.uis.eden.database.platform.OraclePlatform</param>
 	<param name="datasource.driver.name">oracle.jdbc.driver.OracleDriver</param>
@@ -99,3 +100,4 @@
     
     <!-- Turn off KEW use of quartz db to avoid db clear issues -->
     <param name="useQuartzDatabase">false</param>
+</config>
