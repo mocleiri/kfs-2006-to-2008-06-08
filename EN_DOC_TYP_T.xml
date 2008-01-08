@@ -964,7 +964,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="93350" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="2" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="43"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="50"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiSimpleMaintenanceDocument"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
@@ -1618,16 +1618,6 @@
         DOC_TYP_ID="248514"
         DOC_TYP_LBL_TXT="KualiAutomatedReportPeriodMaintenanceDocument"
         DOC_TYP_NM="KualiAutomatedReportPeriodStatusMaintenanceDocument"
-        DOC_TYP_PARNT_ID="176777"
-        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
-        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
-        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
-        DOC_TYP_DESC="KualiCalculatedSalaryFoundationTrackerOverrideMaintenanceDocument"
-        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
-        DOC_TYP_ID="249260"
-        DOC_TYP_LBL_TXT="KualiCalculatedSalaryFoundationTrackerOverrideMaintenanceDocument"
-        DOC_TYP_NM="KualiCalculatedSalaryFoundationTrackerOverrideMaintenanceDocument"
         DOC_TYP_PARNT_ID="176777"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>

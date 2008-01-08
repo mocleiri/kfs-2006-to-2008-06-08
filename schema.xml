@@ -10240,16 +10240,12 @@
     </table>
     <table name="LD_BCN_INTINCBNT_T">
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PERSON_NM" size="50" type="VARCHAR"/>
         <column name="SETID_SALARY" size="5" type="VARCHAR"/>
         <column name="SAL_ADMIN_PLAN" size="4" type="VARCHAR"/>
         <column name="GRADE" size="3" type="VARCHAR"/>
         <column name="IU_CLASSIF_LEVEL" size="2" type="VARCHAR"/>
-        <unique name="LD_BCN_INTINCBNT_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_INTINCBNT_TI2">
             <index-column name="PERSON_NM"/>
         </index>
@@ -10488,7 +10484,6 @@
     <table name="LD_BCN_POS_T">
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POS_EFFDT" type="DATE"/>
         <column name="POS_EFF_STATUS" size="1" type="VARCHAR"/>
@@ -10520,9 +10515,6 @@
         <foreign-key foreignTable="FS_OPTION_T" name="LD_BCN_POS_TR1">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
         </foreign-key>
-        <unique name="LD_BCN_POS_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_POS_TI2">
             <index-column name="POS_DEPTID"/>
             <index-column name="UNIV_FISCAL_YR"/>
@@ -14603,15 +14595,15 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317500"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317540"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
-    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
+    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5791"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12796"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12856"/>
     <sequence name="SEQ_RTE_NODE" nextval="563357909"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2020"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
