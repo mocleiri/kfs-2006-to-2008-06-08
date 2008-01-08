@@ -34,9 +34,9 @@
 	<param name="application.url">http://localhost:9912/${app.context.name}</param>
 	<param name="serviceServletUrl">http://localhost:9912/${app.context.name}/remoting/</param>
 
-	<param name="datasource.url">jdbc:oracle:thin:@esdb12-k.uits.indiana.edu:1521:KUALI</param>
-	<param name="datasource.username">KRREG</param>
-	<param name="datasource.password">@test-rice-password@</param>
+	<param name="datasource.url">@rice-datasource-url@</param>
+	<param name="datasource.username">@rice-datasource-username-test@</param>
+	<param name="datasource.password">@rice-datasource-password-test@</param>
 	<param name="datasource.ojb.platform">Oracle9i</param>
 	<param name="datasource.platform">edu.iu.uis.eden.database.platform.OraclePlatform</param>
 	<param name="datasource.driver.name">oracle.jdbc.driver.OracleDriver</param>
