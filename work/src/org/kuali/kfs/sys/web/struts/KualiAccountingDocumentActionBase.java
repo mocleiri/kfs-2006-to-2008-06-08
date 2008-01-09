@@ -870,7 +870,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     public ActionForward performBalanceInquiryForTargetLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         int lineIndex = getSelectedLine(request);
 
-        TargetAccountingLine line = (TargetAccountingLine) ObjectUtils.deepCopy(((KualiAccountingDocumentFormBase) form).getFinancialDocument().getTargetAccountingLine(lineIndex));
+        TargetAccountingLine line = (TargetAccountingLine)((KualiAccountingDocumentFormBase) form).getFinancialDocument().getTargetAccountingLine(lineIndex);
 
         return performBalanceInquiryForAccountingLine(mapping, form, request, line);
     }
