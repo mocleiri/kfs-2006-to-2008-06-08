@@ -1,18 +1,3 @@
-/*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.purap.pdf;
 
 import java.io.ByteArrayOutputStream;
@@ -23,19 +8,16 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.bo.PurchaseOrderVendorStipulation;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.document.PurchaseOrderRetransmitDocument;
 import org.kuali.module.purap.exceptions.PurError;
 
 import com.lowagie.text.Chunk;
@@ -52,7 +34,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
- * Base class to handle pdf for purchase order documents.
+ * Base class to handle pdf purchase order docs.
  */
 public class PurchaseOrderPdf extends PurapPdf {
     private static Log LOG = LogFactory.getLog(PurchaseOrderPdf.class);
@@ -63,14 +45,6 @@ public class PurchaseOrderPdf extends PurapPdf {
         super();
     }
 
-    /**
-     * Overrides the method in PdfPageEventHelper from itext to create and set the headerTable and set its logo image if 
-     * there is a logoImage to be used, creates and sets the nestedHeaderTable and its content.
-     * 
-     * @param writer    The PdfWriter for this document.
-     * @param document  The document.
-     * @see com.lowagie.text.pdf.PdfPageEventHelper#onOpenDocument(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
-     */
     public void onOpenDocument(PdfWriter writer, Document document) {
         LOG.debug("onOpenDocument() started. isRetransmit is " + isRetransmit);
         try {
@@ -160,19 +134,7 @@ public class PurchaseOrderPdf extends PurapPdf {
         return new PurchaseOrderPdf();
     }
 
-    /**
-     * Generates the pdf document based on the data in the given PurchaseOrderDocument, the pdf parameters, 
-     * environment, retransmit items, creates a pdf writer using the given byteArrayOutputStream then
-     * write the pdf document into the writer.
-     * 
-     * @param po                     The PurchaseOrderDocument to be used to generate the pdf.
-     * @param pdfParameters          The PurchaseOrderPdfParameters to be used to generate the pdf.
-     * @param byteArrayOutputStream  The ByteArrayOutputStream where the pdf document will be written to.
-     * @param isRetransmit           The boolean to indicate whether this is for a retransmit purchase order document.
-     * @param environment            The current environment used (e.g. DEV if it is a development environment).
-     * @param retransmitItems        The items selected by the user to be retransmitted.
-     */
-    public void generatePdf(PurchaseOrderDocument po, PurchaseOrderPdfParameters pdfParameters, ByteArrayOutputStream byteArrayOutputStream, boolean isRetransmit, String environment, List<PurchaseOrderItem> retransmitItems) {
+    public void generatePdf(PurchaseOrderDocument po, PurchaseOrderPdfParameters pdfParameters, ByteArrayOutputStream byteArrayOutputStream, boolean isRetransmit, String environment) {
         LOG.debug("generatePdf() started for po number " + po.getPurapDocumentIdentifier());
 
         this.isRetransmit = isRetransmit;
@@ -188,7 +150,7 @@ public class PurchaseOrderPdf extends PurapPdf {
         try {
             Document doc = this.getDocument(9, 9, 70, 36);
             PdfWriter writer = PdfWriter.getInstance(doc, byteArrayOutputStream);
-            this.createPdf(po, doc, writer, statusInquiryUrl, campusName, contractLanguage, logoImage, directorSignatureImage, directorName, directorTitle, contractManagerSignatureImage, isRetransmit, environment, retransmitItems);
+            this.createPdf(po, doc, writer, statusInquiryUrl, campusName, contractLanguage, logoImage, directorSignatureImage, directorName, directorTitle, contractManagerSignatureImage, isRetransmit, environment);
         }
         catch (DocumentException de) {
             LOG.error("generatePdf() DocumentException: " + de.getMessage(), de);
@@ -204,15 +166,6 @@ public class PurchaseOrderPdf extends PurapPdf {
         }
     }
 
-    /**
-     * Invokes the createPdf method to create a pdf document and saves it into a file 
-     * which name and location are specified in the pdfParameters.
-     * 
-     * @param po             The PurchaseOrderDocument to be used to create the pdf.
-     * @param pdfParameters  The pdfParameters containing some of the parameters information needed by the pdf for example, the pdf file name and pdf file location, purchasing director name, etc.
-     * @param isRetransmit   The boolean to indicate whether this is for a retransmit purchase order document.
-     * @param environment    The current environment used (e.g. DEV if it is a development environment).
-     */
     public void savePdf(PurchaseOrderDocument po, PurchaseOrderPdfParameters pdfParameters, boolean isRetransmit, String environment) {
         LOG.debug("savePdf() started for po number " + po.getPurapDocumentIdentifier());
 
@@ -251,50 +204,13 @@ public class PurchaseOrderPdf extends PurapPdf {
         }
     }
 
-    /**
-     * Creates the purchase order pdf, and pass in null as the retransmitItems List because it doesn't need retransmit.
-     * 
-     * @param po                             The PurchaseOrderDocument to be used to create the pdf.
-     * @param document                       The pdf document whose margins have already been set.
-     * @param writer                         The PdfWriter to write the pdf document into.
-     * @param statusInquiryUrl               The status inquiry url to be displayed on the pdf document.
-     * @param campusName                     The campus name to be displayed on the pdf document.
-     * @param contractLanguage               The contract language to be displayed on the pdf document.
-     * @param logoImage                      The logo image file name to be displayed on the pdf document.
-     * @param directorSignatureImage         The director signature image to be displayed on the pdf document.
-     * @param directorName                   The director name to be displayed on the pdf document.
-     * @param directorTitle                  The director title to be displayed on the pdf document.
-     * @param contractManagerSignatureImage  The contract manager signature image to be displayed on the pdf document.
-     * @param isRetransmit                   The boolean to indicate whether this is for a retransmit purchase order document.
-     * @param environment                    The current environment used (e.g. DEV if it is a development environment).
-     * @throws DocumentException
-     * @throws IOException
-     */
-    private void createPdf(PurchaseOrderDocument po, Document document, PdfWriter writer, String statusInquiryUrl, String campusName, String contractLanguage, String logoImage, String directorSignatureImage, String directorName, String directorTitle, String contractManagerSignatureImage, boolean isRetransmit, String environment) throws DocumentException, IOException {
-        createPdf(po, document, writer, statusInquiryUrl, campusName, contractLanguage, logoImage, directorSignatureImage, directorName, directorTitle, contractManagerSignatureImage, isRetransmit, environment, null);
-    }
 
     /**
-     * Create a PDF using the given input parameters.
+     * Create a PDF.
      * 
-     * @param po                             The PurchaseOrderDocument to be used to create the pdf.
-     * @param document                       The pdf document whose margins have already been set.
-     * @param writer                         The PdfWriter to write the pdf document into.
-     * @param statusInquiryUrl               The status inquiry url to be displayed on the pdf document.
-     * @param campusName                     The campus name to be displayed on the pdf document.
-     * @param contractLanguage               The contract language to be displayed on the pdf document.
-     * @param logoImage                      The logo image file name to be displayed on the pdf document.
-     * @param directorSignatureImage         The director signature image to be displayed on the pdf document.
-     * @param directorName                   The director name to be displayed on the pdf document.
-     * @param directorTitle                  The director title to be displayed on the pdf document.
-     * @param contractManagerSignatureImage  The contract manager signature image to be displayed on the pdf document.
-     * @param isRetransmit                   The boolean to indicate whether this is for a retransmit purchase order document.
-     * @param environment                    The current environment used (e.g. DEV if it is a development environment).
-     * @param retransmitItems                The items selected by the user to be retransmitted.
-     * @throws DocumentException
-     * @throws IOException
+     * @return
      */
-    private void createPdf(PurchaseOrderDocument po, Document document, PdfWriter writer, String statusInquiryUrl, String campusName, String contractLanguage, String logoImage, String directorSignatureImage, String directorName, String directorTitle, String contractManagerSignatureImage, boolean isRetransmit, String environment, List<PurchaseOrderItem> retransmitItems) throws DocumentException, IOException {
+    private void createPdf(PurchaseOrderDocument po, Document document, PdfWriter writer, String statusInquiryUrl, String campusName, String contractLanguage, String logoImage, String directorSignatureImage, String directorName, String directorTitle, String contractManagerSignatureImage, boolean isRetransmit, String environment) throws DocumentException, IOException {
         LOG.debug("createPdf() started for po number " + po.getPurapDocumentIdentifier().toString());
 
         // These have to be set because they are used by the onOpenDocument() and onStartPage() methods.
@@ -341,16 +257,13 @@ public class PurchaseOrderPdf extends PurapPdf {
         if (StringUtils.isNotBlank(po.getVendorStateCode())) {
             vendorInfo.append(", " + po.getVendorStateCode());
         }
-        if (StringUtils.isNotBlank(po.getVendorAddressInternationalProvinceName())) {
-            vendorInfo.append(", " + po.getVendorAddressInternationalProvinceName());
-        }
         if (StringUtils.isNotBlank(po.getVendorPostalCode())) {
             vendorInfo.append(" " + po.getVendorPostalCode() + "\n");
         }
         else {
             vendorInfo.append("\n");
         }
-        if (!KFSConstants.COUNTRY_CODE_UNITED_STATES.equalsIgnoreCase(po.getVendorCountryCode()) && po.getVendorCountry() != null) {
+        if (!KFSConstants.COUNTRY_CODE_UNITED_STATES.equalsIgnoreCase(po.getVendorCountryCode())) {
             vendorInfo.append("     " + po.getVendorCountry().getPostalCountryName() + "\n\n");
         }
         else {
@@ -509,6 +422,11 @@ public class PurchaseOrderPdf extends PurapPdf {
 
         document.add(infoTable);
 
+        // ***** Notes and Stipulations table *****
+        // ripierce: the notes and stipulations table is type Table instead of PdfPTable
+        // because Table has the method setCellsFitPage and I can't find an equivalent
+        // in PdfPTable. Long notes or stipulations would break to the next page, leaving
+        // a large white space on the previous page.
         PdfPTable notesStipulationsTable = new PdfPTable(1);
         notesStipulationsTable.setWidthPercentage(100);
         notesStipulationsTable.setSplitLate(false);
@@ -518,6 +436,11 @@ public class PurchaseOrderPdf extends PurapPdf {
         if (po.getVendorNoteText() != null) {
             p.add(new Chunk("     " + po.getVendorNoteText() + "\n", cour_10_normal));
         }
+        // For testing large notes.
+        // String longNoteText =
+        // "long\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\n
+        // text";
+        // p.add(new Chunk(" "+longNoteText, cour_10_normal));
 
         PdfPCell tableCell = new PdfPCell(p);
         tableCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -539,6 +462,12 @@ public class PurchaseOrderPdf extends PurapPdf {
             }
             p.add(new Chunk("     " + vendorStipulations.toString(), cour_10_normal));
         }
+
+        // For testing large stipulations.
+        // String longStipulationText =
+        // "long\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\nlong\n
+        // text";
+        // p.add(new Chunk(" "+longStipulationText, cour_10_normal));
 
         tableCell = new PdfPCell(p);
         tableCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -577,27 +506,21 @@ public class PurchaseOrderPdf extends PurapPdf {
         tableCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         itemsTable.addCell(tableCell);
 
-        Collection<PurchaseOrderItem> itemsList = new ArrayList();
-        if (isRetransmit) {
-            itemsList = retransmitItems;
-        }
-        else {
-            itemsList = po.getItems();
-        }
+        Collection<PurchaseOrderItem> itemsList = po.getItems();
         for (PurchaseOrderItem poi : itemsList) {
-            if ((poi.getItemType() != null) && (poi.getItemType().isItemTypeAboveTheLineIndicator() || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SHIP_AND_HAND_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_FREIGHT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)) && lineItemDisplaysOnPdf(poi)) {
+            if ((poi.getItemType() != null) && (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SHIP_AND_HAND_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_FREIGHT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)) && lineItemDisplaysOnPdf(poi)) {
 
                 String description = (poi.getItemCatalogNumber() != null) ? poi.getItemCatalogNumber().trim() + " - " : "";
                 description = description + ((poi.getItemDescription() != null) ? poi.getItemDescription().trim() : "");
                 if (StringUtils.isNotBlank(description)) {
-                    if (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_FREIGHT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SHIP_AND_HAND_CODE)) {
+                    if (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)) {
                         // If this is a full order discount or trade-in item, we add the item type description to the description.
                         description = poi.getItemType().getItemTypeDescription() + " - " + description;
                     }
                 }
 
-                // Above the line item types items display the line number; other types don't.
-                if (poi.getItemType().isItemTypeAboveTheLineIndicator()) {
+                // "ITEM"s display the line number; other types don't.
+                if (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE)) {
                     tableCell = new PdfPCell(new Paragraph(poi.getItemLineNumber().toString(), cour_10_normal));
                 }
                 else {
@@ -641,14 +564,8 @@ public class PurchaseOrderPdf extends PurapPdf {
         tableCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         itemsTable.addCell(tableCell);
         itemsTable.addCell(" ");
-        KualiDecimal totalDollarAmount = new KualiDecimal(BigDecimal.ZERO);
-        if (po instanceof PurchaseOrderRetransmitDocument) {
-            totalDollarAmount = ((PurchaseOrderRetransmitDocument) po).getTotalDollarAmountForRetransmit();
-        }
-        else {
-            totalDollarAmount = po.getTotalDollarAmount();
-        }
-        tableCell = new PdfPCell(new Paragraph(numberFormat.format(totalDollarAmount) + " ", cour_10_normal));
+        // getTotalCost() calculates based on the items in the po, so works for retransmit.
+        tableCell = new PdfPCell(new Paragraph(numberFormat.format(po.getTotalDollarAmount()) + " ", cour_10_normal));
         tableCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         itemsTable.addCell(tableCell);
         // Blank line after totals
@@ -766,33 +683,32 @@ public class PurchaseOrderPdf extends PurapPdf {
         LOG.debug("createPdf()pdf document closed.");
     } // End of createPdf()
 
-    /**
-     * Determines whether the item should be displayed on the pdf.
-     * 
-     * @param poi  The PurchaseOrderItem to be determined whether it should be displayed on the pdf.
-     * @return     boolean true if it should be displayed on the pdf.
-     */
     private boolean lineItemDisplaysOnPdf(PurchaseOrderItem poi) {
         LOG.debug("lineItemDisplaysOnPdf() started");
+        // Note ripierce: this method translates the information in
+        // Groups/Fiscal/Purchasing-AP/Entire Project/"processing 0 qty and $0 line items.xls" into java.
 
         // Shipping, freight, full order discount and trade in items.
         if ((poi.getItemType() != null) && (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SHIP_AND_HAND_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_FREIGHT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE) || poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE))) {
 
             // If the unit price is not null and either the unit price > 0 or the item type is full order discount or trade in,
-            // we'll display this line item on pdf.
+            // we'll display this
+            // line item on pdf.
             if ((poi.getItemUnitPrice() != null) && ((poi.getItemUnitPrice().compareTo(zero.bigDecimalValue()) == 1) || (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ORDER_DISCOUNT_CODE)) || (poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_TRADE_IN_CODE)))) {
                 LOG.debug("lineItemDisplaysOnPdf() Item type is " + poi.getItemType().getItemTypeCode() + ". Unit price is " + poi.getItemUnitPrice() + ". Display on pdf.");
                 return true;
             }
             LOG.debug("lineItemDisplaysOnPdf() Item type is " + poi.getItemType().getItemTypeCode() + ". Unit price is " + poi.getItemUnitPrice() + ". Don't display on pdf.");
             return false;
+
+            // "ITEM" items.
         }
-        else if ((poi.getItemType() != null) && poi.getItemType().isItemTypeAboveTheLineIndicator()) {
+        else if ((poi.getItemType() != null) && poi.getItemType().getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE)) {
             if (poi.getItemQuantity() == null && poi.getItemUnitPrice() == null) {
                 LOG.debug("lineItemDisplaysOnPdf() Item type is " + poi.getItemType().getItemTypeCode() + " OrderQuantity and unit price are both null. Display on pdf.");
                 return true;
             }
-            if ((poi.getItemType().isAmountBasedGeneralLedgerIndicator() && ((poi.getItemUnitPrice() != null) && (poi.getItemUnitPrice().compareTo(zero.bigDecimalValue()) >= 0))) || (((poi.getItemType().isQuantityBasedGeneralLedgerIndicator()) && (poi.getItemQuantity().isGreaterThan(zero))) && (poi.getItemUnitPrice() != null))) {
+            if ((poi.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SERVICE_CODE) && ((poi.getItemUnitPrice() != null) && (poi.getItemUnitPrice().compareTo(zero.bigDecimalValue()) >= 0))) || (((!poi.getItemTypeCode().equals(PurapConstants.ItemTypeCodes.ITEM_TYPE_SERVICE_CODE)) && (poi.getItemQuantity().isGreaterThan(zero))) && (poi.getItemUnitPrice() != null))) {
                 LOG.debug("lineItemDisplaysOnPdf() Item type is " + poi.getItemType().getItemTypeCode() + " OrderQuantity is " + poi.getItemQuantity() + ". Unit price is " + poi.getItemUnitPrice() + ". Display on pdf.");
                 return true;
             }

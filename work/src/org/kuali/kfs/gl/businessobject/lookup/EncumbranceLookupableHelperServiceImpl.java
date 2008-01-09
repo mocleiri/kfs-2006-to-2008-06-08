@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.bo.BusinessObject;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.batch.poster.EncumbranceCalculator;
 import org.kuali.module.gl.bo.Encumbrance;
@@ -30,22 +30,13 @@ import org.kuali.module.gl.service.EncumbranceService;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.inquirable.EncumbranceInquirableImpl;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- * An extension of KualiLookupableImpl to support encumbrance lookups
- */
-@Transactional
 public class EncumbranceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
 
     private EncumbranceCalculator postEncumbrance;
     private EncumbranceService encumbranceService;
 
     /**
-     * Returns the url for any drill down links within the lookup
-     * @param bo the business object with a property being drilled down on
-     * @param propertyName the name of the property being drilled down on
-     * @return a String with the URL of the property
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
@@ -54,15 +45,12 @@ public class EncumbranceLookupableHelperServiceImpl extends AbstractGLLookupable
     }
 
     /**
-     * Generates the list of search results for this inquiry
-     * @param fieldValues the field values of the query to carry out
-     * @return List the search results returned by the lookup
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     @Override
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         // get the pending entry option. This method must be prior to the get search results
         String pendingEntryOption = this.getSelectedPendingEntryOption(fieldValues);
@@ -82,13 +70,6 @@ public class EncumbranceLookupableHelperServiceImpl extends AbstractGLLookupable
     }
 
     /**
-     * Updates pending entries before their results are included in the lookup results
-     * 
-     * @param entryCollection a collection of balance entries
-     * @param fieldValues the map containing the search fields and values
-     * @param isApproved flag whether the approved entries or all entries will be processed
-     * @param isConsolidated flag whether the results are consolidated or not
-     * @param isCostShareExcluded flag whether the user selects to see the results with cost share subaccount
      * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableImpl#updateEntryCollection(java.util.Collection, java.util.Map,
      *      boolean, boolean, boolean)
      */
@@ -107,11 +88,7 @@ public class EncumbranceLookupableHelperServiceImpl extends AbstractGLLookupable
         }
     }
 
-    /**
-     * go through the given iterator to get encumbrances and put them into a collection
-     * @param iterator an iterator of encumbrances
-     * @return a collection of those encumbrances
-     */
+    // go through the given iterator to get encumbrances and put them into a collection
     private Collection buildEncumbranceCollection(Iterator iterator) {
         Collection encumbranceCollection = new ArrayList();
 

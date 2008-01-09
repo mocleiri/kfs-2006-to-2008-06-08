@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +26,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.core.service.KualiRuleService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.Constants;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.BudgetIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetIndirectCostLookup;
 import org.kuali.module.kra.budget.rules.event.RecalculateIndirectCostEvent;
 import org.kuali.module.kra.budget.rules.event.UpdateIndirectCostEvent;
-import org.kuali.module.kra.budget.service.BudgetIndirectCostService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.budget.web.struts.form.BudgetIndirectCostFormHelper;
 
 /**
  * This class handles Actions for Research Administration.
+ * 
+ * 
  */
 
 public class BudgetIndirectCostAction extends BudgetAction {
@@ -56,32 +58,32 @@ public class BudgetIndirectCostAction extends BudgetAction {
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         BudgetForm budgetForm = (BudgetForm) form;
-
-        SpringContext.getBean(BudgetIndirectCostService.class).refreshIndirectCost(budgetForm.getBudgetDocument());
+        
+        SpringServiceLocator.getBudgetIndirectCostService().refreshIndirectCost(budgetForm.getBudgetDocument());
         budgetForm.setBudgetIndirectCostFormHelper(new BudgetIndirectCostFormHelper(budgetForm));
 
         // Check to make sure our rules are passed.
-        boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new UpdateIndirectCostEvent(budgetForm.getDocument(), budgetForm.getBudgetDocument().getBudget().getIndirectCost()));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new UpdateIndirectCostEvent(budgetForm.getDocument(), budgetForm.getBudgetDocument().getBudget().getIndirectCost()));
 
         // If our rule failed, reload the current page.
         if (!rulePassed) {
-            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+            return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
         BudgetIndirectCost indirectCost = new BudgetIndirectCost(budgetForm.getBudgetDocument().getBudget().getIndirectCost());
         indirectCost.setDocumentNumber(budgetForm.getBudgetDocument().getDocumentNumber());
 
         List<BudgetIndirectCostLookup> budgetIndirectCostLookups = new ArrayList(budgetForm.getBudgetDocument().getBudget().getBudgetIndirectCostLookups());
-
+        
         // we are only saving indirect cost items, so load the doc and
         // set the indirect cost items to the proper ones.
         this.load(mapping, form, request, response);
         budgetForm.getBudgetDocument().getBudget().setIndirectCost(indirectCost);
         budgetForm.getBudgetDocument().getBudget().setBudgetIndirectCostLookups(budgetIndirectCostLookups);
-
+        
         super.save(mapping, form, request, response);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -100,14 +102,14 @@ public class BudgetIndirectCostAction extends BudgetAction {
         BudgetForm budgetForm = (BudgetForm) form;
 
         // Check to make sure our rules are passed.
-        boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new RecalculateIndirectCostEvent(budgetForm.getDocument()));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new RecalculateIndirectCostEvent(budgetForm.getDocument()));
 
         // If our rule passed, update all our values. Otherwise, reload the page.
         if (rulePassed) {
 
             // Make sure our IDC object is properly formed. This will also perform initial calculations for
             // BudgetTaskPeriodIndirectCost objects.
-            SpringContext.getBean(BudgetIndirectCostService.class).refreshIndirectCost(budgetForm.getBudgetDocument());
+            SpringServiceLocator.getBudgetIndirectCostService().refreshIndirectCost(budgetForm.getBudgetDocument());
 
             // This will populate task and period totals in HashMaps so they can be pulled in the view.
             budgetForm.setBudgetIndirectCostFormHelper(new BudgetIndirectCostFormHelper(budgetForm));
@@ -115,15 +117,15 @@ public class BudgetIndirectCostAction extends BudgetAction {
 
         return this.update(mapping, form, request, response);
     }
-
-
+    
+    
     public ActionForward reload(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = super.reload(mapping, form, request, response);
-
+        
         BudgetForm budgetForm = (BudgetForm) form;
-        SpringContext.getBean(BudgetIndirectCostService.class).refreshIndirectCost(budgetForm.getBudgetDocument());
+        SpringServiceLocator.getBudgetIndirectCostService().refreshIndirectCost(budgetForm.getBudgetDocument());
         budgetForm.setBudgetIndirectCostFormHelper(new BudgetIndirectCostFormHelper(budgetForm));
-
+        
         return forward;
     }
 }

@@ -23,48 +23,37 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.BusinessObject;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
 import org.kuali.core.lookup.CollectionIncomplete;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.InquirableFinancialDocument;
 
-/**
- * An extension of KualiLookupableImpl to support balance lookups
- */
 public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PendingEntryLookupableHelperServiceImpl.class);
 
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
 
     private final static String UNIVERSITY_FISCAL_YEAR = "universityFiscalYear";
     private final static String UNIVERSITY_FISCAL_PERIOD_CODE = "universityFiscalPeriodCode";
 
     /**
-     * Returns the url for any drill down links within the lookup (defers to its superclass unless it needs
-     * to get the url of the document that created this result pending entry)
-     * @param bo the business object with a property being drilled down on
-     * @param propertyName the name of the property being drilled down on
-     * @return a String with the URL of the property
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
-    @Override
-    public String getInquiryUrl(BusinessObject businessObject, String propertyName) {
-        if (KFSPropertyConstants.DOCUMENT_NUMBER.equals(propertyName) && businessObject instanceof GeneralLedgerPendingEntry) {
+    public String getInquiryUrl(PersistableBusinessObject businessObject, String propertyName) {
+        if (PropertyConstants.DOCUMENT_NUMBER.equals(propertyName) && businessObject instanceof GeneralLedgerPendingEntry) {
             GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) businessObject;
             return new InquirableFinancialDocument().getInquirableDocumentUrl(pendingEntry);
         }
@@ -72,11 +61,6 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
     }
 
 
-    /**
-     * Validates the fiscal year searched for in the inquiry
-     * @param fieldValues the values of the query
-     * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#validateSearchParameters(java.util.Map)
-     */
     @Override
     public void validateSearchParameters(Map fieldValues) {
         super.validateSearchParameters(fieldValues);
@@ -87,7 +71,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
                 int year = Integer.parseInt(valueFiscalYear);
             }
             catch (NumberFormatException e) {
-                GlobalVariables.getErrorMap().putError(UNIVERSITY_FISCAL_YEAR, KFSKeyConstants.ERROR_CUSTOM, new String[] { KFSKeyConstants.PendingEntryLookupableImpl.FISCAL_YEAR_FOUR_DIGIT });
+                GlobalVariables.getErrorMap().putError(UNIVERSITY_FISCAL_YEAR, KeyConstants.ERROR_CUSTOM, new String[] { KeyConstants.PendingEntryLookupableImpl.FISCAL_YEAR_FOUR_DIGIT });
                 throw new ValidationException("errors in search criteria");
             }
         }
@@ -95,14 +79,11 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
 
 
     /**
-     * Generates the list of search results for this inquiry
-     * @param fieldValues the field values of the query to carry out
-     * @return List the search results returned by the lookup
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     public List getSearchResults(Map fieldValues) {
-        setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
-        setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
+        setBackLocation((String) fieldValues.get(Constants.BACK_LOCATION));
+        setDocFormKey((String) fieldValues.get(Constants.DOC_FORM_KEY));
 
         boolean isApproved = fieldValues.containsKey(Constant.PENDING_ENTRY_OPTION) && Constant.APPROVED_PENDING_ENTRY.equals(fieldValues.get(Constant.PENDING_ENTRY_OPTION));
         Collection searchResultsCollection = generalLedgerPendingEntryService.findPendingEntries(fieldValues, isApproved);
@@ -115,7 +96,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
         }
 
         // get the result limit number from configuration
-        String limitConfig = parameterService.getParameterValue(ParameterConstants.NERVOUS_SYSTEM_LOOKUP.class, KFSConstants.LOOKUP_RESULTS_LIMIT_URL_KEY);
+        String limitConfig = kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.LOOKUP_RESULTS_LIMIT_URL_KEY);
         Integer limit = null;
         if (limitConfig != null) {
             limit = Integer.valueOf(limitConfig);
@@ -134,7 +115,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
             }
         }
 
-        UniversityDate currentUniversityDate = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate currentUniversityDate = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = currentUniversityDate.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = currentUniversityDate.getUniversityFiscalYear();
 
@@ -181,7 +162,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
 
         return new CollectionIncomplete(collection, new Long(collection.size()));
     }
-
+    
     /**
      * Sets the generalLedgerPendingEntryService attribute value.
      * 
@@ -191,8 +172,8 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
         this.generalLedgerPendingEntryService = generalLedgerPendingEntryService;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 
 }

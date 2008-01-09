@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
@@ -34,6 +38,8 @@ import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
 /**
  * Action for BudgetCostShare page.
+ * 
+ * 
  */
 public class BudgetCostShareAction extends BudgetAction {
 
@@ -53,13 +59,13 @@ public class BudgetCostShareAction extends BudgetAction {
         budget.refreshReferenceObject("personnel");
         budget.refreshReferenceObject("nonpersonnelItems");
         budget.refreshReferenceObject("indirectCost");
-
+        
         // super.execute has to be called before re-creating BudgetCostShareFormHelper because the super call may
         // completly reload data such as for example for the reload button
         ActionForward forward = super.execute(mapping, form, request, response);
-
+        
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
-
+        
         setupBudgetCostSharePermissionDisplay(budgetForm);
 
         return forward;
@@ -103,7 +109,7 @@ public class BudgetCostShareAction extends BudgetAction {
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
         budgetForm.getNewInstitutionCostShare().setPermissionIndicator(true);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -124,7 +130,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -147,7 +153,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -168,7 +174,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -208,7 +214,7 @@ public class BudgetCostShareAction extends BudgetAction {
 
         return super.save(mapping, form, request, response);
     }
-
+    
     @Override
     public ActionForward reload(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = super.reload(mapping, form, request, response);

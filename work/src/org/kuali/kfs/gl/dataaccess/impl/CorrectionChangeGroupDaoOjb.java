@@ -21,20 +21,14 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.dao.CorrectionChangeGroupDao;
 
-/**
- * The OJB implementation of CorrectionChangeGroupDao
- */
 public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb implements CorrectionChangeGroupDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeGroupDaoOjb.class);
 
     /**
-     * Deletes an unlucky correction change group
      * 
-     * @param group the group to delete
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#delete(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void delete(CorrectionChangeGroup group) {
@@ -44,15 +38,12 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     }
 
     /**
-     * Finds all of the correction change groups associated with a document.
      * 
-     * @param documentNumber the document number of a GLCP document
-     * @return a Collection of CorrectionChangeGroup records
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumber(java.lang.String)
      */
     public Collection findByDocumentNumber(String documentNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("financialDocumentNumber", documentNumber);
 
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChangeGroup.class, criteria);
 
@@ -60,30 +51,23 @@ public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb impleme
     }
 
     /**
-     * Finds the specific group associated with the given document with the given group number
      * 
-     * @param documentNumber the document number of the correction change group to retrieve
-     * @param CorrectionChangeGroupNumber the number of the group to retrieve
-     * @return the found CorrectionChangeGroup, or null if not found
-     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumberAndCorrectionChangeGroupNumber(java.lang.String,
-     *      java.lang.Integer)
+     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumberAndCorrectionChangeGroupNumber(java.lang.String, java.lang.Integer)
      */
     public CorrectionChangeGroup findByDocumentNumberAndCorrectionChangeGroupNumber(String documentNumber, Integer CorrectionChangeGroupNumber) {
         LOG.debug("findByDocumentNumberAndCorrectionChangeGroupNumber() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("financialDocumentNumber", documentNumber);
         criteria.addEqualTo("correctionChangeGroupLineNumber", CorrectionChangeGroupNumber);
-
+     
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChangeGroup.class, criteria);
 
         return (CorrectionChangeGroup) getPersistenceBrokerTemplate().getObjectByQuery(query);
     }
 
     /**
-     * Saves a correction change group
      * 
-     * @param group the Correction Change Group to save
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#save(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void save(CorrectionChangeGroup group) {

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +19,21 @@ package org.kuali.module.kra.budget.bo;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.ojb.broker.PersistenceBroker;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.DateTimeService;
+import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
 
 /**
  * Account Business Object
+ * 
+ * 
  */
-public class AppointmentType extends PersistableBusinessObjectBase {
+public class AppointmentType extends BusinessObjectBase {
 
     private static final long serialVersionUID = 5817907435877665832L;
     private String appointmentTypeCode;
@@ -37,6 +41,7 @@ public class AppointmentType extends PersistableBusinessObjectBase {
     private String appointmentTypeAbbrieviation;
     private KualiDecimal fringeRateAmount;
     private KualiDecimal costShareFringeRateAmount;
+    private Integer fiscalYear;
     private Timestamp lastUpdate;
     private boolean displayGrid;
     private boolean active;
@@ -50,7 +55,7 @@ public class AppointmentType extends PersistableBusinessObjectBase {
      */
     public AppointmentType() {
     }
-
+    
     public AppointmentType(String appointmentTypeCode) {
         this();
         this.appointmentTypeCode = appointmentTypeCode;
@@ -117,6 +122,19 @@ public class AppointmentType extends PersistableBusinessObjectBase {
         this.costShareFringeRateAmount = costShareFringeRateAmount;
     }
 
+    /**
+     * @return Returns the fiscalYear.
+     */
+    public Integer getFiscalYear() {
+        return fiscalYear;
+    }
+
+    /**
+     * @param fiscalYear The fiscalYear to set.
+     */
+    public void setFiscalYear(Integer fiscalYear) {
+        this.fiscalYear = fiscalYear;
+    }
 
     /**
      * @return Returns the fringeRateAmount.
@@ -146,16 +164,95 @@ public class AppointmentType extends PersistableBusinessObjectBase {
         return lastUpdate;
     }
 
-    public void beforeInsert(PersistenceBroker persistenceBroker) {
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterDelete(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterDelete(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterInsert(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterInsert(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterLookup(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterLookup(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterUpdate(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterUpdate(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeDelete(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeDelete(persistenceBroker);
+    }
+
+    public void beforeSave() {
+        this.lastUpdate = new Timestamp(new Date().getTime());
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeInsert(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
         super.beforeInsert(persistenceBroker);
-        this.lastUpdate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
     }
 
-    public void beforeUpdate(PersistenceBroker persistenceBroker) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeUpdate(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
         super.beforeUpdate(persistenceBroker);
-        this.lastUpdate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.bo.BusinessObject#getExtendedAttributeValues()
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.core.bo.BusinessObjectBase#toStringBuilder(java.util.LinkedHashMap)
+     */
+    protected String toStringBuilder(LinkedHashMap fieldValues) {
+        // TODO Auto-generated method stub
+        return super.toStringBuilder(fieldValues);
+    }
 
     /*
      * (non-Javadoc)
@@ -167,6 +264,16 @@ public class AppointmentType extends PersistableBusinessObjectBase {
         m.put("appointmentTypeCode", this.appointmentTypeCode);
 
         return m;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.bo.BusinessObject#validate()
+     */
+    public void validate() {
+        // TODO Auto-generated method stub
+        super.validate();
     }
 
     /**
@@ -191,6 +298,7 @@ public class AppointmentType extends PersistableBusinessObjectBase {
      * Gets the appointmentTypeEffectiveDateItems attribute.
      * 
      * @return Returns the appointmentTypeEffectiveDateItems
+     * 
      */
     public List getAppointmentTypeEffectiveDateItems() {
         return appointmentTypeEffectiveDateItems;
@@ -200,6 +308,7 @@ public class AppointmentType extends PersistableBusinessObjectBase {
      * Sets the appointmentTypeEffectiveDateItems attribute.
      * 
      * @param appointmentTypeEffectiveDateItems The appointmentTypeEffectiveDateItems to set.
+     * 
      */
     public void setAppointmentTypeEffectiveDateItems(List appointmentTypeEffectiveDateItems) {
         this.appointmentTypeEffectiveDateItems = appointmentTypeEffectiveDateItems;

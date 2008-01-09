@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/unit/src/org/kuali/kfs/sys/document/workflow/MockWorkflowDocument.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +30,14 @@ import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This class is the base class for a MockWorkflowDocument. It can be extended by any other kind of mock document that needs to
- * override certain methods. This class has absolutely no state or behavior. There is no public constructor, and no member
- * variables. All void methods do nothing. All methods with a return value return null. All state and behavior needs to be added via
- * a subclass.
+ * override certain methods.
+ * 
+ * This class has absolutely no state or behavior. There is no public constructor, and no member variables. All void methods do
+ * nothing. All methods with a return value return null.
+ * 
+ * All state and behavior needs to be added via a subclass.
+ * 
+ * 
  */
 public abstract class MockWorkflowDocument implements KualiWorkflowDocument {
 

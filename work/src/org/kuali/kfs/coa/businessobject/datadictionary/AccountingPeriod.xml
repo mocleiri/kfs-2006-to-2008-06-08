@@ -1,41 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.AccountingPeriod">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Accounting Period Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="universityFiscalPeriodCode" />
                 <field attributeName="universityFiscalPeriodName" />
                 <field attributeName="universityFiscalPeriodStatusCode" />
                 <field attributeName="universityFiscalPeriodEndDate" />
                 <field attributeName="budgetRolloverIndicator" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Accounting Period Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.AccountingPeriod">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup an Accounting Period</instructions>
 
@@ -79,6 +68,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>Budget rollover summary...</summary>
+                <description>Budget rollover description...</description>
             </attribute>
             <attribute name="universityFiscalPeriodName" forceUppercase="true">
                 <label>University Fiscal Period Name</label>
@@ -93,6 +85,9 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>universityFiscalPeriodName summary...</summary>
+                <description>universityFiscalPeriodName description...</description>
             </attribute>
             <attribute name="universityFiscalPeriodStatusCode" forceUppercase="true">
                 <label>University Fiscal Period Status Code</label>
@@ -107,6 +102,9 @@
                 <control>
                     <select valuesFinderClass="org.kuali.core.lookup.keyvalues.OpenCloseValuesFinder" />
                 </control>
+
+                <summary>universityFiscalPeriodStatusCode summary...</summary>
+                <description>universityFiscalPeriodStatusCode description...</description>
             </attribute>
 
             <attribute name="universityFiscalPeriodCode" forceUppercase="true">
@@ -120,14 +118,19 @@
                 </validationPattern>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.kfs.lookup.keyvalues.FiscalPeriodValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.FiscalPeriodValuesFinder" />
                 </control>
+
+                <summary>universityFiscalPeriodCode summary...</summary>
+                <description>universityFiscalPeriodCode description...</description>
             </attribute>
 
             <attributeReference name="universityFiscalPeriodEndDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericDate">
                 <label>University Fiscal Period End Date</label>
                 <shortLabel>End Date</shortLabel>
                 <required>true</required>
+                <summary>University Fiscal Period End Date</summary>
+                <description>University Fiscal Period End Date...</description>
             </attributeReference>
 
             <attribute name="universityFiscalYear" forceUppercase="true">
@@ -143,11 +146,21 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>universityFiscalYear summary...</summary>
+                <description>universityFiscalYear description...</description>
             </attribute>
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
             <attributeReference name="objectId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="objectId" />
         </attributes>
 
-        <objectLabel>Accounting Period</objectLabel>
+        <collections>
+            <collection name="extendedAttributeValues">
+                <label>Extended Attribute Values</label>
+                <shortLabel>Values</shortLabel>
+                <summary>extendedAttributeValues</summary>
+                <description>extendedAttributeValues description...</description>
+            </collection>
+        </collections>
     </businessObject>
 </dictionaryEntry>

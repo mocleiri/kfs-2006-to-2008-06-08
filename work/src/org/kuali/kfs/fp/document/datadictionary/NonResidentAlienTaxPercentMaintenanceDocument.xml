@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.financial.bo.NonResidentAlienTaxPercent</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +32,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>NonResidentAlienTaxPercentMaintenanceDocument</documentTypeName>
-        <documentTypeCode>DVTX</documentTypeCode>
+        <documentTypeName>KualiNonResidentAlienTaxPercentMaintenanceDocument</documentTypeName>
+        <documentTypeCode>DVOT</documentTypeCode>
 
-        <label>Non-Resident Alien Tax Percent</label>
+        <label>Non Resident Alien Tax Percent Maintenance Document</label>
+        <shortLabel>Tax percent Maint Doc</shortLabel>
 
         <summary>Non resident alien tax percent</summary>
         <description>Document used to create or update Tax Percent objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="NonResidentAlienTaxPercent" parameterName="NON_RESIDENT_ALIEN_TAX_PERCENT" />
+        <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_NON_RESIDENT_ALIEN_TAX_PERCENT" />
 
         <lockingKeys>
             <field attributeName="incomeClassCode" />

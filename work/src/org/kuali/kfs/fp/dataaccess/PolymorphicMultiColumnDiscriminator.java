@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/dataaccess/PolymorphicMultiColumnDiscriminator.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +26,23 @@ import org.apache.ojb.broker.accesslayer.RowReaderDefaultImpl;
 import org.apache.ojb.broker.metadata.ClassDescriptor;
 
 /**
- * (Inspired by example posted at http://nagoya.apache.org/eyebrowse/ReadMsg?listName=ojb-user@db.apache.org&msgId=749837) This
- * class enables mapping multiple (presumably similar) classes to a single database table. Subclasses must implement the
+ * (Inspired by example posted at http://nagoya.apache.org/eyebrowse/ReadMsg?listName=ojb-user@db.apache.org&msgId=749837)
+ * 
+ * This class enables mapping multiple (presumably similar) classes to a single database table. Subclasses must implement the
  * getDiscriminatorColumns method, returning a String array of columns to consider when determining which class to return, as well
- * as implement the corresponding chooseClass method that acts on received values for those columns. Sample OBJ config:
- * <class-descriptor class="org.kuali.bo.ClassA" table="some_common_table" row-reader="org.kuali.dao.ojb.ClassADiscriminator"> ...
- * </class-descriptor> <class-descriptor class="org.kuali.bo.ClassB" table="some_common_table"
- * row-reader="org.kuali.dao.ojb.ClassBDiscriminator"> ... </class-descriptor> (where ClassADiscriminator and ClassBDiscriminator
- * extend PolymorphicMultiColumnDiscriminator)
+ * as implement the corresponding chooseClass method that acts on received values for those columns.
+ * 
+ * Sample OBJ config:
+ * 
+ * <class-descriptor class="org.kuali.bo.ClassA" table="some_common_table"row-reader="org.kuali.dao.ojb.ClassADiscriminator"> ...
+ * </class-descriptor>
+ * 
+ * <class-descriptor class="org.kuali.bo.ClassB" table="some_common_table"row-reader="org.kuali.dao.ojb.ClassBDiscriminator"> ...
+ * </class-descriptor>
+ * 
+ * (where ClassADiscriminator and ClassBDiscriminator extend PolymorphicMultiColumnDiscriminator)
+ * 
+ * 
  */
 public abstract class PolymorphicMultiColumnDiscriminator extends RowReaderDefaultImpl {
 
@@ -44,6 +55,7 @@ public abstract class PolymorphicMultiColumnDiscriminator extends RowReaderDefau
     }
 
     /**
+     * 
      * This method should return the column(s) necessary to determine which class to cast to.
      * 
      * @return one or more column names
@@ -51,6 +63,7 @@ public abstract class PolymorphicMultiColumnDiscriminator extends RowReaderDefau
     public abstract String[] getDiscriminatorColumns();
 
     /**
+     * 
      * Based on the received key values, this method determines the appropriate class.
      * 
      * @param values

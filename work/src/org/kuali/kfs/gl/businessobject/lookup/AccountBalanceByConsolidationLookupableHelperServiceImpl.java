@@ -32,9 +32,6 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.AccountBalanceByConsolidationInquirableImpl;
 
-/**
- * An extension of KualiLookupableImpl to support the account balance by consolidation inquiry screen
- */
 public class AccountBalanceByConsolidationLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountBalanceByConsolidationLookupableHelperServiceImpl.class);
@@ -93,7 +90,7 @@ public class AccountBalanceByConsolidationLookupableHelperServiceImpl extends Ab
         String ufy = (String) fieldValues.get(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
 
         // Dashes means no sub account number
-        if (KFSConstants.getDashSubAccountNumber().equals(subAccountNumber)) {
+        if (KFSConstants.DASHES_SUB_ACCOUNT_NUMBER.equals(subAccountNumber)) {
             subAccountNumber = "";
         }
 

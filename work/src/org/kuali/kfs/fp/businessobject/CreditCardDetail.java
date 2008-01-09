@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.bo;
@@ -19,16 +28,17 @@ package org.kuali.module.financial.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
  * This class represents the CreditCardDetail business object, which is a single record on the Credit Card Receipts Document
  * representing a single credit card receipt. This is a type of advance deposit.
+ * 
+ * @author Kuali Transaction Processing eDocs Team (kualidev@oncourse.iu.edu)
  */
-public class CreditCardDetail extends PersistableBusinessObjectBase {
-    private String documentNumber;
+public class CreditCardDetail extends BusinessObjectBase {
+    private String financialDocumentNumber;
     private String financialDocumentTypeCode;
     private String financialDocumentColumnTypeCode;
     private Integer financialDocumentLineNumber;
@@ -51,21 +61,23 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return Returns the financialDocumentNumber
+     * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param financialDocumentNumber The financialDocumentNumber to set.
+     * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
 
@@ -73,6 +85,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Gets the financialDocumentTypeCode attribute.
      * 
      * @return Returns the financialDocumentTypeCode
+     * 
      */
     public String getFinancialDocumentTypeCode() {
         return financialDocumentTypeCode;
@@ -82,6 +95,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the financialDocumentTypeCode attribute.
      * 
      * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
+     * 
      */
     public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
         this.financialDocumentTypeCode = financialDocumentTypeCode;
@@ -92,6 +106,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Gets the financialDocumentColumnTypeCode attribute.
      * 
      * @return Returns the financialDocumentColumnTypeCode
+     * 
      */
     public String getFinancialDocumentColumnTypeCode() {
         return financialDocumentColumnTypeCode;
@@ -101,6 +116,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the financialDocumentColumnTypeCode attribute.
      * 
      * @param financialDocumentColumnTypeCode The financialDocumentColumnTypeCode to set.
+     * 
      */
     public void setFinancialDocumentColumnTypeCode(String financialDocumentColumnTypeCode) {
         this.financialDocumentColumnTypeCode = financialDocumentColumnTypeCode;
@@ -111,6 +127,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Gets the financialDocumentLineNumber attribute.
      * 
      * @return Returns the financialDocumentLineNumber
+     * 
      */
     public Integer getFinancialDocumentLineNumber() {
         return financialDocumentLineNumber;
@@ -120,6 +137,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the financialDocumentLineNumber attribute.
      * 
      * @param financialDocumentLineNumber The financialDocumentLineNumber to set.
+     * 
      */
     public void setFinancialDocumentLineNumber(Integer financialDocumentLineNumber) {
         this.financialDocumentLineNumber = financialDocumentLineNumber;
@@ -130,6 +148,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Gets the financialDocumentCreditCardTypeCode attribute.
      * 
      * @return Returns the financialDocumentCreditCardTypeCode
+     * 
      */
     public String getFinancialDocumentCreditCardTypeCode() {
         return financialDocumentCreditCardTypeCode;
@@ -139,6 +158,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the financialDocumentCreditCardTypeCode attribute.
      * 
      * @param financialDocumentCreditCardTypeCode The financialDocumentCreditCardTypeCode to set.
+     * 
      */
     public void setFinancialDocumentCreditCardTypeCode(String financialDocumentCreditCardTypeCode) {
         this.financialDocumentCreditCardTypeCode = financialDocumentCreditCardTypeCode;
@@ -149,6 +169,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Gets the financialDocumentCreditCardVendorNumber attribute.
      * 
      * @return Returns the financialDocumentCreditCardVendorNumber
+     * 
      */
     public String getFinancialDocumentCreditCardVendorNumber() {
         return financialDocumentCreditCardVendorNumber;
@@ -158,6 +179,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the financialDocumentCreditCardVendorNumber attribute.
      * 
      * @param financialDocumentCreditCardVendorNumber The financialDocumentCreditCardVendorNumber to set.
+     * 
      */
     public void setFinancialDocumentCreditCardVendorNumber(String financialDocumentCreditCardVendorNumber) {
         this.financialDocumentCreditCardVendorNumber = financialDocumentCreditCardVendorNumber;
@@ -168,6 +190,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Gets the creditCardDepositDate attribute.
      * 
      * @return Returns the creditCardDepositDate
+     * 
      */
     public Date getCreditCardDepositDate() {
         return creditCardDepositDate;
@@ -177,6 +200,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the creditCardDepositDate attribute.
      * 
      * @param creditCardDepositDate The creditCardDepositDate to set.
+     * 
      */
     public void setCreditCardDepositDate(Date creditCardDepositDate) {
         this.creditCardDepositDate = creditCardDepositDate;
@@ -187,6 +211,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Gets the creditCardDepositReferenceNumber attribute.
      * 
      * @return Returns the creditCardDepositReferenceNumber
+     * 
      */
     public String getCreditCardDepositReferenceNumber() {
         return creditCardDepositReferenceNumber;
@@ -196,6 +221,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the creditCardDepositReferenceNumber attribute.
      * 
      * @param creditCardDepositReferenceNumber The creditCardDepositReferenceNumber to set.
+     * 
      */
     public void setCreditCardDepositReferenceNumber(String creditCardDepositReferenceNumber) {
         this.creditCardDepositReferenceNumber = creditCardDepositReferenceNumber;
@@ -205,7 +231,8 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
     /**
      * Gets the creditCardAdvanceDepositAmount attribute.
      * 
-     * @return Returns the creditCardAdvanceDepositAmount
+     * @return - Returns the creditCardAdvanceDepositAmount
+     * 
      */
     public KualiDecimal getCreditCardAdvanceDepositAmount() {
         return creditCardAdvanceDepositAmount;
@@ -215,6 +242,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      * Sets the creditCardAdvanceDepositAmount attribute.
      * 
      * @param creditCardAdvanceDepositAmount The creditCardAdvanceDepositAmount to set.
+     * 
      */
     public void setCreditCardAdvanceDepositAmount(KualiDecimal creditCardAdvanceDepositAmount) {
         this.creditCardAdvanceDepositAmount = creditCardAdvanceDepositAmount;
@@ -254,7 +282,7 @@ public class CreditCardDetail extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("financialDocumentNumber", this.financialDocumentNumber);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         m.put("financialDocumentColumnTypeCode", this.financialDocumentColumnTypeCode);
         if (this.financialDocumentLineNumber != null) {

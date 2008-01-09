@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/infrastructure/src/org/kuali/kfs/sys/monitor/DocumentWorkflowRequestMonitor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +18,8 @@
 package org.kuali.test.monitor;
 
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.core.workflow.service.WorkflowDocumentService;
-import org.kuali.kfs.context.SpringContext;
 
 import edu.iu.uis.eden.EdenConstants;
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -35,8 +36,10 @@ public class DocumentWorkflowRequestMonitor extends ChangeMonitor {
         this.actionRequestedCode = actionRequestedCode;
     }
 
-    public boolean valueChanged() throws WorkflowException {
-        KualiWorkflowDocument document = SpringContext.getBean(WorkflowDocumentService.class).createWorkflowDocument(docHeaderId, user);
+    public boolean valueChanged()
+        throws WorkflowException
+    {
+        KualiWorkflowDocument document = SpringServiceLocator.getWorkflowDocumentService().createWorkflowDocument(docHeaderId, user);
         if (EdenConstants.ACTION_REQUEST_COMPLETE_REQ.equals(actionRequestedCode)) {
             return document.isCompletionRequested();
         }

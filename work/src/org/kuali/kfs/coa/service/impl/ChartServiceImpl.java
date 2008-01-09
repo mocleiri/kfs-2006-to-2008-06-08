@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.service.impl;
 
@@ -22,17 +29,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.spring.Cached;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.dao.ChartDao;
 import org.kuali.module.chart.service.ChartService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the Chart structure. This is the default, Kuali delivered implementation.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-@Transactional
 public class ChartServiceImpl implements ChartService {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ChartServiceImpl.class);
 
@@ -44,11 +50,7 @@ public class ChartServiceImpl implements ChartService {
     public Chart getByPrimaryId(String chartOfAccountsCode) {
         return chartDao.getByPrimaryId(chartOfAccountsCode);
     }
-
-    /**
-     * 
-     * @see org.kuali.module.chart.service.ChartService#getUniversityChart()
-     */
+    
     public Chart getUniversityChart() {
         return chartDao.getUniversityChart();
     }
@@ -71,11 +73,10 @@ public class ChartServiceImpl implements ChartService {
     /**
      * @see org.kuali.module.chart.service.getReportsToHierarchy()
      */
-    @Cached
-    public Map<String, String> getReportsToHierarchy() {
+    public Map<String,String> getReportsToHierarchy() {
 
         LOG.debug("getReportsToHierarchy");
-        Map<String, String> reportsToHierarchy = new HashMap();
+        Map<String,String> reportsToHierarchy = new HashMap();
 
         Iterator iter = getAllChartCodes().iterator();
         while (iter.hasNext()) {
@@ -91,17 +92,19 @@ public class ChartServiceImpl implements ChartService {
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.service.ChartService#getChartsThatUserIsResponsibleFor(org.kuali.core.bo.user.KualiUser)
      */
-    public List getChartsThatUserIsResponsibleFor(UniversalUser universalUser) {
+    public List getChartsThatUserIsResponsibleFor(KualiUser kualiUser) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieving chartsResponsible list for user " + universalUser.getPersonName());
+            LOG.debug("retrieving chartsResponsible list for user " + kualiUser.getPersonName());
         }
 
         // gets the list of accounts that the user is the Fiscal Officer of
-        List chartList = chartDao.getChartsThatUserIsResponsibleFor(universalUser);
+        List chartList = chartDao.getChartsThatUserIsResponsibleFor(kualiUser);
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieved chartsResponsible list for user " + universalUser.getPersonName());
+            LOG.debug("retrieved chartsResponsible list for user " + kualiUser.getPersonName());
         }
         return chartList;
     }
@@ -119,5 +122,6 @@ public class ChartServiceImpl implements ChartService {
     public void setChartDao(ChartDao chartDao) {
         this.chartDao = chartDao;
     }
+
 
 }

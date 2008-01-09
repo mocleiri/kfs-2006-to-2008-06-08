@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OrganizationRoutingModelName.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +22,17 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.util.TypedArrayList;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class OrganizationRoutingModelName extends PersistableBusinessObjectBase {
-    private static final Logger LOG = Logger.getLogger(OrganizationRoutingModelName.class);
+public class OrganizationRoutingModelName extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
     private String organizationRoutingModelName;
-    private List<OrganizationRoutingModel> organizationRoutingModel;
+    private List organizationRoutingModel;
 
     private Org organization;
     private Chart chartOfAccounts;
@@ -44,13 +41,15 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Default constructor.
      */
     public OrganizationRoutingModelName() {
-        organizationRoutingModel = new TypedArrayList(OrganizationRoutingModel.class);
+        organizationRoutingModel = new ArrayList();
+
     }
 
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -60,6 +59,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -70,6 +70,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Gets the organizationCode attribute.
      * 
      * @return Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -79,6 +80,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -89,6 +91,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Gets the organizationRoutingModelName attribute.
      * 
      * @return Returns the organizationRoutingModelName
+     * 
      */
     public String getOrganizationRoutingModelName() {
         return organizationRoutingModelName;
@@ -98,6 +101,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Sets the organizationRoutingModelName attribute.
      * 
      * @param organizationRoutingModelName The organizationRoutingModelName to set.
+     * 
      */
     public void setOrganizationRoutingModelName(String organizationRoutingModelName) {
         this.organizationRoutingModelName = organizationRoutingModelName;
@@ -108,6 +112,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public Org getOrganization() {
         return organization;
@@ -127,6 +132,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -147,7 +153,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * 
      * @return Returns the organizationRoutingModel.
      */
-    public List<OrganizationRoutingModel> getOrganizationRoutingModel() {
+    public List getOrganizationRoutingModel() {
         return organizationRoutingModel;
     }
 
@@ -156,7 +162,7 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
      * 
      * @param organizationRoutingModel The organizationRoutingModel to set.
      */
-    public void setOrganizationRoutingModel(List<OrganizationRoutingModel> organizationRoutingModel) {
+    public void setOrganizationRoutingModel(List organizationRoutingModel) {
         this.organizationRoutingModel = organizationRoutingModel;
     }
 
@@ -171,17 +177,5 @@ public class OrganizationRoutingModelName extends PersistableBusinessObjectBase 
         return m;
     }
 
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#linkEditableUserFields()
-     */
-    @Override
-    public void linkEditableUserFields() {
-        super.linkEditableUserFields();
-        if (this == null) {
-            throw new IllegalArgumentException("parameter passed in was null");
-        }
-        List bos = new ArrayList();
-        bos.addAll(getOrganizationRoutingModel());
-        SpringContext.getBean(BusinessObjectService.class).linkUserFields(bos);
-    }
+
 }
