@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/AccountDescription.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +20,13 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Building;
+import org.kuali.core.bo.Building;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class AccountDescription extends PersistableBusinessObjectBase {
+public class AccountDescription extends BusinessObjectBase {
 
     private static final long serialVersionUID = 6233459415790165510L;
 
@@ -49,6 +51,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -58,6 +61,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -68,6 +72,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Gets the accountNumber attribute.
      * 
      * @return Returns the accountNumber
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -77,6 +82,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Sets the accountNumber attribute.
      * 
      * @param accountNumber The accountNumber to set.
+     * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -87,6 +93,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Gets the campusDescription attribute.
      * 
      * @return Returns the campusDescription
+     * 
      */
     public String getCampusDescription() {
         return campusDescription;
@@ -96,6 +103,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Sets the campusDescription attribute.
      * 
      * @param campusDescription The campusDescription to set.
+     * 
      */
     public void setCampusDescription(String campusDescription) {
         this.campusDescription = campusDescription;
@@ -106,6 +114,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Gets the organizationDescription attribute.
      * 
      * @return Returns the organizationDescription
+     * 
      */
     public String getOrganizationDescription() {
         return organizationDescription;
@@ -115,6 +124,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Sets the organizationDescription attribute.
      * 
      * @param organizationDescription The organizationDescription to set.
+     * 
      */
     public void setOrganizationDescription(String organizationDescription) {
         this.organizationDescription = organizationDescription;
@@ -125,6 +135,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Gets the responsibilityCenterDescription attribute.
      * 
      * @return Returns the responsibilityCenterDescription
+     * 
      */
     public String getResponsibilityCenterDescription() {
         return responsibilityCenterDescription;
@@ -134,6 +145,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Sets the responsibilityCenterDescription attribute.
      * 
      * @param responsibilityCenterDescription The responsibilityCenterDescription to set.
+     * 
      */
     public void setResponsibilityCenterDescription(String responsibilityCenterDescription) {
         this.responsibilityCenterDescription = responsibilityCenterDescription;
@@ -144,6 +156,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Gets the campusCode attribute.
      * 
      * @return Returns the campusCode
+     * 
      */
     public String getCampusCode() {
         return campusCode;
@@ -153,6 +166,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Sets the campusCode attribute.
      * 
      * @param campusCode The campusCode to set.
+     * 
      */
     public void setCampusCode(String campusCode) {
         this.campusCode = campusCode;
@@ -163,6 +177,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Gets the buildingCode attribute.
      * 
      * @return Returns the buildingCode
+     * 
      */
     public String getBuildingCode() {
         return buildingCode;
@@ -172,6 +187,7 @@ public class AccountDescription extends PersistableBusinessObjectBase {
      * Sets the buildingCode attribute.
      * 
      * @param buildingCode The buildingCode to set.
+     * 
      */
     public void setBuildingCode(String buildingCode) {
         this.buildingCode = buildingCode;

@@ -23,24 +23,25 @@ import java.util.Map;
 
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.ValidationException;
+import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rule.event.KualiDocumentEvent;
+import org.kuali.core.rule.event.RouteDocumentEvent;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineParser;
 import org.kuali.kfs.bo.AccountingLineParserBase;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.rule.event.AccountingDocumentSaveWithNoLedgerEntryGenerationEvent;
 import org.kuali.kfs.rule.event.AccountingLineEvent;
 import org.kuali.kfs.rule.event.AddAccountingLineEvent;
 import org.kuali.kfs.rule.event.DeleteAccountingLineEvent;
 import org.kuali.kfs.rule.event.ReviewAccountingLineEvent;
 import org.kuali.kfs.rule.event.UpdateAccountingLineEvent;
-import org.kuali.kfs.service.AccountingLineService;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -186,7 +187,6 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
      * Since one side of the document should match the other and the document should balance, the total dollar amount for the
      * document should either be the expense line or the income line. This is the default implementation of this interface method so
      * it should be overridden appropriately if your document cannot make this assumption.
-     * 
      * @return if target total is zero, source total, otherwise target total
      */
     public KualiDecimal getTotalDollarAmount() {
@@ -351,11 +351,9 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
     }
 
     public void prepareForSave(KualiDocumentEvent event) {
-        if (!(event instanceof AccountingDocumentSaveWithNoLedgerEntryGenerationEvent)) { // only generate entries if the rule event specifically allows us to
-            if (!SpringContext.getBean(GeneralLedgerPendingEntryService.class).generateGeneralLedgerPendingEntries(this)) {
-                logErrors();
-                throw new ValidationException("general ledger GLPE generation failed");
-            }
+        if (!SpringServiceLocator.getGeneralLedgerPendingEntryService().generateGeneralLedgerPendingEntries(this)) {
+            logErrors();
+            throw new ValidationException("general ledger GLPE generation failed");
         }
         super.prepareForSave(event);
     }
@@ -369,8 +367,8 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
         // 2. retrieve current accountingLines from given document
         // 3. compare, creating add/delete/update events as needed
         // 4. apply rules as appropriate returned events
-        List persistedSourceLines = getPersistedSourceAccountingLinesForComparison();
-        List currentSourceLines = getSourceAccountingLinesForComparison();
+        List persistedSourceLines = SpringServiceLocator.getAccountingLineService().getByDocumentHeaderId(getSourceAccountingLineClass(), getDocumentNumber());
+        List currentSourceLines = getSourceAccountingLines();
 
         List sourceEvents = generateEvents(persistedSourceLines, currentSourceLines, KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME, this);
         for (Iterator i = sourceEvents.iterator(); i.hasNext();) {
@@ -378,8 +376,8 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
             events.add(sourceEvent);
         }
 
-        List persistedTargetLines = getPersistedTargetAccountingLinesForComparison();
-        List currentTargetLines = getTargetAccountingLinesForComparison();
+        List persistedTargetLines = SpringServiceLocator.getAccountingLineService().getByDocumentHeaderId(getTargetAccountingLineClass(), getDocumentNumber());
+        List currentTargetLines = getTargetAccountingLines();
 
         List targetEvents = generateEvents(persistedTargetLines, currentTargetLines, KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME, this);
         for (Iterator i = targetEvents.iterator(); i.hasNext();) {
@@ -389,43 +387,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
 
         return events;
     }
-
-    /**
-     * This method gets the Target Accounting Lines that will be used in comparisons
-     * 
-     * @return
-     */
-    protected List getTargetAccountingLinesForComparison() {
-        return getTargetAccountingLines();
-    }
-
-    /**
-     * This method gets the Persisted Target Accounting Lines that will be used in comparisons
-     * 
-     * @return
-     */
-    protected List getPersistedTargetAccountingLinesForComparison() {
-        return SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(getTargetAccountingLineClass(), getDocumentNumber());
-    }
-
-    /**
-     * This method gets the Source Accounting Lines that will be used in comparisons
-     * 
-     * @return
-     */
-    protected List getSourceAccountingLinesForComparison() {
-        return getSourceAccountingLines();
-    }
-
-    /**
-     * This method gets the Persisted Source Accounting Lines that will be used in comparisons
-     * 
-     * @return
-     */
-    protected List getPersistedSourceAccountingLinesForComparison() {
-        return SpringContext.getBean(AccountingLineService.class).getByDocumentHeaderId(getSourceAccountingLineClass(), getDocumentNumber());
-    }
-
+    
     /**
      * Generates a List of instances of AccountingLineEvent subclasses, one for each accountingLine in the union of the
      * persistedLines and currentLines lists. Events in the list will be grouped in order by event-type (review, update, add,
@@ -499,7 +461,7 @@ public abstract class AccountingDocumentBase extends GeneralLedgerPostingDocumen
         return lineEvents;
     }
 
-
+    
     /**
      * @param accountingLines
      * @return Map containing accountingLines from the given List, indexed by their sequenceNumber

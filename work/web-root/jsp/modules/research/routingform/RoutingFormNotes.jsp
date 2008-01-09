@@ -18,15 +18,11 @@
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
 	htmlFormAction="researchRoutingFormNotes" headerDispatch="refresh"
-	headerTabActive="notes" renderMultipart="true" showTabButtons="true">
+	feedbackKey="app.krafeedback.link" headerTabActive="notes" renderMultipart="true" >
 	
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 
 	<kra-rf:routingFormHiddenDocumentFields includeDocumenHeaderIdFields="true" />
-	
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Notes" altText="page help"/>
-	</div>	
 
 	<kra-rf:routingFormNotes />
 	

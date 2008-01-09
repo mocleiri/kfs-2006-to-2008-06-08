@@ -29,13 +29,12 @@ import org.kuali.module.purap.PurapAuthorizationConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.service.CreditMemoService;
-import org.kuali.module.purap.service.PurapService;
 
 /**
- * Struts Action Form for Credit Memo document.
+ * ActionForm for the Credit Memo Document. Stores document values to and from the JSP.
  */
 public class CreditMemoForm extends AccountsPayableFormBase {
-
+   
     /**
      * Constructs a PurchaseOrderForm instance and sets up the appropriately casted document.
      */
@@ -47,7 +46,6 @@ public class CreditMemoForm extends AccountsPayableFormBase {
     /**
      * @see org.kuali.core.web.struts.form.KualiForm#getAdditionalDocInfo1()
      */
-    @Override
     public KeyLabelPair getAdditionalDocInfo1() {
         if (ObjectUtils.isNotNull(((CreditMemoDocument) getDocument()).getPurapDocumentIdentifier())) {
             return new KeyLabelPair("DataDictionary.CreditMemoDocument.attributes.purapDocumentIdentifier", ((CreditMemoDocument) getDocument()).getPurapDocumentIdentifier().toString());
@@ -58,7 +56,6 @@ public class CreditMemoForm extends AccountsPayableFormBase {
     /**
      * @see org.kuali.core.web.struts.form.KualiForm#getAdditionalDocInfo2()
      */
-    @Override
     public KeyLabelPair getAdditionalDocInfo2() {
         if (ObjectUtils.isNotNull(((CreditMemoDocument) getDocument()).getStatus())) {
             return new KeyLabelPair("DataDictionary.CreditMemoDocument.attributes.statusCode", ((CreditMemoDocument) getDocument()).getStatus().getStatusDescription());
@@ -67,47 +64,14 @@ public class CreditMemoForm extends AccountsPayableFormBase {
     }
 
     /**
-     * Determines if the credit memo document has reached the INITIATE status.
-     * 
-     * @return - true if credit memo has been initiated, false otherwise
+     * @return the CreditMemoInitiated attribute for JSP
      */
     public boolean isCreditMemoInitiated() {
         return StringUtils.equals(((CreditMemoDocument) getDocument()).getStatusCode(), PurapConstants.CreditMemoStatuses.INITIATE);
     }
 
     /**
-     * This method determines if a user is able to reopen a purchase order. This is used by the checkbox "reopen PO" on the credit
-     * memo form.
-     * 
-     * @return - true if able to reopen a purchase order, false otherwise
-     */
-    public boolean isAbleToReopenPurchaseOrder() {
-        boolean valid = false;
-
-        CreditMemoDocument creditMemo = (CreditMemoDocument) this.getDocument();
-
-        if (SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(creditMemo) == false && isApUser() && PurapConstants.PurchaseOrderStatuses.CLOSED.equals(creditMemo.getPurchaseOrderDocument().getStatusCode())) {
-
-            valid = true;
-        }
-
-        return valid;
-    }
-
-    /**
-     * Helper method to indicate if the current document has reached full document entry.
-     * 
-     * @return - true if document has been fully entered, false otherwise
-     */
-    public boolean isFullDocumentEntryCompleted() {
-        CreditMemoDocument creditMemo = (CreditMemoDocument) this.getDocument();
-        return SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted(creditMemo);
-    }
-
-    /**
      * Build additional credit memo specific buttons and set extraButtons list.
-     * 
-     * @return - list of extra buttons to be displayed to the user
      */
     @Override
     public List<ExtraButton> getExtraButtons() {
@@ -132,7 +96,7 @@ public class CreditMemoForm extends AccountsPayableFormBase {
                     addExtraButton("methodToCall.removeHoldFromCreditMemo", appExternalImageURL + "buttonsmall_removehold.gif", "Remove");
                 }
 
-                // add the calculate button
+                // add the calcuate button
                 if (PurapConstants.CreditMemoStatuses.IN_PROCESS.equals(cmDocument.getStatusCode())) {
                     addExtraButton("methodToCall.calculate", appExternalImageURL + "buttonsmall_calculate.gif", "Calculate");
                 }

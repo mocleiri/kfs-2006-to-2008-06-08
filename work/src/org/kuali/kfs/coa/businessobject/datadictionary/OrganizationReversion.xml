@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/OrganizationReversion.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,14 +21,12 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.OrganizationReversion">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Organization Reversion Inquiry</title>
 
-            <inquirySections>
-            	<inquirySection title="Header Text">
-            		<inquiryFields>
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -35,27 +35,14 @@
                 <field attributeName="cashReversionFinancialChartOfAccountsCode" />
                 <field attributeName="cashReversionAccountNumber" />
                 <field attributeName="carryForwardByObjectCodeIndicator" />
-            		</inquiryFields>
-            	</inquirySection>
-            	<inquirySection title="Organization Reversion Details">
-            		<inquiryFields>
-            			<inquiryCollection name="organizationReversionDetail" businessObjectClass="org.kuali.module.chart.bo.OrganizationReversionDetail">
-            				<field attributeName="organizationReversionCategoryCode" />
-                			<field attributeName="organizationReversionObjectCode" />
-                			<field attributeName="organizationReversionObject.financialObjectCodeName" />
-                			<field attributeName="organizationReversionCode" />
-            			</inquiryCollection>
-            		</inquiryFields>
-            	</inquirySection>
-            </inquirySections>
+
+
+
+            </inquiryFields></inquirySection></inquirySections>
         </inquiry>
 
         <lookup>
             <title>Organization Reversion Lookup</title>
-            
-            <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.OrganizationReversionGlobal"><img src="${kr.externalizable.images.url}tinybutton-createnewglobal.gif" alt="create new global Organization Reversion" width="98" height="15"/></a>]]>
-            </menubar>
 
             <instructions>Lookup an Organization Reversion</instructions>
 
@@ -74,7 +61,6 @@
             </lookupFields>
 
             <resultFields>
-            	<field attributeName="organizationReversionViewer" />
                 <field attributeName="universityFiscalYear" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="organizationCode" />
@@ -87,16 +73,9 @@
 
             </resultFields>
         </lookup>
-        
-        <titleAttribute>organizationReversionViewer</titleAttribute>
 
         <attributes>
-        	<attribute name="organizationReversionViewer">
-        		<label>View</label>
-        		<maxLength>100</maxLength>
-        		<required>false</required>
-        		<control><hidden /></control>
-        	</attribute>
+        
         
             <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
                 <required>true</required>
@@ -107,6 +86,7 @@
             </attributeReference>
 
             <attributeReference name="organizationCode" sourceClassName="org.kuali.module.chart.bo.Org" sourceAttributeName="organizationCode">
+                <description>The code used to represent an organization.</description>
             </attributeReference>
 
             <attributeReference name="budgetReversionChartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
@@ -119,6 +99,7 @@
                 <label>Budget Reversion Account</label>
                 <shortLabel>Budget Reversion Account</shortLabel>
                 <required>true</required>
+                <description>Budget Reversion Account</description>
             </attributeReference>
 
             <attributeReference name="cashReversionFinancialChartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
@@ -131,12 +112,22 @@
                 <label>Cash Reversion Account</label>
                 <shortLabel>Cash Reversion Account</shortLabel>
                 <required>true</required>
+                <description>Cash Reversion Account</description>
             </attributeReference>
 
             <attributeReference name="carryForwardByObjectCodeIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
                 <label>Carry Forward by Object Code Indicator</label>
                 <shortLabel>CF by Object Code</shortLabel>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attributeReference>
+
+
+
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 

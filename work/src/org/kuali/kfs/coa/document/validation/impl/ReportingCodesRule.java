@@ -22,13 +22,9 @@ import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ReportingCodes;
 
-/**
- * 
- * This class implements the business rules specific to the {@link ReportingCodes} Maintenance Document.
- */
 public class ReportingCodesRule extends MaintenanceDocumentRuleBase {
 
     private ReportingCodes oldReportingCode;
@@ -36,21 +32,12 @@ public class ReportingCodesRule extends MaintenanceDocumentRuleBase {
 
     private BusinessObjectService businessObjectService;
 
-    /**
-     * 
-     * Constructs a ReportingCodesRule and pseudo-injects services
-     */
     public ReportingCodesRule() {
         super();
-        setBusinessObjectService((BusinessObjectService) SpringContext.getBean(BusinessObjectService.class));
+        setBusinessObjectService((BusinessObjectService) SpringServiceLocator.getBusinessObjectService());
     }
 
     /**
-     * This performs rules checks on document route
-     * <ul>
-     * <li>{@link ProjectCodeRule#checkReportsToReportingCode()}</li>
-     * </ul>
-     * This rule fails on business rule failures
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
@@ -61,11 +48,6 @@ public class ReportingCodesRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This performs rules checks on document save
-     * <ul>
-     * <li>{@link ProjectCodeRule#checkReportsToReportingCode()}</li>
-     * </ul>
-     * This rule does not fail on business rule failures
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
@@ -75,14 +57,6 @@ public class ReportingCodesRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    /**
-     * 
-     * This method sets the convenience objects like newReportingCode and oldReportingCode, so you have short and easy handles to the new and
-     * old objects contained in the maintenance document. It also calls the BusinessObjectBase.refresh(), which will attempt to load
-     * all sub-objects from the DB by their primary keys, if available.
-     * 
-     * @param document
-     */
     private void setupConvenienceObjects(MaintenanceDocument document) {
 
         // setup oldAccount convenience objects, make sure all possible sub-objects are populated
@@ -92,13 +66,6 @@ public class ReportingCodesRule extends MaintenanceDocumentRuleBase {
         newReportingCode = (ReportingCodes) super.getNewBo();
     }
 
-    /**
-     * 
-     * This checks to see if the user has entered in two different values for the reporting code and the 
-     * reports to reporting code. If they are different then it makes sure that the reports to reporting code actually exists
-     * in the system.
-     * @return true if the reports to reporting code is filled and exists or true if it isn't filled in (doesn't need to be), false otherwise
-     */
     private boolean checkReportsToReportingCode() {
         boolean success = true;
         boolean oneMissing = false;

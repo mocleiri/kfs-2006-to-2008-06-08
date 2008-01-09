@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,28 +21,23 @@
 <dictionaryEntry>
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.OrganizationReversion</businessObjectClass>
-        <maintainableClass>org.kuali.module.chart.maintenance.OrganizationReversionMaintainableImpl</maintainableClass>
+        <maintainableClass>org.kuali.core.maintenance.OrganizationReversionMaintainable</maintainableClass>
         <businessRulesClass>org.kuali.module.chart.rules.OrganizationReversionRule</businessRulesClass>
-        <preRulesCheckClass>org.kuali.module.chart.rules.OrganizationReversionPreRules</preRulesCheckClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>KUALI_ORGREVMNT</workgroup>
+                    <workgroup>KUALI_ROLE_MAINTENANCE</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>OrganizationReversionMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOrganizationReversionMaintenanceDocument</documentTypeName>
         <documentTypeCode>ORGR</documentTypeCode>
-        
-        <webScriptFile>../dwr/interface/ObjectCodeService.js</webScriptFile>
-        <webScriptFile>../scripts/chart/orgReversionDocument.js</webScriptFile>
-        
-        <label>Organization Reversion</label>
+        <label>Organization Reversion Maintenance Document</label>
+        <shortLabel>OrganizationRefersionMaintenanceDocument</shortLabel>
         <summary>Organization Reversion Maintenance Document</summary>
         <description>Maintenance document which allows you to create new Organization Reversions, remove exsiting Organization Reversions, or modify existing Organization Reversions.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="OrganizationReversion" parameterName="ORGANIZATION_REVERSION" />
 
         <lockingKeys>
             <field attributeName="universityFiscalYear" />
@@ -92,10 +87,8 @@
                 <maintainableItems>
                     <maintainableCollection name="organizationReversionDetail" businessObjectClass="org.kuali.module.chart.bo.OrganizationReversionDetail" includeAddLine="false">
                         <maintainableField name="organizationReversionCategoryCode" required="true" readOnly="true"/>
-                        <maintainableField name="organizationReversionObjectCode" required="true" webUILeaveFieldFunction="updateObjectName" />
-                        <maintainableField name="organizationReversionObject.financialObjectCodeName" required="true" readOnly="true" />
+                        <maintainableField name="organizationReversionObjectCode" required="true" />
                         <maintainableField name="organizationReversionCode" required="true" />
-                        <maintainableField name="newCollectionRecord" />
                         <maintainableField name="versionNumber" />
                     </maintainableCollection>
                 </maintainableItems>

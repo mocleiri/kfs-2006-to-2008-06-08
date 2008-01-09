@@ -21,17 +21,17 @@ import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rules.TransactionalDocumentRuleBase;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 
 /**
- * Rules for Purchase Order Retransmit document creation. Should not extend <code>PurchaseOrderDocumentRule</code>, since it does
- * not allow the purchase order to be edited, nor should it create GL entries.
+ * This class is purposely not extending PurchaseOrderDocumentRule becuase it does not need to since 
+ * it does not allow the PO to be edited nor should it create GL entries.
  */
 public class PurchaseOrderRetransmitDocumentRule extends TransactionalDocumentRuleBase {
 
@@ -45,9 +45,6 @@ public class PurchaseOrderRetransmitDocumentRule extends TransactionalDocumentRu
         return isValid &= processValidation(porDocument);
     }
 
-    /**
-     * @see org.kuali.core.rules.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
-     */
     @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
         boolean isValid = true;
@@ -55,9 +52,6 @@ public class PurchaseOrderRetransmitDocumentRule extends TransactionalDocumentRu
         return isValid &= processValidation(porDocument);
     }
 
-    /**
-     * @see org.kuali.core.rules.DocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.rule.event.ApproveDocumentEvent)
-     */
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(ApproveDocumentEvent approveEvent) {
         boolean isValid = true;
@@ -65,13 +59,6 @@ public class PurchaseOrderRetransmitDocumentRule extends TransactionalDocumentRu
         return isValid;
     }
 
-    /**
-     * Central method to control the processing of rule checks. Checks that the purchase order document is not null, and that the
-     * user is in the purchasing workgroup.
-     * 
-     * @param document A PurchaseOrderDocument.
-     * @return True if the document passes all the validations.
-     */
     private boolean processValidation(PurchaseOrderDocument document) {
         boolean valid = true;
 
@@ -80,21 +67,27 @@ public class PurchaseOrderRetransmitDocumentRule extends TransactionalDocumentRu
             throw new ValidationException("Purchase Order Retransmit document was null on validation.");
         }
         else {
-            if (!document.getPurchaseOrderAutomaticIndicator()) {
-                // Check that the user is in purchasing workgroup.
-                String initiatorNetworkId = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
-                UniversalUserService uus = SpringContext.getBean(UniversalUserService.class);
-                UniversalUser user = null;
-                try {
-                    user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
-                    String purchasingGroup = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
-                    if (!uus.isMember(user, purchasingGroup)) {
-                        valid = false;
-                    }
-                }
-                catch (UserNotFoundException ue) {
+            // TODO: Get this from Business Rules.           
+            // Check the PO status.
+            /*  TODO: Is it really supposed to fail when the status is CLOSE ?
+            if (StringUtils.equalsIgnoreCase(document.getStatusCode(), PurchaseOrderStatuses.CLOSED)) {
+                valid = false;
+                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.STATUS_CODE, PurapKeyConstants.ERROR_PURCHASE_ORDER_STATUS_INCORRECT, PurchaseOrderStatuses.CLOSED);
+            }
+            */
+            // Check that the user is in purchasing workgroup.
+            String initiatorNetworkId = document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId();
+            UniversalUserService uus = SpringContext.getBean(UniversalUserService.class);
+            UniversalUser user = null;
+            try {
+                user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
+                String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
+                if (!uus.isMember(user, purchasingGroup)) {
                     valid = false;
                 }
+            }
+            catch (UserNotFoundException ue) {
+                valid = false;
             }
         }
 

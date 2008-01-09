@@ -16,28 +16,62 @@
 
 package org.kuali.module.purap.bo;
 
+import java.util.LinkedHashMap;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
- * Requisition Account Business Object.
+ * 
  */
 public class RequisitionAccount extends PurApAccountingLineBase {
 
     private static final long serialVersionUID = -8655437895493693864L;
+    
+	private RequisitionItem requisitionItem;
 
-    private RequisitionItem requisitionItem;
+    
+	/**
+	 * Default constructor.
+	 */
+	public RequisitionAccount() {
+        super();
+        //this field is not in the database for us because they are in different tables
+        super.ojbConcreteClass = this.getClass().getName();
+	}
+    
+	/**
+	 * Gets the requisitionItem attribute.
+	 * 
+	 * @return Returns the requisitionItem
+	 * 
+	 */
+	public RequisitionItem getRequisitionItem() { 
+		return requisitionItem;
+	}
 
-    public RequisitionItem getRequisitionItem() {
-        return requisitionItem;
-    }
-
+	/**
+	 * Sets the requisitionItem attribute.
+	 * 
+	 * @param requisitionItem The requisitionItem to set.
+	 * @deprecated
+	 */
+	public void setRequisitionItem(RequisitionItem requisitionItem) {
+		this.requisitionItem = requisitionItem;
+	}
+    
     /**
-     * Sets the requisitionItem attribute.
-     * 
-     * @param requisitionItem The requisitionItem to set.
-     * @deprecated
-     */
-    public void setRequisitionItem(RequisitionItem requisitionItem) {
-        this.requisitionItem = requisitionItem;
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        
+        m.put("chartOfAccountsCode", this.getChartOfAccountsCode());
+        m.put("accountNumber", this.getAccountNumber());
+        m.put("subAccountNumber", this.getSubAccountNumber());
+        m.put("financialObjectCode", this.getFinancialObjectCode());
+        m.put("financialSubObjectCode", this.getFinancialSubObjectCode());
+        m.put("projectCode", this.getProjectCode());
+        m.put("organizationReferenceId", this.getOrganizationReferenceId());
+	    return m;
     }
-
 }

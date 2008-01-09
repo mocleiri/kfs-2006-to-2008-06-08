@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/OrganizationReversionDetail.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.OrganizationReversionDetail">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
         <inquiry>
             <title>Organization Reversion Detail Inquiry</title>
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
@@ -55,7 +57,7 @@
                 <shortLabel>Category</shortLabel>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.OrganizationReversionCategoryValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.OrganizationReversionCategoryValuesFinder" />
                 </control>
             </attributeReference>
 
@@ -80,14 +82,14 @@
                 <maxLength>2</maxLength>
                 <required>true</required>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.OrganizationReversionCodeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.OrganizationReversionCodeValuesFinder" />
                 </control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Bank Account Type.</description>
             </attribute>
 
-            <attributeReference name="newCollectionRecord" 
-                                sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-                                sourceAttributeName="newCollectionRecord" />
-                                
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +18,7 @@
 package org.kuali.module.kra.budget.web.struts.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,16 +27,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.KualiRuleService;
-import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.AgencyExtension;
+import org.kuali.module.kra.budget.bo.AppointmentType;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
 import org.kuali.module.kra.budget.bo.BudgetGraduateAssistantRate;
@@ -41,15 +43,16 @@ import org.kuali.module.kra.budget.bo.BudgetModular;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.GraduateAssistantRate;
-import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.rules.event.InsertPeriodLineEventBase;
 import org.kuali.module.kra.budget.service.BudgetFringeRateService;
-import org.kuali.module.kra.budget.service.BudgetModularService;
+import org.kuali.module.kra.budget.service.BudgetGraduateAssistantRateService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
 
 /**
  * This class handles Actions for Research Administration.
+ * 
+ * 
  */
 
 public class BudgetParametersAction extends BudgetAction {
@@ -59,15 +62,16 @@ public class BudgetParametersAction extends BudgetAction {
     /**
      * This method overrides the BudgetAction execute method. It does so for the purpose of recalculating Personnel expenses any
      * time the Personnel page is accessed
+     * 
      */
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward superForward = super.execute(mapping, form, request, response);
 
         BudgetForm budgetForm = (BudgetForm) form;
-
-        // On first load, set the default task name for the initial task.
+        
+//      On first load, set the default task name for the initial task.
         if (budgetForm.getBudgetDocument().getTaskListSize() == 0) {
-            String DEFAULT_BUDGET_TASK_NAME = SpringContext.getBean(ParameterService.class).getParameterValue(BudgetDocument.class, KraConstants.DEFAULT_BUDGET_TASK_NAME);
+            String DEFAULT_BUDGET_TASK_NAME = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, "defaultBudgetTaskName");
             budgetForm.getNewTask().setBudgetTaskName(DEFAULT_BUDGET_TASK_NAME + " 1");
             budgetForm.getNewTask().setBudgetTaskOnCampus(true);
         }
@@ -105,26 +109,22 @@ public class BudgetParametersAction extends BudgetAction {
         referenceObjects.add("thirdPartyCostShareItems");
         referenceObjects.add("institutionCostShareItems");
         referenceObjects.add("institutionCostSharePersonnelItems");
+        referenceObjects.add("adHocPermissions");
+        referenceObjects.add("adHocOrgs");
+        referenceObjects.add("adHocWorkgroups");
 
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(budgetForm.getBudgetDocument().getBudget(), referenceObjects);
-
-        List docReferenceObjects = new ArrayList();
-        docReferenceObjects.add("adhocPersons");
-        docReferenceObjects.add("adhocOrgs");
-        docReferenceObjects.add("adhocWorkgroups");
-
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(budgetForm.getBudgetDocument(), docReferenceObjects);
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(budgetForm.getBudgetDocument().getBudget(), referenceObjects);
 
         if (budgetForm.getBudgetDocument().getBudget().isAgencyModularIndicator()) {
             if (ObjectUtils.isNull(budgetForm.getBudgetDocument().getBudget().getModularBudget())) {
                 // Modular budget with no modular data generated. So generate it.
-                SpringContext.getBean(BudgetModularService.class).generateModularBudget(budgetForm.getBudgetDocument().getBudget());
+                SpringServiceLocator.getBudgetModularService().generateModularBudget(budgetForm.getBudgetDocument().getBudget());
             }
             budgetForm.getBudgetDocument().getBudget().getModularBudget().setBudgetModularTaskNumber(budgetModularTaskNumber);
         }
 
-        Object question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-        KualiConfigurationService kualiConfiguration = SpringContext.getBean(KualiConfigurationService.class);
+        Object question = request.getParameter(Constants.QUESTION_INST_ATTRIBUTE_NAME);
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
         // Logic for Cost Share question.
         ActionForward preRulesForward = preRulesCheck(mapping, form, request, response, "saveParameters");
@@ -138,60 +138,128 @@ public class BudgetParametersAction extends BudgetAction {
             if (budgetForm.isAuditActivated()) {
                 return mapping.findForward("auditmode");
             }
-
-            // This is so that tab states are not shared between parameters and overview.
-            budgetForm.newTabState(true, true);
-
             return super.overview(mapping, budgetForm, request, response);
         }
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward copyFringeRateLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // get the form
         BudgetForm budgetForm = (BudgetForm) form;
+        // get the fringe rate list
+        List budgetFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRates();
+        int i = 0;
+        BudgetFringeRateService bfrService = SpringServiceLocator.getBudgetFringeRateService();
+        for (Iterator iter = bfrService.getDefaultFringeRates().iterator(); iter.hasNext();) {
+            AppointmentType appType = (AppointmentType) iter.next();
 
-        BudgetFringeRateService bfrService = SpringContext.getBean(BudgetFringeRateService.class);
-        for (BudgetFringeRate budgetFringeRate : budgetForm.getBudgetDocument().getBudget().getFringeRates()) {
-            budgetFringeRate.setContractsAndGrantsFringeRateAmount(budgetFringeRate.getAppointmentTypeFringeRateAmount());
+            BudgetFringeRate currentFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRate(i);
+            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getDocumentNumber(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), currentFringeRate.getInstitutionCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
+
+            budgetFringeRate.set(i, bfr);
+            i++;
         }
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward copyInstitutionCostShareLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // get the form
         BudgetForm budgetForm = (BudgetForm) form;
+        // get the fringe rate list
+        List budgetFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRates();
+        int i = 0;
+        BudgetFringeRateService bfrService = SpringServiceLocator.getBudgetFringeRateService();
+        for (Iterator iter = bfrService.getDefaultFringeRates().iterator(); iter.hasNext();) {
+            AppointmentType appType = (AppointmentType) iter.next();
 
-        BudgetFringeRateService bfrService = SpringContext.getBean(BudgetFringeRateService.class);
-        for (BudgetFringeRate budgetFringeRate : budgetForm.getBudgetDocument().getBudget().getFringeRates()) {
-            budgetFringeRate.setInstitutionCostShareFringeRateAmount(budgetFringeRate.getAppointmentTypeCostShareFringeRateAmount());
+            BudgetFringeRate currentFringeRate = budgetForm.getBudgetDocument().getBudget().getFringeRate(i);
+            BudgetFringeRate bfr = new BudgetFringeRate(budgetForm.getDocument().getDocumentNumber(), appType.getAppointmentTypeCode(), currentFringeRate.getContractsAndGrantsFringeRateAmount(), appType.getCostShareFringeRateAmount(), appType, currentFringeRate.getObjectId(), currentFringeRate.getVersionNumber());
+
+            budgetFringeRate.set(i, bfr);
+            i++;
         }
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
+    /*
+     * A struts action to copy the first academic year subdivision graduate assistance rate system values
+     */
+    public ActionForward copyPeriod1GraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return copyPeriodGraduateAssistantLines(mapping, form, request, response, 1);
+    }
 
     /*
-     * A struts action to copy the the Graduate Asst. rates from the system rate to the current budget
+     * A struts action to copy the second academic year subdivision graduate assistance rate system values
+     */
+    public ActionForward copyPeriod2GraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return copyPeriodGraduateAssistantLines(mapping, form, request, response, 2);
+    }
+
+    /*
+     * A struts action to copy the third academic year subdivision graduate assistance rate system values
+     */
+    public ActionForward copyPeriod3GraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return copyPeriodGraduateAssistantLines(mapping, form, request, response, 3);
+    }
+
+    /*
+     * A struts action to copy the forth academic year subdivision graduate assistance rate system values
+     */
+    public ActionForward copyPeriod4GraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return copyPeriodGraduateAssistantLines(mapping, form, request, response, 4);
+    }
+
+    /*
+     * A struts action to copy the fifth academic year subdivision graduate assistance rate system values
+     */
+    public ActionForward copyPeriod5GraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return copyPeriodGraduateAssistantLines(mapping, form, request, response, 5);
+    }
+
+    /*
+     * A struts action to copy the sixth academic year subdivision graduate assistance rate system values
+     */
+    public ActionForward copyPeriod6GraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return copyPeriodGraduateAssistantLines(mapping, form, request, response, 6);
+    }
+
+    /*
+     * A struts action to copy all the academic year subdivision graduate assistance rate system values
      */
     public ActionForward copySystemGraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return copyPeriodGraduateAssistantLines(mapping, form, request, response, 0);
+    }
+
+    /*
+     * A struts action to copy the academic year subdivision graduate assistance rate system values @param periodToCopy - the
+     * academic year subdivision number to copy - 0 means copy all
+     */
+    public ActionForward copyPeriodGraduateAssistantLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, int periodToCopy) throws Exception {
         // get the form
         BudgetForm budgetForm = (BudgetForm) form;
+        // get the fringe rate list
+        List graduateAssistantRate = budgetForm.getBudgetDocument().getBudget().getGraduateAssistantRates();
+        int i = 0;
+        BudgetGraduateAssistantRateService bgarService = SpringServiceLocator.getBudgetGraduateAssistantRateService();
+        for (Iterator iter = bgarService.getAllGraduateAssistantRates().iterator(); iter.hasNext();) {
+            GraduateAssistantRate gar = (GraduateAssistantRate) iter.next();
+            BudgetGraduateAssistantRate currentGraduateAssistantRate = budgetForm.getBudgetDocument().getBudget().getGraduateAssistantRate(i);
+            KualiDecimal[] periodRates = new KualiDecimal[6];
+            for (int j = 0; j < 6; j++) {
+                if (periodToCopy == 0 || j + 1 == periodToCopy) {
+                    periodRates[j] = gar.getCampusMaximumPeriodRate(j + 1);
+                }
+                else {
+                    periodRates[j] = currentGraduateAssistantRate.getCampusMaximumPeriodRate(j + 1);
+                }
+            }
+            BudgetGraduateAssistantRate budgetGraduateAssistantRate = new BudgetGraduateAssistantRate(budgetForm.getDocument().getDocumentNumber(), gar.getCampusCode(), periodRates[0], periodRates[1], periodRates[2], periodRates[3], periodRates[4], periodRates[5], gar, currentGraduateAssistantRate.getObjectId(), currentGraduateAssistantRate.getVersionNumber());
 
-        for (BudgetGraduateAssistantRate budgetGraduateAssistantRate : budgetForm.getBudgetDocument().getBudget().getGraduateAssistantRates()) {
-            budgetGraduateAssistantRate.refreshNonUpdateableReferences();
-            GraduateAssistantRate systemRate = budgetGraduateAssistantRate.getGraduateAssistantRate();
-            budgetGraduateAssistantRate.setCampusMaximumPeriod1Rate(systemRate.getCampusMaximumPeriod1Rate());
-            budgetGraduateAssistantRate.setCampusMaximumPeriod2Rate(systemRate.getCampusMaximumPeriod2Rate());
-            budgetGraduateAssistantRate.setCampusMaximumPeriod3Rate(systemRate.getCampusMaximumPeriod3Rate());
-            budgetGraduateAssistantRate.setCampusMaximumPeriod4Rate(systemRate.getCampusMaximumPeriod4Rate());
-            budgetGraduateAssistantRate.setCampusMaximumPeriod5Rate(systemRate.getCampusMaximumPeriod5Rate());
-            budgetGraduateAssistantRate.setCampusMaximumPeriod6Rate(systemRate.getCampusMaximumPeriod6Rate());
+            graduateAssistantRate.set(i, budgetGraduateAssistantRate);
+            i++;
         }
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
 
@@ -199,13 +267,13 @@ public class BudgetParametersAction extends BudgetAction {
         BudgetForm budgetForm = (BudgetForm) form;
 
         // check any business rules
-        boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new InsertPeriodLineEventBase(budgetForm.getDocument(), budgetForm.getNewPeriod()));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new InsertPeriodLineEventBase(budgetForm.getDocument(), budgetForm.getNewPeriod()));
 
         if (rulePassed) {
             budgetForm.getBudgetDocument().addPeriod(budgetForm.getNewPeriod());
             budgetForm.setNewPeriod(new BudgetPeriod());
         }
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward deletePeriodLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -215,8 +283,8 @@ public class BudgetParametersAction extends BudgetAction {
         if (preRulesForward != null) {
             return preRulesForward;
         }
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward insertTaskLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -224,28 +292,28 @@ public class BudgetParametersAction extends BudgetAction {
         budgetForm.getBudgetDocument().addTask(budgetForm.getNewTask());
         budgetForm.setNewTask(new BudgetTask());
         budgetForm.getNewTask().setBudgetTaskOnCampus(true);
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward deleteTaskLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        
         ((BudgetForm) form).getBudgetDocument().setTaskToDelete(Integer.toString(getLineToDelete(request)));
         ActionForward preRulesForward = preRulesCheck(mapping, form, request, response);
         if (preRulesForward != null) {
             return preRulesForward;
         }
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         super.refresh(mapping, form, request, response);
         BudgetForm budgetForm = (BudgetForm) form;
         Budget budget = budgetForm.getBudgetDocument().getBudget();
-        if (request.getParameter(KFSConstants.REFRESH_CALLER) != null) {
-            String refreshCaller = request.getParameter(KFSConstants.REFRESH_CALLER);
+        if (request.getParameter(Constants.REFRESH_CALLER) != null) {
+            String refreshCaller = request.getParameter(Constants.REFRESH_CALLER);
             // check to see if we are coming back from a lookup
-            if (refreshCaller.equals(KFSConstants.KUALI_LOOKUPABLE_IMPL)) {
+            if (refreshCaller.equals(Constants.KUALI_LOOKUPABLE_IMPL)) {
                 if ("true".equals(request.getParameter("document.budget.agencyToBeNamedIndicator"))) {
                     // coming back from Agency lookup - To Be Named selected
                     budget.setBudgetAgency(null);
@@ -270,19 +338,18 @@ public class BudgetParametersAction extends BudgetAction {
                     }
                     budget.setModularBudget(modularBudget);
                 }
-                else if (request.getParameter("document.budget.budgetProjectDirectorUniversalIdentifier") != null) {
+                else if (request.getParameter("document.budget.budgetProjectDirectorSystemId") != null) {
                     // Coming back from project director lookup - project director selected
                     budgetForm.getBudgetDocument().getBudget().setProjectDirectorToBeNamedIndicator(false);
-                    budgetForm.getBudgetDocument().getBudget().refreshReferenceObject("projectDirector");
                 }
                 else if ("true".equals(request.getParameter("document.budget.projectDirectorToBeNamedIndicator"))) {
                     // Coming back from project director lookup - Name Later selected
                     budgetForm.getBudgetDocument().getBudget().setProjectDirector(null);
-                    budgetForm.getBudgetDocument().getBudget().setBudgetProjectDirectorUniversalIdentifier(null);
+                    budgetForm.getBudgetDocument().getBudget().setBudgetProjectDirectorSystemId(null);
                 }
             }
         }
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     private static void resetModularBudget(Budget budget, BudgetModular modularBudget) {
@@ -290,17 +357,7 @@ public class BudgetParametersAction extends BudgetAction {
         budget.setAgencyModularIndicator(false);
     }
 
-    public ActionForward clearFedPassthrough(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        BudgetForm budgetForm = (BudgetForm) form;
-        Budget budget = budgetForm.getBudgetDocument().getBudget();
-
-        budget.setFederalPassThroughAgencyNumber(null);
-        budget.setFederalPassThroughAgency(null);
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
-
     public ActionForward basic(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 }

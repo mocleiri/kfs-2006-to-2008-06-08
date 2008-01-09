@@ -23,7 +23,7 @@
         <documentClass>org.kuali.module.labor.document.SalaryExpenseTransferDocument</documentClass>
 		<businessRulesClass>org.kuali.module.labor.rules.SalaryExpenseTransferDocumentRule</businessRulesClass>
 		
-        <documentAuthorizerClass>org.kuali.module.labor.document.authorization.LaborExpenseDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.module.labor.document.LaborDocumentAuthorizer</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,7 +33,8 @@
         </authorizations>
         <documentTypeName>KualiSalaryExpenseTransferDocument</documentTypeName>
         <documentTypeCode>ST</documentTypeCode>
-        <label>Salary Expense Transfer</label>
+        <label>Salary Expense Transfer Document</label>
+        <shortLabel>STDoc</shortLabel>
         
         <summary>
             <![CDATA[&nbsp;]]>
@@ -44,7 +45,7 @@
         	from one or more accounts to another account (or accounts). This document is used in
         	the case where an employee's payroll expense was charged to an incorrect account or object code.        	
         </description>
-        
+        <help securityGroupName="Kuali.FinancialTransactionProcessing.TransferOfFundsDocument" parameterName="FINANCIAL_HELP_TRANSFER_OF_FUNDS_DOCUMENT" />
         <allowsCopy>true</allowsCopy>
         <allowsErrorCorrection>true</allowsErrorCorrection>
     </transactionalDocument>

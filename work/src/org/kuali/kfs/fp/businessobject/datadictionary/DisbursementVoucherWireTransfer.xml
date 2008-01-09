@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.DisbursementVoucherWireTransfer">
 
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
 
@@ -36,6 +36,11 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The full name of the Bank handling the Wire Transfer.</description>
             </attribute>
 
             <attribute name="disbVchrBankRoutingNumber">
@@ -49,6 +54,11 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The ABA Routing number of the Bank handling the Wire Transfer.</description>
             </attribute>
 
             <attribute name="disbVchrBankCityName">
@@ -62,6 +72,11 @@
                 <control>
                     <text size="37" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The city in which the Bank handling the Wire Transfer is located.</description>
             </attribute>
 
             <attribute name="disbVchrBankStateCode">
@@ -75,6 +90,11 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The state in which the Bank handling the Wire Transfer is located.</description>
             </attribute>
 
             <attribute name="disbVchrBankCountryCode">
@@ -86,8 +106,13 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.kfs.lookup.keyvalues.CountryValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CountryValuesFinder" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The country in which the Bank handling the Wire Transfer is located. Select one from the pulldown list.</description>
             </attribute>
 
             <attribute name="disbVchrAttentionLineText">
@@ -101,6 +126,11 @@
                 <control>
                     <text size="60" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>A free-form text field for addenda on the Write Transfer.</description>
             </attribute>
 
             <attribute name="disbVchrAdditionalWireText">
@@ -114,6 +144,11 @@
                 <control>
                     <text size="60" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>A free-form text field for additional information on the Write Transfer</description>
             </attribute>
 
             <attribute name="disbVchrPayeeAccountNumber">
@@ -127,6 +162,11 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The Account Number involved in the Wire Transfer.</description>
             </attribute>
 
             <attribute name="disbVchrCurrencyTypeCode">
@@ -138,8 +178,13 @@
                 <required>true</required>
 
                 <control>
-                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.CurrencyTypeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CurrencyTypeValuesFinder" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The foreign or domestic currency for the Wire Transfer. Select one from the pulldown list.</description>
             </attribute>
 
             <attribute name="disbVchrCurrencyTypeName">
@@ -153,6 +198,11 @@
                 <control>
                     <text size="20" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The type or unit of currency, if foreign currency is involved in the Wire Transfer.</description>
             </attribute>
 
             <attribute name="disbursementVoucherWireTransferFeeWaiverIndicator">
@@ -166,6 +216,11 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code to specify that the Wire Transfer fee should be waived, expressed as "Yes" or "No". The field is for central accounting use only.</description>
             </attribute>
 
             <attribute name="disbursementVoucherPayeeAccountName">
@@ -179,6 +234,11 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The full name of the individual or organization account involved in the Wire Transfer.</description>
             </attribute>
 
             <attribute name="disbursementVoucherPayeeAccountTypeCode">
@@ -190,8 +250,13 @@
                 <required>false</required>
 
                 <control>
-                    <radio valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.BankAccountTypeValuesFinder" />
+                    <radio valuesFinderClass="org.kuali.core.lookup.keyvalues.BankAccountTypeValuesFinder" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Bank Account Type.</description>
             </attribute>
 
             <attribute name="disbursementVoucherAutomatedClearingHouseProfileNumber">
@@ -205,6 +270,11 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The customer profile number for the Automated Cash Handling (ACH) payment</description>
             </attribute>
 
         </attributes>

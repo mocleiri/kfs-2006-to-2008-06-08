@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/CorrectionChange.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +21,13 @@ package org.kuali.module.gl.bo;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
- * A class that represents a change to any origin entry that was altered within a GLCP Document
+ * 
  */
-public class CorrectionChange extends PersistableBusinessObjectBase implements Comparable {
+public class CorrectionChange extends BusinessObjectBase implements Comparable {
 
     private String documentNumber;
     private Integer correctionChangeGroupLineNumber;
@@ -40,7 +42,7 @@ public class CorrectionChange extends PersistableBusinessObjectBase implements C
 
     }
 
-    public CorrectionChange(String documentNumber, Integer correctionChangeGroupLineNumber, Integer correctionChangeLineNumber) {
+    public CorrectionChange(String documentNumber,Integer correctionChangeGroupLineNumber,Integer correctionChangeLineNumber) {
         super();
         this.documentNumber = documentNumber;
         this.correctionChangeGroupLineNumber = correctionChangeGroupLineNumber;
@@ -93,26 +95,24 @@ public class CorrectionChange extends PersistableBusinessObjectBase implements C
     }
 
     public int compareTo(Object o) {
-        CorrectionChange cc = (CorrectionChange) o;
+        CorrectionChange cc = (CorrectionChange)o;
 
         String thisFdocNbr = documentNumber == null ? "" : documentNumber;
         String thatFdocNbr = cc.documentNumber == null ? "" : cc.documentNumber;
         int c = thisFdocNbr.compareTo(thatFdocNbr);
 
-        if (c == 0) {
+        if ( c == 0 ) {
             Integer thisGn = correctionChangeGroupLineNumber == null ? 0 : correctionChangeGroupLineNumber;
             Integer thatGn = cc.correctionChangeGroupLineNumber == null ? 0 : cc.correctionChangeGroupLineNumber;
             c = thisGn.compareTo(thatGn);
-            if (c == 0) {
+            if( c == 0 ) {
                 Integer thisCln = correctionChangeLineNumber == null ? 0 : correctionChangeLineNumber;
                 Integer thatCln = correctionChangeLineNumber == null ? 0 : cc.correctionChangeLineNumber;
                 return c = thisCln.compareTo(thatCln);
-            }
-            else {
+            } else {
                 return c;
             }
-        }
-        else {
+        } else {
             return c;
         }
     }
@@ -122,7 +122,7 @@ public class CorrectionChange extends PersistableBusinessObjectBase implements C
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.correctionChangeGroupLineNumber != null) {
             m.put("correctionChangeGroupLineNumber", this.correctionChangeGroupLineNumber.toString());
         }

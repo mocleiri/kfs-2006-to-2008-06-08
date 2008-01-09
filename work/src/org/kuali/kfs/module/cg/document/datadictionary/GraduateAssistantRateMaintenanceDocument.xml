@@ -35,11 +35,11 @@
         <documentTypeName>KualiGraduateAssistantRateMaintenanceDocument</documentTypeName>
         <documentTypeCode>GAR</documentTypeCode>
 
-        <label>Graduate Assistant Rate</label>
+        <label>Graduate Assistant Rate Maintenance Document</label>
+        <shortLabel>GraduateAssistantRateMainDoc</shortLabel>
 
         <summary>Graduate Assistant Rate maintenance document</summary>
         <description>Document used to create or update Graduate Assistant Rate objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="GraduateAssistantRate" parameterName="GRADUATE_ASSISTANT_RATE" />
 
         <lockingKeys>
             <field attributeName="campusCode" />
@@ -59,7 +59,7 @@
                     <maintainableField name="campusMaximumPeriod4Rate" required="false" />
                     <maintainableField name="campusMaximumPeriod5Rate" required="false" />
                     <maintainableField name="campusMaximumPeriod6Rate" required="false" />
-					<maintainableField name="active">
+					<maintainableField name="active" required="true">
 						<defaultValue>true</defaultValue>
 					</maintainableField>
                     <maintainableField name="versionNumber" />

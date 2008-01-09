@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
         <preRulesCheckClass>org.kuali.module.chart.rules.IndirectCostRecoveryExclusionAccountPreRules</preRulesCheckClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
 
         <authorizations>
             <authorization action="initiate">
@@ -33,13 +33,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>IndirectCostRecoveryExclusionAccountMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiIndirectCostRecoveryExclusionAccountMaintenanceDocument</documentTypeName>
         <documentTypeCode>ICRA</documentTypeCode>
-        <label>Indirect Cost Recovery Exclusion By Account</label>
-        <summary>Indirect Cost Recovery Exclusion By Account Maintenance Document</summary>
-        <description>Maintenance document which allows you to create new Indirect Cost Recovery Exclusions By Account, or modify existing Indirect Cost Recovery Exclusions By Account.</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="IndirectCostRecoveryExclusionAccount" parameterName="INDIRECT_COST_RECOVERY_EXCLUSION_BY_ACCOUNT" />
-
+        <label>Indirect Cost Recovery Exclusion Account Maintenance Document</label>
+        <shortLabel>ICRExclusionAccountMaintenanceDoc</shortLabel>
+        <summary>Indirect Cost Recovery Exclusion Account Maintenance Document</summary>
+        <description>Maintenance document which allows you to create new Indirect Cost Recovery Exclusion Accounts, or modify existing Indirect Cost Recovery Exclusion Accounts.</description>
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_INDIRECT_COST_RECOVERY_EXCLUSION_BY_ACCOUNT" />
+        
         <lockingKeys>
             <field attributeName="chartOfAccountsCode" />
             <field attributeName="accountNumber" />

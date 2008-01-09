@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/ProposalPurpose.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +20,29 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * A generalized purpose for a proposal.
+ * 
  */
-public class ProposalPurpose extends PersistableBusinessObjectBase {
+public class ProposalPurpose extends BusinessObjectBase {
 
     private String proposalPurposeCode;
     private String proposalPurposeDescription;
     private boolean rowActiveIndicator;
-
+    
     /**
      * Default constructor.
      */
     public ProposalPurpose() {
+
     }
 
     /**
      * Gets the proposalPurposeCode attribute.
      * 
      * @return Returns the proposalPurposeCode
+     * 
      */
     public String getProposalPurposeCode() {
         return proposalPurposeCode;
@@ -48,6 +52,7 @@ public class ProposalPurpose extends PersistableBusinessObjectBase {
      * Sets the proposalPurposeCode attribute.
      * 
      * @param proposalPurposeCode The proposalPurposeCode to set.
+     * 
      */
     public void setProposalPurposeCode(String proposalPurposeCode) {
         this.proposalPurposeCode = proposalPurposeCode;
@@ -58,6 +63,7 @@ public class ProposalPurpose extends PersistableBusinessObjectBase {
      * Gets the proposalPurposeDescription attribute.
      * 
      * @return Returns the proposalPurposeDescription
+     * 
      */
     public String getProposalPurposeDescription() {
         return proposalPurposeDescription;
@@ -67,14 +73,14 @@ public class ProposalPurpose extends PersistableBusinessObjectBase {
      * Sets the proposalPurposeDescription attribute.
      * 
      * @param proposalPurposeDescription The proposalPurposeDescription to set.
+     * 
      */
     public void setProposalPurposeDescription(String proposalPurposeDescription) {
         this.proposalPurposeDescription = proposalPurposeDescription;
     }
 
     /**
-     * Gets the rowActiveIndicator attribute.
-     * 
+     * Gets the rowActiveIndicator attribute. 
      * @return Returns the rowActiveIndicator.
      */
     public boolean isRowActiveIndicator() {
@@ -83,13 +89,12 @@ public class ProposalPurpose extends PersistableBusinessObjectBase {
 
     /**
      * Sets the rowActiveIndicator attribute value.
-     * 
      * @param rowActiveIndicator The rowActiveIndicator to set.
      */
     public void setRowActiveIndicator(boolean rowActiveIndicator) {
         this.rowActiveIndicator = rowActiveIndicator;
     }
-
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -98,5 +103,4 @@ public class ProposalPurpose extends PersistableBusinessObjectBase {
         m.put("proposalPurposeCode", this.proposalPurposeCode);
         return m;
     }
-
 }

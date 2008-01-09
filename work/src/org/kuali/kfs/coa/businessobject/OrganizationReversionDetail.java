@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/OrganizationReversionDetail.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +20,13 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
 
 /**
  * 
  */
-public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
+public class OrganizationReversionDetail extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
@@ -50,6 +52,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -59,6 +62,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -69,6 +73,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -78,6 +83,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -88,6 +94,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationCode attribute.
      * 
      * @return Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -97,6 +104,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -107,6 +115,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionCategoryCode attribute.
      * 
      * @return Returns the organizationReversionCategoryCode
+     * 
      */
     public String getOrganizationReversionCategoryCode() {
         return organizationReversionCategoryCode;
@@ -116,6 +125,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationReversionCategoryCode attribute.
      * 
      * @param organizationReversionCategoryCode The organizationReversionCategoryCode to set.
+     * 
      */
     public void setOrganizationReversionCategoryCode(String organizationReversionCategoryCode) {
         this.organizationReversionCategoryCode = organizationReversionCategoryCode;
@@ -126,6 +136,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionCode attribute.
      * 
      * @return Returns the organizationReversionCode
+     * 
      */
     public String getOrganizationReversionCode() {
         return organizationReversionCode;
@@ -135,6 +146,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationReversionCode attribute.
      * 
      * @param organizationReversionCode The organizationReversionCode to set.
+     * 
      */
     public void setOrganizationReversionCode(String organizationReversionCode) {
         this.organizationReversionCode = organizationReversionCode;
@@ -145,6 +157,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionObjectCode attribute.
      * 
      * @return Returns the organizationReversionObjectCode
+     * 
      */
     public String getOrganizationReversionObjectCode() {
         return organizationReversionObjectCode;
@@ -154,6 +167,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Sets the organizationReversionObjectCode attribute.
      * 
      * @param organizationReversionObjectCode The organizationReversionObjectCode to set.
+     * 
      */
     public void setOrganizationReversionObjectCode(String organizationReversionObjectCode) {
         this.organizationReversionObjectCode = organizationReversionObjectCode;
@@ -164,6 +178,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organizationReversionObject attribute.
      * 
      * @return Returns the organizationReversionObject
+     * 
      */
     public ObjectCode getOrganizationReversionObject() {
         return organizationReversionObject;
@@ -183,6 +198,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public Org getOrganization() {
         return organization;
@@ -202,6 +218,7 @@ public class OrganizationReversionDetail extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;

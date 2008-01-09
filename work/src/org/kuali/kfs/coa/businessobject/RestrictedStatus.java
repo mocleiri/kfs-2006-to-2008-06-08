@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/RestrictedStatus.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +19,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class RestrictedStatus extends PersistableBusinessObjectBase {
+public class RestrictedStatus extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -38,6 +40,7 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
      * Gets the accountRestrictedStatusCode attribute.
      * 
      * @return Returns the accountRestrictedStatusCode
+     * 
      */
     public String getAccountRestrictedStatusCode() {
         return accountRestrictedStatusCode;
@@ -47,6 +50,7 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
      * Sets the accountRestrictedStatusCode attribute.
      * 
      * @param accountRestrictedStatusCode The accountRestrictedStatusCode to set.
+     * 
      */
     public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
         this.accountRestrictedStatusCode = accountRestrictedStatusCode;
@@ -56,6 +60,7 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
      * Gets the accountRestrictedStatusName attribute.
      * 
      * @return Returns the accountRestrictedStatusName
+     * 
      */
     public String getAccountRestrictedStatusName() {
         return accountRestrictedStatusName;
@@ -65,6 +70,7 @@ public class RestrictedStatus extends PersistableBusinessObjectBase {
      * Sets the accountRestrictedStatusName attribute.
      * 
      * @param accountRestrictedStatusName The accountRestrictedStatusName to set.
+     * 
      */
     public void setAccountRestrictedStatusName(String accountRestrictedStatusName) {
         this.accountRestrictedStatusName = accountRestrictedStatusName;

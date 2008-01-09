@@ -17,32 +17,30 @@ package org.kuali.module.cg.lookup.keyvalues;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.ProposalStatus;
 
-/**
- * Gets a custom-formatted list of {@link ProposalStatus} values.
- */
 public class ProposalStatusValuesFinder extends KeyValuesBase {
 
-    /**
+    /*
      * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
-        Collection<ProposalStatus> codes = SpringContext.getBean(KeyValuesService.class).findAll(ProposalStatus.class);
+        Collection<ProposalStatus> codes = SpringServiceLocator.getKeyValuesService().findAll(ProposalStatus.class);
 
         List<KeyLabelPair> labels = new ArrayList<KeyLabelPair>();
         labels.add(new KeyLabelPair("", ""));
 
         for (ProposalStatus proposalStatus : codes) {
-            if (proposalStatus.isRowActiveIndicator()) {
-                labels.add(new KeyLabelPair(proposalStatus.getProposalStatusCode(), proposalStatus.getProposalStatusCode() + "-" + proposalStatus.getProposalStatusDescription()));
+            if(proposalStatus.isRowActiveIndicator()) {
+                labels.add(new KeyLabelPair(proposalStatus.getProposalStatusCode(), proposalStatus.getProposalStatusCode()+"-"+proposalStatus.getProposalStatusDescription()));
             }
         }
 

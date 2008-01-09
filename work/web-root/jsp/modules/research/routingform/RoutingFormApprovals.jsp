@@ -18,17 +18,14 @@
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
 	htmlFormAction="researchRoutingFormApprovals"
-	headerDispatch="save" headerTabActive="approvals" showTabButtons="true">
+	headerDispatch="save" feedbackKey="app.krafeedback.link"
+	headerTabActive="approvals">
 	
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 	
 	<kra-rf:routingFormHiddenDocumentFields />
 	
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Approvals" altText="page help"/>
-	</div>	
-	
-	<kra:kraAdHocRecipients adhocType="A" adhocLabel="Requests" excludeActionRequested="false" disableActionRequested="true" actionRequestedDefault="${Constants.WORKFLOW_APPROVE_REQUEST}" editingMode="${KualiForm.editingMode}"/>
+	<kra:kraAdHocRecipients adhocType="A" adhocLabel="Recipients" excludeActionRequested="false" disableActionRequested="true" actionRequestedDefault="${Constants.WORKFLOW_APPROVE_REQUEST}" editingMode="${KualiForm.editingMode}"/>
 	
 	<kul:routeLog />
 	

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.kuali.Constants;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.bo.Transaction;
 
 import com.lowagie.text.Document;
@@ -44,6 +46,7 @@ import com.lowagie.text.pdf.PdfWriter;
  * This class prints out a transaction listing report. This is different from a transaction report in that this lists all the
  * transactions and a total amount. The transaction report shows the primary key from transactions and a list of messages for each
  * one.
+ * 
  */
 public class TransactionListingReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionListingReport.class);
@@ -53,11 +56,6 @@ public class TransactionListingReport {
         public Font headerFont;
         public String title;
 
-        /**
-         * Generates end page for the transaction listing report
-         * 
-         * @see com.lowagie.text.pdf.PdfPageEventHelper#onEndPage(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
-         */
         public void onEndPage(PdfWriter writer, Document document) {
             try {
                 Rectangle page = document.getPageSize();
@@ -94,10 +92,10 @@ public class TransactionListingReport {
      * This will generate a report on the transactions passed to it
      * 
      * @param transactions Transactions sorted properly
-     * @param runDate date report is run
-     * @param title title of report
-     * @param fileprefix file prefix of file
-     * @param destinationDirectory directory where file resides
+     * @param runDate
+     * @param title
+     * @param fileprefix
+     * @param destinationDirectory
      */
     public void generateReport(Iterator<Transaction> transactions, Date runDate, String title, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
@@ -190,7 +188,7 @@ public class TransactionListingReport {
 
                     DecimalFormat decimalFormat = new DecimalFormat();
 
-                    if (KFSConstants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
+                    if (Constants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
                         cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
                         debitTotal = debitTotal.add(tran.getTransactionLedgerEntryAmount());
                     }
@@ -200,7 +198,7 @@ public class TransactionListingReport {
                     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     transactionList.addCell(cell);
 
-                    if (KFSConstants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
+                    if (Constants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
                         cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
                         creditTotal = creditTotal.add(tran.getTransactionLedgerEntryAmount());
                     }
@@ -209,8 +207,8 @@ public class TransactionListingReport {
                     }
                     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     transactionList.addCell(cell);
-
-                    if (!KFSConstants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode()) && !KFSConstants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())) {
+                    
+                    if (!Constants.GL_CREDIT_CODE.equals(tran.getTransactionDebitCreditCode()) && !Constants.GL_DEBIT_CODE.equals(tran.getTransactionDebitCreditCode())){
                         cell = new PdfPCell(new Phrase(nf.format(tran.getTransactionLedgerEntryAmount().doubleValue()), textFont));
                         budgetTotal = budgetTotal.add(tran.getTransactionLedgerEntryAmount());
                     }
@@ -229,7 +227,7 @@ public class TransactionListingReport {
             transactionList.addCell(cell);
             cell = new PdfPCell(new Phrase("", textFont));
             transactionList.addCell(cell);
-
+            
             DecimalFormat intf = new DecimalFormat();
             intf.applyPattern("###,###");
             cell = new PdfPCell(new Phrase(intf.format(transactionCount), headerFont));
@@ -244,7 +242,7 @@ public class TransactionListingReport {
             cell = new PdfPCell(new Phrase(nf.format(creditTotal.doubleValue()), headerFont));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             transactionList.addCell(cell);
-
+            
             cell = new PdfPCell(new Phrase(nf.format(budgetTotal.doubleValue()), headerFont));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             transactionList.addCell(cell);

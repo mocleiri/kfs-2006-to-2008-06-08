@@ -22,8 +22,6 @@
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.kra.budget.bo.AppointmentType</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-        <businessRulesClass>org.kuali.module.kra.budget.rules.AppointmentTypeMaintenanceDocumentRule</businessRulesClass>
-        
 
         <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
@@ -37,11 +35,13 @@
         <documentTypeName>KualiAppointmentTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>APPT</documentTypeCode>
 
-        <label>Appointment Type</label>
+        <label>Appointment Type Maintenance Document</label>
+        <shortLabel>Appointment Type</shortLabel>
 
         <summary>Appointment Type maintenance document</summary>
         <description>Document used to create or update AppointmentType objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="AppointmentType" parameterName="APPOINTMENT_TYPE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="appointmentTypeCode" />
@@ -56,7 +56,7 @@
                     <maintainableField name="fringeRateAmount" required="true"/>
                     <maintainableField name="costShareFringeRateAmount" required="true"/>
                     <maintainableField name="relatedAppointmentTypeCode" />
-					          <maintainableField name="active">
+					          <maintainableField name="active" required="true">
 						          <defaultValue>true</defaultValue>
 					          </maintainableField>
                     <maintainableField name="versionNumber" />

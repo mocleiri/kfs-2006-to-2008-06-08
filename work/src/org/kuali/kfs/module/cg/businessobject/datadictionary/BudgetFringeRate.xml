@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,10 +21,10 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetFringeRate">
-
+        <customAttributeEnabled>fakse</customAttributeEnabled>
 
         <inquiry>
-            <title>Budget Fringe Rate Inquiry</title>
+            <title>Budget Fringe Rate</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="documentNumber" />
@@ -36,7 +38,7 @@
         </inquiry>
 
         <lookup>
-            <title>Budget Fringe Rate Lookup</title>
+            <title>Budget Fringe Rate</title>
 
             <instructions>Lookup a Budget Fringe Rate</instructions>
 
@@ -97,7 +99,7 @@
                 <label>Contract and Grants Fringe Rate Amount</label>
                 <shortLabel>C&amp;G Fringe Rate</shortLabel>
 
-                <maxLength>6</maxLength>
+                <maxLength>8</maxLength>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -116,7 +118,7 @@
                 <label>Cost Share Fringe Rate Amount</label>
                 <shortLabel>Fringe Rate</shortLabel>
 
-                <maxLength>6</maxLength>
+                <maxLength>8</maxLength>
                 <validationPattern>
                     <floatingPoint />
                 </validationPattern>
@@ -188,6 +190,8 @@
 
         <objectLabel>Budget Fringe Rates</objectLabel>
         <objectDescription>Fringe rates for the Budget.</objectDescription>
+        
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetRatesHelp" />
 
     </businessObject>
 </dictionaryEntry>

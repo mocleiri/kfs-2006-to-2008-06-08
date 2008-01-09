@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/datadictionary/CheckBase.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.CheckBase">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
             <attribute name="checkNumber" forceUppercase="false">
@@ -32,6 +34,11 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The numeric identifier for the check or batch of checks in the Cash Reconciliation tab.</description>
             </attribute>
 
             <attributeReference name="checkDate" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericTimestamp">
@@ -41,6 +48,8 @@
                 <control>
                     <text size="10" />
                 </control>
+                <description>The date from the check or batch of checks. Use the calendar icon to select and format a date automatically.</description>
+
             </attributeReference>
 
             <attribute name="description" forceUppercase="false">
@@ -52,46 +61,28 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>A free-form text field that describes the purpose or function of the check or batch of checks.</description>
             </attribute>
-            
-            <attribute name="financialDocumentTypeCode" forceUppercase="true">
-    			<label>Financial Document Type Code</label>
-                <shortLabel>FinDocTypCd</shortLabel>
 
-                <maxLength>4</maxLength>
-                <required>false</required>
-
-                <control>
-                    <hidden />
-                </control>
-    		</attribute>
-    		
-    		<attribute name="cashieringRecordSource" forceUppercase="true">
-    			<label>Cashiering Record Source</label>
-                <shortLabel>CshrgRcdSrc</shortLabel>
-
-                <maxLength>1</maxLength>
-                <required>false</required>
-
-                <control>
-                    <hidden />
-                </control>
-    		</attribute>
-            
-
-            <attributeReference name="financialDocumentDepositLineNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <required>false</required>
+            <attributeReference name="interimDepositAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBoolean">
+                <required>true</required>
             </attributeReference>
 
             <attributeReference name="amount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <required>true</required>
+                <description>The total dollar amount of check or batch of checks.</description>
+
             </attributeReference>
 
             <attributeReference name="sequenceId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <required>true</required>
             </attributeReference>
 
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
+            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="documentNumber" />
         </attributes>
     </businessObject>
 </dictionaryEntry>

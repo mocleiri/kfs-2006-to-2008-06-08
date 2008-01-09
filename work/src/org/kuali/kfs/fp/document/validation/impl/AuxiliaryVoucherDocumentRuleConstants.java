@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,21 @@
  */
 package org.kuali.module.financial.rules;
 
-import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants;
-
 
 /**
  * Holds constants for <code>{@link org.kuali.module.financial.document.AuxiliaryVoucherDocument}</code> business rules.
+ * 
+ * 
  */
-public interface AuxiliaryVoucherDocumentRuleConstants extends AccountingDocumentRuleBaseConstants {
+public interface AuxiliaryVoucherDocumentRuleConstants extends TransactionalDocumentRuleBaseConstants {
+    // Security grouping constants used to do application parameter lookups
+    public static final String AUXILIARY_VOUCHER_SECURITY_GROUPING = "Kuali.FinancialTransactionProcessing.AuxiliaryVoucherDocument";
 
     // Application parameter lookup constants to be used in conjunction with the grouping constants above
-    public static final String RESTRICTED_COMBINED_CODES = "COMBINATION_OBJECT_TYPE_OBJECT_SUB_TYPE_OBJECT_LEVEL";
-    public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "OBJECT_SUB_TYPES";
-    public static final String RESTRICTED_PERIOD_CODES = "ACCOUNTING_PERIODS";
-    public static final String GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE = "GLPE_OFFSET_OBJECT_CODE";
-    public static final String AUXILIARY_VOUCHER_ACCOUNTING_PERIOD_GRACE_PERIOD = "ACCOUNTING_PERIOD_GRACE_PERIOD";
+    public static final String RESTRICTED_COMBINED_CODES = "RestrictedCombinationOfCodes";
+    public static final String RESTRICTED_OBJECT_SUB_TYPE_CODES = "RestrictedObjectSubTypeCodes";
+    public static final String RESTRICTED_EXPENSE_OBJECT_TYPE_CODES = "RestrictedExpenseObjectTypeCodes";
+    public static final String RESTRICTED_INCOME_OBJECT_TYPE_CODES = "RestrictedIncomeObjectTypeCodes";
+    public static final String RESTRICTED_PERIOD_CODES = "RestrictedPeriodCodes";
+    public static final String GENERAL_LEDGER_PENDING_ENTRY_OFFSET_CODE = "GeneralLedgerPendingEntryOffsetObjectCode";
 }

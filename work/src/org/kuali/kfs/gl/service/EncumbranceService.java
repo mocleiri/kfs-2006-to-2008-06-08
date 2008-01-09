@@ -20,30 +20,24 @@ import java.util.Map;
 
 import org.kuali.module.gl.bo.Encumbrance;
 
-/**
- * An interface declaring services dealing with encumbrances
- */
 public interface EncumbranceService {
     /**
      * Save an Encumbrance entry
      * 
-     * @param enc an encumbrance entry
+     * @param enc
      */
     public void save(Encumbrance enc);
 
     /**
      * Purge an entire fiscal year for a single chart.
      * 
-     * @param chartOfAccountsCode the chart of encumbrances to purge
-     * @param year the year of encumbrances to purage
+     * @param chartOfAccountscode
+     * @param year
      */
     public void purgeYearByChart(String chartOfAccountsCode, int year);
 
     /**
-     * Fetch all encumbrance records from GL open encumbrance table.  Based on test data, there's only
-     * about a third as many encumbrances as there are, say, balances, so unless your institution is huge,
-     * it's probably safe to call this method.
-     * @return an Iterator of encumbrances
+     * fetch all encumbrance records from GL open encumbrance table
      */
     public Iterator getAllEncumbrances();
 

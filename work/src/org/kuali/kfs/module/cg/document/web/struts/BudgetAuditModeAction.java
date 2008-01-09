@@ -21,14 +21,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.core.service.KualiRuleService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.rules.event.RunAuditEvent;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
 /**
  * This class handles Actions for the Budget Audit Mode page.
+ * 
+ * 
  */
 public class BudgetAuditModeAction extends BudgetAction {
 
@@ -49,7 +50,7 @@ public class BudgetAuditModeAction extends BudgetAction {
         BudgetForm budgetForm = (BudgetForm) form;
         budgetForm.setAuditActivated(true);
 
-        SpringContext.getBean(KualiRuleService.class).applyRules(new RunAuditEvent(budgetForm.getBudgetDocument()));
+        SpringServiceLocator.getKualiRuleService().applyRules(new RunAuditEvent(budgetForm.getBudgetDocument()));
 
         return mapping.findForward((KFSConstants.MAPPING_BASIC));
     }

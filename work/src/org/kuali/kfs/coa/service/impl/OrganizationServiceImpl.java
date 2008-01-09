@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/service/impl/OrganizationServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +20,25 @@ package org.kuali.module.chart.service.impl;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.util.spring.Cached;
-import org.kuali.kfs.KFSConstants.ChartApcParms;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
+
 import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
-import org.kuali.module.chart.service.ChartService;
 import org.kuali.module.chart.service.OrganizationService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the Org structure. This is the default implementation, that is delivered with Kuali.
+ * 
+ * 
  */
-@Transactional
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
-    private ParameterService parameterService;
-    private ChartService chartService;
-
+    
     /**
+     * Implements the getByPrimaryId method defined by OrganizationService.
      * 
+     * @param chartOfAccountsCode The FIN_COA_CD that is being searched for
+     * @param organizationCode the ORG_CD that is being searched for
+     * @return Org Business Object
      * @see org.kuali.module.chart.service.OrganizationService#getByPrimaryId(java.lang.String, java.lang.String)
      */
     public Org getByPrimaryId(String chartOfAccountsCode, String organizationCode) {
@@ -51,81 +51,17 @@ public class OrganizationServiceImpl implements OrganizationService {
      * 
      * @see org.kuali.module.chart.service.impl.OrganizationServiceImpl#getByPrimaryId(java.lang.String, java.lang.String)
      */
-    @Cached
     public Org getByPrimaryIdWithCaching(String chartOfAccountsCode, String organizationCode) {
         return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
     }
 
     /**
      * Implements the save() method defined by OrganizationService, including validation of the Org BO
-     * @see org.kuali.module.chart.service.OrganizationService#save(org.kuali.module.chart.bo.Org)
+     * 
+     * @param organization The Org Business Object to save
      */
     public void save(Org organization) {
         organizationDao.save(organization);
-    }
-
-    /**
-     * @see org.kuali.module.chart.service.OrganizationService#getActiveAccountsByOrg(java.lang.String, java.lang.String)
-     */
-    public List getActiveAccountsByOrg(String chartOfAccountsCode, String organizationCode) {
-
-        if (StringUtils.isBlank(chartOfAccountsCode)) {
-            throw new IllegalArgumentException("String parameter chartOfAccountsCode was null or blank.");
-        }
-        if (StringUtils.isBlank(organizationCode)) {
-            throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
-        }
-
-        return organizationDao.getActiveAccountsByOrg(chartOfAccountsCode, organizationCode);
-    }
-
-    /**
-     * @see org.kuali.module.chart.service.OrganizationService#getActiveChildOrgs(java.lang.String, java.lang.String)
-     */
-    public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode) {
-
-        if (StringUtils.isBlank(chartOfAccountsCode)) {
-            throw new IllegalArgumentException("String parameter chartOfAccountsCode was null or blank.");
-        }
-        if (StringUtils.isBlank(organizationCode)) {
-            throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
-        }
-
-        return organizationDao.getActiveChildOrgs(chartOfAccountsCode, organizationCode);
-    }
-
-    /**
-     * 
-     * @see org.kuali.module.chart.service.OrganizationService#getActiveOrgsByType(java.lang.String)
-     */
-    public List<Org> getActiveOrgsByType(String organizationTypeCode) {
-        if (StringUtils.isBlank(organizationTypeCode)) {
-            throw new IllegalArgumentException("String parameter organizationTypeCode was null or blank.");
-        }
-
-        return organizationDao.getActiveOrgsByType(organizationTypeCode);
-    }
-
-    /**
-     * 
-     * @see org.kuali.module.chart.service.OrganizationService#getRootOrganizationCode()
-     */
-    public String[] getRootOrganizationCode() {
-        String rootChart = getChartService().getUniversityChart().getChartOfAccountsCode();
-        String selfReportsOrgType = SpringContext.getBean(ParameterService.class).getParameterValue(Org.class, ChartApcParms.ORG_MUST_REPORT_TO_SELF_ORG_TYPES);
-        return (organizationDao.getRootOrganizationCode(rootChart, selfReportsOrgType));
-    }
-
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
-    }
-
-    public ChartService getChartService() {
-        return chartService;
-    }
-
-    public void setChartService(ChartService chartService) {
-        this.chartService = chartService;
     }
 
     /**
@@ -142,4 +78,45 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.organizationDao = organizationDao;
     }
 
+    /**
+     * 
+     * @see org.kuali.module.chart.service.OrganizationService#getActiveAccountsByOrg(java.lang.String, java.lang.String)
+     */
+    public List getActiveAccountsByOrg(String chartOfAccountsCode, String organizationCode) {
+
+        if (StringUtils.isBlank(chartOfAccountsCode)) {
+            throw new IllegalArgumentException("String parameter chartOfAccountsCode was null or blank.");
+        }
+        if (StringUtils.isBlank(organizationCode)) {
+            throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
+        }
+
+        return organizationDao.getActiveAccountsByOrg(chartOfAccountsCode, organizationCode);
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.chart.service.OrganizationService#getActiveChildOrgs(java.lang.String, java.lang.String)
+     */
+    public List getActiveChildOrgs(String chartOfAccountsCode, String organizationCode) {
+
+        if (StringUtils.isBlank(chartOfAccountsCode)) {
+            throw new IllegalArgumentException("String parameter chartOfAccountsCode was null or blank.");
+        }
+        if (StringUtils.isBlank(organizationCode)) {
+            throw new IllegalArgumentException("String parameter organizationCode was null or blank.");
+        }
+
+        return organizationDao.getActiveChildOrgs(chartOfAccountsCode, organizationCode);
+    }
+
+    public List<Org> getActiveOrgsByType(String organizationTypeCode) {
+        if (StringUtils.isBlank(organizationTypeCode)) {
+            throw new IllegalArgumentException("String parameter organizationTypeCode was null or blank.");
+        }
+        
+        return organizationDao.getActiveOrgsByType( organizationTypeCode );
+    }
+    
+    
 }

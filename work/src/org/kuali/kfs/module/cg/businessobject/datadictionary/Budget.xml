@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +22,7 @@
 
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.Budget">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Inquiry</title>
@@ -30,36 +32,6 @@
                 <!-- field attributeName="budgetAgency.agencyName" / -->
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
-
-		<lookup>
-            <title>Budget Lookup</title>
-
-            <instructions>Look up a Budget</instructions>
-
-            <defaultSort attributeName="documentNumber" sortAscending="true" />
-
-            <lookupFields>
-                <lookupField attributeName="documentNumber" required="false" />
-                <lookupField attributeName="budgetName" required="false" />
-                <lookupField attributeName="budgetProjectDirectorUniversalIdentifier" required="false" />
-                <lookupField attributeName="universalUser.personUserIdentifier" required="false" />
-                <lookupField attributeName="universalUser.personName" required="false" />
-                <!--  <lookupField attributeName="budgetAgency.agencyNumber" required="false" /> --> 
-                <lookupField attributeName="budgetAgency.fullName" required="false" />
-            </lookupFields>
-
-            <resultFields>
-                <field attributeName="documentNumber" />
-                <field attributeName="budgetName" />
-                <field attributeName="budgetParentTrackNumber" />
-                <field attributeName="electronicResearchAdministrationGrantNumber" />
-                <field attributeName="budgetTypeCodeText" />
-                <field attributeName="projectDirector.universalUser.personUserIdentifier" />               
-                <field attributeName="projectDirector.universalUser.personName" forceInquiry="true" />
-                <field attributeName="budgetAgency.agencyNumber" />
-                <field attributeName="budgetAgency.fullName" />
-            </resultFields>
-		</lookup>
 
         <attributes>
             <attribute name="documentNumber" forceUppercase="true">
@@ -77,6 +49,23 @@
 
                 <summary>Doc Header ID</summary>
                 <description>Doc Header ID</description>
+            </attribute>
+
+            <attribute name="budgetStatusCode" forceUppercase="true">
+                <label>Budget Status Code</label>
+                <shortLabel>Budget Status Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern>
+                    <numeric />
+                </validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>Budget Status Code</summary>
+                <description>Budget Status Code</description>
             </attribute>
 
             <attribute name="budgetParentTrackNumber" forceUppercase="true">
@@ -306,18 +295,11 @@
             </attribute>
 
             <attributeReference name="budgetAgency" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
-                <label>Budget Agency</label>
-                <shortLabel>Agency</shortLabel>
+                <label>Agency</label>
+                <shortLabel>Number</shortLabel>
                 <summary>Budget Agency</summary>
                 <description>Budget Agency...</description>
             </attributeReference>
-
-			<attributeReference name="budgetAgencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
-				<label>Budget Agency Number</label>
-				<shortLabel>Budget Ag Num</shortLabel>
-				<summary>Budget Agency Number</summary>
-				<description>BudgetAgencyNumber...</description>
-			</attributeReference>
 
             <attributeReference name="federalPassThroughAgency" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
                 <label>Federal Pass Through</label>
@@ -327,94 +309,12 @@
                 <description>Federal Pass Through Agency ...</description>
             </attributeReference>
 
-            <attributeReference name="budgetProjectDirectorUniversalIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUniversalIdentifier">
+            <attributeReference name="budgetProjectDirectorSystemId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericSystemId">
                 <label>Project Director</label>
                 <shortLabel>Project Director</shortLabel>
-                <displayLabelAttribute>universalUser.personUserIdentifier</displayLabelAttribute>
-                <required>true</required>
-                <control>
-                    <hidden />
-                </control>
 
                 <summary>Project Director ...</summary>
                 <description>Project Director ...</description>
-            </attributeReference>
-            <attributeReference name="projectDirector.universalUser.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-                <label>Project Director UserID</label>
-                <shortLabel>UserID</shortLabel>
-                <required>false</required>
-                <control>
-                    <kualiUser universalIdAttributeName="budgetProjectDirectorUniversalIdentifier" userIdAttributeName="universalUser.personUserIdentifier" personNameAttributeName="universalUser.personName" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The username of the Project Director for the Budget. </description>
-            </attributeReference>
-
-            <attributeReference name="projectDirector.universalUser.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
-                <label>Project Director Name</label>
-                <shortLabel>Name</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Name of the Project Director.</description>
-            </attributeReference>
-
-            <attributeReference name="universalUser.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-                <label>Project Director UserID</label>
-                <shortLabel>UserID</shortLabel>
-                <required>false</required>
-                <control>
-                    <kualiUser universalIdAttributeName="budgetProjectDirectorUniversalIdentifier" userIdAttributeName="universalUser.personUserIdentifier" personNameAttributeName="universalUser.personName" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The username of the Project Director for the Budget. </description>
-            </attributeReference>
-
-            <attributeReference name="universalUser.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
-                <label>Project Director Name</label>
-                <shortLabel>Name</shortLabel>
-                <required>false</required>
-                <control>
-                    <hidden />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Name of the Project Director.</description>
-            </attributeReference>
-
-            <attributeReference name="budgetAgency.agencyNumber" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
-                <label>Budget Agency Number</label>
-                <shortLabel>Agency Number</shortLabel>
-                <required>false</required>
-                <control>
-                    <text size="6" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Agency Number for the Budget. </description>
-            </attributeReference>
-
-            <attributeReference name="budgetAgency.fullName" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="fullName">
-                <label>Budget Agency Name</label>
-                <shortLabel>Name</shortLabel>
-                <required>false</required>
-                <control>
-                    <text size="50" />
-                </control>
-                <summary>
-                    <![CDATA[&nbsp;]]>
-                </summary>
-                <description>The Name of the Budget Agency.</description>
             </attributeReference>
 
         </attributes>
@@ -435,20 +335,10 @@
             </collection>
         </collections>
 
-        <relationships>
-            <relationship objectAttributeName="universalUser" >
-                <primitiveAttribute sourceName="budgetProjectDirectorUniversalIdentifier" targetName="personUniversalIdentifier" />
-				<supportAttribute sourceName="universalUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
-				<supportAttribute sourceName="universalUser.personName" targetName="personName" />
-            </relationship>
-            <relationship objectAttributeName="budgetAgency" >
-                <primitiveAttribute sourceName="budgetAgencyNumber" targetName="agencyNumber" />
-				<supportAttribute sourceName="budgetAgency.fullName" targetName="fullName" identifier="true" />
-            </relationship>
-		</relationships>
-
-        <objectLabel>Budget</objectLabel>
+        <objectLabel>General Parameters</objectLabel>
         <objectDescription>Help description for budget parameters - general.</objectDescription>
+
+		<objectHelp securityGroupName="KraAdminGroup" parameterName="budgetParametersGeneralHelp" />
 		
     </businessObject>
 </dictionaryEntry>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/SubFundGroupType.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.SubFundGroupType">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Sub-Fund Group Type Inquiry</title>
@@ -69,6 +71,9 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>subFundGroupTypeActiveIndicator</summary>
+                <description>subFundGroupTypeActiveIndicator description...</description>
 			</attribute>
 
             <attribute name="subFundGroupTypeCode" forceUppercase="true">
@@ -81,6 +86,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>subFundGroupTypeCode</summary>
+                <description>subFundGroupTypeCode description...</description>
 			</attribute>
 
             <attribute name="subFundGroupTypeDescription" forceUppercase="true">
@@ -96,6 +104,9 @@
                 <control>
                     <text size="42" />
                 </control>
+
+                <summary>subFundGroupTypeDescription</summary>
+                <description>subFundGroupTypeDescription description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
