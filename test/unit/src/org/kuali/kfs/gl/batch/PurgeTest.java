@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.dbplatform.RawSQL;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.Guid;
 import org.kuali.core.util.UnitTestSqlDao;
@@ -29,21 +28,13 @@ import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.test.ConfigureContext;
 
-/**
- * Tests the PurgeStep
- */
 @ConfigureContext
-@RawSQL
 public class PurgeTest extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurgeTest.class);
 
     private UnitTestSqlDao unitTestSqlDao;
     private DateTimeService dateTimeService;
 
-    /**
-     * Sets up this method by getting the needed services from the SpringContext
-     * @see junit.framework.TestCase#setUp()
-     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -52,11 +43,7 @@ public class PurgeTest extends KualiTestBase {
         dateTimeService = SpringContext.getBean(DateTimeService.class);
     }
 
-    /**
-     * Tests that entries created before 2002 are purged
-     * 
-     * @throws Exception thrown if something (likely a SQL issue) goes wrong
-     */
+    // This will purge entries before 2002
     public void testPurgeEntry() throws Exception {
         LOG.debug("testPurgeEntry() started");
 
@@ -83,11 +70,7 @@ public class PurgeTest extends KualiTestBase {
         assertEquals("Wrong count for year found", 1, getInt(count2002, "COUNT(*)"));
     }
 
-    /**
-     * Tests that balances are purged before 1999
-     * 
-     * @throws Exception thrown if something (likely a SQL issue) goes wrong
-     */
+    // This will purge entries before 1999
     public void testPurgeBalance() throws Exception {
         LOG.debug("testPurgeBalance() started");
 
@@ -114,11 +97,7 @@ public class PurgeTest extends KualiTestBase {
         assertEquals("Wrong count for year found", 1, getInt(count1999, "COUNT(*)"));
     }
 
-    /**
-     * Tests that account balances are purged before 1999
-     * 
-     * @throws Exception thrown if something (likely a SQL issue) goes wrong
-     */
+    // This will purge entries before 1999
     public void testPurgeAccountBalances() throws Exception {
         LOG.debug("testPurgeAccountBalances() started");
 
@@ -145,11 +124,7 @@ public class PurgeTest extends KualiTestBase {
         assertEquals("Wrong count for year found", 1, getInt(count1999, "COUNT(*)"));
     }
 
-    /**
-     * Tests that encumbrances are purged before 2002
-     * 
-     * @throws Exception thrown if something (likely a SQL issue) goes wrong
-     */
+    // This will purge entries before 2002
     public void testPurgeEncumbrance() throws Exception {
         LOG.debug("testPurgeEncumbrance() started");
 
@@ -176,11 +151,7 @@ public class PurgeTest extends KualiTestBase {
         assertEquals("Wrong count for year found", 1, getInt(count2002, "COUNT(*)"));
     }
 
-    /**
-     * Tests that collector details are purged before 2002
-     * 
-     * @throws Exception thrown if something (likely a SQL issue) goes wrong
-     */
+    // This will purge entries before 2002
     public void testPurgeCollectorDetail() throws Exception {
         LOG.debug("testPurgeCollectorDetail() started");
 
@@ -188,10 +159,18 @@ public class PurgeTest extends KualiTestBase {
         unitTestSqlDao.sqlCommand("DELETE FROM GL_ID_BILL_T");
 
         // Should be deleted
-        unitTestSqlDao.sqlCommand("insert into GL_ID_BILL_T (FS_ORIGIN_CD,UNIV_FISCAL_PRD_CD, UNIV_FISCAL_YR, CREATE_DT, CREATE_SEQ, FIN_COA_CD, ACCOUNT_NBR, " + "SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FDOC_IDBIL_SEQ_NBR, FDOC_TYP_CD, FDOC_NBR, OBJ_ID, VER_NBR, FDOC_IDBIL_ITM_AMT, " + "FDOC_IDBIL_NTE_TXT, FIN_OBJ_TYP_CD, FIN_BALANCE_TYP_CD) values ('01','01', 2001, " + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ", '1', 'BL', '1031400', '-----', '5000', '---', '1', 'ID22', 'XXX','" + new Guid().toString() + "', 1, 0, 'x', 'EX', 'AC')");
+        unitTestSqlDao.sqlCommand("insert into GL_ID_BILL_T (FS_ORIGIN_CD,UNIV_FISCAL_PRD_CD, UNIV_FISCAL_YR, CREATE_DT, CREATE_SEQ, FIN_COA_CD, ACCOUNT_NBR, " 
+                    + "SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FDOC_IDBIL_SEQ_NBR, FDOC_TYP_CD, FDOC_NBR, OBJ_ID, VER_NBR, FDOC_IDBIL_ITM_AMT, " 
+                    + "FDOC_IDBIL_NTE_TXT, FIN_OBJ_TYP_CD, FIN_BALANCE_TYP_CD) values ('01','01', 2001, " 
+                    + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ", '1', 'BL', '1031400', '-----', '5000', '---', '1', 'ID22', 'XXX','" 
+                    + new Guid().toString() + "', 1, 0, 'x', 'EX', 'AC')");
 
         // Shouldn't be deleted
-        unitTestSqlDao.sqlCommand("insert into GL_ID_BILL_T (FS_ORIGIN_CD,UNIV_FISCAL_PRD_CD, UNIV_FISCAL_YR, CREATE_DT, CREATE_SEQ, FIN_COA_CD, ACCOUNT_NBR, " + "SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FDOC_IDBIL_SEQ_NBR, FDOC_TYP_CD, FDOC_NBR, OBJ_ID, VER_NBR, FDOC_IDBIL_ITM_AMT, " + "FDOC_IDBIL_NTE_TXT, FIN_OBJ_TYP_CD, FIN_BALANCE_TYP_CD) values ('01','01', 2002, " + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ", '1', 'BL', '1031400', '-----', '5000', '---', '1', 'ID22', 'XXX','" + new Guid().toString() + "', 1, 0, 'x', 'EX', 'AC')");
+        unitTestSqlDao.sqlCommand("insert into GL_ID_BILL_T (FS_ORIGIN_CD,UNIV_FISCAL_PRD_CD, UNIV_FISCAL_YR, CREATE_DT, CREATE_SEQ, FIN_COA_CD, ACCOUNT_NBR, "
+                + "SUB_ACCT_NBR, FIN_OBJECT_CD, FIN_SUB_OBJ_CD, FDOC_IDBIL_SEQ_NBR, FDOC_TYP_CD, FDOC_NBR, OBJ_ID, VER_NBR, FDOC_IDBIL_ITM_AMT, "
+                + "FDOC_IDBIL_NTE_TXT, FIN_OBJ_TYP_CD, FIN_BALANCE_TYP_CD) values ('01','01', 2002, " 
+                + unitTestSqlDao.getDbPlatform().getCurTimeFunction() + ", '1', 'BL', '1031400', '-----', '5000', '---', '1', 'ID22', 'XXX','" 
+                + new Guid().toString() + "', 1, 0, 'x', 'EX', 'AC')");
 
         Step purgeStep = SpringContext.getBean(PurgeCollectorDetailStep.class);
 
@@ -207,11 +186,7 @@ public class PurgeTest extends KualiTestBase {
         assertEquals("Wrong count for year found", 1, getInt(count2002, "COUNT(*)"));
     }
 
-    /**
-     * Tests that sufficient funds balances are purged before 1999
-     * 
-     * @throws Exception thrown if something (likely a SQL issue) goes wrong
-     */
+    // This will purge entries before 1999
     public void testPurgeSufficientFundsBalances() throws Exception {
         LOG.debug("testPurgeSufficientFundsBalances() started");
 
@@ -238,11 +213,6 @@ public class PurgeTest extends KualiTestBase {
         assertEquals("Wrong count for year found", 1, getInt(count1999, "COUNT(*)"));
     }
 
-    /**
-     * Prints the contents of a List of Maps to System.err
-     * 
-     * @param maps a List of Maps
-     */
     private void printList(List maps) {
         for (Iterator iter = maps.iterator(); iter.hasNext();) {
             Map element = (Map) iter.next();
@@ -258,27 +228,17 @@ public class PurgeTest extends KualiTestBase {
         }
     }
 
-    /**
-     * Attempts to convert the value of a MapEntry with the given key into an int
-     * 
-     * @param values a Map of values
-     * @param field the key of the value to convert
-     * @return the converted value or -1 if conversion was unsuccessful
-     */
     private int getInt(Map values, String field) {
         Object o = values.get(field);
         if (o == null) {
             return -1;
-        }
-        else if (o instanceof BigDecimal) {
+        } else if (o instanceof BigDecimal) {
             BigDecimal number = (BigDecimal) o;
             return number.intValue();
-        }
-        else if (o instanceof Long) {
+        } else if (o instanceof Long) {
             Long number = (Long) o;
             return number.intValue();
-        }
-        else {
+        } else {
             return -1;
         }
     }

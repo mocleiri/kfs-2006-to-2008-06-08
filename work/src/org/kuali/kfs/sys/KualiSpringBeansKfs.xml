@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright 2007 The Kuali Foundation.
- 
+
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.opensource.org/licenses/ecl1.php
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,19 +15,19 @@
  limitations under the License.
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-<beans>	
+<beans>
 	<bean class="org.kuali.rice.OjbMetadataLoader">
 		<property name="repositoryDescriptors" value="org/kuali/kfs/OJB-repository-kfs.xml" />
 	</bean>
-	
+
 	<bean class="org.kuali.core.web.servlet.DWRConfigFileConfigurer">
 		<property name="configFile" value="org/kuali/kfs/dwr-kfs.xml" />
 	</bean>
-	
-	<bean class="org.kuali.core.datadictionary.spring.DataDictionaryLocationConfigurer" depends-on="rice">
+
+	<bean class="org.kuali.core.datadictionary.spring.DataDictionaryLocationConfigurer">
 		<property name="dataDictionaryPackages" value="org/kuali/kfs/datadictionary" />
 	</bean>
-	
+
 	<!-- begin batch framework -->
 	<bean name="kfsBatchComponents" class="org.springframework.beans.factory.config.MapFactoryBean">
 		<property name="sourceMap">
@@ -42,11 +42,11 @@
 					<list>
 						<value>scheduleJobTrigger</value>
 					</list>
-				</entry>	
+				</entry>
 			</map>
 		</property>
 	</bean>
-	
+
 	<bean id="scheduler" class="org.kuali.kfs.batch.SchedulerFactoryBean">
 		<property name="useQuartzScheduling" value="${use.quartz.scheduling}" />
 		<property name="useJdbcJobstore" value="${use.quartz.jdbc.jobstore}" />
@@ -62,14 +62,14 @@
 			</props>
 		</property>
 	</bean>
-	
+
 	<bean id="schedulerService" class="org.kuali.kfs.service.impl.SchedulerServiceImpl">
 		<property name="scheduler" ref="scheduler" />
 		<property name="jobListener" ref="jobListener" />
 		<property name="moduleService" ref="kualiModuleService" />
-		<property name="parameterService" ref="parameterService" />
+		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="dateTimeService" ref="dateTimeService" />
-		<property name="mailService" ref="mailService" />		
+		<property name="mailService" ref="mailService" />
 	</bean>
 
 	<bean id="jobListener" class="org.kuali.kfs.batch.JobListener">
@@ -87,7 +87,7 @@
 	</bean>
 
 	<bean id="step" abstract="true">
-		<property name="parameterService" ref="parameterService" />
+		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="dateTimeService" ref="dateTimeService" />
 	</bean>
 
@@ -98,7 +98,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="scheduleStep" parent="step" class="org.kuali.kfs.batch.ScheduleStep">
 		<property name="schedulerService" ref="schedulerService" />
 	</bean>
@@ -114,31 +114,55 @@
 
   	<bean id="scheduleJobTrigger" parent="cronTrigger">
 		<property name="jobName" value="scheduleJob" />
-		<property name="cronExpression" value="${batch.schedule.cron.expression}" />
+		<property name="cronExpression" value="00 00 23 ? * *" />
 	</bean>
-	
-	<bean id="batchJobStatusLookupableHelperService" class="org.kuali.kfs.lookup.BatchJobStatusLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService">
+
+	<bean id="batchJobStatusLookupableHelperService" class="org.kuali.kfs.lookup.BatchJobStatusLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService">
     	<property name="schedulerService" ref="schedulerService" />
-    	<property name="parameterService" ref="parameterService" />
-    	<property name="configurationService" ref="kualiConfigurationService" />
+    	<property name="configService" ref="kualiConfigurationService" />
     </bean>
-	
+
 	<bean id="batchJobStatusLookupable" class="org.kuali.core.lookup.KualiLookupableImpl" singleton="false">
 	    <property name="lookupableHelperService">
 	        <ref bean="batchJobStatusLookupableHelperService" />
 	    </property>
 	</bean>
-	
+
 	<bean id="batchInputFileService" class="org.kuali.kfs.service.impl.BatchInputFileServiceImpl" />
-	
+
 	<bean id="batchInputFileSetService" class="org.kuali.kfs.service.impl.BatchInputFileSetServiceImpl" />
 	<!-- end btch framework -->
-	
+
 	<!--  begin core batch jobs -->
-	<bean id="postDataLoadEncryptionStep" parent="step" class="org.kuali.kfs.batch.PostDataLoadEncryptionStep">
-		<property name="postDataLoadEncryptionService" ref="postDataLoadEncryptionService" />
+	<!-- database purging/creation/maintenance -->
+	<bean id="databaseImportExportStep" abstract="true" parent="step">
+		<property name="databaseImportExportService">
+            <ref bean="databaseImportExportService" />
+        </property>
+    </bean>
+
+	<bean id="databaseUpdateStep" parent="databaseImportExportStep" class="org.kuali.kfs.batch.DatabaseUpdateStep">
+		<property name="updateFileList" value="${database.update.file.list}" />
+	</bean>
+
+	<bean id="dataExportStep" parent="databaseImportExportStep" class="org.kuali.kfs.batch.DataExportStep">
+		<property name="dataExportZipFile" value="${data.export.zip.file}" />
+	</bean>
+
+	<bean id="postDataLoadEncryptionStep" parent="databaseImportExportStep" class="org.kuali.kfs.batch.PostDataLoadEncryptionStep">
 		<property name="attributesToEncryptProperties" value="${encrypt.attributes.properties.file}" />
 	</bean>
+
+	<bean id="generateDatabaseImportFileListStep" parent="databaseImportExportStep" class="org.kuali.kfs.batch.GenerateDatabaseImportFileListStep">
+		<property name="databaseFileDirectory" value="${database.file.directory}" />
+		<property name="dataExportZipFile" value="${data.export.zip.file}" />
+		<property name="updateFileList" value="${database.update.file.list}" />
+	</bean>
+
+	<bean id="databasePurgeStep" parent="databaseImportExportStep" class="org.kuali.kfs.batch.DatabasePurgeStep" />
+
+	<bean id="purgeSequenceTablesStep" parent="databaseImportExportStep" class="org.kuali.kfs.batch.PurgeSequenceTablesStep" />
+	<!-- end database purging/creation/maintenance -->
 
 	<bean id="purgeOldLookupResultsStep" class="org.kuali.kfs.batch.PurgeOldLookupResultsStep" parent="step">
 		<property name="lookupResultsService">
@@ -152,7 +176,6 @@
 				<ref bean="purgeDocumentContentsStep" />
 				<ref bean="purgePendingAttachmentsStep" />
 				<ref bean="purgeOldLookupResultsStep" />
-				<ref bean="purgeTempFilesStep" />
 			</list>
 		</property>
 	</bean>
@@ -168,27 +191,14 @@
 			<ref bean="attachmentService" />
 		</property>
 	</bean>
-
-	<bean id="purgeTempFilesStep" class="org.kuali.kfs.batch.PurgeTempFilesStep" parent="step">
-		<property name="kualiConfigurationService">
-			<ref bean="kualiConfigurationService" />
-		</property>
-	</bean>
-	
 	<!-- end core batch jobs -->
-	
-	<bean id="parameterService" class="org.kuali.kfs.service.impl.ParameterServiceImpl">
-		<property name="dataDictionaryService" ref="dataDictionaryService" />
-		<property name="moduleService" ref="kualiModuleService" />
-		<property name="businessObjectService" ref="businessObjectService" />
-	</bean>
-	
+
 	<bean id="kualiCodeService" class="org.kuali.kfs.service.impl.KualiCodeServiceImpl">
 		<property name="kualiCodeDao">
 			<ref bean="kualiCodeDao" />
 		</property>
 	</bean>
-		
+
 	<bean id="kualiCodeDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.KualiCodeDaoOjb" />
 
 	<bean id="universityDateService" class="org.kuali.module.financial.service.impl.UniversityDateServiceImpl">
@@ -206,13 +216,10 @@
 	<bean id="originationCodeDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.OriginationCodeDaoOjb" />
 
 	<bean id="optionsDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.OptionsDaoOjb" />
-	
+
 	<bean id="generalLedgerPendingEntryDao" parent="platformAwareDao" class="org.kuali.kfs.dao.ojb.GeneralLedgerPendingEntryDaoOjb">
-		<property name="parameterService">
-			<ref bean="parameterService" />
-		</property>
-		<property name="balanceTypService">
-			<ref bean="balanceTypService" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 	</bean>
 
@@ -227,13 +234,13 @@
 			<ref bean="originationCodeDao" />
 		</property>
 	</bean>
-	
+
 	<bean id="optionsService" class="org.kuali.kfs.service.impl.OptionsServiceImpl">
 		<property name="optionsDao">
 			<ref bean="optionsDao" />
 		</property>
 	</bean>
-	
+
 	<bean id="generalLedgerPendingEntryService" class="org.kuali.kfs.service.impl.GeneralLedgerPendingEntryServiceImpl">
 		<property name="generalLedgerPendingEntryDao">
 			<ref bean="generalLedgerPendingEntryDao" />
@@ -247,8 +254,8 @@
 		<property name="optionsService">
 			<ref bean="optionsService" />
 		</property>
-		<property name="parameterService">
-			<ref bean="parameterService" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 		<property name="balanceTypeService">
 			<ref bean="balanceTypService" />
@@ -272,14 +279,14 @@
 			<value>org.kuali.kfs.bo.KualiModuleBO</value>
 		</property>
 	</bean>
-	
+
 	<bean id="workflow-org.kuali.core.bo.Campus-Lookupable" parent="workflowLookupable" singleton="false">
 		<property name="businessObjectClassName">
 			<value>org.kuali.core.bo.Campus</value>
 		</property>
 	</bean>
 
-	<bean id="moduleLookupableHelperService" class="org.kuali.kfs.lookup.ModuleLookupableHelperServiceImpl" singleton="false" parent="lookupableHelperService" >
+	<bean id="moduleLookupableHelperService" class="org.kuali.kfs.lookup.ModuleLookupableHelperServiceImpl" singleton="false" parent="kualiLookupableHelperService" >
 		<property name="configService" ref="kualiConfigurationService" />
 	</bean>
 
@@ -288,23 +295,4 @@
 			<ref bean="moduleLookupableHelperService" />
 		</property>
 	</bean>
-
-    <bean id="parameterLookupable" class="org.kuali.core.lookup.KualiLookupableImpl">
-        <property name="lookupableHelperService">
-            <bean id="parameterLookupableHelperService" class="org.kuali.kfs.lookup.ParameterLookupableHelperServiceImpl" parent="lookupableHelperService">
-                <property name="parameterService" ref="parameterService" />
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="parameterDetailTypeLookupable" class="org.kuali.core.lookup.KualiLookupableImpl">
-        <property name="lookupableHelperService">
-            <bean id="parameterDetailTypeLookupableHelperService" class="org.kuali.kfs.lookup.ParameterDetailTypeLookupableHelperServiceImpl" parent="lookupableHelperService">
-				<property name="parameterService" ref="parameterService" />
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="kualiInquirable" class="org.kuali.kfs.inquiry.KfsInquirableImpl" singleton="false" />
-    
 </beans>
