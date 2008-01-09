@@ -9041,16 +9041,8 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="A21_LBR_PYRL_AMT" scale="2" size="19" type="DECIMAL"/>
-        <column name="LBR_DRVD_PYRL_CD" size="1" type="VARCHAR"/>
-        <column name="LBR_DRVD_PYRL_PCT" size="3" type="DECIMAL"/>
-        <column name="A21LBR_CST_SHR_CD" size="1" type="VARCHAR"/>
-        <column name="A21LBR_CST_SHR_PCT" size="3" type="DECIMAL"/>
-        <column name="LBR_CALC_OVRLL_CD" size="1" type="VARCHAR"/>
         <column name="LBR_CALC_OVRLL_PCT" size="3" type="DECIMAL"/>
-        <column name="LBR_UPDT_OVRLL_CD" size="1" type="VARCHAR"/>
         <column name="LBR_UPDT_OVRLL_PCT" size="3" type="DECIMAL"/>
-        <column name="A21_LBR_PRORT_CD" size="1" type="VARCHAR"/>
-        <column name="A21_LBR_PRORT_PCT" size="3" type="DECIMAL"/>
         <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
         <column name="CST_SRCSUBACCT_NBR" size="5" type="VARCHAR"/>
         <column name="A21_LBRORIG_PY_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -9087,8 +9079,6 @@
         <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
         <column name="ORG_CD" size="4" type="VARCHAR"/>
         <column name="A21_LBR_RPT_NBR" size="3" type="VARCHAR"/>
-        <column name="A21LBR_RPT_PRNT_DT" type="DATE"/>
-        <column name="A21LBR_RPT_APRV_DT" type="DATE"/>
         <column name="A21_LBR_DOC_CD" size="2" type="VARCHAR"/>
         <column name="A21_LBR_FSCL_YR" size="4" type="DECIMAL"/>
         <column name="EMPLID" size="11" type="VARCHAR"/>
@@ -9128,8 +9118,6 @@
         <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
         <column name="ORG_CD" size="4" type="VARCHAR"/>
         <column name="A21_LBR_RPT_NBR" size="3" type="VARCHAR"/>
-        <column name="A21LBR_RPT_PRNT_DT" type="DATE"/>
-        <column name="A21LBR_RPT_APRV_DT" type="DATE"/>
         <column name="A21_LBR_DOC_CD" size="2" type="VARCHAR"/>
         <column name="A21_LBR_FSCL_YR" size="4" type="DECIMAL"/>
         <column name="EMPLID" size="11" type="VARCHAR"/>
@@ -9171,16 +9159,8 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="A21_LBR_PYRL_AMT" scale="2" size="19" type="DECIMAL"/>
-        <column name="LBR_DRVD_PYRL_CD" size="1" type="VARCHAR"/>
-        <column name="LBR_DRVD_PYRL_PCT" size="3" type="DECIMAL"/>
-        <column name="A21LBR_CST_SHR_CD" size="1" type="VARCHAR"/>
-        <column name="A21LBR_CST_SHR_PCT" size="3" type="DECIMAL"/>
-        <column name="LBR_CALC_OVRLL_CD" size="1" type="VARCHAR"/>
         <column name="LBR_CALC_OVRLL_PCT" size="3" type="DECIMAL"/>
-        <column name="LBR_UPDT_OVRLL_CD" size="1" type="VARCHAR"/>
         <column name="LBR_UPDT_OVRLL_PCT" size="3" type="DECIMAL"/>
-        <column name="A21_LBR_PRORT_CD" size="1" type="VARCHAR"/>
-        <column name="A21_LBR_PRORT_PCT" size="3" type="DECIMAL"/>
         <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
         <column name="CST_SRCSUBACCT_NBR" size="5" type="VARCHAR"/>
         <column name="A21_LBRORIG_PY_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -14595,7 +14575,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317540"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317560"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
