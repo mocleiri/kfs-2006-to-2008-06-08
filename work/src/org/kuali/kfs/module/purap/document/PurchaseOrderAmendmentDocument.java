@@ -19,8 +19,11 @@ package org.kuali.module.purap.document;
 import java.util.ArrayList;
 
 import org.kuali.core.rule.event.KualiDocumentEvent;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
+import org.kuali.module.purap.PurapRuleConstants;
+import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
@@ -32,18 +35,12 @@ public class PurchaseOrderAmendmentDocument extends PurchaseOrderDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderAmendmentDocument.class);
 
     /**
-     * Default constructor.
-     */
-    public PurchaseOrderAmendmentDocument() {
+	 * Default constructor.
+	 */
+	public PurchaseOrderAmendmentDocument() {
         super();
     }
 
-    /**
-     * General Ledger pending entries are not created on save for this document. They are created when the document has been finally
-     * processed. Overriding this method so that entries are not created yet.
-     * 
-     * @see org.kuali.module.purap.document.PurchaseOrderDocument#prepareForSave(org.kuali.core.rule.event.KualiDocumentEvent)
-     */
     @Override
     public void prepareForSave(KualiDocumentEvent event) {
         LOG.info("prepareForSave(KualiDocumentEvent) do not create gl entries");
@@ -51,37 +48,34 @@ public class PurchaseOrderAmendmentDocument extends PurchaseOrderDocument {
         setGeneralLedgerPendingEntries(new ArrayList());
     }
 
-    /**
-     * When Purchase Order Amendment document has been Processed through Workflow, the general ledger entries are created and the PO
-     * status remains "OPEN".
-     * 
-     * @see org.kuali.module.purap.document.PurchaseOrderDocument#handleRouteStatusChange()
-     */
-   @Override
+    @Override
     public void handleRouteStatusChange() {
         super.handleRouteStatusChange();
-
+        
         // DOCUMENT PROCESSED
         if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            // generate GL entries
-            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesApproveAmendPurchaseOrder(this);
-
-            // update indicators
+            //TODO remove this config (for testing only) hjs
+            if (SpringContext.getBean(KualiConfigurationService.class).getIndicatorParameter(PurapConstants.PURAP_NAMESPACE,PurapConstants.Components.PURCHASE_ORDER, "GL_AMEND_PO")) {
+                SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesApproveAmendPurchaseOrder(this);
+            }
+            
             SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForApprovedPODocuments(this);
 
-            // set purap status
-            SpringContext.getBean(PurapService.class).updateStatus(this, PurapConstants.PurchaseOrderStatuses.OPEN);
+            //set purap status and status history and status history note
+            SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, PurapConstants.PurchaseOrderStatuses.OPEN );
 
             SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
         }
         // DOCUMENT DISAPPROVED
         else if (getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedChangePODocuments(this);
+            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedPODocuments(this);
             SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
         }
         // DOCUMENT CANCELED
         else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForCancelledChangePODocuments(this);
+            // TODO delyea - is this the correct status.... does it affect counts/reporting?
+            SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, PurapConstants.PurchaseOrderStatuses.CANCELLED);
+            SpringContext.getBean(PurchaseOrderService.class).cancelAmendment(this);
             SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
         }
     }

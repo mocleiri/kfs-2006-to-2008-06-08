@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.dao;
 
@@ -23,98 +30,73 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 public interface OriginEntryGroupDao {
     /**
-     * Given an origin entry group source type (defined in OriginEntrySource)
+     * Copy all the entries from the from group to the to group
      * 
-     * @param sourceCode the source code of the groups to find
-     * @return a OriginEntryGroup with the given source code and max ORIGIN_ENTRY_GRP_ID
-     * @see org.kuali.module.gl.bo.OriginEntrySource
+     * @param fromGroup
+     * @param toGroup
      */
-    public OriginEntryGroup getGroupWithMaxIdFromSource(String sourceCode);
+    public void copyGroup(OriginEntryGroup fromGroup,OriginEntryGroup toGroup);
 
     /**
      * Get all the groups that are older than a date
      * 
-     * @param day the date groups returned should be older than
-     * @return a Collection of origin entry groups older than that date
+     * @param day
+     * @return
      */
     public Collection<OriginEntryGroup> getOlderGroups(Date day);
 
     /**
-     * Delete all the groups in the list.  Note...it doesn't delete the entries within them, you need
-     * OriginEntryDao.deleteGroups for that
+     * Delete all the groups in the list
      * 
-     * @params groups a Collection of origin entry groups to delete
+     * @params groups
      */
     public void deleteGroups(Collection<OriginEntryGroup> groups);
 
     /**
-     * Fetch all the groups that match the criteria
+     * Get all the groups that match the criteria
      * 
-     * @param searchCriteria a Map of search criteria to form the query
-     * @return a Collection of Origin Entry Groups that match that criteria
+     * @param searchCriteria
+     * @return
      */
     public Collection getMatchingGroups(Map searchCriteria);
 
     /**
-     * Get all the groups for the poster (that is to say, Groups with "Process" being true)
+     * Get all the groups for the poster
      * 
-     * @param groupSourceCode the source code of origin entry groups to return
-     * @return a Collection of origin entry groups that should be processed by the poster
+     * @param groupSourceCode
+     * @return
      */
     public Collection getPosterGroups(String groupSourceCode);
 
     /**
-     * Gets a collection of all backup groups that are scrubbable (i.e. valid, process, scrub indicators all set to true)
+     * Get all the backup groups to scrub
      * 
-     * @return a Collection of scrubbable origin entry groups
+     * @param groupDate
+     * @return
      */
-    public Collection<OriginEntryGroup> getAllScrubbableBackupGroups();
-
-    /**
-     * Get all the Labor backup groups to scrub (ie, origin entry groups with source OriginEntrySource.LABOR_BACKUP)
-     * 
-     * @param groupDate the creation date of labor backup groups to find
-     * @return a Collection of Labor backup groups
-     */
-    public Collection getLaborBackupGroups(Date groupDate);
-
+    public Collection getBackupGroups(Date groupDate);
 
     /**
      * Get all the groups to be copied into the backup group
      * 
-     * @param groupDate the date returned origin entry groups must have been created on or before
-     * @return a Collection of origin entry groups to backup
+     * @param groupDate
+     * @return
      */
     public Collection getGroupsToBackup(Date groupDate);
 
     /**
-     * Get all the groups to be copied into the backup group
-     * 
-     * @param groupDate the date returned origin entry groups must have been created on or before
-     * @return a Collection of Labor Origin Entry Groups to backup
-     */
-    public Collection getLaborGroupsToBackup(Date groupDate);
-
-    /**
      * Save a group
      * 
-     * @param group a group to save
+     * @param group
      */
     public void save(OriginEntryGroup group);
 
     /**
-     * The the group for the ID passed. The EXACT one, not one that is close, it must be EXACTLY EXACT.
+     * The the group for the ID passed.  The EXACT one, not one that is close, it
+     * must be EXACTLY EXACT.
      * 
-     * @param id the group id of the group to return
-     * @return a highly exact origin entry group, or, if not found, null
+     * @param id
+     * @return
      */
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id);
-
-    /**
-     * Fetches groups created on or after the given date
-     * 
-     * @param day the date origin entry groups to return must have been created on or after
-     * @return a Collection of origin entry groups created on or after that day
-     */
-    public Collection<OriginEntryGroup> getRecentGroups(Date day);
 }

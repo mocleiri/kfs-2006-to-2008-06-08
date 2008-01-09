@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/Agency.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +20,14 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.kra.budget.bo.AgencyExtension;
 
 /**
- * This class defines an agency as it is used and referenced within the Contracts and Grants portion of a college or university
- * financial system.
+ * 
  */
-public class Agency extends PersistableBusinessObjectBase {
+public class Agency extends BusinessObjectBase {
 
     private String agencyNumber;
     private String reportingName;
@@ -87,6 +88,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the agencyNumber attribute.
      * 
      * @return Returns the agencyNumber
+     * 
      */
     public String getAgencyNumber() {
         return agencyNumber;
@@ -96,6 +98,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Sets the agencyNumber attribute.
      * 
      * @param agencyNumber The agencyNumber to set.
+     * 
      */
     public void setAgencyNumber(String agencyNumber) {
         this.agencyNumber = agencyNumber;
@@ -105,6 +108,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the reportingName attribute.
      * 
      * @return Returns the reportingName
+     * 
      */
     public String getReportingName() {
         return reportingName;
@@ -114,6 +118,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Sets the reportingName attribute.
      * 
      * @param reportingName The reportingName to set.
+     * 
      */
     public void setReportingName(String reportingName) {
         this.reportingName = reportingName;
@@ -123,6 +128,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the fullName attribute.
      * 
      * @return Returns the fullName
+     * 
      */
     public String getFullName() {
         return fullName;
@@ -132,6 +138,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Sets the fullName attribute.
      * 
      * @param fullName The fullName to set.
+     * 
      */
     public void setFullName(String fullName) {
         this.fullName = fullName;
@@ -141,6 +148,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the indirectAmount attribute.
      * 
      * @return Returns the indirectAmount
+     * 
      */
     public KualiDecimal getIndirectAmount() {
         return indirectAmount;
@@ -150,6 +158,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Sets the indirectAmount attribute.
      * 
      * @param indirectAmount The indirectAmount to set.
+     * 
      */
     public void setIndirectAmount(KualiDecimal indirectAmount) {
         this.indirectAmount = indirectAmount;
@@ -159,6 +168,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the historicalIndicator attribute.
      * 
      * @return Returns the historicalIndicator
+     * 
      */
     public boolean isHistoricalIndicator() {
         return historicalIndicator;
@@ -168,6 +178,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Sets the historicalIndicator attribute.
      * 
      * @param historicalIndicator The historicalIndicator to set.
+     * 
      */
     public void setHistoricalIndicator(boolean historicalIndicator) {
         this.historicalIndicator = historicalIndicator;
@@ -177,6 +188,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the inStateIndicator attribute.
      * 
      * @return Returns the inStateIndicator
+     * 
      */
     public boolean isInStateIndicator() {
         return inStateIndicator;
@@ -186,6 +198,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Sets the inStateIndicator attribute.
      * 
      * @param inStateIndicator The inStateIndicator to set.
+     * 
      */
     public void setInStateIndicator(boolean inStateIndicator) {
         this.inStateIndicator = inStateIndicator;
@@ -195,6 +208,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the reportsToAgency attribute.
      * 
      * @return Returns the reportsToAgency
+     * 
      */
     public Agency getReportsToAgency() {
         return reportsToAgency;
@@ -203,9 +217,8 @@ public class Agency extends PersistableBusinessObjectBase {
     /**
      * Sets the reportsToAgency attribute.
      * 
-     * @param reportsToAgencyNumber The reportsToAgency to set.
+     * @param reportsToAgency The reportsToAgency to set.
      * @deprecated
-     * @todo Why is this deprecated?
      */
     public void setReportsToAgency(Agency reportsToAgencyNumber) {
         this.reportsToAgency = reportsToAgencyNumber;
@@ -215,6 +228,7 @@ public class Agency extends PersistableBusinessObjectBase {
      * Gets the agencyType attribute.
      * 
      * @return Returns the agencyType
+     * 
      */
     public AgencyType getAgencyType() {
         return agencyType;
@@ -225,7 +239,6 @@ public class Agency extends PersistableBusinessObjectBase {
      * 
      * @param agencyType The agencyType to set.
      * @deprecated
-     * @todo Why is this deprecated?
      */
     public void setAgencyType(AgencyType agencyType) {
         this.agencyType = agencyType;
@@ -258,16 +271,4 @@ public class Agency extends PersistableBusinessObjectBase {
     public void setAgencyExtension(AgencyExtension agencyExtension) {
         this.agencyExtension = agencyExtension;
     }
-
-    /**
-     * This method compares the passed in agency object against this agency object to check for equality. Equality is defined by if
-     * the agency passed in has the same agency number as the agency being compared to.
-     * 
-     * @param agency The agency object to be compared.
-     * @return True if the agency passed in is determined to be equal, false otherwise.
-     */
-    public boolean equals(Agency agency) {
-        return this.agencyNumber.equals(agency.getAgencyNumber());
-    }
-
 }

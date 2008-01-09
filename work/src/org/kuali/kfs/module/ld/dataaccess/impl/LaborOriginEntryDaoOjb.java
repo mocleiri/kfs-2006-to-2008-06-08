@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
@@ -33,11 +32,22 @@ import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.dao.LaborOriginEntryDao;
 
-/**
- * OJB Implementation of LaborOriginEntryDao.
- */
+
 public class LaborOriginEntryDaoOjb extends OriginEntryDaoOjb implements LaborOriginEntryDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborOriginEntryDaoOjb.class);
+
+    /**
+     * @see org.kuali.module.labor.dao.LaborOriginEntryDao#getEntriesByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
+     */
+    public Iterator<LaborOriginEntry> getEntriesByGroup(OriginEntryGroup group) {
+        LOG.debug("getEntriesByGroup() started");
+        
+        Criteria criteria = new Criteria();
+        criteria.addEqualTo(KFSPropertyConstants.ENTRY_GROUP_ID, group.getId());
+        
+        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
+        return getPersistenceBrokerTemplate().getIteratorByQuery(query);
+    }
 
     /**
      * @see org.kuali.module.labor.dao.LaborOriginEntryDao#getEntriesByGroups(java.util.Collection)
@@ -63,9 +73,8 @@ public class LaborOriginEntryDaoOjb extends OriginEntryDaoOjb implements LaborOr
      */
     public int getCountOfEntriesInGroups(Collection<OriginEntryGroup> groups) {
         LOG.debug("getCountOfEntriesInGroups() started");
-
-        if (groups.size() == 0)
-            return 0;
+        
+        if(groups.size()==0) return 0;
 
         // extract the group ids of the given groups
         List<Integer> groupIds = new ArrayList<Integer>();
@@ -108,31 +117,18 @@ public class LaborOriginEntryDaoOjb extends OriginEntryDaoOjb implements LaborOr
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
     }
 
-    /**
-     * build the returning attribute list for the calling query
-     * 
-     * @return the returning attribute list
-     */
     private List<String> buildConsolidationAttributeList() {
         List<String> attributeList = this.buildGroupByList();
         attributeList.add("sum(" + KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")");
         return attributeList;
     }
 
-    /**
-     * build the grouping attribute list for the calling query
-     * 
-     * @return the grouping attribute list
-     */
     private List<String> buildGroupByList() {
         List<String> groupByList = new ArrayList<String>(LaborConstants.consolidationAttributesOfOriginEntry());
         groupByList.remove(KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);
         return groupByList;
     }
 
-    /**
-     * @see org.kuali.module.labor.dao.LaborOriginEntryDao#testingLaborGetAllEntries()
-     */
     public Collection<LaborOriginEntry> testingLaborGetAllEntries() {
         LOG.debug("testingGetAllEntries() started");
 
@@ -142,9 +138,6 @@ public class LaborOriginEntryDaoOjb extends OriginEntryDaoOjb implements LaborOr
         return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
     }
 
-    /**
-     * @see org.kuali.module.labor.dao.LaborOriginEntryDao#getLaborEntriesByGroup(org.kuali.module.gl.bo.OriginEntryGroup, int)
-     */
     public Iterator<LaborOriginEntry> getLaborEntriesByGroup(OriginEntryGroup oeg, int sort) {
         LOG.debug("getEntriesByGroup() started");
 
@@ -215,86 +208,5 @@ public class LaborOriginEntryDaoOjb extends OriginEntryDaoOjb implements LaborOr
         }
 
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.ojb.LaborOriginEntryDaoOjb#getMatchingEntriesByCollection(java.util.Map)
-     */
-    @Override
-    public Collection getMatchingEntriesByCollection(Map searchCriteria) {
-        LOG.debug("getMatchingEntries() started");
-
-        Criteria criteria = new Criteria();
-        for (Iterator iter = searchCriteria.keySet().iterator(); iter.hasNext();) {
-            String element = (String) iter.next();
-            criteria.addEqualTo(element, searchCriteria.get(element));
-        }
-
-        QueryByCriteria qbc = QueryFactory.newQuery(this.getEntryClass(), criteria);
-        qbc.addOrderByAscending("entryGroupId");
-        return getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
-    }
-
-    /**
-     * @param entry the entry to save.
-     */
-    @Deprecated
-    public void saveOriginEntry(LaborOriginEntry entry) {
-        LOG.debug("saveOriginEntry() started");
-
-        if ((entry != null) && (entry.getTransactionLedgerEntryDescription() != null) && (entry.getTransactionLedgerEntryDescription().length() > 40)) {
-            entry.setTransactionLedgerEntryDescription(entry.getTransactionLedgerEntryDescription().substring(0, 40));
-        }
-        getPersistenceBrokerTemplate().store(entry);
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.ojb.LaborOriginEntryDaoOjb#getSummaryByGroupId(java.util.Collection)
-     */
-    @Override
-    public Iterator getSummaryByGroupId(Collection groupIdList) {
-        LOG.debug("getSummaryByGroupId() started");
-
-        if (groupIdList == null || groupIdList.size() <= 0) {
-            return null;
-        }
-
-        Collection ids = new ArrayList();
-        for (Iterator iter = groupIdList.iterator(); iter.hasNext();) {
-            OriginEntryGroup element = (OriginEntryGroup) iter.next();
-            ids.add(element.getId());
-        }
-
-        Criteria criteria = new Criteria();
-        criteria.addIn(KFSPropertyConstants.ENTRY_GROUP_ID, ids);
-
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(getEntryClass(), criteria);
-
-        String attributeList[] = { KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(*)" };
-
-        String groupList[] = { KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE };
-
-        query.setAttributes(attributeList);
-        query.addGroupBy(groupList);
-
-        // add the sorting criteria
-        for (int i = 0; i < groupList.length; i++) {
-            query.addOrderByAscending(groupList[i]);
-        }
-
-        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.LaborOriginEntryDao#getEntryCollectionByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
-     */
-    public Collection<LaborOriginEntry> getEntryCollectionByGroup(OriginEntryGroup group) {
-        LOG.debug("getEntriesByGroups() started");
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.ENTRY_GROUP_ID, group.getId());
-
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
-        return getPersistenceBrokerTemplate().getCollectionByQuery(query);
     }
 }

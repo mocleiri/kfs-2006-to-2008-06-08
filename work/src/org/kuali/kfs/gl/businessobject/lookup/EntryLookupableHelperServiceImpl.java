@@ -24,14 +24,12 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.service.EntryService;
@@ -40,24 +38,13 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.EntryInquirableImpl;
 import org.kuali.module.gl.web.inquirable.InquirableFinancialDocument;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- * An extension of KualiLookupableImpl to support entry lookups
- */
-@Transactional
 public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EntryLookupableHelperServiceImpl.class);
 
     private ScrubberValidator scrubberValidator;
     private EntryService entryService;
 
-    /**
-     * Validate the university fiscal year that has been queried on
-     * 
-     * @param fieldValues the queried fields
-     * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#validateSearchParameters(java.util.Map)
-     */
     @Override
     public void validateSearchParameters(Map fieldValues) {
         super.validateSearchParameters(fieldValues);
@@ -75,10 +62,6 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
     }
 
     /**
-     * Returns the url for any drill down links within the lookup
-     * @param bo the business object with a property being drilled down on
-     * @param propertyName the name of the property being drilled down on
-     * @return a String with the URL of the property
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
@@ -93,9 +76,6 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
     }
 
     /**
-     * Generates the list of search results for this inquiry
-     * @param fieldValues the field values of the query to carry out
-     * @return List the search results returned by the lookup
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     @Override
@@ -119,13 +99,6 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
     }
 
     /**
-     * Updates pending entries before their results are included in the lookup results
-     * 
-     * @param entryCollection a collection of balance entries
-     * @param fieldValues the map containing the search fields and values
-     * @param isApproved flag whether the approved entries or all entries will be processed
-     * @param isConsolidated flag whether the results are consolidated or not
-     * @param isCostShareExcluded flag whether the user selects to see the results with cost share subaccount
      * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableImpl#updateEntryCollection(java.util.Collection, java.util.Map,
      *      boolean, boolean, boolean)
      */
@@ -140,10 +113,10 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
         Iterator pendingEntryIterator = getGeneralLedgerPendingEntryService().findPendingLedgerEntriesForEntry(pendingEntryFieldValues, isApproved);
 
         String pendingOption = isApproved ? Constant.APPROVED_PENDING_ENTRY : Constant.ALL_PENDING_ENTRY;
-        UniversityDate today = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = today.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = today.getUniversityFiscalYear();
-        Date postDate = SpringContext.getBean(DateTimeService.class).getCurrentSqlDate();
+        Date postDate = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
 
         while (pendingEntryIterator.hasNext()) {
             GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) pendingEntryIterator.next();
@@ -161,7 +134,7 @@ public class EntryLookupableHelperServiceImpl extends AbstractGLLookupableHelper
             entryCollection.add(new Entry(pendingEntry, postDate));
         }
     }
-
+    
     /**
      * Sets the scrubberValidator attribute value.
      * 

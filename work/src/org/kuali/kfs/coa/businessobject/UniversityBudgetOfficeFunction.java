@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/UniversityBudgetOfficeFunction.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +20,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class UniversityBudgetOfficeFunction extends PersistableBusinessObjectBase {
+public class UniversityBudgetOfficeFunction extends BusinessObjectBase {
 
     private String financialUniversityBudgetOfficeFunctionCode;
     private String financialUniversityBudgetOfficeFunctionName;
@@ -39,6 +41,7 @@ public class UniversityBudgetOfficeFunction extends PersistableBusinessObjectBas
      * Gets the financialUniversityBudgetOfficeFunctionCode attribute.
      * 
      * @return Returns the financialUniversityBudgetOfficeFunctionCode
+     * 
      */
     public String getFinancialUniversityBudgetOfficeFunctionCode() {
         return financialUniversityBudgetOfficeFunctionCode;
@@ -48,6 +51,7 @@ public class UniversityBudgetOfficeFunction extends PersistableBusinessObjectBas
      * Sets the financialUniversityBudgetOfficeFunctionCode attribute.
      * 
      * @param financialUniversityBudgetOfficeFunctionCode The financialUniversityBudgetOfficeFunctionCode to set.
+     * 
      */
     public void setFinancialUniversityBudgetOfficeFunctionCode(String financialUniversityBudgetOfficeFunctionCode) {
         this.financialUniversityBudgetOfficeFunctionCode = financialUniversityBudgetOfficeFunctionCode;
@@ -58,6 +62,7 @@ public class UniversityBudgetOfficeFunction extends PersistableBusinessObjectBas
      * Gets the financialUniversityBudgetOfficeFunctionName attribute.
      * 
      * @return Returns the financialUniversityBudgetOfficeFunctionName
+     * 
      */
     public String getFinancialUniversityBudgetOfficeFunctionName() {
         return financialUniversityBudgetOfficeFunctionName;
@@ -67,6 +72,7 @@ public class UniversityBudgetOfficeFunction extends PersistableBusinessObjectBas
      * Sets the financialUniversityBudgetOfficeFunctionName attribute.
      * 
      * @param financialUniversityBudgetOfficeFunctionName The financialUniversityBudgetOfficeFunctionName to set.
+     * 
      */
     public void setFinancialUniversityBudgetOfficeFunctionName(String financialUniversityBudgetOfficeFunctionName) {
         this.financialUniversityBudgetOfficeFunctionName = financialUniversityBudgetOfficeFunctionName;

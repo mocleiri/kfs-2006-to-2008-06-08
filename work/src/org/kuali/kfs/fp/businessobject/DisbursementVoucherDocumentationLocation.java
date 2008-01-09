@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/DisbursementVoucherDocumentationLocation.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +20,12 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * This class is used to represent the documentation location for a disbursement voucher.
+ * 
  */
-public class DisbursementVoucherDocumentationLocation extends PersistableBusinessObjectBase {
+public class DisbursementVoucherDocumentationLocation extends BusinessObjectBase {
 
     private String disbursementVoucherDocumentationLocationCode;
     private String disbursementVoucherDocumentationLocationName;
@@ -40,6 +42,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
      * Gets the disbursementVoucherDocumentationLocationCode attribute.
      * 
      * @return Returns the disbursementVoucherDocumentationLocationCode
+     * 
      */
     public String getDisbursementVoucherDocumentationLocationCode() {
         return disbursementVoucherDocumentationLocationCode;
@@ -49,6 +52,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
      * Sets the disbursementVoucherDocumentationLocationCode attribute.
      * 
      * @param disbursementVoucherDocumentationLocationCode The disbursementVoucherDocumentationLocationCode to set.
+     * 
      */
     public void setDisbursementVoucherDocumentationLocationCode(String disbursementVoucherDocumentationLocationCode) {
         this.disbursementVoucherDocumentationLocationCode = disbursementVoucherDocumentationLocationCode;
@@ -59,6 +63,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
      * Gets the disbursementVoucherDocumentationLocationName attribute.
      * 
      * @return Returns the disbursementVoucherDocumentationLocationName
+     * 
      */
     public String getDisbursementVoucherDocumentationLocationName() {
         return disbursementVoucherDocumentationLocationName;
@@ -68,6 +73,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
      * Sets the disbursementVoucherDocumentationLocationName attribute.
      * 
      * @param disbursementVoucherDocumentationLocationName The disbursementVoucherDocumentationLocationName to set.
+     * 
      */
     public void setDisbursementVoucherDocumentationLocationName(String disbursementVoucherDocumentationLocationName) {
         this.disbursementVoucherDocumentationLocationName = disbursementVoucherDocumentationLocationName;
@@ -78,6 +84,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
      * Gets the disbursementVoucherDocumentationLocationAddress attribute.
      * 
      * @return Returns the disbursementVoucherDocumentationLocationAddress
+     * 
      */
     public String getDisbursementVoucherDocumentationLocationAddress() {
         return disbursementVoucherDocumentationLocationAddress;
@@ -87,6 +94,7 @@ public class DisbursementVoucherDocumentationLocation extends PersistableBusines
      * Sets the disbursementVoucherDocumentationLocationAddress attribute.
      * 
      * @param disbursementVoucherDocumentationLocationAddress The disbursementVoucherDocumentationLocationAddress to set.
+     * 
      */
     public void setDisbursementVoucherDocumentationLocationAddress(String disbursementVoucherDocumentationLocationAddress) {
         this.disbursementVoucherDocumentationLocationAddress = disbursementVoucherDocumentationLocationAddress;

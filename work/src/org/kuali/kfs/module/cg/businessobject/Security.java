@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/Security.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +19,17 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.module.chart.bo.ChartUser;
 
 /**
  * 
  */
-public class Security extends PersistableBusinessObjectBase {
+public class Security extends BusinessObjectBase {
 
     private String personUniversalIdentifier;
+
+    private ChartUser kfsUser;
 
     /**
      * Default no-arg constructor.
@@ -49,6 +54,25 @@ public class Security extends PersistableBusinessObjectBase {
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
+    }
+
+    /**
+     * Gets the kualiUser attribute.
+     * 
+     * @return Returns the kualiUser.
+     */
+    public ChartUser getKFSUser() {
+        return kfsUser;
+    }
+
+    /**
+     * Sets the kualiUser attribute value.
+     * 
+     * @param kualiUser The kualiUser to set.
+     * @deprecated
+     */
+    public void setKFSUser(ChartUser kfsUser) {
+        this.kfsUser = kfsUser;
     }
 
     /**

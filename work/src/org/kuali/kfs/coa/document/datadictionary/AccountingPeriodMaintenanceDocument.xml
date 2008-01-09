@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -22,9 +22,8 @@
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.AccountingPeriod</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-        <businessRulesClass>org.kuali.module.chart.rules.AccountingPeriodRule</businessRulesClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,14 +32,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>AccountingPeriodMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiAccountingPeriodMaintenanceDocument</documentTypeName>
         <documentTypeCode>APRD</documentTypeCode>
 
-        <label>Accounting Period</label>
+        <label>Accounting Period Maintenance Document</label>
+        <shortLabel>AcctPeriodMaintDoc</shortLabel>
 
         <summary>Accounting Period maintenance document</summary>
         <description>Document used to create or update Accounting Period objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="AccountingPeriod" parameterName="ACCOUNTING_PERIOD" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNTING_PERIOD" />
 
         <lockingKeys>
             <field attributeName="universityFiscalYear" />

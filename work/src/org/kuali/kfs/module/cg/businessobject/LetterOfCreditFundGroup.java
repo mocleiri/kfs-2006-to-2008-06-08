@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/LetterOfCreditFundGroup.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +20,29 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class LetterOfCreditFundGroup extends PersistableBusinessObjectBase {
+public class LetterOfCreditFundGroup extends BusinessObjectBase {
 
     private String letterOfCreditFundGroupCode;
     private String letterOfCreditFundGroupDescription;
     private boolean rowActiveIndicator;
-
+    
     /**
      * Default constructor.
      */
     public LetterOfCreditFundGroup() {
+
     }
 
     /**
      * Gets the letterOfCreditFundGroupCode attribute.
      * 
      * @return Returns the letterOfCreditFundGroupCode
+     * 
      */
     public String getLetterOfCreditFundGroupCode() {
         return letterOfCreditFundGroupCode;
@@ -48,6 +52,7 @@ public class LetterOfCreditFundGroup extends PersistableBusinessObjectBase {
      * Sets the letterOfCreditFundGroupCode attribute.
      * 
      * @param letterOfCreditFundGroupCode The letterOfCreditFundGroupCode to set.
+     * 
      */
     public void setLetterOfCreditFundGroupCode(String letterOfCreditFundGroupCode) {
         this.letterOfCreditFundGroupCode = letterOfCreditFundGroupCode;
@@ -58,6 +63,7 @@ public class LetterOfCreditFundGroup extends PersistableBusinessObjectBase {
      * Gets the letterOfCreditFundGroupDescription attribute.
      * 
      * @return Returns the letterOfCreditFundGroupDescription
+     * 
      */
     public String getLetterOfCreditFundGroupDescription() {
         return letterOfCreditFundGroupDescription;
@@ -67,14 +73,14 @@ public class LetterOfCreditFundGroup extends PersistableBusinessObjectBase {
      * Sets the letterOfCreditFundGroupDescription attribute.
      * 
      * @param letterOfCreditFundGroupDescription The letterOfCreditFundGroupDescription to set.
+     * 
      */
     public void setLetterOfCreditFundGroupDescription(String letterOfCreditFundGroupDescription) {
         this.letterOfCreditFundGroupDescription = letterOfCreditFundGroupDescription;
     }
 
     /**
-     * Gets the rowActiveIndicator attribute.
-     * 
+     * Gets the rowActiveIndicator attribute. 
      * @return Returns the rowActiveIndicator.
      */
     public boolean isRowActiveIndicator() {
@@ -83,13 +89,12 @@ public class LetterOfCreditFundGroup extends PersistableBusinessObjectBase {
 
     /**
      * Sets the rowActiveIndicator attribute value.
-     * 
      * @param rowActiveIndicator The rowActiveIndicator to set.
      */
     public void setRowActiveIndicator(boolean rowActiveIndicator) {
         this.rowActiveIndicator = rowActiveIndicator;
     }
-
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */

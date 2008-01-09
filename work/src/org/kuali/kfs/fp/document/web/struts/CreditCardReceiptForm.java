@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.kuali.core.service.BusinessObjectDictionaryService;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kuali.module.financial.bo.CreditCardDetail;
 import org.kuali.module.financial.document.CreditCardReceiptDocument;
 
 /**
  * This class is the struts form for Credit Card Receipt document.
+ * 
+ * 
  */
-public class CreditCardReceiptForm extends KualiAccountingDocumentFormBase {
+public class CreditCardReceiptForm extends KualiTransactionalDocumentFormBase {
     private CreditCardDetail newCreditCardReceipt;
 
     /**
@@ -73,11 +74,11 @@ public class CreditCardReceiptForm extends KualiAccountingDocumentFormBase {
 
         //
         // now run through all of the accounting lines and make sure they've been uppercased and populated appropriately
-        SpringContext.getBean(BusinessObjectDictionaryService.class).performForceUppercase(getNewCreditCardReceipt());
+        SpringServiceLocator.getBusinessObjectDictionaryService().performForceUppercase(getNewCreditCardReceipt());
 
         List<CreditCardDetail> creditCardReceipts = getCreditCardReceiptDocument().getCreditCardReceipts();
         for (CreditCardDetail detail : creditCardReceipts) {
-            SpringContext.getBean(BusinessObjectDictionaryService.class).performForceUppercase(detail);
+            SpringServiceLocator.getBusinessObjectDictionaryService().performForceUppercase(detail);
         }
 
     }

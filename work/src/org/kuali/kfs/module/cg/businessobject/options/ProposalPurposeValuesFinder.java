@@ -17,33 +17,33 @@ package org.kuali.module.cg.lookup.keyvalues;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.ProposalPurpose;
 
-/**
- * Gets a custom-formatted list of {@link ProposalPurpose} values.
- */
-public class ProposalPurposeValuesFinder extends KeyValuesBase {
 
-    /**
+public class ProposalPurposeValuesFinder extends KeyValuesBase {
+    /*
      * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
-        Collection<ProposalPurpose> codes = SpringContext.getBean(KeyValuesService.class).findAll(ProposalPurpose.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
+        Collection codes = boService.findAll(ProposalPurpose.class);
 
         List<KeyLabelPair> labels = new ArrayList<KeyLabelPair>();
         labels.add(new KeyLabelPair("", ""));
 
-        for (ProposalPurpose proposalPurpose : codes) {
-            if (proposalPurpose.isRowActiveIndicator()) {
-                labels.add(new KeyLabelPair(proposalPurpose.getProposalPurposeCode(), proposalPurpose.getProposalPurposeCode() + "-" + proposalPurpose.getProposalPurposeDescription()));
-            }
+
+        for (Iterator iter = codes.iterator(); iter.hasNext();) {
+            ProposalPurpose proposalPurpose = (ProposalPurpose) iter.next();
+
+            labels.add(new KeyLabelPair(proposalPurpose.getProposalPurposeCode(), proposalPurpose.getProposalPurposeCode()+"-"+proposalPurpose.getProposalPurposeDescription()));
         }
 
         return labels;

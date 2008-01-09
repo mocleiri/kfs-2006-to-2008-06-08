@@ -1,29 +1,34 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.bo;
 
-import java.util.Map;
-
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
+
 
 /**
- * This class represents a target accounting line for budget adjustment
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine implements BudgetAdjustmentAccountingLine {
 
@@ -44,35 +49,72 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     private KualiDecimal financialDocumentMonth12LineAmount;
     private boolean fringeBenefitIndicator;
 
+    /**
+     * This constructor needs to initialize the ojbConcreteClass attribute such that it sets it to its class name. This is how OJB
+     * knows what grouping of objects to work with.
+     */
     public BudgetAdjustmentTargetAccountingLine() {
         super();
-        BudgetAdjustmentAccountingLineUtil.init(this);
-    }
-
-    /**
-     * @see org.kuali.core.bo.AccountingLineBase#getValuesMap()
-     */
-    @Override
-    public Map getValuesMap() {
-        Map simpleValues = super.getValuesMap();
-        BudgetAdjustmentAccountingLineUtil.appendToValuesMap(simpleValues, this);
-        return simpleValues;
-    }
-
-    /**
-     * @see org.kuali.core.bo.AccountingLineBase#copyFrom(org.kuali.core.bo.AccountingLine)
-     */
-    @Override
-    public void copyFrom(AccountingLine other) {
-        super.copyFrom(other);
-        BudgetAdjustmentAccountingLineUtil.copyFrom(this, other);
+        super.ojbConcreteClass = this.getClass().getName();
+        this.currentBudgetAdjustmentAmount = new KualiDecimal(0);
+        this.baseBudgetAdjustmentAmount = new KualiInteger(0);
+        this.financialDocumentMonth1LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth2LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth3LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth4LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth5LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth6LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth7LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth8LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth9LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth10LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth11LineAmount = new KualiDecimal(0);
+        this.financialDocumentMonth12LineAmount = new KualiDecimal(0);
+        this.fringeBenefitIndicator = false;
     }
 
     /**
      * @see org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine#getMonthlyLinesTotal()
      */
     public KualiDecimal getMonthlyLinesTotal() {
-        return BudgetAdjustmentAccountingLineUtil.getMonthlyLinesTotal(this);
+        KualiDecimal total = new KualiDecimal(0);
+        if (getFinancialDocumentMonth1LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth1LineAmount());
+        }
+        if (getFinancialDocumentMonth2LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth2LineAmount());
+        }
+        if (getFinancialDocumentMonth3LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth3LineAmount());
+        }
+        if (getFinancialDocumentMonth4LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth4LineAmount());
+        }
+        if (getFinancialDocumentMonth5LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth5LineAmount());
+        }
+        if (getFinancialDocumentMonth6LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth6LineAmount());
+        }
+        if (getFinancialDocumentMonth7LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth7LineAmount());
+        }
+        if (getFinancialDocumentMonth8LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth8LineAmount());
+        }
+        if (getFinancialDocumentMonth9LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth9LineAmount());
+        }
+        if (getFinancialDocumentMonth10LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth10LineAmount());
+        }
+        if (getFinancialDocumentMonth11LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth11LineAmount());
+        }
+        if (getFinancialDocumentMonth12LineAmount() != null) {
+            total = total.add(getFinancialDocumentMonth12LineAmount());
+        }
+        return total;
     }
 
     public KualiInteger getBaseBudgetAdjustmentAmount() {
@@ -106,7 +148,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth1LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth1LineAmount
+     * @return - Returns the financialDocumentMonth1LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth1LineAmount() {
         return financialDocumentMonth1LineAmount;
@@ -116,6 +159,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth1LineAmount attribute.
      * 
      * @param financialDocumentMonth1LineAmount The financialDocumentMonth1LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth1LineAmount(KualiDecimal financialDocumentMonth1LineAmount) {
         if (financialDocumentMonth1LineAmount != null) {
@@ -127,7 +171,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth2LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth2LineAmount
+     * @return - Returns the financialDocumentMonth2LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth2LineAmount() {
         return financialDocumentMonth2LineAmount;
@@ -137,6 +182,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth2LineAmount attribute.
      * 
      * @param financialDocumentMonth2LineAmount The financialDocumentMonth2LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth2LineAmount(KualiDecimal financialDocumentMonth2LineAmount) {
         if (financialDocumentMonth2LineAmount != null) {
@@ -148,7 +194,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth3LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth3LineAmount
+     * @return - Returns the financialDocumentMonth3LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth3LineAmount() {
         return financialDocumentMonth3LineAmount;
@@ -158,6 +205,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth3LineAmount attribute.
      * 
      * @param financialDocumentMonth3LineAmount The financialDocumentMonth3LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth3LineAmount(KualiDecimal financialDocumentMonth3LineAmount) {
         if (financialDocumentMonth3LineAmount != null) {
@@ -169,7 +217,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth4LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth4LineAmount
+     * @return - Returns the financialDocumentMonth4LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth4LineAmount() {
         return financialDocumentMonth4LineAmount;
@@ -179,6 +228,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth4LineAmount attribute.
      * 
      * @param financialDocumentMonth4LineAmount The financialDocumentMonth4LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth4LineAmount(KualiDecimal financialDocumentMonth4LineAmount) {
         if (financialDocumentMonth4LineAmount != null) {
@@ -190,7 +240,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth5LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth5LineAmount
+     * @return - Returns the financialDocumentMonth5LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth5LineAmount() {
         return financialDocumentMonth5LineAmount;
@@ -200,6 +251,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth5LineAmount attribute.
      * 
      * @param financialDocumentMonth5LineAmount The financialDocumentMonth5LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth5LineAmount(KualiDecimal financialDocumentMonth5LineAmount) {
         if (financialDocumentMonth5LineAmount != null) {
@@ -211,7 +263,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth6LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth6LineAmount
+     * @return - Returns the financialDocumentMonth6LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth6LineAmount() {
         return financialDocumentMonth6LineAmount;
@@ -221,6 +274,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth6LineAmount attribute.
      * 
      * @param financialDocumentMonth6LineAmount The financialDocumentMonth6LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth6LineAmount(KualiDecimal financialDocumentMonth6LineAmount) {
         if (financialDocumentMonth6LineAmount != null) {
@@ -232,7 +286,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth7LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth7LineAmount
+     * @return - Returns the financialDocumentMonth7LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth7LineAmount() {
         return financialDocumentMonth7LineAmount;
@@ -242,6 +297,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth7LineAmount attribute.
      * 
      * @param financialDocumentMonth7LineAmount The financialDocumentMonth7LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth7LineAmount(KualiDecimal financialDocumentMonth7LineAmount) {
         if (financialDocumentMonth7LineAmount != null) {
@@ -253,7 +309,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth8LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth8LineAmount
+     * @return - Returns the financialDocumentMonth8LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth8LineAmount() {
         return financialDocumentMonth8LineAmount;
@@ -263,6 +320,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth8LineAmount attribute.
      * 
      * @param financialDocumentMonth8LineAmount The financialDocumentMonth8LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth8LineAmount(KualiDecimal financialDocumentMonth8LineAmount) {
         if (financialDocumentMonth8LineAmount != null) {
@@ -274,7 +332,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth9LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth9LineAmount
+     * @return - Returns the financialDocumentMonth9LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth9LineAmount() {
         return financialDocumentMonth9LineAmount;
@@ -284,6 +343,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth9LineAmount attribute.
      * 
      * @param financialDocumentMonth9LineAmount The financialDocumentMonth9LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth9LineAmount(KualiDecimal financialDocumentMonth9LineAmount) {
         if (financialDocumentMonth9LineAmount != null) {
@@ -295,7 +355,8 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
     /**
      * Gets the financialDocumentMonth10LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth10LineAmount
+     * @return - Returns the financialDocumentMonth10LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth10LineAmount() {
         return financialDocumentMonth10LineAmount;
@@ -305,6 +366,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth10LineAmount attribute.
      * 
      * @param financialDocumentMonth10LineAmount The financialDocumentMonth10LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth10LineAmount(KualiDecimal financialDocumentMonth10LineAmount) {
         if (financialDocumentMonth10LineAmount != null) {
@@ -312,10 +374,12 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
         }
     }
 
+
     /**
      * Gets the financialDocumentMonth11LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth11LineAmount
+     * @return - Returns the financialDocumentMonth11LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth11LineAmount() {
         return financialDocumentMonth11LineAmount;
@@ -325,6 +389,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth11LineAmount attribute.
      * 
      * @param financialDocumentMonth11LineAmount The financialDocumentMonth11LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth11LineAmount(KualiDecimal financialDocumentMonth11LineAmount) {
         if (financialDocumentMonth11LineAmount != null) {
@@ -332,10 +397,12 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
         }
     }
 
+
     /**
      * Gets the financialDocumentMonth12LineAmount attribute.
      * 
-     * @return Returns the financialDocumentMonth12LineAmount
+     * @return - Returns the financialDocumentMonth12LineAmount
+     * 
      */
     public KualiDecimal getFinancialDocumentMonth12LineAmount() {
         return financialDocumentMonth12LineAmount;
@@ -345,6 +412,7 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
      * Sets the financialDocumentMonth12LineAmount attribute.
      * 
      * @param financialDocumentMonth12LineAmount The financialDocumentMonth12LineAmount to set.
+     * 
      */
     public void setFinancialDocumentMonth12LineAmount(KualiDecimal financialDocumentMonth12LineAmount) {
         if (financialDocumentMonth12LineAmount != null) {
@@ -370,21 +438,4 @@ public class BudgetAdjustmentTargetAccountingLine extends TargetAccountingLine i
         this.fringeBenefitIndicator = fringeBenefitIndicator;
     }
 
-    /**
-     * @see org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine#clearFinancialDocumentMonthLineAmounts()
-     */
-    public void clearFinancialDocumentMonthLineAmounts() {
-        financialDocumentMonth1LineAmount = new KualiDecimal(0);
-        financialDocumentMonth2LineAmount = new KualiDecimal(0);
-        financialDocumentMonth3LineAmount = new KualiDecimal(0);
-        financialDocumentMonth4LineAmount = new KualiDecimal(0);
-        financialDocumentMonth5LineAmount = new KualiDecimal(0);
-        financialDocumentMonth6LineAmount = new KualiDecimal(0);
-        financialDocumentMonth7LineAmount = new KualiDecimal(0);
-        financialDocumentMonth8LineAmount = new KualiDecimal(0);
-        financialDocumentMonth9LineAmount = new KualiDecimal(0);
-        financialDocumentMonth10LineAmount = new KualiDecimal(0);
-        financialDocumentMonth11LineAmount = new KualiDecimal(0);
-        financialDocumentMonth12LineAmount = new KualiDecimal(0);
-    }
 }

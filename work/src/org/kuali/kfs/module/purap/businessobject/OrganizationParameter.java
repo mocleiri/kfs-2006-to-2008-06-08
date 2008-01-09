@@ -24,77 +24,133 @@ import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
- * Organization Parameter Business Object. Maintenance document for organization parameters.
+ * 
  */
 public class OrganizationParameter extends PersistableBusinessObjectBase {
 
-    private String chartOfAccountsCode;
-    private String organizationCode;
-    private KualiDecimal organizationAutomaticPurchaseOrderLimit;
-
+	private String chartOfAccountsCode;
+	private String organizationCode;
+	private KualiDecimal organizationAutomaticPurchaseOrderLimit;
+    
     private Chart chartOfAccounts;
-    private Org organization;
+	private Org organization;
+
+	/**
+	 * Default constructor.
+	 */
+	public OrganizationParameter() {
+
+	}
+
+	/**
+	 * Gets the chartOfAccountsCode attribute.
+	 * 
+	 * @return Returns the chartOfAccountsCode
+	 * 
+	 */
+	public String getChartOfAccountsCode() { 
+		return chartOfAccountsCode;
+	}
+
+	/**
+	 * Sets the chartOfAccountsCode attribute.
+	 * 
+	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * 
+	 */
+	public void setChartOfAccountsCode(String chartOfAccountsCode) {
+		this.chartOfAccountsCode = chartOfAccountsCode;
+	}
+
+
+	/**
+	 * Gets the organizationCode attribute.
+	 * 
+	 * @return Returns the organizationCode
+	 * 
+	 */
+	public String getOrganizationCode() { 
+		return organizationCode;
+	}
+
+	/**
+	 * Sets the organizationCode attribute.
+	 * 
+	 * @param organizationCode The organizationCode to set.
+	 * 
+	 */
+	public void setOrganizationCode(String organizationCode) {
+		this.organizationCode = organizationCode;
+	}
+
+
+	/**
+	 * Gets the organizationAutomaticPurchaseOrderLimit attribute.
+	 * 
+	 * @return Returns the organizationAutomaticPurchaseOrderLimit
+	 * 
+	 */
+	public KualiDecimal getOrganizationAutomaticPurchaseOrderLimit() { 
+		return organizationAutomaticPurchaseOrderLimit;
+	}
+
+	/**
+	 * Sets the organizationAutomaticPurchaseOrderLimit attribute.
+	 * 
+	 * @param organizationAutomaticPurchaseOrderLimit The organizationAutomaticPurchaseOrderLimit to set.
+	 * 
+	 */
+	public void setOrganizationAutomaticPurchaseOrderLimit(KualiDecimal organizationAutomaticPurchaseOrderLimit) {
+		this.organizationAutomaticPurchaseOrderLimit = organizationAutomaticPurchaseOrderLimit;
+	}
 
     /**
-     * Default constructor.
-     */
-    public OrganizationParameter() {
+	 * Gets the chartOfAccounts attribute.
+	 * 
+	 * @return Returns the chartOfAccounts
+	 * 
+	 */
+	public Chart getChartOfAccounts() { 
+		return chartOfAccounts;
+	}
 
-    }
+	/**
+	 * Sets the chartOfAccounts attribute.
+	 * 
+	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
+	 */
+	public void setChartOfAccounts(Chart chartOfAccounts) {
+		this.chartOfAccounts = chartOfAccounts;
+	}
 
-    public Chart getChartOfAccounts() {
-        return chartOfAccounts;
-    }
+	/**
+	 * Gets the organization attribute.
+	 * 
+	 * @return Returns the organization
+	 * 
+	 */
+	public Org getOrganization() { 
+		return organization;
+	}
 
-    /**
-     * @deprecated
-     */
-    public void setChartOfAccounts(Chart chartOfAccounts) {
-        this.chartOfAccounts = chartOfAccounts;
-    }
+	/**
+	 * Sets the organization attribute.
+	 * 
+	 * @param organization The organization to set.
+	 * @deprecated
+	 */
+	public void setOrganization(Org organization) {
+		this.organization = organization;
+	}
 
-    public String getChartOfAccountsCode() {
-        return chartOfAccountsCode;
-    }
-
-    public void setChartOfAccountsCode(String chartOfAccountsCode) {
-        this.chartOfAccountsCode = chartOfAccountsCode;
-    }
-
-    public Org getOrganization() {
-        return organization;
-    }
-
-    /**
-     * @deprecated
-     */
-    public void setOrganization(Org organization) {
-        this.organization = organization;
-    }
-
-    public KualiDecimal getOrganizationAutomaticPurchaseOrderLimit() {
-        return organizationAutomaticPurchaseOrderLimit;
-    }
-
-    public void setOrganizationAutomaticPurchaseOrderLimit(KualiDecimal organizationAutomaticPurchaseOrderLimit) {
-        this.organizationAutomaticPurchaseOrderLimit = organizationAutomaticPurchaseOrderLimit;
-    }
-
-    public String getOrganizationCode() {
-        return organizationCode;
-    }
-
-    public void setOrganizationCode(String organizationCode) {
-        this.organizationCode = organizationCode;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("organizationCode", this.organizationCode);
-        return m;
+	    return m;
     }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/dataaccess/impl/CorrectionChangeDaoOjb.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +22,16 @@ import java.util.List;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.dao.CorrectionChangeDao;
+import org.kuali.PropertyConstants;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-/**
- * The OJB implementation of the CorrectionChangeDao
- */
-public class CorrectionChangeDaoOjb extends PlatformAwareDaoBaseOjb implements CorrectionChangeDao {
+public class CorrectionChangeDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionChangeDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeDaoOjb.class);
 
     /**
-     * Delete a CorrectionChange from the database
      * 
-     * @param spec the CorrectionChange to delete
      * @see org.kuali.module.gl.dao.CorrectionChangeDao#delete(org.kuali.module.gl.bo.CorrectionChange)
      */
     public void delete(CorrectionChange spec) {
@@ -44,19 +41,14 @@ public class CorrectionChangeDaoOjb extends PlatformAwareDaoBaseOjb implements C
     }
 
     /**
-     * Query the database to find qualifying CorrectionChange records
      * 
-     * @param documentHeaderId the document number of a GLCP document
-     * @param correctionGroupLineNumber the line number of the group within the GLCP document to find correction chagnes for
-     * @return a List of correction changes
-     * @see org.kuali.module.gl.dao.CorrectionChangeDao#findByDocumentHeaderIdAndCorrectionGroupNumber(java.lang.String,
-     *      java.lang.Integer)
+     * @see org.kuali.module.gl.dao.CorrectionChangeDao#findByDocumentHeaderIdAndCorrectionGroupNumber(java.lang.String, java.lang.Integer)
      */
     public List findByDocumentHeaderIdAndCorrectionGroupNumber(String documentNumber, Integer correctionGroupLineNumber) {
         LOG.debug("findByDocumentHeaderIdAndCorrectionGroupNumber() started");
 
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
         criteria.addEqualTo("correctionChangeGroupLineNumber", correctionGroupLineNumber);
 
         QueryByCriteria query = QueryFactory.newQuery(CorrectionChange.class, criteria);
@@ -65,9 +57,7 @@ public class CorrectionChangeDaoOjb extends PlatformAwareDaoBaseOjb implements C
     }
 
     /**
-     * Save a CorrectionChange to the database
      * 
-     * @param spec a CorrectionChange to save to the database
      * @see org.kuali.module.gl.dao.CorrectionChangeDao#save(org.kuali.module.gl.bo.CorrectionChange)
      */
     public void save(CorrectionChange spec) {

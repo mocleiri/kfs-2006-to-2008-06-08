@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ProjectCode.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +18,10 @@
 package org.kuali.module.chart.bo;
 
 import org.kuali.core.bo.KualiCodeBase;
+
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * 
@@ -46,6 +49,7 @@ public class ProjectCode extends KualiCodeBase {
      * Gets the projectDescription attribute.
      * 
      * @return Returns the projectDescription
+     * 
      */
     public String getProjectDescription() {
         return projectDescription;
@@ -55,13 +59,14 @@ public class ProjectCode extends KualiCodeBase {
      * Sets the projectDescription attribute.
      * 
      * @param projectDescription The projectDescription to set.
+     * 
      */
     public void setProjectDescription(String projectDescription) {
         this.projectDescription = projectDescription;
     }
 
     public UniversalUser getProjectManagerUniversal() {
-        projectManagerUniversal = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(projectManagerUniversalId, projectManagerUniversal);
+        projectManagerUniversal = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(projectManagerUniversalId, projectManagerUniversal);
         return projectManagerUniversal;
     }
 
@@ -69,6 +74,7 @@ public class ProjectCode extends KualiCodeBase {
      * Sets the projectManagerUniversal attribute.
      * 
      * @param projectManagerUniversal The projectManagerUniversal to set.
+     * 
      */
     public void setProjectManagerUniversal(UniversalUser projectManagerUniversal) {
         this.projectManagerUniversal = projectManagerUniversal;
@@ -78,6 +84,7 @@ public class ProjectCode extends KualiCodeBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -87,6 +94,7 @@ public class ProjectCode extends KualiCodeBase {
      * Sets the chartOfAccounts attribute.
      * 
      * @param chartOfAccounts The chartOfAccounts to set.
+     * 
      */
     public void setChartOfAccounts(Chart chartOfAccounts) {
         this.chartOfAccounts = chartOfAccounts;
@@ -96,6 +104,7 @@ public class ProjectCode extends KualiCodeBase {
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public Org getOrganization() {
         return organization;
@@ -105,6 +114,7 @@ public class ProjectCode extends KualiCodeBase {
      * Sets the organization attribute.
      * 
      * @param organization The organization to set.
+     * 
      */
     public void setOrganization(Org organization) {
         this.organization = organization;

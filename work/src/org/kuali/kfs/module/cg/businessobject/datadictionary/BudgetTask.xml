@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetTask">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Task</title>
@@ -170,6 +172,8 @@
 
         <objectLabel>Budget Tasks</objectLabel>
         <objectDescription>Budget Tasks are the tasks for your Budget.</objectDescription>
+        
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetTaskHelp" />
 
     </businessObject>
 </dictionaryEntry>

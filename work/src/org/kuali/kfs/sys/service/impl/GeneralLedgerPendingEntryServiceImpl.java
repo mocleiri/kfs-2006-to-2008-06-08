@@ -21,9 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.KualiRuleService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.Options;
@@ -35,7 +37,6 @@ import org.kuali.kfs.rule.event.GenerateGeneralLedgerDocumentPendingEntriesEvent
 import org.kuali.kfs.rule.event.GenerateGeneralLedgerPendingEntriesEvent;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
 import org.kuali.kfs.service.OptionsService;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
@@ -43,6 +44,7 @@ import org.kuali.module.chart.service.BalanceTypService;
 import org.kuali.module.chart.service.ChartService;
 import org.kuali.module.chart.service.ObjectTypeService;
 import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.UniversityDate;
@@ -61,18 +63,20 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     private KualiRuleService kualiRuleService;
     private ChartService chartService;
     private OptionsService optionsService;
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
     private BalanceTypService balanceTypeService;
 
     /**
+     * 
      * @see org.kuali.module.gl.service.GeneralLedgerPendingEntryService#getExpenseSummary(java.util.List, java.lang.String,
      *      java.lang.String, boolean, boolean)
      */
     public KualiDecimal getExpenseSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd) {
         LOG.debug("getExpenseSummary() started");
-
-        ObjectTypeService objectTypeService = (ObjectTypeService) SpringContext.getBean(ObjectTypeService.class);
-        List<String> objectTypes = objectTypeService.getExpenseObjectTypes(universityFiscalYear);
+        
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> objectTypes = objectTypeService.getBasicExpenseObjectTypes(universityFiscalYear);
+        objectTypes.add( objectTypeService.getExpenseTransferObjectType(universityFiscalYear));
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
@@ -83,32 +87,38 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.service.GeneralLedgerPendingEntryService#getEncumbranceSummary(java.lang.Integer, java.lang.String,
      *      java.lang.String, java.lang.String, boolean, boolean)
      */
     public KualiDecimal getEncumbranceSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isDebit, boolean isYearEnd) {
         LOG.debug("getEncumbranceSummary() started");
 
-        ObjectTypeService objectTypeService = (ObjectTypeService) SpringContext.getBean(ObjectTypeService.class);
-        List<String> objectTypes = objectTypeService.getExpenseObjectTypes(universityFiscalYear);
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> objectTypes = objectTypeService.getBasicExpenseObjectTypes(universityFiscalYear);
+        objectTypes.add( objectTypeService.getExpenseTransferObjectType(universityFiscalYear));
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
-        List<String> balanceTypeCodes = balanceTypeService.getCurrentYearEncumbranceBalanceTypes();
-            
+        List<String> balanceTypeCodes = new ArrayList();
+        for (BalanceTyp balanceTyp : (Collection<BalanceTyp>) balanceTypeService.getEncumbranceBalanceTypes()) {
+            balanceTypeCodes.add(balanceTyp.getCode());
+        }
 
         return generalLedgerPendingEntryDao.getTransactionSummary(universityFiscalYear, chartOfAccountsCode, accountNumber, objectTypes, balanceTypeCodes, sufficientFundsObjectCode, isDebit, isYearEnd);
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.service.GeneralLedgerPendingEntryService#getBudgetSummary(java.lang.Integer, java.lang.String,
      *      java.lang.String, java.lang.String, boolean)
      */
     public KualiDecimal getBudgetSummary(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, boolean isYearEnd) {
         LOG.debug("getBudgetSummary() started");
 
-        ObjectTypeService objectTypeService = (ObjectTypeService) SpringContext.getBean(ObjectTypeService.class);
-        List<String> objectTypes = objectTypeService.getExpenseObjectTypes(universityFiscalYear);
+        ObjectTypeService objectTypeService = (ObjectTypeService)SpringContext.getBean(ObjectTypeService.class);
+        List<String> objectTypes = objectTypeService.getBasicExpenseObjectTypes(universityFiscalYear);
+        objectTypes.add( objectTypeService.getExpenseTransferObjectType(universityFiscalYear));
 
         Options options = optionsService.getOptions(universityFiscalYear);
 
@@ -119,6 +129,7 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.service.GeneralLedgerPendingEntryService#getCashSummary(java.util.Collection, java.lang.String,
      *      java.lang.String, boolean)
      */
@@ -141,13 +152,14 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.service.GeneralLedgerPendingEntryService#getActualSummary(java.util.List, java.lang.String,
      *      java.lang.String, boolean)
      */
     public KualiDecimal getActualSummary(List universityFiscalYears, String chartOfAccountsCode, String accountNumber, boolean isDebit) {
         LOG.debug("getActualSummary() started");
 
-        List<String> codes = parameterService.getParameterValues(ParameterConstants.FINANCIAL_SYSTEM_ALL.class, SufficientFundsServiceConstants.SUFFICIENT_FUNDS_OBJECT_CODE_SPECIALS);
+        List<String> codes = kualiConfigurationService.getParameterValuesAsList(KFSConstants.GL_NAMESPACE, GLConstants.Components.SUFFICIENT_FUND_BALANCES, SufficientFundsServiceConstants.SUFFICIENT_FUNDS_OBJECT_CODE_SPECIALS);
 
         // Note, we are getting the options from the first fiscal year in the list. We are assuming that the
         // balance type code for actual is the same in all the years in the list.
@@ -160,6 +172,7 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
     }
 
     /**
+     * 
      * @see org.kuali.module.gl.service.GeneralLedgerPendingEntryService#getByPrimaryId(java.lang.Integer, java.lang.String)
      */
     public GeneralLedgerPendingEntry getByPrimaryId(Integer transactionEntrySequenceId, String documentHeaderId) {
@@ -376,8 +389,8 @@ public class GeneralLedgerPendingEntryServiceImpl implements GeneralLedgerPendin
         this.generalLedgerPendingEntryDao = generalLedgerPendingEntryDao;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 
     public void setKualiRuleService(KualiRuleService kualiRuleService) {

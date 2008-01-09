@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/CheckBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +22,25 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.NumberUtils;
 
 /**
  * This class represents a check in the system. It is a generalized check business object that will be used by the Cash Receipts
  * document, the Cashier document, etc.
+ * 
+ * 
  */
 
-public class CheckBase extends PersistableBusinessObjectBase implements Check {
+public class CheckBase extends BusinessObjectBase implements Check {
     private String checkNumber;
     private Date checkDate;
     private String description;
+    private boolean interimDepositAmount;
     private Integer sequenceId;
     private KualiDecimal amount;
     private String documentNumber;
-    private String financialDocumentTypeCode;
-    private String cashieringRecordSource;
-    private Integer financialDocumentDepositLineNumber;
 
     /**
      * Constructs a CheckBase business object.
@@ -104,6 +106,24 @@ public class CheckBase extends PersistableBusinessObjectBase implements Check {
     }
 
     /**
+     * Gets the interimDepositAmount attribute.
+     * 
+     * @return Returns the interimDepositAmount.
+     */
+    public boolean isInterimDepositAmount() {
+        return interimDepositAmount;
+    }
+
+    /**
+     * Sets the interimDepositAmount attribute value.
+     * 
+     * @param interimDepositAmount The interimDepositAmount to set.
+     */
+    public void setInterimDepositAmount(boolean interimDepositAmount) {
+        this.interimDepositAmount = interimDepositAmount;
+    }
+
+    /**
      * Gets the sequenceId attribute.
      * 
      * @return Returns the sequenceId.
@@ -159,60 +179,6 @@ public class CheckBase extends PersistableBusinessObjectBase implements Check {
     }
 
     /**
-     * Gets the cashieringRecordSource attribute.
-     * 
-     * @return Returns the cashieringRecordSource.
-     */
-    public String getCashieringRecordSource() {
-        return cashieringRecordSource;
-    }
-
-    /**
-     * Sets the cashieringRecordSource attribute value.
-     * 
-     * @param cashieringRecordSource The cashieringRecordSource to set.
-     */
-    public void setCashieringRecordSource(String financialDocumentColumnTypeCode) {
-        this.cashieringRecordSource = financialDocumentColumnTypeCode;
-    }
-
-    /**
-     * Gets the financialDocumentTypeCode attribute.
-     * 
-     * @return Returns the financialDocumentTypeCode.
-     */
-    public String getFinancialDocumentTypeCode() {
-        return financialDocumentTypeCode;
-    }
-
-    /**
-     * Sets the financialDocumentTypeCode attribute value.
-     * 
-     * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
-     */
-    public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
-        this.financialDocumentTypeCode = financialDocumentTypeCode;
-    }
-
-    /**
-     * Gets the financialDocumentDepositLineNumber attribute.
-     * 
-     * @return Returns the financialDocumentDepositLineNumber.
-     */
-    public Integer getFinancialDocumentDepositLineNumber() {
-        return financialDocumentDepositLineNumber;
-    }
-
-    /**
-     * Sets the financialDocumentDepositLineNumber attribute value.
-     * 
-     * @param financialDocumentDepositLineNumber The financialDocumentDepositLineNumber to set.
-     */
-    public void setFinancialDocumentDepositLineNumber(Integer financialDocumentDepositLineNumber) {
-        this.financialDocumentDepositLineNumber = financialDocumentDepositLineNumber;
-    }
-
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
@@ -222,11 +188,9 @@ public class CheckBase extends PersistableBusinessObjectBase implements Check {
         m.put("checkNumber", this.checkNumber);
         m.put("amount", this.amount);
         m.put("checkDate", this.checkDate);
-        m.put("financialDocumentDepositLineNumber", this.financialDocumentDepositLineNumber);
+        m.put("interimDepositAmount", Boolean.valueOf(this.interimDepositAmount));
         m.put("description", this.description);
         m.put("documentHeaderId", this.documentNumber);
-        m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
-        m.put("cashieringRecordSource", this.cashieringRecordSource);
 
         return m;
     }
@@ -240,15 +204,13 @@ public class CheckBase extends PersistableBusinessObjectBase implements Check {
 
         if (StringUtils.equals(checkNumber, other.getCheckNumber())) {
             if (StringUtils.equals(description, other.getDescription())) {
-                if (StringUtils.equals(financialDocumentTypeCode, other.getFinancialDocumentTypeCode()) && StringUtils.equals(cashieringRecordSource, other.getCashieringRecordSource())) {
-                    if (StringUtils.equals(documentNumber, other.getDocumentNumber())) {
-                        if (NumberUtils.equals(sequenceId, other.getSequenceId())) {
-                            if (NumberUtils.equals(financialDocumentDepositLineNumber, other.getFinancialDocumentDepositLineNumber())) {
+                if (StringUtils.equals(documentNumber, other.getDocumentNumber())) {
+                    if (NumberUtils.equals(sequenceId, other.getSequenceId())) {
+                        if (interimDepositAmount == other.isInterimDepositAmount()) {
 
-                                if (DateUtils.isSameDay(checkDate, other.getCheckDate())) {
-                                    if ((amount != null) && amount.equals(other.getAmount())) {
-                                        like = true;
-                                    }
+                            if (DateUtils.isSameDay(checkDate, other.getCheckDate())) {
+                                if ((amount != null) && amount.equals(other.getAmount())) {
+                                    like = true;
                                 }
                             }
                         }

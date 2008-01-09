@@ -20,7 +20,7 @@
 	<script type='text/javascript' src="dwr/interface/AccountService.js"></script>
 	<script type='text/javascript' src="dwr/interface/SubAccountService.js"></script>
 	<script language="JavaScript" type="text/javascript" src="scripts/kfs/objectInfo.js"></script>
-	<c:set var="accountingLineScriptsLoaded" value="true" scope="request" />
+	<c:set var="accountingLineScriptsLoaded" value="true" scope="page" />
 </c:if>
 
 <c:set var="bcHeaderAttributes" value="${DataDictionary.BudgetConstructionHeader.attributes}" />
@@ -28,27 +28,23 @@
 <c:set var="subFundGroupAttributes" value="${DataDictionary.SubFundGroup.attributes}" />
 <c:set var="orgAttributes" value="${DataDictionary.Org.attributes}" />
 <c:set var="orgPropString" value="budgetConstructionHeader.account.organization" />
+<c:set var="orgVals" value="${KualiForm.budgetConstructionHeader.account.organization}" />
 <c:set var="accountRptsAttributes" value="${DataDictionary.BudgetConstructionAccountReports.attributes}" />
 <c:set var="accountRptsPropString" value="budgetConstructionHeader.budgetConstructionAccountReports" />
+<c:set var="accountRptsVals" value="${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports}" />
 <c:set var="orgRptsAttributes" value="${DataDictionary.BudgetConstructionOrganizationReports.attributes}" />
+<c:set var="orgRptsVals" value="${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.budgetConstructionOrganizationReports}" />
 <c:set var="orgRptsPropString" value="budgetConstructionHeader.budgetConstructionAccountReports.budgetConstructionOrganizationReports" />
-
-<%-- hack to get around ojb retrieve problems when account key is bad, don't show the info fields --%>
-<c:catch var="e">
-	<c:set var="showTheDetail" value="${!empty KualiForm.budgetConstructionHeader.account.subFundGroupCode}" scope="page" />
-</c:catch>
-<c:if test="${e!=null}">
-	<c:set var="showTheDetail" value="false" scope="page" />
-</c:if>
 
 <kul:page showDocumentInfo="false"
 	htmlFormAction="budgetBudgetConstructionSelection" renderMultipart="true"
 	docTitle="Budget Construction Selection"
-    transactionalDocument="false">
+    transactionalDocument="false"
+	>
 
 <%--	<kul:hiddenDocumentFields /> --%>
 
-	<kul:errors keyMatch="budgetConstructionHeader" errorTitle="Errors found in Search Criteria:" />
+	<kul:errors errorTitle="Errors found in Search Criteria:" />
 	<kul:messages/>
 
     <table align="center" cellpadding="0" cellspacing="0" class="datatable-100">
@@ -148,7 +144,7 @@
                 anchor="budgetConstructionHeaderSubAccountAnchor" />
             <td class="grid" nowrap colspan="2">
             <div align="center">
-                <html:image property="methodToCall.performBCDocumentOpen.anchorbudgetConstructionHeaderAnchor" src="${ConfigProperties.externalizable.images.url}tinybutton-loaddoc.gif" title="Load Budget Construction Document" alt="Load Budget Construction Document" styleClass="tinybutton" />
+                <html:image property="methodToCall.performBCDocumentOpen.anchorbudgetConstructionHeaderAnchor" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-loaddoc.gif" title="Load Budget Construction Document" alt="Load Budget Construction Document" styleClass="tinybutton" />
             </div>
             </td>
 	    </tr>
@@ -157,7 +153,6 @@
 		        Sub-Fund Group:
 		    </th>
             <td class="grid" valign="center" rowspan="1" colspan="2">
-                <c:if test="${showTheDetail}" >
                 <kul:htmlControlAttribute
                     property="budgetConstructionHeader.account.subFundGroupCode"
                     attributeEntry="${accountAttributes.subFundGroupCode}"
@@ -166,19 +161,16 @@
                     <kul:inquiry
                         boClassName="org.kuali.module.chart.bo.SubFundGroup"
                         keyValues="subFundGroupCode=${KualiForm.budgetConstructionHeader.account.subFundGroupCode}"
-                        render="${!empty KualiForm.budgetConstructionHeader.accountNumber}">
+                        render="${!empty KualiForm.budgetConstructionHeader.account.subFundGroupCode}">
                         <html:hidden write="true" property="budgetConstructionHeader.account.subFundGroupCode" />
                     </kul:inquiry>&nbsp;
                 </kul:htmlControlAttribute>
-                </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="3">
-                <c:if test="${showTheDetail}" >
                 <kul:htmlControlAttribute
                     property="budgetConstructionHeader.account.subFundGroup.subFundGroupDescription"
                     attributeEntry="${subFundGroupAttributes.subfundGroupDescription}"
                     readOnly="true"/>
-                </c:if>&nbsp;
             </td>
 	    </tr>
 	    <tr>
@@ -189,7 +181,6 @@
 			    &nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="1">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="budgetConstructionHeader.account.organizationCode"
                 attributeEntry="${accountAttributes.organizationCode}"
@@ -198,19 +189,16 @@
                 <kul:inquiry
                     boClassName="org.kuali.module.chart.bo.Org"
                     keyValues="chartOfAccountsCode=${KualiForm.budgetConstructionHeader.account.chartOfAccountsCode}&amp;organizationCode=${KualiForm.budgetConstructionHeader.account.organizationCode}"
-                    render="${!empty KualiForm.budgetConstructionHeader.account.organizationCode}">
+                    render="${!empty KualiForm.budgetConstructionHeader.account.chartOfAccountsCode}">
                 	<html:hidden write="true" property="budgetConstructionHeader.account.organizationCode" />
                 </kul:inquiry>&nbsp;
 	      	</kul:htmlControlAttribute>
-            </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="3">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="${orgPropString}.organizationName"
                 attributeEntry="${orgAttributes.organizationName}"
                 readOnly="true"/>
-            </c:if>&nbsp;
             </td>
 	    </tr>
 	    <tr>
@@ -218,7 +206,6 @@
 		        Rpts To:
 		    </th>
             <td class="grid" valign="center" rowspan="1" colspan="1">
-                <c:if test="${showTheDetail}" >
                 <kul:htmlControlAttribute
                     property="${orgPropString}.reportsToChartOfAccountsCode"
                     attributeEntry="${orgAttributes.reportsToChartOfAccountsCode}"
@@ -226,15 +213,13 @@
                     readOnlyBody="true">
                     <kul:inquiry
                         boClassName="org.kuali.module.chart.bo.Chart"
-                        keyValues="chartOfAccountsCode=${KualiForm.budgetConstructionHeader.account.organization.reportsToChartOfAccountsCode}"
-                        render="${!empty KualiForm.budgetConstructionHeader.account.organization.reportsToChartOfAccountsCode}">
+                        keyValues="chartOfAccountsCode=${orgVals.reportsToChartOfAccountsCode}"
+                        render="${!empty orgVals.reportsToChartOfAccountsCode}">
                     <html:hidden write="true" property="${orgPropString}.reportsToChartOfAccountsCode" />
                 </kul:inquiry>&nbsp;
 	      	</kul:htmlControlAttribute>
-            </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="1">
-            <c:if test="${showTheDetail}" >
 	      	<kul:htmlControlAttribute
 	      		property="${orgPropString}.reportsToOrganizationCode"
 	      		attributeEntry="${orgAttributes.reportsToOrganizationCode}"
@@ -242,20 +227,17 @@
 	      		readOnlyBody="true">
 	      		<kul:inquiry
 				    boClassName="org.kuali.module.chart.bo.Org"
-				    keyValues="chartOfAccountsCode=${KualiForm.budgetConstructionHeader.account.organization.reportsToChartOfAccountsCode}&amp;organizationCode=${KualiForm.budgetConstructionHeader.account.organization.reportsToOrganizationCode}"
-				    render="${!empty KualiForm.budgetConstructionHeader.account.organization.reportsToOrganizationCode}">
+				    keyValues="chartOfAccountsCode=${orgVals.reportsToChartOfAccountsCode}&amp;organizationCode=${orgVals.reportsToOrganizationCode}"
+				    render="${!empty orgVals.reportsToOrganizationCode}">
 			    	<html:hidden write="true" property="${orgPropString}.reportsToOrganizationCode" />
 				</kul:inquiry>&nbsp;
 	      	</kul:htmlControlAttribute>
-            </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="3">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="${orgPropString}.reportsToOrganization.organizationName"
                 attributeEntry="${organizationAttributes.organizationName}"
-                readOnly="true"/>
-            </c:if>&nbsp;
+                readOnly="${true}"/>
             </td>
 	    </tr>
 	    <tr>
@@ -263,7 +245,6 @@
 		        Next Year Org:
 		    </th>
             <td class="grid" valign="center" rowspan="1" colspan="1">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="${accountRptsPropString}.reportsToChartOfAccountsCode"
                 attributeEntry="${accountRptsAttributes.reportsToChartOfAccountsCode}"
@@ -271,15 +252,13 @@
                 readOnlyBody="true">
                 <kul:inquiry
                     boClassName="org.kuali.module.chart.bo.Chart"
-                    keyValues="chartOfAccountsCode=${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.reportsToChartOfAccountsCode}"
-                    render="${!empty KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.reportsToChartOfAccountsCode}">
+                    keyValues="chartOfAccountsCode=${accountRptsVals.reportsToChartOfAccountsCode}"
+                    render="${!empty accountRptsVals.reportsToChartOfAccountsCode}">
                 	<html:hidden write="true" property="${accountRptsPropString}.reportsToChartOfAccountsCode" />
                 </kul:inquiry>&nbsp;
             </kul:htmlControlAttribute>
-            </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="1">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="${accountRptsPropString}.reportsToOrganizationCode"
                 attributeEntry="${accountRptsAttributes.reportsToOrganizationCode}"
@@ -287,28 +266,24 @@
                 readOnlyBody="true">
                 <kul:inquiry
                     boClassName="org.kuali.module.budget.bo.BudgetConstructionOrganizationReports"
-                    keyValues="chartOfAccountsCode=${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.reportsToChartOfAccountsCode}&amp;organizationCode=${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.reportsToOrganizationCode}"
-                    render="${!empty KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.reportsToOrganizationCode}">
+                    keyValues="chartOfAccountsCode=${accountRptsVals.reportsToChartOfAccountsCode}&amp;organizationCode=${accountRptsVals.reportsToOrganizationCode}"
+                    render="${!empty accountRptsVals.reportsToOrganizationCode}">
                 	<html:hidden write="true" property="${accountRptsPropString}.reportsToOrganizationCode" />
                 </kul:inquiry>&nbsp;
             </kul:htmlControlAttribute>
-            </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="3">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="${accountRptsPropString}.reportsToOrganization.organizationName"
                 attributeEntry="${orgAttributes.organizationName}"
                 readOnly="true"/>
             </td>
-            </c:if>&nbsp;
 	    </tr>
 	    <tr>
 		    <th class="grid" align="right" colspan="2">
 		        Rpts To:
 		    </th>
             <td class="grid" valign="center" rowspan="1" colspan="1">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="${orgRptsPropString}.reportsToChartOfAccountsCode"
                 attributeEntry="${orgRptsAttributes.reportsToChartOfAccountsCode}"
@@ -316,15 +291,13 @@
                 readOnlyBody="true">
                 <kul:inquiry
                     boClassName="org.kuali.module.chart.bo.Chart"
-                    keyValues="chartOfAccountsCode=${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.budgetConstructionOrganizationReports.reportsToChartOfAccountsCode}"
-                    render="${!empty KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.budgetConstructionOrganizationReports.reportsToChartOfAccountsCode}">
+                    keyValues="chartOfAccountsCode=${orgRptsVals.reportsToChartOfAccountsCode}"
+                    render="${!empty orgRptsVals.reportsToChartOfAccountsCode}">
                     <html:hidden write="true" property="${orgRptsPropString}.reportsToChartOfAccountsCode" />
                 </kul:inquiry>&nbsp;
             </kul:htmlControlAttribute>
-            </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="1">
-            <c:if test="${showTheDetail}" >
 	      	<kul:htmlControlAttribute
 	      		property="${orgRptsPropString}.reportsToOrganizationCode"
 	      		attributeEntry="${orgRptsAttributes.reportsToOrganizationCode}"
@@ -332,21 +305,18 @@
 	      		readOnlyBody="true">
 	      		<kul:inquiry
 				    boClassName="org.kuali.module.chart.bo.Org"
-				    keyValues="chartOfAccountsCode=${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.budgetConstructionOrganizationReports.reportsToChartOfAccountsCode}&amp;organizationCode=${KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.budgetConstructionOrganizationReports.reportsToOrganizationCode}"
-				    render="${!empty KualiForm.budgetConstructionHeader.budgetConstructionAccountReports.budgetConstructionOrganizationReports.reportsToOrganizationCode}">
+				    keyValues="chartOfAccountsCode=${orgRptsVals.reportsToChartOfAccountsCode}&amp;organizationCode=${orgRptsVals.reportsToOrganizationCode}"
+				    render="${!empty orgRptsVals.reportsToOrganizationCode}">
 			    	<html:hidden write="true" property="${orgRptsPropString}.reportsToOrganizationCode" />
 				</kul:inquiry>&nbsp;
 	      	</kul:htmlControlAttribute>
-            </c:if>&nbsp;
             </td>
             <td class="grid" valign="center" rowspan="1" colspan="3">
-            <c:if test="${showTheDetail}" >
             <kul:htmlControlAttribute
                 property="${orgRptsPropString}.reportsToOrganization.organizationName"
                 attributeEntry="${organizationAttributes.organizationName}"
                 readOnly="${true}"/>
             </td>
-            </c:if>&nbsp;
 		</tr>
     	<tr>
             <th class="grid" colspan="7" align="left">
@@ -358,9 +328,7 @@
     	<tr>
             <td class="grid" colspan="4">
             <div align="center">
-              <c:if test="${!KualiForm.salarySettingDisabled}">
               <html:image property="methodToCall.performOrgSalarySetting.anchororgControlsAnchor" src="${ConfigProperties.externalizable.images.url}buttonsmall_orgsalsetting.gif" title="Organization Salary Setting" alt="Organization Salary Setting" styleClass="tinybutton"/>&nbsp;&nbsp;&nbsp;
-              </c:if>
               <html:image property="methodToCall.performReportDump.anchororgControlsAnchor" src="${ConfigProperties.externalizable.images.url}buttonsmall_orgreportdump.gif" title="Organization Report/Dump" alt="Organization Report/Dump" styleClass="tinybutton"/>&nbsp;&nbsp;&nbsp;
               <html:image property="methodToCall.performRequestImport.anchororgControlsAnchor" src="${ConfigProperties.externalizable.images.url}buttonsmall_reqimport.gif" title="Organization Request Import" alt="Organization Request Import" styleClass="tinybutton" />
             </div>

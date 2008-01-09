@@ -17,12 +17,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class HigherEdFunction extends PersistableBusinessObjectBase {
+public class HigherEdFunction extends BusinessObjectBase {
 
     private String financialHigherEdFunctionCd;
     private String financialHigherEdFunctionNm;
@@ -44,7 +44,8 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialHigherEdFunctionCd attribute.
      * 
-     * @return Returns the financialHigherEdFunctionCd
+     * @return - Returns the financialHigherEdFunctionCd
+     * 
      */
     public String getFinancialHigherEdFunctionCd() {
         return financialHigherEdFunctionCd;
@@ -54,6 +55,7 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
      * Sets the financialHigherEdFunctionCd attribute.
      * 
      * @param financialHigherEdFunctionCd The financialHigherEdFunctionCd to set.
+     * 
      */
     public void setFinancialHigherEdFunctionCd(String financialHigherEdFunctionCd) {
         this.financialHigherEdFunctionCd = financialHigherEdFunctionCd;
@@ -62,7 +64,8 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialHigherEdFunctionNm attribute.
      * 
-     * @return Returns the financialHigherEdFunctionNm
+     * @return - Returns the financialHigherEdFunctionNm
+     * 
      */
     public String getFinancialHigherEdFunctionNm() {
         return financialHigherEdFunctionNm;
@@ -72,6 +75,7 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
      * Sets the financialHigherEdFunctionNm attribute.
      * 
      * @param financialHigherEdFunctionNm The financialHigherEdFunctionNm to set.
+     * 
      */
     public void setFinancialHigherEdFunctionNm(String financialHigherEdFunctionNm) {
         this.financialHigherEdFunctionNm = financialHigherEdFunctionNm;
@@ -80,7 +84,8 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the finUnivBdgtOfficeFunctionCd attribute.
      * 
-     * @return Returns the finUnivBdgtOfficeFunctionCd
+     * @return - Returns the finUnivBdgtOfficeFunctionCd
+     * 
      */
     public String getFinUnivBdgtOfficeFunctionCd() {
         return finUnivBdgtOfficeFunctionCd;
@@ -90,6 +95,7 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
      * Sets the finUnivBdgtOfficeFunctionCd attribute.
      * 
      * @param finUnivBdgtOfficeFunctionCd The finUnivBdgtOfficeFunctionCd to set.
+     * 
      */
     public void setFinUnivBdgtOfficeFunctionCd(String finUnivBdgtOfficeFunctionCd) {
         this.finUnivBdgtOfficeFunctionCd = finUnivBdgtOfficeFunctionCd;
@@ -98,7 +104,8 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the finAicpaFunctionCode attribute.
      * 
-     * @return Returns the finAicpaFunctionCode
+     * @return - Returns the finAicpaFunctionCode
+     * 
      */
     public String getFinAicpaFunctionCode() {
         return finAicpaFunctionCode;
@@ -108,6 +115,7 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
      * Sets the finAicpaFunctionCode attribute.
      * 
      * @param finAicpaFunctionCode The finAicpaFunctionCode to set.
+     * 
      */
     public void setFinAicpaFunctionCode(String finAicpaFunctionCode) {
         this.finAicpaFunctionCode = finAicpaFunctionCode;
@@ -116,7 +124,8 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
     /**
      * Gets the financialFederalFunctionCode attribute.
      * 
-     * @return Returns the financialFederalFunctionCode
+     * @return - Returns the financialFederalFunctionCode
+     * 
      */
     public String getFinancialFederalFunctionCode() {
         return financialFederalFunctionCode;
@@ -126,6 +135,7 @@ public class HigherEdFunction extends PersistableBusinessObjectBase {
      * Sets the financialFederalFunctionCode attribute.
      * 
      * @param financialFederalFunctionCode The financialFederalFunctionCode to set.
+     * 
      */
     public void setFinancialFederalFunctionCode(String financialFederalFunctionCode) {
         this.financialFederalFunctionCode = financialFederalFunctionCode;

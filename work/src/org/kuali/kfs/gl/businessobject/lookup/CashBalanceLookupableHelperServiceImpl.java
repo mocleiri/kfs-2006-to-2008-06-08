@@ -25,8 +25,7 @@ import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.CashBalance;
@@ -36,21 +35,12 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.CashBalanceInquirableImpl;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- * An extension of KualiLookupableImpl to support cash lookups
- */
-@Transactional
 public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private BalanceCalculator postBalance;
     private BalanceService balanceService;
 
     /**
-     * Returns the URL for inquiries on fields returned in the lookup
-     * @param bo the business object the field to inquiry on is in
-     * @param propertyName the name of the property that an inquiry url is being asked of
-     * @return the String of the url
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
@@ -59,9 +49,6 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
     }
 
     /**
-     * Generates a list of results for this inquiry
-     * @param fieldValues the field values that the user entered for this inquiry
-     * @return a List of results
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     @Override
@@ -141,13 +128,6 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
     }
 
     /**
-     * Allows an updating of pending entry records before they are applied to the inquiry results
-     * 
-     * @param entryCollection a collection of balance entries
-     * @param fieldValues the map containing the search fields and values
-     * @param isApproved flag whether the approved entries or all entries will be processed
-     * @param isConsolidated flag whether the results are consolidated or not
-     * @param isCostShareExcluded flag whether the user selects to see the results with cost share subaccount
      * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableImpl#updateEntryCollection(java.util.Collection, java.util.Map,
      *      boolean, boolean, boolean)
      */
@@ -157,7 +137,7 @@ public class CashBalanceLookupableHelperServiceImpl extends AbstractGLLookupable
         // convert the field names of balance object into corresponding ones of pending entry object
         Map pendingEntryFieldValues = BusinessObjectFieldConverter.convertToTransactionFieldValues(fieldValues);
 
-        UniversityDate today = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        UniversityDate today = SpringServiceLocator.getUniversityDateService().getCurrentUniversityDate();
         String currentFiscalPeriodCode = today.getUniversityFiscalAccountingPeriod();
         Integer currentFiscalYear = today.getUniversityFiscalYear();
 

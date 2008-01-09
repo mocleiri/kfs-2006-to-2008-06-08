@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,41 +16,33 @@
 package org.kuali.module.chart.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.rules.PreRulesContinuationBase;
 import org.kuali.core.service.DocumentAuthorizationService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.service.AccountService;
 
-/**
- * General PreRules checks for all Maintenance docs that needs to occur while still in the Struts processing.
- */
 public class MaintenancePreRulesBase extends PreRulesContinuationBase {
 
     private KualiConfigurationService configService;
     private AccountService accountService;
     private DocumentAuthorizationService documentAuthorizationService;
 
-    /**
-     * Constructs a MaintenancePreRulesBase class and injects some services through setters
-     * 
-     * @TODO: should be fixed in the future to use Spring to inject these services
-     */
     public MaintenancePreRulesBase() {
         // Pseudo-inject some services.
         //
         // This approach is being used to make it simpler to convert the Rule classes
         // to spring-managed with these services injected by Spring at some later date.
         // When this happens, just remove these calls to the setters with
-        // SpringContext, and configure the bean defs for spring.
-        setAccountService(SpringContext.getBean(AccountService.class));
-        setConfigService(SpringContext.getBean(KualiConfigurationService.class));
-        setDocumentAuthorizationService(SpringContext.getBean(DocumentAuthorizationService.class));
+        // SpringServiceLocator, and configure the bean defs for spring.
+        setAccountService(SpringServiceLocator.getAccountService());
+        setConfigService(SpringServiceLocator.getKualiConfigurationService());
+        setDocumentAuthorizationService(SpringServiceLocator.getDocumentAuthorizationService());
     }
 
     public void setAccountService(AccountService accountService) {
@@ -61,37 +53,15 @@ public class MaintenancePreRulesBase extends PreRulesContinuationBase {
         this.configService = configService;
     }
 
-    /**
-     * This is called from the rules service to execute our rules A hook is provided here for sub-classes to override the
-     * {@link MaintenancePreRulesBase#doCustomPreRules(MaintenanceDocument)}
-     * 
-     * @see org.kuali.core.rules.PreRulesContinuationBase#doRules(org.kuali.core.document.Document)
-     */
     public boolean doRules(Document document) {
         MaintenanceDocument maintenanceDocument = (MaintenanceDocument) document;
         return doCustomPreRules(maintenanceDocument);
     }
 
-    /**
-     * This is a hook for sub-classes to implement their own pre-rules. Override to get hooked into main class
-     * 
-     * @param maintenanceDocument
-     * @return true if rules pass
-     */
     protected boolean doCustomPreRules(MaintenanceDocument maintenanceDocument) {
         return true;
     }
 
-    /**
-     * This method checks for continuation accounts, returns the continuation account if it is found, null otherwise
-     * 
-     * @param accName
-     * @param chart
-     * @param accountNumber
-     * @param accountName
-     * @param allowExpiredAccount
-     * @return the continuation account if it is found, null otherwise
-     */
     protected Account checkForContinuationAccount(String accName, String chart, String accountNumber, String accountName, boolean allowExpiredAccount) {
         Account result = checkForContinuationAccount(accName, chart, accountNumber, accountName);
         if (!allowExpiredAccount) {
@@ -102,15 +72,6 @@ public class MaintenancePreRulesBase extends PreRulesContinuationBase {
         return result;
     }
 
-    /**
-     * This method checks for continuation accounts and presents the user with a question regarding their use on this account.
-     * 
-     * @param accName
-     * @param chart
-     * @param accountNumber
-     * @param accountName
-     * @return
-     */
     protected Account checkForContinuationAccount(String accName, String chart, String accountNumber, String accountName) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("entering checkForContinuationAccounts(" + accountNumber + ")");
@@ -149,16 +110,8 @@ public class MaintenancePreRulesBase extends PreRulesContinuationBase {
     }
 
 
-    /**
-     * This method builds up the continuation account confirmation question that will be presented to the user
-     * 
-     * @param accName
-     * @param expiredAccount
-     * @param continuationAccount
-     * @return the question to the user about the continuation account
-     */
     protected String buildContinuationConfirmationQuestion(String accName, String expiredAccount, String continuationAccount) {
-        String result = configService.getPropertyString(KFSKeyConstants.QUESTION_CONTINUATION_ACCOUNT_SELECTION);
+        String result = configService.getPropertyString(KeyConstants.QUESTION_CONTINUATION_ACCOUNT_SELECTION);
         result = StringUtils.replace(result, "{0}", accName);
         result = StringUtils.replace(result, "{1}", expiredAccount);
         result = StringUtils.replace(result, "{2}", continuationAccount);

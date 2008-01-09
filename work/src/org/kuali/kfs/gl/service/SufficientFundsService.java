@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package org.kuali.module.gl.service;
 
 import java.util.List;
 
-import org.kuali.kfs.document.GeneralLedgerPostingDocument;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.util.SufficientFundsItem;
@@ -25,21 +25,23 @@ import org.kuali.module.gl.util.SufficientFundsItem;
 
 /**
  * Service used for manipulating disbursement voucher cover sheets.
+ * 
+ * 
  */
 public interface SufficientFundsService {
 
     /**
-     * Checks for sufficient funds on a single document
+     * This method checks for sufficient funds on a single document
      * 
-     * @param document document to check
+     * @param document document
      * @return Empty List if has sufficient funds for all accounts, List of SufficientFundsItem if not
      */
-    public List<SufficientFundsItem> checkSufficientFunds(GeneralLedgerPostingDocument document);
+    public List<SufficientFundsItem> checkSufficientFunds(TransactionalDocument document);
 
     /**
-     * Checks for sufficient funds on a list of transactions
+     * This method checks for sufficient funds on a list of transactions
      * 
-     * @param transactions list of transactions
+     * @param document document
      * @return Empty List if has sufficient funds for all accounts, List of SufficientFundsItem if not
      */
     public List<SufficientFundsItem> checkSufficientFunds(List<? extends Transaction> transactions);
@@ -48,17 +50,17 @@ public interface SufficientFundsService {
      * This operation derives the acct_sf_finobj_cd which is used to populate the General Ledger Pending entry table, so that later
      * we can do Suff Fund checking against that entry
      * 
-     * @param financialObject the object code being checked against
-     * @param accountSufficientFundsCode the kind of sufficient funds checking turned on in this system
-     * @return the object code that should be used for the sufficient funds inquiry, or a blank String
+     * @param financialObject
+     * @param accountSufficientFundsCode
+     * @return
      */
     public String getSufficientFundsObjectCode(ObjectCode financialObject, String accountSufficientFundsCode);
 
     /**
      * Purge the sufficient funds balance table by year/chart
      * 
-     * @param chart chart of sufficient fund balances to purge
-     * @param year fiscal year of sufficent fund balances to purge
+     * @param chart
+     * @param year
      */
     public void purgeYearByChart(String chart, int year);
 }

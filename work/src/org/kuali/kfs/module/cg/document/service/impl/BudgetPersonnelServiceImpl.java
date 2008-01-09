@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +19,7 @@ package org.kuali.module.kra.budget.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -27,13 +30,11 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.financial.service.UniversityDateService;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.AppointmentType;
 import org.kuali.module.kra.budget.bo.AppointmentTypeEffectiveDate;
 import org.kuali.module.kra.budget.bo.Budget;
@@ -46,16 +47,26 @@ import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.service.BudgetFringeRateService;
 import org.kuali.module.kra.budget.service.BudgetPersonnelService;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+
+/**
+ * This class...
+ * 
+ * 
+ */
+/**
+ * 
+ * 
+ * TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
+ */
 public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
     private static HashMap appointmentTypeMappings;
 
     private BusinessObjectService businessObjectService;
+    private DateTimeService dateTimeService;
     private BudgetFringeRateService budgetFringeRateService;
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
 
     /**
      * This method will create all the necessary task/period combinations for a given BudgetUser
@@ -66,7 +77,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     public void createPersonnelDetail(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
         budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-        budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
 
         BudgetFringeRate secondaryBudgetFringeRate = null;
         if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
@@ -74,14 +84,14 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             budgetUser.setSecondaryAppointmentTypeCode(secondaryBudgetFringeRate.getInstitutionAppointmentTypeCode());
         }
 
-
-        for (BudgetTask task : budgetDocument.getBudget().getTasks()) {
+        
+        for (BudgetTask task :  budgetDocument.getBudget().getTasks()) {
             budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, budgetFringeRate, task, budgetDocument.getBudget().getPeriods(), false));
             if (secondaryBudgetFringeRate != null) {
                 budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, secondaryBudgetFringeRate, task, budgetDocument.getBudget().getPeriods(), true));
             }
         }
-
+        
         Collections.sort(budgetUser.getUserAppointmentTasks());
     }
 
@@ -152,8 +162,8 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
         boolean calculateCalendarYear = StringUtils.equals(budgetFringeRate.getInstitutionAppointmentTypeCode(), getAppointmentTypeMappings().get(KraConstants.ACADEMIC_SUMMER).toString());
 
-        Integer periodStartDateEvaluationYear = SpringContext.getBean(UniversityDateService.class).getFiscalYear(period.getBudgetPeriodBeginDate());
-        Integer periodEndDateEvaluationYear = SpringContext.getBean(UniversityDateService.class).getFiscalYear(period.getBudgetPeriodEndDate());
+        Integer periodStartDateEvaluationYear = dateTimeService.getFiscalYear(period.getBudgetPeriodBeginDate());
+        Integer periodEndDateEvaluationYear = dateTimeService.getFiscalYear(period.getBudgetPeriodEndDate());
 
         if (calculateCalendarYear) { // currently only used for Academic Summer appointments
             Calendar startDateCalendar = Calendar.getInstance();
@@ -193,12 +203,11 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
             double inflationFactor = inflationRate.doubleValue() / 100 + 1;
 
-            int compareToYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().intValue();
+            int compareToYear = dateTimeService.getCurrentFiscalYear().intValue();
 
-            if (budgetUser.getBudgetSalaryFiscalYear() != null) {
+            if (budgetUser.getBudgetSalaryFiscalYear() !=  null) {
                 compareToYear = budgetUser.getBudgetSalaryFiscalYear().intValue();
-            }
-            else {
+            } else {
                 budgetUser.setBudgetSalaryFiscalYear(new Integer(compareToYear));
             }
 
@@ -222,15 +231,14 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             }
 
 
-            BigDecimal dailySalaryForAppointmentTypeDuration = fullSalaryForAppointmentTypeDuration.divide(new BigDecimal(SpringContext.getBean(DateTimeService.class).dateDiff(dailySalaryStartDate, dailySalaryEndDate, true)));
+            BigDecimal dailySalaryForAppointmentTypeDuration = fullSalaryForAppointmentTypeDuration.divide(new BigDecimal(dateTimeService.dateDiff(dailySalaryStartDate, dailySalaryEndDate, true)));
 
             // Step 2 - find out the number of days in the period
             Date workStartDate = (period.getBudgetPeriodBeginDate().before(evalStartDate) ? evalStartDate : period.getBudgetPeriodBeginDate());
             Date workEndDate = (period.getBudgetPeriodEndDate().after(evalEndDate) ? evalEndDate : period.getBudgetPeriodEndDate());
 
-            // method can return a negative - this may occur in cases when we are modifying the dates to calcualte based on. For
-            // example, summer appointments in periods that
-            int dateDiff = SpringContext.getBean(DateTimeService.class).dateDiff(workStartDate, workEndDate, true);
+            //method can return a negative - this may occur in cases when we are modifying the dates to calcualte based on.  For example, summer appointments in periods that 
+            int dateDiff = dateTimeService.dateDiff(workStartDate, workEndDate, true);
             int daysInPeriod = dateDiff > 0 ? dateDiff : 0;
 
             // Step 3 - multiply the number of days in the period (Step 2) by the daily salary (Step 1)
@@ -271,9 +279,9 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                         userAppointmentTaskPeriod.setBudgetFringeRate(budgetFringeRate);
 
                         PeriodSalary periodSalary = calculatePeriodSalaryAndDays(budgetUser, userAppointmentTaskPeriod.getBudgetFringeRate(), userAppointmentTaskPeriod.getPeriod(), budgetDocument.getBudget().getBudgetPersonnelInflationRate());
-
+    
                         userAppointmentTaskPeriod.setPeriodSalary(periodSalary);
-
+    
                         userAppointmentTaskPeriod.setUserBudgetPeriodSalaryAmount(periodSalary.getPeriodSalary());
                     }
                 }
@@ -293,8 +301,8 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         BudgetFringeRate budgetFringeRate;
 
         for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
-            userAppointmentTask.refreshReferenceObject("budgetFringeRate");
-
+           userAppointmentTask.refreshReferenceObject("budgetFringeRate");
+            
             BudgetFringeRate budgetFringeRateFromList = (BudgetFringeRate) (ObjectUtils.retrieveObjectWithIdentitcalKey(budgetFringeRates, userAppointmentTask.getBudgetFringeRate()));
             if (budgetFringeRateFromList != null) {
                 budgetFringeRate = budgetFringeRateFromList;
@@ -315,7 +323,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
             for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
                 userAppointmentTaskPeriod.setBudgetFringeRate(userAppointmentTask.getBudgetFringeRate());
-
+                
                 userAppointmentTaskPeriod.setTotalFeeRemissionsAmount(new KualiInteger(0));
                 userAppointmentTaskPeriod.setTotalFteAmount(new KualiInteger(0));
                 userAppointmentTaskPeriod.setTotalHealthInsuranceAmount(new KualiInteger(0));
@@ -323,10 +331,10 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                 userAppointmentTaskPeriod.setTotalPercentEffort(new KualiInteger(0));
                 userAppointmentTaskPeriod.setTotalSalaryAmount(new KualiInteger(0));
                 userAppointmentTaskPeriod.setTotalFringeAmount(new KualiInteger(0));
+                
 
-
-                BigDecimal costShareFringeRateDecimalMultiplier = budgetFringeRate.getInstitutionCostShareFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR);
-                BigDecimal agnecyFringeRateDecimalMultiplier = budgetFringeRate.getContractsAndGrantsFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR);
+                BigDecimal costShareFringeRateDecimalMultiplier = budgetFringeRate.getInstitutionCostShareFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN);
+                BigDecimal agnecyFringeRateDecimalMultiplier = budgetFringeRate.getContractsAndGrantsFringeRateAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN);
 
                 if (StringUtils.equals(getAppointmentTypeMappings().get(KraConstants.ACADEMIC_SUMMER).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) {
                     PeriodSalary periodSalary = userAppointmentTaskPeriod.getPeriodSalary() != null ? userAppointmentTaskPeriod.getPeriodSalary() : new PeriodSalary(new KualiInteger(0), 0);
@@ -339,10 +347,10 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
                     BigDecimal workWeeksPercent = weeks > 0 && workWeeks > 0 ? new BigDecimal(workWeeks / weeks) : new BigDecimal(0);
 
-                    BigDecimal userBudgetPeriodSalaryAmount = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().bigDecimalValue().multiply(workWeeksPercent).setScale(0, KualiDecimal.ROUND_BEHAVIOR);
+                    BigDecimal userBudgetPeriodSalaryAmount = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().bigDecimalValue().multiply(workWeeksPercent).setScale(0, BigDecimal.ROUND_HALF_EVEN);
 
                     userAppointmentTaskPeriod.setUserBudgetPeriodSalaryAmount(new KualiInteger(userBudgetPeriodSalaryAmount));
-
+                    
                     userAppointmentTaskPeriod.setTotalPercentEffort(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount()));
                     userAppointmentTaskPeriod.setTotalSalaryAmount(userAppointmentTaskPeriod.getAgencyRequestTotalAmount().add(userAppointmentTaskPeriod.getInstitutionCostShareRequestTotalAmount()));
                     userAppointmentTaskPeriod.setTotalFringeAmount(userAppointmentTaskPeriod.getAgencyFringeBenefitTotalAmount().add(userAppointmentTaskPeriod.getInstitutionCostShareFringeBenefitTotalAmount()));
@@ -350,10 +358,10 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
 
                 if (StringUtils.contains(getAppointmentTypeMappings().get(KraConstants.FULL_YEAR).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode()) || StringUtils.contains(getAppointmentTypeMappings().get(KraConstants.ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) {
 
-                    KualiInteger agencyRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR));
+                    KualiInteger agencyRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN));
                     KualiInteger agencyRequestFringe = agencyRequestSalary.multiply(agnecyFringeRateDecimalMultiplier);
 
-                    KualiInteger institutionCostShareRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, KualiDecimal.ROUND_BEHAVIOR));
+                    KualiInteger institutionCostShareRequestSalary = userAppointmentTaskPeriod.getUserBudgetPeriodSalaryAmount().multiply(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount().bigDecimalValue().divide(BigDecimal.valueOf(100), 8, BigDecimal.ROUND_HALF_EVEN));
                     KualiInteger institutionCostShareRequestFringe = institutionCostShareRequestSalary.multiply(costShareFringeRateDecimalMultiplier);
 
                     userAppointmentTaskPeriod.setAgencyRequestTotalAmount(agencyRequestSalary);
@@ -400,7 +408,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                     userAppointmentTask.setGradAsstAgencySalaryTotal(userAppointmentTask.getGradAsstAgencySalaryTotal().add(userAppointmentTaskPeriod.getAgencySalaryAmount()));
                     userAppointmentTask.setGradAsstInstHealthInsuranceTotal(userAppointmentTask.getGradAsstInstHealthInsuranceTotal().add(userAppointmentTaskPeriod.getInstitutionHealthInsuranceAmount()));
                     userAppointmentTask.setGradAsstInstSalaryTotal(userAppointmentTask.getGradAsstInstSalaryTotal().add(userAppointmentTaskPeriod.getInstitutionSalaryAmount()));
-
+                    
                     userAppointmentTaskPeriod.setTotalFteAmount(userAppointmentTaskPeriod.getAgencyFullTimeEquivalentPercent().add(userAppointmentTaskPeriod.getInstitutionFullTimeEquivalentPercent()));
                     userAppointmentTaskPeriod.setTotalGradAsstSalaryAmount(userAppointmentTaskPeriod.getAgencySalaryAmount().add(userAppointmentTaskPeriod.getInstitutionSalaryAmount()));
                     userAppointmentTaskPeriod.setTotalHealthInsuranceAmount(userAppointmentTaskPeriod.getAgencyHealthInsuranceAmount().add(userAppointmentTaskPeriod.getInstitutionHealthInsuranceAmount()));
@@ -443,58 +451,42 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     private void verifyAndPropogateAppointmentType(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         List newUserAppointmentTasks = new ArrayList();
 
-        // check to see if the budgetUser.getAppointmentTypeCode has a value - if it doesn't, we're coming into the page from
-        // another page or are reloading data. appointment type code is not stored
-        // in the database. If it does exist, check to make sure that the type code hasn't changed since the last su
+        //check to see if the budgetUser.getAppointmentTypeCode has a value - if it doesn't, we're coming into the page from another page or are reloading data.  appointment type code is not stored
+        //in the database.  If it does exist, check to make sure that the type code hasn't changed since the last su
         if (budgetUser.getAppointmentTypeCode() != null && !budgetUser.getAppointmentTypeCode().equals(budgetUser.getPreviousAppointmentTypeCode())) {
             // appointment type has changed
 
             AppointmentType previousAppointmentType = (AppointmentType) businessObjectService.retrieve(new AppointmentType(budgetUser.getPreviousAppointmentTypeCode()));
-
+            
             // Update the Fringes for this person to ensure that we're getting the most recent amounts
             BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
             budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-            budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
 
             BudgetFringeRate secondaryBudgetFringeRate = null;
             if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
                 secondaryBudgetFringeRate = budgetFringeRateService.getBudgetFringeRate(budgetDocument.getDocumentNumber(), budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode());
                 budgetUser.setSecondaryAppointmentTypeCode(secondaryBudgetFringeRate.getInstitutionAppointmentTypeCode());
-            }
-            else {
-                if (budgetUser.getSecondaryAppointmentTypeCode() != null && budgetUser.getSecondaryAppointmentTypeCode().equals(budgetUser.getAppointmentTypeCode())) {
-                    // previous secondary appointment type is the same as the current appointment type - convert previous secondary
-                    // to new primary
-                    for (Iterator i = budgetUser.getUserAppointmentTasks().iterator(); i.hasNext();) {
-                        // using iterator instead of enhanced for-loop so I can use iter.remove()
-                        UserAppointmentTask userAppointmentTask = (UserAppointmentTask) i.next();
-                        if (userAppointmentTask.getInstitutionAppointmentTypeCode().equals(budgetUser.getAppointmentTypeCode())) {
-                            i.remove();
-                        }
-                    }
-                }
+            } else {
                 budgetUser.setSecondaryAppointmentTypeCode(null);
             }
-
+            
             for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
-
-                // check to see if this userAppointmentTask is associated with the primary or secondary (related) appointment type.
+    
+                //check to see if this userAppointmentTask is associated with the primary or secondary (related) appointment type.
                 if (!userAppointmentTask.isSecondaryAppointment()) {
                     userAppointmentTask.setBudgetFringeRate(budgetFringeRate);
                     userAppointmentTask.setInstitutionAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-
-                    // trickle-down the new appointmentType into the userAppointmentTaskPeriod objects
+    
+                    //trickle-down the new appointmentType into the userAppointmentTaskPeriod objects 
                     for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
                         userAppointmentTaskPeriod.setBudgetFringeRate(budgetFringeRate);
                         userAppointmentTaskPeriod.setInstitutionAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
                     }
-                }
-                else if (secondaryBudgetFringeRate != null) {
-                    // this is a secondary appointment type record, update the record and the associated userAppointmentTaskPeriod
-                    // records
+                } else if (secondaryBudgetFringeRate != null) {
+                    //this is a secondary appointment type record, update the record and the associated userAppointmentTaskPeriod records
                     userAppointmentTask.setBudgetFringeRate(secondaryBudgetFringeRate);
                     userAppointmentTask.setInstitutionAppointmentTypeCode(secondaryBudgetFringeRate.getInstitutionAppointmentTypeCode());
-
+    
                     for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
                         userAppointmentTaskPeriod.setBudgetFringeRate(secondaryBudgetFringeRate);
                         userAppointmentTaskPeriod.setInstitutionAppointmentTypeCode(secondaryBudgetFringeRate.getInstitutionAppointmentTypeCode());
@@ -502,16 +494,15 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                 }
             }
             if (secondaryBudgetFringeRate != null && budgetUser.getUserAppointmentTasks().size() / budgetDocument.getBudget().getTasks().size() < (secondaryBudgetFringeRate != null ? 2 : 1)) {
-                // There is a secondary appointment type, but there are no records created for it yet. Create them.
+                //There is a secondary appointment type, but there are no records created for it yet.  Create them.
                 BudgetUser missingBudgetUser = new BudgetUser(budgetUser);
                 missingBudgetUser.setAppointmentTypeCode(secondaryBudgetFringeRate.getInstitutionAppointmentTypeCode());
                 for (BudgetTask task : budgetDocument.getBudget().getTasks()) {
                     budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(missingBudgetUser, budgetDocument, secondaryBudgetFringeRate, task, budgetDocument.getBudget().getPeriods(), true));
                 }
             }
-        }
-        else if (budgetUser.getAppointmentTypeCode() == null) {
-            // Coming into the page with no appointment type code set in BudgetUser - need to set it.
+        } else if (budgetUser.getAppointmentTypeCode() == null) {
+            //Coming into the page with no appointment type code set in BudgetUser - need to set it.
             List<AppointmentType> appointmentTypes = new ArrayList();
             for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
                 if (!appointmentTypes.contains(userAppointmentTask.getInstitutionAppointmentTypeCode())) {
@@ -521,13 +512,11 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             if (appointmentTypes.size() == 1) {
                 BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
                 budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-            }
-            else {
+            } else {
                 for (AppointmentType appointmentType : appointmentTypes) {
                     if (appointmentType.getRelatedAppointmentTypeCode() != null) {
                         budgetUser.setAppointmentTypeCode(appointmentType.getAppointmentTypeCode());
-                    }
-                    else {
+                    } else {
                         budgetUser.setSecondaryAppointmentTypeCode(appointmentType.getAppointmentTypeCode());
                     }
                 }
@@ -570,7 +559,6 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
     public void reconcilePersonTaskPeriod(BudgetUser budgetUser, BudgetDocument budgetDocument) {
         BudgetFringeRate budgetFringeRate = budgetFringeRateService.getBudgetFringeRateForPerson(budgetUser);
         budgetUser.setAppointmentTypeCode(budgetFringeRate.getInstitutionAppointmentTypeCode());
-        budgetUser.setAppointmentTypeDescription(budgetFringeRate.getAppointmentType().getAppointmentTypeDescription());
         if (budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode() != null) {
             budgetUser.setSecondaryAppointmentTypeCode(budgetFringeRate.getAppointmentType().getRelatedAppointmentTypeCode());
         }
@@ -616,7 +604,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                 budgetUser.getUserAppointmentTasks().add(createUserAppointmentTask(budgetUser, budgetDocument, budgetFringeRate, task, budgetDocument.getBudget().getPeriods(), budgetFringeRate.getInstitutionAppointmentTypeCode().equals(budgetUser.getSecondaryAppointmentTypeCode())));
             }
         }
-
+        
         Collections.sort(budgetUser.getUserAppointmentTasks());
     }
 
@@ -630,7 +618,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         List budgetTasks = budgetDocument.getBudget().getTasks();
         List budgetPeriods = budgetDocument.getBudget().getPeriods();
 
-        // Not using JDK 1.5 style for-loop so Iterator.remove() can be called
+        //Not using JDK 1.5 style for-loop so Iterator.remove() can be called
         for (Iterator budgetUserIter = budgetPersonnel.iterator(); budgetUserIter.hasNext();) {
             BudgetUser budgetUser = (BudgetUser) budgetUserIter.next();
             List userAppointments = new ArrayList();
@@ -714,15 +702,15 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
             projectDirector = new BudgetUser();
             if (!budget.isProjectDirectorToBeNamedIndicator()) {
                 // PD is a real person (not TBN)
-                projectDirector.setPersonUniversalIdentifier(budget.getBudgetProjectDirectorUniversalIdentifier());
+                projectDirector.setPersonSystemIdentifier(budget.getBudgetProjectDirectorSystemId());
                 projectDirector.refresh();
             }
             budgetDocument.addPersonnel(projectDirector);
         }
         else {
             // PD does exist in Personnel List already
-            String paramsPdUid = budget.getBudgetProjectDirectorUniversalIdentifier() != null ? budget.getBudgetProjectDirectorUniversalIdentifier() : "";
-            String personnelSysId = projectDirector.getPersonUniversalIdentifier() != null ? projectDirector.getPersonUniversalIdentifier() : "";
+            String paramsPdUid = budget.getBudgetProjectDirectorSystemId() != null ? budget.getBudgetProjectDirectorSystemId() : "";
+            String personnelSysId = projectDirector.getPersonSystemIdentifier() != null ? projectDirector.getPersonSystemIdentifier() : "";
             if (!(budget.isProjectDirectorToBeNamedIndicator() && StringUtils.isEmpty(personnelSysId)) && !paramsPdUid.equals(personnelSysId)) {
                 // PD from params is not the same as the PD from the Personnel List
 
@@ -735,7 +723,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                     // PD from Params is not TBN
                     for (Iterator i = budget.getPersonnel().iterator(); i.hasNext() && !projectDirectorFound;) {
                         BudgetUser budgetUser = (BudgetUser) i.next();
-                        if (budgetUser.getPersonUniversalIdentifier() != null && budgetUser.getPersonUniversalIdentifier().equals(paramsPdUid)) {
+                        if (budgetUser.getPersonSystemIdentifier() != null && budgetUser.getPersonSystemIdentifier().equals(paramsPdUid)) {
                             projectDirector = budgetUser;
                             projectDirectorFound = true;
                         }
@@ -744,7 +732,7 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
                     if (!projectDirectorFound) {
                         // PD from params was not found in the existing Personnel list; need to create a new personnel entry
                         projectDirector = new BudgetUser();
-                        projectDirector.setPersonUniversalIdentifier(paramsPdUid);
+                        projectDirector.setPersonSystemIdentifier(paramsPdUid);
                         projectDirector.refresh();
                         budgetDocument.addPersonnel(projectDirector);
                     }
@@ -761,45 +749,47 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         projectDirector.setRole(KraConstants.PROJECT_DIRECTOR);
     }
 
-    public synchronized HashMap getAppointmentTypeMappings() {
-        // if (appointmentTypeMappings == null) {
-        appointmentTypeMappings = new HashMap();
+    public HashMap getAppointmentTypeMappings() {
+        if (appointmentTypeMappings == null) {
+            appointmentTypeMappings = new HashMap();
 
-        // using Arrays.asList(String[]).toString() so I can easily check from elsewhere whether or not a particular appointment
-        // type is in the list
-        appointmentTypeMappings.put(KraConstants.FULL_YEAR, parameterService.getParameterValues(BudgetDocument.class, KraConstants.KRA_BUDGET_PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES).toString());
-        List<String> academicYearSummerList = parameterService.getParameterValues(BudgetDocument.class, KraConstants.KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES);
-        appointmentTypeMappings.put(KraConstants.ACADEMIC_YEAR_SUMMER, academicYearSummerList.toString());
-        appointmentTypeMappings.put(KraConstants.ACADEMIC_YEAR_SUMMER_ARRAY, academicYearSummerList.toArray(new String[] {}));
-        appointmentTypeMappings.put(KraConstants.HOURLY, parameterService.getParameterValues(BudgetDocument.class, KraConstants.KRA_BUDGET_PERSONNEL_HOURLY_APPOINTMENT_TYPES).toString());
-        appointmentTypeMappings.put(KraConstants.GRADUATE_ASSISTANT, parameterService.getParameterValues(BudgetDocument.class, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES).toString());
-        appointmentTypeMappings.put(KraConstants.ACADEMIC_SUMMER, parameterService.getParameterValue(BudgetDocument.class, KraConstants.KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE));
-        appointmentTypeMappings.put(KraConstants.ACADEMIC_YEAR, parameterService.getParameterValue(BudgetDocument.class, KraConstants.KRA_BUDGET_PERSONNEL_ACADEMIC_YEAR_APPOINTMENT_TYPE));
-        // }
+            // using Arrays.asList(String[]).toString() so I can easily check from elsewhere whether or not a particular appointment
+            // type is in the list
+            appointmentTypeMappings.put(KraConstants.FULL_YEAR, Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_FULL_YEAR_APPOINTMENT_TYPES)).toString());
+            String[] academicYearSummerArray = kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPES);
+            appointmentTypeMappings.put(KraConstants.ACADEMIC_YEAR_SUMMER, Arrays.asList(academicYearSummerArray).toString());
+            appointmentTypeMappings.put(KraConstants.ACADEMIC_YEAR_SUMMER_ARRAY, academicYearSummerArray);
+            appointmentTypeMappings.put(KraConstants.HOURLY, Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_HOURLY_APPOINTMENT_TYPES)).toString());
+            appointmentTypeMappings.put(KraConstants.GRADUATE_ASSISTANT, Arrays.asList(kualiConfigurationService.getApplicationParameterValues(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_GRADUATE_RESEARCH_ASSISTANT_APPOINTMENT_TYPES)).toString());
+            appointmentTypeMappings.put(KraConstants.ACADEMIC_SUMMER, kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_SUMMER_GRID_APPOINTMENT_TYPE));
+            appointmentTypeMappings.put(KraConstants.ACADEMIC_YEAR, kualiConfigurationService.getApplicationParameterValue(KraConstants.KRA_DEVELOPMENT_GROUP, KraConstants.KRA_BUDGET_PERSONNEL_ACADEMIC_YEAR_APPOINTMENT_TYPE));
+        }
         return appointmentTypeMappings;
     }
 
     public Date getAppointmentTypeEffectiveStartDate(AppointmentType appointmentType, Integer fiscalYear) {
-
-        AppointmentTypeEffectiveDate appointmentTypeEffectiveDate = (AppointmentTypeEffectiveDate) businessObjectService.retrieve(new AppointmentTypeEffectiveDate(appointmentType.getAppointmentTypeCode(), fiscalYear));
-
+        
+        AppointmentTypeEffectiveDate appointmentTypeEffectiveDate = (AppointmentTypeEffectiveDate) businessObjectService.retrieve(
+                new AppointmentTypeEffectiveDate(appointmentType.getAppointmentTypeCode(), fiscalYear));
+        
         if (appointmentTypeEffectiveDate != null) {
             return appointmentTypeEffectiveDate.getAppointmentTypeBeginDate();
         }
         else {
-            return SpringContext.getBean(UniversityDateService.class).getFirstDateOfFiscalYear(fiscalYear);
+            return dateTimeService.getFirstDateOfFiscalYear(fiscalYear);
         }
     }
 
     public Date getAppointmentTypeEffectiveEndDate(AppointmentType appointmentType, Integer fiscalYear) {
-
-        AppointmentTypeEffectiveDate appointmentTypeEffectiveDate = (AppointmentTypeEffectiveDate) businessObjectService.retrieve(new AppointmentTypeEffectiveDate(appointmentType.getAppointmentTypeCode(), fiscalYear));
-
+        
+        AppointmentTypeEffectiveDate appointmentTypeEffectiveDate = (AppointmentTypeEffectiveDate) businessObjectService.retrieve(
+                new AppointmentTypeEffectiveDate(appointmentType.getAppointmentTypeCode(), fiscalYear));
+        
         if (appointmentTypeEffectiveDate != null) {
             return appointmentTypeEffectiveDate.getAppointmentTypeEndDate();
         }
         else {
-            return SpringContext.getBean(UniversityDateService.class).getLastDateOfFiscalYear(fiscalYear);
+            return dateTimeService.getLastDateOfFiscalYear(fiscalYear);
         }
     }
 
@@ -807,10 +797,22 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         this.businessObjectService = businessObjectService;
     }
 
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
+    }
+
     public void setBudgetFringeRateService(BudgetFringeRateService budgetFringeRateService) {
         this.budgetFringeRateService = budgetFringeRateService;
     }
 
+    /**
+     * Sets the kualiConfigurationService attribute value.
+     * 
+     * @param kualiConfigurationService The kualiConfigurationService to set.
+     */
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
+    }
 
     public class PeriodSalary {
         private int workDaysInPeriod;
@@ -842,10 +844,5 @@ public class BudgetPersonnelServiceImpl implements BudgetPersonnelService {
         public void setWorkDaysInPeriod(int workDaysInPeriod) {
             this.workDaysInPeriod = workDaysInPeriod;
         }
-    }
-
-
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
     }
 }

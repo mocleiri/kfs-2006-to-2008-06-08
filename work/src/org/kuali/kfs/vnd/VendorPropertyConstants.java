@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@ package org.kuali.module.vendor;
 
 /**
  * Property name constants.
+ * 
  */
 public class VendorPropertyConstants {
-
+    
     public static final String DATA_OBJ_MAINT_CD_ACTIVE_IND = "dataObjectMaintenanceCodeActiveIndicator";
-
+    
     public static final String VENDOR_HEADER_PREFIX = "vendorHeader.";
     public static final String VENDOR_NUMBER = "vendorNumber";
     public static final String VENDOR_FAX_NUMBER = "vendorFaxNumber";
@@ -39,7 +40,6 @@ public class VendorPropertyConstants {
     public static final String VENDOR_DEFAULT_ADDRESS_INDICATOR = "vendorDefaultAddressIndicator";
     public static final String VENDOR_DEFAULT_ADDRESS_CAMPUS = "vendorCampusCode";
     public static final String VENDOR_SUPPLIER_DIVERSITY_CODE = "vendorSupplierDiversities.vendorSupplierDiversityCode";
-    public static final String VENDOR_SUPPLIER_DIVERSITY_ACTIVE = "vendorSupplierDiversities.active";
     public static final String VENDOR_FEIN_SSN_INDICATOR = "vendorFeinSocialSecurityNumberIndicator";
     public static final String VENDOR_TAX_NUMBER_ONLY = "vendorTaxNumber";
     public static final String VENDOR_NAME = "vendorName";
@@ -58,7 +58,7 @@ public class VendorPropertyConstants {
     public static final String VENDOR_DEBARRED_INDICATOR = "vendorHeader.vendorDebarredIndicator";
     public static final String VENDOR_FOREIGN_INDICATOR = "vendorHeader.vendorForeignIndicator";
     public static final String VENDOR_INACTIVE_REASON = "vendorInactiveReasonCode";
-
+    
     public static final String VENDOR_PAYMENT_TERMS = "vendorPaymentTerms";
     public static final String VENDOR_SHIPPING_TITLE = "vendorShippingTitle";
     public static final String VENDOR_SHIPPING_PAYMENT_TERMS = "vendorShippingPaymentTerms";
@@ -69,8 +69,7 @@ public class VendorPropertyConstants {
     public static final String VENDOR_HEADER_GENERATED_ID = "vendorHeaderGeneratedIdentifier";
     public static final String VENDOR_ALIAS_NAME = "vendorAliasName";
     public static final String VENDOR_ALIAS_NAME_FULL_PATH = "vendorAliases.vendorAliasName";
-    public static final String VENDOR_ALIAS_ACTIVE = "vendorAliases.active";
-
+    
     public static final String CONTRACT_LANGUAGE_CREATE_DATE = "contractLanguageCreateDate";
 
     // Vendor contracts
@@ -79,15 +78,15 @@ public class VendorPropertyConstants {
     public static final String VENDOR_CONTRACT_BEGIN_DATE = "vendorContractBeginningDate";
     public static final String VENDOR_CONTRACT_END_DATE = "vendorContractEndDate";
     public static final String VENDOR_CONTRACT_NAME = "vendorContractName";
-
+    
     // Vendor contract organizations
     public static final String VENDOR_CONTRACT_ORGANIZATION = "vendorContractOrganizations";
     public static final String VENDOR_CONTRACT_ORGANIZATION_APO_LIMIT = "vendorContractPurchaseOrderLimitAmount";
     public static final String VENDOR_CONTRACT_CHART_OF_ACCOUNTS_CODE = "chartOfAccountsCode";
     public static final String VENDOR_CONTRACT_ORGANIZATION_CODE = "organizationCode";
-
+    
     // Vendor customer number
     public static final String VENDOR_CUSTOMER_NUMBER_CHART_OF_ACCOUNTS_CODE = "chartOfAccountsCode";
     public static final String VENDOR_CUSTOMER_NUMBER_ORGANIZATION_CODE = "vendorOrganizationCode";
-
+    
 }

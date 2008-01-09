@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,189 +15,173 @@
  */
 package org.kuali.module.gl.service.impl;
 
-import java.io.File;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.kuali.Constants;
+import org.kuali.core.mail.InvalidAddressException;
+import org.kuali.core.mail.MailMessage;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.batch.BatchInputFileType;
-import org.kuali.kfs.service.BatchInputFileService;
-import org.kuali.module.gl.bo.OriginEntryGroup;
-import org.kuali.module.gl.bo.OriginEntrySource;
-import org.kuali.module.gl.service.CollectorHelperService;
-import org.kuali.module.gl.service.CollectorScrubberService;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.service.MailService;
+import org.kuali.module.gl.GLConstants;
+import org.kuali.module.gl.collector.xml.CollectorFileHandler;
+import org.kuali.module.gl.collector.xml.CollectorFileParser;
+import org.kuali.module.gl.collector.xml.FileReadException;
+import org.kuali.module.gl.collector.xml.XmlHeader;
+import org.kuali.module.gl.collector.xml.XmlTrailer;
+import org.kuali.module.gl.collector.xml.impl.CollectorFileHandlerImpl;
+import org.kuali.module.gl.collector.xml.impl.HardEditHandler;
 import org.kuali.module.gl.service.CollectorService;
+import org.kuali.module.gl.service.InterDepartmentalBillingService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
-import org.kuali.module.gl.service.RunDateService;
-import org.kuali.module.gl.util.CollectorReportData;
-import org.kuali.module.gl.util.CollectorScrubberStatus;
-import org.kuali.module.gl.util.LedgerEntryHolder;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
-/**
- * The base implementation of the Collector service
- */
-@Transactional
-public class CollectorServiceImpl implements CollectorService {
+public class CollectorServiceImpl implements CollectorService, BeanFactoryAware {
     private static Logger LOG = Logger.getLogger(CollectorServiceImpl.class);
 
-    private CollectorHelperService collectorHelperService;
-    private BatchInputFileService batchInputFileService;
-    private BatchInputFileType collectorInputFileType;
+    private InterDepartmentalBillingService interDepartmentalBillingService;
+    private OriginEntryService originEntryService;
     private OriginEntryGroupService originEntryGroupService;
+    private KualiConfigurationService kualiConfigurationService;
+    private MailService mailService;
     private DateTimeService dateTimeService;
-    private CollectorScrubberService collectorScrubberService;
-    private RunDateService runDateService;
+    private BeanFactory beanFactory;
 
-    /**
-     * performs collection
-     * 
-     * @return status information related to the collection execution
-     */
-    public CollectorReportData performCollection() {
-        List<String> fileNamesToLoad = batchInputFileService.listInputFileNamesWithDoneFile(collectorInputFileType);
-        List<String> processedFiles = new ArrayList();
+    public void loadCollectorFile(String fileName) {
+        CollectorFileParser collectorFileParser = (CollectorFileParser) beanFactory.getBean(GLConstants.LookupableBeanKeys.COLLECTOR_FILE_PARSER);
+        doHardEditParse(collectorFileParser, fileName);
+        List errors = collectorFileParser.getFileHandler().getErrorMessages();
+        if (errors.isEmpty())
+            doCollectorFileParse(collectorFileParser, fileName);
+        sendEmail(collectorFileParser.getFileHandler());
+    }
 
-        Date executionDate = dateTimeService.getCurrentSqlDate();
+    private void doHardEditParse(CollectorFileParser collectorFileParser, String fileName) {
+        HardEditHandler hardEditHandler = new HardEditHandler();
+        hardEditHandler.clear();
+        collectorFileParser.setFileHandler(hardEditHandler);
+        try {
+            InputStream inputStream1 = new FileInputStream(fileName);
+            collectorFileParser.parse(inputStream1);
+        }
+        catch (FileReadException fre) {
+            // Do something here.
+        }
+        catch (FileNotFoundException fnfe) {
+            // Do something here.
+        }
+    }
 
-        Date runDate = new Date(runDateService.calculateRunDate(executionDate).getTime());
-        OriginEntryGroup group = originEntryGroupService.createGroup(runDate, OriginEntrySource.COLLECTOR, true, false, true);
-        CollectorReportData collectorReportData = new CollectorReportData();
-        List<CollectorScrubberStatus> collectorScrubberStatuses = new ArrayList<CollectorScrubberStatus>();
+    private void sendEmail(CollectorFileHandler collectorFileHandler) {
+        LOG.debug("sendNoteEmails() starting");
+        MailMessage message = new MailMessage();
+
+        message.setFromAddress(kualiConfigurationService.getApplicationParameterValue("Kuali.GeneralLedger.Collector", "Kuali.GeneralLedger.EmailAddress.DoNotReply"));
+        message.setSubject(kualiConfigurationService.getApplicationParameterValue("Kuali.GeneralLedger.Collector", "SubjectLine"));
+
+        String body = createMessageBody(collectorFileHandler);
+
+        message.setMessage(body);
+
+        String email = collectorFileHandler.getHeader().getWorkgroupName();
+        message.addToAddress(email);
 
         try {
-            for (String inputFileName : fileNamesToLoad) {
-                boolean processSuccess = false;
-                try {
-                    LOG.info("Collecting file: " + inputFileName);
-                    processSuccess = collectorHelperService.loadCollectorFile(inputFileName, group, collectorReportData, collectorScrubberStatuses);
-                }
-                catch (RuntimeException e) {
-                    LOG.error("Caught exception trying to load collector file: " + inputFileName, e);
-                }
-                processedFiles.add(inputFileName);
+            mailService.sendMessage(message);
+        }
+        catch (InvalidAddressException e) {
+            LOG.error("sendErrorEmail() Invalid email address. Message not sent", e);
+        }
+    }
+
+    private String createMessageBody(CollectorFileHandler collectorFileHandler) {
+        StringBuffer body = new StringBuffer();
+        XmlHeader header = collectorFileHandler.getHeader();
+        XmlTrailer trailer = collectorFileHandler.getTrailer();
+        body.append("Header Information:\n\n");
+        body.append("Chart: " + header.getChartOfAccountsCode() + "\n");
+        body.append("Org: " + header.getOrganizationCode() + "\n");
+        body.append("Contact: " + header.getContactPerson() + "\n");
+        body.append("Email: " + header.getWorkgroupName() + "\n");
+        body.append("File Date: " + header.getTransmissionDate() + "\n\n");
+        body.append("Summary Totals:\n");
+        // SUMMARY TOTALS HERE
+        body.append("    Total Records: " + String.valueOf(trailer.getTotalRecords().intValue()) + "\n");
+        body.append("    Total Amount: " + trailer.getTotalAmount() + "\n\n");
+        body.append("Reported Errors:\n");
+        // ERRORS GO HERE
+        List errorMessages = collectorFileHandler.getErrorMessages();
+        if (errorMessages.isEmpty()) {
+            body.append("----- NO ERRORS TO REPORT -----\nFiles have been added to the system.");
+        }
+        else {
+            Iterator iter = errorMessages.iterator();
+            while (iter.hasNext()) {
+                String currentMessage = (String) iter.next();
+                body.append(currentMessage + "\n");
             }
-            updateCollectorReportDataWithExecutionStatistics(collectorReportData, collectorScrubberStatuses);
+            body.append("\n----- THE RECORDS WERE NOT SAVED TO THE DATABASE -----");
         }
-        finally {
-            collectorScrubberService.removeTempGroups(collectorScrubberStatuses);
-            group.setProcess(true);
-            originEntryGroupService.save(group);
-            removeDoneFiles(processedFiles);
-        }
-        return collectorReportData;
+        return body.toString();
     }
 
-    /**
-     * Clears out associated .done files for the processed data files.
-     * @param dataFileNames the name of files with done files to remove
-     */
-    private void removeDoneFiles(List<String> dataFileNames) {
-        for (String dataFileName : dataFileNames) {
-            File doneFile = new File(StringUtils.substringBeforeLast(dataFileName, ".") + ".done");
-            if (doneFile.exists()) {
-                doneFile.delete();
-            }
+    private CollectorFileHandlerImpl doCollectorFileParse(CollectorFileParser collectorFileParser, String fileName) {
+        CollectorFileHandlerImpl collectorFileHandler = new CollectorFileHandlerImpl(originEntryService, interDepartmentalBillingService, originEntryGroupService, dateTimeService);
+        collectorFileParser.setFileHandler(collectorFileHandler);
+        try {
+            InputStream inputStream2 = new FileInputStream(fileName);
+            collectorFileParser.parse(inputStream2);
+            return collectorFileHandler;
+        }
+        catch (FileReadException fre) {
+            return null;
+        }
+        catch (FileNotFoundException fnfe) {
+            return null;
         }
     }
 
-    public void setCollectorHelperService(CollectorHelperService collectorHelperService) {
-        this.collectorHelperService = collectorHelperService;
+    public void setInterDepartmentalBillingService(InterDepartmentalBillingService interDepartmentalBillingService) {
+        this.interDepartmentalBillingService = interDepartmentalBillingService;
     }
 
-    public void setBatchInputFileService(BatchInputFileService batchInputFileService) {
-        this.batchInputFileService = batchInputFileService;
-    }
-
-    public void setCollectorInputFileType(BatchInputFileType collectorInputFileType) {
-        this.collectorInputFileType = collectorInputFileType;
-    }
-
-    /**
-     * Gets the originEntryGroupService attribute.
-     * 
-     * @return Returns the originEntryGroupService.
-     */
-    public OriginEntryGroupService getOriginEntryGroupService() {
-        return originEntryGroupService;
-    }
-
-    /**
-     * Sets the originEntryGroupService attribute value.
-     * 
-     * @param originEntryGroupService The originEntryGroupService to set.
-     */
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }
 
-    /**
-     * Gets the dateTimeService attribute.
-     * 
-     * @return Returns the dateTimeService.
-     */
-    public DateTimeService getDateTimeService() {
-        return dateTimeService;
+    public void setOriginEntryService(OriginEntryService originEntryService) {
+        this.originEntryService = originEntryService;
     }
 
-    /**
-     * Sets the dateTimeService attribute value.
-     * 
-     * @param dateTimeService The dateTimeService to set.
-     */
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
+    }
+
+    public String getStagingDirectory() {
+        return kualiConfigurationService.getPropertyString(Constants.GL_COLLECTOR_STAGING_DIRECTORY);
+    }
+
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+
+    public static void setLOG(Logger log) {
+        LOG = log;
+    }
+
     public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
 
-    /**
-     * Gets the collectorScrubberService attribute.
-     * 
-     * @return Returns the collectorScrubberService.
-     */
-    public CollectorScrubberService getCollectorScrubberService() {
-        return collectorScrubberService;
-    }
-
-    /**
-     * Sets the collectorScrubberService attribute value.
-     * 
-     * @param collectorScrubberService The collectorScrubberService to set.
-     */
-    public void setCollectorScrubberService(CollectorScrubberService collectorScrubberService) {
-        this.collectorScrubberService = collectorScrubberService;
-    }
-
-    /**
-     * Adds execution statistics to the Collector run
-     * 
-     * @param collectorReportData data gathered from the run of the Collector
-     * @param collectorScrubberStatuses a List of CollectorScrubberStatus records
-     */
-    protected void updateCollectorReportDataWithExecutionStatistics(CollectorReportData collectorReportData, List<CollectorScrubberStatus> collectorScrubberStatuses) {
-        Collection<OriginEntryGroup> inputGroups = new ArrayList<OriginEntryGroup>();
-
-        // NOTE: this implementation does not support the use of multiple origin entry group service/origin entry services
-        for (CollectorScrubberStatus collectorScrubberStatus : collectorScrubberStatuses) {
-            inputGroups.add(collectorScrubberStatus.getValidGroup());
-        }
-
-        if (inputGroups.size() > 0 && collectorScrubberStatuses.size() > 0) {
-            OriginEntryService collectorScrubberOriginEntryService = collectorScrubberStatuses.get(0).getOriginEntryService();
-            LedgerEntryHolder ledgerEntryHolder = collectorScrubberOriginEntryService.getSummaryByGroupId(inputGroups);
-            collectorReportData.setLedgerEntryHolder(ledgerEntryHolder);
-        }
-    }
-
-    public RunDateService getRunDateService() {
-        return runDateService;
-    }
-
-    public void setRunDateService(RunDateService runDateService) {
-        this.runDateService = runDateService;
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
     }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/OffsetAccount.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +20,15 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCodeCurrent;
 
 /**
- * This class represents an offset account business object.
+ * 
  */
-public class OffsetAccount extends PersistableBusinessObjectBase {
+public class OffsetAccount extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String accountNumber;
@@ -51,6 +53,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -60,6 +63,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -70,6 +74,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the accountNumber attribute.
      * 
      * @return Returns the accountNumber
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -79,6 +84,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Sets the accountNumber attribute.
      * 
      * @param accountNumber The accountNumber to set.
+     * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -89,6 +95,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the financialOffsetObjectCode attribute.
      * 
      * @return Returns the financialOffsetObjectCode
+     * 
      */
     public String getFinancialOffsetObjectCode() {
         return financialOffsetObjectCode;
@@ -98,6 +105,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Sets the financialOffsetObjectCode attribute.
      * 
      * @param financialOffsetObjectCode The financialOffsetObjectCode to set.
+     * 
      */
     public void setFinancialOffsetObjectCode(String financialOffsetObjectCode) {
         this.financialOffsetObjectCode = financialOffsetObjectCode;
@@ -108,6 +116,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the financialOffsetChartOfAccountCode attribute.
      * 
      * @return Returns the financialOffsetChartOfAccountCode
+     * 
      */
     public String getFinancialOffsetChartOfAccountCode() {
         return financialOffsetChartOfAccountCode;
@@ -117,6 +126,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Sets the financialOffsetChartOfAccountCode attribute.
      * 
      * @param financialOffsetChartOfAccountCode The financialOffsetChartOfAccountCode to set.
+     * 
      */
     public void setFinancialOffsetChartOfAccountCode(String financialOffsetChartOfAccountCode) {
         this.financialOffsetChartOfAccountCode = financialOffsetChartOfAccountCode;
@@ -127,6 +137,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the financialOffsetAccountNumber attribute.
      * 
      * @return Returns the financialOffsetAccountNumber
+     * 
      */
     public String getFinancialOffsetAccountNumber() {
         return financialOffsetAccountNumber;
@@ -136,6 +147,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Sets the financialOffsetAccountNumber attribute.
      * 
      * @param financialOffsetAccountNumber The financialOffsetAccountNumber to set.
+     * 
      */
     public void setFinancialOffsetAccountNumber(String financialOffsetAccountNumber) {
         this.financialOffsetAccountNumber = financialOffsetAccountNumber;
@@ -146,6 +158,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the chart attribute.
      * 
      * @return Returns the chart
+     * 
      */
     public Chart getChart() {
         return chart;
@@ -165,6 +178,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the account attribute.
      * 
      * @return Returns the account
+     * 
      */
     public Account getAccount() {
         return account;
@@ -184,6 +198,7 @@ public class OffsetAccount extends PersistableBusinessObjectBase {
      * Gets the financialOffsetChartOfAccount attribute.
      * 
      * @return Returns the financialOffsetChartOfAccount
+     * 
      */
     public Chart getFinancialOffsetChartOfAccount() {
         return financialOffsetChartOfAccount;
