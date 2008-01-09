@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,6 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 
-/**
- * This class generates a report for balance encumbrance
- */
 public class BalanceEncumbranceReport {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceEncumbranceReport.class);
 
@@ -51,11 +48,6 @@ public class BalanceEncumbranceReport {
         public String title;
         public String type;
 
-        /**
-         * Adds date, title, and page number on end page.
-         * 
-         * @see com.lowagie.text.pdf.PdfPageEventHelper#onEndPage(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
-         */
         public void onEndPage(PdfWriter writer, Document document) {
             try {
                 Rectangle page = document.getPageSize();
@@ -109,23 +101,6 @@ public class BalanceEncumbranceReport {
     public void generateReport(Date runDate, List<GlSummary> glBalances, String fiscalYearName, List<String> balanceTypeCodes, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
 
-        String reportTitle = "GL Summary for Fiscal Year " + fiscalYearName;
-        this.generateReport(glBalances, balanceTypeCodes, runDate, reportTitle, fileprefix, destinationDirectory);
-    }
-
-    /**
-     * Generates report for balance encumbrance
-     * 
-     * @param glBalances balances for G/L entries
-     * @param balanceTypeCodes balance type codes included in report
-     * @param runDate date report was run
-     * @param reportTitle title for report
-     * @param fileprefix file prefix for report
-     * @param destinationDirectory destination of report file
-     */
-    public void generateReport(List<GlSummary> glBalances, List<String> balanceTypeCodes, Date runDate, String reportTitle, String fileprefix, String destinationDirectory) {
-        LOG.debug("generateReport() started");
-
         Font headerFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
         Font textFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.NORMAL);
 
@@ -134,7 +109,7 @@ public class BalanceEncumbranceReport {
         PageHelper helper = new PageHelper();
         helper.runDate = runDate;
         helper.headerFont = headerFont;
-        helper.title = reportTitle;
+        helper.title = "GL Summary for Fiscal Year " + fiscalYearName;
         helper.type = "Balance Type of ";
 
         int total = balanceTypeCodes.size();
@@ -180,7 +155,7 @@ public class BalanceEncumbranceReport {
 
                 cell = new PdfPCell(new Phrase(gls.getFundGroup(), textFont));
                 balances.addCell(cell);
-
+                
                 totalAmount = gls.getBeginningBalance().add(gls.getAnnualBalance());
                 totalAmount = totalAmount.add(gls.getCgBeginningBalance());
                 cell = new PdfPCell(new Phrase(nf.format(totalAmount.doubleValue()), textFont));
@@ -190,7 +165,7 @@ public class BalanceEncumbranceReport {
             // Now add the total line
             cell = new PdfPCell(new Phrase("Total", textFont));
             balances.addCell(cell);
-
+            
             totalAmount = totals.getBeginningBalance().add(totals.getAnnualBalance());
             totalAmount = totalAmount.add(totals.getCgBeginningBalance());
             cell = new PdfPCell(new Phrase(nf.format(totalAmount.doubleValue()), textFont));

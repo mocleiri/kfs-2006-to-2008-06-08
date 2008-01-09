@@ -1,156 +1,148 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
-
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
-import static org.kuali.test.fixtures.AccountingLineFixture.GEC_LINE1;
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.TransactionalDocumentDictionaryService;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.service.AccountingPeriodService;
-import org.kuali.module.financial.bo.GECSourceAccountingLine;
-import org.kuali.module.financial.bo.GECTargetAccountingLine;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.DocumentTestUtils;
-import org.kuali.test.fixtures.AccountingLineFixture;
+import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.test.parameters.DocumentParameter;
+import org.kuali.test.parameters.TransactionalDocumentParameter;
 
 /**
  * This class is used to test GeneralErrorCorrectionDocument.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-@ConfigureContext(session = KHUNTLEY)
-public class GeneralErrorCorrectionDocumentTest extends KualiTestBase {
+public class GeneralErrorCorrectionDocumentTest extends TransactionalDocumentTestBase {
+    public static final String COLLECTION_NAME = "GeneralErrorCorrectionDocumentTest.collection1";
+    public static final String USER_NAME = "user1";
+    public static final String DOCUMENT_PARAMETER = "generalErrorCorrectionDocumentParameter1";
+    public static final String SOURCE_LINE1 = "sourceLine2";
+    public static final String TARGET_LINE1 = "targetLine2";
+    public static final String SERIALIZED_LINE_PARAMTER = "serializedLine1";
 
-    public static final Class<GeneralErrorCorrectionDocument> DOCUMENT_CLASS = GeneralErrorCorrectionDocument.class;
-
-    private Document getDocumentParameterFixture() throws Exception {
-        return DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), GeneralErrorCorrectionDocument.class);
+    /**
+     * Get names of fixture collections test class is using.
+     * 
+     * @return String[]
+     */
+    public String[] getFixtureCollectionNames() {
+        return new String[] { COLLECTION_NAME };
     }
 
-    private List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(GEC_LINE1);
+    /**
+     * 
+     * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
+     */
+    public DocumentParameter getDocumentParameterFixture() {
+        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    }
+
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
+     */ 
+    public List getTargetAccountingLineParametersFromFixtures() {
+        ArrayList list = new ArrayList();
+        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject());
         return list;
     }
 
-    private List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(GEC_LINE1);
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
+     */
+    public List getSourceAccountingLineParametersFromFixtures() {
+        ArrayList list = new ArrayList();
+        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject());
         return list;
     }
 
-    private GeneralErrorCorrectionDocument buildDocument() throws Exception {
-        // put accounting lines into document parameter for later
-        GeneralErrorCorrectionDocument document = (GeneralErrorCorrectionDocument) getDocumentParameterFixture();
-
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-
-            document.addSourceAccountingLine(sourceFixture.createAccountingLine(GECSourceAccountingLine.class, document.getDocumentNumber(), document.getPostingYear(), document.getNextSourceLineNumber()));
-        }
-
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            document.addTargetAccountingLine(targetFixture.createAccountingLine(GECTargetAccountingLine.class, document.getDocumentNumber(), document.getPostingYear(), document.getNextTargetLineNumber()));
-        }
-
-        return document;
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
+     */
+    public String getUserName() {
+        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
     }
 
-
-    public final void testAddAccountingLine() throws Exception {
-        List<SourceAccountingLine> sourceLines = generateSouceAccountingLines();
-        List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
-        int expectedSourceTotal = sourceLines.size();
-        int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
-    }
-
-    public final void testGetNewDocument() throws Exception {
-        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, SpringContext.getBean(DocumentService.class));
-    }
-
-    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-
-    }
-
-    public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
-    }
-
-    public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-    }
-
-    public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_invalidYear(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class), SpringContext.getBean(AccountingPeriodService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), SpringContext.getBean(DocumentService.class), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), SpringContext.getBean(DocumentService.class), getExpectedPrePeCount());
-    }
-
-
-    // test util methods
-    private List<SourceAccountingLine> generateSouceAccountingLines() throws Exception {
-        List<SourceAccountingLine> sourceLines = new ArrayList<SourceAccountingLine>();
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceLines.add(sourceFixture.createAccountingLine(GECSourceAccountingLine.class, sourceFixture.debitCreditCode));
-        }
-
-        return sourceLines;
-    }
-
-    private List<TargetAccountingLine> generateTargetAccountingLines() throws Exception {
-        List<TargetAccountingLine> targetLines = new ArrayList<TargetAccountingLine>();
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetLines.add(targetFixture.createAccountingLine(GECTargetAccountingLine.class, targetFixture.debitCreditCode));
-        }
-
-        return targetLines;
-    }
-
-    private int getExpectedPrePeCount() {
-        return 4;
-    }
-
+    /*
+     * OLD CODE FOR FUTURE CONSIDERATION WHEN WE GET TO THIS DOCUMENT This should probably go in the rule test class
+     * 
+     * public void testFailBusinessRules() throws WorkflowException, IllegalObjectStateException, Exception {
+     * GeneralErrorCorrectionDocument documentOne = getBasicDocument(); SourceAccountingLine sourceAccountingLineOne =
+     * (SourceAccountingLine) DocumentServiceTestUtil.createLine(SourceAccountingLine.class, "UA", "1912610", "BEER", "1175", null,
+     * "BOB", new Integer(2005), new KualiDecimal("2.50"), null, "", "", "", "");
+     * sourceAccountingLineOne.getObjectCode().setFinancialObjectType(new ObjectType("IC"));
+     * 
+     * assertFalse(SpringServiceLocator.getKualiRuleService().applyRules( new AddAccountingLineEvent(documentOne,
+     * sourceAccountingLineOne)));
+     * 
+     * GeneralErrorCorrectionDocument documentTwo = getBasicDocument(); SourceAccountingLine sourceAccountingLineTwo =
+     * (SourceAccountingLine) DocumentServiceTestUtil.createLine(SourceAccountingLine.class, "UA", "1912610", "BEER", "5120", null,
+     * "BOB", new Integer(2005), new KualiDecimal("2.50"), null, "", "", "", ""); sourceAccountingLineTwo.setObjectType(new
+     * ObjectType("ES")); sourceAccountingLineTwo.getObjectCode().setFinancialObjectSubType(new ObjSubTyp("DR"));
+     * assertFalse(SpringServiceLocator.getKualiRuleService().applyRules( new AddAccountingLineEvent(documentTwo,
+     * sourceAccountingLineTwo)));
+     * 
+     * GeneralErrorCorrectionDocument documentThree = getBasicDocument(); SourceAccountingLine sourceAccountingLineThree =
+     * (SourceAccountingLine) DocumentServiceTestUtil.createLine(SourceAccountingLine.class, "UA", "1912610", "BEER", "5102", null,
+     * "BOB", new Integer(2005), new KualiDecimal("2.50"), null, "", "", "", ""); sourceAccountingLineThree.setObjectType(new
+     * ObjectType("ES")); sourceAccountingLineThree.getObjectCode().setFinancialObjectSubType(new ObjSubTyp("VA"));
+     * 
+     * assertFalse(SpringServiceLocator.getKualiRuleService().applyRules( new AddAccountingLineEvent(documentThree,
+     * sourceAccountingLineThree)));
+     * 
+     * GeneralErrorCorrectionDocument documentFour = getBasicDocument(); SourceAccountingLine sourceAccountingLineFour =
+     * (SourceAccountingLine) DocumentServiceTestUtil.createLine(SourceAccountingLine.class, "UA", "1912610", "BEER", "3050", null,
+     * "BOB", new Integer(2005), new KualiDecimal("2.50"), null, "", "", "", ""); sourceAccountingLineFour.setObjectType(new
+     * ObjectType("EX")); sourceAccountingLineFour.getObjectCode().setFinancialObjectSubType(new ObjSubTyp("HW"));
+     * assertFalse(SpringServiceLocator.getKualiRuleService().applyRules( new AddAccountingLineEvent(documentFour,
+     * sourceAccountingLineFour)));
+     * 
+     * GeneralErrorCorrectionDocument documentFive = getBasicDocument(); SourceAccountingLine sourceAccountingLineFive =
+     * (SourceAccountingLine) DocumentServiceTestUtil.createLine(SourceAccountingLine.class, "UA", "1912610", "BEER", "8000", null,
+     * "BOB", new Integer(2005), new KualiDecimal("2.50"), null, "", "", "", ""); sourceAccountingLineFive.setObjectType(new
+     * ObjectType("AS")); sourceAccountingLineFive.getObjectCode().setFinancialObjectSubType(new ObjSubTyp("CA"));
+     * assertFalse(SpringServiceLocator.getKualiRuleService().applyRules( new AddAccountingLineEvent(documentFive,
+     * sourceAccountingLineFive)));
+     * 
+     * GeneralErrorCorrectionDocument documentSix = getBasicDocument(); SourceAccountingLine sourceAccountingLineSix =
+     * (SourceAccountingLine) DocumentServiceTestUtil.createLine(SourceAccountingLine.class, "UA", "1912610", "BEER", "5166", null,
+     * "BOB", new Integer(2005), new KualiDecimal("2.50"), null, "", "", "", ""); sourceAccountingLineSix.setObjectType(new
+     * ObjectType("ES")); sourceAccountingLineSix.getObjectCode().setFinancialObjectSubType(new ObjSubTyp("NA"));
+     * assertFalse(SpringServiceLocator.getKualiRuleService().applyRules( new AddAccountingLineEvent(documentSix,
+     * sourceAccountingLineSix))); }
+     * 
+     * public void testPassBusinessRules() throws WorkflowException, IllegalObjectStateException, Exception {
+     * GeneralErrorCorrectionDocument documentOne = getBasicDocument(); SourceAccountingLine sourceAccountingLineOne =
+     * (SourceAccountingLine) DocumentServiceTestUtil.createLine(SourceAccountingLine.class, "UA", "1912610", "BEER", "2000", null,
+     * "BOB", new Integer(2005), new KualiDecimal("2.50"), null, "", "", "", "");
+     * sourceAccountingLineOne.getObjectCode().setFinancialObjectType(new ObjectType("ES"));
+     * sourceAccountingLineOne.getObjectCode().setFinancialObjectSubType(new ObjSubTyp("SA"));
+     * 
+     * assertFalse(SpringServiceLocator.getKualiRuleService().applyRules( new AddAccountingLineEvent(documentOne,
+     * sourceAccountingLineOne))); }
+     */
 }

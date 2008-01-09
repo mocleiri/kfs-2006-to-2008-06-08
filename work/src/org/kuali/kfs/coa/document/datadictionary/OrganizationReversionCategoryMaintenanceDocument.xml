@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.chart.bo.OrganizationReversionCategory</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +32,14 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>OrganizationReversionCategoryMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiOrganizationReversionCategoryMaintenanceDocument</documentTypeName>
         <documentTypeCode>ORGC</documentTypeCode>
 
-        <label>Organization Reversion Category</label>
+        <label>Organization Reversion Category Maintenance Document</label>
+        <shortLabel>organizationReversionCategoryMaintDoc</shortLabel>
 
         <summary>organizationReversionCategory maintenance document</summary>
         <description>Document used to create or update organizationReversionCategory objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="OrganizationReversionCategory" parameterName="ORGANIZATION_REVERSION_CATEGORY" />
 
         <lockingKeys>
             <field attributeName="organizationReversionCategoryCode" />
@@ -51,9 +51,6 @@
                     <maintainableField name="organizationReversionCategoryCode" required="true" />
                     <maintainableField name="organizationReversionCategoryName" required="true" />
                     <maintainableField name="organizationReversionSortCode" required="true" />
-                    <maintainableField name="organizationReversionCategoryActiveIndicator" required="true">         
-                    <defaultValue>true</defaultValue>
-                    </maintainableField>
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

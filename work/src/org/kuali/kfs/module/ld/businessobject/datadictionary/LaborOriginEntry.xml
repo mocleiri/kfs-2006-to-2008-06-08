@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.LaborOriginEntry">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Labor Origin Entry Inquiry</title>
@@ -50,8 +35,8 @@
                         <field attributeName="laborLedgerOriginalSubAccountNumber" />
                         <field attributeName="organizationDocumentNumber" />
                         <field attributeName="organizationReferenceId" />
-                        <field attributeName="entryGroupId" />
-                        <field attributeName="entryId" />
+                        <field attributeName="originEntryGroupIdentifier" />
+                        <field attributeName="originEntryIdentifier" />
                         <field attributeName="payGroup" />
                         <field attributeName="payPeriodEndDate" />
                         <field attributeName="payrollEndDateFiscalPeriodCode" />
@@ -90,7 +75,7 @@
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
-                    <sortAttribute attributeName="entryId" />
+                    <sortAttribute attributeName="originEntryIdentifier" />
                 </sortAttributes>
             </defaultSort>
 
@@ -118,8 +103,8 @@
                 <lookupField attributeName="laborLedgerOriginalSubAccountNumber" required="false" />
                 <lookupField attributeName="organizationDocumentNumber" required="false" />
                 <lookupField attributeName="organizationReferenceId" required="false" />
-                <lookupField attributeName="entryGroupId" required="false" />
-                <lookupField attributeName="entryId" required="false" />
+                <lookupField attributeName="originEntryGroupIdentifier" required="false" />
+                <lookupField attributeName="originEntryIdentifier" required="false" />
                 <lookupField attributeName="payGroup" required="false" />
                 <lookupField attributeName="payPeriodEndDate" required="false" />
                 <lookupField attributeName="payrollEndDateFiscalPeriodCode" required="false" />
@@ -172,8 +157,8 @@
                 <field attributeName="laborLedgerOriginalSubAccountNumber" />
                 <field attributeName="organizationDocumentNumber" />
                 <field attributeName="organizationReferenceId" />
-                <field attributeName="entryGroupId" />
-                <field attributeName="entryId" />
+                <field attributeName="originEntryGroupIdentifier" />
+                <field attributeName="originEntryIdentifier" />
                 <field attributeName="payGroup" />
                 <field attributeName="payPeriodEndDate" />
                 <field attributeName="payrollEndDateFiscalPeriodCode" />
@@ -215,6 +200,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
 			</attribute>
 
             <attribute name="chartOfAccountsCode" forceUppercase="true">
@@ -227,6 +215,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="earnCode" forceUppercase="true">
@@ -239,6 +230,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>earnCode</summary>
+                <description>earnCode description...</description>
 			</attribute>
 
             <attribute name="emplid" forceUppercase="true">
@@ -251,6 +245,9 @@
                 <control>
                     <text size="13" />
                 </control>
+
+                <summary>emplid</summary>
+                <description>emplid description...</description>
 			</attribute>
 
             <attribute name="employeeRecord" forceUppercase="true">
@@ -263,6 +260,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>employeeRecord</summary>
+                <description>employeeRecord description...</description>
 			</attribute>
 
             <attribute name="financialBalanceTypeCode" forceUppercase="true">
@@ -275,6 +275,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>financialBalanceTypeCode</summary>
+                <description>financialBalanceTypeCode description...</description>
 			</attribute>
 
             <attribute name="financialDocumentApprovedCode" forceUppercase="true">
@@ -287,6 +290,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>financialDocumentApprovedCode</summary>
+                <description>financialDocumentApprovedCode description...</description>
 			</attribute>
 
             <attribute name="documentNumber" forceUppercase="true">
@@ -299,6 +305,9 @@
                 <control>
                     <text size="16" />
                 </control>
+
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
 			</attribute>
 
             <attribute name="financialDocumentReversalDate" forceUppercase="true">
@@ -311,6 +320,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>financialDocumentReversalDate</summary>
+                <description>financialDocumentReversalDate description...</description>
 			</attribute>
 
             <attribute name="financialDocumentTypeCode" forceUppercase="true">
@@ -323,6 +335,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>financialDocumentTypeCode</summary>
+                <description>financialDocumentTypeCode description...</description>
 			</attribute>
 
             <attribute name="financialObjectCode" forceUppercase="true">
@@ -335,6 +350,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
 			</attribute>
 
             <attribute name="financialObjectTypeCode" forceUppercase="true">
@@ -347,6 +365,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>financialObjectTypeCode</summary>
+                <description>financialObjectTypeCode description...</description>
 			</attribute>
 
             <attribute name="financialSubObjectCode" forceUppercase="true">
@@ -359,6 +380,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
 			</attribute>
 
             <attribute name="financialSystemOriginationCode" forceUppercase="false">
@@ -368,6 +392,8 @@
                 <control>
                     <text size="3" />
                 </control>
+                <summary>originCode</summary>
+                <description>The code corresponding to the system which created the Labor entry, e.g., 01 = Kuali Financial System (KFS).</description>
             </attribute>
 
             <attribute name="grade" forceUppercase="true">
@@ -380,6 +406,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>grade</summary>
+                <description>grade description...</description>
 			</attribute>
 
             <attribute name="hrmsCompany" forceUppercase="true">
@@ -392,6 +421,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>hrmsCompany</summary>
+                <description>hrmsCompany description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalAccountNumber" forceUppercase="true">
@@ -404,6 +436,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>laborLedgerOriginalAccountNumber</summary>
+                <description>laborLedgerOriginalAccountNumber description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalChartOfAccountsCode" forceUppercase="true">
@@ -416,6 +451,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>laborLedgerOriginalChartOfAccountsCode</summary>
+                <description>laborLedgerOriginalChartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalFinancialObjectCode" forceUppercase="true">
@@ -428,6 +466,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>laborLedgerOriginalFinancialObjectCode</summary>
+                <description>laborLedgerOriginalFinancialObjectCode description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalFinancialSubObjectCode" forceUppercase="true">
@@ -440,6 +481,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>laborLedgerOriginalFinancialSubObjectCode</summary>
+                <description>laborLedgerOriginalFinancialSubObjectCode description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalSubAccountNumber" forceUppercase="true">
@@ -452,6 +496,9 @@
                 <control>
                     <text size="7" />
                 </control>
+
+                <summary>laborLedgerOriginalSubAccountNumber</summary>
+                <description>laborLedgerOriginalSubAccountNumber description...</description>
 			</attribute>
 
             <attribute name="organizationDocumentNumber" forceUppercase="true">
@@ -464,6 +511,9 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>organizationDocumentNumber</summary>
+                <description>organizationDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="organizationReferenceId" forceUppercase="true">
@@ -476,9 +526,12 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>organizationReferenceId</summary>
+                <description>organizationReferenceId description...</description>
 			</attribute>
 
-            <attribute name="entryGroupId" forceUppercase="true">
+            <attribute name="originEntryGroupIdentifier" forceUppercase="true">
                 <label>Origin Entry Group Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
@@ -488,9 +541,12 @@
                 <control>
                     <text size="16" />
                 </control>
+
+                <summary>originEntryGroupIdentifier</summary>
+                <description>originEntryGroupIdentifier description...</description>
 			</attribute>
 
-            <attribute name="entryId" forceUppercase="true">
+            <attribute name="originEntryIdentifier" forceUppercase="true">
                 <label>Origin Entry Identifier</label>
                 <shortLabel>Identifier</shortLabel>
 
@@ -500,6 +556,9 @@
                 <control>
                     <text size="16" />
                 </control>
+
+                <summary>originEntryIdentifier</summary>
+                <description>originEntryIdentifier description...</description>
 			</attribute>
 
             <attribute name="payGroup" forceUppercase="true">
@@ -512,6 +571,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>payGroup</summary>
+                <description>payGroup description...</description>
 			</attribute>
 
             <attribute name="payPeriodEndDate" forceUppercase="true">
@@ -524,6 +586,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>payPeriodEndDate</summary>
+                <description>payPeriodEndDate description...</description>
 			</attribute>
 
             <attribute name="payrollEndDateFiscalPeriodCode" forceUppercase="true">
@@ -536,6 +601,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>payrollEndDateFiscalPeriodCode</summary>
+                <description>payrollEndDateFiscalPeriodCode description...</description>
 			</attribute>
 
             <attribute name="payrollEndDateFiscalYear" forceUppercase="true">
@@ -548,6 +616,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>payrollEndDateFiscalYear</summary>
+                <description>payrollEndDateFiscalYear description...</description>
 			</attribute>
 
             <attribute name="positionNumber" forceUppercase="true">
@@ -560,6 +631,9 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>positionNumber</summary>
+                <description>positionNumber description...</description>
 			</attribute>
 
             <attribute name="projectCode" forceUppercase="true">
@@ -572,6 +646,9 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>projectCode</summary>
+                <description>projectCode description...</description>
 			</attribute>
 
             <attribute name="referenceFinancialDocumentNumber" forceUppercase="true">
@@ -584,6 +661,9 @@
                 <control>
                     <text size="16" />
                 </control>
+
+                <summary>referenceFinancialDocumentNumber</summary>
+                <description>referenceFinancialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="referenceFinancialDocumentTypeCode" forceUppercase="true">
@@ -596,6 +676,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>referenceFinancialDocumentTypeCode</summary>
+                <description>referenceFinancialDocumentTypeCode description...</description>
 			</attribute>
 
             <attribute name="referenceFinancialSystemOriginationCode" forceUppercase="true">
@@ -608,6 +691,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>referenceFinancialSystemOriginationCode</summary>
+                <description>referenceFinancialSystemOriginationCode description...</description>
 			</attribute>
 
             <attribute name="runIdentifier" forceUppercase="true">
@@ -620,6 +706,9 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>runIdentifier</summary>
+                <description>runIdentifier description...</description>
 			</attribute>
 
             <attribute name="salaryAdministrationPlan" forceUppercase="true">
@@ -632,6 +721,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>salaryAdministrationPlan</summary>
+                <description>salaryAdministrationPlan description...</description>
 			</attribute>
 
             <attribute name="setid" forceUppercase="true">
@@ -644,6 +736,9 @@
                 <control>
                     <text size="7" />
                 </control>
+
+                <summary>setid</summary>
+                <description>setid description...</description>
 			</attribute>
 
             <attribute name="subAccountNumber" forceUppercase="true">
@@ -656,6 +751,9 @@
                 <control>
                     <text size="7" />
                 </control>
+
+                <summary>subAccountNumber</summary>
+                <description>subAccountNumber description...</description>
 			</attribute>
 
             <attribute name="transactionDate" forceUppercase="true">
@@ -668,6 +766,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>transactionDate</summary>
+                <description>transactionDate description...</description>
 			</attribute>
 
             <attribute name="transactionDateTimeStamp" forceUppercase="true">
@@ -680,6 +781,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>transactionDateTimeStamp</summary>
+                <description>transactionDateTimeStamp description...</description>
 			</attribute>
 
             <attribute name="transactionDebitCreditCode" forceUppercase="true">
@@ -692,6 +796,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>transactionDebitCreditCode</summary>
+                <description>transactionDebitCreditCode description...</description>
 			</attribute>
 
             <attribute name="transactionEncumbranceUpdateCode" forceUppercase="true">
@@ -704,6 +811,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>transactionEncumbranceUpdateCode</summary>
+                <description>transactionEncumbranceUpdateCode description...</description>
 			</attribute>
 
             <attribute name="transactionEntryOffsetCode" forceUppercase="true">
@@ -716,6 +826,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>transactionEntryOffsetCode</summary>
+                <description>transactionEntryOffsetCode description...</description>
 			</attribute>
 
             <attribute name="transactionEntryProcessedTimestamp" forceUppercase="true">
@@ -728,6 +841,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>transactionEntryProcessedTimestamp</summary>
+                <description>transactionEntryProcessedTimestamp description...</description>
 			</attribute>
 
             <attribute name="transactionLedgerEntryAmount" forceUppercase="true">
@@ -740,6 +856,9 @@
                 <control>
                     <text size="21" />
                 </control>
+
+                <summary>transactionLedgerEntryAmount</summary>
+                <description>transactionLedgerEntryAmount description...</description>
 			</attribute>
 
             <attribute name="transactionLedgerEntryDescription" forceUppercase="true">
@@ -752,6 +871,9 @@
                 <control>
                     <text size="42" />
                 </control>
+
+                <summary>transactionLedgerEntryDescription</summary>
+                <description>transactionLedgerEntryDescription description...</description>
 			</attribute>
 
             <attribute name="transactionLedgerEntrySequenceNumber" forceUppercase="true">
@@ -764,6 +886,9 @@
                 <control>
                     <text size="7" />
                 </control>
+
+                <summary>transactionLedgerEntrySequenceNumber</summary>
+                <description>transactionLedgerEntrySequenceNumber description...</description>
 			</attribute>
 
             <attribute name="transactionPostingDate" forceUppercase="true">
@@ -776,6 +901,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>transactionPostingDate</summary>
+                <description>transactionPostingDate description...</description>
 			</attribute>
 
             <attribute name="transactionTotalHours" forceUppercase="true">
@@ -788,6 +916,9 @@
                 <control>
                     <text size="11" />
                 </control>
+
+                <summary>transactionTotalHours</summary>
+                <description>transactionTotalHours description...</description>
 			</attribute>
 
             <attribute name="universityFiscalPeriodCode" forceUppercase="true">
@@ -800,6 +931,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>universityFiscalPeriodCode</summary>
+                <description>universityFiscalPeriodCode description...</description>
 			</attribute>
 
             <attribute name="universityFiscalYear" forceUppercase="true">
@@ -812,6 +946,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>universityFiscalYear</summary>
+                <description>universityFiscalYear description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

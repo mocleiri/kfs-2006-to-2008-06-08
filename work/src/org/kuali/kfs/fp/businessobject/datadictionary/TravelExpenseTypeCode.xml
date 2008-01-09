@@ -1,37 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2005-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.TravelExpenseTypeCode">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Disbursement Voucher Travel Expense Type Inquiry</title>
+            <title>Travel Expense Type Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Disbursement Voucher Travel Expense Type Lookup</title>
+            <title>Travel Expense Type Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.TravelExpenseTypeCode">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Travel Expense Type Code</instructions>
 
@@ -65,6 +54,9 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary>Travel Expense Type Code</summary>
+                <description>The code uniquely identify a travel expense type.</description>
             </attribute>
 
             <attribute name="prepaidExpense" forceUppercase="false">
@@ -76,9 +68,12 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>Prepaid Expense Indicator</summary>
+                <description>Prepaid Expense Indicator</description>
             </attribute>
 
-            <attribute name="name" forceUppercase="true">
+            <attribute name="name" forceUppercase="false">
                 <label>Travel Expense Type Name</label>
                 <shortLabel>Name</shortLabel>
 
@@ -87,12 +82,14 @@
                 <control>
                     <text size="25" />
                 </control>
+
+                <summary>Travel Expense Type Name</summary>
+                <description>Travel Expense Type Name</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Disbursement Voucher Travel Expense Type</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

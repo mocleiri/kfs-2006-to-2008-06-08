@@ -1,39 +1,29 @@
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.HigherEdFunction">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Higher Education Function Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="financialHigherEdFunctionCd" />
                 <field attributeName="financialHigherEdFunctionNm" />
                 <field attributeName="finUnivBdgtOfficeFunctionCd" />
                 <field attributeName="finAicpaFunctionCode" />
                 <field attributeName="financialFederalFunctionCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Higher Education Function Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.HigherEdFunction">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Higher Education Function</instructions>
 
@@ -63,16 +53,19 @@
 
                 <maxLength>4</maxLength>
                 <validationPattern>
-                    <anyCharacter />
+                    <alphaNumeric />
                 </validationPattern>
                 <required>true</required>
 
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>Higher Education Function Code</summary>
+                <description>The code uniquely identifying a particular higher education function.</description>
             </attribute>
 
-            <attribute name="financialHigherEdFunctionNm" forceUppercase="true">
+            <attribute name="financialHigherEdFunctionNm" forceUppercase="false">
                 <label>Higher Education Function Name</label>
                 <shortLabel>Name</shortLabel>
 
@@ -82,17 +75,9 @@
                 <control>
                     <text size="40" />
                 </control>
-            </attribute>
 
-            <attribute name="codeAndDescription" forceUppercase="false">
-                <label>Higher Education Function Code</label>
-                <shortLabel>Higher Education Function Code</shortLabel>
-
-                <maxLength>47</maxLength>
-
-                <control>
-                    <text size="47" />
-                </control>
+                <summary>Higher Education Function Name</summary>
+                <description>Higher Education Function Name...</description>
             </attribute>
 
             <attribute name="finUnivBdgtOfficeFunctionCd" forceUppercase="true">
@@ -105,6 +90,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>University Budget Office Function Code</summary>
+                <description>University Budget Office Function Code...</description>
             </attribute>
 
 
@@ -118,6 +106,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>AICPA Function Code</summary>
+                <description>AICPA Function Code...</description>
             </attribute>
 
 
@@ -131,13 +122,14 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>Federal Function Code</summary>
+                <description>Federal Function Code...</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        
-        <objectLabel>Higher Education Function</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

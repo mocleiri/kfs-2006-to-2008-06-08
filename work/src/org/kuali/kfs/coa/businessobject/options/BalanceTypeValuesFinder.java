@@ -22,9 +22,8 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.chart.service.BalanceTypService;
 
 /**
  * This class returns list of balance type value pairs.
@@ -32,12 +31,10 @@ import org.kuali.module.chart.service.BalanceTypService;
 public class BalanceTypeValuesFinder extends KeyValuesBase {
 
     /**
-     * Creates a list of {@link BalanceTyp) with their code as their key and display value
-     * 
      * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-        Collection balanceTypeCodeCollection = SpringContext.getBean(BalanceTypService.class).getAllBalanceTyps();
+        Collection balanceTypeCodeCollection = SpringServiceLocator.getBalanceTypService().getAllBalanceTyps();
         List balanceTypeCodes = new ArrayList();
         balanceTypeCodes.add(new KeyLabelPair("", ""));
 

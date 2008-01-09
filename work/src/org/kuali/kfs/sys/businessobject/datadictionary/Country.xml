@@ -100,6 +100,5 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Country</objectLabel>
     </businessObject>
 </dictionaryEntry>

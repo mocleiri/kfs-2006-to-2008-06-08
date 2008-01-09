@@ -22,24 +22,19 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.labor.bo.LaborGeneralLedgerEntry;
 import org.kuali.module.labor.dao.LaborGeneralLedgerEntryDao;
 
-/**
- * This is the data access object for labor general ledger entry
- * 
- * @see org.kuali.module.labor.bo.LaborGeneralLedgerEntry
- */
 public class LaborGeneralLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb implements LaborGeneralLedgerEntryDao {
 
     /**
      * @see org.kuali.module.labor.dao.LaborGeneralLedgerEntryDao#getMaxSequenceNumber(org.kuali.module.labor.bo.LaborGeneralLedgerEntry)
      */
     public Integer getMaxSequenceNumber(LaborGeneralLedgerEntry laborGeneralLedgerEntry) {
+        //TODO: this is a piece of duplicate code. We need to refactor it later
         Criteria criteria = new Criteria();
-
+        
         criteria.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, laborGeneralLedgerEntry.getUniversityFiscalYear());
         criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, laborGeneralLedgerEntry.getChartOfAccountsCode());
         criteria.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, laborGeneralLedgerEntry.getAccountNumber());
@@ -57,21 +52,14 @@ public class LaborGeneralLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb imple
         query.setAttributes(new String[] { "max(" + KFSPropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER + ")" });
 
         Iterator iterator = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-        Integer maxSequenceNumber = Integer.valueOf(0);
-
+        Integer maxSequenceNumber = new Integer(0);
+        
         if (iterator.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(iterator);
+            Object[] data = (Object[]) iterator.next();
             if (data[0] != null) {
-                maxSequenceNumber = ((BigDecimal) data[0]).intValue();
+                maxSequenceNumber = ((BigDecimal)data[0]).intValue();
             }
         }
         return maxSequenceNumber;
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.LaborGeneralLedgerEntryDao#save(org.kuali.module.labor.bo.LaborGeneralLedgerEntry)
-     */
-    public void save(LaborGeneralLedgerEntry laborGeneralLedgerEntry) {
-        getPersistenceBrokerTemplate().store(laborGeneralLedgerEntry);
     }
 }

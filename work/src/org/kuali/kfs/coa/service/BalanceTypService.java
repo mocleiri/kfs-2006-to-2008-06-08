@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 package org.kuali.module.chart.service;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
- * This service interface defines methods necessary for retrieving fully populated BalanceType business objects from the database
+ * This service interface defines methods necessary for retreiving fully populated BalanceType business objects from the database
  * that are necessary for transaction processing in the application. This interface defines methods for each balance type that is
  * needed by the application. TODO - Continue to update this with new balance type as they are needed.
+ * 
+ * 
  */
 public interface BalanceTypService {
     /**
@@ -45,7 +46,8 @@ public interface BalanceTypService {
      * 
      * @return
      */
-    
+    public Collection getEncumbranceBalanceTypes();
+
     /**
      * This method retrieves a BalanceTyp instance from the Kuali database by its primary key - the balance typ's code.
      * 
@@ -53,40 +55,4 @@ public interface BalanceTypService {
      * @return A fully populated object instance.
      */
     public BalanceTyp getBalanceTypByCode(String code);
-
-
-    /**
-     * Returns the list of encumbrance-related balance types from options table for a given university fiscal year
-     * 
-     * @param universityFiscalYear
-     * @return
-     */
-    public List<String> getEncumbranceBalanceTypes(Integer universityFiscalYear);
-
-    /**
-     * Returns the cost share encumbrance balance type from options table for a given university fiscal year
-     * 
-     * @param universityFiscalYear
-     * @return
-     */
-    public String getCostShareEncumbranceBalanceType(Integer universityFiscalYear);
-
-
-    /**
-     * Returns the list of encumbrance-related balance types from options table for the current university fiscal year
-     * 
-     * @param universityFiscalYear
-     * @return
-     */
-    public List<String> getCurrentYearEncumbranceBalanceTypes();
-
-    /**
-     * Returns the cost share encumbrance balance type from options table for the current university fiscal year
-     * 
-     * @param universityFiscalYear
-     * @return
-     */
-    public String getCurrentYearCostShareEncumbranceBalanceType();
-
-    public List<String> getContinuationAccountBypassBalanceTypeCodes(Integer universityFiscalYear);
 }

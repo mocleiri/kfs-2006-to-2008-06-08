@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package org.kuali.module.cg.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
+import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.Constants;
 
 /**
- * Instances of this class are used to signal to the CloseBatchStep that a close should occur on a particular day.
+ * 
  */
 public class Close extends TransactionalDocumentBase {
 
@@ -35,26 +35,25 @@ public class Close extends TransactionalDocumentBase {
     private Long awardClosedCount;
     private Long proposalClosedCount;
     private String personUserIdentifier;
-
+    
     private UniversalUser personUser;
 
     /**
      * Default constructor.
      */
     public Close() {
+
     }
 
-    /**
-     * @return whether or not this document has been approved.
-     */
     public boolean isApproved() {
-        return KFSConstants.DocumentStatusCodes.APPROVED.equals(getDocumentHeader().getFinancialDocumentStatusCode());
+        return Constants.DocumentStatusCodes.APPROVED.equals(getDocumentHeader().getFinancialDocumentStatusCode());
     }
 
     /**
      * Gets the closeOnOrBeforeDate attribute.
      * 
      * @return Returns the closeOnOrBeforeDate
+     * 
      */
     public Date getCloseOnOrBeforeDate() {
         return closeOnOrBeforeDate;
@@ -64,6 +63,7 @@ public class Close extends TransactionalDocumentBase {
      * Sets the closeOnOrBeforeDate attribute.
      * 
      * @param closeOnOrBeforeDate The closeOnOrBeforeDate to set.
+     * 
      */
     public void setCloseOnOrBeforeDate(Date closeOnOrBeforeDate) {
         this.closeOnOrBeforeDate = closeOnOrBeforeDate;
@@ -74,6 +74,7 @@ public class Close extends TransactionalDocumentBase {
      * Gets the awardClosedCount attribute.
      * 
      * @return Returns the awardClosedCount
+     * 
      */
     public Long getAwardClosedCount() {
         return awardClosedCount;
@@ -83,6 +84,7 @@ public class Close extends TransactionalDocumentBase {
      * Sets the awardClosedCount attribute.
      * 
      * @param awardClosedCount The awardClosedCount to set.
+     * 
      */
     public void setAwardClosedCount(Long awardClosedCount) {
         this.awardClosedCount = awardClosedCount;
@@ -93,6 +95,7 @@ public class Close extends TransactionalDocumentBase {
      * Gets the proposalClosedCount attribute.
      * 
      * @return Returns the proposalClosedCount
+     * 
      */
     public Long getProposalClosedCount() {
         return proposalClosedCount;
@@ -102,6 +105,7 @@ public class Close extends TransactionalDocumentBase {
      * Sets the proposalClosedCount attribute.
      * 
      * @param proposalClosedCount The proposalClosedCount to set.
+     * 
      */
     public void setProposalClosedCount(Long proposalClosedCount) {
         this.proposalClosedCount = proposalClosedCount;
@@ -112,6 +116,7 @@ public class Close extends TransactionalDocumentBase {
      * Gets the personUserIdentifier attribute.
      * 
      * @return Returns the personUserIdentifier
+     * 
      */
     public String getPersonUserIdentifier() {
         return personUserIdentifier;
@@ -121,6 +126,7 @@ public class Close extends TransactionalDocumentBase {
      * Sets the personUserIdentifier attribute.
      * 
      * @param personUserIdentifier The personUserIdentifier to set.
+     * 
      */
     public void setPersonUserIdentifier(String personUserIdentifier) {
         this.personUserIdentifier = personUserIdentifier;
@@ -131,6 +137,7 @@ public class Close extends TransactionalDocumentBase {
      * Gets the userInitiatedCloseDate attribute.
      * 
      * @return Returns the userInitiatedCloseDate
+     * 
      */
     public Date getUserInitiatedCloseDate() {
         return userInitiatedCloseDate;
@@ -140,16 +147,14 @@ public class Close extends TransactionalDocumentBase {
      * Sets the userInitiatedCloseDate attribute.
      * 
      * @param userInitiatedCloseDate The userInitiatedCloseDate to set.
+     * 
      */
     public void setUserInitiatedCloseDate(Date userInitiatedCloseDate) {
         this.userInitiatedCloseDate = userInitiatedCloseDate;
     }
 
-    /**
-     * @return the {@link UniversalUser} for the personUser
-     */
     public UniversalUser getPersonUser() {
-        personUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(personUserIdentifier, personUser);
+        personUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(personUserIdentifier, personUser);
         return personUser;
     }
 

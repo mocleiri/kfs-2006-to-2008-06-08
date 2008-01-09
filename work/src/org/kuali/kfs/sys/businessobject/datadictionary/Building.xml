@@ -151,14 +151,14 @@
             </attribute>
             
             <attribute name="buildingAddressZipCode">
-            	<label>Building Address Postal Code</label>
-            	<shortLabel>Bldg. Postal Code</shortLabel>
+            	<label>Building Address Zip Code</label>
+            	<shortLabel>Bldg. Zip</shortLabel>
             	
-            	<maxLength>11</maxLength>
+            	<maxLength>9</maxLength>
             	<validationPattern><zipcode /></validationPattern>
             	
             	<control>
-            		<text size="11"/>
+            		<text size="9"/>
             	</control>
             	
             	<summary>buildingAddressZipCode</summary>
@@ -183,7 +183,6 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Building</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

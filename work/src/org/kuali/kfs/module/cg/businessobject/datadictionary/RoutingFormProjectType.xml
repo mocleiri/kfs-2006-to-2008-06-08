@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormProjectType.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,13 +21,14 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormProjectType">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Project Type Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="projectTypeCode" />
+                <field attributeName="projectTypeDescription" />
                 <field attributeName="documentNumber" />
             </inquiryFields></inquirySection></inquirySections>
         </inquiry>
@@ -44,11 +47,13 @@
 
             <lookupFields>
                 <lookupField attributeName="projectTypeCode" required="false" />
+                <lookupField attributeName="projectTypeDescription" required="false" />
                 <lookupField attributeName="documentNumber" required="false" />
             </lookupFields>
 
             <resultFields>
                 <field attributeName="projectTypeCode" />
+                <field attributeName="projectTypeDescription" />
                 <field attributeName="documentNumber" />
             </resultFields>
         </lookup>
@@ -56,7 +61,7 @@
         <attributes>
 
             <attribute name="projectTypeCode" forceUppercase="true">
-                <label>Project Type</label>
+                <label>Project Type Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>70</maxLength>
@@ -68,6 +73,21 @@
 
                 <summary>projectTypeCode</summary>
                 <description>projectTypeCode description...</description>
+			</attribute>
+
+            <attribute name="projectTypeDescription" forceUppercase="true">
+                <label>Project Type Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>75</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="77" />
+                </control>
+
+                <summary>projectTypeDescription</summary>
+                <description>projectTypeDescription description...</description>
 			</attribute>
 
             <attribute name="documentNumber" forceUppercase="true">
@@ -83,20 +103,6 @@
 
                 <summary>documentNumber</summary>
                 <description>documentNumber description...</description>
-			</attribute>
-
-            <attribute name="projectTypeSelectedIndicator" forceUppercase="true">
-                <label>Project Type Selected Indicator</label>
-                <shortLabel>Indicator</shortLabel>
-
-                <maxLength>1</maxLength>
-
-                <control>
-                    <checkbox />
-                </control>
-
-                <summary>projectTypeSelectedIndicator</summary>
-                <description>projectTypeSelectedIndicator description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

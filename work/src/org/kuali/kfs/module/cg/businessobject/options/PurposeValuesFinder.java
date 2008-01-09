@@ -20,23 +20,22 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.routingform.bo.Purpose;
-import org.kuali.module.kra.routingform.service.PurposeService;
 
 public class PurposeValuesFinder extends KeyValuesBase {
-
+    
     /**
      * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-
-        List<Purpose> purposes = new ArrayList(SpringContext.getBean(PurposeService.class).getPurposes());
+        
+        List<Purpose> purposes = new ArrayList(SpringServiceLocator.getPurposeService().getPurposes());
         List purposeKeyLabelPairList = new ArrayList();
-        for (Purpose element : purposes) {
+        for (Purpose element: purposes) {
             purposeKeyLabelPairList.add(new KeyLabelPair(element.getPurposeCode(), element.getPurposeDescription()));
         }
-
+        
         return purposeKeyLabelPairList;
     }
 }

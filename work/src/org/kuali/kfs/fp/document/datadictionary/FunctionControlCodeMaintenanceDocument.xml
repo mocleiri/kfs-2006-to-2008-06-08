@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.financial.bo.FunctionControlCode</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +32,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>FunctionControlCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiFunctionControlCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>BFNC</documentTypeCode>
 
-        <label>Function Control Code</label>
+        <label>Function Control Code Maintenance Document</label>
+        <shortLabel>Function Control Maint Doc</shortLabel>
 
         <summary>Function Control Code Maintenance Document</summary>
         <description>Document used to create or update Function Control Code objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="FiscalYearFunctionControl" parameterName="FUNCTION_CONTROL_CODE" />
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_FUNCTION_CONTROL_CODE" />
 
         <lockingKeys>
             <field attributeName="financialSystemFunctionControlCode" />
@@ -51,7 +52,7 @@
                     <maintainableField name="financialSystemFunctionControlCode" required="true" />
                     <maintainableField name="financialSystemFunctionDefaultIndicator" required="false" />
                     <maintainableField name="financialSystemFunctionDescription" required="false" />
-                    <maintainableField name="versionNumber" />
+                    <maintainableField name="versionNumber" required="false" />
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,64 +22,88 @@ import javax.servlet.jsp.PageContext;
 
 import org.displaytag.decorator.TableDecorator;
 import org.displaytag.properties.MediaTypeEnum;
-import org.kuali.core.web.ui.Column;
-import org.kuali.core.web.ui.ResultRow;
+import org.kuali.core.web.uidraw.Column;
+import org.kuali.core.web.uidraw.ResultRow;
 
 /**
- * A decorator meant to help display balance inquiry information for the displaytag tag library.
  */
 public class BalanceInquiryTableDecorator extends TableDecorator {
 
-    private int numOfNonMonthField;
+    private int numOfNonMonthField = 11;
     private int numOfMonthField = 13;
-    private int rowCounter = 0;
+    private int rowCounter;
 
     /**
-     * Generates the first row of the table, which acts as the headers for the data.
-     * 
-     * @return the String to display as the first row in the table
-     * @see org.displaytag.decorator.TableDecorator#startRow()
+     * Constructs a BalanceInquiryTableDecorator.java.
      */
+    public BalanceInquiryTableDecorator() {
+        super();
+    }
+
     @Override
     public String startRow() {
         // TableTagParameters.
         PageContext pageContext = getPageContext();
         MediaTypeEnum mediaType = (MediaTypeEnum) pageContext.getAttribute("mediaType");
+
         ResultRow row = (ResultRow) getCurrentRowObject();
 
         if (MediaTypeEnum.HTML.equals(mediaType)) { // Display the nested table.
 
             StringBuffer rowBuffer = new StringBuffer("<tr>");
-            rowBuffer.append("<tr>");
 
-            List columns = row.getColumns();
-            int columnCount = 0;
-            numOfNonMonthField = columns.size() - numOfMonthField;
-            for (Iterator i = columns.iterator(); i.hasNext() && columnCount++ < numOfNonMonthField;) {
-                Column column = (Column) i.next();
+            if (1 <= rowCounter) {
 
-                if (rowCounter > 0 && columnCount > 1) {
-                    rowBuffer.append("<th>");
-                    rowBuffer.append(column.getColumnTitle());
-                    rowBuffer.append("</th>");
+                rowBuffer.append("<tr>");
+
+                List columns = row.getColumns();
+
+                int columnCount = 0;
+                for (Iterator i = columns.iterator(); i.hasNext() && columnCount++ < numOfNonMonthField;) {
+
+                    Column column = (Column) i.next();
+
+                    if (columnCount > 1) {
+
+                        rowBuffer.append("<th>");
+
+                        // if(column.getSortable()) {
+                        //                        
+                        // }
+
+                        rowBuffer.append(column.getColumnTitle());
+
+                        // if(column.getSortable()) {
+                        //                            
+                        // rowBuffer.append("</a>");
+                        //                            
+                        // }
+
+                        rowBuffer.append("</th>");
+
+                    }
+
                 }
+
+                rowBuffer.append("</tr>");
+
             }
-            rowBuffer.append("</tr>");
+
             return rowBuffer.toString();
+
         }
+
         return super.startRow();
     }
 
-    /**
-     * Generates the last row of the displayed table...which displays some kind of footer...
-     * @return a String representing the last row of the table
-     * @see org.displaytag.decorator.TableDecorator#finishRow()
-     */
     @Override
     public String finishRow() {
+
         rowCounter++;
+
         PageContext pageContext = getPageContext();
         MediaTypeEnum mediaType = (MediaTypeEnum) pageContext.getAttribute("mediaType");
+
         ResultRow row = (ResultRow) getCurrentRowObject();
 
         if (MediaTypeEnum.HTML.equals(mediaType)) {
@@ -91,10 +115,13 @@ public class BalanceInquiryTableDecorator extends TableDecorator {
             rowBuffer.append("<table class=\"datatable-80\" cellspacing=\"0\" cellpadding=\"0\">");
 
             for (int o = 0; o < 3; o++) {
+
                 rowBuffer.append("<tr>");
 
                 for (int i = 0; i < 4; i++) {
-                    int index = this.numOfNonMonthField + o + (3 * i);
+
+                    int index = numOfNonMonthField + o + (3 * i);
+
                     Column column = (Column) row.getColumns().get(index);
 
                     rowBuffer.append("<th class=\"infocell\" width=\"10%\">");
@@ -123,7 +150,9 @@ public class BalanceInquiryTableDecorator extends TableDecorator {
             rowBuffer.append("</td>");
 
             rowBuffer.append("</tr>");
+
             return rowBuffer.append("</table></center><br /></td></tr>").toString();
+
         }
         return super.finishRow();
     }

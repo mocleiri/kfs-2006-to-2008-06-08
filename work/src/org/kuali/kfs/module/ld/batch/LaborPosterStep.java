@@ -19,31 +19,22 @@ import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.labor.service.LaborPosterService;
 
 /**
- * Defines the batch step for labor poster
+ * This class defines the batch step for labor poster
  */
 public class LaborPosterStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborPosterStep.class);
     private LaborPosterService laborPosterService;
 
     /**
-     * @param String jobName
-     * @return boolean when success
      * @see org.kuali.kfs.batch.Step#execute()
      */
     public boolean execute(String jobName) {
-        try {
-            laborPosterService.postMainEntries();
-        }
-        catch (Exception e) {
-            LOG.fatal(e);
-            return false;
-        }
+        laborPosterService.postMainEntries();
         return true;
     }
 
     /**
      * Sets the laborPosterService attribute value.
-     * 
      * @param laborPosterService The laborPosterService to set.
      */
     public void setLaborPosterService(LaborPosterService laborPosterService) {

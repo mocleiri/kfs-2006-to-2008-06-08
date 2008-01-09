@@ -1,32 +1,38 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Country;
-import org.kuali.kfs.bo.State;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Subcontractors are vendors involved with an awarded {@link Proposal}.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class Subcontractor extends PersistableBusinessObjectBase implements Inactivateable {
+public class Subcontractor extends BusinessObjectBase {
 
     private String subcontractorNumber;
     private String subcontractorName;
@@ -36,21 +42,19 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
     private String subcontractorStateCode;
     private String subcontractorZipCode;
     private String subcontractorCountryCode;
-    private boolean active;
-
-    private State subcontractorState;
-    private Country subcontractorCountry;
 
     /**
      * Default no-arg constructor.
      */
     public Subcontractor() {
+
     }
 
     /**
      * Gets the subcontractorNumber attribute.
      * 
-     * @return Returns the subcontractorNumber
+     * @return - Returns the subcontractorNumber
+     * 
      */
     public String getSubcontractorNumber() {
         return subcontractorNumber;
@@ -60,6 +64,7 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
      * Sets the subcontractorNumber attribute.
      * 
      * @param subcontractorNumber The subcontractorNumber to set.
+     * 
      */
     public void setSubcontractorNumber(String subcontractorNumber) {
         this.subcontractorNumber = subcontractorNumber;
@@ -68,7 +73,8 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
     /**
      * Gets the subcontractorName attribute.
      * 
-     * @return Returns the subcontractorName
+     * @return - Returns the subcontractorName
+     * 
      */
     public String getSubcontractorName() {
         return subcontractorName;
@@ -78,6 +84,7 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
      * Sets the subcontractorName attribute.
      * 
      * @param subcontractorName The subcontractorName to set.
+     * 
      */
     public void setSubcontractorName(String subcontractorName) {
         this.subcontractorName = subcontractorName;
@@ -86,7 +93,8 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
     /**
      * Gets the subcontractorAddressLine1 attribute.
      * 
-     * @return Returns the subcontractorAddressLine1
+     * @return - Returns the subcontractorAddressLine1
+     * 
      */
     public String getSubcontractorAddressLine1() {
         return subcontractorAddressLine1;
@@ -96,6 +104,7 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
      * Sets the subcontractorAddressLine1 attribute.
      * 
      * @param subcontractorAddressLine1 The subcontractorAddressLine1 to set.
+     * 
      */
     public void setSubcontractorAddressLine1(String subcontractorAddressLine1) {
         this.subcontractorAddressLine1 = subcontractorAddressLine1;
@@ -104,7 +113,8 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
     /**
      * Gets the subcontractorAddressLine2 attribute.
      * 
-     * @return Returns the subcontractorAddressLine2
+     * @return - Returns the subcontractorAddressLine2
+     * 
      */
     public String getSubcontractorAddressLine2() {
         return subcontractorAddressLine2;
@@ -114,6 +124,7 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
      * Sets the subcontractorAddressLine2 attribute.
      * 
      * @param subcontractorAddressLine2 The subcontractorAddressLine2 to set.
+     * 
      */
     public void setSubcontractorAddressLine2(String subcontractorAddressLine2) {
         this.subcontractorAddressLine2 = subcontractorAddressLine2;
@@ -122,7 +133,8 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
     /**
      * Gets the subcontractorCity attribute.
      * 
-     * @return Returns the subcontractorCity
+     * @return - Returns the subcontractorCity
+     * 
      */
     public String getSubcontractorCity() {
         return subcontractorCity;
@@ -132,6 +144,7 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
      * Sets the subcontractorCity attribute.
      * 
      * @param subcontractorCity The subcontractorCity to set.
+     * 
      */
     public void setSubcontractorCity(String subcontractorCity) {
         this.subcontractorCity = subcontractorCity;
@@ -158,7 +171,8 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
     /**
      * Gets the subcontractorZipCode attribute.
      * 
-     * @return Returns the subcontractorZipCode
+     * @return - Returns the subcontractorZipCode
+     * 
      */
     public String getSubcontractorZipCode() {
         return subcontractorZipCode;
@@ -168,6 +182,7 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
      * Sets the subcontractorZipCode attribute.
      * 
      * @param subcontractorZipCode The subcontractorZipCode to set.
+     * 
      */
     public void setSubcontractorZipCode(String subcontractorZipCode) {
         this.subcontractorZipCode = subcontractorZipCode;
@@ -176,7 +191,8 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
     /**
      * Gets the subcontractorCountryCode attribute.
      * 
-     * @return Returns the subcontractorCountryCode
+     * @return - Returns the subcontractorCountryCode
+     * 
      */
     public String getSubcontractorCountryCode() {
         return subcontractorCountryCode;
@@ -186,27 +202,10 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
      * Sets the subcontractorCountryCode attribute.
      * 
      * @param subcontractorCountryCode The subcontractorCountryCode to set.
+     * 
      */
     public void setSubcontractorCountryCode(String subcontractorCountryCode) {
         this.subcontractorCountryCode = subcontractorCountryCode;
-    }
-
-    /**
-     * Gets the active attribute.
-     * 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * 
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**
@@ -217,41 +216,4 @@ public class Subcontractor extends PersistableBusinessObjectBase implements Inac
         m.put("subcontractorNumber", this.getSubcontractorNumber());
         return m;
     }
-
-    /**
-     * Gets the {@link Country} in which the subcontractor is located.
-     * 
-     * @return the {@link Country} in which the subcontractor is located.
-     */
-    public Country getSubcontractorCountry() {
-        return subcontractorCountry;
-    }
-
-    /**
-     * Sets the {@link Country} in which the subcontractor is located.
-     * 
-     * @param country the {@link Country} in which the subcontractor is located.
-     */
-    public void setSubcontractorCountry(Country country) {
-        this.subcontractorCountry = country;
-    }
-
-    /**
-     * Gets the {@link State} in which the subcontractor is located.
-     * 
-     * @return the {@link State} in which the subcontractor is located.
-     */
-    public State getSubcontractorState() {
-        return subcontractorState;
-    }
-
-    /**
-     * Sets the {@link State} in which the subcontractor is located.
-     * 
-     * @param state the {@link State} in which the subcontractor is located.
-     */
-    public void setSubcontractorState(State state) {
-        this.subcontractorState = state;
-    }
-
 }

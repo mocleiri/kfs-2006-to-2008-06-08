@@ -15,6 +15,9 @@
  */
 package org.kuali.kfs.rules;
 
+import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_CODE;
+import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_TYPE_CODE;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.core.exceptions.ReferentialIntegrityException;
@@ -26,13 +29,10 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.OffsetDefinition;
-import org.kuali.module.chart.service.OffsetDefinitionService;
 import org.kuali.module.financial.bo.OffsetAccount;
-import org.kuali.module.financial.service.FlexibleOffsetAccountService;
-import org.kuali.module.gl.service.SufficientFundsService;
 
 /**
  * This class contains a helper method used to implement a rule for the CashManagementDocument (a FinancialDocument) as well as to
@@ -60,13 +60,13 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         boolean success = true;
 
         // lookup offset object info
-        OffsetDefinition offsetDefinition = SpringContext.getBean(OffsetDefinitionService.class).getByPrimaryId(universityFiscalYear, explicitEntry.getChartOfAccountsCode(), explicitEntry.getFinancialDocumentTypeCode(), explicitEntry.getFinancialBalanceTypeCode());
+        OffsetDefinition offsetDefinition = SpringServiceLocator.getOffsetDefinitionService().getByPrimaryId(universityFiscalYear, explicitEntry.getChartOfAccountsCode(), explicitEntry.getFinancialDocumentTypeCode(), explicitEntry.getFinancialBalanceTypeCode());
         if (ObjectUtils.isNull(offsetDefinition)) {
             success = false;
             GlobalVariables.getErrorMap().putError(KFSConstants.GENERAL_LEDGER_PENDING_ENTRIES_TAB_ERRORS, KFSKeyConstants.ERROR_DOCUMENT_NO_OFFSET_DEFINITION, universityFiscalYear.toString(), explicitEntry.getChartOfAccountsCode(), explicitEntry.getFinancialDocumentTypeCode(), explicitEntry.getFinancialBalanceTypeCode());
         }
         else {
-            OffsetAccount flexibleOffsetAccount = SpringContext.getBean(FlexibleOffsetAccountService.class).getByPrimaryIdIfEnabled(explicitEntry.getChartOfAccountsCode(), explicitEntry.getAccountNumber(), getOffsetFinancialObjectCode(offsetDefinition));
+            OffsetAccount flexibleOffsetAccount = SpringServiceLocator.getFlexibleOffsetAccountService().getByPrimaryIdIfEnabled(explicitEntry.getChartOfAccountsCode(), explicitEntry.getAccountNumber(), getOffsetFinancialObjectCode(offsetDefinition));
             flexOffsetAccountIfNecessary(flexibleOffsetAccount, offsetEntry);
         }
 
@@ -76,9 +76,9 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
 
         String offsetObjectCode = getOffsetFinancialObjectCode(offsetDefinition);
         offsetEntry.setFinancialObjectCode(offsetObjectCode);
-        if (offsetObjectCode.equals(AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectCode())) {
+        if (offsetObjectCode.equals(BLANK_OBJECT_CODE)) {
             // no BO, so punt
-            offsetEntry.setAcctSufficientFundsFinObjCd(AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectCode());
+            offsetEntry.setAcctSufficientFundsFinObjCd(BLANK_OBJECT_CODE);
         }
         else {
             // Need current ObjectCode and Account BOs to get sufficient funds code. (Entries originally have no BOs.)
@@ -90,11 +90,11 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
             if (ObjectUtils.isNull(financialObject)) {
                 throw new ReferentialIntegrityException("offset object code " + offsetEntry.getUniversityFiscalYear() + "-" + offsetEntry.getChartOfAccountsCode() + "-" + offsetEntry.getFinancialObjectCode());
             }
-            offsetEntry.setAcctSufficientFundsFinObjCd(SpringContext.getBean(SufficientFundsService.class).getSufficientFundsObjectCode(financialObject, offsetEntry.getAccount().getAccountSufficientFundsCode()));
+            offsetEntry.setAcctSufficientFundsFinObjCd(SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(financialObject, offsetEntry.getAccount().getAccountSufficientFundsCode()));
         }
 
         offsetEntry.setFinancialObjectTypeCode(getOffsetFinancialObjectTypeCode(offsetDefinition));
-        offsetEntry.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
+        offsetEntry.setFinancialSubObjectCode(KFSConstants.DASHES_SUB_OBJECT_CODE);
         offsetEntry.setTransactionEntryOffsetIndicator(true);
         offsetEntry.setTransactionLedgerEntryDescription(KFSConstants.GL_PE_OFFSET_STRING);
 
@@ -128,7 +128,7 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         offsetEntry.setChartOfAccountsCode(flexCoa);
         offsetEntry.setAccountNumber(flexAccountNumber);
         // COA and account number are part of the sub-account's key, so the original sub-account would be invalid.
-        offsetEntry.setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
+        offsetEntry.setSubAccountNumber(KFSConstants.DASHES_SUB_ACCOUNT_NUMBER);
 
         LOG.debug("flexOffsetAccountIfNecessary(OffsetAccount, GeneralLedgerPendingEntry) - end");
     }
@@ -143,13 +143,13 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         LOG.debug("getOffsetFinancialObjectCode(OffsetDefinition) - start");
 
         if (null != offsetDefinition) {
-            String returnString = getEntryValue(offsetDefinition.getFinancialObjectCode(), AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectCode());
+            String returnString = getEntryValue(offsetDefinition.getFinancialObjectCode(), BLANK_OBJECT_CODE);
             LOG.debug("getOffsetFinancialObjectCode(OffsetDefinition) - end");
             return returnString;
         }
         else {
             LOG.debug("getOffsetFinancialObjectCode(OffsetDefinition) - end");
-            return AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectCode();
+            return BLANK_OBJECT_CODE;
         }
 
     }
@@ -164,13 +164,13 @@ public class GeneralLedgerPostingDocumentRuleBase extends LedgerPostingDocumentR
         LOG.debug("getOffsetFinancialObjectTypeCode(OffsetDefinition) - start");
 
         if (null != offsetDefinition && null != offsetDefinition.getFinancialObject()) {
-            String returnString = getEntryValue(offsetDefinition.getFinancialObject().getFinancialObjectTypeCode(), AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectType());
+            String returnString = getEntryValue(offsetDefinition.getFinancialObject().getFinancialObjectTypeCode(), BLANK_OBJECT_TYPE_CODE);
             LOG.debug("getOffsetFinancialObjectTypeCode(OffsetDefinition) - end");
             return returnString;
         }
         else {
             LOG.debug("getOffsetFinancialObjectTypeCode(OffsetDefinition) - end");
-            return AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectType();
+            return BLANK_OBJECT_TYPE_CODE;
         }
 
     }

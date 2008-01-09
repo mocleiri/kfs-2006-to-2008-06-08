@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.service.DocumentService;
+import org.kuali.kfs.KFSConstants;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -35,30 +36,22 @@ public class PurgeDocumentContentsStep extends AbstractStep {
     /**
      * @see org.kuali.kfs.batch.Step#performStep()
      */
-    public boolean execute(String jobName) {
-        int numberOfDaysFinal = Integer.parseInt(getParameterService().getParameterValue(getClass(), "NUMBER_OF_DAYS_FINAL"));
+    public boolean execute() {
+        int numberOfDaysFinal = Integer.parseInt(getConfigurationService().getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, getName() + "_NUMBER_OF_DAYS_FINAL"));
         Calendar financialDocumentFinalCalendar = getDateTimeService().getCurrentCalendar();
         financialDocumentFinalCalendar.add(GregorianCalendar.DAY_OF_YEAR, -numberOfDaysFinal);
-        String currentDocumentNumber = null;
         try {
             Iterator finalDocumentHeaderItr = documentService.getFinalDocumentHeadersByDate(financialDocumentFinalCalendar.getTime()).iterator();
             while (finalDocumentHeaderItr.hasNext()) {
                 DocumentHeader finalDocumentHeader = (DocumentHeader) finalDocumentHeaderItr.next();
-                currentDocumentNumber = finalDocumentHeader.getDocumentNumber();
-                setFinalDocumentDocumentContent(finalDocumentHeader);
+                finalDocumentHeader.getWorkflowDocument().setApplicationContent("<final/>");
+                finalDocumentHeader.getWorkflowDocument().saveRoutingData();
             }
         }
         catch (WorkflowException we) {
-            throw new RuntimeException("caught exception while executing " + getClass().getName() + " doc id may have been " + currentDocumentNumber, we);
+            throw new RuntimeException("caught exception while executing " + getClass().getName(), we);
         }
         return true;
-    }
-
-    public void setFinalDocumentDocumentContent(DocumentHeader finalDocumentHeader) throws WorkflowException {
-        // Added the special XML content flag here which indicates to the KEW engine not to execute searchable attribute indexing.
-        // This allows for us to clear the content without worrying about losing our search capabilities
-        finalDocumentHeader.getWorkflowDocument().setApplicationContent("<final><doNotExecuteSearchableAttributeIndexing/></final>");
-        finalDocumentHeader.getWorkflowDocument().saveRoutingData();
     }
 
     /**

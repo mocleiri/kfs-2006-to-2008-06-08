@@ -18,32 +18,48 @@ package org.kuali.module.chart.lookup.keyvalues;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
+import org.kuali.core.rule.KualiParameterRule;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.rules.SubAccountRule;
 
-/**
- * This class creates a new finder for our forms view (creates a drop-down of {@link SubAccount}s) It only pulls {@link SubAccount}s
- * that are allowed codes from our {@link ParameterService}
- */
 public class SubAccountTypeValuesFinder extends KeyValuesBase {
 
-    /**
-     * Creates an allowed list of {@link SubAccount}s from the {@link ParameterService}
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
-     * @see ParameterService
-     * @see KFSConstants.ChartApcParms.CG_ALLOWED_SUBACCOUNT_TYPE_CODES
-     */
+    protected KualiConfigurationService configService;
+
+
+    public SubAccountTypeValuesFinder() {
+        super();
+
+        this.setConfigService(SpringServiceLocator.getKualiConfigurationService());
+    }
+
+
     public List getKeyValues() {
+
+        // todo: use getApplicationParameterValues() instead?
+        KualiParameterRule parmRule = configService.getApplicationParameterRule(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, SubAccountRule.CG_ALLOWED_SUBACCOUNT_TYPE_CODES);
+        // now we need to retrieve the parm values
+        String[] parmValues = { "" };
+        if (StringUtils.isNotBlank(parmRule.getParameterText())) {
+            parmValues = parmRule.getParameterText().split(";");
+        }
+
         List activeLabels = new ArrayList();
         activeLabels.add(new KeyLabelPair("", ""));
-        for (String value : SpringContext.getBean(ParameterService.class).getParameterValues(SubAccount.class, KFSConstants.ChartApcParms.CG_ALLOWED_SUBACCOUNT_TYPE_CODES)) {
-            activeLabels.add(new KeyLabelPair(value, value));
+        for (int i = 0; i < parmValues.length; i++) {
+            String parm = parmValues[i];
+            activeLabels.add(new KeyLabelPair(parm, parm));
         }
         return activeLabels;
     }
+
+    public void setConfigService(KualiConfigurationService configService) {
+        this.configService = configService;
+    }
+
 }

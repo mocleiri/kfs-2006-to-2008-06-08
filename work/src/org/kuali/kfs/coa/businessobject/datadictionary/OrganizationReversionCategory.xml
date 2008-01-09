@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,21 +19,24 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.OrganizationReversionCategory">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Organization Reversion Category Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="organizationReversionCategoryCode" />
                 <field attributeName="organizationReversionCategoryName" />
                 <field attributeName="organizationReversionSortCode" />
-                <field attributeName="organizationReversionCategoryActiveIndicator" />  
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Organization Reversion Category Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.OrganizationReversionCategory"><img src="images/tinybutton-createnew.gif" alt="create new" width="70" height="15"/></a>]]>
+            </menubar>
 
             <instructions>Lookup an Organization Reversion Category</instructions>
 
@@ -43,14 +46,12 @@
                 <lookupField attributeName="organizationReversionCategoryCode" />
                 <lookupField attributeName="organizationReversionCategoryName" />
                 <lookupField attributeName="organizationReversionSortCode" />
-                <lookupField attributeName="organizationReversionCategoryActiveIndicator" />                
             </lookupFields>
 
             <resultFields>
                 <field attributeName="organizationReversionCategoryCode" forceInquiry="true" />
                 <field attributeName="organizationReversionCategoryName" />
                 <field attributeName="organizationReversionSortCode" />
-                <field attributeName="organizationReversionCategoryActiveIndicator" />
             </resultFields>
         </lookup>
 
@@ -71,6 +72,9 @@
                 <control>
                     <text size="8" />
                 </control>
+
+                <summary>Organization Reversion Category Code</summary>
+                <description>The code uniquely identifying a particular Organization Reversion Category.</description>
             </attribute>
 
             <attribute name="organizationReversionCategoryName" forceUppercase="false">
@@ -83,6 +87,9 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>Category Name</summary>
+                <description>Category Name...</description>
             </attribute>
 
             <attribute name="organizationReversionSortCode" forceUppercase="true">
@@ -98,25 +105,15 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary>Sort Code</summary>
+                <description>The code identifying type of Sort.</description>
             </attribute>
-            
-			 <attribute name="organizationReversionCategoryActiveIndicator" forceUppercase="false">
-                <label>Organization Reversion Category Active Indicator</label>
-                <shortLabel>Indicator</shortLabel>
 
-                <maxLength>1</maxLength>
-
-                <control>
-                    <checkbox />
-                </control>
-			</attribute>
-			
-		<!-- 	<attributeReference name="organizationReversionCategoryActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />  -->
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Organization Reversion Category</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

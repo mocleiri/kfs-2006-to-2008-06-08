@@ -17,21 +17,24 @@ package org.kuali.kfs.rule.event;
 
 import java.util.List;
 
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.BusinessRule;
 import org.kuali.core.rule.event.KualiDocumentEventBase;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.document.GeneralLedgerPostingDocument;
 import org.kuali.kfs.rule.SufficientFundsCheckingPreparationRule;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.util.SufficientFundsItem;
 
 /**
  * This class represents the Sufficient Funds Checking Preparation event that is part of an eDoc in Kuali. This is triggered on
  * route or approval
+ * 
+ * 
  */
 public final class SufficientFundsCheckingPreparationEvent extends KualiDocumentEventBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsCheckingPreparationEvent.class);
@@ -45,6 +48,7 @@ public final class SufficientFundsCheckingPreparationEvent extends KualiDocument
     }
 
     /**
+     * 
      * @see org.kuali.core.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
      */
     public Class getRuleInterfaceClass() {
@@ -52,6 +56,7 @@ public final class SufficientFundsCheckingPreparationEvent extends KualiDocument
     }
 
     /**
+     * 
      * @see org.kuali.core.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.core.rule.BusinessRule)
      */
     public boolean invokeRuleMethod(BusinessRule rule) {
@@ -62,14 +67,14 @@ public final class SufficientFundsCheckingPreparationEvent extends KualiDocument
 
             GeneralLedgerPostingDocument doc = (GeneralLedgerPostingDocument) document;
 
-            SufficientFundsService sufficientFundsService = SpringContext.getBean(SufficientFundsService.class);
+            SufficientFundsService sufficientFundsService = SpringServiceLocator.getSufficientFundsService();
 
             List<SufficientFundsItem> items = sufficientFundsService.checkSufficientFunds(doc);
 
             // if ( items.size() > 0 ) {
             LOG.error("invokeRuleMethod() No sufficient funds");
 
-            GlobalVariables.getErrorMap().putError("chartOrg", KFSKeyConstants.ERROR_MISSING, new String[] { "Sufficient Funds" });
+            GlobalVariables.getErrorMap().putError("chartOrg", KeyConstants.ERROR_MISSING, new String[] { "Sufficient Funds" });
 
             return false;
             // }

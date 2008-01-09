@@ -23,21 +23,21 @@ import java.util.List;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Chart;
 
 /**
  * This class returns list of chart key value pairs.
+ * 
+ * 
  */
 public class ChartValuesFinder extends KeyValuesBase {
 
-    /**
-     * Creates a list of {@link Chart} using their code as the key and their code "-" description
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         Collection chartCodes = boService.findAll(Chart.class);
         List chartKeyLabels = new ArrayList();
         chartKeyLabels.add(new KeyLabelPair("", ""));

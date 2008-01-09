@@ -23,7 +23,7 @@
         <documentClass>org.kuali.module.labor.document.BenefitExpenseTransferDocument</documentClass>
 		<businessRulesClass>org.kuali.module.labor.rules.BenefitExpenseTransferDocumentRule</businessRulesClass>
 		
-        <documentAuthorizerClass>org.kuali.module.labor.document.authorization.LaborExpenseDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.module.labor.document.LaborDocumentAuthorizer</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -33,14 +33,16 @@
         </authorizations>
         <documentTypeName>KualiBenefitExpenseTransferDocument</documentTypeName>
         <documentTypeCode>BT</documentTypeCode>
-        <label>Benefit Expense Transfer</label>
+        <label>Benefit Expense Transfer Document</label>
+        <shortLabel>BTDoc</shortLabel>
         
         <summary>
             <![CDATA[&nbsp;]]>
         </summary>
         <description>
         	Benefit Expense Transfer Document
-        </description>        
+        </description>
+        <help securityGroupName="Kuali.FinancialTransactionProcessing.TransferOfFundsDocument" parameterName="FINANCIAL_HELP_TRANSFER_OF_FUNDS_DOCUMENT" />
         <allowsCopy>true</allowsCopy>
         <allowsErrorCorrection>true</allowsErrorCorrection>
     </transactionalDocument>

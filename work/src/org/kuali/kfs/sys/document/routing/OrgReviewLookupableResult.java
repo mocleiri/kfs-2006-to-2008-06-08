@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import edu.iu.uis.eden.web.UrlResolver;
 
 /**
  * This class wraps the Org Review Values that we need in the lookup result set.
+ * 
  * 
  * @see org.kuali.module.chart.web.lookupable.OrgReviewLookupableImpl
  */

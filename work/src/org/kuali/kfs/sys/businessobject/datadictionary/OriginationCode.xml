@@ -90,7 +90,7 @@
 
             <attribute name="financialSystemOriginationCode" forceUppercase="true">
                 <label>Origination Code</label>
-                <shortLabel>Origin Code</shortLabel>
+                <shortLabel>Orig Code</shortLabel>
 
                 <maxLength>2</maxLength>
                 <validationPattern>
@@ -162,7 +162,7 @@
 
                 <maxLength>40</maxLength>
                 <validationPattern>
-                    <alphaNumeric allowWhitespace="true"/>
+                    <alphaNumeric />
                 </validationPattern>
 
                 <control>
@@ -329,7 +329,6 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Origination Code</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

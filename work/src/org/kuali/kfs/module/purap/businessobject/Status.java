@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/Status.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,62 +18,111 @@
 
 package org.kuali.module.purap.bo;
 
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Status Business Object.
+ * 
  */
-public class Status extends PersistableBusinessObjectBase implements Comparator<Status>{
+public class Status extends BusinessObjectBase {
 
-    private String statusCode;
-    private String statusDescription;
+	private String statusCode;
+	private String statusDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
     protected String ojbConcreteClass; // attribute needed for OJB polymorphism - do not alter!
 
+	/**
+	 * Default constructor.
+	 */
+	public Status() {
+
+	}
+
     /**
-     * Default constructor.
+     * Gets the statusCode attribute.
+     * 
+     * @return Returns the statusCode
+     * 
      */
-    public Status() {
-
-    }
-
-    public String getStatusCode() {
+	public String getStatusCode() {
         return statusCode;
     }
 
+    /**
+     * Sets the statusCode attribute.
+     * 
+     * @param statusCode The statusCode to set.
+     * 
+     */
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
 
+    /**
+     * Gets the statusDescription attribute.
+     * 
+     * @return Returns the statusDescription
+     * 
+     */
     public String getStatusDescription() {
         return statusDescription;
     }
 
+    /**
+     * Sets the statusDescription attribute.
+     * 
+     * @param statusDescription The statusDescription to set.
+     * 
+     */
     public void setStatusDescription(String statusDescription) {
         this.statusDescription = statusDescription;
     }
 
+    /**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+    /**
+     * Gets the ojbConcreteClass attribute. 
+     * 
+     * @return Returns the ojbConcreteClass.
+     */
     public String getOjbConcreteClass() {
         return ojbConcreteClass;
     }
 
+    /**
+     * Sets the ojbConcreteClass attribute value.
+     * 
+     * @param ojbConcreteClass The ojbConcreteClass to set.
+     */
     public void setOjbConcreteClass(String ojbConcreteClass) {
         this.ojbConcreteClass = ojbConcreteClass;
     }
 
-    public int compare(Status s1, Status s2) {
-        return s1.getStatusDescription().compareTo(s2.getStatusDescription());        
-    }
-    
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("statusCode", this.statusCode);
-        return m;
+	    return m;
     }
-
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.chart.bo.SubFundGroupType</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -31,14 +31,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>SubFundGroupTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiSubFundGroupTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>SFGT</documentTypeCode>
 
-        <label>Sub-Fund Group Type</label>
+        <label>Sub-Fund Group Type Maintenance Document</label>
+        <shortLabel>SubFundGroupTypeMaintDoc</shortLabel>
 
         <summary>Sub-Fund Group Type Maintenance Document</summary>
         <description>Document used to create or update Sub Fund Group Type objects</description>
-        <help parameterNamespace="KFS-CA" parameterDetailType="SubFundGroupType" parameterName="SUB_FUND_GROUP_TYPE" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_SUB_FUND_GROUP_TYPE" />
 
         <lockingKeys>
             <field attributeName="subFundGroupTypeCode" />

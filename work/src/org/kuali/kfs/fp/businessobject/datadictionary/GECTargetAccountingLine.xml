@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd" [
-<!ENTITY accountingLineBaseAttributes SYSTEM "../../../kfs/entities/AccountingLineBaseAttributes.xml">
+<!ENTITY accountingLineBaseAttributes SYSTEM "../../../core/datadictionary/entity/AccountingLineBaseAttributes.xml">
 ]>
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.GECTargetAccountingLine">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
             &accountingLineBaseAttributes;
@@ -35,10 +35,17 @@
 			    <validationPattern>
 			        <alphaNumeric />
 			    </validationPattern>
-			    <required>false</required>
+			    <required>true</required>
 			    <control>
 			        <text size="16" />
 			    </control>
+			
+			    <summary>
+			        <![CDATA[&nbsp;]]>
+			    </summary>
+			    <description>
+			        The transaction number on the deposit slip assigned by the bank.
+			    </description>
 			</attribute>
 
 			<attribute name="referenceOriginCode" forceUppercase="true" override="true">
@@ -50,12 +57,31 @@
 			    <validationPattern>
 			        <anyCharacter />
 			    </validationPattern>
-			    <required>false</required>
+			    <required>true</required>
 			    <control>
 			        <text size="4" />
 			    </control>
+			
+			    <summary>
+			        <![CDATA[&nbsp;]]>
+			    </summary>
+			    <description>
+			        The system code for the system from which the original encumbering transaction came, selected from a pulldown list.
+			    </description>
 			</attribute>
         </attributes>
 
+        <collections>
+            <collection name="extendedAttributeValues">
+                <label>Extended Attribute Values</label>
+                <shortLabel>Values</shortLabel>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
+            </collection>
+        </collections>
     </businessObject>
 </dictionaryEntry>

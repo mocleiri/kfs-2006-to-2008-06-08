@@ -15,17 +15,20 @@
  */
 package org.kuali.module.budget.service.impl;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.core.service.BusinessObjectService;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.budget.BCConstants.OrgSelControlOption;
 import org.kuali.module.budget.bo.BudgetConstructionOrganizationReports;
 import org.kuali.module.budget.bo.BudgetConstructionPullup;
 import org.kuali.module.budget.dao.BudgetConstructionDao;
-import org.kuali.module.budget.dao.BudgetPullupDao;
 import org.kuali.module.budget.service.BudgetConstructionOrganizationReportsService;
 import org.kuali.module.budget.service.BudgetOrganizationTreeService;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,29 +43,27 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
     private BudgetConstructionOrganizationReportsService budgetConstructionOrganizationReportsService;
     private BusinessObjectService businessObjectService;
     private BudgetConstructionDao budgetConstructionDao;
-    private BudgetPullupDao budgetPullupDao;
-
+    
     // controls used to trap any runaways due to cycles in the reporting tree
     private static final int MAXLEVEL = 50;
     private int curLevel;
 
     /**
-     * @see org.kuali.module.budget.service.BudgetOrganizationTreeService#buildPullup(java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * @see org.kuali.module.budget.service.BudgetOrganizationTreeService#buildPullup(java.lang.String, java.lang.String, java.lang.String)
      */
     public void buildPullup(String personUserIdentifier, String chartOfAccountsCode, String organizationCode) {
         cleanPullup(personUserIdentifier);
         BudgetConstructionOrganizationReports bcOrgRpts = budgetConstructionOrganizationReportsService.getByPrimaryId(chartOfAccountsCode, organizationCode);
-        if (bcOrgRpts != null) {
-            if (bcOrgRpts.getOrganization().isOrganizationActiveIndicator()) {
+        if (bcOrgRpts != null){
+            if (bcOrgRpts.getOrganization().isOrganizationActiveIndicator()){
                 curLevel = 0;
                 buildSubTree(personUserIdentifier, bcOrgRpts, curLevel);
             }
         }
     }
-
-    private void buildSubTree(String personUserIdentifier, BudgetConstructionOrganizationReports bcOrgRpts, int curLevel) {
-
+    
+    private void buildSubTree(String personUserIdentifier, BudgetConstructionOrganizationReports bcOrgRpts, int curLevel){
+        
         curLevel++;
         BudgetConstructionPullup bcPullup = new BudgetConstructionPullup();
         bcPullup.setPersonUniversalIdentifier(personUserIdentifier);
@@ -73,42 +74,21 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
         bcPullup.setPullFlag(new Integer(0));
         businessObjectService.save(bcPullup);
 
-        if (curLevel <= MAXLEVEL) {
-            // getActiveChildOrgs does not return orgs that report to themselves
+        if (curLevel <= MAXLEVEL){
+            // getActiveChildOrgs does not return orgs that report to themselves 
             List childOrgs = budgetConstructionOrganizationReportsService.getActiveChildOrgs(bcOrgRpts.getChartOfAccountsCode(), bcOrgRpts.getOrganizationCode());
-            if (childOrgs.size() > 0) {
-                for (Iterator iter = childOrgs.iterator(); iter.hasNext();) {
+            if (childOrgs.size() > 0){
+                for (Iterator iter = childOrgs.iterator(); iter.hasNext();){
                     BudgetConstructionOrganizationReports bcOrg = (BudgetConstructionOrganizationReports) iter.next();
                     buildSubTree(personUserIdentifier, bcOrg, curLevel);
                 }
             }
+        } else {
+            LOG.warn(String.format("\n%s/%s reports to organization more than maxlevel of %d",
+                    bcOrgRpts.getChartOfAccountsCode(),
+                    bcOrgRpts.getOrganizationCode(),
+                    MAXLEVEL));
         }
-        else {
-            LOG.warn(String.format("\n%s/%s reports to organization more than maxlevel of %d", bcOrgRpts.getChartOfAccountsCode(), bcOrgRpts.getOrganizationCode(), MAXLEVEL));
-        }
-    }
-
-    /**
-     * @see org.kuali.module.budget.service.BudgetOrganizationTreeService#buildPullupSql(java.lang.String, java.lang.String, java.lang.String)
-     */
-    public void buildPullupSql(String personUserIdentifier, String chartOfAccountsCode, String organizationCode) {
-        cleanPullup(personUserIdentifier);
-        BudgetConstructionOrganizationReports bcOrgRpts = budgetConstructionOrganizationReportsService.getByPrimaryId(chartOfAccountsCode, organizationCode);
-        if (bcOrgRpts != null) {
-            if (bcOrgRpts.getOrganization().isOrganizationActiveIndicator()) {
-                curLevel = 0;
-                buildSubTreeSql(personUserIdentifier, bcOrgRpts, curLevel);
-            }
-        }
-    }
-
-    private void buildSubTreeSql(String personUserIdentifier, BudgetConstructionOrganizationReports bcOrgRpts, int curLevel) {
-
-        curLevel++;
-        //TODO remove refs to OBJ_ID in these called methods before implementing any calls using this method
-        budgetPullupDao.initPointOfView(personUserIdentifier, bcOrgRpts.getChartOfAccountsCode(), bcOrgRpts.getOrganizationCode(), curLevel);
-        budgetPullupDao.insertChildOrgs(personUserIdentifier, curLevel);
-        
     }
 
     /**
@@ -121,8 +101,7 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
     }
 
     /**
-     * @see org.kuali.module.budget.service.BudgetOrganizationTreeService#getPullupChildOrgs(java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * @see org.kuali.module.budget.service.BudgetOrganizationTreeService#getPullupChildOrgs(java.lang.String, java.lang.String, java.lang.String)
      */
     public List getPullupChildOrgs(String personUniversalIdentifier, String chartOfAccountsCode, String organizationCode) {
 
@@ -148,29 +127,17 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
             throw new IllegalArgumentException("String parameter personUniversalIdentifier was null or blank.");
         }
         List<BudgetConstructionPullup> results = budgetConstructionDao.getBudgetConstructionPullupFlagSetByUserId(personUniversalIdentifier);
-        if (!results.isEmpty()) {
-            for (BudgetConstructionPullup selOrg : results) {
+        if (!results.isEmpty()){
+            for (BudgetConstructionPullup selOrg: results){
                 selOrg.setPullFlag(OrgSelControlOption.NO.getKey());
             }
             businessObjectService.save(results);
         }
-
+        
     }
 
     /**
-     * @see org.kuali.module.budget.service.BudgetOrganizationTreeService#getSelectedOrgs(java.lang.String)
-     */
-    public List getSelectedOrgs(String personUniversalIdentifier) {
-
-        if (StringUtils.isBlank(personUniversalIdentifier)) {
-            throw new IllegalArgumentException("String parameter personUniversalIdentifier was null or blank.");
-        }
-        return budgetConstructionDao.getBudgetConstructionPullupFlagSetByUserId(personUniversalIdentifier);
-    }
-
-    /**
-     * Gets the budgetConstructionOrganizationReportsService attribute.
-     * 
+     * Gets the budgetConstructionOrganizationReportsService attribute. 
      * @return Returns the budgetConstructionOrganizationReportsService.
      */
     public BudgetConstructionOrganizationReportsService getBudgetConstructionOrganizationReportsService() {
@@ -179,7 +146,6 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
 
     /**
      * Sets the budgetConstructionOrganizationReportsService attribute value.
-     * 
      * @param budgetConstructionOrganizationReportsService The budgetConstructionOrganizationReportsService to set.
      */
     public void setBudgetConstructionOrganizationReportsService(BudgetConstructionOrganizationReportsService budgetConstructionOrganizationReportsService) {
@@ -187,8 +153,7 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
     }
 
     /**
-     * Gets the businessObjectService attribute.
-     * 
+     * Gets the businessObjectService attribute. 
      * @return Returns the businessObjectService.
      */
     public BusinessObjectService getBusinessObjectService() {
@@ -197,7 +162,6 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
 
     /**
      * Sets the businessObjectService attribute value.
-     * 
      * @param businessObjectService The businessObjectService to set.
      */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
@@ -205,8 +169,7 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
     }
 
     /**
-     * Gets the budgetConstructionDao attribute.
-     * 
+     * Gets the budgetConstructionDao attribute. 
      * @return Returns the budgetConstructionDao.
      */
     public BudgetConstructionDao getBudgetConstructionDao() {
@@ -215,27 +178,10 @@ public class BudgetOrganizationTreeServiceImpl implements BudgetOrganizationTree
 
     /**
      * Sets the budgetConstructionDao attribute value.
-     * 
      * @param budgetConstructionDao The budgetConstructionDao to set.
      */
     public void setBudgetConstructionDao(BudgetConstructionDao budgetConstructionDao) {
         this.budgetConstructionDao = budgetConstructionDao;
-    }
-
-    /**
-     * Gets the budgetPullupDao attribute. 
-     * @return Returns the budgetPullupDao.
-     */
-    public BudgetPullupDao getBudgetPullupDao() {
-        return budgetPullupDao;
-    }
-
-    /**
-     * Sets the budgetPullupDao attribute value.
-     * @param budgetPullupDao The budgetPullupDao to set.
-     */
-    public void setBudgetPullupDao(BudgetPullupDao budgetPullupDao) {
-        this.budgetPullupDao = budgetPullupDao;
     }
 
 }

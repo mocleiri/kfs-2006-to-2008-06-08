@@ -35,11 +35,13 @@
         <documentTypeName>KualiPurposeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PRPS</documentTypeCode>
 
-        <label>Purpose</label>
+        <label>Purpose Maintenance Document</label>
+        <shortLabel>PurposeMainDoc</shortLabel>
 
         <summary>Purpose maintenance document</summary>
         <description>Document used to create or update Purpose objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="Purpose" parameterName="PURPOSE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="purposeCode" />
@@ -51,7 +53,7 @@
                     <maintainableField name="purposeCode" required="true" />
                     <maintainableField name="purposeDescription" required="true" />
                     <maintainableField name="userSortNumber" required="false" />
-					<maintainableField name="dataObjectMaintenanceCodeActiveIndicator">
+					<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true">
 						<defaultValue>true</defaultValue>
 					</maintainableField>
                     <maintainableField name="versionNumber" />
