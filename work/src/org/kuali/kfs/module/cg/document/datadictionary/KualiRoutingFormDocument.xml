@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2006-2007 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../../core/datadictionary/dataDictionary-1_0.dtd">
+
+<dictionaryEntry>
+    <transactionalDocument>
+        <documentClass>org.kuali.module.kra.routingform.document.RoutingFormDocument</documentClass>
+        <businessRulesClass>org.kuali.module.kra.routingform.rules.RoutingFormDocumentRule</businessRulesClass>
+
+        <documentAuthorizerClass>org.kuali.module.kra.routingform.document.RoutingFormDocumentAuthorizer</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
+
+        <documentTypeName>KualiRoutingFormDocument</documentTypeName>
+        <documentTypeCode>KRFD</documentTypeCode>
+        <label>Routing Form</label>
+        
+                <attributes>
+
+            <attribute name="agencyAdditionalShippingInstructionsIndicator" forceUppercase="true">
+                <label>Agency Additional Shipping Instructions Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>agencyAdditionalShippingInstructionsIndicator</summary>
+                <description>agencyAdditionalShippingInstructionsIndicator description...</description>
+      </attribute>
+
+            <attribute name="agencyFederalPassThroughNotAvailableIndicator" forceUppercase="true">
+                <label>Agency Federal Pass Through Not Available Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>agencyFederalPassThroughNotAvailableIndicator</summary>
+                <description>agencyFederalPassThroughNotAvailableIndicator description...</description>
+      </attribute>
+
+            <attribute name="agencyFederalPassThroughNumber" forceUppercase="true">
+                <label>Federal Pass Through</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>agencyFederalPassThroughNumber</summary>
+                <description>agencyFederalPassThroughNumber description...</description>
+      </attribute>
+
+            <attribute name="grantNumber" forceUppercase="true">
+                <label>Current Grant No.</label>
+                <shortLabel>Grant Number</shortLabel>
+
+                <maxLength>27</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="29" />
+                </control>
+
+                <summary>grantNumber</summary>
+                <description>grantNumber description...</description>
+      </attribute>
+
+            <attribute name="institutionAccountNumber" forceUppercase="true">
+                <label>Institution Account No.</label>
+                <shortLabel>Account Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>institutionAccountNumber</summary>
+                <description>institutionAccountNumber description...</description>
+      </attribute>
+
+            <attribute name="routingFormAnnouncementNumber" forceUppercase="true">
+                <label>Routing Form Announcement Number</label>
+                <shortLabel>Routing Form Announcement</shortLabel>
+
+                <maxLength>110</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+
+                <control>
+                    <text size="112" />
+                </control>
+
+                <summary>routingFormAnnouncementNumber</summary>
+                <description>routingFormAnnouncementNumber description...</description>
+      </attribute>
+
+            <attribute name="routingFormBudgetNumber" forceUppercase="true">
+                <label>Routing Form Budget Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>routingFormBudgetNumber</summary>
+                <description>routingFormBudgetNumber description...</description>
+      </attribute>
+
+            <attribute name="routingFormCoProjectDirectorIndicator" forceUppercase="true">
+                <label>Routing Form Co Project Director Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormCoProjectDirectorIndicator</summary>
+                <description>routingFormCoProjectDirectorIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormConflictOfInterestCurrentIndicator" forceUppercase="true">
+                <label>Routing Form Conflict Of Interest Current Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormConflictOfInterestCurrentIndicator</summary>
+                <description>routingFormConflictOfInterestCurrentIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormConflictOfInterestExistsIndicator" forceUppercase="true">
+                <label>Routing Form Conflict Of Interest Exists Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormConflictOfInterestExistsIndicator</summary>
+                <description>routingFormConflictOfInterestExistsIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormCostShareIndicator" forceUppercase="true">
+                <label>Routing Form Cost Share Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormCostShareIndicator</summary>
+                <description>routingFormCostShareIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormCreateDate" forceUppercase="true">
+                <label>Routing Form Create Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>routingFormCreateDate</summary>
+                <description>routingFormCreateDate description...</description>
+      </attribute>
+
+            <attribute name="routingFormCreditPercentIndicator" forceUppercase="true">
+                <label>Routing Form Credit Percent Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormCreditPercentIndicator</summary>
+                <description>routingFormCreditPercentIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormFederalPassThroughIndicator" forceUppercase="true">
+                <label>Routing Form Federal Pass Through Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormFederalPassThroughIndicator</summary>
+                <description>routingFormFederalPassThroughIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormFellowEmailAddress" forceUppercase="true">
+                <label>Routing Form Fellow Email Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>routingFormFellowEmailAddress</summary>
+                <description>routingFormFellowEmailAddress description...</description>
+      </attribute>
+
+            <attribute name="routingFormFellowFirstName" forceUppercase="true">
+                <label>Routing Form Fellow First Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>25</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="27" />
+                </control>
+
+                <summary>routingFormFellowFirstName</summary>
+                <description>routingFormFellowFirstName description...</description>
+      </attribute>
+
+            <attribute name="routingFormFellowFullName" forceUppercase="true">
+                <label>Fellow</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>30</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+
+                <control>
+                    <text size="32" />
+                </control>
+
+                <summary>routingFormFellowFullName</summary>
+                <description>routingFormFellowFullName description...</description>
+      </attribute>
+
+            <attribute name="routingFormFellowLastName" forceUppercase="true">
+                <label>Routing Form Fellow Last Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>25</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="27" />
+                </control>
+
+                <summary>routingFormFellowLastName</summary>
+                <description>routingFormFellowLastName description...</description>
+      </attribute>
+
+            <attribute name="routingFormLastUpdateDate" forceUppercase="true">
+                <label>Routing Form Last Update Date</label>
+                <shortLabel>Date</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>routingFormLastUpdateDate</summary>
+                <description>routingFormLastUpdateDate description...</description>
+      </attribute>
+
+            <attribute name="routingFormLastUpdateUniversalIdentifier" forceUppercase="true">
+                <label>Routing Form Last Update Universal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>routingFormLastUpdateUniversalIdentifier</summary>
+                <description>routingFormLastUpdateUniversalIdentifier description...</description>
+      </attribute>
+
+            <attribute name="routingFormLayDescription" forceUppercase="true">
+                <label>Lay Description of This Request</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>1000</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
+
+                <summary>routingFormLayDescription</summary>
+                <description>routingFormLayDescription description...</description>
+      </attribute>
+
+            <attribute name="routingFormOtherOrganizationIndicator" forceUppercase="true">
+                <label>Routing Form Other Organization Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormOtherOrganizationIndicator</summary>
+                <description>routingFormOtherOrganizationIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormOtherPurposeDescription" forceUppercase="true">
+                <label>Routing Form Other Purpose Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>50</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>routingFormOtherPurposeDescription</summary>
+                <description>routingFormOtherPurposeDescription description...</description>
+      </attribute>
+
+            <attribute name="projectTypeOtherDescription" forceUppercase="true">
+                <label>Project Type Other Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>75</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>projectTypeOtherDescription</summary>
+                <description>projectTypeOtherDescription description...</description>
+			</attribute>
+
+            <attribute name="routingFormOtherTypeDescription" forceUppercase="true">
+                <label>Routing Form Other Type Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>75</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="77" />
+                </control>
+
+                <summary>routingFormOtherTypeDescription</summary>
+                <description>routingFormOtherTypeDescription description...</description>
+      </attribute>
+
+            <attribute name="routingFormParentNumber" forceUppercase="true">
+                <label>Routing Form Parent Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="14" />
+                </control>
+
+                <summary>routingFormParentNumber</summary>
+                <description>routingFormParentNumber description...</description>
+      </attribute>
+
+            <attribute name="routingFormPhysicalCampusCode" forceUppercase="true">
+                <label>Routing Form Physical Campus Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>routingFormPhysicalCampusCode</summary>
+                <description>routingFormPhysicalCampusCode description...</description>
+      </attribute>
+
+            <attribute name="routingFormPriorGrantNumber" forceUppercase="true">
+                <label>Prior Grant No.</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>27</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="29" />
+                </control>
+
+                <summary>routingFormPriorGrantNumber</summary>
+                <description>routingFormPriorGrantNumber description...</description>
+      </attribute>
+
+            <attribute name="routingFormProjectTitle" forceUppercase="true">
+                <label>Routing Form Project Title</label>
+                <shortLabel>Title</shortLabel>
+
+                <maxLength>500</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
+
+                <summary>routingFormProjectTitle</summary>
+                <description>routingFormProjectTitle description...</description>
+      </attribute>
+
+            <attribute name="routingFormPurposeCode" forceUppercase="true">
+                <label>Project Purpose</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>1</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="3" />
+                </control>
+
+                <summary>routingFormPurposeCode</summary>
+                <description>routingFormPurposeCode description...</description>
+      </attribute>
+
+            <attribute name="routingFormSpaceRequiredDescription" forceUppercase="true">
+                <label>Routing Form Space Required Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>1000</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
+
+                <summary>routingFormSpaceRequiredDescription</summary>
+                <description>routingFormSpaceRequiredDescription description...</description>
+      </attribute>
+
+            <attribute name="routingFormSpaceRequiredIndicator" forceUppercase="true">
+                <label>Routing Form Space Required Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormSpaceRequiredIndicator</summary>
+                <description>routingFormSpaceRequiredIndicator description...</description>
+      </attribute>
+
+            <attribute name="routingFormStatusCode" forceUppercase="true">
+                <label>Routing Form Status Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>routingFormStatusCode</summary>
+                <description>routingFormStatusCode description...</description>
+      </attribute>
+
+            <attribute name="routingFormSubcontractorIndicator" forceUppercase="true">
+                <label>Routing Form Subcontractor Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>routingFormSubcontractorIndicator</summary>
+                <description>routingFormSubcontractorIndicator description...</description>
+      </attribute>
+
+            <attribute name="documentNumber" forceUppercase="true">
+                <label>Document Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>14</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="16" />
+                </control>
+
+                <summary>documentNumber</summary>
+                <description>documentNumber description...</description>
+      </attribute>
+
+            <attribute name="researchTypeCode" forceUppercase="true">
+                <label>Research Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <text size="1" />
+                </control>
+
+                <summary>researchTypeCode</summary>
+                <description>researchTypeCode description...</description>
+      </attribute>
+
+            <attribute name="submissionTypeCode" forceUppercase="true">
+                <label>Submission Type</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>submissionTypeCode</summary>
+                <description>submissionTypeCode description...</description>
+      </attribute>
+	
+            <attribute name="previousFederalIdentifier" forceUppercase="true">
+                <label>Previous Federal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>previousFederalIdentifier</summary>
+                <description>previousFederalIdentifier description...</description>
+      </attribute>
+
+            <attribute name="federalIdentifier" forceUppercase="true">
+                <label>Federal Identification No.</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>federalIdentifier</summary>
+                <description>federalIdentifier description...</description>
+      </attribute>
+
+            <attribute name="grantsGovernmentConfirmationNumber" forceUppercase="true">
+                <label>Grants.gov Confirmation No.</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>12</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>grantsGovernmentConfirmationNumber</summary>
+                <description>grantsGovernmentConfirmationNumber description...</description>
+      </attribute>
+
+            <attribute name="grantsGovernmentSubmissionIndicator" forceUppercase="true">
+                <label>Grants.gov Submission</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>grantsGovernmentSubmissionIndicator</summary>
+                <description>grantsGovernmentSubmissionIndicator description...</description>
+      </attribute>
+
+            <attribute name="projectAbstract" forceUppercase="true">
+                <label>Project Abstract</label>
+                <shortLabel>Abstract</shortLabel>
+
+                <maxLength>4000</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+
+                <control>
+                    <textarea rows="3" cols="60"/>
+                </control>
+
+                <summary>projectAbstract</summary>
+                <description>projectAbstract description...</description>
+      </attribute>
+
+            <attribute name="creditPercentNextSequenceNumber" forceUppercase="true">
+                <label>Credit Percent Next Sequence Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>creditPercentNextSequenceNumber</summary>
+                <description>creditPercentNextSequenceNumber description...</description>
+      </attribute>
+
+            <attribute name="institutionCostShareNextSequenceNumber" forceUppercase="true">
+                <label>Institution Cost Share Next Sequence Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>institutionCostShareNextSequenceNumber</summary>
+                <description>institutionCostShareNextSequenceNumber description...</description>
+      </attribute>
+
+            <attribute name="otherCostShareNextSequenceNumber" forceUppercase="true">
+                <label>Other Cost Share Next Sequence Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>otherCostShareNextSequenceNumber</summary>
+                <description>otherCostShareNextSequenceNumber description...</description>
+      </attribute>
+
+            <attribute name="projectDirectorNextSequenceNumber" forceUppercase="true">
+                <label>Project Director Next Sequence Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>projectDirectorNextSequenceNumber</summary>
+                <description>projectDirectorNextSequenceNumber description...</description>
+      </attribute>
+
+            <attribute name="subcontractorNextSequenceNumber" forceUppercase="true">
+                <label>Subcontractor Next Sequence Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>subcontractorNextSequenceNumber</summary>
+                <description>subcontractorNextSequenceNumber description...</description>
+      </attribute>
+
+            <attributeReference name="routingFormAgency" sourceClassName="org.kuali.module.cg.bo.Agency" sourceAttributeName="agencyNumber">
+                <label>Agency</label>
+                <shortLabel>Number</shortLabel>
+                <summary>Budget Agency</summary>
+                <description>Budget Agency...</description>
+            </attributeReference>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+        
+        
+        <summary>Routing Form document</summary>
+        <description>Filling out routing forms is a delight which all persons should be so lucky as to be able to do dailly twice</description>
+        <help parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM"/>
+
+        <headerNavigation>
+        	<headerNavigationTab>
+        		<navigateTo>mainpage</navigateTo>
+        		<displayName>Main Page</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_MAIN_PAGE"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>personnel</navigateTo>
+        		<displayName>Personnel</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingFormPersonnel" parameterName="ROUTING_FORM_PERSONNEL"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>researchrisks</navigateTo>
+        		<displayName>Research Risks</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingFormResearchRisk" parameterName="ROUTING_FORM_RESEARCH_RISK"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>projectdetails</navigateTo>
+        		<displayName>Project Details</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_PROJECT_DETAILS_PAGE"/>
+        	</headerNavigationTab>
+        	<!-- headerNavigationTab>
+        		<navigateTo>agencyspecific</navigateTo>
+        		<displayName>Agency Specific</displayName>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>sf424</navigateTo>
+        		<displayName>SF 424</displayName>
+        	</headerNavigationTab -->
+        	<headerNavigationTab>
+        		<navigateTo>link</navigateTo>
+        		<displayName>Module Links</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_MODULE_LINKS_PAGE"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>notes</navigateTo>
+        		<displayName>Notes</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_NOTES_PAGE"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>output</navigateTo>
+        		<displayName>Output</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_OUTPUT_PAGE"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>template</navigateTo>
+        		<displayName>Template</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_TEMPLATE_PAGE"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>auditmode</navigateTo>
+        		<displayName>Audit Mode</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_AUDIT_MODE_PAGE"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>permissions</navigateTo>
+        		<displayName>Permissions</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_PERMISSIONS_PAGE"/>
+        	</headerNavigationTab>
+        	<headerNavigationTab>
+        		<navigateTo>approvals</navigateTo>
+        		<displayName>Approvals</displayName>
+        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_APPROVALS_PAGE"/>
+        	</headerNavigationTab>
+        </headerNavigation>
+        
+        <allowsErrorCorrection>false</allowsErrorCorrection>
+        <allowsNoteDelete>true</allowsNoteDelete>
+        <displayTopicFieldInNotes>true</displayTopicFieldInNotes>
+        <!--  attachmentTypesValuesFinderClass>org.kuali.module.kra.budget.lookup.keyvalues.BudgetBaseCodeValuesFinder</attachmentTypesValuesFinderClass -->
+    </transactionalDocument>
+</dictionaryEntry>
