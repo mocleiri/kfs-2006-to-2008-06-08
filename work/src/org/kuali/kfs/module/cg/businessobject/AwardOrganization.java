@@ -18,28 +18,26 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
 
 /**
- * This class represents an association between an award and an organization. It's like a reference to the organization from the
- * award. This way an award can maintain a collection of these references instead of owning organizations directly.
+ * 
+ * 
  */
-public class AwardOrganization extends PersistableBusinessObjectBase implements Primaryable, Inactivateable {
+public class AwardOrganization extends PersistableBusinessObjectBase implements Primaryable {
 
     private String chartOfAccountsCode;
     private String organizationCode;
     private Long proposalNumber;
     private boolean awardPrimaryOrganizationIndicator;
-    private boolean active = true;
 
     private Chart chartOfAccounts;
     private Org organization;
 
     /**
-     * Default no-args constructor.
+     * Default constructor.
      */
     public AwardOrganization() {
 
@@ -63,6 +61,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
         this.chartOfAccountsCode = chartOfAccountsCode;
     }
 
+
     /**
      * Gets the organizationCode attribute.
      * 
@@ -80,6 +79,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
     }
+
 
     /**
      * Gets the proposalNumber attribute.
@@ -99,6 +99,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
         this.proposalNumber = proposalNumber;
     }
 
+
     /**
      * Gets the awardPrimaryOrganizationIndicator attribute.
      * 
@@ -108,6 +109,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
         return awardPrimaryOrganizationIndicator;
     }
 
+
     /**
      * Sets the awardPrimaryOrganizationIndicator attribute.
      * 
@@ -116,6 +118,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
     public void setAwardPrimaryOrganizationIndicator(boolean awardPrimaryOrganizationIndicator) {
         this.awardPrimaryOrganizationIndicator = awardPrimaryOrganizationIndicator;
     }
+
 
     /**
      * Gets the chartOfAccounts attribute.
@@ -130,8 +133,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Sets the chartOfAccounts attribute.
      * 
      * @param chartOfAccounts The chartOfAccounts to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setChartOfAccounts(Chart chartOfAccounts) {
@@ -151,8 +153,7 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      * Sets the organization attribute.
      * 
      * @param organization The organization to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setOrganization(Org organization) {
@@ -164,20 +165,6 @@ public class AwardOrganization extends PersistableBusinessObjectBase implements 
      */
     public boolean isPrimary() {
         return isAwardPrimaryOrganizationIndicator();
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#isActive()
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**

@@ -16,8 +16,7 @@
 
 package org.kuali.module.financial.document;
 
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 
 /**
@@ -36,7 +35,7 @@ public class YearEndBudgetAdjustmentDocument extends BudgetAdjustmentDocument im
      * set posting year to previous fiscal year
      */
     public void initiateDocument() {
-        Integer previousYearParam = new Integer(SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().intValue() - 1);
+        Integer previousYearParam = new Integer(SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear().intValue() - 1);
         setPostingYear(previousYearParam);
     }
 }

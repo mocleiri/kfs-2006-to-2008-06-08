@@ -22,7 +22,7 @@
 
 
         <inquiry>
-            <title>Position Object Group Code</title>
+            <title>Labor Object Group Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="positionObjectGroupCode" />
@@ -32,7 +32,7 @@
         </inquiry>
 
         <lookup>
-            <title>Position Object Group Code</title>
+            <title>Labor Object Group Lookup</title>
 
             <instructions>Look up a Labor Object Group</instructions>
 
@@ -43,8 +43,9 @@
             </defaultSort>
 
             <lookupFields>
-                <lookupField attributeName="positionObjectGroupCode" />
-                <lookupField attributeName="rowActiveIndicator" />
+                <lookupField attributeName="positionObjectGroupCode" required="false" />
+                <lookupField attributeName="positionObjectGroupName" required="false" />
+                <lookupField attributeName="rowActiveIndicator" required="false" />
             </lookupFields>
 
             <resultFields>
@@ -66,6 +67,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>positionObjectGroupCode</summary>
+                <description>positionObjectGroupCode description...</description>
 			</attribute>
 
             <attribute name="positionObjectGroupName" forceUppercase="true">
@@ -78,10 +82,13 @@
                 <control>
                     <text size="42" />
                 </control>
+
+                <summary>positionObjectGroupName</summary>
+                <description>positionObjectGroupName description...</description>
 			</attribute>
 
             <attribute name="rowActiveIndicator" forceUppercase="true">
-                <label>Active Indicator</label>
+                <label>Row Active Indicator</label>
                 <shortLabel>Indicator</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -89,11 +96,13 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>rowActiveIndicator</summary>
+                <description>rowActiveIndicator description...</description>
 			</attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
         </attributes>
-        <objectLabel>Labor Position Object Code Group</objectLabel>
     </businessObject>
 </dictionaryEntry>

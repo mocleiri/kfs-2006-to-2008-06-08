@@ -28,10 +28,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.core.rule.event.KualiDocumentEventBase;
-import org.kuali.core.service.KualiRuleService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.UserAppointmentTask;
 import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
@@ -39,12 +38,13 @@ import org.kuali.module.kra.budget.rules.event.CalculatePersonnelEvent;
 import org.kuali.module.kra.budget.rules.event.InsertPersonnelEventBase;
 import org.kuali.module.kra.budget.rules.event.SavePersonnelEventBase;
 import org.kuali.module.kra.budget.rules.event.UpdatePersonnelEventBase;
-import org.kuali.module.kra.budget.service.BudgetPersonnelService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
 
 /**
  * This class handles Actions for Research Administration.
+ * 
+ * 
  */
 
 public class BudgetPersonnelAction extends BudgetAction {
@@ -55,22 +55,21 @@ public class BudgetPersonnelAction extends BudgetAction {
     /**
      * This method overrides the BudgetAction execute method. It does so for the purpose of recalculating Personnel expenses any
      * time the Personnel page is accessed
+     * 
      */
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         BudgetForm budgetForm = (BudgetForm) form;
 
         boolean rulePassed = runRule(budgetForm, new CalculatePersonnelEvent(budgetForm.getDocument()));
-
+        
         if (rulePassed) {
-            SpringContext.getBean(BudgetPersonnelService.class).calculateAllPersonnelCompensation(budgetForm.getBudgetDocument());
+            SpringServiceLocator.getBudgetPersonnelService().calculateAllPersonnelCompensation(budgetForm.getBudgetDocument());
             return super.execute(mapping, form, request, response);
-        }
-        else if (StringUtils.equals(KFSConstants.RELOAD_METHOD_TO_CALL, budgetForm.getMethodToCall())) {
+        } else if (StringUtils.equals(KFSConstants.RELOAD_METHOD_TO_CALL, budgetForm.getMethodToCall())) {
             GlobalVariables.getErrorMap().clear();
             return this.reload(mapping, form, request, response);
-        }
-        else {
+        } else {
             return mapping.findForward(KFSConstants.MAPPING_BASIC);
         }
     }
@@ -89,7 +88,7 @@ public class BudgetPersonnelAction extends BudgetAction {
         BudgetForm budgetForm = (BudgetForm) form;
 
         boolean rulePassed = runRule(budgetForm, new InsertPersonnelEventBase(budgetForm.getDocument(), budgetForm.getNewPersonnel(), !StringUtils.equals(PERSON, budgetForm.getNewPersonnelType())));
-
+        
         if (rulePassed) {
             if (!StringUtils.equals(PERSON, budgetForm.getNewPersonnelType())) {
                 BudgetUser newPersonnel = new BudgetUser();
@@ -124,7 +123,7 @@ public class BudgetPersonnelAction extends BudgetAction {
         budgetForm.getBudgetDocument().getBudget().setPersonnel(personnelList);
 
         // check any business rules that are specific to saving from this page only.
-        SpringContext.getBean(KualiRuleService.class).applyRules(new SavePersonnelEventBase(budgetForm.getDocument(), budgetForm.getBudgetDocument().getBudget().getPersonnel()));
+        SpringServiceLocator.getKualiRuleService().applyRules(new SavePersonnelEventBase(budgetForm.getDocument(), budgetForm.getBudgetDocument().getBudget().getPersonnel()));
 
 
         // Super save
@@ -140,12 +139,22 @@ public class BudgetPersonnelAction extends BudgetAction {
         BudgetForm budgetForm = (BudgetForm) form;
         List personnel = budgetForm.getBudgetDocument().getBudget().getPersonnel();
 
-        for (Iterator i = personnel.iterator(); i.hasNext();) {
-            BudgetUser budgetUser = (BudgetUser) i.next();
+        for (Iterator i = personnel.iterator(); i.hasNext(); ) {
+            BudgetUser budgetUser = (BudgetUser)i.next();
             if (budgetUser.isDelete()) {
                 i.remove();
             }
         }
+        
+//        String[] deleteIndexes = budgetForm.getDeleteValues();
+//        if (deleteIndexes != null && deleteIndexes.length > 0) {
+//            for (int i = deleteIndexes.length - 1; i > -1; i--) {
+//                if (deleteIndexes[i] != null) {
+//                    personnel.remove(Integer.parseInt(deleteIndexes[i]));
+//                }
+//            }
+//        }
+//        budgetForm.setDeleteValues(new String[personnel.size()]);
 
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
@@ -165,15 +174,15 @@ public class BudgetPersonnelAction extends BudgetAction {
         super.reload(mapping, form, request, response);
 
         Collections.sort(budgetForm.getBudgetDocument().getBudget().getPersonnel());
-
-        SpringContext.getBean(BudgetPersonnelService.class).calculateAllPersonnelCompensation(budgetForm.getBudgetDocument());
+        
+        SpringServiceLocator.getBudgetPersonnelService().calculateAllPersonnelCompensation(budgetForm.getBudgetDocument());
 
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     private boolean runRule(BudgetForm budgetForm, KualiDocumentEventBase event) {
         // check any business rules
-        boolean rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(event);
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(event);
 
         if (!rulePassed) {
             // have to reset all of the tasks and appointment types of everyone on the page.
@@ -184,8 +193,7 @@ public class BudgetPersonnelAction extends BudgetAction {
                 for (UserAppointmentTask userAppointmentTask : budgetUser.getUserAppointmentTasks()) {
                     if (userAppointmentTask.getInstitutionAppointmentTypeCode().equals(budgetUser.getAppointmentTypeCode())) {
                         userAppointmentTask.setInstitutionAppointmentTypeCode(budgetUser.getPreviousAppointmentTypeCode());
-                    }
-                    else if (userAppointmentTask.getInstitutionAppointmentTypeCode().equals(budgetUser.getSecondaryAppointmentTypeCode())) {
+                    } else if (userAppointmentTask.getInstitutionAppointmentTypeCode().equals(budgetUser.getSecondaryAppointmentTypeCode())) {
                         userAppointmentTask.setInstitutionAppointmentTypeCode(budgetUser.getPreviousSecondaryAppointmentTypeCode());
                     }
                     for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
@@ -195,10 +203,10 @@ public class BudgetPersonnelAction extends BudgetAction {
 
                 budgetUser.setAppointmentTypeCode(budgetUser.getPreviousAppointmentTypeCode());
                 budgetUser.setSecondaryAppointmentTypeCode(budgetUser.getPreviousSecondaryAppointmentTypeCode());
-
+                
             }
         }
-
+        
         return rulePassed;
     }
 }

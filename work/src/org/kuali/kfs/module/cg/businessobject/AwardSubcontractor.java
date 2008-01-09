@@ -18,15 +18,13 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
- * This class represents an association between an award and a subcontractor. It's like a reference to the subcontractor from the
- * award. This way an award can maintain a collection of these references instead of owning subcontractors directly.
+ * 
  */
-public class AwardSubcontractor extends PersistableBusinessObjectBase implements Inactivateable {
+public class AwardSubcontractor extends PersistableBusinessObjectBase {
 
     private String awardSubcontractorAmendmentNumber;
     private String awardSubcontractorNumber;
@@ -37,7 +35,6 @@ public class AwardSubcontractor extends PersistableBusinessObjectBase implements
     private String subcontractorContactLastName;
     private String subcontractorAuditHistoryText;
     private String awardSubcontractorDescription;
-    private boolean active = true;
 
     private Subcontractor subcontractor;
 
@@ -45,6 +42,7 @@ public class AwardSubcontractor extends PersistableBusinessObjectBase implements
      * Default constructor.
      */
     public AwardSubcontractor() {
+
     }
 
     /**
@@ -217,8 +215,6 @@ public class AwardSubcontractor extends PersistableBusinessObjectBase implements
     }
 
     /**
-     * Gets the subcontractor attribute.
-     * 
      * @return Returns the subcontractor.
      */
     public Subcontractor getSubcontractor() {
@@ -226,29 +222,12 @@ public class AwardSubcontractor extends PersistableBusinessObjectBase implements
     }
 
     /**
-     * Sets the subcontractor attribute.
-     * 
      * @param subcontractor The subcontractor to set.
-     * @deprecated Setter is required by OJB, but should not be used to modify this attribute. This attribute is set on the initial
-     *             creation of the object and should not be changed.
+     * @deprecated
      */
     @Deprecated
     public void setSubcontractor(Subcontractor subcontractor) {
         this.subcontractor = subcontractor;
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#isActive()
-     */
-    public boolean isActive() {
-        return active;
     }
 
     /**

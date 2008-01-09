@@ -56,7 +56,11 @@ public class BalanceTypServiceImpl implements BalanceTypService {
     /**
      * @see org.kuali.module.chart.service.BalanceTypService#getEncumbranceBalanceTypes()
      */
-    
+    public Collection getEncumbranceBalanceTypes() {
+        LOG.debug("getEncumbranceBalanceTypes() started");
+
+        return balanceTypeDao.getEncumbranceBalanceTypes();
+    }
 
     /**
      * This method retrieves a BalanceTyp instance from the Kuali database by its primary key - the balance typ's code.

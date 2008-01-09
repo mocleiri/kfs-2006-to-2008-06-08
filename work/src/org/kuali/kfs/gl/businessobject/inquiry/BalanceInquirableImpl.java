@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectDictionaryService;
 import org.kuali.core.service.LookupService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
@@ -32,6 +32,8 @@ import org.kuali.module.gl.web.Constant;
 /**
  * This class is used to generate the URL for the user-defined attributes for the GL balace screen. It is entended the
  * KualiInquirableImpl class, so it covers both the default implementation and customized implemetnation.
+ * 
+ * 
  */
 public class BalanceInquirableImpl extends AbstractGLInquirableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BalanceInquirableImpl.class);
@@ -41,61 +43,54 @@ public class BalanceInquirableImpl extends AbstractGLInquirableImpl {
     private Class businessObjectClass;
 
     /**
-     * Builds the keys for this inquiry.
-     * @return a List of Strings, holding the keys of this inquiry
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#buildUserDefinedAttributeKeyList()
      */
     protected List buildUserDefinedAttributeKeyList() {
         List keys = new ArrayList();
 
-        keys.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
-        keys.add(KFSPropertyConstants.ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
-        keys.add(KFSPropertyConstants.BALANCE_TYPE_CODE);
-        keys.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
-        keys.add(KFSPropertyConstants.OBJECT_CODE);
-        keys.add(KFSPropertyConstants.SUB_OBJECT_CODE);
-        keys.add(KFSPropertyConstants.OBJECT_TYPE_CODE);
+        keys.add(PropertyConstants.UNIVERSITY_FISCAL_YEAR);
+        keys.add(PropertyConstants.ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.CHART_OF_ACCOUNTS_CODE);
+        keys.add(PropertyConstants.BALANCE_TYPE_CODE);
+        keys.add(PropertyConstants.SUB_ACCOUNT_NUMBER);
+        keys.add(PropertyConstants.OBJECT_CODE);
+        keys.add(PropertyConstants.SUB_OBJECT_CODE);
+        keys.add(PropertyConstants.OBJECT_TYPE_CODE);
         keys.add(Constant.PENDING_ENTRY_OPTION);
 
         return keys;
     }
 
     /**
-     * The addition of all the month amounts, plus beginning balance and c&g balance as attributes
-     * @return a Map of user defined attributes
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getUserDefinedAttributeMap()
      */
     protected Map getUserDefinedAttributeMap() {
         Map userDefinedAttributeMap = new HashMap();
 
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH1_AMOUNT, KFSConstants.MONTH1);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH2_AMOUNT, KFSConstants.MONTH2);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH3_AMOUNT, KFSConstants.MONTH3);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH1_AMOUNT, Constants.MONTH1);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH2_AMOUNT, Constants.MONTH2);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH3_AMOUNT, Constants.MONTH3);
 
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH4_AMOUNT, KFSConstants.MONTH4);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH5_AMOUNT, KFSConstants.MONTH5);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH6_AMOUNT, KFSConstants.MONTH6);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH4_AMOUNT, Constants.MONTH4);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH5_AMOUNT, Constants.MONTH5);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH6_AMOUNT, Constants.MONTH6);
 
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH7_AMOUNT, KFSConstants.MONTH7);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH8_AMOUNT, KFSConstants.MONTH8);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH9_AMOUNT, KFSConstants.MONTH9);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH7_AMOUNT, Constants.MONTH7);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH8_AMOUNT, Constants.MONTH8);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH9_AMOUNT, Constants.MONTH9);
 
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH10_AMOUNT, KFSConstants.MONTH10);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH11_AMOUNT, KFSConstants.MONTH11);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH12_AMOUNT, KFSConstants.MONTH12);
-        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH13_AMOUNT, KFSConstants.MONTH13);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH10_AMOUNT, Constants.MONTH10);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH11_AMOUNT, Constants.MONTH11);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH12_AMOUNT, Constants.MONTH12);
+        userDefinedAttributeMap.put(PropertyConstants.MONTH13_AMOUNT, Constants.MONTH13);
 
-        userDefinedAttributeMap.put(KFSPropertyConstants.BEGINNING_BALANCE_LINE_AMOUNT, KFSConstants.PERIOD_CODE_BEGINNING_BALANCE);
-        userDefinedAttributeMap.put(KFSPropertyConstants.CONTRACTS_GRANTS_BEGINNING_BALANCE_AMOUNT, KFSConstants.PERIOD_CODE_CG_BEGINNING_BALANCE);
+        userDefinedAttributeMap.put(PropertyConstants.BEGINNING_BALANCE_LINE_AMOUNT, Constants.BEGINNING_BALANCE);
+        userDefinedAttributeMap.put(PropertyConstants.CONTRACTS_GRANTS_BEGINNING_BALANCE_AMOUNT, Constants.CG_BEGINNING_BALANCE);
 
         return userDefinedAttributeMap;
     }
 
     /**
-     * Changes the name of attributes on the fly...in this case, this just always returns the attribute name it's handed
-     * @param attributeName the attribute to rename
-     * @return a String with the new attribute name
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getAttributeName(java.lang.String)
      */
     protected String getAttributeName(String attributeName) {
@@ -103,10 +98,6 @@ public class BalanceInquirableImpl extends AbstractGLInquirableImpl {
     }
 
     /**
-     * If the key name sent in represents an "exclusive field", returns "" as the key value
-     * @param keyName the name of the key that may be changed
-     * @param keyValue the value of the key that may be changed
-     * @return an Object with the perhaps modified value for the key
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
      */
     protected Object getKeyValue(String keyName, Object keyValue) {
@@ -117,9 +108,6 @@ public class BalanceInquirableImpl extends AbstractGLInquirableImpl {
     }
 
     /**
-     * Justs returns the key name given
-     * @param keyName a key name
-     * @return the key name given
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyName(java.lang.String)
      */
     protected String getKeyName(String keyName) {
@@ -128,8 +116,6 @@ public class BalanceInquirableImpl extends AbstractGLInquirableImpl {
     }
 
     /**
-     * Return a Spring bean for the lookup
-     * @return the name of the Spring bean of the lookup
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getLookupableImplAttributeName()
      */
     protected String getLookupableImplAttributeName() {
@@ -137,18 +123,13 @@ public class BalanceInquirableImpl extends AbstractGLInquirableImpl {
     }
 
     /**
-     * Return the page name of this lookup
-     * @return the page name for all GL lookups
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
-        return KFSConstants.GL_MODIFIED_INQUIRY_ACTION;
+        return Constants.GL_MODIFIED_INQUIRY_ACTION;
     }
 
     /**
-     * Retrieves the business class of the next class type to drill up...since balance summarizes entry, it's entry
-     * @param attributeName the name to build the inquiry link to
-     * @return the Class of the business object that should be inquired on
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getInquiryBusinessObjectClass(String)
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
@@ -156,15 +137,12 @@ public class BalanceInquirableImpl extends AbstractGLInquirableImpl {
     }
 
     /**
-     * Addes the lookup impl and period code attributes to the parameters
-     * @param parameter the parameters used in the lookup
-     * @param attributeName the attribute name that an inquiry URL is being built for
      * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
      */
     protected void addMoreParameters(Properties parameter, String attributeName) {
-        parameter.put(KFSConstants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
+        parameter.put(Constants.LOOKUPABLE_IMPL_ATTRIBUTE_NAME, getLookupableImplAttributeName());
 
         String periodCode = (String) getUserDefinedAttributeMap().get(attributeName);
-        parameter.put(KFSConstants.UNIVERSITY_FISCAL_PERIOD_CODE_PROPERTY_NAME, periodCode);
+        parameter.put(Constants.UNIVERSITY_FISCAL_PERIOD_CODE_PROPERTY_NAME, periodCode);
     }
 }
