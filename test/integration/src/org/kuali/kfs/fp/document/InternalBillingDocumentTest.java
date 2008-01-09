@@ -15,6 +15,9 @@
  */
 package org.kuali.module.financial.document;
 
+import static org.kuali.kfs.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.kfs.util.SpringServiceLocator.getTransactionalDocumentDictionaryService;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.approveDocument;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.routeDocument;
 import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
@@ -27,22 +30,20 @@ import static org.kuali.test.fixtures.UserNameFixture.RORENFRO;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.exceptions.DocumentAuthorizationException;
 import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.TransactionalDocumentDictionaryService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.test.ConfigureContext;
 import org.kuali.test.DocumentTestUtils;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.TestsWorkflowViaDatabase;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.fixtures.AccountingLineFixture;
 import org.kuali.test.fixtures.UserNameFixture;
 import org.kuali.test.suite.AnnotationTestSuite;
@@ -50,14 +51,15 @@ import org.kuali.test.suite.CrossSectionSuite;
 
 /**
  * This class is used to test InternalBillingDocument.
+ * 
+ * 
  */
-@ConfigureContext(session = KHUNTLEY)
-// @RelatesTo(RelatesTo.JiraIssue.KULRNE5908)
+@WithTestSpringContext(session = KHUNTLEY)
 public class InternalBillingDocumentTest extends KualiTestBase {
     public static final Class<InternalBillingDocument> DOCUMENT_CLASS = InternalBillingDocument.class;
 
     private Document getDocumentParameterFixture() throws Exception {
-        return DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), InternalBillingDocument.class);
+        return DocumentTestUtils.createDocument(getDocumentService(), InternalBillingDocument.class);
     }
 
     private List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
@@ -81,7 +83,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         return 12;
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testApprove_addAccessibleAccount_ChangingTotals() throws Exception {
         AccountingDocument retrieved;
         AccountingDocument original;
@@ -91,19 +93,19 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         // accountingLines
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to another user, add accountingLines for accounts not
         // controlled by this user
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
         retrieved.addSourceAccountingLine(getSourceAccountingLineAccessibleAccount());
         retrieved.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
 
         boolean failedAsExpected = false;
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (ValidationException e) {
             failedAsExpected = true;
@@ -116,7 +118,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         assertTrue(failedAsExpected);
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testApprove_addInaccessibleAccount_sourceLine() throws Exception {
         // switch user to WESPRICE, build and route document with
         // accountingLines
@@ -126,20 +128,20 @@ public class InternalBillingDocumentTest extends KualiTestBase {
 
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to AHORNICK, add sourceAccountingLine for account not controlled by this user
         // (and add a balancing targetAccountingLine for an accessible account)
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
         retrieved.addSourceAccountingLine(getSourceAccountingLineInaccessibleAccount());
         retrieved.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
 
         // approve document, wait for failure b/c totals have changed
         boolean failedAsExpected = false;
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (ValidationException e) {
             failedAsExpected = true;
@@ -152,7 +154,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         assertTrue(failedAsExpected);
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testApprove_addInaccessibleAccount_targetLine() throws Exception {
         AccountingDocument retrieved;
         AccountingDocument original;
@@ -162,21 +164,21 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         // accountingLines
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to AHORNICK, add targetAccountingLine for accounts not
         // controlled by this user
         // (and add a balancing sourceAccountingLine for an accessible account)
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
         retrieved.addTargetAccountingLine(getTargetAccountingLineInaccessibleAccount());
         retrieved.addSourceAccountingLine(getSourceAccountingLineAccessibleAccount());
 
         // approve document, wait for failure
         boolean failedAsExpected = false;
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (ValidationException e) {
             failedAsExpected = true;
@@ -189,7 +191,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         assertTrue(failedAsExpected);
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testApprove_deleteAccessibleAccount() throws Exception {
         // switch user to WESPRICE, build and route document with
         // accountingLines
@@ -199,21 +201,21 @@ public class InternalBillingDocumentTest extends KualiTestBase {
 
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to AHORNICK, delete sourceAccountingLine for accounts
         // controlled by this user
         // (and delete matching targetAccountingLine, for balance)
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
         deleteSourceAccountingLine(retrieved, 0);
         deleteTargetAccountingLine(retrieved, 0);
 
         // approve document, wait for failure b/c totals have changed
         boolean failedAsExpected = false;
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (ValidationException e) {
             failedAsExpected = true;
@@ -226,7 +228,80 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         assertTrue(failedAsExpected);
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
+    public final void testApprove_deleteInaccessibleAccount_sourceLine() throws Exception {
+        // switch user to WESPRICE, build and route document with
+        // accountingLines
+        AccountingDocument retrieved;
+        AccountingDocument original;
+        String docId;
+
+        changeCurrentUser(getInitialUserName());
+        original = buildDocument();
+        routeDocument(original, getDocumentService());
+        docId = original.getDocumentNumber();
+
+        // switch user to AHORNICK, delete sourceAccountingLines for accounts
+        // not controlled by this user
+        // (and delete matching accessible targetLine, for balance)
+        changeCurrentUser(getTestUserName());
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
+        deleteSourceAccountingLine(retrieved, 1);
+        deleteTargetAccountingLine(retrieved, 0);
+
+        // approve document, wait for failure
+        boolean failedAsExpected = false;
+        try {
+            approveDocument(retrieved, getDocumentService());
+        }
+        catch (ValidationException e) {
+            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KeyConstants.ERROR_ACCOUNTINGLINE_INACCESSIBLE_DELETE);
+        }
+        catch (DocumentAuthorizationException dae) {
+            // this means that the workflow status didn't change in time for the check, so this is
+            // an expected exception
+            failedAsExpected = true;
+        }
+        assertTrue(failedAsExpected);
+    }
+
+    @TestsWorkflowViaDatabase
+    public final void testApprove_deleteInaccessibleAccount_targetLine() throws Exception {
+        AccountingDocument retrieved;
+        AccountingDocument original;
+        String docId;
+
+        // switch user to WESPRICE, build and route document with
+        // accountingLines
+        changeCurrentUser(getInitialUserName());
+        original = buildDocument();
+        routeDocument(original, getDocumentService());
+        docId = original.getDocumentNumber();
+
+        // switch user to AHORNICK, delete targetAccountingLine for accounts not controlled by this user
+        // (and delete matching accessible sourceLine, for balance)
+        changeCurrentUser(getTestUserName());
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
+        deleteTargetAccountingLine(retrieved, 1);
+        deleteSourceAccountingLine(retrieved, 0);
+
+        // approve document, wait for failure
+        boolean failedAsExpected = false;
+        try {
+            approveDocument(retrieved, getDocumentService());
+        }
+        catch (ValidationException e) {
+            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KeyConstants.ERROR_ACCOUNTINGLINE_INACCESSIBLE_DELETE);
+        }
+        catch (DocumentAuthorizationException dae) {
+            // this means that the workflow status didn't change in time for the check, so this is
+            // an expected exception
+            failedAsExpected = true;
+        }
+        assertTrue(failedAsExpected);
+    }
+
+    @TestsWorkflowViaDatabase
     public final void testApprove_deleteLastAccessibleAccount() throws Exception {
         // switch user to WESPRICE, build and route document with
         // accountingLines
@@ -236,12 +311,12 @@ public class InternalBillingDocumentTest extends KualiTestBase {
 
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to AHORNICK, delete all accountingLines for that user
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
         deleteSourceAccountingLine(retrieved, 2);
         deleteSourceAccountingLine(retrieved, 0);
 
@@ -251,10 +326,10 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         // approve document, wait for failure
         boolean failedAsExpected = false;
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (ValidationException e) {
-            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_ACCOUNTINGLINE_LASTACCESSIBLE_DELETE);
+            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KeyConstants.ERROR_ACCOUNTINGLINE_LASTACCESSIBLE_DELETE);
         }
         catch (DocumentAuthorizationException dae) {
             // this means that the workflow status didn't change in time for the check, so this is
@@ -266,7 +341,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
 
 
     @AnnotationTestSuite(CrossSectionSuite.class)
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testApprove_updateAccessibleAccount() throws Exception {
         // switch user to WESPRICE, build and route document with
         // accountingLines
@@ -276,14 +351,14 @@ public class InternalBillingDocumentTest extends KualiTestBase {
 
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to AHORNICK, update sourceAccountingLine for accounts
         // controlled by this user
         // (and delete update targetAccountingLine, for balance)
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
 
         // make sure totals don't change
         KualiDecimal originalSourceLineAmt = retrieved.getSourceAccountingLine(0).getAmount();
@@ -304,7 +379,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         retrieved.addSourceAccountingLine(newSourceLine);
 
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (DocumentAuthorizationException dae) {
             // this means that the workflow status didn't change in time for the check, so this is
@@ -312,7 +387,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         }
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testApprove_updateInaccessibleAccount_sourceLine() throws Exception {
         AccountingDocument retrieved;
         AccountingDocument original;
@@ -322,24 +397,24 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         // accountingLines
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to AHORNICK, update sourceAccountingLines for accounts
         // not controlled by this user
         // (and update matching accessible targetLine, for balance)
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
         updateSourceAccountingLine(retrieved, 1, "3.14");
         updateTargetAccountingLine(retrieved, 0, "3.14");
 
         // approve document, wait for failure
         boolean failedAsExpected = false;
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (ValidationException e) {
-            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_ACCOUNTINGLINE_INACCESSIBLE_UPDATE);
+            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KeyConstants.ERROR_ACCOUNTINGLINE_INACCESSIBLE_UPDATE);
         }
         catch (DocumentAuthorizationException dae) {
             // this means that the workflow status didn't change in time for the check, so this is
@@ -349,7 +424,7 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         assertTrue(failedAsExpected);
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testApprove_updateInaccessibleAccount_targetLine() throws Exception {
         // switch user to WESPRICE, build and route document with
         // accountingLines
@@ -359,24 +434,24 @@ public class InternalBillingDocumentTest extends KualiTestBase {
 
         changeCurrentUser(getInitialUserName());
         original = buildDocument();
-        routeDocument(original, SpringContext.getBean(DocumentService.class));
+        routeDocument(original, getDocumentService());
         docId = original.getDocumentNumber();
 
         // switch user to AHORNICK, update targetAccountingLine for accounts
         // not controlled by this user
         // (and update matching accessible sourceLine, for balance)
         changeCurrentUser(getTestUserName());
-        retrieved = (AccountingDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
+        retrieved = (AccountingDocument) getDocumentService().getByDocumentHeaderId(docId);
         updateTargetAccountingLine(retrieved, 1, "2.81");
         updateSourceAccountingLine(retrieved, 0, "2.81");
 
         // approve document, wait for failure
         boolean failedAsExpected = false;
         try {
-            approveDocument(retrieved, SpringContext.getBean(DocumentService.class));
+            approveDocument(retrieved, getDocumentService());
         }
         catch (ValidationException e) {
-            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_ACCOUNTINGLINE_INACCESSIBLE_UPDATE);
+            failedAsExpected = GlobalVariables.getErrorMap().containsMessageKey(KeyConstants.ERROR_ACCOUNTINGLINE_INACCESSIBLE_UPDATE);
         }
         catch (DocumentAuthorizationException dae) {
             // this means that the workflow status didn't change in time for the check, so this is
@@ -392,45 +467,45 @@ public class InternalBillingDocumentTest extends KualiTestBase {
         List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
         int expectedSourceTotal = sourceLines.size();
         int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
+        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(getDocumentService(), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
     }
 
 
     public final void testGetNewDocument() throws Exception {
-        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, SpringContext.getBean(DocumentService.class));
+        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, getDocumentService());
     }
 
     public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
+        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), getDataDictionaryService());
 
     }
 
     public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
+        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), getTransactionalDocumentDictionaryService());
     }
 
     public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
+        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), getDataDictionaryService());
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), SpringContext.getBean(DocumentService.class), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
+        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), getDocumentService(), getTransactionalDocumentDictionaryService());
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
+        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), getDocumentService());
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
+        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), getDocumentService());
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
+    @TestsWorkflowViaDatabase
     public final void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), SpringContext.getBean(DocumentService.class), getExpectedPrePeCount());
+        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), getDocumentService(), getExpectedPrePeCount());
     }
 
 

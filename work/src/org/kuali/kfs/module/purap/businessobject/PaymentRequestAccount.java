@@ -21,25 +21,23 @@ import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.module.purap.util.PurApObjectUtils;
 
 /**
- * Payment Request Account Business Object.
+ * 
  */
 public class PaymentRequestAccount extends PurApAccountingLineBase {
 
     private KualiDecimal disencumberedAmount = KualiDecimal.ZERO;
+
     private PaymentRequestItem paymentRequestItem;
+    
+	/**
+	 * Default constructor.
+	 */
+	public PaymentRequestAccount() {
+
+	}
 
     /**
      * Default constructor.
-     */
-    public PaymentRequestAccount() {
-
-    }
-
-    /**
-     * Constructor.
-     * 
-     * @param item - payment request item
-     * @param poa - purchase order account
      */
     public PaymentRequestAccount(PaymentRequestItem item, PurchaseOrderAccount poa) {
         // copy base attributes
@@ -50,18 +48,35 @@ public class PaymentRequestAccount extends PurApAccountingLineBase {
         setPaymentRequestItem(item);
     }
 
+    
+    /**
+     * Gets the disencumberedAmount attribute. 
+     * @return Returns the disencumberedAmount.
+     */
     public KualiDecimal getDisencumberedAmount() {
         return disencumberedAmount;
     }
 
+    /**
+     * Sets the disencumberedAmount attribute value.
+     * @param disencumberedAmount The disencumberedAmount to set.
+     */
     public void setDisencumberedAmount(KualiDecimal disencumberedAmount) {
         this.disencumberedAmount = disencumberedAmount;
     }
 
+    /**
+     * Gets the paymentRequestItem attribute. 
+     * @return Returns the paymentRequestItem.
+     */
     public PaymentRequestItem getPaymentRequestItem() {
         return paymentRequestItem;
     }
 
+    /**
+     * Sets the paymentRequestItem attribute value.
+     * @param paymentRequestItem The paymentRequestItem to set.
+     */
     public void setPaymentRequestItem(PaymentRequestItem paymentRequestItem) {
         this.paymentRequestItem = paymentRequestItem;
     }

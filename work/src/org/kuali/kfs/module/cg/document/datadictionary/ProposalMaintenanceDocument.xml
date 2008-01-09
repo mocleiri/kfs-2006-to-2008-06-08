@@ -33,20 +33,19 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ProposalMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiProposalMaintenanceDocument</documentTypeName>
         <documentTypeCode>PRPL</documentTypeCode>
 
-        <webScriptFile>../dwr/interface/AgencyService.js</webScriptFile>
-        <webScriptFile>../dwr/interface/OrganizationService.js</webScriptFile>
-        <webScriptFile>../dwr/interface/ProjectDirectorService.js</webScriptFile>
-        <webScriptFile>../dwr/interface/SubcontractorService.js</webScriptFile>
-        <webScriptFile>../scripts/cg/proposalDocument.js</webScriptFile>
+		<webScriptFile>scripts/cg/proposalDocument.js</webScriptFile>
 
-        <label>Proposal</label>
+        <label>Proposal Maintenance Document</label>
+        <shortLabel>PrpslMaintDoc</shortLabel>
 
         <summary>Proposal maintenance document</summary>
         <description>Document used to create or update Proposal objects</description>
-        <help parameterNamespace="KFS-CG" parameterDetailType="Proposal" parameterName="PROPOSAL" />
+		<!--help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_ACCOUNT" /-->
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="proposalNumber" />
@@ -54,12 +53,13 @@
 
         <defaultExistenceChecks>
             <reference attributeName="proposalStatus" activeIndicatorAttributeName="rowActiveIndicator" attributeToHighlightOnFail="proposalStatusCode" />
-            <reference attributeName="agency" activeIndicatorAttributeName="historicalIndicator" attributeToHighlightOnFail="agencyNumber" />
+            <reference attributeName="agency" activeIndicatorAttributeName="historicalIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="agencyNumber" />
             <reference attributeName="proposalAwardType" activeIndicatorAttributeName="rowActiveIndicator" attributeToHighlightOnFail="proposalAwardTypeCode" />
             <reference attributeName="proposalPurpose" activeIndicatorAttributeName="rowActiveIndicator" attributeToHighlightOnFail="proposalPurposeCode" />
-            <reference attributeName="federalPassThroughAgency" activeIndicatorAttributeName="historicalIndicator" attributeToHighlightOnFail="federalPassThroughAgencyNumber" />
+            <reference attributeName="federalPassThroughAgency" activeIndicatorAttributeName="historicalIndicator" activeIndicatorReversed="true" attributeToHighlightOnFail="federalPassThroughAgencyNumber" />
             <reference attributeName="cfda" activeIndicatorAttributeName="cfdaStatusCode" attributeToHighlightOnFail="cfdaNumber" />
             <reference collection="proposalOrganizations" attributeName="organization" activeIndicatorAttributeName="organizationActiveIndicator" attributeToHighlightOnFail="organizationCode" />
+			<reference collection="proposalProjectDirectors" attributeName="projectDirector" attributeToHighlightOnFail="personUniversalIdentifier" />
 			<reference collection="proposalSubcontractors" attributeName="subcontractor" activeIndicatorAttributeName="active" attributeToHighlightOnFail="subcontractorNumber" />
         </defaultExistenceChecks>
 
@@ -72,7 +72,7 @@
                     <maintainableField name="proposalStatusCode" required="true" webUILeaveFieldFunction="onblur_proposalStatusCode" >
                         <defaultValue>P</defaultValue>
                     </maintainableField>
-                    <maintainableField name="agencyNumber" required="true" webUILeaveFieldFunction="onblur_agencyNumber" />
+                    <maintainableField name="agencyNumber" required="true" />
                     <maintainableField name="agency.fullName" readOnly="true" />
                     <maintainableField name="proposalProjectTitle" required="true" />
                     <maintainableField name="proposalBeginningDate" required="true" />
@@ -88,8 +88,7 @@
                     <maintainableField name="proposalPurposeCode" required="true" />
                     <maintainableField name="grantNumber" />
                     <maintainableField name="proposalFederalPassThroughIndicator" />
-                    <maintainableField name="federalPassThroughAgencyNumber" webUILeaveFieldFunction="onblur_federalPassThroughAgencyNumber" />
-                    <maintainableField name="federalPassThroughAgency.fullName" readOnly="true" />
+                    <maintainableField name="federalPassThroughAgencyNumber" />
                     <maintainableField name="cfdaNumber" />
                     <maintainableField name="proposalFellowName" />
                     <maintainableField name="proposalDueDate" />
@@ -101,9 +100,8 @@
             <maintainableSection title="Organizations">
                 <maintainableItems>
                     <maintainableCollection name="proposalOrganizations" businessObjectClass="org.kuali.module.cg.bo.ProposalOrganization" attributeToHighlightOnDuplicateKey="organizationCode">
-                        <maintainableField name="chartOfAccountsCode" required="true" webUILeaveFieldFunction="organizationNameLookup" />
-                        <maintainableField name="organizationCode" required="true" webUILeaveFieldFunction="organizationNameLookup" />
-                        <maintainableField name="organization.organizationName" readOnly="true" />
+                        <maintainableField name="chartOfAccountsCode" required="true" />
+                        <maintainableField name="organizationCode" required="true" />
                         <maintainableField name="proposalPrimaryOrganizationIndicator" required="false" />
                         <maintainableField name="newCollectionRecord" />
                         <maintainableField name="versionNumber" />
@@ -119,16 +117,15 @@
             <maintainableSection title="Project Directors">
                 <maintainableItems>
                     <maintainableCollection name="proposalProjectDirectors" businessObjectClass="org.kuali.module.cg.bo.ProposalProjectDirector">
-                        <maintainableField name="projectDirector.personUserIdentifier" required="true" webUILeaveFieldFunction="proposalDirectorIDLookup" />
-                        <maintainableField name="projectDirector.personName" readOnly="true" />
-                        <maintainableField name="personUniversalIdentifier" readOnly="true" />
+                        <maintainableField name="personUniversalIdentifier" required="true" />
+                        <maintainableField name="projectDirector.universalUser.personName" required="false" readOnly="true" />
                         <maintainableField name="proposalPrimaryProjectDirectorIndicator" required="false" />
                         <maintainableField name="proposalProjectDirectorProjectTitle" required="false" />
                         <!-- hidden fields -->
                         <maintainableField name="newCollectionRecord" />
                         <maintainableField name="versionNumber" />
                         <summaryFields>
-                            <summaryField name="projectDirector.personName" />
+                            <summaryField name="projectDirector.universalUser.personName" />
                             <summaryField name="proposalPrimaryProjectDirectorIndicator" />
                             <summaryField name="proposalProjectDirectorProjectTitle" />
                         </summaryFields>
@@ -138,8 +135,8 @@
 			
             <maintainableSection title="Subcontractors">
                 <maintainableItems>
-                    <maintainableCollection name="proposalSubcontractors" businessObjectClass="org.kuali.module.cg.bo.ProposalSubcontractor" >
-                        <maintainableField name="subcontractorNumber" required="false" webUILeaveFieldFunction="onblur_subcontractorNumber" />
+                    <maintainableCollection name="proposalSubcontractors" businessObjectClass="org.kuali.module.cg.bo.ProposalSubcontractor" attributeToHighlightOnDuplicateKey="subcontractorNumber">
+                        <maintainableField name="subcontractorNumber" required="true" />
                         <maintainableField name="subcontractor.subcontractorName" readOnly="true" />
 						<maintainableField name="proposalSubcontractorDescription" />
                         <maintainableField name="proposalSubcontractorAmount">
@@ -158,14 +155,14 @@
                 <maintainableItems>
                     <maintainableCollection name="proposalResearchRisks" businessObjectClass="org.kuali.module.cg.bo.ProposalResearchRisk" includeAddLine="false">
                         <maintainableField name="researchRiskType.researchRiskTypeDescription" readOnly="true" />
-                        <maintainableField name="researchRiskTypeIndicator" required="false" />
+                        <maintainableField name="isActive" required="false" />
                         <!-- hidden fields -->
                         <maintainableField name="newCollectionRecord" />
                         <maintainableField name="versionNumber" />
                         <maintainableField name="researchRiskTypeCode" />
                         <summaryFields>
                             <summaryField name="researchRiskType.researchRiskTypeDescription" />
-                            <summaryField name="active" />
+                            <summaryField name="isActive" />
                         </summaryFields>
                     </maintainableCollection>
                 </maintainableItems>

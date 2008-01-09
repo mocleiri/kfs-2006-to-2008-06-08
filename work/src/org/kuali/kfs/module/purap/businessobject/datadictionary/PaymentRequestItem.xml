@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+	Copyright 2006-2007 The Kuali Foundation.
+	
+	Licensed under the Educational Community License, Version 1.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+	
+	http://www.opensource.org/licenses/ecl1.php
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
 -->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
@@ -21,6 +21,7 @@
 ]>
 <dictionaryEntry>
 	<businessObject businessObjectClass="org.kuali.module.purap.bo.PaymentRequestItem">
+
 
 		<inquiry>
 			<title>Payment Request Item Inquiry</title>
@@ -119,42 +120,50 @@
 					<text size="13" />
 				</control>
 
+				<summary>purchaseOrderCommodityCode</summary>
+				<description>purchaseOrderCommodityCode description...</description>
 			</attribute>
 
 			<attributeReference name="purchaseOrderItemUnitPrice" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemUnitPrice">
 				<label>Purchase Order Item Unit Price</label>
 				<shortLabel>PO Unit/Ext Price</shortLabel>
-
+				<summary>purchaseOrderItemUnitPrice</summary>
+				<description>purchaseOrderItemUnitPrice description...</description>
 			</attributeReference>
 
 			<attributeReference name="itemOutstandingInvoiceQuantity" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemQuantity">
 				<label>Item Outstanding Invoice Quantity</label>
 				<shortLabel>Open Qty</shortLabel>
-
+				<summary>itemOutstandingInvoiceQuantity</summary>
+				<description>itemOutstandingInvoiceQuantity description...</description>
 			</attributeReference>
 
 			<attributeReference name="itemOutstandingInvoiceAmount" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemAmount">
 				<label>Item Outstanding Invoiced Amount</label>
 				<shortLabel>Outstanding Invoiced Amount</shortLabel>
-
+				<summary>itemOutstandingInvoiceAmount</summary>
+				<description>itemOutstandingInvoiceAmount description...</description>
 			</attributeReference>
 
 			<attributeReference name="poOutstandingQuantity" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemQuantity">
 				<label>Item Open Quantity</label>
 				<shortLabel>Open Qty</shortLabel>
-
+				<summary>itemOpenQuantity</summary>
+				<description>itemOpenQuantity description...</description>
 			</attributeReference>
 			
 			<attributeReference name="poOutstandingAmount" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemAmount">
 				<label>Item Outstanding Encumbered Amount</label>
 				<shortLabel>Outstanding Encumbered Amount</shortLabel>
-
+				<summary>itemOpenAmount</summary>
+				<description>itemOpenAmount description...</description>
 			</attributeReference>
 
 			<attributeReference name="itemQuantity" sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy" sourceAttributeName="genericItemQuantity">
 				<label>Quantity Invoiced</label>
 				<shortLabel>Qty Invoiced</shortLabel>
-
+				<summary>QuantityInvoiced</summary>
+				<description>QuantityInvoiced description...</description>
 			</attributeReference>
 
 		</attributes>

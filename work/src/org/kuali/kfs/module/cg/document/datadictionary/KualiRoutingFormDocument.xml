@@ -35,6 +35,7 @@
         <documentTypeName>KualiRoutingFormDocument</documentTypeName>
         <documentTypeCode>KRFD</documentTypeCode>
         <label>Routing Form</label>
+        <shortLabel>Routing Form</shortLabel>
         
                 <attributes>
 
@@ -271,11 +272,11 @@
       </attribute>
 
             <attribute name="routingFormFellowFullName" forceUppercase="true">
-                <label>Fellow</label>
+                <label>Routing Form Fellow Full Name</label>
                 <shortLabel>Name</shortLabel>
 
                 <maxLength>30</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="32" />
@@ -331,11 +332,11 @@
       </attribute>
 
             <attribute name="routingFormLayDescription" forceUppercase="true">
-                <label>Lay Description of This Request</label>
+                <label>Routing Form Lay Description</label>
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>1000</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <textarea rows="5" cols="80"/>
@@ -379,7 +380,7 @@
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>75</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="12" />
@@ -743,28 +744,23 @@
         
         <summary>Routing Form document</summary>
         <description>Filling out routing forms is a delight which all persons should be so lucky as to be able to do dailly twice</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM"/>
 
         <headerNavigation>
         	<headerNavigationTab>
         		<navigateTo>mainpage</navigateTo>
         		<displayName>Main Page</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_MAIN_PAGE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>personnel</navigateTo>
         		<displayName>Personnel</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingFormPersonnel" parameterName="ROUTING_FORM_PERSONNEL"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>researchrisks</navigateTo>
         		<displayName>Research Risks</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingFormResearchRisk" parameterName="ROUTING_FORM_RESEARCH_RISK"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>projectdetails</navigateTo>
         		<displayName>Project Details</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_PROJECT_DETAILS_PAGE"/>
         	</headerNavigationTab>
         	<!-- headerNavigationTab>
         		<navigateTo>agencyspecific</navigateTo>
@@ -777,37 +773,30 @@
         	<headerNavigationTab>
         		<navigateTo>link</navigateTo>
         		<displayName>Module Links</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_MODULE_LINKS_PAGE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>notes</navigateTo>
         		<displayName>Notes</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_NOTES_PAGE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>output</navigateTo>
         		<displayName>Output</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_OUTPUT_PAGE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>template</navigateTo>
         		<displayName>Template</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_TEMPLATE_PAGE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>auditmode</navigateTo>
         		<displayName>Audit Mode</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_AUDIT_MODE_PAGE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>permissions</navigateTo>
         		<displayName>Permissions</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_PERMISSIONS_PAGE"/>
         	</headerNavigationTab>
         	<headerNavigationTab>
         		<navigateTo>approvals</navigateTo>
         		<displayName>Approvals</displayName>
-        		<pageHelp parameterNamespace="KFS-RA" parameterDetailType="RoutingForm" parameterName="ROUTING_FORM_APPROVALS_PAGE"/>
         	</headerNavigationTab>
         </headerNavigation>
         
