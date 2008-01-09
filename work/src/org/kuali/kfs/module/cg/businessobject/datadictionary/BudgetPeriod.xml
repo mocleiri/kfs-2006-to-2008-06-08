@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +22,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetPeriod">
 
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <attributes>
 
@@ -124,7 +126,7 @@
                 </control>
 
                 <summary>objectId summary...</summary>
-                <description>Budget period object identifier</description>
+                <description>Da period for da budget. Duh.</description>
             </attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -148,6 +150,8 @@
 
         <objectLabel>Budget Periods</objectLabel>
         <objectDescription>Budget Periods are the periods for your Budget.</objectDescription>
+        
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetPeriodHelp" />
 
     </businessObject>
 </dictionaryEntry>

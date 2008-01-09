@@ -20,6 +20,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.July1PositionFunding">
 
+
         <inquiry>
             <title>July 1 Position Funding Inquiry</title>
              
@@ -43,7 +44,6 @@
         </inquiry>
 
         <lookup>
-			<lookupableID>july1PositionFundingLookupable</lookupableID>	        
             <title>July 1 Position Funding Lookup</title>
 
             <instructions>Look up July 1 Position Funding</instructions>
@@ -53,18 +53,23 @@
                     <sortAttribute attributeName="universityFiscalYear" />
                     <sortAttribute attributeName="chartOfAccountsCode" />
                     <sortAttribute attributeName="accountNumber" />
-                    <sortAttribute attributeName="positionNumber" />
                 </sortAttributes>
             </defaultSort>
 
             <lookupFields>
-			    <lookupField attributeName="universityFiscalYear" required="true">
-                    <defaultValueFinderClass>org.kuali.kfs.lookup.valuefinder.FiscalYearFinder</defaultValueFinderClass>
-                </lookupField>
-                <lookupField attributeName="chartOfAccountsCode" required="true" />                
-                <lookupField attributeName="accountNumber" required="true" />
+                <lookupField attributeName="universityFiscalYear" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />                
+                <lookupField attributeName="accountNumber" required="false" />
                 <lookupField attributeName="subAccountNumber" required="false" />
-               
+                <!-- 
+                <lookupField attributeName="emplid" required="false" />
+                <lookupField attributeName="financialObjectCode" required="false" />
+                <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="july1BudgetAmount" required="false" />
+                <lookupField attributeName="july1BudgetFteQuantity" required="false" />
+                <lookupField attributeName="july1BudgetTimePercent" required="false" />
+                <lookupField attributeName="positionNumber" required="false" />
+				-->
             </lookupFields>
 
             <resultFields>
@@ -74,8 +79,7 @@
                 <field attributeName="subAccountNumber" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialSubObjectCode" />                                
-                <field attributeName="personName" />
-				<field attributeName="emplid" />                
+                <field attributeName="fundingPerson.personName" />
 				<field attributeName="positionNumber" />                
                 <field attributeName="july1BudgetAmount" />
                 <field attributeName="july1BudgetFteQuantity" />
@@ -85,30 +89,53 @@
 
         <attributes>
 
-            <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
-                <label>Fiscal Year</label>
-                <shortLabel>Fiscal Year</shortLabel>
-            </attributeReference>
-            <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
 			<attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber" />
-			<attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber" />          
-			<attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode" />			
+
+            <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
+            
+            <attribute name="emplid" forceUppercase="true">
+                <label>Emplid</label>
+                <shortLabel>Emplid</shortLabel>
+
+                <maxLength>11</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="13" />
+                </control>
+
+                <summary>emplid</summary>
+                <description>emplid description...</description>
+			</attribute>
+
+            <attributeReference name="fundingPerson.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
+                <label>Name</label>
+                <shortLabel>Name</shortLabel>
+                <required>false</required>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Name.</description>
+            </attributeReference>
+
+			<attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode" />
+			
             <attributeReference name="financialSubObjectCode" sourceClassName="org.kuali.module.chart.bo.SubObjCd" sourceAttributeName="financialSubObjectCode" />
-            
-            <attributeReference name="emplid" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personPayrollIdentifier"/>
-            <attributeReference name="personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName" />
-            <attributeReference name="positionNumber" sourceClassName="org.kuali.module.labor.bo.PositionData" sourceAttributeName="positionNumber"/>
-            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
-            
+
             <attributeReference name="july1BudgetAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>July1 Budget Amount</label>
                 <shortLabel>Amount</shortLabel>
+                <summary>july1BudgetAmount</summary>
+                <description>july1BudgetAmount description...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
             
             <attributeReference name="july1BudgetFteQuantity" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
-                <label>July1 Budget FTE Quantity</label>
+                <label>July1 Budget Fte Quantity</label>
                 <shortLabel>Quantity</shortLabel>
+                <summary>july1BudgetFteQuantity</summary>
+                <description>july1BudgetFteQuantity description...</description>
+                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
 
             <attribute name="july1BudgetTimePercent" forceUppercase="true">
@@ -121,11 +148,41 @@
                 <control>
                     <text size="11" />
                 </control>
+
+                <summary>july1BudgetTimePercent</summary>
+                <description>july1BudgetTimePercent description...</description>
 			</attribute>
+
+            <attribute name="positionNumber" forceUppercase="true">
+                <label>Position Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>positionNumber</summary>
+                <description>positionNumber description...</description>
+			</attribute>
+
+			<attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber" />          
+
+            <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
+                <label>Fiscal Year</label>
+                <shortLabel>Fiscal Year</shortLabel>
+                <description>Identifies the Fiscal Year to which the balances apply.</description>
+            </attributeReference>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
             <attributeReference name="dummyBusinessObject.genericAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
                 <label>Year End Close</label>
                 <shortLabel>Year End Close</shortLabel>
+                <summary>Year End Close</summary>
+                <description>Year End Close Amount...</description>
                 <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
             </attributeReference>
 

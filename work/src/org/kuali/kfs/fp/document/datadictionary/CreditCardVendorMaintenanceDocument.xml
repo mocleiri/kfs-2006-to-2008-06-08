@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.financial.bo.CreditCardVendor</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
         <businessRulesClass>org.kuali.module.financial.rules.CreditCardVendorRule</businessRulesClass>
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +32,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>CreditCardVendorMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiCreditCardVendorMaintenanceDocument</documentTypeName>
         <documentTypeCode>CCVN</documentTypeCode>
 
-        <label>Credit Card Vendor</label>
+        <label>Credit Card Vendor Maintenance Document</label>
+        <shortLabel>CreditCardVendorMaintenanceDocument</shortLabel>
 
         <summary>Credit Card Vendor Maintenance Document</summary>
         <description>Document used to create or update a credit card vendor.</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="CreditCardVendor" parameterName="CREDIT_CARD_VENDOR" />
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_CREDIT_CARD_VENDOR" />
 
         <lockingKeys>
             <field attributeName="financialDocumentCreditCardVendorNumber" />

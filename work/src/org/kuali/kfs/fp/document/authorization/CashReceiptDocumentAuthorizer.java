@@ -39,6 +39,8 @@ import org.kuali.module.financial.service.CashReceiptService;
 
 /**
  * Abstract base class for all TransactionalDocumentAuthorizers, since there's this one bit of common code.
+ * 
+ * 
  */
 public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerBase {
     private static Log LOG = LogFactory.getLog(CashReceiptDocumentAuthorizer.class);
@@ -65,7 +67,7 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
             if (cd == null) {
                 throw new IllegalStateException("There is no cash drawer associated with cash receipt: " + crd.getDocumentNumber());
             }
-            else if (cd.isClosed()) {
+            else if (cd.isClosed() || cd.getReferenceFinancialDocumentNumber() == null) {
                 flags.setCanBlanketApprove(false);
                 flags.setCanApprove(false);
             }
@@ -103,8 +105,7 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
     /**
      * Overrides parent to return an empty Map since FO routing doesn't apply to the CR doc.
      * 
-     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List,
-     *      org.kuali.module.chart.bo.ChartUser)
+     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List, org.kuali.module.chart.bo.ChartUser)
      */
     @Override
     public Map getEditableAccounts(List<AccountingLine> lines, ChartUser user) {
@@ -122,7 +123,7 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
         boolean authorized = false;
         String unitName = SpringContext.getBean(CashReceiptService.class).getCashReceiptVerificationUnitForUser(user);
         if (unitName != null) {
-            authorized = !user.isMember(unitName);
+            authorized = !user.isMember( unitName );
         }
         if (!authorized) {
             // TODO: customize message indicating the required unitName using DocumentInitiationAuthorizationException

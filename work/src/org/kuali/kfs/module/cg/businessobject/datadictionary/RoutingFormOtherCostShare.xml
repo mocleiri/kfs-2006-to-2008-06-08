@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormOtherCostShare.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormOtherCostShare">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Other Cost Share Inquiry</title>
@@ -87,7 +89,7 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="6" />
                 </control>
 
                 <summary>routingFormCostShareSequenceNumber</summary>
@@ -99,7 +101,7 @@
                 <shortLabel>Source</shortLabel>
 
                 <maxLength>50</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="52" />
@@ -117,7 +119,7 @@
                 <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="16" />
                 </control>
 
                 <summary>documentNumber</summary>

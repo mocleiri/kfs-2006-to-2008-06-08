@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl;
 
@@ -19,108 +26,138 @@ import java.sql.Date;
 import java.util.Iterator;
 
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
+import org.kuali.module.gl.service.GeneralLedgerPendingEntryService;
 import org.kuali.module.gl.service.NightlyOutService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
-import org.kuali.module.gl.service.ReportService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class implements the nightly out batch job.
+ * 
+ * @author Bin Gao from Michigan State University
  */
-@Transactional
 public class NightlyOutServiceImpl implements NightlyOutService {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(NightlyOutServiceImpl.class);
 
-    private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
-    private OriginEntryService originEntryService;
-    private DateTimeService dateTimeService;
-    private OriginEntryGroupService originEntryGroupService;
-    private ReportService reportService;
+    GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
+    OriginEntryService originEntryService;
+    DateTimeService dateTimeService;
+    OriginEntryGroupService originEntryGroupService;
 
     /**
-     * Constructs a NightlyOutServiceImpl instance
+     * Constructs a NightlyOutServiceImpl.java.
+     *  
      */
     public NightlyOutServiceImpl() {
     }
 
-    /**
-     * Deletes all the pending general ledger entries that have now been copied to origin entries
-     * @see org.kuali.module.gl.service.NightlyOutService#deleteCopiedPendingLedgerEntries()
-     */
     public void deleteCopiedPendingLedgerEntries() {
-        LOG.debug("deleteCopiedPendingLedgerEntries() started");
-
-        generalLedgerPendingEntryService.deleteByFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+      // TODO Write this
     }
 
     /**
-     * Copies the approved pending ledger entries to orign entry table and generates a report
      * @see org.kuali.module.gl.service.NightlyOutService#copyApprovedPendingLedgerEntries()
      */
-    public void copyApprovedPendingLedgerEntries() {
-        LOG.debug("copyApprovedPendingLedgerEntries() started");
+    public int copyApprovedPendingLedgerEntries() {
+        
+        Iterator pendingEntries = generalLedgerPendingEntryService
+                .findApprovedPendingLedgerEntries();
 
-        Iterator pendingEntries = generalLedgerPendingEntryService.findApprovedPendingLedgerEntries();
+        // create a new group for the entries fetch above
+        OriginEntryGroup group = createGroupForCurrentProcessing();
 
-        Date today = new Date(dateTimeService.getCurrentTimestamp().getTime());
-
-        OriginEntryGroup group = originEntryGroupService.createGroup(today, OriginEntrySource.GENERATE_BY_EDOC, true, true, true);
-
+        int counter = 0;      
         while (pendingEntries.hasNext()) {
             // get one pending entry
-            GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) pendingEntries.next();
+            GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) pendingEntries
+                    .next();
 
             // copy the pending entry to origin entry table
             saveAsOriginEntry(pendingEntry, group);
 
             // update the pending entry to indicate it has been copied
-            pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
-            pendingEntry.setTransactionDate(today);
-            generalLedgerPendingEntryService.save(pendingEntry);
+            updatePendingEntryAfterCopy(pendingEntry);
+            
+            // count the number of ledger entries that have been processed
+            counter++;
         }
-
-        // Print reports
-        reportService.generatePendingEntryReport(today, group);
-        reportService.generatePendingEntryLedgerSummaryReport(today, group);
+        
+        return counter;
     }
 
     /**
-     * Saves pending ledger entry as origin entry
-     * 
-     * @param pendingEntry the pending entry to save as an origin entry
-     * @param group the group to save the new origin entry into
+     * create a new group for the entries to be processing
      */
-    private void saveAsOriginEntry(GeneralLedgerPendingEntry pendingEntry, OriginEntryGroup group) {
-        OriginEntryFull originEntry = new OriginEntryFull(pendingEntry);
+    private OriginEntryGroup createGroupForCurrentProcessing() {
+        Date today = new Date(dateTimeService.getCurrentTimestamp().getTime());
+        String groupSourceCode = OriginEntrySource.GENERATE_BY_EDOC;
+        
+        OriginEntryGroup group = originEntryGroupService.createGroup(today, groupSourceCode, true,
+                true, true);
+        return group;
+    }
+
+    /*
+     * save pending ledger entry as origin entry
+     */
+    private void saveAsOriginEntry(GeneralLedgerPendingEntry pendingEntry,
+            OriginEntryGroup group) {
+        OriginEntry originEntry = new OriginEntry(pendingEntry);
         originEntry.setGroup(group);
 
         originEntryService.createEntry(originEntry, group);
     }
 
-    public void setGeneralLedgerPendingEntryService(GeneralLedgerPendingEntryService generalLedgerPendingEntryService) {
+    /**
+     * After it is copied to origin entry table, this method updates the pending entry in
+     * order to indicate it has been proceesed.
+     * 
+     * @param pendingEntry the given pending entry
+     */
+    private void updatePendingEntryAfterCopy(GeneralLedgerPendingEntry pendingEntry) {
+        pendingEntry.setFinancialDocumentApprovedCode("X");
+        pendingEntry.setTransactionDate(new Date(dateTimeService.getCurrentDate().getTime()));
+        generalLedgerPendingEntryService.save(pendingEntry);
+    }
+
+    /**
+     * Sets the generalLedgerPendingEntryService attribute value.
+     * 
+     * @param generalLedgerPendingEntryService The generalLedgerPendingEntryService to
+     *        set.
+     */
+    public void setGeneralLedgerPendingEntryService(
+            GeneralLedgerPendingEntryService generalLedgerPendingEntryService) {
         this.generalLedgerPendingEntryService = generalLedgerPendingEntryService;
     }
 
+    /**
+     * Sets the originEntryService attribute value.
+     * 
+     * @param originEntryService The originEntryService to set.
+     */
     public void setOriginEntryService(OriginEntryService originEntryService) {
         this.originEntryService = originEntryService;
     }
 
-    public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
-        this.originEntryGroupService = originEntryGroupService;
-    }
-
+    /**
+     * Sets the dateTimeService attribute value.
+     * 
+     * @param dateTimeService The dateTimeService to set.
+     */
     public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
 
-    public void setReportService(ReportService rs) {
-        this.reportService = rs;
+    /**
+     * Sets the originEntryGroupService attribute value.
+     * 
+     * @param originEntryGroupService The originEntryGroupService to set.
+     */
+    public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
+        this.originEntryGroupService = originEntryGroupService;
     }
 }

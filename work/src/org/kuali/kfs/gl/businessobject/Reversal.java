@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,10 @@ package org.kuali.module.gl.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -35,9 +34,9 @@ import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 
 /**
- * This class represents a reversal of a transaction
+ * 
  */
-public class Reversal extends PersistableBusinessObjectBase implements Transaction {
+public class Reversal extends BusinessObjectBase implements Transaction {
 
     private Date financialDocumentReversalDate;
     private Integer universityFiscalYear;
@@ -51,7 +50,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     private String universityFiscalPeriodCode;
     private String financialDocumentTypeCode;
     private String financialSystemOriginationCode;
-    private String documentNumber;
+    private String financialDocumentNumber;
     private Integer transactionLedgerEntrySequenceNumber;
     private String transactionLedgerEntryDescription;
     private KualiDecimal transactionLedgerEntryAmount;
@@ -100,7 +99,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
         setUniversityFiscalPeriodCode(t.getUniversityFiscalPeriodCode());
         setFinancialDocumentTypeCode(t.getFinancialDocumentTypeCode());
         setFinancialSystemOriginationCode(t.getFinancialSystemOriginationCode());
-        setDocumentNumber(t.getDocumentNumber());
+        setFinancialDocumentNumber(t.getFinancialDocumentNumber());
         setTransactionLedgerEntrySequenceNumber(t.getTransactionLedgerEntrySequenceNumber());
         setTransactionLedgerEntryDescription(t.getTransactionLedgerEntryDescription());
         setTransactionLedgerEntryAmount(t.getTransactionLedgerEntryAmount());
@@ -122,7 +121,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the financialDocumentReversalDate attribute.
      * 
-     * @return Returns the financialDocumentReversalDate
+     * @return - Returns the financialDocumentReversalDate
      */
     public Date getFinancialDocumentReversalDate() {
         return financialDocumentReversalDate;
@@ -131,7 +130,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the financialDocumentReversalDate attribute.
      * 
-     * @param financialDocumentReversalDate The financialDocumentReversalDate to set.
+     * @param - financialDocumentReversalDate The financialDocumentReversalDate to set.
      */
     public void setFinancialDocumentReversalDate(Date financialDocumentReversalDate) {
         this.financialDocumentReversalDate = financialDocumentReversalDate;
@@ -140,7 +139,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -149,7 +148,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the universityFiscalYear attribute.
      * 
-     * @param universityFiscalYear The universityFiscalYear to set.
+     * @param - universityFiscalYear The universityFiscalYear to set.
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -158,7 +157,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -167,7 +166,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the chartOfAccountsCode attribute.
      * 
-     * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * @param - chartOfAccountsCode The chartOfAccountsCode to set.
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -176,7 +175,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the accountNumber attribute.
      * 
-     * @return Returns the accountNumber
+     * @return - Returns the accountNumber
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -185,7 +184,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the accountNumber attribute.
      * 
-     * @param accountNumber The accountNumber to set.
+     * @param - accountNumber The accountNumber to set.
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -194,7 +193,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the subAccountNumber attribute.
      * 
-     * @return Returns the subAccountNumber
+     * @return - Returns the subAccountNumber
      */
     public String getSubAccountNumber() {
         return subAccountNumber;
@@ -203,7 +202,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the subAccountNumber attribute.
      * 
-     * @param subAccountNumber The subAccountNumber to set.
+     * @param - subAccountNumber The subAccountNumber to set.
      */
     public void setSubAccountNumber(String subAccountNumber) {
         this.subAccountNumber = subAccountNumber;
@@ -212,7 +211,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the financialObjectCode attribute.
      * 
-     * @return Returns the financialObjectCode
+     * @return - Returns the financialObjectCode
      */
     public String getFinancialObjectCode() {
         return financialObjectCode;
@@ -221,7 +220,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the financialObjectCode attribute.
      * 
-     * @param financialObjectCode The financialObjectCode to set.
+     * @param - financialObjectCode The financialObjectCode to set.
      */
     public void setFinancialObjectCode(String financialObjectCode) {
         this.financialObjectCode = financialObjectCode;
@@ -230,7 +229,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the financialSubObjectCode attribute.
      * 
-     * @return Returns the financialSubObjectCode
+     * @return - Returns the financialSubObjectCode
      */
     public String getFinancialSubObjectCode() {
         return financialSubObjectCode;
@@ -239,7 +238,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the financialSubObjectCode attribute.
      * 
-     * @param financialSubObjectCode The financialSubObjectCode to set.
+     * @param - financialSubObjectCode The financialSubObjectCode to set.
      */
     public void setFinancialSubObjectCode(String financialSubObjectCode) {
         this.financialSubObjectCode = financialSubObjectCode;
@@ -248,7 +247,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the financialBalanceTypeCode attribute.
      * 
-     * @return Returns the financialBalanceTypeCode
+     * @return - Returns the financialBalanceTypeCode
      */
     public String getFinancialBalanceTypeCode() {
         return financialBalanceTypeCode;
@@ -257,7 +256,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the financialBalanceTypeCode attribute.
      * 
-     * @param financialBalanceTypeCode The financialBalanceTypeCode to set.
+     * @param - financialBalanceTypeCode The financialBalanceTypeCode to set.
      */
     public void setFinancialBalanceTypeCode(String financialBalanceTypeCode) {
         this.financialBalanceTypeCode = financialBalanceTypeCode;
@@ -266,7 +265,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the financialObjectTypeCode attribute.
      * 
-     * @return Returns the financialObjectTypeCode
+     * @return - Returns the financialObjectTypeCode
      */
     public String getFinancialObjectTypeCode() {
         return financialObjectTypeCode;
@@ -275,7 +274,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the financialObjectTypeCode attribute.
      * 
-     * @param financialObjectTypeCode The financialObjectTypeCode to set.
+     * @param - financialObjectTypeCode The financialObjectTypeCode to set.
      */
     public void setFinancialObjectTypeCode(String financialObjectTypeCode) {
         this.financialObjectTypeCode = financialObjectTypeCode;
@@ -284,7 +283,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the universityFiscalPeriodCode attribute.
      * 
-     * @return Returns the universityFiscalPeriodCode
+     * @return - Returns the universityFiscalPeriodCode
      */
     public String getUniversityFiscalPeriodCode() {
         return universityFiscalPeriodCode;
@@ -293,7 +292,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the universityFiscalPeriodCode attribute.
      * 
-     * @param universityFiscalPeriodCode The universityFiscalPeriodCode to set.
+     * @param - universityFiscalPeriodCode The universityFiscalPeriodCode to set.
      */
     public void setUniversityFiscalPeriodCode(String universityFiscalPeriodCode) {
         this.universityFiscalPeriodCode = universityFiscalPeriodCode;
@@ -302,7 +301,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
      */
     public String getFinancialDocumentTypeCode() {
         return financialDocumentTypeCode;
@@ -311,7 +310,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the financialDocumentTypeCode attribute.
      * 
-     * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
+     * @param - financialDocumentTypeCode The financialDocumentTypeCode to set.
      */
     public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
         this.financialDocumentTypeCode = financialDocumentTypeCode;
@@ -320,7 +319,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the financialSystemOriginationCode attribute.
      * 
-     * @return Returns the financialSystemOriginationCode
+     * @return - Returns the financialSystemOriginationCode
      */
     public String getFinancialSystemOriginationCode() {
         return financialSystemOriginationCode;
@@ -329,34 +328,34 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the financialSystemOriginationCode attribute.
      * 
-     * @param financialSystemOriginationCode The financialSystemOriginationCode to set.
+     * @param - financialSystemOriginationCode The financialSystemOriginationCode to set.
      */
     public void setFinancialSystemOriginationCode(String financialSystemOriginationCode) {
         this.financialSystemOriginationCode = financialSystemOriginationCode;
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the financialDocumentNumber attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the financialDocumentNumber
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getFinancialDocumentNumber() {
+        return financialDocumentNumber;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the financialDocumentNumber attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param - financialDocumentNumber The financialDocumentNumber to set.
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setFinancialDocumentNumber(String financialDocumentNumber) {
+        this.financialDocumentNumber = financialDocumentNumber;
     }
 
     /**
      * Gets the transactionLedgerEntrySequenceNumber attribute.
      * 
-     * @return Returns the transactionLedgerEntrySequenceNumber
+     * @return - Returns the transactionLedgerEntrySequenceNumber
      */
     public Integer getTransactionLedgerEntrySequenceNumber() {
         return transactionLedgerEntrySequenceNumber;
@@ -365,7 +364,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the transactionLedgerEntrySequenceNumber attribute.
      * 
-     * @param transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
+     * @param - transactionLedgerEntrySequenceNumber The transactionLedgerEntrySequenceNumber to set.
      */
     public void setTransactionLedgerEntrySequenceNumber(Integer transactionLedgerEntrySequenceNumber) {
         this.transactionLedgerEntrySequenceNumber = transactionLedgerEntrySequenceNumber;
@@ -374,7 +373,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the transactionLedgerEntryDescription attribute.
      * 
-     * @return Returns the transactionLedgerEntryDescription
+     * @return - Returns the transactionLedgerEntryDescription
      */
     public String getTransactionLedgerEntryDescription() {
         return transactionLedgerEntryDescription;
@@ -383,7 +382,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the transactionLedgerEntryDescription attribute.
      * 
-     * @param transactionLedgerEntryDescription The transactionLedgerEntryDescription to set.
+     * @param - transactionLedgerEntryDescription The transactionLedgerEntryDescription to set.
      */
     public void setTransactionLedgerEntryDescription(String transactionLedgerEntryDescription) {
         this.transactionLedgerEntryDescription = transactionLedgerEntryDescription;
@@ -392,7 +391,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the transactionLedgerEntryAmount attribute.
      * 
-     * @return Returns the transactionLedgerEntryAmount
+     * @return - Returns the transactionLedgerEntryAmount
      */
     public KualiDecimal getTransactionLedgerEntryAmount() {
         return transactionLedgerEntryAmount;
@@ -401,7 +400,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the transactionLedgerEntryAmount attribute.
      * 
-     * @param transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
+     * @param - transactionLedgerEntryAmount The transactionLedgerEntryAmount to set.
      */
     public void setTransactionLedgerEntryAmount(KualiDecimal transactionLedgerEntryAmount) {
         this.transactionLedgerEntryAmount = transactionLedgerEntryAmount;
@@ -410,7 +409,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the transactionDebitCreditCode attribute.
      * 
-     * @return Returns the transactionDebitCreditCode
+     * @return - Returns the transactionDebitCreditCode
      */
     public String getTransactionDebitCreditCode() {
         return transactionDebitCreditCode;
@@ -419,7 +418,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the transactionDebitCreditCode attribute.
      * 
-     * @param transactionDebitCreditCode The transactionDebitCreditCode to set.
+     * @param - transactionDebitCreditCode The transactionDebitCreditCode to set.
      */
     public void setTransactionDebitCreditCode(String transactionDebitCreditCode) {
         this.transactionDebitCreditCode = transactionDebitCreditCode;
@@ -428,7 +427,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the transactionDate attribute.
      * 
-     * @return Returns the transactionDate
+     * @return - Returns the transactionDate
      */
     public Date getTransactionDate() {
         return transactionDate;
@@ -437,7 +436,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the transactionDate attribute.
      * 
-     * @param transactionDate The transactionDate to set.
+     * @param - transactionDate The transactionDate to set.
      */
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
@@ -446,7 +445,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the organizationDocumentNumber attribute.
      * 
-     * @return Returns the organizationDocumentNumber
+     * @return - Returns the organizationDocumentNumber
      */
     public String getOrganizationDocumentNumber() {
         return organizationDocumentNumber;
@@ -455,7 +454,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the organizationDocumentNumber attribute.
      * 
-     * @param organizationDocumentNumber The organizationDocumentNumber to set.
+     * @param - organizationDocumentNumber The organizationDocumentNumber to set.
      */
     public void setOrganizationDocumentNumber(String organizationDocumentNumber) {
         this.organizationDocumentNumber = organizationDocumentNumber;
@@ -464,7 +463,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the projectCode attribute.
      * 
-     * @return Returns the projectCode
+     * @return - Returns the projectCode
      */
     public String getProjectCode() {
         return projectCode;
@@ -473,7 +472,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the projectCode attribute.
      * 
-     * @param projectCode The projectCode to set.
+     * @param - projectCode The projectCode to set.
      */
     public void setProjectCode(String projectCode) {
         this.projectCode = projectCode;
@@ -482,7 +481,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the organizationReferenceId attribute.
      * 
-     * @return Returns the organizationReferenceId
+     * @return - Returns the organizationReferenceId
      */
     public String getOrganizationReferenceId() {
         return organizationReferenceId;
@@ -491,7 +490,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the organizationReferenceId attribute.
      * 
-     * @param organizationReferenceId The organizationReferenceId to set.
+     * @param - organizationReferenceId The organizationReferenceId to set.
      */
     public void setOrganizationReferenceId(String organizationReferenceId) {
         this.organizationReferenceId = organizationReferenceId;
@@ -500,7 +499,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the referenceFinancialDocumentTypeCode attribute.
      * 
-     * @return Returns the referenceFinancialDocumentTypeCode
+     * @return - Returns the referenceFinancialDocumentTypeCode
      */
     public String getReferenceFinancialDocumentTypeCode() {
         return referenceFinancialDocumentTypeCode;
@@ -509,7 +508,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the referenceFinancialDocumentTypeCode attribute.
      * 
-     * @param referenceFinancialDocumentTypeCode The referenceFinancialDocumentTypeCode to set.
+     * @param - referenceFinancialDocumentTypeCode The referenceFinancialDocumentTypeCode to set.
      */
     public void setReferenceFinancialDocumentTypeCode(String referenceFinancialDocumentTypeCode) {
         this.referenceFinancialDocumentTypeCode = referenceFinancialDocumentTypeCode;
@@ -518,7 +517,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the referenceFinancialSystemOriginationCode attribute.
      * 
-     * @return Returns the referenceFinancialSystemOriginationCode
+     * @return - Returns the referenceFinancialSystemOriginationCode
      */
     public String getReferenceFinancialSystemOriginationCode() {
         return referenceFinancialSystemOriginationCode;
@@ -527,7 +526,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the referenceFinancialSystemOriginationCode attribute.
      * 
-     * @param referenceFinancialSystemOriginationCode The referenceFinancialSystemOriginationCode to set.
+     * @param - referenceFinancialSystemOriginationCode The referenceFinancialSystemOriginationCode to set.
      */
     public void setReferenceFinancialSystemOriginationCode(String referenceFinancialSystemOriginationCode) {
         this.referenceFinancialSystemOriginationCode = referenceFinancialSystemOriginationCode;
@@ -536,7 +535,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the referenceFinancialDocumentNumber attribute.
      * 
-     * @return Returns the referenceFinancialDocumentNumber
+     * @return - Returns the referenceFinancialDocumentNumber
      */
     public String getReferenceFinancialDocumentNumber() {
         return referenceFinancialDocumentNumber;
@@ -545,7 +544,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the referenceFinancialDocumentNumber attribute.
      * 
-     * @param referenceFinancialDocumentNumber The referenceFinancialDocumentNumber to set.
+     * @param - referenceFinancialDocumentNumber The referenceFinancialDocumentNumber to set.
      */
     public void setReferenceFinancialDocumentNumber(String referenceFinancialDocumentNumber) {
         this.referenceFinancialDocumentNumber = referenceFinancialDocumentNumber;
@@ -554,7 +553,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the transactionEncumbranceUpdateCode attribute.
      * 
-     * @return Returns the transactionEncumbranceUpdateCode
+     * @return - Returns the transactionEncumbranceUpdateCode
      */
     public String getTransactionEncumbranceUpdateCode() {
         return transactionEncumbranceUpdateCode;
@@ -563,7 +562,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the transactionEncumbranceUpdateCode attribute.
      * 
-     * @param transactionEncumbranceUpdateCode The transactionEncumbranceUpdateCode to set.
+     * @param - transactionEncumbranceUpdateCode The transactionEncumbranceUpdateCode to set.
      */
     public void setTransactionEncumbranceUpdateCode(String transactionEncumbranceUpdateCode) {
         this.transactionEncumbranceUpdateCode = transactionEncumbranceUpdateCode;
@@ -572,7 +571,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Gets the transactionPostingDate attribute.
      * 
-     * @return Returns the transactionPostingDate
+     * @return - Returns the transactionPostingDate
      */
     public Date getTransactionPostingDate() {
         return transactionPostingDate;
@@ -581,7 +580,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
     /**
      * Sets the transactionPostingDate attribute.
      * 
-     * @param transactionPostingDate The transactionPostingDate to set.
+     * @param - transactionPostingDate The transactionPostingDate to set.
      */
     public void setTransactionPostingDate(Date transactionPostingDate) {
         this.transactionPostingDate = transactionPostingDate;
@@ -704,7 +703,7 @@ public class Reversal extends PersistableBusinessObjectBase implements Transacti
         map.put("universityFiscalPeriodCode", getUniversityFiscalPeriodCode());
         map.put("financialDocumentTypeCode", getFinancialDocumentTypeCode());
         map.put("financialSystemOriginationCode", getFinancialSystemOriginationCode());
-        map.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        map.put("financialDocumentNumber", getFinancialDocumentNumber());
         map.put("transactionLedgerEntrySequenceNumber", getTransactionLedgerEntrySequenceNumber());
         return map;
     }

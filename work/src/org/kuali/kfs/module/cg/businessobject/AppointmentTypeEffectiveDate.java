@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +21,12 @@ package org.kuali.module.kra.budget.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase {
+public class AppointmentTypeEffectiveDate extends BusinessObjectBase {
 
     private String appointmentTypeCode;
     private Integer institutionFiscalYear;
@@ -37,7 +39,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
     public AppointmentTypeEffectiveDate() {
 
     }
-
+    
     public AppointmentTypeEffectiveDate(String appointmentTypeCode, Integer institutionFiscalYear) {
         this();
         this.appointmentTypeCode = appointmentTypeCode;
@@ -48,6 +50,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Gets the appointmentTypeCode attribute.
      * 
      * @return Returns the appointmentTypeCode
+     * 
      */
     public String getAppointmentTypeCode() {
         return appointmentTypeCode;
@@ -57,6 +60,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Sets the institutionAppointmentTypeCode attribute.
      * 
      * @param institutionAppointmentTypeCode The institutionAppointmentTypeCode to set.
+     * 
      */
     public void setAppointmentTypeCode(String appointmentTypeCode) {
         this.appointmentTypeCode = appointmentTypeCode;
@@ -67,6 +71,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Gets the institutionFiscalYear attribute.
      * 
      * @return Returns the institutionFiscalYear
+     * 
      */
     public Integer getInstitutionFiscalYear() {
         return institutionFiscalYear;
@@ -76,6 +81,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Sets the institutionFiscalYear attribute.
      * 
      * @param institutionFiscalYear The institutionFiscalYear to set.
+     * 
      */
     public void setInstitutionFiscalYear(Integer institutionFiscalYear) {
         this.institutionFiscalYear = institutionFiscalYear;
@@ -86,6 +92,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Gets the appointmentTypeBeginDate attribute.
      * 
      * @return Returns the appointmentTypeBeginDate
+     * 
      */
     public Date getAppointmentTypeBeginDate() {
         return appointmentTypeBeginDate;
@@ -95,6 +102,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Sets the appointmentTypeBeginDate attribute.
      * 
      * @param appointmentTypeBeginDate The appointmentTypeBeginDate to set.
+     * 
      */
     public void setAppointmentTypeBeginDate(Date appointmentTypeBeginDate) {
         this.appointmentTypeBeginDate = appointmentTypeBeginDate;
@@ -105,6 +113,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Gets the appointmentTypeEndDate attribute.
      * 
      * @return Returns the appointmentTypeEndDate
+     * 
      */
     public Date getAppointmentTypeEndDate() {
         return appointmentTypeEndDate;
@@ -114,6 +123,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Sets the appointmentTypeEndDate attribute.
      * 
      * @param appointmentTypeEndDate The appointmentTypeEndDate to set.
+     * 
      */
     public void setAppointmentTypeEndDate(Date appointmentTypeEndDate) {
         this.appointmentTypeEndDate = appointmentTypeEndDate;

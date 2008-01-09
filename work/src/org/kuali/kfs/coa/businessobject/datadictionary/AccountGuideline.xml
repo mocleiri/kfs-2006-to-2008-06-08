@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/datadictionary/AccountGuideline.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,7 +22,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.AccountGuideline">
 
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <attributes>
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
@@ -30,16 +32,22 @@
             <attributeReference name="accountExpenseGuidelineText" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBigText">
                 <label>Account Expense Guideline Text</label>
                 <shortLabel>ExpGuideTxt</shortLabel>
+                <summary>Expense Guidelines</summary>
+                <description>A textual description of the Expense Guidelines.</description>
             </attributeReference>
 
             <attributeReference name="accountIncomeGuidelineText" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBigText">
                 <label>Account Income Guideline Text</label>
                 <shortLabel>IncGuideTxt</shortLabel>
+                <summary>Income Guidelines</summary>
+                <description>A textual description of the Income Guidelines.</description>
             </attributeReference>
 
             <attributeReference name="accountPurposeText" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericBigText">
                 <label>Account Purpose Text</label>
                 <shortLabel>AcctPurpTxt</shortLabel>
+                <summary>Account Purpose Text</summary>
+                <description>A textual description of the Account Purpose.</description>
             </attributeReference>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />

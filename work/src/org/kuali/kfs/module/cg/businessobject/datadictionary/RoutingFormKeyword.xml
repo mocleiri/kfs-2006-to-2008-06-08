@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormKeyword.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormKeyword">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Keyword Inquiry</title>
@@ -56,11 +58,11 @@
         <attributes>
 
             <attribute name="routingFormKeywordDescription" forceUppercase="true">
-                <label>Keywords</label>
+                <label>Routing Form Keyword Description</label>
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>70</maxLength>
-                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+                <validationPattern><anyCharacter /></validationPattern>
 
                 <control>
                     <text size="72" />

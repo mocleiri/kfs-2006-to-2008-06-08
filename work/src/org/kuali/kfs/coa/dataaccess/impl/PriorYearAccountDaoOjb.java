@@ -21,9 +21,6 @@ import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.module.chart.bo.PriorYearAccount;
 import org.kuali.module.chart.dao.PriorYearAccountDao;
 
-/**
- * This class implements the {@link PriorYearAccountDao} data access methods using Ojb
- */
 public class PriorYearAccountDaoOjb extends PlatformAwareDaoBaseOjb implements PriorYearAccountDao {
 
     /**

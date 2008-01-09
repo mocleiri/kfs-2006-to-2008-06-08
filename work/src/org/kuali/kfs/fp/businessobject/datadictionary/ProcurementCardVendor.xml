@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/datadictionary/ProcurementCardVendor.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.ProcurementCardVendor">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Procurement Card Transaction Vendor Inquiry</title>
@@ -41,7 +43,7 @@
         </inquiry>
 
         <attributes>
-            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.bo.DocumentHeader" sourceAttributeName="documentNumber" />
+            <attributeReference name="documentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="documentNumber" />
 
             <attributeReference name="financialDocumentTransactionLineNumber" sourceClassName="org.kuali.module.financial.bo.ProcurementCardTransactionDetail" sourceAttributeName="financialDocumentTransactionLineNumber" />
 
@@ -54,6 +56,9 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The system code for the category of the transaction merchant.</description>
             </attribute>
 
             <attribute name="vendorCityName" forceUppercase="true">
@@ -65,6 +70,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The city in the address record of the transaction vendor.</description>
             </attribute>
 
             <attribute name="vendorLine1Address" forceUppercase="true">
@@ -76,6 +84,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The first line in the adddres record of the transaction vendor.</description>
             </attribute>
 
             <attribute name="vendorLine2Address" forceUppercase="true">
@@ -87,6 +98,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The second line in the adddres record of the transaction vendor.</description>
             </attribute>
 
             <attribute name="vendorName" forceUppercase="true">
@@ -98,6 +112,9 @@
                 <control>
                     <text size="47" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The name of the transaction vendor.</description>
             </attribute>
 
             <attribute name="vendorOrderNumber" forceUppercase="true">
@@ -109,6 +126,9 @@
                 <control>
                     <text size="14" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The order number assigned by the transaction vendor.</description>
             </attribute>
 
             <attribute name="vendorStateCode" forceUppercase="true">
@@ -120,6 +140,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The state code in the address record of the transaction vendor. </description>
             </attribute>
 
             <attribute name="vendorZipCode" forceUppercase="true">
@@ -131,6 +154,9 @@
                 <control>
                     <text size="22" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The postal code in the address record of the transaction vendor.</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
@@ -144,6 +170,9 @@
                 <control>
                     <text size="18" />
                 </control>
+
+                <summary><![CDATA[&nbsp;]]></summary>
+                <description>The visa identifier of the transaction vendor.</description>
             </attribute>
 
         </attributes>

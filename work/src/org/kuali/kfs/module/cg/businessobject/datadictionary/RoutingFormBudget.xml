@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/datadictionary/RoutingFormBudget.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.routingform.bo.RoutingFormBudget">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Routing Form Budget Inquiry</title>
@@ -29,6 +31,8 @@
                 <field attributeName="routingFormBudgetEndDate" />
                 <field attributeName="routingFormBudgetIndirectCostAmount" />
                 <field attributeName="routingFormBudgetIndirectCostDescription" />
+                <field attributeName="routingFormBudgetMaximumPeriodNumber" />
+                <field attributeName="routingFormBudgetMinimumPeriodNumber" />
                 <field attributeName="routingFormBudgetStartDate" />
                 <field attributeName="documentNumber" />
             </inquiryFields></inquirySection></inquirySections>
@@ -50,6 +54,8 @@
                 <lookupField attributeName="routingFormBudgetEndDate" required="false" />
                 <lookupField attributeName="routingFormBudgetIndirectCostAmount" required="false" />
                 <lookupField attributeName="routingFormBudgetIndirectCostDescription" required="false" />
+                <lookupField attributeName="routingFormBudgetMaximumPeriodNumber" required="false" />
+                <lookupField attributeName="routingFormBudgetMinimumPeriodNumber" required="false" />
                 <lookupField attributeName="routingFormBudgetStartDate" required="false" />
                 <lookupField attributeName="documentNumber" required="false" />
             </lookupFields>
@@ -59,6 +65,8 @@
                 <field attributeName="routingFormBudgetEndDate" />
                 <field attributeName="routingFormBudgetIndirectCostAmount" />
                 <field attributeName="routingFormBudgetIndirectCostDescription" />
+                <field attributeName="routingFormBudgetMaximumPeriodNumber" />
+                <field attributeName="routingFormBudgetMinimumPeriodNumber" />
                 <field attributeName="routingFormBudgetStartDate" />
                 <field attributeName="documentNumber" />
             </resultFields>
@@ -70,8 +78,8 @@
                 <label>Routing Form Budget Direct Amount</label>
                 <shortLabel>Direct Costs</shortLabel>
 
-                <maxLength>15</maxLength>
-                <validationPattern><numeric /></validationPattern>
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
                 <control>
                     <text size="21" />
@@ -100,8 +108,8 @@
                 <label>Routing Form Budget Indirect Cost Amount</label>
                 <shortLabel>Indirect Costs</shortLabel>
 
-                <maxLength>15</maxLength>
-                <validationPattern><numeric /></validationPattern>
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
                 <control>
                     <text size="21" />
@@ -134,7 +142,7 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="4" />
                 </control>
 
                 <summary>routingFormBudgetMaximumPeriodNumber</summary>
@@ -149,7 +157,7 @@
                 <validationPattern><numeric /></validationPattern>
 
                 <control>
-                    <hidden />
+                    <text size="4" />
                 </control>
 
                 <summary>routingFormBudgetMinimumPeriodNumber</summary>
@@ -169,66 +177,6 @@
 
                 <summary>routingFormBudgetStartDate</summary>
                 <description>routingFormBudgetStartDate description...</description>
-			</attribute>
-
-            <attribute name="routingFormBudgetTotalDirectAmount" forceUppercase="true">
-                <label>Routing Form Budget Total Direct Amount</label>
-                <shortLabel>Total Direct Costs</shortLabel>
-
-                <maxLength>15</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="21" />
-                </control>
-
-                <summary>routingFormBudgetTotalDirectAmount</summary>
-                <description>routingFormBudgetTotalDirectAmount description...</description>
-			</attribute>
-
-            <attribute name="routingFormBudgetTotalEndDate" forceUppercase="true">
-                <label>Routing Form Budget Total End Date</label>
-                <shortLabel>End Date</shortLabel>
-
-                <maxLength>10</maxLength>
-                <validationPattern><date /></validationPattern>
-
-                <control>
-                    <text size="10" />
-                </control>
-
-                <summary>routingFormBudgetTotalEndDate</summary>
-                <description>routingFormBudgetTotalEndDate description...</description>
-			</attribute>
-
-            <attribute name="routingFormBudgetTotalIndirectCostAmount" forceUppercase="true">
-                <label>Routing Form Budget Total Indirect Cost Amount</label>
-                <shortLabel>Indirect Costs</shortLabel>
-
-                <maxLength>15</maxLength>
-                <validationPattern><numeric /></validationPattern>
-
-                <control>
-                    <text size="21" />
-                </control>
-
-                <summary>routingFormBudgetTotalIndirectCostAmount</summary>
-                <description>routingFormBudgetTotalIndirectCostAmount description...</description>
-			</attribute>
-
-            <attribute name="routingFormBudgetTotalStartDate" forceUppercase="true">
-                <label>Routing Form Budget Total Start Date</label>
-                <shortLabel>Start Date</shortLabel>
-
-                <maxLength>10</maxLength>
-                <validationPattern><date /></validationPattern>
-
-                <control>
-                    <text size="10" />
-                </control>
-
-                <summary>routingFormBudgetTotalStartDate</summary>
-                <description>routingFormBudgetTotalStartDate description...</description>
 			</attribute>
 
             <attribute name="documentNumber" forceUppercase="true">

@@ -38,7 +38,8 @@
 
 		<webScriptFile>../cg/proposalDocument.js</webScriptFile>
 
-        <label>Proposal Auto-Generated</label>
+        <label>Proposal Maintenance Document</label>
+        <shortLabel>PrpslMaintDoc</shortLabel>
 
         <summary>Proposal maintenance document</summary>
         <description>Document used to create or update Proposal objects</description>

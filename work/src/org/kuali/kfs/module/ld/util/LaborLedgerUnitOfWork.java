@@ -24,10 +24,6 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 
-/**
- * This class is a working unit of labor origin entry. It is formed by a group of slimilar labor origin entries. If any two entries
- * have the same values for the given fields, then they are similar and can be grouped.
- */
 public class LaborLedgerUnitOfWork {
     private LaborOriginEntry workingEntry;
     private List<String> keyFields;
@@ -42,7 +38,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Constructs a LaborLedgerUnitOfWork.java.
-     * 
      * @param laborOriginEntry the given origin entry
      */
     public LaborLedgerUnitOfWork(LaborOriginEntry laborOriginEntry) {
@@ -50,8 +45,7 @@ public class LaborLedgerUnitOfWork {
     }
 
     /**
-     * Intialize the default key fields of the labor ledger unit of work with the given origin entry
-     * 
+     * Intialize the default key fields of the labor ledger unit of work with the given origin entry 
      * @param laborOriginEntry the given origin entry
      */
     public void resetLaborLedgerUnitOfWork(LaborOriginEntry laborOriginEntry) {
@@ -60,7 +54,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Intialize the specified key fields of the labor ledger unit of work with the given origin entry
-     * 
      * @param laborOriginEntry the given origin entry
      * @param keyFields the keys to which values will be assigned
      */
@@ -70,11 +63,11 @@ public class LaborLedgerUnitOfWork {
 
         if (laborOriginEntry != null) {
             ObjectUtil.buildObject(workingEntry, laborOriginEntry, this.getKeyFields());
-
+            
             boolean creditIndicator = KFSConstants.GL_CREDIT_CODE.equals(laborOriginEntry.getTransactionDebitCreditCode());
             KualiDecimal entryAmount = laborOriginEntry.getTransactionLedgerEntryAmount();
             KualiDecimal unitAmount = creditIndicator ? entryAmount.negated() : entryAmount;
-
+            
             workingEntry.setTransactionLedgerEntryAmount(unitAmount);
             workingEntry.setTransactionDebitCreditCode(laborOriginEntry.getTransactionDebitCreditCode());
             numOfMember = 1;
@@ -82,8 +75,7 @@ public class LaborLedgerUnitOfWork {
     }
 
     /**
-     * add the given origin entry as a member of the working unit
-     * 
+     * add the given origin entry as a member of the working unit 
      * @param laborOriginEntry the given origin entry
      * @return true if the given origin entry is successfully added into the current unit of work; otherwise, false
      */
@@ -91,11 +83,14 @@ public class LaborLedgerUnitOfWork {
         if (this.hasSameKey(laborOriginEntry)) {
             KualiDecimal unitAmount = workingEntry.getTransactionLedgerEntryAmount();
             KualiDecimal entryAmount = laborOriginEntry.getTransactionLedgerEntryAmount();
+            
+            String unitDebitCreditCode = workingEntry.getTransactionDebitCreditCode();
+            String entryDebitCreditCode = laborOriginEntry.getTransactionDebitCreditCode();
 
             // if the input entry has a "credit" code , then subtract its amount from the unit total amount
             boolean creditIndicator = KFSConstants.GL_CREDIT_CODE.equals(laborOriginEntry.getTransactionDebitCreditCode());
             unitAmount = creditIndicator ? unitAmount.subtract(entryAmount) : unitAmount.add(entryAmount);
-
+            
             workingEntry.setTransactionLedgerEntryAmount(unitAmount);
             numOfMember++;
 
@@ -106,7 +101,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Determine if the given origin entry belongs to the current unit of work
-     * 
      * @param laborOriginEntry the given origin entry
      * @return true if the given origin entry belongs to the current unit of work; otherwise, false
      */
@@ -136,7 +130,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Gets the workingEntry attribute.
-     * 
      * @return Returns the workingEntry.
      */
     public LaborOriginEntry getWorkingEntry() {
@@ -145,7 +138,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Sets the workingEntry attribute value.
-     * 
      * @param workingEntry The workingEntry to set.
      */
     public void setWorkingEntry(LaborOriginEntry workingEntry) {
@@ -154,7 +146,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Gets the keyFields attribute.
-     * 
      * @return Returns the keyFields.
      */
     public List<String> getKeyFields() {
@@ -163,7 +154,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Sets the keyFields attribute value.
-     * 
      * @param keyFields The keyFields to set.
      */
     public void setKeyFields(List<String> keyFields) {
@@ -172,7 +162,6 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Gets the numOfMember attribute.
-     * 
      * @return Returns the numOfMember.
      */
     public int getNumOfMember() {
@@ -180,8 +169,7 @@ public class LaborLedgerUnitOfWork {
     }
 
     /**
-     * Sets the numOfMember attribute value.
-     * 
+     * Sets the numOfMember attribute value. 
      * @param numOfMember The numOfMember to set.
      */
     public void setNumOfMember(int numOfMember) {
@@ -190,7 +178,7 @@ public class LaborLedgerUnitOfWork {
 
     /**
      * Get the default key fields as a list
-     */
+     **/
     private List<String> getDefaultKeyFields() {
         List<String> defaultKeyFields = new ArrayList<String>(LaborConstants.consolidationAttributesOfOriginEntry());
         defaultKeyFields.remove(KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT);

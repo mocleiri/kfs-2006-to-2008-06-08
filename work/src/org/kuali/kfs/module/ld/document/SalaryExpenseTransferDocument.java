@@ -15,40 +15,78 @@
  */
 package org.kuali.module.labor.document;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.kuali.core.util.KualiDecimal;
+import org.kuali.Constants;
+import org.kuali.core.document.Copyable;
+import org.kuali.core.document.Correctable;
+import org.kuali.kfs.bo.AccountingLineParser;
+import org.kuali.module.labor.bo.LaborLedgerAccountingLineParser;
+import org.kuali.module.labor.bo.SalaryExpenseTransferSourceAccountingLine;
+import org.kuali.module.labor.bo.SalaryExpenseTransferTargetAccountingLine;
 
 /**
- * Labor Document Class for the Salary Expense Transfer Document.
+ * Class representing the Salary Expense Transfer Document.
  */
-public class SalaryExpenseTransferDocument extends LaborExpenseTransferDocumentBase {
-    private Map<String, KualiDecimal> approvalObjectCodeBalances;
+public class SalaryExpenseTransferDocument extends LaborDocument implements Copyable, Correctable{
+
+    private String emplid;
+    
+    public String getEmplid() {
+        return emplid;
+    }
+
+    public void setEmplid(String emplid) {
+        this.emplid = emplid;
+    }
 
     /**
-     * Default Constructor.
+     * Initializes the array lists and some basic info.
      */
     public SalaryExpenseTransferDocument() {
         super();
-        approvalObjectCodeBalances = new HashMap<String, KualiDecimal>();
     }
 
     /**
-     * Gets the approvalObjectCodeBalances attribute.
+     * Overrides the base implementation to return "From".
      * 
-     * @return Returns the approvalObjectCodeBalances.
+     * @see org.kuali.core.document.FinancialDocument#getSourceAccountingLinesSectionTitle()
      */
-    public Map<String, KualiDecimal> getApprovalObjectCodeBalances() {
-        return approvalObjectCodeBalances;
+    public String getSourceAccountingLinesSectionTitle() {
+        return Constants.FROM;
     }
 
     /**
-     * Sets the approvalObjectCodeBalances attribute value.
+     * Overrides the base implementation to return "To".
      * 
-     * @param approvalObjectCodeBalances The approvalObjectCodeBalances to set.
+     * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLinesSectionTitle()
      */
-    public void setApprovalObjectCodeBalances(Map<String, KualiDecimal> approvalObjectCodeBalances) {
-        this.approvalObjectCodeBalances = approvalObjectCodeBalances;
+    public String getTargetAccountingLinesSectionTitle() {
+        return Constants.TO;
     }
+    
+    /**
+     * @see org.kuali.core.document.FinancialDocument#getAccountingLineParser()
+     */
+    @Override
+    public AccountingLineParser getAccountingLineParser() {
+        return new LaborLedgerAccountingLineParser();        
+    }
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
+     */
+    @Override
+    public Class getSourceAccountingLineClass() {
+        return SalaryExpenseTransferSourceAccountingLine.class;
+    }
+
+    /**
+     * @see org.kuali.kfs.document.AccountingDocumentBase#getTargetAccountingLineClass()
+     */
+    @Override
+    public Class getTargetAccountingLineClass() {
+        return SalaryExpenseTransferTargetAccountingLine.class;
+    } 
+    
+    
 }
+

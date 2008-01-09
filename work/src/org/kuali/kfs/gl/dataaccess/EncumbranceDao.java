@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.dao;
 
@@ -22,44 +29,20 @@ import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.Transaction;
 
 /**
- * A DAO interface that declares methods needed for Encumbrances to interact with the database
+ * @author jsissom
+ * @version $Id: EncumbranceDao.java,v 1.6.2.1 2006-07-26 21:51:18 abyrne Exp $
  */
 public interface EncumbranceDao {
-    /**
-     * Returns an encumbrance that would be affected by the given transaction
-     * 
-     * @param t the transaction to find the affected encumbrance for
-     * @return an Encumbrance that would be affected by the posting of the transaction, or null
-     */
     public Encumbrance getEncumbranceByTransaction(Transaction t);
 
-    /**
-     * Returns an Iterator of all encumbrances that need to be closed for the fiscal year
-     * 
-     * @param fiscalYear a fiscal year to find encumbrances for
-     * @return an Iterator of encumbrances to close
-     */
     public Iterator getEncumbrancesToClose(Integer fiscalYear);
 
-    /**
-     * Purges the database of all those encumbrances with the given chart and year 
-     * 
-     * @param chartOfAccountsCode the chart of accounts code purged encumbrances will have
-     * @param year the university fiscal year purged encumbrances will have
-     */
     public void purgeYearByChart(String chartOfAccountsCode, int year);
 
-    /**
-     * Saves an encumbrance to the database
-     * 
-     * @param e an encumbrance to save
-     */
     public void save(Encumbrance e);
 
     /**
      * fetch all encumbrance records from GL open encumbrance table
-     * 
-     * @return an Iterator with all encumbrances currently in the database
      */
     public Iterator getAllEncumbrances();
 
@@ -69,10 +52,9 @@ public interface EncumbranceDao {
      * 
      * @param documentTypeCode the given document type code
      * @param included indicate if all encumbrances with the given document type are included in the results or not
-     * @return an Iterator of arrays of java.lang.Objects holding summarization data about qualifying encumbrances 
      */
     public Iterator getSummarizedEncumbrances(String documentTypeCode, boolean included);
-
+    
     /**
      * This method finds the open encumbrances according to input fields and values
      * 
@@ -80,12 +62,4 @@ public interface EncumbranceDao {
      * @return a collection of open encumbrances
      */
     public Iterator findOpenEncumbrance(Map fieldValues);
-
-    /**
-     * Counts the number of the open encumbrances according to input fields and values
-     * 
-     * @param fieldValues the input fields and values
-     * @return the number of the open encumbrances
-     */
-    public Integer getOpenEncumbranceRecordCount(Map fieldValues);
 }

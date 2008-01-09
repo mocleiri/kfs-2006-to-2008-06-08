@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
         <businessObjectClass>org.kuali.module.financial.bo.TaxControlCode</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +32,15 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>TaxControlCodeMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiTaxControlCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>DVCC</documentTypeCode>
 
-        <label>Disbursement Voucher Tax Control</label>
+        <label>Tax Control Code Maintenance Document</label>
+        <shortLabel>Tax Control Maint Doc</shortLabel>
 
         <summary>Tax Control Code Maintenance Document</summary>
         <description>Document used to create or update Tax Control objects</description>
-        <help parameterNamespace="KFS-FP" parameterDetailType="TaxControlCode" parameterName="TAX_CONTROL" />
+        <help securityGroupName="Kuali.DisbursementVoucher.Help" parameterName="DISBURSEMENT_VOUCHER_HELP_TAX_CONTROL_CODE" />
 
         <lockingKeys>
             <field attributeName="code" />

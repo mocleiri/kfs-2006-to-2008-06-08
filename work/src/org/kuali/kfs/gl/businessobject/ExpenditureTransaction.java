@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,16 @@ package org.kuali.module.gl.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Account;
 
 /**
- * Represents a expenditure transaction for a specific fiscal year, COA code, account number,
- * sub account number, object code, sub-object code, balance type code, object type code,
- * fiscal accounting period, project code, organization reference ID
+ * 
+ * 
  */
-public class ExpenditureTransaction extends PersistableBusinessObjectBase {
+public class ExpenditureTransaction extends BusinessObjectBase {
     static final long serialVersionUID = 5296540728313789670L;
 
     private final static String UNIVERISITY_FISCAL_YEAR = "universityFiscalYear";

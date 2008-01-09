@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,19 +19,23 @@
     "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.financial.bo.TravelCompanyCode">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Disbursement Voucher Travel Company Inquiry</title>
+            <title>Travel Company Code Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="code" />
                 <field attributeName="name" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-            <title>Disbursement Voucher Travel Company Lookup</title>
+            <title>Travel Company Code Lookup</title>
+
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.TravelCompanyCode">Create New</a>]]>
+            </menubar>
 
             <instructions>Lookup a Travel Company Code</instructions>
 
@@ -39,7 +43,6 @@
 
             <lookupFields>
                 <lookupField attributeName="code" required="false" />
-                <lookupField attributeName="travelExpenseTypeCode.prepaidExpense" required="false" />
                 <lookupField attributeName="name" required="false" />
             </lookupFields>
 
@@ -57,10 +60,11 @@
             <attributeReference name="code" sourceClassName="org.kuali.module.financial.bo.TravelExpenseTypeCode" sourceAttributeName="code">
                 <label>Company Type Code</label>
                 <shortLabel>Type Code</shortLabel>
+
+                <summary>Travel Company Code</summary>
+                <description>The code uniquely identify a travel company.</description>
             </attributeReference>
 
-            <attributeReference name="travelExpenseTypeCode.prepaidExpense" sourceClassName="org.kuali.module.financial.bo.TravelExpenseTypeCode" sourceAttributeName="prepaidExpense"/>
-            
             <attribute name="name" forceUppercase="false">
                 <label>Travel Company Name</label>
                 <shortLabel>Name</shortLabel>
@@ -70,11 +74,13 @@
                 <control>
                     <text size="25" />
                 </control>
+
+                <summary>Travel Company Name</summary>
+                <description>Travel Company Name</description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
         </attributes>
-        <objectLabel>Disbursement Voucher Travel Company</objectLabel>
     </businessObject>
 </dictionaryEntry>
 

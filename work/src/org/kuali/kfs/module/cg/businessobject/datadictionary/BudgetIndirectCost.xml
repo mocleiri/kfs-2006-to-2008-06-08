@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
+ 
+ $Source$
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,7 +21,7 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetIndirectCost">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
         <attributes>
 
             <attribute name="documentNumber" forceUppercase="true">
@@ -145,7 +147,7 @@
                 <shortLabel>Code</shortLabel>
                 <maxLength>2</maxLength>
                 <control>
-                    <select valuesFinderClass="org.kuali.module.kra.routingform.lookup.keyvalues.PurposeValuesFinder" />
+                    <select valuesFinderClass="org.kuali.module.kra.budget.lookup.keyvalues.BudgetPurposeCodeValuesFinder" />
                 </control>
 
                 <summary>Purpose Code</summary>
