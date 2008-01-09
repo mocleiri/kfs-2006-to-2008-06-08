@@ -15,20 +15,20 @@
  */
 package org.kuali.core.service;
 
+import static org.kuali.kfs.util.SpringServiceLocator.getHomeOriginationService;
+
 import org.kuali.kfs.bo.HomeOrigination;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.HomeOriginationService;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the Home Origination service.
  */
-@ConfigureContext
+@WithTestSpringContext
 public class HomeOriginationServiceTest extends KualiTestBase {
 
     public void testGetHomeOrigination() {
-        HomeOrigination homeOrigination = SpringContext.getBean(HomeOriginationService.class).getHomeOrigination();
+        HomeOrigination homeOrigination = getHomeOriginationService().getHomeOrigination();
         assertNotNull("Home Origination object cannot be retrieved", homeOrigination);
         assertEquals("Home Origination Code should be 01", "01", homeOrigination.getFinSystemHomeOriginationCode());
     }

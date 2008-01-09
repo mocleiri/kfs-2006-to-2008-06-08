@@ -16,7 +16,7 @@
 -->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.cg.bo.AwardProjectDirector">
 
@@ -24,7 +24,7 @@
         <inquiry>
             <title>Award Project Director Inquiry</title>
 
-            <inquirySections><inquirySection title="Award Project Director Details"><inquiryFields>
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="personUniversalIdentifier" />
                 <field attributeName="proposalNumber" />
                 <field attributeName="awardPrimaryProjectDirectorIndicator" />
@@ -63,19 +63,12 @@
             <attributeReference name="personUniversalIdentifier" sourceClassName="org.kuali.module.cg.bo.ProjectDirector" sourceAttributeName="personUniversalIdentifier">
             	<label>Project Director ID</label>
             	<shortLabel>Proj Dir ID</shortLabel>
-                <control>
-                    <hidden/>
-                </control>
+
+                <summary>Project Director ID</summary>
+                <description>Universal identifier for the Project Director.</description>
             </attributeReference>
             
-            <attributeReference name="projectDirector.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
-            	<label>Project Director User ID</label>
-            	<required>false</required>
-            </attributeReference>
-
-            <attributeReference name="projectDirector.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
-                <label>Name</label>
-            	<required>false</required>
+            <attributeReference name="projectDirector.universalUser.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
                 <control>
                     <text size="40" />
                 </control>
@@ -84,18 +77,21 @@
             <attributeReference name="proposalNumber" sourceClassName="org.kuali.module.cg.bo.Award" sourceAttributeName="proposalNumber"/>
 
             <attribute name="awardPrimaryProjectDirectorIndicator" forceUppercase="true">
-                <label>Primary</label>
-                <shortLabel>Primary</shortLabel>
+                <label>Award Primary Project Director Indicator</label>
+                <shortLabel>Indicator</shortLabel>
 
                 <maxLength>1</maxLength>
 
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>awardPrimaryProjectDirectorIndicator</summary>
+                <description>awardPrimaryProjectDirectorIndicator description...</description>
 			</attribute>
 
             <attribute name="awardProjectDirectorProjectTitle" forceUppercase="true">
-                <label>Title</label>
+                <label>Award Project Director Project Title</label>
                 <shortLabel>Title</shortLabel>
 
                 <maxLength>100</maxLength>
@@ -104,6 +100,9 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>awardProjectDirectorProjectTitle</summary>
+                <description>awardProjectDirectorProjectTitle description...</description>
 			</attribute>
 			
 			<attributeReference name="newCollectionRecord" 

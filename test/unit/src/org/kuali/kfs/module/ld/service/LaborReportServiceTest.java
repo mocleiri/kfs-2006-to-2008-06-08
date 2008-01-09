@@ -30,9 +30,9 @@ import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.batch.poster.VerifyTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -42,14 +42,17 @@ import org.kuali.module.gl.util.Summary;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.module.labor.util.PayrollAccrualSummaryTable;
 import org.kuali.module.labor.util.ReportRegistry;
 import org.kuali.module.labor.util.TestDataPreparator;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
  * This class...
  */
-@ConfigureContext
+@WithTestSpringContext
 public class LaborReportServiceTest extends KualiTestBase {
 
     private Properties properties;
@@ -60,10 +63,12 @@ public class LaborReportServiceTest extends KualiTestBase {
     private String reportsDirectory;
     private Date today;
 
+    private BeanFactory beanFactory;
     private LaborOriginEntryService laborOriginEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private LaborReportService laborReportService;
     private BusinessObjectService businessObjectService;
+    private KualiConfigurationService kualiConfigurationService;
     private VerifyTransaction laborPosterTransactionValidator;
     private PersistenceService persistenceService;
 
@@ -77,16 +82,20 @@ public class LaborReportServiceTest extends KualiTestBase {
         fieldNames = properties.getProperty("fieldNames");
         deliminator = properties.getProperty("deliminator");
 
-        laborOriginEntryService = SpringContext.getBean(LaborOriginEntryService.class);
-        originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-        persistenceService = SpringContext.getBean(PersistenceService.class);
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        laborOriginEntryService = (LaborOriginEntryService) beanFactory.getBean("laborOriginEntryService");
+        originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
+        persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
 
-        laborReportService = SpringContext.getBean(LaborReportService.class);
-        laborPosterTransactionValidator = SpringContext.getBeansOfType(VerifyTransaction.class).get("laborPosterTransactionValidator");
+        laborReportService = (LaborReportService) beanFactory.getBean("laborReportService");
+
+        kualiConfigurationService = (KualiConfigurationService) beanFactory.getBean("kualiConfigurationService");
+        laborPosterTransactionValidator = (VerifyTransaction) beanFactory.getBean("laborPosterTransactionValidator");
+
         reportsDirectory = ReportRegistry.getReportsDirectory();
 
-        today = (SpringContext.getBean(DateTimeService.class)).getCurrentSqlDate();
+        today = ((DateTimeService) beanFactory.getBean("dateTimeService")).getCurrentSqlDate();
         group1 = originEntryGroupService.createGroup(today, LABOR_MAIN_POSTER_VALID, true, true, false);
         group2 = originEntryGroupService.createGroup(today, LABOR_MAIN_POSTER_VALID, true, true, false);
         invalidGroup = originEntryGroupService.createGroup(today, LABOR_MAIN_POSTER_ERROR, false, true, false);
@@ -163,6 +172,15 @@ public class LaborReportServiceTest extends KualiTestBase {
 
         Map<Transaction, List<Message>> errorMap = this.getErrorMap(groups);
         laborReportService.generateStatisticsReport(reportSummary, errorMap, ReportRegistry.LABOR_POSTER_STATISTICS, reportsDirectory, today);
+    }
+
+    public void testGenerateStatisticsReportFromStringList() throws Exception {
+
+        PayrollAccrualSummaryTable accrualSummaryTable = new PayrollAccrualSummaryTable();
+        List<String> reportSummary = PayrollAccrualSummaryTable.buildReportSummary(accrualSummaryTable);
+
+        reportSummary.add(0, PayrollAccrualSummaryTable.buildReportSummaryLine("Base Accrual Percent", 0.50));
+        laborReportService.generateStatisticsReport(reportSummary, ReportRegistry.PAYROLL_ACCRUAL_STATISTICS, reportsDirectory, today);
     }
 
     private List<Summary> getReportSummary() {

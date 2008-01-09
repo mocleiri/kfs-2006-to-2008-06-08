@@ -20,6 +20,7 @@
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod">
 
+
         <inquiry>
             <title>Purchase Order Transmission Method Inquiry</title>
 
@@ -31,9 +32,9 @@
         </inquiry>
 
         <lookup>
-            <title>Method of PO Transmission Lookup</title>
+            <title>Purchase Order Transmission Method Lookup</title>
 
-            <instructions>Lookup a Method of PO Transmission</instructions>
+            <instructions>Lookup a Purchase Order Transmission Method</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>
@@ -59,7 +60,7 @@
         <attributes>
 
             <attribute name="purchaseOrderTransmissionMethodCode" forceUppercase="true">
-                <label>Method of PO Transmission Code</label>
+                <label>Purchase Order Transmission Method Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
@@ -70,10 +71,12 @@
                     <text size="6" />
                 </control>
 
+                <summary>purchaseOrderTransmissionMethodCode</summary>
+                <description>purchaseOrderTransmissionMethodCode description...</description>
 			</attribute>
 
             <attribute name="purchaseOrderTransmissionMethodDescription" forceUppercase="true">
-                <label>Method of PO Transmission Description</label>
+                <label>Purchase Order Transmission Method Description</label>
                 <shortLabel>Description</shortLabel>
 
                 <maxLength>45</maxLength>
@@ -84,6 +87,8 @@
                     <text size="47" />
                 </control>
 
+                <summary>purchaseOrderTransmissionMethodDescription</summary>
+                <description>purchaseOrderTransmissionMethodDescription description...</description>
 			</attribute>
 			
 			<attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
@@ -91,6 +96,5 @@
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 		
         </attributes>
-        <objectLabel>Method of PO Transmission</objectLabel>
     </businessObject>
 </dictionaryEntry>

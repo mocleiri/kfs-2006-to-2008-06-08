@@ -27,12 +27,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiAction;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.document.CashManagementDocument;
 import org.kuali.module.financial.exceptions.CashDrawerStateException;
 import org.kuali.module.financial.web.struts.form.CashManagementStatusForm;
@@ -40,6 +39,8 @@ import org.kuali.module.financial.web.struts.form.CashManagementStatusForm;
 
 /**
  * Action class for CashManagementStatusForm
+ * 
+ * 
  */
 public class CashManagementStatusAction extends KualiAction {
     private static Logger LOG = Logger.getLogger(CashManagementStatusAction.class);
@@ -120,7 +121,7 @@ public class CashManagementStatusAction extends KualiAction {
     public ActionForward openExisting(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         CashManagementStatusForm cform = (CashManagementStatusForm) form;
 
-        String cmDocTypeName = SpringContext.getBean(DocumentTypeService.class).getDocumentTypeNameByClass(CashManagementDocument.class);
+        String cmDocTypeName = SpringServiceLocator.getDocumentTypeService().getDocumentTypeNameByClass(CashManagementDocument.class);
 
         Properties params = new Properties();
         params.setProperty("methodToCall", "docHandler");
@@ -128,7 +129,7 @@ public class CashManagementStatusAction extends KualiAction {
         params.setProperty("docId", cform.getControllingDocumentId());
 
 
-        String cmActionUrl = UrlFactory.parameterizeUrl(KFSConstants.CASH_MANAGEMENT_DOCUMENT_ACTION, params);
+        String cmActionUrl = UrlFactory.buildDocumentActionUrl(cmDocTypeName, params);
 
         return new ActionForward(cmActionUrl, true);
     }

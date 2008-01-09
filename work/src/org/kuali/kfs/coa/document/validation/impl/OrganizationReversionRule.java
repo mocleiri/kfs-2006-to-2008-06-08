@@ -17,16 +17,16 @@ package org.kuali.module.chart.rules;
 
 import java.util.List;
 
+import org.kuali.KeyConstants;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.module.chart.bo.OrganizationReversion;
 import org.kuali.module.chart.bo.OrganizationReversionDetail;
 
 /**
- * This class implements the business rules specific to the {@link OrganizationReversion} Maintenance Document.
+ * This class implements the business rules specific to the Organization Reversion Maintenance Document.
  */
 public class OrganizationReversionRule extends MaintenanceDocumentRuleBase {
 
@@ -36,21 +36,17 @@ public class OrganizationReversionRule extends MaintenanceDocumentRuleBase {
     OrganizationReversion newOrgReversion;
 
     /**
+     * 
      * No-Args Constructor for an OrganizationReversionRule.
+     * 
      */
     public OrganizationReversionRule() {
 
     }
 
     /**
-     * This performs rules checks on document route
-     * <ul>
-     * <li>{@link OrganizationReversionRule#validateDetailBusinessObjects(OrganizationReversion)}</li>
-     * </ul>
-     * This rule fails on business rule failures
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
-    @Override
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
 
         boolean success = true;
@@ -70,10 +66,11 @@ public class OrganizationReversionRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * Tests each option attached to the main business object and validates its properties.
      * 
      * @param orgReversion
-     * @return false if any of the detail objects fail with their validation
+     * @return
      */
     private boolean validateDetailBusinessObjects(OrganizationReversion orgReversion) {
         GlobalVariables.getErrorMap().addToErrorPath("document.newMaintainableObject");
@@ -91,20 +88,14 @@ public class OrganizationReversionRule extends MaintenanceDocumentRuleBase {
         return GlobalVariables.getErrorMap().getErrorCount() == originalErrorCount;
     }
 
-    /**
-     * 
-     * This checks to make sure that the organization reversion object on the detail object actually exists
-     * @param detail
-     * @return false if the organization reversion object doesn't exist
-     */
     protected boolean validateOrganizationReversionDetail(OrganizationReversionDetail detail) {
         boolean result = true; // let's assume this detail will pass the rule
         // 1. makes sure the financial object code exists
         detail.refreshReferenceObject("organizationReversionObject");
-        LOG.debug("organization reversion finanical object = " + detail.getOrganizationReversionObject());
+        LOG.debug("organization reversion finanical object = "+detail.getOrganizationReversionObject());
         if (ObjectUtils.isNull(detail.getOrganizationReversionObject())) {
             result = false;
-            GlobalVariables.getErrorMap().putError("organizationReversionObjectCode", KFSKeyConstants.ERROR_EXISTENCE, new String[] { "Financial Object Code: " + detail.getOrganizationReversionObjectCode() });
+            GlobalVariables.getErrorMap().putError("organizationReversionObjectCode", KeyConstants.ERROR_EXISTENCE, new String[] { "Financial Object Code: "+detail.getOrganizationReversionObjectCode() });
         }
         return result;
     }

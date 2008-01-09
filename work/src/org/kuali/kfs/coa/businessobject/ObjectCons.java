@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ObjectCons.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +19,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class ObjectCons extends PersistableBusinessObjectBase {
+public class ObjectCons extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -100,6 +102,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Gets the finConsolidationObjectName attribute.
      * 
      * @return Returns the finConsolidationObjectName
+     * 
      */
     public String getFinConsolidationObjectName() {
         return finConsolidationObjectName;
@@ -109,6 +112,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Sets the finConsolidationObjectName attribute.
      * 
      * @param finConsolidationObjectName The finConsolidationObjectName to set.
+     * 
      */
     public void setFinConsolidationObjectName(String finConsolidationObjectName) {
         this.finConsolidationObjectName = finConsolidationObjectName;
@@ -118,6 +122,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Gets the finConsolidationObjShortName attribute.
      * 
      * @return Returns the finConsolidationObjShortName
+     * 
      */
     public String getFinConsolidationObjShortName() {
         return finConsolidationObjShortName;
@@ -127,6 +132,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Sets the finConsolidationObjShortName attribute.
      * 
      * @param finConsolidationObjShortName The finConsolidationObjShortName to set.
+     * 
      */
     public void setFinConsolidationObjShortName(String finConsolidationObjShortName) {
         this.finConsolidationObjShortName = finConsolidationObjShortName;
@@ -136,6 +142,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Gets the finConsolidationObjActiveIndicator attribute.
      * 
      * @return Returns the finConsolidationObjActiveIndicator
+     * 
      */
     public boolean isFinConsolidationObjActiveIndicator() {
         return finConsolidationObjActiveIndicator;
@@ -145,6 +152,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Sets the finConsolidationObjActiveIndicator attribute.
      * 
      * @param finConsolidationObjActiveIndicator The finConsolidationObjActiveIndicator to set.
+     * 
      */
     public void setFinConsolidationObjActiveIndicator(boolean finConsolidationObjActiveIndicator) {
         this.finConsolidationObjActiveIndicator = finConsolidationObjActiveIndicator;
@@ -154,6 +162,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Gets the financialReportingSortCode attribute.
      * 
      * @return Returns the financialReportingSortCode
+     * 
      */
     public String getFinancialReportingSortCode() {
         return financialReportingSortCode;
@@ -163,6 +172,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Sets the financialReportingSortCode attribute.
      * 
      * @param financialReportingSortCode The financialReportingSortCode to set.
+     * 
      */
     public void setFinancialReportingSortCode(String financialReportingSortCode) {
         this.financialReportingSortCode = financialReportingSortCode;
@@ -172,6 +182,7 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -193,9 +204,6 @@ public class ObjectCons extends PersistableBusinessObjectBase {
      * @return Returns the financialEliminationsObject.
      */
     public ObjectCodeCurrent getFinancialEliminationsObject() {
-        if (financialEliminationsObjectCode != null && (financialEliminationsObject == null || (financialEliminationsObject.getFinancialObjectCode() != null && financialEliminationsObjectCode != null && !financialEliminationsObject.getFinancialObjectCode().equalsIgnoreCase(this.financialEliminationsObjectCode)))) {
-            refreshReferenceObject("financialEliminationsObject");
-        }
         return financialEliminationsObject;
     }
 

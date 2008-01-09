@@ -16,14 +16,14 @@
 package org.kuali.module.kra.budget.bo;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedHashMap;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
  * 
@@ -69,6 +69,7 @@ public class GraduateAssistantRate extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @return
      */
     public boolean isActive() {
@@ -76,6 +77,7 @@ public class GraduateAssistantRate extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @param active
      */
     public void setActive(boolean active) {
@@ -83,6 +85,7 @@ public class GraduateAssistantRate extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @return
      */
     public String getCampusCode() {
@@ -90,6 +93,7 @@ public class GraduateAssistantRate extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @param campusCode
      */
     public void setCampusCode(String campusCode) {
@@ -212,6 +216,7 @@ public class GraduateAssistantRate extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @return
      */
     public Timestamp getLastUpdateTimestamp() {
@@ -219,19 +224,20 @@ public class GraduateAssistantRate extends PersistableBusinessObjectBase {
     }
 
     /**
+     * 
      * @param lastUpdateTimestamp
      */
     public void setLastUpdateTimestamp(Timestamp lastUpdateTimestamp) {
         this.lastUpdateTimestamp = lastUpdateTimestamp;
     }
-
+    
     public void beforeInsert(PersistenceBroker persistenceBroker) {
         super.beforeInsert(persistenceBroker);
-        this.lastUpdateTimestamp = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        this.lastUpdateTimestamp = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
     }
 
     public void beforeUpdate(PersistenceBroker persistenceBroker) {
         super.beforeUpdate(persistenceBroker);
-        this.lastUpdateTimestamp = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        this.lastUpdateTimestamp = SpringServiceLocator.getDateTimeService().getCurrentTimestamp();
     }
 }

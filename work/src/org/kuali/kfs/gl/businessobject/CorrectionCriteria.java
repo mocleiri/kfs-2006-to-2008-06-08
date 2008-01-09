@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/CorrectionCriteria.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +21,13 @@ package org.kuali.module.gl.bo;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
- * Represents a GLCP criteria
+ * 
  */
-public class CorrectionCriteria extends PersistableBusinessObjectBase implements Comparable {
+public class CorrectionCriteria extends BusinessObjectBase implements Comparable {
 
     private String documentNumber;
     private Integer correctionChangeGroupLineNumber;
@@ -43,7 +45,7 @@ public class CorrectionCriteria extends PersistableBusinessObjectBase implements
 
     }
 
-    public CorrectionCriteria(String documentNumber, Integer correctionChangeGroupLineNumber, Integer correctionCriteriaLineNumber) {
+    public CorrectionCriteria(String documentNumber,Integer correctionChangeGroupLineNumber,Integer correctionCriteriaLineNumber) {
         this.documentNumber = documentNumber;
         this.correctionChangeGroupLineNumber = correctionChangeGroupLineNumber;
         this.correctionCriteriaLineNumber = correctionCriteriaLineNumber;
@@ -109,33 +111,25 @@ public class CorrectionCriteria extends PersistableBusinessObjectBase implements
         this.correctionFieldName = correctionFieldName;
     }
 
-    /**
-     * Compares this object with another CorrectionCriteria based on document number, 
-     * correction change group line number, and correction criteria line number
-     * 
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
     public int compareTo(Object o) {
-        CorrectionCriteria cc = (CorrectionCriteria) o;
+        CorrectionCriteria cc = (CorrectionCriteria)o;
 
         String thisFdocNbr = documentNumber == null ? "" : documentNumber;
         String thatFdocNbr = cc.documentNumber == null ? "" : cc.documentNumber;
         int c = thisFdocNbr.compareTo(thatFdocNbr);
 
-        if (c == 0) {
+        if ( c == 0 ) {
             Integer thisGn = correctionChangeGroupLineNumber == null ? 0 : correctionChangeGroupLineNumber;
             Integer thatGn = cc.correctionChangeGroupLineNumber == null ? 0 : cc.correctionChangeGroupLineNumber;
             c = thisGn.compareTo(thatGn);
-            if (c == 0) {
+            if( c == 0 ) {
                 Integer thisCln = correctionCriteriaLineNumber == null ? 0 : correctionCriteriaLineNumber;
                 Integer thatCln = correctionCriteriaLineNumber == null ? 0 : cc.correctionCriteriaLineNumber;
                 return c = thisCln.compareTo(thatCln);
-            }
-            else {
+            } else {
                 return c;
             }
-        }
-        else {
+        } else {
             return c;
         }
     }
@@ -145,7 +139,7 @@ public class CorrectionCriteria extends PersistableBusinessObjectBase implements
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (this.correctionChangeGroupLineNumber != null) {
             m.put("correctionChangeGroupLineNumber", this.correctionChangeGroupLineNumber.toString());
         }

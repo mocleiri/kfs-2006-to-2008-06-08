@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
@@ -97,6 +98,7 @@ public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
      * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
+        // TODO: investigate change to this constant
         return KFSConstants.GL_MODIFIED_INQUIRY_ACTION;
     }
 
@@ -105,5 +107,12 @@ public class BaseFundsInquirableImpl extends AbstractLaborInquirableImpl {
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
         return LaborCalculatedSalaryFoundationTracker.class;
+    }
+
+    /**
+     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#addMoreParameters(java.util.Properties,
+     *      java.lang.String)
+     */
+    protected void addMoreParameters(Properties parameter, String attributeName) {
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -36,8 +36,11 @@
         <documentTypeName>VendorDetailMaintenanceDocument</documentTypeName>
         <documentTypeCode>PVEN</documentTypeCode>
 
-        <label>Vendor</label>
-        <help parameterNamespace="KFS-VN" parameterDetailType="VendorDetail" parameterName="VENDOR" />
+        <label>Vendor Maintenance Document</label>
+        <shortLabel>Vendor Maint Doc</shortLabel>
+
+        <summary>Vendor Maintenance Document</summary>
+        <description>Document used to create or update Vendor objects</description>
 
         <lockingKeys>
             <field attributeName="vendorHeaderGeneratedIdentifier" />
@@ -67,7 +70,9 @@
                       </fieldAuthorization>
                     </maintainableField>
                     
-                    <maintainableField name="vendorHeader.vendorTaxTypeCode" />
+                    <maintainableField name="vendorHeader.vendorTaxTypeCode" >
+                        <defaultValue>FEIN</defaultValue>
+                    </maintainableField>
                     <maintainableField name="vendorHeader.vendorOwnershipCode" required="true"/>
                     <maintainableField name="vendorHeader.vendorOwnershipCategoryCode" />
                     <!--  To the next column -->
@@ -209,7 +214,9 @@
                     </maintainableCollection>
                 </maintainableItems>
             </maintainableSection>
+                    
 
+            
             <maintainableSection title="Supplier Diversity" >
                 <maintainableItems>
                      <maintainableCollection name="vendorHeader.vendorSupplierDiversities" businessObjectClass="org.kuali.module.vendor.bo.VendorSupplierDiversity" summaryTitle="Supplier Diversity">
@@ -313,6 +320,7 @@
                         <maintainableField name="vendorContractBeginningDate" required="true" />
                         <maintainableField name="vendorContractEndDate" required="true" />
                         <maintainableField name="contractManagerCode" required="true" />
+                        <maintainableField name="vendorB2bIndicator" required="true" />
                         <maintainableField name="purchaseOrderCostSourceCode" required="true" />
                         <maintainableField name="vendorPaymentTermsCode" required="true" />
                         <maintainableField name="vendorShippingPaymentTermsCode" required="false" />

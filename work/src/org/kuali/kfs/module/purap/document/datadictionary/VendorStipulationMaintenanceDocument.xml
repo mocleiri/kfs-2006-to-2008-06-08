@@ -22,22 +22,24 @@
     <maintenanceDocument>
         <businessObjectClass>org.kuali.module.purap.bo.VendorStipulation</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-        <businessRulesClass>org.kuali.module.purap.rules.VendorStipulationRule</businessRulesClass>
 
         <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
-                    <workgroup>PURAP_PUR_ADMIN</workgroup>
+                    <workgroup>kualiUniversalGroup</workgroup>
                 </workgroups>
             </authorization>
         </authorizations>
 
-        <documentTypeName>VendorStipulationMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiVendorStipulationMaintenanceDocument</documentTypeName>
         <documentTypeCode>PMSI</documentTypeCode>
 
-        <label>Vendor Stipulation</label>
-        <help parameterNamespace="KFS-PA" parameterDetailType="VendorStipulation" parameterName="VENDOR_STIPULATION" />
+        <label>Vendor Stipulation Maintenance Document</label>
+        <shortLabel>Vendor Stipulation Maint Doc</shortLabel>
+
+        <summary>Vendor Stipulation Maintenance Document</summary>
+        <description>Document used to create or update Vendor Stipulation objects</description>
 
         <lockingKeys>
             <field attributeName="vendorStipulationIdentifier" />

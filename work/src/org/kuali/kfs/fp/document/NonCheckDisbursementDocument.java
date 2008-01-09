@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  */
 package org.kuali.module.financial.document;
 
-import static org.kuali.kfs.KFSConstants.EMPTY_STRING;
+import static org.kuali.Constants.EMPTY_STRING;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.document.AccountingDocumentBase;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.module.financial.bo.NonCheckDisbursementDocumentAccountingLineParser;
 
 /**
- * This is the business object that represents the NonCheckDisbursementDocument in Kuali. The "Non-Check Disbursement" document is
- * used to record charges or credits directly assessed to university bank accounts. It is used primarily by the Tax and Treasury
- * Accounting office to record wire transfers, foreign drafts, etc.
+ * This is the business object that represents the NonCheckDisbursementDocument in Kuali.
+ * 
+ * The "Non-Check Disbursement" document is used to record charges or credits directly assessed to university bank accounts. It is
+ * used primarily by the Tax and Treasury Accounting office to record wire transfers, foreign drafts, etc.
+ * 
+ * 
  */
-public class NonCheckDisbursementDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
+public class NonCheckDisbursementDocument extends TransactionalDocumentBase {
 
 
     /**
@@ -41,7 +41,7 @@ public class NonCheckDisbursementDocument extends AccountingDocumentBase impleme
     /**
      * Overrides the base implementation to return "From".
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
@@ -49,7 +49,7 @@ public class NonCheckDisbursementDocument extends AccountingDocumentBase impleme
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
