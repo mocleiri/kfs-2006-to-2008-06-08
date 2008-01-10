@@ -4286,4 +4286,47 @@
         SH_PARM_NM="INSTITUTION_NAME" SH_PARM_NMSPC_CD="KFS-AR"
         SH_PARM_TXT="Indiana University" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="43511636C589D000E043814FD881D000"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The Object Code level designated specifically for Capital Assets."
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="CAPITAL_ASSET_OBJECT_LEVELS"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="CAP"
+        SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="43511636C58AD000E043814FD881D000"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The minimum extended price at which an item is to be considered a Capital Asset."
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="CAPITAL_ASSET_PRICE_THRESHOLD"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="5000"
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="43511636C58BD000E043814FD881D000"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Capital Asset Transaction Type Codes which require the item to have a Capital Asset Number."
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="CAPITAL_ASSET_TRANSACTION_TYPES_REQUIRING_ASSET_NUMBERS"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="MDEX;FABR"
+        SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="43511636C58CD000E043814FD881D000"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Capital Asset Transaction Type Codes which can be used if the document is of a recurring payment type"
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="CAPITAL_ASSET_TRANSACTION_TYPES_REQUIRING_RECURRING_PAYMENT_TERMS"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="LEAS"
+        SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="43511636C58DD000E043814FD881D000"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Object Code subtypes that require the associated item to have a quantity."
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="OBJECT_SUB_TYPES_REQUIRING_QUANTITY"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="UC;UO;UF;CM;CF;CO;AM"
+        SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="43511636C58ED000E043814FD881D000"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Object Code levels which indicate that the associated item may be a Capital Asset."
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="POSSIBLE_CAPITAL_ASSET_OBJECT_LEVELS"
+        SH_PARM_NMSPC_CD="KFS-PA"
+        SH_PARM_TXT="NC;OEXP;PRIN;RESA;RENT;R&amp;M;S&amp;E"
+        SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
 </dataset>
