@@ -40,8 +40,6 @@ import org.kuali.core.service.UniversalUserService;
 import org.kuali.kfs.bo.PostalZipCode;
 import org.kuali.kfs.bo.State;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.cg.bo.AwardAccount;
-import org.kuali.module.cg.bo.Cfda;
 import org.kuali.module.chart.bo.codes.BudgetRecordingLevel;
 import org.kuali.module.chart.bo.codes.ICRTypeCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
@@ -129,7 +127,6 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
     private PostalZipCode postalZipCode;
     private BudgetRecordingLevel budgetRecordingLevel;
     private SufficientFundsCode sufficientFundsCode;
-    private Cfda cfda;
 
     // Several kinds of Dummy Attributes for dividing sections on Inquiry page
     private String accountResponsibilitySectionBlank;
@@ -751,14 +748,6 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
      */
     public void setAccountCfdaNumber(String accountCfdaNumber) {
         this.accountCfdaNumber = accountCfdaNumber;
-    }
-
-    public Cfda getCfda() {
-        return cfda;
-    }
-
-    public void setCfda(Cfda cfda) {
-        this.cfda = cfda;
     }
 
     /**
@@ -1793,24 +1782,6 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
      */
     public boolean isForContractsAndGrants() {
         return forContractsAndGrants;
-    }
-
-    /**
-     * This method returns a collection of AwardAccount objects.
-     * 
-     * @return Collection of associated AwardAccounts.
-     */
-    public List<AwardAccount> getAwards() {
-        return awards;
-    }
-
-    /**
-     * This method sets the associated collection of AwardAccounts to the local collection attribute.
-     * 
-     * @param awards New collection of AwardAccounts to be assigned to this Account.
-     */
-    public void setAwards(List<AwardAccount> awards) {
-        this.awards = awards;
     }
 
 }
