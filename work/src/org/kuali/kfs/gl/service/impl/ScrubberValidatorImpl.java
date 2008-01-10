@@ -59,8 +59,6 @@ import org.kuali.module.gl.service.ScrubberValidator;
 import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.StringHelper;
-import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.batch.LaborScrubberStep;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -865,14 +863,6 @@ public class ScrubberValidatorImpl implements ScrubberValidator {
             AccountingPeriod originEntryAccountingPeriod = referenceLookup.get().getAccountingPeriod(originEntry);
             if (originEntryAccountingPeriod == null) {
                 return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_ACCOUNTING_PERIOD_NOT_FOUND) + " (" + originEntry.getUniversityFiscalPeriodCode() + ")", Message.TYPE_FATAL);
-            }
-            else if (KFSConstants.ACCOUNTING_PERIOD_STATUS_CLOSED.equals(originEntryAccountingPeriod.getUniversityFiscalPeriodStatusCode())) {
-                // KULLAB-510
-                // Scrubber accepts closed fiscal periods for certain Balance Types(A2)
-                String bypassBalanceType = SpringContext.getBean(ParameterService.class).getParameterValue(LaborScrubberStep.class, LaborConstants.Scrubber.CLOSED_FISCAL_PERIOD_BYPASS_BALANCE_TYPES);
-                if (!workingEntry.getFinancialBalanceTypeCode().equals(bypassBalanceType)) {
-                    return new Message(kualiConfigurationService.getPropertyString(KFSKeyConstants.ERROR_FISCAL_PERIOD_CLOSED) + " (" + originEntry.getUniversityFiscalPeriodCode() + ")", Message.TYPE_FATAL);
-                }
             }
 
             workingEntry.setUniversityFiscalPeriodCode(originEntry.getUniversityFiscalPeriodCode());
