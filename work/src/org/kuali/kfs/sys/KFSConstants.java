@@ -25,7 +25,6 @@ import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.gl.bo.OriginEntryFull;
-import org.kuali.module.labor.bo.LaborOriginEntry;
 
 /**
  * This class is used to define global constants.
@@ -1046,18 +1045,12 @@ public class KFSConstants extends JstlConstants implements ParameterKeyConstants
     private static String DASH_POSITION_NUMBER = null;
 
     public static String getDashPositionNumber() {
-        if (DASH_POSITION_NUMBER == null) {
-            DASH_POSITION_NUMBER = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(LaborOriginEntry.class, KFSPropertyConstants.POSITION_NUMBER), '-');
-        }
-        return DASH_POSITION_NUMBER;
+        return "-";
     }
 
     private static String DASH_EMPLID = null;
 
     public static String getDashEmplId() {
-        if (DASH_EMPLID == null) {
-            DASH_EMPLID = StringUtils.rightPad("", SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(LaborOriginEntry.class, KFSPropertyConstants.EMPLID), '-');
-        }
-        return DASH_EMPLID;
+        return "-";
     }
 }
