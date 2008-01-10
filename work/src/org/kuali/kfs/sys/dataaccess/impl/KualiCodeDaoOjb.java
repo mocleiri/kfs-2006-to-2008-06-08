@@ -25,7 +25,6 @@ import org.kuali.core.bo.KualiCode;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.dao.KualiCodeDao;
-import org.kuali.module.cg.bo.AgencyType;
 import org.kuali.module.chart.bo.FundGroup;
 import org.kuali.module.chart.bo.KualiSystemCode;
 import org.kuali.module.chart.bo.ObjSubTyp;
@@ -39,7 +38,6 @@ import org.kuali.module.chart.bo.codes.FederalFundedCode;
 import org.kuali.module.chart.bo.codes.MandatoryTransferEliminationCode;
 import org.kuali.module.financial.bo.PaymentReasonCode;
 import org.kuali.module.gl.bo.OriginEntrySource;
-import org.kuali.module.kra.budget.bo.NonpersonnelSubCategory;
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -52,14 +50,12 @@ public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCod
 
     private static Map codeColumns = new HashMap();
     static {
-        codeColumns.put(AgencyType.class, "code");
         codeColumns.put(BalanceTyp.class, "code");
         codeColumns.put(BudgetAggregationCode.class, "code");
         codeColumns.put(PaymentReasonCode.class, "code");
         codeColumns.put(FederalFundedCode.class, "code");
         codeColumns.put(FundGroup.class, "code");
         codeColumns.put(MandatoryTransferEliminationCode.class, "code");
-        codeColumns.put(NonpersonnelSubCategory.class, "code");
         codeColumns.put(ObjectCode.class, "financialObjectCode");
         codeColumns.put(ObjectType.class, "code");
         codeColumns.put(ObjSubTyp.class, "code");
@@ -72,14 +68,12 @@ public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCod
 
     private static Map nameColumns = new HashMap();
     static {
-        nameColumns.put(AgencyType.class, "name");
         nameColumns.put(BalanceTyp.class, "name");
         nameColumns.put(BudgetAggregationCode.class, "name");
         nameColumns.put(PaymentReasonCode.class, "name");
         nameColumns.put(FederalFundedCode.class, "name");
         nameColumns.put(FundGroup.class, "name");
         nameColumns.put(MandatoryTransferEliminationCode.class, "name");
-        nameColumns.put(NonpersonnelSubCategory.class, "name");
         nameColumns.put(ObjectCode.class, "financialObjectCodeName");
         nameColumns.put(ObjectType.class, "name");
         nameColumns.put(ObjSubTyp.class, "name");
