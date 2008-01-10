@@ -32,8 +32,6 @@ import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.dao.OriginEntryDao;
 import org.kuali.module.gl.dao.OriginEntryGroupDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.labor.bo.LaborOriginEntry;
-import org.kuali.module.labor.dao.LaborOriginEntryDao;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -46,7 +44,6 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
     private OriginEntryGroupDao originEntryGroupDao;
     private OriginEntryDao originEntryDao;
     private DateTimeService dateTimeService;
-    private LaborOriginEntryDao laborOriginEntryDao;
 
     /**
      * Constructs a OriginEntryGroupServiceImpl instance
@@ -226,30 +223,6 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
         Date today = dateTimeService.getCurrentSqlDate();
         Collection groups = originEntryGroupDao.getLaborGroupsToBackup(today);
 
-        // Create the new group
-        OriginEntryGroup backupGroup = this.createGroup(today, OriginEntrySource.LABOR_BACKUP, true, true, true);
-
-        for (Iterator<OriginEntryGroup> iter = groups.iterator(); iter.hasNext();) {
-            OriginEntryGroup group = iter.next();
-            // Get only LaborOriginEntryGroup
-            if (group.getSourceCode().startsWith("L")) {
-                Iterator entry_iter = laborOriginEntryDao.getLaborEntriesByGroup(group, 0);
-
-                while (entry_iter.hasNext()) {
-                    LaborOriginEntry entry = (LaborOriginEntry) entry_iter.next();
-
-                    entry.setEntryId(null);
-                    entry.setObjectId(new Guid().toString());
-                    entry.setGroup(backupGroup);
-                    laborOriginEntryDao.saveOriginEntry(entry);
-                }
-
-
-                group.setProcess(false);
-                group.setScrub(false);
-                originEntryGroupDao.save(group);
-            }
-        }
     }
 
 
@@ -327,12 +300,7 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 
         for (OriginEntryGroup group : c) {
 
-            if (group.getSourceCode().startsWith("L") && !groupException.contains(group.getSourceCode())) {
-                group.setRows(laborOriginEntryDao.getGroupCount(group.getId()));
-            }
-            else {
-                group.setRows(originEntryDao.getGroupCount(group.getId()));
-            }
+            group.setRows(originEntryDao.getGroupCount(group.getId()));
 
         }
         return c;
@@ -474,10 +442,6 @@ public class OriginEntryGroupServiceImpl implements OriginEntryGroupService {
 
     public void setOriginEntryDao(OriginEntryDao oed) {
         originEntryDao = oed;
-    }
-
-    public void setLaborOriginEntryDao(LaborOriginEntryDao loed) {
-        laborOriginEntryDao = loed;
     }
 
 
