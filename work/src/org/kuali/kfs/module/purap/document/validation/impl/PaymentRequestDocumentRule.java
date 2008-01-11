@@ -61,7 +61,7 @@ import org.kuali.module.purap.service.PurapService;
  */
 public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase {
 
-    private static KualiDecimal zero = new KualiDecimal(0);
+    private static KualiDecimal zero = KualiDecimal.ZERO;
     private static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
     /**
