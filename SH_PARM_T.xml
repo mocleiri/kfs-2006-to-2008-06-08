@@ -4329,4 +4329,16 @@
         SH_PARM_NMSPC_CD="KFS-PA"
         SH_PARM_TXT="NC;OEXP;PRIN;RESA;RENT;R&amp;M;S&amp;E"
         SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="4360EAC1A8221078E043814FD8811078"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The fiscal year for report record to create"
+        SH_PARM_DTL_TYP_CD="EffortCertificationCreateStep"
+        SH_PARM_NM="CREATE_FISCAL_YEAR" SH_PARM_NMSPC_CD="KFS-ER"
+        SH_PARM_TXT="2008" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+    <SH_PARM_T OBJ_ID="4360EAC1A8231078E043814FD8811078"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The report number for the report record to create"
+        SH_PARM_DTL_TYP_CD="EffortCertificationCreateStep"
+        SH_PARM_NM="CREATE_REPORT_NUMBER" SH_PARM_NMSPC_CD="KFS-ER"
+        SH_PARM_TXT="A01" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
 </dataset>

@@ -1,6 +1,55 @@
 <?xml version="1.0"?>
 <!DOCTYPE dataset SYSTEM "data.dtd">
 <dataset>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317560" DOC_TYP_LBL_TXT="Asset"
+        DOC_TYP_NM="AssetMaintenanceDocument" DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_DESC="AccountsReceivableCashControlDocument"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/arCashControl.do?methodToCall=docHandler"
+        DOC_TYP_ID="317561" DOC_TYP_LBL_TXT="Cash Control"
+        DOC_TYP_NM="AccountsReceivableCashControlDocument"
+        DOC_TYP_PARNT_ID="316840"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317562" DOC_TYP_LBL_TXT="Customer"
+        DOC_TYP_NM="AccountsReceivableCustomerMaintenanceDocument"
+        DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317563" DOC_TYP_LBL_TXT="Invoice Item Code"
+        DOC_TYP_NM="AccountsReceivableInvoiceItemCodeMaintenanceDocument"
+        DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317564"
+        DOC_TYP_LBL_TXT="Organization Accounting Default"
+        DOC_TYP_NM="AccountsReceivableOrganizationAccountingDefaultMaintenanceDocument"
+        DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317565" DOC_TYP_LBL_TXT="Payment Medium"
+        DOC_TYP_NM="AccountsReceivablePaymentMediumMaintenanceDocument"
+        DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
     <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="Budget Construction Document"
@@ -86,6 +135,14 @@
         DOC_TYP_PARNT_ID="293336"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="317566" DOC_TYP_LBL_TXT="System Information"
+        DOC_TYP_NM="AccountsReceivableSystemInformationMaintenanceDocument"
+        DOC_TYP_PARNT_ID="176777"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
     <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/laborLedgerCorrection.do?methodToCall=docHandler"
@@ -810,7 +867,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="296662" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="2" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="5"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="6"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiBaseDocument" DOC_TYP_HDLR_URL_ADDR="none"
         DOC_TYP_ID="316840" DOC_TYP_LBL_TXT="KualiBaseDocument"
@@ -1049,7 +1106,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="93350" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="2" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="57"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="63"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiSimpleMaintenanceDocument"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
