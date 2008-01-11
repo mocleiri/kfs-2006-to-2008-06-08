@@ -463,7 +463,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         sequenceHelper.increment();
 
         // grab the explicit entry for the first accounting line and adjust for wire charge entry
-        GeneralLedgerPendingEntry explicitEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(dvDocument.getGeneralLedgerPendingEntry(0));
+        GeneralLedgerPendingEntry explicitEntry = new GeneralLedgerPendingEntry(dvDocument.getGeneralLedgerPendingEntry(0));
         explicitEntry.setTransactionLedgerEntrySequenceNumber(new Integer(sequenceHelper.getSequenceCounter()));
         explicitEntry.setFinancialObjectCode(wireCharge.getExpenseFinancialObjectCode());
         explicitEntry.setFinancialSubObjectCode(GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialSubObjectCode());
@@ -509,7 +509,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         sequenceHelper.increment();
 
         // copy the charge entry and adjust for credit
-        GeneralLedgerPendingEntry explicitEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(chargeEntry);
+        GeneralLedgerPendingEntry explicitEntry = new GeneralLedgerPendingEntry(chargeEntry);
         explicitEntry.setTransactionLedgerEntrySequenceNumber(new Integer(sequenceHelper.getSequenceCounter()));
         explicitEntry.setChartOfAccountsCode(wireCharge.getChartOfAccountsCode());
         explicitEntry.setAccountNumber(wireCharge.getAccountNumber());
