@@ -113,7 +113,7 @@ public class DisbursementVoucherDocument extends AccountingDocumentBase implemen
         dvPayeeDetail = new DisbursementVoucherPayeeDetail();
         dvPreConferenceDetail = new DisbursementVoucherPreConferenceDetail();
         dvWireTransfer = new DisbursementVoucherWireTransfer();
-        disbVchrCheckTotalAmount = new KualiDecimal(0);
+        disbVchrCheckTotalAmount = KualiDecimal.ZERO;
     }
 
 
