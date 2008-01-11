@@ -722,8 +722,8 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         }
 
         // now loop through all of the GLPEs and calculate buckets for debits and credits
-        KualiDecimal creditAmount = new KualiDecimal(0);
-        KualiDecimal debitAmount = new KualiDecimal(0);
+        KualiDecimal creditAmount = KualiDecimal.ZERO;
+        KualiDecimal debitAmount = KualiDecimal.ZERO;
 
         for (GeneralLedgerPendingEntry glpe : avDoc.getGeneralLedgerPendingEntries()) {
             // make sure we are looking at only the explicit entries that aren't DI types
