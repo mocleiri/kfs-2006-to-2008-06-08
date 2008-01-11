@@ -384,7 +384,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
                     sequenceHelper.increment();
 
                     // ////////////////// now create actual TOF offset //////////////////////////////////////////////
-                    GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
+                    GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(explicitEntry);
                     success &= processOffsetGeneralLedgerPendingEntry(FinancialDocument, sequenceHelper, accountingLine, explicitEntry, offsetEntry);
 
                     // increment the sequence counter
