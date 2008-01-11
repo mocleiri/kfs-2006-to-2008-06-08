@@ -264,7 +264,7 @@ public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCard
 
             // for each transaction, create transaction detail object and then acct lines for the detail
             int transactionLineNumber = 1;
-            KualiDecimal documentTotalAmount = new KualiDecimal(0);
+            KualiDecimal documentTotalAmount = KualiDecimal.ZERO;
             String errorText = "";
             for (Iterator iter = transactions.iterator(); iter.hasNext();) {
                 ProcurementCardTransaction transaction = (ProcurementCardTransaction) iter.next();
