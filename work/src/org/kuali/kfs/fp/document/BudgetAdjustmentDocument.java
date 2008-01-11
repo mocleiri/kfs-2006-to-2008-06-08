@@ -166,7 +166,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetTotal() {
-        KualiDecimal currentBudgetTotal = new KualiDecimal(0);
+        KualiDecimal currentBudgetTotal = KualiDecimal.ZERO;
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -191,7 +191,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetIncomeTotal() {
-        KualiDecimal total = new KualiDecimal(0);
+        KualiDecimal total = KualiDecimal.ZERO;
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -209,7 +209,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getSourceCurrentBudgetExpenseTotal() {
-        KualiDecimal total = new KualiDecimal(0);
+        KualiDecimal total = KualiDecimal.ZERO;
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -227,7 +227,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetTotal() {
-        KualiDecimal currentBudgetTotal = new KualiDecimal(0);
+        KualiDecimal currentBudgetTotal = KualiDecimal.ZERO;
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -252,7 +252,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetIncomeTotal() {
-        KualiDecimal total = new KualiDecimal(0);
+        KualiDecimal total = KualiDecimal.ZERO;
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -270,7 +270,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getTargetCurrentBudgetExpenseTotal() {
-        KualiDecimal total = new KualiDecimal(0);
+        KualiDecimal total = KualiDecimal.ZERO;
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -288,7 +288,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetTotal() {
-        KualiInteger baseBudgetTotal = new KualiInteger(0);
+        KualiInteger baseBudgetTotal = KualiInteger.ZERO;
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -314,7 +314,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetIncomeTotal() {
-        KualiInteger total = new KualiInteger(0);
+        KualiInteger total = KualiInteger.ZERO;
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -332,7 +332,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiInteger getSourceBaseBudgetExpenseTotal() {
-        KualiInteger total = new KualiInteger(0);
+        KualiInteger total = KualiInteger.ZERO;
 
         for (Iterator iter = sourceAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -350,7 +350,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetTotal() {
-        KualiInteger baseBudgetTotal = new KualiInteger(0);
+        KualiInteger baseBudgetTotal = KualiInteger.ZERO;
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -375,7 +375,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetIncomeTotal() {
-        KualiInteger total = new KualiInteger(0);
+        KualiInteger total = KualiInteger.ZERO;
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
@@ -393,7 +393,7 @@ public class BudgetAdjustmentDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiInteger getTargetBaseBudgetExpenseTotal() {
-        KualiInteger total = new KualiInteger(0);
+        KualiInteger total = KualiInteger.ZERO;
 
         for (Iterator iter = targetAccountingLines.iterator(); iter.hasNext();) {
             BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
