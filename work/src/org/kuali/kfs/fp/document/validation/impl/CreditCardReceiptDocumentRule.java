@@ -160,7 +160,7 @@ public class CreditCardReceiptDocumentRule extends CashReceiptFamilyRule impleme
                     ccrDoc.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
                     sequenceHelper.increment();
 
-                    GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
+                    GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(bankOffsetEntry);
                     success &= populateOffsetGeneralLedgerPendingEntry(ccrDoc.getPostingYear(), bankOffsetEntry, sequenceHelper, offsetEntry);
                     // unsuccessful offsets may be added, but that's consistent with the offsets for regular GLPEs (i.e., maybe
                     // neither

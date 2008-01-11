@@ -289,7 +289,7 @@ public class CashManagementDocumentRule extends GeneralLedgerPostingDocumentRule
                 cashManagementDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
                 sequenceHelper.increment();
 
-                GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
+                GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(bankOffsetEntry);
                 success &= populateOffsetGeneralLedgerPendingEntry(universityFiscalYear, bankOffsetEntry, sequenceHelper, offsetEntry);
                 cashManagementDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
                 sequenceHelper.increment();
