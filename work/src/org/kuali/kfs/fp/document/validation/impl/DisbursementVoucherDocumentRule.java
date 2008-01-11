@@ -485,7 +485,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         sequenceHelper.increment();
 
         // handle the offset entry
-        GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
+        GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(explicitEntry);
         populateOffsetGeneralLedgerPendingEntry(dvDocument.getPostingYear(), explicitEntry, sequenceHelper, offsetEntry);
 
         dvDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
@@ -537,7 +537,7 @@ public class DisbursementVoucherDocumentRule extends AccountingDocumentRuleBase 
         sequenceHelper.increment();
 
         // handle the offset entry
-        GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
+        GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(explicitEntry);
         populateOffsetGeneralLedgerPendingEntry(dvDocument.getPostingYear(), explicitEntry, sequenceHelper, offsetEntry);
 
         dvDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
