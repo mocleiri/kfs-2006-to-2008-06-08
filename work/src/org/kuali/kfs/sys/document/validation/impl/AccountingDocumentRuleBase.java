@@ -641,7 +641,7 @@ public abstract class AccountingDocumentRuleBase extends GeneralLedgerPostingDoc
         sequenceHelper.increment();
 
         // handle the offset entry
-        GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
+        GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry( explicitEntry );
         success &= processOffsetGeneralLedgerPendingEntry(accountingDocument, sequenceHelper, accountingLine, explicitEntry, offsetEntry);
 
         // handle the situation where the document is an error correction or is corrected
