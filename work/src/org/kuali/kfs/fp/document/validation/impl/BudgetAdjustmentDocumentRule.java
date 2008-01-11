@@ -653,7 +653,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
 
         // check current amounts balance, income stream balance Map should add to 0
         Map incomeStreamMap = buildIncomeStreamBalanceMap(baDocument);
-        KualiDecimal totalCurrentAmount = new KualiDecimal(0);
+        KualiDecimal totalCurrentAmount = KualiDecimal.ZERO;
         for (Iterator iter = incomeStreamMap.values().iterator(); iter.hasNext();) {
             KualiDecimal streamAmount = (KualiDecimal) iter.next();
             totalCurrentAmount = totalCurrentAmount.add(streamAmount);
@@ -685,7 +685,7 @@ public class BudgetAdjustmentDocumentRule extends AccountingDocumentRuleBase imp
             BudgetAdjustmentAccountingLine budgetAccountingLine = (BudgetAdjustmentAccountingLine) iter.next();
             String incomeStreamKey = budgetAccountingLine.getAccount().getIncomeStreamFinancialCoaCode() + INCOME_STREAM_CHART_ACCOUNT_DELIMITER + budgetAccountingLine.getAccount().getIncomeStreamAccountNumber();
 
-            KualiDecimal incomeStreamAmount = new KualiDecimal(0);
+            KualiDecimal incomeStreamAmount = KualiDecimal.ZERO;
             if (incomeStreamBalance.containsKey(incomeStreamKey)) {
                 incomeStreamAmount = (KualiDecimal) incomeStreamBalance.get(incomeStreamKey);
             }
