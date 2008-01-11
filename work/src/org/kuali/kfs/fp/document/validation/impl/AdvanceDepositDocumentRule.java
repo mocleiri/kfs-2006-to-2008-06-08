@@ -168,7 +168,7 @@ public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements
                 advanceDepositDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
                 sequenceHelper.increment();
 
-                GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
+                GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(bankOffsetEntry);
                 success &= populateOffsetGeneralLedgerPendingEntry(advanceDepositDocument.getPostingYear(), bankOffsetEntry, sequenceHelper, offsetEntry);
                 advanceDepositDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
                 sequenceHelper.increment();
