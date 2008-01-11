@@ -143,7 +143,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getDebitTotal() {
-        KualiDecimal debitTotal = new KualiDecimal(0);
+        KualiDecimal debitTotal = KualiDecimal.ZERO;
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
@@ -162,7 +162,7 @@ public class AuxiliaryVoucherDocument extends AccountingDocumentBase implements 
      * @return KualiDecimal
      */
     public KualiDecimal getCreditTotal() {
-        KualiDecimal creditTotal = new KualiDecimal(0);
+        KualiDecimal creditTotal = KualiDecimal.ZERO;
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
