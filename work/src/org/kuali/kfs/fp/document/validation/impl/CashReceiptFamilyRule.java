@@ -54,7 +54,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
     public boolean isAmountValid(AccountingDocument document, AccountingLine accountingLine) {
         KualiDecimal amount = accountingLine.getAmount();
 
-        if (KFSConstants.ZERO.compareTo(amount) == 0) { // amount == 0
+        if (KualiDecimal.ZERO.compareTo(amount) == 0) { // amount == 0
             GlobalVariables.getErrorMap().putError(KFSConstants.AMOUNT_PROPERTY_NAME, KFSKeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
             return false;
         }
@@ -106,7 +106,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         CashReceiptFamilyBase cr = (CashReceiptFamilyBase) financialDocument;
 
         // make sure that cash reconciliation total is greater than zero
-        boolean isValid = cr.getTotalDollarAmount().compareTo(KFSConstants.ZERO) > 0;
+        boolean isValid = cr.getTotalDollarAmount().compareTo(KualiDecimal.ZERO) > 0;
         if (!isValid) {
             GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SUM_TOTAL_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_NO_CASH_RECONCILIATION_TOTAL);
         }
