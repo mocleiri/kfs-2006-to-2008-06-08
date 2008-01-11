@@ -313,7 +313,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
         // to the type code for a DI document so that it gets passed into the next call and we retrieve the right offset definition
         // since these offsets are
         // specific to Distrib. of Income and Expense documents - we need to do a deep copy though so we don't do this by reference
-        GeneralLedgerPendingEntry explicitEntryDeepCopy = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
+        GeneralLedgerPendingEntry explicitEntryDeepCopy = new GeneralLedgerPendingEntry(explicitEntry);
         explicitEntryDeepCopy.setFinancialDocumentTypeCode(SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(DistributionOfIncomeAndExpenseDocument.class));
 
         // set the posting period to current, because DI GLPEs for recodes should post to the current period
@@ -451,7 +451,7 @@ public class AuxiliaryVoucherDocumentRule extends AccountingDocumentRuleBase {
      */
     private boolean processAuxiliaryVoucherRecodeDistributionOfIncomeAndExpenseGeneralLedgerPendingEntry(AccountingDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, GeneralLedgerPendingEntry explicitEntry) {
         // create a new instance based off of the explicit entry
-        GeneralLedgerPendingEntry recodeGlpe = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(explicitEntry);
+        GeneralLedgerPendingEntry recodeGlpe = new GeneralLedgerPendingEntry(explicitEntry);
 
         // set the sequence number according to what was passed in - this is managed external to this method
         recodeGlpe.setTransactionLedgerEntrySequenceNumber(new Integer(sequenceHelper.getSequenceCounter()));
