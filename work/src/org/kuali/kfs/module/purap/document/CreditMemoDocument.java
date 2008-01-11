@@ -296,7 +296,7 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
      * @return KualiDecimal - above the line item total
      */
     public KualiDecimal getLineItemTotal() {
-        KualiDecimal lineItemTotal = new KualiDecimal(0);
+        KualiDecimal lineItemTotal = KualiDecimal.ZERO;
 
         for (CreditMemoItem item : (List<CreditMemoItem>) getItems()) {
             item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
@@ -314,7 +314,7 @@ public class CreditMemoDocument extends AccountsPayableDocumentBase {
      * @return KualiDecimal - credit memo document total
      */
     public KualiDecimal getGrandTotal() {
-        KualiDecimal grandTotal = new KualiDecimal(0);
+        KualiDecimal grandTotal = KualiDecimal.ZERO;
 
         for (CreditMemoItem item : (List<CreditMemoItem>) getItems()) {
             item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
