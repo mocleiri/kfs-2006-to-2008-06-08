@@ -31,6 +31,7 @@ import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
+import org.kuali.module.financial.bo.BudgetAdjustmentTargetAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
 import org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService;
 import org.kuali.module.labor.bo.BenefitsCalculation;
@@ -87,9 +88,15 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
                     BenefitsCalculation benefitsCalculation = objectBenefit.getBenefitsCalculation();
 
                     // now create and set properties for the benefit line
-                    BudgetAdjustmentAccountingLine benefitLine = (BudgetAdjustmentAccountingLine) ObjectUtils.deepCopy(line);
+                    BudgetAdjustmentAccountingLine benefitLine = null;
+                    if ( benefitLine instanceof BudgetAdjustmentSourceAccountingLine ) {
+                        benefitLine = new BudgetAdjustmentSourceAccountingLine();
+                    } else {
+                        benefitLine = new BudgetAdjustmentTargetAccountingLine();
+                    }
+                    benefitLine.copyFrom(line);
                     benefitLine.setFinancialObjectCode(benefitsCalculation.getPositionFringeBenefitObjectCode());
-                    benefitLine.refresh();
+                    benefitLine.refreshNonUpdateableReferences();
 
                     KualiDecimal benefitCurrentAmount = line.getCurrentBudgetAdjustmentAmount().multiply(benefitsCalculation.getPositionFringeBenefitPercent().toKualiDecimal());
                     benefitLine.setCurrentBudgetAdjustmentAmount(benefitCurrentAmount);
