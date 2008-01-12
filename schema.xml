@@ -749,6 +749,9 @@
         <foreign-key foreignTable="AR_CSH_CTRL_T" name="AR_CSH_CTRL_DTL_TR2">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
+        <foreign-key foreignTable="AR_NON_APLD_HLDG_T" name="AR_CSH_CTRL_DTL_TR4">
+            <reference foreign="FDOC_REF_NBR" local="FDOC_REF_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="AR_CUST_T" name="AR_CSH_CTRL_DTL_TR3">
             <reference foreign="CUST_NBR" local="CUST_NBR"/>
         </foreign-key>
@@ -1219,6 +1222,10 @@
         </foreign-key>
         <foreign-key foreignTable="AR_DOC_HDR_T" name="AR_NON_INV_DIST_TR2">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="AR_NON_INV_T" name="AR_NON_INV_DIST_TR3">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+            <reference foreign="FDOC_LINE_NBR" local="FDOC_LINE_NBR"/>
         </foreign-key>
         <unique name="AR_NON_INV_DIST_TC0">
             <unique-column name="OBJ_ID"/>
@@ -3843,6 +3850,49 @@
         <column name="AST_INVN_STAT_NM" size="40" type="VARCHAR"/>
         <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="CM_AST_STATUS_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="CM_CPTLAST_CHG_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <column name="CPTLAST_DESC" size="2000" type="VARCHAR"/>
+        <column name="CPTLAST_TYP_CD" size="7" type="VARCHAR"/>
+        <column name="CPTLAST_COND_CD" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="CM_ASSET_TYPE_T" name="CM_CPTLAST_CHG_DOC_TR1">
+            <reference foreign="CPTLAST_TYP_CD" local="CPTLAST_TYP_CD"/>
+        </foreign-key>
+        <unique name="CM_CPTLAST_CHG_DOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="CM_CPTLAST_CHG_DTL_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
+        <column name="BLDG_CD" size="10" type="VARCHAR"/>
+        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
+        <column name="BLDG_SUB_ROOM_NBR" size="2" type="VARCHAR"/>
+        <foreign-key foreignTable="SH_ROOM_T" name="CM_CPTLAST_CHG_DTL_TR2">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+            <reference foreign="BLDG_ROOM_NBR" local="BLDG_ROOM_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_CPTLAST_CHG_DOC_T" name="CM_CPTLAST_CHG_DTL_TR4">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="CM_CPTLAST_CHG_DTL_TR1">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_BUILDING_T" name="CM_CPTLAST_CHG_DTL_TR3">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+        </foreign-key>
+        <unique name="CM_CPTLAST_CHG_DTL_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -14575,7 +14625,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317580"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317620"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -14584,8 +14634,8 @@
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5791"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12856"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357909"/>
-    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2020"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563357929"/>
+    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2040"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151676"/>
