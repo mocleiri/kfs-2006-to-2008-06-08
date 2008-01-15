@@ -403,9 +403,4 @@
 		</property>
 	</bean>
 	
-	<bean id="fiscalYearStartDate" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    	<property name="staticField"><value>org.kuali.module.chart.dao.ojb.FiscalYearMakersDaoOjb.START_JULY</value>
-    	</property>
-	</bean>
-	
 </beans>
