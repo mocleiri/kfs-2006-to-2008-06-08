@@ -3086,6 +3086,24 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="CB_PND_PO_T">
+        <column name="PO_NUMBER" primaryKey="true" size="9" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="REQ_NUMBER" size="8" type="VARCHAR"/>
+        <column name="DEPT_REP" size="40" type="VARCHAR"/>
+        <column name="DELIVER_TO_NAME" size="40" type="VARCHAR"/>
+        <column name="DELIVER_TO_ADDR1" size="40" type="VARCHAR"/>
+        <column name="DELIVER_TO_ADDR2" size="40" type="VARCHAR"/>
+        <column name="REQUEST_NAME" size="40" type="VARCHAR"/>
+        <column name="REQUEST_ADDR1" size="40" type="VARCHAR"/>
+        <column name="REQUEST_ADDR2" size="40" type="VARCHAR"/>
+        <column name="RQSTR_PRSN_EMAIL_ADDR" size="100" type="VARCHAR"/>
+        <column name="RQSTR_PRSN_PHN_NBR" size="45" type="VARCHAR"/>
+        <unique name="CB_PND_PO_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CG_AGENCY_T">
         <column name="CG_AGENCY_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -4164,6 +4182,77 @@
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <unique name="CM_MULT_AST_DTL_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="CM_PRTG_DTL_T">
+        <column name="PO_NUMBER" primaryKey="true" size="9" type="VARCHAR"/>
+        <column name="LINE_ITEM_NUMBER" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="CPTLAST_IU_TAG_NBR" primaryKey="true" size="8" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTLAST_SERIAL_NBR" size="25" type="VARCHAR"/>
+        <column name="CPTLAST_ORGTAG_NBR" size="8" type="VARCHAR"/>
+        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
+        <column name="BLDG_CD" size="10" type="VARCHAR"/>
+        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
+        <column name="BLDG_SUB_ROOM_NBR" size="2" type="VARCHAR"/>
+        <column name="AST_PRTGTAG_CRT_DT" type="DATE"/>
+        <foreign-key foreignTable="CM_PRTG_T" name="CM_PRTG_DTL_TR4">
+            <reference foreign="PO_NUMBER" local="PO_NUMBER"/>
+            <reference foreign="LINE_ITEM_NUMBER" local="LINE_ITEM_NUMBER"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_BUILDING_T" name="CM_PRTG_DTL_TR2">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="CM_PRTG_DTL_TR1">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_ROOM_T" name="CM_PRTG_DTL_TR3">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+            <reference foreign="BLDG_ROOM_NBR" local="BLDG_ROOM_NBR"/>
+        </foreign-key>
+        <unique name="CM_PRTG_DTL_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+        <index name="CM_PRTG_DTL_TI2">
+            <index-column name="CPTLAST_IU_TAG_NBR"/>
+        </index>
+    </table>
+    <table name="CM_PRTG_T">
+        <column name="PO_NUMBER" primaryKey="true" size="9" type="VARCHAR"/>
+        <column name="LINE_ITEM_NUMBER" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="QUANTITY_INVOICED" size="22" type="DECIMAL"/>
+        <column name="CPTLAST_TYP_CD" size="7" type="VARCHAR"/>
+        <column name="CPTLAST_MFR_NM" size="40" type="VARCHAR"/>
+        <column name="CPTLAST_MFRMDL_NBR" size="25" type="VARCHAR"/>
+        <column name="VENDOR_NAME" size="40" type="VARCHAR"/>
+        <column name="CPTLAST_TOPS_DESC" size="2000" type="VARCHAR"/>
+        <column name="ORG_DESC" size="255" type="VARCHAR"/>
+        <column name="CPTLAST_ORG_TXT" size="255" type="VARCHAR"/>
+        <column name="ORG_INVN_NM" size="40" type="VARCHAR"/>
+        <column name="AST_REP_UNVL_ID" size="10" type="VARCHAR"/>
+        <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
+        <column name="CM_PRTG_CRT_DT" type="DATE"/>
+        <column name="ORG_CD" size="4" type="VARCHAR"/>
+        <foreign-key foreignTable="CA_CHART_T" name="CM_PRTG_TR1">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ORG_T" name="CM_PRTG_TR2">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ORG_CD" local="ORG_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CB_PND_PO_T" name="CM_PRTG_TR3">
+            <reference foreign="PO_NUMBER" local="PO_NUMBER"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_ASSET_TYPE_T" name="CM_PRTG_TR4">
+            <reference foreign="CPTLAST_TYP_CD" local="CPTLAST_TYP_CD"/>
+        </foreign-key>
+        <unique name="CM_PRTG_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
