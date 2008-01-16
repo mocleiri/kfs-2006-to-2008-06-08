@@ -37,6 +37,7 @@ import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.KualiModuleService;
 import org.kuali.core.util.cache.MethodCacheInterceptor;
+import org.kuali.core.util.cache.MethodCacheNoCopyInterceptor;
 import org.kuali.core.util.spring.CacheNoCopy;
 import org.kuali.core.util.spring.Cached;
 import org.kuali.kfs.batch.Step;
@@ -452,10 +453,12 @@ public class ParameterServiceImpl implements ParameterService {
 
     private void removeCachedMethod(Method method, Object[] arguments) {
         MethodCacheInterceptor methodCacheInterceptor = SpringContext.getBean(MethodCacheInterceptor.class);
+        
         String cacheKey = methodCacheInterceptor.buildCacheKey(method.toString(), arguments);
-        if (methodCacheInterceptor.containsCacheKey(cacheKey)) {
-            methodCacheInterceptor.removeCacheKey(cacheKey);
-        }
+        methodCacheInterceptor.removeCacheKey(cacheKey);
+
+        MethodCacheNoCopyInterceptor methodCacheNoCopyInterceptor = SpringContext.getBean(MethodCacheNoCopyInterceptor.class);
+        methodCacheNoCopyInterceptor.removeCacheKey(cacheKey);
     }
 
     private boolean constraintIsAllow(Parameter parameter) {
