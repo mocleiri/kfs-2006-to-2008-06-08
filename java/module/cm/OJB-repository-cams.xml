@@ -491,7 +491,7 @@
 	</reference-descriptor>
 </class-descriptor>
 
-<class-descriptor class="org.kuali.module.cams.bo.RetirementReason" table="CM_RETIRE_REAS_T">
+<class-descriptor class="org.kuali.module.cams.bo.AssetRetirementReason" table="CM_RETIRE_REAS_T">
 	<field-descriptor name="retirementReasonCode" column="AST_RETIRE_REAS_CD" jdbc-type="VARCHAR" primarykey="true" index="true"/>
 	<field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true"/>
 	<field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true"/>
@@ -535,7 +535,7 @@
 	<reference-descriptor name="retirementChartOfAccounts" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="retirementChartOfAccountsCode" />
 	</reference-descriptor>
-	<reference-descriptor name="retirementReason" class-ref="org.kuali.module.cams.bo.RetirementReason" auto-retrieve="true" auto-update="none" auto-delete="none">
+	<reference-descriptor name="retirementReason" class-ref="org.kuali.module.cams.bo.AssetRetirementReason" auto-retrieve="true" auto-update="none" auto-delete="none">
 		<foreignkey field-ref="retirementReasonCode" />
 	</reference-descriptor>
 	<reference-descriptor name="cashReceiptFinancialDocument" class-ref="org.kuali.core.bo.DocumentHeader" auto-retrieve="true" auto-update="none" auto-delete="none">
