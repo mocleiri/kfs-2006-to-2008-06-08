@@ -154,12 +154,6 @@ public class Account extends PersistableBusinessObjectBase implements AccountInt
      */
     public Account() {
     }
-
-    public void prepareForWorkflow() {
-        // This is needed to put a value in the object so the persisted XML has a flag that
-        // can be used in routing to determine if an account is a C&G Account
-        forContractsAndGrants = SpringContext.getBean(SubFundGroupService.class).isForContractsAndGrants(getSubFundGroup());
-    }
     
     /**
      * This method gathers all SubAccounts related to this account if the account is marked as closed to deactivate
