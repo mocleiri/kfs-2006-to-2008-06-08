@@ -4246,27 +4246,6 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="CM_TBL_MAINT_SEC_T">
-        <column name="CAMPUS_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
-        <column name="ORG_CD" size="4" type="VARCHAR"/>
-        <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
-        <foreign-key foreignTable="CA_CHART_T" name="CM_TBL_MAINT_SEC_TR2">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ORG_T" name="CM_TBL_MAINT_SEC_TR3">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ORG_CD" local="ORG_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_CAMPUS_T" name="CM_TBL_MAINT_SEC_TR1">
-            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
-        </foreign-key>
-        <unique name="CM_TBL_MAINT_SEC_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
     <table name="EN_ACTN_ITM_T">
         <column name="ACTN_ITM_ID" primaryKey="true" size="14" type="DECIMAL"/>
         <column name="ACTN_ITM_PRSN_EN_ID" required="true" size="30" type="VARCHAR"/>
@@ -14649,7 +14628,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317680"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317700"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
