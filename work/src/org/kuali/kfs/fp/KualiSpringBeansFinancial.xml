@@ -293,12 +293,6 @@
 			<ref bean="businessObjectService" /> 
 		</property>
 	</bean>
-
-	<bean id="bankAccountService" class="org.kuali.module.financial.service.impl.BankAccountServiceImpl">
-		<property name="businessObjectService">
-			<ref bean="businessObjectService" /> 
-		</property>
-	</bean>
 	
 	<bean id="procurementCardInputFileType" class="org.kuali.module.financial.batch.pcard.ProcurementCardInputFileType"> 
 	    <property name="directoryPath">
