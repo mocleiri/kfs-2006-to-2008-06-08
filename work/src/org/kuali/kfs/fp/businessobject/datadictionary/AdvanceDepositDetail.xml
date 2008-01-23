@@ -76,11 +76,6 @@
                 <shortLabel>Bank</shortLabel>
                 <required>true</required>
             </attributeReference>
-			<attributeReference name="financialDocumentBankAccountNumber" sourceClassName="org.kuali.module.financial.bo.BankAccount" sourceAttributeName="finDocumentBankAccountNumber">
-                <label>Bank Account</label>
-                <shortLabel>Bank Account</shortLabel>
-                <required>true</required>
-            </attributeReference>
         </attributes>
     </businessObject>
 </dictionaryEntry>
