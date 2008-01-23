@@ -74,17 +74,6 @@
 		                <field attributeName="finPreencumSufficientFundIndicator" />
 		                <field attributeName="financialObjectivePrsctrlIndicator" />
 		
-		                <field attributeName="contractsAndGrantsSectionBlank" />
-		                <field attributeName="contractsAndGrantsSection" />
-		
-		                <field attributeName="contractControlFinCoaCode" />
-		                <field attributeName="contractControlAccountNumber" />
-		                <field attributeName="acctIndirectCostRcvyType.codeAndDescription" />
-		                <field attributeName="financialIcrSeriesIdentifier" />
-		                <field attributeName="indirectCostRcvyFinCoaCode" />
-		                <field attributeName="indirectCostRecoveryAcctNbr" />
-		                <field attributeName="accountCfdaNumber" />
-		
 		                <field attributeName="guidelinesAndPurposeSectionBlank" />
 		                <field attributeName="guidelinesAndPurposeSection" />
 		
@@ -103,19 +92,6 @@
 		
 	            	</inquiryFields>
 	            </inquirySection>
-
-                <inquirySection title="Awards">
-                    <inquiryFields>
-                        <inquiryCollection name="awards" businessObjectClass="org.kuali.module.cg.bo.AwardAccount" numberOfColumns="1">
-                            <field attributeName="proposalNumber" />
-                            <field attributeName="projectDirector.universalUser.personName" />
-                            <field attributeName="award.workgroupName" />
-                            <field attributeName="award.kualiGroupNames" />
-                            <field attributeName="award.proposal.proposalFederalPassThroughIndicator" />
-                            <field attributeName="award.proposal.federalPassThroughAgencyNumber" />
-                        </inquiryCollection>
-                    </inquiryFields>
-                </inquirySection>
 
 		    </inquirySections>
         </inquiry>
@@ -403,62 +379,6 @@
                 <required>false</required>
             </attributeReference>
 
-            <attribute name="awardPeriodEndYear" forceUppercase="false">
-                <label>Award Period End Year</label>
-                <shortLabel>AwrdEndYear</shortLabel>
-
-                <maxLength>4</maxLength>
-                <validationPattern>
-                    <year />
-                </validationPattern>
-
-                <control>
-                    <text size="4" />
-                </control>
-            </attribute>
-
-            <attribute name="awardPeriodEndMonth" forceUppercase="false">
-                <label>Award Period End Month</label>
-                <shortLabel>AwrdEndMnth</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <month />
-                </validationPattern>
-
-                <control>
-                    <text size="2" />
-                </control>
-            </attribute>
-
-            <attribute name="awardPeriodBeginYear" forceUppercase="false">
-                <label>Award Period Begin Year</label>
-                <shortLabel>AwrdBegnYear</shortLabel>
-
-                <maxLength>4</maxLength>
-                <validationPattern>
-                    <year />
-                </validationPattern>
-
-                <control>
-                    <text size="4" />
-                </control>
-            </attribute>
-
-            <attribute name="awardPeriodBeginMonth" forceUppercase="false">
-                <label>Award Period Begin Month</label>
-                <shortLabel>AwrdBegnMnth</shortLabel>
-
-                <maxLength>2</maxLength>
-                <validationPattern>
-                    <month />
-                </validationPattern>
-
-                <control>
-                    <text size="2" />
-                </control>
-            </attribute>
-
             <attributeReference name="endowmentIncomeAcctFinCoaCd" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <label>Endowment Chart Of Accounts Code</label>
                 <shortLabel>EndowChart</shortLabel>
@@ -606,12 +526,6 @@
                 <label>Object Presence Control Indicator</label>
                 <shortLabel>ObjPrsCntrl</shortLabel>
                 <required>true</required>
-            </attributeReference>
-
-            <attributeReference name="accountCfdaNumber" sourceClassName="org.kuali.module.cg.bo.Cfda" sourceAttributeName="cfdaNumber">
-                <label>Catalog of Federal Domestic Assistance Number</label>
-                <shortLabel>FedDomAssisNum</shortLabel>
-                <required>false</required>
             </attributeReference>
 
             <attributeReference name="accountOffCampusIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator">
@@ -789,14 +703,6 @@
                 </control>
             </attribute>
 
-            <attribute name="contractsAndGrantsSection" forceUppercase="false">
-                <label>CONTRACTS AND GRANTS SECTION</label>
-                <maxLength>50</maxLength>
-                <control>
-                    <checkbox />
-                </control>
-            </attribute>
-
             <attribute name="guidelinesAndPurposeSection" forceUppercase="false">
                 <label>GUIDELINES AND PURPOSE SECTION</label>
                 <maxLength>50</maxLength>
@@ -821,10 +727,6 @@
                 <shortLabel>Sub-Accounts</shortLabel>
             </collection>
             
-            <collection name="awards">
-            	<label>Awards</label>
-            	<shortLabel>Awards</shortLabel>
-            </collection>
 		</collections>
         
         <relationships>
