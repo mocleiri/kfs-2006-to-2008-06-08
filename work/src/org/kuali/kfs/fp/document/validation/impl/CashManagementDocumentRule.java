@@ -40,7 +40,6 @@ import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
 import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
 import org.kuali.kfs.rules.GeneralLedgerPostingDocumentRuleBase;
-import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.Deposit;
 import org.kuali.module.financial.bo.DepositCashReceiptControl;
@@ -247,14 +246,6 @@ public class CashManagementDocumentRule extends GeneralLedgerPostingDocumentRule
         // validate foreign-key relationships
         deposit.refresh();
 
-        // only check for BankAccount if both bankCode and bankAccountNumber are present
-        if (StringUtils.isNotBlank(deposit.getDepositBankCode()) && StringUtils.isNotBlank(deposit.getDepositBankAccountNumber())) {
-            BankAccount bankAccount = deposit.getBankAccount();
-            if (ObjectUtils.isNull(bankAccount)) {
-                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.DEPOSIT_BANK_ACCOUNT_NUMBER, KFSKeyConstants.ERROR_EXISTENCE, "Bank Account");
-            }
-        }
-
         return GlobalVariables.getErrorMap().isEmpty();
     }
 
@@ -273,52 +264,6 @@ public class CashManagementDocumentRule extends GeneralLedgerPostingDocumentRule
         if (cashManagementDocument.isBankCashOffsetEnabled()) {
             Integer universityFiscalYear = getUniversityFiscalYear();
             int interimDepositNumber = 1;
-            for (Iterator iterator = cashManagementDocument.getDeposits().iterator(); iterator.hasNext();) {
-                // todo: getDeposits() should return List<Deposit> not List
-                Deposit deposit = (Deposit) iterator.next();
-                deposit.refreshReferenceObject(KFSPropertyConstants.BANK_ACCOUNT);
-
-                GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
-                if (!AccountingDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(deposit.getBankAccount(), deposit.getDepositAmount(), cashManagementDocument, universityFiscalYear, sequenceHelper, bankOffsetEntry, KFSConstants.CASH_MANAGEMENT_DEPOSIT_ERRORS)) {
-                    success = false;
-                    LOG.warn("Skipping ledger entries for depost " + deposit.getDepositTicketNumber() + ".");
-                    continue; // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at
-                    // all.
-                }
-                bankOffsetEntry.setTransactionLedgerEntryDescription(createDescription(deposit, interimDepositNumber++));
-                cashManagementDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
-                sequenceHelper.increment();
-
-                GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
-                success &= populateOffsetGeneralLedgerPendingEntry(universityFiscalYear, bankOffsetEntry, sequenceHelper, offsetEntry);
-                cashManagementDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
-                sequenceHelper.increment();
-                /*
-                 * Only the final deposit will have non-null currency and coin. If this is the final deposit, generate the ledger
-                 * entries for currency and coin.
-                 */
-                if (deposit.getDepositTypeCode().equals(KFSConstants.DocumentStatusCodes.CashReceipt.FINAL)) {
-                    KualiDecimal totalCoinCurrencyAmount = deposit.getDepositedCurrency().getTotalAmount().add(deposit.getDepositedCoin().getTotalAmount());
-                    GeneralLedgerPendingEntry coinCurrencyBankOffsetEntry = new GeneralLedgerPendingEntry();
-                    if (!AccountingDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(deposit.getBankAccount(), totalCoinCurrencyAmount, cashManagementDocument, universityFiscalYear, sequenceHelper, coinCurrencyBankOffsetEntry, KFSConstants.CASH_MANAGEMENT_DEPOSIT_ERRORS)) {
-                        success = false;
-                        // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at all.
-                        LOG.warn("Skipping ledger entries for coin and currency.");
-                        continue;
-            }
-
-                    coinCurrencyBankOffsetEntry.setTransactionLedgerEntryDescription(createDescription(deposit, interimDepositNumber++));
-                    cashManagementDocument.getGeneralLedgerPendingEntries().add(coinCurrencyBankOffsetEntry);
-                    sequenceHelper.increment();
-
-                    GeneralLedgerPendingEntry coinCurrnecyOffsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(coinCurrencyBankOffsetEntry);
-                    success &= populateOffsetGeneralLedgerPendingEntry(universityFiscalYear, coinCurrencyBankOffsetEntry, sequenceHelper, coinCurrnecyOffsetEntry);
-                    cashManagementDocument.getGeneralLedgerPendingEntries().add(coinCurrnecyOffsetEntry);
-                    sequenceHelper.increment();
-
-        }
-
-            }
 
         }
         return success;
