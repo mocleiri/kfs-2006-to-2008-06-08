@@ -47,7 +47,6 @@ import org.kuali.kfs.KFSConstants.CashDrawerConstants;
 import org.kuali.kfs.KFSConstants.DocumentStatusCodes.CashReceipt;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.bo.Bank;
-import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.bo.CashieringTransaction;
 import org.kuali.module.financial.bo.Check;
@@ -257,15 +256,6 @@ public class DepositWizardAction extends KualiAction {
 
                 if (hasBankAccountNumber) {
                     keyMap.put("finDocumentBankAccountNumber", bankAccountNumber);
-
-                    BankAccount bankAccount = (BankAccount) boService.findByPrimaryKey(BankAccount.class, keyMap);
-                    if (bankAccount == null) {
-                        String[] msgParams = { bankAccountNumber, bankCode };
-                        GlobalVariables.getErrorMap().putError(KFSConstants.DepositConstants.DEPOSIT_WIZARD_DEPOSITHEADER_ERROR, KFSKeyConstants.Deposit.ERROR_UNKNOWN_BANKACCOUNT, msgParams);
-                    }
-                    else {
-                        dform.setBankAccount(bankAccount);
-                    }
                 }
             }
         }
@@ -386,7 +376,7 @@ public class DepositWizardAction extends KualiAction {
                     String cmDocId = dform.getCashManagementDocId();
 
                     CashManagementService cms = SpringContext.getBean(CashManagementService.class);
-                    cms.addDeposit(cashManagementDoc, dform.getDepositTicketNumber(), dform.getBankAccount(), selectedReceipts, selectedCashieringChecks, depositIsFinal);
+                    cms.addDeposit(cashManagementDoc, dform.getDepositTicketNumber(), selectedReceipts, selectedCashieringChecks, depositIsFinal);
 
                     if (depositIsFinal) {
                         // find the final deposit
