@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.CashieringItemInProcess;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CoinDetail;
@@ -54,7 +53,7 @@ public interface CashManagementService {
      * @param selectedCashReceipts
      * @param isFinalDeposit
      */
-    public void addDeposit(CashManagementDocument cashManagementDoc, String depositTicketNumber, BankAccount bankAccount, List selectedCashReceipts, List selectedCashieringChecks, boolean isFinalDeposit);
+    public void addDeposit(CashManagementDocument cashManagementDoc, String depositTicketNumber, List selectedCashReceipts, List selectedCashieringChecks, boolean isFinalDeposit);
 
 
     /**
