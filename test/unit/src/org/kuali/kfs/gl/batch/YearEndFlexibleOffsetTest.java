@@ -18,13 +18,18 @@ package org.kuali.module.gl.batch;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.service.A21SubAccountService;
+import org.kuali.module.chart.service.OrganizationReversionService;
+import org.kuali.module.chart.service.PriorYearAccountService;
 import org.kuali.module.financial.bo.OffsetAccount;
 import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.GLConstants;
@@ -34,11 +39,21 @@ import org.kuali.module.gl.batch.closing.year.util.EncumbranceClosingOriginEntry
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.Encumbrance;
 import org.kuali.module.gl.bo.OriginEntry;
+import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.gl.bo.OriginEntrySource;
+import org.kuali.module.gl.service.BalanceService;
+import org.kuali.module.gl.service.OrgReversionUnitOfWorkService;
+import org.kuali.module.gl.service.OrganizationReversionProcessService;
+import org.kuali.module.gl.service.impl.OrganizationReversionMockService;
+import org.kuali.module.gl.service.impl.orgreversion.CashOrganizationReversionCategoryLogic;
+import org.kuali.module.gl.service.impl.orgreversion.OrganizationReversionProcess;
 import org.kuali.module.gl.util.FatalErrorException;
 import org.kuali.module.gl.util.OriginEntryOffsetPair;
 import org.kuali.test.ConfigureContext;
 import org.kuali.core.bo.Parameter;
 import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.Options;
@@ -76,6 +91,7 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
     public static final String DEFAULT_ENCUMBRANCE_BALANCE_TYPE_CODE = "EX";
     public static final String DEFAULT_OFFSET_CHART = "BL";
     public static final String DEFAULT_OFFSET_ACCOUNT_NBR = "0211201";
+    public static final String ORG_REVERSION_CASH_OBJECT_CODE = "8000";
     
     private BusinessObjectService boService;
     private ParameterService parameterService;
@@ -189,10 +205,72 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
         }
     }
     
+    enum ORG_REVERSION_BALANCE_FIXTURE {
+        FLEXIBLE_ORG_REVERSION_BALANCE(DEFAULT_FLEXIBLE_BALANCE_CHART, DEFAULT_FLEXIBLE_BALANCE_ACCOUNT_NBR),
+        INFLEXIBLE_ORG_REVERSION_BALANCE(DEFAULT_NO_FLEXIBLE_BALANCE_CHART, DEFAULT_NO_FLEXIBLE_BALANCE_ACCOUNT_NBR);
+
+        private String chartCode;
+        private String accountNumber;
+        private KualiDecimal amount;
+        private Date timestamp;
+        private static final String DATE_FORMAT = "yyyy-MM-dd";
+        private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(NOMINAL_ACTIVITY_BALANCE_FIXTURE.class);
+        private Options fsOptions = SpringContext.getBean(OptionsService.class).getCurrentYearOptions();
+
+        private ORG_REVERSION_BALANCE_FIXTURE(String chartCode, String accountNumber) {
+            this.chartCode = chartCode;
+            this.accountNumber = accountNumber;
+        }
+
+        /**
+         * Converts the fixture into a balance to test
+         * 
+         * @return a balance represented by this fixture
+         */
+        public Balance convertToBalance() {
+            Balance balance = new Balance();
+            balance.setUniversityFiscalYear(new Integer((SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear()).intValue() - 1));
+            balance.setChartOfAccountsCode(chartCode);
+            balance.setAccountNumber(accountNumber);
+            balance.setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
+            balance.setObjectCode(ORG_REVERSION_CASH_OBJECT_CODE);
+            balance.setSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
+            balance.setBalanceTypeCode(fsOptions.getActualFinancialBalanceTypeCd());
+            balance.setObjectTypeCode(fsOptions.getFinObjTypeCshNotIncomeCd());
+            balance.setAccountLineAnnualBalanceAmount(DEFAULT_FIXTURE_AMOUNT);
+            balance.setBeginningBalanceLineAmount(KualiDecimal.ZERO);
+            balance.setContractsGrantsBeginningBalanceAmount(KualiDecimal.ZERO);
+            balance.setMonth1Amount(amount);
+            balance.setMonth2Amount(KualiDecimal.ZERO);
+            balance.setMonth3Amount(KualiDecimal.ZERO);
+            balance.setMonth4Amount(KualiDecimal.ZERO);
+            balance.setMonth5Amount(KualiDecimal.ZERO);
+            balance.setMonth6Amount(KualiDecimal.ZERO);
+            balance.setMonth7Amount(KualiDecimal.ZERO);
+            balance.setMonth8Amount(KualiDecimal.ZERO);
+            balance.setMonth9Amount(KualiDecimal.ZERO);
+            balance.setMonth10Amount(KualiDecimal.ZERO);
+            balance.setMonth11Amount(KualiDecimal.ZERO);
+            balance.setMonth12Amount(KualiDecimal.ZERO);
+            balance.setMonth13Amount(KualiDecimal.ZERO);
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+                java.util.Date jud = sdf.parse(SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM));
+                balance.setTimestamp(new java.sql.Date(jud.getTime()));
+            }
+            catch (ParseException e) {
+                LOG.debug("Parse date exception while parsing transaction date");
+            }
+            balance.refresh();
+            return balance;
+        }
+    };
+    
     public enum FLEXIBLE_OFFSET_ACCOUNT_FIXTURE {
         FLEXIBLE_ACTIVITY_CLOSING_OFFSET_ACCOUNT(DEFAULT_FLEXIBLE_BALANCE_CHART, DEFAULT_FLEXIBLE_BALANCE_ACCOUNT_NBR, DEFAULT_NOMINAL_ACTIVITY_OFFSET_OBJECT_CODE),
         FLEXIBLE_ENCUMBRANCE_FORWARD_OFFSET_ACCOUNT(DEFAULT_FLEXIBLE_ENCUMBRANCE_CHART, DEFAULT_FLEXIBLE_ENCUMBRANCE_ACCOUNT_NBR, DEFAULT_ENCUMBRANCE_OFFSET_OBJECT_CODE),
-        FLEXIBLE_CS_ENCUMBRANCE_FORWARD_OFFSET_ACCOUNT(DEFAULT_FLEXIBLE_BALANCE_CHART, DEFAULT_FLEXIBLE_BALANCE_ACCOUNT_NBR, DEFAULT_COST_SHARE_ENCUMBRANCE_OFFSET_OBJECT_CODE);
+        FLEXIBLE_CS_ENCUMBRANCE_FORWARD_OFFSET_ACCOUNT(DEFAULT_FLEXIBLE_BALANCE_CHART, DEFAULT_FLEXIBLE_BALANCE_ACCOUNT_NBR, DEFAULT_COST_SHARE_ENCUMBRANCE_OFFSET_OBJECT_CODE),
+        CASH_REVERSION_FORWARD_OFFSET_ACCOUNT(OrganizationReversionMockService.DEFAULT_CASH_REVERSION_CHART, OrganizationReversionMockService.DEFAULT_CASH_REVERSION_ACCOUNT, DEFAULT_NOMINAL_ACTIVITY_OFFSET_OBJECT_CODE);
         
         private String chartCode;
         private String accountNumber;
@@ -372,11 +450,91 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
      *  <li>when flexible offsets are turned on, cash reversion offsets that should get flexible offsets get them</li>
      *  <li>when flexible offsets are turned on, cash reversion activity offsets that should not get flexible offsets don't get them</li>
      *  <li>when flexible offsets are turned on, cash reversion activity entries do not get flexible offsets</li>
-     *  <li>when flexible offsets are turned off, cash reversion activity offsets that should get flexible offsets don't get them
      * </ul>
      */
-    public void testOrganizationReversionCashFlexibleOffsets() {
-        assertTrue(true);
+    public void testOrganizationReversionCashFlexibleOffsetsWhenFlexibleOffsetsOn() {
+        toggleFlexibleOffsets(true);
+        List<Balance> flexibleBalances = new ArrayList<Balance>();
+        flexibleBalances.add(ORG_REVERSION_BALANCE_FIXTURE.FLEXIBLE_ORG_REVERSION_BALANCE.convertToBalance());
+        flexibleBalances.add(ORG_REVERSION_BALANCE_FIXTURE.INFLEXIBLE_ORG_REVERSION_BALANCE.convertToBalance());
+        
+        List<OriginEntryFull> resultingEntries = runOrganizationReversion(flexibleBalances);
+        assertEquals("Number of generated OriginEntries ", new Integer(8), new Integer(resultingEntries.size()));
+        // 1. when flexible offsets are turned on, cash reversion activity entries do not get flexible offsets
+        assertChartAndAccount(resultingEntries.get(0), DEFAULT_FLEXIBLE_BALANCE_CHART, DEFAULT_FLEXIBLE_BALANCE_ACCOUNT_NBR);
+        assertChartAndAccount(resultingEntries.get(2), OrganizationReversionMockService.DEFAULT_CASH_REVERSION_CHART, OrganizationReversionMockService.DEFAULT_CASH_REVERSION_ACCOUNT);
+        assertChartAndAccount(resultingEntries.get(4), DEFAULT_NO_FLEXIBLE_BALANCE_CHART, DEFAULT_NO_FLEXIBLE_BALANCE_ACCOUNT_NBR);
+        assertChartAndAccount(resultingEntries.get(6), OrganizationReversionMockService.DEFAULT_CASH_REVERSION_CHART, OrganizationReversionMockService.DEFAULT_CASH_REVERSION_ACCOUNT);
+        // 2. when flexible offsets are turned on, cash reversion offsets that should get flexible offsets get them
+        assertChartAndAccount(resultingEntries.get(1), DEFAULT_OFFSET_CHART, DEFAULT_OFFSET_ACCOUNT_NBR);
+        assertChartAndAccount(resultingEntries.get(3), DEFAULT_OFFSET_CHART, DEFAULT_OFFSET_ACCOUNT_NBR);
+        assertChartAndAccount(resultingEntries.get(7), DEFAULT_OFFSET_CHART, DEFAULT_OFFSET_ACCOUNT_NBR);
+        // 3. when flexible offsets are turned on, cash reversion offsets that should not get flexible offsets don't get them
+        assertChartAndAccount(resultingEntries.get(5), DEFAULT_NO_FLEXIBLE_BALANCE_CHART, DEFAULT_NO_FLEXIBLE_BALANCE_ACCOUNT_NBR);
+    }
+    
+    /**
+     * Test that:
+     * <ul>
+     *  <li>when flexible offsets are turned off, cash reversion activity offsets that should get flexible offsets don't get them</li>
+     * </ul>
+     */
+    public void testOrganizationReversionCashFlexibleOffsetsWhenFlexibleOffsetsOff() {
+        toggleFlexibleOffsets(false);
+        List<Balance> flexibleBalances = new ArrayList<Balance>();
+        flexibleBalances.add(ORG_REVERSION_BALANCE_FIXTURE.FLEXIBLE_ORG_REVERSION_BALANCE.convertToBalance());
+        
+        List<OriginEntryFull> resultingEntries = runOrganizationReversion(flexibleBalances);
+        assertEquals("Number of generated OriginEntries ", new Integer(4), new Integer(resultingEntries.size()));
+        assertChartAndAccount(resultingEntries.get(1), DEFAULT_FLEXIBLE_BALANCE_CHART, DEFAULT_FLEXIBLE_BALANCE_ACCOUNT_NBR);
+        assertChartAndAccount(resultingEntries.get(3), OrganizationReversionMockService.DEFAULT_CASH_REVERSION_CHART, OrganizationReversionMockService.DEFAULT_CASH_REVERSION_ACCOUNT);
+    }
+    
+    /**
+     * Runs the organization service against a given set of balances.
+     * @param balancesToTest a List of balances to test the organization reversion process against
+     * @return the list of origin entries generated by the organization reversion process
+     */
+    private List<OriginEntryFull> runOrganizationReversion(List<Balance> balancesToTest) {
+        Map<String, OrganizationReversionService> orgRevServiceBeans = SpringContext.getBeansOfType(OrganizationReversionService.class);
+        OrganizationReversionService organizationReversionService = orgRevServiceBeans.get("glOrganizationReversionMockService");
+        DateTimeService dtService = SpringContext.getBean(DateTimeService.class);
+        BalanceService balanceService = SpringContext.getBean(BalanceService.class);
+        CashOrganizationReversionCategoryLogic cashOrganizationReversionCategoryLogic = SpringContext.getBean(CashOrganizationReversionCategoryLogic.class);
+        PriorYearAccountService priorYearAccountService = SpringContext.getBean(PriorYearAccountService.class);
+        OrgReversionUnitOfWorkService orgReversionUnitOfWorkService = SpringContext.getBean(OrgReversionUnitOfWorkService.class);
+        OrganizationReversionProcessService organizationReversionProcessService = SpringContext.getBean(OrganizationReversionProcessService.class);
+
+        Integer currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        Integer previousFiscalYear = new Integer(currentFiscalYear.intValue() - 1);
+
+        Map jobParameters = organizationReversionProcessService.getJobParameters();
+        Map<String, Integer> organizationReversionCounts = new HashMap<String, Integer>();
+
+        OrganizationReversionProcess orgRevProcess = new OrganizationReversionProcess(null, false, organizationReversionService, balanceService, originEntryGroupService, originEntryService, persistenceService, dtService, cashOrganizationReversionCategoryLogic, priorYearAccountService, orgReversionUnitOfWorkService, jobParameters, organizationReversionCounts);
+        orgRevProcess.initializeProcess();
+        
+        clearGlBalanceTable();
+        clearOriginEntryTables();
+        persistenceService.clearCache();
+        for (Balance bal : balancesToTest) {
+            balanceService.save(bal);
+        }
+        OriginEntryGroup outputGroup = organizationReversionProcessService.createOrganizationReversionProcessOriginEntryGroup();
+        orgRevProcess.setOutputGroup(outputGroup);
+        orgRevProcess.setHoldGeneratedOriginEntries(true);
+        orgRevProcess.organizationReversionProcess();
+
+        // ye olde sanity check
+        assertEquals("Balances Read", new Integer(balancesToTest.size()), new Integer(orgRevProcess.getBalancesRead()));
+
+        // make sure this resulted in one Org Rev origin entry group
+        Collection groups = originEntryGroupService.getAllOriginEntryGroup();
+        assertEquals("Origin Entries Group Size", new Integer(1), new Integer(groups.size()));
+
+        OriginEntryGroup group = (OriginEntryGroup) groups.iterator().next();
+        assertEquals("Origin Entry Group Source Code", OriginEntrySource.YEAR_END_ORG_REVERSION, group.getSourceCode());
+        return orgRevProcess.getGeneratedOriginEntries();
     }
     
     /**
@@ -425,5 +583,6 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
         boService.save(FLEXIBLE_OFFSET_ACCOUNT_FIXTURE.FLEXIBLE_ACTIVITY_CLOSING_OFFSET_ACCOUNT.convertToOffsetAccount());
         boService.save(FLEXIBLE_OFFSET_ACCOUNT_FIXTURE.FLEXIBLE_ENCUMBRANCE_FORWARD_OFFSET_ACCOUNT.convertToOffsetAccount());
         boService.save(FLEXIBLE_OFFSET_ACCOUNT_FIXTURE.FLEXIBLE_CS_ENCUMBRANCE_FORWARD_OFFSET_ACCOUNT.convertToOffsetAccount());
+        boService.save(FLEXIBLE_OFFSET_ACCOUNT_FIXTURE.CASH_REVERSION_FORWARD_OFFSET_ACCOUNT.convertToOffsetAccount());
     }
 }
