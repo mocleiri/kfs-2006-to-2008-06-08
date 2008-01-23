@@ -41,7 +41,7 @@ public class AdvanceDepositDetail extends PersistableBusinessObjectBase {
 
     private AdvanceDepositDocument advanceDepositDocument;
     private Bank financialDocumentBank;
-    private BankAccount financialDocumentBankAccount;
+    //private BankAccount financialDocumentBankAccount;
 
     /**
      * Default constructor.
@@ -268,16 +268,16 @@ public class AdvanceDepositDetail extends PersistableBusinessObjectBase {
     /**
      * @return BankAccount
      */
-    public BankAccount getFinancialDocumentBankAccount() {
+    /*public BankAccount getFinancialDocumentBankAccount() {
         return financialDocumentBankAccount;
-    }
+    }*/
 
     /**
      * @param financialDocumentBankAccount
      */
-    public void setFinancialDocumentBankAccount(BankAccount financialDocumentBankAccount) {
+    /*public void setFinancialDocumentBankAccount(BankAccount financialDocumentBankAccount) {
         this.financialDocumentBankAccount = financialDocumentBankAccount;
-    }
+    }*/
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()

@@ -21,7 +21,6 @@ import java.util.List;
 import org.kuali.core.web.struts.form.KualiForm;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.financial.bo.Bank;
-import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.CheckBase;
 import org.kuali.module.financial.bo.CoinDetail;
@@ -46,7 +45,6 @@ public class DepositWizardForm extends KualiForm {
     // Deposit fields
     private Bank bank;
     private String bankCode;
-    private BankAccount bankAccount;
     private String bankAccountNumber;
 
     private String depositTypeCode;
@@ -242,22 +240,6 @@ public class DepositWizardForm extends KualiForm {
      */
     public void setBank(Bank bank) {
         this.bank = bank;
-    }
-
-    /**
-     * @return current value of bankAccount.
-     */
-    public BankAccount getBankAccount() {
-        return bankAccount;
-    }
-
-    /**
-     * Sets the bankAccount attribute value.
-     * 
-     * @param bankAccount The bankAccount to set.
-     */
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
     }
 
     /**
