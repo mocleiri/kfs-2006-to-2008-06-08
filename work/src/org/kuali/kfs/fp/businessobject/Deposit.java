@@ -47,7 +47,7 @@ public class Deposit extends PersistableBusinessObjectBase {
     private CurrencyDetail depositedCurrency;
     private CoinDetail depositedCoin;
 
-    private BankAccount bankAccount;
+    //private BankAccount bankAccount;
     private CashManagementDocument cashManagementDocument;
     private List depositCashReceiptControl;
 
@@ -63,18 +63,18 @@ public class Deposit extends PersistableBusinessObjectBase {
     /**
      * @return current value of bankAccount.
      */
-    public BankAccount getBankAccount() {
+    /*public BankAccount getBankAccount() {
         return bankAccount;
-    }
+    }*/
 
     /**
      * Sets the bankAccount attribute value.
      * 
      * @param bankAccount The bankAccount to set.
      */
-    public void setBankAccount(BankAccount bankAccount) {
+    /*public void setBankAccount(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
-    }
+    }*/
 
 
     /**
