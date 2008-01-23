@@ -75,10 +75,6 @@
             <attributeReference name="depositBankCode" sourceClassName="org.kuali.module.financial.bo.Bank" sourceAttributeName="financialDocumentBankCode">
                 <required>true</required>
             </attributeReference>
-
-            <attributeReference name="depositBankAccountNumber" sourceClassName="org.kuali.module.financial.bo.BankAccount" sourceAttributeName="finDocumentBankAccountNumber">
-                <required>true</required>
-            </attributeReference>
         </attributes>
     </businessObject>
 </dictionaryEntry>
