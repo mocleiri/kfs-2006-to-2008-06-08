@@ -158,7 +158,7 @@ public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements
             for (AdvanceDepositDetail detail : advanceDepositDocument.getAdvanceDeposits()) {
                 detail.refreshReferenceObject(KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT);
 
-                GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
+                /*GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
                 if (!AccountingDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(detail.getFinancialDocumentBankAccount(), detail.getFinancialDocumentAdvanceDepositAmount(), advanceDepositDocument, advanceDepositDocument.getPostingYear(), sequenceHelper, bankOffsetEntry, KFSConstants.ADVANCE_DEPOSITS_LINE_ERRORS)) {
                     success = false;
                     continue; // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at
@@ -171,7 +171,7 @@ public class AdvanceDepositDocumentRule extends CashReceiptFamilyRule implements
                 GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
                 success &= populateOffsetGeneralLedgerPendingEntry(advanceDepositDocument.getPostingYear(), bankOffsetEntry, sequenceHelper, offsetEntry);
                 advanceDepositDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
-                sequenceHelper.increment();
+                sequenceHelper.increment();*/
             }
         }
         return success;
