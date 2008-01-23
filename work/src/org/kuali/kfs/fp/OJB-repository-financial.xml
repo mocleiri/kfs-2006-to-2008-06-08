@@ -805,56 +805,6 @@
     <field-descriptor name="bankRoutingNumber" column="BNK_RTNG_NBR" jdbc-type="VARCHAR" />
     <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" />
     <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-
-    <collection-descriptor name="bankAccounts" proxy="true" element-class-ref="org.kuali.module.financial.bo.BankAccount" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
-        <orderby name="finDocumentBankAccountNumber" sort="ASC" />
-        <inverse-foreignkey field-ref="financialDocumentBankCode" />
-    </collection-descriptor>
-</class-descriptor>
-
-<class-descriptor class="org.kuali.module.financial.bo.BankAccount" table="FP_BANK_ACCOUNT_T">
-    <field-descriptor name="financialDocumentBankCode" column="FDOC_BANK_CD" jdbc-type="VARCHAR" primarykey="true" index="true" />
-    <field-descriptor name="finDocumentBankAccountNumber" column="FDOC_BANK_ACCT_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" conversion="org.kuali.core.util.OjbKualiEncryptDecryptFieldConversion"/>
-    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
-    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
-    <field-descriptor name="finDocumentBankAccountDesc" column="FDOC_BANKACCT_DESC" jdbc-type="VARCHAR" />
-    <field-descriptor name="cashOffsetFinancialChartOfAccountCode" column="CSH_OFST_FIN_COA_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="cashOffsetAccountNumber" column="CSH_OFST_ACCT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="cashOffsetSubAccountNumber" column="CSH_OFST_SUB_ACCT_NBR" jdbc-type="VARCHAR" />
-    <field-descriptor name="cashOffsetObjectCode" column="CSH_OFST_OBJ_CD" jdbc-type="VARCHAR" />
-    <field-descriptor name="cashOffsetSubObjectCode" column="CSH_OFST_SUB_OBJ_CD" jdbc-type="VARCHAR" />
-
-    <reference-descriptor name="bank" class-ref="org.kuali.module.financial.bo.Bank" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="financialDocumentBankCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="cashOffsetAccount" class-ref="org.kuali.module.chart.bo.Account" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="cashOffsetFinancialChartOfAccountCode" />
-        <foreignkey field-ref="cashOffsetAccountNumber" />
-    </reference-descriptor>
-
-    <reference-descriptor name="cashOffsetFinancialChartOfAccount" class-ref="org.kuali.module.chart.bo.Chart" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="cashOffsetFinancialChartOfAccountCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="cashOffsetObject" class-ref="org.kuali.module.chart.bo.ObjectCodeCurrent" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="cashOffsetFinancialChartOfAccountCode" />
-        <foreignkey field-ref="cashOffsetObjectCode" />
-    </reference-descriptor>
-
-    <reference-descriptor name="cashOffsetSubAccount" class-ref="org.kuali.module.chart.bo.SubAccount" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="cashOffsetFinancialChartOfAccountCode" />
-        <foreignkey field-ref="cashOffsetAccountNumber" />
-        <foreignkey field-ref="cashOffsetSubAccountNumber" />
-    </reference-descriptor>
-
-    <reference-descriptor name="cashOffsetSubObject" class-ref="org.kuali.module.chart.bo.SubObjCdCurrent" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true">
-        <foreignkey field-ref="cashOffsetFinancialChartOfAccountCode" />
-        <foreignkey field-ref="cashOffsetAccountNumber" />
-        <foreignkey field-ref="cashOffsetObjectCode" />
-        <foreignkey field-ref="cashOffsetSubObjectCode" />
-    </reference-descriptor>
-
 </class-descriptor>
 
 <!--  CREDIT CARD RECEIPT DOCUMENT MAPPINGS -->
@@ -994,11 +944,6 @@
     <reference-descriptor name="financialDocumentBank" class-ref="org.kuali.module.financial.bo.Bank" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="financialDocumentBankCode" />
     </reference-descriptor>
-
-    <reference-descriptor name="financialDocumentBankAccount" class-ref="org.kuali.module.financial.bo.BankAccount" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="financialDocumentBankCode" />
-        <foreignkey field-ref="financialDocumentBankAccountNumber" />
-    </reference-descriptor>
 </class-descriptor>
 
 <!-- CASH DRAWER SPECIFIC MAPPINGS -->
@@ -1073,10 +1018,6 @@
     <field-descriptor name="depositAmount" column="FDOC_DPST_AMT" jdbc-type="DECIMAL" conversion="org.kuali.core.util.OjbKualiDecimalFieldConversion" />
 
     <!-- object references -->
-    <reference-descriptor name="bankAccount" class-ref="org.kuali.module.financial.bo.BankAccount" auto-retrieve="true" auto-update="none" auto-delete="none">
-        <foreignkey field-ref="depositBankCode" />
-        <foreignkey field-ref="depositBankAccountNumber" />
-    </reference-descriptor>
 
     <reference-descriptor name="cashManagementDocument" class-ref="org.kuali.module.financial.document.CashManagementDocument" auto-retrieve="true" auto-update="none" auto-delete="none">
         <foreignkey field-ref="documentNumber" />
