@@ -19,7 +19,6 @@ CREATE TABLE LD_BCN_ACTV_JOB_MT(
         EMPL_RCD                       NUMBER(3) CONSTRAINT LD_BCN_ACTV_JOB_MTN3 NOT NULL,
         EFFDT                          DATE CONSTRAINT LD_BCN_ACTV_JOB_MTN4 NOT NULL,
         EFFSEQ                         NUMBER(3) CONSTRAINT LD_BCN_ACTV_JOB_MTN5 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) CONSTRAINT LD_BCN_ACTV_JOB_MTN6 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_ACTV_JOB_MTN7 NOT NULL,
         POSITION_NBR                   VARCHAR2(8),
         EMPL_STATUS                    VARCHAR2(1),
@@ -29,7 +28,6 @@ CREATE TABLE LD_BCN_ACTV_JOB_MT(
         EMPLID,
         EMPL_RCD,
         EFFDT,
-        EFFSEQ),
-     CONSTRAINT LD_BCN_ACTV_JOB_MTC0 UNIQUE (OBJ_ID)
+        EFFSEQ)
 )
 /
