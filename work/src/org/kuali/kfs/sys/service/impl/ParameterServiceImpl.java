@@ -61,7 +61,6 @@ import org.springframework.transaction.annotation.Transactional;
  * value, and the constrainingValue is used for complex parameters that limit one field value based on the value of another field,
  * e.g VALID_OBJECT_LEVELS_BY_OBJECT_TYPE.
  */
-//@Transactional
 public class ParameterServiceImpl implements ParameterService {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ParameterServiceImpl.class);
     private static List<ParameterDetailType> components = new ArrayList<ParameterDetailType>();
