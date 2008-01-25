@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import org.kuali.core.lookup.LookupResultsServiceImpl;
 import org.kuali.core.service.impl.KeyValuesServiceImpl;
 import org.kuali.core.service.impl.KualiModuleUserPropertyServiceImpl;
+import org.kuali.core.service.impl.LookupServiceImpl;
 import org.kuali.core.service.impl.PostDataLoadEncryptionServiceImpl;
 import org.kuali.core.service.impl.SequenceAccessorServiceImpl;
 import org.kuali.kfs.service.impl.AccountingLineServiceImpl;
@@ -52,6 +53,7 @@ import org.kuali.module.financial.service.impl.UniversityDateServiceImpl;
 import org.kuali.module.gl.service.impl.GlUserServiceImpl;
 import org.kuali.module.gl.service.impl.OrganizationReversionMockService;
 import org.kuali.module.pdp.service.impl.BatchSearchServiceImpl;
+import org.kuali.module.pdp.service.impl.PaymentDetailSearchServiceImpl;
 import org.kuali.module.pdp.service.impl.PdpUserServiceImpl;
 import org.kuali.module.purap.service.impl.PurapUserServiceImpl;
 import org.kuali.module.vendor.service.impl.VendorUserServiceImpl;
@@ -106,6 +108,9 @@ public class TransactionalAnnotationTest extends KualiTestBase {
         excludedClasses.add( BatchSearchServiceImpl.class );
         excludedClasses.add( LookupResultsServiceImpl.class );
         excludedClasses.add( PostDataLoadEncryptionServiceImpl.class );
+
+        excludedClasses.add( PaymentDetailSearchServiceImpl.class );
+        excludedClasses.add( LookupServiceImpl.class );
     }
 
     public void testTransactionAnnotations() {
