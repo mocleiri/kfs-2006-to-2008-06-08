@@ -9452,12 +9452,8 @@
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
-        <unique name="LD_BCN_2PLG_LIST_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_ACCTSEL_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -9494,7 +9490,6 @@
         <column name="FIN_LEVEL_SORT_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FIN_CONS_SORT_CD" size="2" type="VARCHAR"/>
         <column name="FIN_OBJ_LEVEL_CD" size="4" type="VARCHAR"/>
@@ -9504,9 +9499,6 @@
         <column name="FIN_BEG_BAL_LN_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="POS_CSF_LV_FTE_QTY" size="22" type="DECIMAL"/>
-        <unique name="LD_BCN_ACCT_BAL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_ACCT_DUMP_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -9514,11 +9506,7 @@
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <unique name="LD_BCN_ACCT_DUMP_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_ACCT_ORG_HIER_T">
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
@@ -9578,14 +9566,10 @@
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="INC_EXP_CD" primaryKey="true" size="1" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FIN_BEG_BAL_LN_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="SUB_FUND_SORT_CD" size="2" type="VARCHAR"/>
-        <unique name="LD_BCN_ACCT_SUMM_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_ACTV_JOB_MT">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -9593,14 +9577,10 @@
         <column name="EMPL_RCD" primaryKey="true" size="3" type="DECIMAL"/>
         <column name="EFFDT" primaryKey="true" type="DATE"/>
         <column name="EFFSEQ" primaryKey="true" size="3" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POSITION_NBR" size="8" type="VARCHAR"/>
         <column name="EMPL_STATUS" size="1" type="VARCHAR"/>
         <column name="DEPTID" size="10" type="VARCHAR"/>
-        <unique name="LD_BCN_ACTV_JOB_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_ADM_POST_T">
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
@@ -9621,7 +9601,6 @@
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="APPT_FND_DUR_CD" size="4" type="VARCHAR"/>
         <column name="APPT_RQST_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -9637,20 +9616,13 @@
         <column name="APPT_FND_MO" size="2" type="DECIMAL"/>
         <column name="NEW_FIN_COA_CD" size="2" type="VARCHAR"/>
         <column name="NEW_ACCOUNT_NBR" size="7" type="VARCHAR"/>
-        <unique name="LD_BCN_AF_LOAD01_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_AF_LOAD02_MT">
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CONT_FIN_COA_CD" size="2" type="VARCHAR"/>
         <column name="CONT_ACCOUNT_NBR" size="7" type="VARCHAR"/>
-        <unique name="LD_BCN_AF_LOAD02_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_AF_LOAD02_MTI2">
             <index-column name="ACCOUNT_NBR"/>
             <index-column name="FIN_COA_CD"/>
@@ -9665,7 +9637,6 @@
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="APPT_FND_DUR_CD" size="4" type="VARCHAR"/>
         <column name="APPT_RQST_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -9679,9 +9650,6 @@
         <column name="APPT_RQST_PAY_RT" size="22" type="DECIMAL"/>
         <column name="APPT_FND_DLT_CD" size="1" type="VARCHAR"/>
         <column name="APPT_FND_MO" size="2" type="DECIMAL"/>
-        <unique name="LD_BCN_AF_LOAD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_AF_REASON_T">
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
@@ -9734,7 +9702,6 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FIN_OBJ_TYP_CD" size="2" type="VARCHAR"/>
         <column name="FIN_OBJ_LEVEL_CD" size="4" type="VARCHAR"/>
@@ -9747,9 +9714,6 @@
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FIN_BEG_BAL_LN_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="POS_CSF_LV_FTE_QTY" size="22" type="DECIMAL"/>
-        <unique name="LD_BCN_BAL_BY_ACCT_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_BAL_BY_ACCT_TI2">
             <index-column name="UNIV_FISCAL_YR"/>
             <index-column name="FIN_COA_CD"/>
@@ -10250,16 +10214,12 @@
     <table name="LD_BCN_II_INIT_MT">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PERSON_NM" size="50" type="VARCHAR"/>
         <column name="SETID_SALARY" size="5" type="VARCHAR"/>
         <column name="SAL_ADMIN_PLAN" size="4" type="VARCHAR"/>
         <column name="GRADE" size="3" type="VARCHAR"/>
         <column name="IU_CLASSIF_LEVEL" size="2" type="VARCHAR"/>
-        <unique name="LD_BCN_II_INIT_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_INCUMBENT_SEL_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10297,7 +10257,6 @@
         <column name="INC_EXP_CD" primaryKey="true" size="1" type="VARCHAR"/>
         <column name="FIN_CONS_SORT_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FIN_LEV_SORT_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FIN_BEG_BAL_LN_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -10307,9 +10266,6 @@
         <column name="APPT_RQST_FTE_QTY" size="22" type="DECIMAL"/>
         <column name="POS_CSF_FTE_QTY" size="22" type="DECIMAL"/>
         <column name="POS_CSF_LV_FTE_QTY" size="22" type="DECIMAL"/>
-        <unique name="LD_BCN_LEVL_SUMM_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_MNTH_SUMM_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10322,7 +10278,6 @@
         <column name="FIN_LEV_SORT_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FDOC_LN_MO1_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -10339,9 +10294,6 @@
         <column name="FDOC_LN_MO12_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FIN_CONS_OBJ_CD" size="4" type="VARCHAR"/>
         <column name="FIN_OBJ_LEVEL_CD" size="4" type="VARCHAR"/>
-        <unique name="LD_BCN_MNTH_SUMM_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_OBJT_DUMP_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10353,11 +10305,7 @@
         <column name="ACCOUNT_NBR" primaryKey="true" size="7" type="VARCHAR"/>
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <unique name="LD_BCN_OBJT_DUMP_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_OBJT_SUMM_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10369,7 +10317,6 @@
         <column name="FIN_CONS_SORT_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FIN_LEV_SORT_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FIN_BEG_BAL_LN_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -10379,9 +10326,6 @@
         <column name="APPT_RQST_FTE_QTY" size="22" type="DECIMAL"/>
         <column name="POS_CSF_FTE_QTY" size="22" type="DECIMAL"/>
         <column name="POS_CSF_LV_FTE_QTY" size="22" type="DECIMAL"/>
-        <unique name="LD_BCN_OBJT_SUMM_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_OBJ_PICK_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10419,7 +10363,6 @@
     <table name="LD_BCN_PAYRT_HLDG_T">
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="PERSON_NM" size="50" type="VARCHAR"/>
         <column name="SETID_SALARY" size="5" type="VARCHAR"/>
@@ -10427,9 +10370,6 @@
         <column name="GRADE" size="3" type="VARCHAR"/>
         <column name="UNION_CD" size="3" type="VARCHAR"/>
         <column name="APPT_RQST_PAY_RT" size="22" type="DECIMAL"/>
-        <unique name="LD_BCN_PAYRT_HLDG_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_POS_FND_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10444,11 +10384,7 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <unique name="LD_BCN_POS_FND_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_POS_FND_TI2">
             <index-column name="UNIV_FISCAL_YR"/>
             <index-column name="FIN_COA_CD"/>
@@ -10464,7 +10400,6 @@
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
         <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POS_EFFDT" type="DATE"/>
         <column name="POS_EFF_STATUS" size="1" type="VARCHAR"/>
@@ -10489,9 +10424,6 @@
         <column name="SETID_SALARY" size="5" type="VARCHAR"/>
         <column name="IU_DFLT_OBJ_CD" size="4" type="VARCHAR"/>
         <column name="IU_POSITION_TYPE" size="2" type="VARCHAR"/>
-        <unique name="LD_BCN_POS_INIT_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_POS_SEL_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10566,7 +10498,6 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="FIN_OBJ_TYP_CD" size="2" type="VARCHAR"/>
         <column name="ACLN_ANNL_BAL_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -10583,9 +10514,6 @@
         <column name="FDOC_LN_MO10_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FDOC_LN_MO11_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FDOC_LN_MO12_AMT" scale="2" size="19" type="DECIMAL"/>
-        <unique name="LD_BCN_RQST_MTC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_RSN_CD_PK_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
@@ -10603,11 +10531,7 @@
         <column name="SUB_ACCT_NBR" primaryKey="true" size="5" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="FIN_SUB_OBJ_CD" primaryKey="true" size="3" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <unique name="LD_BCN_SAL_FND_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_SAL_FND_TI2">
             <index-column name="UNIV_FISCAL_YR"/>
             <index-column name="FIN_COA_CD"/>
@@ -10625,11 +10549,7 @@
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="PERSON_NM" primaryKey="true" size="50" type="VARCHAR"/>
         <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <unique name="LD_BCN_SAL_SSN_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
         <index name="LD_BCN_SAL_SSN_TI2">
             <index-column name="EMPLID"/>
         </index>
@@ -10638,16 +10558,12 @@
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
         <column name="ORG_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="APPT_RQST_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="APPT_RQST_FTE_QTY" size="22" type="DECIMAL"/>
         <column name="INIT_RQST_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="INIT_RQST_FTE_QTY" size="22" type="DECIMAL"/>
-        <unique name="LD_BCN_SLRY_TOT_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
     </table>
     <table name="LD_BCN_SUBFUND_PICK_T">
         <column name="PERSON_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
