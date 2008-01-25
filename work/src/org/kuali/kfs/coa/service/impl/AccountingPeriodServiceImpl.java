@@ -35,7 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * This service implementation is the default implementation of the AccountingPeriod service that is delivered with Kuali.
  */
-@Transactional
 public class AccountingPeriodServiceImpl implements AccountingPeriodService {
     // member data
     private BusinessObjectService businessObjectService;
