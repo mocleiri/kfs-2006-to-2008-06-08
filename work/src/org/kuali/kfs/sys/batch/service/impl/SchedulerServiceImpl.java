@@ -50,6 +50,7 @@ import org.quartz.UnableToInterruptJobException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class SchedulerServiceImpl implements SchedulerService {
     private static final Logger LOG = Logger.getLogger(SchedulerServiceImpl.class);
     private static final String SCHEDULE_JOB_NAME = "scheduleJob";
