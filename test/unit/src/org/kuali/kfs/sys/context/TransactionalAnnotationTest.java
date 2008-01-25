@@ -17,10 +17,44 @@ package org.kuali.kfs.context;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.kuali.core.lookup.LookupResultsServiceImpl;
+import org.kuali.core.service.impl.KeyValuesServiceImpl;
+import org.kuali.core.service.impl.KualiModuleUserPropertyServiceImpl;
+import org.kuali.core.service.impl.PostDataLoadEncryptionServiceImpl;
+import org.kuali.core.service.impl.SequenceAccessorServiceImpl;
+import org.kuali.kfs.service.impl.AccountingLineServiceImpl;
+import org.kuali.kfs.service.impl.HomeOriginationServiceImpl;
+import org.kuali.kfs.service.impl.KualiCodeServiceImpl;
+import org.kuali.kfs.service.impl.OptionsServiceImpl;
+import org.kuali.kfs.service.impl.OriginationCodeServiceImpl;
+import org.kuali.module.chart.service.impl.BalanceTypServiceImpl;
+import org.kuali.module.chart.service.impl.ChartServiceImpl;
+import org.kuali.module.chart.service.impl.ChartUserServiceImpl;
+import org.kuali.module.chart.service.impl.ObjectCodeServiceImpl;
+import org.kuali.module.chart.service.impl.ObjectConsServiceImpl;
+import org.kuali.module.chart.service.impl.ObjectLevelServiceImpl;
+import org.kuali.module.chart.service.impl.ObjectTypeServiceImpl;
+import org.kuali.module.chart.service.impl.OffsetDefinitionServiceImpl;
+import org.kuali.module.chart.service.impl.OrganizationReversionServiceImpl;
+import org.kuali.module.chart.service.impl.ProjectCodeServiceImpl;
+import org.kuali.module.chart.service.impl.SubAccountServiceImpl;
+import org.kuali.module.chart.service.impl.SubFundGroupServiceImpl;
+import org.kuali.module.chart.service.impl.SubObjectCodeServiceImpl;
+import org.kuali.module.financial.service.impl.CheckServiceImpl;
+import org.kuali.module.financial.service.impl.FinancialUserServiceImpl;
+import org.kuali.module.financial.service.impl.UniversityDateServiceImpl;
+import org.kuali.module.gl.service.impl.GlUserServiceImpl;
+import org.kuali.module.gl.service.impl.OrganizationReversionMockService;
+import org.kuali.module.pdp.service.impl.BatchSearchServiceImpl;
+import org.kuali.module.pdp.service.impl.PdpUserServiceImpl;
+import org.kuali.module.purap.service.impl.PurapUserServiceImpl;
+import org.kuali.module.vendor.service.impl.VendorUserServiceImpl;
 import org.kuali.test.ConfigureContext;
 import org.kuali.test.suite.AnnotationTestSuite;
 import org.kuali.test.suite.PreCommitSuite;
@@ -32,6 +66,47 @@ public class TransactionalAnnotationTest extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionalAnnotationTest.class);
 
     Map<Class, Boolean> seenClasses = new HashMap();
+    List<Class> excludedClasses;
+    
+    public void setUp() throws Exception {
+        super.setUp();
+        excludedClasses = new ArrayList<Class>();
+        excludedClasses.add( SubFundGroupServiceImpl.class );
+        excludedClasses.add( AccountingLineServiceImpl.class );
+        excludedClasses.add( HomeOriginationServiceImpl.class );
+        excludedClasses.add( ObjectTypeServiceImpl.class );
+        excludedClasses.add( ObjectLevelServiceImpl.class );
+        excludedClasses.add( ObjectConsServiceImpl.class );
+        excludedClasses.add( ObjectCodeServiceImpl.class );
+        excludedClasses.add( OrganizationReversionServiceImpl.class );
+        excludedClasses.add( UniversityDateServiceImpl.class );
+        excludedClasses.add( OrganizationReversionMockService.class );
+        excludedClasses.add( SubAccountServiceImpl.class );
+
+        excludedClasses.add( SubObjectCodeServiceImpl.class );
+        excludedClasses.add( ProjectCodeServiceImpl.class );
+        excludedClasses.add( BalanceTypServiceImpl.class );
+        excludedClasses.add( KualiCodeServiceImpl.class );
+        excludedClasses.add( OriginationCodeServiceImpl.class );
+        excludedClasses.add( ChartUserServiceImpl.class );
+        excludedClasses.add( FinancialUserServiceImpl.class );
+        excludedClasses.add( GlUserServiceImpl.class );
+        excludedClasses.add( VendorUserServiceImpl.class );
+        excludedClasses.add( PdpUserServiceImpl.class );
+        excludedClasses.add( PurapUserServiceImpl.class );
+        excludedClasses.add( OffsetDefinitionServiceImpl.class );
+        excludedClasses.add( ChartServiceImpl.class );
+        excludedClasses.add( OptionsServiceImpl.class );
+        excludedClasses.add( CheckServiceImpl.class );
+        excludedClasses.add( PostDataLoadEncryptionServiceImpl.class );
+        excludedClasses.add( KualiModuleUserPropertyServiceImpl.class );
+        
+        excludedClasses.add( KeyValuesServiceImpl.class );
+        excludedClasses.add( SequenceAccessorServiceImpl.class );
+        excludedClasses.add( BatchSearchServiceImpl.class );
+        excludedClasses.add( LookupResultsServiceImpl.class );
+        excludedClasses.add( PostDataLoadEncryptionServiceImpl.class );
+    }
 
     public void testTransactionAnnotations() {
         Map<String, Class> nonAnnotatedTransactionalServices = getNonAnnotatedTransactionalServices();
@@ -63,7 +138,13 @@ public class TransactionalAnnotationTest extends KualiTestBase {
                 if (beanClass.getName().startsWith("$Proxy")) {
                     beanClass = AopProxyUtils.getTargetClass(bean);
                 }
-                if (beanClass.getName().startsWith("org.kuali") && !Modifier.isAbstract(beanClass.getModifiers()) && !beanClass.getName().endsWith("DaoOjb") && !beanClass.getName().endsWith("Factory") && !isClassAnnotated(beanName, beanClass)) {
+                if (beanClass.getName().startsWith("org.kuali") 
+                        && !Modifier.isAbstract(beanClass.getModifiers()) 
+                        && !beanClass.getName().endsWith("DaoOjb") 
+                        && !beanClass.getName().endsWith("Factory") 
+                        && !beanClass.getName().contains("Lookupable") 
+                        && !isClassAnnotated(beanName, beanClass)
+                        && !excludedClasses.contains(beanClass) ) {
                     nonAnnotatedTransactionalServices.put(beanName, beanClass);
                 }
             }
