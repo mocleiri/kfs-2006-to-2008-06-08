@@ -57,14 +57,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     /**
-     * Implements the save() method defined by OrganizationService, including validation of the Org BO
-     * @see org.kuali.module.chart.service.OrganizationService#save(org.kuali.module.chart.bo.Org)
-     */
-    public void save(Org organization) {
-        organizationDao.save(organization);
-    }
-
-    /**
      * @see org.kuali.module.chart.service.OrganizationService#getActiveAccountsByOrg(java.lang.String, java.lang.String)
      */
     public List getActiveAccountsByOrg(String chartOfAccountsCode, String organizationCode) {
