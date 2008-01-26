@@ -137,7 +137,7 @@ public class InternalBillingDocumentRule extends AccountingDocumentRuleBase {
         else {
             return true;
         }
-        // TODO phase II
+        // TODO phase II (CAMS?)
         // int pendPurchaseCount = 0; 
         // TODO need to do something with this but I have no idea what
         // if (!SUB_FUND_GROUP_CODE.CODE_EXTAGY.equals(subFundGroupCode) && restrictedCapitalObjectCodes.contains(objectSubTypeCode)
