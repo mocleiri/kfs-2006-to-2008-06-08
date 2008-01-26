@@ -72,7 +72,7 @@
         ACCT_INC_GDLN_TXT="some more text version 1"
         ACCT_PURPOSE_TXT="a version 1 purpose" FIN_COA_CD="UA"
         OBJ_ID="0AC0740A76DCF158E043814FD881F158" VER_NBR="1"/>
-    <CA_ACCT_GDLNPRPS_T ACCOUNT_NBR="1912205"
+    <CA_ACCT_GDLNPRPS_T ACCOUNT_NBR="6612160"
         ACCT_EXP_GDLN_TXT="Test Expense Guideline"
         ACCT_INC_GDLN_TXT="Test Income Guideline"
         ACCT_PURPOSE_TXT="Test Purpose" FIN_COA_CD="UA"

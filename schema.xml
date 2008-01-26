@@ -619,6 +619,9 @@
         <foreign-key foreignTable="PUR_PO_CST_SRC_T" name="AP_PMT_RQST_TR9">
             <reference foreign="PO_CST_SRC_CD" local="PMT_RQST_CST_SRC_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="AP_PMT_RQST_TR4">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="PUR_PMT_TERM_TYP_T" name="AP_PMT_RQST_TR7">
             <reference foreign="VNDR_PMT_TERM_CD" local="VNDR_PMT_TERMS_CD"/>
         </foreign-key>
@@ -1718,12 +1721,22 @@
         <foreign-key foreignTable="CA_SUB_FUND_GRP_T" name="CA_ACCOUNT_TR6">
             <reference foreign="SUB_FUND_GRP_CD" local="SUB_FUND_GRP_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="CA_ACCT_SF_T" name="CA_ACCOUNT_TR20">
+            <reference foreign="ACCT_SF_CD" local="ACCT_SF_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR12">
             <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR10">
             <reference foreign="FIN_COA_CD" local="CONT_FIN_COA_CD"/>
             <reference foreign="ACCOUNT_NBR" local="CONT_ACCOUNT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_BDGT_REC_LVL_T" name="CA_ACCOUNT_TR21">
+            <reference foreign="BDGT_REC_LVL_CD" local="BDGT_REC_LVL_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR9">
+            <reference foreign="FIN_COA_CD" local="RPTS_TO_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="RPTS_TO_ACCT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ACCOUNT_TYPE_T" name="CA_ACCOUNT_TR3">
             <reference foreign="ACCT_TYP_CD" local="ACCT_TYP_CD"/>
@@ -1737,6 +1750,10 @@
         </foreign-key>
         <foreign-key foreignTable="SH_STATE_T" name="CA_ACCOUNT_TR5">
             <reference foreign="POSTAL_STATE_CD" local="ACCT_STATE_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR11">
+            <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ENDOW_ACCOUNT_NBR"/>
         </foreign-key>
         <unique name="CA_ACCOUNT_TC0">
             <unique-column name="OBJ_ID"/>
@@ -1911,6 +1928,10 @@
         <column name="ACCT_EXP_GDLN_TXT" size="400" type="VARCHAR"/>
         <column name="ACCT_INC_GDLN_TXT" size="400" type="VARCHAR"/>
         <column name="ACCT_PURPOSE_TXT" size="400" type="VARCHAR"/>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCT_GDLNPRPS_TR1">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
+        </foreign-key>
         <unique name="CA_ACCT_GDLNPRPS_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -1922,6 +1943,10 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACCT_MGR_RTE_OPTN_IND" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCT_MGR_RTE_OPTN_TR1">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_ACCT_MGR_RTE_OPTN_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
@@ -2021,6 +2046,9 @@
         <column name="ACCT_DLGT_START_DT" type="DATE"/>
         <foreign-key foreignTable="FP_DOC_TYPE_T" name="CA_DLGT_CHG_DOC_TR2">
             <reference foreign="FDOC_TYP_CD" local="FDOC_TYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_MAINTENANCE_DOCUMENT_T" name="CA_DLGT_CHG_DOC_TR3">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <unique name="CA_DLGT_CHG_DOC_TC0">
             <unique-column name="OBJ_ID"/>
@@ -2275,6 +2303,9 @@
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <foreign-key foreignTable="CA_OBJ_CD_CHG_DOC_T" name="CA_OBJ_CD_CHG_DTL_TR2">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_OBJ_CD_CHG_DTL_TR1">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
@@ -2419,6 +2450,10 @@
         <foreign-key foreignTable="CA_CHART_T" name="CA_ORG_REVERSION_TR1">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ORG_REVERSION_TR4">
+            <reference foreign="FIN_COA_CD" local="BDGT_RVRSN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="BDGT_RVRSNACCT_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="FS_OPTION_T" name="CA_ORG_REVERSION_TR7">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
         </foreign-key>
@@ -2428,6 +2463,10 @@
         <foreign-key foreignTable="CA_ORG_T" name="CA_ORG_REVERSION_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="ORG_CD" local="ORG_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ORG_REVERSION_TR3">
+            <reference foreign="FIN_COA_CD" local="CSH_RVRSNFINCOA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="CSH_RVRSN_ACCT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_ORG_REVERSION_TR6">
             <reference foreign="FIN_COA_CD" local="CSH_RVRSNFINCOA_CD"/>
@@ -2725,6 +2764,24 @@
         <foreign-key foreignTable="SH_STATE_T" name="CA_PRIOR_YR_ACCT_TR5">
             <reference foreign="POSTAL_STATE_CD" local="ACCT_STATE_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_PRIOR_YR_ACCT_TR9">
+            <reference foreign="FIN_COA_CD" local="RPTS_TO_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="RPTS_TO_ACCT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_TYPE_T" name="CA_PRIOR_YR_ACCT_TR3">
+            <reference foreign="ACCT_TYP_CD" local="ACCT_TYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_PRIOR_YR_ACCT_TR14">
+            <reference foreign="FIN_COA_CD" local="ICR_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ICR_ACCOUNT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_RESTRICT_STAT_T" name="CA_PRIOR_YR_ACCT_TR8">
+            <reference foreign="ACCT_RSTRC_STAT_CD" local="ACCT_RSTRC_STAT_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_PRIOR_YR_ACCT_TR11">
+            <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ENDOW_ACCOUNT_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_PRIOR_YR_ACCT_TR10">
             <reference foreign="FIN_COA_CD" local="CONT_FIN_COA_CD"/>
             <reference foreign="ACCOUNT_NBR" local="CONT_ACCOUNT_NBR"/>
@@ -2735,25 +2792,15 @@
         <foreign-key foreignTable="SH_ZIP_CODE_T" name="CA_PRIOR_YR_ACCT_TR18">
             <reference foreign="POSTAL_ZIP_CD" local="ACCT_ZIP_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_TYPE_T" name="CA_PRIOR_YR_ACCT_TR3">
-            <reference foreign="ACCT_TYP_CD" local="ACCT_TYP_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="CA_PRIOR_YR_ACCT_TR1">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-        </foreign-key>
         <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_PRIOR_YR_ACCT_TR13">
             <reference foreign="FIN_COA_CD" local="INCOME_FIN_COA_CD"/>
             <reference foreign="ACCOUNT_NBR" local="INCOME_ACCOUNT_NBR"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_PRIOR_YR_ACCT_TR14">
-            <reference foreign="FIN_COA_CD" local="ICR_FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ICR_ACCOUNT_NBR"/>
+        <foreign-key foreignTable="CA_CHART_T" name="CA_PRIOR_YR_ACCT_TR1">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_SUB_FUND_GRP_T" name="CA_PRIOR_YR_ACCT_TR6">
             <reference foreign="SUB_FUND_GRP_CD" local="SUB_FUND_GRP_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_RESTRICT_STAT_T" name="CA_PRIOR_YR_ACCT_TR8">
-            <reference foreign="ACCT_RSTRC_STAT_CD" local="ACCT_RSTRC_STAT_CD"/>
         </foreign-key>
         <foreign-key foreignTable="SH_CAMPUS_T" name="CA_PRIOR_YR_ACCT_TR4">
             <reference foreign="CAMPUS_CD" local="ACCT_PHYS_CMP_CD"/>
@@ -3555,6 +3602,9 @@
         </foreign-key>
         <foreign-key foreignTable="CG_CFDA_REF_T" name="CG_PRPSL_TR7">
             <reference foreign="CG_CFDA_NBR" local="CG_CFDA_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CG_AWD_T" name="CG_PRPSL_TR1">
+            <reference foreign="CGPRPSL_NBR" local="CGPRPSL_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CG_AGENCY_T" name="CG_PRPSL_TR5">
             <reference foreign="CG_AGENCY_NBR" local="CG_FEDPT_AGNCY_NBR"/>
@@ -6665,6 +6715,9 @@
         <column name="FDOC_NXT_PSTO_NBR" size="7" type="DECIMAL"/>
         <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
         <column name="FDOC_POST_PRD_CD" size="2" type="VARCHAR"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="FP_BDGT_ADJ_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
         <unique name="FP_BDGT_ADJ_DOC_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -6822,6 +6875,9 @@
         <column name="FDOC_NXT_AD_LN_NBR" size="7" type="DECIMAL"/>
         <column name="WRKGRP_NM" size="70" type="VARCHAR"/>
         <column name="FDOC_DEPOSIT_DT" type="DATE"/>
+        <foreign-key foreignTable="FP_CASH_RCPT_DOC_T" name="FP_CASH_RCPT_HDR_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
         <unique name="FP_CASH_RCPT_HDR_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -8122,6 +8178,10 @@
         <column name="FDOC_GRS_SALES_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FDOC_TXBL_SALES_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="FDOC_SALE_DT" type="DATE"/>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="FP_SALES_TAX_TR1">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="FP_SALES_TAX_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
@@ -8403,6 +8463,11 @@
         <foreign-key foreignTable="FS_OPTION_T" name="GL_ACCT_BALANCES_TR6">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
         </foreign-key>
+        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="GL_ACCT_BALANCES_TR3">
+            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
+        </foreign-key>
         <index name="GL_ACCT_BALANCES_TI2">
             <index-column name="UNIV_FISCAL_YR"/>
             <index-column name="FIN_COA_CD"/>
@@ -8444,6 +8509,11 @@
         </foreign-key>
         <foreign-key foreignTable="FS_OPTION_T" name="GL_BALANCE_TR1">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="GL_BALANCE_TR4">
+            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_BALANCE_TYPE_T" name="GL_BALANCE_TR6">
             <reference foreign="FIN_BALANCE_TYP_CD" local="FIN_BALANCE_TYP_CD"/>
@@ -8562,6 +8632,9 @@
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="FS_ORIGIN_CODE_T" name="GL_ENCUMBRANCE_TR1">
+            <reference foreign="FS_ORIGIN_CD" local="FS_ORIGIN_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="GL_ENCUMBRANCE_TR3">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
@@ -8638,6 +8711,9 @@
         <column name="TRN_ENCUM_UPDT_CD" size="1" type="VARCHAR"/>
         <column name="TRN_POST_DT" type="DATE"/>
         <column name="TIMESTAMP" type="DATE"/>
+        <foreign-key foreignTable="FS_ORIGIN_CODE_T" name="GL_ENTRY_TR14">
+            <reference foreign="FS_ORIGIN_CD" local="FS_ORIGIN_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="GL_ENTRY_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
@@ -8652,6 +8728,11 @@
         </foreign-key>
         <foreign-key foreignTable="CA_BALANCE_TYPE_T" name="GL_ENTRY_TR5">
             <reference foreign="FIN_BALANCE_TYP_CD" local="FIN_BALANCE_TYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="GL_ENTRY_TR3">
+            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
         </foreign-key>
         <foreign-key foreignTable="FP_DOC_TYPE_T" name="GL_ENTRY_TR9">
             <reference foreign="FDOC_TYP_CD" local="FDOC_TYP_CD"/>
@@ -10740,6 +10821,10 @@
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="LD_CSF_TRACKER_TR3">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="FS_OPTION_T" name="LD_CSF_TRACKER_TR6">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
         </foreign-key>
@@ -11120,6 +11205,9 @@
         </foreign-key>
         <foreign-key foreignTable="CA_BALANCE_TYPE_T" name="LD_LBR_GL_ENTRY_TR6">
             <reference foreign="FIN_BALANCE_TYP_CD" local="FIN_BALANCE_TYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="LD_LBR_GL_ENTRY_TR14">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_OBJ_TYPE_T" name="LD_LBR_GL_ENTRY_TR8">
             <reference foreign="FIN_OBJ_TYP_CD" local="FIN_OBJ_TYP_CD"/>
