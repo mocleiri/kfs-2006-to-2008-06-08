@@ -51,7 +51,6 @@ CREATE TABLE ER_RF_DOC_T(
         RF_SUBCNR_IND                  VARCHAR2(1),
         INST_ACCT_NBR                  VARCHAR2(12),
         RSRCH_TYP_CD                   VARCHAR2(1),
-        SUBM_TYP_CD                    VARCHAR2(1),
         PREV_FED_ID                    VARCHAR2(12),
         PROJ_TYP_OTHR_DESC             VARCHAR2(75),
         FED_ID                         VARCHAR2(12),
