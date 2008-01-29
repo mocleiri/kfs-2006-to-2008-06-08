@@ -1928,10 +1928,6 @@
         <column name="ACCT_EXP_GDLN_TXT" size="400" type="VARCHAR"/>
         <column name="ACCT_INC_GDLN_TXT" size="400" type="VARCHAR"/>
         <column name="ACCT_PURPOSE_TXT" size="400" type="VARCHAR"/>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCT_GDLNPRPS_TR1">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
-        </foreign-key>
         <unique name="CA_ACCT_GDLNPRPS_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -2505,6 +2501,9 @@
         <column name="ACCT_DLGT_PRMRT_CD" size="1" type="VARCHAR"/>
         <column name="ACCT_DLGT_START_DT" type="DATE"/>
         <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="FP_DOC_TYPE_T" name="CA_ORG_RTNG_MDL_TR3">
+            <reference foreign="FDOC_TYP_CD" local="FDOC_TYP_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_ORG_RTNG_MDL_NM_T" name="CA_ORG_RTNG_MDL_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="ORG_CD" local="ORG_CD"/>
@@ -3602,9 +3601,6 @@
         </foreign-key>
         <foreign-key foreignTable="CG_CFDA_REF_T" name="CG_PRPSL_TR7">
             <reference foreign="CG_CFDA_NBR" local="CG_CFDA_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CG_AWD_T" name="CG_PRPSL_TR1">
-            <reference foreign="CGPRPSL_NBR" local="CGPRPSL_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CG_AGENCY_T" name="CG_PRPSL_TR5">
             <reference foreign="CG_AGENCY_NBR" local="CG_FEDPT_AGNCY_NBR"/>
@@ -6875,9 +6871,6 @@
         <column name="FDOC_NXT_AD_LN_NBR" size="7" type="DECIMAL"/>
         <column name="WRKGRP_NM" size="70" type="VARCHAR"/>
         <column name="FDOC_DEPOSIT_DT" type="DATE"/>
-        <foreign-key foreignTable="FP_CASH_RCPT_DOC_T" name="FP_CASH_RCPT_HDR_TR1">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-        </foreign-key>
         <unique name="FP_CASH_RCPT_HDR_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -7270,6 +7263,9 @@
         <column name="DV_CNCL_DT" type="DATE"/>
         <foreign-key foreignTable="FP_DV_DOC_LOC_T" name="FP_DV_DOC_TR2">
             <reference foreign="DV_DOC_LOC_CD" local="DV_DOC_LOC_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="FP_DV_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <unique name="FP_DV_DOC_TC0">
             <unique-column name="OBJ_ID"/>
@@ -11205,9 +11201,6 @@
         </foreign-key>
         <foreign-key foreignTable="CA_BALANCE_TYPE_T" name="LD_LBR_GL_ENTRY_TR6">
             <reference foreign="FIN_BALANCE_TYP_CD" local="FIN_BALANCE_TYP_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="LD_LBR_GL_ENTRY_TR14">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_OBJ_TYPE_T" name="LD_LBR_GL_ENTRY_TR8">
             <reference foreign="FIN_OBJ_TYP_CD" local="FIN_OBJ_TYP_CD"/>
