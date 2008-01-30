@@ -26,12 +26,10 @@ import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
 import org.kuali.module.chart.service.ChartService;
 import org.kuali.module.chart.service.OrganizationService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the Org structure. This is the default implementation, that is delivered with Kuali.
  */
-@Transactional
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
     private ParameterService parameterService;
