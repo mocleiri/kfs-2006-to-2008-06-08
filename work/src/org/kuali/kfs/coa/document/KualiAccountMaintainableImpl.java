@@ -16,6 +16,7 @@
 package org.kuali.module.chart.maintenance;
 
 import java.util.List;
+import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
@@ -39,12 +40,12 @@ public class KualiAccountMaintainableImpl extends KualiMaintainableImpl {
     public void saveBusinessObject() {
         // make sure we save account first
         super.saveBusinessObject();
-        BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
         Account acct = (Account) businessObject;
 
         // deactivate any indicated BOs
         List<PersistableBusinessObject> bosToDeactivate = acct.generateDeactivationsToPersist();
         if (bosToDeactivate != null) {
+            BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
             if (!bosToDeactivate.isEmpty()) {
                 boService.save(bosToDeactivate);
             }
@@ -57,12 +58,12 @@ public class KualiAccountMaintainableImpl extends KualiMaintainableImpl {
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterCopy()
      */
     @Override
-    public void processAfterCopy() {
+    public void processAfterCopy( Map parameters ) {
         Account account = (Account) this.getBusinessObject();
         account.setAccountCreateDate(null); // account's pre-rules will fill this field in
         account.setAccountEffectiveDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
         account.setAccountClosedIndicator(false);
-        super.processAfterCopy();
+        super.processAfterCopy( parameters );
     }
 
 
