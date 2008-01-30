@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dataset SYSTEM "data.dtd">
-<dataset>
-    <FS_ADHOC_RTE_ACTN_RECP_T ACTN_RQST_CD="A"
-        ACTN_RQST_RECP_ID="amdelgad" ACTN_RQST_RECP_TYP_CD="0"
-        FDOC_NBR="317535" OBJ_ID="B927CCF1-A584-8BA0-E9A4-0B0D3AFDCF53" VER_NBR="1"/>
-</dataset>
