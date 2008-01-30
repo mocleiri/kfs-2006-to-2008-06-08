@@ -6031,7 +6031,6 @@
         <column name="RF_SUBCNR_IND" size="1" type="VARCHAR"/>
         <column name="INST_ACCT_NBR" size="12" type="VARCHAR"/>
         <column name="RSRCH_TYP_CD" size="1" type="VARCHAR"/>
-        <column name="SUBM_TYP_CD" size="1" type="VARCHAR"/>
         <column name="PREV_FED_ID" size="12" type="VARCHAR"/>
         <column name="PROJ_TYP_OTHR_DESC" size="75" type="VARCHAR"/>
         <column name="FED_ID" size="12" type="VARCHAR"/>
@@ -6383,21 +6382,6 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="ER_RF_SUBM_TYP_T">
-        <column name="RDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column name="SUBM_TYP_CD" primaryKey="true" size="1" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <foreign-key foreignTable="ER_SUBM_TYP_T" name="ER_RF_SUBM_TYP_TR2">
-            <reference foreign="SUBM_TYP_CD" local="SUBM_TYP_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="ER_RF_DOC_T" name="ER_RF_SUBM_TYP_TR1">
-            <reference foreign="RDOC_NBR" local="RDOC_NBR"/>
-        </foreign-key>
-        <unique name="ER_RF_SUBM_TYP_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
     <table name="ER_RSRCH_RSK_TYP_T">
         <column name="RSRCH_RSK_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -6422,17 +6406,6 @@
         <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <column name="RSRCH_TYP_DESC" size="40" type="VARCHAR"/>
         <unique name="ER_RSRCH_TYP_CD_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="ER_SUBM_TYP_T">
-        <column name="SUBM_TYP_CD" primaryKey="true" size="1" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
-        <column name="SUBM_TYP_DESC" size="80" type="VARCHAR"/>
-        <column name="USR_SORT_NBR" size="2" type="DECIMAL"/>
-        <unique name="ER_SUBM_TYP_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
