@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE dataset SYSTEM "data.dtd">
-<dataset>
-    <SH_LOCK_T OBJ_ID="11A64FD3A5496716E043814FD8816716"
-        PERSON_UNVL_ID="1000114422" TRN_LCKTM_TS="20050822122131"
-        TRN_SMPHR_ID="dp_BRSR_BL" TRN_SMPHR_TYP_CD="BRCR" VER_NBR="1"/>
-</dataset>
