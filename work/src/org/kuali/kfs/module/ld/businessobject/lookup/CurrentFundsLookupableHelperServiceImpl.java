@@ -53,7 +53,6 @@ import org.springframework.transaction.annotation.Transactional;
  * Service implementation for the CurrentFundsLookupableHelperServiceImpl class is the front-end for all current funds balance
  * inquiry processing.
  */
-@Transactional
 public class CurrentFundsLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CurrentFundsLookupableHelperServiceImpl.class);
     private LaborDao laborDao;
