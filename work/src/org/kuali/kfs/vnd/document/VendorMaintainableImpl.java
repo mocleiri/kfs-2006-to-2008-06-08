@@ -183,8 +183,9 @@ public class VendorMaintainableImpl extends KualiMaintainableImpl {
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterEdit()
      */
     @Override
-    public void processAfterEdit() {
+    public void processAfterEdit( Map parameters ) {
         setVendorCreateAndUpdateNote(VendorConstants.VendorCreateAndUpdateNotePrefixes.CHANGE);
+        super.processAfterEdit(parameters);
     }
 
     /**
@@ -321,11 +322,12 @@ public class VendorMaintainableImpl extends KualiMaintainableImpl {
      * @see org.kuali.core.maintenance.Maintainable#setupNewFromExisting()
      */
     @Override
-    public void setupNewFromExisting() {
+    public void setupNewFromExisting( Map parameters ) {
         ((VendorDetail) super.getBusinessObject()).setVendorParentIndicator(false);
         ((VendorDetail) super.getBusinessObject()).setActiveIndicator(true);
 
         setVendorCreateAndUpdateNote(VendorConstants.VendorCreateAndUpdateNotePrefixes.ADD);
+        super.setupNewFromExisting(parameters);
     }
 
     /**
