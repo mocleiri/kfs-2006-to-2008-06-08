@@ -34,6 +34,10 @@ import org.kuali.kfs.service.impl.HomeOriginationServiceImpl;
 import org.kuali.kfs.service.impl.KualiCodeServiceImpl;
 import org.kuali.kfs.service.impl.OptionsServiceImpl;
 import org.kuali.kfs.service.impl.OriginationCodeServiceImpl;
+import org.kuali.module.cg.service.impl.AwardServiceImpl;
+import org.kuali.module.cg.service.impl.CgUserServiceImpl;
+import org.kuali.module.chart.service.impl.A21SubAccountServiceImpl;
+import org.kuali.module.chart.service.impl.AccountServiceImpl;
 import org.kuali.module.chart.service.impl.BalanceTypServiceImpl;
 import org.kuali.module.chart.service.impl.ChartServiceImpl;
 import org.kuali.module.chart.service.impl.ChartUserServiceImpl;
@@ -43,18 +47,29 @@ import org.kuali.module.chart.service.impl.ObjectLevelServiceImpl;
 import org.kuali.module.chart.service.impl.ObjectTypeServiceImpl;
 import org.kuali.module.chart.service.impl.OffsetDefinitionServiceImpl;
 import org.kuali.module.chart.service.impl.OrganizationReversionServiceImpl;
+import org.kuali.module.chart.service.impl.OrganizationServiceImpl;
 import org.kuali.module.chart.service.impl.ProjectCodeServiceImpl;
 import org.kuali.module.chart.service.impl.SubAccountServiceImpl;
 import org.kuali.module.chart.service.impl.SubFundGroupServiceImpl;
 import org.kuali.module.chart.service.impl.SubObjectCodeServiceImpl;
+import org.kuali.module.financial.service.impl.AccountPresenceServiceImpl;
 import org.kuali.module.financial.service.impl.CheckServiceImpl;
+import org.kuali.module.financial.service.impl.DisbursementVoucherTravelServiceImpl;
 import org.kuali.module.financial.service.impl.FinancialUserServiceImpl;
 import org.kuali.module.financial.service.impl.UniversityDateServiceImpl;
 import org.kuali.module.gl.service.impl.GlUserServiceImpl;
 import org.kuali.module.gl.service.impl.OrganizationReversionMockService;
+import org.kuali.module.gl.service.impl.ScrubberValidatorImpl;
+import org.kuali.module.kra.service.impl.KraUserServiceImpl;
+import org.kuali.module.labor.service.impl.LaborBaseFundsServiceImpl;
+import org.kuali.module.labor.service.impl.LaborUserServiceImpl;
 import org.kuali.module.pdp.service.impl.BatchSearchServiceImpl;
+import org.kuali.module.pdp.service.impl.DailyReportServiceImpl;
 import org.kuali.module.pdp.service.impl.PaymentDetailSearchServiceImpl;
+import org.kuali.module.pdp.service.impl.PaymentDetailServiceImpl;
 import org.kuali.module.pdp.service.impl.PdpUserServiceImpl;
+import org.kuali.module.purap.service.impl.NegativePaymentRequestApprovalLimitServiceImpl;
+import org.kuali.module.purap.service.impl.PurapAccountingServiceImpl;
 import org.kuali.module.purap.service.impl.PurapUserServiceImpl;
 import org.kuali.module.vendor.service.impl.VendorUserServiceImpl;
 import org.kuali.test.ConfigureContext;
@@ -111,6 +126,22 @@ public class TransactionalAnnotationTest extends KualiTestBase {
 
         excludedClasses.add( PaymentDetailSearchServiceImpl.class );
         excludedClasses.add( LookupServiceImpl.class );
+
+        excludedClasses.add( A21SubAccountServiceImpl.class );
+        excludedClasses.add( AccountPresenceServiceImpl.class );
+        excludedClasses.add( AccountServiceImpl.class );
+        excludedClasses.add( AwardServiceImpl.class );
+        excludedClasses.add( CgUserServiceImpl.class );
+        excludedClasses.add( DisbursementVoucherTravelServiceImpl.class );
+        excludedClasses.add( KraUserServiceImpl.class );
+        excludedClasses.add( LaborBaseFundsServiceImpl.class );
+        excludedClasses.add( LaborUserServiceImpl.class );
+        excludedClasses.add( NegativePaymentRequestApprovalLimitServiceImpl.class );
+        excludedClasses.add( OrganizationServiceImpl.class );
+        excludedClasses.add( DailyReportServiceImpl.class );
+        excludedClasses.add( PaymentDetailServiceImpl.class );
+        excludedClasses.add( PurapAccountingServiceImpl.class );
+        excludedClasses.add( ScrubberValidatorImpl.class );
     }
 
     public void testTransactionAnnotations() {
