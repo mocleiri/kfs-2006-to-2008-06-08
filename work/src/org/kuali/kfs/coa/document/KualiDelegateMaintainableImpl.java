@@ -17,6 +17,7 @@ package org.kuali.module.chart.maintenance;
 
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.MaintenanceLock;
@@ -42,9 +43,9 @@ public class KualiDelegateMaintainableImpl extends KualiMaintainableImpl {
      * 
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterRetrieve()
      */
-    public void processAfterCopy() {
+    public void processAfterCopy( Map parameters ) {
         this.setStartDateDefault();
-        super.processAfterCopy();
+        super.processAfterCopy( parameters );
     }
 
     /**
@@ -52,9 +53,9 @@ public class KualiDelegateMaintainableImpl extends KualiMaintainableImpl {
      * 
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterEdit()
      */
-    public void processAfterEdit() {
+    public void processAfterEdit( Map parameters ) {
         this.setStartDateDefault();
-        super.processAfterEdit();
+        super.processAfterEdit( parameters );
     }
 
     /**
