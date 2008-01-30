@@ -1,0 +1,288 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataset SYSTEM "data.dtd">
+<dataset>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@9b87f6" JOB_GROUP="scheduled"
+        JOB_NAME="pdpExtractCanceledChecksJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@fb6763" JOB_GROUP="unscheduled"
+        JOB_NAME="pdpExtractCanceledChecksJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@140b8fd" JOB_GROUP="unscheduled"
+        JOB_NAME="pdpExtractChecksJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@30fc1f" JOB_GROUP="scheduled"
+        JOB_NAME="pdpDailyReportJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1f88fbd" JOB_GROUP="unscheduled"
+        JOB_NAME="pdpDailyReportJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1a4eb56" JOB_GROUP="scheduled"
+        JOB_NAME="pdpLoadPaymentsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@566633" JOB_GROUP="unscheduled"
+        JOB_NAME="pdpLoadPaymentsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@4fdf11" JOB_GROUP="scheduled"
+        JOB_NAME="autoApprovePaymentRequestsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1be0369" JOB_GROUP="unscheduled"
+        JOB_NAME="autoApprovePaymentRequestsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1d1fc02" JOB_GROUP="scheduled"
+        JOB_NAME="processPdpCancelsAndPaidJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@f800db" JOB_GROUP="unscheduled"
+        JOB_NAME="processPdpCancelsAndPaidJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@5364" JOB_GROUP="scheduled"
+        JOB_NAME="purchasingPreDisbursementImmediatesExtractJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@162f030" JOB_GROUP="unscheduled"
+        JOB_NAME="purchasingPreDisbursementImmediatesExtractJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@870e2f" JOB_GROUP="scheduled"
+        JOB_NAME="purchasingPreDisbursementExtractJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@b44eb4" JOB_GROUP="unscheduled"
+        JOB_NAME="purchasingPreDisbursementExtractJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@19b2faf" JOB_GROUP="scheduled"
+        JOB_NAME="purgeCorrectionProcessFilesJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@157bf4c" JOB_GROUP="unscheduled"
+        JOB_NAME="purgeCorrectionProcessFilesJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1d056de" JOB_GROUP="scheduled"
+        JOB_NAME="laborNightlyOutJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@f70ee1" JOB_GROUP="unscheduled"
+        JOB_NAME="laborNightlyOutJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1f1e39b" JOB_GROUP="scheduled"
+        JOB_NAME="laborScrubberJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@195ff24" JOB_GROUP="unscheduled"
+        JOB_NAME="laborScrubberJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@a1c582" JOB_GROUP="scheduled"
+        JOB_NAME="laborPosterJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@ae1393" JOB_GROUP="unscheduled"
+        JOB_NAME="laborPosterJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@871e65" JOB_GROUP="scheduled"
+        JOB_NAME="laborFeedJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@dcb6b4" JOB_GROUP="unscheduled"
+        JOB_NAME="laborFeedJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@5f1c48" JOB_GROUP="scheduled"
+        JOB_NAME="clearLaborPendingEntriesJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@39ea58" JOB_GROUP="unscheduled"
+        JOB_NAME="clearLaborPendingEntriesJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@486cdd" JOB_GROUP="unscheduled"
+        JOB_NAME="laborBalanceForwardJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@e33af5" JOB_GROUP="unscheduled"
+        JOB_NAME="pdpLoadFederalReserveBankDataJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@33c3e6" JOB_GROUP="scheduled"
+        JOB_NAME="pdpExtractGlTransactionsStepJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@823c6d" JOB_GROUP="unscheduled"
+        JOB_NAME="pdpExtractGlTransactionsStepJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@4d28c7" JOB_GROUP="scheduled"
+        JOB_NAME="pdpExtractAchPaymentsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1b044df" JOB_GROUP="unscheduled"
+        JOB_NAME="pdpExtractAchPaymentsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@179c7cf" JOB_GROUP="unscheduled"
+        JOB_NAME="nightlyOutJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@2d0483" JOB_GROUP="scheduled"
+        JOB_NAME="scrubberJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1836aea" JOB_GROUP="unscheduled"
+        JOB_NAME="scrubberJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@e0420b" JOB_GROUP="scheduled"
+        JOB_NAME="posterJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@10ff62a" JOB_GROUP="unscheduled"
+        JOB_NAME="posterJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@ea7549" JOB_GROUP="scheduled"
+        JOB_NAME="sufficientFundsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@ba175f" JOB_GROUP="unscheduled"
+        JOB_NAME="sufficientFundsJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1549ceb" JOB_GROUP="scheduled"
+        JOB_NAME="posterSummaryReportJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@a30fd" JOB_GROUP="unscheduled"
+        JOB_NAME="posterSummaryReportJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@11650d6" JOB_GROUP="scheduled"
+        JOB_NAME="clearPendingEntriesJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1532fc" JOB_GROUP="unscheduled"
+        JOB_NAME="clearPendingEntriesJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1c64ed8" JOB_GROUP="unscheduled"
+        JOB_NAME="encumbranceForwardJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@626fd2" JOB_GROUP="unscheduled"
+        JOB_NAME="balanceForwardJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@9b777a" JOB_GROUP="unscheduled"
+        JOB_NAME="nominalActivityClosingJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@c12978" JOB_GROUP="unscheduled"
+        JOB_NAME="organizationReversionClosingJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@189c12a" JOB_GROUP="unscheduled"
+        JOB_NAME="organizationReversionOpeningJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@e8c7db" JOB_GROUP="unscheduled"
+        JOB_NAME="sufficientFundsSyncJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@992fa5" JOB_GROUP="unscheduled"
+        JOB_NAME="manualPurgeJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@10718b7" JOB_GROUP="unscheduled"
+        JOB_NAME="clearOldOriginEntriesJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@e7ce4c" JOB_GROUP="scheduled"
+        JOB_NAME="purgeJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@99176f" JOB_GROUP="unscheduled"
+        JOB_NAME="purgeJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@d1ad08" JOB_GROUP="scheduled"
+        JOB_NAME="closeJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1b70f9e" JOB_GROUP="unscheduled"
+        JOB_NAME="closeJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1627c16" JOB_GROUP="scheduled"
+        JOB_NAME="cfdaJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@c0890f" JOB_GROUP="unscheduled"
+        JOB_NAME="cfdaJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@666d83" JOB_GROUP="unscheduled"
+        JOB_NAME="fiscalYearMakerJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@9fd062" JOB_GROUP="unscheduled"
+        JOB_NAME="populatePriorYearDataJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@29f93b" JOB_GROUP="scheduled"
+        JOB_NAME="procurementCardDocumentJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1a998c7" JOB_GROUP="unscheduled"
+        JOB_NAME="procurementCardDocumentJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@16d4b50" JOB_GROUP="scheduled"
+        JOB_NAME="disbursementVoucherPreDisbursementProcessorExtractJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@6b93c5" JOB_GROUP="unscheduled"
+        JOB_NAME="disbursementVoucherPreDisbursementProcessorExtractJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@b28980" JOB_GROUP="scheduled"
+        JOB_NAME="enterpriseFeedJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@161509b" JOB_GROUP="unscheduled"
+        JOB_NAME="enterpriseFeedJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1f30035" JOB_GROUP="scheduled"
+        JOB_NAME="collectorJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@92af24" JOB_GROUP="scheduled"
+        JOB_NAME="scheduleJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@287b58" JOB_GROUP="unscheduled"
+        JOB_NAME="scheduleJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@1b9f88b" JOB_GROUP="unscheduled"
+        JOB_NAME="collectorJob" REQUESTS_RECOVERY="0"/>
+    <QRTZ_JOB_DETAILS IS_DURABLE="1" IS_STATEFUL="1" IS_VOLATILE="0"
+        JOB_CLASS_NAME="org.kuali.kfs.batch.Job"
+        JOB_DATA="oracle.sql.BLOB@6c9ec6" JOB_GROUP="scheduled"
+        JOB_NAME="nightlyOutJob" REQUESTS_RECOVERY="0"/>
+</dataset>

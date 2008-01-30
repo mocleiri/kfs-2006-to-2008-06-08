@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataset SYSTEM "data.dtd">
+<dataset>
+    <AP_NEG_PMT_RQST_APRVL_LMT_T ACCT_NBR="9323000"
+        AP_NEG_PMT_RQST_APRVL_LMT_ID="1002" FIN_COA_CD="UA"
+        NEG_PMT_RQST_APRVL_LMT_AMT="0"
+        OBJ_ID="BCCCA6BE-E08A-37CD-1AFB-130DE22167D2" VER_NBR="1"/>
+</dataset>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataset SYSTEM "data.dtd">
+<dataset>
+    <QRTZ_CRON_TRIGGERS CRON_EXPRESSION="00 00 23 ? * *"
+        TIME_ZONE_ID="America/Los_Angeles" TRIGGER_GROUP="scheduled" TRIGGER_NAME="scheduleJobTrigger"/>
+    <QRTZ_CRON_TRIGGERS CRON_EXPRESSION="00 00 00 1 1,4,7,10  ?"
+        TIME_ZONE_ID="America/Los_Angeles" TRIGGER_GROUP="scheduled" TRIGGER_NAME="cfdaJobTrigger"/>
+</dataset>
