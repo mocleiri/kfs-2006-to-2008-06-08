@@ -4222,4 +4222,11 @@
         SH_PARM_NM="PDP_ERROR_EXCEEDS_NOTE_LIMIT_EMAIL_ADDRESSES"
         SH_PARM_NMSPC_CD="KFS-PD" SH_PARM_TXT="kbatch-l@indiana.edu"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="3FFEBD57883B709AE043814FD881709Z"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Flag for enabling/disabling direct inquiries on screens that are drawn by the nervous system (i.e. lookups and maintenance documents)"
+        SH_PARM_DTL_TYP_CD="All"
+        SH_PARM_NM="ENABLE_DIRECT_INQUIRIES_IND"
+        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="N"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
 </dataset>
