@@ -132,6 +132,12 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
         RULE_TMPL_DESC="KualiCashReceiptVerificationWorkgroupTemplate"
         RULE_TMPL_ID="11557" RULE_TMPL_NM="KualiCashReceiptVerificationWorkgroupTemplate"/>
+    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
+        RULE_TMPL_DESC="Remove/Replace Workgroup Routing"
+        RULE_TMPL_ID="12758" RULE_TMPL_NM="RemoveReplaceWorkgroupTemplate"/>
+    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
+        RULE_TMPL_DESC="Remove/Replace Rule Routing"
+        RULE_TMPL_ID="12760" RULE_TMPL_NM="RemoveReplaceRuleTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
         RULE_TMPL_DESC="KualiCampusCodeTemplate" RULE_TMPL_ID="3734" RULE_TMPL_NM="KualiCampusCodeTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
@@ -193,10 +199,4 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="4"
         RULE_TMPL_DESC="Used for creating Rules based on the Vendor Maintenance Document with respect to the Vendor Type"
         RULE_TMPL_ID="9375" RULE_TMPL_NM="KualiVendorDocumentTypeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="Remove/Replace Workgroup Routing"
-        RULE_TMPL_ID="12758" RULE_TMPL_NM="RemoveReplaceWorkgroupTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="Remove/Replace Rule Routing"
-        RULE_TMPL_ID="12760" RULE_TMPL_NM="RemoveReplaceRuleTemplate"/>
 </dataset>

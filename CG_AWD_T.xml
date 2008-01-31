@@ -21703,7 +21703,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGE"/>
     <CG_AWD_T CGAWD_BEG_DT="19990901000000"
         CGAWD_CLOSING_DT="19991104224228"
-        CGAWD_COMMENT_TXT="DUE TO EARLY TERMINATION OF FELLOW, THIS AWARD REFLECTS A DECREASE IN THE AMT OF $8527.&#xa;This is year 2 of a 2 year project. total award for project period is $21,148.00."
+        CGAWD_COMMENT_TXT="DUE TO EARLY TERMINATION OF FELLOW, THIS AWARD REFLECTS A DECREASE IN THE AMT OF $8527.&#xd;This is year 2 of a 2 year project. total award for project period is $21,148.00."
         CGAWD_CREATE_TS="19990816121138" CGAWD_DOC_NBR="08F1MH12118A"
         CGAWD_DRCT_CST_AMT="21148" CGAWD_END_DT="20000201000000"
         CGAWD_ENTRY_DT="19990916000000" CGAWD_INDR_CST_AMT="0"
@@ -22130,7 +22130,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGE"/>
     <CG_AWD_T CGAWD_BEG_DT="20000601000000"
         CGAWD_CLOSING_DT="20000714211816"
-        CGAWD_COMMENT_TXT="This is year 2 of a 4 year project period. This grant is INCLUDED under Expanded Authorities and subject to SNAP.&#xa;"
+        CGAWD_COMMENT_TXT="This is year 2 of a 4 year project period. This grant is INCLUDED under Expanded Authorities and subject to SNAP.&#xd;"
         CGAWD_CREATE_TS="20000530163958" CGAWD_DOC_NBR="08R1MH56871A"
         CGAWD_DRCT_CST_AMT="15628" CGAWD_END_DT="20010531000000"
         CGAWD_ENTRY_DT="20000623000000" CGAWD_INDR_CST_AMT="6974"
@@ -22193,7 +22193,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGP"/>
     <CG_AWD_T CGAWD_BEG_DT="20000601000000"
         CGAWD_CLOSING_DT="20000714211816"
-        CGAWD_COMMENT_TXT="This is year 1 of a 5 year project period.  Conversion in September 2000 from R01 grant to R37 type grant, with no additional funds awarded.&#xa;&#xa;&#xa;"
+        CGAWD_COMMENT_TXT="This is year 1 of a 5 year project period.  Conversion in September 2000 from R01 grant to R37 type grant, with no additional funds awarded.&#xd;&#xd;&#xd;"
         CGAWD_CREATE_TS="20000613110636" CGAWD_DOC_NBR="08R1AA12502A"
         CGAWD_DRCT_CST_AMT="252734" CGAWD_END_DT="20010531000000"
         CGAWD_ENTRY_DT="20000601000000" CGAWD_INDR_CST_AMT="25104"
@@ -22209,7 +22209,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="20000520000000"
         CGAWD_CLOSING_DT="20000619211454"
-        CGAWD_COMMENT_TXT="This is year 6 of a 10 year project period.&#xa;&#xa;This grant is Excluded from Expanded Authorities."
+        CGAWD_COMMENT_TXT="This is year 6 of a 10 year project period.&#xd;&#xd;This grant is Excluded from Expanded Authorities."
         CGAWD_CREATE_TS="20000615164025" CGAWD_DOC_NBR="08T2HD07475B"
         CGAWD_DRCT_CST_AMT="243462" CGAWD_END_DT="20010430000000"
         CGAWD_ENTRY_DT="20000526000000" CGAWD_INDR_CST_AMT="15395"
@@ -22225,7 +22225,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="20000701000000"
         CGAWD_CLOSING_DT="20000810211122"
-        CGAWD_COMMENT_TXT="This is year 1 of a single year project.&#xa;&#xa;This is INCLUDED under Expanded Authorities and subject to SNAP."
+        CGAWD_COMMENT_TXT="This is year 1 of a single year project.&#xd;&#xd;This is INCLUDED under Expanded Authorities and subject to SNAP."
         CGAWD_CREATE_TS="20000626140211" CGAWD_DOC_NBR="08R3MH62556A"
         CGAWD_DRCT_CST_AMT="25000" CGAWD_END_DT="20010630000000"
         CGAWD_ENTRY_DT="20000701000000" CGAWD_INDR_CST_AMT="12250"
@@ -22257,7 +22257,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="20000701000000"
         CGAWD_CLOSING_DT="20000810211122"
-        CGAWD_COMMENT_TXT="This is year 8 of a 10 year project period. This grant is EXCLUDED from Expanded Authorities.&#xa;"
+        CGAWD_COMMENT_TXT="This is year 8 of a 10 year project period. This grant is EXCLUDED from Expanded Authorities.&#xd;"
         CGAWD_CREATE_TS="20000629085229" CGAWD_DOC_NBR="08T2MH19879B"
         CGAWD_DRCT_CST_AMT="114554" CGAWD_END_DT="20010630000000"
         CGAWD_ENTRY_DT="20000701000000" CGAWD_INDR_CST_AMT="7516"
@@ -22498,7 +22498,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGE"/>
     <CG_AWD_T CGAWD_BEG_DT="20001001000000"
         CGAWD_CLOSING_DT="20001128211609"
-        CGAWD_COMMENT_TXT="This award is noncompetitively renewable for up to 6 additional years.&#xa;&#xa;Full accounting of expenditures made from this award, with a detailed summary, is due no later than Aug. 1st on an annual basis."
+        CGAWD_COMMENT_TXT="This award is noncompetitively renewable for up to 6 additional years.&#xd;&#xd;Full accounting of expenditures made from this award, with a detailed summary, is due no later than Aug. 1st on an annual basis."
         CGAWD_CREATE_TS="20000929144708" CGAWD_DRCT_CST_AMT="139070"
         CGAWD_END_DT="20010630000000" CGAWD_ENTRY_DT="20001001000000"
         CGAWD_INDR_CST_AMT="0" CGAWD_LST_UPDT_DT="20000929144708"
@@ -22721,7 +22721,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="20010201000000"
         CGAWD_CLOSING_DT="20010322211111"
-        CGAWD_COMMENT_TXT="Award totals $269014. No cost extension awarded&#xa;with this amendment."
+        CGAWD_COMMENT_TXT="Award totals $269014. No cost extension awarded&#xd;with this amendment."
         CGAWD_CREATE_TS="20010228102806" CGAWD_DRCT_CST_AMT="79543"
         CGAWD_END_DT="20030131000000" CGAWD_ENTRY_DT="20010228000000"
         CGAWD_INDR_CST_AMT="36881" CGAWD_LST_UPDT_DT="20020322133057"
@@ -23124,7 +23124,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="20010701000000"
         CGAWD_CLOSING_DT="20010912211330"
-        CGAWD_COMMENT_TXT="This is year 9 of a 10-year project.  This grant is EXCLUDED from Expanded Authorities.&#xa;"
+        CGAWD_COMMENT_TXT="This is year 9 of a 10-year project.  This grant is EXCLUDED from Expanded Authorities.&#xd;"
         CGAWD_CREATE_TS="20010619112643" CGAWD_DOC_NBR="08T2MH19879B"
         CGAWD_DRCT_CST_AMT="122122" CGAWD_END_DT="20020630000000"
         CGAWD_ENTRY_DT="20010701000000" CGAWD_INDR_CST_AMT="8122"
@@ -23168,7 +23168,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGD"/>
     <CG_AWD_T CGAWD_BEG_DT="20010801000000"
         CGAWD_CLOSING_DT="20020124211527"
-        CGAWD_COMMENT_TXT="This grant is excluded from expanded authorities.&#xa;&#xa;This award reflects the NIH fiscal Year 2001 increase in the stipend amount from $33,516 to $35,196 and in the Institution Allowance from $4,000 to $5,000."
+        CGAWD_COMMENT_TXT="This grant is excluded from expanded authorities.&#xd;&#xd;This award reflects the NIH fiscal Year 2001 increase in the stipend amount from $33,516 to $35,196 and in the Institution Allowance from $4,000 to $5,000."
         CGAWD_CREATE_TS="20010723134833" CGAWD_DOC_NBR="08F2AA05591A"
         CGAWD_DRCT_CST_AMT="40196" CGAWD_END_DT="20020731000000"
         CGAWD_ENTRY_DT="20011206000000" CGAWD_INDR_CST_AMT="0"
@@ -23200,7 +23200,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGH"/>
     <CG_AWD_T CGAWD_BEG_DT="20010401000000"
         CGAWD_CLOSING_DT="20010912211330"
-        CGAWD_COMMENT_TXT="FUNDS FROM THIS SUPPLEMENT ARE TO BE USED FOR DR. RONALD VILLARREAL ONLY.&#xa;&#xa;MUST BE REPORTED WITH 46-316-17."
+        CGAWD_COMMENT_TXT="FUNDS FROM THIS SUPPLEMENT ARE TO BE USED FOR DR. RONALD VILLARREAL ONLY.&#xd;&#xd;MUST BE REPORTED WITH 46-316-17."
         CGAWD_CREATE_TS="20010725084815" CGAWD_DOC_NBR="08R1MH62013A"
         CGAWD_DRCT_CST_AMT="29946" CGAWD_END_DT="20020331000000"
         CGAWD_ENTRY_DT="20010717000000" CGAWD_INDR_CST_AMT="14673"
@@ -23603,7 +23603,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="19990401000000"
         CGAWD_CLOSING_DT="20020522222858"
-        CGAWD_COMMENT_TXT="This digest awards a no cost extension to &#xa;3/31/04. The cumulative award totals $270,000."
+        CGAWD_COMMENT_TXT="This digest awards a no cost extension to &#xd;3/31/04. The cumulative award totals $270,000."
         CGAWD_CREATE_TS="20020419134115" CGAWD_DOC_NBR="000009817175"
         CGAWD_DRCT_CST_AMT="43625" CGAWD_END_DT="20040331000000"
         CGAWD_ENTRY_DT="20020419000000" CGAWD_INDR_CST_AMT="21375"
@@ -23896,7 +23896,7 @@
         ROW_ACTV_IND="Y" VER_NBR="1" WRKGRP_NM="KUALI_CGP"/>
     <CG_AWD_T CGAWD_BEG_DT="20020801000000"
         CGAWD_CLOSING_DT="20020925211151"
-        CGAWD_COMMENT_TXT="This digest reflects a change in end date due to the funding of year 6 (Competing Continuation). Final reports are due 90 calendar days after expiration.  &#xa;&#xa;Cost share should be tracked via the FIS (CS001)."
+        CGAWD_COMMENT_TXT="This digest reflects a change in end date due to the funding of year 6 (Competing Continuation). Final reports are due 90 calendar days after expiration.  &#xd;&#xd;Cost share should be tracked via the FIS (CS001)."
         CGAWD_CREATE_TS="20020726133250" CGAWD_DOC_NBR="08R1MH57024A"
         CGAWD_DRCT_CST_AMT="105522" CGAWD_END_DT="20040331000000"
         CGAWD_ENTRY_DT="20020815000000" CGAWD_INDR_CST_AMT="51706"
@@ -23978,7 +23978,7 @@
         CGAWD_DRCT_CST_AMT="100000" CGAWD_END_DT="20030831000000"
         CGAWD_ENTRY_DT="20020903000000" CGAWD_INDR_CST_AMT="47829"
         CGAWD_LST_UPDT_DT="20020903152116"
-        CGAWD_PROJ_TTL="Neuro-Robotic Models of Learning and Addiction&#xa;"
+        CGAWD_PROJ_TTL="Neuro-Robotic Models of Learning and Addiction&#xd;"
         CGAWD_PURPOSE_CD="C" CGAWD_STAT_CD="A" CGAWD_TOT_AMT="147829"
         CGPRPSL_AWD_TYP_CD="N" CGPRPSL_NBR="65490"
         CG_AGENCY_AWD_NBR="R21 DA15647-01" CG_AGENCY_FUT1_AMT="147696"
@@ -24194,7 +24194,7 @@
         CGAWD_DRCT_CST_AMT="150000" CGAWD_END_DT="20040331000000"
         CGAWD_ENTRY_DT="20030401000000" CGAWD_INDR_CST_AMT="73500"
         CGAWD_LST_UPDT_DT="20030519150708"
-        CGAWD_PROJ_TTL="Cognitive Modeling of Risky Decision Tasks in Substance Abusers&#xa;"
+        CGAWD_PROJ_TTL="Cognitive Modeling of Risky Decision Tasks in Substance Abusers&#xd;"
         CGAWD_PURPOSE_CD="C" CGAWD_STAT_CD="A" CGAWD_TOT_AMT="223500"
         CGPRPSL_AWD_TYP_CD="C" CGPRPSL_NBR="69053"
         CG_AGENCY_AWD_NBR="R01 DA014119-03" CG_AGENCY_FUT1_AMT="223500"
@@ -24221,7 +24221,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="20030701000000"
         CGAWD_CLOSING_DT="20030903220400"
-        CGAWD_COMMENT_TXT="NO COST EXTENSION APPROVED VIA NIH COMMONS TO 6/30/2005. &#xa;PROJECT PERIOD: 7/1/03-6/30/04. COST SHARE OF 20% OF PI SALARY WILL BE TRACKED IN CS001."
+        CGAWD_COMMENT_TXT="NO COST EXTENSION APPROVED VIA NIH COMMONS TO 6/30/2005. &#xd;PROJECT PERIOD: 7/1/03-6/30/04. COST SHARE OF 20% OF PI SALARY WILL BE TRACKED IN CS001."
         CGAWD_CREATE_TS="20030324140307" CGAWD_DOC_NBR="08RMH066149A"
         CGAWD_DRCT_CST_AMT="50000" CGAWD_END_DT="20050630000000"
         CGAWD_ENTRY_DT="20030701000000" CGAWD_INDR_CST_AMT="25250"
@@ -24556,7 +24556,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGE"/>
     <CG_AWD_T CGAWD_BEG_DT="20030819000000"
         CGAWD_CLOSING_DT="20031014211232"
-        CGAWD_COMMENT_TXT="Fellow: Julie Gros-Louis&#xa;"
+        CGAWD_COMMENT_TXT="Fellow: Julie Gros-Louis&#xd;"
         CGAWD_CREATE_TS="20030821165127" CGAWD_DOC_NBR="08FHD045040A"
         CGAWD_DRCT_CST_AMT="48148" CGAWD_END_DT="20040818000000"
         CGAWD_ENTRY_DT="20030825000000" CGAWD_INDR_CST_AMT="0"
@@ -24602,7 +24602,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGJ"/>
     <CG_AWD_T CGAWD_BEG_DT="20030916000000"
         CGAWD_CLOSING_DT="20031215211154"
-        CGAWD_COMMENT_TXT="Year 1 of 3&#xa;&#xa;Fellow: Mark Blair"
+        CGAWD_COMMENT_TXT="Year 1 of 3&#xd;&#xd;Fellow: Mark Blair"
         CGAWD_CREATE_TS="20030922140256" CGAWD_DOC_NBR="08FMH068218A"
         CGAWD_DRCT_CST_AMT="39700" CGAWD_END_DT="20040915000000"
         CGAWD_ENTRY_DT="20030922000000" CGAWD_INDR_CST_AMT="0"
@@ -24634,7 +24634,7 @@
         VER_NBR="1" WRKGRP_NM="KUALI_CGE"/>
     <CG_AWD_T CGAWD_BEG_DT="20031001000000"
         CGAWD_CLOSING_DT="20031219211450"
-        CGAWD_COMMENT_TXT="All unused funds are to be returned to the agency at the end of the contract.&#xa;No cost extension to 9/30/04."
+        CGAWD_COMMENT_TXT="All unused funds are to be returned to the agency at the end of the contract.&#xd;No cost extension to 9/30/04."
         CGAWD_CREATE_TS="20030924135908" CGAWD_DRCT_CST_AMT="200350"
         CGAWD_END_DT="20040930000000" CGAWD_ENTRY_DT="20031001000000"
         CGAWD_INDR_CST_AMT="64112" CGAWD_LST_UPDT_DT="20040603155355"
@@ -24962,7 +24962,7 @@
         ROW_ACTV_IND="Y" VER_NBR="1" WRKGRP_NM="KUALI_CGP"/>
     <CG_AWD_T CGAWD_BEG_DT="20040401000000"
         CGAWD_CLOSING_DT="20040401210933"
-        CGAWD_COMMENT_TXT="Theis is year 5 of 9.  The grant is subject to expanded authorities and subject to SNAP.&#xa;"
+        CGAWD_COMMENT_TXT="Theis is year 5 of 9.  The grant is subject to expanded authorities and subject to SNAP.&#xd;"
         CGAWD_CREATE_TS="20040211131752" CGAWD_DOC_NBR="08RNS035663B"
         CGAWD_DRCT_CST_AMT="138751" CGAWD_END_DT="20050131000000"
         CGAWD_ENTRY_DT="20040211000000" CGAWD_INDR_CST_AMT="70069"
