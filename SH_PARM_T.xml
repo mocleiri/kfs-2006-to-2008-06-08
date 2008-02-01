@@ -4369,4 +4369,17 @@
         SH_PARM_NM="OVERRIDE_CAPITAL_ASSET_WARNINGS_IND"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="4508B7A964B0F1F6E043814FD881F1F6"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Flag for enabling/disabling direct inquiries on screens that are drawn by the nervous system (i.e. lookups and maintenance documents)"
+        SH_PARM_DTL_TYP_CD="All"
+        SH_PARM_NM="ENABLE_DIRECT_INQUIRIES_IND"
+        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="4509B04020C0A17AE043814FD881A17A"
+        SH_PARM_CONS_CD="A" SH_PARM_DESC="PO Help link."
+        SH_PARM_DTL_TYP_CD="PurchaseOrder" SH_PARM_NM="PURCHASE_ORDER"
+        SH_PARM_NMSPC_CD="KFS-PA"
+        SH_PARM_TXT="default.htm?turl=WordDocuments%2Fpurchaseorderdocument.htm"
+        SH_PARM_TYP_CD="HELP" VER_NBR="2" WRKGRP_NM="KUALI_FMSOPS"/>
 </dataset>

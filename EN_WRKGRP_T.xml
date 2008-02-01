@@ -639,4 +639,8 @@
         WRKGRP_DESC="BC Document Approvers at IU-UNIV"
         WRKGRP_ID="317500" WRKGRP_NM="KUALI_BCAPPROVE_IU_UNIV"
         WRKGRP_TYP_CD="ChartOrgWorkgroup" WRKGRP_VER_NBR="1"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1" WRKGRP_DESC="AR supervisor role"
+        WRKGRP_ID="317700" WRKGRP_NM="AR_ROLE_MAINTAINERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
 </dataset>
