@@ -19,13 +19,13 @@
  */
 package org.kuali.module.pdp.form.upload;
 
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
+import org.kuali.core.web.struts.pojo.PojoFormBase;
 
 /**
  * @author jsissom
  */
-public class UploadForm extends ActionForm {
+public class UploadForm extends PojoFormBase {
     private FormFile file;
 
     public UploadForm() {
