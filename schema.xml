@@ -665,6 +665,14 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="AR_APPLICATION_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <unique name="AR_APPLICATION_DOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="AR_CLCTN_STATUS_T">
         <column name="CUST_CLCTN_STAT_CD" primaryKey="true" size="3" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -672,6 +680,14 @@
         <column name="CUST_CLCTN_STAT_NM" size="40" type="VARCHAR"/>
         <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="AR_CLCTN_STATUS_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="AR_CREDIT_MEMO_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <unique name="AR_CREDIT_MEMO_DOC_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -1697,12 +1713,18 @@
         <foreign-key foreignTable="CA_SUB_FUND_GRP_T" name="CA_ACCOUNT_TR6">
             <reference foreign="SUB_FUND_GRP_CD" local="SUB_FUND_GRP_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="CA_ICR_TYPE_T" name="CA_ACCOUNT_TR15">
+            <reference foreign="ACCT_ICR_TYP_CD" local="ACCT_ICR_TYP_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_ORG_T" name="CA_ACCOUNT_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="ORG_CD" local="ORG_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ACCT_SF_T" name="CA_ACCOUNT_TR20">
             <reference foreign="ACCT_SF_CD" local="ACCT_SF_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR12">
+            <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
         </foreign-key>
         <foreign-key foreignTable="SH_CAMPUS_T" name="CA_ACCOUNT_TR4">
             <reference foreign="CAMPUS_CD" local="ACCT_PHYS_CMP_CD"/>
@@ -1713,8 +1735,14 @@
         <foreign-key foreignTable="CA_BDGT_REC_LVL_T" name="CA_ACCOUNT_TR21">
             <reference foreign="BDGT_REC_LVL_CD" local="BDGT_REC_LVL_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="SH_ZIP_CODE_T" name="CA_ACCOUNT_TR19">
+            <reference foreign="POSTAL_ZIP_CD" local="ACCT_ZIP_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR1">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_TYPE_T" name="CA_ACCOUNT_TR3">
+            <reference foreign="ACCT_TYP_CD" local="ACCT_TYP_CD"/>
         </foreign-key>
         <unique name="CA_ACCOUNT_TC0">
             <unique-column name="OBJ_ID"/>
@@ -12632,6 +12660,16 @@
             <index-column name="FIN_OBJECT_CD"/>
         </index>
     </table>
+    <table name="PUR_ITM_REAS_ADD_T">
+        <column name="ITM_REAS_ADD_CD" primaryKey="true" size="4" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="ITM_REAS_ADD_DESC" size="45" type="VARCHAR"/>
+        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <unique name="PUR_ITM_REAS_ADD_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="PUR_OWNR_CTGRY_T">
         <column name="VNDR_OWNR_CTGRY_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -13204,6 +13242,111 @@
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <unique name="PUR_PO_VNDR_STPLTN_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_RCVNG_COR_ITM_T">
+        <column name="RCVNG_COR_ITM_ID" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="FDOC_NBR" size="14" type="VARCHAR"/>
+        <column name="PO_ID" size="9" type="DECIMAL"/>
+        <column name="ITM_LN_NBR" size="3" type="DECIMAL"/>
+        <column name="ITM_TYP_CD" size="4" type="VARCHAR"/>
+        <column name="ITM_UOM_CD" size="4" type="VARCHAR"/>
+        <column name="ITM_CATLG_NBR" size="30" type="VARCHAR"/>
+        <column name="ITM_DESC" size="4000" type="VARCHAR"/>
+        <column name="ITM_ORIG_RCVD_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_ORIG_RTRN_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_ORIG_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_COR_RCVD_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_COR_RTRN_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_COR_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_REAS_ADD_CD" size="4" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_RCVNG_COR_T" name="PUR_RCVNG_COR_ITM_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_ITM_REAS_ADD_T" name="PUR_RCVNG_COR_ITM_TR2">
+            <reference foreign="ITM_REAS_ADD_CD" local="ITM_REAS_ADD_CD"/>
+        </foreign-key>
+        <unique name="PUR_RCVNG_COR_ITM_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_RCVNG_COR_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="RCVNG_LN_FDOC_NBR" size="14" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_RCVNG_LN_T" name="PUR_RCVNG_COR_TR1">
+            <reference foreign="FDOC_NBR" local="RCVNG_LN_FDOC_NBR"/>
+        </foreign-key>
+        <unique name="PUR_RCVNG_COR_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_RCVNG_LN_ITM_T">
+        <column name="RCVNG_LN_ITM_ID" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="FDOC_NBR" size="14" type="VARCHAR"/>
+        <column name="PO_ID" size="9" type="DECIMAL"/>
+        <column name="ITM_LN_NBR" size="3" type="DECIMAL"/>
+        <column name="ITM_TYP_CD" size="4" type="VARCHAR"/>
+        <column name="ITM_UOM_CD" size="4" type="VARCHAR"/>
+        <column name="ITM_ORD_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_CATLG_NBR" size="30" type="VARCHAR"/>
+        <column name="ITM_DESC" size="4000" type="VARCHAR"/>
+        <column name="ITM_RCVD_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_RTRN_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="ITM_REAS_ADD_CD" size="4" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_ITM_REAS_ADD_T" name="PUR_RCVNG_LN_ITM_TR2">
+            <reference foreign="ITM_REAS_ADD_CD" local="ITM_REAS_ADD_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_RCVNG_LN_T" name="PUR_RCVNG_LN_ITM_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <unique name="PUR_RCVNG_LN_ITM_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_RCVNG_LN_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="PO_ID" size="9" type="DECIMAL"/>
+        <column name="CARI_CD" size="4" type="VARCHAR"/>
+        <column name="SHPMNT_PKNG_SLP_NBR" size="45" type="VARCHAR"/>
+        <column name="SHPMNT_REF_NBR" size="45" type="VARCHAR"/>
+        <column name="SHPMNT_BLL_OF_LDNG_NBR" size="45" type="VARCHAR"/>
+        <column name="SHPMNT_RCVD_DT" type="DATE"/>
+        <column name="VNDR_HDR_GNRTD_ID" size="10" type="DECIMAL"/>
+        <column name="VNDR_DTL_ASND_ID" size="10" type="DECIMAL"/>
+        <column name="VNDR_NM" size="45" type="VARCHAR"/>
+        <column name="VNDR_LN1_ADDR" size="45" type="VARCHAR"/>
+        <column name="VNDR_LN2_ADDR" size="45" type="VARCHAR"/>
+        <column name="VNDR_CTY_NM" size="45" type="VARCHAR"/>
+        <column name="VNDR_ST_CD" size="2" type="VARCHAR"/>
+        <column name="VNDR_PSTL_CD" size="20" type="VARCHAR"/>
+        <column name="VNDR_CNTRY_CD" size="2" type="VARCHAR"/>
+        <column name="DLVY_CMP_CD" size="2" type="VARCHAR"/>
+        <column name="DLVY_BLDG_CD" size="4" type="VARCHAR"/>
+        <column name="DLVY_BLDG_NM" size="45" type="VARCHAR"/>
+        <column name="DLVY_BLDG_RM_NBR" size="8" type="VARCHAR"/>
+        <column name="DLVY_BLDG_LN1_ADDR" size="45" type="VARCHAR"/>
+        <column name="DLVY_BLDG_LN2_ADDR" size="45" type="VARCHAR"/>
+        <column name="DLVY_CTY_NM" size="45" type="VARCHAR"/>
+        <column name="DLVY_ST_CD" size="2" type="VARCHAR"/>
+        <column name="DLVY_PSTL_CD" size="20" type="VARCHAR"/>
+        <column name="DLVY_CNTRY_CD" size="2" type="VARCHAR"/>
+        <column name="DLVY_TO_NM" size="45" type="VARCHAR"/>
+        <column name="DLVY_TO_EMAIL_ADDR" size="100" type="VARCHAR"/>
+        <column name="DLVY_TO_PHN_NBR" size="45" type="VARCHAR"/>
+        <column name="DLVY_REQ_DT" type="DATE"/>
+        <column name="DLVY_INSTRC_TXT" size="255" type="VARCHAR"/>
+        <column name="DLVY_REQ_DT_REAS_CD" size="4" type="VARCHAR"/>
+        <unique name="PUR_RCVNG_LN_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
