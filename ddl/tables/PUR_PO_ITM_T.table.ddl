@@ -28,7 +28,6 @@ CREATE TABLE PUR_PO_ITM_T(
         ITM_CATLG_NBR                  VARCHAR2(30),
         ITM_RCVD_TOT_QTY               NUMBER(11,2),
         ITM_DESC                       VARCHAR2(4000),
-        ITM_RTRN_TOT_QTY               NUMBER(11,2),
         ITM_CPTL_AST_NTE_TXT           VARCHAR2(800),
         ITM_UNIT_PRC                   NUMBER(19,4),
         ITM_OSTND_ENC_QTY              NUMBER(11,2),
@@ -40,6 +39,7 @@ CREATE TABLE PUR_PO_ITM_T(
         EXT_ORG_B2B_PROD_REF_NBR       VARCHAR2(19),
         EXT_ORG_B2B_PROD_TYP_NM        VARCHAR2(15),
         ITM_ASND_TO_TRADE_IN_IND       VARCHAR2(1),
+        ITM_DMGED_TOT_QTY              NUMBER(11,2),
      CONSTRAINT PUR_PO_ITM_TP1 PRIMARY KEY (
         FDOC_NBR,
         PO_ITM_ID),
