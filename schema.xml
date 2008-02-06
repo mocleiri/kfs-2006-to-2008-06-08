@@ -600,6 +600,8 @@
         <column name="CLOSE_PO_IND" size="1" type="VARCHAR"/>
         <column name="REOPEN_PO_IND" size="1" type="VARCHAR"/>
         <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
+        <column name="RCVNG_DOC_REQ_IND" size="1" type="VARCHAR"/>
+        <column name="PMT_RQST_PSTV_APRVL_IND" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="AP_PMT_RQST_STAT_T" name="AP_PMT_RQST_TR2">
             <reference foreign="PMT_RQST_STAT_CD" local="PMT_RQST_STAT_CD"/>
         </foreign-key>
@@ -1710,9 +1712,6 @@
         <foreign-key foreignTable="CA_RESTRICT_STAT_T" name="CA_ACCOUNT_TR8">
             <reference foreign="ACCT_RSTRC_STAT_CD" local="ACCT_RSTRC_STAT_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_SUB_FUND_GRP_T" name="CA_ACCOUNT_TR6">
-            <reference foreign="SUB_FUND_GRP_CD" local="SUB_FUND_GRP_CD"/>
-        </foreign-key>
         <foreign-key foreignTable="CA_ICR_TYPE_T" name="CA_ACCOUNT_TR15">
             <reference foreign="ACCT_ICR_TYP_CD" local="ACCT_ICR_TYP_CD"/>
         </foreign-key>
@@ -1720,29 +1719,55 @@
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="ORG_CD" local="ORG_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_ACCT_SF_T" name="CA_ACCOUNT_TR20">
-            <reference foreign="ACCT_SF_CD" local="ACCT_SF_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR12">
-            <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
-        </foreign-key>
         <foreign-key foreignTable="SH_CAMPUS_T" name="CA_ACCOUNT_TR4">
             <reference foreign="CAMPUS_CD" local="ACCT_PHYS_CMP_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_HIGHR_ED_FUNC_T" name="CA_ACCOUNT_TR7">
             <reference foreign="FIN_HGH_ED_FUNC_CD" local="FIN_HGH_ED_FUNC_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_BDGT_REC_LVL_T" name="CA_ACCOUNT_TR21">
-            <reference foreign="BDGT_REC_LVL_CD" local="BDGT_REC_LVL_CD"/>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR14">
+            <reference foreign="FIN_COA_CD" local="INCOME_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="INCOME_ACCOUNT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="SH_ZIP_CODE_T" name="CA_ACCOUNT_TR19">
             <reference foreign="POSTAL_ZIP_CD" local="ACCT_ZIP_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR1">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+        <foreign-key foreignTable="CA_SUB_FUND_GRP_T" name="CA_ACCOUNT_TR6">
+            <reference foreign="SUB_FUND_GRP_CD" local="SUB_FUND_GRP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCT_SF_T" name="CA_ACCOUNT_TR20">
+            <reference foreign="ACCT_SF_CD" local="ACCT_SF_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR12">
+            <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR10">
+            <reference foreign="FIN_COA_CD" local="CONT_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="CONT_ACCOUNT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_BDGT_REC_LVL_T" name="CA_ACCOUNT_TR21">
+            <reference foreign="BDGT_REC_LVL_CD" local="BDGT_REC_LVL_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR9">
+            <reference foreign="FIN_COA_CD" local="RPTS_TO_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="RPTS_TO_ACCT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ACCOUNT_TYPE_T" name="CA_ACCOUNT_TR3">
             <reference foreign="ACCT_TYP_CD" local="ACCT_TYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR1">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR16">
+            <reference foreign="FIN_COA_CD" local="ICR_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ICR_ACCOUNT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_STATE_T" name="CA_ACCOUNT_TR5">
+            <reference foreign="POSTAL_STATE_CD" local="ACCT_STATE_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR11">
+            <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ENDOW_ACCOUNT_NBR"/>
         </foreign-key>
         <unique name="CA_ACCOUNT_TC0">
             <unique-column name="OBJ_ID"/>
@@ -3764,6 +3789,13 @@
         <column name="AST_PRD12DEPR1_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="AST_PRD12DEPR2_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="AST_TRNFR_PMT_CD" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_PAYMENT_TR5">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="FS_ORIGIN_CODE_T" name="CM_AST_PAYMENT_TR11">
+            <reference foreign="FS_ORIGIN_CD" local="FS_ORIGIN_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_PAYMENT_TR1">
             <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
         </foreign-key>
@@ -3834,6 +3866,9 @@
             <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
             <reference foreign="UNIV_FISCAL_PRD_CD" local="FDOC_POST_PRD_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="FS_ORIGIN_CODE_T" name="CM_AST_PMT_DOC_TR10">
+            <reference foreign="FS_ORIGIN_CD" local="EXPND_FS_ORIGIN_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_PMT_DOC_TR8">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
@@ -3898,6 +3933,9 @@
         <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_RETIREDOC_TR2">
             <reference foreign="FIN_COA_CD" local="AST_RETIR_COA_CD"/>
             <reference foreign="ACCOUNT_NBR" local="AST_RETIR_ACCT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_RETIREDOC_TR5">
+            <reference foreign="FDOC_NBR" local="CASH_RCPT_FDOC_NBR"/>
         </foreign-key>
         <unique name="CM_AST_RETIREDOC_TC0">
             <unique-column name="OBJ_ID"/>
@@ -4005,6 +4043,11 @@
         <column name="AST_INVN_SCAN_CD" size="1" type="VARCHAR"/>
         <column name="AST_SIG_CD" size="1" type="VARCHAR"/>
         <column name="CPTL_AST_IN_SRVC_DT" type="DATE"/>
+        <foreign-key foreignTable="SH_ROOM_T" name="CM_CPTLAST_TR5">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+            <reference foreign="BLDG_ROOM_NBR" local="BLDG_ROOM_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_CPTLAST_TR16">
             <reference foreign="FDOC_NBR" local="TRNFR_FND_FDOC_NBR"/>
         </foreign-key>
@@ -4029,6 +4072,10 @@
         <foreign-key foreignTable="CM_AST_CONDITION_T" name="CM_CPTLAST_TR17">
             <reference foreign="CPTLAST_COND_CD" local="CPTLAST_COND_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="SH_BUILDING_T" name="CM_CPTLAST_TR12">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CM_AST_STATUS_T" name="CM_CPTLAST_TR18">
             <reference foreign="AST_INVN_STAT_CD" local="AST_INVN_STAT_CD"/>
         </foreign-key>
@@ -4039,8 +4086,15 @@
         <foreign-key foreignTable="CA_CHART_T" name="CM_CPTLAST_TR3">
             <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="SH_ACCT_PERIOD_T" name="CM_CPTLAST_TR11">
+            <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
+            <reference foreign="UNIV_FISCAL_PRD_CD" local="FDOC_POST_PRD_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CM_CPTLAST_TR9">
             <reference foreign="FIN_COA_CD" local="AST_INS_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_CPTLAST_TR15">
+            <reference foreign="FDOC_NBR" local="CASH_RCPT_FDOC_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CM_RETIRE_REAS_T" name="CM_CPTLAST_TR14">
             <reference foreign="AST_RETIRE_REAS_CD" local="AST_RETIRE_REAS_CD"/>
@@ -12807,7 +12861,6 @@
         <column name="ITM_CATLG_NBR" size="30" type="VARCHAR"/>
         <column name="ITM_RCVD_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="ITM_DESC" size="4000" type="VARCHAR"/>
-        <column name="ITM_RTRN_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="ITM_CPTL_AST_NTE_TXT" size="800" type="VARCHAR"/>
         <column name="ITM_UNIT_PRC" scale="4" size="19" type="DECIMAL"/>
         <column name="ITM_OSTND_ENC_QTY" scale="2" size="11" type="DECIMAL"/>
@@ -12819,6 +12872,7 @@
         <column name="EXT_ORG_B2B_PROD_REF_NBR" size="19" type="VARCHAR"/>
         <column name="EXT_ORG_B2B_PROD_TYP_NM" size="15" type="VARCHAR"/>
         <column name="ITM_ASND_TO_TRADE_IN_IND" size="1" type="VARCHAR"/>
+        <column name="ITM_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <foreign-key foreignTable="PUR_AP_CPTL_AST_TRN_TYP_T" name="PUR_PO_ITM_TR3">
             <reference foreign="CPTL_AST_TRN_TYP_CD" local="CPTL_AST_TRN_TYP_CD"/>
         </foreign-key>
@@ -13062,6 +13116,8 @@
         <column name="PO_1ST_TRNS_DT" type="DATE"/>
         <column name="AP_PUR_DOC_LNK_ID" size="10" type="DECIMAL"/>
         <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
+        <column name="RCVNG_DOC_REQ_IND" size="1" type="VARCHAR"/>
+        <column name="PMT_RQST_PSTV_APRVL_IND" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="CA_CHART_T" name="PUR_PO_TR13">
             <reference foreign="FIN_COA_CD" local="NON_INST_FND_ORG_COA_CD"/>
         </foreign-key>
@@ -13263,11 +13319,17 @@
         <column name="ITM_COR_RTRN_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="ITM_COR_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="ITM_REAS_ADD_CD" size="4" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_AP_ITM_TYP_T" name="PUR_RCVNG_COR_ITM_TR3">
+            <reference foreign="ITM_TYP_CD" local="ITM_TYP_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="PUR_RCVNG_COR_T" name="PUR_RCVNG_COR_ITM_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_ITM_REAS_ADD_T" name="PUR_RCVNG_COR_ITM_TR2">
             <reference foreign="ITM_REAS_ADD_CD" local="ITM_REAS_ADD_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_AP_UOM_T" name="PUR_RCVNG_COR_ITM_TR4">
+            <reference foreign="ITM_UOM_CD" local="ITM_UOM_CD"/>
         </foreign-key>
         <unique name="PUR_RCVNG_COR_ITM_TC0">
             <unique-column name="OBJ_ID"/>
@@ -13278,6 +13340,9 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="RCVNG_LN_FDOC_NBR" size="14" type="VARCHAR"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="PUR_RCVNG_COR_TR2">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="PUR_RCVNG_LN_T" name="PUR_RCVNG_COR_TR1">
             <reference foreign="FDOC_NBR" local="RCVNG_LN_FDOC_NBR"/>
         </foreign-key>
@@ -13301,11 +13366,17 @@
         <column name="ITM_RTRN_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="ITM_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="ITM_REAS_ADD_CD" size="4" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_AP_ITM_TYP_T" name="PUR_RCVNG_LN_ITM_TR3">
+            <reference foreign="ITM_TYP_CD" local="ITM_TYP_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="PUR_ITM_REAS_ADD_T" name="PUR_RCVNG_LN_ITM_TR2">
             <reference foreign="ITM_REAS_ADD_CD" local="ITM_REAS_ADD_CD"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_RCVNG_LN_T" name="PUR_RCVNG_LN_ITM_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_AP_UOM_T" name="PUR_RCVNG_LN_ITM_TR4">
+            <reference foreign="ITM_UOM_CD" local="ITM_UOM_CD"/>
         </foreign-key>
         <unique name="PUR_RCVNG_LN_ITM_TC0">
             <unique-column name="OBJ_ID"/>
@@ -13346,6 +13417,25 @@
         <column name="DLVY_REQ_DT" type="DATE"/>
         <column name="DLVY_INSTRC_TXT" size="255" type="VARCHAR"/>
         <column name="DLVY_REQ_DT_REAS_CD" size="4" type="VARCHAR"/>
+        <foreign-key foreignTable="SH_COUNTRY_T" name="PUR_RCVNG_LN_TR3">
+            <reference foreign="POSTAL_CNTRY_CD" local="VNDR_CNTRY_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_CARI_T" name="PUR_RCVNG_LN_TR4">
+            <reference foreign="CARI_CD" local="CARI_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_VNDR_DTL_T" name="PUR_RCVNG_LN_TR5">
+            <reference foreign="VNDR_HDR_GNRTD_ID" local="VNDR_HDR_GNRTD_ID"/>
+            <reference foreign="VNDR_DTL_ASND_ID" local="VNDR_DTL_ASND_ID"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="PUR_RCVNG_LN_TR2">
+            <reference foreign="CAMPUS_CD" local="DLVY_CMP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_DLVY_REQ_DT_REAS_T" name="PUR_RCVNG_LN_TR6">
+            <reference foreign="DLVY_REQ_DT_REAS_CD" local="DLVY_REQ_DT_REAS_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="PUR_RCVNG_LN_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
         <unique name="PUR_RCVNG_LN_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -13568,6 +13658,8 @@
         <column name="PO_AUTO_IND" size="1" type="VARCHAR"/>
         <column name="AP_PUR_DOC_LNK_ID" size="10" type="DECIMAL"/>
         <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
+        <column name="RCVNG_DOC_REQ_IND" size="1" type="VARCHAR"/>
+        <column name="PMT_RQST_PSTV_APRVL_IND" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="CA_CHART_T" name="PUR_REQS_TR13">
             <reference foreign="FIN_COA_CD" local="NON_INST_FND_ORG_COA_CD"/>
         </foreign-key>
@@ -14688,6 +14780,8 @@
     <sequence name="PO_STAT_HIST_ID" nextval="1002"/>
     <sequence name="PO_VNDR_QT_ID" nextval="1002"/>
     <sequence name="PO_VNDR_STPLTN_ID" nextval="1002"/>
+    <sequence name="RCVNG_COR_ITM_ID" nextval="1000"/>
+    <sequence name="RCVNG_LN_ITM_ID" nextval="1000"/>
     <sequence name="REQS_ACCT_ID" nextval="1003"/>
     <sequence name="REQS_ID" nextval="1003"/>
     <sequence name="REQS_ITM_CPTL_AST_ID" nextval="1002"/>
