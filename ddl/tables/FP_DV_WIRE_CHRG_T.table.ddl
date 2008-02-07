@@ -15,7 +15,7 @@
  */
 CREATE TABLE FP_DV_WIRE_CHRG_T(
         UNIV_FISCAL_YR                 NUMBER(4) CONSTRAINT FP_DV_WIRE_CHRG_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT FP_DV_WIRE_CHRG_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT FP_DV_WIRE_CHRG_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_DV_WIRE_CHRG_TN3 NOT NULL,
         FIN_COA_CD                     VARCHAR2(2),
         ACCOUNT_NBR                    VARCHAR2(7),

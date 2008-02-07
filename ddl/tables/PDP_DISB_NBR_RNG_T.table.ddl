@@ -1,6 +1,6 @@
 CREATE TABLE PDP_DISB_NBR_RNG_T(
         DISB_NBR_RNG_ID                NUMBER(8) CONSTRAINT PDP_DISB_NBR_RNG_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_DISB_NBR_RNG_TN3 NOT NULL, 
         BNK_ID                         NUMBER(8),
         PHYS_CMP_PROC_CD               VARCHAR2(2) CONSTRAINT PDP_DISB_NBR_RNG_TN4 NOT NULL,

@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PMT_GRP_HIST_T(
         PMT_GRP_HIST_ID                NUMBER(8) CONSTRAINT PDP_PMT_GRP_HIST_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PMT_GRP_HIST_TN3 NOT NULL, 
         PMT_CHG_CD                     VARCHAR2(4),
         PMT_CHG_NTE_TXT                VARCHAR2(250),

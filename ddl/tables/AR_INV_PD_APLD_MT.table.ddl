@@ -47,4 +47,3 @@ CREATE TABLE AR_INV_PD_APLD_MT(
 /
 
 
-	

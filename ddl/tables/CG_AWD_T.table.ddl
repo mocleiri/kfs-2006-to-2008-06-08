@@ -15,7 +15,7 @@
  */
 CREATE TABLE CG_AWD_T(
         CGPRPSL_NBR                    NUMBER(12) CONSTRAINT CG_AWD_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CG_AWD_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CG_AWD_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CG_AWD_TN3 NOT NULL,
         CGAWD_BEG_DT                   DATE,
         CGAWD_END_DT                   DATE,

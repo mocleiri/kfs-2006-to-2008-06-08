@@ -17,7 +17,7 @@ CREATE TABLE SH_ROOM_T(
         CAMPUS_CD                      VARCHAR2(2) CONSTRAINT SH_ROOM_TN1 NOT NULL,
         BLDG_CD                        VARCHAR2(10) CONSTRAINT SH_ROOM_TN2 NOT NULL,
         BLDG_ROOM_NBR                  VARCHAR2(8) CONSTRAINT SH_ROOM_TN3 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT SH_ROOM_TN4 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT SH_ROOM_TN4 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT SH_ROOM_TN5 NOT NULL,
         BLDG_ROOM_TYPE                 VARCHAR2(50),
         BLDG_ROOM_DEPT                 VARCHAR2(40),

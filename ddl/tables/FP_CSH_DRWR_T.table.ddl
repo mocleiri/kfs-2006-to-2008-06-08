@@ -15,7 +15,7 @@
  */
 CREATE TABLE FP_CSH_DRWR_T(
         WRKGRP_NM                      VARCHAR2(70) CONSTRAINT FP_CSH_DRWR_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT FP_CSH_DRWR_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT FP_CSH_DRWR_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_CSH_DRWR_TN3 NOT NULL,
         FDOC_OPEN_DPST_CD              VARCHAR2(1),
         CSH_DRWR_TOT_AMT               NUMBER(19, 2),

@@ -15,7 +15,7 @@
  */
 CREATE TABLE ER_RF_BDGT_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_BDGT_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_BDGT_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_RF_BDGT_TN3 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_BDGT_TN4 NOT NULL,
         RF_BDGT_MAX_PRD_NBR            NUMBER(2,0),
         RF_BDGT_MIN_PRD_NBR            NUMBER(2,0),

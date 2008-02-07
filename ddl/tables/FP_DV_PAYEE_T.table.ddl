@@ -15,7 +15,7 @@
  */
 CREATE TABLE FP_DV_PAYEE_T(
         DV_PAYEE_ID_NBR                VARCHAR2(10) CONSTRAINT FP_DV_PAYEE_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT FP_DV_PAYEE_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT FP_DV_PAYEE_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_DV_PAYEE_TN3 NOT NULL,
         DV_TAX_ID_NBR                  VARCHAR2(4000),
         DV_TXPYR_TYP_CD                CHAR(1),

@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PROC_T(
         PROC_ID                        NUMBER(8) CONSTRAINT PDP_PROC_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PROC_TN3 NOT NULL, 
         PHYS_CMP_CD                    VARCHAR2(2) CONSTRAINT PDP_PROC_TN4 NOT NULL,
         PROC_TS                        DATE CONSTRAINT PDP_PROC_TN5 NOT NULL,

@@ -15,7 +15,7 @@
  */
 CREATE TABLE FP_DV_NRA_TAX_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT FP_DV_NRA_TAX_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT FP_DV_NRA_TAX_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT FP_DV_NRA_TAX_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_DV_NRA_TAX_TN3 NOT NULL,
         FED_INC_TAX_PCT                NUMBER(5,2),
         ST_INC_TAX_PCT                 NUMBER(5,2),

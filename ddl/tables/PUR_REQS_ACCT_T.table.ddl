@@ -15,7 +15,7 @@
  */
 CREATE TABLE PUR_REQS_ACCT_T(
         REQS_ACCT_ID                   NUMBER(10) CONSTRAINT PUR_REQS_ACCT_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT PUR_REQS_ACCT_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT PUR_REQS_ACCT_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PUR_REQS_ACCT_TN3 NOT NULL,
         REQS_ITM_ID                    NUMBER(10),
         FIN_COA_CD                     VARCHAR2(2),

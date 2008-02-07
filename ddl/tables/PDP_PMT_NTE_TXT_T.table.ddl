@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PMT_NTE_TXT_T(
         PMT_NTE_ID                     NUMBER(8) CONSTRAINT PDP_PMT_NTE_TXT_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PMT_NTE_TXT_TN3 NOT NULL, 
         CUST_NTE_LN_NBR                NUMBER(2) CONSTRAINT PDP_PMT_NTE_TXT_TN4 NOT NULL,
         CUST_NTE_TXT                   VARCHAR2(90) CONSTRAINT PDP_PMT_NTE_TXT_TN5 NOT NULL,

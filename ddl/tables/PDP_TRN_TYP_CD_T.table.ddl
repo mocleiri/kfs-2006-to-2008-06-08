@@ -1,6 +1,6 @@
 CREATE TABLE PDP_TRN_TYP_CD_T(
         TRN_TYP_CD                     VARCHAR2(4) CONSTRAINT PDP_TRN_TYP_CD_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_TRN_TYP_CD_TN3 NOT NULL, 
         TRN_TYP_DESC                   VARCHAR2(25),
         LST_UPDT_TS                    DATE CONSTRAINT PDP_TRN_TYP_CD_TN4 NOT NULL,

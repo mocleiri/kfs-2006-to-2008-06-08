@@ -15,7 +15,7 @@
  */
 CREATE TABLE ER_BDGT_MOD_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_BDGT_MOD_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_BDGT_MOD_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_BDGT_MOD_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1,
         BDGT_MOD_INCRM_AMT             NUMBER(6,0),
         BDGT_MOD_TSK_NBR               NUMBER(2,0),

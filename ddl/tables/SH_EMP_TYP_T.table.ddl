@@ -15,7 +15,7 @@
  */
 CREATE TABLE SH_EMP_TYP_T(
         EMP_TYP_CD                     VARCHAR2(1) CONSTRAINT SH_EMP_TYP_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT SH_EMP_TYP_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT SH_EMP_TYP_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT SH_EMP_TYP_TN3 NOT NULL,
         EMP_TYP_DESC                   VARCHAR2(30),
         ROW_ACTV_IND                   VARCHAR2(1) CONSTRAINT SH_EMP_TYP_TN4 NOT NULL,

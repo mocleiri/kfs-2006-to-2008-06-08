@@ -15,7 +15,7 @@
  */
 CREATE TABLE CA_SUB_OBJ_CD_CHG_DOC_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT CA_SUB_OBJ_CD_CHG_DOC_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CA_SUB_OBJ_CD_CHG_DOC_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CA_SUB_OBJ_CD_CHG_DOC_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CA_SUB_OBJ_CD_CHG_DOC_TN3 NOT NULL,
         UNIV_FISCAL_YR                 NUMBER(4),
         FIN_COA_CD                     VARCHAR2(2),

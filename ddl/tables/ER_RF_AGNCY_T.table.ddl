@@ -15,7 +15,7 @@
  */
 CREATE TABLE ER_RF_AGNCY_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_AGNCY_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_AGNCY_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_RF_AGNCY_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_AGNCY_TN3 NOT NULL,
         AGNCY_ADDR_DESC                VARCHAR2(500),
         AGNCY_CNTCT_NM                 VARCHAR2(50),

@@ -1,6 +1,6 @@
 CREATE TABLE PDP_DOC_TYP_CD_T(
         DOC_TYP_ID                     NUMBER(8) CONSTRAINT PDP_DOC_TYP_CD_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_DOC_TYP_CD_TN3 NOT NULL, 
         DISB_TYP_CD                    VARCHAR2(4),
         FS_ORIGIN_CD                   VARCHAR2(2),

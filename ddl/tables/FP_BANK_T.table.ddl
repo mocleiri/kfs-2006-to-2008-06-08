@@ -15,7 +15,7 @@
  */
 CREATE TABLE FP_BANK_T(
         FDOC_BANK_CD                   VARCHAR2(4) CONSTRAINT FP_BANK_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT FP_BANK_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT FP_BANK_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_BANK_TN3 NOT NULL,
         FDOC_BANK_NM                   VARCHAR2(40),
         FDOC_BANK_SHRT_NM              VARCHAR2(12),

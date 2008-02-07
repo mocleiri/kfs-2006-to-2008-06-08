@@ -15,7 +15,7 @@
  */
 CREATE TABLE CA_RC_T(
         RC_CD                          VARCHAR2(2) CONSTRAINT CA_RC_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CA_RC_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CA_RC_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CA_RC_TN3 NOT NULL,
         RC_NM                          VARCHAR2(40),
         RC_SHRT_NM                     VARCHAR2(12),

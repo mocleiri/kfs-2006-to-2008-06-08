@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PMT_ACCT_HIST_T(
         PMT_ACCT_HIST_ID               NUMBER(8) CONSTRAINT PDP_PMT_ACCT_HIST_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PMT_ACCT_HIST_TN3 NOT NULL, 
         ACCTG_CHG_CD                   VARCHAR2(4),
         ACCT_ATTRIB_NM                 VARCHAR2(25),

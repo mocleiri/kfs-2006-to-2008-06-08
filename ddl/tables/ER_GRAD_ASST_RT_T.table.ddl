@@ -15,7 +15,7 @@
  */
 CREATE TABLE ER_GRAD_ASST_RT_T(
         CMP_CD                         VARCHAR2(2) CONSTRAINT ER_GRAD_ASST_RT_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_GRAD_ASST_RT_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_GRAD_ASST_RT_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1,
         CMP_MAX_PRD1_RT                NUMBER(6,2),
         CMP_MAX_PRD2_RT                NUMBER(6,2),

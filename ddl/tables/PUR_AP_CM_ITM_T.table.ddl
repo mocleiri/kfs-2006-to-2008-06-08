@@ -15,7 +15,7 @@
  */
 CREATE TABLE PUR_AP_CM_ITM_T(
         CM_ITM_ID                      NUMBER(10) CONSTRAINT PUR_AP_CM_ITM_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT PUR_AP_CM_ITM_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT PUR_AP_CM_ITM_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PUR_AP_CM_ITM_TN3 NOT NULL,
         CM_DOC_ID                      NUMBER(10) CONSTRAINT PUR_AP_CM_ITM_TN4 NOT NULL,
         ITM_LN_NBR                     NUMBER(3),

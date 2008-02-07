@@ -1,6 +1,6 @@
 CREATE TABLE PDP_CUST_PRFL_T(
         CUST_ID                        NUMBER(8) CONSTRAINT PDP_CUST_PRFL_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_CUST_PRFL_TN3 NOT NULL, 
         FIN_COA_CD                     VARCHAR2(2) CONSTRAINT PDP_CUST_PRFL_TN4 NOT NULL,
         ORG_CD                         VARCHAR2(4) CONSTRAINT PDP_CUST_PRFL_TN5 NOT NULL,

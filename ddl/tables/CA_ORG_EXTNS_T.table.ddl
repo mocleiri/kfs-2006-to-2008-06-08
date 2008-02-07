@@ -16,7 +16,7 @@
 CREATE TABLE CA_ORG_EXTNS_T(
         FIN_COA_CD                     VARCHAR2(2) CONSTRAINT CA_ORG_EXTNS_TN1 NOT NULL,
         ORG_CD                         VARCHAR2(4) CONSTRAINT CA_ORG_EXTNS_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CA_ORG_EXTNS_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CA_ORG_EXTNS_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CA_ORG_EXTNS_TN4 NOT NULL,
         DESCRSHORT                     VARCHAR2(10),
         COMPANY                        VARCHAR2(3),

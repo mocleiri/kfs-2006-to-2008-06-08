@@ -15,7 +15,7 @@
  */
 CREATE TABLE CG_CFDA_REF_T(
         CG_CFDA_NBR                    VARCHAR2(6) CONSTRAINT CG_CFDA_REF_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CG_CFDA_REF_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CG_CFDA_REF_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CG_CFDA_REF_TN3 NOT NULL,
         CG_CFDA_PGM_TTL_NM             VARCHAR2(300),
         CG_CFDA_STAT_CD                VARCHAR2(1),

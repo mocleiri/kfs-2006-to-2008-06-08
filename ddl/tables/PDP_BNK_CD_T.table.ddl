@@ -1,6 +1,6 @@
 CREATE TABLE PDP_BNK_CD_T(
         BNK_ID                         NUMBER(8) CONSTRAINT PDP_BNK_CD_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_BNK_CD_TN3 NOT NULL, 
         BNK_DESC                       VARCHAR2(25) CONSTRAINT PDP_BNK_CD_TN4 NOT NULL,
         BNK_NM                         VARCHAR2(25) CONSTRAINT PDP_BNK_CD_TN5 NOT NULL,

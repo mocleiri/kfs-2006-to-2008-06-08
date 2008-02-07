@@ -16,7 +16,7 @@
 CREATE TABLE PUR_PO_ITM_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT PUR_PO_ITM_TN1 NOT NULL,
         PO_ITM_ID                      NUMBER(10) CONSTRAINT PUR_PO_ITM_TN2 NOT NULL, 
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT PUR_PO_ITM_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT PUR_PO_ITM_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PUR_PO_ITM_TN4 NOT NULL,
         ITM_LN_NBR                     NUMBER(3),
         ITM_TYP_CD                     VARCHAR2(4),

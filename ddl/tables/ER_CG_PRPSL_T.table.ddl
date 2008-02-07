@@ -15,7 +15,7 @@
  */
 CREATE TABLE ER_CG_PRPSL_T(
         RDOC_NBR         	           VARCHAR2(14) CONSTRAINT ER_CG_PRPSL_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_CG_PRPSL_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_CG_PRPSL_TN2 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_CG_PRPSL_TN3 NOT NULL,
         CGPRPSL_NBR       	           NUMBER(12,0),
         CGPRPSL_CRTE_DT   	           DATE,

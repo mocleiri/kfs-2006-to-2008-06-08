@@ -1,6 +1,6 @@
 CREATE TABLE PDP_CUST_BNK_T(
         CUST_BNK_ID                    NUMBER(8) CONSTRAINT PDP_CUST_BNK_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_CUST_BNK_TN3 NOT NULL, 
         CUST_ID                        NUMBER(8),
         BNK_ID                         NUMBER(8),

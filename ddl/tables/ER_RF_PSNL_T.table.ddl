@@ -16,7 +16,7 @@
 CREATE TABLE ER_RF_PSNL_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_PSNL_TN1 NOT NULL,
         RF_PRSN_SEQ_NBR                NUMBER(3,0) CONSTRAINT ER_RF_PSNL_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_PSNL_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_RF_PSNL_TN3 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_PSNL_TN4 NOT NULL,
         PRSN_UNVL_ID                   VARCHAR2(10),
         COA_CD                         VARCHAR2(2),

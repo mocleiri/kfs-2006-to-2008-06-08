@@ -16,7 +16,7 @@
 CREATE TABLE CA_ACCT_DESC_T(
         FIN_COA_CD                     VARCHAR2(2) CONSTRAINT CA_ACCT_DESC_TN1 NOT NULL,
         ACCOUNT_NBR                    VARCHAR2(7) CONSTRAINT CA_ACCT_DESC_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CA_ACCT_DESC_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CA_ACCT_DESC_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CA_ACCT_DESC_TN4 NOT NULL,
         CAMPUS_DESC                    VARCHAR2(40),
         ORG_DESC                       VARCHAR2(40),

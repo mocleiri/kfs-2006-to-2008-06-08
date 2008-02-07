@@ -15,7 +15,7 @@
  */
 CREATE TABLE FP_DV_PAYEE_DTL_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT FP_DV_PAYEE_DTL_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT FP_DV_PAYEE_DTL_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT FP_DV_PAYEE_DTL_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_DV_PAYEE_DTL_TN3 NOT NULL,
         DV_PMT_REAS_CD                 VARCHAR2(1),
         DV_ALIEN_PMT_IND               CHAR(1),

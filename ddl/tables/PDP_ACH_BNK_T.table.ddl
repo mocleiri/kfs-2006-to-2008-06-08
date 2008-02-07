@@ -1,6 +1,6 @@
 CREATE TABLE PDP_ACH_BNK_T(
         BNK_RTNG_NBR                   VARCHAR2(9) CONSTRAINT PDP_ACH_BNK_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_ACH_BNK_TN3 NOT NULL,
         BNK_OFFC_CD                    VARCHAR2(1),
         BNK_SRVC_NBR                   VARCHAR2(9),

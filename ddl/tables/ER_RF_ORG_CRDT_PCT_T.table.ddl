@@ -17,7 +17,7 @@ CREATE TABLE ER_RF_ORG_CRDT_PCT_T(
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_ORG_CRDT_PCT_TN1 NOT NULL,
         COA_CD                         VARCHAR2(2) CONSTRAINT ER_RF_ORG_CRDT_PCT_TN2 NOT NULL,
         ORG_CD                         VARCHAR2(4) CONSTRAINT ER_RF_ORG_CRDT_PCT_TN3 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_ORG_CRDT_PCT_TN4 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_RF_ORG_CRDT_PCT_TN4 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_ORG_CRDT_PCT_TN5 NOT NULL,
         ORG_CRDT_PCT                   NUMBER(3,2),
         ORG_FA_PCT                     NUMBER(3,2),

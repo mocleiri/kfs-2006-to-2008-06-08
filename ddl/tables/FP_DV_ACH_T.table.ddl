@@ -15,7 +15,7 @@
  */
 CREATE TABLE FP_DV_ACH_T(
         DV_ACH_PRFL_NBR                VARCHAR2(3) CONSTRAINT FP_DV_ACH_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT FP_DV_ACH_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT FP_DV_ACH_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_DV_ACH_TN3 NOT NULL,
         DV_PMT_MTHD_CD                 VARCHAR2(1),
         DV_BNK_NM                      VARCHAR2(40),

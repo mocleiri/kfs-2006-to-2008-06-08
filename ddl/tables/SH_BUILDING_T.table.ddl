@@ -16,7 +16,7 @@
 CREATE TABLE SH_BUILDING_T(
         CAMPUS_CD                      VARCHAR2(2) CONSTRAINT SH_BUILDING_TN1 NOT NULL,
         BLDG_CD                        VARCHAR2(10) CONSTRAINT SH_BUILDING_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT SH_BUILDING_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT SH_BUILDING_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT SH_BUILDING_TN4 NOT NULL,
         BLDG_NM                        VARCHAR2(40),
         BLDG_STR_ADDR                  VARCHAR2(40),

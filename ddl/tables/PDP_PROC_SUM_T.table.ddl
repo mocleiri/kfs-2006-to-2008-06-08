@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PROC_SUM_T(
         PROC_SUM_ID                    NUMBER(8) CONSTRAINT PDP_PROC_SUM_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PROC_SUM_TN3 NOT NULL, 
         DISB_TYP_CD                    VARCHAR2(4) CONSTRAINT PDP_PROC_SUM_TN4 NOT NULL,
         PMT_SORT_ORD_VAL               VARCHAR2(1) CONSTRAINT PDP_PROC_SUM_TN5 NOT NULL,

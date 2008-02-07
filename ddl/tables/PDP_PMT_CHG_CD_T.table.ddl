@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PMT_CHG_CD_T(
         PMT_CHG_CD                     VARCHAR2(4) CONSTRAINT PDP_PMT_CHG_CD_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PMT_CHG_CD_TN3 NOT NULL, 
         PMT_CHG_CD_DESC                VARCHAR2(50) CONSTRAINT PDP_PMT_CHG_CD_TN4 NOT NULL,
         LST_UPDT_TS                    DATE CONSTRAINT PDP_PMT_CHG_CD_TN5 NOT NULL,

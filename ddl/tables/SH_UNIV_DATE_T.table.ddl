@@ -15,7 +15,7 @@
  */
 CREATE TABLE SH_UNIV_DATE_T(
         UNIV_DT                        DATE CONSTRAINT SH_UNIV_DATE_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT SH_UNIV_DATE_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT SH_UNIV_DATE_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT SH_UNIV_DATE_TN3 NOT NULL,
         UNIV_FISCAL_YR                 NUMBER(4),
         UNIV_FISCAL_PRD_CD             VARCHAR2(2),

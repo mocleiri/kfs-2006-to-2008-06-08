@@ -1,6 +1,6 @@
 CREATE TABLE PDP_ACH_ACCT_NBR_T(
         PMT_GRP_ID                     NUMBER(8) CONSTRAINT PDP_ACH_ACCT_NBR_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_ACH_ACCT_NBR_TN3 NOT NULL, 
         ACH_BNK_ACCT_NBR               VARCHAR2(255),
         LST_UPDT_TS                    DATE CONSTRAINT PDP_ACH_ACCT_NBR_TN4 NOT NULL, 

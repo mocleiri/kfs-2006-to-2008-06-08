@@ -15,7 +15,7 @@
  */
 CREATE TABLE GL_COR_DOC_T(
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT GL_COR_DOC_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT GL_COR_DOC_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT GL_COR_DOC_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT GL_COR_DOC_TN3 NOT NULL,
         GL_COR_TYP_CD                  VARCHAR2(1),
         GL_COR_SELECT_IND              CHAR(1),

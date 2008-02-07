@@ -15,7 +15,7 @@
  */
 CREATE TABLE PUR_REQS_T(
         REQS_ID                        NUMBER(8) CONSTRAINT PUR_REQS_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT PUR_REQS_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT PUR_REQS_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PUR_REQS_TN3 NOT NULL,
         FDOC_NBR                       VARCHAR2(14) CONSTRAINT PUR_REQS_TN4 NOT NULL,
         FND_SRC_CD                     VARCHAR2(4),

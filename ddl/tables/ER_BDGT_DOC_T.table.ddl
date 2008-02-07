@@ -17,7 +17,7 @@ CREATE TABLE ER_BDGT_DOC_T    (
 	    FDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_BDGT_DOC_TN1 NOT NULL,
 	    BDGT_TSK_NXT_SEQ_NBR           NUMBER(2),
 	    BDGT_PRD_NXT_SEQ_NBR           NUMBER(2),
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_BDGT_DOC_TN2 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_BDGT_DOC_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT ER_BDGT_DOC_TN3 NOT NULL,
         PSNL_NXT_SEQ_NBR               NUMBER(2),
 	    NPRS_NXT_SEQ_NBR               NUMBER(2),

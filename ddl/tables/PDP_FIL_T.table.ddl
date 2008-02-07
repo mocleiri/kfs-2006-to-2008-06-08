@@ -1,6 +1,6 @@
 CREATE TABLE PDP_FIL_T(
         PMT_FIL_ID                     NUMBER(8) CONSTRAINT PDP_FIL_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_FIL_TN3 NOT NULL, 
         PMT_FL_NM                      VARCHAR2(30),
         CUST_FL_CRTN_TS                DATE,

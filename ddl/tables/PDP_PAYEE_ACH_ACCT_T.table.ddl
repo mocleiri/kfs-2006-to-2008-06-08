@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PAYEE_ACH_ACCT_T(
         ACH_ACCT_GNRTD_ID              NUMBER(10) CONSTRAINT PDP_PAYEE_ACH_ACCT_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PAYEE_ACH_ACCT_TN3 NOT NULL,
         BNK_RTNG_NBR                   VARCHAR2(9),
         BNK_ACCT_NBR                   VARCHAR2(255), 

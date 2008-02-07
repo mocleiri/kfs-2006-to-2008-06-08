@@ -16,7 +16,7 @@
 CREATE TABLE CA_PRIOR_YR_ORG_T(
         FIN_COA_CD                     VARCHAR2(2) CONSTRAINT CA_PRIOR_YR_ORG_TN1 NOT NULL,
         ORG_CD                         VARCHAR2(4) CONSTRAINT CA_PRIOR_YR_ORG_TN2 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT CA_PRIOR_YR_ORG_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT CA_PRIOR_YR_ORG_TN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT CA_PRIOR_YR_ORG_TN4 NOT NULL,
         ORG_MGR_UNVL_ID                VARCHAR2(10),
         ORG_NM                         VARCHAR2(40),

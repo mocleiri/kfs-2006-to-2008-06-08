@@ -1,6 +1,6 @@
 CREATE TABLE PDP_PMT_GRP_T(
         PMT_GRP_ID                     NUMBER(8) CONSTRAINT PDP_PMT_GRP_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID(),
+        OBJ_ID                         VARCHAR2(36),
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PDP_PMT_GRP_TN3 NOT NULL, 
         PMT_PAYEE_NM                   VARCHAR2(40),
         DISB_NBR                       NUMBER(9),

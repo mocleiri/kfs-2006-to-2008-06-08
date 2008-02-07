@@ -17,7 +17,7 @@ CREATE TABLE ER_RF_ORG_T(
         FIN_COA_CD                     VARCHAR2(2) CONSTRAINT ER_RF_ORG_TN1 NOT NULL,
         ORG_CD                         VARCHAR2(4) CONSTRAINT ER_RF_ORG_TN2 NOT NULL,
         RDOC_NBR                       VARCHAR2(14) CONSTRAINT ER_RF_ORG_TN3 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) DEFAULT SYS_GUID() CONSTRAINT ER_RF_ORG_TN4 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT ER_RF_ORG_TN4 NOT NULL,
         VER_NBR                        NUMBER(8,0) DEFAULT 1 CONSTRAINT ER_RF_ORG_TN5 NOT NULL,
         BDGT_IND                       VARCHAR2(1),
         RF_PRM_ORG_IND                 VARCHAR2(1),
