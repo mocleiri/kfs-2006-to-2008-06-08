@@ -205,16 +205,16 @@ UPDATE en_appl_cnst_t
   
 -- remove rules with IU data
 DELETE 
-    FROM KULBOOTSTRAP.EN_RULE_BASE_VAL_T
+    FROM EN_RULE_BASE_VAL_T
     WHERE rule_tmpl_id IN (
         SELECT RULE_TMPL_ID
-            FROM KULBOOTSTRAP.EN_RULE_TMPL_T
+            FROM EN_RULE_TMPL_T
             WHERE RULE_TMPL_ID IN (
                 SELECT RULE_TMPL_ID
-                    FROM KULBOOTSTRAP.EN_RULE_TMPL_ATTRIB_T
+                    FROM EN_RULE_TMPL_ATTRIB_T
                     WHERE RULE_ATTRIB_ID IN ( 
                         SELECT rule_attrib_id 
-                            FROM KULBOOTSTRAP.EN_RULE_ATTRIB_T
+                            FROM EN_RULE_ATTRIB_T
                             WHERE RULE_ATTRIB_NM LIKE '%Campus%'
                                OR RULE_ATTRIB_NM LIKE '%Content%'
                                OR RULE_ATTRIB_NM LIKE '%HigherEd%'
@@ -237,6 +237,14 @@ DELETE FROM EN_RULE_EXT_T
 /
 DELETE FROM EN_RULE_EXT_VAL_T 
     WHERE RULE_EXT_ID NOT IN ( SELECT RULE_EXT_ID FROM EN_RULE_EXT_T )
+/
+DELETE FROM en_rule_rsp_t
+    WHERE RULE_BASE_VAL_ID NOT IN ( SELECT RULE_BASE_VAL_ID FROM EN_RULE_BASE_VAL_T )
+/
+-- Clean up person responsibility references
+UPDATE en_rule_rsp_t
+    SET RULE_RSP_NM = 'KULUSER'
+    WHERE rule_rsp_typ = 'F'
 /
 
 DELETE
