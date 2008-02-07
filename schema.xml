@@ -4217,6 +4217,9 @@
         <foreign-key foreignTable="SH_STATE_T" name="CM_MULT_AST_DTL_TR4">
             <reference foreign="POSTAL_STATE_CD" local="AST_OFFCMP_ST_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="SH_COUNTRY_T" name="CM_MULT_AST_DTL_TR6">
+            <reference foreign="POSTAL_CNTRY_CD" local="AST_OFFCMP_CNTRY_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="SH_ROOM_T" name="CM_MULT_AST_DTL_TR3">
             <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
             <reference foreign="BLDG_CD" local="BLDG_CD"/>
