@@ -11,6 +11,8 @@ CREATE TABLE CM_PRTG_DTL_T(
         BLDG_ROOM_NBR                  VARCHAR2(8),
         BLDG_SUB_ROOM_NBR              VARCHAR2(2),
         AST_PRTGTAG_CRT_DT             DATE,
+        CPTL_AST_GOV_TAG_NBR           VARCHAR2(12),
+        CPTL_AST_NTL_STOCK_NBR         VARCHAR2(25),
      CONSTRAINT CM_PRTG_DTL_TP1 PRIMARY KEY (
         PO_NUMBER,
         LINE_ITEM_NUMBER,
