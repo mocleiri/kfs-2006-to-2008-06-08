@@ -3692,6 +3692,44 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="CM_AST_COMPONENT_T">
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="CACMP_NBR" primaryKey="true" size="5" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CACMP_DESC" size="255" type="VARCHAR"/>
+        <column name="CACMP_CNTCTPHN_NBR" size="10" type="VARCHAR"/>
+        <column name="CACMP_COND_CD" size="1" type="VARCHAR"/>
+        <column name="CACMP_EST_LFTM_LMT" size="5" type="DECIMAL"/>
+        <column name="CACMP_MFR_NM" size="40" type="VARCHAR"/>
+        <column name="CACMP_MFR_MDL_NBR" size="25" type="VARCHAR"/>
+        <column name="CACMP_SERIAL_NBR" size="25" type="VARCHAR"/>
+        <column name="CACMP_ORG_TAG_NBR" size="8" type="VARCHAR"/>
+        <column name="CACMP_ORG_TXT" size="255" type="VARCHAR"/>
+        <column name="CACMP_REPLACE_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="CACMP_VENDOR_NM" size="40" type="VARCHAR"/>
+        <column name="CACMP_WRNTY_NBR" size="25" type="VARCHAR"/>
+        <column name="CACMP_WRNTYPHN_NBR" size="13" type="VARCHAR"/>
+        <column name="CACMP_WRNTYCNTC_NM" size="40" type="VARCHAR"/>
+        <column name="CACMP_WRNTY_PO_NBR" size="9" type="VARCHAR"/>
+        <column name="CACMP_WRNTY_BEG_DT" type="DATE"/>
+        <column name="CACMP_WRNTY_END_DT" type="DATE"/>
+        <column name="CACMP_WRNTY_TXT" size="40" type="VARCHAR"/>
+        <column name="CPTL_AST_GOV_TAG_NBR" size="12" type="VARCHAR"/>
+        <column name="CPTL_AST_NTL_STOCK_NBR" size="25" type="VARCHAR"/>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_COMPONENT_TR1">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_AST_CONDITION_T" name="CM_AST_COMPONENT_TR2">
+            <reference foreign="CPTLAST_COND_CD" local="CACMP_COND_CD"/>
+        </foreign-key>
+        <unique name="CM_AST_COMPONENT_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+        <index name="CM_AST_COMPONENT_TI2">
+            <index-column name="CACMP_COND_CD"/>
+        </index>
+    </table>
     <table name="CM_AST_CONDITION_T">
         <column name="CPTLAST_COND_CD" primaryKey="true" size="1" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -4043,6 +4081,8 @@
         <column name="AST_INVN_SCAN_CD" size="1" type="VARCHAR"/>
         <column name="AST_SIG_CD" size="1" type="VARCHAR"/>
         <column name="CPTL_AST_IN_SRVC_DT" type="DATE"/>
+        <column name="CPTL_AST_GOV_TAG_NBR" size="12" type="VARCHAR"/>
+        <column name="CPTL_AST_NTL_STOCK_NBR" size="25" type="VARCHAR"/>
         <foreign-key foreignTable="SH_ROOM_T" name="CM_CPTLAST_TR5">
             <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
             <reference foreign="BLDG_CD" local="BLDG_CD"/>
@@ -4248,6 +4288,8 @@
         <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
         <column name="BLDG_SUB_ROOM_NBR" size="2" type="VARCHAR"/>
         <column name="AST_PRTGTAG_CRT_DT" type="DATE"/>
+        <column name="CPTL_AST_GOV_TAG_NBR" size="12" type="VARCHAR"/>
+        <column name="CPTL_AST_NTL_STOCK_NBR" size="25" type="VARCHAR"/>
         <foreign-key foreignTable="CM_PRTG_T" name="CM_PRTG_DTL_TR4">
             <reference foreign="PO_NUMBER" local="PO_NUMBER"/>
             <reference foreign="LINE_ITEM_NUMBER" local="LINE_ITEM_NUMBER"/>
@@ -7163,6 +7205,7 @@
         <column name="FDOC_TMPL_NBR" size="14" type="VARCHAR"/>
         <column name="TEMP_DOC_FNL_DT" type="DATE"/>
         <column name="FDOC_EXPLAIN_TXT" size="400" type="VARCHAR"/>
+        <column name="FDOC_TYP_CD" size="4" type="VARCHAR"/>
         <unique name="FP_DOC_HEADER_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -14795,7 +14838,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2160"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317740"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317760"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -14803,7 +14846,7 @@
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5831"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12956"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12976"/>
     <sequence name="SEQ_RTE_NODE" nextval="563357929"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2040"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
