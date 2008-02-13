@@ -4424,4 +4424,31 @@
         SH_PARM_NM="DEFAULT_NON_QUANTITY_ITEM_TYPE"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="SVRC"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_PURAP_PURCHASING"/>
+    <SH_PARM_T OBJ_ID="46013F441780B4B0E0404F8189D82BCD"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The number of days after which an electronic payment record will no longer be available for claiming."
+        SH_PARM_DTL_TYP_CD="ElectronicPaymentClaim"
+        SH_PARM_NM="ELECTRONIC_FUNDS_CLAIM_EXPIRATION_DAYS"
+        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="60"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="46013F441781B4B0E0404F8189D82BCD"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The chart and account codes which specify that an accounting line in an Advance Deposit document is an electronic payment."
+        SH_PARM_DTL_TYP_CD="AdvanceDeposit"
+        SH_PARM_NM="ELECTRONIC_FUNDS_ACCOUNTS" SH_PARM_NMSPC_CD="KFS-FP"
+        SH_PARM_TXT="UA=9323000" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="46013F441782B4B0E0404F8189D82BCD"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The wording that should go in the description field for a DI document that claims electronic funds."
+        SH_PARM_DTL_TYP_CD="DistributionOfIncomeAndExpense"
+        SH_PARM_NM="ELECTRONIC_FUNDS_DOCUMENT_DESCRIPTION"
+        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="Electronic Payment Claim"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="46013F441783B4B0E0404F8189D82BCD"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The name of the workgroup all claimants of electronic payments should members of"
+        SH_PARM_DTL_TYP_CD="ElectronicPaymentClaim"
+        SH_PARM_NM="ELECTRONIC_FUNDS_CLAIMANT_GROUP"
+        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="ECLAIM"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
 </dataset>
