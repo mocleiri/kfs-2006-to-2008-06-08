@@ -4451,4 +4451,11 @@
         SH_PARM_NM="ELECTRONIC_FUNDS_CLAIMANT_GROUP"
         SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="ECLAIM"
         SH_PARM_TYP_CD="AUTH" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="460BF64AED739F0AE0404F8189D8499E"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Indicator whether the distribute accounts functionality should perform validations upon the addition of a new accounting line to the distribution account list."
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="VALIDATE_ACCOUNT_DISTRIBUTION_IND"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_PURAP_PURCHASING"/>
 </dataset>
