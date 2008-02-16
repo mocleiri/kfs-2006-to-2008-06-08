@@ -3750,6 +3750,21 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="CM_AST_DISP_T">
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="CPTLAST_DISP_CD" primaryKey="true" size="2" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="AST_DISP_ORGN_CD" size="2" type="VARCHAR"/>
+        <column name="AST_ORIG_AST_NBR" size="12" type="DECIMAL"/>
+        <column name="CPTLAST_DISP_DT" type="DATE"/>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_DISP_TR1">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+        </foreign-key>
+        <unique name="CM_AST_DISP_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CM_AST_LOC_TYP_T">
         <column name="CPTLAST_LOC_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -3982,6 +3997,25 @@
             <index-column name="AST_RETIRE_REAS_CD"/>
         </index>
     </table>
+    <table name="CM_AST_RPR_HIST_T">
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="CPTLAST_INCIDNT_DT" primaryKey="true" type="DATE"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTLAST_PRBLM_DESC" size="255" type="VARCHAR"/>
+        <column name="CPTLAST_RPRCNTC_NM" size="40" type="VARCHAR"/>
+        <column name="CPTLAST_RPR_NT_TXT" size="255" type="VARCHAR"/>
+        <column name="CPTLAST_EST_RPR_DT" type="DATE"/>
+        <column name="CPTLAST_RPR_DT" type="DATE"/>
+        <column name="CPTLAST_RPR_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="AST_RPR_SOLN_DESC" size="255" type="VARCHAR"/>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_RPR_HIST_TR1">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+        </foreign-key>
+        <unique name="CM_AST_RPR_HIST_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CM_AST_STATUS_T">
         <column name="AST_INVN_STAT_CD" primaryKey="true" size="1" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -3989,6 +4023,24 @@
         <column name="AST_INVN_STAT_NM" size="40" type="VARCHAR"/>
         <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="CM_AST_STATUS_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="CM_AST_WRNTY_T">
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="AST_WRNTY_CNTCT_NM" size="40" type="VARCHAR"/>
+        <column name="AST_WRNTYPHN_NBR" size="13" type="VARCHAR"/>
+        <column name="AST_WRNTY_BEG_DT" type="DATE"/>
+        <column name="AST_WRNTY_END_DT" type="DATE"/>
+        <column name="AST_WRNTY_NBR" size="25" type="VARCHAR"/>
+        <column name="AST_WRNTY_PO_NBR" size="9" type="VARCHAR"/>
+        <column name="AST_WRNTY_TXT" size="40" type="VARCHAR"/>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_WRNTY_TR1">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+        </foreign-key>
+        <unique name="CM_AST_WRNTY_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -14838,7 +14890,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317880"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317920"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
