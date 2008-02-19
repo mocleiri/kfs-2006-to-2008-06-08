@@ -4135,6 +4135,9 @@
         <column name="CPTL_AST_IN_SRVC_DT" type="DATE"/>
         <column name="CPTL_AST_GOV_TAG_NBR" size="12" type="VARCHAR"/>
         <column name="CPTL_AST_NTL_STOCK_NBR" size="25" type="VARCHAR"/>
+        <column name="CPTL_AST_LAND_CNTY_NM" size="20" type="VARCHAR"/>
+        <column name="CPTL_AST_LAND_ACRG_SZ" size="7" type="DECIMAL"/>
+        <column name="CPTL_AST_LAND_PRCL_NBR" size="30" type="VARCHAR"/>
         <foreign-key foreignTable="SH_ROOM_T" name="CM_CPTLAST_TR5">
             <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
             <reference foreign="BLDG_CD" local="BLDG_CD"/>
@@ -14890,7 +14893,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317920"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317940"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>

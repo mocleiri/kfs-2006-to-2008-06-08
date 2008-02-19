@@ -4472,14 +4472,14 @@
     <SH_PARM_T OBJ_ID="46389AEC901EB664E0404F8189D80DC2"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator related default document titles. Set to &quot;N&quot; if accepting the Kuali default document title, related to Purchase Order, as listed in the Document Search results."
-        SH_PARM_DTL_TYP_CD="Purchase Order"
+        SH_PARM_DTL_TYP_CD="PurchaseOrder"
         SH_PARM_NM="OVERRIDE_DOCUMENT_TITLE_IND"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="46389AEC901FB664E0404F8189D80DC2"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator related default document titles. Set to &quot;N&quot; if accepting the Kuali default document title, related to Credit Memo, as listed in the Document Search results."
-        SH_PARM_DTL_TYP_CD="Credit Memo"
+        SH_PARM_DTL_TYP_CD="CreditMemo"
         SH_PARM_NM="OVERRIDE_DOCUMENT_TITLE_IND"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
