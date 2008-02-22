@@ -3740,6 +3740,18 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="CM_AST_DEPR_CNVNTN_T">
+        <column name="FIN_OBJ_SUB_TYPE_CD" primaryKey="true" size="2" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTL_AST_DEPR_CNVNTN_CD" size="2" type="VARCHAR"/>
+        <foreign-key foreignTable="CA_OBJ_SUB_TYPE_T" name="CM_AST_DEPR_CNVNTN_TR1">
+            <reference foreign="FIN_OBJ_SUB_TYP_CD" local="FIN_OBJ_SUB_TYPE_CD"/>
+        </foreign-key>
+        <unique name="CM_AST_DEPR_CNVNTN_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CM_AST_DEPR_MTHD_T">
         <column name="AST_DEPR_METHOD_CD" primaryKey="true" size="3" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -4026,6 +4038,66 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="CM_AST_TRNFR_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="AST_REP_UNVL_ID" size="10" type="VARCHAR"/>
+        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
+        <column name="BLDG_CD" size="10" type="VARCHAR"/>
+        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
+        <column name="BLDG_SUB_ROOM_NBR" size="2" type="VARCHAR"/>
+        <column name="CPTLAST_ORGTAG_NBR" size="8" type="VARCHAR"/>
+        <column name="ORG_OWNER_COA_CD" size="2" type="VARCHAR"/>
+        <column name="ORG_OWNER_ACCT_NBR" size="7" type="VARCHAR"/>
+        <column name="ORG_TXT" size="255" type="VARCHAR"/>
+        <column name="ORG_INVN_NM" size="40" type="VARCHAR"/>
+        <column name="TRNFR_FND_FDOC_NBR" size="14" type="VARCHAR"/>
+        <column name="ORG_CD" size="4" type="VARCHAR"/>
+        <column name="AST_OFFCMP_ADDR" size="30" type="VARCHAR"/>
+        <column name="AST_OFFCMP_CITY_NM" size="25" type="VARCHAR"/>
+        <column name="AST_OFFCMP_ST_CD" size="2" type="VARCHAR"/>
+        <column name="AST_OFFCMP_ZIP_CD" size="9" type="VARCHAR"/>
+        <column name="AST_INTRDPTSALE_CD" size="1" type="CHAR"/>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_TRNFR_DOC_TR3">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ORG_OWNER_ACCT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_TRNFR_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ORG_T" name="CM_AST_TRNFR_DOC_TR5">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+            <reference foreign="ORG_CD" local="ORG_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_ROOM_T" name="CM_AST_TRNFR_DOC_TR9">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+            <reference foreign="BLDG_ROOM_NBR" local="BLDG_ROOM_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_STATE_T" name="CM_AST_TRNFR_DOC_TR7">
+            <reference foreign="POSTAL_STATE_CD" local="AST_OFFCMP_ST_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="CM_AST_TRNFR_DOC_TR2">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="CM_AST_TRNFR_DOC_TR4">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_TRNFR_DOC_TR6">
+            <reference foreign="FDOC_NBR" local="TRNFR_FND_FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_BUILDING_T" name="CM_AST_TRNFR_DOC_TR8">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+        </foreign-key>
+        <unique name="CM_AST_TRNFR_DOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+        <index name="CM_AST_TRNFR_DOC_TI2">
+            <index-column name="AST_REP_UNVL_ID"/>
+        </index>
+    </table>
     <table name="CM_AST_WRNTY_T">
         <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -4043,6 +4115,49 @@
         <unique name="CM_AST_WRNTY_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
+    </table>
+    <table name="CM_CPTLAST_HDR_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTLAST_NBR" size="12" type="DECIMAL"/>
+        <column name="AST_REP_UNVL_ID" size="10" type="VARCHAR"/>
+        <column name="ORG_OWNER_COA_CD" size="2" type="VARCHAR"/>
+        <column name="ORG_OWNER_ACCT_NBR" size="7" type="VARCHAR"/>
+        <column name="CG_AGENCY_NBR" size="5" type="VARCHAR"/>
+        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
+        <column name="BLDG_CD" size="10" type="VARCHAR"/>
+        <column name="NXT_AST_PMT_LN_NBR" size="5" type="DECIMAL"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_CPTLAST_HDR_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="CM_CPTLAST_HDR_TR3">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_BUILDING_T" name="CM_CPTLAST_HDR_TR5">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="CM_CPTLAST_HDR_TR4">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_CPTLAST_HDR_TR2">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ORG_OWNER_ACCT_NBR"/>
+        </foreign-key>
+        <unique name="CM_CPTLAST_HDR_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+        <index name="CM_CPTLAST_HDR_TI2">
+            <index-column name="CPTLAST_NBR"/>
+        </index>
+        <index name="CM_CPTLAST_HDR_TI3">
+            <index-column name="ORG_OWNER_COA_CD"/>
+            <index-column name="ORG_OWNER_ACCT_NBR"/>
+        </index>
+        <index name="CM_CPTLAST_HDR_TI4">
+            <index-column name="AST_REP_UNVL_ID"/>
+        </index>
     </table>
     <table name="CM_CPTLAST_OBJ_T">
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
@@ -4200,6 +4315,61 @@
         <unique name="CM_CPTLAST_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
+    </table>
+    <table name="CM_EQPLNRTRN_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTLAST_IU_TAG_NBR" size="8" type="VARCHAR"/>
+        <column name="CPTLAST_ORGTAG_NBR" size="8" type="VARCHAR"/>
+        <column name="AST_INS_COA_CD" size="2" type="VARCHAR"/>
+        <column name="AST_INS_ACCT_NBR" size="7" type="VARCHAR"/>
+        <column name="CPTLAST_LOAN_DT" type="DATE"/>
+        <column name="AST_EXPCTRETURN_DT" type="DATE"/>
+        <column name="CPTLAST_LN_RTRN_DT" type="DATE"/>
+        <column name="AST_BORWR_UNVL_ID" size="10" type="VARCHAR"/>
+        <column name="AST_BORWR_ADDR" size="30" type="VARCHAR"/>
+        <column name="AST_BORWR_CITY_NM" size="25" type="VARCHAR"/>
+        <column name="AST_BORWR_STATE_CD" size="2" type="VARCHAR"/>
+        <column name="AST_BORWR_ZIP_CD" size="9" type="VARCHAR"/>
+        <column name="AST_BORWR_CNTRY_CD" size="2" type="VARCHAR"/>
+        <column name="AST_BORWR_PHN_NBR" size="13" type="VARCHAR"/>
+        <column name="AST_BORWRSTRG_ADDR" size="30" type="VARCHAR"/>
+        <column name="AST_BORWRSTRGCT_NM" size="25" type="VARCHAR"/>
+        <column name="AST_BORWRSTRGST_CD" size="2" type="VARCHAR"/>
+        <column name="AST_BORWRSTRGZP_CD" size="9" type="VARCHAR"/>
+        <column name="AST_BORWRSTRCNT_CD" size="2" type="VARCHAR"/>
+        <column name="AST_BORWRSTRPH_NBR" size="13" type="VARCHAR"/>
+        <column name="CPTLAST_INS_CD" size="4" type="DECIMAL"/>
+        <column name="AST_SIG_CD" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="CA_CHART_T" name="CM_EQPLNRTRN_DOC_TR2">
+            <reference foreign="FIN_COA_CD" local="AST_INS_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_COUNTRY_T" name="CM_EQPLNRTRN_DOC_TR7">
+            <reference foreign="POSTAL_CNTRY_CD" local="AST_BORWR_CNTRY_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_EQPLNRTRN_DOC_TR3">
+            <reference foreign="FIN_COA_CD" local="AST_INS_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="AST_INS_ACCT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_STATE_T" name="CM_EQPLNRTRN_DOC_TR5">
+            <reference foreign="POSTAL_STATE_CD" local="AST_BORWR_STATE_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_STATE_T" name="CM_EQPLNRTRN_DOC_TR6">
+            <reference foreign="POSTAL_STATE_CD" local="AST_BORWRSTRGST_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_EQPLNRTRN_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_COUNTRY_T" name="CM_EQPLNRTRN_DOC_TR8">
+            <reference foreign="POSTAL_CNTRY_CD" local="AST_BORWRSTRCNT_CD"/>
+        </foreign-key>
+        <unique name="CM_EQPLNRTRN_DOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+        <index name="CM_EQPLNRTRN_DOC_TI2">
+            <index-column name="AST_BORWR_UNVL_ID"/>
+        </index>
     </table>
     <table name="CM_INVN_ERR_DOC_T">
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
@@ -14893,7 +15063,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317940"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317960"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -14902,8 +15072,8 @@
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5831"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12976"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563358169"/>
-    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2040"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563358209"/>
+    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2180"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151676"/>
