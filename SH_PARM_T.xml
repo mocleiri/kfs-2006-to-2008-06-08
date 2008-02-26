@@ -1421,8 +1421,9 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Item Type code(s) for below the line items on Credit Memo documents."
         SH_PARM_DTL_TYP_CD="CreditMemo"
-        SH_PARM_NM="BELOW_THE_LINE_ITEM_TYPES" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="RSTO;MSCR" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NM="ADDITIONAL_CHARGES_ITEM_TYPES"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="RSTO;MSCR"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADB93A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Item type code(s) that allow for negative amounts on below the line items in the Credit Memo Document created from a Payment Request."
@@ -1599,9 +1600,9 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Item Type code(s) for below the line items on Payment Request documents."
         SH_PARM_DTL_TYP_CD="PaymentRequest"
-        SH_PARM_NM="BELOW_THE_LINE_ITEM_TYPES" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="FRHT;SPHD;MNOR;MISC;DISC" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NM="ADDITIONAL_CHARGES_ITEM_TYPES"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="FRHT;SPHD;MNOR;MISC;DISC"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBB7A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Default amount above which positive payment request approval is required."
@@ -1649,8 +1650,9 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Item Type code(s) for below the line items on Purchase Order documents."
         SH_PARM_DTL_TYP_CD="PurchaseOrder"
-        SH_PARM_NM="BELOW_THE_LINE_ITEM_TYPES" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="FRHT;SPHD" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NM="ADDITIONAL_CHARGES_ITEM_TYPES"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="FRHT;SPHD"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBBEA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Object codes that, when associated with Contract &amp; Grant accounts on a Purchase Order, will force the PO to route to a C&amp;G workgroup for approval. Format of list is chart 1=object 1, object 2;chart 2=object 3,object 4,object 5."
@@ -1719,8 +1721,9 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Item Type code(s) for below the line items on Requisition documents."
         SH_PARM_DTL_TYP_CD="Requisition"
-        SH_PARM_NM="BELOW_THE_LINE_ITEM_TYPES" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="FRHT;SPHD" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+        SH_PARM_NM="ADDITIONAL_CHARGES_ITEM_TYPES"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="FRHT;SPHD"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADBCAA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The default funding source for a requisition."

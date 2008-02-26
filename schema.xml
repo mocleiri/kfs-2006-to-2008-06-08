@@ -996,6 +996,7 @@
         <column name="AR_INV_ITM_CD" size="6" type="VARCHAR"/>
         <column name="AR_INV_ITM_DESC" size="800" type="VARCHAR"/>
         <column name="FDOC_OVERRIDE_CD" size="1" type="VARCHAR"/>
+        <column name="AR_INV_ITM_TAX_AMT" scale="2" size="19" type="DECIMAL"/>
         <foreign-key foreignTable="CA_PROJECT_T" name="AR_INV_DTL_TR9">
             <reference foreign="PROJECT_CD" local="PROJECT_CD"/>
         </foreign-key>
@@ -4113,6 +4114,27 @@
             <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
         </foreign-key>
         <unique name="CM_AST_WRNTY_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="CM_CACMP_RPRHIST_T">
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="CACMP_NBR" primaryKey="true" size="5" type="DECIMAL"/>
+        <column name="CACMP_INCIDENT_DT" primaryKey="true" type="DATE"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CACMP_EST_RPR_DT" type="DATE"/>
+        <column name="CACMP_PROBLEM_DESC" size="255" type="VARCHAR"/>
+        <column name="CACMP_RPR_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="CACMP_RPR_CNTCT_NM" size="40" type="VARCHAR"/>
+        <column name="CACMP_RPR_DT" type="DATE"/>
+        <column name="CACMP_RPR_NT_TXT" size="255" type="VARCHAR"/>
+        <column name="CACMP_RPRSOLN_DESC" size="255" type="VARCHAR"/>
+        <foreign-key foreignTable="CM_AST_COMPONENT_T" name="CM_CACMP_RPRHIST_TR1">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+            <reference foreign="CACMP_NBR" local="CACMP_NBR"/>
+        </foreign-key>
+        <unique name="CM_CACMP_RPRHIST_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -15063,15 +15085,15 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317960"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317980"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
-    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5831"/>
+    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5851"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12976"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12996"/>
     <sequence name="SEQ_RTE_NODE" nextval="563358209"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2180"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
