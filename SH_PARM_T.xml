@@ -649,7 +649,7 @@
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="VALID_PAYMENT_REASONS_BY_PAYEE_TYPE"
         SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="E=B,F,P,M,Z;P=B,C,F,K,M,P,A,D,E,G,H,J,L,N,R,T,W,Y"
+        SH_PARM_TXT="E=B,F,P,M,Z;P=B,C,F,K,M,P,A,D,E,G,H,J,L,N,R,T,W,Y;V=B,C,F,K,M,P,A,D,E,G,H,J,L,N,R,T,W,Y"
         SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_DV_TAXGRP"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE5A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
@@ -4486,4 +4486,24 @@
         SH_PARM_NM="OVERRIDE_DOCUMENT_TITLE_IND"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="4715FAEFE7ECE9C0E0404F8189D8174F"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Indicator whether commodity code functionality should be completely turned off for the Requisition and Purchase Order"
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="ENABLE_COMMODITY_CODE_IND" SH_PARM_NMSPC_CD="KFS-PA"
+        SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="4715FAEFE7EDE9C0E0404F8189D8174F"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Indicator whether commodity code is required on Requisition items."
+        SH_PARM_DTL_TYP_CD="Requisition"
+        SH_PARM_NM="ITEMS_REQUIRE_COMMODITY_CODE_IND"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="4715FAEFE7EEE9C0E0404F8189D8174F"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Indicator whether commodity code is required on Purchase Order items."
+        SH_PARM_DTL_TYP_CD="PurchaseOrder"
+        SH_PARM_NM="ITEMS_REQUIRE_COMMODITY_CODE_IND"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
 </dataset>

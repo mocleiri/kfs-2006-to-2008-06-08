@@ -150,7 +150,7 @@
         DOC_TYP_NM="KualiBaseDocument" DOC_TYP_POST_PRCSR_NM="none"
         DOC_TYP_PREV_VER="316840" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="20" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="11"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="176769" DB_LOCK_VER_NBR="12"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiSimpleMaintenanceDocument"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
@@ -306,7 +306,7 @@
         DOC_TYP_PARNT_ID="172077"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_PLCY="NONE" DB_LOCK_VER_NBR="1"
+    <EN_DOC_TYP_T BLNKT_APPR_PLCY="NONE" DB_LOCK_VER_NBR="3"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="The Purchasing &amp; Accounts Payable parent document type"
         DOC_TYP_HDLR_URL_ADDR="none" DOC_TYP_ID="317280"
@@ -2678,6 +2678,30 @@
         DOC_TYP_HDLR_URL_ADDR="this-document-has-no-ui"
         DOC_TYP_ID="317960" DOC_TYP_LBL_TXT="Asset Depreciation"
         DOC_TYP_NM="AssetDepreciationDocument" DOC_TYP_PARNT_ID="317580"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="1" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/purapReceivingCorrection.do?methodToCall=docHandler"
+        DOC_TYP_ID="317980" DOC_TYP_LBL_TXT="Receiving Correction"
+        DOC_TYP_NM="ReceivingCorrectionDocument"
+        DOC_TYP_PARNT_ID="317280"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="1" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/purapReceivingLine.do?methodToCall=docHandler"
+        DOC_TYP_ID="317981" DOC_TYP_LBL_TXT="Receiving Line"
+        DOC_TYP_NM="ReceivingLineDocument" DOC_TYP_PARNT_ID="317280"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="318000"
+        DOC_TYP_LBL_TXT="Asset Depreciation Convention"
+        DOC_TYP_NM="AssetDepreciationConventionMaintenanceDocument"
+        DOC_TYP_PARNT_ID="317581"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
 </dataset>
