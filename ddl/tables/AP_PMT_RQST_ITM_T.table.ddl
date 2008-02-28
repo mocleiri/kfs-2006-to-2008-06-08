@@ -30,7 +30,6 @@ CREATE TABLE AP_PMT_RQST_ITM_T(
         ITM_EXTND_PRC                  NUMBER(19,2),
         CPTL_AST_TRN_TYP_CD            VARCHAR2(4),
         ITM_CPTL_AST_NTE_TXT           VARCHAR2(800),
-        PO_CMDTY_CD                    VARCHAR2(11),
         ITM_ASND_TO_TRADE_IN_IND       VARCHAR2(1),
         ITM_OSTND_INV_QTY              NUMBER(11,2), 
         ITM_OSTND_INV_AMT              NUMBER(19,2), 

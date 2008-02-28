@@ -35,7 +35,7 @@ CREATE TABLE PUR_PO_ITM_T(
         REQS_LN_ID                     VARCHAR2(64),
         ITM_AUX_PART_ID                VARCHAR2(300),
         ITM_ACTV_IND                   VARCHAR2(1),
-        PO_CMDTY_CD                    VARCHAR2(11),
+        PUR_COMM_CD                    VARCHAR2(40),
         EXT_ORG_B2B_PROD_REF_NBR       VARCHAR2(19),
         EXT_ORG_B2B_PROD_TYP_NM        VARCHAR2(15),
         ITM_ASND_TO_TRADE_IN_IND       VARCHAR2(1),
