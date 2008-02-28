@@ -657,4 +657,9 @@
         WRKGRP_DESC="A workgroup that allows its members to claim electronic payments that have come into the institution."
         WRKGRP_ID="317901" WRKGRP_NM="ECLAIM"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="A workgroup of users who are allowed to administrate Electronic Funds Transfer functionality."
+        WRKGRP_ID="318040" WRKGRP_NM="ELECTRONIC_FUNDS_ADMINISTRATORS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
 </dataset>

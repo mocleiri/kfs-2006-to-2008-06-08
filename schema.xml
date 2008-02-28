@@ -4468,6 +4468,9 @@
         <column name="CPTLAST_MFRMDL_NBR" size="25" type="VARCHAR"/>
         <column name="CPTLAST_CPTLZTN_DT" type="DATE"/>
         <column name="CPTLAST_TOTCST_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="CPTL_AST_LAND_CNTY_NM" size="20" type="VARCHAR"/>
+        <column name="CPTL_AST_LAND_ACRG_SZ" size="7" type="DECIMAL"/>
+        <column name="CPTL_AST_LAND_PRCL_NBR" size="30" type="VARCHAR"/>
         <foreign-key foreignTable="CM_AST_STATUS_T" name="CM_MULT_AST_DOC_TR2">
             <reference foreign="AST_INVN_STAT_CD" local="AST_INVN_STAT_CD"/>
         </foreign-key>
@@ -4521,6 +4524,36 @@
         <unique name="CM_MULT_AST_DTL_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
+    </table>
+    <table name="CM_MULT_AST_HDR_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="AST_REP_UNVL_ID" size="10" type="VARCHAR"/>
+        <column name="ORG_OWNER_COA_CD" size="2" type="VARCHAR"/>
+        <column name="ORG_OWNER_ACCT_NBR" size="7" type="VARCHAR"/>
+        <column name="CG_AGENCY_NBR" size="5" type="VARCHAR"/>
+        <column name="NXT_AST_PMT_LN_NBR" size="5" type="DECIMAL"/>
+        <foreign-key foreignTable="CA_CHART_T" name="CM_MULT_AST_HDR_TR2">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_MULT_AST_HDR_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_MULT_AST_HDR_TR3">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ORG_OWNER_ACCT_NBR"/>
+        </foreign-key>
+        <unique name="CM_MULT_AST_HDR_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+        <index name="CM_MULT_AST_HDR_TI2">
+            <index-column name="ORG_OWNER_COA_CD"/>
+            <index-column name="ORG_OWNER_ACCT_NBR"/>
+        </index>
+        <index name="CM_MULT_AST_HDR_TI3">
+            <index-column name="AST_REP_UNVL_ID"/>
+        </index>
     </table>
     <table name="CM_PRTG_DTL_T">
         <column name="PO_NUMBER" primaryKey="true" size="9" type="VARCHAR"/>
@@ -15087,7 +15120,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318020"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318060"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>

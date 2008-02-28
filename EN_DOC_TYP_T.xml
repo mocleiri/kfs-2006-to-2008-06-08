@@ -306,7 +306,7 @@
         DOC_TYP_PARNT_ID="172077"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_PLCY="NONE" DB_LOCK_VER_NBR="3"
+    <EN_DOC_TYP_T BLNKT_APPR_PLCY="NONE" DB_LOCK_VER_NBR="4"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="The Purchasing &amp; Accounts Payable parent document type"
         DOC_TYP_HDLR_URL_ADDR="none" DOC_TYP_ID="317280"
@@ -2680,16 +2680,16 @@
         DOC_TYP_NM="AssetDepreciationDocument" DOC_TYP_PARNT_ID="317580"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T DB_LOCK_VER_NBR="1" DOC_TYP_ACTV_IND="1"
-        DOC_TYP_CUR_IND="1"
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="2" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="0"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/purapReceivingCorrection.do?methodToCall=docHandler"
         DOC_TYP_ID="317980" DOC_TYP_LBL_TXT="Receiving Correction"
         DOC_TYP_NM="ReceivingCorrectionDocument"
         DOC_TYP_PARNT_ID="317280"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T DB_LOCK_VER_NBR="1" DOC_TYP_ACTV_IND="1"
-        DOC_TYP_CUR_IND="1"
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="2" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="0"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/purapReceivingLine.do?methodToCall=docHandler"
         DOC_TYP_ID="317981" DOC_TYP_LBL_TXT="Receiving Line"
         DOC_TYP_NM="ReceivingLineDocument" DOC_TYP_PARNT_ID="317280"
@@ -2704,4 +2704,28 @@
         DOC_TYP_PARNT_ID="317581"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="3" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/purapReceivingCorrection.do?methodToCall=docHandler"
+        DOC_TYP_ID="318020" DOC_TYP_LBL_TXT="Receiving"
+        DOC_TYP_NM="ReceivingDocument" DOC_TYP_PARNT_ID="317280"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="1" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/purapReceivingLine.do?methodToCall=docHandler"
+        DOC_TYP_ID="318021" DOC_TYP_LBL_TXT="Receiving Line"
+        DOC_TYP_NM="ReceivingLineDocument" DOC_TYP_PARNT_ID="318020"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_PREV_VER="317981" DOC_TYP_RTE_VER_NBR="2"
+        DOC_TYP_VER_NBR="1" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="1" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/purapReceivingCorrection.do?methodToCall=docHandler"
+        DOC_TYP_ID="318022" DOC_TYP_LBL_TXT="Receiving Correction"
+        DOC_TYP_NM="ReceivingCorrectionDocument"
+        DOC_TYP_PARNT_ID="318020"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_PREV_VER="317980" DOC_TYP_RTE_VER_NBR="2"
+        DOC_TYP_VER_NBR="1" WRKGRP_ID="2752"/>
 </dataset>

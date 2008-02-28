@@ -4506,4 +4506,12 @@
         SH_PARM_NM="ITEMS_REQUIRE_COMMODITY_CODE_IND"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="472894072E4C308FE0404F8189D82C67"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="This parameter specifies a workgroup, that allows members of that workgroup to be Electronic Funds administrators. Electronic Funds administrators are able to claim unclaimed electronic funds, as well as having the unique ability to mark Electronic Funds as claimed without claiming them by initiating a new document."
+        SH_PARM_DTL_TYP_CD="ElectronicPaymentClaim"
+        SH_PARM_NM="ELECTRONIC_FUNDS_ADMINISTRATOR_GROUP"
+        SH_PARM_NMSPC_CD="KFS-SY"
+        SH_PARM_TXT="ELECTRONIC_FUNDS_ADMINISTRATORS"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
 </dataset>
