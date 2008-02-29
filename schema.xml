@@ -445,7 +445,6 @@
         <column name="ITM_EXTND_PRC" scale="2" size="19" type="DECIMAL"/>
         <column name="CPTL_AST_TRN_TYP_CD" size="4" type="VARCHAR"/>
         <column name="ITM_CPTL_AST_NTE_TXT" size="800" type="VARCHAR"/>
-        <column name="PO_CMDTY_CD" size="11" type="VARCHAR"/>
         <column name="ITM_ASND_TO_TRADE_IN_IND" size="1" type="VARCHAR"/>
         <column name="ITM_OSTND_INV_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="ITM_OSTND_INV_AMT" scale="2" size="19" type="DECIMAL"/>
@@ -2984,10 +2983,6 @@
         <column name="FIN_RPT_CHRT_CD" size="2" type="VARCHAR"/>
         <column name="FIN_RPT_ORG_CD" size="4" type="VARCHAR"/>
         <column name="FIN_RPT_CD" size="10" type="VARCHAR"/>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_SUB_ACCT_TR1">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
-        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_SUB_ACCT_TR4">
             <reference foreign="FIN_COA_CD" local="FIN_RPT_CHRT_CD"/>
         </foreign-key>
@@ -3063,10 +3058,6 @@
         </foreign-key>
         <foreign-key foreignTable="FS_OPTION_T" name="CA_SUB_OBJECT_CD_TR2">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_SUB_OBJECT_CD_TR4">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_OBJECT_CODE_T" name="CA_SUB_OBJECT_CD_TR1">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
@@ -12938,6 +12929,41 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="PUR_COMM_CONTR_MGR_T">
+        <column name="PUR_COMM_CD" primaryKey="true" size="40" type="VARCHAR"/>
+        <column name="CAMPUS_CD" primaryKey="true" size="2" type="VARCHAR"/>
+        <column name="CONTR_MGR_CD" primaryKey="true" size="2" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <foreign-key foreignTable="PUR_CONTR_MGR_T" name="PUR_COMM_CONTR_MGR_TR3">
+            <reference foreign="CONTR_MGR_CD" local="CONTR_MGR_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_COMM_T" name="PUR_COMM_CONTR_MGR_TR1">
+            <reference foreign="PUR_COMM_CD" local="PUR_COMM_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="PUR_COMM_CONTR_MGR_TR2">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+        </foreign-key>
+        <unique name="PUR_COMM_CONTR_MGR_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_COMM_T">
+        <column name="PUR_COMM_CD" primaryKey="true" size="40" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="PUR_COMM_DESC" required="true" size="45" type="VARCHAR"/>
+        <column name="PUR_SALES_TAX_IND" size="1" type="VARCHAR"/>
+        <column name="ITM_RSTRC_IND" size="1" type="VARCHAR"/>
+        <column name="RSTRC_MTRL_CD" size="4" type="VARCHAR"/>
+        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_RSTRC_MTRL_T" name="PUR_COMM_TR1">
+            <reference foreign="RSTRC_MTRL_CD" local="RSTRC_MTRL_CD"/>
+        </foreign-key>
+        <unique name="PUR_COMM_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="PUR_CONTR_MGR_T">
         <column name="CONTR_MGR_CD" primaryKey="true" size="2" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -13194,13 +13220,16 @@
         <column name="REQS_LN_ID" size="64" type="VARCHAR"/>
         <column name="ITM_AUX_PART_ID" size="300" type="VARCHAR"/>
         <column name="ITM_ACTV_IND" size="1" type="VARCHAR"/>
-        <column name="PO_CMDTY_CD" size="11" type="VARCHAR"/>
+        <column name="PUR_COMM_CD" size="40" type="VARCHAR"/>
         <column name="EXT_ORG_B2B_PROD_REF_NBR" size="19" type="VARCHAR"/>
         <column name="EXT_ORG_B2B_PROD_TYP_NM" size="15" type="VARCHAR"/>
         <column name="ITM_ASND_TO_TRADE_IN_IND" size="1" type="VARCHAR"/>
         <column name="ITM_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
         <foreign-key foreignTable="PUR_AP_CPTL_AST_TRN_TYP_T" name="PUR_PO_ITM_TR3">
             <reference foreign="CPTL_AST_TRN_TYP_CD" local="CPTL_AST_TRN_TYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_COMM_T" name="PUR_PO_ITM_TR4">
+            <reference foreign="PUR_COMM_CD" local="PUR_COMM_CD"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_AP_ITM_TYP_T" name="PUR_PO_ITM_TR2">
             <reference foreign="ITM_TYP_CD" local="ITM_TYP_CD"/>
@@ -13841,11 +13870,15 @@
         <column name="EXT_ORG_B2B_PROD_REF_NBR" size="19" type="VARCHAR"/>
         <column name="EXT_ORG_B2B_PROD_TYP_NM" size="15" type="VARCHAR"/>
         <column name="ITM_ASND_TO_TRADE_IN_IND" size="1" type="VARCHAR"/>
+        <column name="PUR_COMM_CD" size="40" type="VARCHAR"/>
         <foreign-key foreignTable="PUR_AP_ITM_TYP_T" name="PUR_REQS_ITM_TR3">
             <reference foreign="ITM_TYP_CD" local="ITM_TYP_CD"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_REQS_T" name="PUR_REQS_ITM_TR1">
             <reference foreign="REQS_ID" local="REQS_ID"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_COMM_T" name="PUR_REQS_ITM_TR4">
+            <reference foreign="PUR_COMM_CD" local="PUR_COMM_CD"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_AP_CPTL_AST_TRN_TYP_T" name="PUR_REQS_ITM_TR2">
             <reference foreign="CPTL_AST_TRN_TYP_CD" local="CPTL_AST_TRN_TYP_CD"/>
@@ -14285,6 +14318,22 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="PUR_VNDR_COMM_T">
+        <column name="VNDR_HDR_GNRTD_ID" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="VNDR_DTL_ASND_ID" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="PUR_COMM_CD" primaryKey="true" size="40" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="PUR_COMM_DFLT_IND" size="1" type="VARCHAR"/>
+        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_VNDR_DTL_T" name="PUR_VNDR_COMM_TR1">
+            <reference foreign="VNDR_HDR_GNRTD_ID" local="VNDR_HDR_GNRTD_ID"/>
+            <reference foreign="VNDR_DTL_ASND_ID" local="VNDR_DTL_ASND_ID"/>
+        </foreign-key>
+        <unique name="PUR_VNDR_COMM_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="PUR_VNDR_CONTR_ORG_T">
         <column name="VNDR_CONTR_GNRTD_ID" primaryKey="true" size="10" type="DECIMAL"/>
         <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
@@ -14580,6 +14629,7 @@
         <column name="VNDR_CONTR_ALLW_IND" size="1" type="VARCHAR"/>
         <column name="VNDR_SHOW_RVW_IND" size="1" type="VARCHAR"/>
         <column name="VNDR_RVW_TXT" size="4000" type="VARCHAR"/>
+        <column name="PUR_COMM_REQ_IND" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="PUR_ADDR_TYP_T" name="PUR_VNDR_TYP_TR1">
             <reference foreign="VNDR_ADDR_TYP_CD" local="VNDR_ADDR_TYP_REQ_CD"/>
         </foreign-key>
