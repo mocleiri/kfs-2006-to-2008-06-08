@@ -33,6 +33,7 @@ CREATE TABLE PUR_RCVNG_LN_T(
         DLVY_REQ_DT                    DATE,
         DLVY_INSTRC_TXT                VARCHAR2(255),
         DLVY_REQ_DT_REAS_CD            VARCHAR2(4),
+        AP_PUR_DOC_LNK_ID              NUMBER(10),
      CONSTRAINT PUR_RCVNG_LN_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT PUR_RCVNG_LN_TC0 UNIQUE (OBJ_ID)
