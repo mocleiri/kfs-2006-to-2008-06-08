@@ -3769,6 +3769,30 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="CM_AST_LOC_T">
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="AST_LOC_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="AST_LOC_CNTCT_NM" size="50" type="VARCHAR"/>
+        <column name="AST_LOC_CNTCT_ID" size="10" type="VARCHAR"/>
+        <column name="AST_LOC_INST_NM" size="50" type="VARCHAR"/>
+        <column name="AST_LOC_PHN_NBR" size="13" type="VARCHAR"/>
+        <column name="AST_LOC_STRT_ADDR" size="50" type="VARCHAR"/>
+        <column name="AST_LOC_CITY_NM" size="50" type="VARCHAR"/>
+        <column name="AST_LOC_STATE_CD" size="2" type="VARCHAR"/>
+        <column name="AST_LOC_CNTRY_CD" size="2" type="VARCHAR"/>
+        <column name="AST_LOC_ZIP_CD" size="9" type="VARCHAR"/>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_LOC_TR1">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_AST_LOC_TYP_T" name="CM_AST_LOC_TR2">
+            <reference foreign="CPTLAST_LOC_TYP_CD" local="AST_LOC_TYP_CD"/>
+        </foreign-key>
+        <unique name="CM_AST_LOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CM_AST_LOC_TYP_T">
         <column name="CPTLAST_LOC_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -3884,7 +3908,7 @@
             <index-column name="PO_NUMBER"/>
         </index>
     </table>
-    <table name="CM_AST_PMT_DOC_T">
+    <table name="CM_AST_PMT_DTL_T">
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <column name="FDOC_LINE_NBR" primaryKey="true" size="7" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -3910,36 +3934,36 @@
         <column name="AST_PMT_DEPR1_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="AST_PMT_DEPR2_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="AST_TRNFR_PMT_CD" size="1" type="VARCHAR"/>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_PMT_DOC_TR3">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
+        <foreign-key foreignTable="SH_ACCT_PERIOD_T" name="CM_AST_PMT_DTL_TR7">
+            <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
+            <reference foreign="UNIV_FISCAL_PRD_CD" local="FDOC_POST_PRD_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="CM_AST_PMT_DOC_TR1">
+        <foreign-key foreignTable="CA_CHART_T" name="CM_AST_PMT_DTL_TR5">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_PMT_DTL_TR8">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="CM_AST_PMT_DTL_TR1">
             <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="SH_ACCT_PERIOD_T" name="CM_AST_PMT_DOC_TR7">
-            <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
-            <reference foreign="UNIV_FISCAL_PRD_CD" local="FDOC_POST_PRD_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="FS_ORIGIN_CODE_T" name="CM_AST_PMT_DOC_TR10">
+        <foreign-key foreignTable="FS_ORIGIN_CODE_T" name="CM_AST_PMT_DTL_TR10">
             <reference foreign="FS_ORIGIN_CD" local="EXPND_FS_ORIGIN_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_PMT_DOC_TR8">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="CM_AST_PMT_DOC_TR5">
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_PMT_DTL_TR3">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
         </foreign-key>
-        <unique name="CM_AST_PMT_DOC_TC0">
+        <unique name="CM_AST_PMT_DTL_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
-        <index name="CM_AST_PMT_DOC_TI2">
+        <index name="CM_AST_PMT_DTL_TI2">
             <index-column name="FIN_COA_CD"/>
             <index-column name="ACCOUNT_NBR"/>
         </index>
-        <index name="CM_AST_PMT_DOC_TI3">
+        <index name="CM_AST_PMT_DTL_TI3">
             <index-column name="FDOC_POST_YR"/>
             <index-column name="FIN_COA_CD"/>
             <index-column name="FIN_OBJECT_CD"/>
@@ -13697,6 +13721,7 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="RCVNG_LN_FDOC_NBR" size="14" type="VARCHAR"/>
+        <column name="AP_PUR_DOC_LNK_ID" size="10" type="DECIMAL"/>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="PUR_RCVNG_COR_TR2">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
@@ -13774,6 +13799,7 @@
         <column name="DLVY_REQ_DT" type="DATE"/>
         <column name="DLVY_INSTRC_TXT" size="255" type="VARCHAR"/>
         <column name="DLVY_REQ_DT_REAS_CD" size="4" type="VARCHAR"/>
+        <column name="AP_PUR_DOC_LNK_ID" size="10" type="DECIMAL"/>
         <foreign-key foreignTable="SH_COUNTRY_T" name="PUR_RCVNG_LN_TR3">
             <reference foreign="POSTAL_CNTRY_CD" local="VNDR_CNTRY_CD"/>
         </foreign-key>
