@@ -7500,7 +7500,6 @@
         <column name="FDOC_TMPL_NBR" size="14" type="VARCHAR"/>
         <column name="TEMP_DOC_FNL_DT" type="DATE"/>
         <column name="FDOC_EXPLAIN_TXT" size="400" type="VARCHAR"/>
-        <column name="FDOC_TYP_CD" size="4" type="VARCHAR"/>
         <unique name="FP_DOC_HEADER_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
