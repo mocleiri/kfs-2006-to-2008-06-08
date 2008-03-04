@@ -48,13 +48,9 @@
         <allowsErrorCorrection>false</allowsErrorCorrection>
         
         <workflowProperties>
-            <!--workflowPropertyGroup>
+            <workflowPropertyGroup>
                 <workflowProperty path="sourceAccountingLines" />
                 <workflowProperty path="sourceAccountingLines.account" />
-            </workflowPropertyGroup-->
-            <workflowPropertyGroup basePath="kualiTransactionalDocumentInformation.documentInitiator.universalUser">
-            	<workflowProperty path="moduleUsers.moduleId" />
-            	<workflowProperty path="moduleUsers.universalUser" />
             </workflowPropertyGroup>
         </workflowProperties>
     </transactionalDocument>
