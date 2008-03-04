@@ -21,6 +21,7 @@ CREATE TABLE FP_ELCTRNC_PMT_CLM_T(
         FDOC_REF_NBR                   VARCHAR2(14),
         FDOC_POST_YR                   NUMBER(4),
         FDOC_POST_PRD_CD               VARCHAR2(2),
+        PMT_CLM_STAT_CD                VARCHAR2(1),
      CONSTRAINT FP_ELCTRNC_PMT_CLM_TP1 PRIMARY KEY (
         FDOC_NBR,
         FDOC_LINE_NBR),
