@@ -97,6 +97,7 @@
         
         <workflowProperties>
             <workflowPropertyGroup>
+            	<workflowProperty path="documentHeader" />
                 <workflowProperty path="sourceAccountingLines" />
                 <workflowProperty path="sourceAccountingLines.account" />
             </workflowPropertyGroup>
