@@ -15145,13 +15145,13 @@
     <sequence name="GL_CRRCTN_SRCH_CRT_T_SEQ" nextval="43"/>
     <sequence name="GL_ID_BILL_T_SEQ" nextval="1"/>
     <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="11909"/>
-    <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="31885"/>
+    <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="31905"/>
     <sequence name="INV_HDR_INFO_ID" nextval="1002"/>
     <sequence name="INV_ITM_ID" nextval="1002"/>
     <sequence name="INV_RJT_REAS_ID" nextval="1002"/>
     <sequence name="LOOKUP_RESULT_SEQUENCE_NBR_SEQ" nextval="2040"/>
     <sequence name="NTE_ID_SEQ" nextval="2060"/>
-    <sequence name="ORIGIN_ENTRY_ID_SEQ" nextval="2040"/>
+    <sequence name="ORIGIN_ENTRY_ID_SEQ" nextval="2060"/>
     <sequence name="PDP_ACH_ACCT_GNRTD_ID_SEQ" nextval="10000000"/>
     <sequence name="PDP_BNK_ID_SEQ" nextval="11000001"/>
     <sequence name="PDP_CUST_BNK_ID_SEQ" nextval="10000034"/>
@@ -15195,7 +15195,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318060"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318080"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
