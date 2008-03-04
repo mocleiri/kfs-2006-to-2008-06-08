@@ -26,7 +26,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.service.DateTimeService;
+import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.bo.Options;
+import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.context.TestUtils;
+import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.chart.bo.A21SubAccount;
+import org.kuali.module.chart.bo.OffsetDefinition;
 import org.kuali.module.chart.service.A21SubAccountService;
 import org.kuali.module.chart.service.OrganizationReversionService;
 import org.kuali.module.chart.service.PriorYearAccountService;
@@ -51,16 +62,6 @@ import org.kuali.module.gl.service.impl.orgreversion.OrganizationReversionProces
 import org.kuali.module.gl.util.FatalErrorException;
 import org.kuali.module.gl.util.OriginEntryOffsetPair;
 import org.kuali.test.ConfigureContext;
-import org.kuali.core.bo.Parameter;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.OptionsService;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
 
 /*
  * Unit tests to verify that flexible offsets are being added to year end origin entries correctly
@@ -559,21 +560,12 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
      * @param flexibleOffsetsOn whether we should turn the flexible offsets on or off
      */
     private void toggleFlexibleOffsets(boolean flexibleOffsetsOn) {
-        // 1. get the FlexibleAccountOffsetIndicator parameter
-        Parameter flexibleIndicator;
-        Map parameterPkMap = new HashMap();
-        parameterPkMap.put("parameterNamespaceCode", "KFS-CA");
-        parameterPkMap.put("parameterDetailTypeCode", "OffsetDefinition");
-        parameterPkMap.put("parameterName", KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG);
-        flexibleIndicator = (Parameter)boService.findByPrimaryKey(Parameter.class, parameterPkMap);
-        // 2. turn it on or off
-        if (flexibleOffsetsOn) {
-            flexibleIndicator.setParameterValue("Y");
-        } else {
-            flexibleIndicator.setParameterValue("N");
+        try {
+            TestUtils.setSystemParameter(OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG, (flexibleOffsetsOn ? "Y" : "N"));
         }
-        // 3. save it
-        boService.save(flexibleIndicator);
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     
     private void createFlexibleOffsetAccounts() {
