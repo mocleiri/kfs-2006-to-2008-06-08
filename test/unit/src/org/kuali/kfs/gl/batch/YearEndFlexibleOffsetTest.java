@@ -53,6 +53,7 @@ import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryFull;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
+import org.kuali.module.gl.dao.BalanceDao;
 import org.kuali.module.gl.service.BalanceService;
 import org.kuali.module.gl.service.OrgReversionUnitOfWorkService;
 import org.kuali.module.gl.service.OrganizationReversionProcessService;
@@ -68,6 +69,8 @@ import org.kuali.test.ConfigureContext;
  */
 @ConfigureContext
 public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(YearEndFlexibleOffsetTest.class);
+    
     public static final String DEFAULT_FLEXIBLE_BALANCE_CHART = "BL";
     public static final String DEFAULT_FLEXIBLE_BALANCE_ACCOUNT_NBR = "1031400";
     public static final String DEFAULT_NO_FLEXIBLE_BALANCE_CHART = "BL";
@@ -230,7 +233,6 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
          */
         public Balance convertToBalance() {
             Balance balance = new Balance();
-            balance.setUniversityFiscalYear(new Integer((SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear()).intValue() - 1));
             balance.setChartOfAccountsCode(chartCode);
             balance.setAccountNumber(accountNumber);
             balance.setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
@@ -506,10 +508,9 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
         OrgReversionUnitOfWorkService orgReversionUnitOfWorkService = SpringContext.getBean(OrgReversionUnitOfWorkService.class);
         OrganizationReversionProcessService organizationReversionProcessService = SpringContext.getBean(OrganizationReversionProcessService.class);
 
-        Integer currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
-        Integer previousFiscalYear = new Integer(currentFiscalYear.intValue() - 1);
-
         Map jobParameters = organizationReversionProcessService.getJobParameters();
+        Integer currentFiscalYear = new Integer(((Number)jobParameters.get(KFSConstants.UNIV_FISCAL_YR)).intValue() + 1);
+        Integer previousFiscalYear = new Integer(((Number)jobParameters.get(KFSConstants.UNIV_FISCAL_YR)).intValue());
         Map<String, Integer> organizationReversionCounts = new HashMap<String, Integer>();
 
         OrganizationReversionProcess orgRevProcess = new OrganizationReversionProcess(null, false, organizationReversionService, balanceService, originEntryGroupService, originEntryService, persistenceService, dtService, cashOrganizationReversionCategoryLogic, priorYearAccountService, orgReversionUnitOfWorkService, jobParameters, organizationReversionCounts);
@@ -519,6 +520,7 @@ public class YearEndFlexibleOffsetTest extends OriginEntryTestBase {
         clearOriginEntryTables();
         persistenceService.clearCache();
         for (Balance bal : balancesToTest) {
+            bal.setUniversityFiscalYear(previousFiscalYear);
             balanceService.save(bal);
         }
         OriginEntryGroup outputGroup = organizationReversionProcessService.createOrganizationReversionProcessOriginEntryGroup();
