@@ -39,5 +39,37 @@
         <allowsCopy>false</allowsCopy>
         <allowsErrorCorrection>false</allowsErrorCorrection>
         
+        <workflowProperties>
+        	<workflowPropertyGroup>
+        		<!-- properties for routing -->
+        		<workflowProperty path="documentHeader" />
+        		<workflowProperty path="sourceAccountingLines" />
+        		<workflowProperty path="sourceAccountingLines.account" />
+        		<workflowProperty path="chartOfAccountsCode" />
+        		<workflowProperty path="postingYear" />
+        		<workflowProperty path="vendorHeaderGeneratedIdentifier" />
+        		<workflowProperty path="purchaseOrderTransmissionMethodCode" />
+        		<workflowProperty path="purchaseOrderAutomaticIndicator" />
+        		<workflowProperty path="deliveryCampusCode" />
+        		<!-- extra properties for searches -->
+        		<workflowProperty path="purapDocumentIdentifier" />
+        		<workflowProperty path="requestorPersonName" />
+        		<workflowProperty path="organizationCode" />
+        		<workflowProperty path="requisitionIdentifier" />
+        		<workflowProperty path="status" />
+        		<workflowProperty path="statusCode" />
+        		<workflowProperty path="contractManager.contractManagerName" />
+        		<workflowProperty path="vendorName" />
+        		<workflowProperty path="alternateVendorName" />
+        		<workflowProperty path="contractManagerCode" />
+        		<workflowProperty path="purchaseOrderPreviousIdentifier" />
+        		<workflowProperty path="vendorDetailAssignedIdentifier" />
+        		<workflowProperty path="vendorContract.vendorContractName" />
+        		<workflowProperty path="purchaseOrderLastTransmitDate" />
+        		<workflowProperty path="deliveryRequiredDate" />
+        		<workflowProperty path="purchaseOrderCurrentIndicator" />
+        	</workflowPropertyGroup>
+        </workflowProperties>
+        
     </transactionalDocument>
 </dictionaryEntry>
