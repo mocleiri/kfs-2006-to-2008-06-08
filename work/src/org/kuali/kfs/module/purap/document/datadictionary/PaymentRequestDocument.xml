@@ -348,5 +348,35 @@
         <allowsCopy>false</allowsCopy>
         <allowsErrorCorrection>false</allowsErrorCorrection>
         
+        <workflowProperties>
+        	<workflowPropertyGroup>
+        		<!-- properties for routing -->
+        		<workflowProperty path="documentHeader" />
+        		<workflowProperty path="sourceAccountingLines" />
+        		<workflowProperty path="sourceAccountingLines.account" />
+        		<workflowProperty path="vendorHeaderGeneratedIdentifier" />
+        		<!-- extra properties for searches -->
+        		<workflowProperty path="purapDocumentIdentifier" />
+        		<workflowProperty path="invoiceNumber" />
+        		<workflowProperty path="purchaseOrderIdentifier" />
+        		<workflowProperty path="requisitionIdentifier" />
+        		<workflowProperty path="vendorName" />
+        		<workflowProperty path="vendorDetailAssignedIdentifier" />
+        		<workflowProperty path="chartOfAccountsCode" />
+        		<workflowProperty path="organizationCode" />
+        		<workflowProperty path="processingCampusCode" />
+        		<workflowProperty path="vendorCustomerNumber" />
+        		<workflowProperty path="invoiceDate" />
+        		<workflowProperty path="paymentRequestPayDate" />
+        		<workflowProperty path="accountsPayableApprovalDate" />
+        		<workflowProperty path="extractedDate" />
+        		<workflowProperty path="holdIndicator" />
+        		<workflowProperty path="paymentRequestedCancelIndicator" />
+        		<workflowProperty path="paymentPaidDate" />
+        		<workflowProperty path="status" />
+        		<workflowProperty path="statusCode" />
+        	</workflowPropertyGroup>
+        </workflowProperties>
+        
     </transactionalDocument>
 </dictionaryEntry>
