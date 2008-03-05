@@ -158,5 +158,29 @@
         <allowsCopy>true</allowsCopy>
         <allowsErrorCorrection>false</allowsErrorCorrection>
         
+        <workflowProperties>
+        	<workflowPropertyGroup>
+        		<!-- for routing -->
+        		<workflowProperty path="chartOfAccountsCode" />
+        		<workflowProperty path="organizationCode" />
+        		<workflowProperty path="documentHeader" />
+        		<workflowProperty path="sourceAccountingLines" />
+        		<workflowProperty path="sourceAccountingLines.account" />
+        		<!-- extras for searching -->
+        		<workflowProperty path="purapDocumentIdentifier" />
+        		<workflowProperty path="vendorName" />
+        		<workflowProperty path="requestorPropertyName" />
+        		<workflowProperty path="deliveryCampusCode" />
+        		<workflowProperty path="deliverToName" />
+        		<workflowProperty path="requisitionOrganizationReference1Text" />
+        		<workflowProperty path="requisitionOrganizationReference2Text" />
+        		<workflowProperty path="requisitionOrganizationReference3Text" />
+        		<workflowProperty path="status" />
+        		<workflowProperty path="statusCode" />
+        		<workflowProperty path="requestorPersonName" />
+        		<workflowProperty path="vendorName" />
+        	</workflowPropertyGroup>
+        </workflowProperties>
+        
     </transactionalDocument>
 </dictionaryEntry>
