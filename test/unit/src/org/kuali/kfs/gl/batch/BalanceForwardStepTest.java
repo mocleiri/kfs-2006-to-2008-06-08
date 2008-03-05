@@ -16,9 +16,6 @@
 
 package org.kuali.module.gl.batch;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,19 +50,6 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
      */
     public BalanceForwardStepTest() {
         super();
-    }
-
-    /**
-     * Sets up the test by getting the date parameter
-     * @see org.kuali.module.gl.OriginEntryTestBase#setUp()
-     */
-    @Override
-    protected void setUp() throws Exception {
-
-        super.setUp();
-
-        DateFormat transactionDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateTimeService.setCurrentDate(new Date(transactionDateFormat.parse(SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.GENERAL_LEDGER_BATCH.class, GLConstants.ANNUAL_CLOSING_TRANSACTION_DATE_PARM)).getTime()));
     }
 
     /**
@@ -182,7 +166,8 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
      * @return the filtered origin entry line
      */
     private String filterOriginEntryLine(String line) {
-        // right now, remove the sequence number from this test
-        return line.substring(0, 51) + line.substring(57);
+        line = line.substring(0, 51) + line.substring(56); // remove sequence number
+        line = line.substring(0, 109) + line.substring(119); // remove date
+        return line;
     }
 }
