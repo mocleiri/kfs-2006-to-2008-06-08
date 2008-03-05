@@ -7934,6 +7934,7 @@
         <column name="FDOC_REF_NBR" size="14" type="VARCHAR"/>
         <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
         <column name="FDOC_POST_PRD_CD" size="2" type="VARCHAR"/>
+        <column name="PMT_CLM_STAT_CD" size="1" type="VARCHAR"/>
         <unique name="FP_ELCTRNC_PMT_CLM_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -15195,7 +15196,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318080"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318100"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
