@@ -107,5 +107,13 @@
             </maintainableSection>
 
         </maintainableSections>
+        
+        <workflowProperties>
+        	<workflowPropertyGroup>
+        		<workflowProperty path="newMaintainableObject.businessObject.accountGlobalDetails" />
+        		<workflowProperty path="newMaintainableObject.businessObject.subObjCdGlobalDetails" />
+			</workflowPropertyGroup>
+        </workflowProperties>
+        
     </maintenanceDocument>
 </dictionaryEntry>
