@@ -16,6 +16,7 @@ CREATE TABLE CM_PRTG_T(
         FIN_COA_CD                     VARCHAR2(2),
         CM_PRTG_CRT_DT                 DATE,
         ORG_CD                         VARCHAR2(4),
+        ROW_ACTV_IND                   VARCHAR2(1) CONSTRAINT CM_PRTG_TN5 NOT NULL,
      CONSTRAINT CM_PRTG_TP1 PRIMARY KEY (
         PO_NUMBER,
         LINE_ITEM_NUMBER),
