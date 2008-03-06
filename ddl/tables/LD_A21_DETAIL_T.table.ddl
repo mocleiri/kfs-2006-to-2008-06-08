@@ -18,7 +18,7 @@ CREATE TABLE LD_A21_DETAIL_T(
         OBJ_ID                         VARCHAR2(36) CONSTRAINT LD_A21_DETAIL_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_A21_DETAIL_TN3 NOT NULL,
         A21_LBR_RPT_NBR                VARCHAR2(3),
-        A21_LBR_DOC_CD                 VARCHAR2(2),
+        A21_LBR_DOC_CD                 VARCHAR2(2) CONSTRAINT LD_A21_DETAIL_TN4 NOT NULL,
         A21_LBR_FSCL_YR                NUMBER(4),
         EMPLID                         VARCHAR2(11),
      CONSTRAINT LD_A21_DETAIL_TP1 PRIMARY KEY (
