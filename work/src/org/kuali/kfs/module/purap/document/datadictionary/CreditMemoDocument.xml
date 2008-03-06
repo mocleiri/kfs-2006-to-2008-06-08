@@ -218,27 +218,10 @@
         	<workflowPropertyGroup>
         		<!-- properties for routing -->
         		<workflowProperty path="documentHeader" />
-        		<workflowProperty path="sourceAccountingLines" />
-        		<workflowProperty path="sourceAccountingLines.account" />
+        		<workflowProperty path="accountsForRouting" />
+        		<workflowProperty path="accountsForRouting.account" />
         		<!-- extra properties for searches -->
-        		<workflowProperty path="purapDocumentIdentifier" />
-        		<workflowProperty path="creditMemoNumber" />
-        		<workflowProperty path="paymentRequestIdentifier" />
-        		<workflowProperty path="purchaseOrderIdentifier" />
-        		<workflowProperty path="vendorName" />
-        		<workflowProperty path="vendorHeaderGeneratedIdentifier" />
-        		<workflowProperty path="vendorDetailAssignedIdentifier" />
-        		<workflowProperty path="chartOfAccountsCode" />
-        		<workflowProperty path="organizationCode" />
-        		<workflowProperty path="processingCampusCode" />
-        		<workflowProperty path="vendorCustomerNumber" />
-        		<workflowProperty path="creditMemoDate" />
-        		<workflowProperty path="accountsPayableApprovalDate" />
-        		<workflowProperty path="extractedDate" />
-        		<workflowProperty path="holdIndicator" />
-        		<workflowProperty path="creditMemoPaidTimestamp" />
         		<workflowProperty path="status" />
-        		<workflowProperty path="statusCode" />
         	</workflowPropertyGroup>
         </workflowProperties>
         
