@@ -15196,7 +15196,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318100"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318120"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -15204,7 +15204,7 @@
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5851"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12996"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13036"/>
     <sequence name="SEQ_RTE_NODE" nextval="563358209"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2180"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>

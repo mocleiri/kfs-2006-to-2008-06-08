@@ -643,12 +643,12 @@
         WRKGRP_CUR_IND="1" WRKGRP_DESC="AR supervisor role"
         WRKGRP_ID="317700" WRKGRP_NM="AR_ROLE_MAINTAINERS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
-        WRKGRP_CUR_IND="1" WRKGRP_DESC="Capital Assets administration"
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="2" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="0" WRKGRP_DESC="Capital Assets administration"
         WRKGRP_ID="317720" WRKGRP_NM="CM_ADMINISTRATORS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
-        WRKGRP_CUR_IND="1"
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="2" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="0"
         WRKGRP_DESC="Capital Assets security administrators"
         WRKGRP_ID="317740" WRKGRP_NM="CM_SECURITY_ADMINISTRATORS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
@@ -661,5 +661,41 @@
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="A workgroup of users who are allowed to administrate Electronic Funds Transfer functionality."
         WRKGRP_ID="318040" WRKGRP_NM="ELECTRONIC_FUNDS_ADMINISTRATORS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Users in this workgroup can use acquisition type of New on Global Asset. &#xa;and also can access Add Payment document."
+        WRKGRP_ID="318100" WRKGRP_NM="CM_ADD_PAYMENT_USERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Grants access to CAMS reference maintenance tables except asset security maintenance document"
+        WRKGRP_ID="317720" WRKGRP_NM="CM_ADMINISTRATORS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="1"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Users in this workgroup will have more update options on the Asset maintenance document. &#xa;and can access Merge, and Separate."
+        WRKGRP_ID="318101" WRKGRP_NM="CM_ASSET_MERGE_SEPARATE_USERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Grants access to the Barcode Inventory Document"
+        WRKGRP_ID="318102" WRKGRP_NM="CM_BARCODE_USERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Grants CAB permissions and access. &#xa;1. Grants access to CAB screens. &#xa;2. Allows assets created to be created with cost under the capitalization threshold a) Global Asset, b) Separate an Asset, and c) Financial Edits."
+        WRKGRP_ID="318103"
+        WRKGRP_NM="CM_CAPITAL_ASSET_BUILDER_ADMINISTRATORS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Grants access to asset security maintenance document"
+        WRKGRP_ID="317740" WRKGRP_NM="CM_SECURITY_ADMINISTRATORS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="1"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Users in this workgroup can do everything that CM_ASSET_MERGE_SEPARATE_USERS can do, plus: &#xa;1. Update more fields on Asset maintenance document &#xa;2. Retire non-movable assets and 3. Asset transfers non-movable assets"
+        WRKGRP_ID="318104" WRKGRP_NM="CM_SUPER_USERS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
 </dataset>
