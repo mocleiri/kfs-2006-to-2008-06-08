@@ -15,7 +15,7 @@ CREATE TABLE AR_SYS_INFO_T(
         UNIV_CLR_OBJECT_CD             VARCHAR2(4),
         UNIV_CLR_SUBOBJ_CD             VARCHAR2(3),
         PMT_CLR_FIN_OBJ_CD             VARCHAR2(4),
-        AR_LOCKBOX_NBR                 VARCHAR2(5),
+        AR_LOCKBOX_NBR                 VARCHAR2(10),
         ROW_ACTV_IND                   VARCHAR2(1) CONSTRAINT AR_SYS_INFO_TN6 NOT NULL,
      CONSTRAINT AR_SYS_INFO_TP1 PRIMARY KEY (
         UNIV_FISCAL_YR,

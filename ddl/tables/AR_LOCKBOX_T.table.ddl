@@ -2,7 +2,7 @@ CREATE TABLE AR_LOCKBOX_T(
         AR_INV_SEQ_NBR                 NUMBER(12) CONSTRAINT AR_LOCKBOX_TN1 NOT NULL,
         OBJ_ID                         VARCHAR2(36) CONSTRAINT AR_LOCKBOX_TN2 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AR_LOCKBOX_TN3 NOT NULL,
-        AR_LOCKBOX_NBR                 VARCHAR2(5),
+        AR_LOCKBOX_NBR                 VARCHAR2(10),
         CUST_NBR                       VARCHAR2(9),
         FDOC_REF_INV_NBR               VARCHAR2(14),
         AR_BILLING_DT                  DATE,
