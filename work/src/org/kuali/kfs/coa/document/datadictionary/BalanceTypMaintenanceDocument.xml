@@ -55,7 +55,6 @@
                 </maintainableItems>
             </maintainableSection>
         </maintainableSections>
-    </maintenanceDocument>
-
-	<workflowProperties/>
+        <workflowProperties/>
+    </maintenanceDocument>   
 </dictionaryEntry>
