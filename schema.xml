@@ -1138,7 +1138,7 @@
         <column name="AR_INV_SEQ_NBR" primaryKey="true" size="12" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="AR_LOCKBOX_NBR" size="5" type="VARCHAR"/>
+        <column name="AR_LOCKBOX_NBR" size="10" type="VARCHAR"/>
         <column name="CUST_NBR" size="9" type="VARCHAR"/>
         <column name="FDOC_REF_INV_NBR" size="14" type="VARCHAR"/>
         <column name="AR_BILLING_DT" type="DATE"/>
@@ -1550,7 +1550,7 @@
         <column name="UNIV_CLR_OBJECT_CD" size="4" type="VARCHAR"/>
         <column name="UNIV_CLR_SUBOBJ_CD" size="3" type="VARCHAR"/>
         <column name="PMT_CLR_FIN_OBJ_CD" size="4" type="VARCHAR"/>
-        <column name="AR_LOCKBOX_NBR" size="5" type="VARCHAR"/>
+        <column name="AR_LOCKBOX_NBR" size="10" type="VARCHAR"/>
         <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR8">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
@@ -4585,6 +4585,7 @@
         <column name="AST_PRTGTAG_CRT_DT" type="DATE"/>
         <column name="CPTL_AST_GOV_TAG_NBR" size="12" type="VARCHAR"/>
         <column name="CPTL_AST_NTL_STOCK_NBR" size="25" type="VARCHAR"/>
+        <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="CM_PRTG_T" name="CM_PRTG_DTL_TR4">
             <reference foreign="PO_NUMBER" local="PO_NUMBER"/>
             <reference foreign="LINE_ITEM_NUMBER" local="LINE_ITEM_NUMBER"/>
@@ -4626,6 +4627,7 @@
         <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
         <column name="CM_PRTG_CRT_DT" type="DATE"/>
         <column name="ORG_CD" size="4" type="VARCHAR"/>
+        <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <foreign-key foreignTable="CA_CHART_T" name="CM_PRTG_TR1">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
@@ -9582,7 +9584,7 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="A21_LBR_RPT_NBR" size="3" type="VARCHAR"/>
-        <column name="A21_LBR_DOC_CD" size="2" type="VARCHAR"/>
+        <column name="A21_LBR_DOC_CD" required="true" size="2" type="VARCHAR"/>
         <column name="A21_LBR_FSCL_YR" size="4" type="DECIMAL"/>
         <column name="EMPLID" size="11" type="VARCHAR"/>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="LD_A21_DETAIL_TR1">
