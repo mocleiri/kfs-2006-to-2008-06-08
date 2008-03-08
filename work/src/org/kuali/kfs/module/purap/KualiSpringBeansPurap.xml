@@ -72,8 +72,6 @@
 		</property>
 	</bean>
 
-    <bean id="purapConciseXmlDocumentConversionService" class="org.kuali.module.purap.service.impl.PurapConciseXmlDocumentConversionServiceImpl"/>
-
 	<bean id="pdpExtractService" class="org.kuali.module.purap.service.impl.PdpExtractServiceImpl">
 		<property name="businessObjectService">
 			<ref bean="businessObjectService"/>
