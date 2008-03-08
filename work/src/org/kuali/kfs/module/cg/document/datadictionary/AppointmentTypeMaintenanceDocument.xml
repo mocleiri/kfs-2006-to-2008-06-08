@@ -19,49 +19,50 @@
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
 <dictionaryEntry>
-    <maintenanceDocument>
-        <businessObjectClass>org.kuali.module.kra.budget.bo.AppointmentType</businessObjectClass>
-        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
-        <businessRulesClass>org.kuali.module.kra.budget.rules.AppointmentTypeMaintenanceDocumentRule</businessRulesClass>
-        
+  <maintenanceDocument>
+    <businessObjectClass>org.kuali.module.kra.budget.bo.AppointmentType</businessObjectClass>
+    <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
+    <businessRulesClass>org.kuali.module.kra.budget.rules.AppointmentTypeMaintenanceDocumentRule</businessRulesClass>
+    
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
-        <authorizations>
-            <authorization action="initiate">
-                <workgroups>
-                    <workgroup>KRA_PRE_AWARD_ADMIN</workgroup>
-                </workgroups>
-            </authorization>
-        </authorizations>
-
-        <documentTypeName>KualiAppointmentTypeMaintenanceDocument</documentTypeName>
-        <documentTypeCode>APPT</documentTypeCode>
-
-        <label>Appointment Type</label>
-
-        <summary>Appointment Type maintenance document</summary>
-        <description>Document used to create or update AppointmentType objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="AppointmentType" parameterName="APPOINTMENT_TYPE" />
-
-        <lockingKeys>
-            <field attributeName="appointmentTypeCode" />
-        </lockingKeys>
-
-        <maintainableSections>
-            <maintainableSection title="Edit Appointment Type">
-                <maintainableItems>
-                    <maintainableField name="appointmentTypeCode" required="true"/>
-                    <maintainableField name="appointmentTypeDescription" required="true"/>
-                    <maintainableField name="appointmentTypeAbbrieviation" required="true"/>
-                    <maintainableField name="fringeRateAmount" required="true"/>
-                    <maintainableField name="costShareFringeRateAmount" required="true"/>
-                    <maintainableField name="relatedAppointmentTypeCode" />
-					          <maintainableField name="active">
-						          <defaultValue>true</defaultValue>
-					          </maintainableField>
-                    <maintainableField name="versionNumber" />
-                </maintainableItems>
-            </maintainableSection>
-        </maintainableSections>
-    </maintenanceDocument>
+    <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+    <authorizations>
+      <authorization action="initiate">
+        <workgroups>
+          <workgroup>KRA_PRE_AWARD_ADMIN</workgroup>
+        </workgroups>
+      </authorization>
+    </authorizations>
+	 
+    <documentTypeName>KualiAppointmentTypeMaintenanceDocument</documentTypeName>
+    <documentTypeCode>APPT</documentTypeCode>
+	 
+    <label>Appointment Type</label>
+	 
+    <summary>Appointment Type maintenance document</summary>
+    <description>Document used to create or update AppointmentType objects</description>
+    <help parameterNamespace="KFS-RA" parameterDetailType="AppointmentType" parameterName="APPOINTMENT_TYPE" />
+	 
+    <lockingKeys>
+      <field attributeName="appointmentTypeCode" />
+    </lockingKeys>
+	 
+    <maintainableSections>
+      <maintainableSection title="Edit Appointment Type">
+        <maintainableItems>
+          <maintainableField name="appointmentTypeCode" required="true"/>
+          <maintainableField name="appointmentTypeDescription" required="true"/>
+          <maintainableField name="appointmentTypeAbbrieviation" required="true"/>
+          <maintainableField name="fringeRateAmount" required="true"/>
+          <maintainableField name="costShareFringeRateAmount" required="true"/>
+          <maintainableField name="relatedAppointmentTypeCode" />
+	  <maintainableField name="active">
+	    <defaultValue>true</defaultValue>
+	  </maintainableField>
+          <maintainableField name="versionNumber" />
+        </maintainableItems>
+      </maintainableSection>
+    </maintainableSections>
+    <workflowProperties/>
+  </maintenanceDocument>
 </dictionaryEntry>
