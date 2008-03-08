@@ -37,7 +37,6 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ConciseXmlDocumentConversionService;
 import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
@@ -117,14 +116,6 @@ public class PaymentRequestDocument extends AccountsPayableDocumentBase {
      */
     public PaymentRequestDocument() {
         super();
-    }
-
-    /**
-     * @see org.kuali.core.document.DocumentBase#getDocumentRepresentationForSerialization()
-     */
-    @Override
-    protected Document getDocumentRepresentationForSerialization() {
-        return SpringContext.getBean(ConciseXmlDocumentConversionService.class).getDocumentForSerialization(this);
     }
 
     /**
