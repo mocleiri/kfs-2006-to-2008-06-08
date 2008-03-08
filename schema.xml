@@ -2986,6 +2986,7 @@
         <column name="MESSAGE_ENTITY_NM" size="10" type="VARCHAR"/>
         <column name="DOC_TYP_EMAIL_XSL" size="255" type="VARCHAR"/>
         <column name="BLNKT_APPR_PLCY" size="10" type="VARCHAR"/>
+        <column name="DOC_TYP_SECURITY_XML" type="CLOB"/>
         <unique name="EN_DOC_TYP_TI1">
             <unique-column name="DOC_TYP_NM"/>
             <unique-column name="DOC_TYP_VER_NBR"/>
@@ -3000,6 +3001,24 @@
         <index name="EN_DOC_TYP_TI4">
             <index-column name="DOC_TYP_PREV_VER"/>
         </index>
+    </table>
+    <table name="EN_EDL_DMP_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="DOC_TYP_NM" required="true" size="255" type="VARCHAR"/>
+        <column name="DOC_RTE_STAT_CD" required="true" size="1" type="CHAR"/>
+        <column name="DOC_MDFN_DT" required="true" type="DATE"/>
+        <column name="DOC_CRTE_DT" required="true" type="DATE"/>
+        <column name="DOC_TTL" size="255" type="VARCHAR"/>
+        <column name="DOC_INITR_ID" required="true" size="30" type="VARCHAR"/>
+        <column name="DOC_CRNT_NODE_NM" required="true" size="30" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+    </table>
+    <table name="EN_EDL_FIELD_DMP_T">
+        <column name="EDL_FIELD_DMP_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="DOC_HDR_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="FLD_NM" required="true" size="255" type="VARCHAR"/>
+        <column name="FLD_VAL" size="4000" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
     </table>
     <table name="EN_EDOCLT_ASSOC_T">
         <column name="EDOCLT_ASSOC_ID" primaryKey="true" size="19" type="DECIMAL"/>
@@ -3086,6 +3105,16 @@
         <column name="VAL_ONE" size="2000" type="VARCHAR"/>
         <column name="VAL_TWO" size="2000" type="VARCHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <index name="EN_MSG_QUE_TI1">
+            <index-column name="MESSAGE_SERVICE_NM"/>
+            <index-column name="SERVICE_METHOD_NM"/>
+        </index>
+        <index name="EN_MSG_QUE_TI2">
+            <index-column name="MESSAGE_ENTITY_NM"/>
+            <index-column name="MESSAGE_QUE_STAT_CD"/>
+            <index-column name="MESSAGE_QUE_IP_NBR"/>
+            <index-column name="MESSAGE_QUE_DT"/>
+        </index>
     </table>
     <table name="EN_ORG_RESP_ID_T">
         <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
@@ -3094,6 +3123,55 @@
         <column name="ORG_RESP_ID_APRVR_TYP_CD" primaryKey="true"
             size="1" type="CHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+    </table>
+    <table name="EN_OUT_BOX_ITM_T">
+        <column name="ACTN_ITM_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="ACTN_ITM_PRSN_EN_ID" required="true" size="30" type="VARCHAR"/>
+        <column name="ACTN_ITM_ASND_DT" required="true" type="DATE"/>
+        <column name="ACTN_ITM_RQST_CD" required="true" size="1" type="CHAR"/>
+        <column name="ACTN_RQST_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="DOC_HDR_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="WRKGRP_ID" size="14" type="DECIMAL"/>
+        <column name="ROLE_NM" size="2000" type="VARCHAR"/>
+        <column name="ACTN_ITM_DLGN_PRSN_EN_ID" size="30" type="VARCHAR"/>
+        <column name="ACTN_ITM_DLGN_WRKGRP_ID" size="14" type="DECIMAL"/>
+        <column name="DOC_TTL" size="255" type="VARCHAR"/>
+        <column name="DOC_TYP_LBL_TXT" required="true" size="255" type="VARCHAR"/>
+        <column name="DOC_TYP_HDLR_URL_ADDR" required="true" size="255" type="VARCHAR"/>
+        <column name="DOC_TYP_NM" required="true" size="255" type="VARCHAR"/>
+        <column name="ACTN_ITM_RESP_ID" required="true" size="14" type="DECIMAL"/>
+        <column name="DLGN_TYP" size="1" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <index name="EN_OUT_BOX_ITM_T1">
+            <index-column name="ACTN_ITM_PRSN_EN_ID"/>
+        </index>
+        <index name="EN_OUT_BOX_ITM_TI2">
+            <index-column name="DOC_HDR_ID"/>
+        </index>
+        <index name="EN_OUT_BOX_ITM_TI3">
+            <index-column name="ACTN_RQST_ID"/>
+        </index>
+        <index name="EN_OUT_BOX_ITM_TI4">
+            <index-column name="ACTN_ITM_DLGN_PRSN_EN_ID"/>
+            <index-column name="ACTN_ITM_DLGN_WRKGRP_ID"/>
+            <index-column name="ACTN_ITM_PRSN_EN_ID"/>
+            <index-column name="DLGN_TYP"/>
+        </index>
+    </table>
+    <table name="EN_RMV_RPLC_DOC_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="OPRN" required="true" size="1" type="CHAR"/>
+        <column name="PRSN_EN_ID" required="true" size="30" type="VARCHAR"/>
+        <column name="RPLC_PRSN_EN_ID" size="30" type="VARCHAR"/>
+        <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+    </table>
+    <table name="EN_RMV_RPLC_RULE_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="RULE_ID" primaryKey="true" size="19" type="DECIMAL"/>
+    </table>
+    <table name="EN_RMV_RPLC_WRKGRP_T">
+        <column name="DOC_HDR_ID" primaryKey="true" size="14" type="DECIMAL"/>
+        <column name="WRKGRP_ID" primaryKey="true" size="14" type="DECIMAL"/>
     </table>
     <table name="EN_RTE_BRCH_PROTO_T">
         <column name="RTE_BRCH_PROTO_ID" primaryKey="true" size="19" type="DECIMAL"/>
@@ -3144,6 +3222,15 @@
         <index name="EN_RTE_BRCH_TI5">
             <index-column name="JOIN_RTE_NODE_INSTN_ID"/>
         </index>
+    </table>
+    <table name="EN_RTE_NODE_CFG_PARM_T">
+        <column name="RTE_NODE_CFG_PARM_ID" primaryKey="true" size="19" type="DECIMAL"/>
+        <column name="RTE_NODE_CFG_PARM_ND" required="true" size="19" type="DECIMAL"/>
+        <column name="RTE_NODE_CFG_PARM_KEY" required="true" size="255" type="VARCHAR"/>
+        <column name="RTE_NODE_CFG_PARM_VAL" size="4000" type="VARCHAR"/>
+        <foreign-key foreignTable="EN_RTE_NODE_T" name="EN_RTE_NODE_CFG_PARM_TR1">
+            <reference foreign="RTE_NODE_ID" local="RTE_NODE_CFG_PARM_ND"/>
+        </foreign-key>
     </table>
     <table name="EN_RTE_NODE_INSTN_LNK_T">
         <column name="FROM_RTE_NODE_INSTN_ID" primaryKey="true"
@@ -3273,7 +3360,7 @@
     </table>
     <table name="EN_RULE_BASE_VAL_T">
         <column name="RULE_BASE_VAL_ID" primaryKey="true" size="19" type="DECIMAL"/>
-        <column name="RULE_TMPL_ID" required="true" size="19" type="DECIMAL"/>
+        <column name="RULE_TMPL_ID" size="19" type="DECIMAL"/>
         <column name="RULE_BASE_VAL_ACTV_IND" required="true" size="1" type="DECIMAL"/>
         <column name="RULE_BASE_VAL_DESC" size="2000" type="VARCHAR"/>
         <column name="RULE_BASE_VAL_IGNR_PRVS" required="true" size="1" type="DECIMAL"/>
@@ -3289,6 +3376,16 @@
         <column name="RULE_BASE_VAL_PREV_VER" size="19" type="DECIMAL"/>
         <column name="RULE_BASE_VAL_ACTVN_DT" type="DATE"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <column name="RULE_NM" size="256" type="VARCHAR"/>
+        <column name="RULE_EXPR_ID" size="19" type="DECIMAL"/>
+        <foreign-key foreignTable="EN_RULE_EXPR_T" name="EN_RULE_BASE_VAL_TR1">
+            <reference foreign="RULE_EXPR_ID" local="RULE_EXPR_ID"/>
+        </foreign-key>
+    </table>
+    <table name="EN_RULE_EXPR_T">
+        <column name="RULE_EXPR_ID" primaryKey="true" size="19" type="DECIMAL"/>
+        <column name="RULE_EXPR_TYP" required="true" size="256" type="VARCHAR"/>
+        <column name="RULE_EXPR" size="4000" type="VARCHAR"/>
     </table>
     <table name="EN_RULE_EXT_T">
         <column name="RULE_EXT_ID" primaryKey="true" size="19" type="DECIMAL"/>
@@ -3332,6 +3429,7 @@
         <column name="DSPL_ORD" required="true" size="5" type="DECIMAL"/>
         <column name="DFLT_VAL" size="2000" type="VARCHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
+        <column name="ACTV_IND" required="true" size="1" type="DECIMAL"/>
         <index name="EN_RULE_TMPL_ATTRIB_TI1">
             <index-column name="RULE_TMPL_ID"/>
         </index>
@@ -6564,11 +6662,11 @@
         <foreign-key foreignTable="CA_OBJ_TYPE_T" name="FS_OPTION_TR2">
             <reference foreign="FIN_OBJ_TYP_CD" local="FOBJTP_INC_CSH_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_BALANCE_TYPE_T" name="FS_OPTION_TR14">
-            <reference foreign="FIN_BALANCE_TYP_CD" local="INT_ENC_FBALTYP_CD"/>
-        </foreign-key>
         <foreign-key foreignTable="CA_BALANCE_TYPE_T" name="FS_OPTION_TR15">
             <reference foreign="FIN_BALANCE_TYP_CD" local="PRE_ENC_FBALTYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_BALANCE_TYPE_T" name="FS_OPTION_TR14">
+            <reference foreign="FIN_BALANCE_TYP_CD" local="INT_ENC_FBALTYP_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_OBJ_TYPE_T" name="FS_OPTION_TR6">
             <reference foreign="FIN_OBJ_TYP_CD" local="FOBJ_TYP_ASSET_CD"/>
@@ -11082,18 +11180,18 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <view name="AP_CRDT_MEMO_V" viewdefinition="SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        cm.CRDT_MEMO_ID,  &#xa;        FDOC_NBR,  &#xa;        cm.OBJ_ID,  &#xa;        CRDT_MEMO_NBR,  &#xa;        PMT_RQST_ID,  &#xa;        PO_ID, &#xa;        CRDT_MEMO_STAT_CD,  &#xa;        CRDT_HLD_IND,  &#xa;        VNDR_CUST_NBR,  &#xa;        AP_APRVL_DT,  &#xa;        CRDT_MEMO_EXTRT_DT, &#xa;        CRDT_MEMO_PD_TS, &#xa;        VNDR_NM,  &#xa;        SUM( CASE WHEN item.ITM_EXTND_PRC IS NULL THEN 0.00 ELSE item.ITM_EXTND_PRC END ) AS TOTAL_AMOUNT &#xa; FROM AP_CRDT_MEMO_T cm, AP_CRDT_MEMO_ITM_T item  &#xa; WHERE cm.CRDT_MEMO_ID = item.CRDT_MEMO_ID  &#xa; GROUP BY AP_PUR_DOC_LNK_ID, cm.CRDT_MEMO_ID, FDOC_NBR,  &#xa;          cm.OBJ_ID, CRDT_MEMO_NBR, PMT_RQST_ID, PO_ID, &#xa;          CRDT_MEMO_STAT_CD, CRDT_HLD_IND, VNDR_CUST_NBR,  &#xa;          AP_APRVL_DT, CRDT_MEMO_EXTRT_DT, CRDT_MEMO_PD_TS, VNDR_NM&#xa;"/>
-    <view name="AP_PMT_RQST_V" viewdefinition="SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        rq.PMT_RQST_ID,  &#xa;        FDOC_NBR,  &#xa;        rq.OBJ_ID,  &#xa;        INV_NBR,  &#xa;        PO_ID,  &#xa;        PMT_RQST_STAT_CD,  &#xa;        PMT_HLD_IND,  &#xa;        PMT_RQST_CNCL_IND,  &#xa;        VNDR_NM, &#xa;        VNDR_CUST_NBR,  &#xa;        PMT_RQST_PAY_DT,  &#xa;        PMT_EXTRT_DT,  &#xa;        PMT_PD_DT, &#xa;&#x9;&#x9;SUM( CASE WHEN item.ITM_EXTND_PRC IS NULL THEN 0.00 ELSE item.ITM_EXTND_PRC END ) AS TOTAL_AMOUNT &#xa; FROM AP_PMT_RQST_T rq, AP_PMT_RQST_ITM_T item &#xa; WHERE rq.PMT_RQST_ID = item.PMT_RQST_ID &#xa; GROUP BY AP_PUR_DOC_LNK_ID, rq.PMT_RQST_ID, FDOC_NBR, rq.OBJ_ID, &#xa;          INV_NBR, PO_ID, PMT_RQST_STAT_CD, PMT_HLD_IND, PMT_RQST_CNCL_IND, &#xa;          VNDR_NM, VNDR_CUST_NBR, PMT_RQST_PAY_DT, PMT_EXTRT_DT, PMT_PD_DT &#xa;"/>
-    <view name="CA_OBJECT_CODE_V" viewdefinition="(&#xa;SELECT&#xa;        C.UNIV_FISCAL_YR,&#xa;        FIN_COA_CD,&#xa;        FIN_OBJECT_CD,&#xa;        FIN_OBJ_CD_NM,&#xa;        FIN_OBJ_CD_SHRT_NM,&#xa;        FIN_OBJ_LEVEL_CD,&#xa;        RPTS_TO_FIN_COA_CD,&#xa;        RPTS_TO_FIN_OBJ_CD ,&#xa;        FIN_OBJ_TYP_CD,&#xa;        FIN_OBJ_SUB_TYP_CD,&#xa;        HIST_FIN_OBJECT_CD,&#xa;        FIN_OBJ_ACTIVE_CD,&#xa;        FOBJ_BDGT_AGGR_CD,&#xa;        FOBJ_MNXFR_ELIM_CD,&#xa;        FIN_FED_FUNDED_CD,&#xa;        NXT_YR_FIN_OBJ_CD&#xa;FROM CA_OBJECT_CODE_T C, SH_UNIV_DATE_T S&#xa;WHERE C.UNIV_FISCAL_YR = S.UNIV_FISCAL_YR AND UNIV_DT = TRUNC(SYSDATE)&#xa;)&#xa; &#xa; &#xa; &#xa;"/>
-    <view name="CA_SUB_OBJECT_CD_V" viewdefinition="(&#xa;SELECT&#xa;        C.UNIV_FISCAL_YR,&#xa;        FIN_COA_CD,&#xa;        ACCOUNT_NBR,&#xa;        FIN_OBJECT_CD,&#xa;        FIN_SUB_OBJ_CD,&#xa;        FIN_SUB_OBJ_CD_NM,&#xa;        FIN_SUBOBJ_SHRT_NM,&#xa;        FIN_SUBOBJ_ACTV_CD&#xa;FROM CA_SUB_OBJECT_CD_T C, SH_UNIV_DATE_T S&#xa;WHERE C.UNIV_FISCAL_YR = S.UNIV_FISCAL_YR AND UNIV_DT = TRUNC(SYSDATE)&#xa;)&#xa; &#xa; &#xa; &#xa;"/>
-    <view name="PUR_PO_V" viewdefinition="( &#xa;SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        PO_ID,  &#xa;        PO_CUR_IND,  &#xa;        FDOC_NBR,  &#xa;        OBJ_ID  &#xa;FROM PUR_PO_T &#xa;)&#xa; &#xa;"/>
-    <view name="PUR_REQS_V" viewdefinition="( &#xa;SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        REQS_ID, &#xa;        FDOC_NBR,  &#xa;        OBJ_ID  &#xa;FROM PUR_REQS_T &#xa;)&#xa; &#xa;"/>
+    <view name="AP_CRDT_MEMO_V" viewdefinition="SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        cm.CRDT_MEMO_ID,  &#xa;        FDOC_NBR,  &#xa;        cm.OBJ_ID,  &#xa;        CRDT_MEMO_NBR,  &#xa;        PMT_RQST_ID,  &#xa;        PO_ID, &#xa;        CRDT_MEMO_STAT_CD,  &#xa;        CRDT_HLD_IND,  &#xa;        VNDR_CUST_NBR,  &#xa;        AP_APRVL_DT,  &#xa;        CRDT_MEMO_EXTRT_DT, &#xa;        CRDT_MEMO_PD_TS, &#xa;        VNDR_NM,  &#xa;        SUM( CASE WHEN item.ITM_EXTND_PRC IS NULL THEN 0.00 ELSE item.ITM_EXTND_PRC END ) AS TOTAL_AMOUNT &#xa; FROM AP_CRDT_MEMO_T cm, AP_CRDT_MEMO_ITM_T item  &#xa; WHERE cm.CRDT_MEMO_ID = item.CRDT_MEMO_ID  &#xa; GROUP BY AP_PUR_DOC_LNK_ID, cm.CRDT_MEMO_ID, FDOC_NBR,  &#xa;          cm.OBJ_ID, CRDT_MEMO_NBR, PMT_RQST_ID, PO_ID, &#xa;          CRDT_MEMO_STAT_CD, CRDT_HLD_IND, VNDR_CUST_NBR,  &#xa;          AP_APRVL_DT, CRDT_MEMO_EXTRT_DT, CRDT_MEMO_PD_TS, VNDR_NM&#xa;&#xa;"/>
+    <view name="AP_PMT_RQST_V" viewdefinition="SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        rq.PMT_RQST_ID,  &#xa;        FDOC_NBR,  &#xa;        rq.OBJ_ID,  &#xa;        INV_NBR,  &#xa;        PO_ID,  &#xa;        PMT_RQST_STAT_CD,  &#xa;        PMT_HLD_IND,  &#xa;        PMT_RQST_CNCL_IND,  &#xa;        VNDR_NM, &#xa;        VNDR_CUST_NBR,  &#xa;        PMT_RQST_PAY_DT,  &#xa;        PMT_EXTRT_DT,  &#xa;        PMT_PD_DT, &#xa;&#x9;&#x9;SUM( CASE WHEN item.ITM_EXTND_PRC IS NULL THEN 0.00 ELSE item.ITM_EXTND_PRC END ) AS TOTAL_AMOUNT &#xa; FROM AP_PMT_RQST_T rq, AP_PMT_RQST_ITM_T item &#xa; WHERE rq.PMT_RQST_ID = item.PMT_RQST_ID &#xa; GROUP BY AP_PUR_DOC_LNK_ID, rq.PMT_RQST_ID, FDOC_NBR, rq.OBJ_ID, &#xa;          INV_NBR, PO_ID, PMT_RQST_STAT_CD, PMT_HLD_IND, PMT_RQST_CNCL_IND, &#xa;          VNDR_NM, VNDR_CUST_NBR, PMT_RQST_PAY_DT, PMT_EXTRT_DT, PMT_PD_DT &#xa;&#xa;"/>
+    <view name="CA_OBJECT_CODE_V" viewdefinition="(&#xa;SELECT&#xa;        C.UNIV_FISCAL_YR,&#xa;        FIN_COA_CD,&#xa;        FIN_OBJECT_CD,&#xa;        FIN_OBJ_CD_NM,&#xa;        FIN_OBJ_CD_SHRT_NM,&#xa;        FIN_OBJ_LEVEL_CD,&#xa;        RPTS_TO_FIN_COA_CD,&#xa;        RPTS_TO_FIN_OBJ_CD ,&#xa;        FIN_OBJ_TYP_CD,&#xa;        FIN_OBJ_SUB_TYP_CD,&#xa;        HIST_FIN_OBJECT_CD,&#xa;        FIN_OBJ_ACTIVE_CD,&#xa;        FOBJ_BDGT_AGGR_CD,&#xa;        FOBJ_MNXFR_ELIM_CD,&#xa;        FIN_FED_FUNDED_CD,&#xa;        NXT_YR_FIN_OBJ_CD&#xa;FROM CA_OBJECT_CODE_T C, SH_UNIV_DATE_T S&#xa;WHERE C.UNIV_FISCAL_YR = S.UNIV_FISCAL_YR AND UNIV_DT = TRUNC(SYSDATE)&#xa;)&#xa; &#xa; &#xa; &#xa;&#xa;"/>
+    <view name="CA_SUB_OBJECT_CD_V" viewdefinition="(&#xa;SELECT&#xa;        C.UNIV_FISCAL_YR,&#xa;        FIN_COA_CD,&#xa;        ACCOUNT_NBR,&#xa;        FIN_OBJECT_CD,&#xa;        FIN_SUB_OBJ_CD,&#xa;        FIN_SUB_OBJ_CD_NM,&#xa;        FIN_SUBOBJ_SHRT_NM,&#xa;        FIN_SUBOBJ_ACTV_CD&#xa;FROM CA_SUB_OBJECT_CD_T C, SH_UNIV_DATE_T S&#xa;WHERE C.UNIV_FISCAL_YR = S.UNIV_FISCAL_YR AND UNIV_DT = TRUNC(SYSDATE)&#xa;)&#xa; &#xa; &#xa; &#xa;&#xa;"/>
+    <view name="PUR_PO_V" viewdefinition="( &#xa;SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        PO_ID,  &#xa;        PO_CUR_IND,  &#xa;        FDOC_NBR,  &#xa;        OBJ_ID  &#xa;FROM PUR_PO_T &#xa;)&#xa; &#xa;&#xa;"/>
+    <view name="PUR_REQS_V" viewdefinition="( &#xa;SELECT &#xa;        AP_PUR_DOC_LNK_ID,  &#xa;        REQS_ID, &#xa;        FDOC_NBR,  &#xa;        OBJ_ID  &#xa;FROM PUR_REQS_T &#xa;)&#xa; &#xa;&#xa;"/>
     <sequence name="AP_ELCTRNC_INV_LOAD_SUM_ID" nextval="1002"/>
     <sequence name="AP_NEG_PMT_RQST_APRVL_LMT_ID" nextval="1002"/>
-    <sequence name="AP_PUR_DOC_LNK_ID" nextval="21"/>
+    <sequence name="AP_PUR_DOC_LNK_ID" nextval="26"/>
     <sequence name="BAM_PARAM_SEQ" nextval="2000"/>
     <sequence name="BAM_SEQ" nextval="2000"/>
-    <sequence name="CGPRPSL_NBR_SEQ" nextval="80059"/>
+    <sequence name="CGPRPSL_NBR_SEQ" nextval="80066"/>
     <sequence name="CG_AGENCY_NBR_SEQ" nextval="55061"/>
     <sequence name="CG_PRPSL_CLOSE_NBR_SEQ" nextval="2040"/>
     <sequence name="CG_SUBCNR_NBR_SEQ" nextval="2080"/>
@@ -11116,14 +11214,14 @@
     <sequence name="GL_CRRCTN_RPLC_SPC_T_SEQ" nextval="43"/>
     <sequence name="GL_CRRCTN_SRCH_CRT_T_SEQ" nextval="43"/>
     <sequence name="GL_ID_BILL_T_SEQ" nextval="1"/>
-    <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="11909"/>
-    <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="31885"/>
+    <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="12501"/>
+    <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="35837"/>
     <sequence name="INV_HDR_INFO_ID" nextval="1002"/>
     <sequence name="INV_ITM_ID" nextval="1002"/>
     <sequence name="INV_RJT_REAS_ID" nextval="1002"/>
     <sequence name="LOOKUP_RESULT_SEQUENCE_NBR_SEQ" nextval="2040"/>
-    <sequence name="NTE_ID_SEQ" nextval="2060"/>
-    <sequence name="ORIGIN_ENTRY_ID_SEQ" nextval="2040"/>
+    <sequence name="NTE_ID_SEQ" nextval="2061"/>
+    <sequence name="ORIGIN_ENTRY_ID_SEQ" nextval="2514"/>
     <sequence name="PDP_ACH_ACCT_GNRTD_ID_SEQ" nextval="10000000"/>
     <sequence name="PDP_BNK_ID_SEQ" nextval="11000001"/>
     <sequence name="PDP_CUST_BNK_ID_SEQ" nextval="10000034"/>
@@ -11144,38 +11242,41 @@
     <sequence name="PMT_RQST_ID" nextval="1040"/>
     <sequence name="PMT_RQST_ITM_ID" nextval="1002"/>
     <sequence name="PMT_RQST_STAT_HIST_ID" nextval="1002"/>
-    <sequence name="PO_ACCT_ID" nextval="1003"/>
+    <sequence name="PO_ACCT_ID" nextval="1009"/>
     <sequence name="PO_CONTR_LANG_ID" nextval="1002"/>
-    <sequence name="PO_ID" nextval="1003"/>
+    <sequence name="PO_ID" nextval="1009"/>
     <sequence name="PO_ITM_CPTL_AST_ID" nextval="1002"/>
-    <sequence name="PO_ITM_ID" nextval="1005"/>
+    <sequence name="PO_ITM_ID" nextval="1011"/>
     <sequence name="PO_QT_LANG_ID" nextval="1002"/>
     <sequence name="PO_QT_LST_ID" nextval="1002"/>
     <sequence name="PO_RSTRC_MTRL_STATHST_ID" nextval="1002"/>
     <sequence name="PO_STAT_HIST_ID" nextval="1002"/>
     <sequence name="PO_VNDR_QT_ID" nextval="1002"/>
     <sequence name="PO_VNDR_STPLTN_ID" nextval="1002"/>
-    <sequence name="REQS_ACCT_ID" nextval="1003"/>
-    <sequence name="REQS_ID" nextval="1003"/>
+    <sequence name="REQS_ACCT_ID" nextval="1011"/>
+    <sequence name="REQS_ID" nextval="1008"/>
     <sequence name="REQS_ITM_CPTL_AST_ID" nextval="1002"/>
-    <sequence name="REQS_ITM_ID" nextval="1005"/>
+    <sequence name="REQS_ITM_ID" nextval="1012"/>
     <sequence name="REQS_STAT_HIST_ID" nextval="1006"/>
     <sequence name="SEQUENCE_EN_USR" nextval="100000000000"/>
-    <sequence name="SEQ_ACTION_LIST_OPTN" nextval="1020"/>
-    <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
-    <sequence name="SEQ_ACTION_TAKEN" nextval="2140"/>
-    <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="317320"/>
+    <sequence name="SEQ_ACTION_LIST_OPTN" nextval="1217"/>
+    <sequence name="SEQ_ACTION_REQUEST" nextval="2352"/>
+    <sequence name="SEQ_ACTION_TAKEN" nextval="2285"/>
+    <sequence name="SEQ_ACTN_ITM" nextval="10187"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318185"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
+    <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5771"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="12756"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563357869"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563359695"/>
+    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2000"/>
+    <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
-    <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151656"/>
+    <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="153046"/>
     <sequence name="SEQ_TRANSACTION_TST" nextval="100"/>
     <sequence name="SERVICE_DEF_SEQ" nextval="2000"/>
     <sequence name="SHPMNT_RCVNG_ID" nextval="1002"/>
