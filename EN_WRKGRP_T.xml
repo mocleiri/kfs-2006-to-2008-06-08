@@ -647,11 +647,6 @@
         WRKGRP_CUR_IND="0" WRKGRP_DESC="Capital Assets administration"
         WRKGRP_ID="317720" WRKGRP_NM="CM_ADMINISTRATORS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="2" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
-        WRKGRP_CUR_IND="0"
-        WRKGRP_DESC="Capital Assets security administrators"
-        WRKGRP_ID="317740" WRKGRP_NM="CM_SECURITY_ADMINISTRATORS"
-        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="2" DOC_HDR_ID="317901"
         WRKGRP_ACTV_IND="1" WRKGRP_CUR_IND="1"
         WRKGRP_DESC="A workgroup that allows its members to claim electronic payments that have come into the institution."
@@ -688,11 +683,6 @@
         WRKGRP_ID="318103"
         WRKGRP_NM="CM_CAPITAL_ASSET_BUILDER_ADMINISTRATORS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
-        WRKGRP_CUR_IND="1"
-        WRKGRP_DESC="Grants access to asset security maintenance document"
-        WRKGRP_ID="317740" WRKGRP_NM="CM_SECURITY_ADMINISTRATORS"
-        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="1"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="Users in this workgroup can do everything that CM_ASSET_MERGE_SEPARATE_USERS can do, plus: &#xa;1. Update more fields on Asset maintenance document &#xa;2. Retire non-movable assets and 3. Asset transfers non-movable assets"

@@ -236,14 +236,6 @@
         DOC_TYP_PARNT_ID="317580"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="1"
-        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
-        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
-        DOC_TYP_ID="317680" DOC_TYP_LBL_TXT="Asset Security"
-        DOC_TYP_NM="AssetSecurityMaintenanceDocument"
-        DOC_TYP_PARNT_ID="317581"
-        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
-        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
     <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="2"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="0"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/effortCertification.do?methodToCall=docHandler"
@@ -444,22 +436,6 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="258487" DOC_TYP_RTE_VER_NBR="2"
         DOC_TYP_VER_NBR="3" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="2"
-        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
-        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
-        DOC_TYP_ID="317400" DOC_TYP_LBL_TXT="Asset Security Detail"
-        DOC_TYP_NM="AssetSecurityDetailMaintenanceDocument"
-        DOC_TYP_PARNT_ID="317581"
-        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
-        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="2"
-        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
-        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
-        DOC_TYP_ID="317401" DOC_TYP_LBL_TXT="Asset Campus Security"
-        DOC_TYP_NM="AssetCampusSecurityMaintenanceDocument"
-        DOC_TYP_PARNT_ID="317581"
-        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
-        DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
     <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2741" DB_LOCK_VER_NBR="2"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
