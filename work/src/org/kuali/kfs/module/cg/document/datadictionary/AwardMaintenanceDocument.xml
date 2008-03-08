@@ -189,5 +189,13 @@
 		
         <allowsNoteDelete>false</allowsNoteDelete>
         <displayTopicFieldInNotes>true</displayTopicFieldInNotes>
+        <workflowProperties>
+        	<workflowGroup>
+        		<workflowProperty path="oldMaintainableObject.businessObject" />
+        		<workflowProperty path="newMaintainableObject.businessObject" />
+        		<workflowProperty path="newMaintainableObject.businessObject.Agency" />
+        		<workflowProperty path="newMaintainableObject.businessObject.Proposal.proposalResearchRisks.researchRiskTypeCode" />
+			</workflowGroup>
+		</workflowProperties>
     </maintenanceDocument>
 </dictionaryEntry>
