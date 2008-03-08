@@ -39,7 +39,6 @@ import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.core.workflow.service.KualiWorkflowInfo;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ConciseXmlDocumentConversionService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapWorkflowConstants;
 import org.kuali.module.purap.PurapConstants.CreditMemoStatuses;
@@ -138,14 +137,6 @@ public class PurchaseOrderDocument extends PurchasingDocumentBase {
         super();
         this.purchaseOrderVendorStipulations = new TypedArrayList(PurchaseOrderVendorStipulation.class);
         this.purchaseOrderVendorQuotes = new TypedArrayList(PurchaseOrderVendorQuote.class);
-    }
-
-    /**
-     * @see org.kuali.core.document.Document#getDocumentRepresentationForSerialization()
-     */
-    @Override
-    protected Document getDocumentRepresentationForSerialization() {
-        return SpringContext.getBean(ConciseXmlDocumentConversionService.class).getDocumentForSerialization(this);
     }
 
     public ContractManager getContractManager() {
