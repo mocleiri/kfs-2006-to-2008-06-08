@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiNonpersonnelCategoryMaintenanceDocument</documentTypeName>
+        <documentTypeName>NonpersonnelCategoryMaintenanceDocument</documentTypeName>
         <documentTypeCode>NPC</documentTypeCode>
 
         <label>Non-Personnel Category</label>

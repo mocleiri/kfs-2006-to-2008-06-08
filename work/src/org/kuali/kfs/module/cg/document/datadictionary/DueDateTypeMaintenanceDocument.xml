@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiDueDateTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>DueDateTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>DDT</documentTypeCode>
 
         <label>Due Date Type</label>
