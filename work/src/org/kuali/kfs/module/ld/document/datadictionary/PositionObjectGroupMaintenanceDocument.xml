@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-		<documentTypeName>KualiPositionObjectGroupMaintenanceDocument</documentTypeName>
+		<documentTypeName>PositionObjectGroupMaintenanceDocument</documentTypeName>
 		<documentTypeCode>POGR</documentTypeCode>
 
 		<label>Labor Position Object Code Group</label>
