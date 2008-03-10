@@ -3429,7 +3429,7 @@
         <column name="DSPL_ORD" required="true" size="5" type="DECIMAL"/>
         <column name="DFLT_VAL" size="2000" type="VARCHAR"/>
         <column default="0" name="DB_LOCK_VER_NBR" size="8" type="DECIMAL"/>
-        <column name="ACTV_IND" required="true" size="1" type="DECIMAL"/>
+        <column name="ACTV_IND" required="true" size="1" type="DECIMAL" default="1" />
         <index name="EN_RULE_TMPL_ATTRIB_TI1">
             <index-column name="RULE_TMPL_ID"/>
         </index>
