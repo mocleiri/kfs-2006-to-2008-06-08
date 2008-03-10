@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiResearchTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>ResearchTypeCodeMaintenanceDocument</documentTypeName>
         <documentTypeCode>RTCM</documentTypeCode>
 
         <label>Research Type</label>

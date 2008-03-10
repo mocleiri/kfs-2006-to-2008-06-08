@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiProjectTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>ProjectTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PRJT</documentTypeCode>
 
         <label>Project Type</label>

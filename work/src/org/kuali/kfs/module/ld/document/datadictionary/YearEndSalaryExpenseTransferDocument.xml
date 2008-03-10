@@ -31,7 +31,7 @@
                 </workgroups>
             </authorization>
         </authorizations>
-        <documentTypeName>KualiYearEndSalaryExpenseTransferDocument</documentTypeName>
+        <documentTypeName>YearEndSalaryExpenseTransferDocument</documentTypeName>
         <documentTypeCode>YEST</documentTypeCode>
         <label>Year End Salary Expense Transfer</label>
         
