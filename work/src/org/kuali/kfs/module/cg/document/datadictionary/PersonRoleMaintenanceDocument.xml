@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiPersonRoleMaintenanceDocument</documentTypeName>
+        <documentTypeName>PersonRoleMaintenanceDocument</documentTypeName>
         <documentTypeCode>PRSN</documentTypeCode>
 
         <label>Person Role</label>
