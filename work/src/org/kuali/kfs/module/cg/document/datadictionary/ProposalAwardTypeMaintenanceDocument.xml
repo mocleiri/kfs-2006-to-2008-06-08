@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>ProposalTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>ProposalAwardTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>PATY</documentTypeCode>
 
         <label>Proposal Type</label>

@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiQuestionTypeMaintenanceDocument</documentTypeName>
+        <documentTypeName>QuestionTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>QNT</documentTypeCode>
 
         <label>Question Type</label>
