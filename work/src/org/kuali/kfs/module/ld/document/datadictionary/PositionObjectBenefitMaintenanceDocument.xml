@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-		<documentTypeName>KualiLaborObjectCodeBenefitMaintenanceDocument</documentTypeName>
+		<documentTypeName>PositionObjectBenefitMaintenanceDocument</documentTypeName>
 		<documentTypeCode>LOBN</documentTypeCode>
 
 		<label>Labor Object Code Benefits Maintenance Document</label>
