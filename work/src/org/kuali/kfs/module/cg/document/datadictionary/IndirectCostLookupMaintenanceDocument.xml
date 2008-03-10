@@ -33,7 +33,7 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>KualiIndirectCostLookupMaintenanceDocument</documentTypeName>
+        <documentTypeName>IndirectCostLookupMaintenanceDocument</documentTypeName>
         <documentTypeCode>IDCL</documentTypeCode>
 
         <label>Indirect Cost Lookup Maintenance Document</label>
