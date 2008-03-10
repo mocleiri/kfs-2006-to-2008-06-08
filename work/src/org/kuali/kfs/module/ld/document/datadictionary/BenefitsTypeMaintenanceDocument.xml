@@ -32,7 +32,7 @@
             </authorization>
         </authorizations>
 
-		<documentTypeName>KualiLaborBenefitsTypeMaintenanceDocument</documentTypeName>
+		<documentTypeName>BenefitsTypeMaintenanceDocument</documentTypeName>
 		<documentTypeCode>BENT</documentTypeCode>
 
 		<label>Labor Benefits Type</label>
