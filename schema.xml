@@ -1725,10 +1725,6 @@
         <foreign-key foreignTable="CA_HIGHR_ED_FUNC_T" name="CA_ACCOUNT_TR7">
             <reference foreign="FIN_HGH_ED_FUNC_CD" local="FIN_HGH_ED_FUNC_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR14">
-            <reference foreign="FIN_COA_CD" local="INCOME_FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="INCOME_ACCOUNT_NBR"/>
-        </foreign-key>
         <foreign-key foreignTable="SH_ZIP_CODE_T" name="CA_ACCOUNT_TR19">
             <reference foreign="POSTAL_ZIP_CD" local="ACCT_ZIP_CD"/>
         </foreign-key>
@@ -1740,10 +1736,6 @@
         </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR12">
             <reference foreign="FIN_COA_CD" local="ENDOW_FIN_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR10">
-            <reference foreign="FIN_COA_CD" local="CONT_FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="CONT_ACCOUNT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_BDGT_REC_LVL_T" name="CA_ACCOUNT_TR21">
             <reference foreign="BDGT_REC_LVL_CD" local="BDGT_REC_LVL_CD"/>
@@ -1757,10 +1749,6 @@
         </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CA_ACCOUNT_TR1">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CA_ACCOUNT_TR16">
-            <reference foreign="FIN_COA_CD" local="ICR_FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ICR_ACCOUNT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="SH_STATE_T" name="CA_ACCOUNT_TR5">
             <reference foreign="POSTAL_STATE_CD" local="ACCT_STATE_CD"/>
