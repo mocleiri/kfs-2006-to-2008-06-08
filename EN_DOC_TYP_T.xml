@@ -2333,7 +2333,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="295730" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="8" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="18"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="19"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiMaintenanceDocument"
         DOC_TYP_HDLR_URL_ADDR="none" DOC_TYP_ID="297432"
@@ -2719,4 +2719,13 @@
         DOC_TYP_NM="AssetPaymentDocument" DOC_TYP_PARNT_ID="317040"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="318120"
+        DOC_TYP_LBL_TXT="Effort Certification Report Definition"
+        DOC_TYP_NM="EffortCertificationReportDefinitionMaintenanceDocument"
+        DOC_TYP_PARNT_ID="297432"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
 </dataset>
