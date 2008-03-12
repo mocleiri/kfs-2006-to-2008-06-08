@@ -3862,7 +3862,7 @@
         SH_PARM_DESC="Flag for enabling;disabling direct inquiries on screens that are drawn by the nervous system (i.e. lookups and maintenance documents)"
         SH_PARM_DTL_TYP_CD="All"
         SH_PARM_NM="ENABLE_DIRECT_INQUIRIES_IND"
-        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="WorkflowAdmin"/>
     <SH_PARM_T OBJ_ID="3B13485ADADEA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
