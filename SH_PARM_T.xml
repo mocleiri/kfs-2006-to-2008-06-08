@@ -4532,4 +4532,18 @@
         SH_PARM_DTL_TYP_CD="BudgetConstruction"
         SH_PARM_NM="BUDGET_AGGREGATION_CODES" SH_PARM_NMSPC_CD="KFS-BC"
         SH_PARM_TXT="O" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="484112B5D398ED39E0404F8189D87D9B"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Indicates whether receiving address functionality should be completely turned off for the Requisition and Purchase Order which will hide the &quot;Receiving Address&quot; and &quot;Address to Vendor&quot; section on the Delivery tab. An institution would select to hide these sections if they have no need for receiving addresses."
+        SH_PARM_DTL_TYP_CD="Document"
+        SH_PARM_NM="ENABLE_RECEIVING_ADDRESS_IND"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="484112B5D399ED39E0404F8189D87D9B"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Indicates whether the &quot;Address to Vendor&quot; section of the Delivery tab on the Requisition should be readonly to not allow the user to select which address should be sent to the vendor (delivery or receiving address). An institution would select to hide this section if they prefer to not allow Requestors editing the final delivery/receiving address indicator."
+        SH_PARM_DTL_TYP_CD="Requisition"
+        SH_PARM_NM="ENABLE_ADDRESS_TO_VENDOR_SELECTION_IND"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
 </dataset>

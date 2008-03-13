@@ -451,8 +451,8 @@
         DOC_TYP_NM="RoomMaintenanceDocument" DOC_TYP_PARNT_ID="317581"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2562" DB_LOCK_VER_NBR="1"
-        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2562" DB_LOCK_VER_NBR="2"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="0"
         DOC_TYP_DESC="A document to remove or replace users within rules and workgroups."
         DOC_TYP_HDLR_URL_ADDR="http://localhost:8080/kr-dev/en/RemoveReplace.do?methodToCall=docHandler"
         DOC_TYP_ID="317420" DOC_TYP_LBL_TXT="Remove/Replace User"
@@ -1003,7 +1003,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="303181" DOC_TYP_RTE_VER_NBR="2"
         DOC_TYP_VER_NBR="5" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2562" DB_LOCK_VER_NBR="3"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2562" DB_LOCK_VER_NBR="4"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="Workflow Maintenance Document" DOC_TYP_ID="2785"
         DOC_TYP_LBL_TXT="Workflow Maintenance Document"
@@ -1974,7 +1974,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="167588" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="1" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="16"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="17"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="Parent document of all Purchasing &amp; AP maintenance documents"
         DOC_TYP_HDLR_URL_ADDR="none" DOC_TYP_ID="293336"
@@ -2726,6 +2726,24 @@
         DOC_TYP_LBL_TXT="Effort Certification Report Definition"
         DOC_TYP_NM="EffortCertificationReportDefinitionMaintenanceDocument"
         DOC_TYP_PARNT_ID="297432"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2562" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_DESC="A document to remove or replace users within rules and workgroups."
+        DOC_TYP_HDLR_URL_ADDR="${workflow.url}/RemoveReplace.do?methodToCall=docHandler"
+        DOC_TYP_ID="318140" DOC_TYP_LBL_TXT="Remove/Replace User"
+        DOC_TYP_NM="EDENSERVICE-DOCS.RemoveReplaceUser"
+        DOC_TYP_PARNT_ID="2785"
+        DOC_TYP_POST_PRCSR_NM="edu.iu.uis.eden.removereplace.RemoveReplacePostProcessor"
+        DOC_TYP_PREV_VER="317420" DOC_TYP_RTE_VER_NBR="1"
+        DOC_TYP_VER_NBR="1" WRKGRP_ID="2562"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="318141" DOC_TYP_LBL_TXT="Receiving Address"
+        DOC_TYP_NM="ReceivingAddressMaintenanceDocument"
+        DOC_TYP_PARNT_ID="293336"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
 </dataset>
