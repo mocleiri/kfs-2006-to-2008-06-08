@@ -40,6 +40,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springmodules.orm.ojb.OjbOperationException;
 
+import com.opensymphony.oscache.general.GeneralCacheAdministrator;
+
 /**
  * This class should be extended by all Kuali unit tests.
  * 
@@ -130,12 +132,20 @@ public abstract class KualiTestBase extends TestCase implements KualiTestConstan
             if (contextConfiguration != null) {
                 endTestTransaction();
             }
+            if ( springContextInitialized ) {
+                clearMethodCache();
+            }
             GlobalVariables.setUserSession(null);
             GlobalVariables.setErrorMap(new ErrorMap());
             LOG.info("Leaving test '" + testName + "'");
         }
     }
 
+    protected void clearMethodCache() {
+        GeneralCacheAdministrator cache = (GeneralCacheAdministrator)SpringContext.getBean("methodResultsCacheAdministrator");
+        cache.flushAll();
+    }
+    
     protected boolean testTransactionIsRollbackOnly() {
         return (transactionStatus != null) && (transactionStatus.isRollbackOnly());
     }
