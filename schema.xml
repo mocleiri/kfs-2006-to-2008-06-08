@@ -3769,6 +3769,46 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="CM_AST_LOC_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_LOC_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <unique name="CM_AST_LOC_DOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="CM_AST_LOC_DTL_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
+        <column name="BLDG_CD" size="10" type="VARCHAR"/>
+        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
+        <column name="BLDG_SUB_ROOM_NBR" size="2" type="VARCHAR"/>
+        <column name="CPTLAST_IU_TAG_NBR" size="8" type="VARCHAR"/>
+        <foreign-key foreignTable="SH_BUILDING_T" name="CM_AST_LOC_DTL_TR2">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_ROOM_T" name="CM_AST_LOC_DTL_TR3">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+            <reference foreign="BLDG_CD" local="BLDG_CD"/>
+            <reference foreign="BLDG_ROOM_NBR" local="BLDG_ROOM_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="CM_AST_LOC_DTL_TR1">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_AST_LOC_DOC_T" name="CM_AST_LOC_DTL_TR4">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <unique name="CM_AST_LOC_DTL_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CM_AST_LOC_T">
         <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
         <column name="AST_LOC_TYP_CD" primaryKey="true" size="2" type="VARCHAR"/>
@@ -12959,7 +12999,7 @@
         <column name="PUR_COMM_CD" primaryKey="true" size="40" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="PUR_COMM_DESC" required="true" size="45" type="VARCHAR"/>
+        <column name="PUR_COMM_DESC" required="true" size="200" type="VARCHAR"/>
         <column name="PUR_SALES_TAX_IND" size="1" type="VARCHAR"/>
         <column name="ITM_RSTRC_IND" size="1" type="VARCHAR"/>
         <column name="RSTRC_MTRL_CD" size="4" type="VARCHAR"/>
@@ -13667,10 +13707,10 @@
     </table>
     <table name="PUR_RCVNG_ADDR_T">
         <column name="PUR_RCVNG_ADDR_ID" primaryKey="true" size="10" type="DECIMAL"/>
-        <column name="FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
-        <column name="ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="FIN_COA_CD" required="true" size="2" type="VARCHAR"/>
+        <column name="ORG_CD" size="4" type="VARCHAR"/>
         <column name="PUR_RCVNG_NM" size="45" type="VARCHAR"/>
         <column name="PUR_RCVNG_LN1_ADDR" size="45" type="VARCHAR"/>
         <column name="PUR_RCVNG_LN2_ADDR" size="45" type="VARCHAR"/>
