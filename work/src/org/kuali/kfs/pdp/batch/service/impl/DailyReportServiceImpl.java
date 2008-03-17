@@ -28,6 +28,7 @@ import org.kuali.module.gl.util.TransactionReport.PageHelper;
 import org.kuali.module.pdp.bo.DailyReport;
 import org.kuali.module.pdp.dao.PaymentDetailDao;
 import org.kuali.module.pdp.service.DailyReportService;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -41,6 +42,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
+@Transactional
 public class DailyReportServiceImpl implements DailyReportService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DailyReportServiceImpl.class);
 
