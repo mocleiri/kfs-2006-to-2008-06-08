@@ -717,7 +717,7 @@
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
         DOC_TYP_ID="172083" DOC_TYP_LBL_TXT="Non-Personnel Sub-Category"
-        DOC_TYP_NM="KualiNonpersonnelSubCategoryMaintenanceDocument"
+        DOC_TYP_NM="NonpersonnelSubCategoryMaintenanceDocument"
         DOC_TYP_PARNT_ID="172077"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="172069" DOC_TYP_RTE_VER_NBR="1"
