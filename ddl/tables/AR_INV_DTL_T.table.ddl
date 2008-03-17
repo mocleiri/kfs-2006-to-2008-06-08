@@ -37,6 +37,7 @@ CREATE TABLE AR_INV_DTL_T(
         AR_INV_ITM_DESC                VARCHAR2(800),
         FDOC_OVERRIDE_CD               VARCHAR2(1),
         AR_INV_ITM_TAX_AMT             NUMBER(19, 2),
+        AR_INV_ITM_TXBL_IND            VARCHAR2(1),
      CONSTRAINT AR_INV_DTL_TP1 PRIMARY KEY (
         FDOC_NBR,
         AR_INV_ITM_NBR),
