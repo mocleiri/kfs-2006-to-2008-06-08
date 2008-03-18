@@ -22,7 +22,6 @@
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-dbcp-1.2.1.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-digester-1.7.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-fileupload-1.2.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-io-1.2.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-lang-2.2.jar"/>
@@ -70,5 +69,6 @@
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/transactions-api-3.2.1.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/transactions-jta-3.2.1.jar"/>
 	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/jta-1.0.1B.jar"/>
+	<classpathentry kind="lib" path="work/web-root/WEB-INF/lib/commons-fileupload-1.1.1.jar"/>
 	<classpathentry kind="output" path="work/web-root/WEB-INF/classes"/>
 </classpath>
