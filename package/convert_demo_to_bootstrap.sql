@@ -325,7 +325,7 @@ DELETE FROM ca_rc_t WHERE rc_cd <> 'NO'
 COMMIT
 /
 
-/ clean up the options table /
+-- clean up the options table
 
 UPDATE fs_option_t
 	SET univ_fin_coa_cd = NULL
