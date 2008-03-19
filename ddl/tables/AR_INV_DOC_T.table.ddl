@@ -38,6 +38,13 @@ CREATE TABLE AR_INV_DOC_T(
         CUST_SPCL_PRCS_CD              VARCHAR2(2),
         CUST_REC_ATT_IND               CHAR(1),
         AR_OPEN_INV_IND                VARCHAR2(1),
+        PMT_FIN_COA_CD                 VARCHAR2(2),
+        PMT_ACCT_NBR                   VARCHAR2(7),
+        PMT_SUB_ACCT_NBR               VARCHAR2(5),
+        PMT_FIN_OBJ_CD                 VARCHAR2(4),
+        PMT_FIN_SUB_OBJ_CD             VARCHAR2(3), 
+        PMT_PROJECT_CD                 VARCHAR2(10),
+        PMT_ORG_REF_ID                 VARCHAR2(8),
      CONSTRAINT AR_INV_DOC_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT AR_INV_DOC_TC0 UNIQUE (OBJ_ID)
