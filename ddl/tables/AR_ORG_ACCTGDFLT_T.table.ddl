@@ -15,9 +15,17 @@ CREATE TABLE AR_ORG_ACCTGDFLT_T(
         PMT_FIN_COA_CD                 VARCHAR2(2),
         PMT_ACCT_NBR                   VARCHAR2(7),
         PMT_SUB_ACCT_NBR               VARCHAR2(5),
+        PMT_FIN_OBJ_CD                 VARCHAR2(4),
+        PMT_FIN_SUB_OBJ_CD             VARCHAR2(3), 
         PMT_PROJECT_CD                 VARCHAR2(10),
         PMT_ORG_REF_ID                 VARCHAR2(8),
-        AR_WRITEOFF_OBJ_CD             VARCHAR2(4),
+        WRITEOFF_FIN_COA_CD            VARCHAR2(2),
+        WRITEOFF_ACCT_NBR              VARCHAR2(7),
+        WRITEOFF_SUB_ACCT_NBR          VARCHAR2(5),
+        WRITEOFF_FIN_OBJ_CD            VARCHAR2(4),
+        WRITEOFF_FIN_SUB_OBJ_CD        VARCHAR2(3),
+        WRITEOFF_PROJECT_CD            VARCHAR2(10),
+        WRITEOFF_ORG_REF_ID            VARCHAR2(8),
      CONSTRAINT AR_ORG_ACCTGDFLT_TP1 PRIMARY KEY (
         UNIV_FISCAL_YR,
         FIN_COA_CD,
@@ -25,3 +33,4 @@ CREATE TABLE AR_ORG_ACCTGDFLT_T(
      CONSTRAINT AR_ORG_ACCTGDFLT_TC0 UNIQUE (OBJ_ID)
 )
 /
+
