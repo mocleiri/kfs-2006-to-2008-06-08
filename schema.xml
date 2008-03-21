@@ -4142,6 +4142,81 @@
             <index-column name="AST_RETIRE_REAS_CD"/>
         </index>
     </table>
+    <table name="CM_AST_RETIRE_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="MERGED_TGT_CPTLAST_NBR" size="12" type="DECIMAL"/>
+        <column name="AST_INVN_STAT_CD" size="1" type="VARCHAR"/>
+        <column name="AST_RETIRE_REAS_CD" size="1" type="VARCHAR"/>
+        <column name="CPTLAST_RETIRE_DT" type="DATE"/>
+        <foreign-key foreignTable="CM_RETIRE_REAS_T" name="CM_AST_RETIRE_DOC_TR3">
+            <reference foreign="AST_RETIRE_REAS_CD" local="AST_RETIRE_REAS_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_RETIRE_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_RETIRE_DOC_TR2">
+            <reference foreign="CPTLAST_NBR" local="MERGED_TGT_CPTLAST_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_AST_STATUS_T" name="CM_AST_RETIRE_DOC_TR4">
+            <reference foreign="AST_INVN_STAT_CD" local="AST_INVN_STAT_CD"/>
+        </foreign-key>
+        <unique name="CM_AST_RETIRE_DOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+        <index name="CM_AST_RETIRE_DOC_TI2">
+            <index-column name="AST_RETIRE_REAS_CD"/>
+        </index>
+    </table>
+    <table name="CM_AST_RETIRE_DTL_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="AST_RETIR_COA_CD" size="2" type="VARCHAR"/>
+        <column name="AST_RETIR_ACCT_NBR" size="7" type="VARCHAR"/>
+        <column name="AST_RETIR_CNTCT_NM" size="40" type="VARCHAR"/>
+        <column name="AST_RETIR_INST_NM" size="40" type="VARCHAR"/>
+        <column name="AST_RETIRSTRT_ADDR" size="25" type="VARCHAR"/>
+        <column name="AST_RETIR_CITY_NM" size="25" type="VARCHAR"/>
+        <column name="AST_RETIR_STATE_CD" size="2" type="VARCHAR"/>
+        <column name="AST_RETIR_ZIP_CD" size="9" type="VARCHAR"/>
+        <column name="AST_RETIR_CNTRY_CD" size="2" type="VARCHAR"/>
+        <column name="AST_RETIR_PHN_NBR" size="13" type="VARCHAR"/>
+        <column name="AST_EST_SELL_PRC" scale="2" size="19" type="DECIMAL"/>
+        <column name="CPTLAST_SALE_PRC" scale="2" size="19" type="DECIMAL"/>
+        <column name="CASH_RCPT_FDOC_NBR" size="14" type="VARCHAR"/>
+        <column name="AST_HANDLG_FEE_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="AST_PRVNTMAINT_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="CPTLAST_BUYER_DESC" size="25" type="VARCHAR"/>
+        <column name="AST_PD_CASE_NBR" size="14" type="VARCHAR"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_RETIRE_DTL_TR5">
+            <reference foreign="FDOC_NBR" local="CASH_RCPT_FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_RETIRE_DTL_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_RETIRE_DTL_TR3">
+            <reference foreign="FIN_COA_CD" local="AST_RETIR_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="AST_RETIR_ACCT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_COUNTRY_T" name="CM_AST_RETIRE_DTL_TR7">
+            <reference foreign="POSTAL_CNTRY_CD" local="AST_RETIR_CNTRY_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="CM_AST_RETIRE_DTL_TR4">
+            <reference foreign="FIN_COA_CD" local="AST_RETIR_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_STATE_T" name="CM_AST_RETIRE_DTL_TR6">
+            <reference foreign="POSTAL_STATE_CD" local="AST_RETIR_STATE_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_RETIRE_DTL_TR2">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+        </foreign-key>
+        <unique name="CM_AST_RETIRE_DTL_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CM_AST_RPR_HIST_T">
         <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
         <column name="CPTLAST_INCIDNT_DT" primaryKey="true" type="DATE"/>
@@ -4668,80 +4743,6 @@
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="AST_INVN_UPLD_TS" type="DATE"/>
         <unique name="CM_INVN_UPLD_HDR_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="CM_MULT_AST_DOC_T">
-        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="FDOC_NXT_LINE_NBR" size="7" type="DECIMAL"/>
-        <column name="CPTLAST_ACQ_TYP_CD" size="1" type="VARCHAR"/>
-        <column name="CPTLAST_DESC" size="2000" type="VARCHAR"/>
-        <column name="AST_INVN_STAT_CD" size="1" type="VARCHAR"/>
-        <column name="CPTLAST_COND_CD" size="1" type="VARCHAR"/>
-        <column name="AST_DEPR_MTHD1_CD" size="3" type="VARCHAR"/>
-        <column name="AST_DEPR1_BASE_AMT" scale="2" size="19" type="DECIMAL"/>
-        <column name="CPTLAST_ACQ_SRC_NM" size="40" type="VARCHAR"/>
-        <column name="CPTLAST_TYP_CD" size="7" type="VARCHAR"/>
-        <column name="CPTLAST_MFR_NM" size="40" type="VARCHAR"/>
-        <column name="CPTLAST_MFRMDL_NBR" size="25" type="VARCHAR"/>
-        <column name="CPTLAST_CPTLZTN_DT" type="DATE"/>
-        <column name="CPTLAST_TOTCST_AMT" scale="2" size="19" type="DECIMAL"/>
-        <column name="CPTL_AST_LAND_CNTY_NM" size="20" type="VARCHAR"/>
-        <column name="CPTL_AST_LAND_ACRG_SZ" size="7" type="DECIMAL"/>
-        <column name="CPTL_AST_LAND_PRCL_NBR" size="30" type="VARCHAR"/>
-        <foreign-key foreignTable="CM_AST_STATUS_T" name="CM_MULT_AST_DOC_TR2">
-            <reference foreign="AST_INVN_STAT_CD" local="AST_INVN_STAT_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_MULT_AST_DOC_TR1">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-        </foreign-key>
-        <unique name="CM_MULT_AST_DOC_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="CM_MULT_AST_DTL_T">
-        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column name="CPTLAST_NBR" primaryKey="true" size="12" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
-        <column name="BLDG_CD" size="10" type="VARCHAR"/>
-        <column name="CPTLAST_SERIAL_NBR" size="25" type="VARCHAR"/>
-        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
-        <column name="BLDG_SUB_ROOM_NBR" size="2" type="VARCHAR"/>
-        <column name="CPTLAST_IU_TAG_NBR" size="8" type="VARCHAR"/>
-        <column name="ORG_INVN_NM" size="40" type="VARCHAR"/>
-        <column name="ORG_CPTLAST_TYP_ID" size="20" type="VARCHAR"/>
-        <column name="AST_OFFCMP_NM" size="30" type="VARCHAR"/>
-        <column name="AST_OFFCMP_ADDR" size="30" type="VARCHAR"/>
-        <column name="AST_OFFCMP_CITY_NM" size="25" type="VARCHAR"/>
-        <column name="AST_OFFCMP_ST_CD" size="2" type="VARCHAR"/>
-        <column name="AST_OFFCMP_ZIP_CD" size="9" type="VARCHAR"/>
-        <column name="AST_OFFCMP_CNTRY_CD" size="2" type="VARCHAR"/>
-        <foreign-key foreignTable="SH_BUILDING_T" name="CM_MULT_AST_DTL_TR2">
-            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
-            <reference foreign="BLDG_CD" local="BLDG_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_STATE_T" name="CM_MULT_AST_DTL_TR4">
-            <reference foreign="POSTAL_STATE_CD" local="AST_OFFCMP_ST_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_COUNTRY_T" name="CM_MULT_AST_DTL_TR6">
-            <reference foreign="POSTAL_CNTRY_CD" local="AST_OFFCMP_CNTRY_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_ROOM_T" name="CM_MULT_AST_DTL_TR3">
-            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
-            <reference foreign="BLDG_CD" local="BLDG_CD"/>
-            <reference foreign="BLDG_ROOM_NBR" local="BLDG_ROOM_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_CAMPUS_T" name="CM_MULT_AST_DTL_TR1">
-            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_MULT_AST_DTL_TR5">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-        </foreign-key>
-        <unique name="CM_MULT_AST_DTL_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>

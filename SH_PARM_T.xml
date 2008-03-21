@@ -4385,13 +4385,6 @@
         SH_PARM_NMSPC_CD="KFS-PA"
         SH_PARM_TXT="default.htm?turl=WordDocuments%2Fpurchaseorderdocument.htm"
         SH_PARM_TYP_CD="HELP" VER_NBR="2" WRKGRP_NM="KUALI_FMSOPS"/>
-    <SH_PARM_T OBJ_ID="451E8B2503BA8014E043814FD8818014"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Non depreciable campus plant fund object sub type codes."
-        SH_PARM_DTL_TYP_CD="Batch"
-        SH_PARM_NM="NON_DEPRECIABLE_CAMPUS_PLANT_FUND_OBJECT_SUB_TYPE"
-        SH_PARM_NMSPC_CD="KFS-CM" SH_PARM_TXT="BD;BF;BI;BR;BX;IF;LE;LI"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="4" WRKGRP_NM="KUALI_CAMS_MAINTAINERS"/>
     <SH_PARM_T OBJ_ID="451E8B2503BB8014E043814FD8818014"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Non depreciable federally owned object sub type codes."
@@ -4406,13 +4399,6 @@
         SH_PARM_NM="NON_DEPRECIABLE_NON_CAPITAL_ASSET_STATUS_CODES"
         SH_PARM_NMSPC_CD="KFS-CM" SH_PARM_TXT="N;O"
         SH_PARM_TYP_CD="CONFG" VER_NBR="4" WRKGRP_NM="KUALI_CAMS_MAINTAINERS"/>
-    <SH_PARM_T OBJ_ID="451E8B2503BD8014E043814FD8818014"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Non depreciable organization plant fund object sub type codes."
-        SH_PARM_DTL_TYP_CD="Batch"
-        SH_PARM_NM="NON_DEPRECIABLE_ORGANIZATON_PLANT_FUND_OBJECT_SUB_TYPE"
-        SH_PARM_NMSPC_CD="KFS-CM" SH_PARM_TXT="C1;C2;CF;CM;ES;NA;UC;UF"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="KUALI_CAMS_MAINTAINERS"/>
     <SH_PARM_T OBJ_ID="45E4455F90C45D11E0404F8189D822D9"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Default item type code for quantity driven regular (i.e. above-the-line) items."
@@ -4575,4 +4561,52 @@
         SH_PARM_NM="NON_CAPITAL_ASSET_STATUS_CODES"
         SH_PARM_NMSPC_CD="KFS-CM" SH_PARM_TXT="D;E;N;O"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="48DF968E8C1031E1E0404F8189D80969"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Allowed value(s) found in field labeled Financial Object Fringe or Salary Code in the Labor Object Code table."
+        SH_PARM_DTL_TYP_CD="BudgetConstruction"
+        SH_PARM_NM="FRINGE_BENEFIT_DESIGNATOR_CODES"
+        SH_PARM_NMSPC_CD="KFS-BC" SH_PARM_TXT="F" SH_PARM_TYP_CD="VALID"
+        VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="48DF968E8C1131E1E0404F8189D80969"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Fund groups that only allow accounting lines objects found in the Labor Object table having Detail Position Required."
+        SH_PARM_DTL_TYP_CD="BudgetConstruction"
+        SH_PARM_NM="SALARY_SETTING_FUND_GROUPS"
+        SH_PARM_NMSPC_CD="KFS-BC" SH_PARM_TXT="CG"
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="48DF968E8C1231E1E0404F8189D80969"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Subfund groups that only allow accounting lines with objects found in the Labor Object table having Detail Position Required."
+        SH_PARM_DTL_TYP_CD="BudgetConstruction"
+        SH_PARM_NM="SALARY_SETTING_SUB_FUND_GROUPS"
+        SH_PARM_NMSPC_CD="KFS-BC" SH_PARM_TXT="SDCI"
+        SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
+    <SH_PARM_T OBJ_ID="48DF968E8C1331E1E0404F8189D80969"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="This parameter controls how the entries for the accounts receivable offset are determined. The options include:  &#xa;1: Record the receivable in the same account that receives the income on an invoice and designate a receivable object code by chart.  &#xa;2: Record the receivable in the same account that receives the income on an invoice and designate a receivable object code by subfund group.  &#xa;3: A default accounting key for the receivable is provided by the organization accounting defaults table with the user having the option to edit this on the invoice document. A considerable reconciliation effort may be required if this parameter is changed after the Accounts Receivable module is implemented."
+        SH_PARM_DTL_TYP_CD="Customer Invoice Document"
+        SH_PARM_NM="GLPE_RECEIVABLE_OFFSET_GENERATION_METHOD"
+        SH_PARM_NMSPC_CD="KFS-AR" SH_PARM_TXT="1" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="64C1B9F5-D3E9-7E2C-087F-319BFB789D11"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Date the batch depreciation will use in order to determine which fiscal year and  month depreciation expense the user wants to calculate.&#xa;&#xa;If this parameter is left blank, then the program will assume the current system date is the key to determine which fiscal year and month has to be used in order to calculate the depreciation expense."
+        SH_PARM_DTL_TYP_CD="Batch" SH_PARM_NM="DEPRECIATION_RUN_DATE"
+        SH_PARM_NMSPC_CD="KFS-CM" SH_PARM_TXT="2008-04-01"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="75654972-A2AC-B84F-C1E0-0880770F9EB6"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Organization plant fund object sub type codes that depreciation process uses to link the asset payment object code's object sub type with the organization table in order to get the organization's plant fund account that will be assigned to the depreciation expense that is calculated by the batch depreciation program."
+        SH_PARM_DTL_TYP_CD="Batch"
+        SH_PARM_NM="DEPRECIATION_ORGANIZATON_PLANT_FUND_OBJECT_SUB_TYPE"
+        SH_PARM_NMSPC_CD="KFS-CM" SH_PARM_TXT="C1;C2;CF;CM;ES;NA;UC;UF"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="6" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="129616EB-BBCF-B1A4-33C9-6D087D93CA62"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Campus plant fund object sub type codes that depreciation process uses to link the asset payment object code's object sub type with the organization table in order to get the campus?s plant fund account that will be assigned to the depreciation expense that is calculated by the batch depreciation program."
+        SH_PARM_DTL_TYP_CD="Batch"
+        SH_PARM_NM="DEPRECIATION_CAMPUS_PLANT_FUND_OBJECT_SUB_TYPE"
+        SH_PARM_NMSPC_CD="KFS-CM" SH_PARM_TXT="BD;BF;BI;BR;BX;IF;LE;LI"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="6" WRKGRP_NM="CM_ADMINISTRATORS"/>
 </dataset>
