@@ -199,4 +199,7 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="4"
         RULE_TMPL_DESC="Used for creating Rules based on the Vendor Maintenance Document with respect to the Vendor Type"
         RULE_TMPL_ID="9375" RULE_TMPL_NM="KualiVendorDocumentTypeTemplate"/>
+    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
+        RULE_TMPL_DESC="KualiProjectDirectorTemplate"
+        RULE_TMPL_ID="13037" RULE_TMPL_NM="KualiProjectDirectorTemplate"/>
 </dataset>

@@ -1056,4 +1056,10 @@
         RULE_ATTRIB_LBL_TXT="Contracts &amp; Grants Agency Report Name"
         RULE_ATTRIB_NM="KualiContractsAndGrantsAgencyReportName"
         RULE_ATTRIB_TYP="SearchableXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;searchingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;agencyReportingName&quot; title=&quot;kuali_dd_label(Agency)&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;visibility>&#xd;&#xa;            &lt;field visible=&quot;false&quot;/>&#xd;&#xa;          &lt;/visibility>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//newMaintainableObject/businessObject/agency/reportingName')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/searchingConfig>"/>
+    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="1"
+        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiPDAttribute"
+        RULE_ATTRIB_DESC="Effort Reporting Project Director Routing"
+        RULE_ATTRIB_ID="13036"
+        RULE_ATTRIB_LBL_TXT="Project Director Routing"
+        RULE_ATTRIB_NM="KualiPDAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
 </dataset>

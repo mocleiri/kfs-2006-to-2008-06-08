@@ -2477,7 +2477,7 @@
         DOC_TYP_ID="317420" RTE_NODE_ID="563357891"
         RTE_NODE_NM="Rule Approval"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2562"/>
-    <EN_RTE_NODE_T DB_LOCK_VER_NBR="11" DOC_ACTVN_TYP_TXT="S"
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="12" DOC_ACTVN_TYP_TXT="S"
         DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="317580"
         RTE_NODE_ID="563357909" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
@@ -2647,4 +2647,74 @@
         DOC_TYP_ID="318140" RTE_NODE_ID="563358211"
         RTE_NODE_NM="Rule Approval"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2562"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358229" RTE_NODE_NM="Adhoc Routing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="KualiProjectDirectorTemplate"
+        DOC_TYP_ID="318180" RTE_NODE_ID="563358230"
+        RTE_NODE_NM="Project Director"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR" DOC_RTE_MTHD_NM="KualiAccountTemplate"
+        DOC_TYP_ID="318180" RTE_NODE_ID="563358231"
+        RTE_NODE_NM="Account Review"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR" DOC_RTE_MTHD_NM="KualiOrgReviewTemplate"
+        DOC_TYP_ID="318180" RTE_NODE_ID="563358232"
+        RTE_NODE_NM="Org Review"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358233" RTE_NODE_NM="Do Award Split"
+        RTE_NODE_TYP="org.kuali.workflow.module.effort.node.DoEffortCertificationAwardRoutingSplitNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T BRCH_PROTO_ID="563358234" DB_LOCK_VER_NBR="2"
+        DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
+        DOC_MNDTRY_RTE_IND="0" DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="KualiAwardWorkgroupTemplate"
+        DOC_TYP_ID="318180" RTE_NODE_ID="563358235"
+        RTE_NODE_NM="Award Workgroup"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="2" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358236" RTE_NODE_NM="Award Join"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.SimpleJoinNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T BRCH_PROTO_ID="563358237" DB_LOCK_VER_NBR="2"
+        DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
+        DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358238" RTE_NODE_NM="Award Do Nothing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.NoOpNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="2" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358239" RTE_NODE_NM="Do Nothing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.NoOpNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="2" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358240" RTE_NODE_NM="Do Recreate Split"
+        RTE_NODE_TYP="org.kuali.workflow.module.effort.node.DoEffortCertificationRecreateRoutingSplitNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T BRCH_PROTO_ID="563358241" DB_LOCK_VER_NBR="4"
+        DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
+        DOC_MNDTRY_RTE_IND="0" DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="WorkflowDocumentTemplate" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358242" RTE_NODE_NM="Recreate Workgroup"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="4" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358243" RTE_NODE_NM="Recreate Join"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.SimpleJoinNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T BRCH_PROTO_ID="563358244" DB_LOCK_VER_NBR="4"
+        DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
+        DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358245" RTE_NODE_NM="Recreate Do Nothing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.NoOpNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="4" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318180"
+        RTE_NODE_ID="563358246" RTE_NODE_NM="Do Nothing Again"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.NoOpNode" WRKGRP_ID="2752"/>
 </dataset>
