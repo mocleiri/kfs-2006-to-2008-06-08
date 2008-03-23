@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/datadictionary/PositionObjectBenefit.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -19,10 +21,10 @@
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.PositionObjectBenefit">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
-            <title>Labor Object Code Benefits Inquiry</title>
+            <title>Position Object Benefit Inquiry</title>
 
             <inquirySections><inquirySection title="Header Text"><inquiryFields>
                 <field attributeName="universityFiscalYear" />
@@ -33,10 +35,9 @@
         </inquiry>
 
         <lookup>
-            <lookupableID>positionObjectBenefitLookupable</lookupableID>
-            <title>Labor Object Code Benefits Lookup</title>
+            <title>Position Object Benefits Lookup</title>
 
-            <instructions>Lookup a Labor Object Code Benefit</instructions>
+            <instructions>Lookup a Position Object Benefit</instructions>
 
             <defaultSort sortAscending="true">
                 <sortAttributes>

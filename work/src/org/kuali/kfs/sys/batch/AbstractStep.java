@@ -16,19 +16,16 @@
 package org.kuali.kfs.batch;
 
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.springframework.beans.factory.BeanNameAware;
 
 public abstract class AbstractStep implements Step, BeanNameAware {
     private String name;
-    private ParameterService parameterService;
+    private KualiConfigurationService configurationService;
     private DateTimeService dateTimeService;
     private boolean interrupted = false;
 
     /**
-     * Sets the bean name
-     * 
-     * @param name String that contains the bean name
      * @see org.springframework.beans.factory.BeanNameAware#setBeanName(java.lang.String)
      */
     public void setBeanName(String name) {
@@ -44,12 +41,22 @@ public abstract class AbstractStep implements Step, BeanNameAware {
         return name;
     }
 
-    protected ParameterService getParameterService() {
-        return parameterService;
+    /**
+     * Gets the configurationService attribute.
+     * 
+     * @return Returns the configurationService.
+     */
+    protected KualiConfigurationService getConfigurationService() {
+        return configurationService;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    /**
+     * Sets the configurationService attribute value.
+     * 
+     * @param configurationService The configurationService to set.
+     */
+    public void setConfigurationService(KualiConfigurationService configurationService) {
+        this.configurationService = configurationService;
     }
 
     /**
@@ -70,31 +77,14 @@ public abstract class AbstractStep implements Step, BeanNameAware {
         this.dateTimeService = dateTimeService;
     }
 
-    /**
-     * Returns the boolean value of the interrupted flag
-     * 
-     * @return boolean
-     * @see org.kuali.kfs.batch.Step#isInterrupted()
-     */
     public boolean isInterrupted() {
         return interrupted;
     }
 
-    /**
-     * Sets the interruped flag
-     * 
-     * @param interrupted
-     * @see org.kuali.kfs.batch.Step#setInterrupted(boolean)
-     */
     public void setInterrupted(boolean interrupted) {
         this.interrupted = interrupted;
     }
-
-    /**
-     * Initializes the interrupted flag
-     * 
-     * @see org.kuali.kfs.batch.Step#interrupt()
-     */
+    
     public void interrupt() {
         this.interrupted = true;
     }

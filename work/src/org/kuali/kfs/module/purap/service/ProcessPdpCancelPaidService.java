@@ -15,18 +15,14 @@
  */
 package org.kuali.module.purap.service;
 
-/**
- * Defines methods that must be implemented by a ProcessPdpCancelPaidService implementation.
- */
 public interface ProcessPdpCancelPaidService {
-
     /**
-     * Update Payment Requests that were canceled or paid in PDP
+     * Update Payment Requests that were cancelled or paid in PDP
      */
     public void processPdpCancelsAndPaids();
 
     /**
-     * Update Payment Requests that were canceled in PDP
+     * Update Payment Requests that were cancelled in PDP
      */
     public void processPdpCancels();
 
@@ -34,5 +30,4 @@ public interface ProcessPdpCancelPaidService {
      * Update Payment Requests that were paid in PDP
      */
     public void processPdpPaids();
-
 }

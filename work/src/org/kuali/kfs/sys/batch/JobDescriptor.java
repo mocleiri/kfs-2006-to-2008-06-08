@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ public class JobDescriptor implements BeanNameAware {
         dependencies = new HashMap();
         steps = new ArrayList();
     }
-
-    public JobDescriptor(String name, String group, Step step, boolean durable) {
+    
+    public JobDescriptor( String name, String group, Step step, boolean durable ) {
         this();
         this.name = name;
         this.group = group;

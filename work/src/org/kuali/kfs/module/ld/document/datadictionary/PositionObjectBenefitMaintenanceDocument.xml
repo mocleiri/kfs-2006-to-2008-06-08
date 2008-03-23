@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/document/datadictionary/PositionObjectBenefitMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,7 +25,7 @@
         <businessObjectClass>org.kuali.module.labor.bo.PositionObjectBenefit</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -32,14 +34,15 @@
             </authorization>
         </authorizations>
 
-		<documentTypeName>KualiLaborObjectCodeBenefitMaintenanceDocument</documentTypeName>
-		<documentTypeCode>LOBN</documentTypeCode>
+		<documentTypeName>KualiPositionObjectBenefitMaintenanceDocument</documentTypeName>
+		<documentTypeCode>POBN</documentTypeCode>
 
-		<label>Labor Object Code Benefits Maintenance Document</label>
-		<shortLabel>Object Code Benefit Maint Doc</shortLabel>
+		<label>Position Object Benefit Maintenance Document</label>
+		<shortLabel>Pos Obj Benefit Maint Doc</shortLabel>
 		
-		<summary>Labor Object Code Benefits Maintenance Document</summary>
-		<description>Document used to create or update Labor Object Code Benefit objects</description>
+		<summary>Position Object Benefit Maintenance Document</summary>
+		<description>Document used to create or update Position Object Benefit objects</description>
+        <help securityGroupName="Kuali.Other.Help" parameterName="OTHER_HELP_LABOR_OBJECT_BENEFIT" />
 
         <lockingKeys>
 			<field attributeName="universityFiscalYear" />
@@ -62,7 +65,7 @@
 	            	<maintainableField name="chartOfAccountsCode" required="true" />
 	            	<maintainableField name="financialObjectCode" required="true"/>
 	            	<maintainableField name="financialObjectBenefitsTypeCode" required="true"/>
-	            	<maintainableField name="versionNumber" />
+	            	<maintainableField name="versionNumber" required="false"/>
 	         	</maintainableItems>
 	        </maintainableSection>
 	    </maintainableSections>

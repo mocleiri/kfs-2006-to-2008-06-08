@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,9 @@ package org.kuali.module.gl.util;
 
 import org.kuali.core.util.KualiDecimal;
 
-/**
- * This class represents origin entry statistics for debit, credit, and budget total amounts 
- */
 public class OriginEntryStatistics {
     private KualiDecimal debitTotalAmount = KualiDecimal.ZERO;
     private KualiDecimal creditTotalAmount = KualiDecimal.ZERO;
-    private KualiDecimal budgetTotalAmount = KualiDecimal.ZERO;
     private Integer rowCount = 0;
 
     public void addDebit(KualiDecimal d) {
@@ -31,19 +27,11 @@ public class OriginEntryStatistics {
             debitTotalAmount = debitTotalAmount.add(d);
         }
     }
-
     public void addCredit(KualiDecimal c) {
         if (c != null) {
             creditTotalAmount = creditTotalAmount.add(c);
         }
     }
-
-    public void addBudget(KualiDecimal b) {
-        if (b != null) {
-            budgetTotalAmount = budgetTotalAmount.add(b);
-        }
-    }
-
     public void incrementCount() {
         rowCount++;
     }
@@ -51,31 +39,18 @@ public class OriginEntryStatistics {
     public KualiDecimal getCreditTotalAmount() {
         return creditTotalAmount;
     }
-
     public void setCreditTotalAmount(KualiDecimal creditTotalAmount) {
         this.creditTotalAmount = creditTotalAmount;
     }
-
     public KualiDecimal getDebitTotalAmount() {
         return debitTotalAmount;
     }
-
     public void setDebitTotalAmount(KualiDecimal debitTotalAmount) {
         this.debitTotalAmount = debitTotalAmount;
     }
-
-    public KualiDecimal getBudgetTotalAmount() {
-        return budgetTotalAmount;
-    }
-
-    public void setBudgetTotalAmount(KualiDecimal budgetTotalAmount) {
-        this.budgetTotalAmount = budgetTotalAmount;
-    }
-
     public Integer getRowCount() {
         return rowCount;
     }
-
     public void setRowCount(Integer rowCount) {
         this.rowCount = rowCount;
     }

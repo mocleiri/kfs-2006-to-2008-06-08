@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the financialSystemOriginationCode attribute.
      * 
      * @return Returns the financialSystemOriginationCode
+     * 
      */
     public String getFinancialSystemOriginationCode() {
         return financialSystemOriginationCode;
@@ -62,6 +63,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the financialSystemOriginationCode attribute.
      * 
      * @param financialSystemOriginationCode The financialSystemOriginationCode to set.
+     * 
      */
     public void setFinancialSystemOriginationCode(String financialSystemOriginationCode) {
         this.financialSystemOriginationCode = financialSystemOriginationCode;
@@ -71,6 +73,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextFinancialDocumentNumber attribute.
      * 
      * @return Returns the nextFinancialDocumentNumber
+     * 
      */
     public String getNextFinancialDocumentNumber() {
         return nextFinancialDocumentNumber;
@@ -81,6 +84,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextFinancialDocumentNumber attribute.
      * 
      * @param nextFinancialDocumentNumber The nextFinancialDocumentNumber to set.
+     * 
      */
     public void setNextFinancialDocumentNumber(String nextFinancialDocumentNumber) {
         this.nextFinancialDocumentNumber = nextFinancialDocumentNumber;
@@ -90,6 +94,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the financialSystemServerName attribute.
      * 
      * @return Returns the financialSystemServerName
+     * 
      */
     public String getFinancialSystemServerName() {
         return financialSystemServerName;
@@ -100,6 +105,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the financialSystemServerName attribute.
      * 
      * @param financialSystemServerName The financialSystemServerName to set.
+     * 
      */
     public void setFinancialSystemServerName(String financialSystemServerName) {
         this.financialSystemServerName = financialSystemServerName;
@@ -109,6 +115,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the financialSystemDatabaseName attribute.
      * 
      * @return Returns the financialSystemDatabaseName
+     * 
      */
     public String getFinancialSystemDatabaseName() {
         return financialSystemDatabaseName;
@@ -119,6 +126,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the financialSystemDatabaseName attribute.
      * 
      * @param financialSystemDatabaseName The financialSystemDatabaseName to set.
+     * 
      */
     public void setFinancialSystemDatabaseName(String financialSystemDatabaseName) {
         this.financialSystemDatabaseName = financialSystemDatabaseName;
@@ -128,6 +136,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the financialSystemDatabaseDesc attribute.
      * 
      * @return Returns the financialSystemDatabaseDesc
+     * 
      */
     public String getFinancialSystemDatabaseDesc() {
         return financialSystemDatabaseDesc;
@@ -138,6 +147,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the financialSystemDatabaseDesc attribute.
      * 
      * @param financialSystemDatabaseDesc The financialSystemDatabaseDesc to set.
+     * 
      */
     public void setFinancialSystemDatabaseDesc(String financialSystemDatabaseDesc) {
         this.financialSystemDatabaseDesc = financialSystemDatabaseDesc;
@@ -147,6 +157,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextCapitalAssetNumber attribute.
      * 
      * @return Returns the nextCapitalAssetNumber
+     * 
      */
     public Long getNextCapitalAssetNumber() {
         return nextCapitalAssetNumber;
@@ -157,6 +168,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextCapitalAssetNumber attribute.
      * 
      * @param nextCapitalAssetNumber The nextCapitalAssetNumber to set.
+     * 
      */
     public void setNextCapitalAssetNumber(Long nextCapitalAssetNumber) {
         this.nextCapitalAssetNumber = nextCapitalAssetNumber;
@@ -166,6 +178,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextNonCapitalAssetNumber attribute.
      * 
      * @return Returns the nextNonCapitalAssetNumber
+     * 
      */
     public Long getNextNonCapitalAssetNumber() {
         return nextNonCapitalAssetNumber;
@@ -176,6 +189,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextNonCapitalAssetNumber attribute.
      * 
      * @param nextNonCapitalAssetNumber The nextNonCapitalAssetNumber to set.
+     * 
      */
     public void setNextNonCapitalAssetNumber(Long nextNonCapitalAssetNumber) {
         this.nextNonCapitalAssetNumber = nextNonCapitalAssetNumber;
@@ -185,6 +199,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextCgProposalNumber attribute.
      * 
      * @return Returns the nextCgProposalNumber
+     * 
      */
     public Long getNextCgProposalNumber() {
         return nextCgProposalNumber;
@@ -195,6 +210,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextCgProposalNumber attribute.
      * 
      * @param nextCgProposalNumber The nextCgProposalNumber to set.
+     * 
      */
     public void setNextCgProposalNumber(Long nextCgProposalNumber) {
         this.nextCgProposalNumber = nextCgProposalNumber;
@@ -204,6 +220,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextContractsAndGrantsAgencyNumber attribute.
      * 
      * @return Returns the nextContractsAndGrantsAgencyNumber
+     * 
      */
     public String getNextContractsAndGrantsAgencyNumber() {
         return nextContractsAndGrantsAgencyNumber;
@@ -214,6 +231,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextContractsAndGrantsAgencyNumber attribute.
      * 
      * @param nextContractsAndGrantsAgencyNumber The nextContractsAndGrantsAgencyNumber to set.
+     * 
      */
     public void setNextContractsAndGrantsAgencyNumber(String nextContractsAndGrantsAgencyNumber) {
         this.nextContractsAndGrantsAgencyNumber = nextContractsAndGrantsAgencyNumber;
@@ -223,6 +241,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextContractsAndGrantsSubcontractorNumber attribute.
      * 
      * @return Returns the nextContractsAndGrantsSubcontractorNumber
+     * 
      */
     public String getNextContractsAndGrantsSubcontractorNumber() {
         return nextContractsAndGrantsSubcontractorNumber;
@@ -233,6 +252,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextContractsAndGrantsSubcontractorNumber attribute.
      * 
      * @param nextContractsAndGrantsSubcontractorNumber The nextContractsAndGrantsSubcontractorNumber to set.
+     * 
      */
     public void setNextContractsAndGrantsSubcontractorNumber(String nextContractsAndGrantsSubcontractorNumber) {
         this.nextContractsAndGrantsSubcontractorNumber = nextContractsAndGrantsSubcontractorNumber;
@@ -242,6 +262,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextDisbVchrPayeeIdNbr attribute.
      * 
      * @return Returns the nextDisbVchrPayeeIdNbr
+     * 
      */
     public Long getNextDisbVchrPayeeIdNbr() {
         return nextDisbVchrPayeeIdNbr;
@@ -252,6 +273,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextDisbVchrPayeeIdNbr attribute.
      * 
      * @param nextDisbVchrPayeeIdNbr The nextDisbVchrPayeeIdNbr to set.
+     * 
      */
     public void setNextDisbVchrPayeeIdNbr(Long nextDisbVchrPayeeIdNbr) {
         this.nextDisbVchrPayeeIdNbr = nextDisbVchrPayeeIdNbr;
@@ -261,6 +283,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the nextFdocAttachmentIdentifier attribute.
      * 
      * @return Returns the nextFdocAttachmentIdentifier
+     * 
      */
     public Long getNextFdocAttachmentIdentifier() {
         return nextFdocAttachmentIdentifier;
@@ -271,6 +294,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the nextFdocAttachmentIdentifier attribute.
      * 
      * @param nextFdocAttachmentIdentifier The nextFdocAttachmentIdentifier to set.
+     * 
      */
     public void setNextFdocAttachmentIdentifier(Long nextFdocAttachmentIdentifier) {
         this.nextFdocAttachmentIdentifier = nextFdocAttachmentIdentifier;
@@ -280,6 +304,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the acctRcvbNextCustomerNumber attribute.
      * 
      * @return Returns the acctRcvbNextCustomerNumber
+     * 
      */
     public Long getAcctRcvbNextCustomerNumber() {
         return acctRcvbNextCustomerNumber;
@@ -290,6 +315,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the acctRcvbNextCustomerNumber attribute.
      * 
      * @param acctRcvbNextCustomerNumber The acctRcvbNextCustomerNumber to set.
+     * 
      */
     public void setAcctRcvbNextCustomerNumber(Long acctRcvbNextCustomerNumber) {
         this.acctRcvbNextCustomerNumber = acctRcvbNextCustomerNumber;
@@ -299,6 +325,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Gets the financialDocumentNextItemIdentifier attribute.
      * 
      * @return Returns the financialDocumentNextItemIdentifier
+     * 
      */
     public Long getFinancialDocumentNextItemIdentifier() {
         return financialDocumentNextItemIdentifier;
@@ -309,6 +336,7 @@ public class OriginationCode extends PersistableBusinessObjectBase {
      * Sets the financialDocumentNextItemIdentifier attribute.
      * 
      * @param financialDocumentNextItemIdentifier The financialDocumentNextItemIdentifier to set.
+     * 
      */
     public void setFinancialDocumentNextItemIdentifier(Long financialDocumentNextItemIdentifier) {
         this.financialDocumentNextItemIdentifier = financialDocumentNextItemIdentifier;

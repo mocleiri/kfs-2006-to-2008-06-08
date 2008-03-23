@@ -1,36 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.PaymentRequestThresholdNotToExceed">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Payment Request Threshold Not To Exceed Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountsPayableThresholdNotToExceedAmount" />
                 <field attributeName="chartOfAccountsCode" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Payment Request Threshold Not To Exceed Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PaymentRequestThresholdNotToExceed">Create New</a>]]></menubar>
 
             <instructions>Lookup a Payment Request Threshold Not To Exceed</instructions>
 
@@ -64,6 +52,23 @@
                     <text size="21" />
                 </control>
 
+                <summary>accountsPayableThresholdNotToExceedAmount</summary>
+                <description>accountsPayableThresholdNotToExceedAmount description...</description>
+			</attribute>
+
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="versionNumber" forceUppercase="true">
@@ -77,9 +82,9 @@
                     <text size="10" />
                 </control>
 
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
 			</attribute>
-
-            <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode"/>
 
         </attributes>
     </businessObject>

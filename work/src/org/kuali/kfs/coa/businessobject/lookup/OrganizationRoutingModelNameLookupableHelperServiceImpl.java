@@ -22,18 +22,12 @@ import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.KualiLookupableHelperServiceImpl;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.module.chart.bo.DelegateGlobal;
+import org.kuali.module.chart.bo.DelegateChangeContainer;
 
-/**
- * This class overrides the getBackLocation, getReturnUrl, setFieldConversions and getActionUrls for
- * {@link OrganizationRoutingModelName}
- */
 public class OrganizationRoutingModelNameLookupableHelperServiceImpl extends KualiLookupableHelperServiceImpl {
     private boolean initializingDelegate = true;
 
     /**
-     * Overrides the base implementation to always return to {@link KFSConstants.MAINTENANCE_ACTION}
-     * 
      * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#getBackLocation()
      */
     @Override
@@ -44,36 +38,25 @@ public class OrganizationRoutingModelNameLookupableHelperServiceImpl extends Kua
     }
 
     /**
-     * Overrides the base implementation to add in new parameters to the return url
-     * <ul>
-     * <li>{@link KFSConstants.DISPATCH_REQUEST_PARAMETER}</li>
-     * <li>{@link KFSConstants.BUSINESS_OBJECT_CLASS_ATTRIBUTE}</li>
-     * <li>{@link KFSConstants.OVERRIDE_KEYS}</li>
-     * </ul>
-     * {@link KFSConstants.DISPATCH_REQUEST_PARAMETER}
-     * 
-     * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#getReturnUrl(org.kuali.core.bo.BusinessObject, java.util.Map,
-     *      java.lang.String)
+     * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#getReturnUrl(org.kuali.core.bo.BusinessObject, java.util.Map, java.lang.String)
      */
     @Override
     public String getReturnUrl(BusinessObject businessObject, Map fieldConversions, String lookupImpl) {
         Properties parameters = getParameters(businessObject, fieldConversions, lookupImpl);
         parameters.put(KFSConstants.DISPATCH_REQUEST_PARAMETER, KFSConstants.MAINTENANCE_NEWWITHEXISTING_ACTION);
-        parameters.put(KFSConstants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, DelegateGlobal.class.getName());
-        parameters.put(KFSConstants.OVERRIDE_KEYS, "modelName" + KFSConstants.FIELD_CONVERSIONS_SEPERATOR + "modelChartOfAccountsCode" + KFSConstants.FIELD_CONVERSIONS_SEPERATOR + "modelOrganizationCode");
+        parameters.put(KFSConstants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, DelegateChangeContainer.class.getName());
+        parameters.put(KFSConstants.OVERRIDE_KEYS, "modelName"+KFSConstants.FIELD_CONVERSIONS_SEPERATOR+"modelChartOfAccountsCode"+KFSConstants.FIELD_CONVERSIONS_SEPERATOR+"modelOrganizationCode");
         return UrlFactory.parameterizeUrl(KFSConstants.MAINTENANCE_ACTION, parameters);
     }
 
     /**
-     * Overrides base implementation to determine whether or not we are dealing with looking up the model or editing it
-     * 
      * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#setFieldConversions(java.util.Map)
      */
     @Override
     public void setFieldConversions(Map fieldConversions) {
         super.setFieldConversions(fieldConversions);
         if (fieldConversions == null || fieldConversions.size() == 0) {
-            // if we don't have any field conversions, then we must be
+            // if we don't have any field conversions, then we must be 
             // actually dealing with the model, instead of looking up the model
             // in order to initalize a new global account delegate
             //
@@ -83,16 +66,13 @@ public class OrganizationRoutingModelNameLookupableHelperServiceImpl extends Kua
     }
 
     /**
-     * Overrides base implementation to remove the action urls if we are initializing the delegate model
-     * 
      * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#getActionUrls(org.kuali.core.bo.BusinessObject)
      */
     @Override
     public String getActionUrls(BusinessObject businessObject) {
         if (!initializingDelegate) {
             return super.getActionUrls(businessObject);
-        }
-        else {
+        } else {
             return "";
         }
     }

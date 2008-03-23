@@ -1,38 +1,48 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.bo;
 
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
  * Budget Fringe Rate Business Object
+ * 
+ * @author Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetFringeRate extends PersistableBusinessObjectBase {
+public class BudgetFringeRate extends BusinessObjectBase {
 
     private static final long serialVersionUID = -1305514388024735249L;
-    private String documentNumber;
-    private String institutionAppointmentTypeCode;
+    private String documentHeaderId;
+    private String universityAppointmentTypeCode;
     private KualiDecimal contractsAndGrantsFringeRateAmount;
-    private KualiDecimal institutionCostShareFringeRateAmount;
+    private KualiDecimal universityCostShareFringeRateAmount;
     private Timestamp budgetLastUpdateTimestamp;
 
     private AppointmentType appointmentType;
@@ -46,30 +56,94 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
         appointmentType = new AppointmentType();
     }
 
-    public BudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode) {
-        this();
-        this.documentNumber = documentNumber;
-        this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
+    public BudgetFringeRate(String documentHeaderId, String universityAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal universityCostShareFringeRateAmount, AppointmentType appointmentType) {
+        this(documentHeaderId, universityAppointmentTypeCode, contractsAndGrantsFringeRateAmount, universityCostShareFringeRateAmount, appointmentType, null, null);
     }
 
-    public BudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal institutionCostShareFringeRateAmount, AppointmentType appointmentType) {
-        this(documentNumber, institutionAppointmentTypeCode, contractsAndGrantsFringeRateAmount, institutionCostShareFringeRateAmount, appointmentType, null, null);
-    }
-
-    public BudgetFringeRate(String documentNumber, AppointmentType appointmentType) {
-        this(documentNumber, appointmentType.getAppointmentTypeCode(), appointmentType.getFringeRateAmount(), appointmentType.getCostShareFringeRateAmount(), appointmentType, null, null);
+    public BudgetFringeRate(String documentHeaderId, AppointmentType appointmentType) {
+        this(documentHeaderId, appointmentType.getAppointmentTypeCode(), appointmentType.getFringeRateAmount(), appointmentType.getCostShareFringeRateAmount(), appointmentType, null, null);
     }
 
 
-    public BudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal institutionCostShareFringeRateAmount, AppointmentType appointmentType, String objectId, Long versionNumber) {
+    public BudgetFringeRate(String documentHeaderId, String universityAppointmentTypeCode, KualiDecimal contractsAndGrantsFringeRateAmount, KualiDecimal universityCostShareFringeRateAmount, AppointmentType appointmentType, String objectId, Long versionNumber) {
         super();
-        this.documentNumber = documentNumber;
-        this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
+        this.documentHeaderId = documentHeaderId;
+        this.universityAppointmentTypeCode = universityAppointmentTypeCode;
         this.contractsAndGrantsFringeRateAmount = contractsAndGrantsFringeRateAmount;
-        this.institutionCostShareFringeRateAmount = institutionCostShareFringeRateAmount;
+        this.universityCostShareFringeRateAmount = universityCostShareFringeRateAmount;
         this.appointmentType = appointmentType;
         setObjectId(objectId);
         setVersionNumber(versionNumber);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterDelete(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterDelete(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterInsert(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterInsert(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterLookup(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterLookup(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#afterUpdate(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void afterUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.afterUpdate(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeDelete(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeDelete(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeInsert(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeInsert(persistenceBroker);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeUpdate(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        // TODO Auto-generated method stub
+        super.beforeUpdate(persistenceBroker);
     }
 
     /*
@@ -90,13 +164,53 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
-        m.put("institutionAppointmentTypeCode", this.institutionAppointmentTypeCode);
+        m.put("documentHeaderId", this.documentHeaderId);
+        m.put("universityAppointmentTypeCode", this.universityAppointmentTypeCode);
         return m;
     }
 
     /*
-     * (non-Javadoc) Doesn't compare timestamps
+     * (non-Javadoc)
+     * 
+     * @see org.kuali.bo.BusinessObject#validate()
+     */
+    public void validate() {
+        // TODO Auto-generated method stub
+        super.validate();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        String hashString = this.getDocumentHeaderId() + "|" + this.getUniversityAppointmentTypeCode() + "|" + this.getAppointmentType().toString() + "|" + this.getAppointmentTypeCostShareFringeRateAmount().toString() + "|" + this.getAppointmentTypeFringeRateAmount().toString() + "|" + this.getBudgetLastUpdateTimestamp().toString() + "|" + this.getContractsAndGrantsFringeRateAmount().toString() + "|" + this.getUniversityCostShareFringeRateAmount().toString();
+        return hashString.hashCode();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#finalize()
+     */
+    protected void finalize() throws Throwable {
+        // TODO Auto-generated method stub
+        super.finalize();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#clone()
+     */
+    protected Object clone() throws CloneNotSupportedException {
+        // TODO Auto-generated method stub
+        return super.clone();
+    }
+
+    /*
+     * (non-Javadoc)
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -105,17 +219,22 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
 
         if (ObjectUtils.isNotNull(obj) && obj instanceof BudgetFringeRate) {
             BudgetFringeRate objCompare = (BudgetFringeRate) obj;
-            equals &= this.documentNumber.equals(objCompare.getDocumentNumber());
-            equals &= this.institutionAppointmentTypeCode.equals(objCompare.getInstitutionAppointmentTypeCode());
+            equals &= this.documentHeaderId.equals(objCompare.getDocumentHeaderId());
+            equals &= this.universityAppointmentTypeCode.equals(objCompare.getUniversityAppointmentTypeCode());
+            if (this.budgetLastUpdateTimestamp == null && objCompare.getBudgetLastUpdateTimestamp() == null) {
+            }
+            else {
+                equals &= this.budgetLastUpdateTimestamp != null && objCompare.getBudgetLastUpdateTimestamp() != null && this.budgetLastUpdateTimestamp.equals(objCompare.getBudgetLastUpdateTimestamp());
+            }
             if (this.contractsAndGrantsFringeRateAmount == null && objCompare.getContractsAndGrantsFringeRateAmount() == null) {
             }
             else {
                 equals &= this.contractsAndGrantsFringeRateAmount != null && objCompare.getContractsAndGrantsFringeRateAmount() != null && this.contractsAndGrantsFringeRateAmount.equals(objCompare.getContractsAndGrantsFringeRateAmount());
             }
-            if (this.institutionCostShareFringeRateAmount == null && objCompare.getInstitutionCostShareFringeRateAmount() == null) {
+            if (this.universityCostShareFringeRateAmount == null && objCompare.getUniversityCostShareFringeRateAmount() == null) {
             }
             else {
-                equals &= this.institutionCostShareFringeRateAmount != null && objCompare.getInstitutionCostShareFringeRateAmount() != null && this.institutionCostShareFringeRateAmount.equals(objCompare.getInstitutionCostShareFringeRateAmount());
+                equals &= this.universityCostShareFringeRateAmount != null && objCompare.getUniversityCostShareFringeRateAmount() != null && this.universityCostShareFringeRateAmount.equals(objCompare.getUniversityCostShareFringeRateAmount());
             }
         }
 
@@ -137,17 +256,17 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
     }
 
     /**
-     * @return Returns the documentNumber.
+     * @return Returns the documentHeaderId.
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * @param documentNumber The documentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
@@ -165,31 +284,31 @@ public class BudgetFringeRate extends PersistableBusinessObjectBase {
     }
 
     /**
-     * @return Returns the institutionAppointmentTypeCode.
+     * @return Returns the universityAppointmentTypeCode.
      */
-    public String getInstitutionAppointmentTypeCode() {
-        return institutionAppointmentTypeCode;
+    public String getUniversityAppointmentTypeCode() {
+        return universityAppointmentTypeCode;
     }
 
     /**
-     * @param institutionAppointmentTypeCode The institutionAppointmentTypeCode to set.
+     * @param universityAppointmentTypeCode The universityAppointmentTypeCode to set.
      */
-    public void setInstitutionAppointmentTypeCode(String institutionAppointmentTypeCode) {
-        this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
+    public void setUniversityAppointmentTypeCode(String universityAppointmentTypeCode) {
+        this.universityAppointmentTypeCode = universityAppointmentTypeCode;
     }
 
     /**
-     * @return Returns the institutionCostShareFringeRateAmount.
+     * @return Returns the universityCostShareFringeRateAmount.
      */
-    public KualiDecimal getInstitutionCostShareFringeRateAmount() {
-        return institutionCostShareFringeRateAmount;
+    public KualiDecimal getUniversityCostShareFringeRateAmount() {
+        return universityCostShareFringeRateAmount;
     }
 
     /**
-     * @param institutionCostShareFringeRateAmount The institutionCostShareFringeRateAmount to set.
+     * @param universityCostShareFringeRateAmount The universityCostShareFringeRateAmount to set.
      */
-    public void setInstitutionCostShareFringeRateAmount(KualiDecimal institutionCostShareFringeRateAmount) {
-        this.institutionCostShareFringeRateAmount = institutionCostShareFringeRateAmount;
+    public void setUniversityCostShareFringeRateAmount(KualiDecimal universityCostShareFringeRateAmount) {
+        this.universityCostShareFringeRateAmount = universityCostShareFringeRateAmount;
     }
 
     /**

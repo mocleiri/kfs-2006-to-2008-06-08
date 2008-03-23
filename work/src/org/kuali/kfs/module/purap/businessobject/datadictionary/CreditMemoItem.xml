@@ -1,154 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../dataDictionary-1_0.dtd" [
-<!ENTITY purApItemBaseAttributes SYSTEM "../dictionary/entity/PurApItemBaseAttributes.xml">
-]>
+    "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
-	<businessObject
-		businessObjectClass="org.kuali.module.purap.bo.CreditMemoItem">
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.CreditMemoItem">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-		<attributes>
+        <inquiry>
+            <title>Credit Memo Item Inquiry</title>
 
-			<attribute name="itemLineNumber" forceUppercase="true">
-				<label>Item Line Number</label>
-				<shortLabel>#</shortLabel>
+            <inquiryFields>
+                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="creditMemoItemIdentifier" />
+                <field attributeName="itemAssignedToTradeInIndicator" />
+                <field attributeName="itemCreditQuantity" />
+                <field attributeName="itemExtendedPrice" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="itemTypeCode" />
+                <field attributeName="itemUnitPrice" />
+            </inquiryFields>
+        </inquiry>
 
-				<maxLength>3</maxLength>
-				<validationPattern>
-					<numeric />
-				</validationPattern>
+        <lookup>
+            <title>Credit Memo Item Lookup</title>
 
-				<control>
-					<text size="5" />
-				</control>
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.CreditMemoItem">Create New</a>]]></menubar>
 
+            <instructions>Lookup a Credit Memo Item</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="creditMemoIdentifier" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="creditMemoIdentifier" required="false" />
+                <lookupField attributeName="creditMemoItemIdentifier" required="false" />
+                <lookupField attributeName="itemAssignedToTradeInIndicator" required="false" />
+                <lookupField attributeName="itemCreditQuantity" required="false" />
+                <lookupField attributeName="itemExtendedPrice" required="false" />
+                <lookupField attributeName="itemLineNumber" required="false" />
+                <lookupField attributeName="itemTypeCode" required="false" />
+                <lookupField attributeName="itemUnitPrice" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="creditMemoItemIdentifier" />
+                <field attributeName="itemAssignedToTradeInIndicator" />
+                <field attributeName="itemCreditQuantity" />
+                <field attributeName="itemExtendedPrice" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="itemTypeCode" />
+                <field attributeName="itemUnitPrice" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="creditMemoIdentifier" forceUppercase="true">
+                <label>Credit Memo Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>creditMemoIdentifier</summary>
+                <description>creditMemoIdentifier description...</description>
 			</attribute>
 
-			<attributeReference name="poInvoicedTotalQuantity"
-				sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy"
-				sourceAttributeName="genericItemQuantity">
-				<label>PO Qty Invoiced</label>
-				<shortLabel>PO Qty</shortLabel>
-			</attributeReference>
+            <attribute name="creditMemoItemIdentifier" forceUppercase="true">
+                <label>Credit Memo Item Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-			<attributeReference name="preqInvoicedTotalQuantity"
-				sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy"
-				sourceAttributeName="genericItemQuantity">
-				<label>PREQ Qty Invoiced</label>
-				<shortLabel>PREQ Qty Invoiced</shortLabel>
-			</attributeReference>
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-			<attributeReference name="poUnitPrice"
-				sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy"
-				sourceAttributeName="genericItemUnitPrice">
-				<label>PO Unit Price</label>
-				<shortLabel>PO Unit Price</shortLabel>
+                <control>
+                    <text size="12" />
+                </control>
 
-			</attributeReference>
-
-			<attributeReference name="preqUnitPrice"
-				sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy"
-				sourceAttributeName="genericItemUnitPrice">
-				<label>PREQ Unit Price</label>
-				<shortLabel>PREQ Unit Price</shortLabel>
-
-			</attributeReference>
-
-			<attributeReference name="poExtendedPrice"
-				sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-				sourceAttributeName="genericAmount">
-				<label>Total Invoice Cost</label>
-				<shortLabel>Total Invoice Cost</shortLabel>
-			</attributeReference>
-
-			<attributeReference name="preqExtendedPrice"
-				sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-				sourceAttributeName="genericAmount">
-				<label>Total Invoice Cost</label>
-				<shortLabel>Total Invoice Cost</shortLabel>
-			</attributeReference>
-
-			<attribute name="itemTypeCode" forceUppercase="true">
-				<label>Item Type Code</label>
-				<shortLabel>Item Type</shortLabel>
-				<maxLength>4</maxLength>
-				<validationPattern>
-					<anyCharacter />
-				</validationPattern>
-				<required>true</required>
-				<control>
-					<select
-						valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.ItemTypeValuesFinder" />
-				</control>
+                <summary>creditMemoItemIdentifier</summary>
+                <description>creditMemoItemIdentifier description...</description>
 			</attribute>
 
-			<attributeReference name="itemQuantity"
-				sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy"
-				sourceAttributeName="genericItemQuantity">
-				<label>CM Cty</label>
-				<shortLabel>CM Qty</shortLabel>
-			</attributeReference>
+            <attribute name="itemAssignedToTradeInIndicator" forceUppercase="true">
+                <label>Item Assigned To Trade In Indicator</label>
+                <shortLabel>Indicator</shortLabel>
 
-			<attributeReference name="itemUnitPrice"
-				sourceClassName="org.kuali.module.purap.bo.PurApAttributeReferenceDummy"
-				sourceAttributeName="genericItemUnitPrice">
-				<label>CM Unit Price</label>
-				<shortLabel>CM Unit Price</shortLabel>
-			</attributeReference>
+                <maxLength>1</maxLength>
 
-			<attributeReference name="extendedPrice"
-				sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-				sourceAttributeName="genericAmount">
-				<label>Credit Processed</label>
-				<shortLabel>Credit Processed</shortLabel>
-			</attributeReference>
+                <control>
+                    <checkbox />
+                </control>
 
-			<attribute name="itemCatalogNumber" forceUppercase="true">
-				<label>Item Catalog Number</label>
-				<shortLabel>Catalog #</shortLabel>
-
-				<maxLength>30</maxLength>
-				<validationPattern>
-					<anyCharacter />
-				</validationPattern>
-
-				<control>
-					<text size="15" />
-				</control>
+                <summary>itemAssignedToTradeInIndicator</summary>
+                <description>itemAssignedToTradeInIndicator description...</description>
 			</attribute>
 
-			<attribute name="itemDescription" forceUppercase="true">
-				<label>Item Description</label>
-				<shortLabel>Description</shortLabel>
-				<maxLength>4000</maxLength>
-				<validationPattern>
-					<anyCharacter allowWhitespace="true" />
-				</validationPattern>
-				<control>
-					<textarea rows="4" cols="50" />
-				</control>
+            <attribute name="itemCreditQuantity" forceUppercase="true">
+                <label>Item Credit Quantity</label>
+                <shortLabel>Quantity</shortLabel>
+
+                <maxLength>11</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="13" />
+                </control>
+
+                <summary>itemCreditQuantity</summary>
+                <description>itemCreditQuantity description...</description>
 			</attribute>
 
-			<attributeReference name="versionNumber"
-				sourceClassName="org.kuali.core.bo.AttributeReferenceDummy"
-				sourceAttributeName="versionNumber" />
+            <attribute name="itemExtendedPrice" forceUppercase="true">
+                <label>Item Extended Price</label>
+                <shortLabel>Price</shortLabel>
 
-		</attributes>
-	</businessObject>
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>itemExtendedPrice</summary>
+                <description>itemExtendedPrice description...</description>
+			</attribute>
+
+            <attribute name="itemLineNumber" forceUppercase="true">
+                <label>Item Line Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemLineNumber</summary>
+                <description>itemLineNumber description...</description>
+			</attribute>
+
+            <attribute name="itemTypeCode" forceUppercase="true">
+                <label>Item Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemTypeCode</summary>
+                <description>itemTypeCode description...</description>
+			</attribute>
+
+            <attribute name="itemUnitPrice" forceUppercase="true">
+                <label>Item Unit Price</label>
+                <shortLabel>Price</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>itemUnitPrice</summary>
+                <description>itemUnitPrice description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
 </dictionaryEntry>

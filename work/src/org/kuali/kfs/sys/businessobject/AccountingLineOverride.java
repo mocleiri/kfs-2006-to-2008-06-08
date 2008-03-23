@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.financial.service.AccountPresenceService;
 
 /**
  * This class helps implement AccountingLine overrides. It is not persisted itself, but it simplifies working with the persisted
  * codes. Instances break the code into components. Static methods help with the AccountingLine.
+ * 
+ * 
  */
 public class AccountingLineOverride {
 
@@ -254,7 +255,6 @@ public class AccountingLineOverride {
      */
     public static void populateFromInput(AccountingLine line) {
         // todo: this logic won't work if a single account checkbox might also stands for NON_FRINGE_ACCOUNT_USED; needs thought
-
         Set overrideInputComponents = new HashSet();
         if (line.getAccountExpiredOverride()) {
             overrideInputComponents.add(COMPONENT.EXPIRED_ACCOUNT);
@@ -298,7 +298,6 @@ public class AccountingLineOverride {
         if (needsObjectBudgetOverride(line.getAccount(), line.getObjectCode())) {
             neededOverrideComponents.add(COMPONENT.NON_BUDGETED_OBJECT);
         }
-
         if (!isValidComponentSet(neededOverrideComponents)) {
             // todo: error for invalid override checkbox combinations, for which there is no override code
         }
@@ -316,22 +315,12 @@ public class AccountingLineOverride {
     }
 
     /**
-     * Returns whether the given account needs an expired account override.
-     * 
-     * @param account
-     * @return whether the given account needs an expired account override.
-     */
-    public static boolean needsNonFringAccountOverride(Account account) {
-        return !ObjectUtils.isNull(account) && !account.isAccountClosedIndicator() && !account.isAccountsFringesBnftIndicator();
-    }
-
-    /**
      * Returns whether the given object code needs an object budget override
      * 
      * @param account
      * @return whether the given object code needs an object budget override
      */
     public static boolean needsObjectBudgetOverride(Account account, ObjectCode objectCode) {
-        return !ObjectUtils.isNull(account) && !ObjectUtils.isNull(objectCode) && !account.isAccountClosedIndicator() && !SpringContext.getBean(AccountPresenceService.class).isObjectCodeBudgetedForAccountPresence(account, objectCode);
+        return !ObjectUtils.isNull(account) && !ObjectUtils.isNull(objectCode) && !account.isAccountClosedIndicator() && !SpringServiceLocator.getAccountPresenceService().isObjectCodeBudgetedForAccountPresence(account, objectCode);
     }
 }

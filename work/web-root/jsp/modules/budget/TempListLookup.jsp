@@ -1,5 +1,5 @@
 <%--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -74,14 +74,6 @@
 
                 <kul:rowDisplay rows="${FieldRows}" skipTheOldNewBar="true" />
 
-				<!-- changed cancel to call cancel action where the call to clean up temp table is located 
-						alt="clear" title="clear" border="0" /> <c:if test="${KualiForm.formKey!=''}">
-						<a
-							href='<c:out value="${KualiForm.backLocation}?methodToCall=refresh&docFormKey=${KualiForm.formKey}&anchor=${KualiForm.lookupAnchor}" />'  title="cancel">
-						<img src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif" class="tinybutton" alt="cancel" title="cancel" 
-							border="0" /></a>
-					</c:if>
-                --> 					
 				<tr align=center>
 					<td height="30" colspan=2 class="infoline"><html:image
 						property="methodToCall.search" value="search"
@@ -89,10 +81,12 @@
 						alt="search" title="search" border="0" /> <html:image
 						property="methodToCall.clearValues" value="clearValues"
 						src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_clear.gif" styleClass="tinybutton"
-						alt="clear" title="clear" border="0" /> <html:image
-						property="methodToCall.cancel" value="cancel"
-						src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif" styleClass="tinybutton"
-						alt="cancel" title="cancel" border="0" />
+						alt="clear" title="clear" border="0" /> <c:if test="${KualiForm.formKey!=''}">
+						<a
+							href='<c:out value="${KualiForm.backLocation}?methodToCall=refresh&docFormKey=${KualiForm.formKey}&anchor=${KualiForm.lookupAnchor}" />'  title="cancel">
+						<img src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif" class="tinybutton" alt="cancel" title="cancel" 
+							border="0" /></a>
+					</c:if>
 					<!-- Optional extra buttons --> 					
 					<c:forEach items="${KualiForm.extraButtons}" var="extraButton" varStatus="status">
 						<c:if test="${!empty extraButton.extraButtonSource && !empty extraButton.extraButtonParams}">

@@ -19,32 +19,30 @@ import java.math.BigDecimal;
 
 import org.kuali.kfs.bo.AccountingLine;
 
-/**
- * Labor contract methods to accounting line implementations for Expense Transfer Documents.
- */
 public interface ExpenseTransferAccountingLine extends AccountingLine {
 
-    public String getPositionNumber();
+    public abstract String getPositionNumber();
 
-    public void setPositionNumber(String positionNumber);
+    public abstract void setPositionNumber(String positionNumber);
 
-    public BigDecimal getPayrollTotalHours();
+    public abstract BigDecimal getPayrollTotalHours();
 
-    public void setPayrollTotalHours(BigDecimal payrollTotalHours);
+    public abstract void setPayrollTotalHours(BigDecimal payrollTotalHours);
 
-    public Integer getPayrollEndDateFiscalYear();
+    public abstract Integer getPayrollEndDateFiscalYear();
 
-    public void setPayrollEndDateFiscalYear(Integer payrollEndDateFiscalYear);
+    public abstract void setPayrollEndDateFiscalYear(Integer payrollEndDateFiscalYear);
 
-    public String getPayrollEndDateFiscalPeriodCode();
+    public abstract String getPayrollEndDateFiscalPeriodCode();    
 
-    public void setPayrollEndDateFiscalPeriodCode(String payrollEndDateFiscalPeriodCode);
+    public abstract void setPayrollEndDateFiscalPeriodCode(String payrollEndDateFiscalPeriodCode);
 
-    public String getEmplid();
+    public abstract String getEmplid();
+    
+    public abstract void setEmplid(String emplid);
+    
+    public abstract LaborObject getLaborObject();
+    
+    public abstract void setLaborObject(LaborObject laborObject);
 
-    public void setEmplid(String emplid);
-
-    public LaborObject getLaborObject();
-
-    public void setLaborObject(LaborObject laborObject);
 }

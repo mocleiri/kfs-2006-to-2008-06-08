@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ public class HomeOrigination extends PersistableBusinessObjectBase {
 
     private String finSystemHomeOriginationCode;
     private OriginationCode originationCode;
-
+    
 
     /**
      * Default no-arg constructor.
@@ -41,6 +41,7 @@ public class HomeOrigination extends PersistableBusinessObjectBase {
      * Gets the finSystemHomeOriginationCode attribute.
      * 
      * @return Returns the finSystemHomeOriginationCode
+     * 
      */
     public String getFinSystemHomeOriginationCode() {
         return finSystemHomeOriginationCode;
@@ -51,6 +52,7 @@ public class HomeOrigination extends PersistableBusinessObjectBase {
      * Sets the finSystemHomeOriginationCode attribute.
      * 
      * @param finSystemHomeOriginationCode The finSystemHomeOriginationCode to set.
+     * 
      */
     public void setFinSystemHomeOriginationCode(String finSystemHomeOriginationCode) {
         this.finSystemHomeOriginationCode = finSystemHomeOriginationCode;

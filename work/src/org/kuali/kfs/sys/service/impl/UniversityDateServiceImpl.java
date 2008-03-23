@@ -16,19 +16,14 @@
 package org.kuali.module.financial.service.impl;
 
 import org.apache.log4j.Logger;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.DateUtils;
 import org.kuali.core.util.Timer;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * 
- * This is the default implementation of the UniversityDateService interface.
- */
 @Transactional
 public class UniversityDateServiceImpl implements UniversityDateService {
 
@@ -36,30 +31,19 @@ public class UniversityDateServiceImpl implements UniversityDateService {
 
     private UniversityDateDao universityDateDao;
     
-    /**
-     * This method retrieves a UniversityDate object using today's date to create the instance.
-     * 
-     * @return A UniversityDate instance representing today's date.
-     * 
-     * @see org.kuali.module.financial.service.UniversityDateService#getCurrentUniversityDate()
-     */
     public UniversityDate getCurrentUniversityDate() {
         LOG.debug("getCurrentUniversityDate() started");
-        java.util.Date now = SpringContext.getBean(DateTimeService.class).getCurrentDate();
+        java.util.Date now = SpringServiceLocator.getDateTimeService().getCurrentDate();
 
         return universityDateDao.getByPrimaryKey(DateUtils.clearTimeFields(now));
     }
 
     /**
-     * This method retrieves the current fiscal year using today's date.
-     * 
-     * @return The current fiscal year as an Integer.
-     * 
      * @see org.kuali.core.service.DateTimeService#getCurrentFiscalYear()
      */
     public Integer getCurrentFiscalYear() {
         Timer t0 = new Timer("getCurrentFiscalYear");
-        java.util.Date now = SpringContext.getBean(DateTimeService.class).getCurrentDate();
+        java.util.Date now = SpringServiceLocator.getDateTimeService().getCurrentDate();
 
         Integer result = getFiscalYear(DateUtils.clearTimeFields(now));
         t0.log();
@@ -67,11 +51,6 @@ public class UniversityDateServiceImpl implements UniversityDateService {
     }
     
     /**
-     * This method retrieves the fiscal year associated with the date provided.
-     * 
-     * @param date The date to be used for retrieving the associated fiscal year.
-     * @return The fiscal year that the date provided falls within.
-     * 
      * @see org.kuali.core.service.DateTimeService#getFiscalYear(java.util.Date)
      */
     public Integer getFiscalYear(java.util.Date date) {
@@ -83,38 +62,18 @@ public class UniversityDateServiceImpl implements UniversityDateService {
         return (uDate == null) ? null : uDate.getUniversityFiscalYear();
     }
 
-    /**
-     * This method retrieves the first date of the fiscal year provided.
-     * 
-     * @param fiscalYear The fiscal year to retrieve the first date for.
-     * @return A Date object representing the first date of the fiscal year given.
-     * 
-     * @see org.kuali.module.financial.service.UniversityDateService#getFirstDateOfFiscalYear(java.lang.Integer)
-     */
     public java.util.Date getFirstDateOfFiscalYear(Integer fiscalYear) {
         UniversityDate uDate = universityDateDao.getFirstFiscalYearDate(fiscalYear);
         return (uDate == null) ? null : uDate.getUniversityDate();
     }
 
-    /**
-     * This method retrieves the last date of the fiscal year provided.
-     * 
-     * @param fiscalYear The fiscal year to retrieve the last date for.
-     * @return A Date object representing the last date of the fiscal year given.
-     * 
-     * @see org.kuali.module.financial.service.UniversityDateService#getLastDateOfFiscalYear(java.lang.Integer)
-     */
     public java.util.Date getLastDateOfFiscalYear(Integer fiscalYear) {
         UniversityDate uDate = universityDateDao.getLastFiscalYearDate(fiscalYear);
         return (uDate == null) ? null : uDate.getUniversityDate();
     }
     
-    /**
-     * Sets the universityDateDao attribute value.
-     * @param universityDateDao The universityDateDao to set.
-     */
-    public void setUniversityDateDao(UniversityDateDao universityDateDao) {
-        this.universityDateDao = universityDateDao;
-    }
+  public void setUniversityDateDao(UniversityDateDao universityDateDao) {
+  this.universityDateDao = universityDateDao;
+}
     
 }

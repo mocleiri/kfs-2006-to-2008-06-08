@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <dictionaryEntry>
     <transactionalDocument>
         <documentClass>org.kuali.module.labor.document.LaborCorrectionDocument</documentClass>
-        <documentAuthorizerClass>org.kuali.module.gl.document.CorrectionDocumentAuthorizer</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.module.labor.document.LaborCorrectionDocumentAuthorizer</documentAuthorizerClass>
 
         <authorizations>
             <authorization action="initiate">
@@ -34,9 +34,10 @@
         <documentTypeName>KualiLaborLedgerErrorCorrectionDocument</documentTypeName>
         <documentTypeCode>LLCP</documentTypeCode>
         <label>Labor Ledger Correction Process</label>
+        <shortLabel>LLCPDoc</shortLabel>
         <summary>Labor Ledger Correction Process Document</summary>
-        <description>Labor Ledger Correction Process Document</description>     
-        <help parameterNamespace="KFS-GL" parameterDetailType="Correction" parameterName="GENERAL_LEDGER_CORRECTION_PROCESS" />  
+        <description>Labor Ledger Correction Process Document</description>
+        <help securityGroupName="Kuali.FinancialTransactionProcessing.GeneralLedgerCorrectionProcessDocument" parameterName="FINANCIAL_HELP_GENERAL_LEDGER_CORRECTION_PROCESS_DOCUMENT" />       
         <allowsErrorCorrection>false</allowsErrorCorrection>
     </transactionalDocument>
 </dictionaryEntry>

@@ -30,7 +30,6 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.LaborPropertyConstants;
 import org.kuali.module.labor.bo.BenefitsCalculation;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
 import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;

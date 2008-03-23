@@ -58,14 +58,14 @@ public class KFSActionServlet extends KualiActionServlet {
             this.wrapped = wrapped;
         }
         public String getInitParameter(String name) {
-            if (isUseStandaloneWorkflow() && KEW_STRUTS_MODULE_PARAM.equals(name)) {
+            if (isUseCentralWorkflowServer() && KEW_STRUTS_MODULE_PARAM.equals(name)) {
                 return null;
             }
             return this.wrapped.getInitParameter(name);
         }
         public Enumeration getInitParameterNames() {
             Enumeration initParameterNames = this.wrapped.getInitParameterNames();
-            if (isUseStandaloneWorkflow()) {
+            if (isUseCentralWorkflowServer()) {
                 List<String> paramNames = new ArrayList<String>();
                 while (initParameterNames.hasMoreElements()) {
                     String paramName = (String)initParameterNames.nextElement();
@@ -83,8 +83,8 @@ public class KFSActionServlet extends KualiActionServlet {
         public String getServletName() {
             return this.wrapped.getServletName();
         }
-        private boolean isUseStandaloneWorkflow() {
-            return Boolean.valueOf(PropertyLoadingFactoryBean.getBaseProperty(KFSConstants.USE_STANDALONE_WORKFLOW));
+        private boolean isUseCentralWorkflowServer() {
+            return Boolean.valueOf(ResourceBundle.getBundle(PropertyLoadingFactoryBean.CONFIGURATION_FILE_NAME).getString(KFSConstants.USE_CENTRAL_WORKFLOW_SERVER));
         }
     }
 
