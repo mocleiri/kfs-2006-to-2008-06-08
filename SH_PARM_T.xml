@@ -4585,7 +4585,7 @@
     <SH_PARM_T OBJ_ID="48DF968E8C1331E1E0404F8189D80969"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="This parameter controls how the entries for the accounts receivable offset are determined. The options include:  &#xa;1: Record the receivable in the same account that receives the income on an invoice and designate a receivable object code by chart.  &#xa;2: Record the receivable in the same account that receives the income on an invoice and designate a receivable object code by subfund group.  &#xa;3: A default accounting key for the receivable is provided by the organization accounting defaults table with the user having the option to edit this on the invoice document. A considerable reconciliation effort may be required if this parameter is changed after the Accounts Receivable module is implemented."
-        SH_PARM_DTL_TYP_CD="Customer Invoice Document"
+        SH_PARM_DTL_TYP_CD="CustomerInvoice"
         SH_PARM_NM="GLPE_RECEIVABLE_OFFSET_GENERATION_METHOD"
         SH_PARM_NMSPC_CD="KFS-AR" SH_PARM_TXT="1" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
