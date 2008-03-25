@@ -164,6 +164,7 @@
         		<workflowProperty path="documentHeader" />
         		<workflowProperty path="accountsForRouting" />
         		<workflowProperty path="accountsForRouting.account" />
+        		<workflowProperty path="accountsForRouting.subAccount" />
         		<!-- extras for searching -->
         		<workflowProperty path="status" />
         	</workflowPropertyGroup>
