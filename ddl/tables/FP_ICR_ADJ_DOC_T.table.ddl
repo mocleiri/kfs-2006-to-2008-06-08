@@ -20,7 +20,6 @@ CREATE TABLE FP_ICR_ADJ_DOC_T(
         FDOC_NXT_FRM_NBR               NUMBER(7),
         FDOC_NXT_TO_NBR                NUMBER(7),
         FDOC_POST_YR                   NUMBER(4),
-        FDOC_POST_PRD_CD               VARCHAR2(2),
      CONSTRAINT FP_ICR_ADJ_DOC_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT FP_ICR_ADJ_DOC_TC0 UNIQUE (OBJ_ID)
