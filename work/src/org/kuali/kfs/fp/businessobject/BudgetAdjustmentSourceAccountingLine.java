@@ -361,4 +361,22 @@ public class BudgetAdjustmentSourceAccountingLine extends SourceAccountingLine i
         financialDocumentMonth11LineAmount = KualiDecimal.ZERO;
         financialDocumentMonth12LineAmount = KualiDecimal.ZERO;
     }
+
+    /**
+     * @see org.kuali.kfs.bo.AccountingLineBase#isSourceAccountingLine()
+     */
+    @Override
+    public boolean isSourceAccountingLine() {
+        return true;
+    }
+
+    /**
+     * @see org.kuali.kfs.bo.AccountingLineBase#isTargetAccountingLine()
+     */
+    @Override
+    public boolean isTargetAccountingLine() {
+        return false;
+    }
+    
+    
 }
