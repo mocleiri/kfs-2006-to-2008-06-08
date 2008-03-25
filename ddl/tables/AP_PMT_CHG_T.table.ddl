@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-CREATE TABLE PUR_AP_CM_PMT_CHG_T(
-        CM_PMT_CHG_ID                  NUMBER(10) CONSTRAINT PUR_AP_CM_PMT_CHG_TN1 NOT NULL,
-        OBJ_ID                         VARCHAR2(36) CONSTRAINT PUR_AP_CM_PMT_CHG_TN2 NOT NULL,
-        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PUR_AP_CM_PMT_CHG_TN3 NOT NULL,
+CREATE TABLE AP_PMT_CHG_T(
+        PMT_CHG_ID                     NUMBER(10) CONSTRAINT AP_PMT_CHG_TN1 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT AP_PMT_CHG_TN2 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT AP_PMT_CHG_TN3 NOT NULL,
         PMT_RQST_ID                    NUMBER(9),
         CRDT_MEMO_ID                   NUMBER(9),
-     CONSTRAINT PUR_AP_CM_PMT_CHG_TP1 PRIMARY KEY (
-        CM_PMT_CHG_ID),
-     CONSTRAINT PUR_AP_CM_PMT_CHG_TC0 UNIQUE (OBJ_ID)
+        PMT_CHG_LST_UPDT_USR_ID        VARCHAR2(11) CONSTRAINT AP_PMT_CHG_TN4 NOT NULL,
+        PMT_CHG_LST_UPDT_TS            DATE CONSTRAINT AP_PMT_CHG_TN5 NOT NULL,
+     CONSTRAINT AP_PMT_CHG_TP1 PRIMARY KEY (
+        PMT_CHG_ID),
+     CONSTRAINT AP_PMT_CHG_TC0 UNIQUE (OBJ_ID)
 )
 /

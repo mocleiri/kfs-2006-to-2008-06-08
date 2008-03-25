@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-CREATE SEQUENCE CM_PMT_CHG_ID 
+CREATE SEQUENCE PMT_CHG_ID 
  INCREMENT BY 1 
  START WITH 1000 
  NOMAXVALUE
