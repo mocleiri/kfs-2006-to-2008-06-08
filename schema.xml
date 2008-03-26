@@ -393,6 +393,30 @@
             <unique-column name="ACCT_NBR"/>
         </unique>
     </table>
+    <table name="AP_PMT_CHG_ACCT_T">
+        <column name="PMT_CHG_ID" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="ITM_LN_NBR" primaryKey="true" size="3" type="DECIMAL"/>
+        <column name="GL_PENDING_ENTRY_ID" primaryKey="true" size="8" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="ITM_ACCT_TOT_AMT" required="true" scale="2"
+            size="19" type="DECIMAL"/>
+        <unique name="AP_PMT_CHG_ACCT_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="AP_PMT_CHG_T">
+        <column name="PMT_CHG_ID" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="PMT_RQST_ID" size="9" type="DECIMAL"/>
+        <column name="CRDT_MEMO_ID" size="9" type="DECIMAL"/>
+        <column name="PMT_CHG_LST_UPDT_USR_ID" required="true" size="11" type="VARCHAR"/>
+        <column name="PMT_CHG_LST_UPDT_TS" required="true" type="DATE"/>
+        <unique name="AP_PMT_CHG_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="AP_PMT_RQST_ACCT_T">
         <column name="PMT_RQST_ACCT_ID" primaryKey="true" size="10" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -3997,9 +4021,6 @@
         <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_PAYMENT_TR1">
             <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
         </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_PAYMENT_TR10">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-        </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CM_AST_PAYMENT_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
         </foreign-key>
@@ -4084,62 +4105,6 @@
             <index-column name="FDOC_POST_YR"/>
             <index-column name="FIN_COA_CD"/>
             <index-column name="FIN_OBJECT_CD"/>
-        </index>
-    </table>
-    <table name="CM_AST_RETIREDOC_T">
-        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="AST_INVN_STAT_CD" size="1" type="VARCHAR"/>
-        <column name="AST_RETIR_COA_CD" size="2" type="VARCHAR"/>
-        <column name="AST_RETIR_ACCT_NBR" size="7" type="VARCHAR"/>
-        <column name="AST_RETIRE_REAS_CD" size="1" type="VARCHAR"/>
-        <column name="CPTLAST_RETIRE_DT" type="DATE"/>
-        <column name="AST_RETIR_CNTCT_NM" size="40" type="VARCHAR"/>
-        <column name="AST_RETIR_INST_NM" size="40" type="VARCHAR"/>
-        <column name="AST_RETIRSTRT_ADDR" size="25" type="VARCHAR"/>
-        <column name="AST_RETIR_CITY_NM" size="25" type="VARCHAR"/>
-        <column name="AST_RETIR_STATE_CD" size="2" type="VARCHAR"/>
-        <column name="AST_RETIR_ZIP_CD" size="9" type="VARCHAR"/>
-        <column name="AST_RETIR_CNTRY_CD" size="2" type="VARCHAR"/>
-        <column name="AST_RETIR_PHN_NBR" size="13" type="VARCHAR"/>
-        <column name="AST_EST_SELL_PRC" scale="2" size="19" type="DECIMAL"/>
-        <column name="CPTLAST_SALE_PRC" scale="2" size="19" type="DECIMAL"/>
-        <column name="CASH_RCPT_FDOC_NBR" size="14" type="VARCHAR"/>
-        <column name="AST_HANDLG_FEE_AMT" scale="2" size="19" type="DECIMAL"/>
-        <column name="AST_PRVNTMAINT_AMT" scale="2" size="19" type="DECIMAL"/>
-        <column name="CPTLAST_BUYER_DESC" size="25" type="VARCHAR"/>
-        <column name="AST_IUPD_CASE_NBR" size="14" type="VARCHAR"/>
-        <foreign-key foreignTable="CM_AST_STATUS_T" name="CM_AST_RETIREDOC_TR8">
-            <reference foreign="AST_INVN_STAT_CD" local="AST_INVN_STAT_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="CM_AST_RETIREDOC_TR3">
-            <reference foreign="FIN_COA_CD" local="AST_RETIR_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_RETIREDOC_TR1">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_STATE_T" name="CM_AST_RETIREDOC_TR6">
-            <reference foreign="POSTAL_STATE_CD" local="AST_RETIR_STATE_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_COUNTRY_T" name="CM_AST_RETIREDOC_TR7">
-            <reference foreign="POSTAL_CNTRY_CD" local="AST_RETIR_CNTRY_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CM_RETIRE_REAS_T" name="CM_AST_RETIREDOC_TR4">
-            <reference foreign="AST_RETIRE_REAS_CD" local="AST_RETIRE_REAS_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_RETIREDOC_TR2">
-            <reference foreign="FIN_COA_CD" local="AST_RETIR_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="AST_RETIR_ACCT_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_RETIREDOC_TR5">
-            <reference foreign="FDOC_NBR" local="CASH_RCPT_FDOC_NBR"/>
-        </foreign-key>
-        <unique name="CM_AST_RETIREDOC_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-        <index name="CM_AST_RETIREDOC_TI2">
-            <index-column name="AST_RETIRE_REAS_CD"/>
         </index>
     </table>
     <table name="CM_AST_RETIRE_DOC_T">
@@ -7629,7 +7594,6 @@
         <column name="FDOC_NXT_FRM_NBR" size="7" type="DECIMAL"/>
         <column name="FDOC_NXT_TO_NBR" size="7" type="DECIMAL"/>
         <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
-        <column name="FDOC_POST_PRD_CD" size="2" type="VARCHAR"/>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="FP_DISTRIB_DOC_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
@@ -8173,7 +8137,6 @@
         <column name="FDOC_NXT_FRM_NBR" size="7" type="DECIMAL"/>
         <column name="FDOC_NXT_TO_NBR" size="7" type="DECIMAL"/>
         <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
-        <column name="FDOC_POST_PRD_CD" size="2" type="VARCHAR"/>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="FP_ICR_ADJ_DOC_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
@@ -15361,6 +15324,7 @@
     <sequence name="PDP_PMT_NTE_ID_SEQ" nextval="10012647"/>
     <sequence name="PDP_PROC_ID_SEQ" nextval="10000098"/>
     <sequence name="PDP_PROC_SUM_ID_SEQ" nextval="10000099"/>
+    <sequence name="PMT_CHG_ID" nextval="1000"/>
     <sequence name="PMT_RQST_ACCT_ID" nextval="1002"/>
     <sequence name="PMT_RQST_ID" nextval="1040"/>
     <sequence name="PMT_RQST_ITM_ID" nextval="1002"/>
