@@ -1,10 +1,10 @@
 <%@ page language="java"%>
-<%@ taglib uri="../tld/struts-html-el.tld" prefix="html-el" %>
-<%@ taglib uri="../tld/struts-bean-el.tld" prefix="bean-el" %>
-<%@ taglib uri="../tld/struts-logic-el.tld" prefix="logic-el"%>
-<%@ taglib uri="../tld/c.tld" prefix="c" %>
-<%@ taglib uri="../tld/fmt.tld" prefix="fmt" %>
-<%@ taglib uri="../tld/displaytag.tld" prefix="display-el" %>
+<%@ taglib uri="/kr/WEB-INF/tlds/struts-html-el.tld" prefix="html-el" %>
+<%@ taglib uri="/kr/WEB-INF/tlds/struts-bean-el.tld" prefix="bean-el" %>
+<%@ taglib uri="/kr/WEB-INF/tlds/struts-logic-el.tld" prefix="logic-el"%>
+<%@ taglib uri="/kr/WEB-INF/tlds/c.tld" prefix="c" %>
+<%@ taglib uri="/kr/WEB-INF/tlds/fmt.tld" prefix="fmt" %>
+<%@ taglib uri="/kr/WEB-INF/tlds/displaytag.tld" prefix="display-el" %>
 
 <html>
 	<head>
