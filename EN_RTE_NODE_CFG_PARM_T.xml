@@ -802,4 +802,19 @@
     <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2280"
         RTE_NODE_CFG_PARM_KEY="ruleSelector"
         RTE_NODE_CFG_PARM_ND="563358246" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2300"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2301"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2302"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2303"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2304"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="Template"/>
 </dataset>

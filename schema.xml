@@ -12858,28 +12858,6 @@
             <index-column name="ITM_LN_NBR"/>
         </index>
     </table>
-    <table name="PUR_AP_CM_PMT_CHG_ACCT_T">
-        <column name="CM_PMT_CHG_ID" primaryKey="true" size="10" type="DECIMAL"/>
-        <column name="ITM_LN_NBR" primaryKey="true" size="3" type="DECIMAL"/>
-        <column name="GL_PENDING_ENTRY_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="ITM_ACCT_TOT_AMT" required="true" scale="2"
-            size="19" type="DECIMAL"/>
-        <unique name="PUR_AP_CM_PMT_CHG_ACCT_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="PUR_AP_CM_PMT_CHG_T">
-        <column name="CM_PMT_CHG_ID" primaryKey="true" size="10" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="PMT_RQST_ID" size="9" type="DECIMAL"/>
-        <column name="CRDT_MEMO_ID" size="9" type="DECIMAL"/>
-        <unique name="PUR_AP_CM_PMT_CHG_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
     <table name="PUR_AP_CM_STAT_T">
         <column name="CM_STAT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -15283,7 +15261,6 @@
     <sequence name="CM_DOC_ID" nextval="1002"/>
     <sequence name="CM_ITM_ID" nextval="1002"/>
     <sequence name="CM_ITM_LOC_ID" nextval="1002"/>
-    <sequence name="CM_PMT_CHG_ID" nextval="1002"/>
     <sequence name="CM_SYS_ID" nextval="1002"/>
     <sequence name="CPTLAST_NBR_SEQ" nextval="2000"/>
     <sequence name="CRDT_MEMO_ACCT_ID" nextval="1002"/>
@@ -15294,11 +15271,7 @@
     <sequence name="DV_PAYEE_ID_NBR_SEQ" nextval="178184"/>
     <sequence name="EN_SERVICE_DEF_INTERFACE_SEQ" nextval="2000"/>
     <sequence name="FP_CASHIER_ITM_IN_PROC_T_SEQ" nextval="1000"/>
-    <sequence name="FP_FIS_USER_T_SEQ" nextval="2845"/>
     <sequence name="FP_PRCRMNT_CARD_TRN_T_SEQ" nextval="2040"/>
-    <sequence name="GL_CRRCTN_GRP_T_SEQ" nextval="43"/>
-    <sequence name="GL_CRRCTN_RPLC_SPC_T_SEQ" nextval="43"/>
-    <sequence name="GL_CRRCTN_SRCH_CRT_T_SEQ" nextval="43"/>
     <sequence name="GL_ID_BILL_T_SEQ" nextval="1"/>
     <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="11909"/>
     <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="31905"/>
@@ -15353,7 +15326,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2280"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318220"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318260"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4012"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -15362,8 +15335,8 @@
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5871"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
     <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13056"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563358249"/>
-    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2300"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563358269"/>
+    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2320"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151676"/>
