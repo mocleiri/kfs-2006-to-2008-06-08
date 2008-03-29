@@ -1653,18 +1653,14 @@
         <column name="PMT_CLR_FIN_OBJ_CD" size="4" type="VARCHAR"/>
         <column name="AR_LOCKBOX_NBR" size="10" type="VARCHAR"/>
         <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR8">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="PMT_CLR_FIN_OBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="AR_SYS_INFO_TR3">
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_SYS_INFO_TR10">
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="SALESTAX_ACCT_NBR"/>
-        </foreign-key>
+        <column name="ORG_REMIT_ADDR_NM" size="40" type="VARCHAR"/>
+        <column name="ORG_REMIT_LN1_ADDR" size="30" type="VARCHAR"/>
+        <column name="ORG_REMIT_LN2_ADDR" size="30" type="VARCHAR"/>
+        <column name="ORG_REMIT_CITY_NM" size="25" type="VARCHAR"/>
+        <column name="ORG_REMIT_ST_CD" size="2" type="VARCHAR"/>
+        <column name="ORG_REMIT_ZIP_CD" size="11" type="VARCHAR"/>
+        <column name="ORG_CHCK_PAY_TO_NM" size="40" type="VARCHAR"/>
+        <column name="FDOC_INITIATOR_ID" size="10" type="VARCHAR"/>
         <foreign-key foreignTable="CA_SUB_OBJECT_CD_T" name="AR_SYS_INFO_TR12">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
             <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
@@ -1672,20 +1668,10 @@
             <reference foreign="FIN_OBJECT_CD" local="UNIV_CLR_OBJECT_CD"/>
             <reference foreign="FIN_SUB_OBJ_CD" local="UNIV_CLR_SUBOBJ_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR7">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="DBTEXP_FIN_OBJ_CD"/>
-        </foreign-key>
         <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR5">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
             <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
             <reference foreign="FIN_OBJECT_CD" local="SALESTAX_FINOBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_SUB_ACCT_T" name="AR_SYS_INFO_TR11">
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="UNIV_CLR_ACCT_NBR"/>
-            <reference foreign="SUB_ACCT_NBR" local="UNIV_CLR_SUBAC_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ORG_T" name="AR_SYS_INFO_TR2">
             <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
@@ -1696,14 +1682,39 @@
             <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
             <reference foreign="FIN_OBJECT_CD" local="UNIV_CLR_OBJECT_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_SYS_INFO_TR4">
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="UNIV_CLR_ACCT_NBR"/>
-        </foreign-key>
         <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR6">
             <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
             <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
             <reference foreign="FIN_OBJECT_CD" local="REFUND_FIN_OBJ_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_SYS_INFO_TR10">
+            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="SALESTAX_ACCT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="AR_SYS_INFO_TR3">
+            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR8">
+            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
+            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
+            <reference foreign="FIN_OBJECT_CD" local="PMT_CLR_FIN_OBJ_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR7">
+            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
+            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
+            <reference foreign="FIN_OBJECT_CD" local="DBTEXP_FIN_OBJ_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_STATE_T" name="AR_SYS_INFO_TR13">
+            <reference foreign="POSTAL_STATE_CD" local="ORG_REMIT_ST_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_SUB_ACCT_T" name="AR_SYS_INFO_TR11">
+            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="UNIV_CLR_ACCT_NBR"/>
+            <reference foreign="SUB_ACCT_NBR" local="UNIV_CLR_SUBAC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_SYS_INFO_TR4">
+            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="UNIV_CLR_ACCT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="AR_SYS_INFO_TR1">
             <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
