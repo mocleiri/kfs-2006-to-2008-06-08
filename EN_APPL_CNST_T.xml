@@ -96,7 +96,7 @@
     <EN_APPL_CNST_T APPL_CNST_NM="User.CreateNew.Instruction"
         APPL_CNST_VAL_TXT="Create or modify user information." DB_LOCK_VER_NBR="0"/>
     <EN_APPL_CNST_T APPL_CNST_NM="Workflow.AdminUrls"
-        APPL_CNST_VAL_TXT="/RouteType.do /RouteManagerDriver.do /ApplicationConstants.do /RuleAttribute.do /RuleTemplate.do /WorkflowUser.do /Help.do /DocumentOperation.do" DB_LOCK_VER_NBR="0"/>
+        APPL_CNST_VAL_TXT="/en/RouteType.do /en/RouteManagerDriver.do /en/ApplicationConstants.do /en/RuleAttribute.do /en/RuleTemplate.do /en/WorkflowUser.do /en/Help.do /en/DocumentOperation.do" DB_LOCK_VER_NBR="0"/>
     <EN_APPL_CNST_T
         APPL_CNST_NM="Feature.CheckRouteLogAuthentication.CheckFuture"
         APPL_CNST_VAL_TXT="true" DB_LOCK_VER_NBR="0"/>
