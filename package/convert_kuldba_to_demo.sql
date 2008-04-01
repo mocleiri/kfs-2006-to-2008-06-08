@@ -67,8 +67,12 @@ DELETE FROM ld_ldgr_entr_t
     WHERE fdoc_typ_cd NOT IN ( SELECT fdoc_typ_cd FROM fp_doc_type_t )
 /    
 
+DELETE FROM ca_org_rtng_mdl_t
+    WHERE fdoc_typ_cd NOT IN ( SELECT fdoc_typ_cd FROM fp_doc_type_t )
+/    
 
--- TODO: Clean up workflow document types and versions
+
+-- Clean up workflow document types and versions
 
 DELETE
 --    SELECT *
