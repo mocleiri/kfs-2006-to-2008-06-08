@@ -15345,7 +15345,7 @@
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5871"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13076"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13096"/>
     <sequence name="SEQ_RTE_NODE" nextval="563358269"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2320"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>

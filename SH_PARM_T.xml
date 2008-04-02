@@ -4667,4 +4667,11 @@
         SH_PARM_NMSPC_CD="KFS-CM"
         SH_PARM_TXT="R=A,C,D,E,N,O,S,U;U=A,C,D,E,N,O,R,S"
         SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="49D6590BBAC2F65CE0404F8189D80737"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="This system parameter is used to determine the due date for the Customer Invoice.  It holds the number of days the invoice due date can be from the current date."
+        SH_PARM_DTL_TYP_CD="CustomerInvoice"
+        SH_PARM_NM="MAXIMUM_NUMBER_OF_DAYS_AFTER_CURRENT_DATE_FOR_INVOICE_DUE_DATE"
+        SH_PARM_NMSPC_CD="KFS-AR" SH_PARM_TXT="90"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
 </dataset>
