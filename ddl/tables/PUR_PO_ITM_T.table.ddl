@@ -40,6 +40,7 @@ CREATE TABLE PUR_PO_ITM_T(
         EXT_ORG_B2B_PROD_TYP_NM        VARCHAR2(15),
         ITM_ASND_TO_TRADE_IN_IND       VARCHAR2(1),
         ITM_DMGED_TOT_QTY              NUMBER(11,2),
+        CM_SYS_NBR                     NUMBER(10),
      CONSTRAINT PUR_PO_ITM_TP1 PRIMARY KEY (
         FDOC_NBR,
         PO_ITM_ID),

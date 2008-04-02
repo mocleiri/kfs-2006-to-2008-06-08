@@ -115,6 +115,7 @@ CREATE TABLE PUR_PO_T(
         PMT_RQST_PSTV_APRVL_IND        VARCHAR2(1),
         PO_QT_INITLZTN_DT              DATE,
         PO_QT_AWDED_DT                 DATE,
+        CM_SYS_TYP_CD                  VARCHAR2(4),
      CONSTRAINT PUR_PO_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT PUR_PO_TC0 UNIQUE (OBJ_ID)
