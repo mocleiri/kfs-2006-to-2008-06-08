@@ -59,6 +59,7 @@ import org.kuali.module.financial.bo.ProcurementCardTransactionDetail;
 import org.kuali.module.financial.bo.ProcurementCardVendor;
 import org.kuali.module.financial.document.ProcurementCardDocument;
 import org.kuali.module.financial.service.ProcurementCardCreateDocumentService;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -68,6 +69,7 @@ import edu.iu.uis.eden.exception.WorkflowException;
  * 
  * @see org.kuali.module.financial.service.ProcurementCardCreateDocumentService
  */
+@Transactional
 public class ProcurementCardCreateDocumentServiceImpl implements ProcurementCardCreateDocumentService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProcurementCardCreateDocumentServiceImpl.class);
 
