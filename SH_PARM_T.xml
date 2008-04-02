@@ -3850,13 +3850,6 @@
         SH_PARM_NMSPC_CD="KFS-RA"
         SH_PARM_TXT="By signing, I affirm that, to the best of my knowledge, (1) all information provided in this document is complete and accurate, (2) no federal funds have been or will be used to lobby any member or employee of Congress or employee of any federal agency in connection with the awarding of any contract, grant or cooperative agreement, and (3) that all individuals responsible for the design, conduct or reporting associated with this project have made the necessary disclosures under the University conflict of interest policy. Note: Department chair and dean/director signatures indicate assumption of responsibility for all resources in this proposal (e.g., personnel, space, equipment, and cost-sharing unless otherwise documented)."
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_KRA_ADMIN"/>
-    <SH_PARM_T OBJ_ID="8DE1B1CC0D2D413DAD28C845940F0119"
-        SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="If Y, the &quot;route report&quot; button will be displayed on the document actions bar if the document is using the default DocumentAuthorizerBase.getDocumentActionFlags to set the canPerformRouteReport property of the returned DocumentActionFlags instance."
-        SH_PARM_DTL_TYP_CD="Document"
-        SH_PARM_NM="DEFAULT_CAN_PERFORM_ROUTE_REPORT"
-        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="WorkflowAdmin"/>
     <SH_PARM_T OBJ_ID="330A84917888402D8EEB7EA8E7AC4F1A"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Flag for enabling;disabling direct inquiries on screens that are drawn by the nervous system (i.e. lookups and maintenance documents)"
