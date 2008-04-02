@@ -24,6 +24,7 @@ import static org.kuali.test.util.KualiTestAssertionUtils.assertInequality;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.Copyable;
 import org.kuali.core.document.Correctable;
 import org.kuali.core.document.Document;
@@ -60,6 +61,9 @@ public class JournalVoucherDocumentTest extends KualiTestBase {
     private JournalVoucherDocument buildDocument() throws Exception {
         // put accounting lines into document parameter for later
         JournalVoucherDocument document = (JournalVoucherDocument) getDocumentParameterFixture();
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        document.getDocumentHeader().setFinancialDocumentDescription(StringUtils.abbreviate("Unit Test doc for "+trace[3].getMethodName(), SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(document.getDocumentHeader().getClass(), "financialDocumentDescription")));
+        document.getDocumentHeader().setExplanation(StringUtils.abbreviate("Unit test created document for "+trace[3].getClassName()+"."+trace[3].getMethodName(), SpringContext.getBean(DataDictionaryService.class).getAttributeMaxLength(document.getDocumentHeader().getClass(), "explanation")));
 
         // set accountinglines to document
         for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
