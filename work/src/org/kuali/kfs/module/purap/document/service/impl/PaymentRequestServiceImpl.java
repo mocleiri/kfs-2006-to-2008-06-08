@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -206,23 +207,54 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     }
 
     /**
-     * @see org.kuali.module.purap.service.PaymentRequestService.autoApprovePaymentRequests()
+     * @see org.kuali.module.purap.service.PaymentRequestService#getPaymentRequestsDocumentNumberEligibleForAutoApproval()
      */
-    public boolean autoApprovePaymentRequests() {
-        boolean hadErrorAtLeastOneError = true;
-        // should objects from existing user session be copied over
-        List<PaymentRequestDocument> docs = paymentRequestDao.getEligibleForAutoApproval();
-        if (docs != null) {
-            String samt = parameterService.getParameterValue(PaymentRequestDocument.class, PurapParameterConstants.PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT);
-            KualiDecimal defaultMinimumLimit = new KualiDecimal(samt);
-            for (PaymentRequestDocument paymentRequestDocument : docs) {
-                hadErrorAtLeastOneError |= !autoApprovePaymentRequest(paymentRequestDocument, defaultMinimumLimit);
+    public List<String> getPaymentRequestsDocumentNumberEligibleForAutoApproval() {
+        return paymentRequestDao.getEligibleDocumentNumbersForAutoApproval();
+    }
+    
+    /**
+     * NOTE: in the event of auto-approval failure, this method may throw a RuntimeException, indicating to Spring
+     * transactional management that the transaction should be rolled back.
+     * 
+     * @see org.kuali.module.purap.service.PaymentRequestService#autoApprovePaymentRequest(java.lang.String, org.kuali.core.util.KualiDecimal)
+     */
+    public boolean autoApprovePaymentRequest(String docNumber, KualiDecimal defaultMinimumLimit) {
+        PaymentRequestDocument paymentRequestDocument = null;
+        try {
+            paymentRequestDocument = (PaymentRequestDocument) documentService.getByDocumentHeaderId(docNumber);
+            if (paymentRequestDocument.isHoldIndicator() || paymentRequestDocument.isPaymentRequestedCancelIndicator() ||
+                    !Arrays.asList(PurapConstants.PaymentRequestStatuses.PREQ_STATUSES_FOR_AUTO_APPROVE).contains(paymentRequestDocument.getStatusCode())) {
+                // this condition is based on the conditions that PaymentRequestDaoOjb.getEligibleDocumentNumbersForAutoApproval() uses to query
+                // the database.  Rechecking these conditions to ensure that the document is eligible for auto-approval, because we're not running things
+                // within the same transaction anymore and changes could have occurred since we called that method that make this document not auto-approvable
+                
+                // note that this block does not catch all race conditions
+                // however, this error condition is not enough to make us return an error code, so just skip the document
+                LOG.warn("Payment Request Document " + paymentRequestDocument.getDocumentNumber() + " could not be auto-approved because it has either been placed on hold, " +
+                        " requested cancel, or does not have one of the PREQ statuses for auto-approve.");
+                return true;
+            }
+            if (autoApprovePaymentRequest(paymentRequestDocument, defaultMinimumLimit)) {
+                LOG.info("Auto-approval for payment request successful.  Doc number: " + docNumber);
+                return true;
+            }
+            else {
+                LOG.error("Payment Request Document " + docNumber + " could not be auto-approved.");
+                return false;
             }
         }
-        return hadErrorAtLeastOneError;
+        catch (WorkflowException we) {
+            LOG.error("Exception encountered when retrieving document number " + docNumber + ".", we);
+            // throw a runtime exception up so that we can force a rollback
+            throw new RuntimeException("Exception encountered when retrieving document number " + docNumber + ".", we);
+        }
     }
-
+    
     /**
+     * NOTE: in the event of auto-approval failure, this method may throw a RuntimeException, indicating to Spring
+     * transactional management that the transaction should be rolled back.
+     * 
      * @see org.kuali.module.purap.service.PaymentRequestService#autoApprovePaymentRequest(org.kuali.module.purap.document.PaymentRequestDocument, org.kuali.core.util.KualiDecimal)
      */
     public boolean autoApprovePaymentRequest(PaymentRequestDocument doc, KualiDecimal defaultMinimumLimit) {
@@ -233,7 +265,8 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
             }
             catch (WorkflowException we) {
                 LOG.error("Exception encountered when approving document number " + doc.getDocumentNumber() + ".", we);
-                return false;
+                // throw a runtime exception up so that we can force a rollback
+                throw new RuntimeException("Exception encountered when approving document number " + doc.getDocumentNumber() + ".", we);
             }
         }
         return true;
