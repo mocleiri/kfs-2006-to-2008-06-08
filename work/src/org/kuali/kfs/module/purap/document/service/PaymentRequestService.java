@@ -280,13 +280,25 @@ public interface PaymentRequestService extends AccountsPayableDocumentSpecificSe
     public void populateAndSavePaymentRequest(PaymentRequestDocument preq) throws WorkflowException;
 
     /**
-     * Retrieve a list of PREQs that aren't approved, check to see if they match specific requirements, then auto-approve them if
-     * possible.
+     * Retrieves a list of document numbers that may be auto-approvable.
      * 
-     * @return  boolean true if the auto approval of payment requests has at least one error.
+     * @return a list of document numbers
      */
-    public boolean autoApprovePaymentRequests();
-
+    public List<String> getPaymentRequestsDocumentNumberEligibleForAutoApproval();
+    
+    /**
+     * Checks whether the payment request document is eligible for auto approval. If so, then updates
+     * the status of the document to auto approved and calls the documentService to blanket approve
+     * the document, then returns false.
+     * If the document is not eligible for auto approval then returns true.
+     * 
+     * @param docNumber            The payment request document number (not the payment request ID) to be auto approved.
+     * @param defaultMinimumLimit  The default minimum limit amount to be used in determining the eligibility of the document to be auto approved.
+     * @return                     boolean true if the payment request document is not eligible for auto approval.
+     * @throws RuntimeException    To indicate to Spring transactional management that the transaction for this document should be rolled back
+     */
+    public boolean autoApprovePaymentRequest(String docNumber, KualiDecimal defaultMinimumLimit);
+    
     /**
      * Checks whether the payment request document is eligible for auto approval. If so, then updates
      * the status of the document to auto approved and calls the documentService to blanket approve
@@ -296,6 +308,7 @@ public interface PaymentRequestService extends AccountsPayableDocumentSpecificSe
      * @param doc                  The payment request document to be auto approved.
      * @param defaultMinimumLimit  The default minimum limit amount to be used in determining the eligibility of the document to be auto approved.
      * @return                     boolean true if the payment request document is not eligible for auto approval.
+     * @throws RuntimeException    To indicate to Spring transactional management that the transaction for this document should be rolled back
      */
     public boolean autoApprovePaymentRequest(PaymentRequestDocument doc, KualiDecimal defaultMinimumLimit);
 
