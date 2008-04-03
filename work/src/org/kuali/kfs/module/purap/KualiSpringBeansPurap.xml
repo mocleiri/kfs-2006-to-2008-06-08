@@ -181,6 +181,9 @@
         <property name="kualiConfigurationService">
             <ref bean="kualiConfigurationService" />
         </property>
+        <property name="purapRunDateService">
+        	<ref bean="purapRunDateService" />
+        </property>
     </bean>
     
     <bean id="paymentRequestService" class="org.kuali.module.purap.service.impl.PaymentRequestServiceImpl">
@@ -365,6 +368,9 @@
         <property name="paymentRequestService">
             <ref bean="paymentRequestService" />
         </property>
+        <property name="parameterService">
+        	<ref bean="parameterService" />
+        </property>
     </bean>
 
 	<bean id="processPdpCancelsAndPaidStep" class="org.kuali.module.purap.batch.ProcessPdPCancelsAndPaidStep" parent="step">
@@ -419,4 +425,10 @@
 	</bean>
 
 	<bean id="purApOjbCollectionHelper" class="org.kuali.module.purap.util.PurApOjbCollectionHelper" />
+	
+	<bean id="purapRunDateService" class="org.kuali.module.purap.service.impl.PurapRunDateServiceImpl">
+		<property name="parameterService">
+			<ref bean="parameterService"/>
+		</property>
+	</bean>
 </beans>
