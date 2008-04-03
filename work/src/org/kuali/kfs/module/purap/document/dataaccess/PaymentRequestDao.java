@@ -67,17 +67,6 @@ public interface PaymentRequestDao {
     public Iterator<PaymentRequestDocument> getImmediatePaymentRequestsToExtract(String chartCode);
 
     /**
-     * Get all payment request documents that are eligible for auto-approval. Whether or not a document is eligible for
-     * auto-approval is determined according to whether or not the document total is below a pre-determined minimum amount. This
-     * amount is derived from the accounts, charts and/or organizations associated with a given document. If no minimum amount can
-     * be determined from chart associations a default minimum specified as a system parameter is used to determine the minimum
-     * amount threshold.
-     * 
-     * @return - an Iterator over all payment request documents eligible for automatic approval
-     */
-    public List<PaymentRequestDocument> getEligibleForAutoApproval();
-
-    /**
      * Get a payment request document number by id.
      * 
      * @param id - PaymentRequest Id
@@ -119,5 +108,15 @@ public interface PaymentRequestDao {
      * @param purapDocumentIdentifier - purap document id
      */
     public void deleteSummaryAccounts(Integer purapDocumentIdentifier);
-
+    
+    /**
+     * Get all payment request document numbers that are eligible for auto-approval. Whether or not a document is eligible for
+     * auto-approval is determined according to whether or not the document total is below a pre-determined minimum amount. This
+     * amount is derived from the accounts, charts and/or organizations associated with a given document. If no minimum amount can
+     * be determined from chart associations a default minimum specified as a system parameter is used to determine the minimum
+     * amount threshold.
+     * 
+     * @return - a list of all payment request document numbers eligible for automatic approval
+     */
+    public List<String> getEligibleDocumentNumbersForAutoApproval();
 }
