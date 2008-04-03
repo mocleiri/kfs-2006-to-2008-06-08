@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/PurapRuleConstants.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +23,14 @@ package org.kuali.module.purap;
 public class PurapRuleConstants {
 
     // GROUP NAMES
-    public static String CREDIT_MEMO_RULES_GROUP = "Kuali.Purchasing.CreditMemoDocument";
+    public static String PURAP_ADMIN_GROUP = "PurapAdminGroup";
 
     // RULE NAMES
-    public static final String ALLOW_ENCUMBER_NEXT_YEAR_DAYS = "ALLOW_ENCUMBER_NEXT_YEAR_DAYS";
-    public static final String ALLOW_APO_NEXT_FY_DAYS = "ALLOW_APO_NEXT_FY_DAYS";
-    public static final String ALLOW_BACKPOST_DAYS = "ALLOW_BACKPOST_DAYS";
+    public static String PURAP_VENDOR_MIN_ORDER_AMOUNT = "PURAP.VENDOR_MIN_ORDER_AMOUNT";
+    public static String PURAP_NOT_ALLOWED_TAX_NUMBERS = "PURAP.NOT_ALLOWED_TAX_NUMBERS";
+    public static String PURAP_VNDR_MIN_NUM_LOOKUP_CRITERIA = "PURAP.VNDR_MIN_NUM_LOOKUP_CRITERIA";
+    public static String PURAP_VNDR_LOOKUP_MIN_NAME_LENGTH = "PURAP.VNDR_LOOKUP_MIN_NAME_LENGTH";
 
-    public static final String INVALID_OBJECT_LEVELS_BY_OBJECT_TYPE_PARM_NM = "INVALID_OBJECT_LEVELS_BY_OBJECT_TYPE";
-    public static final String VALID_OBJECT_LEVELS_BY_OBJECT_TYPE_PARM_NM = "VALID_OBJECT_LEVELS_BY_OBJECT_TYPE";
-    public static final String RESTRICTED_OBJECT_SUB_TYPE_PARM_NM = "OBJECT_SUB_TYPES";
+    public static final String ALLOWED_EMPLOYEE_TYPE_RULE = "AllowedEmployeeTypes";
 
-    public static final String PURAP_VENDOR_TYPE_ALLOWED_ON_REQ_AND_PO = "REQ_AND_PO_VENDOR_TYPES";
-    public static final String ITEMS_REQUIRE_COMMODITY_CODE_IND = "ITEMS_REQUIRE_COMMODITY_CODE_IND";
 }

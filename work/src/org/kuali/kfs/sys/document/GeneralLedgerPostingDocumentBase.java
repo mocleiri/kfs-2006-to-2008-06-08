@@ -15,22 +15,19 @@
  */
 package org.kuali.kfs.document;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.exceptions.ValidationException;
-import org.kuali.core.rule.event.ApproveDocumentEvent;
-import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.core.rule.event.RouteDocumentEvent;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.Constants;
+import org.kuali.core.bo.DocumentHeader;
+import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocumentBase;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.financial.bo.Bank;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.util.SufficientFundsItem;
 
@@ -41,9 +38,9 @@ import edu.iu.uis.eden.exception.WorkflowException;
  */
 public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase implements GeneralLedgerPostingDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralLedgerPostingDocumentBase.class);
-
+    
     protected List<GeneralLedgerPendingEntry> generalLedgerPendingEntries;
-
+    
     /**
      * Default constructor.
      */
@@ -53,14 +50,14 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#getGeneralLedgerPendingEntries()
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocument#getGeneralLedgerPendingEntries()
      */
     public List<GeneralLedgerPendingEntry> getGeneralLedgerPendingEntries() {
         return generalLedgerPendingEntries;
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#getGeneralLedgerPendingEntry(int)
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocument#getGeneralLedgerPendingEntry(int)
      */
     public GeneralLedgerPendingEntry getGeneralLedgerPendingEntry(int index) {
         while (generalLedgerPendingEntries.size() <= index) {
@@ -70,40 +67,35 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#setGeneralLedgerPendingEntries(java.util.List)
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocument#setGeneralLedgerPendingEntries(java.util.List)
      */
     public void setGeneralLedgerPendingEntries(List<GeneralLedgerPendingEntry> generalLedgerPendingEntries) {
         this.generalLedgerPendingEntries = generalLedgerPendingEntries;
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#isBankCashOffsetEnabled()
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocument#isBankCashOffsetEnabled()
      */
     public boolean isBankCashOffsetEnabled() {
-        return SpringContext.getBean(ParameterService.class).getIndicatorParameter(Bank.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG);
+        return SpringServiceLocator.getKualiConfigurationService().getApplicationParameterIndicator(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG);
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#checkSufficientFunds()
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocument#checkSufficientFunds()
      */
     public List<SufficientFundsItem> checkSufficientFunds() {
         LOG.debug("checkSufficientFunds() started");
 
         if (documentPerformsSufficientFundsCheck()) {
-            SufficientFundsService sufficientFundsService = SpringContext.getBean(SufficientFundsService.class);
+            SufficientFundsService sufficientFundsService = SpringServiceLocator.getSufficientFundsService();
             return sufficientFundsService.checkSufficientFunds(this);
-        }
-        else {
-            return new ArrayList<SufficientFundsItem>();
+        } else {
+            return new ArrayList();
         }
     }
-
+    
     /**
-     * This method checks to see if SF checking should be done for this document. This was originally part of
-     * SufficientFundsService.checkSufficientFunds() but was externalized so documents that need to override any of the SF methods
-     * can still explicitly check this
-     * 
-     * @return
+     * This method checks to see if SF checking should be done for this document.  This was originally part of SufficientFundsService.checkSufficientFunds() but was externalized so documents that need to override any of the SF methods can still explicitly check this
      */
     public boolean documentPerformsSufficientFundsCheck() {
         // check for reversing entries generated by an error correction.
@@ -111,7 +103,7 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
     }
 
     /**
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocument#getPendingLedgerEntriesForSufficientFundsChecking()
+     * @see org.kuali.module.gl.document.GeneralLedgerPostingDocument#getPendingLedgerEntriesForSufficientFundsChecking()
      */
     public List<GeneralLedgerPendingEntry> getPendingLedgerEntriesForSufficientFundsChecking() {
         return getGeneralLedgerPendingEntries();
@@ -125,32 +117,18 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
     @Override
     public void handleRouteStatusChange() {
         super.handleRouteStatusChange();
-        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            changeGeneralLedgerPendingEntriesApprovedStatusCode(); // update all glpes for doc and set their status to approved
-        }
-        else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled() || getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            removeGeneralLedgerPendingEntries();
-            if (this instanceof ElectronicPaymentClaiming) { // TODO should use this.getClass().isAssignableFrom?
-                ((ElectronicPaymentClaiming)this).declaimElectronicPaymentClaims();
-            }
-        }
+        changeGeneralLedgerPendingEntriesApprovedStatusCode(); // update all glpes for doc and set their status to approved
     }
 
     /**
      * This method iterates over all of the GLPEs for a document and sets their approved status code to APPROVED "A".
      */
     private void changeGeneralLedgerPendingEntriesApprovedStatusCode() {
-        for (GeneralLedgerPendingEntry glpe : getGeneralLedgerPendingEntries()) {
-            glpe.setFinancialDocumentApprovedCode(KFSConstants.DocumentStatusCodes.APPROVED);
+        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
+            for (GeneralLedgerPendingEntry glpe : getGeneralLedgerPendingEntries()) {
+                glpe.setFinancialDocumentApprovedCode(Constants.DocumentStatusCodes.APPROVED);
+            }
         }
-    }
-
-    /**
-     * This method calls the service to remove all of the GLPE's associated with this document
-     */
-    protected void removeGeneralLedgerPendingEntries() {
-        GeneralLedgerPendingEntryService glpeService = SpringContext.getBean(GeneralLedgerPendingEntryService.class);
-        glpeService.delete(getDocumentHeader().getDocumentNumber());
     }
 
     /**
@@ -163,41 +141,13 @@ public class GeneralLedgerPostingDocumentBase extends LedgerPostingDocumentBase 
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#toErrorCorrection()
+     * @see org.kuali.core.document.DocumentBase#toErrorCorrection()
      */
     @Override
     public void toErrorCorrection() throws WorkflowException {
         super.toErrorCorrection();
         getGeneralLedgerPendingEntries().clear();
     }
-
-    @Override
-    public void prepareForSave(KualiDocumentEvent event) {
-        super.prepareForSave(event);
-        if (event instanceof RouteDocumentEvent || event instanceof ApproveDocumentEvent) {
-            // generate general ledger pending entries should be called prior to sufficient funds checking
-            List<SufficientFundsItem> sfItems = checkSufficientFunds();
-            if (!sfItems.isEmpty()) {
-                for (SufficientFundsItem sfItem : sfItems) {
-                    GlobalVariables.getErrorMap().putError(KFSConstants.ACCOUNTING_LINE_ERRORS, KFSKeyConstants.SufficientFunds.ERROR_INSUFFICIENT_FUNDS, new String[] { sfItem.getAccount().getChartOfAccountsCode(), sfItem.getAccount().getAccountNumber(), StringUtils.isNotBlank(sfItem.getSufficientFundsObjectCode()) ? sfItem.getSufficientFundsObjectCode() : KFSConstants.NOT_AVAILABLE_STRING, sfItem.getAccountSufficientFundsCode() });
-                }
-                throw new ValidationException("Insufficient Funds on this Document:");
-            }
-        }
-    }
     
-    /**
-     * Adds a GeneralLedgerPendingEntry to this document's list of pending entries
-     * @param pendingEntry a pending entry to add
-     */
-    public void addPendingEntry(GeneralLedgerPendingEntry pendingEntry) {
-        generalLedgerPendingEntries.add(pendingEntry);
-    }
     
-    /**
-     * This resets this document's list of general ledger pending etnries, though it does not delete those entries (however, the GeneralLedgerPendingEntryService will in most cases when this method is called).
-     */
-    public void clearAnyGeneralLedgerPendingEntries() {
-        generalLedgerPendingEntries = new ArrayList<GeneralLedgerPendingEntry>();
-    }
 }

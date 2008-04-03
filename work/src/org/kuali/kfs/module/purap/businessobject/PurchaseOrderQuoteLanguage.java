@@ -1,18 +1,3 @@
-/*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.purap.bo;
 
 import java.sql.Date;
@@ -21,63 +6,114 @@ import java.util.LinkedHashMap;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 
 /**
- * Purchase Order Quote Language Business Object.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class PurchaseOrderQuoteLanguage extends PersistableBusinessObjectBase {
 
-    private Integer purchaseOrderQuoteLanguageIdentifier;
-    private String purchaseOrderQuoteLanguageDescription;
-    private Date purchaseOrderQuoteLanguageCreateDate;
-    private boolean active;
+	private Integer purchaseOrderQuoteLanguageIdentifier;
+	private String purchaseOrderQuoteLanguageDescription;
+	private Date purchaseOrderQuoteLanguageCreateDate;
+	private boolean active;
 
-    /**
-     * Default constructor.
-     */
-    public PurchaseOrderQuoteLanguage() {
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderQuoteLanguage() {
 
-    }
+	}
 
-    public Integer getPurchaseOrderQuoteLanguageIdentifier() {
-        return purchaseOrderQuoteLanguageIdentifier;
-    }
+	/**
+	 * Gets the purchaseOrderQuoteLanguageIdentifier attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteLanguageIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderQuoteLanguageIdentifier() { 
+		return purchaseOrderQuoteLanguageIdentifier;
+	}
 
-    public void setPurchaseOrderQuoteLanguageIdentifier(Integer purchaseOrderQuoteLanguageIdentifier) {
-        this.purchaseOrderQuoteLanguageIdentifier = purchaseOrderQuoteLanguageIdentifier;
-    }
+	/**
+	 * Sets the purchaseOrderQuoteLanguageIdentifier attribute.
+	 * 
+	 * @param purchaseOrderQuoteLanguageIdentifier The purchaseOrderQuoteLanguageIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteLanguageIdentifier(Integer purchaseOrderQuoteLanguageIdentifier) {
+		this.purchaseOrderQuoteLanguageIdentifier = purchaseOrderQuoteLanguageIdentifier;
+	}
 
-    public String getPurchaseOrderQuoteLanguageDescription() {
-        return purchaseOrderQuoteLanguageDescription;
-    }
 
-    public void setPurchaseOrderQuoteLanguageDescription(String purchaseOrderQuoteLanguageDescription) {
-        this.purchaseOrderQuoteLanguageDescription = purchaseOrderQuoteLanguageDescription;
-    }
+	/**
+	 * Gets the purchaseOrderQuoteLanguageDescription attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteLanguageDescription
+	 * 
+	 */
+	public String getPurchaseOrderQuoteLanguageDescription() { 
+		return purchaseOrderQuoteLanguageDescription;
+	}
 
-    public Date getPurchaseOrderQuoteLanguageCreateDate() {
-        return purchaseOrderQuoteLanguageCreateDate;
-    }
+	/**
+	 * Sets the purchaseOrderQuoteLanguageDescription attribute.
+	 * 
+	 * @param purchaseOrderQuoteLanguageDescription The purchaseOrderQuoteLanguageDescription to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteLanguageDescription(String purchaseOrderQuoteLanguageDescription) {
+		this.purchaseOrderQuoteLanguageDescription = purchaseOrderQuoteLanguageDescription;
+	}
 
-    public void setPurchaseOrderQuoteLanguageCreateDate(Date purchaseOrderQuoteLanguageCreateDate) {
-        this.purchaseOrderQuoteLanguageCreateDate = purchaseOrderQuoteLanguageCreateDate;
-    }
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Gets the purchaseOrderQuoteLanguageCreateDate attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteLanguageCreateDate
+	 * 
+	 */
+	public Date getPurchaseOrderQuoteLanguageCreateDate() { 
+		return purchaseOrderQuoteLanguageCreateDate;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Sets the purchaseOrderQuoteLanguageCreateDate attribute.
+	 * 
+	 * @param purchaseOrderQuoteLanguageCreateDate The purchaseOrderQuoteLanguageCreateDate to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteLanguageCreateDate(Date purchaseOrderQuoteLanguageCreateDate) {
+		this.purchaseOrderQuoteLanguageCreateDate = purchaseOrderQuoteLanguageCreateDate;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+
+	/**
+	 * Gets the active attribute.
+	 * 
+	 * @return Returns the active
+	 * 
+	 */
+	public boolean isActive() { 
+		return active;
+	}
+
+	/**
+	 * Sets the active attribute.
+	 * 
+	 * @param active The active to set.
+	 * 
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.purchaseOrderQuoteLanguageIdentifier != null) {
             m.put("purchaseOrderQuoteLanguageIdentifier", this.purchaseOrderQuoteLanguageIdentifier.toString());
         }
-        return m;
+	    return m;
     }
-
 }

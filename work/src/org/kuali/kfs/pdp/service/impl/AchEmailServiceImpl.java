@@ -51,7 +51,7 @@ public class AchEmailServiceImpl implements AchEmailService {
 
             if ( cust.getAdviceCreate().booleanValue() ) {
                 if ( environmentService.isProduction() ) {
-                    // Send it to the real recipients
+                    // Send it to the real receipients
                 } else {
                     // Send it to ourselves for test purposes
                     

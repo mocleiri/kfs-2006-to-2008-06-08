@@ -32,14 +32,16 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>IntendedIncumbentMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiBudgetConstructionIntendedIncumbentMaintenanceDocument</documentTypeName>
         <documentTypeCode>IINC</documentTypeCode>
 
-        <label>Intended Incumbent</label>
+        <label>Budget Construction Intended Incumbent Maintenance Document</label>
         <shortLabel>BC - BC Intended Incumbent Code Maint Doc</shortLabel>
 
         <summary>Budget Construction Intended Incumbent Maintenance Document</summary>
         <description>Document used to create or update Budget Construction Intended Incumbent Maintenance Document objects</description>
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="emplid" />

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,808 +17,28 @@ package org.kuali.module.purap.fixtures;
 
 import java.sql.Date;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.purap.PurapConstants.POCostSources;
-import org.kuali.module.purap.PurapConstants.POTransmissionMethods;
-import org.kuali.module.purap.PurapConstants.RequisitionSources;
+import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
+import org.kuali.module.purap.PurapConstants.*;
 
 public enum PurchasingDocumentFixture {
 
     // REQUISITION FIXTURES
-    REQ_ONLY_REQUIRED_FIELDS("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            null, // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode
-    
-    REQ_MULTI("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "KO", // chartOfAccountsCode
-            "SBSC", // organizationCode
-            "KO", // deliveryCampusCode
-            null, // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "WATSON,TERRENCE G", // requestorPersonName
-            "tw@kuali.org", // requestorPersonEmailAddress
-            "812-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "100", // deliveryBuildingRoomNumber
-            "98 smart street", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "brainy", // deliveryCityName
-            "CA", // deliveryStateCode
-            "46202", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "front desk", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode
+    REQ_ONLY_REQUIRED_FIELDS("INST", RequisitionSources.STANDARD_ORDER, POTransmissionMethods.NOPRINT, POCostSources.ESTIMATE, null, null, 
+            "UA", "PUR", "BL", null, null, null, null, null, null, "RENFROW,ROBERTA G", "test@email.com", "555-555-5555", null, null, null, null,
+            "ADMIN", "Administration", "123", "1 big dog", null, "campus", "AK", "46202-5260", null, "me", null, null, null, null, null, null,
+            null, null, null, "THE UNIVERSITY", "ACCOUNTS PAYABLE", null, "BUTTER NUT", "SC", "47402", "US", null, null, null, false, null, null, null),
 
-    REQ_WITH_RECURRING_PAYMENT_TYPE("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            "FVAR", // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            null, // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode
-
-    REQ_WITH_PO_TOTAL_LIMIT_NON_ZERO("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode           
-                  
-    REQ_B2B_VENDOR("INST", // fundingSourceCode
-            RequisitionSources.B2B, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode     
-                  
-    REQ_INVALID_VENDOR_FAX_NUMBER_CONTAINS_LETTER("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            "ABC-DEF-1234", // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode     
-                    
-    REQ_INVALID_VENDOR_FAX_NUMBER_BAD_FORMAT("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            "1112223333", // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode     
-
-    REQ_VALID_VENDOR_FAX_NUMBER("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            "111-222-3333", // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode     
-                    
-    REQ_PO_BEGIN_DATE_AFTER_END_DATE("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            SpringContext.getBean(DateTimeService.class).getCurrentSqlDate(), // purchaseOrderBeginDate
-            SpringContext.getBean(DateTimeService.class).getCurrentSqlDateMidnight(), // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode     
-
-    REQ_PO_BEGIN_DATE_NO_END_DATE("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            SpringContext.getBean(DateTimeService.class).getCurrentSqlDate(), // purchaseOrderBeginDate
-            null, // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode     
-                    
-    REQ_PO_END_DATE_NO_BEGIN_DATE("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            new KualiDecimal(100), // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            null, // purchaseOrderBeginDate
-            SpringContext.getBean(DateTimeService.class).getCurrentSqlDate(), // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode     
-
-    REQ_WITH_BEGIN_AND_END_DATE_WITHOUT_RECURRING_PAYMENT_TYPE("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            null, // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            null, // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate().getTime()/2), // purchaseOrderBeginDate
-            SpringContext.getBean(DateTimeService.class).getCurrentSqlDate(), // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode            
-            
-    REQ_WITH_RECURRING_PAYMENT_TYPE_BEGIN_AND_END_DATE("INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            POCostSources.ESTIMATE, // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            "FVAR", // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "PUR", // organizationCode
-            "BL", // deliveryCampusCode
-            null, // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            null, // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate().getTime()/2), // purchaseOrderBeginDate
-            SpringContext.getBean(DateTimeService.class).getCurrentSqlDate(), // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            null, // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null), // vendorShippingPaymentTermsCode
-                    
     // PURCHASE ORDER FIXTURES
-    PO_ONLY_REQUIRED_FIELDS("INST", RequisitionSources.STANDARD_ORDER, POTransmissionMethods.NOPRINT, POCostSources.ESTIMATE, null, null, "UA", "PUR", "BL", null, null, null, null, null, null, "RENFROW,ROBERTA G", "test@email.com", "555-555-5555", null, null, null, null, "ADMN", "Administration", "123", "1 big dog", null, "campus", "AK", "46202-5260", "US", "me", null, null, null, null, null, null, null, null, null, "THE UNIVERSITY", "ACCOUNTS PAYABLE", null, "BUTTER NUT", "SC", "47402", "US", "111-111-1111", null, 10, false, null, null, null),
-    PO_ONLY_REQUIRED_FIELDS_2("INST", RequisitionSources.STANDARD_ORDER, POTransmissionMethods.NOPRINT, POCostSources.ESTIMATE, null, null, "UA", "PUR", "BL", null, null, null, null, null, null, "RENFROW,ROBERTA G", "test@email.com", "555-555-5555", null, null, null, null, "ADMN", "Administration", "123", "1 big dog", null, "campus", "AK", "46202-5260", "US", "me", null, null, null, null, null, null, null, null, null, "THE UNIVERSITY", "ACCOUNTS PAYABLE", null, "BUTTER NUT", "SC", "47402", "US", "111-111-1111", null, 10, false, "00N10", null, "CL"),
-
-    PO_WITH_VENDOR_CONTRACT(
-            "INST", // fundingSourceCode
-            RequisitionSources.STANDARD_ORDER, // requisitionSourceCode
-            POTransmissionMethods.NOPRINT, // purchaseOrderTransmissionMethodCode
-            "VEN", // purchaseOrderCostSourceCode
-            null, // deliveryRequiredDateReasonCode
-            "FVAR", // recurringPaymentTypeCode
-            "UA", // chartOfAccountsCode
-            "VPIT", // organizationCode
-            "BL", // deliveryCampusCode
-            null, // purchaseOrderTotalLimit
-            null, // vendorRestrictedIndicator
-            null, // vendorPhoneNumber
-            null, // vendorFaxNumber
-            new Integer(1021), // vendorContractGeneratedIdentifier
-            null, // vendorNoteText
-            "RENFROW,ROBERTA G", // requestorPersonName
-            "test@email.com", // requestorPersonEmailAddress
-            "555-555-5555", // requestorPersonPhoneNumber
-            null, // nonInstitutionFundOrgChartOfAccountsCode
-            null, // nonInstitutionFundOrganizationCode
-            null, // nonInstitutionFundChartOfAccountsCode
-            null, // nonInstitutionFundAccountNumber
-            "ADMN", // deliveryBuildingCode
-            "Administration", // deliveryBuildingName
-            "123", // deliveryBuildingRoomNumber
-            "1 big dog", // deliveryBuildingLine1Address
-            null, // deliveryBuildingLine2Address
-            "campus", // deliveryCityName
-            "AK", // deliveryStateCode
-            "46202-5260", // deliveryPostalCode
-            null, // deliveryCountryCode
-            "me", // deliveryToName
-            null, // deliveryToEmailAddress
-            null, // deliveryToPhoneNumber
-            null, // deliveryRequiredDate
-            null, // deliveryInstructionText
-            new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentSqlDate().getTime()/2), // purchaseOrderBeginDate
-            SpringContext.getBean(DateTimeService.class).getCurrentSqlDate(), // purchaseOrderEndDate
-            null, // institutionContactName
-            null, // institutionContactPhoneNumber
-            null, // institutionContactEmailAddress
-            "THE UNIVERSITY", // billingName
-            "ACCOUNTS PAYABLE", // billingLine1Address
-            null, // billingLine2Address
-            "BUTTER NUT", // billingCityName
-            "SC", // billingStateCode
-            "47402", // billingPostalCode
-            "US", // billingCountryCode
-            "111-111-1111", // billingPhoneNumber
-            null, // externalOrganizationB2bSupplierIdentifier
-            new Integer(10), // contractManagerCode
-            false, // purchaseOrderAutomaticIndicator
-            null, // vendorPaymentTermsCode
-            null, // vendorShippingTitleCode
-            null); // vendorShippingPaymentTermsCode
-                    
+    PO_ONLY_REQUIRED_FIELDS("INST", RequisitionSources.STANDARD_ORDER, POTransmissionMethods.NOPRINT, POCostSources.ESTIMATE, null, null, 
+            "UA", "PUR", "BL", null, null, null, null, null, null, "RENFROW,ROBERTA G", "test@email.com", "555-555-5555", null, null, null, null,
+            "ADMIN", "Administration", "123", "1 big dog", null, "campus", "AK", "46202-5260", null, "me", null, null, null, null, null, null,
+            null, null, null, "THE UNIVERSITY", "ACCOUNTS PAYABLE", null, "BUTTER NUT", "SC", "47402", "US", null, null, 10, false, null, null, null),
+    ;
+    
     public final String fundingSourceCode;
     public final String requisitionSourceCode;
     public final String purchaseOrderTransmissionMethodCode;
@@ -875,8 +95,62 @@ public enum PurchasingDocumentFixture {
     public final String vendorShippingTitleCode;
     public final String vendorShippingPaymentTermsCode;
 
-    private PurchasingDocumentFixture(String fundingSourceCode, String requisitionSourceCode, String purchaseOrderTransmissionMethodCode, String purchaseOrderCostSourceCode, String deliveryRequiredDateReasonCode, String recurringPaymentTypeCode, String chartOfAccountsCode, String organizationCode, String deliveryCampusCode, KualiDecimal purchaseOrderTotalLimit, Boolean vendorRestrictedIndicator, String vendorPhoneNumber, String vendorFaxNumber, Integer vendorContractGeneratedIdentifier, String vendorNoteText, String requestorPersonName, String requestorPersonEmailAddress, String requestorPersonPhoneNumber, String nonInstitutionFundOrgChartOfAccountsCode, String nonInstitutionFundOrganizationCode, String nonInstitutionFundChartOfAccountsCode, String nonInstitutionFundAccountNumber, String deliveryBuildingCode, String deliveryBuildingName, String deliveryBuildingRoomNumber, String deliveryBuildingLine1Address, String deliveryBuildingLine2Address, String deliveryCityName,
-            String deliveryStateCode, String deliveryPostalCode, String deliveryCountryCode, String deliveryToName, String deliveryToEmailAddress, String deliveryToPhoneNumber, Date deliveryRequiredDate, String deliveryInstructionText, Date purchaseOrderBeginDate, Date purchaseOrderEndDate, String institutionContactName, String institutionContactPhoneNumber, String institutionContactEmailAddress, String billingName, String billingLine1Address, String billingLine2Address, String billingCityName, String billingStateCode, String billingPostalCode, String billingCountryCode, String billingPhoneNumber, String externalOrganizationB2bSupplierIdentifier, Integer contractManagerCode, boolean purchaseOrderAutomaticIndicator, String vendorPaymentTermsCode, String vendorShippingTitleCode, String vendorShippingPaymentTermsCode) {
+    private PurchasingDocumentFixture(
+            String fundingSourceCode,
+            String requisitionSourceCode,
+            String purchaseOrderTransmissionMethodCode,
+            String purchaseOrderCostSourceCode,
+            String deliveryRequiredDateReasonCode,
+            String recurringPaymentTypeCode,
+            String chartOfAccountsCode,
+            String organizationCode,
+            String deliveryCampusCode,
+            KualiDecimal purchaseOrderTotalLimit,
+            Boolean vendorRestrictedIndicator,
+            String vendorPhoneNumber,
+            String vendorFaxNumber,
+            Integer vendorContractGeneratedIdentifier,
+            String vendorNoteText,
+            String requestorPersonName,
+            String requestorPersonEmailAddress,
+            String requestorPersonPhoneNumber,
+            String nonInstitutionFundOrgChartOfAccountsCode,
+            String nonInstitutionFundOrganizationCode,
+            String nonInstitutionFundChartOfAccountsCode,
+            String nonInstitutionFundAccountNumber,
+            String deliveryBuildingCode,
+            String deliveryBuildingName,
+            String deliveryBuildingRoomNumber,
+            String deliveryBuildingLine1Address,
+            String deliveryBuildingLine2Address,
+            String deliveryCityName,
+            String deliveryStateCode,
+            String deliveryPostalCode,
+            String deliveryCountryCode,
+            String deliveryToName,
+            String deliveryToEmailAddress,
+            String deliveryToPhoneNumber,
+            Date deliveryRequiredDate,
+            String deliveryInstructionText,
+            Date purchaseOrderBeginDate,
+            Date purchaseOrderEndDate,
+            String institutionContactName,
+            String institutionContactPhoneNumber,
+            String institutionContactEmailAddress,
+            String billingName,
+            String billingLine1Address,
+            String billingLine2Address,
+            String billingCityName,
+            String billingStateCode,
+            String billingPostalCode,
+            String billingCountryCode,
+            String billingPhoneNumber,
+            String externalOrganizationB2bSupplierIdentifier,
+            Integer contractManagerCode,
+            boolean purchaseOrderAutomaticIndicator,
+            String vendorPaymentTermsCode,
+            String vendorShippingTitleCode,
+            String vendorShippingPaymentTermsCode) {
         this.fundingSourceCode = fundingSourceCode;
         this.requisitionSourceCode = requisitionSourceCode;
         this.purchaseOrderTransmissionMethodCode = purchaseOrderTransmissionMethodCode;
@@ -935,15 +209,15 @@ public enum PurchasingDocumentFixture {
     }
 
     public RequisitionDocument createRequisitionDocument(PurchasingAccountsPayableDocumentFixture purapFixture) {
-        return (RequisitionDocument) createPurchasingDocument(RequisitionDocument.class, purapFixture);
+        return (RequisitionDocument)createPurchasingDocument(RequisitionDocument.class, purapFixture);
     }
 
     public PurchaseOrderDocument createPurchaseOrderDocument(PurchasingAccountsPayableDocumentFixture purapFixture) {
-        return (PurchaseOrderDocument) createPurchasingDocument(PurchaseOrderDocument.class, purapFixture);
+        return (PurchaseOrderDocument)createPurchasingDocument(PurchaseOrderDocument.class, purapFixture);
     }
 
     private PurchasingDocument createPurchasingDocument(Class clazz, PurchasingAccountsPayableDocumentFixture purapFixture) {
-        PurchasingDocument doc = (PurchasingDocument) purapFixture.createPurchasingAccountsPayableDocument(clazz);
+        PurchasingDocument doc = (PurchasingDocument)purapFixture.createPurchasingAccountsPayableDocument(clazz);
         doc.setFundingSourceCode(this.fundingSourceCode);
         doc.setRequisitionSourceCode(this.requisitionSourceCode);
         doc.setPurchaseOrderTransmissionMethodCode(this.purchaseOrderTransmissionMethodCode);
@@ -994,10 +268,7 @@ public enum PurchasingDocumentFixture {
         doc.setBillingCountryCode(this.billingCountryCode);
         doc.setBillingPhoneNumber(this.billingPhoneNumber);
         doc.setExternalOrganizationB2bSupplierIdentifier(this.externalOrganizationB2bSupplierIdentifier);
-        // Req doesn't have contract manager anymore, only PO still has contract manager.
-        if (doc instanceof PurchaseOrderDocument) {
-            ((PurchaseOrderDocument) doc).setContractManagerCode(this.contractManagerCode);
-        }
+        doc.setContractManagerCode(this.contractManagerCode);
         doc.setPurchaseOrderAutomaticIndicator(this.purchaseOrderAutomaticIndicator);
         doc.setVendorPaymentTermsCode(this.vendorPaymentTermsCode);
         doc.setVendorShippingTitleCode(this.vendorShippingTitleCode);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.kuali.kfs.rule;
 
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.BusinessRule;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
@@ -38,7 +39,7 @@ public interface AccountingLineRule<F extends AccountingDocument> extends Busine
      * @param accountingLine
      * @return boolean True if the use of the object code is allowed.
      */
-    public boolean isObjectCodeAllowed(Class documentClass, AccountingLine accountingLine);
+    public boolean isObjectCodeAllowed(AccountingLine accountingLine);
 
     /**
      * This checks the accounting line's object type code to ensure that it is allowed.
@@ -46,7 +47,7 @@ public interface AccountingLineRule<F extends AccountingDocument> extends Busine
      * @param accountingLine
      * @return boolean
      */
-    public boolean isObjectTypeAllowed(Class documentClass, AccountingLine accountingLine);
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine);
 
     /**
      * This method checks to see if the object sub-type code for the accouting line's object code is allowed.
@@ -54,7 +55,7 @@ public interface AccountingLineRule<F extends AccountingDocument> extends Busine
      * @param accountingLine
      * @return boolean True if the use of the object code's object sub type code is allowed; false otherwise.
      */
-    public boolean isObjectSubTypeAllowed(Class documentClass, AccountingLine accountingLine);
+    public boolean isObjectSubTypeAllowed(AccountingLine accountingLine);
 
     /**
      * This method checks to see if the object level for the accouting line's object code is allowed.
@@ -62,7 +63,7 @@ public interface AccountingLineRule<F extends AccountingDocument> extends Busine
      * @param accountingLine
      * @return boolean True if the use of the object code's object sub type code is allowed; false otherwise.
      */
-    public boolean isObjectLevelAllowed(Class documentClass, AccountingLine accountingLine);
+    public boolean isObjectLevelAllowed(AccountingLine accountingLine);
 
     /**
      * This method checks to see if the object consolidation for the accouting line's object code is allowed.
@@ -70,7 +71,7 @@ public interface AccountingLineRule<F extends AccountingDocument> extends Busine
      * @param accountingLine
      * @return boolean True if the use of the object code's object sub type code is allowed; false otherwise.
      */
-    public boolean isObjectConsolidationAllowed(Class documentClass, AccountingLine accountingLine);
+    public boolean isObjectConsolidationAllowed(AccountingLine accountingLine);
 
     /**
      * This method checks to see if the sub fund group code for the accouting line's account is allowed.
@@ -78,7 +79,7 @@ public interface AccountingLineRule<F extends AccountingDocument> extends Busine
      * @param accountingLine
      * @return boolean
      */
-    public boolean isSubFundGroupAllowed(Class documentClass, AccountingLine accountingLine);
+    public boolean isSubFundGroupAllowed(AccountingLine accountingLine);
 
     /**
      * This method checks to see if the fund group code for the accouting line's account
@@ -86,5 +87,24 @@ public interface AccountingLineRule<F extends AccountingDocument> extends Busine
      * @param accountingLine
      * @return boolean
      */
-    public boolean isFundGroupAllowed(Class documentClass, AccountingLine accountingLine);
+    public boolean isFundGroupAllowed(AccountingLine accountingLine);
+
+    /**
+     * This method determines if the passed in accounting line is a debit or not.
+     * 
+     * @param financialDocument
+     * @param accountingLine
+     * 
+     * @return boolean
+     */
+    public boolean isDebit(AccountingDocument financialDocument, AccountingLine accountingLine);
+
+    /**
+     * This method determines if the passed in accounting line is a credit or not.
+     * 
+     * @param accountingLine
+     * @param financialDocument TODO
+     * @return boolean
+     */
+    public boolean isCredit(AccountingLine accountingLine, F financialDocument);
 }

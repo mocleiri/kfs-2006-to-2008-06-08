@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,10 @@ import org.displaytag.properties.MediaTypeEnum;
 import org.kuali.core.web.ui.Column;
 import org.kuali.core.web.ui.ResultRow;
 
-/**
- * Decorator class for the Long Row Table.
- */
-
 public class LongRowTableDecorator extends TableDecorator {
 
-    private static final int numOfColumnInEachRow = 12;
-    private static final int numOfColumnInFirstRow = 14;
+    private final int numOfColumnInEachRow = 12;
+    private final int numOfColumnInFirstRow = 14;
 
     /**
      * @see org.displaytag.decorator.TableDecorator#finishRow()
@@ -42,33 +38,33 @@ public class LongRowTableDecorator extends TableDecorator {
 
         if (MediaTypeEnum.HTML.equals(mediaType)) {
             StringBuffer rowBuffer = new StringBuffer();
-
+            
             List columns = row.getColumns();
             int columnCount = columns.size();
-            int numOfRows = (int) Math.ceil(1.0 * (columnCount - numOfColumnInFirstRow) / numOfColumnInEachRow);
-
-            rowBuffer.append("<tr>").append("<td colspan='" + numOfColumnInFirstRow + "'><br/><center>");
+            int numOfRows = new Double(Math.ceil(1.0 * (columnCount - numOfColumnInFirstRow) / numOfColumnInEachRow)).intValue() ;           
+            
+            rowBuffer.append("<tr>").append("<td colspan='" + numOfColumnInFirstRow +"'><br/><center>");
             rowBuffer.append("<table class='datatable-80' cellspacing='0' cellpadding='0' >");
-
+            
             for (int rowIndex = 0; rowIndex < numOfRows; rowIndex++) {
-
-                rowBuffer.append("<tr>");
+                
+                rowBuffer.append("<tr>");                    
                 for (int columnIndex = 0; columnIndex < numOfColumnInEachRow; columnIndex++) {
-
+                    
                     int currentPosition = rowIndex * numOfColumnInEachRow + columnIndex + numOfColumnInFirstRow;
                     String title = currentPosition < columnCount ? ((Column) columns.get(currentPosition)).getColumnTitle() : null;
-
+                    
                     rowBuffer.append("<th>");
                     rowBuffer.append(!StringUtils.isBlank(title) ? title : "&nbsp;");
                     rowBuffer.append("</th>");
                 }
                 rowBuffer.append("</tr>");
-
+                
                 rowBuffer.append("<tr>");
                 for (int columnIndex = 0; columnIndex < numOfColumnInEachRow; columnIndex++) {
                     int currentPosition = rowIndex * numOfColumnInEachRow + columnIndex + numOfColumnInFirstRow;
                     String value = currentPosition < columnCount ? ((Column) columns.get(currentPosition)).getPropertyValue() : null;
-
+                    
                     rowBuffer.append("<td class='infocell'>");
                     rowBuffer.append(!StringUtils.isBlank(value) ? value : "&nbsp;");
                     rowBuffer.append("</td>");

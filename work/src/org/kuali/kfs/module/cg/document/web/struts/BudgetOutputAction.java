@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.web.struts.action;
 
@@ -42,14 +49,12 @@ import org.apache.fop.messaging.MessageHandler;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.util.WebUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.module.kra.budget.xml.BudgetXml;
@@ -57,13 +62,16 @@ import org.w3c.dom.Document;
 
 /**
  * This class handles Output Actions for Research Administration.
+ * 
+ * @author KRA (era_team@indiana.edu)
  */
 public class BudgetOutputAction extends BudgetAction {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetOutputAction.class);
     private static Logger fopLogger = null; // Needed for fop logging
 
-    // Parameters used on tag. Only the output page should care about these.
+    // These are not at global level because only the output page should care about this. Not application constants
+    // because tag can't be changed without release.
     private static final String GENERIC_BY_TASK = "genericByTask";
     private static final String GENERIC_BY_PERIOD = "genericByPeriod";
     private static final String AGENCY = "agency";
@@ -72,6 +80,17 @@ public class BudgetOutputAction extends BudgetAction {
     private static final String NIH_MOD = "NIH-mod";
     private static final String NIH_SUMMARY = "NSF-summary";
     private static final String SF_424 = "SF424";
+
+    // Style sheet locations.
+    /** TODO Application Constants */
+    private static final String STYLESHEET_URL_OR_PATH = "/xml/budget/";
+    private static final String GENERIC_BY_TASK_XSL_PATH = "generic/genericByTask.xsl";
+    private static final String GENERIC_BY_PERIOD_XSL_PATH = "generic/genericByPeriod.xsl";
+    private static final String NIH_2590_XSL_PATH = "nih/nih-2590.xsl";
+    private static final String NIH_398_XSL_PATH = "nih/nih-398.xsl";
+    private static final String NIH_MOD_XSL_PATH = "nih/nih-modular.xsl";
+    private static final String NIH_SUMMARY_XSL_PATH = "nsf/NSFSummaryProposalBudget.xsl";
+    private static final String SF_424_XSL_PATH = "sf424.xsl";
 
     /**
      * Use for generation of PDF that is to be pushed to the browser.
@@ -90,7 +109,7 @@ public class BudgetOutputAction extends BudgetAction {
         BudgetDocument budgetDoc = budgetForm.getBudgetDocument();
 
         if (!isOutputPageSelectionValid(budgetForm)) {
-            return mapping.findForward(KFSConstants.MAPPING_BASIC);
+            return mapping.findForward(Constants.MAPPING_BASIC);
         }
 
         Document xmlDocument = makeXml(request, budgetForm, budgetDoc);
@@ -106,7 +125,8 @@ public class BudgetOutputAction extends BudgetAction {
         Document foDocument = (Document) result.getNode();
 
         // Set logger for FOP up. org.apache.avalon.framework.logger.Logger is replaced with Jakarta Commons-Logging in FOP 0.92.
-        // See http://xmlgraphics.apache.org/fop/0.20.5/embedding.html#basic-logging for details.
+        // See
+        // http://xmlgraphics.apache.org/fop/0.20.5/embedding.html#basic-logging for details. */
         if (fopLogger == null) {
             fopLogger = new Log4JLogger(LOG);
             MessageHandler.setScreenLogger(fopLogger);
@@ -121,10 +141,10 @@ public class BudgetOutputAction extends BudgetAction {
         driver.render(foDocument);
 
         // Retrieve the environment we're in.
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        String env = kualiConfigurationService.getPropertyString(KFSConstants.ENVIRONMENT_KEY);
+        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
+        String env = kualiConfigurationService.getPropertyString("environment");
 
-        WebUtils.saveMimeOutputStreamAsFile(response, "application/pdf", baos, "kraBudget-" + env + budgetDoc.getBudget().getDocumentNumber() + ".pdf");
+        WebUtils.saveMimeOutputStreamAsFile(response, "application/pdf", baos, "kraBudget-" + env + budgetDoc.getBudget().getDocumentHeaderId() + ".pdf");
 
         return null; // because saveMimeOutputStreamAsFile commits the response
     }
@@ -162,10 +182,10 @@ public class BudgetOutputAction extends BudgetAction {
         transformer.transform(src, dest);
 
         // Retrieve the environment we're in.
-        KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
-        String env = kualiConfigurationService.getPropertyString(KFSConstants.ENVIRONMENT_KEY);
+        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
+        String env = kualiConfigurationService.getPropertyString("environment");
 
-        WebUtils.saveMimeOutputStreamAsFile(response, "text/xml", baos, "kraBudget-" + env + budgetDoc.getBudget().getDocumentNumber() + ".xml");
+        WebUtils.saveMimeOutputStreamAsFile(response, "text/xml", baos, "kraBudget-" + env + budgetDoc.getBudget().getDocumentHeaderId() + ".xml");
 
         return null; // because saveMimeOutputStreamAsFile commits the response
     }
@@ -180,20 +200,20 @@ public class BudgetOutputAction extends BudgetAction {
     private boolean isOutputPageSelectionValid(BudgetForm budgetForm) {
         boolean valid = true;
         if (budgetForm.getCurrentOutputReportType() == null) {
-            GlobalVariables.getErrorMap().putError("currentOutputReportType", KFSKeyConstants.ERROR_REQUIRED, "Report Type");
+            GlobalVariables.getErrorMap().putError("currentOutputReportType", KeyConstants.ERROR_REQUIRED, "Report Type");
             valid = false;
         }
         else {
             if ((GENERIC_BY_TASK.equals(budgetForm.getCurrentOutputReportType()) || GENERIC_BY_PERIOD.equals(budgetForm.getCurrentOutputReportType())) && StringUtils.isBlank(budgetForm.getCurrentOutputDetailLevel())) {
-                GlobalVariables.getErrorMap().putError("currentOutputDetailLevel", KFSKeyConstants.ERROR_REQUIRED, "Detail Level");
+                GlobalVariables.getErrorMap().putError("currentOutputDetailLevel", KeyConstants.ERROR_REQUIRED, "Detail Level");
                 valid = false;
             }
             if (AGENCY.equals(budgetForm.getCurrentOutputReportType()) && StringUtils.isBlank(budgetForm.getCurrentOutputAgencyType())) {
-                GlobalVariables.getErrorMap().putError("currentOutputAgencyType", KFSKeyConstants.ERROR_REQUIRED, "Agency Type");
+                GlobalVariables.getErrorMap().putError("currentOutputAgencyType", KeyConstants.ERROR_REQUIRED, "Agency Type");
                 valid = false;
             }
             else if (AGENCY.equals(budgetForm.getCurrentOutputReportType()) && NIH_2590.equals(budgetForm.getCurrentOutputAgencyType()) && StringUtils.isBlank(budgetForm.getCurrentOutputAgencyPeriod())) {
-                GlobalVariables.getErrorMap().putError("currentOutputAgencyPeriod", KFSKeyConstants.ERROR_REQUIRED, "Agency Period");
+                GlobalVariables.getErrorMap().putError("currentOutputAgencyPeriod", KeyConstants.ERROR_REQUIRED, "Agency Period");
                 valid = false;
             }
         }
@@ -212,7 +232,11 @@ public class BudgetOutputAction extends BudgetAction {
      * @throws Exception
      */
     private Document makeXml(HttpServletRequest request, BudgetForm budgetForm, BudgetDocument budgetDocument) throws ParserConfigurationException, Exception {
-        String imagesUrl = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSConstants.EXTERNALIZABLE_IMAGES_URL_KEY);
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath(); // like
+                                                                                                                                            // returnUrl
+                                                                                                                                            // in
+                                                                                                                                            // Kuali
+                                                                                                                                            // Core
 
         String param = "";
         if (GENERIC_BY_TASK.equals(budgetForm.getCurrentOutputReportType()) || GENERIC_BY_PERIOD.equals(budgetForm.getCurrentOutputReportType())) {
@@ -226,12 +250,14 @@ public class BudgetOutputAction extends BudgetAction {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder domBuilder = domFactory.newDocumentBuilder();
         Document xmlDocument = domBuilder.newDocument();
-        BudgetXml.makeXml(budgetDocument, xmlDocument, imagesUrl, param);
+        BudgetXml.makeXml(budgetDocument, xmlDocument, baseUrl, param);
         return xmlDocument;
     }
 
     /**
-     * Returns a file handle to the parameter passed in for a particular style sheet.
+     * Returns a file handle to the parameter passed in for a particular style sheet. If STYLESHEET_URL_OR_PATH contains a complete
+     * url (method checks for "://") then STYLESHEET_URL_OR_PATH is used, otherwise baseUrl + STYLESHEET_URL_OR_PATH is used. This
+     * is to allow both internal and external URLs. The appropriate *_XSL_PATH is tagged to the end of that.
      * 
      * @param currentOutputReportType stylesheet identifier
      * @param currentOutputAgencyType stylesheet identifier if currentOutputReportType=AGENCY
@@ -242,39 +268,46 @@ public class BudgetOutputAction extends BudgetAction {
     private StreamSource pickStylesheet(String currentOutputReportType, String currentOutputAgencyType, HttpServletRequest request) throws IOException {
         String urlString = "";
 
-        // Base URL
-        ParameterService parameterService = SpringContext.getBean(ParameterService.class);
-        urlString = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSConstants.EXTERNALIZABLE_XML_URL_KEY) + parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_PATH_PREFIX);
+        if (STYLESHEET_URL_OR_PATH.contains("://")) {
+            urlString = STYLESHEET_URL_OR_PATH;
+        }
+        else {
+            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath(); // like
+                                                                                                                                                // returnUrl
+                                                                                                                                                // in
+                                                                                                                                                // Kuali
+                                                                                                                                                // Core
+            urlString = baseUrl + STYLESHEET_URL_OR_PATH;
+        }
 
-        // Add the file name based on selection by user
         if (GENERIC_BY_TASK.equals(currentOutputReportType)) {
-            urlString += parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_GENERIC_BY_TASK_XSL_FILENAME);
+            urlString += GENERIC_BY_TASK_XSL_PATH;
         }
         else if (GENERIC_BY_PERIOD.equals(currentOutputReportType)) {
-            urlString += parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_GENERIC_BY_PERIOD_XSL_FILENAME);
+            urlString += GENERIC_BY_PERIOD_XSL_PATH;
         }
         else if (AGENCY.equals(currentOutputReportType)) {
             if (NIH_2590.equals(currentOutputAgencyType)) {
-                urlString += parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_NIH2590_XSL_FILENAME);
+                urlString += NIH_2590_XSL_PATH;
             }
             else if (NIH_398.equals(currentOutputAgencyType)) {
-                urlString += parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_NIH398_XSL_FILENAME);
+                urlString += NIH_398_XSL_PATH;
             }
             else if (NIH_MOD.equals(currentOutputAgencyType)) {
-                urlString += parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_NIH_MODULAR_XSL_FILENAME);
+                urlString += NIH_MOD_XSL_PATH;
             }
             else if (NIH_SUMMARY.equals(currentOutputAgencyType)) {
-                urlString += parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_NSF_SUMMARY_XSL_FILENAME);
+                urlString += NIH_SUMMARY_XSL_PATH;
             }
             else {
-                LOG.error("Report type agency stylesheet not found.");
+                LOG.error("Report type agency stylesheet not found, using default.");
             }
         }
         else if (SF_424.equals(currentOutputReportType)) {
-            urlString += parameterService.getParameterValue(BudgetDocument.class, KraConstants.OUTPUT_SF424_XSL_FILENAME);
+            urlString += SF_424_XSL_PATH;
         }
         else {
-            LOG.error("Report type stylesheet not found.");
+            LOG.error("Report type stylesheet not found, using default.");
         }
 
         return new StreamSource(new URL(urlString).openConnection().getInputStream());

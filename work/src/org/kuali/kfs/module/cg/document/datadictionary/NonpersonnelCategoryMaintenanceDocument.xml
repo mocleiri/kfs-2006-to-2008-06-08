@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../../../../core/datadictionary/dataDictionary-1_0.dtd">
@@ -23,7 +8,7 @@
         <businessObjectClass>org.kuali.module.kra.budget.bo.NonpersonnelCategory</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -35,11 +20,11 @@
         <documentTypeName>KualiNonpersonnelCategoryMaintenanceDocument</documentTypeName>
         <documentTypeCode>NPC</documentTypeCode>
 
-        <label>Non-Personnel Category</label>
+        <label>Nonpersonnel Category Maintenance Document</label>
+        <shortLabel>NonpersonnelCategoryMainDoc</shortLabel>
 
         <summary>Nonpersonnel Category maintenance document</summary>
         <description>Document used to create or update Nonpersonnel Category objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="NonpersonnelCategory" parameterName="NONPERSONNEL_CATEGORY" />
 
         <lockingKeys>
             <field attributeName="code" />
@@ -50,10 +35,8 @@
                 <maintainableItems>
                     <maintainableField name="code" required="true" />
                     <maintainableField name="name" required="true" />
+                    <maintainableField name="active" required="false" />
                     <maintainableField name="sortNumber" required="false" />
-					<maintainableField name="active">
-						<defaultValue>true</defaultValue>
-					</maintainableField>
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

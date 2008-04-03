@@ -22,19 +22,22 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.vendor.VendorConstants;
 import org.kuali.module.vendor.bo.VendorContact;
 import org.kuali.module.vendor.bo.VendorContactPhoneNumber;
+import org.kuali.module.vendor.service.VendorService;
 
 public class VendorContactLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
 
     /**
-     * Overrides the getSearchResults in the super class so that we can do some customization in our vendor contact lookup. For
-     * example, we want to be able to display the first phone number, fax number and toll free number in the vendor contact.
+     * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map) 
      * 
-     * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
+     * This method overrides the getSearchResults in the super class so that we can do some customization 
+     * in our vendor contact lookup. For example, we want to be able to display the first phone number, fax 
+     * number and toll free number in the vendor contact.
      */
     @Override
     public List<PersistableBusinessObject> getSearchResults(Map<String, String> fieldValues) {
@@ -48,15 +51,16 @@ public class VendorContactLookupableHelperServiceImpl extends AbstractLookupable
         for (PersistableBusinessObject object : searchResults) {
             VendorContact vendorContact = (VendorContact) object;
 
-            for (VendorContactPhoneNumber phoneNumber : vendorContact.getVendorContactPhoneNumbers()) {
+            for (VendorContactPhoneNumber phoneNumber: vendorContact.getVendorContactPhoneNumbers()) {
                 String extension = phoneNumber.getVendorPhoneExtensionNumber();
-                if (phoneNumber.getVendorPhoneType().getVendorPhoneTypeCode().equals(VendorConstants.PhoneTypes.PHONE) && StringUtils.isEmpty(vendorContact.getPhoneNumberForLookup())) {
-                    vendorContact.setPhoneNumberForLookup(phoneNumber.getVendorPhoneNumber() + ((StringUtils.isNotEmpty(extension)) ? " x " + extension : null));
-                }
-                else if (phoneNumber.getVendorPhoneType().getVendorPhoneTypeCode().equals(VendorConstants.PhoneTypes.FAX) && StringUtils.isBlank(vendorContact.getFaxForLookup())) {
+                if (phoneNumber.getVendorPhoneType().getVendorPhoneTypeCode().equals(VendorConstants.PhoneTypes.PHONE) &&
+                    StringUtils.isEmpty(vendorContact.getPhoneNumberForLookup())) {
+                    vendorContact.setPhoneNumberForLookup(phoneNumber.getVendorPhoneNumber() + ((StringUtils.isNotEmpty(extension)) ? " x " + extension : null)) ;
+                } else if (phoneNumber.getVendorPhoneType().getVendorPhoneTypeCode().equals(VendorConstants.PhoneTypes.FAX) &&
+                           StringUtils.isBlank(vendorContact.getFaxForLookup())) {
                     vendorContact.setFaxForLookup(phoneNumber.getVendorPhoneNumber() + ((StringUtils.isNotEmpty(extension)) ? " x " + extension : KFSConstants.EMPTY_STRING));
-                }
-                else if (phoneNumber.getVendorPhoneType().getVendorPhoneTypeCode().equals(VendorConstants.PhoneTypes.TOLL_FREE) && StringUtils.isBlank(vendorContact.getTollFreeForLookup())) {
+                } else if (phoneNumber.getVendorPhoneType().getVendorPhoneTypeCode().equals(VendorConstants.PhoneTypes.TOLL_FREE) &&
+                           StringUtils.isBlank(vendorContact.getTollFreeForLookup())) {
                     vendorContact.setTollFreeForLookup(phoneNumber.getVendorPhoneNumber() + ((StringUtils.isNotEmpty(extension)) ? " x " + extension : KFSConstants.EMPTY_STRING));
                 }
             }
@@ -67,7 +71,6 @@ public class VendorContactLookupableHelperServiceImpl extends AbstractLookupable
         if (defaultSortColumns.size() > 0) {
             Collections.sort(searchResults, new BeanPropertyComparator(getDefaultSortColumns(), true));
         }
-
         return searchResults;
     }
 

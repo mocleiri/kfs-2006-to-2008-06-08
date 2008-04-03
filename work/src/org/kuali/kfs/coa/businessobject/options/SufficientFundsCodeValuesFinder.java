@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,23 @@
  */
 package org.kuali.module.chart.lookup.keyvalues;
 
+import org.kuali.core.lookup.keyvalues.KualiSystemCodeValuesFinder;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
 
 
 /**
- * This class creates a new finder for our forms view (creates a drop-down of {@link SufficientFundsCode}s)
+ * This class...
+ * 
+ * 
  */
 public class SufficientFundsCodeValuesFinder extends KualiSystemCodeValuesFinder {
 
     /**
+     * 
      * This method is used to tell the superclass what the class being looked up is.
      * 
      * @see org.kuali.core.lookup.keyvalues.KualiSystemCodeValuesFinder#getValuesClass()
+     * 
      */
     protected Class getValuesClass() {
         return SufficientFundsCode.class;

@@ -16,37 +16,15 @@
 package org.kuali.module.purap.service;
 
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.module.purap.bo.PurchaseOrderItem;
 import org.kuali.module.purap.document.AccountsPayableDocument;
-import org.kuali.module.purap.document.PaymentRequestDocument;
 
 /**
  * This interface is a non spring managed interface that is implemented by both PaymentRequestService and CreditMemoService
  */
 public interface AccountsPayableDocumentSpecificService {
-    
-    /**
-     * Saves the given document without validation.
-     * 
-     * @param apDoc     An AccountsPayableDocument
-     */
-    public void saveDocumentWithoutValidation(AccountsPayableDocument apDoc);
-    
     public boolean shouldPurchaseOrderBeReversed(AccountsPayableDocument apDoc);
-
     public void takePurchaseOrderCancelAction(AccountsPayableDocument apDoc);
-
     public UniversalUser getUniversalUserForCancel(AccountsPayableDocument apDoc);
-
     public String updateStatusByNode(String currentNodeName, AccountsPayableDocument apDoc);
-
-    public boolean poItemEligibleForAp(AccountsPayableDocument apDoc, PurchaseOrderItem poi);
     
-    /**
-     * Generates the general ledger entries that need to be created by an AccountsPayableDocument
-     * of the specific type of the given AP document.
-     * 
-     * @param apDoc     An AccountsPayableDocument
-     */
-    public void generateGLEntriesCreateAccountsPayableDocument(AccountsPayableDocument apDoc);
 }

@@ -1,48 +1,18 @@
-<%--
- Copyright 2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
-<%@ taglib uri="/WEB-INF/app.tld" prefix="app" %>
+<%@ page language="java"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html locale="true">
 <head>
-<link rel="stylesheet" type="text/css"  href="<%= request.getContextPath() %>/pdp/css/pdp_styles.css">
+<link rel="stylesheet" type="text/css" href="https://docs.onestart.iu.edu/dav/MY/channels/css/styles.css">
 <title>Format Disbursements</title>
-<script type="text/javascript">
-  var formHasAlreadyBeenSubmitted = false;
-  var excludeSubmitRestriction = false;
-  function hasFormAlreadyBeenSubmitted() {
-    if ( document.getElementById( "formComplete" ) ) { 
-	  if (formHasAlreadyBeenSubmitted && !excludeSubmitRestriction) {
-        alert("Page already being processed by the server.");
-        return false;
-      } else {
-        formHasAlreadyBeenSubmitted = true;
-        return true;
-      }
-      excludeSubmitRestriction = false; 
-    } else {
-      alert("Page has not finished loading.");
-      return false;
-    }
-  }
-</script>
 </head>
 <body>
   <h1><strong>Format Disbursements</strong></h1><br>
-  <jsp:include page="${request.contextPath}/pdp/TestEnvironmentWarning.jsp" flush="true"/>
+  <jsp:include page="${request.contextPath}/TestEnvironmentWarning.jsp" flush="true"/>
   <table border="0" cellpadding="0" cellspacing="0" width="100%">
   <tbody>
     <tr>
@@ -51,7 +21,7 @@
         <table border="0" cellpadding="4" cellspacing="0" width="100%">
           <tbody>
             <tr>
-              <td><strong>Your Default Campus Code is ${campus}</strong></td>
+              <td><strong>Your Default Campus Code is <c:out value="${campus}"/></strong></td>
               <td>&nbsp;</td>
             </tr>
           </tbody>
@@ -112,7 +82,7 @@
   </tbody>
 </table>
 
-<html:form action="/pdp/formatprepare" onsubmit="return hasFormAlreadyBeenSubmitted();">
+<html:form action="/formatprepare">
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="90%">
   <tbody>
   <tr>
@@ -202,8 +172,8 @@
           <tr align="left" valign="middle">
             <th nowrap="nowrap">
               <div align="center">
-                <input type="image" name="btnContinue" src="<%= request.getContextPath().toString() %>/pdp/images/button_beginformat.gif" alt="Begin Format" align="center">&nbsp;
-                <input type="image" name="btnClear" src="<%= request.getContextPath().toString() %>/pdp/images/button_clearfields.gif" alt="Cancel" align="center">
+                <input type="image" name="btnContinue" src="<%= request.getContextPath().toString() %>/images/button_beginformat.gif" alt="Begin Format" align="center">&nbsp;
+                <input type="image" name="btnClear" src="<%= request.getContextPath().toString() %>/images/button_clearfields.gif" alt="Cancel" align="center">
               </div>
             </th>
           </tr>
@@ -215,9 +185,8 @@
   </tbody>
 </table>
 </html:form>
-<div id="formComplete"></div>
 <p>&nbsp;</p>
-<c:import url="/pdp/backdoor.jsp"/>
+<c:import url="/backdoor.jsp"/>
 </body>
 </html:html>
 

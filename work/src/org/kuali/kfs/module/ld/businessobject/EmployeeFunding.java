@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,276 +16,119 @@
 
 package org.kuali.module.labor.bo;
 
-import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.kuali.core.bo.user.PersonPayrollId;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.bo.user.UserId;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.labor.LaborConstants;
+import org.kuali.module.labor.dao.LaborDao;
+import org.springframework.beans.factory.BeanFactory;
 
-/**
- * Labor business object for Employee Funding.
- */
 public class EmployeeFunding extends LedgerBalance {
 
     private String personName;
-    private String csfDeleteCode;
-    private String csfFundingStatusCode;
-    private BigDecimal csfTimePercent;
-    private BigDecimal csfFullTimeEmploymentQuantity;
-    private KualiDecimal csfAmount;
-    private KualiDecimal currentAmount;
-    private KualiDecimal outstandingEncumbrance;
+    private KualiDecimal ytdActualAmount;
+    private KualiDecimal outstandingEncum;
     private KualiDecimal totalAmount;
 
+    private LaborDao laborDao;
+    
+    
     /**
-     * Although the title of this class is EmployeeFunding, it is really a representation of the AccountStatusCurrentFunds business
-     * object, however it is generated using the fiscal year and employee ID.
+     * Although the title of this class is EmployeeFunding, it is really a representation of the AccountStatusCurrentFunds 
+     * business object, however it is generated using the fiscal year and employee ID.
      */
     public EmployeeFunding() {
         super();
         this.setMonth1Amount(KualiDecimal.ZERO);
-        this.setCurrentAmount(KualiDecimal.ZERO);
-        this.setOutstandingEncumbrance(KualiDecimal.ZERO);
-        this.setTotalAmount(KualiDecimal.ZERO);
+        this.setOutstandingEncum(KualiDecimal.ZERO);
     }
 
     /**
-     * Gets the person name.
      * 
-     * @return Returns the PersonName.
+     * This method returns the person name
+     * @return
      */
     public String getPersonName() {
         UserId empl = new PersonPayrollId(getEmplid());
         UniversalUser universalUser = null;
-
-        try {
-            universalUser = SpringContext.getBean(UniversalUserService.class).getUniversalUser(empl);
-        }
-        catch (UserNotFoundException e) {
+        
+        try{
+            universalUser = SpringServiceLocator.getUniversalUserService().getUniversalUser(empl);
+        }catch(UserNotFoundException e){
             return LaborConstants.BalanceInquiries.UnknownPersonName;
         }
 
         return universalUser.getPersonName();
-    }
-
+    }        
+    
     /**
-     * Sets the persons name.
      * 
-     * @param personName The personName to set.
+     * This method set thes persons name
+     * @param personName
      */
-
+    
     public void setPersonName(String personName) {
         this.personName = personName;
     }
 
     /**
-     * Gets the csfAmount
      * 
-     * @return Returns the csfAmount.
+     * This method returns an outstanding encumberance value 
+     * @return
      */
-    public KualiDecimal getCsfAmount() {
-        return csfAmount;
+    public KualiDecimal getOutstandingEncum() {
+        
+        Map fieldValues = new HashMap(); 
+        
+        fieldValues.put("universityFiscalYear", getUniversityFiscalYear());
+        fieldValues.put("chartOfAccountsCode", getChartOfAccountsCode());
+        fieldValues.put("accountNumber", getAccountNumber());
+        fieldValues.put("subAccountNumber", getSubAccountNumber());       
+        fieldValues.put("financialObjectCode", getFinancialObjectCode());
+        fieldValues.put("financialSubObjectCode", getFinancialSubObjectCode());
+        fieldValues.put("emplid", getEmplid());
+        
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
+        laborDao = (LaborDao) beanFactory.getBean("laborDao");
+        KualiDecimal EncumTotal = (KualiDecimal) laborDao.getEncumbranceTotal(fieldValues);
+        this.outstandingEncum = EncumTotal;
+        return EncumTotal;       
     }
 
     /**
-     * Sets the csfAmount.
      * 
-     * @param csfAmount The csfAmount to set.
+     * This method sets an outstanding encumberance value 
+     * @param outstandingEncum
      */
-    public void setCsfAmount(KualiDecimal csfAmount) {
-        this.csfAmount = csfAmount;
+    public void setOutstandingEncum(KualiDecimal outstandingEncum) {
+        this.outstandingEncum = outstandingEncum;
     }
-
+    
     /**
-     * Gets the csfDeleteCode.
      * 
-     * @return Returns the csfDeleteCode.
-     */
-    public String getCsfDeleteCode() {
-        return csfDeleteCode;
-    }
-
-    /**
-     * Sets the csfDeleteCode.
-     * 
-     * @param csfDeleteCode The csfDeleteCode to set.
-     */
-    public void setCsfDeleteCode(String csfDeleteCode) {
-        this.csfDeleteCode = csfDeleteCode;
-    }
-
-    /**
-     * Gets the csfFundingStatusCode.
-     * 
-     * @return Returns the csfFundingStatusCode.
-     */
-    public String getCsfFundingStatusCode() {
-        return csfFundingStatusCode;
-    }
-
-    /**
-     * Sets the csfFundingStatusCode.
-     * 
-     * @param csfFundingStatusCode The csfFundingStatusCode to set.
-     */
-    public void setCsfFundingStatusCode(String csfFundingStatusCode) {
-        this.csfFundingStatusCode = csfFundingStatusCode;
-    }
-
-    /**
-     * Gets the csfTimePercent.
-     * 
-     * @return Returns the csfTimePercent.
-     */
-    public BigDecimal getCsfTimePercent() {
-        return csfTimePercent;
-    }
-
-    /**
-     * Sets the csfTimePercent.
-     * 
-     * @param csfTimePercent The csfTimePercent to set.
-     */
-    public void setCsfTimePercent(BigDecimal csfTimePercent) {
-        this.csfTimePercent = csfTimePercent;
-    }
-
-    /**
-     * Gets the currentAmount.
-     * 
-     * @return Returns the currentAmount.
-     */
-    public KualiDecimal getCurrentAmount() {
-        return currentAmount;
-    }
-
-    /**
-     * Sets the currentAmount.
-     * 
-     * @param currentAmount The currentAmount to set.
-     */
-    public void setCurrentAmount(KualiDecimal currentAmount) {
-        this.currentAmount = currentAmount;
-    }
-
-    /**
-     * Gets the outstandingEncumbrance.
-     * 
-     * @return Returns the outstandingEncumbrance.
-     */
-    public KualiDecimal getOutstandingEncumbrance() {
-        return outstandingEncumbrance;
-    }
-
-    /**
-     * Sets the outstandingEncumbrance.
-     * 
-     * @param outstandingEncumbrance The outstandingEncumbrance to set.
-     */
-    public void setOutstandingEncumbrance(KualiDecimal outstandingEncumbrance) {
-        this.outstandingEncumbrance = outstandingEncumbrance;
-    }
-
-    /**
-     * Returns a total amount based upon adding any outstanding encumberence records to the annual balance amount.
-     * 
-     * @return TotalAmount
+     * This method returns a total amount based upon adding any outstanding encumberence 
+     * records to the annual balance amount.
+     * @return
      */
     public KualiDecimal getTotalAmount() {
-        return this.currentAmount.add(this.outstandingEncumbrance);
+        if ((getAccountLineAnnualBalanceAmount() != null) && (getOutstandingEncum() != null))
+            totalAmount = (getAccountLineAnnualBalanceAmount().add(getOutstandingEncum()));
+        return totalAmount;      
     }
-
+    
     /**
-     * Sets the total amount.
      * 
-     * @param totalAmount The totalAmount to set.
+     * This method sets a total amount value 
+     * @param totalAmount
      */
     public void setTotalAmount(KualiDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int PRIME = 31;
-        int result = 1;
-        result = PRIME * result + ((getAccountNumber() == null) ? 0 : getAccountNumber().hashCode());
-        result = PRIME * result + ((getChartOfAccountsCode() == null) ? 0 : getChartOfAccountsCode().hashCode());
-        result = PRIME * result + ((getFinancialObjectCode() == null) ? 0 : getFinancialObjectCode().hashCode());
-        result = PRIME * result + ((getFinancialSubObjectCode() == null) ? 0 : getFinancialSubObjectCode().hashCode());
-        result = PRIME * result + ((getSubAccountNumber() == null) ? 0 : getSubAccountNumber().hashCode());
-        result = PRIME * result + ((getUniversityFiscalYear() == null) ? 0 : getUniversityFiscalYear().hashCode());
-        result = PRIME * result + ((getEmplid() == null) ? 0 : getEmplid().hashCode());
-        result = PRIME * result + ((getPositionNumber() == null) ? 0 : getPositionNumber().hashCode());
-
-        return result;
-    }
-
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        final EmployeeFunding other = (EmployeeFunding) obj;
-
-        if (!ObjectUtils.equals(getAccountNumber(), other.getAccountNumber())) {
-            return false;
-        }
-        else if (!ObjectUtils.equals(getChartOfAccountsCode(), other.getChartOfAccountsCode())) {
-            return false;
-        }
-        else if (!ObjectUtils.equals(getFinancialObjectCode(), other.getFinancialObjectCode())) {
-            return false;
-        }
-        else if (!ObjectUtils.equals(getFinancialSubObjectCode(), other.getFinancialSubObjectCode())) {
-            return false;
-        }
-        else if (!ObjectUtils.equals(getSubAccountNumber(), other.getSubAccountNumber())) {
-            return false;
-        }
-        else if (!ObjectUtils.equals(getUniversityFiscalYear(), other.getUniversityFiscalYear())) {
-            return false;
-        }
-        else if (!ObjectUtils.equals(getEmplid(), other.getEmplid())) {
-            return false;
-        }
-        else if (!ObjectUtils.equals(getPositionNumber(), other.getPositionNumber())) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Gets the csfFullTimeEmploymentQuantity.
-     * 
-     * @return Returns the csfFullTimeEmploymentQuantity.
-     */
-    public BigDecimal getCsfFullTimeEmploymentQuantity() {
-        return csfFullTimeEmploymentQuantity;
-    }
-
-    /**
-     * Sets the csfFullTimeEmploymentQuantity.
-     * 
-     * @param csfFullTimeEmploymentQuantity The csfFullTimeEmploymentQuantity to set.
-     */
-    public void setCsfFullTimeEmploymentQuantity(BigDecimal csfFullTimeEmploymentQuantity) {
-        this.csfFullTimeEmploymentQuantity = csfFullTimeEmploymentQuantity;
-    }
 }

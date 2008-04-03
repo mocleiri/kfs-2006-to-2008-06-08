@@ -16,19 +16,14 @@
 package org.kuali.module.purap.rule.event;
 
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.module.purap.bo.PurchasingApItem;
 
-/**
- * 
- * Purchasing Accounts Payable Item Event
- */
+
 public interface PurchasingAccountsPayableItemEvent extends KualiDocumentEvent {
 
     /**
-     * gets an item for the item events
-     * 
-     * @return an item
+     * @see org.kuali.core.rule.event.CheckEvent#getCheck()
      */
-    public abstract PurApItem getItem();
+    public abstract PurchasingApItem getItem();
 
 }

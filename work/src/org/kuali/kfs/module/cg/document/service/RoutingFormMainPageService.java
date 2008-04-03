@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,76 +15,18 @@
  */
 package org.kuali.module.kra.routingform.service;
 
-import java.util.List;
-
-import org.kuali.module.kra.routingform.bo.DueDateType;
-import org.kuali.module.kra.routingform.bo.PersonRole;
-import org.kuali.module.kra.routingform.bo.ProjectType;
-import org.kuali.module.kra.routingform.bo.ResearchTypeCode;
-import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
-import org.kuali.module.kra.routingform.document.RoutingFormDocument;
+import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
 
 /**
- * This interface defines methods that a RoutingFormMainPageService must provide
+ * Contains routing form main page services.
+ * 
  */
 public interface RoutingFormMainPageService {
-
+    
     /**
-     * Setup maintainables for Main Page: DueDateType, ProjectType, Purpose, ResearchTypeCode, and PersonRole.
-     * 
-     * @param routingFormDocument the doc to set up
+     * Populates projectTypes, submissionTypes, and purposes in RoutingForm for proper display on RF Main Page.
+     * @param routingForm
      */
-    public void setupMainPageMaintainables(RoutingFormDocument routingFormDocument);
+    public void initializeRoutingFormMainPage(RoutingForm routingForm);
 
-    /**
-     * Returns the complete list of ResearchTypeCodes except for the inactive ones.
-     * 
-     * @return typed list of ResearchTypeCodes
-     */
-    public List<ResearchTypeCode> getResearchTypeCodes();
-
-    /**
-     * Returns the complete list of ProjectTypes except for the inactive ones.
-     * 
-     * @return typed list of project types
-     */
-    public List<ProjectType> getProjectTypes();
-
-    /**
-     * Returns the complete list of PersonRoles except for the inactive ones.
-     * 
-     * @return typed list of person roles
-     */
-    public List<PersonRole> getPersonRoles();
-
-    /**
-     * Returns the complete list of DueDateTypes except for the inactive ones.
-     * 
-     * @return typed list of due date types
-     */
-    public List<DueDateType> getDueDateTypes();
-
-    /**
-     * Checks if at least one of the people in the list is a CoPd.
-     * 
-     * @param routingFormPersonnel
-     * @return
-     */
-    public boolean checkCoPdExistance(List<RoutingFormPersonnel> routingFormPersonnel);
-
-    /**
-     * Returns the first project director found in a list. If none is found it return null;
-     * 
-     * @param routingFormPersonnel
-     * @return
-     */
-    public RoutingFormPersonnel getProjectDirector(List<RoutingFormPersonnel> routingFormPersonnel);
-
-    /**
-     * Returns the first contact person found in a list. If none is found it return null;
-     * 
-     * @param routingFormPersonnel
-     * @return
-     */
-    public RoutingFormPersonnel getContactPerson(List<RoutingFormPersonnel> routingFormPersonnel);
 }

@@ -18,39 +18,39 @@ package org.kuali.module.purap.bo;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.SourceAccountingLine;
 
-/**
- * Purap Summary Item Business Object.
- */
 public class PurApSummaryItem extends PurApItemBase {
 
-    private KualiDecimal estimatedEncumberanceAmount;   
-
+    private KualiDecimal estimatedEncumberanceAmount;
+	//TODO: abstract PurApItemBase so that this inherits less
     public PurApSummaryItem() {
         this(KualiDecimal.ZERO);
     }
-
-    public PurApSummaryItem(KualiDecimal estimatedEncumberanceAmount) {
+    
+    
+    public PurApSummaryItem(KualiDecimal estimatedEncumberanceAmount){
         this.estimatedEncumberanceAmount = estimatedEncumberanceAmount;
     }
-
+    /**
+     * Gets the estimatedEncumberanceAmount attribute. 
+     * @return Returns the estimatedEncumberanceAmount.
+     */
     public KualiDecimal getEstimatedEncumberanceAmount() {
         return estimatedEncumberanceAmount;
     }
 
+    /**
+     * Sets the estimatedEncumberanceAmount attribute value.
+     * @param estimatedEncumberanceAmount The estimatedEncumberanceAmount to set.
+     */
     public void setEstimatedEncumberanceAmount(KualiDecimal estimatedEncumberanceAmount) {
         this.estimatedEncumberanceAmount = estimatedEncumberanceAmount;
     }
 
-    /**
-     * @see org.kuali.module.purap.bo.PurApItem#getAccountingLineClass()
-     */
+    @Override
     public Class getAccountingLineClass() {
         return SourceAccountingLine.class;
     }
 
-    /**
-     * @see org.kuali.module.purap.bo.PurApItem#isConsideredEntered()
-     */
     public boolean isConsideredEntered() {
         return false;
     }
@@ -60,6 +60,7 @@ public class PurApSummaryItem extends PurApItemBase {
      */
     @Override
     public void resetAccount() {
-        // do nothing
+        //do nothing
     }
+
 }

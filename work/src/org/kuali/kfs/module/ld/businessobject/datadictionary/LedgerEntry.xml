@@ -1,43 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.labor.bo.LedgerEntry">
-
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Ledger Entry Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="accountNumber" />
                 <field attributeName="chartOfAccountsCode" />
                 <field attributeName="earnCode" />
                 <field attributeName="emplid" />
                 <field attributeName="employeeRecord" />
                 <field attributeName="financialBalanceTypeCode" />
-                <field attributeName="documentNumber" />
+                <field attributeName="financialDocumentNumber" />
                 <field attributeName="financialDocumentReversalDate" />
                 <field attributeName="financialDocumentTypeCode" />
                 <field attributeName="financialObjectCode" />
                 <field attributeName="financialObjectTypeCode" />
                 <field attributeName="financialSubObjectCode" />
-                <field attributeName="financialSystemOriginationCode" />
                 <field attributeName="grade" />
                 <field attributeName="hrmsCompany" />
                 <field attributeName="laborLedgerOriginalAccountNumber" />
@@ -71,12 +55,13 @@
                 <field attributeName="transactionTotalHours" />
                 <field attributeName="universityFiscalPeriodCode" />
                 <field attributeName="universityFiscalYear" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
-        	<lookupableID>laborLedgerEntryLookupable</lookupableID>
             <title>Ledger Entry Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.LedgerEntry">Create New</a>]]></menubar>
 
             <instructions>Look up a Ledger Entry</instructions>
 
@@ -95,13 +80,12 @@
                 <lookupField attributeName="emplid" required="false" />
                 <lookupField attributeName="employeeRecord" required="false" />
                 <lookupField attributeName="financialBalanceTypeCode" required="false" />
-                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="financialDocumentNumber" required="false" />
                 <lookupField attributeName="financialDocumentReversalDate" required="false" />
                 <lookupField attributeName="financialDocumentTypeCode" required="false" />
                 <lookupField attributeName="financialObjectCode" required="false" />
                 <lookupField attributeName="financialObjectTypeCode" required="false" />
                 <lookupField attributeName="financialSubObjectCode" required="false" />
-                <lookupField attributeName="financialSystemOriginationCode" required="false" />
                 <lookupField attributeName="grade" required="false" />
                 <lookupField attributeName="hrmsCompany" required="false" />
                 <lookupField attributeName="laborLedgerOriginalAccountNumber" required="false" />
@@ -135,72 +119,88 @@
                 <lookupField attributeName="transactionTotalHours" required="false" />
                 <lookupField attributeName="universityFiscalPeriodCode" required="false" />
                 <lookupField attributeName="universityFiscalYear" required="false" />
-                
-                <lookupField attributeName="dummyBusinessObject.pendingEntryOption">
-                    <defaultValueFinderClass>org.kuali.module.gl.web.optionfinder.GLPendingEntryOptionFinder</defaultValueFinderClass>
-                </lookupField>                
             </lookupFields>
 
             <resultFields>
-                <field attributeName="universityFiscalYear" />
-                <field attributeName="chartOfAccountsCode" />
                 <field attributeName="accountNumber" />
-                <field attributeName="subAccountNumber" />
-                <field attributeName="financialObjectCode" />
-                <field attributeName="financialSubObjectCode" />
-                <field attributeName="financialBalanceTypeCode" />
-                <field attributeName="financialObjectTypeCode" />
-                <field attributeName="universityFiscalPeriodCode" />
-                <field attributeName="financialDocumentTypeCode" />
-                <field attributeName="financialSystemOriginationCode" />
-                <field attributeName="documentNumber" />
-                <field attributeName="positionNumber" />
-                <field attributeName="projectCode" />
-                <field attributeName="transactionLedgerEntryDescription" />
-                <field attributeName="transactionLedgerEntryAmount" />
-                <field attributeName="transactionDebitCreditCode" />
-                <field attributeName="transactionDate" />
-                <field attributeName="organizationDocumentNumber" />
-                <field attributeName="organizationReferenceId" />
-                <field attributeName="referenceFinancialDocumentTypeCode" />
-                <field attributeName="referenceFinancialSystemOriginationCode" />
-                <field attributeName="referenceFinancialDocumentNumber" />
-                <field attributeName="financialDocumentReversalDate" />
-                <field attributeName="transactionEncumbranceUpdateCode" />
-                <field attributeName="transactionPostingDate" />
-                <field attributeName="payPeriodEndDate" />
-                <field attributeName="transactionTotalHours" />
-                <field attributeName="payrollEndDateFiscalYear" />
-                <field attributeName="payrollEndDateFiscalPeriodCode" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="earnCode" />
                 <field attributeName="emplid" />
                 <field attributeName="employeeRecord" />
-				<field attributeName="earnCode" />
-                <field attributeName="payGroup" />
-                <field attributeName="salaryAdministrationPlan" />
-				<field attributeName="grade" />
-                <field attributeName="runIdentifier" />
-                <field attributeName="laborLedgerOriginalChartOfAccountsCode" />
-                <field attributeName="laborLedgerOriginalAccountNumber" />
-                <field attributeName="laborLedgerOriginalSubAccountNumber" />
-                <field attributeName="laborLedgerOriginalFinancialObjectCode" />
-                <field attributeName="laborLedgerOriginalFinancialSubObjectCode" />				
+                <field attributeName="financialBalanceTypeCode" />
+                <field attributeName="financialDocumentNumber" />
+                <field attributeName="financialDocumentReversalDate" />
+                <field attributeName="financialDocumentTypeCode" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialObjectTypeCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="grade" />
                 <field attributeName="hrmsCompany" />
-                <field attributeName="setid" />				
+                <field attributeName="laborLedgerOriginalAccountNumber" />
+                <field attributeName="laborLedgerOriginalChartOfAccountsCode" />
+                <field attributeName="laborLedgerOriginalFinancialObjectCode" />
+                <field attributeName="laborLedgerOriginalFinancialSubObjectCode" />
+                <field attributeName="laborLedgerOriginalSubAccountNumber" />
+                <field attributeName="organizationDocumentNumber" />
+                <field attributeName="organizationReferenceId" />
+                <field attributeName="payGroup" />
+                <field attributeName="payPeriodEndDate" />
+                <field attributeName="payrollEndDateFiscalPeriodCode" />
+                <field attributeName="payrollEndDateFiscalYear" />
+                <field attributeName="positionNumber" />
+                <field attributeName="projectCode" />
+                <field attributeName="referenceFinancialDocumentNumber" />
+                <field attributeName="referenceFinancialDocumentTypeCode" />
+                <field attributeName="referenceFinancialSystemOriginationCode" />
+                <field attributeName="runIdentifier" />
+                <field attributeName="salaryAdministrationPlan" />
+                <field attributeName="setid" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="transactionDate" />
                 <field attributeName="transactionDateTimeStamp" />
+                <field attributeName="transactionDebitCreditCode" />
+                <field attributeName="transactionEncumbranceUpdateCode" />
+                <field attributeName="transactionLedgerEntryAmount" />
+                <field attributeName="transactionLedgerEntryDescription" />
                 <field attributeName="transactionLedgerEntrySequenceNumber" />
+                <field attributeName="transactionPostingDate" />
+                <field attributeName="transactionTotalHours" />
+                <field attributeName="universityFiscalPeriodCode" />
+                <field attributeName="universityFiscalYear" />
             </resultFields>
         </lookup>
 
         <attributes>
-            <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear"/>
-            <attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber" />          
-			<attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber" />
-			<attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
-            
-			<attributeReference name="financialBalanceTypeCode" sourceClassName="org.kuali.module.chart.bo.codes.BalanceTyp" sourceAttributeName="code"/>
-			<attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode" />
-			<attributeReference name="financialObjectTypeCode" sourceClassName="org.kuali.module.chart.bo.ObjectType" sourceAttributeName="code" />
-			<attributeReference name="financialSubObjectCode" sourceClassName="org.kuali.module.chart.bo.SubObjCd" sourceAttributeName="financialSubObjectCode" />
+
+            <attribute name="accountNumber" forceUppercase="true">
+                <label>Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
+			</attribute>
+
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
 
             <attribute name="earnCode" forceUppercase="true">
                 <label>Earn Code</label>
@@ -212,10 +212,26 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>earnCode</summary>
+                <description>earnCode description...</description>
 			</attribute>
 
-            <attributeReference name="emplid" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personPayrollIdentifier"/>
-						
+            <attribute name="emplid" forceUppercase="true">
+                <label>Emplid</label>
+                <shortLabel>Emplid</shortLabel>
+
+                <maxLength>11</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="13" />
+                </control>
+
+                <summary>emplid</summary>
+                <description>emplid description...</description>
+			</attribute>
+
             <attribute name="employeeRecord" forceUppercase="true">
                 <label>Employee Record</label>
                 <shortLabel>Record</shortLabel>
@@ -226,10 +242,28 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>employeeRecord</summary>
+                <description>employeeRecord description...</description>
 			</attribute>
-			
-            <attribute name="documentNumber" forceUppercase="true">
-                <label>Document Number</label>
+
+            <attribute name="financialBalanceTypeCode" forceUppercase="true">
+                <label>Financial Balance Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>financialBalanceTypeCode</summary>
+                <description>financialBalanceTypeCode description...</description>
+			</attribute>
+
+            <attribute name="financialDocumentNumber" forceUppercase="true">
+                <label>Financial Document Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
@@ -238,10 +272,13 @@
                 <control>
                     <text size="16" />
                 </control>
+
+                <summary>financialDocumentNumber</summary>
+                <description>financialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="financialDocumentReversalDate" forceUppercase="true">
-                <label>Reversal Date</label>
+                <label>Financial Document Reversal Date</label>
                 <shortLabel>Date</shortLabel>
 
                 <maxLength>7</maxLength>
@@ -250,18 +287,70 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>financialDocumentReversalDate</summary>
+                <description>financialDocumentReversalDate description...</description>
 			</attribute>
 
-			<attributeReference name="financialDocumentTypeCode" sourceClassName="org.kuali.core.bo.DocumentType" sourceAttributeName="financialDocumentTypeCode"/>
-			
-            <attribute name="financialSystemOriginationCode" forceUppercase="false">
-                <label>Origin Code</label>
-                <shortLabel>Origin Code</shortLabel>
-                <maxLength>2</maxLength>
+            <attribute name="financialDocumentTypeCode" forceUppercase="true">
+                <label>Financial Document Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
                 <control>
-                    <text size="3" />
+                    <text size="6" />
                 </control>
-            </attribute>
+
+                <summary>financialDocumentTypeCode</summary>
+                <description>financialDocumentTypeCode description...</description>
+			</attribute>
+
+            <attribute name="financialObjectCode" forceUppercase="true">
+                <label>Financial Object Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
+			</attribute>
+
+            <attribute name="financialObjectTypeCode" forceUppercase="true">
+                <label>Financial Object Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>financialObjectTypeCode</summary>
+                <description>financialObjectTypeCode description...</description>
+			</attribute>
+
+            <attribute name="financialSubObjectCode" forceUppercase="true">
+                <label>Financial Sub Object Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
+			</attribute>
 
             <attribute name="grade" forceUppercase="true">
                 <label>Grade</label>
@@ -273,10 +362,13 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>grade</summary>
+                <description>grade description...</description>
 			</attribute>
 
             <attribute name="hrmsCompany" forceUppercase="true">
-                <label>Company</label>
+                <label>Hrms Company</label>
                 <shortLabel>Company</shortLabel>
 
                 <maxLength>3</maxLength>
@@ -285,10 +377,13 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>hrmsCompany</summary>
+                <description>hrmsCompany description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalAccountNumber" forceUppercase="true">
-                <label>Original Account Number</label>
+                <label>Labor Ledger Original Account Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>7</maxLength>
@@ -297,10 +392,13 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>laborLedgerOriginalAccountNumber</summary>
+                <description>laborLedgerOriginalAccountNumber description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalChartOfAccountsCode" forceUppercase="true">
-                <label>Original Chart Code</label>
+                <label>Labor Ledger Original Chart Of Accounts Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
@@ -309,10 +407,13 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>laborLedgerOriginalChartOfAccountsCode</summary>
+                <description>laborLedgerOriginalChartOfAccountsCode description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalFinancialObjectCode" forceUppercase="true">
-                <label>Original Object Code</label>
+                <label>Labor Ledger Original Financial Object Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
@@ -321,10 +422,13 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>laborLedgerOriginalFinancialObjectCode</summary>
+                <description>laborLedgerOriginalFinancialObjectCode description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalFinancialSubObjectCode" forceUppercase="true">
-                <label>Original Sub-Object Code</label>
+                <label>Labor Ledger Original Financial Sub Object Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>3</maxLength>
@@ -333,10 +437,13 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>laborLedgerOriginalFinancialSubObjectCode</summary>
+                <description>laborLedgerOriginalFinancialSubObjectCode description...</description>
 			</attribute>
 
             <attribute name="laborLedgerOriginalSubAccountNumber" forceUppercase="true">
-                <label>Original Sub-Account Number</label>
+                <label>Labor Ledger Original Sub Account Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>5</maxLength>
@@ -345,6 +452,9 @@
                 <control>
                     <text size="7" />
                 </control>
+
+                <summary>laborLedgerOriginalSubAccountNumber</summary>
+                <description>laborLedgerOriginalSubAccountNumber description...</description>
 			</attribute>
 
             <attribute name="organizationDocumentNumber" forceUppercase="true">
@@ -357,10 +467,13 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>organizationDocumentNumber</summary>
+                <description>organizationDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="organizationReferenceId" forceUppercase="true">
-                <label>Organization Reference ID</label>
+                <label>Organization Reference Id</label>
                 <shortLabel>Id</shortLabel>
 
                 <maxLength>8</maxLength>
@@ -369,6 +482,9 @@
                 <control>
                     <text size="10" />
                 </control>
+
+                <summary>organizationReferenceId</summary>
+                <description>organizationReferenceId description...</description>
 			</attribute>
 
             <attribute name="payGroup" forceUppercase="true">
@@ -381,6 +497,9 @@
                 <control>
                     <text size="5" />
                 </control>
+
+                <summary>payGroup</summary>
+                <description>payGroup description...</description>
 			</attribute>
 
             <attribute name="payPeriodEndDate" forceUppercase="true">
@@ -393,10 +512,13 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>payPeriodEndDate</summary>
+                <description>payPeriodEndDate description...</description>
 			</attribute>
 
             <attribute name="payrollEndDateFiscalPeriodCode" forceUppercase="true">
-                <label>Payroll End Date Fiscal Period</label>
+                <label>Payroll End Date Fiscal Period Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
@@ -405,6 +527,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>payrollEndDateFiscalPeriodCode</summary>
+                <description>payrollEndDateFiscalPeriodCode description...</description>
 			</attribute>
 
             <attribute name="payrollEndDateFiscalYear" forceUppercase="true">
@@ -417,9 +542,25 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>payrollEndDateFiscalYear</summary>
+                <description>payrollEndDateFiscalYear description...</description>
 			</attribute>
 
-            <attributeReference name="positionNumber" sourceClassName="org.kuali.module.labor.bo.PositionData" sourceAttributeName="positionNumber" />
+            <attribute name="positionNumber" forceUppercase="true">
+                <label>Position Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>positionNumber</summary>
+                <description>positionNumber description...</description>
+			</attribute>
 
             <attribute name="projectCode" forceUppercase="true">
                 <label>Project Code</label>
@@ -431,10 +572,13 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>projectCode</summary>
+                <description>projectCode description...</description>
 			</attribute>
 
             <attribute name="referenceFinancialDocumentNumber" forceUppercase="true">
-                <label>Reference Document Number</label>
+                <label>Reference Financial Document Number</label>
                 <shortLabel>Number</shortLabel>
 
                 <maxLength>14</maxLength>
@@ -443,10 +587,13 @@
                 <control>
                     <text size="16" />
                 </control>
+
+                <summary>referenceFinancialDocumentNumber</summary>
+                <description>referenceFinancialDocumentNumber description...</description>
 			</attribute>
 
             <attribute name="referenceFinancialDocumentTypeCode" forceUppercase="true">
-                <label>Reference Document Type Code</label>
+                <label>Reference Financial Document Type Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>4</maxLength>
@@ -455,10 +602,13 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>referenceFinancialDocumentTypeCode</summary>
+                <description>referenceFinancialDocumentTypeCode description...</description>
 			</attribute>
 
             <attribute name="referenceFinancialSystemOriginationCode" forceUppercase="true">
-                <label>Reference Origin Code</label>
+                <label>Reference Financial System Origination Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
@@ -467,6 +617,9 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>referenceFinancialSystemOriginationCode</summary>
+                <description>referenceFinancialSystemOriginationCode description...</description>
 			</attribute>
 
             <attribute name="runIdentifier" forceUppercase="true">
@@ -479,10 +632,13 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>runIdentifier</summary>
+                <description>runIdentifier description...</description>
 			</attribute>
 
             <attribute name="salaryAdministrationPlan" forceUppercase="true">
-                <label>Salary Admin Plan</label>
+                <label>Salary Administration Plan</label>
                 <shortLabel>Plan</shortLabel>
 
                 <maxLength>4</maxLength>
@@ -491,10 +647,13 @@
                 <control>
                     <text size="6" />
                 </control>
+
+                <summary>salaryAdministrationPlan</summary>
+                <description>salaryAdministrationPlan description...</description>
 			</attribute>
 
             <attribute name="setid" forceUppercase="true">
-                <label>Set ID</label>
+                <label>Setid</label>
                 <shortLabel>Setid</shortLabel>
 
                 <maxLength>5</maxLength>
@@ -503,6 +662,24 @@
                 <control>
                     <text size="7" />
                 </control>
+
+                <summary>setid</summary>
+                <description>setid description...</description>
+			</attribute>
+
+            <attribute name="subAccountNumber" forceUppercase="true">
+                <label>Sub Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>subAccountNumber</summary>
+                <description>subAccountNumber description...</description>
 			</attribute>
 
             <attribute name="transactionDate" forceUppercase="true">
@@ -515,6 +692,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>transactionDate</summary>
+                <description>transactionDate description...</description>
 			</attribute>
 
             <attribute name="transactionDateTimeStamp" forceUppercase="true">
@@ -527,10 +707,13 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>transactionDateTimeStamp</summary>
+                <description>transactionDateTimeStamp description...</description>
 			</attribute>
 
             <attribute name="transactionDebitCreditCode" forceUppercase="true">
-                <label>Debit Credit Code</label>
+                <label>Transaction Debit Credit Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -539,10 +722,13 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>transactionDebitCreditCode</summary>
+                <description>transactionDebitCreditCode description...</description>
 			</attribute>
 
             <attribute name="transactionEncumbranceUpdateCode" forceUppercase="true">
-                <label>Encumbrance Update Code</label>
+                <label>Transaction Encumbrance Update Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>1</maxLength>
@@ -551,6 +737,9 @@
                 <control>
                     <text size="3" />
                 </control>
+
+                <summary>transactionEncumbranceUpdateCode</summary>
+                <description>transactionEncumbranceUpdateCode description...</description>
 			</attribute>
 
             <attribute name="transactionLedgerEntryAmount" forceUppercase="true">
@@ -563,6 +752,9 @@
                 <control>
                     <text size="21" />
                 </control>
+
+                <summary>transactionLedgerEntryAmount</summary>
+                <description>transactionLedgerEntryAmount description...</description>
 			</attribute>
 
             <attribute name="transactionLedgerEntryDescription" forceUppercase="true">
@@ -575,6 +767,9 @@
                 <control>
                     <text size="42" />
                 </control>
+
+                <summary>transactionLedgerEntryDescription</summary>
+                <description>transactionLedgerEntryDescription description...</description>
 			</attribute>
 
             <attribute name="transactionLedgerEntrySequenceNumber" forceUppercase="true">
@@ -587,6 +782,9 @@
                 <control>
                     <text size="7" />
                 </control>
+
+                <summary>transactionLedgerEntrySequenceNumber</summary>
+                <description>transactionLedgerEntrySequenceNumber description...</description>
 			</attribute>
 
             <attribute name="transactionPostingDate" forceUppercase="true">
@@ -599,6 +797,9 @@
                 <control>
                     <text size="9" />
                 </control>
+
+                <summary>transactionPostingDate</summary>
+                <description>transactionPostingDate description...</description>
 			</attribute>
 
             <attribute name="transactionTotalHours" forceUppercase="true">
@@ -611,10 +812,13 @@
                 <control>
                     <text size="11" />
                 </control>
+
+                <summary>transactionTotalHours</summary>
+                <description>transactionTotalHours description...</description>
 			</attribute>
 
             <attribute name="universityFiscalPeriodCode" forceUppercase="true">
-                <label>Fiscal Period</label>
+                <label>University Fiscal Period Code</label>
                 <shortLabel>Code</shortLabel>
 
                 <maxLength>2</maxLength>
@@ -623,9 +827,28 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>universityFiscalPeriodCode</summary>
+                <description>universityFiscalPeriodCode description...</description>
 			</attribute>
 
-            <attributeReference name="dummyBusinessObject.pendingEntryOption" sourceClassName="org.kuali.module.gl.bo.TransientBalanceInquiryAttributes" sourceAttributeName="pendingEntryOption" />
+            <attribute name="universityFiscalYear" forceUppercase="true">
+                <label>University Fiscal Year</label>
+                <shortLabel>Year</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>universityFiscalYear</summary>
+                <description>universityFiscalYear description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
         </attributes>
     </businessObject>
 </dictionaryEntry>

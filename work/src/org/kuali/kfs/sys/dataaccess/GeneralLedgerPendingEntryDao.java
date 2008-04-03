@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@ import org.kuali.module.gl.bo.Encumbrance;
 
 /**
  * This interface defines basic methods that GeneralLedgerPendingEntry Dao's must provide
+ * 
+ * 
  */
 public interface GeneralLedgerPendingEntryDao {
 
@@ -82,6 +84,12 @@ public interface GeneralLedgerPendingEntryDao {
     public Collection findPendingEntries(Map fieldValues, boolean isApproved);
 
     /**
+     * Delete pending entries for documents which have been either cancelled or disapproved.
+     */
+    public void deleteEntriesForCancelledOrDisapprovedDocuments();
+
+    /**
+     * 
      * @param documentHeaderId
      * @param transactionLedgerEntrySequenceNumber
      * @return a pending ledger entry
@@ -89,6 +97,7 @@ public interface GeneralLedgerPendingEntryDao {
     public GeneralLedgerPendingEntry getByPrimaryId(String documentHeaderId, Integer transactionLedgerEntrySequenceNumber);
 
     /**
+     * 
      * @param generalLedgerPendingEntry
      */
     public void save(GeneralLedgerPendingEntry generalLedgerPendingEntry);
@@ -123,6 +132,7 @@ public interface GeneralLedgerPendingEntryDao {
     public int countPendingLedgerEntries(Account account);
 
     /**
+     * 
      * This method retrieves all pending ledger entries for the given encumbrance
      * 
      * @param encumbrance the encumbrance entry in the GL_Encumbrance_T table
@@ -132,6 +142,7 @@ public interface GeneralLedgerPendingEntryDao {
     public Iterator findPendingLedgerEntries(Encumbrance encumbrance, boolean isApproved);
 
     /**
+     * 
      * This method retrieves all pending ledger entries for the given encumbrance
      * 
      * @param balance the balance entry
@@ -142,6 +153,7 @@ public interface GeneralLedgerPendingEntryDao {
     public Iterator findPendingLedgerEntries(Balance balance, boolean isApproved, boolean isConsolidated);
 
     /**
+     * 
      * This method retrieves all pending ledger entries matching the given entry criteria
      * 
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
@@ -151,6 +163,7 @@ public interface GeneralLedgerPendingEntryDao {
     public Iterator findPendingLedgerEntriesForEntry(Map fieldValues, boolean isApproved);
 
     /**
+     * 
      * This method retrieves all pending ledger entries matching the given balance criteria
      * 
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care
@@ -160,6 +173,7 @@ public interface GeneralLedgerPendingEntryDao {
     public Iterator findPendingLedgerEntriesForBalance(Map fieldValues, boolean isApproved);
 
     /**
+     * 
      * This method retrieves all pending ledger entries matching the given cash balance criteria
      * 
      * @param isApproved the flag that indicates whether the pending entries are approved or don't care

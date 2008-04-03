@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/document/datadictionary/DueDateTypeMaintenanceDocument.xml,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -20,10 +22,10 @@
 
 <dictionaryEntry>
     <maintenanceDocument>
-        <businessObjectClass>org.kuali.module.kra.routingform.bo.DueDateType</businessObjectClass>
+        <businessObjectClass>org.kuali.module.kra.routingform.bo.RoutingFormDueDateType</businessObjectClass>
         <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-        <documentAuthorizerClass>org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
         <authorizations>
             <authorization action="initiate">
                 <workgroups>
@@ -35,24 +37,22 @@
         <documentTypeName>KualiDueDateTypeMaintenanceDocument</documentTypeName>
         <documentTypeCode>DDT</documentTypeCode>
 
-        <label>Due Date Type</label>
+        <label>Due Date Type Maintenance Document</label>
+        <shortLabel>DueDateTypeMainDoc</shortLabel>
 
         <summary>Due Date Type maintenance document</summary>
         <description>Document used to create or update Due Date Type objects</description>
-        <help parameterNamespace="KFS-RA" parameterDetailType="DueDateType" parameterName="DUE_DATE_TYPE" />
 
         <lockingKeys>
-            <field attributeName="dueDateTypeCode" />
+            <field attributeName="routingFormDueDateTypeCode" />
         </lockingKeys>
 
         <maintainableSections>
             <maintainableSection title="Edit Due Date Type">
                 <maintainableItems>
-                    <maintainableField name="dueDateTypeCode" required="true" />
-                    <maintainableField name="dueDateDescription" required="true" />
-					<maintainableField name="dataObjectMaintenanceCodeActiveIndicator">
-						<defaultValue>true</defaultValue>
-					</maintainableField>
+                    <maintainableField name="routingFormDueDateTypeCode" required="true" />
+                    <maintainableField name="routingFormDueDateDescription" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="false" />
                     <maintainableField name="versionNumber" />
                 </maintainableItems>
             </maintainableSection>

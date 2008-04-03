@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
 import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
 import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
 import org.kuali.workflow.KualiWorkflowUtils.RouteLevelNames;
 
@@ -93,7 +94,7 @@ public class ProcurementCardDocumentAuthorizer extends AccountingDocumentAuthori
      */
     @Override
     public void canInitiate(String documentTypeName, UniversalUser user) {
-        if (!KFSConstants.SYSTEM_USER.equalsIgnoreCase(user.getPersonUserIdentifier())) {
+        if (!Constants.SYSTEM_USER.equalsIgnoreCase(user.getPersonUserIdentifier())) {
             throw new DocumentTypeAuthorizationException(user.getPersonUserIdentifier(), "initiate", documentTypeName);
         }
     }

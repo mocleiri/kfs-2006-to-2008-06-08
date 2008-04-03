@@ -1,53 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
-    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.BudgetTask">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Budget Task</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
-                <field attributeName="documentNumber" />
+            <inquiryFields>
+                <field attributeName="documentHeaderId" />
                 <field attributeName="budgetTaskSequenceNumber" />
                 <field attributeName="budgetTaskName" />
                 <field attributeName="objectId" />
                 <field attributeName="versionNumber" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Budget Task</title>
 
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.kra.budget.bo.BudgetTask">Create New</a>]]>
+            </menubar>
+
             <instructions>Lookup an Budget Task</instructions>
 
-            <defaultSort attributeName="documentNumber" sortAscending="true" />
+            <defaultSort attributeName="documentHeaderId" sortAscending="true" />
 
             <lookupFields>
-                <lookupField attributeName="documentNumber" required="false" />
+                <lookupField attributeName="documentHeaderId" required="false" />
                 <lookupField attributeName="budgetTaskSequenceNumber" required="false" />
                 <lookupField attributeName="budgetTaskName" required="false" />
             </lookupFields>
 
             <resultFields>
-                <field attributeName="documentNumber" />
+                <field attributeName="documentHeaderId" />
                 <field attributeName="budgetTaskSequenceNumber" />
                 <field attributeName="budgetTaskName" />
                 <field attributeName="budgetTaskOnCampus" />
@@ -58,7 +47,7 @@
 
         <attributes>
 
-            <attribute name="documentNumber" forceUppercase="true">
+            <attribute name="documentHeaderId" forceUppercase="true">
                 <label>Budget Number</label>
                 <shortLabel>Budget Number</shortLabel>
 
@@ -93,8 +82,8 @@
             </attribute>
 
             <attribute name="budgetTaskOnCampus" forceUppercase="false">
-                <label>Occurs On Campus</label>
-                <shortLabel>Indicator</shortLabel>
+                <label>Budget Task On Campus?</label>
+                <shortLabel>Budget Task On Campus?</shortLabel>
 
                 <maxLength>1</maxLength>
                 <validationPattern>
@@ -111,8 +100,8 @@
 
 
             <attribute name="budgetTaskName" forceUppercase="false">
-                <label>Task</label>
-                <shortLabel>Name</shortLabel>
+                <label>Budget Task Name</label>
+                <shortLabel>Task Name</shortLabel>
 
                 <maxLength>50</maxLength>
                 <validationPattern>
@@ -170,6 +159,8 @@
 
         <objectLabel>Budget Tasks</objectLabel>
         <objectDescription>Budget Tasks are the tasks for your Budget.</objectDescription>
+        
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetTaskHelp" />
 
     </businessObject>
 </dictionaryEntry>

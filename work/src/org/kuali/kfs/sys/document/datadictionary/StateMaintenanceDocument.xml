@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -32,14 +32,17 @@
             </authorization>
         </authorizations>
 
-        <documentTypeName>StateMaintenanceDocument</documentTypeName>
+        <documentTypeName>KualiStateMaintenanceDocument</documentTypeName>
         <documentTypeCode>STAT</documentTypeCode>
 
-        <label>State</label>
+        <label>State Maintenance Document</label>
+        <shortLabel>StateMaintDoc</shortLabel>
 
         <summary>State maintenance document</summary>
         <description>Document used to create or update State objects</description>
-        <help parameterNamespace="KFS-SY" parameterDetailType="State" parameterName="STATE" />
+        <help securityGroupName="ChartMaintenanceEDoc" parameterName="CHART_HELP_STATE" />
+
+        <allowsCopy>true</allowsCopy>
 
         <lockingKeys>
             <field attributeName="postalStateCode" />

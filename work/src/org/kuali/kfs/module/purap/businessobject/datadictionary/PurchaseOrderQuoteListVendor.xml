@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2006-2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE dictionaryEntry PUBLIC
     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
     "../dataDictionary-1_0.dtd">
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.purap.bo.PurchaseOrderQuoteListVendor">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
         <inquiry>
             <title>Purchase Order Quote List Vendor Inquiry</title>
 
-            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+            <inquiryFields>
                 <field attributeName="purchaseOrderQuoteListIdentifier" />
                 <field attributeName="vendorDetailAssignedIdentifier" />
                 <field attributeName="vendorHeaderGeneratedIdentifier" />
-            </inquiryFields></inquirySection></inquirySections>
+            </inquiryFields>
         </inquiry>
 
         <lookup>
             <title>Purchase Order Quote List Vendor Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PurchaseOrderQuoteListVendor">Create New</a>]]></menubar>
 
             <instructions>Lookup an Purchase Order Quote List Vendor</instructions>
 
@@ -53,23 +41,68 @@
                 <field attributeName="vendorHeaderGeneratedIdentifier" />
             </resultFields>
         </lookup>
-        
+
         <attributes>
 
-			<attributeReference name="purchaseOrderQuoteListIdentifier" sourceClassName="org.kuali.module.purap.bo.PurchaseOrderQuoteList" sourceAttributeName="purchaseOrderQuoteListIdentifier" />
+            <attribute name="purchaseOrderQuoteListIdentifier" forceUppercase="true">
+                <label>Purchase Order Quote List Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-			<attributeReference name="vendorHeaderGeneratedIdentifier" sourceClassName="org.kuali.module.vendor.bo.VendorDetail" sourceAttributeName="vendorHeaderGeneratedIdentifier" />
-			<attributeReference name="vendorDetailAssignedIdentifier" sourceClassName="org.kuali.module.vendor.bo.VendorDetail" sourceAttributeName="vendorDetailAssignedIdentifier" />
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-			<attributeReference name="vendorDetail.vendorName" sourceClassName="org.kuali.module.vendor.bo.VendorDetail" sourceAttributeName="vendorName">
-				<control>
-					<lookupReadonly />
-				</control>
-			</attributeReference>
+                <control>
+                    <text size="11" />
+                </control>
 
-			<attributeReference name="vendorDetail.activeIndicator" sourceClassName="org.kuali.module.vendor.bo.VendorDetail" sourceAttributeName="activeIndicator" />
+                <summary>purchaseOrderQuoteListIdentifier</summary>
+                <description>purchaseOrderQuoteListIdentifier description...</description>
+			</attribute>
 
-      <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+            <attribute name="vendorDetailAssignedIdentifier" forceUppercase="true">
+                <label>Vendor Detail Assigned Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>vendorDetailAssignedIdentifier</summary>
+                <description>vendorDetailAssignedIdentifier description...</description>
+			</attribute>
+
+            <attribute name="vendorHeaderGeneratedIdentifier" forceUppercase="true">
+                <label>Vendor Header Generated Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>vendorHeaderGeneratedIdentifier</summary>
+                <description>vendorHeaderGeneratedIdentifier description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
 
         </attributes>
     </businessObject>

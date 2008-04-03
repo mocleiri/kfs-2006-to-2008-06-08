@@ -15,40 +15,18 @@
  */
 package org.kuali.module.chart.rules;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.module.chart.bo.BasicAccountingCategory;
 import org.kuali.module.chart.bo.ObjectType;
-/**
- * 
- * This class implements the business rules for {@link ObjectType}
- */
+
 public class ObjectTypeRule extends MaintenanceDocumentRuleBase {
 
     /**
-     * This performs rules checks on document save
-     * <ul>
-     * <li>{@link ObjectTypeRule#checkAccountingCategory(MaintenanceDocument)}</li>
-     * </ul>
-     * This rule does not fail on business rule failures
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
-    @Override
-    protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
-        checkAccountingCategory(document);
-        return true; // it's a save, always return true
-    }
-
-    /**
-     * This performs rules checks on document route
-     * <ul>
-     * <li>{@link ObjectTypeRule#checkAccountingCategory(MaintenanceDocument)}</li>
-     * </ul>
-     * This rule fails on business rule failures
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
     @Override
@@ -59,17 +37,20 @@ public class ObjectTypeRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * 
-     * This checks that the accounting category exists in the system
-     * @param document
-     * @return false if category does not exist
+     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
+    @Override
+    protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
+        checkAccountingCategory(document);
+        return true; // it's a save, always return true
+    }
+
     protected boolean checkAccountingCategory(MaintenanceDocument document) {
         boolean result = true;
-        ObjectType objectType = (ObjectType) document.getNewMaintainableObject().getBusinessObject();
+        ObjectType objectType = (ObjectType)document.getNewMaintainableObject().getBusinessObject();
         Map pkMap = new HashMap();
         pkMap.put("code", objectType.getBasicAccountingCategoryCode());
-        BasicAccountingCategory basicAccountingCategory = (BasicAccountingCategory) this.getBoService().findByPrimaryKey(BasicAccountingCategory.class, pkMap);
+        BasicAccountingCategory basicAccountingCategory = (BasicAccountingCategory)this.getBoService().findByPrimaryKey(BasicAccountingCategory.class, pkMap);
         if (basicAccountingCategory == null) {
             result = false;
             putFieldError("basicAccountingCategoryCode", KFSKeyConstants.ERROR_DOCUMENT_OBJTYPE_INVALID_ACCT_CTGRY, new String[] { objectType.getBasicAccountingCategoryCode() });

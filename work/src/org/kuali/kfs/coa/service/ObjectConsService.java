@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package org.kuali.module.chart.service;
 import org.kuali.module.chart.bo.ObjectCons;
 
 /**
- * This service interface defines methods necessary for retrieving fully populated ObjectCons business objects from the database
- * that are necessary for transaction processing in the application. 
+ * This interface defines methods that an ObjLevel Service must provide.
+ * 
+ * 
  */
 public interface ObjectConsService {
     /**
