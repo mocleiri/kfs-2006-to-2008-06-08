@@ -44,6 +44,7 @@ import org.kuali.module.purap.dao.NegativePaymentRequestApprovalLimitDao;
 import org.kuali.module.purap.dao.PaymentRequestDao;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.service.PurapAccountingService;
+import org.kuali.module.purap.service.PurapRunDateService;
 import org.kuali.module.purap.util.VendorGroupingHelper;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -58,6 +59,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
     private DateTimeService dateTimeService;
     private PurapAccountingService purapAccountingService;
     private KualiConfigurationService kualiConfigurationService;
+    private PurapRunDateService purapRunDateService;
 
     /**
      * The special payments query should be this: select * from pur.ap_pmt_rqst_t where pmt_rqst_stat_cd in ('AUTO', 'DPTA') and
@@ -208,12 +210,13 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
     }
     
     /**
-     * @see org.kuali.module.purap.dao.PaymentRequestDao#getEligibleForAutoApproval()
+     * @see org.kuali.module.purap.dao.PaymentRequestDao#getEligibleDocumentNumbersForAutoApproval()
      */
-    public List<PaymentRequestDocument> getEligibleForAutoApproval() {
-        Date todayAtMidnight = dateTimeService.getCurrentSqlDateMidnight();
+    public List<String> getEligibleDocumentNumbersForAutoApproval() {
+        java.util.Date now = dateTimeService.getCurrentDate();
+        Date runDate = new Date(purapRunDateService.calculateRunDate(now).getTime());
         Criteria criteria = new Criteria();
-        criteria.addLessOrEqualThan(PurapPropertyConstants.PAYMENT_REQUEST_PAY_DATE, todayAtMidnight);
+        criteria.addLessOrEqualThan(PurapPropertyConstants.PAYMENT_REQUEST_PAY_DATE, runDate);
         criteria.addNotEqualTo("holdIndicator", "Y");
         criteria.addNotEqualTo("paymentRequestedCancelIndicator", "Y");
         criteria.addIn("status", Arrays.asList(PurapConstants.PaymentRequestStatuses.PREQ_STATUSES_FOR_AUTO_APPROVE));
@@ -225,19 +228,8 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
             PaymentRequestDocument document = (PaymentRequestDocument) documents.next();
             documentHeaderIds.add(document.getDocumentNumber());
         }
-
-        if (documentHeaderIds.size() > 0) {
-            try {
-                return SpringContext.getBean(DocumentService.class).getDocumentsByListOfDocumentHeaderIds(PaymentRequestDocument.class, documentHeaderIds);
-            }
-            catch (WorkflowException e) {
-                throw new InfrastructureException("unable to retrieve paymentRequestDocuments", e);
-            }
-        }
-        else {
-            return null;
-        }
-
+        
+        return documentHeaderIds;
     }
 
     /**
@@ -384,4 +376,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
         this.kualiConfigurationService = kualiConfigurationService;
     }
 
+    public void setPurapRunDateService(PurapRunDateService purapRunDateService) {
+        this.purapRunDateService = purapRunDateService;
+    }
 }
