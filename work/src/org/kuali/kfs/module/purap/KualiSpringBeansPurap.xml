@@ -406,6 +406,11 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="purchasingPreDisbursementImmediatesExtractJobTrigger" parent="cronTrigger">
+		<property name="jobName" value="purchasingPreDisbursementImmediatesExtractJob" />
+		<property name="cronExpression" value="00 00 11,15,19 ? * *" />
+	</bean>
 
 	<bean id="purchasingPreDisbursementExtractJob" parent="scheduledJobDescriptor">
 		<property name="steps">
@@ -413,6 +418,11 @@
                 <ref bean="purchasingPreDisbursementImmediatesExtractStep" />
 				<ref bean="purchasingPreDisbursementExtractStep" />
 			</list>
+		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="autoApprovePaymentRequestsJob" value="hardDependency" />
+			</map>
 		</property>
 	</bean>
 
@@ -422,10 +432,15 @@
 				<ref bean="autoApprovePaymentRequestsStep" />
 			</list>
 		</property>
+		<property name="dependencies">
+			<map>
+				<entry key="processPdpCancelsAndPaidJob" value="softDependency" />
+			</map>
+		</property>
 	</bean>
 
 	<bean id="purApOjbCollectionHelper" class="org.kuali.module.purap.util.PurApOjbCollectionHelper" />
-	
+
 	<bean id="purapRunDateService" class="org.kuali.module.purap.service.impl.PurapRunDateServiceImpl">
 		<property name="parameterService">
 			<ref bean="parameterService"/>
