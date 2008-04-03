@@ -4674,4 +4674,52 @@
         SH_PARM_NM="MAXIMUM_NUMBER_OF_DAYS_AFTER_CURRENT_DATE_FOR_INVOICE_DUE_DATE"
         SH_PARM_NMSPC_CD="KFS-AR" SH_PARM_TXT="90"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="49E4AC894C8B0EA7E0404F8189D82D28"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="This parameter controls whether the Remit to Address on the Accounts Receivable Organization Options is editable. When set to &quot;Y&quot; the Remit to Address is editable, when &quot;N&quot; the Remit to Address is not editable."
+        SH_PARM_DTL_TYP_CD="OrganizationOptions"
+        SH_PARM_NM="REMIT_TO_ADDRESS_EDITABLE_IND"
+        SH_PARM_NMSPC_CD="KFS-AR" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="49E4AC894C8C0EA7E0404F8189D82D28"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="This parameter controls whether the Remit to Name on the Accounts Receivable Organization Options is editable. When set to &quot;Y&quot; the Remit to Name is editable, when &quot;N&quot; the Remit to Name is not editable."
+        SH_PARM_DTL_TYP_CD="OrganizationOptions"
+        SH_PARM_NM="REMIT_TO_NAME_EDITABLE_IND"
+        SH_PARM_NMSPC_CD="KFS-AR" SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
+    <SH_PARM_T OBJ_ID="49E4AC894C8D0EA7E0404F8189D82D28"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Allows editing of the effort document at the organization routing level."
+        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_NM="ORGANIZATION_ROUTING_EDITABLE_IND"
+        SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+    <SH_PARM_T OBJ_ID="49E4AC894C8E0EA7E0404F8189D82D28"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Allows editing of the effort document at the award (CG) routing level."
+        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_NM="AWARD_ROUTING_EDITABLE_IND"
+        SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+    <SH_PARM_T OBJ_ID="49E4AC894C8F0EA7E0404F8189D82D28"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Allows editing of the effort document at the recreate administrator routing level."
+        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_NM="ADMINISTRATOR_ROUTING_EDITABLE_IND"
+        SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+    <SH_PARM_T OBJ_ID="49E4AC894C900EA7E0404F8189D82D28"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Indicator to route to only federal or fed pass through account project directors."
+        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_NM="FEDERAL_ONLY_ROUTE_IND" SH_PARM_NMSPC_CD="KFS-ER"
+        SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+    <SH_PARM_T OBJ_ID="49EC0A8FFFAC6717E0404F8189D81F90"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Cutoff time for auto approve payment requests and extract jobs, represented in 24 hour time format. If either of these jobs run between midnight and the CUTOFF_TIME, they consider the job run date - 1 to be the current day. If they run between the CUTOFF_TIME and midnight, they consider the job run date to be the current day. For example, if the CUTOFF_TIME is 5 AM and the auto approve job runs at 2 AM on March 27th , it will consider March 26th to be the current day when looking for payment requests that meet the auto approve criteria and have a pay date less than or equal to the current day. If this parameter is blank, the jobs will always consider their run date to be the current day."
+        SH_PARM_DTL_TYP_CD="Batch"
+        SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_CUTOFF_TIME"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="05:00:00"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_FMSOPS"/>
 </dataset>
