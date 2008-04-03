@@ -21,13 +21,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.RicePropertyConstants;
 import org.kuali.core.document.Document;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.service.DocumentService;
+import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLine;
@@ -370,12 +375,38 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
      * @param document - payment request document
      * @return
      */
-    boolean validatePayDateNotPast(PaymentRequestDocument document) {
+    protected boolean validatePayDateNotPast(PaymentRequestDocument document) {
         boolean valid = true;
         java.sql.Date paymentRequestPayDate = document.getPaymentRequestPayDate();
+        
         if (ObjectUtils.isNotNull(paymentRequestPayDate) && SpringContext.getBean(PurapService.class).isDateInPast(paymentRequestPayDate)) {
-            valid &= false;
-            GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PAYMENT_REQUEST_PAY_DATE, PurapKeyConstants.ERROR_INVALID_PAY_DATE);
+            // the pay date is in the past, now we need to check whether given the state of the document to determine whether a past pay date is allowed
+            KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument(); 
+            if (workflowDocument.stateIsInitiated() || workflowDocument.stateIsSaved()) {
+                // past pay dates are not allowed if the document has never been routed (i.e. in saved or initiated state)
+                // (note that this block will be run when a document is being routed, or re-saved after being routed
+                valid &= false;
+                GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PAYMENT_REQUEST_PAY_DATE, PurapKeyConstants.ERROR_INVALID_PAY_DATE);
+            }
+            else {
+                // otherwise, this document has already been routed
+                // it's an error if the pay date has been changed from the pay date in the database and the new pay date is in the past
+                // retrieve doc from DB, and compare the dates
+                
+                Map primaryKeyValues = SpringContext.getBean(PersistenceService.class).getPrimaryKeyFieldValues(document);
+                PaymentRequestDocument paymentRequestDocumentFromDatabase = (PaymentRequestDocument) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(document.getClass(), primaryKeyValues);
+                
+                if (ObjectUtils.isNull(paymentRequestDocumentFromDatabase)) {
+                    // this definitely should not happen
+                    throw new NullPointerException("Unable to find document " + document.getDocumentNumber() + " from database");
+                }
+                
+                java.sql.Date paymentRequestPayDateFromDatabase = paymentRequestDocumentFromDatabase.getPaymentRequestPayDate();
+                if (ObjectUtils.isNull(paymentRequestPayDateFromDatabase) || !paymentRequestPayDateFromDatabase.equals(paymentRequestPayDate)) {
+                    valid &= false;
+                    GlobalVariables.getErrorMap().putError(PurapPropertyConstants.PAYMENT_REQUEST_PAY_DATE, PurapKeyConstants.ERROR_INVALID_PAY_DATE);
+                }
+            }
         }
         return valid;
     }
@@ -763,6 +794,21 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
         // way to do this
         PaymentRequestDocumentActionAuthorizer preqAuth = new PaymentRequestDocumentActionAuthorizer(preq);
         valid = valid &= preqAuth.canCancel();
+        return valid;
+    }
+
+    @Override
+    protected boolean processCustomSaveDocumentBusinessRules(Document document) {
+        boolean valid = super.processCustomSaveDocumentBusinessRules(document);
+        
+        PaymentRequestDocument paymentRequestDocument = (PaymentRequestDocument) document;
+        
+        GlobalVariables.getErrorMap().addToErrorPath(RicePropertyConstants.DOCUMENT);
+        // Pay date in the past validation.
+        valid &= validatePayDateNotPast(paymentRequestDocument);
+        GlobalVariables.getErrorMap().clearErrorPath();
+        
+        
         return valid;
     }
 }
