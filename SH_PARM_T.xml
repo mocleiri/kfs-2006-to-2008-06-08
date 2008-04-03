@@ -4231,7 +4231,7 @@
         SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TYP_CD="VALID" VER_NBR="1" WRKGRP_NM="KUALI_ROLE_ADMINISTRATOR"/>
     <SH_PARM_T OBJ_ID="3B13485ADAF9A020E043814FD881A02Z"
         SH_PARM_CONS_CD="A"
-        SH_PARM_DESC="Cutoff time for auto approve payment requests and extract jobs, represented in 24 hour time format. If either of these jobs run between midnight and the CUTOFF_TIME, they consider the job run date - 1 to be the current day. If they run between the CUTOFF_TIME and midnight, they consider the job run date to be the current day. For example, if the CUTOFF_TIME is 5 AM and the auto approve job runs at 2 AM on March 27th , it will consider March 26th to be the current day when looking for payment requests that meet the auto approve criteria and have a pay date less than or equal to the current day. If this parameter is blank, the jobs will always consider their run date to be the current day."
+        SH_PARM_DESC="Cutoff time for auto approve payment requests and extract jobs, represented in 24 hour time format. If either of these jobs run between midnight and the cutoff time, they consider the job run date to be the current day. If they run between the cutoff time and midnight, they consider the job run date + 1 to be the current day. For example, if the cutoff time is 5 AM and the auto approve job runs at 6 AM on March 27th , it will consider March 28th to be the current day when looking for payment requests that meet the auto approve criteria and have a pay date less than or equal to the current day. If this parameter is blank, the jobs will always consider their run date to be the current day."
         SH_PARM_DTL_TYP_CD="Batch"
         SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_CUTOFF_TIME"
         SH_PARM_TXT="05:00:00"
