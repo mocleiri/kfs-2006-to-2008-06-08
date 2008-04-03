@@ -57,7 +57,7 @@
 		</property>
 		<property name="triggerNames">
 				<value>purchasingPreDisbursementImmediatesExtractJobTrigger</value>
-		</property>.
+		</property>
 	</bean>
 
 	<bean id="workflow-org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod-Lookupable" parent="workflowLookupable" singleton="false">
