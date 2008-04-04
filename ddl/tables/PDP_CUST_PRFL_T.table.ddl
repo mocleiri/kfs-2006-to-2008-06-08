@@ -25,7 +25,7 @@ CREATE TABLE PDP_CUST_PRFL_T(
         CUST_LN2_ADDR                  VARCHAR2(55),
         CUST_LN3_ADDR                  VARCHAR2(55),
         CUST_LN4_ADDR                  VARCHAR2(55),
-        CUST_CTY_NM                    VARCHAR2(30),
+        CUST_CTY_NM                    VARCHAR2(45),
         CUST_ST_CD                     VARCHAR2(30),
         CUST_ZIP_CD                    VARCHAR2(20),
         CUST_CNTRY_NM                  VARCHAR2(30),
