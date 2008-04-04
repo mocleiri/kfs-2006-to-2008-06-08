@@ -166,8 +166,8 @@
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="disbursementVoucherPreDisbursementProcessorExtractJob" value="hardDependency"/>
-				<entry key="purchasingPreDisbursementExtractJob" value="hardDependency"/>
+				<entry key="disbursementVoucherPreDisbursementProcessorExtractJob" value="softDependency"/>
+				<entry key="purchasingPreDisbursementExtractJob" value="softDependency"/>
 			</map>
 		</property>
 	</bean>
@@ -180,7 +180,7 @@
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="pdpNightlyLoadPaymentsJob" value="hardDependency"/>
+				<entry key="pdpNightlyLoadPaymentsJob" value="softDependency"/>
 			</map>
 		</property>
 	</bean>
