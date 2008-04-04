@@ -412,7 +412,7 @@
 	
 	<bean id="purchasingPreDisbursementImmediatesExtractJobTrigger" parent="cronTrigger">
 		<property name="jobName" value="purchasingPreDisbursementImmediatesExtractJob" />
-		<property name="cronExpression" value="00 00 11,15,19 ? * *" />
+		<property name="cronExpression" value="00 00 11,15 ? * *" />
 	</bean>
 
 	<bean id="purchasingPreDisbursementExtractJob" parent="scheduledJobDescriptor">
