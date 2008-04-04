@@ -8409,7 +8409,7 @@
         <column name="CUST_LN2_ADDR" size="55" type="VARCHAR"/>
         <column name="CUST_LN3_ADDR" size="55" type="VARCHAR"/>
         <column name="CUST_LN4_ADDR" size="55" type="VARCHAR"/>
-        <column name="CUST_CTY_NM" size="30" type="VARCHAR"/>
+        <column name="CUST_CTY_NM" size="45" type="VARCHAR"/>
         <column name="CUST_ST_CD" size="30" type="VARCHAR"/>
         <column name="CUST_ZIP_CD" size="20" type="VARCHAR"/>
         <column name="CUST_CNTRY_NM" size="30" type="VARCHAR"/>
