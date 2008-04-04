@@ -979,6 +979,7 @@
         <column name="PMT_FIN_SUB_OBJ_CD" size="3" type="VARCHAR"/>
         <column name="PMT_PROJECT_CD" size="10" type="VARCHAR"/>
         <column name="PMT_ORG_REF_ID" size="8" type="VARCHAR"/>
+        <column name="AR_PRNT_DT" type="DATE"/>
         <foreign-key foreignTable="CA_PROJECT_T" name="AR_INV_DOC_TR11">
             <reference foreign="PROJECT_CD" local="PMT_PROJECT_CD"/>
         </foreign-key>
