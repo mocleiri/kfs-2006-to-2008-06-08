@@ -424,7 +424,7 @@
 		</property>
 		<property name="dependencies">
 			<map>
-				<entry key="autoApprovePaymentRequestsJob" value="hardDependency" />
+				<entry key="autoApprovePaymentRequestsJob" value="softDependency" />
 			</map>
 		</property>
 	</bean>
