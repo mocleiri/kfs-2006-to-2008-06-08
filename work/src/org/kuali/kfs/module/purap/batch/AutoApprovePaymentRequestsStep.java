@@ -15,8 +15,10 @@
  */
 package org.kuali.module.purap.batch;
 
+import java.util.Date;
 import java.util.List;
 
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
@@ -37,6 +39,7 @@ public class AutoApprovePaymentRequestsStep extends AbstractStep {
 
     private PaymentRequestService paymentRequestService;
     private ParameterService parameterService;
+    private DateTimeService dateTimeService;
 
     public AutoApprovePaymentRequestsStep() {
         super();
@@ -45,9 +48,9 @@ public class AutoApprovePaymentRequestsStep extends AbstractStep {
     /**
      * Calls service method to approve payment requests
      * 
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String)
+     * @see org.kuali.kfs.batch.Step#execute(String, Date)
      */
-    public boolean execute(String jobName) throws InterruptedException {
+    public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
         boolean hasNoErrors = true;
         // should objects from existing user session be copied over
         List<String> autoApprovableDocumentNumbers = paymentRequestService.getPaymentRequestsDocumentNumberEligibleForAutoApproval();
@@ -79,7 +82,7 @@ public class AutoApprovePaymentRequestsStep extends AbstractStep {
      * @throws InterruptedException
      */
     public boolean execute() throws InterruptedException {
-        return execute(null);
+        return execute(null, dateTimeService.getCurrentDate());
     }
 
     public void setPaymentRequestService(PaymentRequestService paymentRequestService) {
@@ -88,6 +91,10 @@ public class AutoApprovePaymentRequestsStep extends AbstractStep {
 
     public void setParameterService(ParameterService parameterService) {
         this.parameterService = parameterService;
+    }
+
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
     }
 
 }
