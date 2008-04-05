@@ -39,9 +39,9 @@ public class PurapRunDateServiceImpl implements PurapRunDateService {
 
         CutoffTime cutoffTime = parseCutoffTime(retrieveCutoffTimeValue());
 
-        if (isCurrentDateBeforeCutoff(currentCal, cutoffTime)) {
+        if (isCurrentDateAfterCutoff(currentCal, cutoffTime)) {
             // go back one day
-            currentCal.add(Calendar.DAY_OF_MONTH, -1);
+            currentCal.add(Calendar.DAY_OF_MONTH, 1);
             adjustTimeOfDay(currentCal, true);
         }
         else {
@@ -70,7 +70,7 @@ public class PurapRunDateServiceImpl implements PurapRunDateService {
      * @param cutoffTime the "start of the day" cut off time
      * @return true if the current time is before the cutoff, false otherwise
      */
-    protected boolean isCurrentDateBeforeCutoff(Calendar currentCal, CutoffTime cutoffTime) {
+    protected boolean isCurrentDateAfterCutoff(Calendar currentCal, CutoffTime cutoffTime) {
         if (cutoffTime != null) {
             // if cutoff date is not properly defined
             // 24 hour clock (i.e. hour is 0 - 23)
@@ -85,9 +85,9 @@ public class PurapRunDateServiceImpl implements PurapRunDateService {
             cutoffCal.set(Calendar.SECOND, cutoffTime.second);
             cutoffCal.set(Calendar.MILLISECOND, 0);
 
-            return currentCal.before(cutoffCal);
+            return currentCal.after(cutoffCal);
         }
-        // if cutoff date is not properly defined, then it is considered to be after the cutoff
+        // if cutoff date is not properly defined, then it is considered to be before the cutoff, that is, no cutoff date will be applied
         return false;
     }
 
