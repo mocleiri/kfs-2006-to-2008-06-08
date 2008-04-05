@@ -374,6 +374,9 @@
         <property name="parameterService">
         	<ref bean="parameterService" />
         </property>
+        <property name="dateTimeService">
+			<ref bean="dateTimeService"/>
+		</property>
     </bean>
 
 	<bean id="processPdpCancelsAndPaidStep" class="org.kuali.module.purap.batch.ProcessPdPCancelsAndPaidStep" parent="step">
@@ -386,11 +389,17 @@
 		<property name="pdpExtractService">
 			<ref bean="pdpExtractService"/>
 		</property>
+		<property name="dateTimeService">
+			<ref bean="dateTimeService"/>
+		</property>
 	</bean>
 
 	<bean id="purchasingPreDisbursementExtractStep" class="org.kuali.module.purap.batch.ExtractPdpStep" parent="step">
 		<property name="pdpExtractService">
 			<ref bean="pdpExtractService"/>
+		</property>
+		<property name="dateTimeService">
+			<ref bean="dateTimeService"/>
 		</property>
 	</bean>
 
