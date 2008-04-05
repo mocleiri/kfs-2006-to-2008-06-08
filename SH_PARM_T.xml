@@ -88,8 +88,8 @@
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on maintenance documents."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="MAINTENANCE_ADMIN_GROUP" SH_PARM_NMSPC_CD="KFS-CA"
-        SH_PARM_TXT="KUALI_ROLE_ADMINISTRATOR" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_TXT="SY_BLANKET_APPROVERS" SH_PARM_TYP_CD="AUTH"
+        VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA68A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Controls in which mode the Fiscal Year Makers batch process runs. N=copies values to the new fiscal year without overwriting any values that already exist in the new year, and Y=copies values to the new fiscal year and overwrites any values that already exist in the new year."
@@ -135,8 +135,8 @@
         SH_PARM_DESC="The workgroup to which a user must belong to update the Plant Fund Ttab on the organization maintenance document."
         SH_PARM_DTL_TYP_CD="Org" SH_PARM_NM="PLANT_GROUP"
         SH_PARM_NMSPC_CD="KFS-CA"
-        SH_PARM_TXT="KUALI_ORG_PLANT_FUND_MAINTAINER"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_TXT="CA_ORGANIZATION_PLANT_FUND_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA7EA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Flag (Y/N) indicating whether HRMS Org Tab will appear on the Organization document."
@@ -210,20 +210,23 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a person must belong to edit CG Subaccount fields."
         SH_PARM_DTL_TYP_CD="SubAccount" SH_PARM_NM="CG_GROUP"
-        SH_PARM_NMSPC_CD="KFS-CA" SH_PARM_TXT="KUALI_CGSACCT"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_NMSPC_CD="KFS-CA"
+        SH_PARM_TXT="CG_COST_SHARE_SUB-ACCOUNT_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA96A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on post-award documents."
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="POST_AWARD_GROUP"
-        SH_PARM_NMSPC_CD="KFS-CG" SH_PARM_TXT="KRA_POST_AWARD_ADMIN"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="CG_POST_AWARD_MAINTENANCE_USERS"/>
+        SH_PARM_NMSPC_CD="KFS-CG"
+        SH_PARM_TXT="CG_POST_AWARD_MAINTENANCE_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="CG_POST_AWARD_MAINTENANCE_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA97A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on pre-award documents."
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="PRE_AWARD_GROUP"
-        SH_PARM_NMSPC_CD="KFS-CG" SH_PARM_TXT="KRA_PRE_AWARD_ADMIN"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="CG_POST_AWARD_MAINTENANCE_USERS"/>
+        SH_PARM_NMSPC_CD="KFS-CG"
+        SH_PARM_TXT="RA_PRE_AWARD_MAINTENANCE_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="CG_POST_AWARD_MAINTENANCE_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADA9AA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Number of days, after an accounting period has closed, that transactions can be posted back to that period using an Auxiliary Voucher."
@@ -312,8 +315,8 @@
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on Disbursement Voucher documents."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="ADMIN_GROUP" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="KUALI_ROLE_DV_ADMIN" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="3" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
+        SH_PARM_TXT="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADAB1A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed location(s) where a Disbursement Voucher and attachments will route when the Non-resident Alien box is checked on the DV."
@@ -404,7 +407,8 @@
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on Disbursement Voucher documents with a payment method of F (Foreign Draft)."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="FOREIGN_DRAFT_GROUP" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="KUALI_DV_FRN" SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
+        SH_PARM_TXT="FP_DISBURSEMENT_VOUCHER_FOREIGN_DRAFT_REVIEWERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADABFA020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Accounts with these Higher Education Function Code(s) are disallowed on the Disbursement Voucher document."
@@ -589,14 +593,16 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on Disbursement Voucher documents with any payment reason that requires the institution to maintain tax information."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher" SH_PARM_NM="TAX_GROUP"
-        SH_PARM_NMSPC_CD="KFS-FP" SH_PARM_TXT="KUALI_DV_TAXGRP"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
+        SH_PARM_NMSPC_CD="KFS-FP"
+        SH_PARM_TXT="FP_DISBURSEMENT_VOUCHER_TAX_REVIEWERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADADDA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to perform administrative functions on Disbursement Voucher documents with a payment reason(s) related to Travel."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="TRAVEL_GROUP" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="KUALI_DV_TRAV" SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
+        SH_PARM_TXT="FP_DISBURSEMENT_VOUCHER_TRAVEL_REVIEWERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADADEA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Creates the message that appears when the Per Diem link is selected on the Non-Employee Travel Expense tab of the Disbursement Voucher."
@@ -669,7 +675,8 @@
         SH_PARM_DESC="The workgroup to which a user must belong to approve Disbursement Voucher documents with a wire transfer payment method."
         SH_PARM_DTL_TYP_CD="DisbursementVoucher"
         SH_PARM_NM="WIRE_TRANSFER_GROUP" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="KUALI_DV_WIRE" SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
+        SH_PARM_TXT="FP_DISBURSEMENT_VOUCHER_WIRE_REVIEWERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADAE9A020E043814FD881A020"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Object Sub-Type(s) restricted from use on the Distribution of Income and Expense document."
@@ -960,7 +967,7 @@
         SH_PARM_DESC="The workgroup to which a user must belong to have permission to do batch uploads for the Procurement Card Document."
         SH_PARM_DTL_TYP_CD="ProcurementCardLoadStep"
         SH_PARM_NM="UPLOAD_GROUP" SH_PARM_NMSPC_CD="KFS-FP"
-        SH_PARM_TXT="KUALI_FMSOPS" SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="FP_OPERATIONS" SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB26A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Object Type(s) for use on the Service Billing document."
@@ -1066,8 +1073,8 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to have batch upload permissions for the collector."
         SH_PARM_DTL_TYP_CD="CollectorStep" SH_PARM_NM="UPLOAD_GROUP"
-        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="KUALI_FMSOPS"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_NMSPC_CD="KFS-GL" SH_PARM_TXT="FP_OPERATIONS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB45A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="This is the subject line used when the collector sends out email relating to the validation status of a particular file."
@@ -1123,7 +1130,7 @@
         SH_PARM_DESC="The workgroup to which a user must belong to have batch upload permissions for the enterprise feeder."
         SH_PARM_DTL_TYP_CD="EnterpriseFeedStep"
         SH_PARM_NM="UPLOAD_GROUP" SH_PARM_NMSPC_CD="KFS-GL"
-        SH_PARM_TXT="KUALI_FMSOPS" SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="FP_OPERATIONS" SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB50A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Nominal balances remaining in expense object codes, after other year-end processes are run, are closed to this object code."
@@ -1389,8 +1396,7 @@
         SH_PARM_DESC="The workgroup to which a user must belong to perform actions on Assign Contract Manager documents (cancel, save, etc.)."
         SH_PARM_DTL_TYP_CD="AssignContractManager"
         SH_PARM_NM="ACTION_TAKING_GROUP" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="KUALI_PURAP_PURCHASING" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_PUR_USERS" SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADB8BA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator related default document titles. Set to &quot;N&quot; if accepting the Kuali default document title, related to Contract Manager Assignment, as listed in the Document Search results."
@@ -1503,16 +1509,15 @@
         SH_PARM_DESC="The workgroup to which a user must belong to initiate payment request and credit memo documents"
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="ACCOUNTS_PAYABLE_GROUP" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="KUALI_PURAP_ACCOUNTS_PAYABLE" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_AP_USERS" SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADBA7A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Workgroup name for Internal Purchasing Route Node Reviewers"
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="INTERNAL_PURCHASING_REVIEWERS_GROUP"
         SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="INTERNAL_PURCHASING_REVIEWERS"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_PUR_INTERNAL_REVIEWERS" SH_PARM_TYP_CD="AUTH"
+        VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADBA8A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The required file extension for the file containing the purchasing director(s)' signature image file(s)."
@@ -1560,8 +1565,8 @@
     <SH_PARM_T OBJ_ID="3B13485ADBB0A020E043814FD881A020"
         SH_PARM_CONS_CD="A" SH_PARM_DESC="Purchasing Workgroup"
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="PURCHASING_GROUP"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="KUALI_PURAP_PURCHASING"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="PA_PUR_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADBB1A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed vendor type(s) for Purchase Order and Requisition documents."
@@ -1573,9 +1578,8 @@
         SH_PARM_DESC="The workgroup to which a user must belong to be allowed access to special document search conditions involving less required criteria."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="SEARCH_SPECIAL_ACCESS_GROUP"
-        SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="KUALI_PURAP_SEARCH_SPECIAL_ACCESS"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="PA_SPECIAL_SEARCH_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADBB3A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allows the display of a continuation account warning to AP Users on credit memo and payment request documents."
@@ -1664,9 +1668,8 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to initiate Purchase Order Documents."
         SH_PARM_DTL_TYP_CD="PurchaseOrder" SH_PARM_NM="INITIATE_ACTION"
-        SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="KUALI_PURAP_PURCHASE_ORDER_INITATE"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="PA_PURCHASE_ORDER_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADBC0A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Item type code(s) that allow for negative amounts on below the line items in the Purchase Order document."
@@ -1782,8 +1785,8 @@
         SH_PARM_DTL_TYP_CD="Requisition"
         SH_PARM_NM="SEPARATION_OF_DUTIES_GROUP"
         SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="KUALI_PURAP_ROUTING_SEPARATION_OF_DUTIES"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_SEPARATION_OF_DUTIES_REVIEWERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADBDCA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed employee status codes to use the KFS-RA."
@@ -2353,8 +2356,8 @@
         SH_PARM_DESC="The workgroup to which a user must belong to view tax ID's."
         SH_PARM_DTL_TYP_CD="VendorDetail"
         SH_PARM_NM="TAXNBR_ACCESSIBLE_GROUP" SH_PARM_NMSPC_CD="KFS-VN"
-        SH_PARM_TXT="KUALI_PURAP_TAXNBR_ACCESSIBLE"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_TAX_NUMBER_USERS" SH_PARM_TYP_CD="AUTH"
+        VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC45A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Flag for enabling/disabling (Y/N) the demonstration encryption check."
@@ -2373,8 +2376,8 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must be assigned to modify batch jobs."
         SH_PARM_DTL_TYP_CD="Batch" SH_PARM_NM="SCHEDULE_ADMIN_GROUP"
-        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="KUALI_FMSOPS"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="FP_OPERATIONS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC49A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="If Y, the &quot;route report&quot; button will be displayed on the document actions bar if the document is using the default DocumentAuthorizerBase.getDocumentActionFlags to set the canPerformRouteReport property of the returned DocumentActionFlags instance."
@@ -2386,14 +2389,15 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must be assigned to perform actions on documents in exception routing status."
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="EXCEPTION_GROUP"
-        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="KUALI_ROLE_EXCEPTION"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_NMSPC_CD="KR-NS"
+        SH_PARM_TXT="SY_EXCEPTION_ROUTING_REVIEWERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC4BA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must be assigned to perform almost any function within KFS."
         SH_PARM_DTL_TYP_CD="Document" SH_PARM_NM="SUPERVISOR_GROUP"
-        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="KUALI_ROLE_SUPERVISOR"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_NMSPC_CD="KR-NS" SH_PARM_TXT="SY_FUNCTIONAL_SUPER_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC4CA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allowed Employee Status code to be assigned as a KFS user."
@@ -2449,8 +2453,7 @@
         SH_PARM_DESC="The workgroup to which a user must be assigned to edit the universal user table."
         SH_PARM_DTL_TYP_CD="UniversalUser"
         SH_PARM_NM="UNIVERSAL_USER_EDIT_GROUP" SH_PARM_NMSPC_CD="KR-NS"
-        SH_PARM_TXT="UNIVERSAL_USER_MAINTAINERS" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_TXT="SY_USER_USERS" SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC5AA020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The number of days after a General Ledger Correction Process document transitions to FINAL that the document's input and output origin entry files will remain on the system."
@@ -2650,15 +2653,15 @@
         SH_PARM_DESC="The workgroup to which users must belong to approve Salary Expense Transfer documents."
         SH_PARM_DTL_TYP_CD="SalaryExpenseTransfer"
         SH_PARM_NM="SALARY_EXPENSE_TRANSFER_ADMINISTRATORS_GROUP"
-        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="KUALI_SET_ADMIN"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_NMSPC_CD="KFS-LD"
+        SH_PARM_TXT="LD_SALARY_TRANSFER_OBJECT_CODE_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC93A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to perform actions on Purchase Order documents (cancel, save, route, ad hoc route, close, reopen, void)."
         SH_PARM_DTL_TYP_CD="PurchaseOrder"
         SH_PARM_NM="ACTION_TAKING_GROUP" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="KUALI_PURAP_PURCHASING" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_PUR_USERS" SH_PARM_TYP_CD="AUTH" VER_NBR="4" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3B13485ADC94A020E043814FD881A020"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Part of the Accounts Not Accepting Benefits Exclusion Logic used by the Labor Ledger Scrubber. If yes (Y), the Labor Ledger Scrubber will check for associated benefit accounts. If no (N), the scrubber will proceed with account supplied on transaction."
@@ -2719,22 +2722,22 @@
         SH_PARM_DESC="The workgroup to which a user must belong in order to edit vendor contracts."
         SH_PARM_DTL_TYP_CD="VendorContract"
         SH_PARM_NM="VENDOR_CONTRACT_GROUP" SH_PARM_NMSPC_CD="KFS-VN"
-        SH_PARM_TXT="KUALI_PURAP_PURCHASING" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="2" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_PUR_USERS" SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3C04E894956530EEE043814FD88130EE"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to release holds put on payment request documents."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="ACCOUNTS_PAYABLE_SUPERVISOR_GROUP"
-        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="PURAP_AP_SUPERVISOR"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="2" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_NMSPC_CD="KFS-PA"
+        SH_PARM_TXT="PA_PAYMENT_REQUEST_REMOVE_HOLD_USERS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3C04E894956730EEE043814FD88130EE"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup to which a user must belong to be identified as a Contract Manager for the purpose of Internal Purchasing routing on the PO document."
         SH_PARM_DTL_TYP_CD="Document"
         SH_PARM_NM="CONTRACT_MANAGERS_GROUP" SH_PARM_NMSPC_CD="KFS-PA"
-        SH_PARM_TXT="PURAP_PUR_CONTR_MGR" SH_PARM_TYP_CD="AUTH"
-        VER_NBR="2" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
+        SH_PARM_TXT="PA_PUR_CONTRACT_MANAGERS" SH_PARM_TYP_CD="AUTH"
+        VER_NBR="3" WRKGRP_NM="SY_BLANKET_APPROVERS"/>
     <SH_PARM_T OBJ_ID="3C04E894956830EEE043814FD88130EE"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Maximum file upload size for the application. Used by PojoFormBase. Must be an integer, optionally followed by &quot;K&quot;, &quot;M&quot;, or &quot;G&quot;. Only used if no other upload limits are in effect."
@@ -2869,8 +2872,8 @@
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The workgroup that has access to the service bus user interfaces"
         SH_PARM_DTL_TYP_CD="All" SH_PARM_NM="SERVICE_BUS_ACCESS_GROUP"
-        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="KUALI_FMSOPS"
-        SH_PARM_TYP_CD="AUTH" VER_NBR="2" WRKGRP_NM="FP_OPERATIONS"/>
+        SH_PARM_NMSPC_CD="KFS-SY" SH_PARM_TXT="FP_OPERATIONS"
+        SH_PARM_TYP_CD="AUTH" VER_NBR="3" WRKGRP_NM="FP_OPERATIONS"/>
     <SH_PARM_T OBJ_ID="1178873C-E6F5-C6F6-EFE7-75D00E4594D7"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Maximum upload size for accounting line spreadsheets. Used by KualiAccountingDocumentFormBase. Must be an integer, optionally followed by &quot;K&quot;, &quot;M&quot;, or &quot;G&quot;."
@@ -4692,28 +4695,28 @@
     <SH_PARM_T OBJ_ID="49E4AC894C8D0EA7E0404F8189D82D28"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allows editing of the effort document at the organization routing level."
-        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="ORGANIZATION_ROUTING_EDITABLE_IND"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
     <SH_PARM_T OBJ_ID="49E4AC894C8E0EA7E0404F8189D82D28"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allows editing of the effort document at the award (CG) routing level."
-        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="AWARD_ROUTING_EDITABLE_IND"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
     <SH_PARM_T OBJ_ID="49E4AC894C8F0EA7E0404F8189D82D28"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allows editing of the effort document at the recreate administrator routing level."
-        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="ADMINISTRATOR_ROUTING_EDITABLE_IND"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
     <SH_PARM_T OBJ_ID="49E4AC894C900EA7E0404F8189D82D28"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator to route to only federal or fed pass through account project directors."
-        SH_PARM_DTL_TYP_CD="Effort Certification Document"
+        SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="FEDERAL_ONLY_ROUTE_IND" SH_PARM_NMSPC_CD="KFS-ER"
         SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
     <SH_PARM_T OBJ_ID="49EC0A8FFFAC6717E0404F8189D81F90"
