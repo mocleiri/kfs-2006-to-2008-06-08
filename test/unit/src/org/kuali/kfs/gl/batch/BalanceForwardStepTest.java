@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.context.TestUtils;
 import org.kuali.kfs.service.ParameterService;
@@ -64,9 +65,11 @@ public class BalanceForwardStepTest extends OriginEntryTestBase {
         clearOriginEntryTables();
         BalanceTestHelper.populateBalanceTable();
 
+        DateTimeService dateTimeService = SpringContext.getBean(DateTimeService.class);
+        
         // Execute the step ...
         BalanceForwardStep step = SpringContext.getBean(BalanceForwardStep.class);
-        step.execute(getClass().getName());
+        step.execute(getClass().getName(), dateTimeService.getCurrentDate());
 
         // load our services.
         OriginEntryService entryService = SpringContext.getBean(OriginEntryService.class);
