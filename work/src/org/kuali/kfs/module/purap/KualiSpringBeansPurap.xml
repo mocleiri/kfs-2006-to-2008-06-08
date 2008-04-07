@@ -116,6 +116,9 @@
     	<property name="environmentService">
     		<ref bean="pdpEnvironmentService"/>
     	</property>
+        <property name="purapRunDateService">
+        	<ref bean="purapRunDateService" />
+        </property>
 	</bean>
 
 	<bean id="pdpEnvironmentService" class="org.kuali.module.pdp.service.impl.EnvironmentServiceImpl">
