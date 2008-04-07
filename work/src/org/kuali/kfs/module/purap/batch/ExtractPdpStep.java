@@ -37,7 +37,7 @@ public class ExtractPdpStep extends AbstractStep {
     public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
         LOG.debug("execute() started");
 
-        pdpExtractService.extractPayments();
+        pdpExtractService.extractPayments(new java.sql.Date(jobRunDate.getTime()));
         return true;
     }
 
