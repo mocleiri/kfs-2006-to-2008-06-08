@@ -69,7 +69,8 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
      * 
      * @see org.kuali.module.purap.dao.PaymentRequestDao#getPaymentRequestsToExtract(boolean, java.lang.String)
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract(boolean onlySpecialPayments, String chartCode) {
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract(boolean onlySpecialPayments, String chartCode,
+            Date onOrBeforePaymentRequestPayDate) {
         LOG.debug("getPaymentRequestsToExtract() started");
 
         Criteria criteria = new Criteria();
@@ -97,7 +98,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
             c1.addOrCriteria(c4);
 
             a.addAndCriteria(c1);
-            a.addLessOrEqualThan("paymentRequestPayDate", dateTimeService.getCurrentSqlDateMidnight());
+            a.addLessOrEqualThan("paymentRequestPayDate", onOrBeforePaymentRequestPayDate);
 
             Criteria c5 = new Criteria();
             c5.addEqualTo("immediatePaymentIndicator", Boolean.TRUE);
@@ -107,7 +108,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
         }
         else {
             Criteria c1 = new Criteria();
-            c1.addLessOrEqualThan("paymentRequestPayDate", dateTimeService.getCurrentSqlDateMidnight());
+            c1.addLessOrEqualThan("paymentRequestPayDate", onOrBeforePaymentRequestPayDate);
 
             Criteria c2 = new Criteria();
             c2.addEqualTo("immediatePaymentIndicator", Boolean.TRUE);
@@ -179,7 +180,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
      * 
      * @see org.kuali.module.purap.dao.PaymentRequestDao#getPaymentRequestsToExtractForVendor(java.lang.String, org.kuali.module.purap.util.VendorGroupingHelper)
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractForVendor(String campusCode, VendorGroupingHelper vendor ) {
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractForVendor(String campusCode, VendorGroupingHelper vendor, Date onOrBeforePaymentRequestPayDate) {
         LOG.debug("getPaymentRequestsToExtract() started");
 
         List statuses = new ArrayList();
@@ -193,7 +194,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
         criteria.addEqualTo("holdIndicator", Boolean.FALSE);
 
         Criteria c1 = new Criteria();
-        c1.addLessOrEqualThan("paymentRequestPayDate", dateTimeService.getCurrentSqlDateMidnight());
+        c1.addLessOrEqualThan("paymentRequestPayDate", onOrBeforePaymentRequestPayDate);
 
         Criteria c2 = new Criteria();
         c2.addEqualTo("immediatePaymentIndicator", Boolean.TRUE);
