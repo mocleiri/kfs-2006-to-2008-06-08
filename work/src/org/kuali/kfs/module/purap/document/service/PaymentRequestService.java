@@ -230,16 +230,17 @@ public interface PaymentRequestService extends AccountsPayableDocumentSpecificSe
      * Get all the payment requests that match a vendor.
      * 
      * @param vendor
+     * @param onOrBeforePaymentRequestPayDate only payment requests with a pay date on or before this date will be extracted
      * @return      The iterator of the resulting payment request documents returned by the paymentRequestDao.
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByVendor(String campusCode, VendorGroupingHelper vendor );
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByVendor(String campusCode, VendorGroupingHelper vendor, Date onOrBeforePaymentRequestPayDate);
     
     /**
      * Get all the payment requests that need to be extracted.
      * 
      * @return The iterator of the resulting payment request documents returned by the paymentRequestDao.
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract();
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract(Date onOrBeforePaymentRequestPayDate);
 
     /**
      * Get all the special payment requests for a single chart that need to be extracted.
@@ -247,7 +248,7 @@ public interface PaymentRequestService extends AccountsPayableDocumentSpecificSe
      * @param chartCode  The chart code to be used as one of the criterias to retrieve the payment request documents. 
      * @return           The iterator of the resulting payment request documents returned by the paymentRequestDao.
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractSpecialPayments(String chartCode);
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractSpecialPayments(String chartCode, Date onOrBeforePaymentRequestPayDate);
 
     /**
      * Get all the regular payment requests for a single campus.
@@ -255,7 +256,7 @@ public interface PaymentRequestService extends AccountsPayableDocumentSpecificSe
      * @param chartCode  The chart code to be used as one of the criterias to retrieve the payment request documents. 
      * @return           The iterator of the resulting payment request documents returned by the paymentRequestDao.
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestToExtractByChart(String chartCode);
+    public Iterator<PaymentRequestDocument> getPaymentRequestToExtractByChart(String chartCode, Date onOrBeforePaymentRequestPayDate);
 
     /**
      * Recalculate the payment request.
