@@ -131,7 +131,7 @@ public class PurapRunDateServiceImpl implements PurapRunDateService {
      */
     protected CutoffTime parseCutoffTime(String cutoffTime) {
         if (StringUtils.isBlank(cutoffTime)) {
-            return new CutoffTime(0, 0, 0);
+            return null;
         }
         else {
             cutoffTime = cutoffTime.trim();
