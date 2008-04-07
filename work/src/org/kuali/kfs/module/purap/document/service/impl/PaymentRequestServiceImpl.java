@@ -164,28 +164,31 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
 
     
     
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByVendor(String campusCode, VendorGroupingHelper vendor ) {
+    /**
+     * @see org.kuali.module.purap.service.PaymentRequestService#getPaymentRequestsToExtractByVendor(java.lang.String, org.kuali.module.purap.util.VendorGroupingHelper, java.sql.Date)
+     */
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByVendor(String campusCode, VendorGroupingHelper vendor, Date onOrBeforePaymentRequestPayDate) {
         LOG.debug("getPaymentRequestsByVendor() started");
 
-        return paymentRequestDao.getPaymentRequestsToExtractForVendor(campusCode, vendor );
+        return paymentRequestDao.getPaymentRequestsToExtractForVendor(campusCode, vendor, onOrBeforePaymentRequestPayDate);
     }
 
     /**
-     * @see org.kuali.module.purap.server.PaymentRequestService.getPaymentRequestsToExtract()
+     * @see org.kuali.module.purap.server.PaymentRequestService.getPaymentRequestsToExtract(Date)
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract() {
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract(Date onOrBeforePaymentRequestPayDate) {
         LOG.debug("getPaymentRequestsToExtract() started");
 
-        return paymentRequestDao.getPaymentRequestsToExtract(false, null);
+        return paymentRequestDao.getPaymentRequestsToExtract(false, null, onOrBeforePaymentRequestPayDate);
     }
 
     /**
-     * @see org.kuali.module.purap.service.PaymentRequestService#getPaymentRequestsToExtractSpecialPayments(java.lang.String)
+     * @see org.kuali.module.purap.service.PaymentRequestService#getPaymentRequestsToExtractSpecialPayments(java.lang.String, java.sql.Date)
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractSpecialPayments(String chartCode) {
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractSpecialPayments(String chartCode, Date onOrBeforePaymentRequestPayDate) {
         LOG.debug("getPaymentRequestsToExtractSpecialPayments() started");
 
-        return paymentRequestDao.getPaymentRequestsToExtract(true, chartCode);
+        return paymentRequestDao.getPaymentRequestsToExtract(true, chartCode, onOrBeforePaymentRequestPayDate);
     }
 
     /**
@@ -198,12 +201,12 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
     }
 
     /**
-     * @see org.kuali.module.purap.service.PaymentRequestService#getPaymentRequestToExtractByChart(java.lang.String)
+     * @see org.kuali.module.purap.service.PaymentRequestService#getPaymentRequestToExtractByChart(java.lang.String, java.sql.Date)
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestToExtractByChart(String chartCode) {
+    public Iterator<PaymentRequestDocument> getPaymentRequestToExtractByChart(String chartCode, Date onOrBeforePaymentRequestPayDate) {
         LOG.debug("getPaymentRequestToExtractByChart() started");
 
-        return paymentRequestDao.getPaymentRequestsToExtract(false, chartCode);
+        return paymentRequestDao.getPaymentRequestsToExtract(false, chartCode, onOrBeforePaymentRequestPayDate);
     }
 
     /**
