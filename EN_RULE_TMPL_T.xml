@@ -7,9 +7,6 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
         RULE_TMPL_DESC="KualiResearchOrgReviewDelegationTemplate"
         RULE_TMPL_ID="9426" RULE_TMPL_NM="KualiResearchOrgReviewDelegationTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="Rule Template for KRA Post-Award Maintenance Docs"
-        RULE_TMPL_ID="9554" RULE_TMPL_NM="KraPostAwardMaintenanceDocTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="3"
         RULE_TMPL_DESC="Kuali Requisition Content Template"
         RULE_TMPL_ID="9575" RULE_TMPL_NM="KualiRequisitionContentTemplate"/>
@@ -72,9 +69,6 @@
         RULE_TMPL_DESC="KualiOrgReviewTemplate" RULE_TMPL_ID="1014" RULE_TMPL_NM="KualiOrgReviewTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1" RULE_TMPL_DESC="RuleTemplate"
         RULE_TMPL_ID="1031" RULE_TMPL_NM="RuleTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="3"
-        RULE_TMPL_DESC="KualiCashReceiptDefaultWorkgroupRuleTemplate"
-        RULE_TMPL_ID="1154" RULE_TMPL_NM="KualiCashReceiptDefaultWorkgroupRuleTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
         RULE_TMPL_DESC="SystemParameterRoutingTemplate"
         RULE_TMPL_ID="11456" RULE_TMPL_NM="SystemParameterRoutingTemplate"/>
@@ -116,8 +110,6 @@
         RULE_TMPL_ID="8331" RULE_TMPL_NM="KualiAccountDelegationTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
         RULE_TMPL_DESC="KualiPayeeTaxIdTemplate" RULE_TMPL_ID="8432" RULE_TMPL_NM="KualiPayeeTaxIdTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="KualiBudgetDocumentTemplate" RULE_TMPL_ID="8452" RULE_TMPL_NM="KualiBudgetDocumentTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
         RULE_TMPL_DESC="KualiInitiatorCampusRuleTemplate"
         RULE_TMPL_ID="8611" RULE_TMPL_NM="KualiInitiatorCampusRuleTemplate"/>
