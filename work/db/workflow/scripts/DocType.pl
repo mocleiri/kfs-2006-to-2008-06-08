@@ -27,10 +27,13 @@ while ($_ = <ATTRIB>){
 		close OUTFILE;
 		$tempPage="";
 		print $name.".xml created\n";
+		$name="blank";
 	}
 	if (/\<name\>/){
-		/\>([^<]*)\</;
-		$name=$1;
+if ($name eq "blank"){
+			/\>([^<]*)\</;
+			$name=$1;
+		}
 	}
 	if ($flag==1) {$tempPage = $tempPage.$_;}
 }

@@ -133,10 +133,6 @@
       </attributes>
     </ruleTemplate>
     <ruleTemplate>
-      <name>KualiCashReceiptDefaultWorkgroupRuleTemplate</name>
-      <description>KualiCashReceiptDefaultWorkgroupRuleTemplate</description>
-    </ruleTemplate>
-    <ruleTemplate>
       <name>KualiCashReceiptVerificationWorkgroupTemplate</name>
       <description>KualiCashReceiptVerificationWorkgroupTemplate</description>
       <attributes>
@@ -295,16 +291,6 @@
       </attributes>
     </ruleTemplate>
     <ruleTemplate>
-      <name>KualiBudgetDocumentTemplate</name>
-      <description>KualiBudgetDocumentTemplate</description>
-      <attributes>
-        <attribute>
-          <name>KualiBudgetDocumentAttribute</name>
-          <required>false</required>
-        </attribute>
-      </attributes>
-    </ruleTemplate>
-    <ruleTemplate>
       <name>KualiInitiatorCampusRuleTemplate</name>
       <description>KualiInitiatorCampusRuleTemplate</description>
       <attributes>
@@ -377,10 +363,6 @@
           <required>false</required>
         </attribute>
       </attributes>
-    </ruleTemplate>
-    <ruleTemplate>
-      <name>KraPostAwardMaintenanceDocTemplate</name>
-      <description>Rule Template for KRA Post-Award Maintenance Docs</description>
     </ruleTemplate>
     <ruleTemplate>
       <name>KualiRequisitionContentTemplate</name>

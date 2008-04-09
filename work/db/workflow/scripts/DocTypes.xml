@@ -124,18 +124,6 @@
       </routeNodes>
     </documentType>
     <documentType>
-      <name>KualiDepositDocument</name>
-      <parent>KualiBaseDocument</parent>
-      <description>KualiDepositDocument</description>
-      <label>KualiDepositDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
-      <docHandler>${application.url}/depositDocument.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <routingVersion>1</routingVersion>
-    </documentType>
-    <documentType>
       <name>KualiResearchDocument</name>
       <parent>KualiBaseDocument</parent>
       <description>KualiResearchDocument</description>
@@ -416,18 +404,6 @@
       </routeNodes>
     </documentType>
     <documentType>
-      <name>KualiAccountGuidelineMaintenanceDocument</name>
-      <parent>KualiMaintenanceDocument</parent>
-      <description>KualiAccountGuidelineMaintenanceDocument</description>
-      <label>KualiAccountGuidelineMaintenanceDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
-      <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <routingVersion>1</routingVersion>
-    </documentType>
-    <documentType>
       <name>DelegateMaintenanceDocument</name>
       <parent>KualiMaintenanceDocument</parent>
       <label>Account Delegate</label>
@@ -626,18 +602,6 @@
       <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
       <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
       <active>true</active>
-      <routingVersion>1</routingVersion>
-    </documentType>
-    <documentType>
-      <name>KualiProgramCodeMaintenanceDocument</name>
-      <parent>KualiMaintenanceDocument</parent>
-      <description>KualiProgramCodeMaintenanceDocument</description>
-      <label>KualiProgramCodeMaintenanceDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
-      <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
-      <active>false</active>
       <routingVersion>1</routingVersion>
     </documentType>
     <documentType>
@@ -1152,18 +1116,6 @@
       <routingVersion>1</routingVersion>
     </documentType>
     <documentType>
-      <name>ProcurementCardDefaultMaintenanceDocument</name>
-      <parent>KualiSimpleMaintenanceDocument</parent>
-      <description>ProcurementCardDefaultMaintenanceDocument</description>
-      <label>ProcurementCardDefaultMaintenanceDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_MAINTENANCE</blanketApproveWorkgroupName>
-      <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <routingVersion>1</routingVersion>
-    </documentType>
-    <documentType>
       <name>KualiDocumentTypeMaintenanceDocument</name>
       <parent>KualiSimpleMaintenanceDocument</parent>
       <label>Document Type</label>
@@ -1263,18 +1215,6 @@
       <routingVersion>1</routingVersion>
     </documentType>
     <documentType>
-      <name>KualiFinancialSystemParameterMaintenanceDocument</name>
-      <parent>KualiSimpleMaintenanceDocument</parent>
-      <description>KualiFinancialSystemParameterMaintenanceDocument</description>
-      <label>KualiFinancialSystemParameterMaintenanceDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_MAINTENANCE</blanketApproveWorkgroupName>
-      <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <routingVersion>1</routingVersion>
-    </documentType>
-    <documentType>
       <name>OriginationCodeMaintenanceDocument</name>
       <parent>KualiSimpleMaintenanceDocument</parent>
       <label>Origination Code</label>
@@ -1366,18 +1306,6 @@
       <name>LaborObjectMaintenanceDocument</name>
       <parent>KualiSimpleMaintenanceDocument</parent>
       <label>Labor Object Code</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_MAINTENANCE</blanketApproveWorkgroupName>
-      <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <routingVersion>1</routingVersion>
-    </documentType>
-    <documentType>
-      <name>KualiAutomatedReportPeriodStatusMaintenanceDocument</name>
-      <parent>KualiSimpleMaintenanceDocument</parent>
-      <description>KualiAutomatedReportPeriodMaintenanceDocument</description>
-      <label>KualiAutomatedReportPeriodMaintenanceDocument</label>
       <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
       <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
       <blanketApproveWorkgroupName>KUALI_ROLE_MAINTENANCE</blanketApproveWorkgroupName>
@@ -2767,52 +2695,6 @@
       </routeNodes>
     </documentType>
     <documentType>
-      <name>KualiLaborYearEndBenefitTransferDocument</name>
-      <parent>KualiFinancialDocument</parent>
-      <description>KualiLaborYearEndBenefitTransferDocument</description>
-      <label>KualiLaborYearEndBenefitTransferDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
-      <defaultExceptionWorkgroupName>KUALI_ROLE_SUPERVISOR</defaultExceptionWorkgroupName>
-      <docHandler>${application.url}/laborYearEndBenefitTransfer.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <routingVersion>1</routingVersion>
-      <routePaths>
-        <routePath>
-          <start name="Adhoc Routing" nextNode="Account Review" />
-          <requests name="Account Review" nextNode="Org Review" />
-          <requests name="Org Review" nextNode="Subfund" />
-          <requests name="Subfund" />
-        </routePath>
-      </routePaths>
-      <routeNodes>
-        <start name="Adhoc Routing">
-          <activationType>S</activationType>
-          <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </start>
-        <requests name="Account Review">
-          <activationType>S</activationType>
-          <ruleTemplate>KualiAccountTemplate</ruleTemplate>
-          <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </requests>
-        <requests name="Org Review">
-          <activationType>S</activationType>
-          <ruleTemplate>KualiOrgReviewTemplate</ruleTemplate>
-          <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </requests>
-        <requests name="Subfund">
-          <activationType>S</activationType>
-          <ruleTemplate>KualiSubFundTemplate</ruleTemplate>
-          <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </requests>
-      </routeNodes>
-    </documentType>
-    <documentType>
       <name>PositionObjectBenefitMaintenanceDocument</name>
       <parent>KualiSimpleMaintenanceDocument</parent>
       <description>PositionObjectBenefitMaintenanceDocument</description>
@@ -3153,31 +3035,6 @@
       </routeNodes>
     </documentType>
     <documentType>
-      <name>VendorParentMaintenanceDocument</name>
-      <parent>KualiMaintenanceDocument</parent>
-      <description>Parent document of all Vendor maintenance documents</description>
-      <label>Vendor Parent Maintenance Document</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
-      <defaultExceptionWorkgroupName>KUALI_ROLE_ADMINISTRATOR</defaultExceptionWorkgroupName>
-      <docHandler>none</docHandler>
-      <active>true</active>
-      <routingVersion>2</routingVersion>
-      <routePaths>
-        <routePath>
-          <start name="Adhoc Routing" />
-        </routePath>
-      </routePaths>
-      <routeNodes>
-        <start name="Adhoc Routing">
-          <activationType>S</activationType>
-          <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </start>
-      </routeNodes>
-    </documentType>
-    <documentType>
       <name>VendorModuleMaintenanceDocument</name>
       <parent>KualiMaintenanceDocument</parent>
       <description>Parent document of all Vendor Module maintenance documents</description>
@@ -3318,64 +3175,6 @@
           <activationType>S</activationType>
           <ruleTemplate>KualiSubFundTemplate</ruleTemplate>
           <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </requests>
-      </routeNodes>
-    </documentType>
-    <documentType>
-      <name>KualiResearchAdminPostAwardMaintenanceDocument</name>
-      <parent>KualiMaintenanceDocument</parent>
-      <description>KualiResearchAdminPostAwardMaintenanceDocument</description>
-      <label>KualiResearchAdminPostAwardMaintenanceDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
-      <defaultExceptionWorkgroupName>KUALI_ROLE_SUPERVISOR</defaultExceptionWorkgroupName>
-      <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <attributes>
-        <attribute>
-          <name>KualiContractsAndGrantsDocSearchGenerator</name>
-        </attribute>
-        <attribute>
-          <name>KualiContractsAndGrantsDocSearchResultProcessor</name>
-        </attribute>
-        <attribute>
-          <name>KualiContractsAndGrantsProposalNumber</name>
-        </attribute>
-        <attribute>
-          <name>KualiContractsAndGrantsAgencyNumber</name>
-        </attribute>
-        <attribute>
-          <name>RoutingOrganization</name>
-        </attribute>
-        <attribute>
-          <name>KualiContractsAndGrantsStatus</name>
-        </attribute>
-        <attribute>
-          <name>KualiContractsAndGrantsSearchType</name>
-        </attribute>
-        <attribute>
-          <name>KualiContractsAndGrantsAgencyReportName</name>
-        </attribute>
-      </attributes>
-      <routingVersion>1</routingVersion>
-      <routePaths>
-        <routePath>
-          <start name="Adhoc Routing" nextNode="Default Verification Workgroup Routing" />
-          <requests name="Default Verification Workgroup Routing" />
-        </routePath>
-      </routePaths>
-      <routeNodes>
-        <start name="Adhoc Routing">
-          <activationType>S</activationType>
-          <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </start>
-        <requests name="Default Verification Workgroup Routing">
-          <activationType>S</activationType>
-          <ruleTemplate>KraPostAwardMaintenanceDocTemplate</ruleTemplate>
-          <mandatoryRoute>true</mandatoryRoute>
           <finalApproval>false</finalApproval>
         </requests>
       </routeNodes>
@@ -3670,17 +3469,6 @@
       <parent>KualiSimpleMaintenanceDocument</parent>
       <description>PayeeAchAccountMaintenanceDocument</description>
       <label>PayeeAchAccountMaintenanceDocument</label>
-      <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>KUALI_ROLE_MAINTENANCE</blanketApproveWorkgroupName>
-      <docHandler>${application.url}/kr/maintenance.do?methodToCall=docHandler</docHandler>
-      <active>true</active>
-      <routingVersion>1</routingVersion>
-    </documentType>
-    <documentType>
-      <name>AssetObjectCodeMaintenanceDocument</name>
-      <parent>KualiSimpleMaintenanceDocument</parent>
-      <label>Asset Object Code</label>
       <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
       <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
       <blanketApproveWorkgroupName>KUALI_ROLE_MAINTENANCE</blanketApproveWorkgroupName>
@@ -4434,11 +4222,7 @@
       <active>true</active>
       <policies>
         <policy>
-          <name>INITIATOR_MUST_ROUTE</name>
-          <value>true</value>
-        </policy>
-        <policy>
-          <name>INITIATOR_MUST_SAVE</name>
+          <name>INITIATOR_MUST_BLANKET_APPROVE</name>
           <value>true</value>
         </policy>
         <policy>
@@ -4446,7 +4230,11 @@
           <value>true</value>
         </policy>
         <policy>
-          <name>INITIATOR_MUST_BLANKET_APPROVE</name>
+          <name>INITIATOR_MUST_ROUTE</name>
+          <value>true</value>
+        </policy>
+        <policy>
+          <name>INITIATOR_MUST_SAVE</name>
           <value>true</value>
         </policy>
       </policies>
