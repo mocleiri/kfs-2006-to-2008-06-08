@@ -817,4 +817,265 @@
     <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2304"
         RTE_NODE_CFG_PARM_KEY="ruleSelector"
         RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2320"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358289" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2321"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358289" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2322"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358289" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2323"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358289" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2324"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358289" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2325"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358291" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2326"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358291" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2327"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358291" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2328"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358291" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2329"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358291" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2330"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358292" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Internal Purchasing Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiInternalPurchasingTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2331"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358292" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2332"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358292" RTE_NODE_CFG_PARM_VAL="KualiInternalPurchasingTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2333"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358292" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2334"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358292" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2335"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358292" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2336"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358293" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Commodity Code Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiPurApCommodityCodeTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2337"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358293" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2338"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358293" RTE_NODE_CFG_PARM_VAL="KualiPurApCommodityCodeTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2339"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358293" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2340"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358293" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2341"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358293" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2342"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358294" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Contracts and Grants Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiPurApContractsAndGrantsTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2343"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358294" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2344"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358294" RTE_NODE_CFG_PARM_VAL="KualiPurApContractsAndGrantsTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2345"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358294" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2346"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358294" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2347"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358294" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2348"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358295" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Budget Office Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiPurApBudgetReviewTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2349"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358295" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2350"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358295" RTE_NODE_CFG_PARM_VAL="KualiPurApBudgetReviewTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2351"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358295" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2352"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358295" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2353"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358295" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2354"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358296" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Vendor Tax Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiVendorTaxReviewTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2355"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358296" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2356"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358296" RTE_NODE_CFG_PARM_VAL="KualiVendorTaxReviewTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2357"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358296" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2358"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358296" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2359"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358296" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2360"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358297" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Document Transmission&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiPurchaseOrderTransmissionTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2361"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358297" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2362"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358297" RTE_NODE_CFG_PARM_VAL="KualiPurchaseOrderTransmissionTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2363"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358297" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2364"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358297" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2365"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358297" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2366"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358299" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2367"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358299" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2368"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358299" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2369"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358299" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2370"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358299" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2371"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358300" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Content Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiRequisitionContentTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2372"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358300" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2373"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358300" RTE_NODE_CFG_PARM_VAL="KualiRequisitionContentTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2374"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358300" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2375"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358300" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2376"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358300" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2377"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358301" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Sub Account Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiSubAccountTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2378"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358301" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2379"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358301" RTE_NODE_CFG_PARM_VAL="KualiSubAccountTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2380"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358301" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2381"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358301" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2382"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358301" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2383"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358302" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Account Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiAccountTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>true&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2384"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358302" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2385"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358302" RTE_NODE_CFG_PARM_VAL="KualiAccountTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2386"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358302" RTE_NODE_CFG_PARM_VAL="true"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2387"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358302" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2388"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358302" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2389"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358303" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Org Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiOrgReviewTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2390"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358303" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2391"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358303" RTE_NODE_CFG_PARM_VAL="KualiOrgReviewTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2392"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358303" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2393"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358303" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2394"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358303" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2395"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358304" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Commodity Code Review&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiPurApCommodityCodeTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2396"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358304" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2397"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358304" RTE_NODE_CFG_PARM_VAL="KualiPurApCommodityCodeTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2398"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358304" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2399"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358304" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2400"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358304" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2401"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358305" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Separation of Duties&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiRequisitionSeparationOfDutiesTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2402"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358305" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2403"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358305" RTE_NODE_CFG_PARM_VAL="KualiRequisitionSeparationOfDutiesTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2404"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358305" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2405"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358305" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2406"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358305" RTE_NODE_CFG_PARM_VAL="Template"/>
 </dataset>

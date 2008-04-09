@@ -1062,4 +1062,10 @@
         RULE_ATTRIB_ID="13036"
         RULE_ATTRIB_LBL_TXT="Project Director Routing"
         RULE_ATTRIB_NM="KualiPDAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
+    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="1"
+        RULE_ATTRIB_CLS_NM="org.kuali.workflow.module.purap.attribute.KualiPurApCommodityCodeAttribute"
+        RULE_ATTRIB_DESC="Commodity Code Routing Attribute for Kuali Documents"
+        RULE_ATTRIB_ID="13136"
+        RULE_ATTRIB_LBL_TXT="Kuali PurAp Commodity Code Attribute"
+        RULE_ATTRIB_NM="KualiPurApCommodityCodeAttribute" RULE_ATTRIB_TYP="RuleAttribute"/>
 </dataset>

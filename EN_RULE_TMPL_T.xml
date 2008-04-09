@@ -202,4 +202,7 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
         RULE_TMPL_DESC="KualiProjectDirectorTemplate"
         RULE_TMPL_ID="13037" RULE_TMPL_NM="KualiProjectDirectorTemplate"/>
+    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
+        RULE_TMPL_DESC="KualiPurApCommodityCodeTemplate"
+        RULE_TMPL_ID="13137" RULE_TMPL_NM="KualiPurApCommodityCodeTemplate"/>
 </dataset>
