@@ -392,13 +392,11 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
                 // otherwise, this document has already been routed
                 // it's an error if the pay date has been changed from the pay date in the database and the new pay date is in the past
                 // retrieve doc from DB, and compare the dates
-                
-                Map primaryKeyValues = SpringContext.getBean(PersistenceService.class).getPrimaryKeyFieldValues(document);
-                PaymentRequestDocument paymentRequestDocumentFromDatabase = (PaymentRequestDocument) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(document.getClass(), primaryKeyValues);
+                PaymentRequestDocument paymentRequestDocumentFromDatabase = retrievePaymentRequestDocumentFromDatabase(document);
                 
                 if (ObjectUtils.isNull(paymentRequestDocumentFromDatabase)) {
                     // this definitely should not happen
-                    throw new NullPointerException("Unable to find document " + document.getDocumentNumber() + " from database");
+                    throw new NullPointerException("Unable to find payment request document " + document.getDocumentNumber() + " from database");
                 }
                 
                 java.sql.Date paymentRequestPayDateFromDatabase = paymentRequestDocumentFromDatabase.getPaymentRequestPayDate();
@@ -409,6 +407,16 @@ public class PaymentRequestDocumentRule extends AccountsPayableDocumentRuleBase 
             }
         }
         return valid;
+    }
+    
+    /**
+     * Retrieves the payment request document from the database.  Note that the instance returned 
+     * @param document the document to look in the database for
+     * @return an instance representing what's stored in the database for this instance
+     */
+    protected PaymentRequestDocument retrievePaymentRequestDocumentFromDatabase(PaymentRequestDocument document) {
+        Map primaryKeyValues = SpringContext.getBean(PersistenceService.class).getPrimaryKeyFieldValues(document);
+        return (PaymentRequestDocument) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(document.getClass(), primaryKeyValues);
     }
 
     /**
