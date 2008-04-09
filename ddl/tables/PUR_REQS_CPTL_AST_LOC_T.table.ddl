@@ -1,0 +1,23 @@
+CREATE TABLE PUR_REQS_CPTL_AST_LOC_T(
+        REQS_ID                        NUMBER(8) CONSTRAINT PUR_REQS_CPTL_AST_LOC_TN1 NOT NULL,
+        CPTL_AST_SYS_NBR               NUMBER(10) CONSTRAINT PUR_REQS_CPTL_AST_LOC_TN2 NOT NULL,
+        CPTL_AST_LOC_NBR               NUMBER(10) CONSTRAINT PUR_REQS_CPTL_AST_LOC_TN3 NOT NULL,
+        OBJ_ID                         VARCHAR2(36) CONSTRAINT PUR_REQS_CPTL_AST_LOC_TN4 NOT NULL,
+        VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT PUR_REQS_CPTL_AST_LOC_TN5 NOT NULL,
+        CPTL_AST_ITM_QTY               NUMBER(11,2),
+        CAMPUS_CD                      VARCHAR2(2),
+        CPTL_AST_OFF_CMP_IND           VARCHAR2(1),
+        BLDG_CD                        VARCHAR2(10),
+        BLDG_ROOM_NBR                  VARCHAR2(8),
+        CPTL_AST_LN1_ADDR              VARCHAR2(45),
+        CPTL_AST_CTY_NM                VARCHAR2(45),
+        CPTL_AST_ST_CD                 VARCHAR2(2),
+        CPTL_AST_PSTL_CD               VARCHAR2(20),
+        CPTL_AST_CNTRY_CD              VARCHAR2(2),
+     CONSTRAINT PUR_REQS_CPTL_AST_LOC_TP1 PRIMARY KEY (
+        REQS_ID,
+        CPTL_AST_SYS_NBR,
+        CPTL_AST_LOC_NBR),
+     CONSTRAINT PUR_REQS_CPTL_AST_LOC_TC0 UNIQUE (OBJ_ID)
+)
+/
