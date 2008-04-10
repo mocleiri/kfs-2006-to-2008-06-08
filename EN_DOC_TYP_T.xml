@@ -1974,7 +1974,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="167588" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="1" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="17"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="18"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="Parent document of all Purchasing &amp; AP maintenance documents"
         DOC_TYP_HDLR_URL_ADDR="none" DOC_TYP_ID="293336"
@@ -2811,4 +2811,12 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="317050" DOC_TYP_RTE_VER_NBR="2"
         DOC_TYP_VER_NBR="25" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/kr/maintenance.do?methodToCall=docHandler"
+        DOC_TYP_ID="318300" DOC_TYP_LBL_TXT="Capital Asset System Type"
+        DOC_TYP_NM="CapitalAssetSystemTypeMaintenanceDocument"
+        DOC_TYP_PARNT_ID="293336"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
 </dataset>

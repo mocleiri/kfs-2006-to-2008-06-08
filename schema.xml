@@ -4547,6 +4547,7 @@
         <column name="CPTL_AST_LAND_ACRG_SZ" size="7" type="DECIMAL"/>
         <column name="CPTL_AST_LAND_PRCL_NBR" size="30" type="VARCHAR"/>
         <column name="CPTL_AST_DEPR_DT" type="DATE"/>
+        <column name="FIN_OBJ_SUB_TYP_CD" size="2" type="VARCHAR"/>
         <foreign-key foreignTable="SH_ROOM_T" name="CM_CPTLAST_TR5">
             <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
             <reference foreign="BLDG_CD" local="BLDG_CD"/>
@@ -4593,6 +4594,9 @@
         <foreign-key foreignTable="SH_ACCT_PERIOD_T" name="CM_CPTLAST_TR11">
             <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
             <reference foreign="UNIV_FISCAL_PRD_CD" local="FDOC_POST_PRD_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_OBJ_SUB_TYPE_T" name="CM_CPTLAST_TR21">
+            <reference foreign="FIN_OBJ_SUB_TYP_CD" local="FIN_OBJ_SUB_TYP_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="CM_CPTLAST_TR9">
             <reference foreign="FIN_COA_CD" local="AST_INS_COA_CD"/>
@@ -4681,7 +4685,6 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="AST_UPLDR_UNVL_ID" size="10" type="VARCHAR"/>
-        <column name="AST_UPLDR_SEQ_NBR" size="12" type="DECIMAL"/>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_INVN_ERR_DOC_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
@@ -4690,47 +4693,25 @@
         </unique>
     </table>
     <table name="CM_INVN_ERR_DTL_T">
-        <column name="AST_UPLDR_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
-        <column name="AST_UPLDR_SEQ_NBR" primaryKey="true" size="12" type="DECIMAL"/>
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <column name="AST_UPLD_ROW_NBR" primaryKey="true" size="12" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="AST_ERRCOR_STAT_CD" size="1" type="VARCHAR"/>
-        <column name="AST_COR_ROW_TXT" size="125" type="VARCHAR"/>
         <column name="AST_COR_UNVL_ID" size="10" type="VARCHAR"/>
         <column name="AST_INVN_COR_TS" type="DATE"/>
-        <foreign-key foreignTable="CM_INVN_UPLD_DTL_T" name="CM_INVN_ERR_DTL_TR1">
-            <reference foreign="AST_UPLDR_UNVL_ID" local="AST_UPLDR_UNVL_ID"/>
-            <reference foreign="AST_UPLDR_SEQ_NBR" local="AST_UPLDR_SEQ_NBR"/>
-            <reference foreign="AST_UPLD_ROW_NBR" local="AST_UPLD_ROW_NBR"/>
+        <column name="CPTLAST_TAG_NBR" size="8" type="VARCHAR"/>
+        <column name="AST_UPLD_SCAN_IND" size="1" type="VARCHAR"/>
+        <column name="AST_UPLD_SCAN_TS" type="DATE"/>
+        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
+        <column name="BLDG_CD" size="10" type="VARCHAR"/>
+        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
+        <column name="BLDG_SUB_ROOM_NBR" size="2" type="VARCHAR"/>
+        <column name="CPTLAST_COND_CD" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="CM_INVN_ERR_DOC_T" name="CM_INVN_ERR_DTL_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
         <unique name="CM_INVN_ERR_DTL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="CM_INVN_UPLD_DTL_T">
-        <column name="AST_UPLDR_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
-        <column name="AST_UPLDR_SEQ_NBR" primaryKey="true" size="12" type="DECIMAL"/>
-        <column name="AST_UPLD_ROW_NBR" primaryKey="true" size="12" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="AST_UPLD_ROW_TXT" size="125" type="VARCHAR"/>
-        <column name="AST_UPLD_ERR_IND" size="1" type="VARCHAR"/>
-        <foreign-key foreignTable="CM_INVN_UPLD_HDR_T" name="CM_INVN_UPLD_DTL_TR1">
-            <reference foreign="AST_UPLDR_UNVL_ID" local="AST_UPLDR_UNVL_ID"/>
-            <reference foreign="AST_UPLDR_SEQ_NBR" local="AST_UPLDR_SEQ_NBR"/>
-        </foreign-key>
-        <unique name="CM_INVN_UPLD_DTL_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="CM_INVN_UPLD_HDR_T">
-        <column name="AST_UPLDR_UNVL_ID" primaryKey="true" size="10" type="VARCHAR"/>
-        <column name="AST_UPLDR_SEQ_NBR" primaryKey="true" size="12" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="AST_INVN_UPLD_TS" type="DATE"/>
-        <unique name="CM_INVN_UPLD_HDR_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -12958,16 +12939,6 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="PUR_CM_SYS_TYP_T">
-        <column name="CM_SYS_TYP_CD" primaryKey="true" size="4" type="VARCHAR"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CM_SYS_TYP_DESC" size="45" type="VARCHAR"/>
-        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
-        <unique name="PUR_CM_SYS_TYP_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
     <table name="PUR_CNTCT_TYP_T">
         <column name="VNDR_CNTCT_TYP_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -13025,6 +12996,16 @@
         <column name="CONTR_MGR_DLGN_DLR_LMT" scale="2" size="19" type="DECIMAL"/>
         <column name="CONTR_MGR_SIG_IMG_LOC_DESC" size="45" type="VARCHAR"/>
         <unique name="PUR_CONTR_MGR_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_CPTL_AST_SYS_TYP_T">
+        <column name="CPTL_AST_SYS_TYP_CD" primaryKey="true" size="4" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTL_AST_SYS_TYP_DESC" size="45" type="VARCHAR"/>
+        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <unique name="PUR_CPTL_AST_SYS_TYP_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -13207,44 +13188,6 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="PUR_PO_CM_LOC_T">
-        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column name="CM_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
-        <column name="CM_LOC_NBR" primaryKey="true" size="10" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CM_ITM_QTY" scale="2" size="11" type="DECIMAL"/>
-        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
-        <column name="CM_OFF_CMP_IND" size="1" type="VARCHAR"/>
-        <column name="BLDG_CD" size="10" type="VARCHAR"/>
-        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
-        <column name="CM_LN1_ADDR" size="45" type="VARCHAR"/>
-        <column name="CM_CTY_NM" size="45" type="VARCHAR"/>
-        <column name="CM_ST_CD" size="2" type="VARCHAR"/>
-        <column name="CM_PSTL_CD" size="20" type="VARCHAR"/>
-        <column name="CM_CNTRY_CD" size="2" type="VARCHAR"/>
-        <foreign-key foreignTable="SH_CAMPUS_T" name="PUR_PO_CM_LOC_TR1">
-            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
-        </foreign-key>
-        <unique name="PUR_PO_CM_LOC_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
-    <table name="PUR_PO_CM_SYS_T">
-        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column name="CM_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CM_SYS_DESC" size="4000" type="VARCHAR"/>
-        <column name="CM_NOTRCVD_CUR_FSCL_YR_IND" size="1" type="VARCHAR"/>
-        <column name="CPTLAST_TYP_CD" size="7" type="VARCHAR"/>
-        <column name="CM_MFR_IS_VNDR_IND" size="1" type="VARCHAR"/>
-        <column name="CM_MFR_NM" size="45" type="VARCHAR"/>
-        <column name="CM_MDL_DESC" size="45" type="VARCHAR"/>
-        <unique name="PUR_PO_CM_SYS_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-    </table>
     <table name="PUR_PO_CONTR_LANG_T">
         <column name="PO_CONTR_LANG_ID" primaryKey="true" size="10" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -13254,6 +13197,44 @@
         <column name="CONTR_LANG_CRTE_DT" required="true" type="DATE"/>
         <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="PUR_PO_CONTR_LANG_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_PO_CPTL_AST_LOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="CPTL_AST_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="CPTL_AST_LOC_NBR" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTL_AST_ITM_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
+        <column name="CPTL_AST_OFF_CMP_IND" size="1" type="VARCHAR"/>
+        <column name="BLDG_CD" size="10" type="VARCHAR"/>
+        <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
+        <column name="CPTL_AST_LN1_ADDR" size="45" type="VARCHAR"/>
+        <column name="CPTL_AST_CTY_NM" size="45" type="VARCHAR"/>
+        <column name="CPTL_AST_ST_CD" size="2" type="VARCHAR"/>
+        <column name="CPTL_AST_PSTL_CD" size="20" type="VARCHAR"/>
+        <column name="CPTL_AST_CNTRY_CD" size="2" type="VARCHAR"/>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="PUR_PO_CPTL_AST_LOC_TR1">
+            <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
+        </foreign-key>
+        <unique name="PUR_PO_CPTL_AST_LOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
+    <table name="PUR_PO_CPTL_AST_SYS_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="CPTL_AST_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTL_AST_SYS_DESC" size="4000" type="VARCHAR"/>
+        <column name="CPTLAST_NOTRCVD_CUR_FSCLYR_IND" size="1" type="VARCHAR"/>
+        <column name="CPTLAST_TYP_CD" size="7" type="VARCHAR"/>
+        <column name="CPTL_AST_MFR_IS_VNDR_IND" size="1" type="VARCHAR"/>
+        <column name="CPTL_AST_MFR_NM" size="45" type="VARCHAR"/>
+        <column name="CPTL_AST_MDL_DESC" size="45" type="VARCHAR"/>
+        <unique name="PUR_PO_CPTL_AST_SYS_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -13312,13 +13293,13 @@
         <column name="EXT_ORG_B2B_PROD_TYP_NM" size="15" type="VARCHAR"/>
         <column name="ITM_ASND_TO_TRADE_IN_IND" size="1" type="VARCHAR"/>
         <column name="ITM_DMGED_TOT_QTY" scale="2" size="11" type="DECIMAL"/>
-        <column name="CM_SYS_NBR" size="10" type="DECIMAL"/>
+        <column name="CPTL_AST_SYS_NBR" size="10" type="DECIMAL"/>
         <foreign-key foreignTable="PUR_AP_CPTL_AST_TRN_TYP_T" name="PUR_PO_ITM_TR3">
             <reference foreign="CPTL_AST_TRN_TYP_CD" local="CPTL_AST_TRN_TYP_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="PUR_PO_CM_SYS_T" name="PUR_PO_ITM_TR5">
+        <foreign-key foreignTable="PUR_PO_CPTL_AST_SYS_T" name="PUR_PO_ITM_TR5">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-            <reference foreign="CM_SYS_NBR" local="CM_SYS_NBR"/>
+            <reference foreign="CPTL_AST_SYS_NBR" local="CPTL_AST_SYS_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_COMM_T" name="PUR_PO_ITM_TR4">
             <reference foreign="PUR_COMM_CD" local="PUR_COMM_CD"/>
@@ -13567,12 +13548,12 @@
         <column name="PMT_RQST_PSTV_APRVL_IND" size="1" type="VARCHAR"/>
         <column name="PO_QT_INITLZTN_DT" type="DATE"/>
         <column name="PO_QT_AWDED_DT" type="DATE"/>
-        <column name="CM_SYS_TYP_CD" size="4" type="VARCHAR"/>
+        <column name="CPTL_AST_SYS_TYP_CD" size="4" type="VARCHAR"/>
         <foreign-key foreignTable="PUR_PMT_TERM_TYP_T" name="PUR_PO_TR20">
             <reference foreign="VNDR_PMT_TERM_CD" local="VNDR_PMT_TERM_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="PUR_CM_SYS_TYP_T" name="PUR_PO_TR25">
-            <reference foreign="CM_SYS_TYP_CD" local="CM_SYS_TYP_CD"/>
+        <foreign-key foreignTable="PUR_CPTL_AST_SYS_TYP_T" name="PUR_PO_TR25">
+            <reference foreign="CPTL_AST_SYS_TYP_CD" local="CPTL_AST_SYS_TYP_CD"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_DLVY_REQ_DT_REAS_T" name="PUR_PO_TR8">
             <reference foreign="DLVY_REQ_DT_REAS_CD" local="DLVY_REQ_DT_REAS_CD"/>
@@ -13961,41 +13942,41 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="PUR_REQS_CM_LOC_T">
+    <table name="PUR_REQS_CPTL_AST_LOC_T">
         <column name="REQS_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column name="CM_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
-        <column name="CM_LOC_NBR" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="CPTL_AST_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="CPTL_AST_LOC_NBR" primaryKey="true" size="10" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CM_ITM_QTY" scale="2" size="11" type="DECIMAL"/>
+        <column name="CPTL_AST_ITM_QTY" scale="2" size="11" type="DECIMAL"/>
         <column name="CAMPUS_CD" size="2" type="VARCHAR"/>
-        <column name="CM_OFF_CMP_IND" size="1" type="VARCHAR"/>
+        <column name="CPTL_AST_OFF_CMP_IND" size="1" type="VARCHAR"/>
         <column name="BLDG_CD" size="10" type="VARCHAR"/>
         <column name="BLDG_ROOM_NBR" size="8" type="VARCHAR"/>
-        <column name="CM_LN1_ADDR" size="45" type="VARCHAR"/>
-        <column name="CM_CTY_NM" size="45" type="VARCHAR"/>
-        <column name="CM_ST_CD" size="2" type="VARCHAR"/>
-        <column name="CM_PSTL_CD" size="20" type="VARCHAR"/>
-        <column name="CM_CNTRY_CD" size="2" type="VARCHAR"/>
-        <foreign-key foreignTable="SH_CAMPUS_T" name="PUR_REQS_CM_LOC_TR1">
+        <column name="CPTL_AST_LN1_ADDR" size="45" type="VARCHAR"/>
+        <column name="CPTL_AST_CTY_NM" size="45" type="VARCHAR"/>
+        <column name="CPTL_AST_ST_CD" size="2" type="VARCHAR"/>
+        <column name="CPTL_AST_PSTL_CD" size="20" type="VARCHAR"/>
+        <column name="CPTL_AST_CNTRY_CD" size="2" type="VARCHAR"/>
+        <foreign-key foreignTable="SH_CAMPUS_T" name="PUR_REQS_CPTL_AST_LOC_TR1">
             <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
         </foreign-key>
-        <unique name="PUR_REQS_CM_LOC_TC0">
+        <unique name="PUR_REQS_CPTL_AST_LOC_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="PUR_REQS_CM_SYS_T">
+    <table name="PUR_REQS_CPTL_AST_SYS_T">
         <column name="REQS_ID" primaryKey="true" size="8" type="DECIMAL"/>
-        <column name="CM_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="CPTL_AST_SYS_NBR" primaryKey="true" size="10" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CM_SYS_DESC" size="4000" type="VARCHAR"/>
-        <column name="CM_NOTRCVD_CUR_FSCL_YR_IND" size="1" type="VARCHAR"/>
+        <column name="CPTL_AST_SYS_DESC" size="4000" type="VARCHAR"/>
+        <column name="CPTLAST_NOTRCVD_CUR_FSCLYR_IND" size="1" type="VARCHAR"/>
         <column name="CPTLAST_TYP_CD" size="7" type="VARCHAR"/>
-        <column name="CM_MFR_IS_VNDR_IND" size="1" type="VARCHAR"/>
-        <column name="CM_MFR_NM" size="45" type="VARCHAR"/>
-        <column name="CM_MDL_DESC" size="45" type="VARCHAR"/>
-        <unique name="PUR_REQS_CM_SYS_TC0">
+        <column name="CPTL_AST_MFR_IS_VNDR_IND" size="1" type="VARCHAR"/>
+        <column name="CPTL_AST_MFR_NM" size="45" type="VARCHAR"/>
+        <column name="CPTL_AST_MDL_DESC" size="45" type="VARCHAR"/>
+        <unique name="PUR_REQS_CPTL_AST_SYS_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -14040,10 +14021,10 @@
         <column name="EXT_ORG_B2B_PROD_TYP_NM" size="15" type="VARCHAR"/>
         <column name="ITM_ASND_TO_TRADE_IN_IND" size="1" type="VARCHAR"/>
         <column name="PUR_COMM_CD" size="40" type="VARCHAR"/>
-        <column name="CM_SYS_NBR" size="10" type="DECIMAL"/>
-        <foreign-key foreignTable="PUR_REQS_CM_SYS_T" name="PUR_REQS_ITM_TR5">
+        <column name="CPTL_AST_SYS_NBR" size="10" type="DECIMAL"/>
+        <foreign-key foreignTable="PUR_REQS_CPTL_AST_SYS_T" name="PUR_REQS_ITM_TR5">
             <reference foreign="REQS_ID" local="REQS_ID"/>
-            <reference foreign="CM_SYS_NBR" local="CM_SYS_NBR"/>
+            <reference foreign="CPTL_AST_SYS_NBR" local="CPTL_AST_SYS_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_AP_ITM_TYP_T" name="PUR_REQS_ITM_TR3">
             <reference foreign="ITM_TYP_CD" local="ITM_TYP_CD"/>
@@ -14195,15 +14176,15 @@
         <column name="VNDR_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
         <column name="RCVNG_DOC_REQ_IND" size="1" type="VARCHAR"/>
         <column name="PMT_RQST_PSTV_APRVL_IND" size="1" type="VARCHAR"/>
-        <column name="CM_SYS_TYP_CD" size="4" type="VARCHAR"/>
+        <column name="CPTL_AST_SYS_TYP_CD" size="4" type="VARCHAR"/>
         <foreign-key foreignTable="CA_CHART_T" name="PUR_REQS_TR13">
             <reference foreign="FIN_COA_CD" local="NON_INST_FND_ORG_COA_CD"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_PO_TRNS_MTHD_T" name="PUR_REQS_TR6">
             <reference foreign="PO_TRNS_MTHD_CD" local="PO_TRNS_MTHD_CD"/>
         </foreign-key>
-        <foreign-key foreignTable="PUR_CM_SYS_TYP_T" name="PUR_REQS_TR20">
-            <reference foreign="CM_SYS_TYP_CD" local="CM_SYS_TYP_CD"/>
+        <foreign-key foreignTable="PUR_CPTL_AST_SYS_TYP_T" name="PUR_REQS_TR20">
+            <reference foreign="CPTL_AST_SYS_TYP_CD" local="CPTL_AST_SYS_TYP_CD"/>
         </foreign-key>
         <foreign-key foreignTable="PUR_REQS_STAT_T" name="PUR_REQS_TR2">
             <reference foreign="REQS_STAT_CD" local="REQS_STAT_CD"/>
@@ -15345,7 +15326,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2300"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318300"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318320"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4072"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
