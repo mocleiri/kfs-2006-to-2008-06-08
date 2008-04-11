@@ -46,6 +46,8 @@ CREATE TABLE AR_INV_DOC_T(
         PMT_PROJECT_CD                 VARCHAR2(10),
         PMT_ORG_REF_ID                 VARCHAR2(8),
         AR_PRNT_DT                     DATE,
+        AR_ST_TAX_PCT                  NUMBER(6, 4), 
+        AR_LOC_TAX_PCT                 NUMBER(6, 4), 
      CONSTRAINT AR_INV_DOC_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT AR_INV_DOC_TC0 UNIQUE (OBJ_ID)
