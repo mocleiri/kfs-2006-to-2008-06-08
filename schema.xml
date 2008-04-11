@@ -1636,6 +1636,16 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="AR_PRN_INV_OPTN_T">
+        <column name="AR_PRN_INV_IND" primaryKey="true" size="1" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="AR_PRN_INV_DESC" size="40" type="VARCHAR"/>
+        <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <unique name="AR_PRN_INV_OPTN_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="AR_SYS_INFO_T">
         <column name="UNIV_FISCAL_YR" primaryKey="true" size="4" type="DECIMAL"/>
         <column name="PRCS_FIN_COA_CD" primaryKey="true" size="2" type="VARCHAR"/>
@@ -12572,7 +12582,7 @@
         <column name="PMT_LN2_ADDR" size="55" type="VARCHAR"/>
         <column name="PMT_LN3_ADDR" size="55" type="VARCHAR"/>
         <column name="PMT_LN4_ADDR" size="55" type="VARCHAR"/>
-        <column name="PMT_CTY_NM" size="30" type="VARCHAR"/>
+        <column name="PMT_CTY_NM" size="45" type="VARCHAR"/>
         <column name="PMT_ZIP_CD" size="20" type="VARCHAR"/>
         <column name="PMT_ST_NM" size="30" type="VARCHAR"/>
         <column name="CMP_ADDR_IND" size="1" type="VARCHAR"/>
