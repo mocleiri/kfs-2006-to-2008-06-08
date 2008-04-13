@@ -980,6 +980,8 @@
         <column name="PMT_PROJECT_CD" size="10" type="VARCHAR"/>
         <column name="PMT_ORG_REF_ID" size="8" type="VARCHAR"/>
         <column name="AR_PRNT_DT" type="DATE"/>
+        <column name="AR_ST_TAX_PCT" scale="4" size="6" type="DECIMAL"/>
+        <column name="AR_LOC_TAX_PCT" scale="4" size="6" type="DECIMAL"/>
         <foreign-key foreignTable="CA_PROJECT_T" name="AR_INV_DOC_TR11">
             <reference foreign="PROJECT_CD" local="PMT_PROJECT_CD"/>
         </foreign-key>
@@ -15268,10 +15270,6 @@
     <sequence name="CG_AGENCY_NBR_SEQ" nextval="55061"/>
     <sequence name="CG_PRPSL_CLOSE_NBR_SEQ" nextval="2040"/>
     <sequence name="CG_SUBCNR_NBR_SEQ" nextval="2080"/>
-    <sequence name="CM_DOC_ID" nextval="1002"/>
-    <sequence name="CM_ITM_ID" nextval="1002"/>
-    <sequence name="CM_ITM_LOC_ID" nextval="1002"/>
-    <sequence name="CM_SYS_ID" nextval="1002"/>
     <sequence name="CPTLAST_NBR_SEQ" nextval="2000"/>
     <sequence name="CRDT_MEMO_ACCT_ID" nextval="1002"/>
     <sequence name="CRDT_MEMO_ID" nextval="1002"/>
