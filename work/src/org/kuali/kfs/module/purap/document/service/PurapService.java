@@ -18,12 +18,10 @@ package org.kuali.module.purap.service;
 import java.sql.Date;
 import java.util.List;
 
-import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.purap.bo.ItemType;
 import org.kuali.module.purap.bo.PurApItem;
-import org.kuali.module.purap.document.PurapItemOperations;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -75,14 +73,6 @@ public interface PurapService {
      * @return below the line item by item type
      */
     public PurApItem getBelowTheLineByType(PurchasingAccountsPayableDocument document, ItemType iT);
-    
-    /**
-     * Return a Date object which is which is a given number of days away from today, in either direction. 
-     * 
-     * @param offsetDays
-     * @return  A java.sql.Date
-     */
-    public Date getDateFromOffsetFromToday(int offsetDays);
 
     /**
      * Determine whether a given date is in the past.
@@ -132,6 +122,13 @@ public interface PurapService {
     public boolean isFullDocumentEntryCompleted(PurchasingAccountsPayableDocument purapDocument);
 
     /**
+     * Performs all the actions on an update document.
+     * 
+     * @param purapDocument PurchasingAccountsPayableDocument
+     */
+    public void performLogicForFullEntryCompleted(PurchasingAccountsPayableDocument purapDocument);
+
+    /**
      * Create a close or reopen purchase order document.
      * 
      * @param purapDocument PurchasingAccountsPayableDocument
@@ -157,19 +154,4 @@ public interface PurapService {
      * @param document  PurchasingAccountsPayableDocument to be sorted
      */
     public void sortBelowTheLine(PurchasingAccountsPayableDocument document);
-    
-    /**
-     * Remove items that have not been "entered" which means no data has been added to them so no more processing needs to continue
-     * on these items.
-     * 
-     * @param apDocument  AccountsPayableDocument which contains list of items to be reviewed
-     */
-    public void deleteUnenteredItems(PurapItemOperations document);
-    
-    /**
-     * Saves the document without doing validation by invoking the saveDocument method of documentService.
-     * 
-     * @param document The purchase order document to be saved.
-     */
-    public void saveDocumentNoValidation(Document document);
 }

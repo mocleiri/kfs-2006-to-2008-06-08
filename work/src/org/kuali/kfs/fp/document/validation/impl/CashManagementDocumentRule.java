@@ -28,7 +28,6 @@ import org.kuali.core.document.Document;
 import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
@@ -37,6 +36,8 @@ import org.kuali.kfs.KFSConstants.DocumentStatusCodes.CashReceipt;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.rule.GenerateGeneralLedgerDocumentPendingEntriesRule;
+import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
 import org.kuali.kfs.rules.GeneralLedgerPostingDocumentRuleBase;
 import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.CashDrawer;
@@ -52,7 +53,7 @@ import org.kuali.module.financial.service.UniversityDateService;
 /**
  * Business rule(s) applicable to Cash Management Document.
  */
-public class CashManagementDocumentRule extends GeneralLedgerPostingDocumentRuleBase {
+public class CashManagementDocumentRule extends GeneralLedgerPostingDocumentRuleBase implements GenerateGeneralLedgerDocumentPendingEntriesRule<AccountingDocument> {
     private static final Logger LOG = Logger.getLogger(CashManagementDocumentRule.class);
 
     /**
@@ -254,5 +255,77 @@ public class CashManagementDocumentRule extends GeneralLedgerPostingDocumentRule
         }
 
         return GlobalVariables.getErrorMap().isEmpty();
+    }
+
+    /**
+     * Generates bank offset GLPEs for deposits, if enabled.
+     * 
+     * @param financialDocument submitted accounting document
+     * @param sequenceHelper helper class to keep track of sequence of general ledger pending entries
+     * @return true if bank offset GLPE's for deposits are generated successfully
+     * 
+     * @see org.kuali.kfs.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.kfs.document.GeneralLedgerPostingDocument, org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
+     */
+    public boolean processGenerateDocumentGeneralLedgerPendingEntries(AccountingDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
+        boolean success = true;
+        final CashManagementDocument cashManagementDocument = ((CashManagementDocument) financialDocument);
+        if (cashManagementDocument.isBankCashOffsetEnabled()) {
+            Integer universityFiscalYear = getUniversityFiscalYear();
+            int interimDepositNumber = 1;
+            for (Iterator iterator = cashManagementDocument.getDeposits().iterator(); iterator.hasNext();) {
+                // todo: getDeposits() should return List<Deposit> not List
+                Deposit deposit = (Deposit) iterator.next();
+                deposit.refreshReferenceObject(KFSPropertyConstants.BANK_ACCOUNT);
+
+                GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
+                if (!AccountingDocumentRuleUtil.populateBankOffsetGeneralLedgerPendingEntry(deposit.getBankAccount(), deposit.getDepositAmount(), cashManagementDocument, universityFiscalYear, sequenceHelper, bankOffsetEntry, KFSConstants.CASH_MANAGEMENT_DEPOSIT_ERRORS)) {
+                    success = false;
+                    continue; // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at
+                    // all.
+                }
+                bankOffsetEntry.setTransactionLedgerEntryDescription(createDescription(deposit, interimDepositNumber++));
+                cashManagementDocument.getGeneralLedgerPendingEntries().add(bankOffsetEntry);
+                sequenceHelper.increment();
+
+                GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
+                success &= populateOffsetGeneralLedgerPendingEntry(universityFiscalYear, bankOffsetEntry, sequenceHelper, offsetEntry);
+                cashManagementDocument.getGeneralLedgerPendingEntries().add(offsetEntry);
+                sequenceHelper.increment();
+            }
+        }
+        return success;
+    }
+
+    /**
+     * Create description for deposit
+     * 
+     * @param deposit deposit from cash management document
+     * @param interimDepositNumber
+     * @return the description for the given deposit's GLPE bank offset
+     */
+    private static String createDescription(Deposit deposit, int interimDepositNumber) {
+        String descriptionKey;
+        if (KFSConstants.DepositConstants.DEPOSIT_TYPE_FINAL.equals(deposit.getDepositTypeCode())) {
+            descriptionKey = KFSKeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_FINAL;
+        }
+        else {
+            assertThat(KFSConstants.DepositConstants.DEPOSIT_TYPE_INTERIM.equals(deposit.getDepositTypeCode()), deposit.getDepositTypeCode());
+            descriptionKey = KFSKeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_INTERIM;
+        }
+        return AccountingDocumentRuleUtil.formatProperty(descriptionKey, interimDepositNumber);
+    }
+
+    /**
+     * Gets the fiscal year for the GLPEs generated by this document. This works the same way as in TransactionalDocumentBase. The
+     * property is down in TransactionalDocument because no FinancialDocument (currently only CashManagementDocument) allows the
+     * user to override it. So, that logic is duplicated here. A comment in TransactionalDocumentBase says that this implementation
+     * is a hack right now because it's intended to be set by the
+     * <code>{@link org.kuali.module.chart.service.AccountingPeriodService}</code>, which suggests to me that pulling that
+     * property up to FinancialDocument is preferable to duplicating this logic here.
+     * 
+     * @return the fiscal year for the GLPEs generated by this document
+     */
+    private Integer getUniversityFiscalYear() {
+        return SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
     }
 }
