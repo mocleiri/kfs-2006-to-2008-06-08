@@ -708,72 +708,31 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="AR_CREDIT_MEMO_DOC_T">
+    <table name="AR_CRDT_MEMO_DOC_T">
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <unique name="AR_CREDIT_MEMO_DOC_TC0">
+        <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
+        <column name="FDOC_REF_INV_NBR" size="14" type="VARCHAR"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="AR_CRDT_MEMO_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <unique name="AR_CRDT_MEMO_DOC_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="AR_CREDIT_MEMO_T">
+    <table name="AR_CRDT_MEMO_DTL_T">
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
-        <column name="FDOC_LINE_NBR" primaryKey="true" size="7" type="DECIMAL"/>
+        <column name="REF_INV_ITM_NBR" primaryKey="true" size="7" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
-        <column name="ACCOUNT_NBR" size="7" type="VARCHAR"/>
-        <column name="SUB_ACCT_NBR" size="5" type="VARCHAR"/>
-        <column name="FIN_OBJECT_CD" size="4" type="VARCHAR"/>
-        <column name="FIN_SUB_OBJ_CD" size="3" type="VARCHAR"/>
-        <column name="PROJECT_CD" size="10" type="VARCHAR"/>
-        <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
-        <column name="UNIV_FISCAL_PRD_CD" size="2" type="VARCHAR"/>
-        <column name="FDOC_REF_INV_NBR" size="14" type="VARCHAR"/>
-        <column name="FDOC_SHORT_DESC" size="40" type="VARCHAR"/>
-        <column name="FDOC_LINE_AMT" scale="2" size="19" type="DECIMAL"/>
-        <column name="FDOC_OVERRIDE_CD" size="1" type="VARCHAR"/>
-        <foreign-key foreignTable="AR_DOC_HDR_T" name="AR_CREDIT_MEMO_TR2">
+        <column name="CRDT_MEMO_ITM_QTY" size="22" type="DECIMAL"/>
+        <column name="CRDT_MEMO_ITM_TAX_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="CRDT_MEMO_ITM_TOT_AMT" scale="2" size="19" type="DECIMAL"/>
+        <foreign-key foreignTable="AR_CRDT_MEMO_DOC_T" name="AR_CRDT_MEMO_DTL_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
-        <foreign-key foreignTable="SH_ACCT_PERIOD_T" name="AR_CREDIT_MEMO_TR7">
-            <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
-            <reference foreign="UNIV_FISCAL_PRD_CD" local="UNIV_FISCAL_PRD_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_PROJECT_T" name="AR_CREDIT_MEMO_TR10">
-            <reference foreign="PROJECT_CD" local="PROJECT_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_SUB_OBJECT_CD_T" name="AR_CREDIT_MEMO_TR9">
-            <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
-            <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
-            <reference foreign="FIN_SUB_OBJ_CD" local="FIN_SUB_OBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_CREDIT_MEMO_TR5">
-            <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="FIN_OBJECT_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="FP_DOC_HEADER_T" name="AR_CREDIT_MEMO_TR1">
-            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="AR_NON_APLD_HLDG_T" name="AR_CREDIT_MEMO_TR3">
-            <reference foreign="FDOC_REF_NBR" local="FDOC_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_SUB_ACCT_T" name="AR_CREDIT_MEMO_TR8">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
-            <reference foreign="SUB_ACCT_NBR" local="SUB_ACCT_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="AR_CREDIT_MEMO_TR6">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_CREDIT_MEMO_TR4">
-            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
-        </foreign-key>
-        <unique name="AR_CREDIT_MEMO_TC0">
+        <unique name="AR_CRDT_MEMO_DTL_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
@@ -1055,6 +1014,7 @@
         <column name="FDOC_OVERRIDE_CD" size="1" type="VARCHAR"/>
         <column name="AR_INV_ITM_TAX_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="AR_INV_ITM_TXBL_IND" size="1" type="VARCHAR"/>
+        <column name="AR_INV_ITM_DSCT_LN_NBR" size="7" type="DECIMAL"/>
         <foreign-key foreignTable="CA_PROJECT_T" name="AR_INV_DTL_TR9">
             <reference foreign="PROJECT_CD" local="PROJECT_CD"/>
         </foreign-key>
@@ -7889,7 +7849,6 @@
         <column name="DV_RMT_ST_CD" size="2" type="VARCHAR"/>
         <column name="DV_RMT_ZIP_CD" size="11" type="VARCHAR"/>
         <column name="DV_PAYEE_EMP_IND" size="1" type="CHAR"/>
-        <column name="DV_PAYEE_RVFND_IND" size="1" type="CHAR"/>
         <column name="DV_PAYEE_CNTRY_CD" size="2" type="VARCHAR"/>
         <column name="DV_RMT_CNTRY_CD" size="2" type="VARCHAR"/>
         <column name="DV_PAYEE_TYP_CD" size="1" type="VARCHAR"/>
@@ -8698,7 +8657,7 @@
         <column name="ACTN_RQST_RECP_ID" primaryKey="true" size="70" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="FDOC_NBR" required="true" size="14" type="VARCHAR"/>
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <unique name="FS_ADHOC_RTE_ACTN_RECP_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>

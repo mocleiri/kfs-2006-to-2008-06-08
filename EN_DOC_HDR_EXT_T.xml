@@ -31,35 +31,6 @@
         DOC_HDR_EXT_VAL_KEY="documentHeaderOrganizationDocumentNumber" DOC_HDR_ID="316826"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151577" DOC_HDR_EXT_VAL="CLOSED"
         DOC_HDR_EXT_VAL_KEY="requisitionDocumentStatusDescription" DOC_HDR_ID="316826"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151638"
-        DOC_HDR_EXT_VAL_KEY="disbVchrPayeePersonName" DOC_HDR_ID="317221"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151639"
-        DOC_HDR_EXT_VAL_KEY="disbVchrPaymentReasonCode" DOC_HDR_ID="317221"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151657"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentVendorName" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151658" DOC_HDR_EXT_VAL="IN"
-        DOC_HDR_EXT_VAL_KEY="purapDocumentChartOfAccountsCode" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151659" DOC_HDR_EXT_VAL="SOC"
-        DOC_HDR_EXT_VAL_KEY="purapDocumentOrganizationCode" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151660" DOC_HDR_EXT_VAL="IN-SOC"
-        DOC_HDR_EXT_VAL_KEY="purapDocumentOrgDisplayValue" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151661"
-        DOC_HDR_EXT_VAL="APPLETON,NEAL K"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentRequestorName" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151662" DOC_HDR_EXT_VAL="IN"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentDeliveryCampus" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151663"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentDeliverToName" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151664"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentOrganizationReference1Text" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151665"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentOrganizationReference2Text" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151666"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentOrganizationReference3Text" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151667"
-        DOC_HDR_EXT_VAL_KEY="documentHeaderDescription" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151668"
-        DOC_HDR_EXT_VAL_KEY="documentHeaderOrganizationDocumentNumber" DOC_HDR_ID="317381"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151578" DOC_HDR_EXT_VAL="CLOS"
         DOC_HDR_EXT_VAL_KEY="requisitionDocumentStatusCode" DOC_HDR_ID="316826"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151580"
@@ -96,11 +67,4 @@
         DOC_HDR_EXT_VAL_KEY="purchaseOrderDocumentIncompleteStatuses" DOC_HDR_ID="316828"/>
     <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151600" DOC_HDR_EXT_VAL="Yes"
         DOC_HDR_EXT_VAL_KEY="purchaseOrderDocumentCurrentIndicator" DOC_HDR_ID="316828"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151637"
-        DOC_HDR_EXT_VAL_KEY="disbVchrPayeeIdNumber" DOC_HDR_ID="317221"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151670"
-        DOC_HDR_EXT_VAL="IN PROCESS"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentStatusDescription" DOC_HDR_ID="317381"/>
-    <EN_DOC_HDR_EXT_T DOC_HDR_EXT_ID="151671" DOC_HDR_EXT_VAL="INPR"
-        DOC_HDR_EXT_VAL_KEY="requisitionDocumentStatusCode" DOC_HDR_ID="317381"/>
 </dataset>

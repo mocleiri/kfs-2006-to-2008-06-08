@@ -7,9 +7,6 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
         RULE_TMPL_DESC="KualiResearchOrgReviewDelegationTemplate"
         RULE_TMPL_ID="9426" RULE_TMPL_NM="KualiResearchOrgReviewDelegationTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="Rule Template for KRA Post-Award Maintenance Docs"
-        RULE_TMPL_ID="9554" RULE_TMPL_NM="KraPostAwardMaintenanceDocTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="3"
         RULE_TMPL_DESC="Kuali Requisition Content Template"
         RULE_TMPL_ID="9575" RULE_TMPL_NM="KualiRequisitionContentTemplate"/>
@@ -73,60 +70,6 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1" RULE_TMPL_DESC="RuleTemplate"
         RULE_TMPL_ID="1031" RULE_TMPL_NM="RuleTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiAccountFundTemplate"
-        RULE_TMPL_ID="1134" RULE_TMPL_NM="TestKualiAccountFundTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiObjectCodeTemplate" RULE_TMPL_ID="1137" RULE_TMPL_NM="TestKualiObjectCodeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestSubAccountTemplate" RULE_TMPL_ID="1140" RULE_TMPL_NM="TestSubAccountTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestProjectCodeTemplate" RULE_TMPL_ID="1142" RULE_TMPL_NM="TestProjectCodeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="3"
-        RULE_TMPL_DESC="KualiCashReceiptDefaultWorkgroupRuleTemplate"
-        RULE_TMPL_ID="1154" RULE_TMPL_NM="KualiCashReceiptDefaultWorkgroupRuleTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestKualiSubAccountTemplate" RULE_TMPL_ID="1195" RULE_TMPL_NM="TestKualiSubAccountTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestKualiProjectCodeTemplate"
-        RULE_TMPL_ID="1197" RULE_TMPL_NM="TestKualiProjectCodeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestKualiAmountSourceTemplate"
-        RULE_TMPL_ID="1199" RULE_TMPL_NM="TestKualiAmountSourceTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestKualiAmountTargetTemplate"
-        RULE_TMPL_ID="1201" RULE_TMPL_NM="TestKualiAmountTargetTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestKualiContentRoutingTemplate"
-        RULE_TMPL_ID="1203" RULE_TMPL_NM="TestKualiContentRoutingTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestKualiHigherEdTemplate" RULE_TMPL_ID="1205" RULE_TMPL_NM="TestKualiHigherEdTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="TestKualiOverrideCodeTemplate"
-        RULE_TMPL_ID="1207" RULE_TMPL_NM="TestKualiOverrideCodeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiPaymentMethodTemplate"
-        RULE_TMPL_ID="1247" RULE_TMPL_NM="TestKualiPaymentMethodTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiPaymentReasonTemplate"
-        RULE_TMPL_ID="1249" RULE_TMPL_NM="TestKualiPaymentReasonTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiPaymentReasonCampusCodeTemplate"
-        RULE_TMPL_ID="1251" RULE_TMPL_NM="TestKualiPaymentReasonCampusCodeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiEmployeeIndicatorTemplate"
-        RULE_TMPL_ID="1254" RULE_TMPL_NM="TestKualiEmployeeIndicatorTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiTaxControlCodeTemplate"
-        RULE_TMPL_ID="1256" RULE_TMPL_NM="TestKualiTaxControlCodeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiAlienIndicatorTemplate"
-        RULE_TMPL_ID="1258" RULE_TMPL_NM="TestKualiAlienIndicatorTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiAlienIndicatorPaymentReasonTemplate"
-        RULE_TMPL_ID="1260" RULE_TMPL_NM="TestKualiAlienIndicatorPaymentReasonTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
-        RULE_TMPL_DESC="TestKualiCampusCodeTemplate" RULE_TMPL_ID="1263" RULE_TMPL_NM="TestKualiCampusCodeTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
         RULE_TMPL_DESC="SystemParameterRoutingTemplate"
         RULE_TMPL_ID="11456" RULE_TMPL_NM="SystemParameterRoutingTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
@@ -173,8 +116,6 @@
         RULE_TMPL_ID="8331" RULE_TMPL_NM="KualiAccountDelegationTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
         RULE_TMPL_DESC="KualiPayeeTaxIdTemplate" RULE_TMPL_ID="8432" RULE_TMPL_NM="KualiPayeeTaxIdTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="KualiBudgetDocumentTemplate" RULE_TMPL_ID="8452" RULE_TMPL_NM="KualiBudgetDocumentTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
         RULE_TMPL_DESC="KualiInitiatorCampusRuleTemplate"
         RULE_TMPL_ID="8611" RULE_TMPL_NM="KualiInitiatorCampusRuleTemplate"/>
@@ -184,18 +125,6 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
         RULE_TMPL_DESC="Kuali Simple Maintenance Document Rule Template"
         RULE_TMPL_ID="8911" RULE_TMPL_NM="KualiSimpleMaintenanceDocumentTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="Kuali Reporting Subfund Template"
-        RULE_TMPL_ID="8971" RULE_TMPL_NM="KualiReportingSubFundTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="Kuali Reporting Account Template"
-        RULE_TMPL_ID="8974" RULE_TMPL_NM="KualiReportingAccountTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="Kuali Reporting Chart Template"
-        RULE_TMPL_ID="8977" RULE_TMPL_NM="KualiReportingChartTemplate"/>
-    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="1"
-        RULE_TMPL_DESC="Kuali Reporting Org Template"
-        RULE_TMPL_ID="8980" RULE_TMPL_NM="KualiReportingOrgTemplate"/>
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="4"
         RULE_TMPL_DESC="Used for creating Rules based on the Vendor Maintenance Document with respect to the Vendor Type"
         RULE_TMPL_ID="9375" RULE_TMPL_NM="KualiVendorDocumentTypeTemplate"/>

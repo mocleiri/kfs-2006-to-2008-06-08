@@ -1,57 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE dataset SYSTEM "data.dtd">
 <dataset>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2000"
-        RTE_NODE_CFG_PARM_KEY="contentFragment"
-        RTE_NODE_CFG_PARM_ND="563357889" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>P&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2001"
-        RTE_NODE_CFG_PARM_KEY="activationType"
-        RTE_NODE_CFG_PARM_ND="563357889" RTE_NODE_CFG_PARM_VAL="P"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2002"
-        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
-        RTE_NODE_CFG_PARM_ND="563357889" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2003"
-        RTE_NODE_CFG_PARM_KEY="finalApproval"
-        RTE_NODE_CFG_PARM_ND="563357889" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2004"
-        RTE_NODE_CFG_PARM_KEY="ruleSelector"
-        RTE_NODE_CFG_PARM_ND="563357889" RTE_NODE_CFG_PARM_VAL="Template"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2005"
-        RTE_NODE_CFG_PARM_KEY="contentFragment"
-        RTE_NODE_CFG_PARM_ND="563357890" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Workgroup Approval&quot;>&lt;activationType>P&lt;/activationType>&lt;ruleTemplate>RemoveReplaceWorkgroupTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2006"
-        RTE_NODE_CFG_PARM_KEY="activationType"
-        RTE_NODE_CFG_PARM_ND="563357890" RTE_NODE_CFG_PARM_VAL="P"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2007"
-        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
-        RTE_NODE_CFG_PARM_ND="563357890" RTE_NODE_CFG_PARM_VAL="RemoveReplaceWorkgroupTemplate"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2008"
-        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
-        RTE_NODE_CFG_PARM_ND="563357890" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2009"
-        RTE_NODE_CFG_PARM_KEY="finalApproval"
-        RTE_NODE_CFG_PARM_ND="563357890" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2010"
-        RTE_NODE_CFG_PARM_KEY="ruleSelector"
-        RTE_NODE_CFG_PARM_ND="563357890" RTE_NODE_CFG_PARM_VAL="Template"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2011"
-        RTE_NODE_CFG_PARM_KEY="contentFragment"
-        RTE_NODE_CFG_PARM_ND="563357891" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Rule Approval&quot;>&lt;activationType>P&lt;/activationType>&lt;ruleTemplate>RemoveReplaceRuleTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2012"
-        RTE_NODE_CFG_PARM_KEY="activationType"
-        RTE_NODE_CFG_PARM_ND="563357891" RTE_NODE_CFG_PARM_VAL="P"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2013"
-        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
-        RTE_NODE_CFG_PARM_ND="563357891" RTE_NODE_CFG_PARM_VAL="RemoveReplaceRuleTemplate"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2014"
-        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
-        RTE_NODE_CFG_PARM_ND="563357891" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2015"
-        RTE_NODE_CFG_PARM_KEY="finalApproval"
-        RTE_NODE_CFG_PARM_ND="563357891" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2016"
-        RTE_NODE_CFG_PARM_KEY="ruleSelector"
-        RTE_NODE_CFG_PARM_ND="563357891" RTE_NODE_CFG_PARM_VAL="Template"/>
     <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2020"
         RTE_NODE_CFG_PARM_KEY="contentFragment"
         RTE_NODE_CFG_PARM_ND="563357909" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
@@ -802,21 +751,6 @@
     <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2280"
         RTE_NODE_CFG_PARM_KEY="ruleSelector"
         RTE_NODE_CFG_PARM_ND="563358246" RTE_NODE_CFG_PARM_VAL="Template"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2300"
-        RTE_NODE_CFG_PARM_KEY="contentFragment"
-        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2301"
-        RTE_NODE_CFG_PARM_KEY="activationType"
-        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="S"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2302"
-        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
-        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2303"
-        RTE_NODE_CFG_PARM_KEY="finalApproval"
-        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="false"/>
-    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2304"
-        RTE_NODE_CFG_PARM_KEY="ruleSelector"
-        RTE_NODE_CFG_PARM_ND="563358249" RTE_NODE_CFG_PARM_VAL="Template"/>
     <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2320"
         RTE_NODE_CFG_PARM_KEY="contentFragment"
         RTE_NODE_CFG_PARM_ND="563358289" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
