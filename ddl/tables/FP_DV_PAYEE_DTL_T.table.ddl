@@ -33,7 +33,6 @@ CREATE TABLE FP_DV_PAYEE_DTL_T(
         DV_RMT_ST_CD                   VARCHAR2(2),
         DV_RMT_ZIP_CD                  VARCHAR2(11),
         DV_PAYEE_EMP_IND               CHAR(1),
-        DV_PAYEE_RVFND_IND             CHAR(1),
         DV_PAYEE_CNTRY_CD              VARCHAR2(2),
         DV_RMT_CNTRY_CD                VARCHAR2(2),
         DV_PAYEE_TYP_CD                VARCHAR2(1),
