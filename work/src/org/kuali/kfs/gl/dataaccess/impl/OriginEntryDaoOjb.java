@@ -28,17 +28,14 @@ import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.util.KFSUtils;
 import org.kuali.module.gl.bo.OriginEntry;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntryable;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
 
-/**
- * An OJB implementation of the OriginEntryDao
- */
 public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements OriginEntryDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryDaoOjb.class);
 
@@ -60,52 +57,33 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     private static final String TRANSACTION_LEDGER_ENTRY_DESCRIPTION = "transactionLedgerEntryDescription";
     private static final String TRANSACTION_LEDGER_ENTRY_AMOUNT = "transactionLedgerEntryAmount";
     private static final String TRANSACTION_DEBIT_CREDIT_CODE = "transactionDebitCreditCode";
-
+    
     private Class entryClass;
 
-    /**
-     * Sets the class of the origin entries this class deals with.  This makes this particular
-     * class very flexible; instances of it can deal with OriginEntryLites as well as they deal
-     * with OriginEntryFulls.
-     * 
-     * @param entryClass the class of OriginEntries this instance will use for OJB operations
-     */
     public void setEntryClass(Class entryClass) {
         this.entryClass = entryClass;
     }
 
     /**
-     * Gets the entryClass attribute.
-     * 
+     * Gets the entryClass attribute. 
      * @return Returns the entryClass.
      */
     public Class getEntryClass() {
         return entryClass;
     }
 
-    /**
-     * Constructs a OriginEntryDaoOjb instance
-     */
     public OriginEntryDaoOjb() {
         super();
     }
 
-    /**
-     * Get the total amount of transactions in a group
-     * @param the id of the origin entry group to total
-     * @param isCredit whether the total should be of credits or not
-     * @return the sum of all queried origin entries
-     * @see org.kuali.module.gl.dao.OriginEntryDao#getGroupTotal(java.lang.Integer, boolean)
-     */
     public KualiDecimal getGroupTotal(Integer groupId, boolean isCredit) {
         LOG.debug("getGroupTotal() started");
 
         Criteria crit = new Criteria();
         crit.addEqualTo(OriginEntryDaoOjb.ENTRY_GROUP_ID, groupId);
-        if (isCredit) {
+        if ( isCredit ) {
             crit.addEqualTo(OriginEntryDaoOjb.TRANSACTION_DEBIT_CREDIT_CODE, KFSConstants.GL_CREDIT_CODE);
-        }
-        else {
+        } else {
             crit.addNotEqualTo(OriginEntryDaoOjb.TRANSACTION_DEBIT_CREDIT_CODE, KFSConstants.GL_CREDIT_CODE);
         }
 
@@ -113,21 +91,14 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         q.setAttributes(new String[] { "SUM(" + OriginEntryDaoOjb.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" });
 
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
-        if (i.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(i);
-            return (KualiDecimal) data[0];
-        }
-        else {
+        if ( i.hasNext() ) {
+            Object[] data = (Object[]) KFSUtils.retrieveFirstAndExhaustIterator(i);
+            return (KualiDecimal)data[0];
+        } else {
             return null;
         }
     }
 
-    /**
-     * Counts the number of entries in a group
-     * @param the id of an origin entry group
-     * @return the count of the entries in that group
-     * @see org.kuali.module.gl.dao.OriginEntryDao#getGroupCount(java.lang.Integer)
-     */
     public Integer getGroupCount(Integer groupId) {
         LOG.debug("getGroupCount() started");
 
@@ -138,25 +109,21 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         q.setAttributes(new String[] { "count(*)" });
 
         Iterator i = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
-        if (i.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(i);
+        if ( i.hasNext() ) {
+            Object[] data = (Object[]) KFSUtils.retrieveFirstAndExhaustIterator(i);
 
             if (data[0] instanceof BigDecimal) {
-                return ((BigDecimal) data[0]).intValue();
+                return ((BigDecimal)data[0]).intValue();
+            } else {
+                return ((Long)data[0]).intValue();
             }
-            else {
-                return ((Long) data[0]).intValue();
-            }
-        }
-        else {
+        } else {
             return null;
         }
     }
 
     /**
-     * Counts of rows of all the origin entry groups
      * 
-     * @return iterator of Object[] {[BigDecimal id,BigDecimal count]}
      * @see org.kuali.module.gl.dao.OriginEntryDao#getGroupCounts()
      */
     public Iterator getGroupCounts() {
@@ -172,21 +139,17 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * Delete an entry from the database
-     * @param oe the entry to delete
-     * @see org.kuali.module.gl.dao.OriginEntryDao#deleteEntry(org.kuali.module.gl.bo.OriginEntry)
+     * 
+     * @see org.kuali.module.gl.dao.OriginEntryDao#deleteEntry(org.kuali.module.gl.bo.OriginEntryable)
      */
-    public void deleteEntry(OriginEntry oe) {
+    public void deleteEntry(OriginEntryable oe) {
         LOG.debug("deleteEntry() started");
 
         getPersistenceBrokerTemplate().delete(oe);
     }
 
     /**
-     * Return an iterator of keys of all documents referenced by origin entries in a given group
      * 
-     * @param oeg Group the origin entry group to find entries in, by origin entry
-     * @return Iterator of java.lang.Object[] with report data about all of the distinct document numbers/type code/origination code combinations of origin entries in the group
      * @see org.kuali.module.gl.dao.OriginEntryDao#getDocumentsByGroup(org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public Iterator getDocumentsByGroup(OriginEntryGroup oeg) {
@@ -196,7 +159,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         criteria.addEqualTo(ENTRY_GROUP_ID, oeg.getId());
 
         ReportQueryByCriteria q = QueryFactory.newReportQuery(entryClass, criteria);
-        q.setAttributes(new String[] { KFSPropertyConstants.DOCUMENT_NUMBER, "financialDocumentTypeCode", "financialSystemOriginationCode" });
+        q.setAttributes(new String[] { KFSPropertyConstants.DOCUMENT_NUMBER,"financialDocumentTypeCode","financialSystemOriginationCode" });
 
         q.setDistinct(true);
 
@@ -204,13 +167,10 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * Iterator of entries that match criteria
      * 
-     * @param searchCriteria Map of field, value pairs
-     * @return collection of entries
      * @see org.kuali.module.gl.dao.OriginEntryDao#getMatchingEntries(java.util.Map)
      */
-    public Iterator<OriginEntryFull> getMatchingEntries(Map searchCriteria) {
+    public Iterator<OriginEntry> getMatchingEntries(Map searchCriteria) {
         LOG.debug("getMatchingEntries() started");
 
         Criteria criteria = new Criteria();
@@ -224,20 +184,13 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
 
-    /**
-     * Get bad balance entries
-     * 
-     * @param groups a Collection of groups to remove bad entries in
-     * @return an Iterator of no good, won't use, bad balance entries
-     * @see org.kuali.module.gl.dao.OriginEntryDao#getBadBalanceEntries(java.util.Collection)
-     */
-    public Iterator<OriginEntryFull> getBadBalanceEntries(Collection groups) {
+    public Iterator<OriginEntry> getBadBalanceEntries(Collection groups) {
         LOG.debug("getBadBalanceEntries() started");
 
-        if (groups.size() <= 0) {
+        if(groups.size()<=0) {
             return null;
         }
-
+        
         Collection ids = new ArrayList();
         for (Iterator iter = groups.iterator(); iter.hasNext();) {
             OriginEntryGroup element = (OriginEntryGroup) iter.next();
@@ -276,19 +229,15 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
      * This method is special because of the order by. It is used in the scrubber. The getMatchingEntries wouldn't work because of
      * the required order by.
      * 
-     * @param OriginEntryGroup the originEntryGroup that holds the origin entries to find
-     * @param sort the sort order to sort entries by, defined in OriginEntryDao
-     * 
-     * @return an Iterator of whichever flavor of OriginEntries this instance uses
      */
     public <T> Iterator<T> getEntriesByGroup(OriginEntryGroup oeg, int sort) {
         LOG.debug("getEntriesByGroup() started");
 
         // clear cache because the GLCP document class saves to the origin entry table and
-        // reads from it (via this method) in the same transaction. If the clearCache line is
+        // reads from it (via this method) in the same transaction.  If the clearCache line is
         // deleted, then the references to OriginEntries returned by this method will be null.
         getPersistenceBrokerTemplate().clearCache();
-
+        
         Criteria criteria = new Criteria();
         criteria.addEqualTo(ENTRY_GROUP_ID, oeg.getId());
 
@@ -319,17 +268,15 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
             qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_DESCRIPTION);
             qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_AMOUNT);
             qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);
-        }
-        else if (sort == OriginEntryDao.SORT_REPORT) {
+        } else if (sort == OriginEntryDao.SORT_REPORT ) {
             qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
             qbc.addOrderByAscending(FINANCIAL_SYSTEM_ORIGINATION_CODE);
             qbc.addOrderByAscending(KFSPropertyConstants.DOCUMENT_NUMBER);
-            qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);
+            qbc.addOrderByAscending(TRANSACTION_DEBIT_CREDIT_CODE);            
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
             qbc.addOrderByAscending(ACCOUNT_NUMBER);
             qbc.addOrderByAscending(FINANCIAL_OBJECT_CODE);
-        }
-        else if (sort == OriginEntryDao.SORT_LISTING_REPORT) {
+        } else if(sort == OriginEntryDao.SORT_LISTING_REPORT ) {
             qbc.addOrderByAscending(UNIVERSITY_FISCAL_YEAR);
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
             qbc.addOrderByAscending(ACCOUNT_NUMBER);
@@ -340,7 +287,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
             qbc.addOrderByAscending(FINANCIAL_DOCUMENT_TYPE_CODE);
             qbc.addOrderByAscending(FINANCIAL_SYSTEM_ORIGINATION_CODE);
             qbc.addOrderByAscending(KFSPropertyConstants.DOCUMENT_NUMBER);
-            qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_DESCRIPTION);
+            qbc.addOrderByAscending(TRANSACTION_LEDGER_ENTRY_DESCRIPTION);            
         }
         else {
             qbc.addOrderByAscending(CHART_OF_ACCOUNTS_CODE);
@@ -362,9 +309,9 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
      * This method should only be used in unit tests. It loads all the gl_origin_entry_t rows in memory into a collection. This
      * won't work for production because there would be too many rows to load into memory.
      * 
-     * @return a collection of OriginEntryFulls
+     * @return
      */
-    public Collection<OriginEntryFull> testingGetAllEntries() {
+    public Collection<OriginEntry> testingGetAllEntries() {
         LOG.debug("testingGetAllEntries() started");
 
         Criteria criteria = new Criteria();
@@ -375,11 +322,9 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * Saves an origin entry to the database
-     * 
      * @param entry the entry to save.
      */
-    public void saveOriginEntry(OriginEntry entry) {
+    public void saveOriginEntry(OriginEntryable entry) {
         LOG.debug("saveOriginEntry() started");
 
         if ((entry != null) && (entry.getTransactionLedgerEntryDescription() != null) && (entry.getTransactionLedgerEntryDescription().length() > 40)) {
@@ -391,7 +336,7 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     /**
      * Delete entries matching searchCriteria search criteria.
      * 
-     * @param searchCriteria a map of criteria to use as keys for building a query
+     * @param searchCriteria
      */
     public void deleteMatchingEntries(Map searchCriteria) {
         LOG.debug("deleteMatchingEntries() started");
@@ -412,16 +357,13 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * Delete all the groups in the list. This will delete the entries. The OriginEntryGroupDao has a method to delete the groups,
-     * and one has to use both to really delete the whole group
      * 
-     * @param groups a Collection of Origin Entry Groups to delete entries in
      * @see org.kuali.module.gl.dao.OriginEntryDao#deleteGroups(java.util.Collection)
      */
     public void deleteGroups(Collection<OriginEntryGroup> groups) {
         LOG.debug("deleteGroups() started");
-
-        if (groups == null || groups.size() <= 0) {
+        
+        if(groups == null || groups.size()<=0) {
             return;
         }
 
@@ -444,13 +386,10 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * Collection of entries that match criteria
      * 
-     * @param searchCriteria Map of field, value pairs
-     * @return collection of entries
      * @see org.kuali.module.gl.dao.OriginEntryDao#getMatchingEntriesByCollection(java.util.Map)
      */
-    public Collection<OriginEntryFull> getMatchingEntriesByCollection(Map searchCriteria) {
+    public Collection<OriginEntry> getMatchingEntriesByCollection(Map searchCriteria) {
         LOG.debug("getMatchingEntries() started");
 
         Criteria criteria = new Criteria();
@@ -465,16 +404,12 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * get the summarized information of the entries that belong to the entry groups with the given group ids
-     * 
-     * @param groupIdList the ids of origin entry groups
-     * @return a set of summarized information of the entries within the specified groups
      * @see org.kuali.module.gl.dao.OriginEntryDao#getSummaryByGroupId(java.util.List)
      */
     public Iterator getSummaryByGroupId(Collection groupIdList) {
         LOG.debug("getSummaryByGroupId() started");
-
-        if (groupIdList == null || groupIdList.size() <= 0) {
+        
+        if(groupIdList == null || groupIdList.size()<=0) {
             return null;
         }
 
@@ -504,19 +439,12 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
     }
 
-    /**
-     * Fetches an entry for the given entryId, or returns a newly created on
-     * 
-     * @param entryId an entry id to find an entry for
-     * @return the entry for the given entry id, or a newly created entry
-     * @see org.kuali.module.gl.dao.OriginEntryDao#getExactMatchingEntry(java.lang.Integer)
-     */
-    public OriginEntryFull getExactMatchingEntry(Integer entryId) {
+    public OriginEntry getExactMatchingEntry(Integer entryId) {
         LOG.debug("getMatchingEntries() started");
-        OriginEntryFull oe = new OriginEntryFull();
+        OriginEntry oe = new OriginEntry();
         // in case of no matching entry
         try {
-            oe = (OriginEntryFull) getPersistenceBrokerTemplate().getObjectById(entryClass, entryId);
+            oe = (OriginEntry) getPersistenceBrokerTemplate().getObjectById(entryClass, entryId);
 
         }
         catch (Exception e) {
@@ -526,16 +454,12 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
     }
 
     /**
-     * get the summarized information of poster input entries that belong to the entry groups with the given group id list
-     * 
-     * @param groups the origin entry groups
-     * @return a set of summarized information of poster input entries within the specified groups
      * @see org.kuali.module.gl.dao.OriginEntryDao#getPosterOutputSummaryByGroupId(java.util.Collection)
      */
     public Iterator getPosterOutputSummaryByGroupId(Collection groups) {
         LOG.debug("getPosterInputSummaryByGroupId() started");
 
-        if (groups == null || groups.size() <= 0) {
+        if(groups == null || groups.size()<=0) {
             return null;
         }
 
@@ -551,9 +475,24 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
 
         ReportQueryByCriteria query = QueryFactory.newReportQuery(entryClass, criteria);
 
-        String attributeList[] = { KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, fundGroupCode, KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")" };
+        String attributeList[] = {
+                KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE,
+                KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, 
+                KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, 
+                fundGroupCode, 
+                KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, 
+                KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, 
+                "sum(" + KFSPropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")"
+        };
 
-        String groupList[] = { KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, fundGroupCode, KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE };
+        String groupList[] = {
+                KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, 
+                KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, 
+                KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, 
+                fundGroupCode, 
+                KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, 
+                KFSPropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE
+        };
 
         query.setAttributes(attributeList);
         query.addGroupBy(groupList);
@@ -564,5 +503,13 @@ public class OriginEntryDaoOjb extends PlatformAwareDaoBaseOjb implements Origin
         }
 
         return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
+    }
+
+    /**
+     * @see org.kuali.module.gl.dao.OriginEntryDao#clearCache()
+     */
+    public void clearCache() {
+        LOG.info("PersistenceBroker "+getPersistenceBrokerTemplate().getPbKey().toString()+" is clearing cache");
+        getPersistenceBrokerTemplate().clearCache();
     }
 }

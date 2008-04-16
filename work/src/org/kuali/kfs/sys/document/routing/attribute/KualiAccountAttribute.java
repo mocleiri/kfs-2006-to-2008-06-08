@@ -18,7 +18,6 @@ package org.kuali.workflow.attribute;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -33,29 +32,25 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.bo.user.UuId;
 import org.kuali.core.lookup.LookupUtils;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Delegate;
-import org.kuali.module.chart.service.AccountService;
 import org.kuali.workflow.KualiWorkflowUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import edu.iu.uis.eden.WorkflowServiceErrorImpl;
 import edu.iu.uis.eden.engine.RouteContext;
 import edu.iu.uis.eden.exception.EdenUserNotFoundException;
+import edu.iu.uis.eden.lookupable.Field;
+import edu.iu.uis.eden.lookupable.Row;
 import edu.iu.uis.eden.plugin.attributes.RoleAttribute;
 import edu.iu.uis.eden.plugin.attributes.WorkflowAttribute;
 import edu.iu.uis.eden.routeheader.DocumentContent;
@@ -67,6 +62,8 @@ import edu.iu.uis.eden.util.Utilities;
 
 /**
  * KualiAccountAttribute which should be used when using Accounts to do routing
+ * 
+ * 
  */
 public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
 
@@ -99,12 +96,6 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
     private static final String ACCOUNT_ATTRIBUTE = "KUALI_ACCOUNT_ATTRIBUTE";
 
     private static final String ROLE_STRING_DELIMITER = "~!~!~";
-
-    // below map is used to signify that a document will route to delegates based on a different document type's code
-    private static final Map<String, String> DOCUMENT_TYPE_TRANSLATION = new HashMap<String, String>();
-    static {
-        DOCUMENT_TYPE_TRANSLATION.put(KualiWorkflowUtils.ACCOUNTS_PAYABLE_CREDIT_MEMO_DOCUMENT_TYPE, KualiWorkflowUtils.ACCOUNTS_PAYABLE_PAYMENT_REQUEST_DOCUMENT_TYPE);
-    }
 
     private String finCoaCd;
 
@@ -198,20 +189,21 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
             errors.add(new WorkflowServiceErrorImpl("Account is required.", "routetemplate.accountattribute.account.required"));
             return;
         }
-        Account account = SpringContext.getBean(AccountService.class).getByPrimaryIdWithCaching(finCoaCd, accountNbr);
+        Account account = SpringServiceLocator.getAccountService().getByPrimaryIdWithCaching(finCoaCd, accountNbr);
         if (account == null) {
             errors.add(new WorkflowServiceErrorImpl("Account is invalid.", "routetemplate.accountattribute.account.invalid"));
         }
     }
 
     /**
-     * method to validate the rule data, since this is a role attribute, there is no rule data
+     * method to validate the rule data, which matches the routing data in this attributes case therefore, we should just be able to
+     * call into the other implementation validateRoutingData
      * 
      * @param paramMap
      * @return
      */
     public List validateRuleData(Map paramMap) {
-        return new ArrayList();
+        return validateRoutingData(paramMap);
     }
 
     /**
@@ -223,8 +215,8 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
         if (Utilities.isEmpty(getFinCoaCd()) || Utilities.isEmpty(getAccountNbr())) {
             return "";
         }
-        return new StringBuffer(KFSConstants.WorkflowConstants.GET_GENERIC_ACCOUNT_REPORT_PREFIX).append("<routingChart>").append(getFinCoaCd()).append("</routingChart><routingAccount>").append(getAccountNbr()).append("</routingAccount><totalDollarAmount>").append(getTotalDollarAmount()).append("</totalDollarAmount>").append(KFSConstants.WorkflowConstants.GET_GENERIC_ACCOUNT_REPORT_SUFFIX).toString();
-   }
+        return new StringBuffer("<report><chart>").append(getFinCoaCd()).append("</chart><accountNumber>").append(getAccountNbr()).append("</accountNumber><totalDollarAmount>").append(getTotalDollarAmount()).append("</totalDollarAmount></report>").toString();
+    }
 
     public String getAttributeLabel() {
         return "";
@@ -250,15 +242,14 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
      */
     public List getRoutingDataRows() {
         List rows = new ArrayList();
-        rows.add(KualiWorkflowUtils.buildTextRowWithLookup(Chart.class, KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, FIN_COA_CD_KEY));
-        Map fieldConversionMap = new HashMap();
-        fieldConversionMap.put(KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, FIN_COA_CD_KEY);
-        rows.add(KualiWorkflowUtils.buildTextRowWithLookup(Account.class, KFSConstants.ACCOUNT_NUMBER_PROPERTY_NAME, ACCOUNT_NBR_KEY, fieldConversionMap));
-
-        // List fields = new ArrayList();
-        // fields.add(new Field("Total Dollar Amount", "", Field.TEXT, false, FDOC_TOTAL_DOLLAR_AMOUNT_KEY, "", null, null));
-        // rows.add(new Row(fields));
-        rows.add(KualiWorkflowUtils.buildTextRow(DocumentHeader.class, KFSPropertyConstants.FINANCIAL_DOCUMENT_TOTAL_AMOUNT, FDOC_TOTAL_DOLLAR_AMOUNT_KEY));
+        rows.add(KualiWorkflowUtils.buildTextRowWithLookup(Chart.class, Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, FIN_COA_CD_KEY));
+        rows.add(KualiWorkflowUtils.buildTextRowWithLookup(Account.class, Constants.ACCOUNT_NUMBER_PROPERTY_NAME, ACCOUNT_NBR_KEY));
+        
+        // TODO: hook TotalDollarAmount into the DD attribute for DocumentHeader.financialDocumentTotalAmount once
+        // the DD has this attribute defined, like Chart and Account above
+        List fields = new ArrayList();
+        fields.add(new Field("Total Dollar Amount", "", Field.TEXT, false, FDOC_TOTAL_DOLLAR_AMOUNT_KEY, "", null, null));
+        rows.add(new Row(fields));
 
         return rows;
     }
@@ -372,17 +363,17 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
             List qualifiedRoleNames = new ArrayList();
             XPath xpath = KualiWorkflowUtils.getXPath(docContent.getDocument());
             String docTypeName = docContent.getRouteContext().getDocument().getDocumentType().getName();
-            boolean isGeneric = ((Boolean) xpath.evaluate(new StringBuffer(KualiWorkflowUtils.XSTREAM_SAFE_PREFIX).append(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX).append("routingSet").append(KualiWorkflowUtils.XSTREAM_SAFE_SUFFIX).toString(), docContent.getDocument(), XPathConstants.BOOLEAN)).booleanValue();
-            
             if (FISCAL_OFFICER_ROLE_KEY.equals(roleName) || FISCAL_OFFICER_PRIMARY_DELEGATE_ROLE_KEY.equals(roleName) || FISCAL_OFFICER_SECONDARY_DELEGATE_ROLE_KEY.equals(roleName)) {
                 Set fiscalOfficers = new HashSet();
-                //Check for Generic Routing
-                if (isGeneric) {
-                    NodeList routingNodes = (NodeList) xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath(KFSConstants.WorkflowConstants.GET_GENERIC_ACCOUNTS), docContent.getDocument(), XPathConstants.NODESET);
-                    
+                if (((Boolean) xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath("//report"), docContent.getDocument(), XPathConstants.BOOLEAN)).booleanValue()) {
+                    String chart = xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath("//report/chart"), docContent.getDocument());
+                    String accountNumber = xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath("//report/accountNumber"), docContent.getDocument());
+                    String totalDollarAmount = xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath("//report/totalDollarAmount"), docContent.getDocument());
                     FiscalOfficerRole role = new FiscalOfficerRole(roleName);
-                    String totalDollarAmount = String.valueOf(calculateTotalDollarAmount(docContent.getDocument()));
-                    fiscalOfficers.addAll(getGenericFiscalOfficerCriteria(xpath, routingNodes, roleName, totalDollarAmount));
+                    role.chart = chart;
+                    role.accountNumber = accountNumber;
+                    role.totalDollarAmount = totalDollarAmount;
+                    fiscalOfficers.add(role);
                 }
                 else if (KualiWorkflowUtils.ACCOUNT_DOC_TYPE.equals(docTypeName)) {
                     // 1) If this is a new account, it routes to the fiscal
@@ -398,10 +389,10 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
                     // Route on all unique fiscal officers on the document.
                     // Dont route to the same person twice.
                     //
-                    String newFiscalOfficerId = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + KFSPropertyConstants.ACCOUNT_FISCAL_OFFICER_SYSTEM_IDENTIFIER, docContent.getDocument());
-                    String oldFiscalOfficerId = KualiWorkflowUtils.xstreamSafeEval(xpath, oldMaintPrefix + KFSPropertyConstants.ACCOUNT_FISCAL_OFFICER_SYSTEM_IDENTIFIER, docContent.getDocument());
-                    String foChartCode = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, docContent.getDocument());
-                    String foAccountNumber = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + KFSConstants.ACCOUNT_NUMBER_PROPERTY_NAME, docContent.getDocument());
+                    String newFiscalOfficerId = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + PropertyConstants.ACCOUNT_FISCAL_OFFICER_SYSTEM_IDENTIFIER, docContent.getDocument());
+                    String oldFiscalOfficerId = KualiWorkflowUtils.xstreamSafeEval(xpath, oldMaintPrefix + PropertyConstants.ACCOUNT_FISCAL_OFFICER_SYSTEM_IDENTIFIER, docContent.getDocument());
+                    String foChartCode = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, docContent.getDocument());
+                    String foAccountNumber = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + Constants.ACCOUNT_NUMBER_PROPERTY_NAME, docContent.getDocument());
                     if (StringUtils.isNotBlank(newFiscalOfficerId)) {
                         fiscalOfficers.add(new FiscalOfficerRole(roleName, newFiscalOfficerId, foChartCode, foAccountNumber));
                     }
@@ -415,31 +406,19 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
                     }
                 }
                 else if (KualiWorkflowUtils.SUB_ACCOUNT_DOC_TYPE.equals(docTypeName) || KualiWorkflowUtils.SUB_OBJECT_DOC_TYPE.equals(docTypeName) || KualiWorkflowUtils.ACCOUNT_DEL_DOC_TYPE.equals(docTypeName)) {
-                    String foChartCode = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, docContent.getDocument());
-                    String foAccountNumber = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + KFSConstants.ACCOUNT_NUMBER_PROPERTY_NAME, docContent.getDocument());
+                    String foChartCode = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, docContent.getDocument());
+                    String foAccountNumber = KualiWorkflowUtils.xstreamSafeEval(xpath, newMaintPrefix + Constants.ACCOUNT_NUMBER_PROPERTY_NAME, docContent.getDocument());
                     fiscalOfficers.add(new FiscalOfficerRole(roleName, foChartCode, foAccountNumber));
-                }
-                else if (KualiWorkflowUtils.SUB_OBJECT_CODE_CHANGE_DOC_TYPE.equals(docTypeName)) {
-                    // route to the fiscal officers of the accounts on the AccountGlobalDetails
-                    NodeList accountGlobalDetails = (NodeList) xpath.evaluate(KualiWorkflowUtils.ACCOUNT_GLOBAL_DETAILS_XPATH, docContent.getDocument(), XPathConstants.NODESET);
-                    if (accountGlobalDetails != null) {
-                        for (int index = 0; index < accountGlobalDetails.getLength(); index++) {
-                            Element accountGlobalDetail = (Element) accountGlobalDetails.item(index);
-                            String chartOfAccountsCode = getChildElementValue(accountGlobalDetail, KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME);
-                            String accountNumber = getChildElementValue(accountGlobalDetail, KFSConstants.ACCOUNT_NUMBER_PROPERTY_NAME);
-                            fiscalOfficers.add(new FiscalOfficerRole(roleName, chartOfAccountsCode, accountNumber));
-                        }
-                    }
                 }
                 else {
                     if (!KualiWorkflowUtils.isTargetLineOnly(docTypeName)) {
                         NodeList sourceLineNodes = (NodeList) xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + KualiWorkflowUtils.getSourceAccountingLineClassName(docTypeName)), docContent.getDocument(), XPathConstants.NODESET);
-                        String totalDollarAmount = String.valueOf(calculateTotalDollarAmount(docContent.getDocument()));
+                        String totalDollarAmount = String.valueOf(calculateTotalDollarAmount(xpath, sourceLineNodes));
                         fiscalOfficers.addAll(getFiscalOfficerCriteria(xpath, sourceLineNodes, roleName, totalDollarAmount));
                     }
                     if (!KualiWorkflowUtils.isSourceLineOnly(docTypeName)) {
                         NodeList targetLineNodes = (NodeList) xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.XSTREAM_MATCH_ANYWHERE_PREFIX + KualiWorkflowUtils.getTargetAccountingLineClassName(docTypeName)), docContent.getDocument(), XPathConstants.NODESET);
-                        String totalDollarAmount = String.valueOf(calculateTotalDollarAmount(docContent.getDocument()));
+                        String totalDollarAmount = String.valueOf(calculateTotalDollarAmount(xpath, targetLineNodes));
                         fiscalOfficers.addAll(getFiscalOfficerCriteria(xpath, targetLineNodes, roleName, totalDollarAmount));
                     }
                 }
@@ -449,28 +428,14 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
                 }
             }
             else if (ACCOUNT_SUPERVISOR_ROLE_KEY.equals(roleName)) {
-                Set<String> supervisors = new HashSet<String>();
-                if (isGeneric){
-                    
-                    NodeList routingNodes = (NodeList) xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath(KFSConstants.WorkflowConstants.GET_GENERIC_ACCOUNTS), docContent.getDocument(), XPathConstants.NODESET);
-                    for (int index = 0; index < routingNodes.getLength(); index++) {
-                        Element accountElement = (Element) routingNodes.item(index);
-                        String chartOfAccountsCode = getChildElementValue(accountElement, KFSConstants.WorkflowConstants.GET_GENERIC_CHART);
-                        String accountNumber = getChildElementValue(accountElement, KFSConstants.WorkflowConstants.GET_GENERIC_ACCOUNT);
-                        if (!StringUtils.isBlank(accountNumber) && !StringUtils.isBlank(chartOfAccountsCode)) {
-                            Account account = SpringContext.getBean(AccountService.class).getByPrimaryIdWithCaching(chartOfAccountsCode, accountNumber);
-                            if (account != null && !StringUtils.isBlank(account.getAccountsSupervisorySystemsIdentifier())) {
-                                supervisors.add(account.getAccountsSupervisorySystemsIdentifier());
-                            }
-                        }
+                // only route to account supervisor on
+                // KualiAccountMaintenanceDocument
+                if (docTypeName.equals(KualiWorkflowUtils.ACCOUNT_DOC_TYPE)) {
+                    String accountSupervisorId = xpath.evaluate(KualiWorkflowUtils.xstreamSafeXPath(newMaintPrefix + "accountsSupervisorySystemsIdentifier"), docContent.getDocument());
+                    if (!StringUtils.isEmpty(accountSupervisorId)) {
+                        qualifiedRoleNames.add(getQualifiedAccountSupervisorRoleString(roleName, accountSupervisorId));
                     }
-
-                }else {
-                    supervisors = getAccountSupervisorIds(docTypeName, xpath, docContent);
                 }
-                for (String accountSupervisorId : supervisors) {
-                    qualifiedRoleNames.add(getQualifiedAccountSupervisorRoleString(roleName, accountSupervisorId));
-                }  
             }
             return qualifiedRoleNames;
         }
@@ -479,53 +444,14 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
         }
     }
 
-    /**
-     * Retrieves a Set of account supervisor Ids that should be routed to for the given document content.
-     */
-    private Set<String> getAccountSupervisorIds(String docTypeName, XPath xpath, DocumentContent docContent) throws Exception {
-        Set<String> supervisors = new HashSet<String>();
-        List<String> accountXPaths = new ArrayList<String>();
-        String supervisorProperty = "accountsSupervisorySystemsIdentifier";
-        // Account Maintenance Document - route to Account Supervisor of account on new maintainable
-        if (docTypeName.equals(KualiWorkflowUtils.ACCOUNT_DOC_TYPE)) {
-            accountXPaths.add(KualiWorkflowUtils.xstreamSafeXPath(KualiWorkflowUtils.NEW_MAINTAINABLE_PREFIX_NTS));
-        }
-        // Sub Object Code Change Document - route to Account Supervisor of accounts on AccountGlobalDetails
-        else if (docTypeName.equals(KualiWorkflowUtils.SUB_OBJECT_CODE_CHANGE_DOC_TYPE)) {
-            accountXPaths.add(KualiWorkflowUtils.ACCOUNT_GLOBAL_DETAILS_XPATH);
-        }
-        for (String accountXPath : accountXPaths) {
-            NodeList accountNodes = (NodeList) xpath.evaluate(accountXPath, docContent.getDocument(), XPathConstants.NODESET);
-            for (int index = 0; index < accountNodes.getLength(); index++) {
-                Element accountElement = (Element) accountNodes.item(index);
-                String chartOfAccountsCode = getChildElementValue(accountElement, KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME);
-                String accountNumber = getChildElementValue(accountElement, KFSConstants.ACCOUNT_NUMBER_PROPERTY_NAME);
-                if (!StringUtils.isBlank(accountNumber) && !StringUtils.isBlank(chartOfAccountsCode)) {
-                    Account account = SpringContext.getBean(AccountService.class).getByPrimaryIdWithCaching(chartOfAccountsCode, accountNumber);
-                    if (account != null && !StringUtils.isBlank(account.getAccountsSupervisorySystemsIdentifier())) {
-                        supervisors.add(account.getAccountsSupervisorySystemsIdentifier());
-                    }
-                }
+    private static String calculateTotalDollarAmount(XPath xpath, NodeList targetAccountingLineNodes) throws XPathExpressionException {
+        KualiDecimal sum = new KualiDecimal(0);
+        String stringAddend = "";
+        for (int index = 0; index < targetAccountingLineNodes.getLength(); index++) {
+            stringAddend = xpath.evaluate(KualiWorkflowUtils.XSTREAM_MATCH_RELATIVE_PREFIX + "amount/value", targetAccountingLineNodes.item(index));
+            if (KualiDecimal.isNumeric(stringAddend)) {
+                sum = sum.add(new KualiDecimal(stringAddend));
             }
-        }
-        return supervisors;
-    }
-
-    private String getChildElementValue(Element element, String childTagName) {
-        NodeList nodes = element.getChildNodes();
-        for (int index = 0; index < nodes.getLength(); index++) {
-            Node node = nodes.item(index);
-            if (Node.ELEMENT_NODE == node.getNodeType() && node.getNodeName().equals(childTagName)) {
-                return node.getFirstChild().getNodeValue();
-            }
-        }
-        return null;
-    }
-
-    private static String calculateTotalDollarAmount(Document document) throws XPathExpressionException {
-        KualiDecimal sum = KualiWorkflowUtils.getFinancialDocumentTotalAmount(document);
-        if (ObjectUtils.isNull(sum)) {
-            sum = KualiDecimal.ZERO;
         }
         return sum.toString();
     }
@@ -535,23 +461,8 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
         for (int i = 0; i < accountingLineNodes.getLength(); i++) {
             Node accountingLineNode = accountingLineNodes.item(i);
             FiscalOfficerRole role = new FiscalOfficerRole(roleName);
-            role.chart = xpath.evaluate(KualiWorkflowUtils.XSTREAM_MATCH_RELATIVE_PREFIX + KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, accountingLineNode);
-            role.accountNumber = xpath.evaluate(KualiWorkflowUtils.XSTREAM_MATCH_RELATIVE_PREFIX + KFSConstants.ACCOUNT_NUMBER_PROPERTY_NAME, accountingLineNode);
-            role.totalDollarAmount = totalDollarAmount;
-            fiscalOfficers.add(role);
-        }
-        return fiscalOfficers;
-    }
-    
-    private static Set getGenericFiscalOfficerCriteria(XPath xpath, NodeList lineNodes, String roleName, String totalDollarAmount) throws XPathExpressionException {
-        Set fiscalOfficers = new HashSet();
-        
-        for (int i = 0; i < lineNodes.getLength(); i++) {
-            Node lineNode = lineNodes.item(i);
-            FiscalOfficerRole role = new FiscalOfficerRole(roleName);
-           
-            role.chart = xpath.evaluate(KFSConstants.WorkflowConstants.GET_GENERIC_ACCOUNT_CHART,  lineNode);
-            role.accountNumber = xpath.evaluate(KFSConstants.WorkflowConstants.GET_GENERIC_ACCOUNT_ACCOUNT,  lineNode);
+            role.chart = xpath.evaluate(KualiWorkflowUtils.XSTREAM_MATCH_RELATIVE_PREFIX + Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, accountingLineNode);
+            role.accountNumber = xpath.evaluate(KualiWorkflowUtils.XSTREAM_MATCH_RELATIVE_PREFIX + Constants.ACCOUNT_NUMBER_PROPERTY_NAME, accountingLineNode);
             role.totalDollarAmount = totalDollarAmount;
             fiscalOfficers.add(role);
         }
@@ -564,11 +475,7 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
     public ResolvedQualifiedRole resolveQualifiedRole(RouteContext context, String roleName, String qualifiedRole) throws EdenUserNotFoundException {
         try {
             List members = new ArrayList();
-            String workfowDocumentType = context.getDocument().getDocumentType().getName();
-            if ((DOCUMENT_TYPE_TRANSLATION.containsKey(workfowDocumentType)) && (DOCUMENT_TYPE_TRANSLATION.get(workfowDocumentType) != null)) {
-                workfowDocumentType = DOCUMENT_TYPE_TRANSLATION.get(workfowDocumentType);
-            }
-            String kualiDocumentType = SpringContext.getBean(DataDictionaryService.class).getDocumentTypeCodeByTypeName(workfowDocumentType);
+            String kualiDocumentType = SpringServiceLocator.getDataDictionaryService().getDocumentTypeCodeByTypeName(context.getDocument().getDocumentType().getName());
             String annotation = "";
             if (FISCAL_OFFICER_ROLE_KEY.equals(roleName)) {
                 FiscalOfficerRole role = getUnqualifiedFiscalOfficerRole(qualifiedRole);
@@ -592,7 +499,7 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
             else if (ACCOUNT_SUPERVISOR_ROLE_KEY.equals(roleName)) {
                 String accountSupervisorId = getUnqualifiedAccountSupervisorIdFromString(qualifiedRole);
                 annotation = "Routing to Account Supervisor";
-                String supervisorNetworkId = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new UuId(accountSupervisorId)).getPersonUserIdentifier();
+                String supervisorNetworkId = SpringServiceLocator.getUniversalUserService().getUniversalUser(new UuId(accountSupervisorId)).getPersonUserIdentifier();
                 if (!StringUtils.isEmpty(supervisorNetworkId)) {
                     members.add(new AuthenticationUserId(supervisorNetworkId));
                 }
@@ -613,7 +520,7 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
         // if we already have an ID, validate it, and then we're done
         if (StringUtils.isNotBlank(role.fiscalOfficerId)) {
             try {
-                fiscalOfficerNetworkId = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new UuId(role.fiscalOfficerId)).getPersonUserIdentifier();
+                fiscalOfficerNetworkId = SpringServiceLocator.getUniversalUserService().getUniversalUser(new UuId(role.fiscalOfficerId)).getPersonUserIdentifier();
             }
             catch (org.kuali.core.exceptions.UserNotFoundException e) {
                 // do nothing, but leave fiscalOfficerNetworkId blank, which will get caught after this
@@ -628,7 +535,7 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
 
         // if we dont have an ID, but we do have a chart/account, then hit Kuali to retrieve current FO
         if (StringUtils.isNotBlank(role.chart) && StringUtils.isNotBlank(role.accountNumber)) {
-            Account account = SpringContext.getBean(AccountService.class).getByPrimaryIdWithCaching(role.chart, role.accountNumber);
+            Account account = SpringServiceLocator.getAccountService().getByPrimaryIdWithCaching(role.chart, role.accountNumber);
             if (account != null) {
                 if (account.getAccountFiscalOfficerUser() != null) {
                     fiscalOfficerNetworkId = account.getAccountFiscalOfficerUser().getPersonUserIdentifier();
@@ -657,7 +564,7 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
             delegateExample.setChartOfAccountsCode(role.chart);
             delegateExample.setAccountNumber(role.accountNumber);
             delegateExample.setFinancialDocumentTypeCode(fisDocumentType);
-            Delegate primaryDelegate = SpringContext.getBean(AccountService.class).getPrimaryDelegationByExample(delegateExample, role.totalDollarAmount);
+            Delegate primaryDelegate = SpringServiceLocator.getAccountService().getPrimaryDelegationByExample(delegateExample, role.totalDollarAmount);
             if (primaryDelegate != null) {
                 primaryDelegateId = new AuthenticationUserId(primaryDelegate.getAccountDelegate().getPersonUserIdentifier());
             }
@@ -676,7 +583,7 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
             delegateExample.setChartOfAccountsCode(role.chart);
             delegateExample.setAccountNumber(role.accountNumber);
             delegateExample.setFinancialDocumentTypeCode(fisDocumentType);
-            Iterator secondaryDelegations = SpringContext.getBean(AccountService.class).getSecondaryDelegationsByExample(delegateExample, role.totalDollarAmount).iterator();
+            Iterator secondaryDelegations = SpringServiceLocator.getAccountService().getSecondaryDelegationsByExample(delegateExample, role.totalDollarAmount).iterator();
             while (secondaryDelegations.hasNext()) {
                 members.add(new AuthenticationUserId(((Delegate) secondaryDelegations.next()).getAccountDelegate().getPersonUserIdentifier()));
             }
@@ -687,6 +594,8 @@ public class KualiAccountAttribute implements RoleAttribute, WorkflowAttribute {
     /**
      * A helper class which defines a Fiscal Officer role. Implements an equals() and hashCode() method so that it can be used in a
      * Set to prevent the generation of needless duplicate requests.
+     * 
+     * 
      */
     private static class FiscalOfficerRole {
 

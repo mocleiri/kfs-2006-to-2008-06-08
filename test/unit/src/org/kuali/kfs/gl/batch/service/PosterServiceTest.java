@@ -23,27 +23,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.dbplatform.RawSQL;
 import org.kuali.core.util.Guid;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.gl.OriginEntryTestBase;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.test.ConfigureContext;
+import org.kuali.test.suite.RelatesTo;
 
-/**
- * Tests the PosterService
- */
 @ConfigureContext
-@RawSQL
 public class PosterServiceTest extends OriginEntryTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PosterServiceTest.class);
 
     private PosterService posterService;
 
-    /**
-     * 
-     * @see org.kuali.module.gl.OriginEntryTestBase#setUp()
-     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -52,9 +44,8 @@ public class PosterServiceTest extends OriginEntryTestBase {
         c.set(Calendar.DAY_OF_MONTH, 1);
         c.set(Calendar.MONTH, Calendar.JANUARY);
         c.set(Calendar.YEAR, 2004);
-
-        // because of the cutoff time implementation, assume a specific time of day after the cutoff (10:00 am, see RunDateService
-        // for details)
+        
+        // because of the cutoff time implementation, assume a specific time of day after the cutoff (10:00 am, see RunDateService for details)
         c.set(Calendar.HOUR_OF_DAY, 23);
         c.set(Calendar.MINUTE, 50);
         c.set(Calendar.SECOND, 0);
@@ -67,181 +58,118 @@ public class PosterServiceTest extends OriginEntryTestBase {
         posterService.setDateTimeService(dateTimeService);
     }
 
-    ///**
-    // * Check invalid entries
-    // * 
-    // * @throws Exception
-    // */
-    //
-    // This test succeeds in Eclipse, but fails in Anthill
-    // public void testInvalidEntries() throws Exception {
-    // LOG.debug("testInvalidEntries() started");
-    //
-    // /*
-    // * These transactions are invalid for one reason or another:
-    // * 0 - bad chartOfAccountsCode
-    // * 1 - bad accountNumber
-    // * 2 - bad objectTypeCode
-    // * 3 - bad balanceTypeCode
-    // * 4 - bad univFiscalYear
-    // * 5 - bad debitCreditCode
-    // * 6 - bad debitCreditCode
-    // * 7 - 19 empty key field
-    // */
-    // String[] inputTransactions = {
-    // "2007XX6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA9999999-----8000---ACAS07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00C2006-01-05ABCDEFGHIG----------12345678 ",
-    // "2007BA6044900-----8000---ACZZ07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00C2006-01-05ABCDEFGHIG----------12345678 ",
-    // "2007BA6044900-----8000---ZZEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00C2006-01-05ABCDEFGHIG----------12345678 ",
-    // "9999BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC. 1445.00
-    // 2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00X2006-01-05ABCDEFGHIJ----------12345678 ",
-    //
-    // " BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007 6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA -----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900 5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900----- ---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300 ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300--- EE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300---AC 07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300---ACEE CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300---ACEE07 PDBLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300---ACEE07CHKD BLANKFISC 12345214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ",
-    // "2007BA6044900-----5300---ACEE07CHKDPD 12345214090047 EVERETT J PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678
-    // ",
-    // "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 00000214090047 EVERETT J PRESCOTT INC.
-    // 1445.00D2006-01-05ABCDEFGHIJ----------12345678 ", };
-    //
-    // EntryHolder[] outputTransactions = new EntryHolder[] {
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007XX6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9999999-----8000---ACAS07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00C2006-01-05ABCDEFGHIG----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----8000---ACZZ07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00C2006-01-05ABCDEFGHIG----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00 2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "9999BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----8000---ZZEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00C2006-01-05ABCDEFGHIG----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00X2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007 6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900 5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 00000214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPD 12345214090047 EVERETT J PRESCOTT
-    // INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKD BLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07 PDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---AC 07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300--- EE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300 ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900----- ---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA -----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J PRESCOTT
-    // INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.SCRUBBER_VALID, " BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007XX6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007 6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00X2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---AC 07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----8000---ACZZ07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00C2006-01-05ABCDEFGHIG----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "9999BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA -----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA9999999-----8000---ACAS07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00C2006-01-05ABCDEFGHIG----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900 5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300--- EE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----8000---ZZEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00C2006-01-05ABCDEFGHIG----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, " BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900----- ---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300 ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 00000214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00 2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPD 12345214090047 EVERETT J PRESCOTT
-    // INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKD BLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "),
-    // new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07 PDBLANKFISC 12345214090047 EVERETT J
-    // PRESCOTT INC. 1445.00D2006-01-05ABCDEFGHIJ----------12345678 "), };
-    //
-    // clearOriginEntryTables();
-    // loadInputTransactions(OriginEntrySource.SCRUBBER_VALID, inputTransactions);
-    //
-    // posterService.postMainEntries();
-    //
-    // assertOriginEntries(3, outputTransactions);
-    // }
-    
     /**
-     * @see junit.framework.TestCase#tearDown()
+     * Check invalid entries
+     * 
+     * @throws Exception
      */
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        // return the run date to the current date
-        dateTimeService.setCurrentDate(new java.util.Date());
-    }
+
+// This test succeeds in Eclipse, but fails in Anthill
+
+//    public void testInvalidEntries() throws Exception {
+//        LOG.debug("testInvalidEntries() started");
+//
+//        /*
+//         * These transactions are invalid for one reason or another:
+//         *   0 - bad chartOfAccountsCode 
+//         *   1 - bad accountNumber 
+//         *   2 - bad objectTypeCode 
+//         *   3 - bad balanceTypeCode 
+//         *   4 - bad univFiscalYear 
+//         *   5 - bad debitCreditCode 
+//         *   6 - bad debitCreditCode 
+//         *   7 - 19 empty key field
+//         */
+//        String[] inputTransactions = { 
+//                "2007XX6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA9999999-----8000---ACAS07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       ", 
+//                "2007BA6044900-----8000---ACZZ07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       ", 
+//                "2007BA6044900-----8000---ZZEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       ",
+//                "9999BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00X2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+//
+//                "    BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007  6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA       -----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900     5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+//                "2007BA6044900-----    ---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300   ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300---  EE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300---AC  07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+//                "2007BA6044900-----5300---ACEE  CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300---ACEE07    PDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300---ACEE07CHKD  BLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+//                "2007BA6044900-----5300---ACEE07CHKDPD              12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+//                "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     00000214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", };
+//
+//        EntryHolder[] outputTransactions = new EntryHolder[] { 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007XX6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9999999-----8000---ACAS07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----8000---ACZZ07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "9999BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----8000---ZZEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00X2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007  6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900     5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     00000214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKDPD              12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07CHKD  BLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE07    PDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---ACEE  CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---AC  07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                            "),
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300---  EE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5300   ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----    ---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA       -----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),                 
+//                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "    BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007XX6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007  6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00X2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---AC  07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----8000---ACZZ07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "9999BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA       -----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA9999999-----8000---ACAS07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900     5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---  EE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----8000---ZZEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00C2006-01-05ABCDEFGHIG----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE  CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "    BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----    ---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300   ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     00000214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKDPD              12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07CHKD  BLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+//                new EntryHolder(OriginEntrySource.MAIN_POSTER_ERROR, "2007BA6044900-----5300---ACEE07    PDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), };
+//
+//        clearOriginEntryTables();
+//        loadInputTransactions(OriginEntrySource.SCRUBBER_VALID, inputTransactions);
+//
+//        posterService.postMainEntries();
+//
+//        assertOriginEntries(3, outputTransactions);
+//    }
 
     /**
-     * Covers the posting of GL entries
+     * Check GL Entry inserts
      * 
-     * @throws Exception thrown if any exception is encountered for any reason
+     * @throws Exception
      */
     public void testPostGlEntry() throws Exception {
         LOG.debug("testPostGlEntry() started");
 
-        String[] inputTransactions = { "2007BA6044909-----5300---ACEX07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BA6044909-----5300---ACEX07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       " };
+        String[] inputTransactions = { 
+                "2007BA6044909-----5300---ACEX07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BA6044909-----5300---ACEX07CHKDPDBLANKFISC     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "
+        };
 
-        EntryHolder[] outputTransactions = { new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[0]), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[1]), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[0]), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[1]) };
+        EntryHolder[] outputTransactions = { 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[0]), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[1]), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[0]), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[1]) 
+        };
 
         clearOriginEntryTables();
         clearGlEntryTable("BA", "6044909");
@@ -278,9 +206,9 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("ORG_DOC_NBR wrong", "ABCDEFGHIJ", (String) glEntry.get("ORG_DOC_NBR"));
         assertEquals("PROJECT_CD wrong", "----------", (String) glEntry.get("PROJECT_CD"));
         assertEquals("ORG_REFERENCE_ID wrong", "12345678", (String) glEntry.get("ORG_REFERENCE_ID"));
-        assertTrue("FDOC_REF_TYP_CD is not blank, was: '" + glEntry.get("FDOC_REF_TYP_CD") + "'", StringUtils.isEmpty((String) glEntry.get("FDOC_REF_TYP_CD")));
-        assertTrue("FS_REF_ORIGIN_CD is not blank, was: '" + glEntry.get("FS_REF_ORIGIN_CD") + "'", StringUtils.isEmpty((String) glEntry.get("FS_REF_ORIGIN_CD")));
-        assertTrue("FDOC_REF_NBR is not blank, was: '" + glEntry.get("FDOC_REF_NBR") + "'", StringUtils.isEmpty((String) glEntry.get("FDOC_REF_NBR")));
+        assertTrue("FDOC_REF_TYP_CD is not blank, was: '" + glEntry.get("FDOC_REF_TYP_CD") + "'", StringUtils.isEmpty( (String)glEntry.get("FDOC_REF_TYP_CD") ));
+        assertTrue("FS_REF_ORIGIN_CD is not blank, was: '" + glEntry.get("FS_REF_ORIGIN_CD") + "'", StringUtils.isEmpty( (String)glEntry.get("FS_REF_ORIGIN_CD") ));
+        assertTrue("FDOC_REF_NBR is not blank, was: '" + glEntry.get("FDOC_REF_NBR") + "'", StringUtils.isEmpty( (String)glEntry.get("FDOC_REF_NBR") ));
         assertNull("FDOC_REVERSAL_DT is not null, was: '" + glEntry.get("FDOC_REVERSAL_DT") + "'", glEntry.get("FDOC_REVERSAL_DT"));
         assertEquals("TRN_ENCUM_UPDT_CD wrong", " ", (String) glEntry.get("TRN_ENCUM_UPDT_CD"));
 
@@ -293,16 +221,27 @@ public class PosterServiceTest extends OriginEntryTestBase {
     /**
      * Check valid and invalid reversal posting
      * 
-     * @throws Exception thrown if any exception is encountered for any reason
+     * @throws Exception
      */
     public void testPostReversal() throws Exception {
         LOG.debug("testPostReversal() started");
 
         // if this test fails, ensure that the cutoff time is set to 10am.
+        
+        String[] inputTransactions = { 
+                "2007BA6044900-----5300---ACEX07CHKDPDREVTEST01     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2006-03-01    ", 
+                "2007BA6044900-----5300---ACEX07CHKDPDREVTEST01     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2006-03-01    ", 
+                "2007BA6044900-----5300---ACEX07CHKDPDREVTEST02     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                  "
+        };
 
-        String[] inputTransactions = { "2007BA6044900-----5300---ACEX07CHKDPDREVTEST01     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2006-03-01    ", "2007BA6044900-----5300---ACEX07CHKDPDREVTEST01     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2006-03-01    ", "2007BA6044900-----5300---ACEX07CHKDPDREVTEST02     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                                  " };
-
-        EntryHolder[] outputTransactions = { new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[0]), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[1]), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[2]), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[0]), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[1]), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[2]) };
+        EntryHolder[] outputTransactions = { 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[0]), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[1]), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, inputTransactions[2]), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[0]), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[1]), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, inputTransactions[2]) 
+        };
 
         clearOriginEntryTables();
         clearReversalTable();
@@ -320,18 +259,27 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("FDOC_REVERSAL_DT wrong", "2006-03-01", sdf.format((Date) reversalEntry.get("FDOC_REVERSAL_DT")));
     }
 
-    /**
-     * Covers entry posting's effects on balances
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testPostBalance() throws Exception {
         LOG.debug("testPostBalance() started");
 
-        String[] inputTransactions = { "2007BA6044900-----4166---ACEX01CHKDPDBALTEST01     12345214090047 EVERETT J PRESCOTT INC.                   10.01D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX02CHKDPDBALTEST02     12345214090047 EVERETT J PRESCOTT INC.                   20.02D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX03CHKDPDBALTEST03     12345214090047 EVERETT J PRESCOTT INC.                   30.03D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX04CHKDPDBALTEST04     12345214090047 EVERETT J PRESCOTT INC.                   40.04D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX05CHKDPDBALTEST05     12345214090047 EVERETT J PRESCOTT INC.                   50.05D2006-01-05ABCDEFGHIJ----------12345678                                  ",
-                "2007BA6044900-----4166---ACEX06CHKDPDBALTEST06     12345214090047 EVERETT J PRESCOTT INC.                   60.06D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX07CHKDPDBALTEST07     12345214090047 EVERETT J PRESCOTT INC.                   70.07D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX08CHKDPDBALTEST08     12345214090047 EVERETT J PRESCOTT INC.                   80.08D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX09CHKDPDBALTEST09     12345214090047 EVERETT J PRESCOTT INC.                   90.09D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX10CHKDPDBALTEST10     12345214090047 EVERETT J PRESCOTT INC.                  100.10D2006-01-05ABCDEFGHIJ----------12345678                                  ",
-                "2007BA6044900-----4166---ACEX11CHKDPDBALTEST11     12345214090047 EVERETT J PRESCOTT INC.                  110.11D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX12CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  120.12D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEX13CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  130.13D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEXABCHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  140.14D2006-01-05ABCDEFGHIJ----------12345678                                  ", "2007BA6044900-----4166---ACEXBBCHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  150.15D2006-01-05ABCDEFGHIJ----------12345678                                  ",
-                "2007BA6044900-----4166---ACEXCBCHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  160.16D2006-01-05ABCDEFGHIJ----------12345678                                  " };
+        String[] inputTransactions = {
+                "2007BA6044900-----4166---ACEX01CHKDPDBALTEST01     12345214090047 EVERETT J PRESCOTT INC.                   10.01D2006-01-05ABCDEFGHIJ----------12345678                                  ",
+                "2007BA6044900-----4166---ACEX02CHKDPDBALTEST02     12345214090047 EVERETT J PRESCOTT INC.                   20.02D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX03CHKDPDBALTEST03     12345214090047 EVERETT J PRESCOTT INC.                   30.03D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX04CHKDPDBALTEST04     12345214090047 EVERETT J PRESCOTT INC.                   40.04D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX05CHKDPDBALTEST05     12345214090047 EVERETT J PRESCOTT INC.                   50.05D2006-01-05ABCDEFGHIJ----------12345678                                  ",
+                "2007BA6044900-----4166---ACEX06CHKDPDBALTEST06     12345214090047 EVERETT J PRESCOTT INC.                   60.06D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX07CHKDPDBALTEST07     12345214090047 EVERETT J PRESCOTT INC.                   70.07D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX08CHKDPDBALTEST08     12345214090047 EVERETT J PRESCOTT INC.                   80.08D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX09CHKDPDBALTEST09     12345214090047 EVERETT J PRESCOTT INC.                   90.09D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX10CHKDPDBALTEST10     12345214090047 EVERETT J PRESCOTT INC.                  100.10D2006-01-05ABCDEFGHIJ----------12345678                                  ",
+                "2007BA6044900-----4166---ACEX11CHKDPDBALTEST11     12345214090047 EVERETT J PRESCOTT INC.                  110.11D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX12CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  120.12D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEX13CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  130.13D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEXABCHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  140.14D2006-01-05ABCDEFGHIJ----------12345678                                  ", 
+                "2007BA6044900-----4166---ACEXBBCHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  150.15D2006-01-05ABCDEFGHIJ----------12345678                                  ",
+                "2007BA6044900-----4166---ACEXCBCHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                  160.16D2006-01-05ABCDEFGHIJ----------12345678                                  " 
+         };
 
         EntryHolder[] outputTransactions = new EntryHolder[inputTransactions.length * 2];
         for (int i = 0; i < inputTransactions.length; i++) {
@@ -377,9 +325,21 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("MO12_ACCT_LN_AMT is wrong", 120.12, getAmount(balance, "MO12_ACCT_LN_AMT"), 0.01);
         assertEquals("MO13_ACCT_LN_AMT is wrong", 130.13, getAmount(balance, "MO13_ACCT_LN_AMT"), 0.01);
 
-        String[] inputTransactions2 = { "2007BA6044900-----4166---ACEX01CHKDPDBALTEST01     12345214090047 EVERETT J PRESCOTT INC.                    0.01C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX02CHKDPDBALTEST02     12345214090047 EVERETT J PRESCOTT INC.                    0.02C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX03CHKDPDBALTEST03     12345214090047 EVERETT J PRESCOTT INC.                    0.03C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX04CHKDPDBALTEST04     12345214090047 EVERETT J PRESCOTT INC.                    0.04C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX05CHKDPDBALTEST05     12345214090047 EVERETT J PRESCOTT INC.                    0.05C2006-01-05ABCDEFGHIJ----------12345678                             ",
-                "2007BA6044900-----4166---ACEX06CHKDPDBALTEST06     12345214090047 EVERETT J PRESCOTT INC.                    0.06C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX07CHKDPDBALTEST07     12345214090047 EVERETT J PRESCOTT INC.                    0.07C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX08CHKDPDBALTEST08     12345214090047 EVERETT J PRESCOTT INC.                    0.08C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX09CHKDPDBALTEST09     12345214090047 EVERETT J PRESCOTT INC.                    0.09C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX10CHKDPDBALTEST10     12345214090047 EVERETT J PRESCOTT INC.                    0.10C2006-01-05ABCDEFGHIJ----------12345678                             ",
-                "2007BA6044900-----4166---ACEX11CHKDPDBALTEST11     12345214090047 EVERETT J PRESCOTT INC.                    0.11C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX12CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                    0.12C2006-01-05ABCDEFGHIJ----------12345678                             ", "2007BA6044900-----4166---ACEX13CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                    0.13C2006-01-05ABCDEFGHIJ----------12345678                             ", };
+        String[] inputTransactions2 = {
+                "2007BA6044900-----4166---ACEX01CHKDPDBALTEST01     12345214090047 EVERETT J PRESCOTT INC.                    0.01C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX02CHKDPDBALTEST02     12345214090047 EVERETT J PRESCOTT INC.                    0.02C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX03CHKDPDBALTEST03     12345214090047 EVERETT J PRESCOTT INC.                    0.03C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX04CHKDPDBALTEST04     12345214090047 EVERETT J PRESCOTT INC.                    0.04C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX05CHKDPDBALTEST05     12345214090047 EVERETT J PRESCOTT INC.                    0.05C2006-01-05ABCDEFGHIJ----------12345678                             ",
+                "2007BA6044900-----4166---ACEX06CHKDPDBALTEST06     12345214090047 EVERETT J PRESCOTT INC.                    0.06C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX07CHKDPDBALTEST07     12345214090047 EVERETT J PRESCOTT INC.                    0.07C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX08CHKDPDBALTEST08     12345214090047 EVERETT J PRESCOTT INC.                    0.08C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX09CHKDPDBALTEST09     12345214090047 EVERETT J PRESCOTT INC.                    0.09C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX10CHKDPDBALTEST10     12345214090047 EVERETT J PRESCOTT INC.                    0.10C2006-01-05ABCDEFGHIJ----------12345678                             ",
+                "2007BA6044900-----4166---ACEX11CHKDPDBALTEST11     12345214090047 EVERETT J PRESCOTT INC.                    0.11C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX12CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                    0.12C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+                "2007BA6044900-----4166---ACEX13CHKDPDBALTEST12     12345214090047 EVERETT J PRESCOTT INC.                    0.13C2006-01-05ABCDEFGHIJ----------12345678                             ", 
+        };
 
         EntryHolder[] outputTransactions2 = new EntryHolder[inputTransactions2.length * 2];
         for (int i = 0; i < inputTransactions2.length; i++) {
@@ -425,21 +385,30 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("2 MO13_ACCT_LN_AMT is wrong", 130.00, getAmount(balance, "MO13_ACCT_LN_AMT"), 0.01);
     }
 
-    /**
-     * Covers entry posting's effects on encumbrances
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testPostEncumbrance() throws Exception {
         LOG.debug("testPostEncumbrance() started");
 
-        String[] inputTransactions = { "2007BA6044900-----4166---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  100.01D2006-01-05ABCDEFGHIJ----------12345678                              D    ", "2007BA6044900-----5215---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  200.02D2006-01-05ABCDEFGHIJ----------12345678                              D    ", "2007BA6044900-----4166---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   50.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    ", "2007BA6044900-----5215---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    ", "2007BA6044900-----5215---ACEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678                                   ", };
+        String[] inputTransactions = {
+                "2007BA6044900-----4166---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  100.01D2006-01-05ABCDEFGHIJ----------12345678                              D    ", 
+                "2007BA6044900-----5215---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  200.02D2006-01-05ABCDEFGHIJ----------12345678                              D    ", 
+                "2007BA6044900-----4166---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   50.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    ", 
+                "2007BA6044900-----5215---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    ", 
+                "2007BA6044900-----5215---ACEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678                                   ", 
+        };
 
-        EntryHolder[] outputTransactions = new EntryHolder[] { new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  100.01D2006-01-05ABCDEFGHIJ----------12345678                              D    "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  200.02D2006-01-05ABCDEFGHIJ----------12345678                              D    "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   50.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5215---ACEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678                                   "),
+        EntryHolder[] outputTransactions = new EntryHolder[] {
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  100.01D2006-01-05ABCDEFGHIJ----------12345678                              D    "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  200.02D2006-01-05ABCDEFGHIJ----------12345678                              D    "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   50.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----5215---ACEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678                                   "),
 
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  100.01D2006-01-05ABCDEFGHIJ----------12345678                              D    "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  200.02D2006-01-05ABCDEFGHIJ----------12345678                              D    "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----5215---ACEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678                                   "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   50.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "),
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "), };
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  100.01D2006-01-05ABCDEFGHIJ----------12345678                              D    "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST01     12345214090047 EVERETT J PRESCOTT INC.                  200.02D2006-01-05ABCDEFGHIJ----------12345678                              D    "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----5215---ACEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678                                   "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   50.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "),
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----5215---IEEX06CHKDPDENCTEST02     12345214090047 EVERETT J PRESCOTT INC.                   60.00C2006-01-05ABCDEFGHIJ----------12345678CHKDPDENCTEST01               R    "),
+        };
 
         clearOriginEntryTables();
         clearEncumbranceTable();
@@ -485,24 +454,36 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("ACLN_ENCUM_CLS_AMT is wrong", 60, getAmount(enc5215, "ACLN_ENCUM_CLS_AMT"), 0.01);
     }
 
-    /**
-     * Covers posting entry's effects on account balances
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testPostGlAccountBalance() throws Exception {
         LOG.debug("testPostGlAccountBalance() started");
 
-        String[] inputTransactions = { "2007BA6044900-----4166---TREX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        123.45D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                       1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        345.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        222.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
-                "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                         -2.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       " };
+        String[] inputTransactions = { 
+                "2007BA6044900-----4166---TREX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        123.45D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                       1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        345.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        222.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+                "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                         -2.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       " 
+        };
 
-        EntryHolder[] outputTransactions = new EntryHolder[] { new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---TREX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        123.45D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                       1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        345.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        222.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+        EntryHolder[] outputTransactions = new EntryHolder[] { 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---TREX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        123.45D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                       1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        345.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        222.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
                 new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                         -2.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
 
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                       1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                         -2.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        222.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        345.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---TREX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        123.45D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), };
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---ACEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                       1445.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                         -2.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---CBEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        222.00 2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                          5.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---EXEX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        345.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA6044900-----4166---TREX07CHKDPDGLACCTBA1     12345DESCRIPTION                                        123.45D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+        };
 
         clearOriginEntryTables();
         clearGlAccountBalanceTable();
@@ -527,51 +508,76 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("ACLN_ENCUM_BAL_AMT is wrong", 340.00, getAmount(bal, "ACLN_ENCUM_BAL_AMT"), 0.01);
     }
 
-    /**
-     * Covers posting entry's effects on expenditure transactions
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
-    // @RelatesTo(RelatesTo.JiraIssue.KULRNE4797)
+    @RelatesTo(RelatesTo.JiraIssue.KULRNE4797)
     public void testPostExpenditureTransaction() throws Exception {
         LOG.debug("testPostExpenditureTransaction() started");
 
         String[] inputTransactions = {
-        // Not posted because icr type cd = 10
+                // Not posted because icr type cd = 10
                 "2007BL2231499-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
 
                 // Not posted because icr type cd is null
                 "2007BA9019993-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
 
                 // Not posted because the period code is AB, BB or CB
-                "2007BL4031407-----4166---ACEXABCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BL4031407-----4166---ACEXBBCHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BL4031407-----4166---ACEXCBCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+                "2007BL4031407-----4166---ACEXABCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BL4031407-----4166---ACEXBBCHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BL4031407-----4166---ACEXCBCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
 
                 // Posted
-                "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+                "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
 
                 // Posted
-                "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         12.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          2.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+                "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         12.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          2.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
 
                 // Not posted - excluded account
-                "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         33.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          4.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+                "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         33.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          4.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
 
                 // Not posted - excluded type (23)
-                "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         44.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          5.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+                "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         44.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          5.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
 
                 // Posted, non-CS sub acct
-                "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                         25.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                          2.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ", };
+                "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                         25.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       ", 
+                "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                          2.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       ",
+        };
 
-        EntryHolder[] outputTransactions = new EntryHolder[] { new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2231499-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9019993-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEXABCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEXBBCHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEXCBCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         12.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          2.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         33.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          4.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         44.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          5.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                         25.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                          2.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA9019993-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL2231499-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEXABCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEXBBCHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEXCBCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          2.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         12.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          4.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         33.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          5.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
-                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         44.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                          2.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                         25.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), };
+        EntryHolder[] outputTransactions = new EntryHolder[] { 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL2231499-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BA9019993-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEXABCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEXBBCHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEXCBCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         12.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          2.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         33.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          4.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         44.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          5.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                         25.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.SCRUBBER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                          2.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BA9019993-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL2231499-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      11000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEX07CHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEXABCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEXBBCHKDPDET0000011     12345DESCRIPTION                                          0.12C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4031407-----4166---ACEXCBCHKDPDET0000011     12345DESCRIPTION                                      12000.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          2.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4131406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         12.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          4.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431406-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         33.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                          5.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4431407-----2400---EXEX07CHKDPDET0000011     12345DESCRIPTION                                         44.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                          2.00C2006-01-05ABCDEFGHIJ----------12345678                                                                       "), 
+                new EntryHolder(OriginEntrySource.MAIN_POSTER_VALID, "2007BL4631464XXX  4166---ACEX07CHKDPDET0000021     12345DESCRIPTION                                         25.00D2006-01-05ABCDEFGHIJ----------12345678                                                                       "),
+        };
 
         clearOriginEntryTables();
         clearExpenditureTable();
@@ -599,7 +605,7 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertOriginEntries(3, outputTransactions);
 
         List trans = unitTestSqlDao.sqlSelect("select * from GL_EXPEND_TRN_T order by account_nbr");
-
+        
         assertEquals("Wrong number of transactions", 4, trans.size());
         Map acct4031407 = (Map) trans.get(0);
         assertEquals("Account wrong", "4031407", acct4031407.get("ACCOUNT_NBR"));
@@ -612,16 +618,17 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("Amount wrong", 23.00, getAmount(acct4631464, "ACCT_OBJ_DCST_AMT"), 0.01);
     }
 
-    /**
-     * Covers the reversal poster
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testReversalPoster() throws Exception {
         LOG.debug("testPostReversalPosting() started");
 
         // First post these entries to the reversal table
-        String[] inputTransactions = { "2007BL2231408-----5300---ACEX07CHKDPDREVTEST01     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2003-10-01    ", "2007BL2231408-----5300---ACEX07CHKDPDREVTEST02     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2003-12-31    ", "2007BL2231408-----5300---ACEX07CHKDPDREVTEST03     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2004-01-01    ", "2007BL2231408-----5300---ACEX07CHKDPDREVTEST04     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2004-01-02    ", "2007BL2231408-----5300---ACEX07CHKDPDREVTEST05     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2005-03-01    " };
+        String[] inputTransactions = {
+                "2007BL2231408-----5300---ACEX07CHKDPDREVTEST01     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2003-10-01    ", 
+                "2007BL2231408-----5300---ACEX07CHKDPDREVTEST02     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2003-12-31    ", 
+                "2007BL2231408-----5300---ACEX07CHKDPDREVTEST03     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2004-01-01    ", 
+                "2007BL2231408-----5300---ACEX07CHKDPDREVTEST04     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2004-01-02    ", 
+                "2007BL2231408-----5300---ACEX07CHKDPDREVTEST05     12345214090047 EVERETT J PRESCOTT INC.                 1445.00D2006-01-05ABCDEFGHIJ----------12345678                    2005-03-01    " 
+        };
 
         clearOriginEntryTables();
         clearReversalTable();
@@ -645,11 +652,6 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("Wrong doc nbr", "REVTEST03", row3.get("FDOC_NBR"));
     }
 
-    /**
-     * Covers poster ICR generation
-     * 
-     * @throws Exception thrown if any exception is encountered for any reason
-     */
     public void testIcrGeneration() throws Exception {
         LOG.debug("testIcrGeneration() started");
         // Load the expenditure table
@@ -726,13 +728,6 @@ public class PosterServiceTest extends OriginEntryTestBase {
         assertEquals("9 amount wrong", 180.0, getAmount(row, "TRN_LDGR_ENTR_AMT"), 0.01);
     }
 
-    /**
-     * Converts an amount in a Map to a double (to make it easier to compare)
-     * 
-     * @param map the Map with values in it
-     * @param field the key of the Map with a double in it
-     * @return a double from that map
-     */
     private double getAmount(Map map, String field) {
         BigDecimal amt = (BigDecimal) map.get(field);
         if (amt == null) {
