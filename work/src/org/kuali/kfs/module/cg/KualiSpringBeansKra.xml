@@ -18,12 +18,11 @@
 <beans>
 	<bean id="kraModule" class="org.kuali.core.KualiModule">
 		<property name="moduleId" value="kra" />
-		<property name="moduleName" value="Pre-Award" />
+		<property name="moduleName" value="Kuali Research Administration" />
 		<property name="moduleCode" value="RA" />
 		<property name="moduleUserService" ref="kraUserService" />
-		<property name="initializeDataDictionary" value="true" />
 		<property name="moduleAuthorizer">
-			<bean class="org.kuali.kfs.authorization.KfsModuleAuthorizerBase">
+			<bean class="org.kuali.core.authorization.KualiModuleAuthorizerBase">
 				<property name="packagePrefixes">
 					<list>
 						<value>org.kuali.module.kra.</value>
@@ -39,30 +38,27 @@
 		</property>
 		<property name="dataDictionaryPackages">
 			<list>
-				<value>org/kuali/module/kra/datadictionary</value>
-				<value>org/kuali/module/kra/budget/datadictionary</value>
-				<value>org/kuali/module/kra/routingform/datadictionary</value>
+				<value>org.kuali.module.kra.budget.datadictionary</value>
+				<value>org.kuali.module.kra.routingform.datadictionary</value>
 			</list>
 		</property>
-		<property name="databaseRepositoryFilePaths">
-			<list>
-				<value>org/kuali/module/kra/OJB-repository-kra.xml</value>
-			</list>
-		</property>
-		<property name="scriptConfigurationFilePaths">
-			<list>
-				<value>org/kuali/module/kra/dwr-kra.xml</value>
-			</list>
-		</property>		
 	</bean>
 
 	<bean id="kraUserService" class="org.kuali.module.kra.service.impl.KraUserServiceImpl" parent="kualiModuleUserServiceBase">
-		<property name="kualiModuleUserDao" ref="kraUserDao" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
+		</property>
 	</bean>
-	
-	<bean id="kraUserDao" class="org.kuali.module.kra.budget.dao.ojb.KraUserDaoOjb">
-		<property name="parameterService" ref="parameterService" />
+
+	<!-- The following is temporary, only until SH_UNIV_DATE_T is corrected in the databse -->
+
+	<bean id="dateTimeService" class="org.kuali.core.service.impl.DateTimeServiceImpl">
+		<property name="universityDateDao">
+			<ref bean="universityDateDao" />
+		</property>
 	</bean>
+
+	<bean id="universityDateDao" class="org.kuali.module.gl.dao.ojb.UniversityDateDaoOjb" />
 
 	<bean id="budgetService" class="org.kuali.module.kra.budget.service.impl.BudgetServiceImpl">
 		<property name="documentService">
@@ -98,15 +94,11 @@
 		<property name="documentService">
 			<ref bean="documentService" />
 		</property>
-        <property name="maintenanceDocumentDictionaryService">
-      		<ref bean="maintenanceDocumentDictionaryService" />
-    	</property>
-		<property name="parameterService" ref="parameterService" />
 	</bean>
 
 	<bean id="budgetFringeRateService" class="org.kuali.module.kra.budget.service.impl.BudgetFringeRateServiceImpl">
-		<property name="parameterService">
-			<ref bean="parameterService" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 		<property name="businessObjectService">
 			<ref bean="businessObjectService" />
@@ -168,11 +160,14 @@
 		<property name="businessObjectService">
 			<ref bean="businessObjectService" />
 		</property>
+		<property name="dateTimeService">
+			<ref bean="dateTimeService" />
+		</property>
 		<property name="budgetFringeRateService">
 			<ref bean="budgetFringeRateService" />
 		</property>
-		<property name="parameterService">
-			<ref bean="parameterService" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 	</bean>
 
@@ -185,18 +180,12 @@
 		<property name="budgetModularService">
 			<ref bean="budgetModularService" />
 		</property>
-		<property name="parameterService">
-			<ref bean="parameterService" />
+		<property name="kualiConfigurationService">
+			<ref bean="kualiConfigurationService" />
 		</property>
 	</bean>
 
-	<bean id="researchDocumentPermissionsService" class="org.kuali.module.kra.service.impl.ResearchDocumentPermissionsServiceImpl">
-		<property name="businessObjectService">
-			<ref bean="businessObjectService" />
-		</property>
-	</bean>
-
-	<bean id="researchDocumentControlAttributeTypeService" class="org.kuali.module.kra.service.impl.ResearchDocumentControlAttributeTypeServiceImpl">
+	<bean id="budgetPermissionsService" class="org.kuali.module.kra.budget.service.impl.BudgetPermissionsServiceImpl">
 		<property name="businessObjectService">
 			<ref bean="businessObjectService" />
 		</property>
@@ -208,21 +197,51 @@
 		</property>
 	</bean>
 
-	<bean id="purposeService" class="org.kuali.module.kra.routingform.service.impl.PurposeServiceImpl">
+	<bean id="routingFormDueDateService" class="org.kuali.module.kra.routingform.service.impl.RoutingFormDueDateServiceImpl">
 		<property name="businessObjectService">
 			<ref bean="businessObjectService" />
 		</property>
 	</bean>
 
 	<bean id="routingFormMainPageService" class="org.kuali.module.kra.routingform.service.impl.RoutingFormMainPageServiceImpl">
-		<property name="businessObjectService">
-			<ref bean="businessObjectService" />
+		<property name="projectTypeService">
+			<ref bean="projectTypeService" />
+		</property>
+		<property name="submissionTypeService">
+			<ref bean="submissionTypeService" />
 		</property>
 		<property name="purposeService">
 			<ref bean="purposeService" />
 		</property>
-		<property name="parameterService">
-			<ref bean="parameterService" />
+	</bean>
+
+	<bean id="personRoleService" class="org.kuali.module.kra.routingform.service.impl.PersonRoleServiceImpl">
+		<property name="businessObjectService">
+			<ref bean="businessObjectService" />
+		</property>
+	</bean>
+
+	<bean id="projectTypeService" class="org.kuali.module.kra.routingform.service.impl.ProjectTypeServiceImpl">
+		<property name="businessObjectService">
+			<ref bean="businessObjectService" />
+		</property>
+	</bean>
+
+	<bean id="purposeService" class="org.kuali.module.kra.routingform.service.impl.PurposeServiceImpl">
+		<property name="businessObjectService">
+			<ref bean="businessObjectService" />
+		</property>
+	</bean>
+	
+	<bean id="submissionTypeService" class="org.kuali.module.kra.routingform.service.impl.SubmissionTypeServiceImpl">
+		<property name="businessObjectService">
+			<ref bean="businessObjectService" />
+		</property>
+	</bean>
+
+	<bean id="researchTypeCodeService" class="org.kuali.module.kra.routingform.service.impl.ResearchTypeCodeServiceImpl">
+		<property name="businessObjectService">
+			<ref bean="businessObjectService" />
 		</property>
 	</bean>
 
@@ -231,12 +250,5 @@
 			<ref bean="businessObjectService" />
 		</property>
 	</bean>
-	
-	<!-- Workflow Lookupables-->
-	
-	<bean id="workflow-org.kuali.module.kra.routingform.bo.ResearchRiskType-Lookupable" parent="workflowLookupable" singleton="false">
-        <property name="businessObjectClassName">
-            <value>org.kuali.module.kra.routingform.bo.ResearchRiskType</value>
-        </property>
-    </bean>
+
 </beans>
