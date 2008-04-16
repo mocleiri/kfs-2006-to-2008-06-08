@@ -34,7 +34,6 @@ import org.kuali.core.service.PersistenceService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.service.OptionsService;
-import org.kuali.kfs.util.Message;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
@@ -59,6 +58,7 @@ import org.kuali.module.gl.util.ExpenditureTransactionReport;
 import org.kuali.module.gl.util.GeneralLedgerPendingEntryReport;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.LedgerReport;
+import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.PosterOutputSummaryReport;
 import org.kuali.module.gl.util.Summary;
 import org.kuali.module.gl.util.TransactionListingReport;
@@ -82,6 +82,7 @@ import com.lowagie.text.pdf.PdfWriter;
 /**
  * The base implementation of ReportService
  */
+@Transactional
 public class ReportServiceImpl implements ReportService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReportServiceImpl.class);
 

@@ -24,7 +24,7 @@
 -->
 <dictionaryEntry>
     <businessObject businessObjectClass="org.kuali.module.chart.bo.ObjectCode">
-
+        <customAttributeEnabled>true</customAttributeEnabled>
 
         <inquiry>
             <title>Object Code Inquiry</title>
@@ -57,7 +57,7 @@
             <title>Object Code Lookup</title>
 
             <menubar>
-                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeGlobal"><img src="${kr.externalizable.images.url}tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.ObjectCodeChangeDocument"><img src="images/tinybutton-createnewglobal.gif" alt="create new global" width="98" height="15"/></a>]]>
             </menubar>
 
             <instructions>Lookup an Object Code</instructions>
@@ -115,13 +115,19 @@
                 <label>Fiscal Year</label>
                 <shortLabel>FY</shortLabel>
                 <required>true</required>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>This identifies the fiscal year of this object code. The Kuali object code table is by fiscal year, which assists in clean-up and maitenance of object codes.</description>
             </attributeReference>
 
             <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode">
                 <required>true</required>
+                <!-- 
                 <control>
-				    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" script="if ( typeof setReportsToChartCode == 'function' ) { setReportsToChartCode(); }" /> 
+				    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" script="setReportsToChartCode();" /> 
                 </control>
+                -->
             </attributeReference>
 
             <attribute name="financialObjectCode" forceUppercase="true">
@@ -136,6 +142,11 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code for the "object" of accounting for a transaction, expressed as a 4-digit numeric text, including leading zeros. For Search Criteria, select the Help for the Object Code Lookup title.</description>
             </attribute>
 
             <attribute name="financialObjectCodeName" forceUppercase="true">
@@ -150,6 +161,11 @@
                 <control>
                     <text size="40" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>A description that conveys the concept represented by the Object Code. For Search Criteria, select the Help for the Object Code Lookup title.</description>
             </attribute>
 
             <attribute name="financialObjectCodeShortName" forceUppercase="true">
@@ -164,6 +180,11 @@
                 <control>
                     <text size="12" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>A shortened version of the Object Code Name for use on standard reports that have limited space available for printing. No additional functions have been assigned to this field. For Search Criteria, select the Help for the Object Code Lookup title.</description>
             </attribute>
             <!-- 
                 NOTE!!!
@@ -182,6 +203,11 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code used to aggregate Object Codes into a broader classification, expressed as a 4-character code. For Search Criteria, select the Help for the Object Code Lookup title.</description>
             </attribute>
 
             <attribute name="reportsToChartOfAccountsCode" forceUppercase="true">
@@ -192,10 +218,17 @@
                 <validationPattern>
                     <alpha exactLength="2" />
                 </validationPattern>
-                <required>true</required>
+                <required>false</required>
                 <control>
-					<text size="2" />
-				</control>
+				    <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder" /> 
+                </control>
+                
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attribute>
 
             <attribute name="reportsToFinancialObjectCode" forceUppercase="true">
@@ -210,6 +243,13 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attribute>
             <!-- 
                 NOTE!!!
@@ -228,6 +268,11 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code used to identify the basic accounting category to which the Object Code relates, expressed as a 2-character code. For Search Criteria, select the Help for the Object Code Lookup title.</description>
             </attribute>
 
             <attribute name="financialObjectSubTypeCode" forceUppercase="true">
@@ -242,6 +287,11 @@
                 <control>
                     <text size="2" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>A classification for Object Codes used for system checking, routing, and approval, expressed as a 2-character code. For Search Criteria, select the Help for the Object Code Lookup title.</description>
             </attribute>
 
             <attribute name="historicalFinancialObjectCode" forceUppercase="true">
@@ -255,6 +305,11 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code that links the current Object Code to codes used in the past to represent the same concept. It provides for the reference of a different code previously used for this purpose, and can be used for historical reporting.</description>
             </attribute>
             <!-- 
                 NOTE!!!
@@ -270,6 +325,11 @@
                 <control>
                     <checkbox />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Radioboxes in the entry form that indicate if the Object Code is active or inactive. If "Both" is checked in the Lookup, then both "Yes" (active) or "No" (inactive) values are listed in the search.</description>
                 <formatterClass>org.kuali.core.web.format.BooleanFormatter</formatterClass>
             </attribute>
 
@@ -284,6 +344,10 @@
                         <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.BudgetAggregationCodeValuesFinder" />
                 -->
 				</control>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code that indicates at what level the Object Code can be used for budgeting, expressed as a 1-character code, where O = Object Code level, C = consolidation level, and L = the level itself.</description>
             </attribute>
 
             <attribute name="finObjMandatoryTrnfrelimCd" forceUppercase="true">
@@ -295,6 +359,13 @@
                 <control>
                     <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.MandatoryTransferEliminationCodeValuesFinder" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attribute>
             <!-- 
                 NOTE!!!
@@ -311,6 +382,13 @@
                 <control>
                     <select valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.FederalFundedCodeValuesFinder" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attribute>
 
             <attribute name="nextYearFinancialObjectCode" forceUppercase="true">
@@ -325,6 +403,13 @@
                 <control>
                     <text size="4" />
                 </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    <![CDATA[&nbsp;]]>
+                </description>
             </attribute>
 
             <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
