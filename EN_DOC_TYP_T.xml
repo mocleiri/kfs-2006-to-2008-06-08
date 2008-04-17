@@ -430,7 +430,7 @@
         DOC_TYP_PARNT_ID="317581"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="20"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="21"
         DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
         DOC_TYP_DESC="KualiFinancialDocument"
         DOC_TYP_HDLR_URL_ADDR="none" DOC_TYP_ID="317040"
@@ -2105,8 +2105,8 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="289194" DOC_TYP_RTE_VER_NBR="2"
         DOC_TYP_VER_NBR="27" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="2"
-        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="3"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="0"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/financialBudgetAdjustment.do?methodToCall=docHandler"
         DOC_TYP_ID="306389" DOC_TYP_LBL_TXT="Budget Adjustment"
         DOC_TYP_NM="BudgetAdjustmentDocument" DOC_TYP_PARNT_ID="317040"
@@ -2366,4 +2366,12 @@
         DOC_TYP_PARNT_ID="293336"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="2" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T BLNKT_APPR_WRKGRP_ID="2744" DB_LOCK_VER_NBR="1"
+        DOC_TYP_ACTV_IND="1" DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/financialBudgetAdjustment.do?methodToCall=docHandler"
+        DOC_TYP_ID="318320" DOC_TYP_LBL_TXT="Budget Adjustment"
+        DOC_TYP_NM="BudgetAdjustmentDocument" DOC_TYP_PARNT_ID="317040"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_PREV_VER="306389" DOC_TYP_RTE_VER_NBR="2"
+        DOC_TYP_VER_NBR="12" WRKGRP_ID="2752"/>
 </dataset>
