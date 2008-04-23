@@ -4536,14 +4536,6 @@
         SH_PARM_NM="ENABLE_ADDRESS_TO_VENDOR_SELECTION_IND"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
-    <SH_PARM_T OBJ_ID="486DA15C4D25BE0DE0404F8189D85EA5"
-        SH_PARM_CONS_CD="D"
-        SH_PARM_DESC="Set of fields which are hidden for departmental users."
-        SH_PARM_DTL_TYP_CD="Asset"
-        SH_PARM_NM="DEPARTMENT_VIEWABLE_FIELDS"
-        SH_PARM_NMSPC_CD="KFS-CM"
-        SH_PARM_TXT="replacementAmount;estimatedSellingPrice;oldTagNumber;conditionCode;landCountyName;landAcreageSize;landParcelNumber"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="CM_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="486DA15C4D26BE0DE0404F8189D85EA5"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Set of Object SubType codes which require federal contribution for this asset"
@@ -4726,4 +4718,28 @@
         SH_PARM_NM="PRE_DISBURSEMENT_EXTRACT_CUTOFF_TIME"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="05:00:00"
         SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="FP_OPERATIONS"/>
+    <SH_PARM_T OBJ_ID="4B796E80FD5E2827E0404F8189D82B5E"
+        SH_PARM_CONS_CD="D"
+        SH_PARM_DESC="Set of fields which are hidden for departmental users (i.e. users that are not present in any workgroup)"
+        SH_PARM_DTL_TYP_CD="Asset"
+        SH_PARM_NM="DEPARTMENT_VIEWABLE_FIELDS"
+        SH_PARM_NMSPC_CD="KFS-CM"
+        SH_PARM_TXT="replacementAmount;estimatedSellingPrice;oldTagNumber;conditionCode;landCountyName;landAcreageSize;landParcelNumber;salePrice"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="4B796E80FD5F2827E0404F8189D82B5E"
+        SH_PARM_CONS_CD="D"
+        SH_PARM_DESC="Set of fields which are read-only (not-editable) for departmental users (i.e. users that are not present in any workgroup)"
+        SH_PARM_DTL_TYP_CD="Asset"
+        SH_PARM_NM="DEPARTMENT_EDITABLE_FIELDS"
+        SH_PARM_NMSPC_CD="KFS-CM"
+        SH_PARM_TXT="organizationOwnerAccountNumber;organizationOwnerChartOfAccountsCode;agencyNumber;vendorName;oldTagNumber;governmentTagNumber;nationalStockNumber;capitalAssetInServiceDate;financialObjectSubTypeCode"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="4B796E80FD602827E0404F8189D82B5E"
+        SH_PARM_CONS_CD="D"
+        SH_PARM_DESC="Set of fields which are read-only (not-editable) for Merge, Separate users"
+        SH_PARM_DTL_TYP_CD="Asset"
+        SH_PARM_NM="MERGE_SEPARATE_EDITABLE_FIELDS"
+        SH_PARM_NMSPC_CD="KFS-CM"
+        SH_PARM_TXT="organizationOwnerChartOfAccountsCode;organizationOwnerAccountNumber;capitalAssetInServiceDate"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="CM_ADMINISTRATORS"/>
 </dataset>

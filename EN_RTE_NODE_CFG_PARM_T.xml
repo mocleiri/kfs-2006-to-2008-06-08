@@ -1165,4 +1165,37 @@
     <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2471"
         RTE_NODE_CFG_PARM_KEY="ruleSelector"
         RTE_NODE_CFG_PARM_ND="563358319" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2480"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358329" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2481"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358329" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2482"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358329" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2483"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358329" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2484"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358329" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2485"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358330" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Lockbox&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>LockboxTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>true&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2486"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358330" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2487"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358330" RTE_NODE_CFG_PARM_VAL="LockboxTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2488"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358330" RTE_NODE_CFG_PARM_VAL="true"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2489"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358330" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2490"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358330" RTE_NODE_CFG_PARM_VAL="Template"/>
 </dataset>

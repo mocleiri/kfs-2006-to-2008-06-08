@@ -3936,9 +3936,6 @@
         <column name="CPTLAST_ORGTAG_NBR" size="8" type="VARCHAR"/>
         <column name="CPTLAST_ORG_DESC" size="40" type="VARCHAR"/>
         <column name="ORG_TXT" size="255" type="VARCHAR"/>
-        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_ORG_TR1">
-            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
-        </foreign-key>
         <unique name="CM_AST_ORG_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -4266,9 +4263,6 @@
         <column name="AST_WRNTY_NBR" size="25" type="VARCHAR"/>
         <column name="AST_WRNTY_PO_NBR" size="9" type="VARCHAR"/>
         <column name="AST_WRNTY_TXT" size="40" type="VARCHAR"/>
-        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_WRNTY_TR1">
-            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
-        </foreign-key>
         <unique name="CM_AST_WRNTY_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -15293,7 +15287,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2300"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318340"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318360"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4072"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -15301,9 +15295,9 @@
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5891"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13156"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563358329"/>
-    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2480"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13176"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563358349"/>
+    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2500"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151676"/>

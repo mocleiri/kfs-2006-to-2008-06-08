@@ -134,4 +134,7 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
         RULE_TMPL_DESC="KualiPurApCommodityCodeTemplate"
         RULE_TMPL_ID="13137" RULE_TMPL_NM="KualiPurApCommodityCodeTemplate"/>
+    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
+        RULE_TMPL_DESC="Rule Template to route documents to an appropriate lockbox"
+        RULE_TMPL_ID="13157" RULE_TMPL_NM="LockboxTemplate"/>
 </dataset>
