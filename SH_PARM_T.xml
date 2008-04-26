@@ -4742,4 +4742,10 @@
         SH_PARM_NMSPC_CD="KFS-CM"
         SH_PARM_TXT="organizationOwnerChartOfAccountsCode;organizationOwnerAccountNumber;capitalAssetInServiceDate"
         SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="4BB3F38EC87757D2E0404F8189D83A2C"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Identifies the sub account number associated with the SUSPENSE_ACCOUNT_NUMBER parameter."
+        SH_PARM_DTL_TYP_CD="LaborScrubberStep"
+        SH_PARM_NM="SUSPENSE_SUB_ACCOUNT" SH_PARM_NMSPC_CD="KFS-LD"
+        SH_PARM_TXT="-----" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="FP_OPERATIONS"/>
 </dataset>
