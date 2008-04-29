@@ -25,6 +25,11 @@ CREATE TABLE AR_SYS_INFO_T(
         ORG_REMIT_ZIP_CD               VARCHAR2(11), 
         ORG_CHCK_PAY_TO_NM             VARCHAR2(40), 
         FDOC_INITIATOR_ID              VARCHAR2(10),
+        WIRE_COA_CD                    VARCHAR2(2), 
+        WIRE_ACCT_NBR                  VARCHAR2(7), 
+        WIRE_SUB_ACCT_NBR              VARCHAR2(5), 
+        WIRE_OBJ_CD                    VARCHAR2(4), 
+        WIRE_SUB_OBJ_CD                VARCHAR2(3), 
      CONSTRAINT AR_SYS_INFO_TP1 PRIMARY KEY (
         UNIV_FISCAL_YR,
         PRCS_FIN_COA_CD,
