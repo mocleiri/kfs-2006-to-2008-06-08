@@ -4748,4 +4748,11 @@
         SH_PARM_DTL_TYP_CD="LaborScrubberStep"
         SH_PARM_NM="SUSPENSE_SUB_ACCOUNT" SH_PARM_NMSPC_CD="KFS-LD"
         SH_PARM_TXT="-----" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="FP_OPERATIONS"/>
+    <SH_PARM_T OBJ_ID="4C0A454C0028483AE0404F8189D8089D"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The number of days added to the processed date to calculate the default pay date."
+        SH_PARM_DTL_TYP_CD="PaymentRequest"
+        SH_PARM_NM="NUMBER_OF_DAYS_USED_TO_CALCULATE_DEFAULT_PAY_DATE"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="10"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="2" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
 </dataset>
