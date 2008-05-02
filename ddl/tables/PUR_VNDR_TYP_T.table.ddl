@@ -24,7 +24,7 @@ CREATE TABLE PUR_VNDR_TYP_T(
         VNDR_ADDR_TYP_REQ_CD           VARCHAR2(4), 
         VNDR_CONTR_ALLW_IND            VARCHAR2(1),
         VNDR_SHOW_RVW_IND              VARCHAR2(1),
-        VNDR_RVW_TXT                   VARCHAR(4000),
+        VNDR_RVW_TXT                   VARCHAR2(4000),
         PUR_COMM_REQ_IND               VARCHAR2(1),
      CONSTRAINT PUR_VNDR_TYP_TP1 PRIMARY KEY (
         VNDR_TYP_CD),
