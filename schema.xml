@@ -14359,6 +14359,44 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
+    <table name="PUR_THRSHLD_T">
+        <column name="PUR_THRSHLD_ID" primaryKey="true" size="10" type="DECIMAL"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="FIN_COA_CD" size="2" type="VARCHAR"/>
+        <column name="ACCT_TYP_CD" size="2" type="VARCHAR"/>
+        <column name="SUB_FUND_GRP_CD" size="6" type="VARCHAR"/>
+        <column name="FIN_OBJECT_CD" size="4" type="VARCHAR"/>
+        <column name="ORG_CD" size="4" type="VARCHAR"/>
+        <column name="PUR_THRSHLD_AMT" size="19" type="DECIMAL"/>
+        <column name="VNDR_HDR_GNRTD_ID" size="10" type="DECIMAL"/>
+        <column name="VNDR_DTL_ASND_ID" size="10" type="DECIMAL"/>
+        <column name="PUR_COMM_CD" size="40" type="VARCHAR"/>
+        <column name="DOBJ_MAINT_CD_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="PUR_VNDR_DTL_T" name="PUR_THRSHLD_TR3">
+            <reference foreign="VNDR_HDR_GNRTD_ID" local="VNDR_HDR_GNRTD_ID"/>
+            <reference foreign="VNDR_DTL_ASND_ID" local="VNDR_DTL_ASND_ID"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ORG_T" name="PUR_THRSHLD_TR6">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+            <reference foreign="ORG_CD" local="ORG_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_SUB_FUND_GRP_T" name="PUR_THRSHLD_TR2">
+            <reference foreign="SUB_FUND_GRP_CD" local="SUB_FUND_GRP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="PUR_THRSHLD_TR4">
+            <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="PUR_COMM_T" name="PUR_THRSHLD_TR5">
+            <reference foreign="PUR_COMM_CD" local="PUR_COMM_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_TYPE_T" name="PUR_THRSHLD_TR1">
+            <reference foreign="ACCT_TYP_CD" local="ACCT_TYP_CD"/>
+        </foreign-key>
+        <unique name="PUR_THRSHLD_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="PUR_VNDR_ADDR_T">
         <column name="VNDR_ADDR_GNRTD_ID" primaryKey="true" size="10" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -15263,7 +15301,7 @@
     <sequence name="FP_CASHIER_ITM_IN_PROC_T_SEQ" nextval="1000"/>
     <sequence name="FP_PRCRMNT_CARD_TRN_T_SEQ" nextval="2040"/>
     <sequence name="GL_ID_BILL_T_SEQ" nextval="1"/>
-    <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="11909"/>
+    <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="11929"/>
     <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="31905"/>
     <sequence name="INV_HDR_INFO_ID" nextval="1002"/>
     <sequence name="INV_ITM_ID" nextval="1002"/>
@@ -15304,6 +15342,7 @@
     <sequence name="PO_VNDR_QT_ID" nextval="1002"/>
     <sequence name="PO_VNDR_STPLTN_ID" nextval="1002"/>
     <sequence name="PUR_RCVNG_ADDR_ID" nextval="1000"/>
+    <sequence name="PUR_THRSHLD_ID" nextval="1000"/>
     <sequence name="RCVNG_COR_ITM_ID" nextval="1000"/>
     <sequence name="RCVNG_LN_ITM_ID" nextval="1000"/>
     <sequence name="REQS_ACCT_ID" nextval="1003"/>
