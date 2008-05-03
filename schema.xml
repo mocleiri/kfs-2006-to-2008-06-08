@@ -14368,7 +14368,7 @@
         <column name="SUB_FUND_GRP_CD" size="6" type="VARCHAR"/>
         <column name="FIN_OBJECT_CD" size="4" type="VARCHAR"/>
         <column name="ORG_CD" size="4" type="VARCHAR"/>
-        <column name="PUR_THRSHLD_AMT" size="19" type="DECIMAL"/>
+        <column name="PUR_THRSHLD_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="VNDR_HDR_GNRTD_ID" size="10" type="DECIMAL"/>
         <column name="VNDR_DTL_ASND_ID" size="10" type="DECIMAL"/>
         <column name="PUR_COMM_CD" size="40" type="VARCHAR"/>
@@ -15355,7 +15355,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2300"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318400"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318420"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4072"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
