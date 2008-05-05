@@ -15,10 +15,7 @@
  */
 package org.kuali.module.budget.dao.ojb;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,37 +24,26 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
-import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.dao.DocumentDao;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.KualiInteger;
-import org.kuali.core.util.TransactionalServiceUtils;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.KFSConstants.BudgetConstructionConstants;
 import org.kuali.kfs.KFSConstants.ParameterValues;
-import org.kuali.kfs.context.SpringContext;
-import org.springframework.dao.DataAccessException;
-import org.kuali.module.budget.BCConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.budget.bo.BudgetConstructionAccountOrganizationHierarchy;
 import org.kuali.module.budget.bo.BudgetConstructionAccountReports;
-import org.kuali.module.budget.bo.BudgetConstructionAdministrativePost;
-import org.kuali.module.budget.bo.BudgetConstructionAppointmentFundingReason;
 import org.kuali.module.budget.bo.BudgetConstructionCalculatedSalaryFoundationTracker;
-import org.kuali.module.budget.bo.BudgetConstructionIntendedIncumbent;
 import org.kuali.module.budget.bo.BudgetConstructionHeader;
 import org.kuali.module.budget.bo.BudgetConstructionMonthly;
 import org.kuali.module.budget.bo.BudgetConstructionOrganizationReports;
@@ -71,24 +57,13 @@ import org.kuali.module.budget.document.BudgetConstructionDocument;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.Org;
-import org.kuali.module.chart.service.OrganizationService;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
 import org.kuali.module.financial.bo.FunctionControlCode;
 import org.kuali.module.gl.GLConstants.ColumnNames;
 import org.kuali.module.gl.bo.Balance;
-import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.labor.bo.LaborObject;
 
-import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.KEWServiceLocator;
 import edu.iu.uis.eden.exception.WorkflowException;
-import edu.iu.uis.eden.routeheader.DocumentRouteHeaderValue;
-import edu.iu.uis.eden.routeheader.RouteHeaderService;
-// October, 2007 additions
-import edu.iu.uis.eden.actions.CompleteAction;
-import edu.iu.uis.eden.actions.ActionTakenEvent;
-import edu.iu.uis.eden.clientapp.vo.NetworkIdVO;
-import edu.iu.uis.eden.server.BeanConverter;
 
 
 public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb 
@@ -170,8 +145,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
     private WorkflowDocumentService workflowDocumentService;
     private DateTimeService dateTimeService; 
     private DocumentDao documentDao;
-    private RouteHeaderService routeHeaderService = null;
-    
     
     public final Map<String,String> getBudgetConstructionControlFlags (Integer universityFiscalYear)
     {
@@ -218,6 +191,32 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             
     }
     
+    public final String getBudgetConstructionInitiatorID()
+    {
+        //@TODO: The constants and field names below should come from constants files
+        //  the chart and department should be budget construction constants
+        //  the others should be kuali constants
+        final String DEFAULT_ID = "666-666-66";
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(FINANCIAL_CHART_PROPERTY, BUDGET_CZAR_CHART);
+        criteriaID.addEqualTo(ORG_CODE_PROPERTY,BUDGET_CZAR_ORG);
+        criteriaID.addColumnEqualTo(ACCOUNT_CLOSED_INDICATOR_PROPERTY,
+                KFSConstants.ParameterValues.NO);
+        String[] queryAttr = {FISCAL_OFFICER_ID_PROPERTY};
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(Account.class, queryAttr, criteriaID, true);
+        Iterator Results = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        if (!Results.hasNext())
+        {
+            return DEFAULT_ID;
+        }
+        else
+        {  
+           String retID = (String) ((Object[]) Results.next())[0];  
+           return retID;
+        }
+    }
+    
     /*
      * ******************************************************************************
      *   These are utility routines used by all the units
@@ -258,9 +257,9 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             new ReportQueryByCriteria(classID, selectList, criteriaID);
         Iterator resultRows = 
             getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        if (resultRows.hasNext())
+        while (resultRows.hasNext())
         {
-            return(hashCapacity(((Number)((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(resultRows))[0]).intValue()));
+            return(hashCapacity(((BigDecimal)((Object[]) resultRows.next())[0]).intValue()));
         }
         return (new Integer(1));
     }
@@ -275,9 +274,9 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             new ReportQueryByCriteria(classID, selectList, criteriaID);
         Iterator resultRows = 
             getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        if (resultRows.hasNext())
+        while (resultRows.hasNext())
         {
-            return(hashCapacity(((Number)((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(resultRows))[0]).intValue()));
+            return(hashCapacity(((BigDecimal)((Object[]) resultRows.next())[0]).intValue()));
         }
         return (new Integer(1));
     }
@@ -296,42 +295,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             new ReportQueryByCriteria(classID, selectList, criteriaID, true);
         return (getPersistenceBrokerTemplate().getCount(queryID));
     }
-
-  /*
-   * ********************************************************************************
-   *   This routine returns the fiscal year as of the run date.
-   *   Normally, genesis runs in the current fiscal year to build budget construction
-   *   for the coming fiscal year.
-   */   
-    public Integer fiscalYearFromToday()
-    {
-        //  we look up the fiscal year for today's date, and return it
-        //  we return 0 if nothing is found
-        Integer currentFiscalYear = new Integer(0);
-        Date lookUpDate =
-            dateTimeService.getCurrentSqlDateMidnight();
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_DATE,
-                              lookUpDate);
-        String[] attrb = {KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR};
-        ReportQueryByCriteria queryID =
-            new ReportQueryByCriteria(UniversityDate.class, attrb, criteriaID);
-        Iterator resultRow =
-        getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-        // there will only be one row.
-        // Oracle will not close the cursor, however, until the iterator has been exhausted
-        if (resultRow.hasNext())
-        {
-            currentFiscalYear = (Integer) ((Number)
-                        ((Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(resultRow))[0]).intValue();
-        }
-        //TODO:
-        LOG.debug(String.format("\nreturned from fiscalYearFromToday: %d",
-                currentFiscalYear));
-        //TODO:
-        return currentFiscalYear;
-    }
-    
     
     /*
      * ******************************************************************************  
@@ -460,11 +423,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
      */
     public void clearDBForGenesis(Integer BaseYear)
     {
-        clearBudgetConstructionAdministrativePost();
-        clearBudgetConstructionIntendedIncumbent();
         //  the order is important because of referential integrity in the database
         clearBothYearsBCSF(BaseYear);
-        clearBothYearsBudgetConstructionAppointmentFundingReason(BaseYear);
         clearBothYearsPendingApptFunding(BaseYear);
         clearBothYearsBCPosition(BaseYear);
         //  the calling order is important because of referential integrity in the 
@@ -472,63 +432,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         clearBothYearsPBGL(BaseYear);
         clearBothYearsHeaders(BaseYear);
     }
-    
-    private void clearBudgetConstructionAdministrativePost()
-    {
-        QueryByCriteria queryId = 
-            new QueryByCriteria(BudgetConstructionAdministrativePost.class,
-                                QueryByCriteria.CRITERIA_SELECT_ALL);
-        getPersistenceBrokerTemplate().deleteByQuery(queryId);
-        getPersistenceBrokerTemplate().clearCache();
-    }
 
-    private void clearBaseYearBudgetConstructionAppointmentFundingReason(Integer BaseYear)
-    {
-        Criteria criteriaId = new Criteria();
-        criteriaId.addColumnEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
-                BaseYear);
-        QueryByCriteria queryId = 
-            new QueryByCriteria(BudgetConstructionAppointmentFundingReason.class,
-                    criteriaId);
-        getPersistenceBrokerTemplate().deleteByQuery(queryId);
-        getPersistenceBrokerTemplate().clearCache();
-    }
-
-    private void clearBothYearsBudgetConstructionAppointmentFundingReason(Integer BaseYear)
-    {
-        Integer RequestYear = BaseYear+1;
-        Criteria criteriaId = new Criteria();
-        criteriaId.addBetween(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
-                              BaseYear,RequestYear);
-        QueryByCriteria queryId = 
-            new QueryByCriteria(BudgetConstructionAppointmentFundingReason.class,
-                                                      criteriaId);
-        getPersistenceBrokerTemplate().deleteByQuery(queryId);
-        getPersistenceBrokerTemplate().clearCache();
-    }
-    
-    private void clearBudgetConstructionAppointmentFundingReason()
-    {
-        QueryByCriteria queryId = 
-            new QueryByCriteria(BudgetConstructionAppointmentFundingReason.class,
-                                QueryByCriteria.CRITERIA_SELECT_ALL);
-        getPersistenceBrokerTemplate().deleteByQuery(queryId);
-        getPersistenceBrokerTemplate().clearCache();
-    }
-    
-    private void clearRequestYearBudgetConstructionAppointmentFundingReason(Integer BaseYear)
-    {
-        Integer RequestYear = BaseYear +1;
-        Criteria criteriaId = new Criteria();
-        criteriaId.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
-                RequestYear);
-        QueryByCriteria queryId = 
-            new QueryByCriteria(BudgetConstructionAppointmentFundingReason.class,
-                    criteriaId);
-        getPersistenceBrokerTemplate().deleteByQuery(queryId);
-        getPersistenceBrokerTemplate().clearCache();
-    }
-    
     private void clearBaseYearBCSF(Integer BaseYear)
     {
         Criteria criteriaId = new Criteria();
@@ -558,15 +462,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
     {
         QueryByCriteria queryId = 
             new QueryByCriteria(BudgetConstructionCalculatedSalaryFoundationTracker.class,
-                                QueryByCriteria.CRITERIA_SELECT_ALL);
-        getPersistenceBrokerTemplate().deleteByQuery(queryId);
-        getPersistenceBrokerTemplate().clearCache();
-    }
-    
-    private void clearBudgetConstructionIntendedIncumbent()
-    {
-        QueryByCriteria queryId = 
-            new QueryByCriteria(BudgetConstructionIntendedIncumbent.class,
                                 QueryByCriteria.CRITERIA_SELECT_ALL);
         getPersistenceBrokerTemplate().deleteByQuery(queryId);
         getPersistenceBrokerTemplate().clearCache();
@@ -846,8 +741,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             // no new documents need to be created
             return;
         }
-        // get the workflow document service
-        setUpRouteHeaderService();
         // take the count of header keys from the GL
         setUpCurrentBCHeaderKeys(BaseYear);
         Integer RequestYear = BaseYear+1;
@@ -879,20 +772,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         }
         createNewDocumentsCleanUp();
     }
- /*  @@TODO:  this is prior to October, 2007, when calling complete stopped running in finite time   
-    private void finalizeBCDocument(BudgetConstructionDocument bcDoc) throws WorkflowException
-    {
-        // this routine reads the actual workflow tables to set the status dates and the final status code
-        // going through the routing procedure took far too much time per document
-        DocumentRouteHeaderValue routeHeader =
-            routeHeaderService.getRouteHeader(bcDoc.getDocumentHeader().getWorkflowDocument().getRouteHeaderId());
-        routeHeader.markDocumentEnroute();
-        routeHeader.markDocumentApproved();
-        routeHeader.markDocumentProcessed();
-        routeHeader.markDocumentFinalized();
-        routeHeaderService.saveRouteHeader(routeHeader);
-    }
-*/    
 
     //  here are the private methods that go with it      
     private void getAndStoreCurrentCSFBCHeaderCandidates(Integer BaseYear)
@@ -916,7 +795,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                 LOG.warn(String.format(
                         "\nskipping creation of document for CSF key: %s %s %s \n(%s)\n",
                         Results[0], Results[1], Results[2], wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
             }
@@ -937,7 +815,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                         newBCHdr.getAccountNumber(),
                         newBCHdr.getSubAccountNumber(),
                         wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
 
@@ -998,7 +875,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                         (String) Results[1],
                         (String) Results[2],
                         wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
             }
@@ -1019,7 +895,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                         newBCHdr.getAccountNumber(),
                         newBCHdr.getSubAccountNumber(),
                         wex.getMessage()));
-                wex.printStackTrace();
                 documentsSkippedinNTS = documentsSkippedinNTS+1;
                 continue;
 
@@ -1164,26 +1039,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         }
     }
     
-    //@@TODO:  this method was added in October, 2007 in an attempt to speed things up
-    private void saveBCDocumentInWorkflow(BudgetConstructionDocument bcDoc) throws WorkflowException
-    {
-       // first, fetch the DB version of the workflow document saved when Kuali checked for the correct document type 
-        DocumentRouteHeaderValue ourWorkflowDoc = 
-         routeHeaderService.getRouteHeader(bcDoc.getDocumentHeader().getWorkflowDocument().getRouteHeaderId());
-       // next, call the complete method in the document service
-       // WorkflowDocumentService interface has a complete method, but its Kuali counterpart does not
-       // so, we mimic the workflow call here.  complete should be added to Kuali 
-       CompleteAction action = new CompleteAction(ourWorkflowDoc, ourWorkflowDoc.getInitiatorUser(), "created by Genesis");
-       action.recordAction();
-       // there was no need to queue.  we want to mark the document final and save it 
-       ourWorkflowDoc.markDocumentEnroute();
-       ourWorkflowDoc.markDocumentApproved();
-       ourWorkflowDoc.markDocumentProcessed();
-       ourWorkflowDoc.markDocumentFinalized();
-       routeHeaderService.saveRouteHeader(ourWorkflowDoc);
-    }
-
-    
     public void setUpCSFHashStructures(Integer BaseYear)
     {
        // these are the potential document keys in the CSF tracker
@@ -1208,7 +1063,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         Criteria criteriaID = new Criteria();
         criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
         criteriaID.addEqualTo(KFSPropertyConstants.BALANCE_TYPE_CODE,
-                              KFSConstants.BALANCE_TYPE_BASE_BUDGET);
+                              BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_TYPE);
         String[] propertyString = {KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
                                    KFSPropertyConstants.ACCOUNT_NUMBER,
                                    KFSPropertyConstants.SUB_ACCOUNT_NUMBER};
@@ -1246,19 +1101,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                 BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION);
         getPersistenceBrokerTemplate().store(newBCHdr);
         documentService.prepareWorkflowDocument(newBCHdr);
-        // this is more efficient than route and does what we want
-        // it calls a document method, not a service
-        // newBCHdr.getDocumentHeader().getWorkflowDocument().complete("created by Genesis");
-        // October, 2007:  refactoring has made BC document creation unacceptably slow
-        // we are going to attempt to streamline the process by by-passing the workflowDocumentActionWebService
-        // (which is called by complete above) and simply saving our document and its action log message directly
-        // using workflowDocumentService routines
-        saveBCDocumentInWorkflow(newBCHdr);
-        //@@TODO: end October 2007 additions
-        //@@TODO: October 2007 deletion
-        // finalizeBCDocument(newBCHdr);
-//        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
-//                                      "created by Genesis",null);
+        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
+                                      "created by Genesis",null);
    }
     
         
@@ -1290,12 +1134,10 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         killOrgQuery.setCriteria(criteriaID);
         getPersistenceBrokerTemplate().deleteByQuery(killOrgQuery);
         getPersistenceBrokerTemplate().clearCache();
-      // this has moved temporarily until the data model is fixed (8/8/2007)  
-        buildNewOrganizationReportsTo();
       // build the account table
         buildNewAccountReportsTo();
       // build the organization table  
-      // buildNewOrganizationReportsTo();
+        buildNewOrganizationReportsTo();
     }
     
     //  private working methods for the BC chart update
@@ -1469,7 +1311,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         //
         // now we fetch the root of the organization tree
         String[] rootNode = 
-            SpringContext.getBean(OrganizationService.class).getRootOrganizationCode();
+            SpringServiceLocator.getOrganizationService().getRootOrganizationCode();
         rootChart = rootNode[0];
         rootOrganization = rootNode[1];
         //
@@ -2108,10 +1950,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
            (KualiDecimal) sqlResult[sqlBeginningBalanceLineAmount];
        BaseAmount = 
            BaseAmount.add((KualiDecimal) sqlResult[sqlAccountLineAnnualBalanceAmount]);
-       KualiInteger DollarBaseAmount = 
-           new KualiInteger(BaseAmount.bigDecimalValue());
-       PBGLObj.setFinancialBeginningBalanceLineAmount(DollarBaseAmount);
-       PBGLObj.setAccountLineAnnualBalanceAmount(KualiInteger.ZERO);
+       PBGLObj.setFinancialBeginningBalanceLineAmount(BaseAmount);
+       PBGLObj.setAccountLineAnnualBalanceAmount(KualiDecimal.ZERO);
        //  ObjectID is set in the BusinessObjectBase on insert and update
        //  but, we must set the version number
        PBGLObj.setVersionNumber(DEFAULT_VERSION_NUMBER);
@@ -2262,9 +2102,9 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
            return;
        }
        PendingBudgetConstructionGeneralLedger matchFromGL = pBGLFromGL.get(TestKey);
-       KualiInteger baseFromCurrentGL = 
+       KualiDecimal baseFromCurrentGL = 
            matchFromGL.getFinancialBeginningBalanceLineAmount();
-       KualiInteger baseFromPBGL = 
+       KualiDecimal baseFromPBGL = 
            currentPBGLInstance.getFinancialBeginningBalanceLineAmount();
        // remove the candidate GL from the hash list
        // it won't match with anything else
@@ -2410,7 +2250,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
           criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,BaseYear);
           criteriaID.addColumnEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
                                       problemChart);
-          criteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,problemObject);
+          criteriaID.addEqualTo(KFSPropertyConstants.OBJECT_CODE,problemObject);
           ReportQueryByCriteria queryID = 
               new ReportQueryByCriteria(ObjectCode.class,criteriaID);
           Iterator Results = 
@@ -2424,7 +2264,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                        problemChart,problemObject,BaseYear));
               continue;
           }
-          ObjectCode baseYearObject = (ObjectCode) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(Results);
+          ObjectCode baseYearObject = (ObjectCode) Results.next();
           baseYearObject.setUniversityFiscalYear(RequestYear);
           baseYearObject.setActive(false);
           getPersistenceBrokerTemplate().store(baseYearObject);
@@ -2438,7 +2278,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         Criteria criteriaID = new Criteria();
         criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,RequestYear);
         criteriaID.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,Chart);
-        criteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,ObjectCode);
+        criteriaID.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER,ObjectCode);
         QueryByCriteria queryID = 
             new QueryByCriteria(ObjectCode.class,criteriaID);
         Integer Result = 
@@ -2501,6 +2341,676 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
               gLBBObjects.put(hashMapKey,hashMapValue);
               nInactiveBBObjectCodes = nInactiveBBObjectCodes + 1;
           }
+        }
+    }
+    
+    /********************************************************************************************
+     *  (8)  the budget construction position table is dependent on each institution's payroll
+     *       system, and thus cannot be coded effectively in Kuali.   However, RI in the database
+     *       requires that it be populated.  This is a stub routine to do so.
+     ********************************************************************************************
+     */
+    private HashMap<String,BudgetConstructionPosition> currentBCPosition =
+        new HashMap<String,BudgetConstructionPosition>(1);
+    private HashSet<String> deletedCSFOverridePositions =
+                             new HashSet();
+    private void createNewPositionCleanUp()
+    {
+       currentBCPosition.clear();
+       clearRCMaps();
+     }
+
+    private String newLockMarker = new String("saveThis");
+
+    private Integer returnedPositionNumber         = new Integer(0);
+    private Integer returnedEmplid                 = new Integer(1);
+    private Integer returnedChartOfAccountsCode    = new Integer(2);
+    private Integer returnedAccountNumber          = new Integer(3);
+    private Integer returnedSubAccountNumber       = new Integer(4);
+    private Integer returnedFinancialObjectCode    = new Integer(5);
+    private Integer returnedFinancialSubObjectCode = new Integer(6);
+    private Integer returnedCSFFundingStatusCode   = new Integer(7);
+    
+    public void createNewBCPosition(Integer BaseYear,
+                                    boolean PosSyncAllowed,
+                                    boolean CSFUpdatesAllowed)
+    {
+      
+       // do nothing if batch position updates are turned off  
+       if (! PosSyncAllowed)
+       {
+           return;
+       }
+       // read the current positions first
+        readCurrentPositions(BaseYear,CSFUpdatesAllowed);
+       //
+       // the positions for the base year are those in ACTIVE lines
+       // in CSF and CSF override
+       // there are two elements of stub code in this
+       // (1) it will be necessary to read active, budgeted positions for the
+       //     current fiscal year (by effective date at IU) into a hash map
+       //     and look for those in the CSF hash map, and fill in the position
+       //     attributes using the former.  
+       // (2) the next fiscal year positions come ONLY from the HR budgeted
+       //     positions (again by effective date at IU).  it does not matter
+       //     whether they are in CSF.  in the code below, we spoof the coming
+       //     year fetch by using CSF. 
+       // initialize the data needed for the spoof routines
+       initializeStubValues(BaseYear); 
+       // (we will eliminate positions from lines which are not active,
+       //  because the positions in inactive lines might no longer be
+       //  budgeted, and/or the accounts might no longer be active)
+        readCSFOverridePositions(BaseYear,CSFUpdatesAllowed);
+        readCSFPositions(BaseYear,CSFUpdatesAllowed);
+       //  finally, we have to read the position map, and store all the
+       //  positions that do not have a default lock ID, changing the lock
+       //  ID first
+       storeNewPositions();
+       createNewPositionCleanUp();
+       // getPersistenceBrokerTemplate().clearCache();
+    }
+    
+    private String buildDeletedKey(Object[] returnedRow)
+    {
+        return ((String) returnedRow[returnedPositionNumber])+
+                vacantEmplid((String) returnedRow[returnedCSFFundingStatusCode],
+                             (String) returnedRow[returnedEmplid])+
+               ((String) returnedRow[returnedChartOfAccountsCode])+
+               ((String) returnedRow[returnedAccountNumber])+
+               ((String) returnedRow[returnedSubAccountNumber])+
+               ((String) returnedRow[returnedFinancialObjectCode])+
+               ((String) returnedRow[returnedFinancialSubObjectCode]);
+
+    }
+    
+    private void buildDeletedList(Integer BaseYear)
+    {
+        // start fresh
+        deletedCSFOverridePositions.clear();
+        String yearString = BaseYear.toString();
+        // get the accounting strings for the lines marked deleted in CSF
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                                    BaseYear);
+        criteriaID.addNotEqualTo(KFSPropertyConstants.CSF_DELETE_CODE,
+                                 BudgetConstructionConstants.ACTIVE_CSF_LINE);
+        String[] selectList = buildCSFPositionSelectList();
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(CalculatedSalaryFoundationTrackerOverride.class,
+                                      selectList,criteriaID);
+        Iterator resultSet = 
+            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        while (resultSet.hasNext())
+        {
+            Object[] returnedRow = (Object[]) resultSet.next();
+            String deletedKey = buildDeletedKey(returnedRow);
+            if (! deletedCSFOverridePositions.contains(deletedKey))
+            {
+                deletedCSFOverridePositions.add(deletedKey);
+            }
+        }
+        LOG.info(String.format("\ndeleted CSF Override rows %d",
+                           deletedCSFOverridePositions.size()));
+    }
+    
+    private String[] buildCSFPositionSelectList()
+    {
+        String[] returnArray =
+           {KFSPropertyConstants.POSITION_NUMBER,
+            KFSPropertyConstants.EMPLID,
+            KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
+            KFSPropertyConstants.ACCOUNT_NUMBER,
+            KFSPropertyConstants.SUB_ACCOUNT_NUMBER,
+            KFSPropertyConstants.FINANCIAL_OBJECT_CODE,
+            KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE,
+            KFSPropertyConstants.CSF_FUNDING_STATUS_CODE};
+        return returnArray;
+    }
+    
+    private void buildNewPositionFromCSF(Integer FiscalYear, Object[] rowReturned)
+    {
+       // we will save new positions with a lock ID that is NOT the default 
+       // we will then automatically store them when we run the code to clear
+       // locks 
+       BudgetConstructionPosition newBCPosition = new BudgetConstructionPosition();
+       newBCPosition.setUniversityFiscalYear(FiscalYear);
+       newBCPosition.setPositionLockUserIdentifier(newLockMarker);
+       newBCPosition.setPositionNumber((String) rowReturned[returnedPositionNumber]);
+       // this is spoof code
+       fillPositionAttributesSpoof(newBCPosition, rowReturned, FiscalYear);
+       // add the new position to the position hash
+       currentBCPosition.put(positionKey(FiscalYear,
+                                         (String) rowReturned[returnedPositionNumber]),
+                                         newBCPosition);
+    }
+    
+    private Integer countCSFPositions(Integer FiscalYear)
+    {
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                              FiscalYear);
+        criteriaID.addEqualTo(KFSPropertyConstants.CSF_DELETE_CODE,
+                BudgetConstructionConstants.ACTIVE_CSF_DELETE_CODE);
+        return (hashObjectSize(CalculatedSalaryFoundationTracker.class,
+                               criteriaID,
+                               KFSPropertyConstants.POSITION_NUMBER));
+    }
+    
+    private String positionKey (Integer FiscalYear, String PositionNumber)
+    {
+        return PositionNumber+FiscalYear.toString();
+    }
+    
+    private void readCSFOverridePositions(Integer BaseYear,
+                                          boolean CSFUpdatesAllowed)
+    {
+        Integer overridesRead     = new Integer(0);
+        Integer overridePositions = new Integer(0);
+        Integer overrideRequest   = new Integer(0);
+    //  first get the positions in deleted lines
+    //  any key marked deleted in CSF override will NOT contribute
+    //  to the position table
+        buildDeletedList(BaseYear);
+    //  now, read the active CSF override lines    
+        String yearString = BaseYear.toString();
+        // get the accounting strings for the lines marked deleted in CSF
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                                    BaseYear);
+        criteriaID.addEqualTo(KFSPropertyConstants.CSF_DELETE_CODE,
+                                 BudgetConstructionConstants.ACTIVE_CSF_LINE);
+        String[] selectList = buildCSFPositionSelectList(); 
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(CalculatedSalaryFoundationTrackerOverride.class,
+                                      selectList,criteriaID);
+        Iterator resultSet = 
+            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        while (resultSet.hasNext())
+        {
+            overridesRead = overridesRead+1;
+            Object[] rowReturned = (Object[]) resultSet.next();
+            // we know the active rows are not deleted in CSF Override
+            // so, we just go ahead and build a new position, but only if
+            // CSF updates are active
+            if (! CSFUpdatesAllowed)
+            {    
+              String testBaseKey = 
+                  positionKey(BaseYear,
+                             (String) rowReturned[returnedPositionNumber]);
+              if (! currentBCPosition.containsKey(testBaseKey))
+              {
+                  buildNewPositionFromCSF(BaseYear,rowReturned);
+                  overridePositions = overridePositions+1;
+              }
+            }
+            buildRequestYearSpoof(BaseYear+1,rowReturned);
+            overrideRequest = overrideRequest+1;
+        }
+        LOG.info(String.format("\noverride rows (1) read = %d\n"+
+                                  "             (2) base year positions = %d\n"+
+                                  "             (3) request year positions = %d",
+                                  overridesRead, overridePositions, overrideRequest));
+    }
+    
+    private void readCSFPositions(Integer BaseYear, boolean CSFUpdatesAllowed)
+    {
+        Integer csfRead     = new Integer(0);
+        Integer csfPositions = new Integer(0);
+        Integer csfRequest   = new Integer(0);
+    //  now, read the active CSF lines    
+        String yearString = BaseYear.toString();
+        // get the accounting strings for the lines marked active in CSF
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                                    BaseYear);
+        criteriaID.addEqualTo(KFSPropertyConstants.CSF_DELETE_CODE,
+                                 BudgetConstructionConstants.ACTIVE_CSF_LINE);
+        String[] selectList = buildCSFPositionSelectList(); 
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(CalculatedSalaryFoundationTracker.class,
+                                      selectList,criteriaID);
+        Iterator resultSet = 
+            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        while (resultSet.hasNext())
+        {
+            csfRead = csfRead+1;
+            Object[] rowReturned = (Object[]) resultSet.next();
+            // do not include any CSF rows which are marked deleted in CSF 
+            // override
+            String csfKey = buildDeletedKey(rowReturned);
+            if (deletedCSFOverridePositions.contains(csfKey))
+            {
+                continue;
+            }
+            // if CSF updates are not allowed, we will not include any base year
+            // position rows
+            if (CSFUpdatesAllowed)
+            {
+              String testBaseKey = 
+                  positionKey(BaseYear,
+                              (String) rowReturned[returnedPositionNumber]);
+              if (! currentBCPosition.containsKey(testBaseKey))
+              {
+                  buildNewPositionFromCSF(BaseYear,rowReturned);
+                  csfPositions = csfPositions+1;
+              }
+            }
+            buildRequestYearSpoof(BaseYear+1,rowReturned);
+            csfRequest = csfRequest+1;
+        }
+        LOG.info(String.format("\nCSF rows (1) read = %d\n"+
+                                  "        (2) base year positions = %d\n"+
+                                  "        (3) request year positions = %d",
+                                  csfRead, csfPositions, csfRequest));
+    }
+    
+    private void readCurrentPositions(Integer BaseYear,
+                                      boolean CSFUpdatesAllowed)
+    {
+        QueryByCriteria queryId;
+        Integer positionHashSize;
+        Integer RequestYear = BaseYear+1;  
+        if (CSFUpdatesAllowed) 
+        {
+          // we only update the base year if CSF updates are allowed
+          // we always update the request year
+          // this code gets both years   
+          Criteria criteriaID = new Criteria();
+          criteriaID.addBetween(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                                BaseYear,RequestYear);
+          queryId = 
+              new QueryByCriteria(BudgetConstructionPosition.class,criteriaID);
+          // CSF could create a base and a request position
+          positionHashSize = 
+              hashObjectSize(BudgetConstructionPosition.class,criteriaID)+
+                             2*countCSFPositions(BaseYear);
+        }
+        else
+        {
+          // base year budget construction positions are frozen
+          // only update the request year positions  
+          Criteria criteriaID = new Criteria();
+          criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                                RequestYear);
+          // CSF will create only request year positions
+          // (but CSF is only there for the base year)
+          positionHashSize = 
+              hashObjectSize(BudgetConstructionPosition.class,
+                             criteriaID)+
+                             countCSFPositions(BaseYear);
+          queryId = 
+              new QueryByCriteria(BudgetConstructionPosition.class,criteriaID);
+        }
+        currentBCPosition = 
+            new HashMap<String,BudgetConstructionPosition>(positionHashSize);
+        Iterator rowsReturned =
+        getPersistenceBrokerTemplate().getIteratorByQuery(queryId);
+        while (rowsReturned.hasNext())
+        {
+            BudgetConstructionPosition currentPosition = 
+                (BudgetConstructionPosition) rowsReturned.next();
+            String hashKey = 
+                positionKey(currentPosition.getUniversityFiscalYear(),
+                            currentPosition.getPositionNumber());
+            currentBCPosition.put(hashKey,currentPosition);
+        }
+        LOG.info(String.format("\nposition count before updates %d",
+                               currentBCPosition.size()));
+    }
+    
+    private void storeNewPositions()
+    {
+        Integer positionsWritten = new Integer(0);
+        for (Map.Entry<String,BudgetConstructionPosition> positionRows : 
+  currentBCPosition.entrySet())
+        {
+            BudgetConstructionPosition testPosition =
+                positionRows.getValue();
+            if (!(storeNewPositionsCriteria(testPosition)))
+            {
+                // store everything that has a "lock"
+                // this code will also serve to clear hanging locks, although
+                // we should do that as well in the lock release routine because
+                // this code doesn't run if the flag is not set
+                // this mechanism can also permit us to update the default
+                // object class and set the change flag in the "real" system
+                testPosition.setPositionLockUserIdentifier(
+                        BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS);
+                getPersistenceBrokerTemplate().store(testPosition);
+                positionsWritten = positionsWritten+1;
+            }
+        }
+        LOG.info(String.format("\n%d of %d budget positions written",
+                    positionsWritten,currentBCPosition.size()));
+    }
+    
+    private boolean storeNewPositionsCriteria(BudgetConstructionPosition testPosition)
+    {
+        //  if we try to test content of A (null) = content og B (null) we get a null
+        //  pointer exception.  so, we need this convoluted routine because the default
+        //  locks in the DB can be nulls
+        //  (the null pointer exception apparently comes from the use of the null
+        //   constant in the compareTo)
+        //  this routine returns true if the tested lock is equal in value to the
+        //  default lock, false otherwise
+        boolean nullLock = (testPosition.getPositionLockUserIdentifier() == null);
+        boolean nullDefaultLock = 
+            (BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS == null);
+        if  (nullLock && nullDefaultLock)
+        {
+            return true;
+        }
+        if ((nullDefaultLock) || (nullLock))
+        {
+            return false;
+        }
+        else
+        {
+            return (testPosition.getPositionLockUserIdentifier().compareTo(
+                    BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS) == 0);
+        }
+    }
+
+    private String vacantEmplid(String vacantCSFCode, String emplidCSF)
+    {
+       return (vacantCSFCode.equals(BudgetConstructionConstants.VACANT_CSF_LINE)?
+               BudgetConstructionConstants.VACANT_EMPLID:
+               emplidCSF);
+    }
+
+    //
+    //  these are some stub routines to build a test position table
+    //  the implementing institution will have to replace these with
+    //  routines that access the HR system at that institution
+    //
+    private void buildRequestYearSpoof(Integer RequestYear, Object[] rowReturned)
+    {
+        String testRequestKey = 
+            positionKey(RequestYear,
+                        (String) rowReturned[returnedPositionNumber]);
+        if (! currentBCPosition.containsKey(testRequestKey))
+        {
+            buildNewPositionFromCSF(RequestYear,rowReturned);
+        }
+    }
+    
+    private String missingRCCode = new String("NO");
+    private String missingOrgCode = new String(" ");
+    private String[] defaultValue;
+    private String fabricatedPositionTitle = new String("Generated from CSF");
+    private HashMap<String,String> orgRCMap = new HashMap<String,String>(1);
+    private HashMap<String,String[]> acctRCMap = new HashMap<String,String[]>(1);
+    private void clearRCMaps()
+    {
+        orgRCMap.clear();
+        acctRCMap.clear();
+    }
+    
+    private String acctRCKey(String ChartCode, String AccountNumber)
+    {
+        return AccountNumber+ChartCode;
+    }
+    
+    private java.sql.Date defaultAugustFirst(Integer dateYear)
+    {
+        // this routine assumes a specific SQLDATE_FORMAT in the date service
+        try
+        {
+        java.sql.Date augustFirst = 
+                dateTimeService.convertToSqlDate(dateYear.toString()+
+                                                 "-08-01");
+        return augustFirst;
+        }
+        catch (ParseException ex)
+        {
+            LOG.warn("\nproblem setting July 1 position date with: ("+
+                    dateYear.toString()+"-08-01)\ncurrent date was used\n"
+                    +ex.getMessage());
+            return dateTimeService.getCurrentSqlDateMidnight();
+        }
+    }
+    
+    private java.sql.Date defaultJulyFirst(Integer dateYear)
+    {
+        // this routine assumes a specific SQLDATE_FORMAT in the date service
+        try
+        {
+        java.sql.Date julyFirst = 
+                dateTimeService.convertToSqlDate(dateYear.toString()+
+                                                 "-07-01");
+        return julyFirst;
+        }
+        catch (ParseException ex)
+        {
+            LOG.warn("\nproblem setting July 1 position date with: ("+
+                    dateYear.toString()+"-07-01)\ncurrent date was used\n"
+                    +ex.getMessage());
+            return dateTimeService.getCurrentSqlDateMidnight();
+        }
+    }
+
+    private void fillPositionAttributesSpoof(BudgetConstructionPosition newBCPosition,
+                                             Object[] rowReturned, Integer FiscalYear)
+    {
+        // default the regular/temporary indicator to regular, and mark as budgeted
+        newBCPosition.setPositionRegularTemporary("R");
+        newBCPosition.setBudgetedPosition(true);
+        newBCPosition.setPositionEffectiveStatus("A");
+        newBCPosition.setPositionStatus("A");
+        newBCPosition.setPositionDescription(fabricatedPositionTitle);
+        // standard hours will be 40
+        newBCPosition.setPositionStandardHoursDefault(new BigDecimal(40));
+        // set the position type to academic, staff monthly, or staff biweekly
+        String posTypeString = 
+            positionTypeSpoof((String) rowReturned[returnedFinancialObjectCode]);
+        newBCPosition.setIuPositionType(posTypeString);
+        // academic are 10-pay, others 12-pay
+        if (posTypeString.equals("AC"))
+        {
+          java.sql.Date augustFirst = defaultAugustFirst(FiscalYear);  
+          newBCPosition.setPositionEffectiveDate(augustFirst);  
+          newBCPosition.setIuNormalWorkMonths(new Integer(10));
+          newBCPosition.setIuPayMonths(new Integer(10));
+        }
+        else
+        {
+          java.sql.Date julyFirst = defaultJulyFirst(FiscalYear); 
+          newBCPosition.setPositionEffectiveDate(julyFirst);  
+          newBCPosition.setIuNormalWorkMonths(new Integer(12));
+          newBCPosition.setIuPayMonths(new Integer(12));
+        }
+        // default object class comes from the CSF line
+        // department ID and RC come from the account, chart comes from the CSF
+        // line.  if the position is split, the first one in wins the prize
+        newBCPosition.setIuDefaultObjectCode((String) rowReturned[returnedFinancialObjectCode]);
+        String acctTestKey = acctRCKey((String) rowReturned[returnedChartOfAccountsCode],
+                                       (String) rowReturned[returnedAccountNumber]);
+        //
+        //  the RC code should be derived from the department ID on the position
+        //  in HR.
+        //  a default is used if no RC can be assigned
+        newBCPosition.setResponsibilityCenterCode(missingRCCode);
+        newBCPosition.setPositionDepartmentIdentifier(missingOrgCode);
+        if (acctRCMap.containsKey(acctTestKey))
+        {
+          String[] acctRptsData =
+              acctRCMap.get(acctTestKey);
+          newBCPosition.setPositionDepartmentIdentifier(acctRptsData[0]);
+          newBCPosition.setResponsibilityCenterCode(acctRptsData[1]);
+        }
+    }
+    
+    private void initializeStubValues(Integer BaseYear)
+    {
+        readAcctRCMap(BaseYear);
+    }
+    
+    private String positionOrg(String chartCode, String orgCode)
+    {
+        return chartCode+"-"+orgCode;
+    }
+    
+    private String positionTypeSpoof (String objectClass)
+    {
+        //24xx is monthly, 25xx bi-weekly, otherwise default to academic
+        String empTypeID = objectClass.substring(0,2);
+        return ((empTypeID.equals("24"))?"SM":
+                ((empTypeID.equals("25"))?"SB":"AC"));
+    }
+    
+    private void readAcctRCCSF(Class csfClass, Integer BaseYear)
+    {
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                              BaseYear);
+        String[] selectList = {KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
+                               KFSPropertyConstants.ACCOUNT_NUMBER};
+        ReportQueryByCriteria queryID =
+            new ReportQueryByCriteria(csfClass, selectList, criteriaID, true);
+        Iterator resultSet = 
+            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        while (resultSet.hasNext())
+        {
+            Object[] rowReturned = (Object[]) resultSet.next();
+            String acctKey = acctRCKey((String) rowReturned[0],
+                                       (String) rowReturned[1]);
+            if (!(acctRCMap.containsKey(acctKey)))
+            {
+                acctRCMap.put(acctKey,defaultValue);
+            }
+        }
+    }
+
+    private Integer readAcctRCMapCount(Integer BaseYear)
+    {
+       Integer acctCount = new Integer(0);
+       Criteria criteriaID = new Criteria();
+       // we will estimate the size of the map needed based on the
+       // number of accounts alone, and not on the full key.  if this is
+       // an underestimate, the map can expand on its own
+       //
+       // CSF override is a method for institutions which do not have a CSF
+       // tracker to enter payroll data.  so, we should include it in the count
+       criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                             BaseYear);
+       String[] selectList = {"COUNT(DISTINCT "+
+                              KFSPropertyConstants.ACCOUNT_NUMBER+")"}; 
+       ReportQueryByCriteria queryID = 
+           new ReportQueryByCriteria(CalculatedSalaryFoundationTrackerOverride.class,
+                                     selectList, criteriaID);
+       Iterator ovrdIter = 
+           getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+       if (ovrdIter.hasNext())
+       {
+           BigDecimal resultValue = (BigDecimal) ((Object[]) ovrdIter.next())[0];
+           acctCount = acctCount +
+                       (Integer) resultValue.intValue();  
+       }
+       ReportQueryByCriteria queryCSF =
+           new ReportQueryByCriteria(CalculatedSalaryFoundationTracker.class,
+                   selectList, criteriaID);
+       Iterator csfIter =
+           getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryCSF);
+       if (csfIter.hasNext())
+       {
+           BigDecimal resultValue = (BigDecimal) ((Object[]) csfIter.next())[0];
+           acctCount = acctCount +
+                       (Integer) resultValue.intValue();  
+       }
+       return acctCount+10;
+    }
+    
+    private void readAcctRCMap(Integer BaseYear)
+    {
+        //  we need the set of organizations/RC codes
+        readOrgRCMap();
+        //
+        Integer acctCount = readAcctRCMapCount(BaseYear);
+        acctRCMap = new HashMap<String,String[]>(acctCount);
+        defaultValue = new String[] {missingOrgCode, missingRCCode};
+        // first we build a map with the default RC and organization
+        //    take override accounts first, then CSF accounts
+        readAcctRCCSF(CalculatedSalaryFoundationTrackerOverride.class, BaseYear);
+        readAcctRCCSF(CalculatedSalaryFoundationTracker.class, BaseYear);
+        // next, read the account table to fill in the org codes and the RC's.
+        // every account key in the hash should have a counterpart in the account
+        // table.  as each of those counterparts comes up as we iterate through
+        // all the accounts, we will join to the organization table to get
+        // RC code
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(KFSPropertyConstants.ACCOUNT_CLOSED_INDICATOR,
+                              false);
+        // we cannot return a business object with a report query
+        // so, we just return what we need
+        String [] attrbList = {KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
+                               KFSPropertyConstants.ACCOUNT_NUMBER,
+                               KFSPropertyConstants.ORGANIZATION_CODE};
+        Integer chartIndex        = new Integer(0);
+        Integer accountIndex      = new Integer(1);
+        Integer organizationIndex = new Integer(2);
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(org.kuali.module.chart.bo.Account.class,
+                                      attrbList, criteriaID);
+        Iterator accountsReturned = 
+            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        while (accountsReturned.hasNext())
+        {
+            Object[] rowReturned = (Object[]) accountsReturned.next();
+            String orgPositionKey = positionOrg((String) rowReturned[chartIndex],
+                                                (String) rowReturned[organizationIndex]);
+            String acctKey = acctRCKey((String) rowReturned[chartIndex],
+                                       (String) rowReturned[accountIndex]);
+            if ((acctRCMap.containsKey(acctKey)) && 
+                (orgRCMap.containsKey(orgPositionKey)))
+            {
+                String[] newValue = {orgPositionKey,
+                                     orgRCMap.get(orgPositionKey)};
+                // this will replace the default values
+                acctRCMap.put(acctKey,newValue);
+            }
+        }
+        //  at this point, we no longer need the orgRCMap
+        //  we want to minimize memory use
+        orgRCMap.clear();
+    }
+    
+    private Integer readOrgRCCount()
+    {
+        String[] selectList = {"COUNT(*)"};
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(Org.class, selectList,
+                    QueryByCriteria.CRITERIA_SELECT_ALL);
+        Iterator resultRow =
+        getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        if (!(resultRow.hasNext()))
+        {
+            return new Integer(0);
+        }
+        else
+        {
+            BigDecimal resultValue = (BigDecimal) ((Object[]) resultRow.next())[0];
+            return (Integer) resultValue.intValue();
+        }
+    }
+    
+    private void readOrgRCMap()
+    {
+        Integer orgCount = readOrgRCCount();
+        orgRCMap = new HashMap<String,String>(orgCount+3);
+        String[] selectList = {KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,
+                               KFSPropertyConstants.ORGANIZATION_CODE,
+                               KFSPropertyConstants.RESPONSIBILITY_CENTER_CODE};
+        ReportQueryByCriteria queryID = 
+            new ReportQueryByCriteria(Org.class, selectList,
+                                      QueryByCriteria.CRITERIA_SELECT_ALL);
+        Iterator resultSet =
+            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        while (resultSet.hasNext())
+        {
+            Object[] rowReturned = (Object[]) resultSet.next();
+            String orgKey = positionOrg ((String) rowReturned[0],
+                                         (String) rowReturned[1]);
+            orgRCMap.put(orgKey,(String) rowReturned[2]);
         }
     }
     
@@ -2646,12 +3156,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
       BudgetConstructionCalculatedSalaryFoundationTracker nowBCSF =
           bCSF.get(csfKey);
       // first round the amount to whole dollars
-      // KualiDecimal roundedAmount = csf.getCsfAmount().setScale(0);
-      // this is after the change to KualiInteger from KualiDecimal in the BCSF table
-      // (June 1, 2007)
-      KualiInteger roundedAmount = 
-            new KualiInteger(csf.getCsfAmount(),
-                             RoundingMode.valueOf(KualiInteger.ROUND_BEHAVIOR));
+      KualiDecimal roundedAmount = csf.getCsfAmount().setScale(0);
       nowBCSF.setCsfAmount(nowBCSF.getCsfAmount().add(roundedAmount));
       // increase the percent time (maximum of 100)
       BigDecimal pctTime = nowBCSF.getCsfTimePercent();
@@ -2689,12 +3194,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
       BudgetConstructionCalculatedSalaryFoundationTracker nowBCSF =
           bCSF.get(csfKey);
       // first round the amount to whole dollars
-      // KualiDecimal roundedAmount = csf.getCsfAmount().setScale(0);
-      // this is after the change to KualiInteger from KualiDecimal in the BCSF table
-      // (June 1, 2007)
-      KualiInteger roundedAmount = 
-            new KualiInteger(csf.getCsfAmount(),
-                             RoundingMode.valueOf(KualiInteger.ROUND_BEHAVIOR));
+      KualiDecimal roundedAmount = csf.getCsfAmount().setScale(0);
       nowBCSF.setCsfAmount(nowBCSF.getCsfAmount().add(roundedAmount));
       // increase the percent time (maximum of 100)
       BigDecimal pctTime = nowBCSF.getCsfTimePercent();
@@ -2746,7 +3246,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
        // budget construction CSF always contains the vacant EMPLID, not
        // the EMPLID of the last incumbent
        csfBC.setEmplid((vacantLine?
-                       BCConstants.VACANT_EMPLID:
+                       BudgetConstructionConstants.VACANT_EMPLID:
                        csf.getEmplid()));
        csfBC.setCsfFullTimeEmploymentQuantity(csf.getCsfFullTimeEmploymentQuantity());
        csfBC.setCsfTimePercent(csf.getCsfTimePercent());
@@ -2756,18 +3256,16 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
        // would have to round by position. 
        if (!vacantLine)
        {
-          // changed BO type from KualiDecimal to KualiInteger (June 1, 2007) 
-          // csfBC.setCsfAmount(csf.getCsfAmount());
+           csfBC.setCsfAmount(csf.getCsfAmount());
            bCSF.put(csfKey,csfBC);
            // now we have to round and save the rounding error
            roundMechanism rX = keysNeedingRounding.get(csf.getEmplid());
-           rX.addNewBCSF(csfBC,csf.getCsfAmount());
+           rX.addNewBCSF(csfBC);
        }
        else
        {
            // for vacant lines, we have to round to whole dollars
-           csfBC.setCsfAmount(new KualiInteger(csf.getCsfAmount(),
-                                  RoundingMode.valueOf(KualiInteger.ROUND_BEHAVIOR)));
+           csfBC.setCsfAmount(csf.getCsfAmount().setScale(0));
            bCSF.put(csfKey,csfBC);
        }
     }
@@ -2790,7 +3288,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
        // budget construction CSF always contains the vacant EMPLID, not
        // the EMPLID of the last incumbent
        csfBC.setEmplid((vacantLine?
-                       BCConstants.VACANT_EMPLID:
+                       BudgetConstructionConstants.VACANT_EMPLID:
                        csf.getEmplid()));
        csfBC.setCsfFullTimeEmploymentQuantity(csf.getCsfFullTimeEmploymentQuantity());
        csfBC.setCsfTimePercent(csf.getCsfTimePercent());
@@ -2800,16 +3298,16 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
        // would have to round by position, and positions can be shared. 
        if (!vacantLine)
        {
+           csfBC.setCsfAmount(csf.getCsfAmount());
            bCSF.put(csfKey,csfBC);
            // now we have to round and save the rounding error
            roundMechanism rX = keysNeedingRounding.get(csf.getEmplid());
-           rX.addNewBCSF(csfBC,csf.getCsfAmount());
+           rX.addNewBCSF(csfBC);
        }
        else
        {
            // for vacant lines, we have to round to whole dollars
-           csfBC.setCsfAmount(new KualiInteger(csf.getCsfAmount(),
-                   RoundingMode.valueOf(KualiInteger.ROUND_BEHAVIOR)));
+           csfBC.setCsfAmount(csf.getCsfAmount().setScale(0));
            bCSF.put(csfKey,csfBC);
        }
     }
@@ -2824,7 +3322,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             (positionNormalWorkMonths.containsKey(positionNumber)?
              positionNormalWorkMonths.get(positionNumber):12);
         // rqstAmount and notOnLeave are used elswhere and defined globally
-        KualiInteger defaultAmount = KualiInteger.ZERO;
+        KualiDecimal defaultAmount = KualiDecimal.ZERO;
         BigDecimal   defaultFractions = new BigDecimal(0);
         //
         PendingBudgetConstructionAppointmentFunding bcaf =
@@ -2960,8 +3458,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         pbGL.setFinancialSubObjectCode(bcsf.getFinancialSubObjectCode());
         pbGL.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_BASE_BUDGET);
         pbGL.setFinancialObjectTypeCode(objectType);
-        pbGL.setAccountLineAnnualBalanceAmount(KualiInteger.ZERO);
-        pbGL.setFinancialBeginningBalanceLineAmount(KualiInteger.ZERO);
+        pbGL.setAccountLineAnnualBalanceAmount(KualiDecimal.ZERO);
+        pbGL.setFinancialBeginningBalanceLineAmount(KualiDecimal.ZERO);
         // store the new PBGL row
         getPersistenceBrokerTemplate().store(pbGL);
         CSFNewGLRows = CSFNewGLRows+1;
@@ -2990,7 +3488,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
     private String buildVacantCSFKey(CalculatedSalaryFoundationTrackerOverride csf)
     {
         boolean vacantLine = isVacantLine(csf);
-        return (vacantLine?BCConstants.VACANT_EMPLID:
+        return (vacantLine?BudgetConstructionConstants.VACANT_EMPLID:
                 csf.getEmplid())+
                 csf.getPositionNumber()+
                 csf.getAccountNumber()+
@@ -3003,7 +3501,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
     private String buildVacantCSFKey(CalculatedSalaryFoundationTracker csf)
     {
         boolean vacantLine = isVacantLine(csf);
-        return (vacantLine?BCConstants.VACANT_EMPLID:
+        return (vacantLine?BudgetConstructionConstants.VACANT_EMPLID:
                 csf.getEmplid())+
                 csf.getPositionNumber()+
                 csf.getAccountNumber()+
@@ -3051,7 +3549,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                  CSFBCAFRowsMarkedDeleted));
     }
     
-    private ArrayList<String> findPositionRequiredObjectCodes (Integer BaseYear)
+    private ArrayList<String> findPositonRequiredObjectCodes (Integer BaseYear)
     {
         // we want to build an SQL IN criteria to filter a return set
         // we will find distinct objects only, regardless of chart
@@ -3082,17 +3580,17 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
     private boolean isVacantLine(CalculatedSalaryFoundationTracker csf)
     {
        return  ((csf.getCsfFundingStatusCode().equals(
-                 BCConstants.csfFundingStatusFlag.VACANT.getFlagValue()))||
+                 BudgetConstructionConstants.VACANT_CSF_LINE))||
                 (csf.getCsfFundingStatusCode().equals(
-                 BCConstants.csfFundingStatusFlag.UNFUNDED.getFlagValue())));
+                 BudgetConstructionConstants.UNFUNDED_CSF_LINE)));
     }
     
     private boolean isVacantLine(CalculatedSalaryFoundationTrackerOverride csf)
     {
        return  ((csf.getCsfFundingStatusCode().equals(
-               BCConstants.csfFundingStatusFlag.VACANT.getFlagValue()))||
+                 BudgetConstructionConstants.VACANT_CSF_LINE))||
                 (csf.getCsfFundingStatusCode().equals(
-                        BCConstants.csfFundingStatusFlag.UNFUNDED.getFlagValue())));
+                 BudgetConstructionConstants.UNFUNDED_CSF_LINE)));
     }
 
     // here are the routines to build BCSF
@@ -3141,7 +3639,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
             String testKey = buildCSFKey(csfRow);
             if (csfOverrideKeys.contains(testKey))
             {
-                continue;
+                break;
             }
             // is the line vacant
             testKey = buildVacantCSFKey(csfRow);
@@ -3302,7 +3800,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
                               BudgetConstructionConstants.ACTIVE_CSF_DELETE_CODE);
         Criteria vacantCriteria = new Criteria();
         vacantCriteria.addEqualTo(KFSPropertyConstants.CSF_FUNDING_STATUS_CODE,
-                BCConstants.csfFundingStatusFlag.VACANT.getFlagValue());
+                                  BudgetConstructionConstants.VACANT_CSF_LINE);
         deleteCriteria.addOrCriteria(vacantCriteria);
         criteriaID.addAndCriteria(deleteCriteria);
         csfOverrideKeys = 
@@ -3337,7 +3835,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
                               RequestYear);
         criteriaID.addIn(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,
-                this.findPositionRequiredObjectCodes(BaseYear));
+                this.findPositonRequiredObjectCodes(BaseYear));
         currentPBGLKeys = new HashSet<String>(hashObjectSize(
                 PendingBudgetConstructionGeneralLedger.class,criteriaID));
         // now do the same for the detailed position object code--> object type
@@ -3446,18 +3944,18 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
           getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
       while (positionRows.hasNext())
       {
-          // apparently, numbers come back from report queries in DB-specific ways.  use Number to be safe (as OJB itself does)
+          // apparently, numbers always come back in report queries as BigDecimal
           // the results do not go through the business object
           Object[] positionRow = (Object[]) positionRows.next();
           positionNormalWorkMonths.put((String) positionRow[0],
-                                       (Integer) ((Number) positionRow[1]).intValue());
+                                       (Integer) ((BigDecimal) positionRow[1]).intValue());
       }
     }
         
 //     decide whether the current appointment funding row, missing from BCSF, has
 //     been entered by a user or is due to a CSF row that has since gone away
-    String notOnLeave  = new String(BCConstants.APPOINTMENT_FUNDING_DURATION_DEFAULT);
-    KualiInteger rqstAmount = new KualiInteger(0);
+    String notOnLeave  = new String(BudgetConstructionConstants.NO_LEAVE_INDICATED);
+    KualiDecimal rqstAmount = new KualiDecimal(0);
     BigDecimal pctTime = new BigDecimal(0);
     BigDecimal FTE     = new BigDecimal(0);
     private void 
@@ -3507,14 +4005,14 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
       Criteria flagCriteria   = new Criteria();
 //     funding status is "vacant" or "unfunded"
       vacantCriteria.addEqualTo(KFSPropertyConstants.CSF_FUNDING_STATUS_CODE,
-                                BCConstants.csfFundingStatusFlag.VACANT.getFlagValue());
+                                BudgetConstructionConstants.VACANT_CSF_LINE);
       flagCriteria.addEqualTo(KFSPropertyConstants.CSF_FUNDING_STATUS_CODE,
-                              BCConstants.csfFundingStatusFlag.UNFUNDED.getFlagValue());
+                              BudgetConstructionConstants.UNFUNDED_CSF_LINE);
       flagCriteria.addOrCriteria(vacantCriteria);
 //     in addition, EMPLID is vacant
       vacantCriteria = new Criteria();
       vacantCriteria.addEqualTo(KFSPropertyConstants.EMPLID,
-                                BCConstants.VACANT_EMPLID);
+                                BudgetConstructionConstants.VACANT_EMPLID);
       vacantCriteria.addAndCriteria(flagCriteria);
 //     OR, the EMPLID in CSF is the same as in BCAF
       flagCriteria = new Criteria();
@@ -3541,8 +4039,6 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
       bcaf.setAppointmentFundingDeleteIndicator(true);
       getPersistenceBrokerTemplate().store(bcaf);
       CSFBCAFRowsMarkedDeleted = CSFBCAFRowsMarkedDeleted+1;
-      // we also need to exhaust the iterator, so OJB will close the cursor (Oracle)
-      TransactionalServiceUtils.exhaustIterator(resultSet);
     }
 
 //     this is an inner class which will store the data we need to perform the rounding,
@@ -3566,21 +4062,18 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
      candidateBCSFRows =
      new ArrayList<BudgetConstructionCalculatedSalaryFoundationTracker>(10);
 
-    public void addNewBCSF(BudgetConstructionCalculatedSalaryFoundationTracker bCSF,
-                           KualiDecimal amountFromCSFToSet)
+    public void addNewBCSF(BudgetConstructionCalculatedSalaryFoundationTracker bCSF)
     {
-       // lop off the pennies--go down to the nearest whole dollar 
-       KualiInteger wholeDollarsCSFAmount =
-           new KualiInteger(amountFromCSFToSet,
-                            RoundingMode.FLOOR);
-       // store the whole dollar amount in the budget construction CSF object
+       //  we round by converting by dividing by 100, subtracting the remainder from
+       //  the original value, then saving the remainder as the difference
+       KualiDecimal penniesFromCSFAmount =
+           bCSF.getCsfAmount().multiply(shavePennies);
+       penniesFromCSFAmount = penniesFromCSFAmount.mod(shavePennies);
+       penniesFromCSFAmount = penniesFromCSFAmount.divide(shavePennies);
+       KualiDecimal wholeDollarsCSFAmount = 
+           bCSF.getCsfAmount().subtract(penniesFromCSFAmount);
+       //  store the whole dollar amount
        bCSF.setCsfAmount(wholeDollarsCSFAmount);
-       // find the pennies that were shaved off
-       KualiDecimal penniesFromCSFAmount = amountFromCSFToSet;
-       // BigDecimal values are immutable.  So, we have to reset the pointer 
-       // after the subtract
-       penniesFromCSFAmount =
-       penniesFromCSFAmount.subtract(wholeDollarsCSFAmount.kualiDecimalValue());
        //  just round negative amounts and return
        //  this is only a safety measure.  negative salaries are illegal in 
        //  budget construction 
@@ -3592,8 +4085,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
        // (KualiDecimal values are immutable, so we need to redirect the diffAmount
        //  pointer to a new one.)
        diffAmount = diffAmount.add(penniesFromCSFAmount);
-       // store the budget construction CSF row with the truncated amount for
-       // possible adjustment later
+       // store the truncated amount
        candidateBCSFRows.add(bCSF);
     }
 
@@ -3642,8 +4134,8 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
           // LOG.info(String.format("\n       before %f",
           //         rCSF.getCsfAmount().floatValue()));
            // @@TODO: end test code 
-           KualiInteger fixBCSFAmount = rCSF.getCsfAmount();
-           rCSF.setCsfAmount(fixBCSFAmount.add(new KualiInteger(adjustAmount.intValue())));
+           KualiDecimal fixBCSFAmount = rCSF.getCsfAmount();
+           rCSF.setCsfAmount(fixBCSFAmount.add(adjustAmount));
            diffAmount = diffAmount.subtract(adjustAmount);   
            // @@TODO: test code
            //LOG.info(String.format("\n       after %f",
@@ -3678,39 +4170,39 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         }
         */
         /* (2) test the addIn criterion  (worked 04/02/2007) p6spy=yes */
-//        Integer RequestYear = BaseYear+1;
-//        Criteria criteriaID = new Criteria();
-//        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
-//                              RequestYear);
-//        criteriaID.addIn(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,
-//                this.findPositionRequiredObjectCodes(BaseYear));
-//        String[] selectCount = {"COUNT(*)"};
-//        ReportQueryByCriteria queryID =
-//            new ReportQueryByCriteria(PendingBudgetConstructionGeneralLedger.class,
-//                                      selectCount,criteriaID);
-//        Iterator rowCounter =
-//            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
-//        while (rowCounter.hasNext())
-//        {
-//            Integer rowCount = 
-//                ((Number)((Object[]) rowCounter.next())[0]).intValue();
-//            LOG.info(String.format("\nPBGL rows with detailed position objects: %d",
-//                     rowCount));
-//        }
+        Integer RequestYear = BaseYear+1;
+        Criteria criteriaID = new Criteria();
+        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,
+                              RequestYear);
+        criteriaID.addIn(KFSPropertyConstants.FINANCIAL_OBJECT_CODE,
+                this.findPositonRequiredObjectCodes(BaseYear));
+        String[] selectCount = {"COUNT(*)"};
+        ReportQueryByCriteria queryID =
+            new ReportQueryByCriteria(PendingBudgetConstructionGeneralLedger.class,
+                                      selectCount,criteriaID);
+        Iterator rowCounter =
+            getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(queryID);
+        while (rowCounter.hasNext())
+        {
+            Integer rowCount = 
+                ((BigDecimal)((Object[]) rowCounter.next())[0]).intValue();
+            LOG.info(String.format("\nPBGL rows with detailed position objects: %d",
+                     rowCount));
+        }
         // here is an add on to verify that OJB instantiates all joined rows
         // one row at a time
-//        criteriaID.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,"BL");
-//        QueryByCriteria testQry = 
-//            new QueryByCriteria(LaborObject.class,criteriaID);
-//        Iterator uncleGuido =
-//            getPersistenceBrokerTemplate().getIteratorByQuery(testQry);
-//        Integer numerateri = new Integer(0);
-//        while (uncleGuido.hasNext())
-//        {
-//            numerateri = numerateri+1;
-//            LOG.warn(String.format("\ninstantiating Object %d",numerateri));
-//            LaborObject labObj = (LaborObject) uncleGuido.next();
-//        }
+        criteriaID.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE,"BL");
+        QueryByCriteria testQry = 
+            new QueryByCriteria(LaborObject.class,criteriaID);
+        Iterator uncleGuido =
+            getPersistenceBrokerTemplate().getIteratorByQuery(testQry);
+        Integer numerateri = new Integer(0);
+        while (uncleGuido.hasNext())
+        {
+            numerateri = numerateri+1;
+            LOG.warn(String.format("\ninstantiating Object %d",numerateri));
+            LaborObject labObj = (LaborObject) uncleGuido.next();
+        }
         /* (3) attempt to test the rounding mechanism (worked 4/4/2007)
         // build the new BC CSF objects in memory
         setUpCSFOverrideKeys(BaseYear); 
@@ -3726,394 +4218,7 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
         createNewBCDocumentsFromGLCSF(2007,true,true);
         buildAppointmentFundingAndBCSF(2007);
         */
-        /*
-         * (5)  attempting to speed up document creation
-         */
-        try
-        {
-            // testANewBCDocument();
-            logAnExistingBCDocument();
-        }
-        catch (WorkflowException wex)
-        {
-            LOG.warn(String.format("\nproblem creating document %s",
-                                   wex.getMessage()));
-            wex.printStackTrace();
-        }
-        /*
-         *  (6) write out a bean's properties
-         */
-//        try
-//        {
-//            testBeanProperties();
-//        }
-//        catch (IllegalAccessException iaex)
-//        {
-//            LOG.warn(String.format("\n %s",iaex.getMessage()));
-//            iaex.printStackTrace();
-//        }
-//        catch (NoSuchMethodException nsex)
-//        {
-//            LOG.warn(String.format("\n %s",nsex.getMessage()));
-//            nsex.printStackTrace();
-//        }
-//        catch (InvocationTargetException itex)
-//        {
-//            LOG.warn(String.format("\n %s",itex.getMessage()));
-//            itex.printStackTrace();
-//        }
-   }
-    
-    public void testNullForeignKeys()
-    {
-        // this verifies that some of the code we used in fiscalYearMakers works
-        //
-        // build a bogus row with some null fields
-        Integer oldYear = new Integer(1997);
-        CalculatedSalaryFoundationTracker testCSFRow = new CalculatedSalaryFoundationTracker();
-        testCSFRow.setUniversityFiscalYear(oldYear);
-        testCSFRow.setChartOfAccountsCode("BL");
-        testCSFRow.setAccountNumber("1031400");
-        testCSFRow.setSubAccountNumber("-----");
-        testCSFRow.setFinancialObjectCode("3000");
-        testCSFRow.setFinancialSubObjectCode("---");
-        testCSFRow.setPositionNumber("00000000");
-        testCSFRow.setEmplid("0000000000");
-        testCSFRow.setCsfCreateTimestamp(dateTimeService.getCurrentTimestamp());
-        // save the row to force nulls in uniitialized fields
-        getPersistenceBrokerTemplate().store(testCSFRow);
-        getPersistenceBrokerTemplate().clearCache();
-        // get the row
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, oldYear);  
-        QueryByCriteria queryID = new QueryByCriteria(CalculatedSalaryFoundationTracker.class,criteriaID);
-        testCSFRow = (CalculatedSalaryFoundationTracker) getPersistenceBrokerTemplate().getObjectByQuery(queryID);
-        // now we want to do exactly what we are doing in fiscal year makers
-        // on a string--
-        String earnCode = new String("");
-        String accountNumber = null;
-        try 
-        {
-            Object returnValue = (String) PropertyUtils.getProperty(testCSFRow,"earnCode");
-            if (returnValue != null)
-            {
-                earnCode = returnValue.toString();
-            }
-            returnValue = PropertyUtils.getProperty(testCSFRow,"accountNumber");
-            // make sure one we know is there translates correctly from Object to string
-            accountNumber = returnValue.toString();
-        }
-        catch (InvocationTargetException ex)
-        {
-            LOG.error(String.format("\n  InvocationTargetException getting earnCode from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        catch (NoSuchMethodException ex)
-        {
-            LOG.error(String.format("\n  NoSuchMethodException getting earnCode from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        catch (IllegalAccessException ex)
-        {
-            LOG.error(String.format("\n  IllegalAccessException getting earnCode from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        LOG.warn(String.format("\n>>> earnCode string length %d, earnCode = %s",earnCode.length(),earnCode));
-        LOG.warn(String.format("\n   string from Object accountNumber (String) %s",accountNumber));
-        // on a number--
-        String employeeRecord = new String("");
-        String universityFiscalYear = new String("");
-        try 
-        {
-            Object returnValue = (String) PropertyUtils.getProperty(testCSFRow,"employeeRecord");
-            if (returnValue != null)
-            {
-                employeeRecord = returnValue.toString();
-            }
-            // make sure one we know is there translates correctly from Object to string
-            returnValue = PropertyUtils.getProperty(testCSFRow,"universityFiscalYear");
-            universityFiscalYear = returnValue.toString();
-        }
-        catch (InvocationTargetException ex)
-        {
-            LOG.error(String.format("\n  InvocationTargetException getting employeeRecord from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        catch (NoSuchMethodException ex)
-        {
-            LOG.error(String.format("\n  NoSuchMethodException getting employeeRecord from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        catch (IllegalAccessException ex)
-        {
-            LOG.error(String.format("\n  IllegalAccessException getting employeeRecord from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        LOG.warn(String.format("\n>>> employeeRecord string length %d, employeeRecord = %s",employeeRecord.length(),employeeRecord));
-        LOG.warn(String.format("\n   string from Object universityFiscalYear (Integer) %s",universityFiscalYear));
-        // on a date--
-        String effectiveDate = new String("");
-        String csfCreateTimestamp = new String("");
-        try 
-        {
-            Object returnValue = (String) PropertyUtils.getProperty(testCSFRow,"effectiveDate");
-            if (returnValue != null)
-            {
-                effectiveDate = returnValue.toString();
-            }
-            returnValue = PropertyUtils.getProperty(testCSFRow,"csfCreateTimestamp");
-            csfCreateTimestamp = returnValue.toString();
-        }
-        catch (InvocationTargetException ex)
-        {
-            LOG.error(String.format("\n  InvocationTargetException getting effectiveDate from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        catch (NoSuchMethodException ex)
-        {
-            LOG.error(String.format("\n  NoSuchMethodException getting effectiveDate from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        catch (IllegalAccessException ex)
-        {
-            LOG.error(String.format("\n  IllegalAccessException getting effectiveDate from fake CSF row\n%s\n",ex.getMessage()));
-        }
-        LOG.warn(String.format("\n>>> effectiveDate string length %d, effectiveDate = %s",effectiveDate.length(),effectiveDate));
-        LOG.warn(String.format("\n   string from Object csfCreateTimestamp (time stamp) %s",csfCreateTimestamp));
-        // now test the string builder
-        StringBuilder testBuilder = new StringBuilder(500);
-        LOG.warn(String.format("\n\nString builder length = %d and value = %s when unitialized",testBuilder.toString().length(),testBuilder.toString()));
-        testBuilder.delete(0,testBuilder.length());
-        String emptyString = testBuilder.toString();
-        LOG.warn(String.format("\n\nString builder length = %d and value = %s after delete",testBuilder.toString().length(),testBuilder.toString()));
-        testBuilder.append(testCSFRow.getAccountNumber());
-        testBuilder.delete(0,testBuilder.length());
-        emptyString = testBuilder.toString();
-        LOG.warn(String.format("\n\nString builder length = %d and value = %s after fill, then delete",testBuilder.toString().length(),testBuilder.toString()));
     }
-    
-    /*
-     *   @@TODO:  take this out
-     */
-    // playing around to see if we can create a new document and have workflow
-    // do fewer steps in the route
-    
-    
-    private void testBeanProperties()
-    throws IllegalAccessException, InvocationTargetException,
-           NoSuchMethodException
-    {
-        HashMap<String,Object> propertyMap;
-        propertyMap = 
-            (HashMap<String,Object>) PropertyUtils.describe(workflowDocumentService);
-        LOG.warn(String.format("\n\nworkflowDocumentService bean properties"));
-        for (Map.Entry<String,Object> printPair: propertyMap.entrySet())
-        {
-          LOG.warn(String.format("\n %s  %s",
-                          printPair.getKey(),
-                          printPair.getValue().toString())); 
-        }
-        
-    }
-    
-    private void logAnExistingBCDocument()
-    throws WorkflowException
-    {
-        Long testDocumentID = new Long(306358);
-        String note1 = new String("this here doc was scoped out by Ernie '07");
-        String note2 = new String("Ernie cameback--left some goobers the first time");
-        String note3 = new String("Ernie bought another ticket--whoowee!");
-        KualiWorkflowDocument workflowDocument = 
-                              workflowDocumentService.createWorkflowDocument(testDocumentID,
-                                                      GlobalVariables.getUserSession().getUniversalUser());
-        // try to write to the log
-        workflowDocument.logDocumentAction(note1);
-        // try writing to the log again
-        workflowDocument.logDocumentAction(note2);
-        // get a fresh "flex doc" for the same ID and try writing a third message
-        workflowDocument =
-            workflowDocumentService.createWorkflowDocument(testDocumentID,
-                    GlobalVariables.getUserSession().getUniversalUser());
-        workflowDocument.logDocumentAction(note3);
-    }
-    
-    private void testANewBCDocument()
-    throws WorkflowException
-    {
-        // first, get rid of anything that's in the header
-        Criteria delCriteria = new Criteria();
-        delCriteria.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,2012);
-        QueryByCriteria queryID = new QueryByCriteria(BudgetConstructionDocument.class,
-                                                      delCriteria);
-        getPersistenceBrokerTemplate().deleteByQuery(queryID);
-        getPersistenceBrokerTemplate().clearCache();
-        // try to get the workflow service that deals with the actual document header
-        setUpRouteHeaderService();
-        // set up the Budget Construction Header
-        BudgetConstructionDocument newBCHdr;
-        newBCHdr = (BudgetConstructionDocument)
-        documentService.getNewDocument(
-                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_NAME);
-        newBCHdr.setUniversityFiscalYear(2012);
-        newBCHdr.setChartOfAccountsCode("BL");
-        newBCHdr.setAccountNumber("1031400");
-        newBCHdr.setSubAccountNumber("-----");
-        newBCHdr.setOrganizationLevelChartOfAccountsCode(
-                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CHART_OF_ACCOUNTS_CODE);
-        newBCHdr.setOrganizationLevelOrganizationCode(
-                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_ORGANIZATION_CODE);
-        newBCHdr.setOrganizationLevelCode(
-                BudgetConstructionConstants.INITIAL_ORGANIZATION_LEVEL_CODE);
-        newBCHdr.setBudgetTransactionLockUserIdentifier(
-                BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS);
-        newBCHdr.setBudgetLockUserIdentifier(
-                BudgetConstructionConstants.DEFAULT_BUDGET_HEADER_LOCK_IDS);
-        newBCHdr.setVersionNumber(DEFAULT_VERSION_NUMBER);
-        DocumentHeader kualiDocumentHeader = newBCHdr.getDocumentHeader();
-        newBCHdr.setDocumentNumber(newBCHdr.getDocumentHeader().getDocumentNumber());
-//   this settting apparently has not effect on workflow
-//        kualiDocumentHeader.setOrganizationDocumentNumber(
-//                            newBCHdr.getUniversityFiscalYear().toString());
-        kualiDocumentHeader.setFinancialDocumentStatusCode(
-                KFSConstants.INITIAL_KUALI_DOCUMENT_STATUS_CD);
-        kualiDocumentHeader.setFinancialDocumentStatusCode(
-                EdenConstants.ROUTE_HEADER_FINAL_CD);
-        kualiDocumentHeader.setFinancialDocumentTotalAmount(KualiDecimal.ZERO);
-        kualiDocumentHeader.setFinancialDocumentDescription(String.format("%s %d %s %s",
-                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION,
-                       newBCHdr.getUniversityFiscalYear(),
-                       newBCHdr.getChartOfAccountsCode(),newBCHdr.getAccountNumber()));
-        kualiDocumentHeader.setExplanation(String.format("%s: %s",
-                BudgetConstructionConstants.BUDGET_CONSTRUCTION_DOCUMENT_DESCRIPTION,
-                newBCHdr.getDocumentHeader().getWorkflowDocument().toString()));
-//      do this for a timing check
-        LOG.info(String.format("\nstore %s",
-                 newBCHdr.getDocumentHeader().getWorkflowDocument().getRouteHeaderId()));    
-        getPersistenceBrokerTemplate().store(newBCHdr);
-        documentService.prepareWorkflowDocument(newBCHdr);
-        StringBuffer annotateDoc = new StringBuffer("created by Genesis--test");
-        annotateDoc.append(newBCHdr.getDocumentNumber());
-//  the service does not have a complete method, but the document does        
-//        workflowDocumentService.route(newBCHdr.getDocumentHeader().getWorkflowDocument(),
-//                                      annotateDoc.toString(),null);
-//        newBCHdr.getDocumentHeader().getWorkflowDocument().saveDocument(annotateDoc.toString());
-//  this is Eric Westfall's suggestion of 01/18/2007
-//        newBCHdr.getDocumentHeader().getWorkflowDocument().logDocumentAction(annotateDoc.toString());
-//        newBCHdr.getDocumentHeader().getWorkflowDocument().routeDocument(annotateDoc.append(": passed to route").toString());
-//  end of Eric's suggestion
-//  this complete works, but does not fill in some of the dates 
-/*  removed October 2007, when things stopped working in finite time        
-        newBCHdr.getDocumentHeader().getWorkflowDocument().complete(annotateDoc.toString());
-//  OK.  This should have saved the document.  Now, we are going to try to set all the dates and codes
-        finalizeBCDocument(newBCHdr);
-*/
-    saveBCDocumentInWorkflow(newBCHdr);    
-//  do this for a timing check
-        LOG.info(String.format("\nfinished processing %s",
-                 newBCHdr.getDocumentHeader().getWorkflowDocument().getRouteHeaderId()));  
-        Long ourDocID = newBCHdr.getDocumentHeader().getWorkflowDocument().getRouteHeaderId();
-        
-//
-//      try to change the route header itself, so it will have the correct dates and status codes
-        
-//
-//        
-//        KHUNTLEY does not have superuser privileges
-//        the procurement card does a superUserApprove, and its test uses KULUSER 
-//        KULUSER works for us as well, but for our document the superUser method
-//        apparently goes through the same stages as the route method        
-//        workflowDocumentService.superUserApprove(newBCHdr.getDocumentHeader().getWorkflowDocument(),
-//                "created by Genesis");
-   }
- 
-    public Object returnWkflwDocHeader()
-    {   
-        DocumentRouteHeaderValue newDoc = new DocumentRouteHeaderValue();
-        Criteria docCriteria = new Criteria();
-        docCriteria.addEqualTo("routeHeaderId",286968);
-        QueryByCriteria queryID = 
-            new QueryByCriteria(DocumentRouteHeaderValue.class,docCriteria);
-        Iterator<DocumentRouteHeaderValue> itr =
-            getPersistenceBrokerTemplate().getIteratorByQuery(queryID);
-        if (itr.hasNext())
-        {
-           newDoc = TransactionalServiceUtils.retrieveFirstAndExhaustIterator(itr);  
-        }
-        return newDoc;
-    }
-
-    public String testFindBCDocumentNumber (Integer fiscalYear, String chartOfAccounts, String accountNumber, String subAccountNumber) {
-        Criteria criteriaId = new Criteria();
-        criteriaId.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
-        criteriaId.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccounts);
-        criteriaId.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, accountNumber);
-        criteriaId.addEqualTo(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, subAccountNumber);
-        QueryByCriteria queryId = new QueryByCriteria(BudgetConstructionHeader.class, criteriaId);
-        BudgetConstructionHeader newBCHeader = (BudgetConstructionHeader) getPersistenceBrokerTemplate().getObjectByQuery(queryId);
-        return(newBCHeader.getDocumentNumber());
-    }
-    
-    public void testObjectID ()
-    {
-        FiscalYearFunctionControl fyrCtrl;
-        FiscalYearFunctionControl fyrCtrl1;
-        FiscalYearFunctionControl fyrCtrl2;
-        FiscalYearFunctionControl fyrCtrl3;
-        Integer fiscalYear;
-        String  financialSystemFunctionControlCode; 
-        // get the intial row
-        Criteria criteriaID = new Criteria();
-        criteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,2008);
-        criteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_SYSTEM_FUNCTION_CONTROL_CODE,"CSFUPD");
-        QueryByCriteria queryID = new QueryByCriteria(FiscalYearFunctionControl.class,criteriaID);
-        fyrCtrl = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectByQuery(queryID);
-        // now get a new object--see if it uses the cache
-        fyrCtrl1 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectByQuery(queryID);
-        LOG.warn(String.format("\ntwo queries by criteria for same row into different object pointers (constant WHERE clauses):\n same Object? %b",
-                 fyrCtrl.equals(fyrCtrl1)));
-        // now get a new object with a different query--see if it uses the cache
-        fiscalYear = fyrCtrl.getUniversityFiscalYear();
-        financialSystemFunctionControlCode = fyrCtrl1.getFinancialSystemFunctionControlCode();
-        Criteria anotherCriteriaID = new Criteria();
-        anotherCriteriaID.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR,fiscalYear);
-        anotherCriteriaID.addEqualTo(KFSPropertyConstants.FINANCIAL_SYSTEM_FUNCTION_CONTROL_CODE,financialSystemFunctionControlCode);
-        QueryByCriteria newQueryID = new QueryByCriteria(FiscalYearFunctionControl.class,anotherCriteriaID);
-        fyrCtrl2 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectByQuery(newQueryID);
-        LOG.warn(String.format("\ntwo queries by criteria for same row into different object pointers (constant WHERE clause,"+
-                 "variable WHERE clause):\n same Object? %b",
-                fyrCtrl.equals(fyrCtrl2)));
-        // finally, try getting it using getObjectByID
-        // we will take a flying leap and guess that we should pass in the object--that's what the code looks like it wants
-        // recall that the PersistenceBrokerTemplate converts PersistenceBrokerException into a DataAccess Exception
-        try
-        {
-        fyrCtrl3 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectById(FiscalYearFunctionControl.class,
-                                                                              fyrCtrl2);
-        LOG.warn(String.format("\ngetObjectById: same Object? %b",
-                fyrCtrl.equals(fyrCtrl3)));
-        }
-        catch (DataAccessException e)
-        {
-            LOG.warn(String.format("\nPersistenceBrokerException when trying to read Identity for pointer fyrCtrl2:\n%s",e));
-        }
-        try
-        {
-        fyrCtrl3 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectById(FiscalYearFunctionControl.class,
-                                                                              fyrCtrl1);
-        LOG.warn(String.format("\ngetObjectById: same Object? %b",
-                fyrCtrl.equals(fyrCtrl3)));
-        }
-        catch (DataAccessException e)
-        {
-            LOG.warn(String.format("\nPersistenceBrokerException when trying to read Identity for pointer fyrCtrl1:\n%s",e));
-        }
-        try
-        {
-        fyrCtrl3 = (FiscalYearFunctionControl) getPersistenceBrokerTemplate().getObjectById(FiscalYearFunctionControl.class,
-                                                                              fyrCtrl);
-        LOG.warn(String.format("\ngetObjectById: same Object? %b",
-                fyrCtrl.equals(fyrCtrl3)));
-        }
-        catch (DataAccessException e)
-        {
-            LOG.warn(String.format("\nPersistenceBrokerException when trying to read Identity for pointer fyrCtrl:\n%s",e));
-        }
-    }
-    
-        
-
 
     //
     //  here are the routines Spring uses to "wire the beans"
@@ -4129,14 +4234,5 @@ public class GenesisDaoOjb extends PlatformAwareDaoBaseOjb
      {
          this.workflowDocumentService = workflowDocumentService;
      }
-     private void setUpRouteHeaderService ()
-     {
-        if (this.routeHeaderService == null)
-        {
-          this.routeHeaderService = 
-              (RouteHeaderService) KEWServiceLocator.getService(KEWServiceLocator.DOC_ROUTE_HEADER_SRV);
-        }
-     }
-     
-     
+    
 }
