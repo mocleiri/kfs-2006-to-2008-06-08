@@ -906,6 +906,33 @@
             <index-column name="CUST_NBR"/>
         </index>
     </table>
+    <table name="AR_DOC_RCURRNC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="FDOC_REF_NBR" size="14" type="VARCHAR"/>
+        <column name="CUST_NBR" size="9" type="VARCHAR"/>
+        <column name="DOC_RCURRNC_BEG_DT" type="DATE"/>
+        <column name="DOC_RCURRNC_END_DT" type="DATE"/>
+        <column name="DOC_TOT_RCURRNC_NBR" size="7" type="DECIMAL"/>
+        <column name="DOC_RCURRNC_INTRV_CD" size="1" type="VARCHAR"/>
+        <column name="WRKGRP_ID" size="19" type="DECIMAL"/>
+        <column name="DOC_INITR_USR_ID" size="10" type="VARCHAR"/>
+        <column name="DOC_LST_CRTE_DT" type="DATE"/>
+        <column name="ROW_ACTV_IND" required="true" size="1" type="VARCHAR"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="AR_DOC_RCURRNC_TR3">
+            <reference foreign="FDOC_NBR" local="FDOC_REF_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="AR_CUST_T" name="AR_DOC_RCURRNC_TR2">
+            <reference foreign="CUST_NBR" local="CUST_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="AR_DOC_RCURRNC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <unique name="AR_DOC_RCURRNC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="AR_INV_DOC_T">
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -15355,7 +15382,7 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2300"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318420"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318460"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4072"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
@@ -15363,7 +15390,7 @@
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5891"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13176"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13276"/>
     <sequence name="SEQ_RTE_NODE" nextval="563358349"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2500"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
