@@ -31,18 +31,14 @@ END;
 /* create the table */
 CREATE TABLE LD_BCN_BUILD_EXSALTOT02_MT(
         SESID                          VARCHAR2(36) CONSTRAINT LD_BCN_BUILD_EXSALTOT02_MTN1 NOT NULL,
-        EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_BUILD_EXSALTOT02_MTN2 NOT NULL,
-        POSITION_NBR                   VARCHAR2(8) CONSTRAINT LD_BCN_BUILD_EXSALTOT02_MTN3 NOT NULL,
+        POSITION_NBR                   VARCHAR2(8) CONSTRAINT LD_BCN_BUILD_EXSALTOT02_MTN2 NOT NULL,
+        EMPLID                         VARCHAR2(11) CONSTRAINT LD_BCN_BUILD_EXSALTOT02_MTN3 NOT NULL,
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT LD_BCN_BUILD_EXSALTOT02_MTN4 NOT NULL,
         SAL_AMT                        NUMBER(19, 2),
         SAL_PCT                        NUMBER,
         SAL_MTHS                       NUMBER(2),
         POS_CSF_AMT                    NUMBER(19, 2),
         POS_CSF_TM_PCT                 NUMBER,
-        SAL_PMTHS                      NUMBER(2),
-     CONSTRAINT LD_BCN_BUILD_EXSALTOT02_MTP1 PRIMARY KEY (
-        SESID,
-        EMPLID,
-        POSITION_NBR)
+        SAL_PMTHS                      NUMBER(2)
 )
 /
