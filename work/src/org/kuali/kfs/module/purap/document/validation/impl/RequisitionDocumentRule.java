@@ -18,25 +18,23 @@ package org.kuali.module.purap.rules;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.RicePropertyConstants;
 import org.kuali.core.datadictionary.validation.fieldlevel.ZipcodeValidationPattern;
 import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.util.ErrorMap;
+import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapRuleConstants;
 import org.kuali.module.purap.PurapWorkflowConstants.RequisitionDocument.NodeDetailEnum;
-import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
@@ -59,6 +57,7 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
     public boolean processValidation(PurchasingAccountsPayableDocument purapDocument) {
         boolean valid = super.processValidation(purapDocument);
         valid &= processAdditionalValidation((PurchasingDocument) purapDocument);
+
         return valid;
     }
 
@@ -106,7 +105,7 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
     public boolean processVendorValidation(PurchasingAccountsPayableDocument purapDocument) {
         ErrorMap errorMap = GlobalVariables.getErrorMap();
         errorMap.clearErrorPath();
-        errorMap.addToErrorPath(KFSPropertyConstants.DOCUMENT);
+        errorMap.addToErrorPath(RicePropertyConstants.DOCUMENT);
         boolean valid = super.processVendorValidation(purapDocument);
         RequisitionDocument reqDocument = (RequisitionDocument) purapDocument;
         if (reqDocument.getRequisitionSourceCode().equals(PurapConstants.RequisitionSources.STANDARD_ORDER)) {
@@ -133,7 +132,7 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
     public boolean validateTotalDollarAmountIsLessThanPurchaseOrderTotalLimit(PurchasingDocument purDocument) {
         boolean valid = true;
         GlobalVariables.getErrorMap().clearErrorPath();
-        GlobalVariables.getErrorMap().addToErrorPath(KFSPropertyConstants.DOCUMENT);
+        GlobalVariables.getErrorMap().addToErrorPath(RicePropertyConstants.DOCUMENT);
         if (ObjectUtils.isNotNull(purDocument.getPurchaseOrderTotalLimit()) && ObjectUtils.isNotNull(((AmountTotaling) purDocument).getTotalDollarAmount())) {
             if (((AmountTotaling) purDocument).getTotalDollarAmount().isGreaterThan(purDocument.getPurchaseOrderTotalLimit())) {
                 valid &= false;
@@ -170,6 +169,26 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
 
             return super.checkAccountingLineAccountAccessibility(financialDocument, accountingLine, action);
         }
+    }
+
+    /**
+     * Overrides the method in GeneralLedgerPostingDocumentRuleBase class in order to do nothing and return true, because
+     * Requisition doesn't generate GL entries.
+     * 
+     * @param universityFiscalYear
+     * @param explicitEntry
+     * @param sequenceHelper
+     * @param offsetEntry
+     * @return boolean true
+     * @see org.kuali.kfs.rules.GeneralLedgerPostingDocumentRuleBase#populateOffsetGeneralLedgerPendingEntry(java.lang.Integer,
+     *      org.kuali.kfs.bo.GeneralLedgerPendingEntry, org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper,
+     *      org.kuali.kfs.bo.GeneralLedgerPendingEntry)
+     */
+    @Override
+    protected boolean populateOffsetGeneralLedgerPendingEntry(Integer universityFiscalYear, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, GeneralLedgerPendingEntry offsetEntry) {
+        // Requisition doesn't generate GL entries
+
+        return true;
     }
 
     /**
@@ -251,26 +270,5 @@ public class RequisitionDocumentRule extends PurchasingDocumentRuleBase {
 
         return false;
     }
-        
-    /**
-     * @see org.kuali.module.purap.rules.PurchasingDocumentRuleBase#validateItemCapitalAssetWithErrors(org.kuali.module.purap.bo.PurchasingItemBase, org.kuali.module.purap.bo.RecurringPaymentType, java.lang.String)
-     */
-    @Override
-    public boolean validateItemCapitalAssetWithErrors(PurchasingAccountsPayableDocument purapDocument, PurApItem item, boolean apoCheck) {
-        if (SpringContext.getBean(ParameterService.class).getIndicatorParameter(RequisitionDocument.class, PurapParameterConstants.CapitalAsset.OVERRIDE_CAPITAL_ASSET_WARNINGS_IND) ||
-                apoCheck) {
-            return super.validateItemCapitalAssetWithErrors(purapDocument, item, apoCheck);
-        }
-        else {
-            return true;
-        }
-    }
-    
-    /**
-     * @see org.kuali.module.purap.rules.PurchasingDocumentRuleBase#commodityCodeIsRequired()
-     */
-    @Override
-    protected boolean commodityCodeIsRequired() {
-        return SpringContext.getBean(ParameterService.class).getIndicatorParameter(RequisitionDocument.class, PurapRuleConstants.ITEMS_REQUIRE_COMMODITY_CODE_IND);
-    }
+
 }

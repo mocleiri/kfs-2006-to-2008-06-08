@@ -1,5 +1,5 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -82,16 +82,12 @@
         </table>
         <table cellpadding="0" class="datatable">
           <tr>
-            <td width="20%" align="left" valign="middle" > Total Debits: </td> 
+            <td width="20%" align="left" valign="middle" > Total Debits/Blanks: </td> 
             <td align="right" valign="middle"> <fmt:formatNumber value="${KualiForm.document.correctionDebitTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
           </tr>
           <tr>
             <td width="20%" align="left" valign="middle" > Total Credits: </td> 
             <td align="right" valign="middle"> <fmt:formatNumber value="${KualiForm.document.correctionCreditTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
-          </tr>
-          <tr>
-            <td width="20%" align="left" valign="middle" > Total No DB/CR: </td> 
-            <td align="right" valign="middle"> <fmt:formatNumber value="${KualiForm.document.correctionBudgetTotalAmount}" groupingUsed="true" minFractionDigits="2"/></td>
           </tr>
           <tr>
             <td width="20%" align="left" valign="middle" > Rows output: </td> 
@@ -214,7 +210,7 @@
                   <html:hidden property="previousInputGroupId"/>
                   <br/><br/>
                   <c:if test="${KualiForm.editMethod eq 'R'}">
-                    <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="${ConfigProperties.externalizable.images.url}tinybutton-remgrpproc.gif" styleClass="tinybutton" alt="deleteDocument" title="Remove Group From Processing" />
+                    <html:image property="methodToCall.confirmDeleteDocument.anchor${currentTabIndex}" src="${ConfigProperties.kr.externalizable.images.url}tinybutton-remgrpproc.gif" styleClass="tinybutton" alt="deleteDocument" title="Remove Group From Processing" />
                   </c:if>
                   <c:if test="${KualiForm.editMethod eq 'M' or KualiForm.editMethod eq 'C'}">
                     <html:image property="methodToCall.loadGroup.anchor${currentTabIndex}" src="${ConfigProperties.externalizable.images.url}tinybutton-loadgroup.gif" styleClass="tinybutton" alt="ShowAllEntries" title="Show All Entries"/>
