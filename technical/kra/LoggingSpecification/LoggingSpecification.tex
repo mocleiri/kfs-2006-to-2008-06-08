@@ -1,0 +1,207 @@
+\documentclass[12pt]{report}
+\author{Leo Przybylski}
+\usepackage{graphicx}
+\input{../../general/S5.tex}
+\fulltitle{Kuali Research Administration Logging Specification}
+\W \subtitle{}
+
+\W \affiliation{University of Arizona}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\abstract{A specification that can be used by software developers to create a work of software specific
+to the purpose outlined in the requirements. This specification addresses logging within the KRA project. 
+Topics addressed are \begin{itemize}
+  \item What do we need to log?
+  \item When do we need to log?
+  \item Where do we need to log?
+  \item How do we want to log? 
+  \item Layered approach to logging
+  \item AOP Advice for logging
+\end{itemize}
+
+The goal of this document is to transmit that information to the reader (a software developer.)}
+
+\section{Scope}
+Implementation of a logging strategy using patterns of \emph{Chain of Responsibility} and AOP. To obtain a
+consistent approach to logging that is flexible, modular, and non-invasive, a strategy
+is described through layers.
+
+\subsection{Filter Layer}
+Filters use the aforementioned \emph{Chain of Responsibility} to link filters together in order of execution. The J2EE
+Servlet API provides interfaces for this which is what will be used to build the implementation. The use of Filters and 
+Listeners are applicable.
+
+\subsubsection{State Logging}
+An implementation of filters to log in detail application and session state information for trace and debugging.
+
+\subsubsection{Performance Logging}
+An implementation of filters to log runtime information about the application and session that is useful for exposing
+memory leaks or other resource related issues regarding overall application performance.
+
+\subsection{Service Layer Logging}
+Spring provides a facility for trace logging of services. Wes Price created an implementation that was extracted into
+Kuali Rice called the MethodLoggingInterceptor. Reusing this source will enable trace level logging information for 
+services which is useful in debugging.
+
+\subsection{Domain Model Logging}
+Currently not officially scoped
+
+\subsection{Exception Logging}
+Exception Logging is outside the scope of this document. Please read 
+
+https://test.kuali.org/confluence/display/KULRICE/Exception+handling+and+incident+reporting
+
+\section{Referenced Documents}
+Exception Handling
+ 
+https://test.kuali.org/confluence/display/KULRICE/Exception+handling+and+incident+reporting
+
+\section{Requirements}
+\subsection{External Interface Requirements}
+The following is an outline of API's, libraries, components, and protocols used by the software being implemented. If the software
+cannot be implemented within the guidelines outlined here, this specification should be revised.
+
+\subsubsection{Libraries}
+\begin{tabular}{l|l}
+  Library Name & Version \\
+  \hline
+  Log4J & 1.2.14 \\ 
+  Spring & 2.0.4 \\ 
+  OpenSymphony ClickStream & ?
+\end{tabular}
+
+\subsubsection{Application Programming Interfaces}
+\begin{tabular}{l|l}
+  Library Name & Version \\
+  \hline
+  J2EE Servlet API & 2.3 \\
+  Kual Nervous System & 9.3 
+\end{tabular}
+
+\subsection{Design and Implementation Constraints}
+Developers may be able to avoid continuous \verb|isDebugEnabled()| checks with an interface to easily defer string
+concatenation and creation to prevent needless creation and destruction of strings. The interface provides easily substitutable,
+non-intrusive wrappers for log levels described in Other Requirements.
+
+\subsubsection{Layered Logging Approach}
+Filters and ServletListeners are used for Session and Application state logging and for performance logging. 
+
+\begin{description}
+\item [Session and Application state] is logged per request. The state consists of:
+\begin{itemize}
+  \item All request headers (headers sent from the client)
+  \item The target URI
+  \item All request parameters (POST and GET)
+  \item Session state. Any objects in the state are logged in output including the state of the session itself.
+  \item The client IP address is logged
+\end{itemize}
+
+\item [Performance data] is logged per request. The data is captured immediately before a request and after a request to measure the difference
+and report it to the log. The performance measuring filter is as close to the end of the FilterChain as possible in order to have
+the least amount of impact on performance measurements. Performance data consists of:
+\begin{itemize}
+  \item Request runtime in milliseconds
+  \item JVM Memory consumption
+  \item Available memory
+\end{itemize}
+
+\item [Service tracing] is implemented through Spring configuration using the \verb|org.kuali.core.util.spring.MethodLoggingInterceptor|
+class. Tracing reports invocation details of each Spring service call. Invocation details consist of:
+\begin{itemize}
+  \item Input parameters including types, values, and default values
+  \item Return value(s)
+  \item If an exception is thrown, this is acknowledged in the trace. Exception details are logged.
+\end{itemize}
+
+Service tracing is turned on per service. Service tracing may be activated for all services.
+\end{description}
+
+\subsection{User Documentation}
+In this case, the user is a developer. Developers will use logs and implementation to provide logging in their functionality.
+The javadoc guidelines followed can be found at \verb|http://java.sun.com/j2se/javadoc/writingdoccomments/#doccommentcheckingtool|, 
+and \verb|https://test.kuali.org/confluence/display/KRACOEUS/Coding+Standards|
+
+Particularly address the following:
+\begin{itemize} 
+\item All methods have javadoc comments
+  \begin{itemize} 
+  \item Properly describe input parameters
+  \item Properly describe return parameters
+  \item Properly describe thrown exceptions
+  \item Describe cross-referneces
+  \end{itemize}
+\item All classes have javadoc comments
+\end{itemize}
+
+Developers may also be required to interpret log information. Provide documentation on how to interpret logs. When log formats
+change, update the documentation to reflect the change in intepretation.
+
+Since AOP Advice for tracing service calls must be manually turned on by a developer, it is thorougly documented with examples
+exactly how to turn tracing on for a specific service by editing the Spring configuration.
+
+\subsection{Performance Requirements}
+Logging statements should have little to no impact on the application. Minimize impact as much as possible when logging.
+
+\subsection{Security Requirements}
+Confidential or sensitive information is never logged.. This is a requirement for all logging and all log messages. No log should ever
+expose the following:
+\begin{itemize}
+  \item Passwords
+  \item Social security numbers
+  \item Personal identification numbers
+  \item Tax identification numbers
+  \item Financial information like account numbers 
+  \item Any personal identifiable information of individuals under the age of 13
+\end{itemize}
+
+The logging implementation must not interfere or intercede on the login/logout process. For example, when using a CachingFilter, cached pages
+only available to authenticated users should not be responded after the session has expired.
+
+\subsection{Software Quality Factors}
+Tests are provided to show that the logging implementation works and is not functioning outside the boundaries of this specification. It is not
+important to test that log messages are printed to the appropriate output. Filters are proven to not greatly impact runtime by consuming
+unnecessary resources like memory or cpu usage. Tests show that the logging implementation does not in any way effect the functionality of the
+application. Test show that there are no usability issues caused from the logging implementation.
+
+\subsection{Other Requirements}
+These are the definitions for the applicable log levels of the logging strategy implementation.
+\subsubsection{DEBUG}
+\begin{itemize}
+    \item Entry and exit points to other methods are logged with this level (utility, dao, etc.,) including arguments passed and returned values where appropriate / branches in code.
+\end{itemize}
+
+\subsubsection{INFO}
+\begin{itemize}
+\item Used for entry an exit points to service methods. If log of params or return values will take more than a few lines, then they are logged
+  at the DEBUG log level. Currently, MethodLoggingInterceptor requires the use of FATAL. This may need to be reimplemented.
+\item Core information (not in the sense of everything in the ns) - startup and shutdown points / start and end of request and function requested
+\end{itemize}
+
+\subsubsection{WARN}
+\begin{itemize}
+  \item Used for unexpected situations where throwing an error is not appropriate. if the situation occurs frequently, it is not unexpected.
+\end{itemize}
+
+\subsubsection{ERROR}
+\begin{itemize}
+  \item Used for global exception handling.
+\end{itemize}
+
+\subsubsection{FATAL}
+\begin{itemize}
+  \item When scenarios appear like a database cannot be connected to or workflow is inaccessible, this log level is used.
+\end{itemize}
+
+\section{Use Cases}
+\subsection{Exception Troubleshooting}
+\subsection{Resource Consumption Monitoring}
+\subsection{Search for Memory Leaks}
+\section{Requirements Traceability}
+How requirements trace back to source code.
+\section{Analysis Patterns/Models}
+\subsection{Chain of Responsibility}
+\section{Notes}
+\end{document}
