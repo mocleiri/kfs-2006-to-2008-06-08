@@ -396,11 +396,18 @@
     <table name="AP_PMT_CHG_ACCT_T">
         <column name="PMT_CHG_ID" primaryKey="true" size="10" type="DECIMAL"/>
         <column name="ITM_LN_NBR" primaryKey="true" size="3" type="DECIMAL"/>
-        <column name="GL_PENDING_ENTRY_ID" primaryKey="true" size="8" type="DECIMAL"/>
+        <column name="FS_ORIGIN_CD" primaryKey="true" size="2" type="VARCHAR"/>
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="TRN_ENTR_SEQ_NBR" primaryKey="true" size="5" type="DECIMAL"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ITM_ACCT_TOT_AMT" required="true" scale="2"
             size="19" type="DECIMAL"/>
+        <foreign-key foreignTable="GL_PENDING_ENTRY_T" name="AP_PMT_CHG_ACCT_TR1">
+            <reference foreign="FS_ORIGIN_CD" local="FS_ORIGIN_CD"/>
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+            <reference foreign="TRN_ENTR_SEQ_NBR" local="TRN_ENTR_SEQ_NBR"/>
+        </foreign-key>
         <unique name="AP_PMT_CHG_ACCT_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -10357,9 +10364,9 @@
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT02_MT">
-        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
-        <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
+        <column name="SESID" required="true" size="36" type="VARCHAR"/>
+        <column name="POSITION_NBR" required="true" size="8" type="VARCHAR"/>
+        <column name="EMPLID" required="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="SAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="SAL_PCT" size="22" type="DECIMAL"/>
@@ -10367,6 +10374,11 @@
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="POS_CSF_TM_PCT" size="22" type="DECIMAL"/>
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
+        <index name="LD_BCN_BUILD_EXSALTOT02_MTI2">
+            <index-column name="SESID"/>
+            <index-column name="EMPLID"/>
+            <index-column name="POSITION_NBR"/>
+        </index>
     </table>
     <table name="LD_BCN_BUILD_EXSALTOT03_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
@@ -10578,9 +10590,9 @@
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
     </table>
     <table name="LD_BCN_BUILD_SALTOT01_MT">
-        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
-        <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
+        <column name="SESID" required="true" size="36" type="VARCHAR"/>
+        <column name="POSITION_NBR" required="true" size="8" type="VARCHAR"/>
+        <column name="EMPLID" required="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="SAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="SAL_PCT" size="22" type="DECIMAL"/>
@@ -10588,6 +10600,11 @@
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="POS_CSF_TM_PCT" size="22" type="DECIMAL"/>
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
+        <index name="LD_BCN_BUILD_SALTOT01_MTI2">
+            <index-column name="SESID"/>
+            <index-column name="EMPLID"/>
+            <index-column name="POSITION_NBR"/>
+        </index>
     </table>
     <table name="LD_BCN_BUILD_SALTOT02_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
@@ -15368,7 +15385,7 @@
     <sequence name="PO_STAT_HIST_ID" nextval="1002"/>
     <sequence name="PO_VNDR_QT_ID" nextval="1002"/>
     <sequence name="PO_VNDR_STPLTN_ID" nextval="1002"/>
-    <sequence name="PUR_RCVNG_ADDR_ID" nextval="1000"/>
+    <sequence name="PUR_RCVNG_ADDR_ID" nextval="1001"/>
     <sequence name="PUR_THRSHLD_ID" nextval="1000"/>
     <sequence name="RCVNG_COR_ITM_ID" nextval="1000"/>
     <sequence name="RCVNG_LN_ITM_ID" nextval="1000"/>
@@ -15390,7 +15407,7 @@
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
     <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5891"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13276"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13296"/>
     <sequence name="SEQ_RTE_NODE" nextval="563358349"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2500"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
