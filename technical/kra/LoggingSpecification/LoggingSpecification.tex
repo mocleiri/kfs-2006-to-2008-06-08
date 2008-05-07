@@ -90,7 +90,7 @@ non-intrusive wrappers for log levels described in Other Requirements.
 Filters and ServletListeners are used for Session and Application state logging and for performance logging. 
 
 \begin{description}
-\item [Session and Application state] is logged per request. The state consists of:
+\item [Session and Application state] is logged per request. The \textbf{INFO} log level is used. The state consists of:
 \begin{itemize}
   \item All request headers (headers sent from the client)
   \item The target URI
@@ -99,7 +99,7 @@ Filters and ServletListeners are used for Session and Application state logging 
   \item The client IP address is logged
 \end{itemize}
 
-\item [Performance data] is logged per request. The data is captured immediately before a request and after a request to measure the difference
+\item [Performance data] is logged per request. The \textbf{INFO} log level is used. The data is captured immediately before a request and after a request to measure the difference
 and report it to the log. The performance measuring filter is as close to the end of the FilterChain as possible in order to have
 the least amount of impact on performance measurements. Performance data consists of:
 \begin{itemize}
@@ -131,7 +131,7 @@ Particularly address the following:
   \item Properly describe input parameters
   \item Properly describe return parameters
   \item Properly describe thrown exceptions
-  \item Describe cross-referneces
+  \item Describe cross-references
   \end{itemize}
 \item All classes have javadoc comments
 \end{itemize}
@@ -202,6 +202,17 @@ These are the definitions for the applicable log levels of the logging strategy 
 \section{Requirements Traceability}
 How requirements trace back to source code.
 \section{Analysis Patterns/Models}
+\subsection{Layered Approach to Logging}
+The diagram below illustrates where in the KRA application the layers are for logging.
+\includegraphics[scale=0.5,bb=40 0 100 600]{LoggingByLayers.eps}
+\newpage
 \subsection{Chain of Responsibility}
+\begin{quote}
+Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle
+the request. Chain the receiving objects and pass the request along the chain until an object handles it. -- Gang of Four\end{quote}
+
+The diagram below illustrates how KRA implements this pattern with filters.
+
+\includegraphics[scale=0.45,bb=40 0 100 350]{ChainOfResponsibility.eps}
 \section{Notes}
 \end{document}
