@@ -31,6 +31,17 @@
         DOC_TYP_ID="318340" RTE_NODE_ID="563358330"
         RTE_NODE_NM="Lockbox"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318460"
+        RTE_NODE_ID="563358349" RTE_NODE_NM="Adhoc Routing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="1"
+        DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="KualiCashReceiptVerificationWorkgroupTemplate"
+        DOC_TYP_ID="318460" RTE_NODE_ID="563358350"
+        RTE_NODE_NM="Default Verification Workgroup Routing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
     <EN_RTE_NODE_T
         CONTENT_FRAGMENT="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"
         DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
@@ -115,7 +126,7 @@
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2744"/>
     <EN_RTE_NODE_T
         CONTENT_FRAGMENT="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"
-        DB_LOCK_VER_NBR="22" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
+        DB_LOCK_VER_NBR="23" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
         DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="317040"
         RTE_NODE_ID="563357629" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
@@ -222,7 +233,7 @@
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
     <EN_RTE_NODE_T
         CONTENT_FRAGMENT="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"
-        DB_LOCK_VER_NBR="2" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
+        DB_LOCK_VER_NBR="3" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
         DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="316900"
         RTE_NODE_ID="563357509" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
@@ -1978,7 +1989,7 @@
         DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="317580"
         RTE_NODE_ID="563357909" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
-    <EN_RTE_NODE_T DB_LOCK_VER_NBR="16" DOC_ACTVN_TYP_TXT="S"
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="17" DOC_ACTVN_TYP_TXT="S"
         DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="317581"
         RTE_NODE_ID="563357911" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
