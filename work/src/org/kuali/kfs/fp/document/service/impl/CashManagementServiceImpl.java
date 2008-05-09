@@ -884,7 +884,7 @@ public class CashManagementServiceImpl implements CashManagementService {
                     if (drawer.getFinancialDocumentMiscellaneousAdvanceAmount() != null) {
                         drawer.setFinancialDocumentMiscellaneousAdvanceAmount(drawer.getFinancialDocumentMiscellaneousAdvanceAmount().subtract(itemInProc.getCurrentPayment()));
                     }
-                    itemInProc.setCurrentPayment(KualiDecimal.ZERO);
+                    itemInProc.setCurrentPayment(new KualiDecimal(0));
                     if (itemInProc.getItemRemainingAmount().equals(KualiDecimal.ZERO)) {
                         itemInProc.setItemClosedDate(new java.sql.Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime()));
                     }
@@ -1119,7 +1119,7 @@ public class CashManagementServiceImpl implements CashManagementService {
      * @return The total amount of cashiering checks deposited so far as part of that document.
      */
     public KualiDecimal calculateDepositedCheckTotal(String documentNumber) {
-        KualiDecimal total = KualiDecimal.ZERO;
+        KualiDecimal total = new KualiDecimal(0);
         for (Check check: cashManagementDao.selectDepositedCashieringChecks(documentNumber)) {
             if (check != null && check.getAmount() != null && check.getAmount().isGreaterThan(KualiDecimal.ZERO)) {
                 total = total.add(check.getAmount());
@@ -1137,7 +1137,7 @@ public class CashManagementServiceImpl implements CashManagementService {
      * @see org.kuali.module.financial.service.CashManagementService#calculateUndepositedCheckTotal(java.lang.String)
      */
     public KualiDecimal calculateUndepositedCheckTotal(String documentNumber) {
-        KualiDecimal total = KualiDecimal.ZERO;
+        KualiDecimal total = new KualiDecimal(0);
         for (Check check: cashManagementDao.selectUndepositedCashieringChecks(documentNumber)) {
             if (check != null && check.getAmount() != null && check.getAmount().isGreaterThan(KualiDecimal.ZERO)) {
                 total = total.add(check.getAmount());

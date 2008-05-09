@@ -51,22 +51,19 @@ import static org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.ERROR_PATH
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.datadictionary.BusinessObjectEntry;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rules.AccountingDocumentRuleBase;
-import org.kuali.kfs.service.AccountingDocumentRuleHelperService;
-import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.rules.AccountingDocumentRuleUtil;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.ObjectType;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.bo.VoucherSourceAccountingLine;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 
 /**
@@ -76,18 +73,14 @@ import org.kuali.module.financial.document.JournalVoucherDocument;
 public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
 
     /**
-     * Constructs a JournalVoucherDocumentRule instance.
+     * Constructs a JournalVoucherDocumentRule instance and sets the logger.
      */
     public JournalVoucherDocumentRule() {
     }
 
     /**
-     * Performs additional Journal Voucher specific checks every time an accounting line is added. These include 
-     * checking to make sure that encumbrance reference fields are filled in under certain circumstances.
-     * 
-     * @param financialDocument The document the new line is being added to.
-     * @param accountingLine The new accounting line being added.
-     * @return True if the business rules all pass, false otherwise.
+     * Performs additional Journal Voucher specific checks every time an accounting line is added. These include checking to make
+     * sure that encumbrance reference fields are filled in under certain circumstances.
      * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
@@ -98,12 +91,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * This method performs business rule checks on the accounting line being provided to ensure the accounting line
-     * is valid and appropriate for the document.  
-     * 
-     * @param transactionalDocument The document associated with the accounting line being validated.
-     * @param accountingLine The accounting line being validated.
-     * @return True if the business rules all pass, false otherwise.
+     * Performs additional Journal Voucher specific checks every time an accounting line is updated.
      * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomReviewAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
@@ -114,15 +102,12 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * This method performs business rule checks on the accounting line being updated to the document to ensure the accounting line
-     * is valid and appropriate for the document.  Performs additional Journal Voucher specific checks every time an accounting 
-     * line is updated.  
+     * Performs additional Journal Voucher specific checks every time an accounting line is updated.
      * 
-     * @param transactionalDocument The document the accounting line being updated resides within.
-     * @param accountingLine The original accounting line.
-     * @param updatedAccoutingLine The updated version of the accounting line.
-     * @return True if the business rules all pass for the update, false otherwise.
-     * 
+     * @param financialDocument
+     * @param originalAccountingLine
+     * @param updatedAccountingLine
+     * @return boolean
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processCustomUpdateAccountingLineBusinessRules(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine, org.kuali.core.bo.AccountingLine)
      */
@@ -135,10 +120,8 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * Implements Journal Voucher specific accountingLine validity checks. These include checking to make sure that encumbrance
      * reference fields are filled in under certain circumstances.
      * 
-     * @param accountingLine The accounting line to be validated.
-     * @return True if the given accountingLine is valid, false otherwise.
-     * 
-     * @see #isExternalEncumbranceSpecificBusinessRulesValid(AccountingLine)
+     * @param accountingLine
+     * @return true if the given accountingLine is valid
      */
     boolean validateAccountingLine(AccountingLine accountingLine) {
         // validate business rules specific to having the balance type set to EXTERNAL ENCUMBRANCE
@@ -146,39 +129,101 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * Performs Journal Voucher document specific save rules. These include checking to make sure that a valid and 
-     * active balance type is chosen and that a valid open accounting period is chosen.
-     * 
-     * @param document The document being saved.
-     * @return True if the document being saved passed all the business rules, false otherwise.
+     * Performs Journal Voucher document specific save rules. These include checking to make sure that a valid and active balance
+     * type is chosen and that a valid open accounting period is chosen.
      * 
      * @see org.kuali.core.rule.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
      */
     @Override
     public boolean processCustomSaveDocumentBusinessRules(Document document) {
         JournalVoucherDocument jvDoc = (JournalVoucherDocument) document;
-        AccountingDocumentRuleHelperService accountingDocumentRuleUtil = SpringContext.getBean(AccountingDocumentRuleHelperService.class);
 
         boolean valid = true;
 
         // check the selected balance type
         jvDoc.refreshReferenceObject(BALANCE_TYPE);
         BalanceTyp balanceType = jvDoc.getBalanceType();
-        valid &= accountingDocumentRuleUtil.isValidBalanceType(balanceType, JournalVoucherDocument.class, BALANCE_TYPE_CODE, DOCUMENT_ERROR_PREFIX + BALANCE_TYPE_CODE);
+        valid &= AccountingDocumentRuleUtil.isValidBalanceType(balanceType, JournalVoucherDocument.class, BALANCE_TYPE_CODE, DOCUMENT_ERROR_PREFIX + BALANCE_TYPE_CODE);
 
         // check the selected accounting period
         jvDoc.refreshReferenceObject(ACCOUNTING_PERIOD);
         AccountingPeriod accountingPeriod = jvDoc.getAccountingPeriod();
         // KFSPropertyConstants.SELECTED_ACCOUNTING_PERIOD is on JournalVoucherForm, not JournalVoucherDocument
-        valid &= accountingDocumentRuleUtil.isValidOpenAccountingPeriod(accountingPeriod, JournalVoucherDocument.class, ACCOUNTING_PERIOD, DOCUMENT_ERROR_PREFIX + SELECTED_ACCOUNTING_PERIOD);
+        valid &= AccountingDocumentRuleUtil.isValidOpenAccountingPeriod(accountingPeriod, JournalVoucherDocument.class, ACCOUNTING_PERIOD, DOCUMENT_ERROR_PREFIX + SELECTED_ACCOUNTING_PERIOD);
 
         // check the chosen reversal date, only if they entered a value
         if (null != jvDoc.getReversalDate()) {
             java.sql.Date reversalDate = jvDoc.getReversalDate();
-            valid &= accountingDocumentRuleUtil.isValidReversalDate(reversalDate, DOCUMENT_ERROR_PREFIX + REVERSAL_DATE);
+            valid &= AccountingDocumentRuleUtil.isValidReversalDate(reversalDate, DOCUMENT_ERROR_PREFIX + REVERSAL_DATE);
         }
 
         return valid;
+    }
+
+    @Override
+    protected KualiDecimal getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine accountingLine) {
+        LOG.debug("getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine) - start");
+        KualiDecimal returnKualiDecimal;
+            
+        String budgetCodes = SpringServiceLocator.getOptionsService().getOptions(accountingLine.getPostingYear()).getBudgetCheckingBalanceTypeCd();
+        if (budgetCodes.contains(accountingLine.getBalanceTypeCode())) { 
+            returnKualiDecimal = accountingLine.getAmount();
+        } else {
+            returnKualiDecimal = accountingLine.getAmount().abs();
+        }
+        LOG.debug("getGeneralLedgerPendingEntryAmountForAccountingLine(AccountingLine) - end");
+        return returnKualiDecimal;
+    }
+
+    /**
+     * This method contains Journal Voucher document specific GLPE explicit entry attribute sets.
+     * 
+     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
+     */
+    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument financialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        JournalVoucherDocument jvDoc = (JournalVoucherDocument) financialDocument;
+
+        // set the appropriate accounting period values according to the values chosen by the user
+        explicitEntry.setUniversityFiscalPeriodCode(jvDoc.getPostingPeriodCode());
+        explicitEntry.setUniversityFiscalYear(jvDoc.getPostingYear());
+
+        // set the object type code directly from what was entered in the interface
+        explicitEntry.setFinancialObjectTypeCode(accountingLine.getObjectTypeCode());
+
+        // set the balance type code directly from what was entered in the interface
+        explicitEntry.setFinancialBalanceTypeCode(accountingLine.getBalanceTypeCode());
+
+        // set the debit/credit code appropriately
+        jvDoc.refreshReferenceObject(BALANCE_TYPE);
+        if (jvDoc.getBalanceType().isFinancialOffsetGenerationIndicator()) {
+            explicitEntry.setTransactionDebitCreditCode(getEntryValue(accountingLine.getDebitCreditCode(), BLANK_SPACE));
+        }
+        else {
+            explicitEntry.setTransactionDebitCreditCode(BLANK_SPACE);
+        }
+
+        // set the encumbrance update code
+        explicitEntry.setTransactionEncumbranceUpdateCode(getEntryValue(accountingLine.getEncumbranceUpdateCode(), BLANK_SPACE));
+
+        // set the reversal date to what what specified at the document level
+        if (jvDoc.getReversalDate() != null) {
+            explicitEntry.setFinancialDocumentReversalDate(jvDoc.getReversalDate());
+        }
+    }
+
+    /**
+     * A Journal Voucher document doesn't generate an offset entry at all, so this method overrides to do nothing more than return
+     * true. This will be called by the parent's processGeneralLedgerPendingEntries method.
+     * 
+     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processOffsetGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     *      org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper, org.kuali.core.bo.AccountingLine,
+     *      org.kuali.module.gl.bo.GeneralLedgerPendingEntry, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
+     */
+    @Override
+    protected boolean processOffsetGeneralLedgerPendingEntry(AccountingDocument financialDocument, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, AccountingLine accountingLineCopy, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+        sequenceHelper.decrement(); // the parent already increments; assuming that all documents have offset entries
+        return true;
     }
 
     // Overridden Helper Methods
@@ -186,8 +231,8 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * Overrides the parent to return true, because Journal Voucher documents do not have to balance in order to be submitted for
      * routing.
      * 
-     * @param financialDocument The document being validated.
-     * @return True if the balance of the document is valid, false otherwise.
+     * @param financialDocument
+     * @return boolean True if the balance of the document is valid, false other wise.
      */
     @Override
     protected boolean isDocumentBalanceValid(AccountingDocument financialDocument) {
@@ -195,15 +240,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * Accounting lines for Journal Vouchers can be positive or negative, just not "$0.00".  
-     * 
-     * Additionally, accounting lines cannot have negative dollar amounts if the balance type of the 
-     * journal voucher allows for general ledger pending entry offset generation or the balance type 
-     * is not a budget type code.  
-     * 
-     * @param document The document when contains the accounting line being validated.
-     * @param acocuntingLine The accounting line to be validated.
-     * @return True if the accounting line amount is valid, false otherwise.
+     * Accounting lines for Journal Vouchers can be positive or negative, just not "$0.00".
      * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isAmountValid(org.kuali.core.document.FinancialDocument,
      *      org.kuali.core.bo.AccountingLine)
@@ -252,16 +289,11 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     }
 
     /**
-     * This method looks at the current full key path that exists in the ErrorMap structure to determine how to build 
-     * the error map for the special journal voucher credit and debit fields since they don't conform to the standard 
-     * pattern of accounting lines.
+     * This method looks at the current full key path that exists in the ErrorMap structure to determine how to build the error map
+     * for the special journal voucher credit and debit fields since they don't conform to the standard pattern of accounting lines.
      * 
-     * The error map key path is also dependent on whether or not the accounting line containing an error is a new 
-     * accounting line or an existing line that is being updated.  This determination is made by searching for 
-     * NEW_SOURCE_ACCT_LINE_PROPERTY_NAME in the error path of the global error map.
-     * 
-     * @param isDebit Identifies whether or not the line we are returning an error path for is a debit accounting line or not.
-     * @return The full error map key path for the appropriate amount type.
+     * @param isDebit
+     * @return String
      */
     private String buildErrorMapKeyPathForDebitCreditAmount(boolean isDebit) {
         // determine if we are looking at a new line add or an update
@@ -295,9 +327,6 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * The list that holds TargetAccountingLines should be empty. This will be checked when the document is "routed" or submitted to
      * post - it's called automatically by the parent's processRouteDocument method.
      * 
-     * @param financialDocument The document containing the target accounting lines being validated.
-     * @return This method always returns true because Journal Vouchers do not contain target accounting lines.
-     * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isTargetAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
      */
     @Override
@@ -307,10 +336,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
 
     /**
      * This method will check to make sure that the required number of source accounting lines for routing, exist in the document.
-     * The Journal Voucher only has one set of accounting lines; therefore, we need to use a different message for this.
-     * 
-     * @param financialDocument The document containing the source accounting lines being validated.
-     * @return True if there is one or more source accounting lines in the given document.
+     * The Journal Voucher only has one set of accounting lines; therefore, we need to use a differe message for this.
      * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isSourceAccountingLinesRequiredNumberForRoutingMet(org.kuali.core.document.FinancialDocument)
      */
@@ -329,14 +355,10 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * Overrides the parent to return true, because Journal Voucher documents aren't restricted from using any object code. This is
      * part of the "save" check that gets done. This method is called automatically by the parent's processSaveDocument method.
      * 
-     * @param documentClass The document type class used to retrieve the rules defining if the object code is allowed.
-     * @param accountingLine The accounting line containing the object code being validated.
-     * @return This method always returns true.
-     * 
      * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#isObjectCodeAllowed(org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isObjectCodeAllowed(Class documentClass, AccountingLine accountingLine) {
+    public boolean isObjectCodeAllowed(AccountingLine accountingLine) {
         return true;
     }
 
@@ -345,14 +367,13 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * This method checks that values exist in the three reference fields (referenceOriginCode, referenceTypeCode, referenceNumber)
      * that are required if the balance type is set to EXTERNAL ENCUMBRANCE.
      * 
-     * @param accountingLine The accounting line being validated.
-     * @return True if the fields are filled in, true if the balance type is not EXTERNAL ENCUMBRANCE, false otherwise.
+     * @param accountingLine
+     * @return boolean True if the fields are filled in, true if the balance type is not EXTERNAL ENCUMBRANCE, false otherwise.
      */
-    protected boolean isExternalEncumbranceSpecificBusinessRulesValid(AccountingLine accountingLine) {
+    private boolean isExternalEncumbranceSpecificBusinessRulesValid(AccountingLine accountingLine) {
         // make sure that the line contains a proper balance type like it should
         BalanceTyp balanceType = accountingLine.getBalanceTyp();
-        AccountingDocumentRuleHelperService accountingDocumentRuleUtil = SpringContext.getBean(AccountingDocumentRuleHelperService.class);
-        if (!accountingDocumentRuleUtil.isValidBalanceType(balanceType, GENERIC_CODE_PROPERTY_NAME)) {
+        if (!AccountingDocumentRuleUtil.isValidBalanceType(balanceType, GENERIC_CODE_PROPERTY_NAME)) {
             return false;
         }
         else if (BALANCE_TYPE_EXTERNAL_ENCUMBRANCE.equals(balanceType.getCode())) {
@@ -369,13 +390,13 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * This method checks that values exist in the three reference fields that are required if the balance type is set to EXTERNAL
      * ENCUMBRANCE.
      * 
-     * @param accountingLine The accounting line being validated.
+     * @param accountingLine
      * @return True if all of the required external encumbrance reference fields are valid, false otherwise.
      */
-    protected boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
+    private boolean isRequiredReferenceFieldsValid(AccountingLine accountingLine) {
         boolean valid = true;
 
-        BusinessObjectEntry boe = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(VoucherSourceAccountingLine.class.getName());
+        BusinessObjectEntry boe = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(SourceAccountingLine.class.getName());
         if (StringUtils.isEmpty(accountingLine.getReferenceOriginCode())) {
             putRequiredPropertyError(boe, REFERENCE_ORIGIN_CODE);
             valid = false;
@@ -396,30 +417,49 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
      * check is done for us automatically by the data dictionary validation if a value exists; beforehand so we can assume that any
      * value in that field is valid.
      * 
-     * @param documentClass The type of document the accounting line is contained within.
-     * @param accountingLine The accounting line the object type code will be retrieved from.
-     * @return True if the object type code exists, false otherwise.
-     * 
      * @see org.kuali.core.rule.AddAccountingLineRule#isObjectTypeAllowed(org.kuali.core.bo.AccountingLine)
      */
     @Override
-    public boolean isObjectTypeAllowed(Class documentClass, AccountingLine accountingLine) {
+    public boolean isObjectTypeAllowed(AccountingLine accountingLine) {
         String objectTypeCode = accountingLine.getObjectTypeCode();
         if (StringUtils.isNotBlank(objectTypeCode)) {
             return true;
         }
         else {
-            String label = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(ObjectType.class.getName()).getAttributeDefinition(GENERIC_CODE_PROPERTY_NAME).getLabel();
+            String label = SpringServiceLocator.getDataDictionaryService().getDataDictionary().getBusinessObjectEntry(ObjectType.class.getName()).getAttributeDefinition(GENERIC_CODE_PROPERTY_NAME).getLabel();
             GlobalVariables.getErrorMap().putError(OBJECT_TYPE_CODE_PROPERTY_NAME, ERROR_REQUIRED, label);
             return false;
         }
 
     }
 
-    // /**
-    //  * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(FinancialDocument,
-    //  *      org.kuali.core.bo.SourceAccountingLine)
-    // */
+    /**
+     * the following are credits (return false)
+     * <ol>
+     * <li> (debitCreditCode isNotBlank) && debitCreditCode != 'D'
+     * </ol>
+     * the following are debits (return true)
+     * <ol>
+     * <li> debitCreditCode == 'D'
+     * <li> debitCreditCode isBlank
+     * </ol>
+     * 
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     *      org.kuali.core.bo.AccountingLine)
+     */
+    public boolean isDebit(AccountingDocument financialDocument, AccountingLine accountingLine) throws IllegalStateException {
+        String debitCreditCode = accountingLine.getDebitCreditCode();
+
+        boolean isDebit = StringUtils.isBlank(debitCreditCode) || IsDebitUtils.isDebitCode(debitCreditCode);
+
+        return isDebit;
+    }
+
+    /**
+     * 
+     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processSourceAccountingLineSufficientFundsCheckingPreparation(FinancialDocument,
+     *      org.kuali.core.bo.SourceAccountingLine)
+     */
     // @Override
     // protected SufficientFundsItem processSourceAccountingLineSufficientFundsCheckingPreparation(FinancialDocument
     // financialDocument, SourceAccountingLine sourceAccountingLine) {
@@ -460,7 +500,7 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     // KualiDecimal lineAmount = sourceAccountingLine.getAmount();
     // String financialObjectTypeCode = sourceAccountingLine.getObjectTypeCode();
     // String sufficientFundsObjectCode =
-    // SpringContext.getBean(SufficientFundsService.class).getSufficientFundsObjectCode(sourceAccountingLine.getObjectCode(),accountSufficientFundsCode);
+    // SpringServiceLocator.getSufficientFundsService().getSufficientFundsObjectCode(sourceAccountingLine.getObjectCode(),accountSufficientFundsCode);
     //
     // item = buildSufficentFundsItem(accountNumber, accountSufficientFundsCode, lineAmount, chartOfAccountsCode,
     // sufficientFundsObjectCode, debitCreditCode, financialObjectCode, financialObjectLevelCode, fiscalYear,
@@ -473,8 +513,9 @@ public class JournalVoucherDocumentRule extends AccountingDocumentRuleBase {
     //
     // /**
     // *
-    // * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(FinancialDocument,
-    // *      org.kuali.core.bo.TargetAccountingLine)
+    // * @see
+    // org.kuali.module.financial.rules.FinancialDocumentRuleBase#processTargetAccountingLineSufficientFundsCheckingPreparation(FinancialDocument,
+    // * org.kuali.core.bo.TargetAccountingLine)
     // */
     // @Override
     // protected SufficientFundsItem processTargetAccountingLineSufficientFundsCheckingPreparation(FinancialDocument
