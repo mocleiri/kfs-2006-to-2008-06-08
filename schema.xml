@@ -1661,6 +1661,7 @@
         <column name="PRCS_ORG_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="UNIV_FEIN_NBR" size="9" type="VARCHAR"/>
         <column name="SALESTAX_ACCT_NBR" size="7" type="VARCHAR"/>
         <column name="SALESTAX_FINOBJ_CD" size="4" type="VARCHAR"/>
         <column name="REFUND_FIN_OBJ_CD" size="4" type="VARCHAR"/>
@@ -1686,88 +1687,6 @@
         <column name="WIRE_SUB_ACCT_NBR" size="5" type="VARCHAR"/>
         <column name="WIRE_OBJ_CD" size="4" type="VARCHAR"/>
         <column name="WIRE_SUB_OBJ_CD" size="3" type="VARCHAR"/>
-        <foreign-key foreignTable="CA_SUB_OBJECT_CD_T" name="AR_SYS_INFO_TR12">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="UNIV_CLR_ACCT_NBR"/>
-            <reference foreign="FIN_OBJECT_CD" local="UNIV_CLR_OBJECT_CD"/>
-            <reference foreign="FIN_SUB_OBJ_CD" local="UNIV_CLR_SUBOBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR5">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="SALESTAX_FINOBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_SUB_OBJECT_CD_T" name="AR_SYS_INFO_TR18">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="WIRE_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="WIRE_ACCT_NBR"/>
-            <reference foreign="FIN_OBJECT_CD" local="WIRE_OBJ_CD"/>
-            <reference foreign="FIN_SUB_OBJ_CD" local="WIRE_SUB_OBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_SYS_INFO_TR15">
-            <reference foreign="FIN_COA_CD" local="WIRE_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="WIRE_ACCT_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ORG_T" name="AR_SYS_INFO_TR2">
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="ORG_CD" local="PRCS_ORG_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="AR_SYS_INFO_TR14">
-            <reference foreign="FIN_COA_CD" local="WIRE_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR9">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="UNIV_CLR_OBJECT_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR6">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="REFUND_FIN_OBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR17">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="WIRE_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="WIRE_OBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_SUB_ACCT_T" name="AR_SYS_INFO_TR16">
-            <reference foreign="FIN_COA_CD" local="WIRE_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="WIRE_ACCT_NBR"/>
-            <reference foreign="SUB_ACCT_NBR" local="WIRE_SUB_ACCT_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_SYS_INFO_TR10">
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="SALESTAX_ACCT_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="AR_SYS_INFO_TR3">
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR8">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="PMT_CLR_FIN_OBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="SH_STATE_T" name="AR_SYS_INFO_TR13">
-            <reference foreign="POSTAL_STATE_CD" local="ORG_REMIT_ST_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_OBJECT_CODE_T" name="AR_SYS_INFO_TR7">
-            <reference foreign="UNIV_FISCAL_YR" local="UNIV_FISCAL_YR"/>
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-            <reference foreign="FIN_OBJECT_CD" local="DBTEXP_FIN_OBJ_CD"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_SUB_ACCT_T" name="AR_SYS_INFO_TR11">
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="UNIV_CLR_ACCT_NBR"/>
-            <reference foreign="SUB_ACCT_NBR" local="UNIV_CLR_SUBAC_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_ACCOUNT_T" name="AR_SYS_INFO_TR4">
-            <reference foreign="FIN_COA_CD" local="UNIV_CLR_COA_CD"/>
-            <reference foreign="ACCOUNT_NBR" local="UNIV_CLR_ACCT_NBR"/>
-        </foreign-key>
-        <foreign-key foreignTable="CA_CHART_T" name="AR_SYS_INFO_TR1">
-            <reference foreign="FIN_COA_CD" local="PRCS_FIN_COA_CD"/>
-        </foreign-key>
         <unique name="AR_SYS_INFO_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -4590,6 +4509,7 @@
         <column name="CPTL_AST_LAND_PRCL_NBR" size="30" type="VARCHAR"/>
         <column name="CPTL_AST_DEPR_DT" type="DATE"/>
         <column name="FIN_OBJ_SUB_TYP_CD" size="2" type="VARCHAR"/>
+        <column name="AST_FABR_EST_RETN_YRS" size="5" type="DECIMAL"/>
         <foreign-key foreignTable="SH_ROOM_T" name="CM_CPTLAST_TR5">
             <reference foreign="CAMPUS_CD" local="CAMPUS_CD"/>
             <reference foreign="BLDG_CD" local="BLDG_CD"/>
@@ -15412,17 +15332,17 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2300"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318480"/>
-    <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4072"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318500"/>
+    <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4092"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
-    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5891"/>
+    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5911"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13296"/>
-    <sequence name="SEQ_RTE_NODE" nextval="563358369"/>
-    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2520"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13316"/>
+    <sequence name="SEQ_RTE_NODE" nextval="563358389"/>
+    <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2580"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
     <sequence name="SEQ_RULE_TMPL_OPTN" nextval="3088"/>
     <sequence name="SEQ_SEARCHABLE_ATTRIBUTE_VALUE" nextval="151676"/>

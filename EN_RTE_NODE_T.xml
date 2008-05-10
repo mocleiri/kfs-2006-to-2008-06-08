@@ -42,6 +42,29 @@
         DOC_TYP_ID="318460" RTE_NODE_ID="563358350"
         RTE_NODE_NM="Default Verification Workgroup Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318480"
+        RTE_NODE_ID="563358369" RTE_NODE_NM="Adhoc Routing"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="KualiRequisitionContentTemplate"
+        DOC_TYP_ID="318480" RTE_NODE_ID="563358370"
+        RTE_NODE_NM="Content Review"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR" DOC_RTE_MTHD_NM="KualiSubAccountTemplate"
+        DOC_TYP_ID="318480" RTE_NODE_ID="563358371"
+        RTE_NODE_NM="Sub Account Review"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="1"
+        DOC_RTE_MTHD_CD="FR" DOC_RTE_MTHD_NM="KualiAccountTemplate"
+        DOC_TYP_ID="318480" RTE_NODE_ID="563358372"
+        RTE_NODE_NM="Account Review"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
     <EN_RTE_NODE_T
         CONTENT_FRAGMENT="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"
         DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
@@ -117,6 +140,26 @@
         DOC_RTE_MTHD_NM="KualiPurchaseOrderRemoveHoldNotify"
         DOC_TYP_ID="316931" RTE_NODE_ID="563357568"
         RTE_NODE_NM="Notification"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR" DOC_RTE_MTHD_NM="KualiOrgReviewTemplate"
+        DOC_TYP_ID="318480" RTE_NODE_ID="563358373"
+        RTE_NODE_NM="Org Review"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="KualiPurApCommodityCodeTemplate"
+        DOC_TYP_ID="318480" RTE_NODE_ID="563358374"
+        RTE_NODE_NM="Commodity Code Review"
+        RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+        DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0"
+        DOC_RTE_MTHD_CD="FR"
+        DOC_RTE_MTHD_NM="KualiRequisitionSeparationOfDutiesTemplate"
+        DOC_TYP_ID="318480" RTE_NODE_ID="563358375"
+        RTE_NODE_NM="Separation of Duties"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
     <EN_RTE_NODE_T
         CONTENT_FRAGMENT="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"
@@ -1872,7 +1915,7 @@
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
     <EN_RTE_NODE_T
         CONTENT_FRAGMENT="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"
-        DB_LOCK_VER_NBR="6" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
+        DB_LOCK_VER_NBR="7" DOC_ACTVN_TYP_TXT="S" DOC_FNL_APRVR_IND="0"
         DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="317280"
         RTE_NODE_ID="563357829" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2744"/>
@@ -2281,7 +2324,7 @@
         DOC_TYP_ID="318281" RTE_NODE_ID="563358297"
         RTE_NODE_NM="Document Transmission"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.RequestsNode" WRKGRP_ID="2752"/>
-    <EN_RTE_NODE_T DB_LOCK_VER_NBR="1" DOC_ACTVN_TYP_TXT="S"
+    <EN_RTE_NODE_T DB_LOCK_VER_NBR="2" DOC_ACTVN_TYP_TXT="S"
         DOC_FNL_APRVR_IND="0" DOC_MNDTRY_RTE_IND="0" DOC_TYP_ID="318282"
         RTE_NODE_ID="563358299" RTE_NODE_NM="Adhoc Routing"
         RTE_NODE_TYP="edu.iu.uis.eden.engine.node.InitialNode" WRKGRP_ID="2752"/>
