@@ -22,7 +22,8 @@ Topics addressed are \begin{itemize}
   \item AOP Advice for logging
 \end{itemize}
 
-The goal of this document is to transmit that information to the reader (a software developer.)}
+The goal of this document is to transmit that information to the reader (a software developer.) This document can
+in some ways be considered a hybrid of functional and technical specification.}
 
 \section{Scope}
 Implementation of a logging strategy using patterns of \emph{Chain of Responsibility} and AOP. To obtain a
@@ -54,6 +55,8 @@ Exception Logging is outside the scope of this document. Please read
 
 https://test.kuali.org/confluence/display/KULRICE/Exception+handling+and+incident+reporting
 
+This may be revisited at a later time.
+
 \section{Referenced Documents}
 Exception Handling
  
@@ -65,21 +68,22 @@ The following is an outline of API's, libraries, components, and protocols used 
 cannot be implemented within the guidelines outlined here, this specification should be revised.
 
 \subsubsection{Libraries}
-\begin{tabular}{l|l}
-  Library Name & Version \\
-  \hline
-  Log4J & 1.2.14 \\ 
-  Spring & 2.0.4 \\ 
-  OpenSymphony ClickStream & ?
-\end{tabular}
+\begin{itemize}
+\item Log4J
+\item Spring
+\item OpenSymphony Clickstream (waiting to see if this is part of KTC approved API list)
+\end{itemize}
 
 \subsubsection{Application Programming Interfaces}
-\begin{tabular}{l|l}
-  Library Name & Version \\
-  \hline
-  J2EE Servlet API & 2.3 \\
-  Kual Nervous System & 9.3 
-\end{tabular}
+\begin{itemize}
+  \item J2EE Servlet API v2.3
+\end{itemize}
+
+\subsection{Software Applications}
+\begin{itemize}
+  \item Jetty
+  \item Tomcat v5.5
+\end{itemize}
 
 \subsection{Design and Implementation Constraints}
 Developers may be able to avoid continuous \verb|isDebugEnabled()| checks with an interface to easily defer string
@@ -90,14 +94,24 @@ non-intrusive wrappers for log levels described in Other Requirements.
 Filters and ServletListeners are used for Session and Application state logging and for performance logging. 
 
 \begin{description}
-\item [Session and Application state] is logged per request. The \textbf{INFO} log level is used. The state consists of:
+\item [Session and Application state] is logged per request. The state consists of:
 \begin{itemize}
   \item All request headers (headers sent from the client)
   \item The target URI
   \item All request parameters (POST and GET)
-  \item Session state. Any objects in the state are logged in output including the state of the session itself.
   \item The client IP address is logged
 \end{itemize}
+Further information may be logged in the future regarding session state. See the \emph{Notes} section regarding 
+this.
+
+The following parts should be logged at the *INFO* level:
+\begin{itemize}
+  \item Current logged in user name
+  \item Current date/time
+  \item The action or whatever best describes what the user was trying to do
+\end{itemize}
+
+All other parts of state logging should be logged at *DEBUG* level.
 
 \item [Performance data] is logged per request. The \textbf{INFO} log level is used. The data is captured immediately before a request and after a request to measure the difference
 and report it to the log. The performance measuring filter is as close to the end of the FilterChain as possible in order to have
@@ -119,22 +133,21 @@ class. Tracing reports invocation details of each Spring service call. Invocatio
 Service tracing is turned on per service. Service tracing may be activated for all services.
 \end{description}
 
+\subsubsection{Configuration Constraints}
+The following configuration files may be effected:
+\begin{description}
+  \item[log4j.properties] log formats, appenders, log levels, et al... may need to be modified. 
+  \item[SpringBeans.xml] For AOP MethodLoggingInterceptor configuration
+  \item[web.xml] Filters have to be declared within the web.xml file
+\end{description}
+
+\subsubsection{Allowable Refactoring}
+It may be required to re-implement the \verb|MethodLoggingInterceptor|.
+
 \subsection{User Documentation}
 In this case, the user is a developer. Developers will use logs and implementation to provide logging in their functionality.
 The javadoc guidelines followed can be found at \verb|http://java.sun.com/j2se/javadoc/writingdoccomments/#doccommentcheckingtool|, 
 and \verb|https://test.kuali.org/confluence/display/KRACOEUS/Coding+Standards|
-
-Particularly address the following:
-\begin{itemize} 
-\item All methods have javadoc comments
-  \begin{itemize} 
-  \item Properly describe input parameters
-  \item Properly describe return parameters
-  \item Properly describe thrown exceptions
-  \item Describe cross-references
-  \end{itemize}
-\item All classes have javadoc comments
-\end{itemize}
 
 Developers may also be required to interpret log information. Provide documentation on how to interpret logs. When log formats
 change, update the documentation to reflect the change in intepretation.
@@ -145,8 +158,10 @@ exactly how to turn tracing on for a specific service by editing the Spring conf
 \subsection{Performance Requirements}
 Logging statements should have little to no impact on the application. Minimize impact as much as possible when logging.
 
+It is currently unknown what can be considered impact to the application. This will be determined at a later time.
+
 \subsection{Security Requirements}
-Confidential or sensitive information is never logged.. This is a requirement for all logging and all log messages. No log should ever
+Confidential or sensitive information is never logged. This is a requirement for all logging and all log messages. No log should ever
 expose the following:
 \begin{itemize}
   \item Passwords
@@ -171,12 +186,12 @@ These are the definitions for the applicable log levels of the logging strategy 
 \subsubsection{DEBUG}
 \begin{itemize}
     \item Entry and exit points to other methods are logged with this level (utility, dao, etc.,) including arguments passed and returned values where appropriate / branches in code.
+    \item If log of params or return values will take more than a few lines
 \end{itemize}
 
 \subsubsection{INFO}
 \begin{itemize}
-\item Used for entry an exit points to service methods. If log of params or return values will take more than a few lines, then they are logged
-  at the DEBUG log level. Currently, MethodLoggingInterceptor requires the use of FATAL. This may need to be reimplemented.
+\item Used for entry an exit points to service methods. 
 \item Core information (not in the sense of everything in the ns) - startup and shutdown points / start and end of request and function requested
 \end{itemize}
 
@@ -193,14 +208,15 @@ These are the definitions for the applicable log levels of the logging strategy 
 \subsubsection{FATAL}
 \begin{itemize}
   \item When scenarios appear like a database cannot be connected to or workflow is inaccessible, this log level is used.
+  \item MethodLoggingInterceptor requires the use of FATAL. This may need to be reimplemented.
 \end{itemize}
 
-\section{Use Cases}
-\subsection{Exception Troubleshooting}
-\subsection{Resource Consumption Monitoring}
-\subsection{Search for Memory Leaks}
 \section{Requirements Traceability}
-How requirements trace back to source code.
+This is where it is described how requirements trace back to source code. 
+
+\subsection{Expected Modified Classes}
+\subsection{Expected New Classes}
+
 \section{Analysis Patterns/Models}
 \subsection{Layered Approach to Logging}
 The diagram below illustrates where in the KRA application the layers are for logging.
@@ -214,5 +230,15 @@ the request. Chain the receiving objects and pass the request along the chain un
 The diagram below illustrates how KRA implements this pattern with filters.
 
 \includegraphics[scale=0.45,bb=40 0 100 350]{ChainOfResponsibility.eps}
+
 \section{Notes}
+\subsection{Session State. What gets logged?}
+Bryan is looking into this. Some options given were:
+\begin{itemize}
+  \item Everything except the Form 
+  \item Everything in the Form except the document
+  \item Maybe this is only the case for specific url patterns?
+  \item Maybe just forget session state? 
+\end{itemize}
+
 \end{document}
