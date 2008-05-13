@@ -19,7 +19,7 @@ CREATE TABLE FP_DV_PAYEE_DTL_T(
         VER_NBR                        NUMBER(8) DEFAULT 1 CONSTRAINT FP_DV_PAYEE_DTL_TN3 NOT NULL,
         DV_PMT_REAS_CD                 VARCHAR2(1),
         DV_ALIEN_PMT_IND               CHAR(1),
-        DV_PAYEE_ID_NBR                VARCHAR2(10),
+        DV_PAYEE_ID_NBR                VARCHAR2(21),
         DV_PAYEE_PRSN_NM               VARCHAR2(40),
         DV_PAYEE_LN1_ADDR              VARCHAR2(40),
         DV_PAYEE_LN2_ADDR              VARCHAR2(40),
