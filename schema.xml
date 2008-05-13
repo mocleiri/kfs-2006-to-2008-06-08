@@ -15272,6 +15272,7 @@
     <sequence name="CRDT_MEMO_ID" nextval="1002"/>
     <sequence name="CRDT_MEMO_ITM_ID" nextval="1002"/>
     <sequence name="CRDT_MEMO_STAT_HIST_ID" nextval="1002"/>
+    <sequence name="CUST_NBR_SEQ" nextval="2000"/>
     <sequence name="DIRTY_CACHE_SEQ" nextval="2000"/>
     <sequence name="DV_PAYEE_ID_NBR_SEQ" nextval="178184"/>
     <sequence name="EN_SERVICE_DEF_INTERFACE_SEQ" nextval="2000"/>
