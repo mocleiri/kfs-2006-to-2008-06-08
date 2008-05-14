@@ -7825,7 +7825,7 @@
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="DV_PMT_REAS_CD" size="1" type="VARCHAR"/>
         <column name="DV_ALIEN_PMT_IND" size="1" type="CHAR"/>
-        <column name="DV_PAYEE_ID_NBR" size="10" type="VARCHAR"/>
+        <column name="DV_PAYEE_ID_NBR" size="21" type="VARCHAR"/>
         <column name="DV_PAYEE_PRSN_NM" size="40" type="VARCHAR"/>
         <column name="DV_PAYEE_LN1_ADDR" size="40" type="VARCHAR"/>
         <column name="DV_PAYEE_LN2_ADDR" size="40" type="VARCHAR"/>

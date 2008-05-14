@@ -4774,4 +4774,11 @@
         SH_PARM_NM="RETRANSMIT_TRANSMISSION_METHOD_TYPES"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="PRIN;FAX"
         SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_PURAP_ADMIN"/>
+    <SH_PARM_T OBJ_ID="4D1E7F6A81911C73E0404F8189D83A36"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Allows the display of the clear and load quantity buttons on a receiving line document."
+        SH_PARM_DTL_TYP_CD="ReceivingLine"
+        SH_PARM_NM="SHOW_CLEAR_AND_LOAD_QTY_BUTTONS"
+        SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="PA_PUR_USERS"/>
 </dataset>
