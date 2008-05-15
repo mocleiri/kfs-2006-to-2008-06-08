@@ -4781,4 +4781,11 @@
         SH_PARM_NM="SHOW_CLEAR_AND_LOAD_QTY_BUTTONS"
         SH_PARM_NMSPC_CD="KFS-PA" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
         VER_NBR="1" WRKGRP_NM="PA_PUR_USERS"/>
+    <SH_PARM_T OBJ_ID="1263F563-7241-CA5F-49C2-A01092887B84"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Set of object sub types codes that are used to validate that the asset payment being created has the same object sub type code in the existing payments."
+        SH_PARM_DTL_TYP_CD="Asset" SH_PARM_NM="OBJECT_SUB_TYPE_GROUPS"
+        SH_PARM_NMSPC_CD="KFS-CM"
+        SH_PARM_TXT="BD,BF;CM,CF,CO;UC,UF,UO;LI,LF"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="CM_ADMINISTRATORS"/>
 </dataset>
