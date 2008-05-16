@@ -15279,7 +15279,7 @@
     <sequence name="FP_CASHIER_ITM_IN_PROC_T_SEQ" nextval="1000"/>
     <sequence name="FP_PRCRMNT_CARD_TRN_T_SEQ" nextval="2040"/>
     <sequence name="GL_ID_BILL_T_SEQ" nextval="1"/>
-    <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="11929"/>
+    <sequence name="GL_ORIGIN_ENTRY_GRP_T_SEQ" nextval="12069"/>
     <sequence name="GL_ORIGIN_ENTRY_T_SEQ" nextval="31905"/>
     <sequence name="INV_HDR_INFO_ID" nextval="1002"/>
     <sequence name="INV_ITM_ID" nextval="1002"/>

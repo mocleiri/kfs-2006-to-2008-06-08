@@ -288,11 +288,10 @@
         WRKGRP_DESC="Kuali Organization Plant Fund Maintainer"
         WRKGRP_ID="180244" WRKGRP_NM="CA_ORGANIZATION_PLANT_FUND_USERS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="10" DOC_HDR_ID="-1"
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="11" DOC_HDR_ID="-1"
         WRKGRP_ACTV_IND="1" WRKGRP_CUR_IND="1"
         WRKGRP_DESC="Kuali Maintenance User Role" WRKGRP_ID="2741"
-        WRKGRP_NM="SY_MAINTAINENANCE_USERS"
-        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="4"/>
+        WRKGRP_NM="SY_MAINTENANCE_USERS" WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="4"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="10" DOC_HDR_ID="-1"
         WRKGRP_ACTV_IND="1" WRKGRP_CUR_IND="1"
         WRKGRP_DESC="DV Tax Issues Review" WRKGRP_ID="2636"
@@ -653,10 +652,6 @@
         WRKGRP_CUR_IND="0" WRKGRP_DESC="Capital Assets administration"
         WRKGRP_ID="317720" WRKGRP_NM="CM_ADMINISTRATORS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
-        WRKGRP_CUR_IND="1" WRKGRP_DESC="Non Contract Manager Staff"
-        WRKGRP_ID="318261" WRKGRP_NM="PURAP_PUR_STAFF"
-        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="2" DOC_HDR_ID="317901"
         WRKGRP_ACTV_IND="1" WRKGRP_CUR_IND="1"
         WRKGRP_DESC="A workgroup that allows its members to claim electronic payments that have come into the institution."
@@ -701,10 +696,6 @@
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="Users in this workgroup can do everything that CM_ASSET_MERGE_SEPARATE_USERS can do, plus: &#xa;1. Update more fields on Asset maintenance document &#xa;2. Retire non-movable assets and 3. Asset transfers non-movable assets"
         WRKGRP_ID="318104" WRKGRP_NM="CM_SUPER_USERS"
-        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
-    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
-        WRKGRP_CUR_IND="1" WRKGRP_DESC="Purchasing Contract Managers"
-        WRKGRP_ID="318260" WRKGRP_NM="PURAP_PUR_CONTR_MGR"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1" WRKGRP_DESC="PDP Cancels" WRKGRP_ID="297272"

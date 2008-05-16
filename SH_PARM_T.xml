@@ -4788,4 +4788,14 @@
         SH_PARM_NMSPC_CD="KFS-CM"
         SH_PARM_TXT="BD,BF;CM,CF,CO;UC,UF,UO;LI,LF"
         SH_PARM_TYP_CD="CONFG" VER_NBR="3" WRKGRP_NM="CM_ADMINISTRATORS"/>
+    <SH_PARM_T OBJ_ID="4D532894110AD4CDE0404F8189D83D75"
+        SH_PARM_CONS_CD="A" SH_PARM_DTL_TYP_CD="ReceivingLine"
+        SH_PARM_NM="RECEIVING_LINE" SH_PARM_NMSPC_CD="KFS-PA"
+        SH_PARM_TXT="default.htm?turl=WordDocuments%2Freceivinglinedocument.htm"
+        SH_PARM_TYP_CD="HELP" VER_NBR="1" WRKGRP_NM="FP_OPERATIONS"/>
+    <SH_PARM_T OBJ_ID="4D532894110BD4CDE0404F8189D83D75"
+        SH_PARM_CONS_CD="A" SH_PARM_DTL_TYP_CD="ReceivingCorrection"
+        SH_PARM_NM="RECEIVING_CORRECTION" SH_PARM_NMSPC_CD="KFS-PA"
+        SH_PARM_TXT="default.htm?turl=WordDocuments%2Freceivingcorrectiondocument.htm"
+        SH_PARM_TYP_CD="HELP" VER_NBR="1" WRKGRP_NM="FP_OPERATIONS"/>
 </dataset>
