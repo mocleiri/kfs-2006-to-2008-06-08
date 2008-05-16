@@ -1,29 +1,38 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class SubFundGroup extends PersistableBusinessObjectBase {
+public class SubFundGroup extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
@@ -43,15 +52,15 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     private String fundGroupCode;
     private String fundGroupBudgetAdjustmentRestrictionLevelCode;
     private String accountRestrictedStatusCode;
-
+    
     private FundGroup fundGroup;
     private SubFundGroupType subFundGroupType;
-    private RestrictedStatus accountRestrictedStatus;
-
+    
     /**
      * Gets the subFundGroupCode attribute.
      * 
-     * @return Returns the subFundGroupCode
+     * @return - Returns the subFundGroupCode
+     * 
      */
     public String getSubFundGroupCode() {
         return subFundGroupCode;
@@ -69,7 +78,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupDescription attribute.
      * 
-     * @return Returns the subFundGroupDescription
+     * @return - Returns the subFundGroupDescription
+     * 
      */
     public String getSubFundGroupDescription() {
         return subFundGroupDescription;
@@ -79,6 +89,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the subFundGroupDescription attribute.
      * 
      * @param subFundGroupDescription The subFundGroupDescription to set.
+     * 
      */
     public void setSubFundGroupDescription(String subFundGroupDescription) {
         this.subFundGroupDescription = subFundGroupDescription;
@@ -87,7 +98,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the _SubfundgrpActivityIndicator_ attribute.
      * 
-     * @return Returns the _SubfundgrpActivityIndicator_
+     * @return - Returns the _SubfundgrpActivityIndicator_
+     * 
      */
     public boolean getSubfundgrpActivityIndicator() {
         return subfundgrpActivityIndicator;
@@ -97,6 +109,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the _SubfundgrpActivityIndicator_ attribute.
      * 
      * @param _SubfundgrpActivityIndicator_ The _SubfundgrpActivityIndicator_ to set.
+     * 
      */
     public void setSubfundgrpActivityIndicator(boolean _SubfundgrpActivityIndicator_) {
         this.subfundgrpActivityIndicator = _SubfundgrpActivityIndicator_;
@@ -105,7 +118,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupTypeCode attribute.
      * 
-     * @return Returns the subFundGroupTypeCode
+     * @return - Returns the subFundGroupTypeCode
+     * 
      */
     public String getSubFundGroupTypeCode() {
         return subFundGroupTypeCode;
@@ -115,6 +129,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the subFundGroupTypeCode attribute.
      * 
      * @param subFundGroupTypeCode The subFundGroupTypeCode to set.
+     * 
      */
     public void setSubFundGroupTypeCode(String subFundGroupTypeCode) {
         this.subFundGroupTypeCode = subFundGroupTypeCode;
@@ -123,7 +138,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the financialReportingSortCode attribute.
      * 
-     * @return Returns the financialReportingSortCode
+     * @return - Returns the financialReportingSortCode
+     * 
      */
     public String getFinancialReportingSortCode() {
         return financialReportingSortCode;
@@ -133,6 +149,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the financialReportingSortCode attribute.
      * 
      * @param financialReportingSortCode The financialReportingSortCode to set.
+     * 
      */
     public void setFinancialReportingSortCode(String financialReportingSortCode) {
         this.financialReportingSortCode = financialReportingSortCode;
@@ -141,7 +158,8 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupWagesIndicator attribute.
      * 
-     * @return Returns the subFundGroupWagesIndicator
+     * @return - Returns the subFundGroupWagesIndicator
+     * 
      */
     public boolean isSubFundGroupWagesIndicator() {
         return subFundGroupWagesIndicator;
@@ -151,6 +169,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
      * Sets the subFundGroupWagesIndicator attribute.
      * 
      * @param subFundGroupWagesIndicator The subFundGroupWagesIndicator to set.
+     * 
      */
     public void setSubFundGroupWagesIndicator(boolean subFundGroupWagesIndicator) {
         this.subFundGroupWagesIndicator = subFundGroupWagesIndicator;
@@ -187,8 +206,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute.
-     * 
+     * Gets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute. 
      * @return Returns the fundGroupBudgetAdjustmentRestrictionLevelCode.
      */
     public String getFundGroupBudgetAdjustmentRestrictionLevelCode() {
@@ -197,7 +215,6 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
 
     /**
      * Sets the fundGroupBudgetAdjustmentRestrictionLevelCode attribute value.
-     * 
      * @param fundGroupBudgetAdjustmentRestrictionLevelCode The fundGroupBudgetAdjustmentRestrictionLevelCode to set.
      */
     public void setFundGroupBudgetAdjustmentRestrictionLevelCode(String fundGroupBudgetAdjustmentRestrictionLevelCode) {
@@ -205,8 +222,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the accountRestrictedStatusCode attribute.
-     * 
+     * Gets the accountRestrictedStatusCode attribute. 
      * @return Returns the accountRestrictedStatusCode.
      */
     public String getAccountRestrictedStatusCode() {
@@ -215,7 +231,6 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
 
     /**
      * Sets the accountRestrictedStatusCode attribute value.
-     * 
      * @param accountRestrictedStatusCode The accountRestrictedStatusCode to set.
      */
     public void setAccountRestrictedStatusCode(String accountRestrictedStatusCode) {
@@ -223,8 +238,7 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the subFundGroupType attribute.
-     * 
+     * Gets the subFundGroupType attribute. 
      * @return Returns the subFundGroupType.
      */
     public SubFundGroupType getSubFundGroupType() {
@@ -233,41 +247,12 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
 
     /**
      * Sets the subFundGroupType attribute value.
-     * 
      * @param subFundGroupType The subFundGroupType to set.
      * @deprecated
      */
     public void setSubFundGroupType(SubFundGroupType subFundGroupType) {
         this.subFundGroupType = subFundGroupType;
     }
-
-
-    /**
-     * Gets the accountRestrictedStatus attribute.
-     * 
-     * @return Returns the accountRestrictedStatus.
-     */
-    public RestrictedStatus getAccountRestrictedStatus() {
-        return accountRestrictedStatus;
-    }
-
-    /**
-     * Sets the accountRestrictedStatus attribute value.
-     * 
-     * @param accountRestrictedStatus The accountRestrictedStatus to set.
-     */
-    public void setAccountRestrictedStatus(RestrictedStatus accountRestrictedStatus) {
-        this.accountRestrictedStatus = accountRestrictedStatus;
-    }
-
-    /**
-     * @return Returns the code and description in format: xx - xxxxxxxxxxxxxxxx
-     */
-    public String getCodeAndDescription() {
-        String theString = getSubFundGroupCode() + " - " + getSubFundGroupDescription();
-        return theString;
-    }
-
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
@@ -279,6 +264,6 @@ public class SubFundGroup extends PersistableBusinessObjectBase {
 
 
         return m;
-    }
-
+    }    
+    
 }

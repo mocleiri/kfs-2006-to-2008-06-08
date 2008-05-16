@@ -1,44 +1,55 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class GrantDescription extends PersistableBusinessObjectBase {
+public class GrantDescription extends BusinessObjectBase {
 
     private String grantDescriptionCode;
     private String grantDescription;
-    private boolean grantDescriptionActiveCode;
+    private String grantDescriptionActiveCode;
 
     /**
      * Default constructor.
      */
     public GrantDescription() {
+
     }
 
     /**
      * Gets the grantDescriptionCode attribute.
      * 
-     * @return Returns the grantDescriptionCode
+     * @return - Returns the grantDescriptionCode
+     * 
      */
     public String getGrantDescriptionCode() {
         return grantDescriptionCode;
@@ -48,6 +59,7 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Sets the grantDescriptionCode attribute.
      * 
      * @param grantDescriptionCode The grantDescriptionCode to set.
+     * 
      */
     public void setGrantDescriptionCode(String grantDescriptionCode) {
         this.grantDescriptionCode = grantDescriptionCode;
@@ -57,7 +69,8 @@ public class GrantDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the grantDescription attribute.
      * 
-     * @return Returns the grantDescription
+     * @return - Returns the grantDescription
+     * 
      */
     public String getGrantDescription() {
         return grantDescription;
@@ -67,6 +80,7 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Sets the grantDescription attribute.
      * 
      * @param grantDescription The grantDescription to set.
+     * 
      */
     public void setGrantDescription(String grantDescription) {
         this.grantDescription = grantDescription;
@@ -76,9 +90,10 @@ public class GrantDescription extends PersistableBusinessObjectBase {
     /**
      * Gets the grantDescriptionActiveCode attribute.
      * 
-     * @return Returns the grantDescriptionActiveCode
+     * @return - Returns the grantDescriptionActiveCode
+     * 
      */
-    public boolean getGrantDescriptionActiveCode() {
+    public String getGrantDescriptionActiveCode() {
         return grantDescriptionActiveCode;
     }
 
@@ -86,19 +101,12 @@ public class GrantDescription extends PersistableBusinessObjectBase {
      * Sets the grantDescriptionActiveCode attribute.
      * 
      * @param grantDescriptionActiveCode The grantDescriptionActiveCode to set.
+     * 
      */
-    public void setGrantDescriptionActiveCode(boolean grantDescriptionActiveCode) {
+    public void setGrantDescriptionActiveCode(String grantDescriptionActiveCode) {
         this.grantDescriptionActiveCode = grantDescriptionActiveCode;
     }
 
-    /**
-     * This method returns a boolean identifying whether or not this grant description is active or inactive.
-     * 
-     * @return True if the grant description is active, false if its inactive.
-     */
-    public boolean isRowActiveIndicator() {
-        return grantDescriptionActiveCode;
-    }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()

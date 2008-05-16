@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
@@ -19,18 +28,13 @@ package org.kuali.module.chart.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.Inactivateable;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class OrganizationRoutingModel extends PersistableBusinessObjectBase implements Inactivateable {
+public class OrganizationRoutingModel extends BusinessObjectBase {
 
     private String chartOfAccountsCode;
     private String organizationCode;
@@ -41,11 +45,8 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     private KualiDecimal approvalToThisAmount;
     private boolean accountDelegatePrimaryRoutingIndicator;
     private Date accountDelegateStartDate;
-    private boolean active;
 
     private Chart chartOfAccounts;
-    private DocumentType documentType;
-    private UniversalUser accountDelegate;
 
     /**
      * Default constructor.
@@ -53,19 +54,20 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     public OrganizationRoutingModel() {
     }
 
-    public OrganizationRoutingModel(DelegateGlobalDetail delegateGlobalDetail) {
-        accountDelegateUniversalId = delegateGlobalDetail.getAccountDelegateUniversalId();
-        accountDelegatePrimaryRoutingIndicator = delegateGlobalDetail.getAccountDelegatePrimaryRoutingIndicator();
-        approvalFromThisAmount = delegateGlobalDetail.getApprovalFromThisAmount();
-        approvalToThisAmount = delegateGlobalDetail.getApprovalToThisAmount();
-        accountDelegateStartDate = delegateGlobalDetail.getAccountDelegateStartDate();
-        financialDocumentTypeCode = delegateGlobalDetail.getFinancialDocumentTypeCode();
+    public OrganizationRoutingModel(DelegateChangeDocument delegateChangeDocument) {
+        accountDelegateUniversalId=delegateChangeDocument.getAccountDelegateUniversalId();
+        accountDelegatePrimaryRoutingIndicator=delegateChangeDocument.getAccountDelegatePrimaryRoutingIndicator();
+        approvalFromThisAmount=delegateChangeDocument.getApprovalFromThisAmount();
+        approvalToThisAmount=delegateChangeDocument.getApprovalToThisAmount();
+        accountDelegateStartDate=delegateChangeDocument.getAccountDelegateStartDate();
+        financialDocumentTypeCode=delegateChangeDocument.getFinancialDocumentTypeCode();
     }
 
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Returns the chartOfAccountsCode
+     * @return - Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -75,6 +77,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -84,7 +87,8 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     /**
      * Gets the organizationCode attribute.
      * 
-     * @return Returns the organizationCode
+     * @return - Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -94,6 +98,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -103,7 +108,8 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     /**
      * Gets the organizationRoutingModelName attribute.
      * 
-     * @return Returns the organizationRoutingModelName
+     * @return - Returns the organizationRoutingModelName
+     * 
      */
     public String getOrganizationRoutingModelName() {
         return organizationRoutingModelName;
@@ -113,6 +119,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the organizationRoutingModelName attribute.
      * 
      * @param organizationRoutingModelName The organizationRoutingModelName to set.
+     * 
      */
     public void setOrganizationRoutingModelName(String organizationRoutingModelName) {
         this.organizationRoutingModelName = organizationRoutingModelName;
@@ -122,7 +129,8 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     /**
      * Gets the accountDelegateUniversalId attribute.
      * 
-     * @return Returns the accountDelegateUniversalId
+     * @return - Returns the accountDelegateUniversalId
+     * 
      */
     public String getAccountDelegateUniversalId() {
         return accountDelegateUniversalId;
@@ -132,6 +140,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the accountDelegateUniversalId attribute.
      * 
      * @param accountDelegateUniversalId The accountDelegateUniversalId to set.
+     * 
      */
     public void setAccountDelegateUniversalId(String accountDelegateUniversalId) {
         this.accountDelegateUniversalId = accountDelegateUniversalId;
@@ -139,28 +148,10 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
 
 
     /**
-     * Gets the accountDelegate attribute.
-     * 
-     * @return Returns the accountDelegate.
-     */
-    public UniversalUser getAccountDelegate() {
-        accountDelegate = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountDelegateUniversalId, accountDelegate);
-        return accountDelegate;
-    }
-
-    /**
-     * Sets the accountDelegate attribute value.
-     * 
-     * @param accountDelegate The accountDelegate to set.
-     */
-    public void setAccountDelegate(UniversalUser accountDelegate) {
-        this.accountDelegate = accountDelegate;
-    }
-
-    /**
      * Gets the financialDocumentTypeCode attribute.
      * 
-     * @return Returns the financialDocumentTypeCode
+     * @return - Returns the financialDocumentTypeCode
+     * 
      */
     public String getFinancialDocumentTypeCode() {
         return financialDocumentTypeCode;
@@ -170,6 +161,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the financialDocumentTypeCode attribute.
      * 
      * @param financialDocumentTypeCode The financialDocumentTypeCode to set.
+     * 
      */
     public void setFinancialDocumentTypeCode(String financialDocumentTypeCode) {
         this.financialDocumentTypeCode = financialDocumentTypeCode;
@@ -177,27 +169,10 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
 
 
     /**
-     * Gets the documentType attribute.
-     * 
-     * @return Returns the documentType.
-     */
-    public DocumentType getDocumentType() {
-        return documentType;
-    }
-
-    /**
-     * Sets the documentType attribute value.
-     * 
-     * @param documentType The documentType to set.
-     */
-    public void setDocumentType(DocumentType documentType) {
-        this.documentType = documentType;
-    }
-
-    /**
      * Gets the approvalFromThisAmount attribute.
      * 
-     * @return Returns the approvalFromThisAmount
+     * @return - Returns the approvalFromThisAmount
+     * 
      */
     public KualiDecimal getApprovalFromThisAmount() {
         return approvalFromThisAmount;
@@ -207,6 +182,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the approvalFromThisAmount attribute.
      * 
      * @param approvalFromThisAmount The approvalFromThisAmount to set.
+     * 
      */
     public void setApprovalFromThisAmount(KualiDecimal approvalFromThisAmount) {
         this.approvalFromThisAmount = approvalFromThisAmount;
@@ -216,7 +192,8 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     /**
      * Gets the approvalToThisAmount attribute.
      * 
-     * @return Returns the approvalToThisAmount
+     * @return - Returns the approvalToThisAmount
+     * 
      */
     public KualiDecimal getApprovalToThisAmount() {
         return approvalToThisAmount;
@@ -226,6 +203,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the approvalToThisAmount attribute.
      * 
      * @param approvalToThisAmount The approvalToThisAmount to set.
+     * 
      */
     public void setApprovalToThisAmount(KualiDecimal approvalToThisAmount) {
         this.approvalToThisAmount = approvalToThisAmount;
@@ -235,7 +213,8 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     /**
      * Gets the accountDelegatePrimaryRoutingIndicator attribute.
      * 
-     * @return Returns the accountDelegatePrimaryRoutingIndicator
+     * @return - Returns the accountDelegatePrimaryRoutingIndicator
+     * 
      */
     public boolean getAccountDelegatePrimaryRoutingIndicator() {
         return accountDelegatePrimaryRoutingIndicator;
@@ -245,6 +224,7 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the accountDelegatePrimaryRoutingIndicator attribute.
      * 
      * @param accountDelegatePrimaryRoutingCode The accountDelegatePrimaryRoutingIndicator to set.
+     * 
      */
     public void setAccountDelegatePrimaryRoutingIndicator(boolean accountDelegatePrimaryRoutingCode) {
         this.accountDelegatePrimaryRoutingIndicator = accountDelegatePrimaryRoutingCode;
@@ -254,7 +234,8 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
     /**
      * Gets the accountDelegateStartDate attribute.
      * 
-     * @return Returns the accountDelegateStartDate
+     * @return - Returns the accountDelegateStartDate
+     * 
      */
     public Date getAccountDelegateStartDate() {
         return accountDelegateStartDate;
@@ -264,33 +245,18 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
      * Sets the accountDelegateStartDate attribute.
      * 
      * @param accountDelegateStartDate The accountDelegateStartDate to set.
+     * 
      */
     public void setAccountDelegateStartDate(Date accountDelegateStartDate) {
         this.accountDelegateStartDate = accountDelegateStartDate;
     }
 
-    /**
-     * Gets the active attribute.
-     * 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * 
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
     /**
      * Gets the chartOfAccounts attribute.
      * 
-     * @return Returns the chartOfAccounts
+     * @return - Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -318,19 +284,4 @@ public class OrganizationRoutingModel extends PersistableBusinessObjectBase impl
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         return m;
     }
-
-    public boolean equals(Object o) {
-        if (o instanceof OrganizationRoutingModel) {
-            OrganizationRoutingModel orgRouteModel = (OrganizationRoutingModel) o;
-            return (((this.getChartOfAccountsCode() == null && orgRouteModel.getChartOfAccountsCode() == null) || this.getChartOfAccountsCode().equals(orgRouteModel.getChartOfAccountsCode())) && ((this.getOrganizationCode() == null && orgRouteModel.getOrganizationCode() == null) || this.getOrganizationCode().equals(orgRouteModel.getOrganizationCode())) && ((this.getOrganizationRoutingModelName() == null && orgRouteModel.getOrganizationRoutingModelName() == null) || this.getOrganizationRoutingModelName().equals(orgRouteModel.getOrganizationRoutingModelName())) && ((this.getAccountDelegateUniversalId() == null && orgRouteModel.getAccountDelegateUniversalId() == null) || this.getAccountDelegateUniversalId().equals(orgRouteModel.getAccountDelegateUniversalId())) && ((this.getFinancialDocumentTypeCode() == null && orgRouteModel.getFinancialDocumentTypeCode() == null) || this.getFinancialDocumentTypeCode().equals(orgRouteModel.getFinancialDocumentTypeCode())));
-        }
-        else {
-            return false;
-        }
-    }
-
-    public int hashCode() {
-        return ((((this.getChartOfAccountsCode().hashCode() * 29 + this.getOrganizationCode().hashCode()) * 29 + this.getOrganizationRoutingModelName().hashCode()) * 29 + this.getAccountDelegateUniversalId().hashCode()) * 29 + this.getFinancialDocumentTypeCode().hashCode()) * 29;
-    }
-
 }

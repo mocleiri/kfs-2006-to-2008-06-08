@@ -20,22 +20,22 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.ObjectUtil;
 import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.LaborGeneralLedgerEntry;
+import org.kuali.module.labor.util.ObjectUtil;
 
 public class LaborGeneralLedgerEntryForTesting extends LaborGeneralLedgerEntry {
-
-    @Override
-    public boolean equals(Object otherEntry) {
-        return ObjectUtil.equals(this, otherEntry, LaborConstants.consolidationAttributesOfOriginEntry());
+    
+    @ Override
+    public boolean equals(Object otherEntry){
+        return ObjectUtil.compareObject(this, otherEntry, LaborConstants.consolidationAttributesOfOriginEntry());
     }
-
+    
     public Map getPrimaryKeyMap() {
         return ObjectUtil.buildPropertyMap(this, this.getPrimaryKeyList());
     }
-
-    public List<String> getPrimaryKeyList() {
+    
+    public List<String> getPrimaryKeyList(){
         List<String> primaryKeyList = new ArrayList<String>();
         primaryKeyList.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
         primaryKeyList.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);

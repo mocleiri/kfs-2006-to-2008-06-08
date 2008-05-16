@@ -27,28 +27,26 @@ import org.kuali.core.lookup.LookupableHelperService;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.lookup.LookupableSpringContext;
-import org.kuali.kfs.util.ObjectUtil;
-import org.kuali.module.gl.web.Constant;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
 import org.kuali.module.gl.web.TestDataGenerator;
-import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.AccountStatusCurrentFunds;
 import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.service.LaborInquiryOptionsService;
-import org.kuali.test.ConfigureContext;
+import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
  * This class contains test cases that can be applied to methods in Account Status Current Funds class.
  */
-@ConfigureContext
+@WithTestSpringContext
 public class CurrentFundsLookupableHelperServiceTest extends KualiTestBase {
-    private static final org.apache.commons.logging.Log LOG = org.apache.commons.logging.LogFactory.getLog(CurrentFundsLookupableHelperServiceTest.class);
     private BusinessObjectService businessObjectService;
     private LookupableHelperService lookupableHelperService;
     private PersistenceService persistenceService;
 
+    private BeanFactory beanFactory;
     private Properties properties;
     private String fieldNames, documentFieldNames;
     private String deliminator;
@@ -62,9 +60,10 @@ public class CurrentFundsLookupableHelperServiceTest extends KualiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
 
-        lookupableHelperService = LookupableSpringContext.getLookupableHelperService(LaborConstants.CURRENT_FUNDS_LOOKUP_HELPER_SRVICE_NAME);
+        lookupableHelperService = (LookupableHelperService) beanFactory.getBean("CurrentFundsLookupableHelperService");
         lookupableHelperService.setBusinessObjectClass(AccountStatusCurrentFunds.class);
 
         // Clear up the data so that any existing data cannot affact your test result
@@ -90,49 +89,6 @@ public class CurrentFundsLookupableHelperServiceTest extends KualiTestBase {
 
         // test the search results before the specified entry is inserted
         Map fieldValues = buildFieldValues(accountStatusCurrentFunds, this.getLookupFields(false));
-
-        // Tells the lookupable I want detailed results
-        getInquiryOptionsService().getConsolidationField(lookupableHelperService.getRows()).setPropertyValue(Constant.DETAIL);
-        fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.DETAIL);
-
-        List<String> groupByList = new ArrayList<String>();
-        List<AccountStatusCurrentFunds> searchResults = lookupableHelperService.getSearchResults(fieldValues);
-        
-        // Make sure the basic search parameters are returned from the inquiry
-        for (AccountStatusCurrentFunds accountStatusCurrentFundsReturn : searchResults) {
-              assertTrue((accountStatusCurrentFundsReturn.getAccountNumber().equals(accountStatusCurrentFunds.getAccountNumber()) &&
-              accountStatusCurrentFundsReturn.getUniversityFiscalYear().equals(accountStatusCurrentFunds.getUniversityFiscalYear()) &&
-              accountStatusCurrentFundsReturn.getChartOfAccountsCode().equals(accountStatusCurrentFunds.getChartOfAccountsCode())));
-        }            
-              
-        if (searchResults != null) {
-            System.out.println("Results Size:" + searchResults.size());
-        }
-
-        // compare the search results with the expected and see if they match with each other        
-        assertEquals(this.currentFundsExpectedInsertion,searchResults.size());
-    }
-
-    /**
-     * 
-     * This method will run the current funds balance inquiry to test that the CurrentFundsLookupableHelperService 
-     * is returning data correctly.
-     * @throws Exception
-     */
-    public void testGetSearchResultsConsolidated() throws Exception {
-        insertCurrentFundsRecords();
-        AccountStatusCurrentFunds accountStatusCurrentFunds = new AccountStatusCurrentFunds();
-        accountStatusCurrentFunds.setAccountNumber("6044906");
-        accountStatusCurrentFunds.setUniversityFiscalYear(2004);
-        accountStatusCurrentFunds.setChartOfAccountsCode("BA");
-
-        // test the search results before the specified entry is inserted
-        Map fieldValues = buildFieldValues(accountStatusCurrentFunds, this.getLookupFields(false));
-        
-        // Tells the lookupable I want consolidated results
-        getInquiryOptionsService().getConsolidationField(lookupableHelperService.getRows()).setPropertyValue(Constant.CONSOLIDATION);
-        fieldValues.put(Constant.CONSOLIDATION_OPTION, Constant.CONSOLIDATION);
-
         List<String> groupByList = new ArrayList<String>();
         List<AccountStatusCurrentFunds> searchResults = lookupableHelperService.getSearchResults(fieldValues);
         
@@ -144,7 +100,7 @@ public class CurrentFundsLookupableHelperServiceTest extends KualiTestBase {
         }            
               
         if (searchResults != null) {
-            LOG.debug("Results Size:" + searchResults.size());
+            System.out.println("Results Size:" + searchResults.size());
         }
 
         // compare the search results with the expected and see if they match with each other        
@@ -188,7 +144,7 @@ public class CurrentFundsLookupableHelperServiceTest extends KualiTestBase {
      * This method will add temporary test data to the Ledger Balance table 
      */
     protected void insertCurrentFundsRecords() {
-        String messageFileName    = "test/src/org/kuali/module/labor/web/testdata/message.properties";
+        String messageFileName = "test/src/org/kuali/module/labor/web/testdata/message.properties";
         String propertiesFileName = "test/src/org/kuali/module/labor/web/testdata/accountStatusCurrentFunds.properties";
 
         properties = (new TestDataGenerator(propertiesFileName, messageFileName)).getProperties();
@@ -196,10 +152,16 @@ public class CurrentFundsLookupableHelperServiceTest extends KualiTestBase {
         documentFieldNames = properties.getProperty("fieldNames");
         deliminator = properties.getProperty("deliminator");
 
+        CalculatedSalaryFoundationTracker cleanup = new CalculatedSalaryFoundationTracker();
+        ObjectUtil.populateBusinessObject(cleanup, properties, "dataCleanup", fieldNames, deliminator);
+        Map fieldValues = ObjectUtil.buildPropertyMap(cleanup, Arrays.asList(StringUtils.split(fieldNames, deliminator)));
+        businessObjectService.deleteMatching(CalculatedSalaryFoundationTracker.class, fieldValues);
+
         TestDataGenerator testDataGenerator = new TestDataGenerator(propertiesFileName, messageFileName);
 
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-        persistenceService = SpringContext.getBean(PersistenceService.class);
+        BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
+        persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
 
         int numberOfDocuments = Integer.valueOf(properties.getProperty("getAccountStatusCurrentFunds.numOfData"));
         List<LedgerBalance> inputDataList = new ArrayList<LedgerBalance>();
@@ -213,11 +175,5 @@ public class CurrentFundsLookupableHelperServiceTest extends KualiTestBase {
         this.currentFundsNumberOfTestData = Integer.valueOf(properties.getProperty(testTarget + "numOfData"));
         this.currentFundsExpectedInsertion = Integer.valueOf(properties.getProperty(testTarget + "expectedInsertion"));
         businessObjectService.save(inputDataList);
-        
-        System.out.println("*** RECORDS INSERTED!!!!");
     }  
-       
-    private LaborInquiryOptionsService getInquiryOptionsService() {
-        return SpringContext.getBean(LaborInquiryOptionsService.class);
-    }
 }

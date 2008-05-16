@@ -1,40 +1,48 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.exceptions.InfrastructureException;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.service.DebitDeterminerService;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.IndirectCostAdjustmentDocumentAccountingLineParser;
 import org.kuali.module.financial.rules.IndirectCostAdjustmentDocumentRuleConstants;
 
-public class IndirectCostAdjustmentDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
+
+/**
+ * 
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
+ */
+public class IndirectCostAdjustmentDocument extends TransactionalDocumentBase {
 
     /**
+     * 
      * Constructs a IndirectCostAdjustmentDocument.java.
      */
     public IndirectCostAdjustmentDocument() {
@@ -42,19 +50,21 @@ public class IndirectCostAdjustmentDocument extends AccountingDocumentBase imple
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * 
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.GRANT;
+        return Constants.GRANT;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
+     * 
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.ICR;
+        return Constants.ICR;
     }
 
     /**
@@ -66,9 +76,10 @@ public class IndirectCostAdjustmentDocument extends AccountingDocumentBase imple
      * <li>receipt line's object code = Financial System Parameter APC for the document global receipt line object code (see APC
      * setion below)
      * <li>receipt line's amount = amount from grant line
+     * 
      * </ol>
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#addSourceAccountingLine(SourceAccountingLine)
+     * @see org.kuali.core.document.TransactionalDocumentBase#addSourceAccountingLine(org.kuali.core.bo.SourceAccountingLine)
      */
     @Override
     public void addSourceAccountingLine(SourceAccountingLine line) {
@@ -83,58 +94,26 @@ public class IndirectCostAdjustmentDocument extends AccountingDocumentBase imple
             throw new InfrastructureException("unable to create a target accounting line", e);
         }
         // get apc object code value
-        String objectCode = SpringContext.getBean(ParameterService.class).getParameterValue(IndirectCostAdjustmentDocument.class, IndirectCostAdjustmentDocumentRuleConstants.RECEIPT_OBJECT_CODE);
+        String objectCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(IndirectCostAdjustmentDocumentRuleConstants.INDIRECT_COST_ADJUSTMENT_DOCUMENT_SECURITY_GROUPING, IndirectCostAdjustmentDocumentRuleConstants.RECEIPT_OBJECT_CODE);
         targetAccountingLine.setFinancialObjectCode(objectCode);
         targetAccountingLine.setAccountNumber(line.getAccount().getIndirectCostRecoveryAcctNbr());
         targetAccountingLine.setChartOfAccountsCode(line.getChartOfAccountsCode());
-        targetAccountingLine.setDocumentNumber(line.getDocumentNumber());
-        targetAccountingLine.setPostingYear(line.getPostingYear());
         targetAccountingLine.setAmount(line.getAmount());
+        targetAccountingLine.setPostingYear(line.getPostingYear());
+        targetAccountingLine.setFinancialDocumentNumber(line.getFinancialDocumentNumber());
         // refresh reference objects
-
-        targetAccountingLine.refresh();
+        targetAccountingLine.refreshReferenceObject(PropertyConstants.OBJECT_CODE);
+        targetAccountingLine.refreshReferenceObject(PropertyConstants.ACCOUNT);
+        targetAccountingLine.refreshReferenceObject(PropertyConstants.CHART);
         // add target line
         addTargetAccountingLine(targetAccountingLine);
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
         return new IndirectCostAdjustmentDocumentAccountingLineParser();
-    }
-    
-    /**
-     * Same logic as <code>IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)</code>
-     * but has the following accounting line restrictions: 
-     * 
-     * for grant lines(source):
-     * <ol>
-     * <li>only allow expense object type codes
-     * </ol>
-     * for receipt lines(target):
-     * <ol>
-     * <li>only allow income object type codes
-     * </ol>
-     * 
-     * @param transactionDocument The document associated with the accounting line being reviewed to determine if it's a debit.
-     * @param accountingLine The accounting line being reviewed to determine if it's a debit line.
-     * @return True if the accounting line is a debit.  See IsDebitUtils.isDebitConsideringType().
-     * @throws IllegalStateException Thrown if the accounting line given is a source accounting line representing an expense
-     * or is a target accounting line representing an income.
-     * 
-     * @see IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
-     *      org.kuali.core.bo.AccountingLine)
-     */
-    public boolean isDebit(GeneralLedgerPendingEntrySourceDetail postable) throws IllegalStateException {
-        AccountingLine accountingLine = (AccountingLine)postable;
-        DebitDeterminerService isDebitUtils = SpringContext.getBean(DebitDeterminerService.class);
-        if (!(accountingLine.isSourceAccountingLine() && isDebitUtils.isExpense(accountingLine)) && !(accountingLine.isTargetAccountingLine() && isDebitUtils.isIncome(accountingLine))) {
-            throw new IllegalStateException(isDebitUtils.getDebitCalculationIllegalStateExceptionMessage());
-        }
-
-        return isDebitUtils.isDebitConsideringType(this, accountingLine);
     }
 }

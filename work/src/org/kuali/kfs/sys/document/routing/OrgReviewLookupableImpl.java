@@ -1,22 +1,28 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.workflow.attribute;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,8 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.KEWServiceLocator;
-import edu.iu.uis.eden.exception.EdenUserNotFoundException;
+import edu.iu.uis.eden.SpringServiceLocator;
 import edu.iu.uis.eden.lookupable.Column;
 import edu.iu.uis.eden.lookupable.Field;
 import edu.iu.uis.eden.lookupable.Row;
@@ -38,13 +43,13 @@ import edu.iu.uis.eden.routetemplate.RuleBaseValues;
 import edu.iu.uis.eden.routetemplate.RuleService;
 import edu.iu.uis.eden.routetemplate.RuleTemplate;
 import edu.iu.uis.eden.routetemplate.RuleTemplateService;
-import edu.iu.uis.eden.user.UserId;
 import edu.iu.uis.eden.util.KeyLabelPair;
 import edu.iu.uis.eden.util.Utilities;
-import edu.iu.uis.eden.workgroup.GroupId;
 
 /**
  * This class provides a lookup for org review hierarchy routing rules.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class OrgReviewLookupableImpl implements WorkflowLookupable {
     private Long ruleTemplateId;
@@ -70,7 +75,7 @@ public class OrgReviewLookupableImpl implements WorkflowLookupable {
      * variables based on it.
      */
     public OrgReviewLookupableImpl() {
-        RuleTemplate ruleTemplate = ((RuleTemplateService) KEWServiceLocator.getService(KEWServiceLocator.RULE_TEMPLATE_SERVICE)).findByRuleTemplateName("KualiOrgReviewTemplate");
+        RuleTemplate ruleTemplate = ((RuleTemplateService) SpringServiceLocator.getService(SpringServiceLocator.RULE_TEMPLATE_SERVICE)).findByRuleTemplateName("KualiOrgReviewTemplate");
         this.ruleTemplateId = ruleTemplate.getRuleTemplateId();
         this.orgReviewAttribute = ruleTemplate.getRuleTemplateAttribute(0).getWorkflowAttribute();
         this.orgReviewAttribute.setRequired(false);
@@ -157,7 +162,7 @@ public class OrgReviewLookupableImpl implements WorkflowLookupable {
                 }
             }
         }
-        Iterator rules = ((RuleService) KEWServiceLocator.getService(KEWServiceLocator.RULE_SERVICE)).search(docTypeSearchName, null, ruleTemplateId, null, null, null, null, null, isActive, attributes, null).iterator();
+        Iterator rules = ((RuleService) SpringServiceLocator.getService(SpringServiceLocator.RULE_SERVICE)).search(docTypeSearchName, null, ruleTemplateId, null, null, null, null, null, isActive, attributes).iterator();
         List displayList = new ArrayList();
         while (rules.hasNext()) {
             displayList.add(new OrgReviewLookupableResult((RuleBaseValues) rules.next()));

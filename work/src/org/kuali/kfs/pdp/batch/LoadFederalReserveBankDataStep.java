@@ -15,10 +15,8 @@
  */
 package org.kuali.module.pdp.batch;
 
-import java.util.Date;
-
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.batch.AbstractStep;
-import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.pdp.PdpConstants;
 import org.kuali.module.pdp.service.AchBankService;
 
@@ -26,21 +24,23 @@ public class LoadFederalReserveBankDataStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LoadFederalReserveBankDataStep.class);
 
     private AchBankService achBankService;
+    private KualiConfigurationService kualiConfigurationService;
     private String directoryName;
 
-    /**
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String, java.util.Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
+    public boolean execute(String jobName) throws InterruptedException {
         LOG.debug("execute() started");
 
-        String filename = getParameterService().getParameterValue(ParameterConstants.PRE_DISBURSEMENT_ALL.class, PdpConstants.ApplicationParameterKeys.ACH_BANK_INPUT_FILE);
+        String filename = kualiConfigurationService.getParameterValue(PdpConstants.PDP_NAMESPACE, PdpConstants.Components.LOAD_FED_RESERVE_BANK_DATA_STEP, PdpConstants.ApplicationParameterKeys.ACH_BANK_INPUT_FILE);
 
         return achBankService.reloadTable(directoryName + filename);
     }
 
     public void setAchBankService(AchBankService achBankService) {
         this.achBankService = achBankService;
+    }
+
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 
     public void setDirectoryName(String dn) {

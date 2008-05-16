@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 package org.kuali.module.financial.rules;
 
 /**
- * Defines constants for the service billing document.
+ * This class...
+ * 
+ * 
  */
 public class ServiceBillingDocumentRuleConstants {
-    
-    // Security grouping constants used to do application parameter lookups
     public static final String SERVICE_BILLING_DOCUMENT_SECURITY_GROUPING = "Kuali.FinancialTransactionProcessing.ServiceBillingDocument";
-
     public static final String RESTRICTED_OBJECT_TYPE_CODES = "RestrictedObjectTypeCodes";
 }

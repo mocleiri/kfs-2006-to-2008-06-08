@@ -1,82 +1,85 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.web.inquirable;
 
+import java.util.Properties;
+
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.gl.bo.Encumbrance;
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.service.DataDictionaryService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.core.util.UrlFactory;
+import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Transaction;
 
 /**
- * This class provides a placeholder that can connect General Ledger business object with financial document in the presentation
- * tier. The typical method is to generate url for the inquirable financial document.
+ * This class provides a placeholder that can connect General Ledger business object with
+ * financial document in the presentation tier. The typical method is to generate url for
+ * the inquirable financial document.
+ * 
+ * @author Bin Gao
  */
 public class InquirableFinancialDocument {
-
-    private KualiConfigurationService kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
 
     /**
      * get the url of inquirable financial document for the given transaction
      * 
-     * @param transaction the business object that implements Transaction interface
-     * @return the url of inquirable financial document for the given transaction if the document is inquirable; otherwise, return
-     *         empty string
+     * @param transaction the business object that implements Transaction interface 
+     * @return the url of inquirable financial document for the given transaction if the
+     * document is inquirable; otherwise, return empty string
      */
     public String getInquirableDocumentUrl(Transaction transaction) {
-        if (transaction == null) {
-            return KFSConstants.EMPTY_STRING;
+        DataDictionaryService dataDictionary = SpringServiceLocator.getDataDictionaryService();
+
+        if (this.isInquirableDocument(transaction)) {
+            Properties parameters = this.addParameters(transaction);
+
+            String docTypeCode = transaction.getFinancialDocumentTypeCode();
+            String docTypeName = dataDictionary.getDocumentTypeNameByTypeCode(docTypeCode);
+            
+            if (docTypeName != null) {
+                return UrlFactory.buildDocumentActionUrl(docTypeName, parameters);
+            }
         }
-
-        String docNumber = transaction.getDocumentNumber();
-        String originationCode = transaction.getFinancialSystemOriginationCode();
-
-        return getUrl(originationCode, docNumber);
+        return Constants.EMPTY_STRING;
     }
 
-    /**
-     * Creates the url for a document drill down
-     * 
-     * @param originCode the originatino code of the document
-     * @param docNumber the document number of the document to drill down on
-     * @return the URL for the drill down
-     */
-    private String getUrl(String originCode, String docNumber) {
-        if (KFSConstants.ORIGIN_CODE_KUALI.equals(originCode) && !StringUtils.isBlank(docNumber)) {
-            return kualiConfigurationService.getPropertyString(KFSConstants.WORKFLOW_URL_KEY) + "/DocHandler.do?docId=" + docNumber + "&command=displayDocSearchView";
-        }
-        return KFSConstants.EMPTY_STRING;
+    // determine if the document of the given transaction is inquirable
+    private boolean isInquirableDocument(Transaction transaction) {
+        String documentNumber = transaction.getFinancialDocumentNumber();
+        String originationCode = transaction.getFinancialSystemOriginationCode();        
+        return Constants.ORIGIN_CODE_KUALI.equals(originationCode) && !StringUtils.isBlank(documentNumber);       
     }
 
-    /**
-     * get the url of inquirable financial document for the given encumbrance
-     * 
-     * @param encumbrance the encumrbance record
-     * @return the url of inquirable financial document for the given encumbrance if the document is inquirable; otherwise, return
-     *         empty string
-     */
-    public String getInquirableDocumentUrl(Encumbrance encumbrance) {
-        if (encumbrance == null) {
-            return KFSConstants.EMPTY_STRING;
-        }
+    // build the parameter list that can be the query strings of inquiry url
+    private Properties addParameters(Transaction transaction) {
+        Properties parameters = new Properties();
+        parameters.put(Constants.DISPATCH_REQUEST_PARAMETER, Constants.DOC_HANDLER_METHOD);
+        parameters.put(Constants.PARAMETER_COMMAND, Constants.METHOD_DISPLAY_DOC_SEARCH_VIEW);
+        parameters.put(Constants.PARAMETER_DOC_ID, transaction.getFinancialDocumentNumber());
 
-        String docNumber = encumbrance.getDocumentNumber();
-        String originationCode = encumbrance.getOriginCode();
-
-        return getUrl(originationCode, docNumber);
+        return parameters;
     }
 }

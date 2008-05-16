@@ -30,33 +30,29 @@ import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.util.SummaryAccount;
 
 /**
- * Struts Action Form for Purchasing and Accounts Payable documents.
+ * 
+ * This class is to contain any common functionality between purchasing and accounts payable forms. 
  */
 public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFormBase {
 
-    private transient List<SummaryAccount> summaryAccounts;
+    private List<SummaryAccount> summaryAccounts;
+    
+    
 
-    /**
-     * Constructs a PurchasingAccountsPayableFormBase instance and initializes summary accounts.
-     */
     public PurchasingAccountsPayableFormBase() {
         super();
         clearSummaryAccounts();
     }
 
     /**
-     * Updates the summaryAccounts that are contained in the form. Currently we are only calling this on load and when
-     * refreshAccountSummary is called.
+     * this method updates the summaryAccounts that are contained in the form
+     * currently we are only calling this on load and when refreshAccountSummary is called.
      */
     public void refreshAccountSummmary() {
         clearSummaryAccounts();
-        PurchasingAccountsPayableDocument purapDocument = (PurchasingAccountsPayableDocument) getDocument();
-        summaryAccounts.addAll(SpringContext.getBean(PurapAccountingService.class).generateSummaryAccounts(purapDocument));
+        summaryAccounts.addAll(SpringContext.getBean(PurapAccountingService.class).generateSummaryAccounts(((PurchasingAccountsPayableDocument)this.getDocument()).getItems()));
     }
 
-    /**
-     * Initializes summary accounts.
-     */
     public void clearSummaryAccounts() {
         summaryAccounts = new TypedArrayList(SummaryAccount.class);
     }
@@ -67,9 +63,9 @@ public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFo
     @Override
     public List getBaselineSourceAccountingLines() {
         List<AccountingLine> accounts = super.getBaselineSourceAccountingLines();
-        if (ObjectUtils.isNull(accounts) || accounts.isEmpty()) {
+        if(ObjectUtils.isNull(accounts)|| accounts.isEmpty()) {
             accounts = new ArrayList<AccountingLine>();
-            for (PurApItem item : ((PurchasingAccountsPayableDocument) getDocument()).getItems()) {
+            for (PurApItem item : ((PurchasingAccountsPayableDocument)getDocument()).getItems()) {
                 List<PurApAccountingLine> lines = item.getBaselineSourceAccountingLines();
                 for (PurApAccountingLine line : lines) {
                     accounts.add(line);
@@ -87,4 +83,5 @@ public class PurchasingAccountsPayableFormBase extends KualiAccountingDocumentFo
     public void setSummaryAccounts(List<SummaryAccount> summaryAccounts) {
         this.summaryAccounts = summaryAccounts;
     }
+    
 }

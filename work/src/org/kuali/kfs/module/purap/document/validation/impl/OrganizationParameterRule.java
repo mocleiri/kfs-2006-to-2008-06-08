@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,9 @@ import org.kuali.module.chart.service.OrganizationService;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.bo.OrganizationParameter;
 
-/**
- * Business rule(s) applicable to Organization Parameter maintenance document.
- */
-public class OrganizationParameterRule extends MaintenanceDocumentRuleBase {
 
+public class OrganizationParameterRule extends MaintenanceDocumentRuleBase {
+    
     private OrganizationParameter newOrganizationParameter;
     private BusinessObjectService boService;
 
@@ -48,10 +46,7 @@ public class OrganizationParameterRule extends MaintenanceDocumentRuleBase {
         boService = (BusinessObjectService) super.getBoService();
         super.setupConvenienceObjects();
     }
-
-    /**
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
+    
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
         LOG.info("processCustomApproveDocumentBusinessRules called");
         this.setupConvenienceObjects();
@@ -61,9 +56,6 @@ public class OrganizationParameterRule extends MaintenanceDocumentRuleBase {
         return success && super.processCustomApproveDocumentBusinessRules(document);
     }
 
-    /**
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
         LOG.info("processCustomRouteDocumentBusinessRules called");
         this.setupConvenienceObjects();
@@ -73,27 +65,19 @@ public class OrganizationParameterRule extends MaintenanceDocumentRuleBase {
         return success && super.processCustomRouteDocumentBusinessRules(document);
     }
 
-    /**
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
         LOG.info("processCustomSaveDocumentBusinessRules called");
-        this.setupConvenienceObjects();
+        this.setupConvenienceObjects();        
         boolean success = true;
         success &= this.checkChartOfAccountsCode();
         success &= this.checkOrganizationCode();
         return success && super.processCustomSaveDocumentBusinessRules(document);
     }
-
-    /**
-     * Validate chart of accounts code
-     * 
-     * @return Boolean indicating if validation succeeded
-     */
+        
     protected boolean checkChartOfAccountsCode() {
         LOG.info("checkChartOfAccountsCode called");
         ErrorMap errorMap = GlobalVariables.getErrorMap();
-        boolean success = true;
+        boolean success = true;        
         Chart chart = SpringContext.getBean(ChartService.class).getByPrimaryId(newOrganizationParameter.getChartOfAccountsCode());
         if (ObjectUtils.isNull(chart)) {
             success &= false;
@@ -101,16 +85,11 @@ public class OrganizationParameterRule extends MaintenanceDocumentRuleBase {
         }
         return success;
     }
-
-    /**
-     * Validate organization code
-     * 
-     * @return Boolean indicating if validation succeeded
-     */
+    
     protected boolean checkOrganizationCode() {
         LOG.info("checkOrganizationCode called");
         ErrorMap errorMap = GlobalVariables.getErrorMap();
-        boolean success = true;
+        boolean success = true;        
         Org org = SpringContext.getBean(OrganizationService.class).getByPrimaryId(newOrganizationParameter.getChartOfAccountsCode(), newOrganizationParameter.getOrganizationCode());
         if (ObjectUtils.isNull(org)) {
             success &= false;
@@ -120,3 +99,4 @@ public class OrganizationParameterRule extends MaintenanceDocumentRuleBase {
     }
 
 }
+

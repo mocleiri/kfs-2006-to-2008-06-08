@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/PositionObjectBenefit.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,28 +20,28 @@ package org.kuali.module.labor.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.integration.bo.LaborLedgerBenefitsCalculation;
-import org.kuali.module.integration.bo.LaborLedgerPositionObjectBenefit;
 
 /**
- * Labor business object for Modeling of Position Object Benefit
+ * Model of Position Object Benefit
  */
-public class PositionObjectBenefit extends PersistableBusinessObjectBase implements LaborLedgerPositionObjectBenefit {
+public class PositionObjectBenefit extends BusinessObjectBase {
+
     private Integer universityFiscalYear;
     private String chartOfAccountsCode;
     private String financialObjectCode;
     private String financialObjectBenefitsTypeCode;
+
     private ObjectCode financialObject;
     private Chart chartOfAccounts;
     private transient Options universityFiscal;
     private BenefitsCalculation benefitsCalculation;
     private BenefitsType financialObjectBenefitsType;
     private LaborObject laborObject;
-
+    
     /**
      * Default constructor.
      */
@@ -48,117 +50,132 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase impleme
     }
 
     /**
-     * Gets the universityFiscalYear
+     * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
     }
 
     /**
-     * Sets the universityFiscalYear
+     * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
     }
 
+
     /**
-     * Gets the chartOfAccountsCode
+     * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
     }
 
     /**
-     * Sets the chartOfAccountsCode
+     * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
     }
 
+
     /**
-     * Gets the financialObjectCode
+     * Gets the financialObjectCode attribute.
      * 
      * @return Returns the financialObjectCode
+     * 
      */
     public String getFinancialObjectCode() {
         return financialObjectCode;
     }
 
     /**
-     * Sets the financialObjectCode
+     * Sets the financialObjectCode attribute.
      * 
      * @param financialObjectCode The financialObjectCode to set.
+     * 
      */
     public void setFinancialObjectCode(String financialObjectCode) {
         this.financialObjectCode = financialObjectCode;
     }
 
+
     /**
-     * Gets the financialObjectBenefitsTypeCode
+     * Gets the financialObjectBenefitsTypeCode attribute.
      * 
      * @return Returns the financialObjectBenefitsTypeCode
+     * 
      */
     public String getFinancialObjectBenefitsTypeCode() {
         return financialObjectBenefitsTypeCode;
     }
 
     /**
-     * Sets the financialObjectBenefitsTypeCode
+     * Sets the financialObjectBenefitsTypeCode attribute.
      * 
      * @param financialObjectBenefitsTypeCode The financialObjectBenefitsTypeCode to set.
+     * 
      */
     public void setFinancialObjectBenefitsTypeCode(String financialObjectBenefitsTypeCode) {
         this.financialObjectBenefitsTypeCode = financialObjectBenefitsTypeCode;
     }
 
+
     /**
-     * Gets the financialObject
+     * Gets the financialObject attribute.
      * 
      * @return Returns the financialObject
+     * 
      */
     public ObjectCode getFinancialObject() {
         return financialObject;
     }
 
     /**
-     * Sets the financialObject
+     * Sets the financialObject attribute.
      * 
      * @param financialObject The financialObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialObject(ObjectCode financialObject) {
         this.financialObject = financialObject;
     }
 
     /**
-     * Gets the chartOfAccounts
+     * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
     }
 
     /**
-     * Sets the chartOfAccounts
+     * Sets the chartOfAccounts attribute.
      * 
      * @param chartOfAccounts The chartOfAccounts to set.
+     * @deprecated
      */
-    @Deprecated
     public void setChartOfAccounts(Chart chartOfAccounts) {
         this.chartOfAccounts = chartOfAccounts;
     }
 
+
     /**
-     * Gets the universityFiscal
+     * Gets the universityFiscal attribute.
      * 
      * @return Returns the universityFiscal.
      */
@@ -167,17 +184,18 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase impleme
     }
 
     /**
-     * Sets the universityFiscal
+     * Sets the universityFiscal attribute value.
      * 
      * @param universityFiscal The universityFiscal to set.
+     * @deprecated
      */
-    @Deprecated
     public void setUniversityFiscal(Options universityFiscal) {
         this.universityFiscal = universityFiscal;
     }
 
+
     /**
-     * Gets the benefitsCalculation
+     * Gets the benefitsCalculation attribute.
      * 
      * @return Returns the benefitsCalculation.
      */
@@ -186,37 +204,28 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase impleme
     }
 
     /**
-     * Sets the benefitsCalculation
+     * Sets the benefitsCalculation attribute value.
      * 
      * @param benefitsCalculation The benefitsCalculation to set.
+     * @deprecated
      */
-    @Deprecated
     public void setBenefitsCalculation(BenefitsCalculation benefitsCalculation) {
         this.benefitsCalculation = benefitsCalculation;
     }
 
-    /**
-     * Gets the financialObjectBenefitsType
-     * 
-     * @return financialObjectBenefitsType
-     */
     public BenefitsType getFinancialObjectBenefitsType() {
         return financialObjectBenefitsType;
     }
 
     /**
-     * Sets financialObjectBenefitsType
-     * 
-     * @param financialObjectBenefitsType The financialObjectBenefitsType to be set
+     * @deprecated
      */
-    @Deprecated
     public void setFinancialObjectBenefitsType(BenefitsType financialObjectBenefitsType) {
         this.financialObjectBenefitsType = financialObjectBenefitsType;
     }
 
     /**
-     * Gets the laborObject
-     * 
+     * Gets the laborObject attribute. 
      * @return Returns the laborObject.
      */
     public LaborObject getLaborObject() {
@@ -224,18 +233,15 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase impleme
     }
 
     /**
-     * Sets the laborObject
-     * 
+     * Sets the laborObject attribute value.
      * @param laborObject The laborObject to set.
+     * @deprecated
      */
-    @Deprecated
     public void setLaborObject(LaborObject laborObject) {
         this.laborObject = laborObject;
     }
 
     /**
-     * construct the key list of the business object.
-     * 
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
@@ -246,21 +252,8 @@ public class PositionObjectBenefit extends PersistableBusinessObjectBase impleme
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("financialObjectCode", this.financialObjectCode);
         m.put("financialObjectBenefitsTypeCode", this.financialObjectBenefitsTypeCode);
-
         return m;
     }
 
-    /**
-     * @see org.kuali.module.integration.bo.LaborLedgerPositionObjectBenefit#getLaborLedgerBenefitsCalculation()
-     */
-    public LaborLedgerBenefitsCalculation getLaborLedgerBenefitsCalculation() {
-        return this.getBenefitsCalculation();
-    }
 
-    /**
-     * @see org.kuali.module.integration.bo.LaborLedgerPositionObjectBenefit#setLaborLedgerBenefitsCalculation(org.kuali.module.integration.bo.LaborLedgerBenefitsCalculation)
-     */
-    public void setLaborLedgerBenefitsCalculation(LaborLedgerBenefitsCalculation laborLedgerBenefitsCalculation) {
-        benefitsCalculation = (BenefitsCalculation)laborLedgerBenefitsCalculation;
-    }
 }

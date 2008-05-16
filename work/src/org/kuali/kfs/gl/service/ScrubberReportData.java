@@ -1,125 +1,78 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl.scrubber;
 
-/**
- * A class which encapsulates statistics about a scrubber run
- */
 public class ScrubberReportData {
-    /**
-     * Constructs a ScrubberReportData instance
-     */
     public ScrubberReportData() {
     }
 
-    private int numberOfUnscrubbedRecordsRead = 0;
-    private int numberOfScrubbedRecordsWritten = 0;
-    private int numberOfErrorRecordsWritten = 0;
-    private int numberOfOffsetEntriesGenerated = 0;
-    private int numberOfCapitalizationEntriesGenerated = 0;
-    private int numberOfLiabilityEntriesGenerated = 0;
-    private int numberOfPlantIndebtednessEntriesGenerated = 0;
-    private int numberOfCostShareEntriesGenerated = 0;
-    private int numberOfCostShareEncumbrancesGenerated = 0;
-    private int numberOfExpiredAccountsFound = 0;
+    int numberOfUnscrubbedRecordsRead = 0;
+    int numberOfScrubbedRecordsWritten = 0;
+    int numberOfErrorRecordsWritten = 0;
+    int numberOfOffsetEntriesGenerated = 0;
+    int numberOfCapitalizationEntriesGenerated = 0;
+    int numberOfLiabilityEntriesGenerated = 0;
+    int numberOfPlantIndebtednessEntriesGenerated = 0;
+    int numberOfCostShareEntriesGenerated = 0;
+    int numberOfCostShareEncumbrancesGenerated = 0;
+    int numberOfExpiredAccountsFound = 0;
 
-    /**
-     * Adds the values from the parameter report data into this object.
-     * 
-     * @param anotherReport another set of scrubber report data to add to this scrubber report data
-     */
-    public void incorporateReportData(ScrubberReportData anotherReport) {
-        numberOfUnscrubbedRecordsRead += anotherReport.numberOfUnscrubbedRecordsRead;
-        numberOfScrubbedRecordsWritten += anotherReport.numberOfScrubbedRecordsWritten;
-        numberOfErrorRecordsWritten += anotherReport.numberOfErrorRecordsWritten;
-        numberOfOffsetEntriesGenerated += anotherReport.numberOfOffsetEntriesGenerated;
-        numberOfCapitalizationEntriesGenerated += anotherReport.numberOfCapitalizationEntriesGenerated;
-        numberOfLiabilityEntriesGenerated += anotherReport.numberOfLiabilityEntriesGenerated;
-        numberOfPlantIndebtednessEntriesGenerated += anotherReport.numberOfPlantIndebtednessEntriesGenerated;
-        numberOfCostShareEntriesGenerated += anotherReport.numberOfCostShareEntriesGenerated;
-        numberOfCostShareEncumbrancesGenerated += anotherReport.numberOfCostShareEncumbrancesGenerated;
-        numberOfExpiredAccountsFound += numberOfExpiredAccountsFound;
-    }
-
-    /**
-     * Increments the error records written count by 1
-     */
     public void incrementErrorRecordWritten() {
         numberOfErrorRecordsWritten++;
     }
 
-    /**
-     * Increments the expired account found count by 1
-     */
     public void incrementExpiredAccountFound() {
         numberOfExpiredAccountsFound++;
     }
 
-    /**
-     * Increments the scrubbed records written count by 1
-     */
     public void incrementScrubbedRecordWritten() {
         numberOfScrubbedRecordsWritten++;
     }
 
-    /**
-     * Increments the offset entry generated count by 1
-     */
     public void incrementOffsetEntryGenerated() {
         numberOfOffsetEntriesGenerated++;
     }
 
-    /**
-     * Increments the capitalization entry generated count by 1
-     */
     public void incrementCapitalizationEntryGenerated() {
         numberOfCapitalizationEntriesGenerated++;
     }
 
-    /**
-     * Increments the liability entry generated count by 1
-     */
     public void incrementLiabilityEntryGenerated() {
         numberOfLiabilityEntriesGenerated++;
     }
 
-    /**
-     * Increments the plant indebtedness entry count by 1
-     */
     public void incrementPlantIndebtednessEntryGenerated() {
         numberOfPlantIndebtednessEntriesGenerated++;
     }
 
-    /**
-     * Increments the cost share entry generated count by 1
-     */
     public void incrementCostShareEntryGenerated() {
         numberOfCostShareEntriesGenerated++;
     }
 
-    /**
-     * Increments the cost share encumbranace generated count by 1
-     */
     public void incrementCostShareEncumbranceGenerated() {
         numberOfCostShareEncumbrancesGenerated++;
     }
 
-    /**
-     * Increments the unscrubbed records read count by 1
-     */
     public void incrementUnscrubbedRecordsRead() {
         numberOfUnscrubbedRecordsRead++;
     }

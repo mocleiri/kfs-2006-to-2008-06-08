@@ -20,20 +20,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.service.LookupService;
-import org.kuali.kfs.util.ObjectUtil;
 import org.kuali.module.labor.bo.AccountStatusBaseFunds;
 import org.kuali.module.labor.bo.EmployeeFunding;
 import org.kuali.module.labor.bo.July1PositionFunding;
 import org.kuali.module.labor.bo.LaborCalculatedSalaryFoundationTracker;
 import org.kuali.module.labor.dao.LaborCalculatedSalaryFoundationTrackerDao;
 import org.kuali.module.labor.service.LaborCalculatedSalaryFoundationTrackerService;
+import org.kuali.module.labor.util.ObjectUtil;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This class provides its clients with access to CSF tracker entries in the backend data store.
- * 
- * @see org.kuali.module.labor.bo.LaborCalculatedSalaryFoundationTracker
- */
 @Transactional
 public class LaborCalculatedSalaryFoundationTrackerServiceImpl implements LaborCalculatedSalaryFoundationTrackerService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborCalculatedSalaryFoundationTrackerServiceImpl.class);
@@ -84,7 +79,7 @@ public class LaborCalculatedSalaryFoundationTrackerServiceImpl implements LaborC
      */
     private LaborCalculatedSalaryFoundationTracker findCSFTracker(List<LaborCalculatedSalaryFoundationTracker> CSFTrackerCollection, Object anotherObject) {
         for (LaborCalculatedSalaryFoundationTracker CSFTracker : CSFTrackerCollection) {
-            boolean found = ObjectUtil.equals(CSFTracker, anotherObject, CSFTracker.getKeyFieldList());
+            boolean found = ObjectUtil.compareObject(CSFTracker, anotherObject, CSFTracker.getKeyFieldList());
             if (found) {
                 return CSFTracker;
             }

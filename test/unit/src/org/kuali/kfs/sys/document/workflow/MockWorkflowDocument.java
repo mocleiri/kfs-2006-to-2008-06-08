@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package org.kuali.workflow;
 
 import java.sql.Timestamp;
 
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
 
 import edu.iu.uis.eden.clientapp.vo.RouteHeaderVO;
@@ -28,9 +28,14 @@ import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * This class is the base class for a MockWorkflowDocument. It can be extended by any other kind of mock document that needs to
- * override certain methods. This class has absolutely no state or behavior. There is no public constructor, and no member
- * variables. All void methods do nothing. All methods with a return value return null. All state and behavior needs to be added via
- * a subclass.
+ * override certain methods.
+ * 
+ * This class has absolutely no state or behavior. There is no public constructor, and no member variables. All void methods do
+ * nothing. All methods with a return value return null.
+ * 
+ * All state and behavior needs to be added via a subclass.
+ * 
+ * 
  */
 public abstract class MockWorkflowDocument implements KualiWorkflowDocument {
 
@@ -509,7 +514,7 @@ public abstract class MockWorkflowDocument implements KualiWorkflowDocument {
     /**
      * @see org.kuali.core.workflow.service.KualiWorkflowDocument#userIsInitiator(org.kuali.core.bo.user.KualiUser)
      */
-    public boolean userIsInitiator(UniversalUser user) {
+    public boolean userIsInitiator(KualiUser user) {
         // TODO Auto-generated method stub
         return false;
     }

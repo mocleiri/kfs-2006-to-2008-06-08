@@ -16,152 +16,165 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.bo.SourceAccountingLine;
+import org.kuali.kfs.bo.AccountingLineBase;
+import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.SubAccount;
 
-/**
- * Purap Accounting Line Base Business Object.
- */
-public abstract class PurApAccountingLineBase extends SourceAccountingLine implements PurApAccountingLine, Comparable {
+public class PurApAccountingLineBase extends AccountingLineBase implements PurApAccountingLine {
 
+    private Chart chartOfAccounts;
+    private Account account;
+    private SubAccount subAccount;
     protected Integer accountIdentifier;
     private Integer itemIdentifier;
+    private String chartOfAccountsCode;
+    private String accountNumber;
+    private String subAccountNumber;
+    private String financialObjectCode;
+    private String financialSubObjectCode;
+    private String projectCode;
+    private String organizationReferenceId;
     private BigDecimal accountLinePercent;
-    private KualiDecimal alternateAmountForGLEntryCreation; // not stored in DB; needed for disencumbrances and such
+    
+    
+    /**
+     * Gets the chartOfAccounts attribute.
+     * 
+     * @return Returns the chartOfAccounts
+     * 
+     */
+    public Chart getChartOfAccounts() { 
+        return chartOfAccounts;
+    }
 
-    public Integer getAccountIdentifier() {
-        return accountIdentifier;
+    /**
+     * Sets the chartOfAccounts attribute.
+     * 
+     * @param chartOfAccounts The chartOfAccounts to set.
+     * @deprecated
+     */
+    public void setChartOfAccounts(Chart chartOfAccounts) {
+        this.chartOfAccounts = chartOfAccounts;
+    }
+
+    /**
+     * Gets the account attribute.
+     * 
+     * @return Returns the account
+     * 
+     */
+    public Account getAccount() { 
+        return account;
+    }
+
+    /**
+     * Sets the account attribute.
+     * 
+     * @param account The account to set.
+     * @deprecated
+     */
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    /**
+     * Gets the subAccount attribute. 
+     * @return Returns the subAccount.
+     */
+    public SubAccount getSubAccount() {
+        return subAccount;
+    }
+
+    /**
+     * Sets the subAccount attribute value.
+     * @param subAccount The subAccount to set.
+     * @deprecated
+     */
+    public void setSubAccount(SubAccount subAccount) {
+        this.subAccount = subAccount;
+    }
+
+    public Integer getAccountIdentifier() { 
+    	return accountIdentifier;
     }
 
     public void setAccountIdentifier(Integer requisitionAccountIdentifier) {
-        this.accountIdentifier = requisitionAccountIdentifier;
+    	this.accountIdentifier = requisitionAccountIdentifier;
     }
 
-    public Integer getItemIdentifier() {
-        return itemIdentifier;
+    public Integer getItemIdentifier() { 
+    	return itemIdentifier;
     }
 
     public void setItemIdentifier(Integer requisitionItemIdentifier) {
-        this.itemIdentifier = requisitionItemIdentifier;
+    	this.itemIdentifier = requisitionItemIdentifier;
     }
 
-    public BigDecimal getAccountLinePercent() {
-        return accountLinePercent;
+    public String getChartOfAccountsCode() { 
+    	return chartOfAccountsCode;
+    }
+
+    public void setChartOfAccountsCode(String chartOfAccountsCode) {
+    	this.chartOfAccountsCode = chartOfAccountsCode;
+    }
+
+    public String getAccountNumber() { 
+    	return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+    	this.accountNumber = accountNumber;
+    }
+
+    public String getSubAccountNumber() { 
+    	return subAccountNumber;
+    }
+
+    public void setSubAccountNumber(String subAccountNumber) {
+    	this.subAccountNumber = subAccountNumber;
+    }
+
+    public String getFinancialObjectCode() { 
+    	return financialObjectCode;
+    }
+
+    public void setFinancialObjectCode(String financialObjectCode) {
+    	this.financialObjectCode = financialObjectCode;
+    }
+
+    public String getFinancialSubObjectCode() { 
+    	return financialSubObjectCode;
+    }
+
+    public void setFinancialSubObjectCode(String financialSubObjectCode) {
+    	this.financialSubObjectCode = financialSubObjectCode;
+    }
+
+    public String getProjectCode() { 
+    	return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+    	this.projectCode = projectCode;
+    }
+
+    public String getOrganizationReferenceId() { 
+    	return organizationReferenceId;
+    }
+
+    public void setOrganizationReferenceId(String organizationReferenceId) {
+    	this.organizationReferenceId = organizationReferenceId;
+    }
+
+    public BigDecimal getAccountLinePercent() { 
+    	return accountLinePercent;
     }
 
     public void setAccountLinePercent(BigDecimal accountLinePercent) {
-        this.accountLinePercent = accountLinePercent;
-    }
-
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#isEmpty()
-     */
-    public boolean isEmpty() {
-        return !(StringUtils.isNotEmpty(getAccountNumber()) || StringUtils.isNotEmpty(getChartOfAccountsCode()) || StringUtils.isNotEmpty(getFinancialObjectCode()) || StringUtils.isNotEmpty(getFinancialSubObjectCode()) || StringUtils.isNotEmpty(getOrganizationReferenceId()) || StringUtils.isNotEmpty(getProjectCode()) || StringUtils.isNotEmpty(getSubAccountNumber()) || ObjectUtils.isNotNull(getAccountLinePercent()));
-    }
-
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#createBlankAmountsCopy()
-     */
-    public PurApAccountingLine createBlankAmountsCopy() {
-        PurApAccountingLine newAccount = (PurApAccountingLine) ObjectUtils.deepCopy(this);
-        newAccount.setAccountLinePercent(BigDecimal.ZERO);
-        newAccount.setAmount(KualiDecimal.ZERO);
-        return newAccount;
-    }
-
-
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#accountStringsAreEqual(org.kuali.kfs.bo.SourceAccountingLine)
-     */
-    public boolean accountStringsAreEqual(SourceAccountingLine accountingLine) {
-        if (accountingLine == null) {
-            return false;
-        }
-        return new EqualsBuilder().append(getChartOfAccountsCode(), accountingLine.getChartOfAccountsCode()).append(getAccountNumber(), accountingLine.getAccountNumber()).append(getSubAccountNumber(), accountingLine.getSubAccountNumber()).append(getFinancialObjectCode(), accountingLine.getFinancialObjectCode()).append(getFinancialSubObjectCode(), accountingLine.getFinancialSubObjectCode()).append(getProjectCode(), accountingLine.getProjectCode()).append(getOrganizationReferenceId(), accountingLine.getOrganizationReferenceId())
-                .isEquals();
-    }
-
-    public boolean accountStringsAreEqual(PurApAccountingLine accountingLine) {
-        return accountStringsAreEqual((SourceAccountingLine) accountingLine);
-
-    }
-
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#generateSourceAccountingLine()
-     */
-    public SourceAccountingLine generateSourceAccountingLine() {
-        // the fields here should probably match method 'accountStringsAreEqual' above
-        SourceAccountingLine sourceLine = new SourceAccountingLine();
-        sourceLine.setChartOfAccountsCode(getChartOfAccountsCode());
-        sourceLine.setAccountNumber(getAccountNumber());
-        sourceLine.setSubAccountNumber(getSubAccountNumber());
-        sourceLine.setFinancialObjectCode(getFinancialObjectCode());
-        sourceLine.setFinancialSubObjectCode(getFinancialSubObjectCode());
-        sourceLine.setProjectCode(getProjectCode());
-        sourceLine.setOrganizationReferenceId(getOrganizationReferenceId());
-        sourceLine.setAmount(getAmount());
-        return sourceLine;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLineBase#toStringMapper()
-     */
-    @Override
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-
-        m.put("chart", getChartOfAccountsCode());
-        m.put("account", getAccountNumber());
-        m.put("objectCode", getFinancialObjectCode());
-        m.put("subAccount", getSubAccountNumber());
-        m.put("subObjectCode", getFinancialSubObjectCode());
-        m.put("projectCode", getProjectCode());
-        m.put("orgRefId", getOrganizationReferenceId());
-
-        return m;
-    }
-
-    public int compareTo(Object arg0) {
-        if (arg0 instanceof PurApAccountingLine) {
-            PurApAccountingLine account = (PurApAccountingLine) arg0;
-            return this.getString().compareTo(account.getString());
-        }
-        return -1;
-    }
-
-    public String getString() {
-        return getChartOfAccountsCode() + "~" + getAccountNumber() + "~" + getSubAccountNumber() + "~" + getFinancialObjectCode() + "~" + getFinancialSubObjectCode() + "~" + getProjectCode() + "~" + getOrganizationReferenceId();
-    }
-
-    public KualiDecimal getAlternateAmountForGLEntryCreation() {
-        return alternateAmountForGLEntryCreation;
-    }
-
-    public void setAlternateAmountForGLEntryCreation(KualiDecimal alternateAmount) {
-        this.alternateAmountForGLEntryCreation = alternateAmount;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLineBase#getSequenceNumber()
-     */
-    @Override
-    public Integer getSequenceNumber() {
-        return this.getAccountIdentifier();
+    	this.accountLinePercent = accountLinePercent;
     }
     
-    protected void copyFrom(PurApAccountingLine other) {
-        
-        super.copyFrom(other);
-
-        setAccountLinePercent(other.getAccountLinePercent());      
-        setAlternateAmountForGLEntryCreation(other.getAlternateAmountForGLEntryCreation());            
- 
-    }
-
+    
 }

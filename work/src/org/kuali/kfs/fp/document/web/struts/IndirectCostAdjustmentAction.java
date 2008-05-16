@@ -1,53 +1,34 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.web.struts.action;
 
-import java.util.List;
-
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
-import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
-import org.kuali.kfs.web.ui.AccountingLineDecorator;
+import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 
 /**
  * This class handles Actions for <ocde>IndirectCostAdjustmentDocument</code>s
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class IndirectCostAdjustmentAction extends KualiAccountingDocumentActionBase {
-
-    /**
-     * added target line baseline creation for lines created by source add
-     * 
-     * @see org.kuali.module.financial.web.struts.action.KualiFinancialDocumentActionBase#insertAccountingLine(boolean,
-     *      org.kuali.module.financial.web.struts.form.KualiFinancialDocumentFormBase, org.kuali.core.bo.AccountingLine)
-     */
-    @Override
-    protected void insertAccountingLine(boolean isSource, KualiAccountingDocumentFormBase financialDocumentForm, AccountingLine line) {
-        super.insertAccountingLine(isSource, financialDocumentForm, line);
-        if (isSource) {
-            AccountingLineDecorator decorator = new AccountingLineDecorator();
-            decorator.setRevertible(false);
-
-            // add it to the baseline, to prevent generation of spurious update events
-            AccountingDocument tDoc = (AccountingDocument) financialDocumentForm.getDocument();
-            List targetLines = tDoc.getTargetAccountingLines();
-            financialDocumentForm.getBaselineTargetAccountingLines().add(targetLines.get(targetLines.size() - 1));
-
-            // add the decorator
-            financialDocumentForm.getTargetLineDecorators().add(decorator);
-        }
-    }
+public class IndirectCostAdjustmentAction extends KualiTransactionalDocumentActionBase {
+    // no difference from superclass
 }

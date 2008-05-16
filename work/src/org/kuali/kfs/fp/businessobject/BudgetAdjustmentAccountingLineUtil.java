@@ -17,17 +17,21 @@ package org.kuali.module.financial.bo;
 
 import java.util.Map;
 
+import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLine;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.bo.AccountingLine;
 
 
 /**
- * This class is a utility class to consolidate budget adjustment accounting line code
+ * Util class to consolidate BA accounting line code
+ * 
+ * 
  */
 public class BudgetAdjustmentAccountingLineUtil {
     /**
-     * Initialize attributes
+     * 
+     * initialize attributes
      * 
      * @param accountingLine
      */
@@ -47,13 +51,14 @@ public class BudgetAdjustmentAccountingLineUtil {
         accountingLine.setFinancialDocumentMonth11LineAmount(KualiDecimal.ZERO);
         accountingLine.setFinancialDocumentMonth12LineAmount(KualiDecimal.ZERO);
         accountingLine.setFringeBenefitIndicator(false);
+        accountingLine.setDebitCreditCode(Constants.BLANK_SPACE);
     }
 
     /**
-     * Adds {@link BudgetAdjustmentAccountingLine} attributes to map
+     * adds {@link BudgetAdjustmentAccountingLine} attributes to map
      * 
-     * @param simpleValues map used to add values to
-     * @param accountingLine accounting line that provides attributes to add to map
+     * @param simpleValues
+     * @param accountingLine
      * @return
      */
     public static Map appendToValuesMap(Map simpleValues, BudgetAdjustmentAccountingLine accountingLine) {
@@ -76,7 +81,7 @@ public class BudgetAdjustmentAccountingLineUtil {
     }
 
     /**
-     * Copies {@link BudgetAdjustmentAccountingLine} values
+     * copies {@link BudgetAdjustmentAccountingLine} values
      * 
      * @param toLine the line to copy values to
      * @param fromLine the line to take the values to use in writing to the toLine
@@ -105,9 +110,10 @@ public class BudgetAdjustmentAccountingLineUtil {
     }
 
     /**
-     * Calculates monthlyLines total amount@param accountingLine
      * 
-     * @return KualiDecimal sum of all monthly line amounts
+     * calculates monthlyLines total amount@param accountingLine
+     * 
+     * @return
      */
     public static KualiDecimal getMonthlyLinesTotal(BudgetAdjustmentAccountingLine accountingLine) {
         KualiDecimal total = KualiDecimal.ZERO;

@@ -19,52 +19,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.bo.DocumentType;
-import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.document.JournalVoucherDocument;
 import org.kuali.module.labor.LaborConstants.JournalVoucherOffsetType;
-import org.kuali.module.labor.bo.LaborJournalVoucherAccountingLineParser;
+import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;
 import org.kuali.module.labor.bo.LaborJournalVoucherDetail;
-import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
-import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
+import org.kuali.module.labor.bo.LaborLedgerAccountingLineParser;
+import org.kuali.module.labor.bo.PendingLedgerEntry;
+import org.kuali.module.labor.bo.TestSourceAccountingLine;
 
-// @latex.ClassSignatureStart
-/**
- * Labor Document class for the Labor Ledger Journal Voucher.
- */
-public class LaborJournalVoucherDocument extends JournalVoucherDocument implements LaborLedgerPostingDocument, AmountTotaling {
-    // @latex.ClassSignatureStop
+public class LaborJournalVoucherDocument extends JournalVoucherDocument implements LaborLedgerPostingDocument{
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborJournalVoucherDocument.class);
-    private String offsetTypeCode = JournalVoucherOffsetType.NO_OFFSET.typeCode;
-    private List<LaborLedgerPendingEntry> laborLedgerPendingEntries;
-    private DocumentType documentType;
 
+    private String offsetTypeCode = JournalVoucherOffsetType.NO_OFFSET.typeCode;
+    private List<PendingLedgerEntry> laborLedgerPendingEntries;   
+    private DocumentType documentType;
+       
     /**
      * Constructs a LaborJournalVoucherDocument.java.
      */
     public LaborJournalVoucherDocument() {
         super();
-        setLaborLedgerPendingEntries(new ArrayList<LaborLedgerPendingEntry>());
+        setLaborLedgerPendingEntries(new ArrayList<PendingLedgerEntry>());
     }
 
     /**
      * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLineClass()
      */
     @Override
-    public Class getSourceAccountingLineClass() {
+    public Class getSourceAccountingLineClass() { 
         return LaborJournalVoucherDetail.class;
     }
 
     /**
      * @see org.kuali.module.labor.document.LaborLedgerPostingDocument#getLaborLedgerPendingEntry(int)
      */
-    public LaborLedgerPendingEntry getLaborLedgerPendingEntry(int index) {
+    public PendingLedgerEntry getLaborLedgerPendingEntry(int index) {
         while (laborLedgerPendingEntries.size() <= index) {
-            laborLedgerPendingEntries.add(new LaborLedgerPendingEntry());
+            laborLedgerPendingEntries.add(new PendingLedgerEntry());
         }
         return laborLedgerPendingEntries.get(index);
     }
@@ -75,12 +70,12 @@ public class LaborJournalVoucherDocument extends JournalVoucherDocument implemen
     @Override
     public void prepareForSave(KualiDocumentEvent event) {
         super.prepareForSave(event);
-        if (!SpringContext.getBean(LaborLedgerPendingEntryService.class).generateLaborLedgerPendingEntries(this)) {
+        if (!SpringServiceLocator.getLaborLedgerPendingEntryService().generateLaborLedgerPendingEntries(this)) {
             logErrors();
             throw new ValidationException("labor ledger LLPE generation failed");
         }
     }
-
+    
     /**
      * Gets the offsetTypeCode attribute.
      * 
@@ -104,7 +99,7 @@ public class LaborJournalVoucherDocument extends JournalVoucherDocument implemen
      * 
      * @return Returns the laborLedgerPendingEntries.
      */
-    public List<LaborLedgerPendingEntry> getLaborLedgerPendingEntries() {
+    public List<PendingLedgerEntry> getLaborLedgerPendingEntries() {
         return laborLedgerPendingEntries;
     }
 
@@ -113,13 +108,12 @@ public class LaborJournalVoucherDocument extends JournalVoucherDocument implemen
      * 
      * @param laborLedgerPendingEntries The laborLedgerPendingEntries to set.
      */
-    public void setLaborLedgerPendingEntries(List<LaborLedgerPendingEntry> laborLedgerPendingEntries) {
+    public void setLaborLedgerPendingEntries(List<PendingLedgerEntry> laborLedgerPendingEntries) {
         this.laborLedgerPendingEntries = laborLedgerPendingEntries;
     }
 
     /**
-     * Gets the documentType attribute.
-     * 
+     * Gets the documentType attribute. 
      * @return Returns the documentType.
      */
     public DocumentType getDocumentType() {
@@ -128,53 +122,9 @@ public class LaborJournalVoucherDocument extends JournalVoucherDocument implemen
 
     /**
      * Sets the documentType attribute value.
-     * 
      * @param documentType The documentType to set.
      */
     public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
-    }
-
-    /**
-     * Used to get the appropriate <code>{@link AccountingLineParser}</code> for the <code>Document</code>
-     * 
-     * @return AccountingLineParser
-     */
-    @Override
-    public AccountingLineParser getAccountingLineParser() {
-        return new LaborJournalVoucherAccountingLineParser(getBalanceTypeCode());
-    }
-
-    /**
-     * Override to call super and then iterate over all GLPEs and update the approved code appropriately.
-     * 
-     * @see Document#handleRouteStatusChange()
-     */
-    @Override
-    public void handleRouteStatusChange() {
-        super.handleRouteStatusChange();
-        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            changeLedgerPendingEntriesApprovedStatusCode();
-        }
-        else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled() || getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            removeLedgerPendingEntries();
-        }
-    }
-
-    /**
-     * This method iterates over all of the pending entries for a document and sets their approved status code to APPROVED "A".
-     */
-    private void changeLedgerPendingEntriesApprovedStatusCode() {
-        for (LaborLedgerPendingEntry pendingEntry : laborLedgerPendingEntries) {
-            pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.DocumentStatusCodes.APPROVED);
-        }
-    }
-
-    /**
-     * This method calls the service to remove all of the pending entries associated with this document
-     */
-    private void removeLedgerPendingEntries() {
-        LaborLedgerPendingEntryService laborLedgerPendingEntryService = SpringContext.getBean(LaborLedgerPendingEntryService.class);
-        laborLedgerPendingEntryService.delete(getDocumentHeader().getDocumentNumber());
     }
 }

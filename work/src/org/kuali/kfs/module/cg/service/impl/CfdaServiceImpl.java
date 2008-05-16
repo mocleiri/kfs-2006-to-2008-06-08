@@ -1,41 +1,24 @@
-/*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.cg.service.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.LookupService;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.cg.bo.Cfda;
 import org.kuali.module.cg.service.CfdaService;
 import org.kuali.module.cg.service.CfdaUpdateResults;
+import org.kuali.module.cg.bo.CatalogOfFederalDomesticAssistanceReference;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.kfs.service.impl.HomeOriginationServiceImpl;
+import org.kuali.core.service.BusinessObjectService;
+import org.apache.log4j.Logger;
 
+import java.net.URL;
+import java.net.MalformedURLException;
+import java.io.*;
+import java.util.regex.Pattern;
+import java.util.*;
+
+/**
+ * User: Laran Evans <lc278@cornell.edu>
+ * Date: May 8, 2007
+ * Time: 12:55:43 PM
+ */
 public class CfdaServiceImpl implements CfdaService {
 
     private BusinessObjectService businessObjectService;
@@ -51,33 +34,31 @@ public class CfdaServiceImpl implements CfdaService {
             }
         };
     }
-
+    
     /**
-     * I know this is hack-ish. Regexes are appropriate. I just couldn't get the pattern down and didn't want to waste my time
-     * figuring it out.
-     * 
+     * I know this is hack-ish. Regexes are appropriate. I just couldn't get the pattern down and didn't want to waste
+     * my time figuring it out.
+     *
      * @param string
      * @return
      */
-    public String extractCfdaNumberFrom(String string) {
-        if (null == string)
-            return null;
-
+    public static String extractCfdaNumberFrom(String string) {
+        if(null == string) return null;
+        
         string = string.substring(string.indexOf("<U>") + 3);
         string = string.substring(0, string.indexOf("</U>"));
         return string;
     }
 
     /**
-     * I know this is hack-ish. Regexes are appropriate. I just couldn't get the pattern down and didn't want to waste my time
-     * figuring it out.
-     * 
+     * I know this is hack-ish. Regexes are appropriate. I just couldn't get the pattern down and didn't want to waste
+     * my time figuring it out.
+     *
      * @param string
      * @return
      */
-    public String extractCfdaAgencyFrom(String string) {
-        if (null == string)
-            return null;
+    public static String extractCfdaAgencyFrom(String string) {
+        if(null == string) return null;
 
         string = string.substring(string.indexOf("<FONT") + 5);
         string = string.substring(string.indexOf(">") + 1);
@@ -86,15 +67,14 @@ public class CfdaServiceImpl implements CfdaService {
     }
 
     /**
-     * I know this is hack-ish. Regexes are appropriate. I just couldn't get the pattern down and didn't want to waste my time
-     * figuring it out.
-     * 
+     * I know this is hack-ish. Regexes are appropriate. I just couldn't get the pattern down and didn't want to waste
+     * my time figuring it out.
+     *
      * @param string
      * @return
      */
-    public String extractCfdaTitleFrom(String string) {
-        if (null == string)
-            return null;
+    public static String extractCfdaTitleFrom(String string) {
+        if(null == string) return null;
 
         string = string.substring(string.indexOf("<FONT") + 5);
         string = string.substring(string.indexOf(">") + 1);
@@ -103,11 +83,13 @@ public class CfdaServiceImpl implements CfdaService {
     }
 
     /**
+     * 
      * @return
      * @throws IOException
      */
-    public SortedMap<String, Cfda> getGovCodes() throws IOException {
-        SortedMap<String, Cfda> govMap = new TreeMap<String, Cfda>();
+    public static SortedMap<String, CatalogOfFederalDomesticAssistanceReference> getGovCodes() throws IOException {
+        SortedMap<String, CatalogOfFederalDomesticAssistanceReference> govMap =
+                new TreeMap<String, CatalogOfFederalDomesticAssistanceReference>();
 
         URL url = new URL(SOURCE_URL);
         InputStream inputStream = url.openStream();
@@ -116,22 +98,22 @@ public class CfdaServiceImpl implements CfdaService {
         String line = screen.readLine();
 
         boolean headerFound = false;
-        while (null != line) {
-            if (line.trim().equals("<TR>")) {
+        while(null != line) {
+            if(line.trim().equals("<TR>")) {
 
                 // There's one match that will happen for the table header row. Skip past it.
-                if (!headerFound) {
+                if(!headerFound) {
                     headerFound = true;
                     line = screen.readLine();
                     continue;
                 }
 
                 String number = extractCfdaNumberFrom(screen.readLine());
-                /* String agency = extractCfdaAgencyFrom( */screen.readLine()/* ) */; // not used, but we still need to read the line
-                // to move past it.
-                String title = extractCfdaTitleFrom(screen.readLine());
+                /*String agency = extractCfdaAgencyFrom(*/screen.readLine()/*)*/; // not used, but we still need to read the line
+                                                                                  // to move past it.
+                String title  = extractCfdaTitleFrom(screen.readLine());
 
-                Cfda cfda = new Cfda();
+                CatalogOfFederalDomesticAssistanceReference cfda = new CatalogOfFederalDomesticAssistanceReference();
                 cfda.setCfdaNumber(number);
                 cfda.setCfdaProgramTitleName(title);
 
@@ -144,15 +126,16 @@ public class CfdaServiceImpl implements CfdaService {
     }
 
     /**
+     *
      * @return
      * @throws IOException
      */
-    public SortedMap<String, Cfda> getKfsCodes() throws IOException {
-        Collection allCodes = businessObjectService.findAll(Cfda.class);
+    public static SortedMap<String, CatalogOfFederalDomesticAssistanceReference> getKfsCodes() throws IOException {
+        Collection allCodes = SpringServiceLocator.getLookupService().findCollectionBySearch(CatalogOfFederalDomesticAssistanceReference.class, new HashMap());
 
-        SortedMap<String, Cfda> kfsMapAll = new TreeMap<String, Cfda>(cfdaComparator);
-        for (Object o : allCodes) {
-            Cfda c = (Cfda) o;
+        SortedMap<String, CatalogOfFederalDomesticAssistanceReference> kfsMapAll = new TreeMap<String, CatalogOfFederalDomesticAssistanceReference>(cfdaComparator);
+        for(Object o : allCodes) {
+            CatalogOfFederalDomesticAssistanceReference c = (CatalogOfFederalDomesticAssistanceReference) o;
             kfsMapAll.put(c.getCfdaNumber(), c);
         }
         return kfsMapAll;
@@ -163,53 +146,38 @@ public class CfdaServiceImpl implements CfdaService {
      */
     public CfdaUpdateResults update() throws IOException {
 
+        Map<String, CatalogOfFederalDomesticAssistanceReference> govMap = getGovCodes();
+        Map<String, CatalogOfFederalDomesticAssistanceReference> kfsMap = getKfsCodes();
+
         CfdaUpdateResults results = new CfdaUpdateResults();
-        Map<String, Cfda> govMap = null;
-
-        try {
-            govMap = getGovCodes();
-        }
-        catch (IOException ioe) {
-            StringBuilder builder = new StringBuilder();
-            builder.append("No updates took place.\n");
-            builder.append(ioe.getMessage());
-            results.setMessage(builder.toString());
-            return results;
-        }
-        Map<String, Cfda> kfsMap = getKfsCodes();
-
         results.setNumberOfRecordsInKfsDatabase(kfsMap.keySet().size());
         results.setNumberOfRecordsRetrievedFromWebSite(govMap.keySet().size());
 
-        for (Object key : kfsMap.keySet()) {
+        for(Object key : kfsMap.keySet()) {
 
-            Cfda cfdaKfs = kfsMap.get(key);
-            Cfda cfdaGov = govMap.get(key);
+            CatalogOfFederalDomesticAssistanceReference cfdaKfs = kfsMap.get(key);
+            CatalogOfFederalDomesticAssistanceReference cfdaGov = govMap.get(key);
 
-            if (cfdaKfs.getCfdaMaintenanceTypeId().startsWith("M")) {
+            if(cfdaKfs.getCfdaMaintenanceTypeId().startsWith("M")) {
                 // Leave it alone. It's maintained manually.
                 results.setNumberOfRecordsNotUpdatedBecauseManual(1 + results.getNumberOfRecordsNotUpdatedBecauseManual());
-            }
-            else if (cfdaKfs.getCfdaMaintenanceTypeId().startsWith("A")) {
+            } else if(cfdaKfs.getCfdaMaintenanceTypeId().startsWith("A")) {
 
-                if (null == cfdaGov) {
-                    if ("A".equals(cfdaKfs.getCfdaStatusCode())) {
+                if(null == cfdaGov) {
+                    if("A".equals(cfdaKfs.getCfdaStatusCode())) {
                         cfdaKfs.setCfdaStatusCode(false);
                         businessObjectService.save(cfdaKfs);
                         results.setNumberOfRecordsDeactivatedBecauseNoLongerOnWebSite(results.getNumberOfRecordsDeactivatedBecauseNoLongerOnWebSite() + 1);
-                    }
-                    else {
+                    } else {
                         // Leave it alone for historical purposes
                         results.setNumberOfRecrodsNotUpdatedForHistoricalPurposes(results.getNumberOfRecrodsNotUpdatedForHistoricalPurposes() + 1);
                     }
-                }
-                else {
-                    if ("A".equals(cfdaKfs.getCfdaStatusCode())) {
+                } else {
+                    if("A".equals(cfdaKfs.getCfdaStatusCode())) {
                         cfdaKfs.setCfdaProgramTitleName(cfdaGov.getCfdaProgramTitleName());
                         businessObjectService.save(cfdaKfs);
                         results.setNumberOfRecordsUpdatedBecauseAutomatic(results.getNumberOfRecordsUpdatedBecauseAutomatic() + 1);
-                    }
-                    else if ("I".equals(cfdaKfs.getCfdaStatusCode())) {
+                    } else if("I".equals(cfdaKfs.getCfdaStatusCode())) {
                         cfdaKfs.setCfdaStatusCode(true);
                         cfdaKfs.setCfdaProgramTitleName(cfdaGov.getCfdaProgramTitleName());
                         businessObjectService.save(cfdaKfs);
@@ -222,9 +190,9 @@ public class CfdaServiceImpl implements CfdaService {
             govMap.remove(key);
         }
 
-        // What's left in govMap now is just the codes that don't exist in KFS
-        for (String key : govMap.keySet()) {
-            Cfda cfdaGov = govMap.get(key);
+        // What's left in govMap now is just the codes that don't exist in
+        for(String key : govMap.keySet()) {
+            CatalogOfFederalDomesticAssistanceReference cfdaGov = govMap.get(key);
             cfdaGov.setCfdaMaintenanceTypeId("Automatic");
             cfdaGov.setCfdaStatusCode(true);
             businessObjectService.save(cfdaGov);
@@ -237,18 +205,4 @@ public class CfdaServiceImpl implements CfdaService {
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
     }
-
-    public Cfda getByPrimaryId(String cfdaNumber) {
-        if ( StringUtils.isBlank(cfdaNumber) ) {
-            return null;
-        }
-        return (Cfda) businessObjectService.findByPrimaryKey(Cfda.class, mapPrimaryKeys(cfdaNumber));
-    }
-
-    private Map<String, Object> mapPrimaryKeys(String cfdaNumber) {
-        Map<String, Object> primaryKeys = new HashMap();
-        primaryKeys.put(KFSPropertyConstants.CFDA_NUMBER, cfdaNumber.trim());
-        return primaryKeys;
-    }
-
 }

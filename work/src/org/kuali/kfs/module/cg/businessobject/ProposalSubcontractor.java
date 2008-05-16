@@ -1,39 +1,44 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class ProposalSubcontractor extends PersistableBusinessObjectBase implements Inactivateable {
+public class ProposalSubcontractor extends BusinessObjectBase {
 
     private String proposalSubcontractorNumber;
     private Long proposalNumber;
     private String subcontractorNumber;
     private KualiDecimal proposalSubcontractorAmount;
-    private String proposalSubcontractorDescription;
-    private boolean active = true;
 
     private Subcontractor subcontractor;
 
@@ -47,7 +52,8 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
     /**
      * Gets the proposalSubcontractorNumber attribute.
      * 
-     * @return Returns the proposalSubcontractorNumber
+     * @return - Returns the proposalSubcontractorNumber
+     * 
      */
     public String getProposalSubcontractorNumber() {
         return proposalSubcontractorNumber;
@@ -57,6 +63,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the proposalSubcontractorNumber attribute.
      * 
      * @param proposalSubcontractorNumber The proposalSubcontractorNumber to set.
+     * 
      */
     public void setProposalSubcontractorNumber(String proposalSubcontractorNumber) {
         this.proposalSubcontractorNumber = proposalSubcontractorNumber;
@@ -66,7 +73,8 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
     /**
      * Gets the proposalNumber attribute.
      * 
-     * @return Returns the proposalNumber
+     * @return - Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
@@ -76,6 +84,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the proposalNumber attribute.
      * 
      * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -85,7 +94,8 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
     /**
      * Gets the subcontractorNumber attribute.
      * 
-     * @return Returns the subcontractorNumber
+     * @return - Returns the subcontractorNumber
+     * 
      */
     public String getSubcontractorNumber() {
         return subcontractorNumber;
@@ -95,6 +105,7 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the subcontractorNumber attribute.
      * 
      * @param subcontractorNumber The subcontractorNumber to set.
+     * 
      */
     public void setSubcontractorNumber(String subcontractorNumber) {
         this.subcontractorNumber = subcontractorNumber;
@@ -104,7 +115,8 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
     /**
      * Gets the proposalSubcontractorAmount attribute.
      * 
-     * @return Returns the proposalSubcontractorAmount
+     * @return - Returns the proposalSubcontractorAmount
+     * 
      */
     public KualiDecimal getProposalSubcontractorAmount() {
         return proposalSubcontractorAmount;
@@ -114,45 +126,10 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
      * Sets the proposalSubcontractorAmount attribute.
      * 
      * @param proposalSubcontractorAmount The proposalSubcontractorAmount to set.
+     * 
      */
     public void setProposalSubcontractorAmount(KualiDecimal proposalSubcontractorAmount) {
         this.proposalSubcontractorAmount = proposalSubcontractorAmount;
-    }
-
-    /**
-     * Gets the proposalSubcontractorDescription attribute.
-     * 
-     * @return Returns the proposalSubcontractorDescription.
-     */
-    public String getProposalSubcontractorDescription() {
-        return proposalSubcontractorDescription;
-    }
-
-    /**
-     * Sets the proposalSubcontractorDescription attribute value.
-     * 
-     * @param proposalSubcontractorDescription The proposalSubcontractorDescription to set.
-     */
-    public void setProposalSubcontractorDescription(String proposalSubcontractorDescription) {
-        this.proposalSubcontractorDescription = proposalSubcontractorDescription;
-    }
-
-    /**
-     * Gets the active attribute.
-     * 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * 
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**
@@ -183,16 +160,5 @@ public class ProposalSubcontractor extends PersistableBusinessObjectBase impleme
         return m;
     }
 
-    /**
-     * This can be displayed by Proposal.xml lookup results.
-     * 
-     * @see Object#toString()
-     */
-    @Override
-    public String toString() {
-        // todo: get "nonexistent" from ApplicationResources.properties via KFSKeyConstants?
-        String name = ObjectUtils.isNull(getSubcontractor()) ? "nonexistent" : getSubcontractor().getSubcontractorName();
-        String description = getProposalSubcontractorDescription() == null ? "" : " " + getProposalSubcontractorDescription();
-        return name + " " + getProposalSubcontractorAmount() + description;
-    }
+
 }

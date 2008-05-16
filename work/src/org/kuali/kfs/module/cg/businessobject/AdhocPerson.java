@@ -17,30 +17,26 @@ package org.kuali.module.kra.bo;
 
 import java.util.LinkedHashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.bo.ChartUser;
-import org.kuali.module.chart.service.ChartUserService;
+import org.kuali.PropertyConstants;
 
 /**
  * This class represents an ad-hoc person.
+ * 
+ * 
  */
 public class AdhocPerson extends AbstractAdhoc {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AdhocPerson.class);
 
     private String personUniversalIdentifier;
-    private String personUserIdentifier;
-    private String name;
     private UniversalUser user;
-
+    
     public AdhocPerson() {
         super();
     }
-
+    
     public AdhocPerson(String documentNumber, String personUniversalIdentifier) {
         this();
         this.setDocumentNumber(documentNumber);
@@ -71,7 +67,6 @@ public class AdhocPerson extends AbstractAdhoc {
      * @return Returns the user.
      */
     public UniversalUser getUser() {
-        user = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(personUniversalIdentifier, user);
         return user;
     }
 
@@ -79,93 +74,25 @@ public class AdhocPerson extends AbstractAdhoc {
      * Sets the user attribute value.
      * 
      * @param user The user to set.
-     * @deprecated Should not be set. User should be retrieved from SpringContext each time. See getUser() above.
      */
     public void setUser(UniversalUser user) {
         this.user = user;
     }
     
-    public String getPrimaryDepartmentCode() {
-        String org = "";
-        if (user == null || user.getPersonUserIdentifier() == null) {
-            user = null;
-            try {
-                user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(getPersonUniversalIdentifier());
-            }
-            catch (UserNotFoundException ex) {
-                // do nothing, leave user as null
-            }
-        }
-        if (user == null) {
-            return "";
-        }
-        if (this.user.getModuleUser(ChartUser.MODULE_ID) != null) {
-            org = ((ChartUser) this.user.getModuleUser(ChartUser.MODULE_ID)).getOrganizationCode();
-        }
-        else {
-            org = SpringContext.getBean(ChartUserService.class).getDefaultOrganizationCode(this.user);
-        }
-        return org;
-    }
-
     /**
-     * This method retrieves the associated user id from the UniversalUser attribute.
+     * Gets the org code based on deptid.
      * 
-     * @return The user id of the associated user.
+     * @return Returns the user.
      */
-    public String getPersonUserIdentifier() {
-        if (user == null || user.getPersonUserIdentifier() == null) {
-            user = null;
-            try {
-                user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(getPersonUniversalIdentifier());
-            }
-            catch (UserNotFoundException ex) {
-                // do nothing, leave user as null
+    public String getOrgCode() {
+        if (this.getUser() != null) {
+            if ( !StringUtils.isEmpty( this.getUser().getPrimaryDepartmentCode() ) ) {
+                return this.getUser().getPrimaryDepartmentCode();
+            } else {
+                return this.getUser().getCampusCode();
             }
         }
-        if (user == null) {
-            return "";
-        }
-        return user.getPersonUserIdentifier();
-    }
-
-    /**
-     * This method has no function and is only here to satisfy Struts.
-     * 
-     * @param userIdentifier User id to be passed in.
-     */
-    public void setPersonUserIdentifier(String userIdentifier) {
-        // do nothing, the getter will handle this
-    }
-
-    /**
-     * This method retrieves the associated user name from the UniversalUser attribute.
-     * 
-     * @return The user name in the format of LAST, FIRST
-     */
-    public String getName() {
-        if (user == null || user.getPersonName() == null) {
-            user = null;
-            try {
-                user = SpringContext.getBean(UniversalUserService.class).getUniversalUser(getPersonUniversalIdentifier());
-            }
-            catch (UserNotFoundException ex) {
-                // do nothing, leave UU as null
-            }
-        }
-        if (user == null) {
-            return "";
-        }
-        return user.getPersonName();
-    }
-
-    /**
-     * This method has no function and is only here to satisfy Struts.
-     * 
-     * @param name The name of the user.
-     */
-    public void setName(String name) {
-        // do nothing, the getter will handle this
+        return "";
     }
 
     /**
@@ -173,7 +100,7 @@ public class AdhocPerson extends AbstractAdhoc {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
         m.put("personUniversalIdentifier", this.personUniversalIdentifier);
         return m;
     }

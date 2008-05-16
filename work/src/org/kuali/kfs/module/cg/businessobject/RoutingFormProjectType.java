@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormProjectType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,108 +20,91 @@ package org.kuali.module.kra.routingform.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.PropertyConstants;
 
 /**
  * 
  */
-public class RoutingFormProjectType extends PersistableBusinessObjectBase {
+public class RoutingFormProjectType extends BusinessObjectBase {
 
-    private String projectTypeCode;
-    private String documentNumber;
-    private boolean projectTypeSelectedIndicator;
+	private String projectTypeCode;
+	private String documentNumber;
+	private String projectTypeDescription;
 
     private ProjectType projectType;
+    
+	/**
+	 * Default constructor.
+	 */
+	public RoutingFormProjectType() {
+
+	}
+
+	/**
+	 * Gets the projectTypeCode attribute.
+	 * 
+	 * @return Returns the projectTypeCode
+	 * 
+	 */
+	public String getProjectTypeCode() { 
+		return projectTypeCode;
+	}
+
+	/**
+	 * Sets the projectTypeCode attribute.
+	 * 
+	 * @param projectTypeCode The projectTypeCode to set.
+	 * 
+	 */
+	public void setProjectTypeCode(String projectTypeCode) {
+		this.projectTypeCode = projectTypeCode;
+	}
+
+
+	/**
+	 * Gets the documentNumber attribute.
+	 * 
+	 * @return Returns the documentNumber
+	 * 
+	 */
+	public String getDocumentNumber() { 
+		return documentNumber;
+	}
+
+	/**
+	 * Sets the documentNumber attribute.
+	 * 
+	 * @param documentNumber The documentNumber to set.
+	 * 
+	 */
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
+	}
+
+
+	/**
+	 * Gets the projectTypeDescription attribute.
+	 * 
+	 * @return Returns the projectTypeDescription
+	 * 
+	 */
+	public String getProjectTypeDescription() { 
+		return projectTypeDescription;
+	}
+
+	/**
+	 * Sets the projectTypeDescription attribute.
+	 * 
+	 * @param projectTypeDescription The projectTypeDescription to set.
+	 * 
+	 */
+	public void setProjectTypeDescription(String projectTypeDescription) {
+		this.projectTypeDescription = projectTypeDescription;
+	}
 
     /**
-     * Default constructor.
-     */
-    public RoutingFormProjectType() {
-
-    }
-
-    /**
-     * Constructs a RoutingFormProjectType.
-     * 
-     * @param documentNumber
-     * @param projectType
-     */
-    public RoutingFormProjectType(String documentNumber, ProjectType projectType) {
-        this();
-        this.documentNumber = documentNumber;
-        this.projectTypeCode = projectType.getProjectTypeCode();
-        this.projectType = projectType;
-    }
-
-    /**
-     * Constructs with projectTypeCode argument.
-     * 
-     * @param projectTypeCode
-     */
-    public RoutingFormProjectType(String projectTypeCode) {
-        this.projectTypeCode = projectTypeCode;
-    }
-
-    /**
-     * Gets the projectTypeCode attribute.
-     * 
-     * @return Returns the projectTypeCode
-     */
-    public String getProjectTypeCode() {
-        return projectTypeCode;
-    }
-
-    /**
-     * Sets the projectTypeCode attribute.
-     * 
-     * @param projectTypeCode The projectTypeCode to set.
-     */
-    public void setProjectTypeCode(String projectTypeCode) {
-        this.projectTypeCode = projectTypeCode;
-    }
-
-
-    /**
-     * Gets the documentNumber attribute.
-     * 
-     * @return Returns the documentNumber
-     */
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    /**
-     * Sets the documentNumber attribute.
-     * 
-     * @param documentNumber The documentNumber to set.
-     */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    /**
-     * Gets the projectTypeSelectedIndicator attribute.
-     * 
-     * @return Returns the projectTypeSelectedIndicator.
-     */
-    public boolean isProjectTypeSelectedIndicator() {
-        return projectTypeSelectedIndicator;
-    }
-
-    /**
-     * Sets the projectTypeSelectedIndicator attribute value.
-     * 
-     * @param projectTypeSelectedIndicator The projectTypeSelectedIndicator to set.
-     */
-    public void setProjectTypeSelectedIndicator(boolean projectTypeSelectedIndicator) {
-        this.projectTypeSelectedIndicator = projectTypeSelectedIndicator;
-    }
-
-    /**
-     * Gets the projectType attribute.
-     * 
+     * Gets the projectType attribute. 
      * @return Returns the projectType.
      */
     public ProjectType getProjectType() {
@@ -128,7 +113,6 @@ public class RoutingFormProjectType extends PersistableBusinessObjectBase {
 
     /**
      * Sets the projectType attribute value.
-     * 
      * @param projectType The projectType to set.
      * @deprecated
      */
@@ -137,35 +121,14 @@ public class RoutingFormProjectType extends PersistableBusinessObjectBase {
     }
 
     /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        boolean equals = false;
-
-        if (ObjectUtils.isNotNull(obj) && obj instanceof RoutingFormProjectType) {
-            RoutingFormProjectType routingFormProjectType = (RoutingFormProjectType) obj;
-
-            equals = this.projectTypeCode.equals(routingFormProjectType.getProjectTypeCode());
-        }
-
-        return equals;
-    }
-
-    /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("projectTypeCode", this.projectTypeCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         return m;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        String hashString = this.getDocumentNumber() + "|" + this.getProjectTypeCode() + "|" + this.getDocumentNumber();
-        return hashString.hashCode();
-    }
+
 }

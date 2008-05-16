@@ -1,18 +1,3 @@
-/*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.rice.ojb;
 
 import org.apache.commons.beanutils.ConstructorUtils;
@@ -23,7 +8,8 @@ import org.apache.ojb.broker.metadata.ClassDescriptor;
 import org.apache.ojb.broker.metadata.FieldDescriptor;
 import org.apache.ojb.broker.util.sequence.SequenceManager;
 import org.apache.ojb.broker.util.sequence.SequenceManagerException;
-import org.kuali.kfs.context.PropertyLoadingFactoryBean;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.kfs.context.SpringContext;
 import org.kuali.rice.config.ConfigurationException;
 
 
@@ -40,7 +26,7 @@ public class ConfigurableSequenceManager implements SequenceManager {
     }
 
     protected SequenceManager createSequenceManager(PersistenceBroker broker) {
-        String sequenceManagerClassName = PropertyLoadingFactoryBean.getBaseProperty(SEQUENCE_MANAGER_CLASS_NAME_PROPERTY);
+        String sequenceManagerClassName = SpringContext.getStringConfigurationProperty(SEQUENCE_MANAGER_CLASS_NAME_PROPERTY);
         try {
             Object sequenceManagerObject = ConstructorUtils.invokeConstructor(Class.forName(sequenceManagerClassName), broker);
             if (!(sequenceManagerObject instanceof SequenceManager)) {

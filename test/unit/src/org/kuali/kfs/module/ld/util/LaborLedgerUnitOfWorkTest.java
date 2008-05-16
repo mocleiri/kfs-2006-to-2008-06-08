@@ -15,19 +15,15 @@
  */
 package org.kuali.module.labor.util;
 
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborOriginEntry;
-import org.kuali.test.ConfigureContext;
 
-@ConfigureContext(session = KHUNTLEY)
+import junit.framework.TestCase;
+
 public class LaborLedgerUnitOfWorkTest extends TestCase {
 
     private TestDataGenerator testDataGenerator;
@@ -36,7 +32,7 @@ public class LaborLedgerUnitOfWorkTest extends TestCase {
 
     public LaborLedgerUnitOfWorkTest() throws Exception {
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
-        String propertiesFileName = "test/src/org/kuali/module/labor/testdata/laborLedgerUnitOfWork.properties";
+        String propertiesFileName = "test/src/org/kuali/module/labor/testdata/laborOriginEntry.properties";
 
         laborOriginEntry = new LaborOriginEntry();
         testDataGenerator = new TestDataGenerator(propertiesFileName, messageFileName);
@@ -57,7 +53,7 @@ public class LaborLedgerUnitOfWorkTest extends TestCase {
         assertTrue(charAccountsCode.equals(laborOriginEntry.getChartOfAccountsCode()));
 
         List keyList = new ArrayList();
-        keyList.add(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
+        keyList.add(PropertyConstants.FINANCIAL_OBJECT_CODE);
         laborLedgerUnitOfWork.resetLaborLedgerUnitOfWork(laborOriginEntry, keyList);
 
         charAccountsCode = laborLedgerUnitOfWork.getWorkingEntry().getChartOfAccountsCode();

@@ -1,209 +1,294 @@
-/*
- * Copyright 2005-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.financial.document;
 
-import static org.kuali.module.financial.document.AccountingDocumentTestUtils.testGetNewDocument_byDocumentClass;
-import static org.kuali.test.fixtures.AccountingLineFixture.LINE2;
-import static org.kuali.test.fixtures.UserNameFixture.KHUNTLEY;
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.TransactionalDocumentDictionaryService;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.DocumentTestUtils;
-import org.kuali.test.fixtures.AccountingLineFixture;
-import org.kuali.test.suite.AnnotationTestSuite;
+import org.kuali.core.document.TransactionalDocumentTestBase;
+import org.kuali.test.parameters.DocumentParameter;
+import org.kuali.test.parameters.TransactionalDocumentParameter;
 
 /**
  * This class is used to test DistributionOfIncomeAndExpenseDocument.
+ * 
+ * @author Kuali Transaction Processing Team (kualidev@oncourse.iu.edu)
  */
-@ConfigureContext(session = KHUNTLEY)
-public class DistributionOfIncomeAndExpenseDocumentTest extends KualiTestBase {
-    private static final Log LOG = LogFactory.getLog(DistributionOfIncomeAndExpenseDocumentTest.class);
-    public static final Class<DistributionOfIncomeAndExpenseDocument> DOCUMENT_CLASS = DistributionOfIncomeAndExpenseDocument.class;
+public class DistributionOfIncomeAndExpenseDocumentTest extends TransactionalDocumentTestBase {
+    public static final String COLLECTION_NAME = "DistributionOfIncomeAndExpenseDocumentTest.collection1";
+    public static final String USER_NAME = "user1";
+    public static final String DOCUMENT_PARAMETER = "distributionOfIncomeAndExpenseDocumentParameter1";
+    public static final String SOURCE_LINE1 = "sourceLine2";
+    public static final String TARGET_LINE1 = "targetLine2";
+    public static final String SERIALIZED_LINE_PARAMTER = "serializedLine1";
 
-    private Document getDocumentParameterFixture() throws Exception {
-        return DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DistributionOfIncomeAndExpenseDocument.class);
+    /**
+     * Get names of fixture collections test class is using.
+     *
+     * @return String[]
+     */
+    public String[] getFixtureCollectionNames() {
+        return new String[] { COLLECTION_NAME };
     }
 
-    private List<AccountingLineFixture> getTargetAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE2);
+    /**
+     * 
+     * @see org.kuali.core.document.DocumentTestBase#getDocumentParameterFixture()
+     */
+    public DocumentParameter getDocumentParameterFixture() {
+        return (TransactionalDocumentParameter) getFixtureEntryFromCollection(COLLECTION_NAME, DOCUMENT_PARAMETER).createObject();
+    }
+
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getTargetAccountingLineParametersFromFixtures()
+     */
+    public List getTargetAccountingLineParametersFromFixtures() {
+        ArrayList list = new ArrayList();
+        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, TARGET_LINE1).createObject());
         return list;
     }
 
-    private List<AccountingLineFixture> getSourceAccountingLineParametersFromFixtures() {
-        List<AccountingLineFixture> list = new ArrayList<AccountingLineFixture>();
-        list.add(LINE2);
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getSourceAccountingLineParametersFromFixtures()
+     */
+    public List getSourceAccountingLineParametersFromFixtures() {
+        ArrayList list = new ArrayList();
+        list.add(getFixtureEntryFromCollection(COLLECTION_NAME, SOURCE_LINE1).createObject());
         return list;
     }
 
+    /**
+     * 
+     * @see org.kuali.core.document.TransactionalDocumentTestBase#getUserName()
+     */
+    public String getUserName() {
+        return (String) getFixtureEntryFromCollection(COLLECTION_NAME, USER_NAME).createObject();
+    }
+    
+    // START TEST METHODS
+    /**
+     * Overrides the parent to do nothing since the DofI&E doesn't set the posting period in 
+     * the record it stores.  This test doesn't apply to this type of document.
+     */
+    public final void testConvertIntoCopy_invalidYear() throws Exception {
+        //do nothing to pass
+    }
+    
+    /**
+     * Overrides the parent to do nothing since the DofI&E doesn't set the posting period in 
+     * the record it stores.  This test doesn't apply to this type of document.
+     */
+    public final void testConvertIntoErrorCorrection_invalidYear() throws Exception {
+        //do nothing to pass
+    }
 
     /*
-     * This test fails related to KULEDOCS-1662
+     * THIS IS OLD TEST CODE THAT SHOULD BE CONSIDERED AND POSSIBLY IMPLEMENTED WHEN WE GET TO THIS DOCUMENT 
+     * AS PART OF THE WORK CYCLE - IT WILL MOSTLY LIKE GO IN THE RULE TEST CLASS
+     * 
+     * public final void testGetNewDocument_knownUser_knownDocumentType() throws Exception {
+     Document document = SpringServiceLocator.getDocumentService().getNewDocument(KNOWN_DOCUMENT_TYPENAME);
+     
+     assertNotNull( document );
+     assertNotNull( document.getDocumentHeader() );
+     assertNotNull( document.getDocumentHeader().getFinancialDocumentNumber() );
+     }
+
+     public final void testApplyAddAccountingLineBusinessRulesInvalidSubObjectCode() throws Exception {
+     DistributionOfIncomeAndExpenseDocument didoc = createInvalidRulesDIDocumentInvalidSubObjectCode();
+
+     // Check business rules
+     List src = didoc.getSourceAccountingLines();
+     List dst = didoc.getTargetAccountingLines();
+
+     for (Iterator i = src.iterator(); i.hasNext();) {
+     SourceAccountingLine sourceAccountingLine = (SourceAccountingLine) i.next();
+     sourceAccountingLine.refresh();
+
+     assertFalse(SpringServiceLocator.getKualiRuleService().applyRules(
+     new AddAccountingLineEvent(didoc, sourceAccountingLine)));
+     }
+
+     for (Iterator i = dst.iterator(); i.hasNext();) {
+     TargetAccountingLine targetAccountingLine = (TargetAccountingLine) i.next();
+     targetAccountingLine.refresh();
+
+     assertFalse(SpringServiceLocator.getKualiRuleService().applyRules(
+     new AddAccountingLineEvent(didoc, targetAccountingLine)));
+     }
+     }
+
+     public final void testApplyAddAccountingLineBusinessRulesValidSubObjectCode() throws Exception {
+     DistributionOfIncomeAndExpenseDocument didoc = createValidRulesDIDocument();
+
+     // Check business rules
+     List src = didoc.getSourceAccountingLines();
+     List dst = didoc.getTargetAccountingLines();
+
+     for (Iterator i = src.iterator(); i.hasNext();) {
+     SourceAccountingLine sourceAccountingLine = (SourceAccountingLine) i.next();
+     sourceAccountingLine.refresh();
+
+     assertTrue(SpringServiceLocator.getKualiRuleService().applyRules(
+     new AddAccountingLineEvent(didoc, sourceAccountingLine)));
+     }
+
+     for (Iterator i = dst.iterator(); i.hasNext();) {
+     TargetAccountingLine targetAccountingLine = (TargetAccountingLine) i.next();
+     targetAccountingLine.refresh();
+
+     assertTrue(SpringServiceLocator.getKualiRuleService().applyRules(
+     new AddAccountingLineEvent(didoc, targetAccountingLine)));
+     }
+     }
+
+     public final void testApplyRouteDocumentBusinessRules_invalidDocument() throws Exception {
+     // TODO: Create an appropriate document.
+     TransactionalDocument document = createInvalidRulesDIDocumentNotInBalance();
+     assertFalse(SpringServiceLocator.getKualiRuleService().applyRules(new RouteDocumentEvent(document)));
+
+     document = createInvalidRulesDIDocumentInvalidSubObjectCode();
+     assertFalse(SpringServiceLocator.getKualiRuleService().applyRules(new RouteDocumentEvent(document)));
+     }
+
+     public final void testApplyRouteDocumentBusinessRules_validDocument() throws Exception {
+     // TODO: Create an appropriate document.
+     TransactionalDocument document = createValidRulesDIDocument();
+     assertTrue(SpringServiceLocator.getKualiRuleService().applyRules(new RouteDocumentEvent(document)));
+     }
+
+
+     private static final String CHART = "BL";
+     private static final String ACCOUNT = "1031400";
+     private static final String SUB_ACCT = "ADV";
+
+     //   MT :: 5197, 5198, 1696, 1699, 1669, 9959, 9977, 9903
+     //   TN :: 9918, 9900, 9924, 9951, 9912, 5163, 1663, 5216, 9915, 9920, 9923, 9925, 9930
+
+     private static final String MT_OBJ_CODE = "5197";
+     private static final String TN_OBJ_CODE = "9918";
+     private static final String UNKNOWN_SUB_OBJ_CODE = "YYZZY";
+     private static final String SUB_OBJ_CODE = "SSS";
+     private static final String PROJECT = "KUL3";
+     private static BalanceTyp BAL_TYP = new BalanceTyp();
+     private static final int YEAR = 2004;
+     private static final KualiDecimal AMT1 = new KualiDecimal("2.50");
+     private static final KualiDecimal AMT2 = new KualiDecimal("5.20");
+
+     final private DistributionOfIncomeAndExpenseDocument createValidRulesDIDocument() throws Exception {
+     // Get a new object, unpopulated
+     DistributionOfIncomeAndExpenseDocument didoc = (DistributionOfIncomeAndExpenseDocument) SpringServiceLocator
+     .getDocumentService().getNewDocument(KNOWN_DOCUMENT_TYPENAME);
+
+     // Set attributes on the document itself
+     didoc.setPostingYear(new Integer(YEAR));
+     didoc.setExplanation("This is a test document, testing valid accounting line business rules.");
+     didoc.getDocumentHeader().setFinancialDocumentDescription(
+     "testing DistributionOfIncomeAndExpenseDocumentServiceTest.createValidRuleDIDocument");
+     String documentHeaderId = didoc.getFinancialDocumentNumber();
+
+     // Setup income lines
+     SourceAccountingLine incomeLine = DocumentTestUtils.createSourceLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT,
+     TN_OBJ_CODE, SUB_OBJ_CODE, PROJECT, YEAR, AMT1, 1, "", "", "", "", "", "", "");
+     didoc.addSourceAccountingLine(incomeLine);
+     incomeLine = DocumentTestUtils.createSourceLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT, MT_OBJ_CODE, SUB_OBJ_CODE,
+     PROJECT, YEAR, AMT2, 2, "", "", "", "", "", "", "");
+     didoc.addSourceAccountingLine(incomeLine);
+
+     // Setup expense lines
+     TargetAccountingLine expenseLine = DocumentTestUtils.createTargetLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT,
+     TN_OBJ_CODE, SUB_OBJ_CODE, PROJECT, YEAR, AMT1, 1, "", "", "", "", "", "", "");
+     didoc.addTargetAccountingLine(expenseLine);
+     expenseLine = DocumentTestUtils.createTargetLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT, MT_OBJ_CODE, SUB_OBJ_CODE,
+     PROJECT, YEAR, AMT2, 2, "", "", "", "", "", "", "");
+     didoc.addTargetAccountingLine(expenseLine);
+
+     return didoc;
+     }
+
+     final private DistributionOfIncomeAndExpenseDocument createInvalidRulesDIDocumentNotInBalance() throws Exception {
+     // Get a new object, unpopulated
+     DistributionOfIncomeAndExpenseDocument didoc = (DistributionOfIncomeAndExpenseDocument) SpringServiceLocator
+     .getDocumentService().getNewDocument(KNOWN_DOCUMENT_TYPENAME);
+
+     // Set attributes on the document itself
+     didoc.setPostingYear(new Integer(YEAR));
+     didoc.setExplanation("This is a test document, testing valid accounting line business rules.");
+     didoc.getDocumentHeader().setFinancialDocumentDescription(
+     "testing DistributionOfIncomeAndExpenseDocumentServiceTest.createValidRuleDIDocument");
+     String documentHeaderId = didoc.getFinancialDocumentNumber();
+
+     // Setup income lines
+     SourceAccountingLine incomeLine = DocumentTestUtils.createSourceLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT,
+     TN_OBJ_CODE, SUB_OBJ_CODE, PROJECT, YEAR, AMT1, 1, "", "", "", "", "", "", "");
+     didoc.addSourceAccountingLine(incomeLine);
+     incomeLine = DocumentTestUtils.createSourceLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT, MT_OBJ_CODE, SUB_OBJ_CODE,
+     PROJECT, YEAR, AMT1, 2, "", "", "", "", "", "", "");
+     didoc.addSourceAccountingLine(incomeLine);
+
+     // Setup expense lines
+     TargetAccountingLine expenseLine = DocumentTestUtils.createTargetLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT,
+     TN_OBJ_CODE, SUB_OBJ_CODE, PROJECT, YEAR, AMT2, 1, "", "", "", "", "", "", "");
+     didoc.addTargetAccountingLine(expenseLine);
+     expenseLine = DocumentTestUtils.createTargetLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT, MT_OBJ_CODE, SUB_OBJ_CODE,
+     PROJECT, YEAR, AMT2, 2, "", "", "", "", "", "", "");
+     didoc.addTargetAccountingLine(expenseLine);
+
+     return didoc;
+     }
+
+     final private DistributionOfIncomeAndExpenseDocument createInvalidRulesDIDocumentInvalidSubObjectCode() throws Exception {
+     // Get a new object, unpopulated
+     DistributionOfIncomeAndExpenseDocument didoc = (DistributionOfIncomeAndExpenseDocument) SpringServiceLocator
+     .getDocumentService().getNewDocument(KNOWN_DOCUMENT_TYPENAME);
+
+     // Set attributes on the document itself
+     didoc.setPostingYear(new Integer(YEAR));
+     didoc.setExplanation("This is a test document, testing valid accounting line business rules.");
+     didoc.getDocumentHeader().setFinancialDocumentDescription(
+     "testing DistributionOfIncomeAndExpenseDocumentServiceTest.createValidRuleDIDocument");
+     String documentHeaderId = didoc.getFinancialDocumentNumber();
+
+     // Setup income lines
+     SourceAccountingLine incomeLine = DocumentTestUtils.createSourceLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT,
+     TN_OBJ_CODE, UNKNOWN_SUB_OBJ_CODE, PROJECT, YEAR, AMT1, 1, "", "", "", "", "", "", "");
+     didoc.addSourceAccountingLine(incomeLine);
+     incomeLine = DocumentTestUtils.createSourceLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT, MT_OBJ_CODE, SUB_OBJ_CODE,
+     PROJECT, YEAR, AMT2, 2, "", "", "", "", "", "", "");
+     didoc.addSourceAccountingLine(incomeLine);
+
+     // Setup expense lines
+     TargetAccountingLine expenseLine = DocumentTestUtils.createTargetLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT,
+     TN_OBJ_CODE, SUB_OBJ_CODE, PROJECT, YEAR, AMT1, 1, "", "", "", "", "", "", "");
+     didoc.addTargetAccountingLine(expenseLine);
+     expenseLine = DocumentTestUtils.createTargetLine(documentHeaderId, CHART, ACCOUNT, SUB_ACCT, MT_OBJ_CODE, SUB_OBJ_CODE,
+     PROJECT, YEAR, AMT2, 2, "", "", "", "", "", "", "");
+     didoc.addTargetAccountingLine(expenseLine);
+
+     return didoc;
+     }
      */
-    // @RelatesTo(KULRNE1612)
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testKULEDOCS_1401() throws Exception {
-        String testDocId = null;
-
-        try {
-            {
-                // create a DIE doc
-                DistributionOfIncomeAndExpenseDocument createdDoc = (DistributionOfIncomeAndExpenseDocument) SpringContext.getBean(DocumentService.class).getNewDocument(DistributionOfIncomeAndExpenseDocument.class);
-                testDocId = createdDoc.getDocumentNumber();
-
-                // populate and save it
-                createdDoc.getDocumentHeader().setFinancialDocumentDescription("created by testKULEDOCS_1401");
-                createdDoc.getDocumentHeader().setExplanation("reproducing KULEDOCS_1401");
-
-                createdDoc.addSourceAccountingLine(getSourceAccountingLineAccessibleAccount());
-                createdDoc.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
-
-                SpringContext.getBean(DocumentService.class).saveDocument(createdDoc);
-            }
-
-            {
-                // change the accountingLine totals (by adding new lines)
-                DistributionOfIncomeAndExpenseDocument savedDoc = (DistributionOfIncomeAndExpenseDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(testDocId);
-                savedDoc.addSourceAccountingLine(getSourceAccountingLineAccessibleAccount());
-                savedDoc.addTargetAccountingLine(getTargetAccountingLineAccessibleAccount());
-
-                // blanketapprove updated doc
-                SpringContext.getBean(DocumentService.class).blanketApproveDocument(savedDoc, "blanketapproving updated doc", null);
-            }
-        }
-        finally {
-            // clean things up, if possible
-            if (testDocId != null) {
-                DistributionOfIncomeAndExpenseDocument cancelingDoc = (DistributionOfIncomeAndExpenseDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(testDocId);
-                if (cancelingDoc != null) {
-                    try {
-                        SpringContext.getBean(DocumentService.class).cancelDocument(cancelingDoc, "cleaning up after test");
-                    }
-                    catch (RuntimeException e) {
-                        LOG.error("caught RuntimeException canceling document: " + e.getMessage());
-                    }
-                }
-            }
-        }
-    }
-
-
-    public final void testAddAccountingLine() throws Exception {
-        List<SourceAccountingLine> sourceLines = generateSouceAccountingLines();
-        List<TargetAccountingLine> targetLines = generateTargetAccountingLines();
-        int expectedSourceTotal = sourceLines.size();
-        int expectedTargetTotal = targetLines.size();
-        AccountingDocumentTestUtils.testAddAccountingLine(DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), DOCUMENT_CLASS), sourceLines, targetLines, expectedSourceTotal, expectedTargetTotal);
-    }
-
-    public final void testGetNewDocument() throws Exception {
-        testGetNewDocument_byDocumentClass(DOCUMENT_CLASS, SpringContext.getBean(DocumentService.class));
-    }
-
-    public final void testConvertIntoCopy_copyDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy_copyDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-
-    }
-
-    public final void testConvertIntoErrorCorrection_documentAlreadyCorrected() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_documentAlreadyCorrected(buildDocument(), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
-    }
-
-    public final void testConvertIntoErrorCorrection_errorCorrectionDisallowed() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection_errorCorrectionDisallowed(buildDocument(), SpringContext.getBean(DataDictionaryService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testConvertIntoErrorCorrection() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoErrorCorrection(buildDocument(), getExpectedPrePeCount(), SpringContext.getBean(DocumentService.class), SpringContext.getBean(TransactionalDocumentDictionaryService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testRouteDocument() throws Exception {
-        AccountingDocumentTestUtils.testRouteDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testSaveDocument() throws Exception {
-        AccountingDocumentTestUtils.testSaveDocument(buildDocument(), SpringContext.getBean(DocumentService.class));
-    }
-
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public void testConvertIntoCopy() throws Exception {
-        AccountingDocumentTestUtils.testConvertIntoCopy(buildDocument(), SpringContext.getBean(DocumentService.class), getExpectedPrePeCount());
-    }
-
-    // test util methods
-    private List<SourceAccountingLine> generateSouceAccountingLines() throws Exception {
-        List<SourceAccountingLine> sourceLines = new ArrayList<SourceAccountingLine>();
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceLines.add(sourceFixture.createSourceAccountingLine());
-        }
-
-        return sourceLines;
-    }
-
-    private List<TargetAccountingLine> generateTargetAccountingLines() throws Exception {
-        List<TargetAccountingLine> targetLines = new ArrayList<TargetAccountingLine>();
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetLines.add(targetFixture.createTargetAccountingLine());
-        }
-
-        return targetLines;
-    }
-
-    private DistributionOfIncomeAndExpenseDocument buildDocument() throws Exception {
-        // put accounting lines into document parameter for later
-        DistributionOfIncomeAndExpenseDocument document = (DistributionOfIncomeAndExpenseDocument) getDocumentParameterFixture();
-
-        // set accountinglines to document
-        for (AccountingLineFixture sourceFixture : getSourceAccountingLineParametersFromFixtures()) {
-            sourceFixture.addAsSourceTo(document);
-        }
-
-        for (AccountingLineFixture targetFixture : getTargetAccountingLineParametersFromFixtures()) {
-            targetFixture.addAsTargetTo(document);
-        }
-
-        return document;
-    }
-
-    private int getExpectedPrePeCount() {
-        return 4;
-    }
-
-    private SourceAccountingLine getSourceAccountingLineAccessibleAccount() throws Exception {
-        return LINE2.createSourceAccountingLine();
-    }
-
-    private TargetAccountingLine getTargetAccountingLineAccessibleAccount() throws Exception {
-        return LINE2.createTargetAccountingLine();
-    }
-
 }

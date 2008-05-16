@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class SubFundGroupType extends PersistableBusinessObjectBase {
+public class SubFundGroupType extends BusinessObjectBase {
 
     private String subFundGroupTypeCode;
     private String subFundGroupTypeDescription;
@@ -39,7 +39,8 @@ public class SubFundGroupType extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupTypeCode attribute.
      * 
-     * @return Returns the subFundGroupTypeCode
+     * @return - Returns the subFundGroupTypeCode
+     * 
      */
     public String getSubFundGroupTypeCode() {
         return subFundGroupTypeCode;
@@ -48,7 +49,8 @@ public class SubFundGroupType extends PersistableBusinessObjectBase {
     /**
      * Sets the subFundGroupTypeCode attribute.
      * 
-     * @param subFundGroupTypeCode The subFundGroupTypeCode to set.
+     * @param - subFundGroupTypeCode The subFundGroupTypeCode to set.
+     * 
      */
     public void setSubFundGroupTypeCode(String subFundGroupTypeCode) {
         this.subFundGroupTypeCode = subFundGroupTypeCode;
@@ -58,7 +60,8 @@ public class SubFundGroupType extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupTypeDescription attribute.
      * 
-     * @return Returns the subFundGroupTypeDescription
+     * @return - Returns the subFundGroupTypeDescription
+     * 
      */
     public String getSubFundGroupTypeDescription() {
         return subFundGroupTypeDescription;
@@ -67,7 +70,8 @@ public class SubFundGroupType extends PersistableBusinessObjectBase {
     /**
      * Sets the subFundGroupTypeDescription attribute.
      * 
-     * @param subFundGroupTypeDescription The subFundGroupTypeDescription to set.
+     * @param - subFundGroupTypeDescription The subFundGroupTypeDescription to set.
+     * 
      */
     public void setSubFundGroupTypeDescription(String subFundGroupTypeDescription) {
         this.subFundGroupTypeDescription = subFundGroupTypeDescription;
@@ -77,7 +81,8 @@ public class SubFundGroupType extends PersistableBusinessObjectBase {
     /**
      * Gets the subFundGroupTypeActiveIndicator attribute.
      * 
-     * @return Returns the subFundGroupTypeActiveIndicator
+     * @return - Returns the subFundGroupTypeActiveIndicator
+     * 
      */
     public boolean getSubFundGroupTypeActiveIndicator() {
         return subFundGroupTypeActiveIndicator;
@@ -86,7 +91,8 @@ public class SubFundGroupType extends PersistableBusinessObjectBase {
     /**
      * Sets the subFundGroupTypeActiveIndicator attribute.
      * 
-     * @param subFundGroupTypeActiveIndicator The subFundGroupTypeActiveIndicator to set.
+     * @param - subFundGroupTypeActiveIndicator The subFundGroupTypeActiveIndicator to set.
+     * 
      */
     public void setSubFundGroupTypeActiveIndicator(boolean subFundGroupTypeActiveIndicator) {
         this.subFundGroupTypeActiveIndicator = subFundGroupTypeActiveIndicator;
@@ -94,7 +100,7 @@ public class SubFundGroupType extends PersistableBusinessObjectBase {
 
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+     * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();

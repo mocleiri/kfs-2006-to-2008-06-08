@@ -17,171 +17,274 @@ package org.kuali.module.purap.dao.ojb;
 
 
 import java.sql.Date;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
-import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.TransactionalServiceUtils;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapConstants.CreditMemoStatuses;
+import org.kuali.module.purap.bo.CreditMemoStatusHistory;
 import org.kuali.module.purap.dao.CreditMemoDao;
 import org.kuali.module.purap.document.CreditMemoDocument;
-import org.kuali.module.purap.util.VendorGroupingHelper;
+import org.kuali.module.purap.document.PaymentRequestDocument;
 
-/**
- * OJB Implementation of CreditMemoDao. Provides persistence layer methods for the credit memo document.
- */
+
 public class CreditMemoDaoOjb extends PlatformAwareDaoBaseOjb implements CreditMemoDao {
+
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CreditMemoDaoOjb.class);
+/*
+    private UserService userService;
 
-    /**
-     * @see org.kuali.module.purap.dao.CreditMemoDao#getCreditMemosToExtract(java.lang.String)
-     */
-    public Iterator<CreditMemoDocument> getCreditMemosToExtract(String chartCode) {
-        LOG.debug("getCreditMemosToExtract() started");
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("processingCampusCode", chartCode);
-        criteria.addIn("statusCode", Arrays.asList(CreditMemoStatuses.STATUSES_ALLOWED_FOR_EXTRACTION));
-        criteria.addIsNull("extractedDate");
-        criteria.addEqualTo("holdIndicator", Boolean.FALSE);
-
-        return getPersistenceBrokerTemplate().getIteratorByQuery(new QueryByCriteria(CreditMemoDocument.class, criteria));
+    public void setUserService(UserService us) {
+      userService = us;
+    }
+*/
+    public void save(CreditMemoDocument cmDocument) {
+        getPersistenceBrokerTemplate().store(cmDocument);
+    }
+    public CreditMemoDaoOjb() {
+      super();
     }
 
-    
-    /**
-     * @see org.kuali.module.purap.dao.CreditMemoDao#getCreditMemosToExtractByVendor(java.lang.String, java.lang.Integer, java.lang.Integer)
-     */
-    public Iterator<CreditMemoDocument> getCreditMemosToExtractByVendor(String chartCode, VendorGroupingHelper vendor ) {
-        LOG.debug("getCreditMemosToExtractByVendor() started");
+    public CreditMemoDocument getCreditMemoById(Integer id) {
+      LOG.debug("getCreditMemoById() started");
 
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo( "processingCampusCode", chartCode );
-        criteria.addIn( "statusCode", Arrays.asList(CreditMemoStatuses.STATUSES_ALLOWED_FOR_EXTRACTION) );
-        criteria.addIsNull( "extractedDate" );
-        criteria.addEqualTo( "holdIndicator", Boolean.FALSE );
-        criteria.addEqualTo( "vendorHeaderGeneratedIdentifier", vendor.getVendorHeaderGeneratedIdentifier() );
-        criteria.addEqualTo( "vendorDetailAssignedIdentifier", vendor.getVendorDetailAssignedIdentifier() );
-        criteria.addEqualTo( "vendorCountryCode", vendor.getVendorCountry() );
-        criteria.addEqualTo( "vendorPostalCode", vendor.getVendorPostalCode() );
+      Criteria criteria = new Criteria();
+      criteria.addEqualTo("purapDocumentIdentifier",id);
 
-        return getPersistenceBrokerTemplate().getIteratorByQuery(new QueryByCriteria(CreditMemoDocument.class, criteria));
+      CreditMemoDocument cm = (CreditMemoDocument)getPersistenceBrokerTemplate().getObjectByQuery(new QueryByCriteria(CreditMemoDocument.class,criteria));
+      if ( cm != null ) {
+     ///   cm.updateUser(userService);
+      }
+      return cm;
     }
+/*
+    public CreditMemoDocument save(CreditMemoDocument cm,User user,boolean retrieveAllReferences) {
+      LOG.debug("save() started");
 
+      Date now = new Date( (new Date()).getTime() );
 
+      cm.setLastUpdateDate(now);
+      cm.setLastUpdateUser(user);
 
+      // Set these on all the child objects too
+      for (Iterator iter = cm.getItems().iterator(); iter.hasNext();) {
+        CreditMemoItem item = (CreditMemoItem)iter.next();
+        item.setLastUpdateDate(now);
+        item.setLastUpdateUser(user);
+
+        for (Iterator iterator = item.getAccounts().iterator(); iterator.hasNext();) {
+          CreditMemoAccount account = (CreditMemoAccount)iterator.next();
+          account.setLastUpdateDate(now);
+          account.setLastUpdateUser(user);
+        }
+      }
+
+      getPersistenceBrokerTemplate().store(cm);
+      if (retrieveAllReferences) {
+        getPersistenceBroker(true).retrieveAllReferences(cm);
+        //loop through the items to retrieveAllReferences for accounts in each item
+        Collection items = cm.getItems();
+        for (Iterator itemsIt = items.iterator(); itemsIt.hasNext();) {
+          CreditMemoItem item = (CreditMemoItem)itemsIt.next();
+          getPersistenceBroker(true).retrieveAllReferences(item);
+          Collection accounts = item.getAccounts();
+          for (Iterator accountsIt = accounts.iterator(); accountsIt.hasNext();){
+            CreditMemoAccount cma = (CreditMemoAccount)accountsIt.next();
+            getPersistenceBroker(true).retrieveAllReferences(cma);
+          }
+        }
+      }
+      return cm;
+    }
+   */ 
     /**
+     * 
      * @see edu.iu.uis.pur.cm.dao.CreditMemoDao#duplicateExists(java.lang.String, java.lang.String)
      */
-    public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, String creditMemoNumber) {
+  
+    public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, 
+                                        String creditMemoNumber) {
         LOG.debug("duplicateExists() started");
 
-        // criteria: vendorNumberHeader AND vendorNumberDetail AND creditMemoNumber
+        //  criteria:  vendorNumberHeader AND vendorNumberDetail AND creditMemoNumber
         Criteria criteria = new Criteria();
         criteria.addEqualTo("vendorHeaderGeneratedIdentifier", vendorNumberHeaderId);
         criteria.addEqualTo("vendorDetailAssignedIdentifier", vendorNumberDetailId);
         criteria.addEqualTo("creditMemoNumber", creditMemoNumber);
-
-        criteria.addNotIn(PurapPropertyConstants.STATUS_CODE, PurapConstants.CreditMemoStatuses.CANCELLED_STATUSES);
-
-        // use the criteria to do a Count against the DB, and return the resulting
-        // number. Any positive non-zero result means that a potential duplicate
+        
+        //  use the criteria to do a Count against the DB, and return the resulting 
+        // number.  Any positive non-zero result means that a potential duplicate 
         // exists and we return true, otherwise, return false.
         int cmCount = getPersistenceBrokerTemplate().getCount(new QueryByCriteria(CreditMemoDocument.class, criteria));
         if (cmCount > 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     /**
+     * 
      * @see edu.iu.uis.pur.cm.dao.CreditMemoDao#duplicateExists(java.lang.String, java.lang.String)
      */
-    public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, Date date, KualiDecimal amount) {
+ 
+    public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, 
+                                        Date date, KualiDecimal amount) {
         LOG.debug("duplicateExists() started");
 
-        // criteria: vendorNumberHeader AND vendorNumberDetail AND date AND amount
+        //  criteria:  vendorNumberHeader AND vendorNumberDetail AND date AND amount
         Criteria criteria = new Criteria();
         criteria.addEqualTo("vendorHeaderGeneratedIdentifier", vendorNumberHeaderId);
         criteria.addEqualTo("vendorDetailAssignedIdentifier", vendorNumberDetailId);
         criteria.addEqualTo("creditMemoDate", date);
         criteria.addEqualTo("creditMemoAmount", amount);
-
-        criteria.addNotIn(PurapPropertyConstants.STATUS_CODE, PurapConstants.CreditMemoStatuses.CANCELLED_STATUSES);
-
-        // use the criteria to do a Count against the DB, and return the resulting
-        // number. Any positive non-zero result means that a potential duplicate
+        
+        //  use the criteria to do a Count against the DB, and return the resulting 
+        // number.  Any positive non-zero result means that a potential duplicate 
         // exists and we return true, otherwise, return false.
         int cmCount = getPersistenceBrokerTemplate().getCount(new QueryByCriteria(CreditMemoDocument.class, criteria));
         if (cmCount > 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
+    private List getCreditMemosByQueryByCriteria(QueryByCriteria qbc) {
+      List l = (List) getPersistenceBrokerTemplate().getCollectionByQuery(qbc);
+     // updateUser(l);
+      return l;
+    }
+  
     /**
-     * @see org.kuali.module.purap.dao.CreditMemoDao#getDocumentNumberByCreditMemoId(java.lang.Integer)
+     * 
+     * @see edu.iu.uis.pur.cm.dao.CreditMemoDao#getCreditMemosByRequisitionId(java.lang.Integer)
      */
-    public String getDocumentNumberByCreditMemoId(Integer id) {
+ 
+    public List getCreditMemosByRequisitionId(Integer requisitionID) {
+      LOG.debug("getCreditMemosByRequisitionId() started");
+
+      Criteria criteria = new Criteria();
+      Criteria orCriteria = new Criteria();
+      criteria.addEqualTo("purchaseOrder.requisitionId", requisitionID);
+      orCriteria.addEqualTo("paymentRequest.requisitionNumber", requisitionID);
+      criteria.addOrCriteria(orCriteria);
+      QueryByCriteria qbc = new QueryByCriteria(CreditMemoDocument.class,criteria);
+      qbc.addOrderByDescending("id");
+      qbc.addOrderBy("purchaseOrder.id",true);
+      qbc.addOrderBy("paymentRequest.id",true);
+      qbc.setDistinct(true);
+      return this.getCreditMemosByQueryByCriteria(qbc);
+    }
+   
+    /**
+     * Retreives a list of Credit Memos with the given PO Id.
+     * 
+     * @param poID
+     * @return List of Credit Memos.
+     */
+   
+    public List getCreditMemosByPOId(Integer poID) {
+      LOG.debug("getCreditMemosByPOId() started");
+
+      Criteria criteria = new Criteria();
+      Criteria orCriteria = new Criteria();
+      criteria.addEqualTo("purchaseOrder.id", poID);
+      orCriteria.addEqualTo("paymentRequest.purchaseOrder.id", poID);
+      criteria.addOrCriteria(orCriteria);
+      QueryByCriteria qbc = new QueryByCriteria(CreditMemoDocument.class,criteria);
+      qbc.addOrderByDescending("id");
+      qbc.addOrderBy("purchaseOrder.id",true);
+      qbc.addOrderBy("paymentRequest.id",true);
+      qbc.setDistinct(true);
+      
+      return this.getCreditMemosByQueryByCriteria(qbc);
+    }
+    
+    /**
+     * Retreives a list of Credit Memos with the given PO Id.
+     * 
+     * @param poID
+     * @return List of Credit Memos.
+     */
+ 
+    public List getCreditMemosByPOId(Integer poID, Integer returnListMax) {
+      LOG.debug("getCreditMemosByPOId(Integer) started");
+
+      Criteria criteria = new Criteria();
+      Criteria orCriteria = new Criteria();
+      criteria.addEqualTo("purchaseOrder.id", poID);
+      orCriteria.addEqualTo("paymentRequest.purchaseOrder.id", poID);
+      criteria.addOrCriteria(orCriteria);
+      QueryByCriteria qbc = new QueryByCriteria(CreditMemoDocument.class,criteria);
+      qbc.setEndAtIndex(returnListMax.intValue());
+      qbc.addOrderByDescending("id");
+      qbc.addOrderBy("purchaseOrder.id",true);
+      qbc.addOrderBy("paymentRequest.id",true);
+      qbc.setDistinct(true);
+      
+      return this.getCreditMemosByQueryByCriteria(qbc);
+    }
+
+    public List getAllCMsByPOIdAndStatus(Integer purchaseOrderID, Collection statusCodes) {
+      LOG.debug("getAllCMsByPOIdAndStatus() started");
+      Criteria criteria = new Criteria();
+      criteria.addEqualTo("purchaseOrder.id", purchaseOrderID);
+      criteria.addIn("status.code",statusCodes);
+      QueryByCriteria qbc = new QueryByCriteria(CreditMemoDocument.class,criteria);
+      return this.getCreditMemosByQueryByCriteria(qbc);
+    }
+
+
+    public CreditMemoStatusHistory saveCreditMemoStatusHistory(CreditMemoStatusHistory cmsh) {
+      LOG.debug("saveCreditMemoStatusHistory() ");
+      getPersistenceBrokerTemplate().store(cmsh);
+      return cmsh;
+    }
+
+    /**
+     * Get all the credit memos for a set of statuses
+     */
+  
+    public Collection getByStatuses(String statuses[]) {
+      LOG.debug("getByStatuses() started");
+
+      Collection stati = new ArrayList();
+      Criteria criteria = new Criteria();
+      for (int i = 0; i < statuses.length; i++) {
+        stati.add(statuses[i]);
+      }
+      criteria.addIn("statusCode",stati);
+
+      QueryByCriteria qbc = new QueryByCriteria(CreditMemoDocument.class,criteria);
+      return this.getCreditMemosByQueryByCriteria(qbc);
+    }
+  /*      
+    private void updateUser(Collection l) {
+      for (Iterator iter = l.iterator(); iter.hasNext();) {
+        ((CreditMemo) iter.next()).updateUser(userService);
+      }    
+    }
+*/
+    /* (non-Javadoc)
+     * @see edu.iu.uis.pur.cm.dao.CreditMemoDao#getCreditMemoByDocId(java.lang.Long)
+     */
+ /*   public CreditMemo getCreditMemoByDocId(Long docId) {
+        LOG.debug("getCreditMemoByDocId() started");
+        
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(PurapPropertyConstants.PURAP_DOC_ID, id);
-        return getDocumentNumberOfCreditMemoByCriteria(criteria);
-    }
-
-    /**
-     * Retrieves a document number for a credit memo by user defined criteria.
-     * 
-     * @param criteria - holds field and value pairs defined by the calling method
-     * @return - document number
-     */
-    private String getDocumentNumberOfCreditMemoByCriteria(Criteria criteria) {
-        LOG.debug("getDocumentNumberOfCreditMemoByCriteria() started");
-        Iterator<Object[]> iter = getDocumentNumbersOfCreditMemoByCriteria(criteria, false);
-        if (iter.hasNext()) {
-            Object[] cols = (Object[]) iter.next();
-            if (iter.hasNext()) {
-                // the iterator should have held only a single doc id of data but it holds 2 or more
-                String errorMsg = "Expected single document number for given criteria but multiple (at least 2) were returned";
-                LOG.error(errorMsg);
-                TransactionalServiceUtils.exhaustIterator(iter);
-                throw new RuntimeException();
-            }
-            // at this part of the code, we know there's no more elements in iterator
-            return (String) cols[0];
+        criteria.addEqualTo("documentHeaderId", docId);
+        
+        CreditMemo cm  = (CreditMemo) getPersistenceBrokerTemplate().getObjectByQuery(new QueryByCriteria(CreditMemoDocument.class, criteria));
+        if (cm!=null) {
+            cm.updateUser(userService);
         }
-        return null;
+        return cm;
     }
-
-    /**
-     * Retrieves a document number for a credit memo by user defined criteria and sorts the values ascending if orderByAscending
-     * parameter is true, descending otherwise.
-     * 
-     * @param criteria - list of criteria to use in the retrieve
-     * @param orderByAscending - boolean indicating results should be sorted ascending, descending otherwise
-     * @return - Iterator of document numbers
-     */
-    private Iterator<Object[]> getDocumentNumbersOfCreditMemoByCriteria(Criteria criteria, boolean orderByAscending) {
-        LOG.debug("getDocumentNumberOfCreditMemoByCriteria() started");
-        ReportQueryByCriteria rqbc = new ReportQueryByCriteria(CreditMemoDocument.class, criteria);
-        rqbc.setAttributes(new String[] { KFSPropertyConstants.DOCUMENT_NUMBER });
-        if (orderByAscending) {
-            rqbc.addOrderByAscending(KFSPropertyConstants.DOCUMENT_NUMBER);
-        }
-        else {
-            rqbc.addOrderByDescending(KFSPropertyConstants.DOCUMENT_NUMBER);
-        }
-        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(rqbc);
-    }
-
+  */    
 }

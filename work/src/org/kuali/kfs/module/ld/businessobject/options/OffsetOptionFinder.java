@@ -23,9 +23,6 @@ import org.kuali.core.lookup.valueFinder.ValueFinder;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.module.labor.LaborConstants.JournalVoucherOffsetType;
 
-/**
- * Option Finder for Offset.
- */
 public class OffsetOptionFinder extends KeyValuesBase implements ValueFinder {
 
     /**
@@ -40,11 +37,10 @@ public class OffsetOptionFinder extends KeyValuesBase implements ValueFinder {
      */
     public List getKeyValues() {
         List labels = new ArrayList();
-
-        for (JournalVoucherOffsetType offsetType : JournalVoucherOffsetType.values()) {
+        
+        for(JournalVoucherOffsetType offsetType : JournalVoucherOffsetType.values()){
             labels.add(new KeyLabelPair(offsetType.typeCode, offsetType.description));
         }
-
         return labels;
     }
 }

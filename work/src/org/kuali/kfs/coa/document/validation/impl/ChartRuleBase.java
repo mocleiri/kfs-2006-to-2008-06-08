@@ -1,33 +1,37 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.Maintainable;
 import org.kuali.core.rule.RouteDocumentRule;
 import org.kuali.core.rule.SaveDocumentRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.module.chart.bo.Account;
 
-/**
- * This class provides some basic saving and routing rules for Chart documents
- */
 public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ChartRuleBase.class);
 
@@ -74,6 +78,7 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
     }
 
     /**
+     * 
      * This method should be overridden to provide custom rules for processing document routing
      * 
      * @param document
@@ -120,9 +125,9 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
     private boolean validateDocument(Document document) {
         boolean success = true;
 
-        String documentHeaderId = document.getDocumentNumber();
+        String documentHeaderId = document.getFinancialDocumentNumber();
         if (documentHeaderId == null) {
-            GlobalVariables.getErrorMap().putError("documentHeaderId", KFSKeyConstants.ERROR_REQUIRED);
+            GlobalVariables.getErrorMap().putError("documentHeaderId", KeyConstants.ERROR_REQUIRED);
             success = false;
         }
 
@@ -136,13 +141,13 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
         GlobalVariables.getErrorMap().addToErrorPath("newMaintainableObject");
         Maintainable newMaintainable = maintenanceDocument.getNewMaintainableObject();
         if (newMaintainable == null) {
-            GlobalVariables.getErrorMap().putError("", KFSKeyConstants.ERROR_REQUIRED, "Account");
+            GlobalVariables.getErrorMap().putError("", KeyConstants.ERROR_REQUIRED, "Account");
             success = false;
         }
         else {
             Account newAccount = (Account) newMaintainable.getBusinessObject();
             if (StringUtils.isBlank(newAccount.getAccountName())) {
-                GlobalVariables.getErrorMap().putError("accountNumber", KFSKeyConstants.ERROR_REQUIRED, "Account Number");
+                GlobalVariables.getErrorMap().putError("accountNumber", KeyConstants.ERROR_REQUIRED, "Account Number");
                 success = false;
             }
         }
@@ -152,13 +157,13 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
             GlobalVariables.getErrorMap().addToErrorPath("oldMaintainableObject");
             Maintainable oldMaintainable = maintenanceDocument.getOldMaintainableObject();
             if (oldMaintainable == null) {
-                GlobalVariables.getErrorMap().putError("", KFSKeyConstants.ERROR_REQUIRED, "Account");
+                GlobalVariables.getErrorMap().putError("", KeyConstants.ERROR_REQUIRED, "Account");
                 success = false;
             }
             else {
                 Account oldAccount = (Account) oldMaintainable.getBusinessObject();
                 if (StringUtils.isBlank(oldAccount.getAccountName())) {
-                    GlobalVariables.getErrorMap().putError("accountNumber", KFSKeyConstants.ERROR_REQUIRED, "Account Number");
+                    GlobalVariables.getErrorMap().putError("accountNumber", KeyConstants.ERROR_REQUIRED, "Account Number");
                     success = false;
                 }
             }

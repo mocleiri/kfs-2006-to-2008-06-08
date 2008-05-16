@@ -31,17 +31,14 @@ import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.exception.LoadException;
 
-/**
- * This class represents an origin entry used primarily in the scrubber process
- */
-public class OriginEntryLite extends PersistableBusinessObjectBase implements OriginEntry {
+public class OriginEntryLite extends PersistableBusinessObjectBase implements OriginEntryable {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntryLite.class);
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     // 17 characters while it is 19 character in DD. Don't change, it has to be 17.
     public static final String SPACE_TRANSACTION_LEDGER_ENTRY_AMOUNT = "                 ";
-
+    
     private Integer entryId;
     private Integer entryGroupId;
     protected String accountNumber;
@@ -70,7 +67,7 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
     protected String universityFiscalPeriodCode;
     protected Integer universityFiscalYear;
     private boolean transactionScrubberOffsetGenerationIndicator;
-
+    
     public OriginEntryLite(GeneralLedgerPendingEntry glpe) {
         accountNumber = glpe.getAccountNumber();
         documentNumber = glpe.getDocumentNumber();
@@ -124,11 +121,11 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
         setUniversityFiscalPeriodCode(KFSConstants.EMPTY_STRING);
 
         setTransactionLedgerEntrySequenceNumber(new Integer(1));
-        setTransactionLedgerEntryAmount(KualiDecimal.ZERO);
+        setTransactionLedgerEntryAmount(new KualiDecimal(0));
         setTransactionLedgerEntryDescription(KFSConstants.EMPTY_STRING);
         setTransactionDate(null);
         setTransactionDebitCreditCode(KFSConstants.EMPTY_STRING);
-        setTransactionEncumbranceUpdateCode(null);
+        setTransactionEncumbranceUpdateCode(KFSConstants.EMPTY_STRING);
 
         setOrganizationDocumentNumber(KFSConstants.EMPTY_STRING);
         setOrganizationReferenceId(KFSConstants.EMPTY_STRING);
@@ -155,7 +152,7 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
             setFromTextFile(line, 0);
         }
         catch (LoadException e) {
-            LOG.error("OriginEntryFull() Error loading line", e);
+            LOG.error("OriginEntry() Error loading line", e);
         }
     }
 
@@ -196,10 +193,10 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
             sdf.setLenient(beLenientWithDates);
 
-            java.util.Date d = sdf.parse(sdate);
-            return new Date(d.getTime());
-        }
-    }
+                java.util.Date d = sdf.parse(sdate);
+                return new Date(d.getTime());
+            }
+            }
 
     protected String formatDate(Date date) {
         if (date == null) {
@@ -212,13 +209,14 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
     }
 
     protected String getValue(String line, int s, int e) {
-        // String v = line.substring(s, e);
+        //String v = line.substring(s, e);
         return StringUtils.substring(line, s, e).trim();
     }
-
+    
     /**
-     * This method loads the fields of this origin entry by parsing the passed in the string It is assumed that the String does not
-     * contain the origin entry ID, but if it does, it will be ignored
+     * This method loads the fields of this origin entry by parsing the passed in the string
+     * It is assumed that the String does not contain the origin entry ID, but if it does, it 
+     * will be ignored
      * 
      * @param line a string representing an origin entry
      * @param lineNumber used to render an error message by identifying this line
@@ -257,7 +255,7 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
         if (!GLConstants.getSpaceTransactionEntrySequenceNumber().equals(line.substring(51, 56)) && !GLConstants.getZeroTransactionEntrySequenceNumber().equals(line.substring(51, 56))) {
             try {
                 setTransactionLedgerEntrySequenceNumber(new Integer(line.substring(51, 56).trim()));
-            }
+        }
             catch (NumberFormatException e) {
                 GlobalVariables.getErrorMap().putError("fileUpload", KFSKeyConstants.ERROR_NUMBER_FORMAT_ORIGIN_ENTRY_FROM_TEXT_FILE, new String[] { new Integer(lineNumber).toString(), "Sequence Number" });
                 throw new LoadException("Invalid sequence number");
@@ -415,7 +413,7 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
     public void setTransactionScrubberOffsetGenerationIndicator(boolean transactionScrubberOffsetGenerationIndicator) {
         this.transactionScrubberOffsetGenerationIndicator = transactionScrubberOffsetGenerationIndicator;
     }
-
+    
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -445,9 +443,7 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
     }
 
     public void setTransactionDebitCreditCode(String transactionDebitCreditCode) {
-        if (transactionDebitCreditCode != null) {
-            this.transactionDebitCreditCode = transactionDebitCreditCode.toUpperCase();
-        }
+        this.transactionDebitCreditCode = transactionDebitCreditCode;
     }
 
     public String getDocumentNumber() {
@@ -497,7 +493,7 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
     public void setEntryId(Integer entryId) {
         this.entryId = entryId;
     }
-
+    
     public void resetEntryId() {
         this.entryId = null;
         this.versionNumber = null;
@@ -618,11 +614,11 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
     public void setTransactionLedgerEntryAmount(String transactionLedgerEntryAmount) {
         this.transactionLedgerEntryAmount = new KualiDecimal(transactionLedgerEntryAmount);
     }
-
-    public void clearTransactionLedgerEntryAmount() {
+    
+    public void clearTransactionLedgerEntryAmount(){
         this.transactionLedgerEntryAmount = null;
     }
-
+    
     public String getTransactionLedgerEntryDescription() {
         return transactionLedgerEntryDescription;
     }
@@ -646,7 +642,7 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
     }
-
+    
     public boolean isDebit() {
         return KFSConstants.GL_DEBIT_CODE.equals(this.transactionDebitCreditCode);
     }
@@ -655,201 +651,144 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
         return KFSConstants.GL_CREDIT_CODE.equals(this.transactionDebitCreditCode);
     }
 
-    public void setFieldValue(String fieldName, String fieldValue) {
-        if ("universityFiscalYear".equals(fieldName)) {
-            if (StringUtils.isNotBlank(fieldValue)) {
+    public void setFieldValue(String fieldName,String fieldValue) {
+        if ( "universityFiscalYear".equals(fieldName) ) {
+            if ( StringUtils.isNotBlank(fieldValue) ) {
                 setUniversityFiscalYear(Integer.parseInt(fieldValue));
-            }
-            else {
+            } else {
                 setUniversityFiscalYear(null);
             }
-        }
-        else if ("chartOfAccountsCode".equals(fieldName)) {
+        } else if ( "chartOfAccountsCode".equals(fieldName) ) {
             setChartOfAccountsCode(fieldValue);
-        }
-        else if ("accountNumber".equals(fieldName)) {
+        } else if ( "accountNumber".equals(fieldName) ) {
             setAccountNumber(fieldValue);
-        }
-        else if ("subAccountNumber".equals(fieldName)) {
+        } else if ( "subAccountNumber".equals(fieldName) ) {
             setSubAccountNumber(fieldValue);
-        }
-        else if ("financialObjectCode".equals(fieldName)) {
+        } else if ( "financialObjectCode".equals(fieldName) ) {
             setFinancialObjectCode(fieldValue);
-        }
-        else if ("financialSubObjectCode".equals(fieldName)) {
+        } else if ( "financialSubObjectCode".equals(fieldName) ) {
             setFinancialSubObjectCode(fieldValue);
-        }
-        else if ("financialBalanceTypeCode".equals(fieldName)) {
+        } else if ( "financialBalanceTypeCode".equals(fieldName) ) {
             setFinancialBalanceTypeCode(fieldValue);
-        }
-        else if ("financialObjectTypeCode".equals(fieldName)) {
+        } else if ( "financialObjectTypeCode".equals(fieldName) ) {
             setFinancialObjectTypeCode(fieldValue);
-        }
-        else if ("universityFiscalPeriodCode".equals(fieldName)) {
+        } else if ( "universityFiscalPeriodCode".equals(fieldName) ) {
             setUniversityFiscalPeriodCode(fieldValue);
-        }
-        else if ("financialDocumentTypeCode".equals(fieldName)) {
+        } else if ( "financialDocumentTypeCode".equals(fieldName) ) {
             setFinancialDocumentTypeCode(fieldValue);
-        }
-        else if ("financialSystemOriginationCode".equals(fieldName)) {
+        } else if ( "financialSystemOriginationCode".equals(fieldName) ) {
             setFinancialSystemOriginationCode(fieldValue);
-        }
-        else if (KFSPropertyConstants.DOCUMENT_NUMBER.equals(fieldName)) {
+        } else if ( KFSPropertyConstants.DOCUMENT_NUMBER.equals(fieldName) ) {
             setDocumentNumber(fieldValue);
-        }
-        else if ("transactionLedgerEntrySequenceNumber".equals(fieldName)) {
-            if (StringUtils.isNotBlank(fieldValue)) {
+        } else if ( "transactionLedgerEntrySequenceNumber".equals(fieldName) ) {
+            if ( StringUtils.isNotBlank(fieldValue) ) {
                 setTransactionLedgerEntrySequenceNumber(Integer.parseInt(fieldValue));
-            }
-            else {
+            } else {
                 setTransactionLedgerEntrySequenceNumber(null);
             }
-        }
-        else if ("transactionLedgerEntryDescription".equals(fieldName)) {
+        } else if ( "transactionLedgerEntryDescription".equals(fieldName) ) {
             setTransactionLedgerEntryDescription(fieldValue);
-        }
-        else if ("transactionLedgerEntryAmount".equals(fieldName)) {
-            if (StringUtils.isNotBlank(fieldValue)) {
+        } else if ( "transactionLedgerEntryAmount".equals(fieldName) ) {
+            if ( StringUtils.isNotBlank(fieldValue) ) {
                 setTransactionLedgerEntryAmount(new KualiDecimal(fieldValue));
-            }
-            else {
+            } else {
                 clearTransactionLedgerEntryAmount();
             }
-        }
-        else if ("transactionDebitCreditCode".equals(fieldName)) {
+        } else if ( "transactionDebitCreditCode".equals(fieldName) ) {
             setTransactionDebitCreditCode(fieldValue);
-        }
-        else if ("transactionDate".equals(fieldName)) {
-            if (StringUtils.isNotBlank(fieldValue)) {
+        } else if ( "transactionDate".equals(fieldName) ) {
+            if ( StringUtils.isNotBlank(fieldValue) ) {
                 try {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    setTransactionDate(new java.sql.Date((df.parse(fieldValue)).getTime()));
-                }
-                catch (ParseException e) {
+                    setTransactionDate(new java.sql.Date( (df.parse(fieldValue)).getTime() ) );
+                } catch (ParseException e) {
                     setTransactionDate(null);
                 }
-            }
-            else {
+            } else {
                 setTransactionDate(null);
             }
-        }
-        else if ("organizationDocumentNumber".equals(fieldName)) {
+        } else if ( "organizationDocumentNumber".equals(fieldName) ) {
             setOrganizationDocumentNumber(fieldValue);
-        }
-        else if ("projectCode".equals(fieldName)) {
+        } else if ( "projectCode".equals(fieldName) ) {
             setProjectCode(fieldValue);
-        }
-        else if ("organizationReferenceId".equals(fieldName)) {
+        } else if ( "organizationReferenceId".equals(fieldName) ) {
             setOrganizationReferenceId(fieldValue);
-        }
-        else if ("referenceFinancialDocumentTypeCode".equals(fieldName)) {
+        } else if ( "referenceFinancialDocumentTypeCode".equals(fieldName) ) {
             setReferenceFinancialDocumentTypeCode(fieldValue);
-        }
-        else if ("referenceFinancialSystemOriginationCode".equals(fieldName)) {
+        } else if ( "referenceFinancialSystemOriginationCode".equals(fieldName) ) {
             setReferenceFinancialSystemOriginationCode(fieldValue);
-        }
-        else if ("referenceFinancialDocumentNumber".equals(fieldName)) {
+        } else if ( "referenceFinancialDocumentNumber".equals(fieldName) ) {
             setReferenceFinancialDocumentNumber(fieldValue);
-        }
-        else if ("financialDocumentReversalDate".equals(fieldName)) {
-            if (StringUtils.isNotBlank(fieldValue)) {
+        } else if ( "financialDocumentReversalDate".equals(fieldName) ) {
+            if ( StringUtils.isNotBlank(fieldValue) ) {
                 try {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    setFinancialDocumentReversalDate(new java.sql.Date((df.parse(fieldValue)).getTime()));
-                }
-                catch (ParseException e) {
+                    setFinancialDocumentReversalDate(new java.sql.Date( (df.parse(fieldValue)).getTime() ) );
+                } catch (ParseException e) {
                     setFinancialDocumentReversalDate(null);
                 }
-            }
-            else {
+            } else {
                 setFinancialDocumentReversalDate(null);
             }
-        }
-        else if ("transactionEncumbranceUpdateCode".equals(fieldName)) {
+        } else if ( "transactionEncumbranceUpdateCode".equals(fieldName) ) {
             setTransactionEncumbranceUpdateCode(fieldValue);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Invalid Field Name " + fieldName);
-        }
+        }        
     }
 
     public Object getFieldValue(String fieldName) {
-        if ("universityFiscalYear".equals(fieldName)) {
+        if ( "universityFiscalYear".equals(fieldName) ) {
             return getUniversityFiscalYear();
-        }
-        else if ("chartOfAccountsCode".equals(fieldName)) {
+        } else if ( "chartOfAccountsCode".equals(fieldName) ) {
             return getChartOfAccountsCode();
-        }
-        else if ("accountNumber".equals(fieldName)) {
+        } else if ( "accountNumber".equals(fieldName) ) {
             return getAccountNumber();
-        }
-        else if ("subAccountNumber".equals(fieldName)) {
+        } else if ( "subAccountNumber".equals(fieldName) ) {
             return getSubAccountNumber();
-        }
-        else if ("financialObjectCode".equals(fieldName)) {
+        } else if ( "financialObjectCode".equals(fieldName) ) {
             return getFinancialObjectCode();
-        }
-        else if ("financialSubObjectCode".equals(fieldName)) {
+        } else if ( "financialSubObjectCode".equals(fieldName) ) {
             return getFinancialSubObjectCode();
-        }
-        else if ("financialBalanceTypeCode".equals(fieldName)) {
+        } else if ( "financialBalanceTypeCode".equals(fieldName) ) {
             return getFinancialBalanceTypeCode();
-        }
-        else if ("financialObjectTypeCode".equals(fieldName)) {
+        } else if ( "financialObjectTypeCode".equals(fieldName) ) {
             return getFinancialObjectTypeCode();
-        }
-        else if ("universityFiscalPeriodCode".equals(fieldName)) {
+        } else if ( "universityFiscalPeriodCode".equals(fieldName) ) {
             return getUniversityFiscalPeriodCode();
-        }
-        else if ("financialDocumentTypeCode".equals(fieldName)) {
+        } else if ( "financialDocumentTypeCode".equals(fieldName) ) {
             return getFinancialDocumentTypeCode();
-        }
-        else if ("financialSystemOriginationCode".equals(fieldName)) {
+        } else if ( "financialSystemOriginationCode".equals(fieldName) ) {
             return getFinancialSystemOriginationCode();
-        }
-        else if (KFSPropertyConstants.DOCUMENT_NUMBER.equals(fieldName)) {
+        } else if ( KFSPropertyConstants.DOCUMENT_NUMBER.equals(fieldName) ) {
             return getDocumentNumber();
-        }
-        else if ("transactionLedgerEntrySequenceNumber".equals(fieldName)) {
+        } else if ( "transactionLedgerEntrySequenceNumber".equals(fieldName) ) {
             return getTransactionLedgerEntrySequenceNumber();
-        }
-        else if ("transactionLedgerEntryDescription".equals(fieldName)) {
+        } else if ( "transactionLedgerEntryDescription".equals(fieldName) ) {
             return getTransactionLedgerEntryDescription();
-        }
-        else if ("transactionLedgerEntryAmount".equals(fieldName)) {
+        } else if ( "transactionLedgerEntryAmount".equals(fieldName) ) {
             return getTransactionLedgerEntryAmount();
-        }
-        else if ("transactionDebitCreditCode".equals(fieldName)) {
+        } else if ( "transactionDebitCreditCode".equals(fieldName) ) {
             return getTransactionDebitCreditCode();
-        }
-        else if ("transactionDate".equals(fieldName)) {
+        } else if ( "transactionDate".equals(fieldName) ) {
             return getTransactionDate();
-        }
-        else if ("organizationDocumentNumber".equals(fieldName)) {
+        } else if ( "organizationDocumentNumber".equals(fieldName) ) {
             return getOrganizationDocumentNumber();
-        }
-        else if ("projectCode".equals(fieldName)) {
+        } else if ( "projectCode".equals(fieldName) ) {
             return getProjectCode();
-        }
-        else if ("organizationReferenceId".equals(fieldName)) {
+        } else if ( "organizationReferenceId".equals(fieldName) ) {
             return getOrganizationReferenceId();
-        }
-        else if ("referenceFinancialDocumentTypeCode".equals(fieldName)) {
+        } else if ( "referenceFinancialDocumentTypeCode".equals(fieldName) ) {
             return getReferenceFinancialDocumentTypeCode();
-        }
-        else if ("referenceFinancialSystemOriginationCode".equals(fieldName)) {
+        } else if ( "referenceFinancialSystemOriginationCode".equals(fieldName) ) {
             return getReferenceFinancialSystemOriginationCode();
-        }
-        else if ("referenceFinancialDocumentNumber".equals(fieldName)) {
+        } else if ( "referenceFinancialDocumentNumber".equals(fieldName) ) {
             return getReferenceFinancialDocumentNumber();
-        }
-        else if ("financialDocumentReversalDate".equals(fieldName)) {
+        } else if ( "financialDocumentReversalDate".equals(fieldName) ) {
             return getFinancialDocumentReversalDate();
-        }
-        else if ("transactionEncumbranceUpdateCode".equals(fieldName)) {
-            return getTransactionEncumbranceUpdateCode();
-        }
-        else {
+        } else if ( "transactionEncumbranceUpdateCode".equals(fieldName) ) {
+            return getTransactionEncumbranceUpdateCode();        
+        } else {
             throw new IllegalArgumentException("Invalid Field Name " + fieldName);
         }
     }

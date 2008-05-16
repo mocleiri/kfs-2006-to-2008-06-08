@@ -18,17 +18,13 @@ package org.kuali.module.labor.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
 import org.kuali.module.labor.bo.AccountStatusBaseFunds;
 import org.kuali.module.labor.bo.EmployeeFunding;
 import org.kuali.module.labor.bo.LaborCalculatedSalaryFoundationTracker;
 
-/**
- * This is the data access object for calculated salary foundation tracker
- * 
- * @see org.kuali.module.labor.bo.CalculatedSalaryFoundationTracker
- */
 public interface LaborCalculatedSalaryFoundationTrackerDao {
-
+    
     /**
      * This method finds the CSF trackers according to input fields and values
      * 
@@ -53,6 +49,6 @@ public interface LaborCalculatedSalaryFoundationTrackerDao {
      * @param fieldValues the input fields and values
      * @param isConsolidated consolidation option is applied or not
      * @return a collection of CSF trackers as EmployeeFunding
-     */
+     */    
     List<EmployeeFunding> findCSFTrackersAsEmployeeFunding(Map fieldValues, boolean isConsolidated);
 }

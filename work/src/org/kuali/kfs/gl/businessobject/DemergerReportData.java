@@ -1,27 +1,28 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.service.impl.scrubber;
 
-/**
- * A class to encapsulate statistics generated during a demerger
- */
 public class DemergerReportData {
-    /**
-     * Constructs a DemergerReportData instance
-     */
     public DemergerReportData() {
     }
 
@@ -35,191 +36,75 @@ public class DemergerReportData {
     private int costShareTransactionsBypassed = 0;
     private int costShareEncumbranceTransactionsBypassed = 0;
 
-    /**
-     * Adds the values from the parameter report data into this object.
-     * 
-     * @param anotherReport more demerger report data to add to the current demerger report data
-     */
-    public void incorporateReportData(DemergerReportData anotherReport) {
-        errorTransactionsRead += anotherReport.errorTransactionsRead;
-        errorTransactionsSaved += anotherReport.errorTransactionsSaved;
-        validTransactionsSaved += anotherReport.validTransactionsSaved;
-        offsetTransactionsBypassed += anotherReport.offsetTransactionsBypassed;
-        capitalizationTransactionsBypassed += anotherReport.capitalizationTransactionsBypassed;
-        liabilityTransactionsBypassed += anotherReport.liabilityTransactionsBypassed;
-        transferTransactionsBypassed += anotherReport.transferTransactionsBypassed;
-        costShareTransactionsBypassed += anotherReport.costShareTransactionsBypassed;
-        costShareEncumbranceTransactionsBypassed += anotherReport.costShareEncumbranceTransactionsBypassed;
-    }
-
-    /**
-     * Increments the count of cost share encumbrance transactions read by 1
-     */
     public void incrementErrorTransactionsRead() {
         errorTransactionsRead++;
     }
 
-    /**
-     * Increments the count of error transactions written by 1
-     */
     public void incrementErrorTransactionsSaved() {
         errorTransactionsSaved++;
     }
 
-    /**
-     * Increments the count of valid transactions saved by 1
-     */
     public void incrementValidTransactionsSaved() {
         validTransactionsSaved++;
     }
 
-    /**
-     * Increments the count of offset transactions bypassed by 1
-     */
     public void incrementOffsetTransactionsBypassed() {
         offsetTransactionsBypassed++;
     }
 
-    /**
-     * Increments the count of capitalization transactions bypassed by 1
-     */
     public void incrementCapitalizationTransactionsBypassed() {
         capitalizationTransactionsBypassed++;
     }
 
-    /**
-     * Increments the count of liability transactions bypassed by 1
-     */
     public void incrementLiabilityTransactionsBypassed() {
         liabilityTransactionsBypassed++;
     }
 
-    /**
-     * Increments the count of transfer transactions bypassed by 1
-     */
     public void incrementTransferTransactionsBypassed() {
         transferTransactionsBypassed++;
     }
 
-    /**
-     * Increments the count of cost share transactions bypassed by 1
-     */
     public void incrementCostShareTransactionsBypassed() {
         costShareTransactionsBypassed++;
     }
 
-    /**
-     * Increments the count of cost share encumbrance transactions bypassed by 1
-     */
     public void incrementCostShareEncumbranceTransactionsBypassed() {
         costShareEncumbranceTransactionsBypassed++;
     }
 
-    /**
-     * Returns the count of capitalization transactions bypassed
-     * 
-     * @return the count of capitalization transactions bypassed
-     */
     public int getCapitalizationTransactionsBypassed() {
         return capitalizationTransactionsBypassed;
     }
 
-    /**
-     * Returns the count of cost share encumbranace transactions bypassed
-     * 
-     * @return the count of cost share encumbranace transactions bypassed
-     */
     public int getCostShareEncumbranceTransactionsBypassed() {
         return costShareEncumbranceTransactionsBypassed;
     }
 
-    /**
-     * Returns the count of cost share transactions bypassed
-     * 
-     * @return the count of cost share transactions bypassed
-     */
     public int getCostShareTransactionsBypassed() {
         return costShareTransactionsBypassed;
     }
 
-    /**
-     * Returns the count of error transactions read
-     * 
-     * @return the count of error transactions read
-     */
     public int getErrorTransactionsRead() {
         return errorTransactionsRead;
     }
 
-    /**
-     * Returns the count of error transactions saved
-     * 
-     * @return the count of error transactions saved
-     */
     public int getErrorTransactionsSaved() {
         return errorTransactionsSaved;
     }
 
-    /**
-     * Returns the count of liability transactions bypassed
-     * 
-     * @return the count of liability transactions bypassed
-     */
     public int getLiabilityTransactionsBypassed() {
         return liabilityTransactionsBypassed;
     }
 
-    /**
-     * Returns the count of offset transactions bypassed
-     * 
-     * @return the count of offset transactions bypassed
-     */
     public int getOffsetTransactionsBypassed() {
         return offsetTransactionsBypassed;
     }
 
-    /**
-     * Returns the count of transfer transactions bypassed
-     * 
-     * @return the count of transfer transactions bypassed
-     */
     public int getTransferTransactionsBypassed() {
         return transferTransactionsBypassed;
     }
 
-    /**
-     * Returns the count of valid transactions saved
-     * 
-     * @return the count of valid transactions saved
-     */
     public int getValidTransactionsSaved() {
         return validTransactionsSaved;
-    }
-
-    /**
-     * Resets the number of error transactions read to the given amount
-     * 
-     * @param x the count of error transactions read to reset to
-     */
-    public void setErrorTransactionsRead(int x) {
-        this.errorTransactionsRead = x;
-    }
-
-    /**
-     * Resets the number of error transactions written to the given amount
-     * 
-     * @param x the count of error transactions written to reset to
-     */
-    public void setErrorTransactionWritten(int x) {
-        this.errorTransactionsSaved = x;
-    }
-
-    /**
-     * Sets the validTransactionsSaved attribute value.
-     * 
-     * @param validTransactionsSaved The validTransactionsSaved to set.
-     */
-    public void setValidTransactionsSaved(int validTransactionsSaved) {
-        this.validTransactionsSaved = validTransactionsSaved;
     }
 }

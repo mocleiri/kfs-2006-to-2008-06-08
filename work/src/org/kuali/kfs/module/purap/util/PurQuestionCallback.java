@@ -29,5 +29,5 @@ public interface PurQuestionCallback {
      * @param document - AP document
      * @param noteText - user entered note
      */
-    public AccountsPayableDocument doPostQuestion(AccountsPayableDocument document, String noteText) throws Exception;
+    public void doPostQuestion(AccountsPayableDocument document, String noteText) throws Exception;
 }

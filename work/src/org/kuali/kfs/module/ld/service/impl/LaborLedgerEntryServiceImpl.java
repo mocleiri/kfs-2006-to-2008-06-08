@@ -15,72 +15,43 @@
  */
 package org.kuali.module.labor.service.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import org.kuali.core.service.BusinessObjectService;
 import org.kuali.module.labor.bo.LedgerEntry;
 import org.kuali.module.labor.dao.LaborLedgerEntryDao;
 import org.kuali.module.labor.service.LaborLedgerEntryService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This class implements LaborLedgerEntryService to provide the access to labor ledger entries in data stores.
- * 
- * @see org.kuali.module.labor.bo.LedgerEntry
+ * This class implements LaborOriginEntryService to provide the access to labor ledger entries in data stores.
  */
-@Transactional
 public class LaborLedgerEntryServiceImpl implements LaborLedgerEntryService {
 
+    private BusinessObjectService businessObjectService;
     private LaborLedgerEntryDao laborLedgerEntryDao;
-
+    
     /**
      * @see org.kuali.module.labor.service.LaborLedgerEntryService#save(org.kuali.module.labor.bo.LedgerEntry)
      */
     public void save(LedgerEntry ledgerEntry) {
-        laborLedgerEntryDao.save(ledgerEntry);
+        businessObjectService.save(ledgerEntry);
     }
 
     /**
      * @see org.kuali.module.labor.service.LaborLedgerEntryService#getMaxSquenceNumber(org.kuali.module.labor.bo.LedgerEntry)
      */
-    public Integer getMaxSequenceNumber(LedgerEntry ledgerEntry) {
+    public Integer getMaxSquenceNumber(LedgerEntry ledgerEntry) {
         return laborLedgerEntryDao.getMaxSquenceNumber(ledgerEntry);
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborLedgerEntryService#find(java.util.Map)
+     * Sets the businessObjectService attribute value.
+     * @param businessObjectService The businessObjectService to set.
      */
-    public Iterator<LedgerEntry> find(Map<String, String> fieldValues) {
-        return laborLedgerEntryDao.find(fieldValues);
+    public void setBusinessObjectService(BusinessObjectService businessObjectService) {
+        this.businessObjectService = businessObjectService;
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborLedgerEntryService#findEmployeesWithPayType(java.util.Map, java.util.List, java.util.Map)
-     */
-    public List<String> findEmployeesWithPayType(Map<Integer, Set<String>> payPeriods, List<String> balanceTypes, Map<String, Set<String>> earnCodePayGroupMap) {
-        return laborLedgerEntryDao.findEmployeesWithPayType(payPeriods, balanceTypes, earnCodePayGroupMap);
-    }
-    
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerEntryService#isEmployeeWithPayType(java.lang.String, java.util.Map, java.util.List, java.util.Map)
-     */
-    public boolean isEmployeeWithPayType(String emplid, Map<Integer, Set<String>> payPeriods, List<String> balanceTypes, Map<String, Set<String>> earnCodePayGroupMap) {
-        return laborLedgerEntryDao.isEmployeeWithPayType(emplid, payPeriods, balanceTypes, earnCodePayGroupMap);
-    }
-    
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerEntryService#deleteLedgerEntriesPriorToYear(java.lang.Integer, java.lang.String)
-     */
-    public void deleteLedgerEntriesPriorToYear(Integer fiscalYear, String chartOfAccountsCode) {
-        laborLedgerEntryDao.deleteLedgerEntriesPriorToYear(fiscalYear, chartOfAccountsCode);       
-    }
-    
-    /**
      * Sets the laborLedgerEntryDao attribute value.
-     * 
      * @param laborLedgerEntryDao The laborLedgerEntryDao to set.
      */
     public void setLaborLedgerEntryDao(LaborLedgerEntryDao laborLedgerEntryDao) {

@@ -17,61 +17,56 @@ package org.kuali.module.kra.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 
 /**
  * This class represents an ad-hoc org.
+ * 
+ * 
  */
 public class AdhocOrg extends AbstractAdhoc {
-
+    
     private String fiscalCampusCode;
     private String primaryDepartmentCode;
-
+    
     /**
-     * Gets the fiscalCampusCode attribute.
-     * 
+     * Gets the fiscalCampusCode attribute. 
      * @return Returns the fiscalCampusCode.
      */
     public String getFiscalCampusCode() {
         return fiscalCampusCode;
     }
-
     /**
      * Sets the fiscalCampusCode attribute value.
-     * 
      * @param fiscalCampusCode The fiscalCampusCode to set.
      */
     public void setFiscalCampusCode(String fiscalCampusCode) {
         this.fiscalCampusCode = fiscalCampusCode;
     }
-
     /**
-     * Gets the primaryDepartmentCode attribute.
-     * 
+     * Gets the primaryDepartmentCode attribute. 
      * @return Returns the primaryDepartmentCode.
      */
     public String getPrimaryDepartmentCode() {
         return primaryDepartmentCode;
     }
-
     /**
      * Sets the primaryDepartmentCode attribute value.
-     * 
      * @param primaryDepartmentCode The primaryDepartmentCode to set.
      */
     public void setPrimaryDepartmentCode(String primaryDepartmentCode) {
         this.primaryDepartmentCode = primaryDepartmentCode;
     }
-
+    
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.getDocumentNumber());
         m.put("fiscalCampusCode", this.fiscalCampusCode);
         m.put("primaryDepartmentCode", this.primaryDepartmentCode);
-
+        
         return m;
     }
 }

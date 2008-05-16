@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,42 +15,36 @@
  */
 package org.kuali.module.gl.batch;
 
-import java.util.Date;
-
-import org.kuali.kfs.batch.AbstractStep;
-import org.kuali.module.gl.GLConstants;
+import org.kuali.core.batch.Step;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
-/**
- * A step which runs the process to remove old origin entry groups and associated origin entries
- */
-public class ClearOldOriginEntryStep extends AbstractStep {
+public class ClearOldOriginEntryStep implements Step {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ClearOldOriginEntryStep.class);
-    private OriginEntryGroupService originEntryGroupService;
 
-    /**
-     * Performs the process of clearing old origin entry groups and entries
-     * 
-     * @param the name of the job that this step is a part of
-     * @param jobRunDate the time/date the job is run
-     * @return that the job completed successfully
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) {
+    private OriginEntryGroupService originEntryGroupService;
+    private KualiConfigurationService kualiConfigurationService;
+
+    public boolean performStep() {
         LOG.debug("performStep() started");
-        String daysStr = getParameterService().getParameterValue(getClass(), GLConstants.RETAIN_DAYS);
+
+        String daysStr = kualiConfigurationService.getApplicationParameterValue("glClearOldOriginEntryStep", "days");
         int days = Integer.parseInt(daysStr);
+
         originEntryGroupService.deleteOlderGroups(days);
+
         return true;
     }
 
-    /**
-     * Sets the originEntryService attribute, allowing injection of an implementation of the service
-     * 
-     * @param oes
-     * @see org.kuali.module.gl.service.OriginEntryGroupService
-     */
+    public String getName() {
+        return "Clear old origin entry groups";
+    }
+
     public void setOriginEntryGroupService(OriginEntryGroupService oes) {
         originEntryGroupService = oes;
+    }
+
+    public void setKualiConfigurationService(KualiConfigurationService kcs) {
+        kualiConfigurationService = kcs;
     }
 }

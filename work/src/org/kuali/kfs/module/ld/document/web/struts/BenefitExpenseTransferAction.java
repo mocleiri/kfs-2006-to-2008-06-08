@@ -15,72 +15,21 @@
  */
 package org.kuali.module.labor.web.struts.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.ObjectUtil;
-import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
-import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.web.struts.form.BenefitExpenseTransferForm;
-import org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase;
+import org.kuali.core.document.TransactionalDocument;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
+import org.kuali.module.labor.bo.SalaryExpenseTransferAccountingLine;
+import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
 
 /**
- * Struts Action class for the Benefit Expense Transfer Document.
+ * This class extends the parent KualiTransactionalDocumentActionBase class, which contains all common action methods. Since the SEP
+ * follows the basic transactional document pattern, there are no specific actions that it has to implement; however, this empty
+ * class is necessary for integrating into the framework.
+ * 
+ * 
  */
-public class BenefitExpenseTransferAction extends ExpenseTransferDocumentActionBase {
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BenefitExpenseTransferAction.class);
+public class BenefitExpenseTransferAction extends LaborDocumentActionBase {
 
-    /**
-     * Gets the Business object class name
-     * 
-     * @param expenseTransferDocumentFormBase ExpenseTransferDocumentForm type
-     * @return String classname
-     * @see org.kuali.module.labor.web.struts.action.ExpenseTransferDocumentActionBase#getLookupResultsBOClassName(org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase)
-     */
-    @Override
-    protected String getLookupResultsBOClassName(ExpenseTransferDocumentFormBase expenseTransferDocumentForm) {
-        return LedgerBalance.class.getName();
-    }
-
-    /**
-     * @param expenseTransferDocumentFormBase ExpenseTransferDocumentForm type
-     * @param balance LedgerBalance type
-     * @return none
-     * @see org.kuali.module.labor.web.struts.action.ExpenseTransferDocumentActionBase#resetLookupFields(org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase,
-     *      org.kuali.module.labor.bo.LedgerBalance)
-     */
-    @Override
-    protected void resetLookupFields(ExpenseTransferDocumentFormBase expenseTransferDocumentForm, LedgerBalance balance) {
-        BenefitExpenseTransferForm benefitExpenseTransferForm = (BenefitExpenseTransferForm) expenseTransferDocumentForm;
-        ObjectUtil.buildObject(benefitExpenseTransferForm, balance);
-    }
-
-    /**
-     * @param mapping ActionMapping
-     * @param form ActionForm
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
-     * @see org.kuali.core.web.struts.action.KualiAction#performLookup(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward performLookup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // parse out the business object name from our methodToCall parameter
-        String fullParameter = (String) request.getAttribute(KFSConstants.METHOD_TO_CALL_ATTRIBUTE);
-        String boClassName = StringUtils.substringBetween(fullParameter, KFSConstants.METHOD_TO_CALL_BOPARM_LEFT_DEL, KFSConstants.METHOD_TO_CALL_BOPARM_RIGHT_DEL);
-
-        if (!StringUtils.equals(boClassName, LaborLedgerPendingEntry.class.getName())) {
-            return super.performLookup(mapping, form, request, response);
-        }
-
-        String path = super.performLookup(mapping, form, request, response).getPath();
-        path = path.replaceFirst(KFSConstants.LOOKUP_ACTION, LaborConstants.LONG_ROW_TABLE_INRUIRY_ACTION);
-        return new ActionForward(path, true);
-    }
 }

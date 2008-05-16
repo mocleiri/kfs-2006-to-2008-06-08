@@ -21,8 +21,11 @@ import java.util.ArrayList;
 import org.kuali.core.question.QuestionBase;
 
 /**
- * Support the SingleConfirmationQuestion that displays a window with an OK button.
+ * This class support the SingleConfirmationQuestion that displays a window with an OK button.
+ * 
+ * 
  */
+
 public class SingleConfirmationQuestion extends QuestionBase {
 
     public static final String OK = "0";

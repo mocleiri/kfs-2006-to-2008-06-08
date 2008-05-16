@@ -1,57 +1,71 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * This class represents an association between an award and a project director. It's like a reference to the project director from
- * the award. This way an award can maintain a collection of these references instead of owning project directors directly.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class AwardProjectDirector extends PersistableBusinessObjectBase implements Primaryable, CGProjectDirector, Inactivateable {
+public class AwardProjectDirector extends BusinessObjectBase {
 
     private String personUniversalIdentifier;
     private Long proposalNumber;
     private boolean awardPrimaryProjectDirectorIndicator;
+    private String awardProjectDirectorNote1Text;
+    private String awardProjectDirectorNote2Text;
+    private String awardProjectDirectorNote3Text;
     private String awardProjectDirectorProjectTitle;
-    private boolean active = true;
 
-    private ProjectDirector projectDirector;
+    private ContractsAndGrantsProjectDirectorView personUniversal;
 
     /**
-     * Default no-args constructor.
+     * Default constructor.
      */
     public AwardProjectDirector() {
-        // Struts needs this instance to populate the secondary key, personUserIdentifier.
-        projectDirector = new ProjectDirector();
+
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getPersonUniversalIdentifier()
+     * Gets the personUniversalIdentifier attribute.
+     * 
+     * @return - Returns the personUniversalIdentifier
+     * 
      */
     public String getPersonUniversalIdentifier() {
         return personUniversalIdentifier;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setPersonUniversalIdentifier(java.lang.String)
+     * Sets the personUniversalIdentifier attribute.
+     * 
+     * @param personUniversalIdentifier The personUniversalIdentifier to set.
+     * 
      */
     public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
         this.personUniversalIdentifier = personUniversalIdentifier;
@@ -59,14 +73,20 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
 
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getProposalNumber()
+     * Gets the proposalNumber attribute.
+     * 
+     * @return - Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setProposalNumber(java.lang.Long)
+     * Sets the proposalNumber attribute.
+     * 
+     * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -76,7 +96,8 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
     /**
      * Gets the awardPrimaryProjectDirectorIndicator attribute.
      * 
-     * @return Returns the awardPrimaryProjectDirectorIndicator
+     * @return - Returns the awardPrimaryProjectDirectorIndicator
+     * 
      */
     public boolean isAwardPrimaryProjectDirectorIndicator() {
         return awardPrimaryProjectDirectorIndicator;
@@ -87,6 +108,7 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
      * Sets the awardPrimaryProjectDirectorIndicator attribute.
      * 
      * @param awardPrimaryProjectDirectorIndicator The awardPrimaryProjectDirectorIndicator to set.
+     * 
      */
     public void setAwardPrimaryProjectDirectorIndicator(boolean awardPrimaryProjectDirectorIndicator) {
         this.awardPrimaryProjectDirectorIndicator = awardPrimaryProjectDirectorIndicator;
@@ -94,9 +116,73 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
 
 
     /**
+     * Gets the awardProjectDirectorNote1Text attribute.
+     * 
+     * @return - Returns the awardProjectDirectorNote1Text
+     * 
+     */
+    public String getAwardProjectDirectorNote1Text() {
+        return awardProjectDirectorNote1Text;
+    }
+
+    /**
+     * Sets the awardProjectDirectorNote1Text attribute.
+     * 
+     * @param awardProjectDirectorNote1Text The awardProjectDirectorNote1Text to set.
+     * 
+     */
+    public void setAwardProjectDirectorNote1Text(String awardProjectDirectorNote1Text) {
+        this.awardProjectDirectorNote1Text = awardProjectDirectorNote1Text;
+    }
+
+
+    /**
+     * Gets the awardProjectDirectorNote2Text attribute.
+     * 
+     * @return - Returns the awardProjectDirectorNote2Text
+     * 
+     */
+    public String getAwardProjectDirectorNote2Text() {
+        return awardProjectDirectorNote2Text;
+    }
+
+    /**
+     * Sets the awardProjectDirectorNote2Text attribute.
+     * 
+     * @param awardProjectDirectorNote2Text The awardProjectDirectorNote2Text to set.
+     * 
+     */
+    public void setAwardProjectDirectorNote2Text(String awardProjectDirectorNote2Text) {
+        this.awardProjectDirectorNote2Text = awardProjectDirectorNote2Text;
+    }
+
+
+    /**
+     * Gets the awardProjectDirectorNote3Text attribute.
+     * 
+     * @return - Returns the awardProjectDirectorNote3Text
+     * 
+     */
+    public String getAwardProjectDirectorNote3Text() {
+        return awardProjectDirectorNote3Text;
+    }
+
+    /**
+     * Sets the awardProjectDirectorNote3Text attribute.
+     * 
+     * @param awardProjectDirectorNote3Text The awardProjectDirectorNote3Text to set.
+     * 
+     */
+    public void setAwardProjectDirectorNote3Text(String awardProjectDirectorNote3Text) {
+        this.awardProjectDirectorNote3Text = awardProjectDirectorNote3Text;
+    }
+
+
+    /**
      * Gets the awardProjectDirectorProjectTitle attribute.
      * 
-     * @return Returns the awardProjectDirectorProjectTitle
+     * @return - Returns the awardProjectDirectorProjectTitle
+     * 
      */
     public String getAwardProjectDirectorProjectTitle() {
         return awardProjectDirectorProjectTitle;
@@ -106,51 +192,22 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
      * Sets the awardProjectDirectorProjectTitle attribute.
      * 
      * @param awardProjectDirectorProjectTitle The awardProjectDirectorProjectTitle to set.
+     * 
      */
     public void setAwardProjectDirectorProjectTitle(String awardProjectDirectorProjectTitle) {
         this.awardProjectDirectorProjectTitle = awardProjectDirectorProjectTitle;
     }
 
     /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#getProjectDirector()
+     * @return Returns the personUniversal.
      */
-    public ProjectDirector getProjectDirector() {
-        return projectDirector;
-    }
-
-    /**
-     * @see org.kuali.module.cg.bo.CGProjectDirector#setProjectDirector(org.kuali.module.cg.bo.ProjectDirector)
-     */
-    public void setProjectDirector(ProjectDirector projectDirector) {
-        this.projectDirector = projectDirector;
-    }
-
-    /**
-     * @see Primaryable#isPrimary()
-     */
-    public boolean isPrimary() {
-        return isAwardPrimaryProjectDirectorIndicator();
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#isActive()
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
-     */
-    public void setActive(boolean active) {
-        this.active = active;
+    public ContractsAndGrantsProjectDirectorView getPersonUniversal() {
+        return personUniversal;
     }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
-    @SuppressWarnings("unchecked")
-    @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("personUniversalIdentifier", this.personUniversalIdentifier);

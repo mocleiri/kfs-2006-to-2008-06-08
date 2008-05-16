@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/BudgetInstitutionCostShare.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +47,7 @@ public class BudgetInstitutionCostShare extends BudgetAbstractCostShare {
      * Gets the organizationCode attribute.
      * 
      * @return Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -54,6 +57,7 @@ public class BudgetInstitutionCostShare extends BudgetAbstractCostShare {
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -63,6 +67,7 @@ public class BudgetInstitutionCostShare extends BudgetAbstractCostShare {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the documentchartOfAccountsCodeHeaderId
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -72,6 +77,7 @@ public class BudgetInstitutionCostShare extends BudgetAbstractCostShare {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -81,6 +87,7 @@ public class BudgetInstitutionCostShare extends BudgetAbstractCostShare {
      * Gets the budgetPeriodInstitutionCostShare attribute.
      * 
      * @return Returns the budgetPeriodInstitutionCostShare
+     * 
      */
     public List<BudgetPeriodInstitutionCostShare> getBudgetPeriodCostShare() {
         return budgetPeriodCostShare;
@@ -97,6 +104,7 @@ public class BudgetInstitutionCostShare extends BudgetAbstractCostShare {
      * Sets the budgetPeriodInstitutionCostShare attribute.
      * 
      * @param budgetPeriodInstitutionCostShare The budgetPeriodInstitutionCostShare to set.
+     * 
      */
     public void setBudgetPeriodCostShare(List budgetPeriodCostShare) {
         this.budgetPeriodCostShare = budgetPeriodCostShare;

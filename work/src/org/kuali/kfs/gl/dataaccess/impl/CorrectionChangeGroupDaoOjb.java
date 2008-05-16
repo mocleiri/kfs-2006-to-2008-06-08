@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.dao.ojb;
 
@@ -20,75 +27,65 @@ import java.util.Collection;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionChangeGroup;
 import org.kuali.module.gl.dao.CorrectionChangeGroupDao;
+import org.springframework.orm.ojb.support.PersistenceBrokerDaoSupport;
 
-/**
- * The OJB implementation of CorrectionChangeGroupDao
- */
-public class CorrectionChangeGroupDaoOjb extends PlatformAwareDaoBaseOjb implements CorrectionChangeGroupDao {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionChangeGroupDaoOjb.class);
+public class CorrectionChangeGroupDaoOjb extends PersistenceBrokerDaoSupport implements CorrectionChangeGroupDao {
 
-    /**
-     * Deletes an unlucky correction change group
+    public CorrectionChangeGroupDaoOjb() {
+        super();
+    }
+
+    /*
+     * (non-Javadoc)
      * 
-     * @param group the group to delete
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#delete(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void delete(CorrectionChangeGroup group) {
-        LOG.debug("delete() started");
-
         getPersistenceBrokerTemplate().delete(group);
     }
 
-    /**
-     * Finds all of the correction change groups associated with a document.
+    /*
+     * (non-Javadoc)
      * 
-     * @param documentNumber the document number of a GLCP document
-     * @return a Collection of CorrectionChangeGroup records
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumber(java.lang.String)
      */
-    public Collection findByDocumentNumber(String documentNumber) {
+    public Collection findByDocumentNumber(Integer documentNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        criteria.addEqualTo("FDOC_NBR", documentNumber);
 
-        QueryByCriteria query = QueryFactory.newQuery(CorrectionChangeGroup.class, criteria);
+        Class clazz = CorrectionChangeGroup.class;
+        QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
 
-        return getPersistenceBrokerTemplate().getCollectionByQuery(query);
+        Collection groups = getPersistenceBrokerTemplate().getCollectionByQuery(query);
+        return groups;
     }
 
-    /**
-     * Finds the specific group associated with the given document with the given group number
+    /*
+     * (non-Javadoc)
      * 
-     * @param documentNumber the document number of the correction change group to retrieve
-     * @param CorrectionChangeGroupNumber the number of the group to retrieve
-     * @return the found CorrectionChangeGroup, or null if not found
-     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentNumberAndCorrectionChangeGroupNumber(java.lang.String,
+     * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#findByDocumentHeaderIdAndCorrectionChangeGroupId(java.lang.Integer,
      *      java.lang.Integer)
      */
-    public CorrectionChangeGroup findByDocumentNumberAndCorrectionChangeGroupNumber(String documentNumber, Integer CorrectionChangeGroupNumber) {
-        LOG.debug("findByDocumentNumberAndCorrectionChangeGroupNumber() started");
-
+    public CorrectionChangeGroup findByDocumentNumberAndCorrectionChangeGroupNumber(Integer documentNumber, Integer CorrectionChangeGroupNumber) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
-        criteria.addEqualTo("correctionChangeGroupLineNumber", CorrectionChangeGroupNumber);
+        criteria.addEqualTo("FDOC_NBR", documentNumber);
+        criteria.addEqualTo("GL_COR_CHG_GRP_LN_NBR", CorrectionChangeGroupNumber);
 
-        QueryByCriteria query = QueryFactory.newQuery(CorrectionChangeGroup.class, criteria);
+        Class clazz = CorrectionChangeGroup.class;
+        QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
 
-        return (CorrectionChangeGroup) getPersistenceBrokerTemplate().getObjectByQuery(query);
+        CorrectionChangeGroup group = (CorrectionChangeGroup)getPersistenceBrokerTemplate().getObjectByQuery(query);
+        return group;
     }
 
-    /**
-     * Saves a correction change group
+    /*
+     * (non-Javadoc)
      * 
-     * @param group the Correction Change Group to save
      * @see org.kuali.module.gl.dao.CorrectionChangeGroupDao#save(org.kuali.module.gl.bo.CorrectionChangeGroup)
      */
     public void save(CorrectionChangeGroup group) {
-        LOG.debug("save() started");
-
         getPersistenceBrokerTemplate().store(group);
     }
 }
