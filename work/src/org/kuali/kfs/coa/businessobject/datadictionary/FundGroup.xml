@@ -1,191 +1,140 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-
-  <bean id="FundGroup" parent="FundGroup-parentBean" />
-
-  <bean id="FundGroup-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.chart.bo.FundGroup" />
-    <property name="inquiryDefinition" >
-      <ref bean="FundGroup-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="FundGroup-lookupDefinition" />
-    </property>
-    <property name="titleAttribute" value="code" />
-    <property name="objectLabel" value="Fund Group" />
-    <property name="attributes" >
-      <list>
-        <ref bean="FundGroup-code" />
-        <ref bean="FundGroup-active" />
-        <ref bean="FundGroup-financialReportingSortCode" />
-        <ref bean="FundGroup-name" />
-        <ref bean="FundGroup-fundGroupBudgetAdjustmentRestrictionLevelCode" />
-        <ref bean="FundGroup-versionNumber" />
-      </list>
-    </property>
-  </bean>
-
-<!-- Attribute Definitions -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2005-2007 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.chart.bo.FundGroup">
 
 
-  <bean id="FundGroup-code" parent="FundGroup-code-parentBean" />
+        <inquiry>
+            <title>Fund Group Inquiry</title>
 
-  <bean id="FundGroup-code-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="code" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Fund Group Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AlphaValidationPattern"
-            p:exactLength="2" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-  </bean>
-  <bean id="FundGroup-active" parent="FundGroup-active-parentBean" />
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+                <field attributeName="code" noInquiry="true" />
+                <field attributeName="name" />
+                <field attributeName="financialReportingSortCode" />
+                <field attributeName="fundGroupBudgetAdjustmentRestrictionLevelCode" />
+                <field attributeName="active" />
+            </inquiryFields></inquirySection></inquirySections>
+        </inquiry>
 
-  <bean id="FundGroup-active-parentBean" abstract="true" parent="GenericAttributes-activeIndicator">
-    <property name="name" value="active" />
-  </bean>
-  <bean id="FundGroup-financialReportingSortCode" parent="FundGroup-financialReportingSortCode-parentBean" />
+        <lookup>
+            <title>Fund Group Lookup</title>
 
-  <bean id="FundGroup-financialReportingSortCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="financialReportingSortCode" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Financial Reporting Sort Code" />
-    <property name="shortLabel" value="Fin. Rpt. Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern"
-            p:exactLength="2" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-  </bean>
-  <bean id="FundGroup-name" parent="FundGroup-name-parentBean" />
+            <instructions>Lookup a Fund Group</instructions>
 
-  <bean id="FundGroup-name-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="name" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Fund Group Name" />
-    <property name="shortLabel" value="Name" />
-    <property name="maxLength" value="40" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="42" />
-    </property>
-  </bean>
-  <bean id="FundGroup-fundGroupBudgetAdjustmentRestrictionLevelCode" parent="FundGroup-fundGroupBudgetAdjustmentRestrictionLevelCode-parentBean" />
+            <defaultSort attributeName="code" sortAscending="false" />
 
-  <bean id="FundGroup-fundGroupBudgetAdjustmentRestrictionLevelCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="fundGroupBudgetAdjustmentRestrictionLevelCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Budget Adjustment Restriction Code" />
-    <property name="shortLabel" value="BA Code" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.BudgetAdjustmentFundRestrictionsValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="FundGroup-versionNumber" parent="FundGroup-versionNumber-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="code" required="false" />
+                <lookupField attributeName="name" required="false" />
+                <lookupField attributeName="financialReportingSortCode" required="false" />
+                <lookupField attributeName="active" required="false">
+                    <defaultValue>Y</defaultValue>
+                </lookupField>
+            </lookupFields>
 
-  <bean id="FundGroup-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+            <resultFields>
+                <field attributeName="code" />
+                <field attributeName="name" />
+                <field attributeName="financialReportingSortCode" />
+                <field attributeName="fundGroupBudgetAdjustmentRestrictionLevelCode" />
+                <field attributeName="active" />
+            </resultFields>
+        </lookup>
 
-<!-- Business Object Inquiry Definition -->
+       <titleAttribute>code</titleAttribute>
+ 
+        <attributes>
+            <attribute name="code" forceUppercase="true">
+                <label>Fund Group Code</label>
+                <shortLabel>Code</shortLabel>
 
+                <maxLength>2</maxLength>
 
-  <bean id="FundGroup-inquiryDefinition" parent="FundGroup-inquiryDefinition-parentBean" />
+                <validationPattern>
+                    <alpha exactLength="2" />
+                </validationPattern>
+                <required>true</required>
+                <control>
+                    <text size="4" />
+                </control>
 
-  <bean id="FundGroup-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Fund Group Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="code"
-                    p:noInquiry="true" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="name" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialReportingSortCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="fundGroupBudgetAdjustmentRestrictionLevelCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="active" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <summary>Fund Group Code</summary>
+                <description>Fund Group Code</description>
+            </attribute>
 
-<!-- Business Object Lookup Definition -->
+            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
+            <attribute name="financialReportingSortCode" forceUppercase="false">
+                <label>Financial Reporting Sort Code</label>
+                <shortLabel>Fin. Rpt. Code</shortLabel>
 
-  <bean id="FundGroup-lookupDefinition" parent="FundGroup-lookupDefinition-parentBean" />
+                <maxLength>2</maxLength>
 
-  <bean id="FundGroup-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Fund Group Lookup" />
-    <property name="instructions" value="Lookup a Fund Group" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-        <property name="attributeNames" >
-          <list>
-            <value>code</value>
-          </list>
-        </property>
-        <property name="sortAscending" value="false" />
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="code" />
-        <bean parent="FieldDefinition"
-              p:attributeName="name" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialReportingSortCode" />
-        <bean parent="FieldDefinition"
-              p:defaultValue="Y"
-              p:attributeName="active" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="code" />
-        <bean parent="FieldDefinition"
-              p:attributeName="name" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialReportingSortCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="fundGroupBudgetAdjustmentRestrictionLevelCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="active" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <validationPattern>
+                    <numeric exactLength="2" />
+                </validationPattern>
+                <required>true</required>
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>Financial Reporting Sort Code</summary>
+                <description>The Financial Reporting Sort Code represents...</description>
+            </attribute>
+
+            <attribute name="name" forceUppercase="true">
+                <label>Fund Group Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>40</maxLength>
+
+                <validationPattern>
+                    <anyCharacter allowWhitespace="true" />
+                </validationPattern>
+                <required>true</required>
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>Fund Group Name</summary>
+                <description>The name of the Fund Group.</description>
+            </attribute>
+            
+            <attribute name="fundGroupBudgetAdjustmentRestrictionLevelCode" forceUppercase="true">
+                <label>Budget Adjustment Restriction Code</label>
+                <shortLabel>BA Code</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <required>true</required>
+                <control>
+                    <select valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.BudgetAdjustmentFundRestrictionsValuesFinder"/>
+                </control>
+
+                <summary>Budget Adjustment Restriction Code</summary>
+                <description>Budget Adjustment Restriction Code...</description>
+            </attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+        <objectLabel>Fund Group</objectLabel>
+    </businessObject>
+</dictionaryEntry>

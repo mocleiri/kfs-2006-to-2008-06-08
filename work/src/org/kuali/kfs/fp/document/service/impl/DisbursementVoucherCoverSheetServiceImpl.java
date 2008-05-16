@@ -15,6 +15,8 @@
  */
 package org.kuali.module.financial.service.impl;
 
+import static org.kuali.module.financial.rules.DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,12 +28,12 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.lookup.keyvalues.KeyValuesFinder;
+import org.kuali.core.rules.RulesUtils;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.KualiRuleService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceStructureService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.DisbursementVoucherDocumentationLocation;
 import org.kuali.module.financial.bo.PaymentReasonCode;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
@@ -46,31 +48,28 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 /**
- * This is the default implementation of the DisbursementVoucherCoverSheetService interface.
+ * 
+ * Service used for manipulating disbursement voucher cover sheets.
+ * 
  */
 public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVoucherCoverSheetService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DisbursementVoucherCoverSheetServiceImpl.class);
 
+    public static final String DV_COVERSHEET_TEMPLATE_RELATIVE_DIR = "static/help/templates/financial";
     public static final String DV_COVERSHEET_TEMPLATE_NM = "disbursementVoucherCoverSheetTemplate.pdf";
 
-    public static final String DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM = "COVER_SHEET_TEMPLATE_LINES";
-    public static final String DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM = "COVER_SHEET_TEMPLATE_RLINES";
-    public static final String DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM = "COVER_SHEET_TEMPLATE_NON_RESIDENT_ALIEN";
-    public static final String DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM = "COVER_SHEET_TEMPLATE_ATTACHMENT";
-    public static final String DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM = "COVER_SHEET_TEMPLATE_HANDLING";
-    public static final String DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM = "COVER_SHEET_TEMPLATE_BAR";
+    public static String DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM = "DV_COVER_SHEET_TEMPLATE_LINES";
+    public static String DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM = "DV_COVER_SHEET_TEMPLATE_RLINES";
+    public static String DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM = "DV_COVER_SHEET_TEMPLATE_ALIEN";
+    public static String DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM = "DV_COVER_SHEET_TEMPLATE_ATTACHMENT";
+    public static String DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM = "DV_COVER_SHEET_TEMPLATE_HANDLING";
+    public static String DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM = "DV_COVER_SHEET_TEMPLATE_BAR";
 
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
     private BusinessObjectService businessObjectService;
     private PersistenceStructureService persistenceStructureService;
 
     /**
-     * This method uses the values provided to build and populate a cover sheet associated with a given DisbursementVoucher.
-     * 
-     * @param templateDirectory The directory where the cover sheet template can be found.
-     * @param templateName The name of the cover sheet template to be used to build the cover sheet.
-     * @param document The DisbursementVoucher the cover sheet will be populated from.
-     * @param outputStream The stream the cover sheet file will be written to.
      * 
      * @see org.kuali.module.financial.service.DisbursementVoucherCoverSheetService#generateDisbursementVoucherCoverSheet(java.lang.String,
      *      java.lang.String, org.kuali.module.financial.document.DisbursementVoucherDocument, java.io.OutputStream)
@@ -98,25 +97,25 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
 
             // retrieve attachment label
             if (document.isDisbVchrAttachmentCode()) {
-                attachment = parameterService.getParameterValue(DisbursementVoucherDocument.class, DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM);
+                attachment = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_ATTACHMENT_PARM_NM);
             }
             // retrieve handling label
             if (document.isDisbVchrSpecialHandlingCode()) {
-                handling = parameterService.getParameterValue(DisbursementVoucherDocument.class, DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM);
+                handling = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_HANDLING_PARM_NM);
             }
             // retrieve data for alien payment code
             if (document.getDvPayeeDetail().isDisbVchrAlienPaymentCode()) {
-                String taxDocumentationLocationCode = parameterService.getParameterValue(DisbursementVoucherDocument.class, DisbursementVoucherRuleConstants.TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM);
+                String taxDocumentationLocationCode = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.TAX_DOCUMENTATION_LOCATION_CODE_PARM_NM);
 
                 address = retrieveAddress(taxDocumentationLocationCode);
-                alien = parameterService.getParameterValue(DisbursementVoucherDocument.class, DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM);
-                lines = parameterService.getParameterValue(DisbursementVoucherDocument.class, DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM);
+                alien = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_ALIEN_PARM_NM);
+                lines = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_LINES_PARM_NM);
             }
-            // determine if non-employee travel payment reasons
-            DisbursementVoucherDocumentRule dvDocRule = (DisbursementVoucherDocumentRule) SpringContext.getBean(KualiRuleService.class).getBusinessRulesInstance(document, DisbursementVoucherDocumentRule.class);
-            if (dvDocRule.isTravelNonEmplPaymentReason(document)) {
-                bar = parameterService.getParameterValue(DisbursementVoucherDocument.class, DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM);
-                rlines = parameterService.getParameterValue(DisbursementVoucherDocument.class, DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM);
+            // retrieve data for travel payment reasons
+            String[] travelNonEmplPaymentReasonCodes = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValues(DisbursementVoucherRuleConstants.DV_DOCUMENT_PARAMETERS_GROUP_NM, DisbursementVoucherRuleConstants.NONEMPLOYEE_TRAVEL_PAY_REASONS_PARM_NM);
+            if (RulesUtils.makeSet(travelNonEmplPaymentReasonCodes).contains(document.getDvPayeeDetail().getDisbVchrPaymentReasonCode())) {
+                bar = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_BAR_PARM_NM);
+                rlines = kualiConfigurationService.getApplicationParameterValue(DV_DOCUMENT_PARAMETERS_GROUP_NM, DV_COVER_SHEET_TEMPLATE_RLINES_PARM_NM);
             }
 
             try {
@@ -156,12 +155,11 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
     }
 
     /**
-     * This method is used to retrieve business objects that have a single primary key field without hard-coding 
-     * the key field name.
+     * used to retrieve BO's that have a single primary key field without hardcoding the key field name.
      * 
-     * @param clazz The class type that will be used to retrieve the primary key field names.
-     * @param keyValue The primary key value to be used to lookup the object by.
-     * @return An instance of a business object matching the class type and primary key value given.
+     * @param clazz
+     * @param keyValue
+     * @return
      */
     private PersistableBusinessObject retrieveObjectByKey(Class clazz, String keyValue) {
         List primaryKeyFields = persistenceStructureService.listPrimaryKeyFieldNames(clazz);
@@ -176,11 +174,11 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
     }
 
     /**
-     * This method is a helper method to retrieve values from a list based on a primary key provided.
+     * helper method to retrieve values from a list
      * 
-     * @param keyValuesFinder KeyValuesFinder that the value will be retrieved from.
-     * @param key The key to the value being retrieved.
-     * @return The value associated with the key provided, or empty string if no value is found.
+     * @param keyValuesFinder
+     * @param key
+     * @return
      */
     private String getValueForKey(KeyValuesFinder keyValuesFinder, String key) {
         for (Iterator i = keyValuesFinder.getKeyValues().iterator(); i.hasNext();) {
@@ -193,10 +191,10 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
     }
 
     /**
-     * This method contains logic to determine the address the cover sheet should be sent to.
+     * contains logic to determine adress the cover sheet should be sent to
      * 
-     * @param docLocCd A key used to retrieve the document location.  
-     * @return The address the cover sheet will be sent to or empty string if no location is found.
+     * @param docLocCd
+     * @return
      */
     private String retrieveAddress(String docLocCd) {
         String address = "";
@@ -213,7 +211,35 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
     // spring injected services
 
     /**
+     * Gets the kualiConfigurationService attribute.
+     * 
+     * @return Returns the kualiConfigurationService.
+     */
+    public KualiConfigurationService getKualiConfigurationService() {
+        return kualiConfigurationService;
+    }
+
+    /**
+     * Sets the kualiConfigurationService attribute value.
+     * 
+     * @param kualiConfigurationService The kualiConfigurationService to set.
+     */
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
+    }
+
+    /**
+     * Gets the businessObjectService attribute.
+     * 
+     * @return Returns the businessObjectService.
+     */
+    public BusinessObjectService getBusinessObjectService() {
+        return businessObjectService;
+    }
+
+    /**
      * Sets the businessObjectService attribute value.
+     * 
      * @param businessObjectService The businessObjectService to set.
      */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
@@ -222,17 +248,10 @@ public class DisbursementVoucherCoverSheetServiceImpl implements DisbursementVou
 
     /**
      * Sets the persistenceStructureService attribute value.
+     * 
      * @param persistenceStructureService The persistenceService to set.
      */
     public void setPersistenceStructureService(PersistenceStructureService persistenceStructureService) {
         this.persistenceStructureService = persistenceStructureService;
-    }
-
-    /**
-     * Sets the parameterService attribute value.
-     * @param parameterService The parameterService to set.
-     */
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
     }
 }

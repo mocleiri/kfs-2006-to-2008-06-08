@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/Entry.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +19,13 @@
 package org.kuali.module.gl.bo;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.service.DateTimeService;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.Options;
+import org.kuali.core.bo.OriginationCode;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.bo.OriginationCode;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountingPeriod;
 import org.kuali.module.chart.bo.Chart;
@@ -37,12 +35,12 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.PropertyConstants;
 
 /**
- * Represents a G/L entry
  * 
  */
-public class Entry extends PersistableBusinessObjectBase implements Transaction {
+public class Entry extends BusinessObjectBase implements Transaction {
     static final long serialVersionUID = -24983129882357448L;
 
     private Integer universityFiscalYear;
@@ -71,7 +69,8 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
     private Date financialDocumentReversalDate;
     private String transactionEncumbranceUpdateCode;
     private Date transactionPostingDate;
-    private Timestamp transactionDateTimeStamp;
+    private Date transactionDateTimeStamp;
+    private String budgetYear;
 
     // bo references
     private Account account;
@@ -91,7 +90,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
     private OriginationCode originationCode;
     private OriginationCode referenceOriginationCode;
 
-    private TransientBalanceInquiryAttributes dummyBusinessObject;
+    private DummyBusinessObject dummyBusinessObject;
 
     /**
      * Default constructor.
@@ -99,39 +98,9 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
     public Entry() {
     }
 
-    public Entry(Transaction t) {
-        super();
-
-        setUniversityFiscalYear(t.getUniversityFiscalYear());
-        setChartOfAccountsCode(t.getChartOfAccountsCode());
-        setAccountNumber(t.getAccountNumber());
-        setSubAccountNumber(t.getSubAccountNumber());
-        setFinancialObjectCode(t.getFinancialObjectCode());
-        setFinancialSubObjectCode(t.getFinancialSubObjectCode());
-        setFinancialBalanceTypeCode(t.getFinancialBalanceTypeCode());
-        setFinancialObjectTypeCode(t.getFinancialObjectTypeCode());
-        setUniversityFiscalPeriodCode(t.getUniversityFiscalPeriodCode());
-        setFinancialDocumentTypeCode(t.getFinancialDocumentTypeCode());
-        setFinancialSystemOriginationCode(t.getFinancialSystemOriginationCode());
-        setDocumentNumber(t.getDocumentNumber());
-        setTransactionLedgerEntrySequenceNumber(t.getTransactionLedgerEntrySequenceNumber());
-        setTransactionLedgerEntryDescription(t.getTransactionLedgerEntryDescription());
-        setTransactionLedgerEntryAmount(t.getTransactionLedgerEntryAmount());
-        setTransactionDebitCreditCode(t.getTransactionDebitCreditCode());
-        setTransactionDate(t.getTransactionDate());
-        setOrganizationDocumentNumber(t.getOrganizationDocumentNumber());
-        setProjectCode(t.getProjectCode());
-        setOrganizationReferenceId(t.getOrganizationReferenceId());
-        setReferenceFinancialDocumentTypeCode(t.getReferenceFinancialDocumentTypeCode());
-        setReferenceFinancialSystemOriginationCode(t.getReferenceFinancialSystemOriginationCode());
-        setReferenceFinancialDocumentNumber(t.getReferenceFinancialDocumentNumber());
-        setFinancialDocumentReversalDate(t.getFinancialDocumentReversalDate());
-        setTransactionEncumbranceUpdateCode(t.getTransactionEncumbranceUpdateCode());
-    }
-
     public Entry(Transaction t, java.util.Date postDate) {
         super();
-        this.dummyBusinessObject = new TransientBalanceInquiryAttributes();
+        this.dummyBusinessObject = new DummyBusinessObject();
 
         setUniversityFiscalYear(t.getUniversityFiscalYear());
         setChartOfAccountsCode(t.getChartOfAccountsCode());
@@ -162,8 +131,8 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
             setTransactionPostingDate(new Date(postDate.getTime()));
         }
 
-        Timestamp now = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
-        setTransactionDateTimeStamp(now);
+        java.util.Date now = new java.util.Date();
+        setTransactionDateTimeStamp(new Date(now.getTime()));
     }
 
     public OriginationCode getOriginationCode() {
@@ -655,7 +624,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @return Returns the transactionDateTimeStamp
      */
-    public Timestamp getTransactionDateTimeStamp() {
+    public Date getTransactionDateTimeStamp() {
         return transactionDateTimeStamp;
     }
 
@@ -664,8 +633,26 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @param transactionDateTimeStamp The transactionDateTimeStamp to set.
      */
-    public void setTransactionDateTimeStamp(Timestamp transactionDateTimeStamp) {
+    public void setTransactionDateTimeStamp(Date transactionDateTimeStamp) {
         this.transactionDateTimeStamp = transactionDateTimeStamp;
+    }
+
+    /**
+     * Gets the budgetYear attribute.
+     * 
+     * @return Returns the budgetYear
+     */
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    /**
+     * Sets the budgetYear attribute.
+     * 
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
     }
 
     public Account getAccount() {
@@ -788,7 +775,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
         m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
         m.put("financialDocumentTypeCode", this.financialDocumentTypeCode);
         m.put("financialSystemOriginationCode", this.financialSystemOriginationCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         m.put("transactionLedgerEntrySequenceNumber", this.transactionLedgerEntrySequenceNumber.toString());
         return m;
     }
@@ -798,7 +785,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @return Returns the dummyBusinessObject.
      */
-    public TransientBalanceInquiryAttributes getDummyBusinessObject() {
+    public DummyBusinessObject getDummyBusinessObject() {
         return dummyBusinessObject;
     }
 
@@ -807,7 +794,7 @@ public class Entry extends PersistableBusinessObjectBase implements Transaction 
      * 
      * @param dummyBusinessObject The dummyBusinessObject to set.
      */
-    public void setDummyBusinessObject(TransientBalanceInquiryAttributes dummyBusinessObject) {
+    public void setDummyBusinessObject(DummyBusinessObject dummyBusinessObject) {
         this.dummyBusinessObject = dummyBusinessObject;
     }
 

@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiInteger;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
@@ -54,15 +56,16 @@ import org.w3c.dom.Element;
 
 /**
  * This class creates an XML representation of a Budget's data.
+ * 
+ * 
  */
 public class BudgetXml {
 
     // The following field is hard coded as checks in nih-2590, nih-398, nih-modular, and NSFSummaryProposalBudget. Hence if
     // this field name is changed, the XLTs have to be updated. This also prevents us from using the more elegant:
-    // SpringContext.getBean(KualiConfigurationService.class).getParameterValue(ParameterConstants.RESEARCH_ADMINISTRATION_DOCUMENT.class,
-    // KraConstants.TO_BE_NAMED_LABEL)
+    // SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.KRA_NAMESPACE, KFSConstants.Components.DOCUMENT, KraConstants.TO_BE_NAMED_LABEL)
     private static final String TO_BE_NAMED = "To Be Named";
-
+    
     private static final String OUTPUT_PERCENT_SYMBOL = "%";
 
     /**
@@ -70,11 +73,11 @@ public class BudgetXml {
      * 
      * @param budgetDoc data representation of a budget
      * @param xmlDoc target xml representation for the budget. This field will be side effected.
-     * @param imagesUrl location of the images the stylesheets use
+     * @param baseUrl ensures that stylesheet may be path idependent
      * @param param a parameter that is to be added to the XML as PARAMETER1. Useful for custom functions of a style sheet.
      * @throws Exception
      */
-    public static void makeXml(BudgetDocument budgetDoc, Document xmlDoc, String imagesUrl, String param) throws Exception {
+    public static void makeXml(BudgetDocument budgetDoc, Document xmlDoc, String baseUrl, String param) throws Exception {
         Budget budget = budgetDoc.getBudget();
 
         // Initialize data needed. This is data true for the budget as global. There is some data in createTaskPeriodsElement
@@ -104,7 +107,7 @@ public class BudgetXml {
         DateFormat localFormat = DateFormat.getDateTimeInstance();
 
         budgetElement.setAttribute("XML_CREATE_DATE_TIME", localFormat.format(date));
-        budgetElement.setAttribute("IMAGES_URL", imagesUrl);
+        budgetElement.setAttribute("BASE_URL", baseUrl);
         budgetElement.setAttribute("PARAMETER1", param);
 
         budgetElement.appendChild(createProjectDirectorElement(budget, xmlDoc));
@@ -262,7 +265,10 @@ public class BudgetXml {
         costShareElement.setAttribute("INSTITUTION_COST_SHARE_INDICATOR", "YES");
         costShareElement.setAttribute("THIRD_PARTY_COST_SHARE_INDICATOR", "NO");
 
-        BudgetCostShareFormHelper budgetCostShareFormHelper = new BudgetCostShareFormHelper(budget.getPeriods(), budget.getPersonnel(), budget.getNonpersonnelItems(), budget.getInstitutionCostSharePersonnelItems(), budget.getInstitutionCostShareItems(), budget.getThirdPartyCostShareItems(), budgetIndirectCostFormHelper);
+        BudgetCostShareFormHelper budgetCostShareFormHelper =
+            new BudgetCostShareFormHelper(budget.getPeriods(), budget.getPersonnel(), budget.getNonpersonnelItems(),
+                    budget.getInstitutionCostSharePersonnelItems(), budget.getInstitutionCostShareItems(), budget.getThirdPartyCostShareItems(),
+                    budgetIndirectCostFormHelper);
 
         costShareElement.appendChild(createInstitutionCostShareElement(budgetCostShareFormHelper, budget, xmlDoc));
         costShareElement.appendChild(createInstitutionIndirectCostShareElement(budgetIndirectCostFormHelper, budget, xmlDoc));
@@ -347,13 +353,13 @@ public class BudgetXml {
      */
     private static Element createInstitutionIndirectCostShareElement(BudgetIndirectCostFormHelper budgetIndirectCostFormHelper, Budget budget, Document xmlDoc) {
         Element institutionIndirectCostShareElement = xmlDoc.createElement("INSTITUTION_INDIRECT_COST_SHARE");
-
+        
         institutionIndirectCostShareElement.setAttribute("TOTAL_INDIRECT_COST_SHARE", budgetIndirectCostFormHelper.getPeriodSubTotal().getCostShareCalculatedIndirectCost().toString());
         institutionIndirectCostShareElement.setAttribute("TOTAL_UNRECOVERED_INDIRECT_COST", budgetIndirectCostFormHelper.getPeriodSubTotal().getCostShareUnrecoveredIndirectCost().toString());
 
         for (int i = 0; i < budget.getPeriods().size(); i++) {
             BudgetTaskPeriodIndirectCost periodTotal = budgetIndirectCostFormHelper.getPeriodTotal(i);
-
+            
             Element institutionIndirectCostSharePeriodElement = xmlDoc.createElement("INSTITUTION_INDIRECT_COST_SHARE_PERIOD");
             institutionIndirectCostSharePeriodElement.setAttribute("PERIOD_NUMBER", Integer.toString(i + 1));
 
@@ -386,7 +392,7 @@ public class BudgetXml {
         thirdPartyCostSharePeriodsElement.setAttribute("THIRD_PARTY_TOTAL_BUDGETED", budgetCostShareFormHelper.getThirdPartyDirect().getTotalTotalBudgeted().toString());
         thirdPartyCostSharePeriodsElement.setAttribute("THIRD_PARTY_AMOUNT_DISTRIBUTED", budgetCostShareFormHelper.getThirdPartyDirect().getTotalAmountDistributed().toString());
         thirdPartyCostSharePeriodsElement.setAttribute("THIRD_PARTY_BALANCE", budgetCostShareFormHelper.getThirdPartyDirect().getTotalBalanceToBeDistributed().toString());
-
+        
         for (int i = 0; i < budget.getPeriods().size(); i++) {
             Element thirdPartyCostSharePeriodElement = xmlDoc.createElement("THIRD_PARTY_COST_SHARE_PERIOD");
             thirdPartyCostSharePeriodElement.setAttribute("PERIOD_NUMBER", Integer.toString(i + 1));
@@ -519,7 +525,7 @@ public class BudgetXml {
                 taskPeriodElement.setAttribute("TOTAL_AGENCY_REQUEST_INDIRECT_COST", budgetOverviewFormHelper.getTotalIndirectCostsAgencyRequest().toString());
                 taskPeriodElement.setAttribute("TOTAL_INSTITUTION_INDIRECT_COST", budgetOverviewFormHelper.getTotalIndirectCostsInstitutionCostShare().toString());
                 taskPeriodElement.setAttribute("TOTAL_INSTITUTION_UNRECOVERED_INDIRECT_COST", budgetOverviewFormHelper.getTotalIndirectCostsInstitutionCostShareUnrecovered().toString());
-
+                
                 // Not so sure why this exists as there doesn't appear to be a third party Indirect Cost. Maybe legacy XSLT support?
                 taskPeriodElement.setAttribute("TOTAL_THIRD_PARTY_INDIRECT_COST", "0");
 
@@ -565,7 +571,7 @@ public class BudgetXml {
             personElement.appendChild(appointmentElement);
 
             personElement.setAttribute("PROJECT_DIRECTOR", ObjectUtils.toString(budgetOverviewPersonnelHelper.isPersonProjectDirectorIndicator()).toUpperCase());
-
+            
             // CREATE_TIMESTAMP was dropped in KRA, it is replaced with this field
             personElement.setAttribute("SEQUENCE_NUMBER", ObjectUtils.toString(budgetOverviewPersonnelHelper.getBudgetUserSequenceNumber()));
 
@@ -585,8 +591,8 @@ public class BudgetXml {
 
             // Following calculation should probably be somewhere else.
             /** TODO Create App KFSConstants for the below or move into Personnel? Does it already exist there? */
-            KualiInteger agencyPercentEffortAmount = budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount() == null ? KualiInteger.ZERO : budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount();
-            KualiInteger institutionCostSharePercentEffortAmount = budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount() == null ? KualiInteger.ZERO : budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount();
+            KualiInteger agencyPercentEffortAmount = budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount();
+            KualiInteger institutionCostSharePercentEffortAmount = budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount();
             BigDecimal combinedPercentEffort = agencyPercentEffortAmount.add(institutionCostSharePercentEffortAmount).divide(new KualiInteger(100));
             String calendarMonths = "";
             String academicMonths = "";
@@ -601,15 +607,14 @@ public class BudgetXml {
                 summerMonths = personMonths.toString();
             }
             else if (budgetOverviewFormHelper.SUMMER_GRID_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode())) {
-                // A2 & AS, note that AS got caught above though and it should. Just trying to avoid creating another application
-                // constant
+                // A2 & AS, note that AS got caught above though and it should. Just trying to avoid creating another application constant
                 // as personnel already uses this one.
                 BigDecimal personMonths = new BigDecimal(9 * combinedPercentEffort.doubleValue()).setScale(1, BigDecimal.ROUND_HALF_DOWN);
                 academicMonths = personMonths.toString();
             }
             else if (budgetOverviewFormHelper.HOURLY_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode())) {
                 KualiInteger totalsHours = budgetOverviewPersonnelHelper.getUserAgencyHours().add(budgetOverviewPersonnelHelper.getUserInstitutionHours());
-
+                
                 // 173.33 = 2080 hours per year / 12 months
                 calendarMonths = "" + totalsHours.divide(new BigDecimal(173.33)).setScale(1, BigDecimal.ROUND_HALF_DOWN);
             }
@@ -713,7 +718,8 @@ public class BudgetXml {
                 for (Iterator indirectCostItemsIter = budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems().iterator(); indirectCostItemsIter.hasNext();) {
                     indirectCostItem = (BudgetTaskPeriodIndirectCost) indirectCostItemsIter.next();
 
-                    if (indirectCostItem.getBudgetTaskSequenceNumber().equals(budget.getTask(i).getBudgetTaskSequenceNumber()) && indirectCostItem.getBudgetPeriodSequenceNumber().equals(budget.getPeriod(j).getBudgetPeriodSequenceNumber())) {
+                    if (indirectCostItem.getBudgetTaskSequenceNumber().equals(budget.getTask(i).getBudgetTaskSequenceNumber())
+                            && indirectCostItem.getBudgetPeriodSequenceNumber().equals(budget.getPeriod(j).getBudgetPeriodSequenceNumber())) {
                         break;
                     }
                 }

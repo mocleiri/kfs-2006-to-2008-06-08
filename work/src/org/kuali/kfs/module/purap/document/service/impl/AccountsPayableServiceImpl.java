@@ -49,10 +49,8 @@ import org.kuali.module.purap.document.AccountsPayableDocument;
 import org.kuali.module.purap.document.CreditMemoDocument;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.service.AccountsPayableDocumentSpecificService;
 import org.kuali.module.purap.service.AccountsPayableService;
-import org.kuali.module.purap.service.PaymentRequestService;
 import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
@@ -347,23 +345,6 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
         // close/reopen purchase order.
         accountsPayableDocumentSpecificService.takePurchaseOrderCancelAction(apDocument);
     }
-    
-    /**
-     * @see org.kuali.module.purap.service.AccountsPayableService#performLogicForFullEntryCompleted(org.kuali.module.purap.document.PurchasingAccountsPayableDocument)
-     */
-    public void performLogicForFullEntryCompleted(PurchasingAccountsPayableDocument purapDocument) {
-        
-        AccountsPayableDocument apDocument = (AccountsPayableDocument)purapDocument;
-        AccountsPayableDocumentSpecificService accountsPayableDocumentSpecificService = apDocument.getDocumentSpecificService();
-        // eliminate unentered items
-        purapService.deleteUnenteredItems(apDocument);
-        // change accounts from percents to dollars
-        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(apDocument);
-        // do GL entries for document creation
-        accountsPayableDocumentSpecificService.generateGLEntriesCreateAccountsPayableDocument(apDocument);
-        // save the document
-        accountsPayableDocumentSpecificService.saveDocumentWithoutValidation(apDocument);
-    }
 
     /**
      * @see org.kuali.module.purap.service.AccountsPayableService#updateItemList(org.kuali.module.purap.document.AccountsPayableDocument)
@@ -537,9 +518,5 @@ public class AccountsPayableServiceImpl implements AccountsPayableService {
             return false;
         }
     }
-    
-
-
-
 
 }

@@ -16,57 +16,42 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.module.vendor.bo.CommodityCode;
 
-/**
- * Purchasing Item Base Business Object.
- */
 public abstract class PurchasingItemBase extends PurApItemBase implements PurchasingItem {
-    
-    private static List<PurchasingItemCapitalAsset> purchasingItemCapitalAssets;
-    private String addCapitalAssetNumber;
-    private String purchasingCommodityCode;
-    
-    private CommodityCode commodityCode;
-    
-    /**
-     * @see org.kuali.module.purap.bo.PurApItem#isConsideredEntered()
-     */
+
     public boolean isConsideredEntered() {
+        // TODO PURAP - this check is here because PO 'Change' docs all extend this class not PurchaseOrderDocumentRule... is that hierarchy necessary?
         if (this instanceof PurchaseOrderItem) {
             // if item is PO item... only validate active items
-            PurchaseOrderItem poi = (PurchaseOrderItem) this;
+            PurchaseOrderItem poi = (PurchaseOrderItem)this;
             if (!poi.isItemActiveIndicator()) {
                 return false;
             }
         }
         if (!getItemType().isItemTypeAboveTheLineIndicator()) {
-            if ((ObjectUtils.isNull(getItemUnitPrice())) && (StringUtils.isBlank(getItemDescription())) && (getSourceAccountingLines().isEmpty())) {
+            if ( (ObjectUtils.isNull(getItemUnitPrice())) && (StringUtils.isBlank(getItemDescription())) && (getSourceAccountingLines().isEmpty()) ) {
                 return false;
             }
         }
         return true;
     }
-
-    /**
-     * Determines if the Purchasing Item is empty.
-     * 
-     * @return boolean - true if item is empty, false if conditions show its not empty.
-     */
+    
     public boolean isEmpty() {
-        return !(StringUtils.isNotEmpty(getItemUnitOfMeasureCode()) || StringUtils.isNotEmpty(getItemCatalogNumber()) || StringUtils.isNotEmpty(getItemDescription()) || StringUtils.isNotEmpty(getItemCapitalAssetNoteText()) || StringUtils.isNotEmpty(getItemAuxiliaryPartIdentifier()) || ObjectUtils.isNotNull(getItemQuantity()) || (ObjectUtils.isNotNull(getItemUnitPrice()) && (getItemUnitPrice().compareTo(BigDecimal.ZERO) != 0)) || ObjectUtils.isNotNull(getCapitalAssetTransactionType()) || (!this.isAccountListEmpty()));
+        return ! ( StringUtils.isNotEmpty(getItemUnitOfMeasureCode()) ||
+                   StringUtils.isNotEmpty(getItemCatalogNumber()) ||
+                   StringUtils.isNotEmpty(getItemDescription()) ||
+                   StringUtils.isNotEmpty(getItemCapitalAssetNoteText()) ||
+                   StringUtils.isNotEmpty(getItemAuxiliaryPartIdentifier()) ||
+                   ObjectUtils.isNotNull(getItemQuantity()) ||
+                   (ObjectUtils.isNotNull(getItemUnitPrice()) && (getItemUnitPrice().compareTo(BigDecimal.ZERO) != 0)) ||
+                   ObjectUtils.isNotNull(getCapitalAssetTransactionType()) ||
+                   (!this.isAccountListEmpty()));                  
     }
 
-    /**
-     * Determines if the Purchasing Item Detail is empty.
-     * 
-     * @return boolean - true if item is empty, false if conditions show its not empty.
-     */
     public boolean isItemDetailEmpty() {
         boolean empty = true;
         empty &= ObjectUtils.isNull(getItemQuantity()) || StringUtils.isEmpty(getItemQuantity().toString());
@@ -75,37 +60,5 @@ public abstract class PurchasingItemBase extends PurApItemBase implements Purcha
         empty &= StringUtils.isEmpty(getItemDescription());
         empty &= ObjectUtils.isNull(getItemUnitPrice()) || (getItemUnitPrice().compareTo(BigDecimal.ZERO) == 0);
         return empty;
-    }
-
-    public List<PurchasingItemCapitalAsset> getPurchasingItemCapitalAssets() {
-        return purchasingItemCapitalAssets;
-    }
-
-    public void setPurchasingItemCapitalAssets(List<PurchasingItemCapitalAsset> purchasingItemCapitalAssets) {
-        this.purchasingItemCapitalAssets = purchasingItemCapitalAssets;
-    }
-
-    public String getAddCapitalAssetNumber() {
-        return addCapitalAssetNumber;
-    }
-
-    public void setAddCapitalAssetNumber(String addCapitalAssetNumber) {
-        this.addCapitalAssetNumber = addCapitalAssetNumber;
-    }
-
-    public CommodityCode getCommodityCode() {
-        return commodityCode;
-    }
-
-    public void setCommodityCode(CommodityCode commodityCode) {
-        this.commodityCode = commodityCode;
-    }
-
-    public String getPurchasingCommodityCode() {
-        return purchasingCommodityCode;
-    }
-
-    public void setPurchasingCommodityCode(String purchasingCommodityCode) {
-        this.purchasingCommodityCode = purchasingCommodityCode;
     }
 }

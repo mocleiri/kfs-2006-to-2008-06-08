@@ -19,11 +19,8 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.purap.bo.CapitalAssetTransactionType;
 import org.kuali.module.purap.bo.PurchaseOrderAccount;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
-import org.kuali.module.purap.bo.RecurringPaymentType;
 import org.kuali.module.purap.bo.RequisitionAccount;
 import org.kuali.module.purap.bo.RequisitionItem;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
@@ -50,7 +47,7 @@ public class PurapTestConstants {
     static class AmountsLimits {
         static final KualiDecimal LARGE_NEGATIVE_AMOUNT = new KualiDecimal(-1024);
         static final KualiDecimal SMALL_NEGATIVE_AMOUNT = new KualiDecimal(-32);
-        static final KualiDecimal ZERO = KualiDecimal.ZERO;
+        static final KualiDecimal ZERO = new KualiDecimal(0);
         static final KualiDecimal SMALL_POSITIVE_AMOUNT = new KualiDecimal(32);
         static final KualiDecimal LARGE_POSITIVE_AMOUNT = new KualiDecimal(1024);
     }
@@ -68,7 +65,6 @@ public class PurapTestConstants {
         static final String ACCOUNT_NUMBER = "1031400";
         static final KualiDecimal QUANTITY = new KualiDecimal(1);
         static final BigDecimal UNIT_PRICE = new KualiDecimal(32).bigDecimalValue();
-        static final BigDecimal NEGATIVE_UNIT_PRICE = new KualiDecimal(-32).bigDecimalValue();
         static final BigDecimal PERCENTAGE = new KualiDecimal(100).bigDecimalValue();
 
         static final BigDecimal UNIT_PRICE_APO_1 = new KualiDecimal(1.99).bigDecimalValue();
@@ -78,7 +74,7 @@ public class PurapTestConstants {
     @SuppressWarnings("deprecation")
     static class PO {
         static final Integer REQ_ID = new Integer("8888");
-        static final Date CREATE_DATE = new Date(107, 10, 10); // 2007-10-10
+        static final Date CREATE_DATE = new Date(107, 10, 10); // 2008-01-01
         static final KualiDecimal AMOUNT = new KualiDecimal(32);
     }
 
@@ -89,45 +85,5 @@ public class PurapTestConstants {
         static final String INVOICE_NUMBER = "123456789";
         static final KualiDecimal AMOUNT = new KualiDecimal(32);
     }
-    
-    static class CMInit {
-        static final String INITIAL_VENDOR_NUMBER = "1000-0";
-        static final KualiDecimal HIGH_AMOUNT = new KualiDecimal(32);
-        static final KualiDecimal LOW_AMOUNT = new KualiDecimal(16);
-        static final KualiDecimal ZERO_AMOUNT = new KualiDecimal(0);
-    }
-    
-    static class PurCams {
-        static final KualiDecimal CAPITAL_AMOUNT = new KualiDecimal(6000);
-        static final KualiDecimal POSITIVE_AMOUNT = new KualiDecimal(16);
-        static final KualiDecimal ZERO_AMOUNT = new KualiDecimal(0);
-        static final KualiDecimal NEGATIVE_AMOUNT = new KualiDecimal(-16);
-        static final ObjectCode CAPITAL_OBJECT_CODE = new ObjectCode(new Integer("2008"),"BL","7017"); //Level should be set to "CAP"
-        static final ObjectCode POSSIBLE_OBJECT_CODE = new ObjectCode(new Integer("2008"),"BL","7050"); //Level should be set to "S&E"
-        static final ObjectCode EXPENSE_OBJECT_CODE = new ObjectCode(new Integer("2008"),"BL","5010"); //Level should be set to "DEBT"
-        static final CapitalAssetTransactionType NONRECURRING_ASSET_NUMBER_REQUIRING_TRAN_TYPE = new CapitalAssetTransactionType("MDEX");
-        static final CapitalAssetTransactionType NONRECURRING_NON_ASSET_NUMBER_REQUIRING_TRAN_TYPE = new CapitalAssetTransactionType("NEW");
-        static final CapitalAssetTransactionType RECURRING_TRAN_TYPE = new CapitalAssetTransactionType("LEAS");
-        static final RecurringPaymentType RECURRING_PAYMENT_TYPE = new RecurringPaymentType();
-        static final Long ASSET_NUMBER_1 = new Long("333221");
-        static final Long ASSET_NUMBER_2 = new Long("333222");
-        
-    }
-    
-    static class Threshold {
-        static final String CHART_CODE = "BA";
-        static final String CHART_CODE_INVALID = "XX";
-        static final String ACCOUNT_TYPE = "AI";
-        static final String SUBACCOUNT_TYPE = "AUXAMB";
-        static final String SUBACCOUNT_TYPE_INVALID = "XXXXXX";
-        static final String COMMODITY_CODE = "812922";
-        static final String COMMODITY_CODE_INVALID = "000000";
-        static final String OBJECT_CODE = "3310";
-        static final String OBJECT_CODE_INVALID = "0000";
-        static final String ORG_CODE = "ACAC";
-        static final String ORG_CODE_INVALID = "XXXX";
-        static final String VENDOR_NUMBER = "1000-0";
-        static final String VENDOR_NUMBER_INVALID = "0000-0";
-        static final KualiDecimal THRESHOLD_AMOUNT = new KualiDecimal(100);
-    }
+
 }

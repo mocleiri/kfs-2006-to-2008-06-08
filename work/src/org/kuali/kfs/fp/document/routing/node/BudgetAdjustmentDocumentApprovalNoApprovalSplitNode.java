@@ -21,13 +21,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.user.AuthenticationUserId;
+
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.UniversalUserService;
 import org.kuali.kfs.bo.AccountResponsibility;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
 
@@ -38,9 +36,13 @@ import edu.iu.uis.eden.engine.node.SplitResult;
 
 /**
  * Checks for conditions on a Budget Adjustment document that allow auto-approval by the initiator. If these conditions are not met,
- * standard financial routing is performed. The conditions for auto-approval are: 1) Single account used on document 2) Initiator is
- * fiscal officer or primary delegate for the account 3) Only current adjustments are being made 4) The fund group for the account
- * is not contract and grants 5) current income/expense decrease amount must equal increase amount
+ * standard financial routing is performed.
+ * 
+ * The conditions for auto-approval are: 1) Single account used on document 2) Initiator is fiscal officer or primary delegate for
+ * the account 3) Only current adjustments are being made 4) The fund group for the account is not contract and grants 5) current
+ * income/expense decrease amount must equal increase amount
+ * 
+ * 
  */
 public class BudgetAdjustmentDocumentApprovalNoApprovalSplitNode implements SplitNode {
 
@@ -49,14 +51,18 @@ public class BudgetAdjustmentDocumentApprovalNoApprovalSplitNode implements Spli
 
         // retrieve ba document
         String documentID = routeContext.getDocument().getRouteHeaderId().toString();
-        BudgetAdjustmentDocument budgetDocument = (BudgetAdjustmentDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(documentID);
+        BudgetAdjustmentDocument budgetDocument = (BudgetAdjustmentDocument) SpringServiceLocator.getDocumentService().getByDocumentHeaderId(documentID);
 
+        //TODO: due to transaction scoping issues, any proxied items in budgetDocument are now irretrievable!  Any 
+        //      attempt to retrieve them will cause OJB to throw an exception.  This will be fixed in the 
+        //      general case in Phase 2.
+        
         // new list so that sourceAccountingLines isn't modified by addAll statement. Important for
         // total calculations below.
         List accountingLines = new ArrayList();
         accountingLines.addAll(budgetDocument.getSourceAccountingLines());
         accountingLines.addAll(budgetDocument.getTargetAccountingLines());
-
+        
         /* only one account can be present on document and only current adjustments allowed */
         String chart = "";
         String accountNumber = "";
@@ -80,8 +86,8 @@ public class BudgetAdjustmentDocumentApprovalNoApprovalSplitNode implements Spli
         // check remaining conditions
         if (autoApprovalAllowed) {
             // initiator should be fiscal officer or primary delegate for account
-            UniversalUser initiator = SpringContext.getBean(UniversalUserService.class).getUniversalUser(new AuthenticationUserId(budgetDocument.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId()));
-            List userAccounts = SpringContext.getBean(AccountService.class).getAccountsThatUserIsResponsibleFor(initiator);
+            UniversalUser initiator = SpringServiceLocator.getUniversalUserService().getUniversalUser(new AuthenticationUserId(budgetDocument.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId()));
+            List userAccounts = SpringServiceLocator.getAccountService().getAccountsThatUserIsResponsibleFor(initiator);
             Account userAccount = null;
             for (Iterator iter = userAccounts.iterator(); iter.hasNext();) {
                 AccountResponsibility account = (AccountResponsibility) iter.next();

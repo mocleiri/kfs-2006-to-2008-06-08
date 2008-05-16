@@ -62,6 +62,8 @@ import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 
+ * THIS CODE IS NOT USED IN RELEASE 2 BUT THE CODE WAS LEFT IN TO
+ * FACILITATE TURNING IT BACK ON EARLY IN THE DEVELOPMENT CYCLE OF RELEASE 3.
  * 
  */
 public class PurchaseOrderQuotePdf extends PurapPdf {
@@ -264,9 +266,6 @@ public class PurchaseOrderQuotePdf extends PurapPdf {
         }
         if ((StringUtils.isNotBlank(poqv.getVendorStateCode())) && (!poqv.getVendorStateCode().equals("--"))) {
             vendorInfo.append(", " + poqv.getVendorStateCode());
-        }
-        if (StringUtils.isNotBlank(poqv.getVendorAddressInternationalProvinceName())) {
-            vendorInfo.append(", " + poqv.getVendorAddressInternationalProvinceName());
         }
         if (StringUtils.isNotBlank(poqv.getVendorPostalCode())) {
             vendorInfo.append(" " + poqv.getVendorPostalCode() + "\n");

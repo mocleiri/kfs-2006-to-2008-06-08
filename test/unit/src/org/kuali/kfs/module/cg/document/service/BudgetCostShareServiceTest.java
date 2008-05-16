@@ -15,28 +15,30 @@
  */
 package org.kuali.module.kra.service;
 
-import static org.kuali.test.util.KualiTestAssertionUtils.assertEquality;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
+
+import static org.kuali.kfs.util.SpringServiceLocator.getBudgetCostShareService;
+
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
+import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.InstitutionCostSharePersonnel;
-import org.kuali.module.kra.budget.service.BudgetCostShareService;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.test.suite.AnnotationTestSuite;
 import org.kuali.test.suite.CrossSectionSuite;
+import static org.kuali.test.util.KualiTestAssertionUtils.assertEquality;
 
 /**
  * This class tests service methods in BudgetCostShareService.
+ * 
+ * 
  */
 @AnnotationTestSuite(CrossSectionSuite.class)
-@ConfigureContext
+@WithTestSpringContext
 public class BudgetCostShareServiceTest extends KualiTestBase {
 
     public void testCleanseCostShare() {
@@ -50,7 +52,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         List<InstitutionCostSharePersonnel> institutionCostSharePersonnel = new ArrayList();
 
         // CONDITION: cost share TRUE, all empty lists
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: no data change, but no crashes either
         assertTrue("universityCostShareIndicator should never be changed", universityCostShareIndicator);
         assertTrue("budgetInstitutionCostShare should still be empty", budgetInstitutionCostShare.size() == 0);
@@ -61,7 +63,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         budgetThirdPartyCostShare.add(new BudgetThirdPartyCostShare());
 
         // CONDITION: cost share TRUE, lists have values
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: no data change
         assertTrue("universityCostShareIndicator should never be changed", universityCostShareIndicator);
         assertTrue("budgetInstitutionCostShare should still contain 1 item", budgetInstitutionCostShare.size() == 1);
@@ -71,7 +73,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         universityCostShareIndicator = false;
 
         // CONDITION: cost share TRUE, lists have values
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: no data change
         assertFalse("universityCostShareIndicator should never be changed", universityCostShareIndicator);
         assertTrue("budgetInstitutionCostShare should now be empty", budgetInstitutionCostShare.size() == 0);
@@ -83,7 +85,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         budgetThirdPartyCostShareIndicator = false;
 
         // CONDITION: cost share TRUE, lists have values
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: no data change
         assertTrue("universityCostShareIndicator should never be changed", universityCostShareIndicator);
         assertTrue("budgetInstitutionCostShare should still contain 1 item", budgetInstitutionCostShare.size() == 1);
@@ -92,7 +94,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
 
 
         // CONDITION: cost share TRUE, all empty lists
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: no data change, but no crashes either
         assertTrue("personnel should never be changed", personnel.size() == 0);
         assertTrue("institutionCostSharePersonnel should still be empty", institutionCostSharePersonnel.size() == 0);
@@ -119,10 +121,10 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         universityCostSharePerson2.setOrganizationCode("CARD");
 
         // Add data to institutionCostSharePersonnel (this assumes testReconcileCostShare runs clean).
-        SpringContext.getBean(BudgetCostShareService.class).reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
 
         // CONDITION: cost share TRUE, personnel 2 items, institutionCostSharePersonnel same 2 items
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: no data change
         assertTrue("personnel should never be changed", personnel.size() == 2);
         assertTrue("institutionCostSharePersonnel should still contain 2 items", institutionCostSharePersonnel.size() == 2);
@@ -138,7 +140,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         personnel.add(budgetUser4);
 
         // CONDITION: Same as above but null / empty data was introduced.
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: Same as above, no crash should occur.
         assertTrue("personnel should never be changed", personnel.size() == 4);
         assertTrue("institutionCostSharePersonnel should still contain 2 items", institutionCostSharePersonnel.size() == 2);
@@ -146,7 +148,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         personnel.remove(0);
 
         // CONDITION: The BL/CSCI entry was removed.
-        SpringContext.getBean(BudgetCostShareService.class).cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().cleanseCostShare(universityCostShareIndicator, budgetInstitutionCostShare, budgetThirdPartyCostShareIndicator, budgetThirdPartyCostShare, personnel, institutionCostSharePersonnel);
         // RESULT: The BL/CSCI entry shouldn't be in institutionCostSharePersonnel anymore
         assertTrue("personnel should never be changed", personnel.size() == 3);
         assertTrue("institutionCostSharePersonnel should only contain 1 item now", institutionCostSharePersonnel.size() == 1);
@@ -160,7 +162,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         List<InstitutionCostSharePersonnel> institutionCostSharePersonnel = new ArrayList();
 
         // CONDITION: no personnel, no cost share
-        SpringContext.getBean(BudgetCostShareService.class).reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
         // RESULT: no personnel, no cost share
         assertEquality(documentHeaderId, "160642");
         assertTrue("Should still be empty.", personnel.isEmpty());
@@ -177,7 +179,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         universityCostSharePerson1.setOrganizationCode("CSCI");
 
         // CONDITION: 1 person, no cost share
-        SpringContext.getBean(BudgetCostShareService.class).reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
         // RESULT: 1 person, 1 cost share with identical keys
         assertEquality(documentHeaderId, "160642");
         assertTrue("Person list should not be changed.", personnel.size() == 1);
@@ -187,7 +189,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         personnel.add(budgetUser1);
 
         // CONDITION: 2 person, 1 cost share (same keys)
-        SpringContext.getBean(BudgetCostShareService.class).reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
         // RESULT: 2 person, 1 cost share with identical keys (ie. item not added again)
         assertEquality(documentHeaderId, "160642");
         assertTrue("Person list should not be changed.", personnel.size() == 2);
@@ -205,7 +207,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         universityCostSharePerson2.setOrganizationCode("CARD");
 
         // CONDITION: 3 people, 1 cost share (one key same)
-        SpringContext.getBean(BudgetCostShareService.class).reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
         // RESULT: 3 people, 2 cost share with identical keys
         assertEquality(documentHeaderId, "160642");
         assertTrue("Person list should not be changed.", personnel.size() == 3);
@@ -224,7 +226,7 @@ public class BudgetCostShareServiceTest extends KualiTestBase {
         personnel.add(budgetUser4);
 
         // CONDITION: 5 people, 2 cost share (two keys same)
-        SpringContext.getBean(BudgetCostShareService.class).reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
+        getBudgetCostShareService().reconcileCostShare(documentHeaderId, personnel, institutionCostSharePersonnel);
         // RESULT: 5 people, 2 cost share with identical keys
         assertEquality(documentHeaderId, "160642");
         assertTrue("Person list should not be changed.", personnel.size() == 5);
