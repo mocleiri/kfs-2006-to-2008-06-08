@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.util.Message;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.ExpenditureTransaction;
 import org.kuali.module.gl.bo.OriginEntryGroup;
@@ -30,6 +29,7 @@ import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.document.CorrectionDocument;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
+import org.kuali.module.gl.util.Message;
 
 /**
  * An interface of methods that allow all of the GL processes generate reports about their runs
