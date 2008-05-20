@@ -96,6 +96,13 @@ CREATE TABLE PUR_REQS_T(
         RCVNG_DOC_REQ_IND              VARCHAR2(1),
         PMT_RQST_PSTV_APRVL_IND        VARCHAR2(1),
         CPTL_AST_SYS_TYP_CD            VARCHAR2(4),
+        PUR_RCVNG_NM                   VARCHAR2(45),
+        PUR_RCVNG_LN1_ADDR             VARCHAR2(45),
+        PUR_RCVNG_LN2_ADDR             VARCHAR2(45),
+        PUR_RCVNG_CTY_NM               VARCHAR2(45),
+        PUR_RCVNG_ST_CD                VARCHAR2(2),
+        PUR_RCVNG_PSTL_CD              VARCHAR2(20),
+        PUR_RCVNG_CNTRY_CD             VARCHAR2(2),
      CONSTRAINT PUR_REQS_TP1 PRIMARY KEY (
         REQS_ID),
      CONSTRAINT PUR_REQS_TC0 UNIQUE (OBJ_ID)

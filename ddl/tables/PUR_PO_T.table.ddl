@@ -116,6 +116,13 @@ CREATE TABLE PUR_PO_T(
         PO_QT_INITLZTN_DT              DATE,
         PO_QT_AWDED_DT                 DATE,
         CPTL_AST_SYS_TYP_CD            VARCHAR2(4),
+        PUR_RCVNG_NM                   VARCHAR2(45),
+        PUR_RCVNG_LN1_ADDR             VARCHAR2(45),
+        PUR_RCVNG_LN2_ADDR             VARCHAR2(45),
+        PUR_RCVNG_CTY_NM               VARCHAR2(45),
+        PUR_RCVNG_ST_CD                VARCHAR2(2),
+        PUR_RCVNG_PSTL_CD              VARCHAR2(20),
+        PUR_RCVNG_CNTRY_CD             VARCHAR2(2),
      CONSTRAINT PUR_PO_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT PUR_PO_TC0 UNIQUE (OBJ_ID)
