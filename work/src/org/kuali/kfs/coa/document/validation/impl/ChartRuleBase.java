@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/document/validation/impl/ChartRuleBase.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +18,15 @@
 package org.kuali.module.chart.rules;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.Maintainable;
 import org.kuali.core.rule.RouteDocumentRule;
 import org.kuali.core.rule.SaveDocumentRule;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.module.chart.bo.Account;
 
-/**
- * This class provides some basic saving and routing rules for Chart documents
- */
 public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ChartRuleBase.class);
 
@@ -74,6 +73,7 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
     }
 
     /**
+     * 
      * This method should be overridden to provide custom rules for processing document routing
      * 
      * @param document
@@ -122,7 +122,7 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
 
         String documentHeaderId = document.getDocumentNumber();
         if (documentHeaderId == null) {
-            GlobalVariables.getErrorMap().putError("documentHeaderId", KFSKeyConstants.ERROR_REQUIRED);
+            GlobalVariables.getErrorMap().putError("documentHeaderId", KeyConstants.ERROR_REQUIRED);
             success = false;
         }
 
@@ -136,13 +136,13 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
         GlobalVariables.getErrorMap().addToErrorPath("newMaintainableObject");
         Maintainable newMaintainable = maintenanceDocument.getNewMaintainableObject();
         if (newMaintainable == null) {
-            GlobalVariables.getErrorMap().putError("", KFSKeyConstants.ERROR_REQUIRED, "Account");
+            GlobalVariables.getErrorMap().putError("", KeyConstants.ERROR_REQUIRED, "Account");
             success = false;
         }
         else {
             Account newAccount = (Account) newMaintainable.getBusinessObject();
             if (StringUtils.isBlank(newAccount.getAccountName())) {
-                GlobalVariables.getErrorMap().putError("accountNumber", KFSKeyConstants.ERROR_REQUIRED, "Account Number");
+                GlobalVariables.getErrorMap().putError("accountNumber", KeyConstants.ERROR_REQUIRED, "Account Number");
                 success = false;
             }
         }
@@ -152,13 +152,13 @@ public class ChartRuleBase implements RouteDocumentRule, SaveDocumentRule {
             GlobalVariables.getErrorMap().addToErrorPath("oldMaintainableObject");
             Maintainable oldMaintainable = maintenanceDocument.getOldMaintainableObject();
             if (oldMaintainable == null) {
-                GlobalVariables.getErrorMap().putError("", KFSKeyConstants.ERROR_REQUIRED, "Account");
+                GlobalVariables.getErrorMap().putError("", KeyConstants.ERROR_REQUIRED, "Account");
                 success = false;
             }
             else {
                 Account oldAccount = (Account) oldMaintainable.getBusinessObject();
                 if (StringUtils.isBlank(oldAccount.getAccountName())) {
-                    GlobalVariables.getErrorMap().putError("accountNumber", KFSKeyConstants.ERROR_REQUIRED, "Account Number");
+                    GlobalVariables.getErrorMap().putError("accountNumber", KeyConstants.ERROR_REQUIRED, "Account Number");
                     success = false;
                 }
             }

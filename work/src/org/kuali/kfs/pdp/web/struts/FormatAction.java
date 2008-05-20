@@ -1,17 +1,24 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.pdp.action.format;
 
@@ -45,24 +52,24 @@ public class FormatAction extends BaseAction {
 
     public FormatAction() {
         super();
-        setFormatService(SpringContext.getBean(FormatService.class));
+        setFormatService( SpringContext.getBean(FormatService.class) );
     }
 
     public void setFormatService(FormatService fs) {
         formatService = fs;
     }
 
-    protected boolean isAuthorized(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+    protected boolean isAuthorized(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) {
         SecurityRecord sr = getSecurityRecord(request);
-        return sr.isProcessRole()||sr.isSysAdminRole();
+        return sr.isProcessRole();
     }
 
     protected ActionForward executeLogic(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         LOG.debug("executeLogic() started");
 
-        FormatProcessForm fpf = (FormatProcessForm) form;
+        FormatProcessForm fpf = (FormatProcessForm)form;
 
-        if ("btnCancel".equals(whichButtonWasPressed(request))) {
+        if ( "btnCancel".equals(whichButtonWasPressed(request)) ) {
             // Clear the format
             formatService.clearUnfinishedFormat(fpf.getProcId());
             return mapping.findForward("cleared");
@@ -73,39 +80,36 @@ public class FormatAction extends BaseAction {
             Collections.sort(results);
             FormatResult total = new FormatResult();
             for (Iterator iter = results.iterator(); iter.hasNext();) {
-                FormatResult element = (FormatResult) iter.next();
+                FormatResult element = (FormatResult)iter.next();
                 total.setPayments(total.getPayments() + element.getPayments());
                 total.setAmount(total.getAmount().add(element.getAmount()));
             }
-            request.setAttribute("campusCd", fpf.getCampusCd());
-            request.setAttribute("procId", fpf.getProcId());
-            request.setAttribute("formatResultList", results);
-            request.setAttribute("total", total);
+            request.setAttribute("campusCd",fpf.getCampusCd());
+            request.setAttribute("procId",fpf.getProcId());
+            request.setAttribute("formatResultList",results);
+            request.setAttribute("total",total);
             request.removeAttribute("FormatProcessForm");
             request.getSession().removeAttribute("FormatSelectionForm");
             request.getSession().removeAttribute("campus");
             return mapping.findForward("finished");
-        }
-        catch (NoBankForCustomerException nbfce) {
+        } catch (NoBankForCustomerException nbfce) {
             LOG.error("executeLogic() No Bank For Customer Exception", nbfce);
             ActionErrors ae = new ActionErrors();
-            ae.add("global", new ActionMessage("format.bank.missing", nbfce.getCustomerProfile()));
-            saveErrors(request, ae);
-            return mapping.findForward("pdp_message");
-        }
-        catch (DisbursementRangeExhaustedException e) {
+            ae.add("global",new ActionMessage("format.bank.missing",nbfce.getCustomerProfile()));
+            saveErrors(request,ae);
+            return mapping.findForward("pdp_error");
+        } catch (DisbursementRangeExhaustedException e) {
             LOG.error("executeLogic() Disbursement Range Exhausted Exception", e);
             ActionErrors ae = new ActionErrors();
-            ae.add("global", new ActionMessage("format.disb.exhausted"));
-            saveErrors(request, ae);
-            return mapping.findForward("pdp_message");
-        }
-        catch (MissingDisbursementRangeException e) {
+            ae.add("global",new ActionMessage("format.disb.exhausted"));
+            saveErrors(request,ae);
+            return mapping.findForward("pdp_error");
+        } catch (MissingDisbursementRangeException e) {
             LOG.error("executeLogic() Missing Disbursment Number Range", e);
             ActionMessages ae = new ActionMessages();
-            ae.add("global", new ActionMessage("format.disb.missing"));
-            saveErrors(request, ae);
-            return mapping.findForward("pdp_message");
+            ae.add("global",new ActionMessage("format.disb.missing"));
+            saveErrors(request,ae);
+            return mapping.findForward("pdp_error");
         }
     }
 }

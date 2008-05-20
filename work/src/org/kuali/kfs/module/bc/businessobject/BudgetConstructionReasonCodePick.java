@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/BudgetConstructionReasonCodePick.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,85 +20,90 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Business object that represents a selected/unselected funding reason code for a user.
+ * 
  */
-public class BudgetConstructionReasonCodePick extends PersistableBusinessObjectBase {
+public class BudgetConstructionReasonCodePick extends BusinessObjectBase {
 
-    private String appointmentFundingReasonCode;
-    private Integer selectFlag;
-    private String personUniversalIdentifier;
+	private String appointmentFundingReasonCode;
+	private Integer selectFlag;
+	private Long personUniversalIdentifier;
 
     BudgetConstructionAppointmentFundingReasonCode appointmentFundingReason;
+    
+	/**
+	 * Default constructor.
+	 */
+	public BudgetConstructionReasonCodePick() {
+
+	}
+
+	/**
+	 * Gets the appointmentFundingReasonCode attribute.
+	 * 
+	 * @return Returns the appointmentFundingReasonCode
+	 * 
+	 */
+	public String getAppointmentFundingReasonCode() { 
+		return appointmentFundingReasonCode;
+	}
+
+	/**
+	 * Sets the appointmentFundingReasonCode attribute.
+	 * 
+	 * @param appointmentFundingReasonCode The appointmentFundingReasonCode to set.
+	 * 
+	 */
+	public void setAppointmentFundingReasonCode(String appointmentFundingReasonCode) {
+		this.appointmentFundingReasonCode = appointmentFundingReasonCode;
+	}
+
+
+	/**
+	 * Gets the selectFlag attribute.
+	 * 
+	 * @return Returns the selectFlag
+	 * 
+	 */
+	public Integer getSelectFlag() { 
+		return selectFlag;
+	}
+
+	/**
+	 * Sets the selectFlag attribute.
+	 * 
+	 * @param selectFlag The selectFlag to set.
+	 * 
+	 */
+	public void setSelectFlag(Integer selectFlag) {
+		this.selectFlag = selectFlag;
+	}
+
+
+	/**
+	 * Gets the personUniversalIdentifier attribute.
+	 * 
+	 * @return Returns the personUniversalIdentifier
+	 * 
+	 */
+	public Long getPersonUniversalIdentifier() { 
+		return personUniversalIdentifier;
+	}
+
+	/**
+	 * Sets the personUniversalIdentifier attribute.
+	 * 
+	 * @param personUniversalIdentifier The personUniversalIdentifier to set.
+	 * 
+	 */
+	public void setPersonUniversalIdentifier(Long personUniversalIdentifier) {
+		this.personUniversalIdentifier = personUniversalIdentifier;
+	}
 
     /**
-     * Default constructor.
-     */
-    public BudgetConstructionReasonCodePick() {
-        selectFlag = new Integer(0);
-    }
-
-    /**
-     * Gets the appointmentFundingReasonCode attribute.
-     * 
-     * @return Returns the appointmentFundingReasonCode
-     */
-    public String getAppointmentFundingReasonCode() {
-        return appointmentFundingReasonCode;
-    }
-
-    /**
-     * Sets the appointmentFundingReasonCode attribute.
-     * 
-     * @param appointmentFundingReasonCode The appointmentFundingReasonCode to set.
-     */
-    public void setAppointmentFundingReasonCode(String appointmentFundingReasonCode) {
-        this.appointmentFundingReasonCode = appointmentFundingReasonCode;
-    }
-
-
-    /**
-     * Gets the selectFlag attribute.
-     * 
-     * @return Returns the selectFlag
-     */
-    public Integer getSelectFlag() {
-        return selectFlag;
-    }
-
-    /**
-     * Sets the selectFlag attribute.
-     * 
-     * @param selectFlag The selectFlag to set.
-     */
-    public void setSelectFlag(Integer selectFlag) {
-        this.selectFlag = selectFlag;
-    }
-
-
-    /**
-     * Gets the personUniversalIdentifier attribute.
-     * 
-     * @return Returns the personUniversalIdentifier.
-     */
-    public String getPersonUniversalIdentifier() {
-        return personUniversalIdentifier;
-    }
-
-    /**
-     * Sets the personUniversalIdentifier attribute value.
-     * 
-     * @param personUniversalIdentifier The personUniversalIdentifier to set.
-     */
-    public void setPersonUniversalIdentifier(String personUniversalIdentifier) {
-        this.personUniversalIdentifier = personUniversalIdentifier;
-    }
-
-    /**
-     * Gets the appointmentFundingReason attribute.
-     * 
+     * Gets the appointmentFundingReason attribute. 
      * @return Returns the appointmentFundingReason.
      */
     public BudgetConstructionAppointmentFundingReasonCode getAppointmentFundingReason() {
@@ -105,7 +112,6 @@ public class BudgetConstructionReasonCodePick extends PersistableBusinessObjectB
 
     /**
      * Sets the appointmentFundingReason attribute value.
-     * 
      * @param appointmentFundingReason The appointmentFundingReason to set.
      * @deprecated
      */
@@ -117,8 +123,10 @@ public class BudgetConstructionReasonCodePick extends PersistableBusinessObjectB
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-        m.put("personUniversalIdentifier", this.personUniversalIdentifier);
+        LinkedHashMap m = new LinkedHashMap();      
+        if (this.personUniversalIdentifier != null) {
+            m.put("personUniversalIdentifier", this.personUniversalIdentifier.toString());
+        }
         m.put("appointmentFundingReasonCode", this.appointmentFundingReasonCode);
         return m;
     }

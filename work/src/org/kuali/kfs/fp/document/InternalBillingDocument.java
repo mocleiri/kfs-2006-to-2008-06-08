@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
 
@@ -19,18 +26,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
+import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLineParser;
+import org.kuali.core.bo.AccountingLineParserBase;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.AccountingLineParserBase;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.service.DebitDeterminerService;
 import org.kuali.module.financial.bo.InternalBillingItem;
 
 
@@ -38,8 +38,10 @@ import org.kuali.module.financial.bo.InternalBillingItem;
  * This is the business object that represents the InternalBillingDocument in Kuali. This is a transactional document that will
  * eventually post transactions to the G/L. It integrates with workflow and also contains two groupings of accounting lines: Expense
  * and Income.
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class InternalBillingDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling {
+public class InternalBillingDocument extends TransactionalDocumentBase {
 
     private List items;
     private Integer nextItemLineNumber;
@@ -69,6 +71,7 @@ public class InternalBillingDocument extends AccountingDocumentBase implements C
      * initialized if necessary.
      * 
      * @param index
+     * 
      * @return the item
      */
     public InternalBillingItem getItem(int index) {
@@ -103,7 +106,7 @@ public class InternalBillingDocument extends AccountingDocumentBase implements C
      * @return the total
      */
     public KualiDecimal getItemTotal() {
-        KualiDecimal total = KualiDecimal.ZERO;
+        KualiDecimal total = new KualiDecimal(0);
         for (Iterator iterator = items.iterator(); iterator.hasNext();) {
             total = total.add(((InternalBillingItem) iterator.next()).getTotal());
         }
@@ -141,7 +144,7 @@ public class InternalBillingDocument extends AccountingDocumentBase implements C
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.INCOME;
+        return Constants.INCOME;
     }
 
     /**
@@ -149,30 +152,14 @@ public class InternalBillingDocument extends AccountingDocumentBase implements C
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.EXPENSE;
+        return Constants.EXPENSE;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
         return new AccountingLineParserBase();
-    }
-    
-    /**
-     * This method determines if an accounting line is a debit accounting line by calling IsDebitUtils.isDebitConsideringSection().
-     * 
-     * @param transactionalDocument The document containing the accounting line being analyzed.
-     * @param accountingLine The accounting line being reviewed to determine if it is a debit line or not.
-     * @return True if the accounting line is a debit accounting line, false otherwise.
-     * 
-     * @see IsDebitUtils#isDebitConsideringSection(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
-     *      org.kuali.core.bo.AccountingLine)
-     */
-    public boolean isDebit(GeneralLedgerPendingEntrySourceDetail postable) {
-        DebitDeterminerService isDebitUtils = SpringContext.getBean(DebitDeterminerService.class);
-        return isDebitUtils.isDebitConsideringSection(this, (AccountingLine)postable);
     }
 }

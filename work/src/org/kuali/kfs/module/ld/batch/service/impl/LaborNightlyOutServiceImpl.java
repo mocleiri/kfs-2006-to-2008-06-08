@@ -16,33 +16,30 @@
 package org.kuali.module.labor.service.impl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.util.ObjectUtil;
-import org.kuali.module.gl.bo.OriginEntryFull;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.labor.bo.LaborGeneralLedgerEntry;
-import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
 import org.kuali.module.labor.bo.LaborOriginEntry;
+import org.kuali.module.labor.bo.PendingLedgerEntry;
 import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
 import org.kuali.module.labor.service.LaborNightlyOutService;
 import org.kuali.module.labor.service.LaborReportService;
+import org.kuali.module.labor.util.ObjectUtil;
 import org.kuali.module.labor.util.ReportRegistry;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The class implements loading and cleanup methods for nightly batch jobs
+ * This class...
  */
 @Transactional
 public class LaborNightlyOutServiceImpl implements LaborNightlyOutService {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborNightlyOutServiceImpl.class);
-
     private LaborLedgerPendingEntryService laborLedgerPendingEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private LaborReportService laborReportService;
@@ -65,87 +62,35 @@ public class LaborNightlyOutServiceImpl implements LaborNightlyOutService {
         String reportDirectory = ReportRegistry.getReportsDirectory();
         OriginEntryGroup group = originEntryGroupService.createGroup(runDate, OriginEntrySource.LABOR_EDOC, true, true, true);
 
-        Iterator<LaborLedgerPendingEntry> pendingEntries = laborLedgerPendingEntryService.findApprovedPendingLedgerEntries();
+        Iterator<PendingLedgerEntry> pendingEntries = laborLedgerPendingEntryService.findApprovedPendingLedgerEntries();
         while (pendingEntries != null && pendingEntries.hasNext()) {
-            LaborLedgerPendingEntry pendingEntry = pendingEntries.next();
+            PendingLedgerEntry pendingEntry = pendingEntries.next();
 
-            // copy the pending entry to labor origin entry table
-            boolean isSaved = saveAsLaborOriginEntry(pendingEntry, group);
-            if (isSaved) {
-                // update the pending entry to indicate it has been copied
-                pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
-                pendingEntry.setTransactionDate(runDate);
-                businessObjectService.save(pendingEntry);
-            }
-        }
-        laborReportService.generateInputSummaryReport(group, ReportRegistry.LABOR_PENDING_ENTRY_SUMMARY, reportDirectory, runDate);
-    }
+            // copy the pending entry to origin entry table
+            saveAsOriginEntry(pendingEntry, group);
 
-    /**
-     * @see org.kuali.module.labor.service.LaborNightlyOutService#deleteCopiedLaborGenerealLedgerEntries()
-     */
-    public void deleteCopiedLaborGenerealLedgerEntries() {
-        Collection<LaborGeneralLedgerEntry> generalLedgerEntries = businessObjectService.findAll(LaborGeneralLedgerEntry.class);
-        for (LaborGeneralLedgerEntry entry : generalLedgerEntries) {
-            businessObjectService.delete(entry);
-        }
-    }
-
-    /**
-     * @see org.kuali.module.labor.service.LaborNightlyOutService#copyLaborGenerealLedgerEntries()
-     */
-    public void copyLaborGenerealLedgerEntries() {
-        Date runDate = dateTimeService.getCurrentSqlDate();
-        String reportDirectory = ReportRegistry.getReportsDirectory();
-        OriginEntryGroup group = originEntryGroupService.createGroup(runDate, OriginEntrySource.LABOR_LEDGER_GENERAL_LEDGER, true, true, true);
-
-        // copy the labor general ledger entry to origin entry table
-        Collection<LaborGeneralLedgerEntry> generalLedgerEntries = businessObjectService.findAll(LaborGeneralLedgerEntry.class);
-        int numberOfGLEntries = generalLedgerEntries.size();
-
-        for (LaborGeneralLedgerEntry entry : generalLedgerEntries) {
-            boolean isSaved = saveAsGLOriginEntry(entry, group);
+            // update the pending entry to indicate it has been copied
+            pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+            pendingEntry.setTransactionDate(runDate);
+            businessObjectService.save(pendingEntry);
         }
 
-        laborReportService.generateGLSummaryReport(group, ReportRegistry.LABOR_GL_SUMMARY, reportDirectory, runDate);
+        Collection<OriginEntryGroup> groupList = new ArrayList<OriginEntryGroup>();
+        groupList.add(group);
+        laborReportService.generateInputSummaryReport(groupList, ReportRegistry.LABOR_PENDING_ENTRY_SUMMARY, reportDirectory, runDate);
     }
 
     /*
-     * save the given pending ledger entry as a labor origin entry
+     * save pending ledger entry as origin entry
      */
-    private boolean saveAsLaborOriginEntry(LaborLedgerPendingEntry pendingEntry, OriginEntryGroup group) {
-        try {
-            LaborOriginEntry originEntry = new LaborOriginEntry();
-            ObjectUtil.buildObject(originEntry, pendingEntry);
+    private void saveAsOriginEntry(PendingLedgerEntry pendingEntry, OriginEntryGroup group) {
+        LaborOriginEntry originEntry = new LaborOriginEntry();
+        ObjectUtil.buildObject(originEntry, pendingEntry);
 
-            originEntry.setTransactionPostingDate(group.getDate());
-            originEntry.setEntryGroupId(group.getId());
+        originEntry.setTransactionPostingDate(group.getDate());
+        originEntry.setEntryGroupId(group.getId());
 
-            businessObjectService.save(originEntry);
-        }
-        catch (Exception e) {
-            LOG.debug("Fail to copy the pending entry as origin entry" + e);
-            return false;
-        }
-        return true;
-    }
-
-    /*
-     * save the given pending ledger entry as a labor origin entry
-     */
-    private boolean saveAsGLOriginEntry(LaborGeneralLedgerEntry entry, OriginEntryGroup group) {
-        try {
-            OriginEntryFull originEntry = new OriginEntryFull();
-            ObjectUtil.buildObject(originEntry, entry);
-
-            originEntry.setEntryGroupId(group.getId());
-            businessObjectService.save(originEntry);
-        }
-        catch (Exception e) {
-            LOG.debug("Fail to copy the labor GL entry as an origin entry" + e);
-            return false;
-        }
-        return true;
+        businessObjectService.save(originEntry);
     }
 
     /**

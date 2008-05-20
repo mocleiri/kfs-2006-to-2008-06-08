@@ -17,13 +17,16 @@ package org.kuali.module.purap.service.impl;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.purap.bo.NegativePaymentRequestApprovalLimit;
 import org.kuali.module.purap.dao.NegativePaymentRequestApprovalLimitDao;
 import org.kuali.module.purap.service.NegativePaymentRequestApprovalLimitService;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class NegativePaymentRequestApprovalLimitServiceImpl implements NegativePaymentRequestApprovalLimitService {
-    //private static Logger LOG = Logger.getLogger(NegativePaymentRequestApprovalLimitServiceImpl.class);
+    private static Logger LOG = Logger.getLogger(NegativePaymentRequestApprovalLimitServiceImpl.class);
 
     private NegativePaymentRequestApprovalLimitDao dao;
 
@@ -35,6 +38,8 @@ public class NegativePaymentRequestApprovalLimitServiceImpl implements NegativeP
      * @see org.kuali.module.purap.service.NegativePaymentRequestApprovalLimitService#findByChart(java.lang.String)
      */
     public Collection<NegativePaymentRequestApprovalLimit> findByChart(String chartCode) {
+        LOG.debug("Entering findByChart(String)");
+        LOG.debug("Leaving findByChart(String)");
         return dao.findByChart(chartCode);
     }
 
@@ -43,6 +48,8 @@ public class NegativePaymentRequestApprovalLimitServiceImpl implements NegativeP
      *      java.lang.String)
      */
     public Collection<NegativePaymentRequestApprovalLimit> findByChartAndAccount(String chartCode, String accountNumber) {
+        LOG.debug("Entering findByChartAndAccount(String, String)");
+        LOG.debug("Leaving findByChartAndAccount(String, String)");
         return dao.findByChartAndAccount(chartCode, accountNumber);
     }
 
@@ -51,6 +58,8 @@ public class NegativePaymentRequestApprovalLimitServiceImpl implements NegativeP
      *      java.lang.String)
      */
     public Collection<NegativePaymentRequestApprovalLimit> findByChartAndOrganization(String chartCode, String organizationCode) {
+        LOG.debug("Entering findByChartAndOrganization(String, String)");
+        LOG.debug("Leaving findByChartAndOrganization(String, String)");
         return dao.findByChartAndOrganization(chartCode, organizationCode);
     }
 
@@ -58,6 +67,8 @@ public class NegativePaymentRequestApprovalLimitServiceImpl implements NegativeP
      * @see org.kuali.module.purap.service.NegativePaymentRequestApprovalLimitService#findAboveLimit(org.kuali.core.util.KualiDecimal)
      */
     public Collection<NegativePaymentRequestApprovalLimit> findAboveLimit(KualiDecimal limit) {
+        LOG.debug("Entering findAboveLimit(KualiDecimal)");
+        LOG.debug("Leaving findAboveLimit(KualiDecimal)");
         return dao.findAboveLimit(limit);
     }
 
@@ -65,6 +76,8 @@ public class NegativePaymentRequestApprovalLimitServiceImpl implements NegativeP
      * @see org.kuali.module.purap.service.NegativePaymentRequestApprovalLimitService#findBelowLimit(org.kuali.core.util.KualiDecimal)
      */
     public Collection<NegativePaymentRequestApprovalLimit> findBelowLimit(KualiDecimal limit) {
+        LOG.debug("Entering findBelowLimit(KualiDecimal)");
+        LOG.debug("Leaving findBelowLimit(KualiDecimal)");
         return dao.findBelowLimit(limit);
     }
 

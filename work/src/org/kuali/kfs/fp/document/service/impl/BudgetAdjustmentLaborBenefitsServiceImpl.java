@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,35 @@
 package org.kuali.module.financial.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.SourceAccountingLine;
+import org.kuali.core.bo.TargetAccountingLine;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.module.financial.bo.BudgetAdjustmentAccountingLine;
+import org.kuali.module.financial.bo.BudgetAdjustmentSourceAccountingLine;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
 import org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService;
-import org.kuali.module.integration.bo.LaborFringeBenefitInformation;
-import org.kuali.module.integration.service.LaborModuleService;
+import org.kuali.module.labor.bo.BenefitsCalculation;
+import org.kuali.module.labor.bo.LaborObjectBenefit;
 
 /**
+ * These service performs methods related to the generation of labor benefit accounting lines for the budget adjustment document.
  * 
- * This is the default implementation of the methods defined by the BudgetAdjustmentLaborBenefitsService.
- * 
- * These service performs methods related to the generation of labor benefit accounting lines for the budget 
- * adjustment document.
  * 
  */
 public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmentLaborBenefitsService {
     private BusinessObjectService businessObjectService;
 
     /**
-     * This method generated labor benefit accounting lines to be added to the BudgetDocument provided.
-     * 
-     * @param budgetDocument The BudgetDocument to have the new labor benefit accounting lines added to.
-     * 
      * @see org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService#generateLaborBenefitsAccountingLines(org.kuali.module.financial.document.BudgetAdjustmentDocument)
      */
     public void generateLaborBenefitsAccountingLines(BudgetAdjustmentDocument budgetDocument) {
@@ -59,7 +56,7 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
 
         /*
          * find lines that have labor object codes, then retrieve the benefit calculation records for the object code. Finally, for
-         * each benefit record, create an accounting line with properties set from the original line, but substituted with the
+         * each benefit record, create an accounting line with properties set from the orginal line, but substituted with the
          * benefit object code and calculated current and base amount.
          */
         for (Iterator iter = accountingLines.iterator(); iter.hasNext();) {
@@ -67,7 +64,7 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
 
             // check if the line was previousely generated benefit line, if so delete and skip
             if (line.isFringeBenefitIndicator()) {
-                if (line.isSourceAccountingLine()) {
+                if (line instanceof BudgetAdjustmentSourceAccountingLine) {
                     budgetDocument.getSourceAccountingLines().remove(line);
                 }
                 else {
@@ -75,47 +72,22 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
                 }
                 continue;
             }
-            
-            List<BudgetAdjustmentAccountingLine> benefitLines = generateBenefitLines(fiscalYear, line, budgetDocument);
-            
-            for (BudgetAdjustmentAccountingLine benefitLine: benefitLines) {
-                if (benefitLine.isSourceAccountingLine()) {
-                    budgetDocument.addSourceAccountingLine((SourceAccountingLine) benefitLine);
-                }
-                else {
-                    budgetDocument.addTargetAccountingLine((TargetAccountingLine) benefitLine);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Given a budget adjustment accounting line, generates appropriate fringe benefit lines for the line
-     * @param line a line to generate fringe benefit lines for
-     * @return a List of BudgetAdjustmentAccountingLines to add to the document as fringe benefit lines
-     */
-    private List<BudgetAdjustmentAccountingLine> generateBenefitLines(Integer fiscalYear, BudgetAdjustmentAccountingLine line, BudgetAdjustmentDocument document) {
-        List<BudgetAdjustmentAccountingLine> fringeLines = new ArrayList<BudgetAdjustmentAccountingLine>();
-        
-        try {
-            List<LaborFringeBenefitInformation> objectBenefits = SpringContext.getBean(LaborModuleService.class).retrieveLaborObjectBenefitInformation(fiscalYear, line.getChartOfAccountsCode(), line.getFinancialObjectCode());
-            if (objectBenefits != null) {
-                for (LaborFringeBenefitInformation fringeBenefitInformation: objectBenefits) {
-                    // now create and set properties for the benefit line
-                    BudgetAdjustmentAccountingLine benefitLine = null;
-                    if ( line.isSourceAccountingLine() ) {
-                        benefitLine = (BudgetAdjustmentAccountingLine)document.getSourceAccountingLineClass().newInstance();
-                    } else {
-                        benefitLine = (BudgetAdjustmentAccountingLine)document.getTargetAccountingLineClass().newInstance();
-                    }
-                    benefitLine.copyFrom(line);
-                    benefitLine.setFinancialObjectCode(fringeBenefitInformation.getPositionFringeBenefitObjectCode());
-                    benefitLine.refreshNonUpdateableReferences();
 
-                    KualiDecimal benefitCurrentAmount = line.getCurrentBudgetAdjustmentAmount().multiply(fringeBenefitInformation.getPositionFringeBenefitPercent());
+            Collection objectBenefits = retrieveLaborObjectBenefits(fiscalYear, line);
+            if (objectBenefits != null) {
+                for (Iterator iterator = objectBenefits.iterator(); iterator.hasNext();) {
+                    LaborObjectBenefit objectBenefit = (LaborObjectBenefit) iterator.next();
+                    BenefitsCalculation benefitsCalculation = objectBenefit.getBenefitsCalculation();
+
+                    // now create and set properties for the benefit line
+                    BudgetAdjustmentAccountingLine benefitLine = (BudgetAdjustmentAccountingLine) ObjectUtils.deepCopy(line);
+                    benefitLine.setFinancialObjectCode(benefitsCalculation.getPositionFringeBenefitObjectCode());
+                    benefitLine.refresh();
+
+                    KualiDecimal benefitCurrentAmount = line.getCurrentBudgetAdjustmentAmount().multiply(benefitsCalculation.getPositionFringeBenefitPercent().toKualiDecimal());
                     benefitLine.setCurrentBudgetAdjustmentAmount(benefitCurrentAmount);
 
-                    KualiInteger benefitBaseAmount = line.getBaseBudgetAdjustmentAmount().multiply(fringeBenefitInformation.getPositionFringeBenefitPercent());
+                    KualiInteger benefitBaseAmount = line.getBaseBudgetAdjustmentAmount().multiply(benefitsCalculation.getPositionFringeBenefitPercent().toKualiDecimal());
                     benefitLine.setBaseBudgetAdjustmentAmount(benefitBaseAmount);
 
                     // clear monthly lines per KULEDOCS-1606
@@ -124,52 +96,58 @@ public class BudgetAdjustmentLaborBenefitsServiceImpl implements BudgetAdjustmen
                     // set flag on line so we know it was a generated benefit line and can clear it out later if needed
                     benefitLine.setFringeBenefitIndicator(true);
 
-                    fringeLines.add(benefitLine);
+                    if (benefitLine instanceof BudgetAdjustmentSourceAccountingLine) {
+                        budgetDocument.addSourceAccountingLine((SourceAccountingLine) benefitLine);
+                    }
+                    else {
+                        budgetDocument.addTargetAccountingLine((TargetAccountingLine) benefitLine);
+                    }
                 }
             }
         }
-        catch (InstantiationException ie) {
-            // it's doubtful this catch block or the catch block below are ever accessible, as accounting lines should already have been generated
-            // for the document.  But we can still make it somebody else's problem
-            throw new RuntimeException(ie);
-        }
-        catch (IllegalAccessException iae) {
-            // with some luck we'll pass the buck now sez some other dev "This sucks!" Get your Runtime on!
-            // but really...we'll never make it this far.  I promise.
-            throw new RuntimeException(iae);
-        }
-        
-        return fringeLines;
     }
 
 
     /**
-     * @param budgetDocument
-     * @return 
-     * 
      * @see org.kuali.module.financial.service.BudgetAdjustmentLaborBenefitsService#hasLaborObjectCodes(org.kuali.module.financial.document.BudgetAdjustmentDocument)
      */
     public boolean hasLaborObjectCodes(BudgetAdjustmentDocument budgetDocument) {
         boolean hasLaborObjectCodes = false;
 
-        List<AccountingLine> accountingLines = new ArrayList<AccountingLine>();
+        List accountingLines = new ArrayList();
         accountingLines.addAll(budgetDocument.getSourceAccountingLines());
         accountingLines.addAll(budgetDocument.getTargetAccountingLines());
 
         Integer fiscalYear = budgetDocument.getPostingYear();
-        LaborModuleService laborModuleService = SpringContext.getBean(LaborModuleService.class);
-        
-        for (AccountingLine line: accountingLines) {
-            if (laborModuleService.hasFringeBenefitProducingObjectCodes(fiscalYear, line.getChartOfAccountsCode(), line.getFinancialObjectCode())) {
+        for (Iterator iter = accountingLines.iterator(); iter.hasNext();) {
+            BudgetAdjustmentAccountingLine line = (BudgetAdjustmentAccountingLine) iter.next();
+            Collection objectBenefits = retrieveLaborObjectBenefits(fiscalYear, line);
+            if (objectBenefits != null && !objectBenefits.isEmpty()) {
                 hasLaborObjectCodes = true;
                 break;
             }
         }
-        
+
         return hasLaborObjectCodes;
     }
 
-    
+    /**
+     * Calls business object service to retrieve LaborObjectBenefit objects for the given fiscal year, and chart, object code from
+     * accounting line.
+     * 
+     * @param fiscalYear
+     * @param line
+     * @return List of LaborObjectBenefit objects or null if one does not exist for parameters
+     */
+    private Collection retrieveLaborObjectBenefits(Integer fiscalYear, BudgetAdjustmentAccountingLine line) {
+        Map searchCriteria = new HashMap();
+
+        searchCriteria.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
+        searchCriteria.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, line.getChartOfAccountsCode());
+        searchCriteria.put(PropertyConstants.FINANCIAL_OBJECT_CODE, line.getFinancialObjectCode());
+
+        return getBusinessObjectService().findMatching(LaborObjectBenefit.class, searchCriteria);
+    }
 
     /**
      * Gets the businessObjectService attribute.

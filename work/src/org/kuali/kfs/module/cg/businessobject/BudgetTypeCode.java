@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +20,12 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class BudgetTypeCode extends PersistableBusinessObjectBase {
+public class BudgetTypeCode extends BusinessObjectBase {
 
     private String budgetTypeCode;
     private String budgetTypeDescription;
@@ -39,6 +41,7 @@ public class BudgetTypeCode extends PersistableBusinessObjectBase {
      * Gets the budgetTypeCode attribute.
      * 
      * @return Returns the budgetTypeCode
+     * 
      */
     public String getBudgetTypeCode() {
         return budgetTypeCode;
@@ -48,6 +51,7 @@ public class BudgetTypeCode extends PersistableBusinessObjectBase {
      * Sets the budgetTypeCode attribute.
      * 
      * @param budgetTypeCode The budgetTypeCode to set.
+     * 
      */
     public void setBudgetTypeCode(String budgetTypeCode) {
         this.budgetTypeCode = budgetTypeCode;
@@ -57,6 +61,7 @@ public class BudgetTypeCode extends PersistableBusinessObjectBase {
      * Gets the budgetTypeDescription attribute.
      * 
      * @return Returns the budgetTypeDescription
+     * 
      */
     public String getBudgetTypeDescription() {
         return budgetTypeDescription;
@@ -66,6 +71,7 @@ public class BudgetTypeCode extends PersistableBusinessObjectBase {
      * Sets the budgetTypeDescription attribute.
      * 
      * @param budgetTypeDescription The budgetTypeDescription to set.
+     * 
      */
     public void setBudgetTypeDescription(String budgetTypeDescription) {
         this.budgetTypeDescription = budgetTypeDescription;

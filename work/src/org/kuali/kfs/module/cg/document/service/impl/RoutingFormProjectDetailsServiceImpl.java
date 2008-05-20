@@ -23,29 +23,31 @@ import java.util.Map;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.kra.routingform.bo.QuestionType;
+import org.kuali.module.kra.routingform.bo.ResearchRiskType;
 import org.kuali.module.kra.routingform.bo.RoutingFormQuestion;
+import org.kuali.module.kra.routingform.bo.RoutingFormResearchRisk;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 import org.kuali.module.kra.routingform.service.RoutingFormProjectDetailsService;
 
 public class RoutingFormProjectDetailsServiceImpl implements RoutingFormProjectDetailsService {
-
+    
     private BusinessObjectService businessObjectService;
-
+    
     public void setupOtherProjectDetailsQuestions(RoutingFormDocument routingFormDocument) {
         List<QuestionType> questionTypes = getAllQuestionTypes();
         List<RoutingFormQuestion> questions = new ArrayList<RoutingFormQuestion>();
-        for (QuestionType questionType : questionTypes) {
+        for (QuestionType questionType: questionTypes) {
             questions.add(new RoutingFormQuestion(routingFormDocument.getDocumentNumber(), questionType));
         }
         routingFormDocument.setRoutingFormQuestions(questions);
     }
-
+    
     public void reconcileOtherProjectDetailsQuestions(RoutingFormDocument routingFormDocument) {
         List<RoutingFormQuestion> questions = routingFormDocument.getRoutingFormQuestions();
         List<RoutingFormQuestion> newQuestions = new ArrayList<RoutingFormQuestion>();
         List<QuestionType> questionTypes = getAllQuestionTypes();
         List indexList = new ArrayList();
-        for (RoutingFormQuestion question : questions) {
+        for (RoutingFormQuestion question: questions) {
             QuestionType currentType = question.getQuestion();
             if (questionTypes.contains(currentType)) {
                 newQuestions.add(question);
@@ -59,24 +61,26 @@ public class RoutingFormProjectDetailsServiceImpl implements RoutingFormProjectD
         }
         routingFormDocument.setRoutingFormQuestions(newQuestions);
     }
-
+    
     private List<QuestionType> getAllQuestionTypes() {
         Map criteria = new HashMap();
         criteria.put(KFSPropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, true);
-        List<QuestionType> questionTypes = (List<QuestionType>) businessObjectService.findMatchingOrderBy(QuestionType.class, criteria, "questionTypeSortNumber", true);
+        List<QuestionType> questionTypes = (List<QuestionType>) businessObjectService.findMatchingOrderBy(
+                QuestionType.class, criteria, "questionTypeSortNumber", true);
         return questionTypes;
     }
-
+    
     public List<String> getNotificationWorkgroups(String documentNumber) {
         Map fieldValues = new HashMap();
         fieldValues.put("documentNumber", documentNumber);
         List<RoutingFormQuestion> questions = new ArrayList<RoutingFormQuestion>(businessObjectService.findMatching(RoutingFormQuestion.class, fieldValues));
         List<String> workgroups = new ArrayList<String>();
         for (RoutingFormQuestion question : questions) {
-            if (question.getQuestion() != null) {
-                if (question.getQuestion().getQuestionTypeWorkgroupName() != null && (question.getQuestion().getQuestionTypeNotificationValue() != null && question.getYesNoIndicator().equals(question.getQuestion().getQuestionTypeNotificationValue()) || question.getQuestion().getQuestionTypeNotificationValue().equals("A"))) {
-                    workgroups.add(question.getQuestion().getQuestionTypeWorkgroupName());
-                }
+            if (question.getQuestion().getQuestionTypeWorkgroupName() != null
+                    && (question.getQuestion().getQuestionTypeNotificationValue() != null 
+                            && question.getYesNoIndicator().equals(question.getQuestion().getQuestionTypeNotificationValue())
+                            || question.getQuestion().getQuestionTypeNotificationValue().equals("A"))) {
+                workgroups.add(question.getQuestion().getQuestionTypeWorkgroupName());
             }
         }
         return workgroups;
@@ -84,7 +88,6 @@ public class RoutingFormProjectDetailsServiceImpl implements RoutingFormProjectD
 
     /**
      * Sets the businessObjectService attribute value.
-     * 
      * @param businessObjectService The businessObjectService to set.
      */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {

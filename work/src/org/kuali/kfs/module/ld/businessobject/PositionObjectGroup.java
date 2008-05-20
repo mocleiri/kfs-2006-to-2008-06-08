@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/ld/businessobject/PositionObjectGroup.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,86 +20,94 @@ package org.kuali.module.labor.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.module.integration.bo.LaborLedgerPositionObjectGroup;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Labor business object for PositionObjectGroup
+ * 
  */
-public class PositionObjectGroup extends PersistableBusinessObjectBase implements LaborLedgerPositionObjectGroup {
-    private String positionObjectGroupCode;
-    private String positionObjectGroupName;
-    private boolean rowActiveIndicator;
+public class PositionObjectGroup extends BusinessObjectBase {
 
-    /**
-     * Default constructor.
-     */
-    public PositionObjectGroup() {
+	private String positionObjectGroupCode;
+	private String positionObjectGroupName;
+	private boolean rowActiveIndicator;
 
-    }
+	/**
+	 * Default constructor.
+	 */
+	public PositionObjectGroup() {
 
-    /**
-     * Gets the positionObjectGroupCode
-     * 
-     * @return Returns the positionObjectGroupCode
-     */
-    public String getPositionObjectGroupCode() {
-        return positionObjectGroupCode;
-    }
+	}
 
-    /**
-     * Sets the positionObjectGroupCode
-     * 
-     * @param positionObjectGroupCode The positionObjectGroupCode to set.
-     */
-    public void setPositionObjectGroupCode(String positionObjectGroupCode) {
-        this.positionObjectGroupCode = positionObjectGroupCode;
-    }
+	/**
+	 * Gets the positionObjectGroupCode attribute.
+	 * 
+	 * @return Returns the positionObjectGroupCode
+	 * 
+	 */
+	public String getPositionObjectGroupCode() { 
+		return positionObjectGroupCode;
+	}
 
-    /**
-     * Gets the positionObjectGroupName
-     * 
-     * @return Returns the positionObjectGroupName
-     */
-    public String getPositionObjectGroupName() {
-        return positionObjectGroupName;
-    }
+	/**
+	 * Sets the positionObjectGroupCode attribute.
+	 * 
+	 * @param positionObjectGroupCode The positionObjectGroupCode to set.
+	 * 
+	 */
+	public void setPositionObjectGroupCode(String positionObjectGroupCode) {
+		this.positionObjectGroupCode = positionObjectGroupCode;
+	}
 
-    /**
-     * Sets the positionObjectGroupName
-     * 
-     * @param positionObjectGroupName The positionObjectGroupName to set.
-     */
-    public void setPositionObjectGroupName(String positionObjectGroupName) {
-        this.positionObjectGroupName = positionObjectGroupName;
-    }
 
-    /**
-     * Gets the rowActiveIndicator
-     * 
-     * @return Returns the rowActiveIndicator
-     */
-    public boolean isRowActiveIndicator() {
-        return rowActiveIndicator;
-    }
+	/**
+	 * Gets the positionObjectGroupName attribute.
+	 * 
+	 * @return Returns the positionObjectGroupName
+	 * 
+	 */
+	public String getPositionObjectGroupName() { 
+		return positionObjectGroupName;
+	}
 
-    /**
-     * Sets the rowActiveIndicator
-     * 
-     * @param rowActiveIndicator The rowActiveIndicator to set.
-     */
-    public void setRowActiveIndicator(boolean rowActiveIndicator) {
-        this.rowActiveIndicator = rowActiveIndicator;
-    }
+	/**
+	 * Sets the positionObjectGroupName attribute.
+	 * 
+	 * @param positionObjectGroupName The positionObjectGroupName to set.
+	 * 
+	 */
+	public void setPositionObjectGroupName(String positionObjectGroupName) {
+		this.positionObjectGroupName = positionObjectGroupName;
+	}
 
-    /**
-     * construct the key list of the business object.
-     * 
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+
+	/**
+	 * Gets the rowActiveIndicator attribute.
+	 * 
+	 * @return Returns the rowActiveIndicator
+	 * 
+	 */
+	public boolean isRowActiveIndicator() { 
+		return rowActiveIndicator;
+	}
+	
+
+	/**
+	 * Sets the rowActiveIndicator attribute.
+	 * 
+	 * @param rowActiveIndicator The rowActiveIndicator to set.
+	 * 
+	 */
+	public void setRowActiveIndicator(boolean rowActiveIndicator) {
+		this.rowActiveIndicator = rowActiveIndicator;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("positionObjectGroupCode", this.positionObjectGroupCode);
-        return m;
+	    return m;
     }
 }

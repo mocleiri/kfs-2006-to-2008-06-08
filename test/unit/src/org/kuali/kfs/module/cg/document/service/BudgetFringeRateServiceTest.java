@@ -1,36 +1,21 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Created on Jul 15, 2005
  *
  */
 package org.kuali.module.kra.service;
 
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.budget.bo.BudgetFringeRate;
-import org.kuali.module.kra.budget.service.BudgetFringeRateService;
-import org.kuali.test.ConfigureContext;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.bo.BudgetFringeRate;
+import org.kuali.test.KualiTestBaseWithSession;
 
 /**
+ * 
  * This class...
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-@ConfigureContext
-public class BudgetFringeRateServiceTest extends KualiTestBase {
+public class BudgetFringeRateServiceTest extends KualiTestBaseWithSession {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BudgetFringeRateServiceTest.class);
 
@@ -46,32 +31,41 @@ public class BudgetFringeRateServiceTest extends KualiTestBase {
     private static final KualiDecimal GOOD_COST_SHARE = new KualiDecimal("0.50");
 
 
+    private BudgetFringeRateService budgetFringeRateService;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        super.changeCurrentUser(KNOWN_USERNAME);
+        this.budgetFringeRateService = SpringServiceLocator.getBudgetFringeRateService();
+    }
+
+
     public void testValidContractsAndGrantsFringeRate() throws Exception {
         BudgetFringeRate budgetFringeRate = new BudgetFringeRate();
 
         budgetFringeRate.setContractsAndGrantsFringeRateAmount(GOOD_FRINGE_RATE);
 
-        assertTrue(SpringContext.getBean(BudgetFringeRateService.class).isValidFringeRate(budgetFringeRate.getContractsAndGrantsFringeRateAmount()));
+        assertTrue(budgetFringeRateService.isValidFringeRate(budgetFringeRate.getContractsAndGrantsFringeRateAmount()));
     }
 
     public void testValidContractsAndGrantsCostShare() throws Exception {
         BudgetFringeRate budgetFringeRate = new BudgetFringeRate();
 
-        budgetFringeRate.setInstitutionCostShareFringeRateAmount(GOOD_COST_SHARE);
-        assertTrue(SpringContext.getBean(BudgetFringeRateService.class).isValidCostShare(budgetFringeRate.getInstitutionCostShareFringeRateAmount()));
+        budgetFringeRate.setUniversityCostShareFringeRateAmount(GOOD_COST_SHARE);
+        assertTrue(budgetFringeRateService.isValidCostShare(budgetFringeRate.getUniversityCostShareFringeRateAmount()));
     }
 
     public void testInvalidContractsAndGrantsFringeRate() throws Exception {
         BudgetFringeRate budgetFringeRate = new BudgetFringeRate();
 
         budgetFringeRate.setContractsAndGrantsFringeRateAmount(BAD_FRINGE_RATE);
-        assertTrue(SpringContext.getBean(BudgetFringeRateService.class).isValidFringeRate(budgetFringeRate.getContractsAndGrantsFringeRateAmount()));
+        assertTrue(budgetFringeRateService.isValidFringeRate(budgetFringeRate.getContractsAndGrantsFringeRateAmount()));
     }
 
     public void testInvalidContractsAndGrantsCostShare() throws Exception {
         BudgetFringeRate budgetFringeRate = new BudgetFringeRate();
 
-        budgetFringeRate.setInstitutionCostShareFringeRateAmount(BAD_COST_SHARE);
-        assertTrue(SpringContext.getBean(BudgetFringeRateService.class).isValidCostShare(budgetFringeRate.getInstitutionCostShareFringeRateAmount()));
+        budgetFringeRate.setUniversityCostShareFringeRateAmount(BAD_COST_SHARE);
+        assertTrue(budgetFringeRateService.isValidCostShare(budgetFringeRate.getUniversityCostShareFringeRateAmount()));
     }
 }

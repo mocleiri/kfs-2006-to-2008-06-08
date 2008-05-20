@@ -1,44 +1,40 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 
 package org.kuali.module.financial.document;
 
-import java.util.List;
+import org.kuali.Constants;
+import org.kuali.core.document.TransactionalDocumentBase;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.document.Correctable;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.ElectronicPaymentClaim;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.document.ElectronicPaymentClaiming;
-import org.kuali.kfs.service.DebitDeterminerService;
-import org.kuali.kfs.service.ElectronicPaymentClaimingService;
 
 /**
  * The Distribution of Income and Expense (DI) document is used to distribute income or expense, or assets and liabilities. Amounts
  * being distributed are usually the result of an accumulation of transactions that need to be divided up between various accounts.
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class DistributionOfIncomeAndExpenseDocument extends AccountingDocumentBase implements Copyable, Correctable, AmountTotaling, ElectronicPaymentClaiming {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(DistributionOfIncomeAndExpenseDocument.class);
-    private List<ElectronicPaymentClaim> electronicPaymentClaims;
-    
+public class DistributionOfIncomeAndExpenseDocument extends TransactionalDocumentBase {
+
     /**
      * Constructs a DistributionOfIncomeAndExpenseDocument.java.
      */
@@ -47,58 +43,19 @@ public class DistributionOfIncomeAndExpenseDocument extends AccountingDocumentBa
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.FROM;
+        return Constants.FROM;
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.TO;
+        return Constants.TO;
     }
 
-    /**
-     * Return true if account line is debit
-     * 
-     * @param financialDocument submitted accounting document
-     * @param accountingLine accounting line from accounting document
-     * @return true is account line is debit
-     * 
-     * @see IsDebitUtils#isDebitConsideringSectionAndTypePositiveOnly(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
-     *      org.kuali.core.bo.AccountingLine)
-     */
-    public boolean isDebit(GeneralLedgerPendingEntrySourceDetail postable) {
-        DebitDeterminerService isDebitUtils = SpringContext.getBean(DebitDeterminerService.class);
-        return isDebitUtils.isDebitConsideringSectionAndTypePositiveOnly(this, (AccountingLine)postable);
-    }
-
-    /**
-     * @see org.kuali.kfs.document.ElectronicPaymentClaiming#declaimElectronicPaymentClaims()
-     */
-    public void declaimElectronicPaymentClaims() {
-        SpringContext.getBean(ElectronicPaymentClaimingService.class).declaimElectronicPaymentClaimsForDocument(this);
-    }
-
-    /**
-     * Gets the electronicPaymentClaims attribute. 
-     * @return Returns the electronicPaymentClaims.
-     */
-    public List<ElectronicPaymentClaim> getElectronicPaymentClaims() {
-        return electronicPaymentClaims;
-    }
-
-    /**
-     * Sets the electronicPaymentClaims attribute value.
-     * @param electronicPaymentClaims The electronicPaymentClaims to set.
-     * @deprecated
-     */
-    public void setElectronicPaymentClaims(List<ElectronicPaymentClaim> electronicPaymentClaims) {
-        this.electronicPaymentClaims = electronicPaymentClaims;
-    }
 }

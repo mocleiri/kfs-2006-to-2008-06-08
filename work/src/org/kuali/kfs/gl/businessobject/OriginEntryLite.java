@@ -124,11 +124,11 @@ public class OriginEntryLite extends PersistableBusinessObjectBase implements Or
         setUniversityFiscalPeriodCode(KFSConstants.EMPTY_STRING);
 
         setTransactionLedgerEntrySequenceNumber(new Integer(1));
-        setTransactionLedgerEntryAmount(KualiDecimal.ZERO);
+        setTransactionLedgerEntryAmount(new KualiDecimal(0));
         setTransactionLedgerEntryDescription(KFSConstants.EMPTY_STRING);
         setTransactionDate(null);
         setTransactionDebitCreditCode(KFSConstants.EMPTY_STRING);
-        setTransactionEncumbranceUpdateCode(null);
+        setTransactionEncumbranceUpdateCode(KFSConstants.EMPTY_STRING);
 
         setOrganizationDocumentNumber(KFSConstants.EMPTY_STRING);
         setOrganizationReferenceId(KFSConstants.EMPTY_STRING);

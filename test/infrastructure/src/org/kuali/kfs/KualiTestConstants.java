@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.test;
 
@@ -19,22 +26,27 @@ import org.kuali.core.util.KualiDecimal;
 
 
 /**
+ * 
  * provides centralized storage of constants that occur throughout the tests
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public interface KualiTestConstants {
-
     /**
      * contains Test related constants
+     * 
+     * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
      */
     public final class TestConstants {
         private static final String HOST = "localhost";
         private static final String PORT = "8080";
         public static final String BASE_PATH = "http://" + HOST + ":" + PORT + "/";
         public static final String MESSAGE = "JUNIT test entry. If this exist after the tests are not cleaning up correctly. Created by class";
-        public static final String TEST_BATCH_STAGING_DIRECTORY = "/java/projects/kuali_project/test/src/org/kuali/test/staging/";
 
         /**
          * group of data values that should work if used togther
+         * 
+         * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
          */
         public static class Data1 {
             public final static String ACCOUNT_NUMBER = "9544900";
@@ -50,10 +62,9 @@ public interface KualiTestConstants {
         public static class Data2 {
             public final static String AUTHENTICATION_USER_ID = "KHUNTLEY";
             public final static String AUTHENTICATION_USER_ID_THAT_IS_SUPERVISOR = "HEAGLE";
-            public static final String KUALI_JV_USER_WORKGROUP = "FP_JOURNAL_VOUCHER_USERS";
+            public static final String KUALI_JV_USER_WORKGROUP = "KUALI_ROLE_JOURNAL_VOUCHER_DOCUMENT_USER";
             public static final String WORKFLOW_ADMIN_WORKGROUP = "WorkflowAdmin";
-            public static final String KUALI_DV_ADMIN_WORKGROUP = "FP_DISBURSEMENT_VOUCHER_PARAMETER_USERS";
-            public static final String KUALI_FMSOPS = "FP_OPERATIONS";
+            public static final String KUALI_DV_ADMIN_WORKGROUP = "KUALI_ROLE_DV_ADMIN";
         }
 
         public static class Data3 {
@@ -111,27 +122,14 @@ public interface KualiTestConstants {
 
         public static class Data5 {
             public static final String BUDGET_AGGREGATION_CODE1 = "O";
-            public static final String BUDGET_AGGREGATION_NAME1 = "OBJECT";
+            public static final String BUDGET_AGGREGATION_NAME1 = "Object";
             public static final String BUDGET_AGGREGATION_CODE2 = "L";
-            public static final String BUDGET_AGGREGATION_NAME2 = "OBJECT LEVEL";
+            public static final String BUDGET_AGGREGATION_NAME2 = "Object Level";
 
             public static final String FEDERAL_FUNDED_CODE1 = "F";
-            public static final String FEDERAL_FUNDED_NAME1 = "FEDERALLY FUNDED AND OWNED";
+            public static final String FEDERAL_FUNDED_NAME1 = "Federally funded and owned";
             public static final String FEDERAL_FUNDED_CODE_BAD = "A";
             public static final String FEDERAL_FUNDED_NAME_BAD = "This is a bad code name";
-        }
-
-        public static class PositionObjectTestData {
-            public static final String UNIVERSITY_FISCAL_YEAR = "2011";
-            public static final String CHART_OF_ACCOUNTS_CODE = "SB";
-            public static final String FINANCIAL_OBJECT_CODE = "2504";
-        }
-
-
-        public static class BenefitsCalculationServiceImplTest {
-            public static final String FISCAL_YEAR = "2008";
-            public static final String CHART = "BA";
-            public static final String POSITION_TYPE_CODE = "B";
         }
     }
 }

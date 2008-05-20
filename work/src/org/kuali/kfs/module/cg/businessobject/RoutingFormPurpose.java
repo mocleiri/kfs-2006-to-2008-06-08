@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/RoutingFormPurpose.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,101 +15,98 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.kuali.module.kra.routingform.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
-public class RoutingFormPurpose extends PersistableBusinessObjectBase {
+/**
+ * 
+ */
+public class RoutingFormPurpose extends BusinessObjectBase {
 
-    private String documentNumber;
-    private String purposeCode;
+	private String routingFormPurposeCode;
+	private String dataObjectMaintenanceCodeActiveIndicator;
+	private String routingFormPurposeDescription;
 
-    private Purpose purpose;
+	/**
+	 * Default constructor.
+	 */
+	public RoutingFormPurpose() {
 
-    /**
-     * Default constructor.
-     */
-    public RoutingFormPurpose() {
+	}
 
-    }
+	/**
+	 * Gets the routingFormPurposeCode attribute.
+	 * 
+	 * @return Returns the routingFormPurposeCode
+	 * 
+	 */
+	public String getRoutingFormPurposeCode() { 
+		return routingFormPurposeCode;
+	}
 
-    /**
-     * Constructs a RoutingFormPurpose.
-     * 
-     * @param documentNumber
-     * @param purpose
-     */
-    public RoutingFormPurpose(String documentNumber, Purpose purpose) {
-        this();
-        this.documentNumber = documentNumber;
-        this.purposeCode = purpose.getPurposeCode();
-        this.purpose = purpose;
-    }
-
-    /**
-     * Gets the documentNumber attribute.
-     * 
-     * @return Returns the documentNumber
-     */
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    /**
-     * Sets the documentNumber attribute.
-     * 
-     * @param documentNumber The documentNumber to set.
-     */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
+	/**
+	 * Sets the routingFormPurposeCode attribute.
+	 * 
+	 * @param routingFormPurposeCode The routingFormPurposeCode to set.
+	 * 
+	 */
+	public void setRoutingFormPurposeCode(String routingFormPurposeCode) {
+		this.routingFormPurposeCode = routingFormPurposeCode;
+	}
 
 
-    /**
-     * Gets the purposeCode attribute.
-     * 
-     * @return Returns the purposeCode
-     */
-    public String getPurposeCode() {
-        return purposeCode;
-    }
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public String getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * Sets the purposeCode attribute.
-     * 
-     * @param purposeCode The purposeCode to set.
-     */
-    public void setPurposeCode(String purposeCode) {
-        this.purposeCode = purposeCode;
-    }
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(String dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * Gets the purpose attribute.
-     * 
-     * @return Returns the purpose
-     */
-    public Purpose getPurpose() {
-        return purpose;
-    }
 
-    /**
-     * Sets the purpose attribute.
-     * 
-     * @param purpose The purpose to set.
-     */
-    public void setPurpose(Purpose purpose) {
-        this.purpose = purpose;
-    }
+	/**
+	 * Gets the routingFormPurposeDescription attribute.
+	 * 
+	 * @return Returns the routingFormPurposeDescription
+	 * 
+	 */
+	public String getRoutingFormPurposeDescription() { 
+		return routingFormPurposeDescription;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-        m.put("documentNumber", this.documentNumber);
-        m.put("purposeCode", this.purposeCode);
-        return m;
+	/**
+	 * Sets the routingFormPurposeDescription attribute.
+	 * 
+	 * @param routingFormPurposeDescription The routingFormPurposeDescription to set.
+	 * 
+	 */
+	public void setRoutingFormPurposeDescription(String routingFormPurposeDescription) {
+		this.routingFormPurposeDescription = routingFormPurposeDescription;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        m.put("routingFormPurposeCode", this.routingFormPurposeCode);
+	    return m;
     }
 }

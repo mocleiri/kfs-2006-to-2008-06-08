@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderVendorChoice.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,55 +20,92 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Purchase Order Vendor Choice Business Object.
+ * 
  */
-public class PurchaseOrderVendorChoice extends PersistableBusinessObjectBase {
+public class PurchaseOrderVendorChoice extends BusinessObjectBase {
 
-    private String purchaseOrderVendorChoiceCode;
-    private String purchaseOrderVendorChoiceDescription;
-    private boolean active;
+	private String purchaseOrderVendorChoiceCode;
+	private String purchaseOrderVendorChoiceDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public PurchaseOrderVendorChoice() {
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderVendorChoice() {
 
-    }
+	}
 
-    public String getPurchaseOrderVendorChoiceCode() {
-        return purchaseOrderVendorChoiceCode;
-    }
+	/**
+	 * Gets the purchaseOrderVendorChoiceCode attribute.
+	 * 
+	 * @return Returns the purchaseOrderVendorChoiceCode
+	 * 
+	 */
+	public String getPurchaseOrderVendorChoiceCode() { 
+		return purchaseOrderVendorChoiceCode;
+	}
 
-    public void setPurchaseOrderVendorChoiceCode(String purchaseOrderVendorChoiceCode) {
-        this.purchaseOrderVendorChoiceCode = purchaseOrderVendorChoiceCode;
-    }
+	/**
+	 * Sets the purchaseOrderVendorChoiceCode attribute.
+	 * 
+	 * @param purchaseOrderVendorChoiceCode The purchaseOrderVendorChoiceCode to set.
+	 * 
+	 */
+	public void setPurchaseOrderVendorChoiceCode(String purchaseOrderVendorChoiceCode) {
+		this.purchaseOrderVendorChoiceCode = purchaseOrderVendorChoiceCode;
+	}
 
-    public String getPurchaseOrderVendorChoiceDescription() {
-        return purchaseOrderVendorChoiceDescription;
-    }
 
-    public void setPurchaseOrderVendorChoiceDescription(String purchaseOrderVendorChoiceDescription) {
-        this.purchaseOrderVendorChoiceDescription = purchaseOrderVendorChoiceDescription;
-    }
+	/**
+	 * Gets the purchaseOrderVendorChoiceDescription attribute.
+	 * 
+	 * @return Returns the purchaseOrderVendorChoiceDescription
+	 * 
+	 */
+	public String getPurchaseOrderVendorChoiceDescription() { 
+		return purchaseOrderVendorChoiceDescription;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Sets the purchaseOrderVendorChoiceDescription attribute.
+	 * 
+	 * @param purchaseOrderVendorChoiceDescription The purchaseOrderVendorChoiceDescription to set.
+	 * 
+	 */
+	public void setPurchaseOrderVendorChoiceDescription(String purchaseOrderVendorChoiceDescription) {
+		this.purchaseOrderVendorChoiceDescription = purchaseOrderVendorChoiceDescription;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("purchaseOrderVendorChoiceCode", this.purchaseOrderVendorChoiceCode);
-        return m;
+	    return m;
     }
-
 }

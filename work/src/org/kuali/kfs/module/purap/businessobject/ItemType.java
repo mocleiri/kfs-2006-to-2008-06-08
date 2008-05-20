@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/ItemType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,83 +20,92 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Item Type Business Object. Defines various types of items.
+ * 
  */
-public class ItemType extends PersistableBusinessObjectBase {
+public class ItemType extends BusinessObjectBase {
 
-    private String itemTypeCode;
-    private String itemTypeDescription;
-    private boolean quantityBasedGeneralLedgerIndicator;
-    private boolean itemTypeAboveTheLineIndicator;
-    private boolean active;
+	private String itemTypeCode;
+	private String itemTypeDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public ItemType() {
+	/**
+	 * Default constructor.
+	 */
+	public ItemType() {
 
-    }
+	}
 
-    public String getItemTypeCode() {
-        return itemTypeCode;
-    }
+	/**
+	 * Gets the itemTypeCode attribute.
+	 * 
+	 * @return Returns the itemTypeCode
+	 * 
+	 */
+	public String getItemTypeCode() { 
+		return itemTypeCode;
+	}
 
-    public void setItemTypeCode(String itemTypeCode) {
-        this.itemTypeCode = itemTypeCode;
-    }
+	/**
+	 * Sets the itemTypeCode attribute.
+	 * 
+	 * @param itemTypeCode The itemTypeCode to set.
+	 * 
+	 */
+	public void setItemTypeCode(String itemTypeCode) {
+		this.itemTypeCode = itemTypeCode;
+	}
 
-    public String getItemTypeDescription() {
-        return itemTypeDescription;
-    }
 
-    public void setItemTypeDescription(String itemTypeDescription) {
-        this.itemTypeDescription = itemTypeDescription;
-    }
+	/**
+	 * Gets the itemTypeDescription attribute.
+	 * 
+	 * @return Returns the itemTypeDescription
+	 * 
+	 */
+	public String getItemTypeDescription() { 
+		return itemTypeDescription;
+	}
 
-    public boolean isQuantityBasedGeneralLedgerIndicator() {
-        return quantityBasedGeneralLedgerIndicator;
-    }
+	/**
+	 * Sets the itemTypeDescription attribute.
+	 * 
+	 * @param itemTypeDescription The itemTypeDescription to set.
+	 * 
+	 */
+	public void setItemTypeDescription(String itemTypeDescription) {
+		this.itemTypeDescription = itemTypeDescription;
+	}
 
-    public void setQuantityBasedGeneralLedgerIndicator(boolean quantityBasedGeneralLedgerIndicator) {
-        this.quantityBasedGeneralLedgerIndicator = quantityBasedGeneralLedgerIndicator;
-    }
 
-    public boolean isItemTypeBelowTheLineIndicator() {
-        return !itemTypeAboveTheLineIndicator;
-    }
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    public boolean isItemTypeAboveTheLineIndicator() {
-        return itemTypeAboveTheLineIndicator;
-    }
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    public void setItemTypeAboveTheLineIndicator(boolean itemTypeAboveTheLineIndicator) {
-        this.itemTypeAboveTheLineIndicator = itemTypeAboveTheLineIndicator;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * @return Returns the opposite of quantityBasedGeneralLedgerIndicator.
-     */
-    public boolean isAmountBasedGeneralLedgerIndicator() {
-        return !quantityBasedGeneralLedgerIndicator;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("itemTypeCode", this.itemTypeCode);
-        return m;
+	    return m;
     }
 }

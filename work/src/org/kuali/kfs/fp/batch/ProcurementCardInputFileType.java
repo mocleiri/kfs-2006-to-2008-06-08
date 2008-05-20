@@ -39,9 +39,13 @@ public class ProcurementCardInputFileType extends BatchInputFileTypeBase {
     public String getFileTypeIdentifer() {
         return KFSConstants.PCDO_FILE_TYPE_INDENTIFIER;
     }
+    
+    public String getWorkgroupParameterComponent() {
+        return KFSConstants.SystemGroupParameterNames.PCDO_FILE_TYPE_PARAMETER_COMPONENT;
+    }
 
-    public Class getUploadWorkgroupParameterComponent() {
-        return ProcurementCardLoadStep.class;
+    public String getWorkgroupParameterNamespace() {
+        return KFSConstants.SystemGroupParameterNames.PCDO_FILE_TYPE_PARAMETER_NAMESPACE;
     }
 
     /**
@@ -53,12 +57,12 @@ public class ProcurementCardInputFileType extends BatchInputFileTypeBase {
     public String getFileName(UniversalUser user, Object parsedFileContents, String userIdentifier) {
         Timestamp currentTimestamp = dateTimeService.getCurrentTimestamp();
 
-        String fileName = "pcdo_" + user.getPersonUserIdentifier().toLowerCase();
+        String fileName = "pcdo_"  + user.getPersonUserIdentifier().toLowerCase();
         if (StringUtils.isNotBlank(userIdentifier)) {
             fileName += "_" + userIdentifier;
         }
         fileName += "_" + dateTimeService.toString(currentTimestamp, "yyyyMMdd_HHmmss");
-
+        
         // remove spaces in filename
         fileName = StringUtils.remove(fileName, " ");
 

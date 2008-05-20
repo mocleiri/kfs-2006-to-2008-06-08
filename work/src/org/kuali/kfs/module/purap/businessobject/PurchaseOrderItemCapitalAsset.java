@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderItemCapitalAsset.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,81 +20,116 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Purchase Order Item Capital Asset Business Object.
+ * 
  */
-public class PurchaseOrderItemCapitalAsset extends PurchasingItemCapitalAsset {
+public class PurchaseOrderItemCapitalAsset extends BusinessObjectBase {
 
-    private String documentNumber;
-    private Integer purchaseOrderItemCapitalAssetIdentifier;
-    private Integer purchaseOrderItemIdentifier;
+	private Integer purchaseOrderItemCapitalAssetIdentifier;
+	private Integer purchaseOrderItemIdentifier;
+	private Long capitalAssetNumber;
 
     private PurchaseOrderItem purchaseOrderItem;
 
-    /**
-     * Default constructor.
-     */
-    public PurchaseOrderItemCapitalAsset() {
-    }
-    
-    /**
-     * Constructs a PurchaseOrderItemCapitalAsset.
-     * @param capitalAssetNumber
-     */
-    public PurchaseOrderItemCapitalAsset(Long capitalAssetNumber){
-        this.setCapitalAssetNumber(capitalAssetNumber);
-    }
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderItemCapitalAsset() {
 
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
+	}
 
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
+	/**
+	 * Gets the purchaseOrderItemCapitalAssetIdentifier attribute.
+	 * 
+	 * @return Returns the purchaseOrderItemCapitalAssetIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderItemCapitalAssetIdentifier() { 
+		return purchaseOrderItemCapitalAssetIdentifier;
+	}
 
-    public Integer getPurchaseOrderItemCapitalAssetIdentifier() {
-        return purchaseOrderItemCapitalAssetIdentifier;
-    }
+	/**
+	 * Sets the purchaseOrderItemCapitalAssetIdentifier attribute.
+	 * 
+	 * @param purchaseOrderItemCapitalAssetIdentifier The purchaseOrderItemCapitalAssetIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderItemCapitalAssetIdentifier(Integer purchaseOrderItemCapitalAssetIdentifier) {
+		this.purchaseOrderItemCapitalAssetIdentifier = purchaseOrderItemCapitalAssetIdentifier;
+	}
 
-    public void setPurchaseOrderItemCapitalAssetIdentifier(Integer purchaseOrderItemCapitalAssetIdentifier) {
-        this.purchaseOrderItemCapitalAssetIdentifier = purchaseOrderItemCapitalAssetIdentifier;
-    }
 
-    public Integer getPurchaseOrderItemIdentifier() {
-        return purchaseOrderItemIdentifier;
-    }
+	/**
+	 * Gets the purchaseOrderItemIdentifier attribute.
+	 * 
+	 * @return Returns the purchaseOrderItemIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderItemIdentifier() { 
+		return purchaseOrderItemIdentifier;
+	}
 
-    public void setPurchaseOrderItemIdentifier(Integer purchaseOrderItemIdentifier) {
-        this.purchaseOrderItemIdentifier = purchaseOrderItemIdentifier;
-    }
+	/**
+	 * Sets the purchaseOrderItemIdentifier attribute.
+	 * 
+	 * @param purchaseOrderItemIdentifier The purchaseOrderItemIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderItemIdentifier(Integer purchaseOrderItemIdentifier) {
+		this.purchaseOrderItemIdentifier = purchaseOrderItemIdentifier;
+	}
 
-    public PurchaseOrderItem getPurchaseOrderItem() {
-        return purchaseOrderItem;
-    }
+	/**
+	 * Gets the capitalAssetNumber attribute.
+	 * 
+	 * @return Returns the capitalAssetNumber
+	 * 
+	 */
+	public Long getCapitalAssetNumber() { 
+		return capitalAssetNumber;
+	}
 
-    /**
-     * Sets the purchaseOrderItem attribute.
-     * 
-     * @param purchaseOrderItem The purchaseOrderItem to set.
-     * @deprecated
-     */
-    public void setPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
-        this.purchaseOrderItem = purchaseOrderItem;
-    }
+	/**
+	 * Sets the capitalAssetNumber attribute.
+	 * 
+	 * @param capitalAssetNumber The capitalAssetNumber to set.
+	 * 
+	 */
+	public void setCapitalAssetNumber(Long capitalAssetNumber) {
+		this.capitalAssetNumber = capitalAssetNumber;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-        m.put("documentNumber", this.documentNumber);
+
+	/**
+	 * Gets the purchaseOrderItem attribute.
+	 * 
+	 * @return Returns the purchaseOrderItem
+	 * 
+	 */
+	public PurchaseOrderItem getPurchaseOrderItem() { 
+		return purchaseOrderItem;
+	}
+
+	/**
+	 * Sets the purchaseOrderItem attribute.
+	 * 
+	 * @param purchaseOrderItem The purchaseOrderItem to set.
+	 * @deprecated
+	 */
+	public void setPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem) {
+		this.purchaseOrderItem = purchaseOrderItem;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.purchaseOrderItemCapitalAssetIdentifier != null) {
             m.put("purchaseOrderItemCapitalAssetIdentifier", this.purchaseOrderItemCapitalAssetIdentifier.toString());
         }
-        return m;
+	    return m;
     }
-
 }

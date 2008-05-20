@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.rules;
 
@@ -19,18 +26,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.financial.bo.BankAccount;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
- * This is the rules class that is used for the default implementation of the Bank Account maintenance document.
+ * This is the rules class that is used for the default implementation of the Bank Account maintenance document. 
+ * 
+ * @author Kuali Financial Transaction Processing team (kualidev@oncourse.iu.edu)
  */
 public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
@@ -38,11 +45,6 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
     BankAccount newBankAccount;
 
     /**
-     * Validates a bank account maintenance document when it is approved. Method returns true if objects are completely filled out,
-     * sub account number exists, and sub object code exists
-     * 
-     * @param document submitted document
-     * @return true if objects are completed filled out, sub account number exists, and sub object code exists
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
@@ -57,11 +59,6 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * Validates a bank account maintenance document when it is routed. Method returns true if objects are completely filled out,
-     * sub account number exists, and sub object code exists
-     * 
-     * @param document submitted document
-     * @return true if objects are completed filled out, sub account number exists, and sub object code exists
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
@@ -76,11 +73,6 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * Validates a bank account maintenance document when it is save. Although method checks if objects are completely filled out,
-     * sub account number exists, and sub object code exists, this method always returns TRUE.
-     * 
-     * @param document submitted document
-     * @return true always
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
@@ -93,10 +85,13 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
     /**
      * This method sets the convenience objects like newAccount and oldAccount, so you have short and easy handles to the new and
-     * old objects contained in the maintenance document. It also calls the BusinessObjectBase.refresh(), which will attempt to load
-     * all sub-objects from the DB by their primary keys, if available.
+     * old objects contained in the maintenance document.
      * 
-     * @param document the maintenanceDocument being evaluated
+     * It also calls the BusinessObjectBase.refresh(), which will attempt to load all sub-objects from the DB by their primary keys,
+     * if available.
+     * 
+     * @param document - the maintenanceDocument being evaluated
+     * 
      */
     public void setupConvenienceObjects() {
         // setup oldAccount convenience objects, make sure all possible sub-objects are populated
@@ -109,8 +104,8 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
     /**
      * This method checks for partially filled out objects.
      * 
-     * @param document maintenance document being evaluated
-     * @return true if there are no partially filled out references
+     * @param document
+     * @return
      */
     private boolean checkPartiallyFilledOutReferences() {
 
@@ -123,8 +118,8 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
     /**
      * This method validates that the Cash Offset subAccountNumber exists, if it is entered
      * 
-     * @param document maintenance document being evaluated
-     * @return true if sub account number exists
+     * @param document
+     * @return
      */
     private boolean checkSubAccountNumberExistence() {
 
@@ -152,7 +147,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
         // fail if the subAccount isnt found
         if (testSubAccount == null) {
-            putFieldError("cashOffsetSubAccountNumber", KFSKeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubAccountNumber"));
+            putFieldError("cashOffsetSubAccountNumber", KeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubAccountNumber"));
             success &= false;
         }
 
@@ -162,8 +157,8 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
     /**
      * This method validates that the Cash Offset subObjectCode exists, if it is entered
      * 
-     * @param document maintenance document being evaluated
-     * @return true if sub object code exists
+     * @param document
+     * @return
      */
     private boolean checkSubObjectCodeExistence() {
 
@@ -185,7 +180,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
         // setup the map to search on
         Map pkMap = new HashMap();
-        pkMap.put("universityFiscalYear", SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear());
+        pkMap.put("universityFiscalYear", getDateTimeService().getCurrentFiscalYear());
         pkMap.put("chartOfAccountsCode", newBankAccount.getCashOffsetFinancialChartOfAccountCode());
         pkMap.put("accountNumber", newBankAccount.getCashOffsetAccountNumber());
         pkMap.put("financialObjectCode", newBankAccount.getCashOffsetObjectCode());
@@ -196,7 +191,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
 
         // fail if the subObjectCode isnt found
         if (testSubObjCd == null) {
-            putFieldError("cashOffsetSubObjectCode", KFSKeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubObjectCode"));
+            putFieldError("cashOffsetSubObjectCode", KeyConstants.ERROR_EXISTENCE, getDdService().getAttributeLabel(BankAccount.class, "cashOffsetSubObjectCode"));
             success &= false;
         }
 
@@ -204,11 +199,11 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method has been taken out of service to be replaced by the defaultExistenceChecks happening through the
-     * BankAccountMaintenanceDocument.xml
+     * This method has been taken out of service to be replaced by the
+     * defaultExistenceChecks happening through the BankAccountMaintenanceDocument.xml
      * 
-     * @param document maintenance document being evaluated
-     * @return true if sub object code exists
+     * @param document
+     * @return
      */
     private boolean checkSubObjectExistence(MaintenanceDocument document) {
         // default to success
@@ -222,7 +217,7 @@ public class BankAccountRule extends MaintenanceDocumentRuleBase {
         if (StringUtils.isNotEmpty(newBankAcct.getFinancialDocumentBankCode())) {
             if (ObjectUtils.isNull(newBankAcct.getBank())) {
                 success &= false;
-                putFieldError("financialDocumentBankCode", KFSKeyConstants.ERROR_DOCUMENT_BANKACCMAINT_INVALID_BANK);
+                putFieldError("financialDocumentBankCode", KeyConstants.ERROR_DOCUMENT_BANKACCMAINT_INVALID_BANK);
             }
         }
 

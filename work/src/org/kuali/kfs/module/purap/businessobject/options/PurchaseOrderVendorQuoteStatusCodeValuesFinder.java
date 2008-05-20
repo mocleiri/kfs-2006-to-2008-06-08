@@ -27,6 +27,10 @@ import org.kuali.module.purap.service.PurchaseOrderService;
 
 /**
  * Value Finder for Purchase Order Vendor Quote Statuses.
+ * 
+ * THIS CODE IS NOT USED IN RELEASE 2 BUT THE CODE WAS LEFT IN TO
+ * FACILITATE TURNING IT BACK ON EARLY IN THE DEVELOPMENT CYCLE OF RELEASE 3.
+ * 
  */
 public class PurchaseOrderVendorQuoteStatusCodeValuesFinder extends KeyValuesBase {
 
@@ -40,7 +44,7 @@ public class PurchaseOrderVendorQuoteStatusCodeValuesFinder extends KeyValuesBas
         keyValues.add(new KeyLabelPair(KFSConstants.EMPTY_STRING, KFSConstants.EMPTY_STRING));
         ArrayList<PurchaseOrderQuoteStatus> poQuoteStatuses = SpringContext.getBean(PurchaseOrderService.class).getPurchaseOrderQuoteStatusCodes();
         for (PurchaseOrderQuoteStatus status : poQuoteStatuses) {
-            keyValues.add(new KeyLabelPair(status.getStatusCode(), status.getStatusDescription()));
+            keyValues.add(new KeyLabelPair(status.getPurchaseOrderQuoteStatusCode(), status.getPurchaseOrderQuoteStatusDescription()));
         }
         return keyValues;
     }

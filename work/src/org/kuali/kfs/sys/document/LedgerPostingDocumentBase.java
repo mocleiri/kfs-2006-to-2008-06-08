@@ -19,15 +19,10 @@ import java.sql.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.TransactionalDocumentBase;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.NumberUtils;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AccountingPeriod;
-import org.kuali.module.chart.service.AccountingPeriodService;
-import org.kuali.module.financial.service.UniversityDateService;
-
-import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * Base implementation for a ledger posting document.
@@ -40,7 +35,7 @@ public class LedgerPostingDocumentBase extends TransactionalDocumentBase impleme
     protected Integer postingYear;
     protected String postingPeriodCode;
     protected boolean checkPostingYearForCopy;
-
+    
     /**
      * Constructs a LedgerPostingDocumentBase.java.
      */
@@ -52,25 +47,17 @@ public class LedgerPostingDocumentBase extends TransactionalDocumentBase impleme
     /**
      * Used during initialization to provide a base <code>{@link AccountingPeriod}</code>.<br/>
      * <p>
-     * This is a hack right now because its intended to be set by the
-     * <code>{@link org.kuali.module.chart.service.AccountingPeriodService}</code>
+     * This is a hack right now because its intended to be set by the <code>{@link org.kuali.module.chart.service.AccountingPeriodService}</code>
      * 
      * @return AccountingPeriod
      */
-    private void createInitialAccountingPeriod() { 
-        AccountingPeriod accountingPeriod = retrieveCurrentAccountingPeriod();
+    private void createInitialAccountingPeriod() {
+        Date date = SpringServiceLocator.getDateTimeService().getCurrentSqlDate();
+        AccountingPeriod accountingPeriod = SpringServiceLocator.getAccountingPeriodService().getByDate(date);
+
         setAccountingPeriod(accountingPeriod);
     }
     
-    /**
-     * Finds the accounting period for the current date
-     * @return the current accounting period
-     */
-    private AccountingPeriod retrieveCurrentAccountingPeriod() {
-        Date date = SpringContext.getBean(DateTimeService.class).getCurrentSqlDate();
-        return SpringContext.getBean(AccountingPeriodService.class).getByDate(date);
-    }
-
     /**
      * @see org.kuali.kfs.document.LedgerPostingDocument#getPostingYear()
      */
@@ -85,7 +72,7 @@ public class LedgerPostingDocumentBase extends TransactionalDocumentBase impleme
         this.tmpPostingYear = postingYear;
         handleAccountingPeriodChange();
     }
-
+    
     /**
      * @see org.kuali.kfs.document.LedgerPostingDocument#getPostingPeriodCode()
      */
@@ -118,11 +105,10 @@ public class LedgerPostingDocumentBase extends TransactionalDocumentBase impleme
             postingYear = accountingPeriod.getUniversityFiscalYear();
             postingPeriodCode = accountingPeriod.getUniversityFiscalPeriodCode();
         }
-        this.tmpPostingPeriodCode = postingPeriodCode;
-        this.tmpPostingYear = postingYear;
-        handleAccountingPeriodChange();
+        setPostingYear(postingYear);
+        setPostingPeriodCode(postingPeriodCode);
     }
-
+    
     /**
      * Uses <code>{@link AccountingPeriod}</code> key to set new key values at once. <br/>
      * <p>
@@ -135,7 +121,7 @@ public class LedgerPostingDocumentBase extends TransactionalDocumentBase impleme
         String code = this.tmpPostingPeriodCode;
 
         if (year != null && StringUtils.isNotBlank(code)) {
-            AccountingPeriod accountingPeriod = SpringContext.getBean(AccountingPeriodService.class).getByPeriod(code, year);
+            AccountingPeriod accountingPeriod = SpringServiceLocator.getAccountingPeriodService().getByPeriod(code, year);
             if (ObjectUtils.isNotNull(accountingPeriod)) {
                 accountingPeriod.refresh();
                 this.accountingPeriod = accountingPeriod;
@@ -148,30 +134,18 @@ public class LedgerPostingDocumentBase extends TransactionalDocumentBase impleme
     }
 
     /**
-     * @see org.kuali.core.document.TransactionalDocumentBase#getAllowsErrorCorrection() Checks the condition the posting year of
-     *      the original document is current fiscal year.
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAllowsErrorCorrection()
+     * Checks the condition the posting year of the original document is current fiscal year.
      */
     @Override
     public boolean getAllowsErrorCorrection() {
         boolean allowsCorrection = super.getAllowsErrorCorrection();
-
-        Integer fiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        
+        Integer fiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
         if (!NumberUtils.equals(fiscalYear, getPostingYear())) {
             allowsCorrection = false;
         }
-
+        
         return allowsCorrection;
     }
-
-    /**
-     * If we've copied, we need to update the posting period and year
-     * @see org.kuali.core.document.DocumentBase#toCopy()
-     */
-    @Override
-    public void toCopy() throws WorkflowException, IllegalStateException {
-        super.toCopy();
-        setAccountingPeriod(retrieveCurrentAccountingPeriod());
-    }
-    
-    
 }

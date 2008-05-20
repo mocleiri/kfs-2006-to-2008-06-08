@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,56 +22,50 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DocumentTypeService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
-@ConfigureContext
+@WithTestSpringContext
 public class OrganizationRoutingModelTest extends KualiTestBase {
 
-    OrganizationRoutingModel model;
+    OrganizationRoutingModel model = new OrganizationRoutingModel();
 
-    @Override
+    private final static String MODEL_NAME = "junit-test";
+
+    BusinessObjectService boService;
+
     protected void setUp() throws Exception {
         super.setUp();
-        Map<String, String> fieldValues = new HashMap<String, String>();
-        fieldValues.put(KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, "BL");
-        fieldValues.put(KFSConstants.ORGANIZATION_CODE_PROPERTY_NAME, "CLAS");
-        List<OrganizationRoutingModel> results = (List<OrganizationRoutingModel>) SpringContext.getBean(BusinessObjectService.class).findMatching(OrganizationRoutingModel.class, fieldValues);
-        assertFalse("no models found", results.isEmpty());
-
-        model = results.get(0);
+        boService = SpringServiceLocator.getBusinessObjectService();
     }
 
     public void testSaveModel() {
-        String name = model.getOrganizationRoutingModelName();
-        OrganizationRoutingModel routingModel = new OrganizationRoutingModel();
-        routingModel.setOrganizationRoutingModelName(name);
-        routingModel.setChartOfAccountsCode(model.getChartOfAccountsCode());
-        routingModel.setOrganizationCode(model.getOrganizationCode());
-        routingModel.setAccountDelegateUniversalId(model.getAccountDelegateUniversalId());
-        routingModel.setFinancialDocumentTypeCode("GDLM");
-        SpringContext.getBean(BusinessObjectService.class).save(routingModel);
+        model.setOrganizationRoutingModelName(MODEL_NAME);
+        model.setChartOfAccountsCode("BL");
+        model.setOrganizationCode("AMUS");
+        model.setAccountDelegateUniversalId("12345");
+        model.setFinancialDocumentTypeCode("xx");
 
-        assertTrue(loadModel(name, model.getClass()));
+        boService.save(model);
+        assertTrue(loadModel(MODEL_NAME));
     }
 
-    private boolean loadModel(String name, Class clazz) {
+    public boolean loadModel(String name) {
 
-        Map<String, String> fieldValues = new HashMap<String, String>();
+        Map fieldValues = new HashMap();
+        Collection<OrganizationRoutingModel> foundModel;
         fieldValues.put("ORG_RTNG_MDL_NM", name);
 
-        Collection<OrganizationRoutingModel> foundModel = SpringContext.getBean(BusinessObjectService.class).findMatching(clazz, fieldValues);
+        foundModel = boService.findMatching(model.getClass(), fieldValues);
 
-        List<DelegateGlobalDetail> delegateGlobals = new ArrayList<DelegateGlobalDetail>();
+        List<DelegateChangeDocument> delegateChanges = new ArrayList();
 
         for (OrganizationRoutingModel model : foundModel) {
-            delegateGlobals.add(new DelegateGlobalDetail(model));
+            delegateChanges.add(new DelegateChangeDocument(model));
         }
 
-        return (foundModel != null && !foundModel.isEmpty());
+        return foundModel != null && foundModel.size() > 0;
 
     }
 

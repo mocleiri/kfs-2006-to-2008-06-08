@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/DeliveryRequiredDateReason.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,54 +20,92 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Delivery Required Date Reason Business Object. Defines the reason why a delivery date is required.
+ * 
  */
-public class DeliveryRequiredDateReason extends PersistableBusinessObjectBase {
+public class DeliveryRequiredDateReason extends BusinessObjectBase {
 
-    private String deliveryRequiredDateReasonCode;
-    private String deliveryRequiredDateReasonDescription;
-    private boolean active;
+	private String deliveryRequiredDateReasonCode;
+	private String deliveryRequiredDateReasonDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public DeliveryRequiredDateReason() {
+	/**
+	 * Default constructor.
+	 */
+	public DeliveryRequiredDateReason() {
 
-    }
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Gets the deliveryRequiredDateReasonCode attribute.
+	 * 
+	 * @return Returns the deliveryRequiredDateReasonCode
+	 * 
+	 */
+	public String getDeliveryRequiredDateReasonCode() { 
+		return deliveryRequiredDateReasonCode;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Sets the deliveryRequiredDateReasonCode attribute.
+	 * 
+	 * @param deliveryRequiredDateReasonCode The deliveryRequiredDateReasonCode to set.
+	 * 
+	 */
+	public void setDeliveryRequiredDateReasonCode(String deliveryRequiredDateReasonCode) {
+		this.deliveryRequiredDateReasonCode = deliveryRequiredDateReasonCode;
+	}
 
-    public String getDeliveryRequiredDateReasonCode() {
-        return deliveryRequiredDateReasonCode;
-    }
 
-    public void setDeliveryRequiredDateReasonCode(String deliveryRequiredDateReasonCode) {
-        this.deliveryRequiredDateReasonCode = deliveryRequiredDateReasonCode;
-    }
+	/**
+	 * Gets the deliveryRequiredDateReasonDescription attribute.
+	 * 
+	 * @return Returns the deliveryRequiredDateReasonDescription
+	 * 
+	 */
+	public String getDeliveryRequiredDateReasonDescription() { 
+		return deliveryRequiredDateReasonDescription;
+	}
 
-    public String getDeliveryRequiredDateReasonDescription() {
-        return deliveryRequiredDateReasonDescription;
-    }
+	/**
+	 * Sets the deliveryRequiredDateReasonDescription attribute.
+	 * 
+	 * @param deliveryRequiredDateReasonDescription The deliveryRequiredDateReasonDescription to set.
+	 * 
+	 */
+	public void setDeliveryRequiredDateReasonDescription(String deliveryRequiredDateReasonDescription) {
+		this.deliveryRequiredDateReasonDescription = deliveryRequiredDateReasonDescription;
+	}
 
-    public void setDeliveryRequiredDateReasonDescription(String deliveryRequiredDateReasonDescription) {
-        this.deliveryRequiredDateReasonDescription = deliveryRequiredDateReasonDescription;
-    }
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("deliveryRequiredDateReasonCode", this.deliveryRequiredDateReasonCode);
-        return m;
+	    return m;
     }
 }

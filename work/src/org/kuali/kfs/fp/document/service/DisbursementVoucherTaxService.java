@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.service;
 
@@ -21,77 +28,91 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
 
 /**
- * 
- * This service interface defines the methods that a DisbursementVoucherTaxService implementation must provide.
- * 
  * Handles queries and validation on tax id numbers.
  * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
 public interface DisbursementVoucherTaxService {
+    public static Integer TAX_NUMBER_NOT_FOUND = new Integer(0);
+    public static Integer INSTITUTION_TAX_NUMBER = new Integer(1);
+    public static Integer TAX_ID_VENDOR = new Integer(2);
+    public static Integer TAX_ID_EXISTING_PAYEE = new Integer(3);
+    public static Integer TAX_ID_PENDING_PAYEE = new Integer(4);
+    public static Integer TAX_ID_EMPLOYEE = new Integer(5);
+
+    /**
+     * Checks the existence of a tax id number as one of the following, returning the constant representing the match: 1) No Match
+     * 2) Institution special tax number 3) Vendor ID Number 4) Tax ID of existing payee 5) Tax ID of pending payee 6) Employee tax
+     * number
+     * 
+     * @param taxIDNumber
+     * @return
+     */
+    public Integer getTaxIDNumberUsage(String taxIDNumber, String taxpayerTypeCode);
 
     /**
      * Returns the vendor id number whose tax number matches the number passed in, or null if no vendor is found.
      * 
-     * @param taxIDNumber A vendor tax id number.
-     * @param taxpayerTypeCode A vendor tax payer type code.
-     * @return The id of the vendor found with a matching tax id number and payer type code, or null if no vendor is found.
+     * @param taxIDNumber
+     * @param taxpayerTypeCode
+     * @return
      */
-    public String getVendorId(String taxIDNumber, String taxpayerTypeCode);
+    public String getVendorNumber(String taxIDNumber, String taxpayerTypeCode);
 
     /**
      * Returns the pending payee id number whose tax number matches the number passed in, or null if no payee is found.
      * 
-     * @param taxIDNumber A pending payee tax id number.
-     * @param taxpayerTypeCode A pending payee tax payer type code.
-     * @return The id of the pending payee found with a matching tax id number and payer type code, or null if no payee is found.
+     * @param taxIDNumber
+     * @param taxpayerTypeCode
+     * @return
      */
-    public String getPendingPayeeId(String taxIDNumber, String taxpayerTypeCode);
+    public String getPendingPayeeNumber(String taxIDNumber, String taxpayerTypeCode);
 
     /**
      * Returns the payee id number whose tax number matches the number passed in, or null if no payee is found.
      * 
-     * @param taxIDNumber A payee tax id number.
-     * @param taxpayerTypeCode A payee tax payer type code.
-     * @return The id of the payee found with a matching tax id number and payer type code, or null if no payee is found.
+     * @param taxIDNumber
+     * @param taxpayerTypeCode
+     * @return
      */
-    public String getPayeeId(String taxIDNumber, String taxpayerTypeCode);
+    public String getPayeeNumber(String taxIDNumber, String taxpayerTypeCode);
 
     /**
      * Returns the employee id number whose tax number matches the number passed in, or null if no employee is found.
      * 
-     * @param taxIDNumber A vendor tax id number.
-     * @param taxpayerTypeCode A vendor tax payer type code.
-     * @return The universal id of the employee found with a matching tax id number and payer type code, or null if no employee is found.
+     * @param taxIDNumber
+     * @param taxpayerTypeCode
+     * @return
      */
-    public String getUniversalId(String taxIDNumber, String taxpayerTypeCode);
+    public String getEmployeeNumber(String taxIDNumber, String taxpayerTypeCode);
 
     /**
-     * Removes non-resident alien tax lines from the document's accounting lines and updates the check total.
+     * Removes tax lines from the document's accounting lines and updates the check total.
      * 
-     * @param document The disbursement voucher document being modified.
+     * @param document
      */
     public void clearNRATaxLines(DisbursementVoucherDocument document);
 
     /**
-     * Generates new tax lines based on associated non-resident alien information, and debits the check total
+     * generates new tax lines based on nra tab infor, and debits the check total
      * 
-     * @param document The disbursement voucher document being modified.
+     * @param document
      */
     public void processNonResidentAlienTax(DisbursementVoucherDocument document);
 
     /**
-     * Returns the non-resident alien accounting line tax amount (if any).
+     * Returns the accounting line tax amount (if any)
      * 
-     * @param document The disbursement voucher being reviewed.
-     * @return The total tax amount of the non-resident alien accounting lines for the given disbursement voucher document.
+     * @param document
+     * @return
      */
     public KualiDecimal getNonResidentAlienTaxAmount(DisbursementVoucherDocument document);
 
     /**
-     * Returns a list of Integers representing the non-resident alien tax line numbers parsed from the line string.
+     * Returns a List of Integer line numbers parsed from the line string.
      * 
-     * @param taxLineString The tax line representation as as string that will be parsed for the non-resident alien tax line numbers.
-     * @return A collection of Integers representing the line numbers of non-resident alien tax lines.
+     * @param taxLineString
+     * @return
      */
     public List getNRATaxLineNumbers(String taxLineString);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,29 @@
 
 package org.kuali.module.financial.bo;
 
-import static org.kuali.kfs.KFSPropertyConstants.ACCOUNT_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
-import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.SUB_ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.AMOUNT;
+import static org.kuali.PropertyConstants.CHART_OF_ACCOUNTS_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
+import static org.kuali.PropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.PropertyConstants.OVERRIDE_CODE;
+import static org.kuali.PropertyConstants.PROJECT_CODE;
+import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
+import static org.kuali.PropertyConstants.SUB_ACCOUNT_NUMBER;
 
-import org.kuali.kfs.bo.AccountingLineParserBase;
-
+import org.kuali.core.bo.AccountingLineParserBase;
 
 /**
- * This class represents a <code>PreEncumbranceDocument</code> accounting line parser.
+ * <code>PreEncumbranceDocument</code> accounting line parser
  * 
  * @see org.kuali.module.financial.document.PreEncumbranceDocument
+ * 
+ * 
  */
 public class PreEncumbranceDocumentAccountingLineParser extends AccountingLineParserBase {
-    private static final String[] SOURCE_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, AMOUNT };
-    private static final String[] TARGET_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, REFERENCE_NUMBER, AMOUNT };
+    private static final String[] SOURCE_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, OVERRIDE_CODE, AMOUNT };
+    private static final String[] TARGET_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, REFERENCE_NUMBER, OVERRIDE_CODE, AMOUNT };
 
     /**
      * @see org.kuali.core.bo.AccountingLineParserBase#getSourceAccountingLineFormat()

@@ -1,17 +1,26 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
@@ -20,16 +29,15 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class AccountingPeriod extends PersistableBusinessObjectBase {
+public class AccountingPeriod extends BusinessObjectBase {
 
     private Integer universityFiscalYear;
     private String universityFiscalPeriodCode;
@@ -50,7 +58,8 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the universityFiscalYear
+     * @return - Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -60,6 +69,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -69,7 +79,8 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodCode attribute.
      * 
-     * @return Returns the universityFiscalPeriodCode
+     * @return - Returns the universityFiscalPeriodCode
+     * 
      */
     public String getUniversityFiscalPeriodCode() {
         return universityFiscalPeriodCode;
@@ -79,6 +90,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      * Sets the universityFiscalPeriodCode attribute.
      * 
      * @param universityFiscalPeriodCode The universityFiscalPeriodCode to set.
+     * 
      */
     public void setUniversityFiscalPeriodCode(String universityFiscalPeriodCode) {
         this.universityFiscalPeriodCode = universityFiscalPeriodCode;
@@ -88,7 +100,8 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodName attribute.
      * 
-     * @return Returns the universityFiscalPeriodName
+     * @return - Returns the universityFiscalPeriodName
+     * 
      */
     public String getUniversityFiscalPeriodName() {
         return universityFiscalPeriodName;
@@ -98,6 +111,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      * Sets the universityFiscalPeriodName attribute.
      * 
      * @param universityFiscalPeriodName The universityFiscalPeriodName to set.
+     * 
      */
     public void setUniversityFiscalPeriodName(String universityFiscalPeriodName) {
         this.universityFiscalPeriodName = universityFiscalPeriodName;
@@ -107,7 +121,8 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodStatusCode attribute.
      * 
-     * @return Returns the universityFiscalPeriodStatusCode
+     * @return - Returns the universityFiscalPeriodStatusCode
+     * 
      */
     public String getUniversityFiscalPeriodStatusCode() {
         return universityFiscalPeriodStatusCode;
@@ -117,6 +132,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      * Sets the universityFiscalPeriodStatusCode attribute.
      * 
      * @param universityFiscalPeriodStatusCode The universityFiscalPeriodStatusCode to set.
+     * 
      */
     public void setUniversityFiscalPeriodStatusCode(String universityFiscalPeriodStatusCode) {
         this.universityFiscalPeriodStatusCode = universityFiscalPeriodStatusCode;
@@ -126,7 +142,8 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetRolloverIndicator attribute.
      * 
-     * @return Returns the budgetRolloverIndicator
+     * @return - Returns the budgetRolloverIndicator
+     * 
      */
     public boolean isBudgetRolloverIndicator() {
         return budgetRolloverIndicator;
@@ -137,6 +154,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      * Sets the budgetRolloverIndicator attribute.
      * 
      * @param budgetRolloverIndicator The budgetRolloverIndicator to set.
+     * 
      */
     public void setBudgetRolloverIndicator(boolean budgetRolloverIndicator) {
         this.budgetRolloverIndicator = budgetRolloverIndicator;
@@ -146,7 +164,8 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
     /**
      * Gets the universityFiscalPeriodEndDate attribute.
      * 
-     * @return Returns the universityFiscalPeriodEndDate
+     * @return - Returns the universityFiscalPeriodEndDate
+     * 
      */
     public Date getUniversityFiscalPeriodEndDate() {
         return universityFiscalPeriodEndDate;
@@ -156,18 +175,10 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      * Sets the universityFiscalPeriodEndDate attribute.
      * 
      * @param universityFiscalPeriodEndDate The universityFiscalPeriodEndDate to set.
+     * 
      */
     public void setUniversityFiscalPeriodEndDate(Date universityFiscalPeriodEndDate) {
         this.universityFiscalPeriodEndDate = universityFiscalPeriodEndDate;
-    }
-
-    /**
-     * Determine if the current account period is open
-     * 
-     * @return true if the accounting period is open; otherwise, false
-     */
-    public boolean isOpen() {
-        return KFSConstants.ACCOUNTING_PERIOD_STATUS_OPEN.equals(this.getUniversityFiscalPeriodStatusCode());
     }
 
     /**
@@ -191,7 +202,7 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      * @return the actual month (1 - 12) that this period represents
      */
     public int getMonth() {
-        DateTimeService dateTimeService = SpringContext.getBean(DateTimeService.class);
+        DateTimeService dateTimeService = SpringServiceLocator.getDateTimeService();
         Calendar cal = dateTimeService.getCalendar(new Date(this.universityFiscalPeriodEndDate.getTime()));
         return cal.get(Calendar.MONTH) + 1;
     }
@@ -201,55 +212,10 @@ public class AccountingPeriod extends PersistableBusinessObjectBase {
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("universityFiscalYear", "" + this.universityFiscalYear);
+        m.put("universityFiscalYear", ""+this.universityFiscalYear);
         m.put("universityFiscalPeriodCode", this.universityFiscalPeriodCode);
         return m;
     }
 
-    /**
-     * generates a hash code for this accounting period, based on the primary keys of the AccountingPeriod BusinesObject: university
-     * fiscal year and university fiscal period code
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int PRIME = 31;
-        int result = 1;
-        result = PRIME * result + ((universityFiscalPeriodCode == null) ? 0 : universityFiscalPeriodCode.hashCode());
-        result = PRIME * result + ((universityFiscalYear == null) ? 0 : universityFiscalYear.hashCode());
-        return result;
-    }
 
-    /**
-     * determines if two accounting periods are equal, based on the primary keys of the AccountingPeriod BusinesObject: university
-     * fiscal year and university fiscal period code
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        // this method was added so that
-        // org.kuali.module.financial.web.struts.form.AuxiliaryVoucherForm.populateAccountingPeriodListForRendering works properly
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final AccountingPeriod other = (AccountingPeriod) obj;
-        if (universityFiscalPeriodCode == null) {
-            if (other.universityFiscalPeriodCode != null)
-                return false;
-        }
-        else if (!universityFiscalPeriodCode.equals(other.universityFiscalPeriodCode))
-            return false;
-        if (universityFiscalYear == null) {
-            if (other.universityFiscalYear != null)
-                return false;
-        }
-        else if (!universityFiscalYear.equals(other.universityFiscalYear))
-            return false;
-        return true;
-    }
 }

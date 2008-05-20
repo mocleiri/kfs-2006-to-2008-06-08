@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/RestrictedMaterial.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,85 +20,136 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.module.integration.bo.PurchasingAccountsPayableRestrictedMaterial;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Restricted Material Business Object.
+ * 
  */
-public class RestrictedMaterial extends PersistableBusinessObjectBase implements PurchasingAccountsPayableRestrictedMaterial {
+public class RestrictedMaterial extends BusinessObjectBase {
 
-    private String restrictedMaterialCode;
-    private String restrictedMaterialDescription;
-    private String restrictedMaterialDefaultDescription;
-    private String restrictedMaterialWorkgroupName;
-    private boolean active;
+	private String restrictedMaterialCode;
+	private String restrictedMaterialDescription;
+	private String restrictedMaterialDefaultDescription;
+	private String restrictedMaterialWorkgroupName;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    //Not persisted in DB
-    private boolean selected;
-    
-    /**
-     * Default constructor.
-     */
-    public RestrictedMaterial() {
+	/**
+	 * Default constructor.
+	 */
+	public RestrictedMaterial() {
 
-    }
+	}
 
-    public String getRestrictedMaterialCode() {
-        return restrictedMaterialCode;
-    }
+	/**
+	 * Gets the restrictedMaterialCode attribute.
+	 * 
+	 * @return Returns the restrictedMaterialCode
+	 * 
+	 */
+	public String getRestrictedMaterialCode() { 
+		return restrictedMaterialCode;
+	}
 
-    public void setRestrictedMaterialCode(String restrictedMaterialCode) {
-        this.restrictedMaterialCode = restrictedMaterialCode;
-    }
+	/**
+	 * Sets the restrictedMaterialCode attribute.
+	 * 
+	 * @param restrictedMaterialCode The restrictedMaterialCode to set.
+	 * 
+	 */
+	public void setRestrictedMaterialCode(String restrictedMaterialCode) {
+		this.restrictedMaterialCode = restrictedMaterialCode;
+	}
 
-    public String getRestrictedMaterialDescription() {
-        return restrictedMaterialDescription;
-    }
 
-    public void setRestrictedMaterialDescription(String restrictedMaterialDescription) {
-        this.restrictedMaterialDescription = restrictedMaterialDescription;
-    }
+	/**
+	 * Gets the restrictedMaterialDescription attribute.
+	 * 
+	 * @return Returns the restrictedMaterialDescription
+	 * 
+	 */
+	public String getRestrictedMaterialDescription() { 
+		return restrictedMaterialDescription;
+	}
 
-    public String getRestrictedMaterialDefaultDescription() {
-        return restrictedMaterialDefaultDescription;
-    }
+	/**
+	 * Sets the restrictedMaterialDescription attribute.
+	 * 
+	 * @param restrictedMaterialDescription The restrictedMaterialDescription to set.
+	 * 
+	 */
+	public void setRestrictedMaterialDescription(String restrictedMaterialDescription) {
+		this.restrictedMaterialDescription = restrictedMaterialDescription;
+	}
 
-    public void setRestrictedMaterialDefaultDescription(String restrictedMaterialDefaultDescription) {
-        this.restrictedMaterialDefaultDescription = restrictedMaterialDefaultDescription;
-    }
 
-    public String getRestrictedMaterialWorkgroupName() {
-        return restrictedMaterialWorkgroupName;
-    }
+	/**
+	 * Gets the restrictedMaterialDefaultDescription attribute.
+	 * 
+	 * @return Returns the restrictedMaterialDefaultDescription
+	 * 
+	 */
+	public String getRestrictedMaterialDefaultDescription() { 
+		return restrictedMaterialDefaultDescription;
+	}
 
-    public void setRestrictedMaterialWorkgroupName(String restrictedMaterialWorkgroupName) {
-        this.restrictedMaterialWorkgroupName = restrictedMaterialWorkgroupName;
-    }
+	/**
+	 * Sets the restrictedMaterialDefaultDescription attribute.
+	 * 
+	 * @param restrictedMaterialDefaultDescription The restrictedMaterialDefaultDescription to set.
+	 * 
+	 */
+	public void setRestrictedMaterialDefaultDescription(String restrictedMaterialDefaultDescription) {
+		this.restrictedMaterialDefaultDescription = restrictedMaterialDefaultDescription;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Gets the restrictedMaterialWorkgroupName attribute.
+	 * 
+	 * @return Returns the restrictedMaterialWorkgroupName
+	 * 
+	 */
+	public String getRestrictedMaterialWorkgroupName() { 
+		return restrictedMaterialWorkgroupName;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Sets the restrictedMaterialWorkgroupName attribute.
+	 * 
+	 * @param restrictedMaterialWorkgroupName The restrictedMaterialWorkgroupName to set.
+	 * 
+	 */
+	public void setRestrictedMaterialWorkgroupName(String restrictedMaterialWorkgroupName) {
+		this.restrictedMaterialWorkgroupName = restrictedMaterialWorkgroupName;
+	}
+
+
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("restrictedMaterialCode", this.restrictedMaterialCode);
-        return m;
+	    return m;
     }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean isSelected) {
-        this.selected = isSelected;
-    }
-
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/AutoApproveExclude.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,83 +20,139 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
 
 /**
- * Auto Approve Exclude Business Object. Defines attributes in maintenance document for excluding payment request from automatic
- * approval.
+ * 
  */
-public class AutoApproveExclude extends PersistableBusinessObjectBase {
+public class AutoApproveExclude extends BusinessObjectBase {
 
-    private String chartOfAccountsCode;
-    private String accountNumber;
-    private boolean active;
+	private String chartOfAccountsCode;
+	private String accountNumber;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
     private Account account;
-    private Chart chartOfAccounts;
+	private Chart chartOfAccounts;
 
-    /**
-     * Default constructor.
-     */
-    public AutoApproveExclude() {
+	/**
+	 * Default constructor.
+	 */
+	public AutoApproveExclude() {
 
-    }
+	}
 
-    public String getChartOfAccountsCode() {
-        return chartOfAccountsCode;
-    }
+	/**
+	 * Gets the chartOfAccountsCode attribute.
+	 * 
+	 * @return Returns the chartOfAccountsCode
+	 * 
+	 */
+	public String getChartOfAccountsCode() { 
+		return chartOfAccountsCode;
+	}
 
-    public void setChartOfAccountsCode(String chartOfAccountsCode) {
-        this.chartOfAccountsCode = chartOfAccountsCode;
-    }
+	/**
+	 * Sets the chartOfAccountsCode attribute.
+	 * 
+	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * 
+	 */
+	public void setChartOfAccountsCode(String chartOfAccountsCode) {
+		this.chartOfAccountsCode = chartOfAccountsCode;
+	}
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
+	/**
+	 * Gets the accountNumber attribute.
+	 * 
+	 * @return Returns the accountNumber
+	 * 
+	 */
+	public String getAccountNumber() { 
+		return accountNumber;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Sets the accountNumber attribute.
+	 * 
+	 * @param accountNumber The accountNumber to set.
+	 * 
+	 */
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
-    public Account getAccount() {
-        return account;
-    }
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    /**
-     * @deprecated
-     */
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    public Chart getChartOfAccounts() {
-        return chartOfAccounts;
-    }
 
-    /**
-     * @deprecated
-     */
-    public void setChartOfAccounts(Chart chartOfAccounts) {
-        this.chartOfAccounts = chartOfAccounts;
-    }
+	/**
+	 * Gets the account attribute.
+	 * 
+	 * @return Returns the account
+	 * 
+	 */
+	public Account getAccount() { 
+		return account;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Sets the account attribute.
+	 * 
+	 * @param account The account to set.
+	 * @deprecated
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * Gets the chartOfAccounts attribute.
+	 * 
+	 * @return Returns the chartOfAccounts
+	 * 
+	 */
+	public Chart getChartOfAccounts() { 
+		return chartOfAccounts;
+	}
+
+	/**
+	 * Sets the chartOfAccounts attribute.
+	 * 
+	 * @param chartOfAccounts The chartOfAccounts to set.
+	 * @deprecated
+	 */
+	public void setChartOfAccounts(Chart chartOfAccounts) {
+		this.chartOfAccounts = chartOfAccounts;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("accountNumber", this.accountNumber);
-        return m;
+	    return m;
     }
 }

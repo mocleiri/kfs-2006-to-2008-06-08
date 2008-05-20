@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public class BalanceReport {
         public String title;
         public String type;
 
-        /**
-         * Add date, page number, and title to end page
-         * 
-         * @see com.lowagie.text.pdf.PdfPageEventHelper#onEndPage(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
-         */
         public void onEndPage(PdfWriter writer, Document document) {
             try {
                 Rectangle page = document.getPageSize();
@@ -94,28 +89,15 @@ public class BalanceReport {
         }
     }
 
+
     /**
      * Print a balance summary report
      * 
-     * @param runDate date report was run
-     * @param fiscalYearName name of fiscal year
-     * @param balanceTypeCodes list of balance type codes used for report
+     * @param runDate
+     * @param fiscalYearName
+     * @param balanceTypeCodes
      */
     public void generateReport(Date runDate, List<GlSummary> glBalances, String fiscalYearName, List<String> balanceTypeCodes, String fileprefix, String destinationDirectory) {
-        LOG.debug("generateReport() started");
-
-        String reportTitle = "GL Summary for Fiscal Year " + fiscalYearName;
-        this.generateReport(glBalances, balanceTypeCodes, runDate, reportTitle, fileprefix, destinationDirectory);
-    }
-
-    /**
-     * Print a balance summary report
-     * 
-     * @param runDate date report was run
-     * @param fiscalYearName name of fiscal year
-     * @param balanceTypeCodes list of balance type codes used for report
-     */
-    public void generateReport(List<GlSummary> glBalances, List<String> balanceTypeCodes, Date runDate, String reportTitle, String fileprefix, String destinationDirectory) {
         LOG.debug("generateReport() started");
 
         Font headerFont = FontFactory.getFont(FontFactory.COURIER, 8, Font.BOLD);
@@ -126,7 +108,7 @@ public class BalanceReport {
         PageHelper helper = new PageHelper();
         helper.runDate = runDate;
         helper.headerFont = headerFont;
-        helper.title = reportTitle;
+        helper.title = "GL Summary for Fiscal Year " + fiscalYearName;
         helper.type = "Balance Type of ";
 
         int total = balanceTypeCodes.size();

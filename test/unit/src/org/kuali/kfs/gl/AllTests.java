@@ -1,122 +1,92 @@
 /*
- * Copyright 2005-2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.kuali.module.gl.batch.BalanceForwardStepTest;
-import org.kuali.module.gl.batch.CollectorStepTest;
-import org.kuali.module.gl.batch.FileEnterpriseFeederTest;
-import org.kuali.module.gl.batch.ForwardEncumbranceTest;
-import org.kuali.module.gl.batch.PurgeTest;
-import org.kuali.module.gl.batch.YearEndFlexibleOffsetTest;
-import org.kuali.module.gl.bo.OriginEntryTest;
+import org.kuali.module.gl.batch.poster.impl.PostBalanceTest;
+import org.kuali.module.gl.batch.poster.impl.PostEncumbranceTest;
+import org.kuali.module.gl.batch.poster.impl.PostExpenditureTransactionTest;
+import org.kuali.module.gl.batch.poster.impl.PostGlAccountBalanceTest;
+import org.kuali.module.gl.batch.poster.impl.PostGlEntryTest;
+import org.kuali.module.gl.batch.poster.impl.PostReversalTest;
+import org.kuali.module.gl.batch.poster.impl.PostSufficientFundBalancesTest;
 import org.kuali.module.gl.dao.ojb.TestUnitTestSqlDao;
 import org.kuali.module.gl.dao.ojb.TestUniversityDateDao;
-import org.kuali.module.gl.service.CollectorServiceTest;
 import org.kuali.module.gl.service.GeneralLedgerPendingEntryServiceTest;
 import org.kuali.module.gl.service.NightlyOutServiceTest;
-import org.kuali.module.gl.service.PosterServiceTest;
-import org.kuali.module.gl.service.ReportServiceTest;
-import org.kuali.module.gl.service.RunDateServiceTest;
-import org.kuali.module.gl.service.ScrubberFlexibleOffsetTest;
-import org.kuali.module.gl.service.ScrubberServiceTest;
-import org.kuali.module.gl.service.SufficientFundsRebuilderServiceTest;
-import org.kuali.module.gl.service.SufficientFundsServiceTest;
-import org.kuali.module.gl.service.impl.orgreversion.OrganizationReversionCategoryTest;
-import org.kuali.module.gl.service.impl.orgreversion.OrganizationReversionLogicTest;
-import org.kuali.module.gl.util.OJBUtilityTest;
-import org.kuali.module.gl.web.lookupable.AccountBalanceLookupableHelperServiceTest;
-import org.kuali.module.gl.web.lookupable.BalanceLookupableHelperServiceTest;
-import org.kuali.module.gl.web.lookupable.EntryLookupableHelperServiceTest;
-import org.kuali.module.gl.web.lookupable.PendingLedgerServiceHelperServiceTest;
 
 /**
- * Runs all the tests in the GL test suite.
+ * @author jsissom
+ *
  */
 public class AllTests {
 
-    /**
-     * Constructs a AllTests instance
-     */
-    public AllTests() {
-        super();
+  public AllTests() {
+    super();
+  }
+
+  public static Test suite() {
+    // -------------------------------------------------------
+    // NOTE:  Set this to true if you just want fast tests (tests that don't touch the database).
+    // Set it to false if you want all tests
+    // -------------------------------------------------------
+    boolean fastTests = true;
+
+    TestSuite suite = new TestSuite();
+
+    // When you are adding tests, put the test in an if statement checking fastTests if
+    // the test you are adding touches the database or workflow.
+
+    // org.kuali.module.gl.batch.poster.impl
+    suite.addTestSuite(PostBalanceTest.class);
+    suite.addTestSuite(PostEncumbranceTest.class);
+    suite.addTestSuite(PostExpenditureTransactionTest.class);
+    suite.addTestSuite(PostGlEntryTest.class);
+    suite.addTestSuite(PostReversalTest.class);
+    suite.addTestSuite(PostSufficientFundBalancesTest.class);
+    suite.addTestSuite(PostGlAccountBalanceTest.class);
+    
+    if ( ! fastTests ) {
+      suite.addTestSuite(NightlyOutServiceTest.class);
     }
 
-    /**
-     * Returns a suite of all the tests in GL...except, of course, for those tests that were never
-     * added to this class.
-     * @return a Test suite with most all GL tests
-     */
-    public static Test suite() {
-        TestSuite suite = new TestSuite();
-
-        // org.kuali.module.gl
-        suite.addTestSuite(GLConstantsTest.class);
-
-        // org.kuali.module.gl.batch
-        suite.addTestSuite(BalanceForwardStepTest.class);
-        suite.addTestSuite(CollectorStepTest.class);
-        suite.addTestSuite(FileEnterpriseFeederTest.class);
-        suite.addTestSuite(ForwardEncumbranceTest.class);
-        suite.addTestSuite(PurgeTest.class);
-        suite.addTestSuite(YearEndFlexibleOffsetTest.class);
-
-        // org.kuali.module.gl.bo
-        suite.addTestSuite(OriginEntryTest.class);
-
-        // org.kuali.module.gl.dao.ojb
-        suite.addTestSuite(TestUniversityDateDao.class);
-        suite.addTestSuite(TestUnitTestSqlDao.class);
-
-        // org.kuali.module.gl.service
-        suite.addTestSuite(CollectorServiceTest.class);
-        suite.addTestSuite(GeneralLedgerPendingEntryServiceTest.class);
-        suite.addTestSuite(NightlyOutServiceTest.class);
-        suite.addTestSuite(PosterServiceTest.class);
-        suite.addTestSuite(ReportServiceTest.class);
-        suite.addTestSuite(RunDateServiceTest.class);
-        suite.addTestSuite(ScrubberFlexibleOffsetTest.class);
-        suite.addTestSuite(ScrubberServiceTest.class);
-        suite.addTestSuite(SufficientFundsRebuilderServiceTest.class);
-        suite.addTestSuite(SufficientFundsServiceTest.class);
-
-        // org.kuali.module.gl.service.impl.orgreversion
-        suite.addTestSuite(OrganizationReversionCategoryTest.class);
-        suite.addTestSuite(OrganizationReversionLogicTest.class);
-
-        // org.kuali.module.gl.util
-        suite.addTestSuite(OJBUtilityTest.class);
-
-        // org.kuali.module.gl.web.lookupable
-        suite.addTestSuite(AccountBalanceLookupableHelperServiceTest.class);
-        suite.addTestSuite(BalanceLookupableHelperServiceTest.class);
-        suite.addTestSuite(EntryLookupableHelperServiceTest.class);
-        suite.addTestSuite(PendingLedgerServiceHelperServiceTest.class);
-
-        return suite;
+    // org.kuali.module.gl.dao.ojb
+    if ( ! fastTests ) {
+      suite.addTestSuite(TestUniversityDateDao.class);
+      suite.addTestSuite(TestUnitTestSqlDao.class);
     }
 
-    /**
-     * Runs all the tests in the all test test suite
-     * 
-     * @param args command line arguments
-     */
-    public static void main(String[] args) {
-        junit.textui.TestRunner.run(suite());
+    // org.kuali.module.gl.service
+    if ( ! fastTests ) {
+      suite.addTestSuite(GeneralLedgerPendingEntryServiceTest.class);
     }
+
+    return suite;
+  }
+
+  public static void main(String[] args) {
+    junit.textui.TestRunner.run(suite());
+  }
 }

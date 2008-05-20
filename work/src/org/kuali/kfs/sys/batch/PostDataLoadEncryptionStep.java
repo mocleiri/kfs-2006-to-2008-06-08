@@ -17,7 +17,6 @@ package org.kuali.kfs.batch;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -34,10 +33,7 @@ public class PostDataLoadEncryptionStep extends AbstractStep {
     private PostDataLoadEncryptionService postDataLoadEncryptionService;
     private String attributesToEncryptProperties;
 
-    /**
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String, java.util.Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) {
+    public boolean execute(String jobName) {
         Properties attributesToEncryptProperties = new Properties();
         try {
             attributesToEncryptProperties.load(new FileSystemResource(this.attributesToEncryptProperties).getInputStream());
@@ -65,6 +61,7 @@ public class PostDataLoadEncryptionStep extends AbstractStep {
             try {
                 postDataLoadEncryptionService.prepClassDescriptor(businessObjectClass, attributeNames);
                 Collection objectsToEncrypt = SpringContext.getBean(BusinessObjectService.class).findAll(businessObjectClass);
+                postDataLoadEncryptionService.truncateTable(businessObjectClass);
                 for (Object businessObject : objectsToEncrypt) {
                     postDataLoadEncryptionService.encrypt((PersistableBusinessObject) businessObject, attributeNames);
                 }
@@ -86,7 +83,6 @@ public class PostDataLoadEncryptionStep extends AbstractStep {
 
     /**
      * Sets the attributesToEncryptProperties attribute value.
-     * 
      * @param attributesToEncryptProperties The attributesToEncryptProperties to set.
      */
     public void setAttributesToEncryptProperties(String attributesToEncryptProperties) {

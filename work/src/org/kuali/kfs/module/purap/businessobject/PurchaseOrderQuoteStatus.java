@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderQuoteStatus.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +20,92 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Purchase Order Quote Status Business Object.
  * 
  */
-public class PurchaseOrderQuoteStatus extends Status {
+public class PurchaseOrderQuoteStatus extends BusinessObjectBase {
 
-    private boolean active;
-    
-    /**
-     * Default constructor.
-     */
-    public PurchaseOrderQuoteStatus() {
-        super();
-        super.ojbConcreteClass = this.getClass().getName();
-    }
+	private String purchaseOrderQuoteStatusCode;
+	private String purchaseOrderQuoteStatusDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderQuoteStatus() {
 
-    public void setActive(boolean active) {
-        this.active = active;
+	}
+
+	/**
+	 * Gets the purchaseOrderQuoteStatusCode attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteStatusCode
+	 * 
+	 */
+	public String getPurchaseOrderQuoteStatusCode() { 
+		return purchaseOrderQuoteStatusCode;
+	}
+
+	/**
+	 * Sets the purchaseOrderQuoteStatusCode attribute.
+	 * 
+	 * @param purchaseOrderQuoteStatusCode The purchaseOrderQuoteStatusCode to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteStatusCode(String purchaseOrderQuoteStatusCode) {
+		this.purchaseOrderQuoteStatusCode = purchaseOrderQuoteStatusCode;
+	}
+
+
+	/**
+	 * Gets the purchaseOrderQuoteStatusDescription attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteStatusDescription
+	 * 
+	 */
+	public String getPurchaseOrderQuoteStatusDescription() { 
+		return purchaseOrderQuoteStatusDescription;
+	}
+
+	/**
+	 * Sets the purchaseOrderQuoteStatusDescription attribute.
+	 * 
+	 * @param purchaseOrderQuoteStatusDescription The purchaseOrderQuoteStatusDescription to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteStatusDescription(String purchaseOrderQuoteStatusDescription) {
+		this.purchaseOrderQuoteStatusDescription = purchaseOrderQuoteStatusDescription;
+	}
+
+
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        m.put("purchaseOrderQuoteStatusCode", this.purchaseOrderQuoteStatusCode);
+	    return m;
     }
-    
 }

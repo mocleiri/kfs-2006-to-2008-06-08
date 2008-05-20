@@ -24,22 +24,23 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.exceptions.GroupNotFoundException;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.KualiGroupService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.purap.PurapAuthorizationConstants;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.document.CreditMemoDocument;
+import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.service.CreditMemoService;
 import org.kuali.module.purap.service.PurapService;
 
 /**
- * Document Authorizer for the Credit Memo document.
+ * Document Authorizer for the credit memo document.
  */
 public class CreditMemoDocumentAuthorizer extends AccountingDocumentAuthorizerBase {
 
@@ -49,7 +50,7 @@ public class CreditMemoDocumentAuthorizer extends AccountingDocumentAuthorizerBa
      */
     @Override
     public boolean hasInitiateAuthorization(Document document, UniversalUser user) {
-        String authorizedWorkgroup = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
+        String authorizedWorkgroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
         try {
             return SpringContext.getBean(KualiGroupService.class).getByGroupName(authorizedWorkgroup).hasMember(user);
         }
@@ -74,13 +75,12 @@ public class CreditMemoDocumentAuthorizer extends AccountingDocumentAuthorizerBa
             }
         }
         else if (workflowDocument.stateIsEnroute() && workflowDocument.isApprovalRequested()) {
-            if (!SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted((CreditMemoDocument) document)) {
+            if(!SpringContext.getBean(PurapService.class).isFullDocumentEntryCompleted((CreditMemoDocument)document)) {
                 editMode = AuthorizationConstants.EditMode.FULL_ENTRY;
-            }
+            }        
         }
-        if (!editMode.equals(AuthorizationConstants.EditMode.FULL_ENTRY) || (! workflowDocument.isAdHocRequested())) {
-            editModeMap.put(editMode, "TRUE");
-        }
+        editModeMap.put(editMode, "TRUE");
+
         CreditMemoDocument creditMemoDocument = (CreditMemoDocument) document;
         if (StringUtils.equals(creditMemoDocument.getStatusCode(), PurapConstants.CreditMemoStatuses.INITIATE)) {
             editModeMap.put(PurapAuthorizationConstants.CreditMemoEditMode.DISPLAY_INIT_TAB, "TRUE");
@@ -93,11 +93,11 @@ public class CreditMemoDocumentAuthorizer extends AccountingDocumentAuthorizerBa
             editModeMap.put(PurapAuthorizationConstants.CreditMemoEditMode.LOCK_VENDOR_ENTRY, "TRUE");
         }
 
-        String apGroup = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
-        if (user.isMember(apGroup) && (creditMemoDocument.getExtractedDate() == null) && (! workflowDocument.isAdHocRequested())) {
+        String apGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(PurapConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);        
+        if (user.isMember(apGroup) && (creditMemoDocument.getExtractedDate()==null)) {
             editModeMap.put(PurapAuthorizationConstants.PaymentRequestEditMode.EDIT_PRE_EXTRACT, "TRUE");
         }
-
+        
         return editModeMap;
     }
 

@@ -27,17 +27,13 @@ import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
+import org.kuali.PropertyConstants;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.TransactionalServiceUtils;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Reversal;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.ReversalDao;
 
-/**
- * An OJB implementation of the Reversal DAO
- */
 public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReversalDaoOjb.class);
 
@@ -52,11 +48,9 @@ public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalD
     private final static String UNIVERISTY_FISCAL_PERIOD_CODE = "universityFiscalPeriodCode";
     private final static String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
     private final static String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
-    private final static String MAX_CONSTANT = "max(documentNumber)";
+    private final static String FINANCIAL_DOCUMENT_NUMBER = "financialDocumentNumber";
+    private final static String MAX_CONSTANT = "max(financialDocumentNumber)";
 
-    /**
-     * Constructs a ReversalDaoOjb instance
-     */
     public ReversalDaoOjb() {
         super();
     }
@@ -64,9 +58,6 @@ public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalD
     /**
      * Find the maximum transactionLedgerEntrySequenceNumber in the entry table for a specific transaction. This is used to make
      * sure that rows added have a unique primary key.
-     * 
-     * @param t a transaction to find the maximum sequence number for
-     * @return the max sequence number for the given transaction
      */
     public int getMaxSequenceNumber(Transaction t) {
         LOG.debug("getSequenceNumber() ");
@@ -83,16 +74,15 @@ public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalD
         crit.addEqualTo(UNIVERISTY_FISCAL_PERIOD_CODE, t.getUniversityFiscalPeriodCode());
         crit.addEqualTo(FINANCIAL_DOCUMENT_TYPE_CODE, t.getFinancialDocumentTypeCode());
         crit.addEqualTo(FINANCIAL_SYSTEM_ORIGINATION_CODE, t.getFinancialSystemOriginationCode());
-        crit.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, t.getDocumentNumber());
+        crit.addEqualTo(FINANCIAL_DOCUMENT_NUMBER, t.getFinancialDocumentNumber());
 
         ReportQueryByCriteria q = QueryFactory.newReportQuery(Entry.class, crit);
         q.setAttributes(new String[] { "max(transactionLedgerEntrySequenceNumber)" });
 
         Iterator iter = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
         if (iter.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(iter);
+            Object[] data = (Object[]) iter.next();
             BigDecimal max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
-
             if (max == null) {
                 return 0;
             }
@@ -105,72 +95,72 @@ public class ReversalDaoOjb extends PlatformAwareDaoBaseOjb implements ReversalD
         }
     }
 
-    /**
-     * Fetches the reversal record that would affected by the posting of the given transaction
-     * 
-     * @param t the transaction to find the related reversal for
-     * @return the reversal affected by the given transaction
-     * @see org.kuali.module.gl.dao.ReversalDao#getByTransaction(org.kuali.module.gl.bo.Transaction)
-     */
     public Reversal getByTransaction(Transaction t) {
         LOG.debug("getByTransaction() started");
 
         Criteria crit = new Criteria();
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, t.getFinancialDocumentReversalDate());
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, t.getUniversityFiscalYear());
-        crit.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, t.getChartOfAccountsCode());
-        crit.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, t.getAccountNumber());
-        crit.addEqualTo(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, t.getSubAccountNumber());
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, t.getFinancialObjectCode());
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE, t.getFinancialSubObjectCode());
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, t.getFinancialBalanceTypeCode());
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, t.getFinancialObjectTypeCode());
-        crit.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, t.getUniversityFiscalPeriodCode());
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE, t.getFinancialDocumentTypeCode());
-        crit.addEqualTo(KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, t.getFinancialSystemOriginationCode());
-        crit.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, t.getDocumentNumber());
-        crit.addEqualTo(KFSPropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER, t.getTransactionLedgerEntrySequenceNumber());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, t.getFinancialDocumentReversalDate());
+        crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_YEAR, t.getUniversityFiscalYear());
+        crit.addEqualTo(PropertyConstants.CHART_OF_ACCOUNTS_CODE, t.getChartOfAccountsCode());
+        crit.addEqualTo(PropertyConstants.ACCOUNT_NUMBER, t.getAccountNumber());
+        crit.addEqualTo(PropertyConstants.SUB_ACCOUNT_NUMBER, t.getSubAccountNumber());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_OBJECT_CODE, t.getFinancialObjectCode());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_SUB_OBJECT_CODE, t.getFinancialSubObjectCode());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, t.getFinancialBalanceTypeCode());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_OBJECT_TYPE_CODE, t.getFinancialObjectTypeCode());
+        crit.addEqualTo(PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, t.getUniversityFiscalPeriodCode());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE, t.getFinancialDocumentTypeCode());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, t.getFinancialSystemOriginationCode());
+        crit.addEqualTo(PropertyConstants.FINANCIAL_DOCUMENT_NUMBER, t.getFinancialDocumentNumber());
+        crit.addEqualTo(PropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER, t.getTransactionLedgerEntrySequenceNumber());
 
         QueryByCriteria qbc = QueryFactory.newQuery(Reversal.class, crit);
         return (Reversal) getPersistenceBrokerTemplate().getObjectByQuery(qbc);
     }
 
-    /**
-     * Saves a reversal record
-     * 
-     * @param re a reversal record to save
-     * @see org.kuali.module.gl.dao.ReversalDao#save(org.kuali.module.gl.bo.Reversal)
-     */
     public void save(Reversal re) {
         LOG.debug("save() started");
 
         getPersistenceBrokerTemplate().store(re);
     }
 
-    /**
-     * Fetches all reversals that have been set to reverse on or before the given date - that is to say,
-     * returns all the reversal records ready to be reversed!
-     * 
-     * @param before the date that reversals must reverse on or before
-     * @return an Iterator of reversal records to reverse
-     * @see org.kuali.module.gl.dao.ReversalDao#getByDate(java.util.Date)
-     */
     public Iterator getByDate(Date before) {
         LOG.debug("getByDate() started");
 
         Criteria crit = new Criteria();
-        crit.addLessOrEqualThan(KFSPropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, new java.sql.Date(before.getTime()));
+        crit.addLessOrEqualThan(PropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, new java.sql.Date(before.getTime()));
 
         QueryByCriteria qbc = QueryFactory.newQuery(Reversal.class, crit);
         return getPersistenceBrokerTemplate().getIteratorByQuery(qbc);
     }
 
     /**
-     * Deletes a reversal record
      * 
-     * @param re reversal to delete
-     * @see org.kuali.module.gl.dao.ReversalDao#delete(org.kuali.module.gl.bo.Reversal)
+     * @see org.kuali.module.gl.dao.ReversalDao#getSummaryByDate(java.util.Date)
      */
+    public Iterator getSummaryByDate(Date before) {
+        LOG.debug("getSummaryByDate() started");
+
+        Criteria crit = new Criteria();
+        crit.addLessOrEqualThan(PropertyConstants.FINANCIAL_DOCUMENT_REVERSAL_DATE, new java.sql.Date(before.getTime()));
+    
+        ReportQueryByCriteria query = QueryFactory.newReportQuery(Reversal.class, crit);
+
+        String attributeList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE, "sum(" + PropertyConstants.TRANSACTION_LEDGER_ENTRY_AMOUNT + ")", "count(" + PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE + ")" };
+
+        String groupList[] = { PropertyConstants.UNIVERSITY_FISCAL_YEAR, PropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, PropertyConstants.TRANSACTION_DEBIT_CREDIT_CODE };
+
+        query.setAttributes(attributeList);
+        query.addGroupBy(groupList);
+
+        // add the sorting criteria
+        for (int i = 0; i < groupList.length; i++) {
+            query.addOrderByAscending(groupList[i]);
+        }
+
+        return getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
+    }
+
     public void delete(Reversal re) {
         LOG.debug("delete() started");
 

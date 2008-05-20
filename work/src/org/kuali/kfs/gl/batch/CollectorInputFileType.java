@@ -25,6 +25,7 @@ import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.KFSConstants.SystemGroupParameterNames;
 import org.kuali.kfs.batch.BatchInputFileTypeBase;
 import org.kuali.module.gl.service.CollectorHelperService;
 
@@ -38,34 +39,24 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
     private CollectorHelperService collectorHelperService;
 
     /**
-     * Returns the identifier of the Collector's file type
-     * 
-     * @return the Collector's file type identifier
      * @see org.kuali.kfs.batch.BatchInputFileType#getFileTypeIdentifer()
      */
     public String getFileTypeIdentifer() {
         return KFSConstants.COLLECTOR_FILE_TYPE_INDENTIFIER;
     }
 
-    /**
-     * Returns the class associated with the authorization workgroup for the input type, in this case CollectorStep
-     * 
-     * @return the CollectorStep class
-     * @see org.kuali.kfs.batch.BatchInputType#getUploadWorkgroupParameterComponent()
-     */
-    public Class getUploadWorkgroupParameterComponent() {
-        return CollectorStep.class;
+    public String getWorkgroupParameterNamespace() {
+        return KFSConstants.SystemGroupParameterNames.COLLECTOR_FILE_TYPE_PARAMETER_NAMESPACE;
+    }
+    
+    public String getWorkgroupParameterComponent() {
+        return KFSConstants.SystemGroupParameterNames.COLLECTOR_FILE_TYPE_PARAMETER_COMPONENT;
     }
 
     /**
      * Builds the file name using the following construction: All collector files start with gl_idbilltrans_ append the chartorg
      * from the batch header append the username of the user who is uploading the file then the user supplied indentifier finally
      * the timestamp
-     * 
-     * @param user who uploaded the file
-     * @param parsedFileContents represents collector batch object
-     * @param userIdentifier user identifier for user who uploaded file
-     * @return String returns file name using the convention mentioned in the description
      * 
      * @see org.kuali.kfs.batch.BatchInputFileType#getFileName(org.kuali.core.bo.user.UniversalUser, java.lang.Object,
      *      java.lang.String)
@@ -85,7 +76,7 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
             fileName += "_" + userIdentifier;
         }
         fileName += "_" + buf.toString();
-
+        
         // remove spaces in filename
         fileName = StringUtils.remove(fileName, " ");
 
@@ -95,10 +86,6 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
     /**
      * Verifies user created the file by checking for the username in the file name.
      * 
-     * @param user user who created file
-     * @param batchFile uploaded batch file
-     * @return true if user's username in in file
-     * 
      * @see org.kuali.kfs.batch.BatchInputFileType#checkAuthorization(org.kuali.core.bo.user.UniversalUser, java.io.File)
      */
     public boolean checkAuthorization(UniversalUser user, File batchFile) {
@@ -106,7 +93,7 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
 
         String userIdentifier = user.getPersonUserIdentifier();
         userIdentifier = StringUtils.remove(userIdentifier, " ");
-
+        
         String[] fileNameParts = StringUtils.split(batchFile.getName(), "_");
         if (fileNameParts.length > 4) {
             if (fileNameParts[3].equalsIgnoreCase(userIdentifier.toLowerCase())) {
@@ -118,10 +105,6 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
     }
 
     /**
-     * Checks that the file contents parsed from the file are valid Collector data
-     * 
-     * @param parsedFileContents represents collector batch
-     * @return true if valid, false if not
      * @see org.kuali.kfs.batch.BatchInputFileType#validate(java.lang.Object)
      */
     public boolean validate(Object parsedFileContents) {
@@ -129,14 +112,11 @@ public class CollectorInputFileType extends BatchInputFileTypeBase {
         if (isValid) {
             isValid = collectorHelperService.checkTrailerTotals((CollectorBatch) parsedFileContents, null);
         }
-
+        
         return isValid;
     }
 
     /**
-     * Returns the Collector's title key
-     * 
-     * @return the title key for the Collector
      * @see org.kuali.kfs.batch.BatchInputFileType#getTitleKey()
      */
     public String getTitleKey() {

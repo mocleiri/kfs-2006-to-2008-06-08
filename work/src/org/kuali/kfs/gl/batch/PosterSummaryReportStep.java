@@ -48,11 +48,10 @@ public class PosterSummaryReportStep extends AbstractStep {
      * Runs the process that generates poster summary reports.
      * 
      * @param jobName the name of the job this step is being run as part of
-     * @param jobRunDate the time/date the job was started
-     * @return true if the step completed successfully, false if otherwise
+     * @return true if the job completed successfully, false if otherwise
      * @see org.kuali.kfs.batch.Step#execute(java.lang.String)
      */
-    public synchronized boolean execute(String jobName, Date jobRunDate) {
+    public synchronized boolean execute(String jobName) {
         final String CURRENT_YEAR_LOWER = getParameterService().getParameterValue(getClass(), GLConstants.GlSummaryReport.CURRENT_YEAR_LOWER);
         final String CURRENT_YEAR_UPPER = getParameterService().getParameterValue(getClass(), GLConstants.GlSummaryReport.CURRENT_YEAR_UPPER);
         final String CURRENT_AND_LAST_YEAR = getParameterService().getParameterValue(getClass(), GLConstants.GlSummaryReport.CURRENT_AND_LAST_YEAR);

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/PurchaseOrderQuoteListVendor.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,60 +20,98 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Purchase Order Quote List Vendor Business Object.
+ * 
  */
-public class PurchaseOrderQuoteListVendor extends PersistableBusinessObjectBase {
+public class PurchaseOrderQuoteListVendor extends BusinessObjectBase {
 
-    private Integer purchaseOrderQuoteListIdentifier;
-    private Integer vendorHeaderGeneratedIdentifier;
-    private Integer vendorDetailAssignedIdentifier;
+	private Integer purchaseOrderQuoteListIdentifier;
+	private Integer vendorHeaderGeneratedIdentifier;
+	private Integer vendorDetailAssignedIdentifier;
 
     private PurchaseOrderQuoteList purchaseOrderQuoteList;
+    
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderQuoteListVendor() {
 
-    private VendorDetail vendorDetail;
+	}
+
+	/**
+	 * Gets the purchaseOrderQuoteListIdentifier attribute.
+	 * 
+	 * @return Returns the purchaseOrderQuoteListIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderQuoteListIdentifier() { 
+		return purchaseOrderQuoteListIdentifier;
+	}
+
+	/**
+	 * Sets the purchaseOrderQuoteListIdentifier attribute.
+	 * 
+	 * @param purchaseOrderQuoteListIdentifier The purchaseOrderQuoteListIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderQuoteListIdentifier(Integer purchaseOrderQuoteListIdentifier) {
+		this.purchaseOrderQuoteListIdentifier = purchaseOrderQuoteListIdentifier;
+	}
+
+
+	/**
+	 * Gets the vendorHeaderGeneratedIdentifier attribute.
+	 * 
+	 * @return Returns the vendorHeaderGeneratedIdentifier
+	 * 
+	 */
+	public Integer getVendorHeaderGeneratedIdentifier() { 
+		return vendorHeaderGeneratedIdentifier;
+	}
+
+	/**
+	 * Sets the vendorHeaderGeneratedIdentifier attribute.
+	 * 
+	 * @param vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
+	 * 
+	 */
+	public void setVendorHeaderGeneratedIdentifier(Integer vendorHeaderGeneratedIdentifier) {
+		this.vendorHeaderGeneratedIdentifier = vendorHeaderGeneratedIdentifier;
+	}
+
+
+	/**
+	 * Gets the vendorDetailAssignedIdentifier attribute.
+	 * 
+	 * @return Returns the vendorDetailAssignedIdentifier
+	 * 
+	 */
+	public Integer getVendorDetailAssignedIdentifier() { 
+		return vendorDetailAssignedIdentifier;
+	}
+
+	/**
+	 * Sets the vendorDetailAssignedIdentifier attribute.
+	 * 
+	 * @param vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
+	 * 
+	 */
+	public void setVendorDetailAssignedIdentifier(Integer vendorDetailAssignedIdentifier) {
+		this.vendorDetailAssignedIdentifier = vendorDetailAssignedIdentifier;
+	}
 
     /**
-     * Default constructor.
+     * Gets the purchaseOrderQuoteList attribute. 
+     * @return Returns the purchaseOrderQuoteList.
      */
-    public PurchaseOrderQuoteListVendor() {
-
-    }
-
-    public Integer getPurchaseOrderQuoteListIdentifier() {
-        return purchaseOrderQuoteListIdentifier;
-    }
-
-    public void setPurchaseOrderQuoteListIdentifier(Integer purchaseOrderQuoteListIdentifier) {
-        this.purchaseOrderQuoteListIdentifier = purchaseOrderQuoteListIdentifier;
-    }
-
-    public Integer getVendorHeaderGeneratedIdentifier() {
-        return vendorHeaderGeneratedIdentifier;
-    }
-
-    public void setVendorHeaderGeneratedIdentifier(Integer vendorHeaderGeneratedIdentifier) {
-        this.vendorHeaderGeneratedIdentifier = vendorHeaderGeneratedIdentifier;
-    }
-
-    public Integer getVendorDetailAssignedIdentifier() {
-        return vendorDetailAssignedIdentifier;
-    }
-
-    public void setVendorDetailAssignedIdentifier(Integer vendorDetailAssignedIdentifier) {
-        this.vendorDetailAssignedIdentifier = vendorDetailAssignedIdentifier;
-    }
-
     public PurchaseOrderQuoteList getPurchaseOrderQuoteList() {
         return purchaseOrderQuoteList;
     }
 
     /**
      * Sets the purchaseOrderQuoteList attribute value.
-     * 
      * @param purchaseOrderQuoteList The purchaseOrderQuoteList to set.
      * @deprecated
      */
@@ -79,19 +119,11 @@ public class PurchaseOrderQuoteListVendor extends PersistableBusinessObjectBase 
         this.purchaseOrderQuoteList = purchaseOrderQuoteList;
     }
 
-    public VendorDetail getVendorDetail() {
-        return vendorDetail;
-    }
-
-    public void setVendorDetail(VendorDetail vendorDetail) {
-        this.vendorDetail = vendorDetail;
-    }
-
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+        LinkedHashMap m = new LinkedHashMap();      
         if (this.purchaseOrderQuoteListIdentifier != null) {
             m.put("purchaseOrderQuoteListIdentifier", this.purchaseOrderQuoteListIdentifier.toString());
         }

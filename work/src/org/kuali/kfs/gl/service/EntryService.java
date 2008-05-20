@@ -17,15 +17,12 @@ package org.kuali.module.gl.service;
 
 import java.util.Map;
 
-/**
- * An interface declaring methods to deal with Entry
- */
 public interface EntryService {
     /**
      * Purge the entry table by year/chart
      * 
-     * @param chart chart of entries to purge
-     * @param year fiscal year of entries to purge
+     * @param chart
+     * @param year
      */
     public void purgeYearByChart(String chart, int year);
 

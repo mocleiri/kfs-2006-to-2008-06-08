@@ -24,9 +24,8 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.bo.LaborTransaction;
 import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.service.LaborLedgerBalanceService;
+import org.kuali.module.labor.util.ObjectUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -36,15 +35,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class LaborLedgerBalancePoster implements PostTransaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborLedgerBalancePoster.class);
     private BusinessObjectService businessObjectService;
-    private LaborLedgerBalanceService laborLedgerBalanceService;
 
     /**
      * @see org.kuali.module.gl.batch.poster.PostTransaction#post(org.kuali.module.gl.bo.Transaction, int, java.util.Date)
      */
     public String post(Transaction transaction, int mode, Date postDate) {
         String operationType = KFSConstants.OperationType.INSERT;
-        LedgerBalance ledgerBalance = new LedgerBalance((LaborTransaction) transaction);
-        // ObjectUtil.buildObject(ledgerBalance, transaction);
+        LedgerBalance ledgerBalance = new LedgerBalance();       
+        ObjectUtil.buildObject(ledgerBalance, transaction);
 
         LedgerBalance tempLedgerBalance = (LedgerBalance) businessObjectService.retrieve(ledgerBalance);
         if (tempLedgerBalance != null) {
@@ -54,11 +52,11 @@ public class LaborLedgerBalancePoster implements PostTransaction {
         String debitCreditCode = transaction.getTransactionDebitCreditCode();
         KualiDecimal amount = transaction.getTransactionLedgerEntryAmount();
         amount = debitCreditCode.equals(KFSConstants.GL_CREDIT_CODE) ? amount.negated() : amount;
-
+        
         ledgerBalance.addAmount(transaction.getUniversityFiscalPeriodCode(), amount);
         ledgerBalance.setTransactionDateTimeStamp(new Timestamp(postDate.getTime()));
 
-        laborLedgerBalanceService.save(ledgerBalance);
+        businessObjectService.save(ledgerBalance);
         return operationType;
     }
 
@@ -76,14 +74,5 @@ public class LaborLedgerBalancePoster implements PostTransaction {
      */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
-    }
-
-    /**
-     * Sets the laborLedgerBalanceService attribute value.
-     * 
-     * @param laborLedgerBalanceService The laborLedgerBalanceService to set.
-     */
-    public void setLaborLedgerBalanceService(LaborLedgerBalanceService laborLedgerBalanceService) {
-        this.laborLedgerBalanceService = laborLedgerBalanceService;
     }
 }

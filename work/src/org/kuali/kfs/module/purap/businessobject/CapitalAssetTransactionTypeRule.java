@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/purap/businessobject/CapitalAssetTransactionTypeRule.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,55 +20,94 @@ package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Capital Asset Transaction Type Business Object.
+ * 
  */
-public class CapitalAssetTransactionTypeRule extends PersistableBusinessObjectBase {
+public class CapitalAssetTransactionTypeRule extends BusinessObjectBase {
 
-    private String capitalAssetTransactionTypeCode;
-    private String financialObjectSubTypeCode;
-    private Integer capitalAssetRelationshipLimitNumber;
+	private String capitalAssetTransactionTypeCode;
+	private String financialObjectSubTypeCode;
+	private Integer capitalAssetRelationshipLimitNumber;
 
-    /**
-     * Default constructor.
-     */
-    public CapitalAssetTransactionTypeRule() {
+	/**
+	 * Default constructor.
+	 */
+	public CapitalAssetTransactionTypeRule() {
 
-    }
+	}
 
-    public Integer getCapitalAssetRelationshipLimitNumber() {
-        return capitalAssetRelationshipLimitNumber;
-    }
+	/**
+	 * Gets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @return Returns the capitalAssetTransactionTypeCode
+	 * 
+	 */
+	public String getCapitalAssetTransactionTypeCode() { 
+		return capitalAssetTransactionTypeCode;
+	}
 
-    public void setCapitalAssetRelationshipLimitNumber(Integer capitalAssetRelationshipLimitNumber) {
-        this.capitalAssetRelationshipLimitNumber = capitalAssetRelationshipLimitNumber;
-    }
+	/**
+	 * Sets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @param capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
+		this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
+	}
 
-    public String getCapitalAssetTransactionTypeCode() {
-        return capitalAssetTransactionTypeCode;
-    }
 
-    public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
-        this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
-    }
+	/**
+	 * Gets the financialObjectSubTypeCode attribute.
+	 * 
+	 * @return Returns the financialObjectSubTypeCode
+	 * 
+	 */
+	public String getFinancialObjectSubTypeCode() { 
+		return financialObjectSubTypeCode;
+	}
 
-    public String getFinancialObjectSubTypeCode() {
-        return financialObjectSubTypeCode;
-    }
+	/**
+	 * Sets the financialObjectSubTypeCode attribute.
+	 * 
+	 * @param financialObjectSubTypeCode The financialObjectSubTypeCode to set.
+	 * 
+	 */
+	public void setFinancialObjectSubTypeCode(String financialObjectSubTypeCode) {
+		this.financialObjectSubTypeCode = financialObjectSubTypeCode;
+	}
 
-    public void setFinancialObjectSubTypeCode(String financialObjectSubTypeCode) {
-        this.financialObjectSubTypeCode = financialObjectSubTypeCode;
-    }
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the capitalAssetRelationshipLimitNumber attribute.
+	 * 
+	 * @return Returns the capitalAssetRelationshipLimitNumber
+	 * 
+	 */
+	public Integer getCapitalAssetRelationshipLimitNumber() { 
+		return capitalAssetRelationshipLimitNumber;
+	}
+
+	/**
+	 * Sets the capitalAssetRelationshipLimitNumber attribute.
+	 * 
+	 * @param capitalAssetRelationshipLimitNumber The capitalAssetRelationshipLimitNumber to set.
+	 * 
+	 */
+	public void setCapitalAssetRelationshipLimitNumber(Integer capitalAssetRelationshipLimitNumber) {
+		this.capitalAssetRelationshipLimitNumber = capitalAssetRelationshipLimitNumber;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("capitalAssetTransactionTypeCode", this.capitalAssetTransactionTypeCode);
         m.put("financialObjectSubTypeCode", this.financialObjectSubTypeCode);
-        return m;
+	    return m;
     }
 }

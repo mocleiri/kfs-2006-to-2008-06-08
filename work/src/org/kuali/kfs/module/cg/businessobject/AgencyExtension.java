@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,14 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.module.cg.bo.Agency;
 
 /**
  * 
  */
-public class AgencyExtension extends PersistableBusinessObjectBase {
+public class AgencyExtension extends BusinessObjectBase {
 
     private String agencyNumber;
     private boolean agencyModularIndicator;
@@ -45,6 +47,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Gets the agencyModularIndicator attribute.
      * 
      * @return Returns the agencyModularIndicator
+     * 
      */
     public boolean isAgencyModularIndicator() {
         return agencyModularIndicator;
@@ -54,6 +57,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Sets the agencyModularIndicator attribute.
      * 
      * @param agencyModularIndicator The agencyModularIndicator to set.
+     * 
      */
     public void setAgencyModularIndicator(boolean agencyModularIndicator) {
         this.agencyModularIndicator = agencyModularIndicator;
@@ -63,6 +67,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Gets the budgetModularIncrementAmount attribute.
      * 
      * @return Returns the budgetModularIncrementAmount
+     * 
      */
     public KualiInteger getBudgetModularIncrementAmount() {
         return budgetModularIncrementAmount;
@@ -72,6 +77,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Sets the budgetModularIncrementAmount attribute.
      * 
      * @param budgetModularIncrementAmount The budgetModularIncrementAmount to set.
+     * 
      */
     public void setBudgetModularIncrementAmount(KualiInteger budgetModularIncrementAmount) {
         this.budgetModularIncrementAmount = budgetModularIncrementAmount;
@@ -81,6 +87,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Gets the budgetPeriodMaximumAmount attribute.
      * 
      * @return Returns the budgetPeriodMaximumAmount
+     * 
      */
     public KualiInteger getBudgetPeriodMaximumAmount() {
         return budgetPeriodMaximumAmount;
@@ -90,6 +97,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Sets the budgetPeriodMaximumAmount attribute.
      * 
      * @param budgetPeriodMaximumAmount The budgetPeriodMaximumAmount to set.
+     * 
      */
     public void setBudgetPeriodMaximumAmount(KualiInteger budgetPeriodMaximumAmount) {
         this.budgetPeriodMaximumAmount = budgetPeriodMaximumAmount;
@@ -99,6 +107,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Gets the agencyNsfOutputIndicator attribute.
      * 
      * @return Returns the agencyNsfOutputIndicator
+     * 
      */
     public boolean isAgencyNsfOutputIndicator() {
         return agencyNsfOutputIndicator;
@@ -108,6 +117,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Sets the agencyNsfOutputIndicator attribute.
      * 
      * @param agencyNsfOutputIndicator The agencyNsfOutputIndicator to set.
+     * 
      */
     public void setAgencyNsfOutputIndicator(boolean agencyNsfOutputIndicator) {
         this.agencyNsfOutputIndicator = agencyNsfOutputIndicator;
@@ -117,6 +127,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Gets the agencyNumber attribute.
      * 
      * @return Returns the agencyNumber
+     * 
      */
     public String getAgencyNumber() {
         return agencyNumber;
@@ -126,6 +137,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Sets the agencyNumber attribute.
      * 
      * @param agencyNumber The agencyNumber to set.
+     * 
      */
     public void setAgencyNumber(String agencyNumber) {
         this.agencyNumber = agencyNumber;
@@ -135,6 +147,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Gets the agency attribute.
      * 
      * @return Returns the agency
+     * 
      */
     public Agency getAgency() {
         return agency;
@@ -144,6 +157,7 @@ public class AgencyExtension extends PersistableBusinessObjectBase {
      * Sets the agency attribute.
      * 
      * @param agency The agency to set.
+     * 
      */
     public void setAgency(Agency agency) {
         this.agency = agency;
