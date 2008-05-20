@@ -9,6 +9,8 @@ CREATE TABLE AR_CUST_ADDR_T(
         CUST_CITY_NM                   VARCHAR2(25),
         CUST_STATE_CD                  VARCHAR2(2),
         CUST_ZIP_CD                    VARCHAR2(11),
+        CUST_CNTRY_CD                  VARCHAR2(2), 
+        CUST_ADDR_INTL_PROV_NM         VARCHAR2(45),
         CUST_INTL_MAIL_CD              VARCHAR2(20),
         CUST_EMAIL_ADDR                VARCHAR2(60),
         CUST_ADDR_TYPE_CD              VARCHAR2(2),
