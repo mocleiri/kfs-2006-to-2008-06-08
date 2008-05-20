@@ -1354,4 +1354,52 @@
     <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2560"
         RTE_NODE_CFG_PARM_KEY="ruleSelector"
         RTE_NODE_CFG_PARM_ND="563358375" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2580"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358389" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2581"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358389" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2582"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358389" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2583"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358389" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2584"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358389" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2585"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358390" RTE_NODE_CFG_PARM_VAL="&lt;requests name=&quot;Default Verification Workgroup Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;ruleTemplate>KualiCashReceiptVerificationWorkgroupTemplate&lt;/ruleTemplate>&lt;mandatoryRoute>true&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/requests>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2586"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358390" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2587"
+        RTE_NODE_CFG_PARM_KEY="ruleTemplate"
+        RTE_NODE_CFG_PARM_ND="563358390" RTE_NODE_CFG_PARM_VAL="KualiCashReceiptVerificationWorkgroupTemplate"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2588"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358390" RTE_NODE_CFG_PARM_VAL="true"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2589"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358390" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2590"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358390" RTE_NODE_CFG_PARM_VAL="Template"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2600"
+        RTE_NODE_CFG_PARM_KEY="contentFragment"
+        RTE_NODE_CFG_PARM_ND="563358409" RTE_NODE_CFG_PARM_VAL="&lt;start name=&quot;Adhoc Routing&quot;>&lt;activationType>S&lt;/activationType>&lt;mandatoryRoute>false&lt;/mandatoryRoute>&lt;finalApproval>false&lt;/finalApproval>&lt;/start>"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2601"
+        RTE_NODE_CFG_PARM_KEY="activationType"
+        RTE_NODE_CFG_PARM_ND="563358409" RTE_NODE_CFG_PARM_VAL="S"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2602"
+        RTE_NODE_CFG_PARM_KEY="mandatoryRoute"
+        RTE_NODE_CFG_PARM_ND="563358409" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2603"
+        RTE_NODE_CFG_PARM_KEY="finalApproval"
+        RTE_NODE_CFG_PARM_ND="563358409" RTE_NODE_CFG_PARM_VAL="false"/>
+    <EN_RTE_NODE_CFG_PARM_T RTE_NODE_CFG_PARM_ID="2604"
+        RTE_NODE_CFG_PARM_KEY="ruleSelector"
+        RTE_NODE_CFG_PARM_ND="563358409" RTE_NODE_CFG_PARM_VAL="Template"/>
 </dataset>
