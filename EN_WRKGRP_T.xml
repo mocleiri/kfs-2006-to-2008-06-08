@@ -46,7 +46,7 @@
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="workgroup to define who can remove hold and cancel if the individual who originally placed on hold or request cancel is unavailable"
         WRKGRP_ID="313877"
-        WRKGRP_NM="PA_PAYMENT_REQUEST_REMOVE_HOLD_USERS"
+        WRKGRP_NM="PA_AP_PAYMENT_REQUEST_REMOVE_HOLD_USERS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1" WRKGRP_ID="314219"
@@ -485,7 +485,7 @@
     <EN_WRKGRP_T DB_LOCK_VER_NBR="7" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="Tax Individuals responsible for document review of Employee Vendors"
-        WRKGRP_ID="294378" WRKGRP_NM="PA_EMPLOYEE_VENDOR_REVIEWERS"
+        WRKGRP_ID="294378" WRKGRP_NM="PA_EMPLOYEE_VENDOR_TAX_REVIEWERS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="2"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="7" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1"
@@ -749,4 +749,14 @@
         WRKGRP_CUR_IND="1" WRKGRP_DESC="BC Document Approvers for BL-BL"
         WRKGRP_ID="317505" WRKGRP_NM="KUALI_BCAPPROVE_BL_BL"
         WRKGRP_TYP_CD="ChartOrgWorkgroup" WRKGRP_VER_NBR="2"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="For Purchasing to review changes to PO type vendors"
+        WRKGRP_ID="318540" WRKGRP_NM="PA_PUR_PO_VENDOR_REVIEWERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="For Accounts Payable to review changes to DV type vendors"
+        WRKGRP_ID="318541" WRKGRP_NM="PA_AP_DV_VENDOR_REVIEWERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
 </dataset>

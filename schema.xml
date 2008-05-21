@@ -803,10 +803,15 @@
         <column name="CUST_CITY_NM" size="25" type="VARCHAR"/>
         <column name="CUST_STATE_CD" size="2" type="VARCHAR"/>
         <column name="CUST_ZIP_CD" size="11" type="VARCHAR"/>
+        <column name="CUST_CNTRY_CD" size="2" type="VARCHAR"/>
+        <column name="CUST_ADDR_INTL_PROV_NM" size="45" type="VARCHAR"/>
         <column name="CUST_INTL_MAIL_CD" size="20" type="VARCHAR"/>
         <column name="CUST_EMAIL_ADDR" size="60" type="VARCHAR"/>
         <column name="CUST_ADDR_TYPE_CD" size="2" type="VARCHAR"/>
         <column name="CUST_ADDR_END_DT" type="DATE"/>
+        <foreign-key foreignTable="SH_COUNTRY_T" name="AR_CUST_ADDR_TR3">
+            <reference foreign="POSTAL_CNTRY_CD" local="CUST_CNTRY_CD"/>
+        </foreign-key>
         <foreign-key foreignTable="AR_CUST_T" name="AR_CUST_ADDR_TR2">
             <reference foreign="CUST_NBR" local="CUST_NBR"/>
         </foreign-key>
@@ -2265,6 +2270,8 @@
         <column name="FIN_OBJECT_CD" primaryKey="true" size="4" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="ACCT_ICR_EXCL_TYP_ACTV_IND" required="true"
+            size="1" type="VARCHAR"/>
         <foreign-key foreignTable="CA_ICR_TYPE_T" name="CA_ICR_EXCL_TYPE_TR2">
             <reference foreign="ACCT_ICR_TYP_CD" local="ACCT_ICR_TYP_CD"/>
         </foreign-key>
@@ -2277,6 +2284,7 @@
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="ACCT_ICR_TYP_DESC" size="40" type="VARCHAR"/>
+        <column name="ACCT_ICR_TYP_ACTV_IND" required="true" size="1" type="VARCHAR"/>
         <unique name="CA_ICR_TYPE_TC0">
             <unique-column name="OBJ_ID"/>
         </unique>
@@ -13520,6 +13528,13 @@
         <column name="PO_QT_INITLZTN_DT" type="DATE"/>
         <column name="PO_QT_AWDED_DT" type="DATE"/>
         <column name="CPTL_AST_SYS_TYP_CD" size="4" type="VARCHAR"/>
+        <column name="PUR_RCVNG_NM" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_LN1_ADDR" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_LN2_ADDR" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_CTY_NM" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_ST_CD" size="2" type="VARCHAR"/>
+        <column name="PUR_RCVNG_PSTL_CD" size="20" type="VARCHAR"/>
+        <column name="PUR_RCVNG_CNTRY_CD" size="2" type="VARCHAR"/>
         <foreign-key foreignTable="PUR_PMT_TERM_TYP_T" name="PUR_PO_TR20">
             <reference foreign="VNDR_PMT_TERM_CD" local="VNDR_PMT_TERM_CD"/>
         </foreign-key>
@@ -14148,6 +14163,13 @@
         <column name="RCVNG_DOC_REQ_IND" size="1" type="VARCHAR"/>
         <column name="PMT_RQST_PSTV_APRVL_IND" size="1" type="VARCHAR"/>
         <column name="CPTL_AST_SYS_TYP_CD" size="4" type="VARCHAR"/>
+        <column name="PUR_RCVNG_NM" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_LN1_ADDR" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_LN2_ADDR" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_CTY_NM" size="45" type="VARCHAR"/>
+        <column name="PUR_RCVNG_ST_CD" size="2" type="VARCHAR"/>
+        <column name="PUR_RCVNG_PSTL_CD" size="20" type="VARCHAR"/>
+        <column name="PUR_RCVNG_CNTRY_CD" size="2" type="VARCHAR"/>
         <foreign-key foreignTable="CA_CHART_T" name="PUR_REQS_TR13">
             <reference foreign="FIN_COA_CD" local="NON_INST_FND_ORG_COA_CD"/>
         </foreign-key>
@@ -15333,15 +15355,15 @@
     <sequence name="SEQ_ACTION_REQUEST" nextval="2080"/>
     <sequence name="SEQ_ACTION_TAKEN" nextval="2300"/>
     <sequence name="SEQ_ACTN_ITM" nextval="10020"/>
-    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318540"/>
+    <sequence name="SEQ_DOCUMENT_ROUTE_HEADER" nextval="318560"/>
     <sequence name="SEQ_DOCUMENT_TYPE_ATTRIBUTE" nextval="4092"/>
     <sequence name="SEQ_DOC_NTE" nextval="2000"/>
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
-    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5911"/>
+    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5931"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13316"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13336"/>
     <sequence name="SEQ_RTE_NODE" nextval="563358429"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2620"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>
@@ -15359,5 +15381,5 @@
     <sequence name="VNDR_HDR_GNRTD_ID" nextval="4005"/>
     <sequence name="VNDR_PHN_GNRTD_ID" nextval="4005"/>
     <sequence name="VNDR_STPLTN_ID" nextval="2003"/>
-    <sequence name="VNDR_TAX_CHG_GNRTD_ID" nextval="4027"/>
+    <sequence name="VNDR_TAX_CHG_GNRTD_ID" nextval="4032"/>
 </database>
