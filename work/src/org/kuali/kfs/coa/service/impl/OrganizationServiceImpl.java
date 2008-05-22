@@ -15,12 +15,9 @@
  */
 package org.kuali.module.chart.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.spring.Cached;
 import org.kuali.kfs.KFSConstants.ChartApcParms;
 import org.kuali.kfs.context.SpringContext;
@@ -29,15 +26,16 @@ import org.kuali.module.chart.bo.Org;
 import org.kuali.module.chart.dao.OrganizationDao;
 import org.kuali.module.chart.service.ChartService;
 import org.kuali.module.chart.service.OrganizationService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the Org structure. This is the default implementation, that is delivered with Kuali.
  */
+@Transactional
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao organizationDao;
     private ParameterService parameterService;
     private ChartService chartService;
-    private BusinessObjectService boService;
 
     /**
      * 
@@ -56,6 +54,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Cached
     public Org getByPrimaryIdWithCaching(String chartOfAccountsCode, String organizationCode) {
         return organizationDao.getByPrimaryId(chartOfAccountsCode, organizationCode);
+    }
+
+    /**
+     * Implements the save() method defined by OrganizationService, including validation of the Org BO
+     * @see org.kuali.module.chart.service.OrganizationService#save(org.kuali.module.chart.bo.Org)
+     */
+    public void save(Org organization) {
+        organizationDao.save(organization);
     }
 
     /**
@@ -102,17 +108,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * 
-     * @see org.kuali.module.chart.service.OrganizationService#getActiveFinancialOrgs()
-     */
-    public List<Org> getActiveFinancialOrgs() {
-        Map<String, Object> criteriaMap = new HashMap<String, Object>();
-        criteriaMap.put("organizationInFinancialProcessingIndicator", Boolean.TRUE);
-        criteriaMap.put("organizationActiveIndicator", Boolean.TRUE);
-        return (List<Org>)boService.findMatching(Org.class, criteriaMap);
-    }
-    
-    /**
-     * 
      * @see org.kuali.module.chart.service.OrganizationService#getRootOrganizationCode()
      */
     public String[] getRootOrganizationCode() {
@@ -145,14 +140,6 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     public void setOrganizationDao(OrganizationDao organizationDao) {
         this.organizationDao = organizationDao;
-    }
-
-    /**
-     * Sets the boService attribute value.
-     * @param boService The boService to set.
-     */
-    public void setBusinessObjectService(BusinessObjectService boService) {
-        this.boService = boService;
     }
 
 }
