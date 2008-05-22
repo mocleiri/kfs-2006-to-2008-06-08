@@ -10486,9 +10486,9 @@
         <column name="RPTS_TO_ORG_CD" size="4" type="VARCHAR"/>
     </table>
     <table name="LD_BCN_BUILD_SALSUMM01_MT">
-        <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
-        <column name="EMPLID" primaryKey="true" size="11" type="VARCHAR"/>
-        <column name="POSITION_NBR" primaryKey="true" size="8" type="VARCHAR"/>
+        <column name="SESID" required="true" size="36" type="VARCHAR"/>
+        <column name="POSITION_NBR" required="true" size="8" type="VARCHAR"/>
+        <column name="EMPLID" required="true" size="11" type="VARCHAR"/>
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="SAL_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="SAL_PCT" size="22" type="DECIMAL"/>
@@ -10496,6 +10496,11 @@
         <column name="POS_CSF_AMT" scale="2" size="19" type="DECIMAL"/>
         <column name="POS_CSF_TM_PCT" size="22" type="DECIMAL"/>
         <column name="SAL_PMTHS" size="2" type="DECIMAL"/>
+        <index name="LD_BCN_BUILD_SALSUMM01_MTI2">
+            <index-column name="SESID"/>
+            <index-column name="EMPLID"/>
+            <index-column name="POSITION_NBR"/>
+        </index>
     </table>
     <table name="LD_BCN_BUILD_SALSUMM02_MT">
         <column name="SESID" primaryKey="true" size="36" type="VARCHAR"/>
