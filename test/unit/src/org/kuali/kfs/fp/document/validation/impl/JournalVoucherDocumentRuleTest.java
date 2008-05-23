@@ -17,14 +17,17 @@ package org.kuali.module.financial.rules;
 
 import static org.kuali.kfs.KFSConstants.GL_CREDIT_CODE;
 import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
+import static org.kuali.kfs.util.SpringServiceLocator.getDataDictionaryService;
+import static org.kuali.kfs.util.SpringServiceLocator.getDocumentService;
+import static org.kuali.kfs.util.SpringServiceLocator.getDocumentTypeService;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.getBusinessRule;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_IsObjectCodeAllowed;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_IsObjectTypeAllowed;
-import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_ProcessAddAccountingLineBusinessRules;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLine_IsObjectSubTypeAllowed;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testGenerateGeneralLedgerPendingEntriesRule_ProcessGenerateGeneralLedgerPendingEntries;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testRouteDocumentRule_processRouteDocument;
 import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testSaveDocumentRule_ProcessSaveDocument;
+import static org.kuali.module.financial.rules.AccountingDocumentRuleTestUtils.testAddAccountingLineRule_ProcessAddAccountingLineBusinessRules;
 import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_LINE;
 import static org.kuali.test.fixtures.AccountingLineFixture.EXPENSE_LINE2;
 import static org.kuali.test.fixtures.AccountingLineFixture.EXTERNAL_ENCUMBRANCE_LINE;
@@ -42,25 +45,24 @@ import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapSi
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.DocumentTypeService;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rule.AddAccountingLineRule;
 import org.kuali.module.financial.document.JournalVoucherDocument;
-import org.kuali.test.ConfigureContext;
 import org.kuali.test.DocumentTestUtils;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.kuali.test.suite.RelatesTo;
 
-@ConfigureContext(session = DFOGLE)
+@WithTestSpringContext(session = DFOGLE)
 public class JournalVoucherDocumentRuleTest extends KualiTestBase {
 
     public static final Class<JournalVoucherDocument> DOCUMENT_CLASS = JournalVoucherDocument.class;
@@ -118,53 +120,95 @@ public class JournalVoucherDocumentRuleTest extends KualiTestBase {
     }
 
 
+    public void testProcessCustomRouteDocumentBusinessRules_accountingLines_notMatching_budgetYear() throws Exception {
+        JournalVoucherDocument document = createDocumentValidForRouting();
+        int budgetYear = 1990;
+        for (ListIterator i = document.getSourceAccountingLines().listIterator(); i.hasNext();) {
+            AccountingLine line = (AccountingLine) i.next();
+            line.setBudgetYear(Integer.toString(budgetYear + i.nextIndex()));
+            i.set(line);
+        }
+        for (ListIterator i = document.getTargetAccountingLines().listIterator(); i.hasNext();) {
+            AccountingLine line = (AccountingLine) i.next();
+            line.setBudgetYear(Integer.toString(budgetYear + 2 + i.nextIndex()));
+            i.set(line);
+        }
+
+        JournalVoucherDocumentRule rule = new JournalVoucherDocumentRule();
+        boolean failedAsExpected = !rule.processCustomRouteDocumentBusinessRules(document);
+
+        assertTrue(failedAsExpected);
+        assertTrue(GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_ACCOUNTING_LINES_DIFFERENT_BUDGET_YEAR));
+    }
+
+    public void testProcessCustomRouteDocumentBusinessRules_accountingLines_matching_budgetYear() throws Exception {
+        JournalVoucherDocument document = createDocumentValidForRouting();
+        int budgetYear = 1990;
+        for (ListIterator i = document.getSourceAccountingLines().listIterator(); i.hasNext();) {
+            AccountingLine line = (AccountingLine) i.next();
+            line.setBudgetYear(Integer.toString(budgetYear));
+            i.set(line);
+        }
+        for (ListIterator i = document.getTargetAccountingLines().listIterator(); i.hasNext();) {
+            AccountingLine line = (AccountingLine) i.next();
+            line.setBudgetYear(Integer.toString(budgetYear));
+            i.set(line);
+        }
+
+        JournalVoucherDocumentRule rule = new JournalVoucherDocumentRule();
+        boolean passedAsExpected = rule.processCustomRouteDocumentBusinessRules(document);
+
+        assertTrue(passedAsExpected);
+        assertFalse(GlobalVariables.getErrorMap().containsMessageKey(KFSKeyConstants.ERROR_ACCOUNTING_LINES_DIFFERENT_BUDGET_YEAR));
+    }
+
     public void testIsDebit_debitCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), JournalVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_DEBIT_CODE);
 
-        assertTrue(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_creditCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), JournalVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_CREDIT_CODE);
 
-        assertFalse(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_blankValue() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getDocument(getDocumentService(), JournalVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(" ");
 
-        assertTrue(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
 
     }
 
     public void testIsDebit_errorCorrection_crediCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), JournalVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_CREDIT_CODE);
 
-        assertFalse(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertFalse(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_errorCorrection_debitCode() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), JournalVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(GL_DEBIT_CODE);
 
-        assertTrue(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
     }
 
     public void testIsDebit_errorCorrection_blankValue() throws Exception {
-        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        AccountingDocument accountingDocument = IsDebitTestUtils.getErrorCorrectionDocument(getDocumentService(), JournalVoucherDocument.class);
         AccountingLine accountingLine = (AccountingLine) accountingDocument.getSourceAccountingLineClass().newInstance();
         accountingLine.setDebitCreditCode(" ");
 
-        assertTrue(IsDebitTestUtils.isDebit(SpringContext.getBean(DocumentTypeService.class), SpringContext.getBean(DataDictionaryService.class), accountingDocument, accountingLine));
+        assertTrue(IsDebitTestUtils.isDebit(getDocumentTypeService(), getDataDictionaryService(), accountingDocument, accountingLine));
 
     }
 
@@ -189,7 +233,6 @@ public class JournalVoucherDocumentRuleTest extends KualiTestBase {
         testAddAccountingLine_IsObjectSubTypeAllowed(DOCUMENT_CLASS, getValidObjectSubTypeTargetLine(), true);
     }
 
-    // @RelatesTo(JiraIssue.KULRNE4926)
     public void testProcessSaveDocument_Valid() throws Exception {
         testSaveDocumentRule_ProcessSaveDocument(buildDocument(), true);
     }
@@ -227,7 +270,7 @@ public class JournalVoucherDocumentRuleTest extends KualiTestBase {
     public void testProcessGenerateGeneralLedgerPendingEntries_validSourceExpense() throws Exception {
         testGenerateGeneralLedgerPendingEntriesRule_ProcessGenerateGeneralLedgerPendingEntries(buildDocument(), EXPENSE_LINE.createSourceAccountingLine(), EXPECTED_JV_EXPLICIT_SOURCE_PENDING_ENTRY_FOR_EXPENSE, null);
     }
-
+    
     public void testProcessGenerateGeneralLedgerPendingEntries_validSourceAsset() throws Exception {
         testGenerateGeneralLedgerPendingEntriesRule_ProcessGenerateGeneralLedgerPendingEntries(buildDocument(), getAssetSourceLine(), EXPECTED_JV_EXPLICIT_SOURCE_PENDING_ENTRY, null);
     }
@@ -241,7 +284,7 @@ public class JournalVoucherDocumentRuleTest extends KualiTestBase {
     }
 
     private JournalVoucherDocument buildDocument() throws Exception {
-        JournalVoucherDocument retval = DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        JournalVoucherDocument retval = DocumentTestUtils.createDocument(getDocumentService(), JournalVoucherDocument.class);
         retval.setBalanceTypeCode(KFSConstants.BALANCE_TYPE_ACTUAL);
         return retval;
     }
@@ -254,7 +297,7 @@ public class JournalVoucherDocumentRuleTest extends KualiTestBase {
     }
 
     private JournalVoucherDocument createDocumentInvalidDescription() throws Exception {
-        JournalVoucherDocument retval = DocumentTestUtils.createDocument(SpringContext.getBean(DocumentService.class), JournalVoucherDocument.class);
+        JournalVoucherDocument retval = DocumentTestUtils.createDocument(getDocumentService(), JournalVoucherDocument.class);
 
         retval.getDocumentHeader().setFinancialDocumentDescription(new String());
         return retval;

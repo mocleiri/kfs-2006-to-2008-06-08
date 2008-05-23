@@ -123,16 +123,21 @@
 			<br />
 			<br />
 
-			<c:if test="${!empty reqSearchResultsSize }">
+			<c:if test="${reqSearchResultsActualSize>0}">
+				<c:out value="${reqSearchResultsActualSize}" /> items found.
+	        </c:if>
 	        
 	        <display:table class="datatable-100" cellspacing="0"
 				cellpadding="0" name="${reqSearchResults}" id="row"
 				export="true" pagesize="100" defaultsort="1" decorator="org.kuali.module.gl.web.BalanceInquiryTableDecorator"
-				requestURI="glBalanceInquiry.do?methodToCall=viewResults&reqSearchResultsSize=${reqSearchResultsSize}&searchResultKey=${searchResultKey}">
+				requestURI="glBalanceInquiry.do?methodToCall=viewResults&reqSearchResultsActualSize=${reqSearchResultsActualSize}&searchResultKey=${searchResultKey}">
 				
 				<c:set var="columnLength" value="${fn:length(row.columns)-13}" />
 				<c:forEach items="${row.columns}" var="column" begin="1" varStatus="status">
-   				    <c:if test="${status.index > 0}">
+									
+					<c:choose>
+					
+						<c:when test="${status.index > 0}">
 					
 							<c:choose>
 		
@@ -200,12 +205,15 @@
 								</c:otherwise>
 		
 							</c:choose>
-				    </c:if>	
+					
+						</c:when>
+						
+					</c:choose>
+					
 				</c:forEach>
 				
 			</display:table>
 			</td>
-			</c:if>
 			<td width="1%"><img src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" height="20"
 				width="20"></td>
 		</tr>

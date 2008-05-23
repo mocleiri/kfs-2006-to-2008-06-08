@@ -15,6 +15,7 @@
  */
 package org.kuali.module.labor.rules;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,16 +23,18 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.document.Document;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
+import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.labor.LaborConstants;
-import org.kuali.module.labor.LaborKeyConstants;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
 import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;
+import org.kuali.module.labor.bo.ExpenseTransferTargetAccountingLine;
 import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
 import org.kuali.module.labor.bo.LaborObject;
+import org.kuali.module.labor.document.BenefitExpenseTransferDocument;
 import org.kuali.module.labor.document.LaborExpenseTransferDocumentBase;
 import org.kuali.module.labor.document.LaborLedgerPostingDocument;
 import org.kuali.module.labor.util.LaborPendingEntryGenerator;
@@ -50,12 +53,6 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
     }
 
     /**
-     * Overrides the method in class laborExpenseTransferDocumentRules in order validate the object code is a fringe benefit object
-     * code and that the source and target lines have the same account number.
-     * 
-     * @param accountingDocument
-     * @param accountingLine
-     * @return boolean false when an error is found in any validation
      * @see org.kuali.kfs.rules.AccountingDocumentRuleBase#processCustomAddAccountingLineBusinessRules(org.kuali.kfs.document.AccountingDocument,
      *      org.kuali.kfs.bo.AccountingLine)
      */
@@ -65,28 +62,25 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
 
         // only fringe benefit labor object codes are allowed on the benefit expense transfer document
         if (!isFringeBenefitObjectCode(accountingLine)) {
-            reportError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, LaborKeyConstants.INVALID_FRINGE_OBJECT_CODE_ERROR, accountingLine.getAccountNumber());
+            reportError(KFSPropertyConstants.FINANCIAL_OBJECT_CODE, KFSKeyConstants.Labor.INVALID_FRINGE_OBJECT_CODE_ERROR, accountingLine.getAccountNumber());
             isValid = false;
         }
 
         // Only check this rule for source accounting lines
         boolean isTargetLine = accountingLine.isTargetAccountingLine();
-        if (!isTargetLine) {
+        if (!isTargetLine){
+
             // ensure the accounts in source accounting lines are same
             if (!hasSameAccount(accountingDocument, accountingLine)) {
-                reportError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, LaborKeyConstants.ERROR_ACCOUNT_NOT_SAME);
-                isValid = false;
+                reportError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, KFSKeyConstants.Labor.ERROR_ACCOUNT_NOT_SAME);
+                return false;
             }
         }
-
+        
         return isValid;
     }
 
     /**
-     * Validates the target and source lines have the same object code.
-     * 
-     * @param document
-     * @return boolean false when the source and target lines have different object codes.
      * @see org.kuali.module.labor.rules.LaborExpenseTransferDocumentRules#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
      */
     @Override
@@ -99,7 +93,7 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
         if (isValid) {
             boolean hasSameFringeBenefitObjectCodes = hasSameFringeBenefitObjectCodes(expenseTransferDocument);
             if (!hasSameFringeBenefitObjectCodes) {
-                reportError(KFSPropertyConstants.TARGET_ACCOUNTING_LINES, LaborKeyConstants.DISTINCT_OBJECT_CODE_ERROR);
+                reportError(KFSPropertyConstants.TARGET_ACCOUNTING_LINES, KFSKeyConstants.Labor.DISTINCT_OBJECT_CODE_ERROR);
                 isValid = false;
             }
         }
@@ -108,11 +102,6 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
     }
 
     /**
-     * Generates the expense pending entries.
-     * 
-     * @param document LaborLedgerPostingDocument type
-     * @param accountingLine AccountingLine type
-     * @return boolean
      * @see org.kuali.module.labor.rules.LaborExpenseTransferDocumentRules#processGenerateLaborLedgerPendingEntries(org.kuali.module.labor.document.LaborLedgerPostingDocument,
      *      org.kuali.module.labor.bo.ExpenseTransferAccountingLine, org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
      */
@@ -128,7 +117,7 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
     }
 
     /**
-     * Determines whether the object code of given accounting line is a fringe benefit labor object code
+     * Determine whether the object code of given accounting line is a fringe benefit labor object code
      * 
      * @param accountingLine the given accounting line
      * @return true if the object code of given accounting line is a fringe benefit labor object code; otherwise, false
@@ -147,7 +136,7 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
     }
 
     /**
-     * Determines whether the given accouting line has the same account as the source accounting lines
+     * determine whether the given accouting line has the same account as the source accounting lines
      * 
      * @param accountingDocument the given accouting document
      * @param accountingLine the given accounting line
@@ -171,12 +160,12 @@ public class BenefitExpenseTransferDocumentRule extends LaborExpenseTransferDocu
                 return false;
             }
         }
-
+     
         return true;
     }
 
     /**
-     * Determines whether target accouting lines have the same fringe benefit object codes as source accounting lines
+     * Determine whether target accouting lines have the same fringe benefit object codes as source accounting lines
      * 
      * @param accountingDocument the given accounting document
      * @return true if target accouting lines have the same fringe benefit object codes as source accounting lines; otherwise, false
