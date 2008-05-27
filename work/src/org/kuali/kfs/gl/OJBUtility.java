@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,17 +26,20 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.WrapDynaClass;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.Query;
+import org.kuali.Constants;
 import org.kuali.core.dao.LookupDao;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.util.SpringServiceLocator;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
  * This class provides a set of utilities that can handle common tasks related to business objects.
+ * 
+ * 
  */
 public class OJBUtility {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OJBUtility.class);
+    private static BeanFactory beanFactory = SpringServiceLocator.getBeanFactory();
 
     public static final String LOOKUP_DAO = "lookupDao";
 
@@ -61,7 +64,7 @@ public class OJBUtility {
             }
         }
         catch (Exception e) {
-            LOG.error("OJBUtility.buildPropertyMap()" + e);
+            e.printStackTrace();
         }
         return propertyMap;
     }
@@ -76,28 +79,23 @@ public class OJBUtility {
     public static Criteria buildCriteriaFromMap(Map fieldValues, Object businessObject) {
         Criteria criteria = new Criteria();
 
-        try {
-            Iterator propsIter = fieldValues.keySet().iterator();
-            while (propsIter.hasNext()) {
-                String propertyName = (String) propsIter.next();
-                Object propertyValueObject = fieldValues.get(propertyName);
-                String propertyValue = (propertyValueObject != null) ? propertyValueObject.toString().trim() : "";
+        Iterator propsIter = fieldValues.keySet().iterator();
+        while (propsIter.hasNext()) {
+            String propertyName = (String) propsIter.next();
+            String propertyValue = (String) fieldValues.get(propertyName);
+            propertyValue = (propertyValue != null) ? propertyValue.trim() : "";
 
-                // if searchValue is empty and the key is not a valid property ignore
-                boolean isCreated = createCriteria(businessObject, propertyValue, propertyName, criteria);
-                if (!isCreated) {
-                    continue;
-                }
+            // if searchValue is empty and the key is not a valid property ignore
+            boolean isCreated = createCriteria(businessObject, propertyValue, propertyName, criteria);
+            if (!isCreated) {
+                continue;
             }
-        }
-        catch (Exception e) {
-            LOG.error("OJBUtility.buildCriteriaFromMap()" + e);
         }
         return criteria;
     }
 
     /**
-     * Limit the size of the result set from the given query operation
+     * limit the size of the result set from the given query operation
      * 
      * @param query the given query operation
      */
@@ -138,7 +136,7 @@ public class OJBUtility {
      * @return the size of a result set from the given search criteria
      */
     public static Long getResultSizeFromMap(Map fieldValues, Object businessObject) {
-        LookupDao lookupDao = SpringContext.getBean(LookupDao.class);
+        LookupDao lookupDao = (LookupDao) beanFactory.getBean(LOOKUP_DAO);
         return lookupDao.findCountByMap(businessObject, fieldValues);
     }
 
@@ -149,7 +147,8 @@ public class OJBUtility {
      */
     public static Integer getResultLimit() {
         // get the result limit number from configuration
-        String limitConfig = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.NERVOUS_SYSTEM_LOOKUP.class, KFSConstants.LOOKUP_RESULTS_LIMIT_URL_KEY);
+        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
+        String limitConfig = kualiConfigurationService.getApplicationParameterValue(Constants.ParameterGroups.SYSTEM, Constants.LOOKUP_RESULTS_LIMIT_URL_KEY);
 
         Integer limit = Integer.MAX_VALUE;
         if (limitConfig != null) {
@@ -162,7 +161,7 @@ public class OJBUtility {
      * This method build OJB criteria from the given property value and name
      */
     public static boolean createCriteria(Object businessObject, String propertyValue, String propertyName, Criteria criteria) {
-        LookupDao lookupDao = SpringContext.getBean(LookupDao.class);
+        LookupDao lookupDao = (LookupDao) beanFactory.getBean(LOOKUP_DAO);
         return lookupDao.createCriteria(businessObject, propertyValue, propertyName, criteria);
     }
 }

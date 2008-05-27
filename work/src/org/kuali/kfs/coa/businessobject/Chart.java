@@ -1,32 +1,38 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.core.bo.Summarizable;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.context.SpringContext;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class Chart extends PersistableBusinessObjectBase implements Summarizable {
+public class Chart extends BusinessObjectBase {
 
     private static final long serialVersionUID = 4129020803214027609L;
 
@@ -45,7 +51,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     private String icrExpenseFinancialObjectCd;
     private String incBdgtEliminationsFinObjCd;
     private String expBdgtEliminationsFinObjCd;
-    private String fundBalanceObjectCode;
+
 
     private ObjectCode incBdgtEliminationsFinObj;
     private ObjectCode expBdgtEliminationsFinObj;
@@ -57,7 +63,6 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     private ObjectCode finAccountsReceivableObj;
     private ObjectCode finInternalEncumbranceObj;
     private ObjectCode icrExpenseFinancialObject;
-    private ObjectCode fundBalanceObject;
     private UniversalUser finCoaManagerUniversal;
     private Chart reportsToChartOfAccounts;
 
@@ -71,7 +76,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finChartOfAccountDescription attribute.
      * 
-     * @return Returns the finChartOfAccountDescription
+     * @return - Returns the finChartOfAccountDescription
+     * 
      */
     public String getFinChartOfAccountDescription() {
         return finChartOfAccountDescription;
@@ -81,6 +87,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
      * Sets the finChartOfAccountDescription attribute.
      * 
      * @param finChartOfAccountDescription The finChartOfAccountDescription to set.
+     * 
      */
     public void setFinChartOfAccountDescription(String finChartOfAccountDescription) {
         this.finChartOfAccountDescription = finChartOfAccountDescription;
@@ -89,7 +96,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finChartOfAccountActiveIndicator attribute.
      * 
-     * @return Returns the finChartOfAccountActiveIndicator
+     * @return - Returns the finChartOfAccountActiveIndicator
+     * 
      */
     public boolean isFinChartOfAccountActiveIndicator() {
         return finChartOfAccountActiveIndicator;
@@ -99,6 +107,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
      * Sets the finChartOfAccountActiveIndicator attribute.
      * 
      * @param finChartOfAccountActiveIndicator The finChartOfAccountActiveIndicator to set.
+     * 
      */
     public void setFinChartOfAccountActiveIndicator(boolean finChartOfAccountActiveIndicator) {
         this.finChartOfAccountActiveIndicator = finChartOfAccountActiveIndicator;
@@ -108,7 +117,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finAccountsPayableObject attribute.
      * 
-     * @return Returns the finAccountsPayableObject
+     * @return - Returns the finAccountsPayableObject
+     * 
      */
     public ObjectCode getFinAccountsPayableObject() {
         return finAccountsPayableObject;
@@ -147,7 +157,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finPreEncumbranceObject attribute.
      * 
-     * @return Returns the finPreEncumbranceObject
+     * @return - Returns the finPreEncumbranceObject
+     * 
      */
     public ObjectCode getFinPreEncumbranceObject() {
         return finPreEncumbranceObject;
@@ -166,7 +177,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the financialCashObject attribute.
      * 
-     * @return Returns the financialCashObject
+     * @return - Returns the financialCashObject
+     * 
      */
     public ObjectCode getFinancialCashObject() {
         return financialCashObject;
@@ -185,7 +197,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the icrIncomeFinancialObject attribute.
      * 
-     * @return Returns the icrIncomeFinancialObject
+     * @return - Returns the icrIncomeFinancialObject
+     * 
      */
     public ObjectCode getIcrIncomeFinancialObject() {
         return icrIncomeFinancialObject;
@@ -204,7 +217,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the finAccountsReceivableObj attribute.
      * 
-     * @return Returns the finAccountsReceivableObj
+     * @return - Returns the finAccountsReceivableObj
+     * 
      */
     public ObjectCode getFinAccountsReceivableObj() {
         return finAccountsReceivableObj;
@@ -220,8 +234,13 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
         this.finAccountsReceivableObj = finAccountsReceivableObj;
     }
 
+    /**
+     * Gets the finCoaManagerUniversal attribute.
+     * 
+     * @return - Returns the finCoaManagerUniversal
+     * 
+     */
     public UniversalUser getFinCoaManagerUniversal() {
-        finCoaManagerUniversal = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(finCoaManagerUniversalId, finCoaManagerUniversal);
         return finCoaManagerUniversal;
     }
 
@@ -238,7 +257,8 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the reportsToChartOfAccounts attribute.
      * 
-     * @return Returns the reportsToChartOfAccounts
+     * @return - Returns the reportsToChartOfAccounts
+     * 
      */
     public Chart getReportsToChartOfAccounts() {
         return reportsToChartOfAccounts;
@@ -305,6 +325,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
      * Sets the chartOfAccountsCode attribute value.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -506,7 +527,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the expBdgtEliminationsFinObjCd attribute.
      * 
-     * @return Returns the expBdgtEliminationsFinObjCd
+     * @return - Returns the expBdgtEliminationsFinObjCd
      */
     public String getExpBdgtEliminationsFinObjCd() {
         return expBdgtEliminationsFinObjCd;
@@ -524,7 +545,7 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     /**
      * Gets the incBdgtEliminationsFinObjCd attribute.
      * 
-     * @return Returns the incBdgtEliminationsFinObjCd
+     * @return - Returns the incBdgtEliminationsFinObjCd
      */
     public String getIncBdgtEliminationsFinObjCd() {
         return incBdgtEliminationsFinObjCd;
@@ -567,58 +588,4 @@ public class Chart extends PersistableBusinessObjectBase implements Summarizable
     public void setReportsToChartOfAccountsCode(String reportsToChartOfAccountsCode) {
         this.reportsToChartOfAccountsCode = reportsToChartOfAccountsCode;
     }
-
-    /**
-     * Gets the fundBalanceObject attribute.
-     * 
-     * @return Returns the fundBalanceObject.
-     */
-    public ObjectCode getFundBalanceObject() {
-        return fundBalanceObject;
-    }
-
-    /**
-     * Sets the fundBalanceObject attribute value.
-     * 
-     * @param fundBalanceObject The fundBalanceObject to set.
-     * @deprecated
-     */
-    public void setFundBalanceObject(ObjectCode fundBalanceObject) {
-        this.fundBalanceObject = fundBalanceObject;
-    }
-
-    /**
-     * Gets the fundBalanceObjectCode attribute.
-     * 
-     * @return Returns the fundBalanceObjectCode.
-     */
-    public String getFundBalanceObjectCode() {
-        return fundBalanceObjectCode;
-    }
-
-    /**
-     * Sets the fundBalanceObjectCode attribute value.
-     * 
-     * @param fundBalanceObjectCode The fundBalanceObjectCode to set.
-     */
-    public void setFundBalanceObjectCode(String fundBalanceObjectCode) {
-        this.fundBalanceObjectCode = fundBalanceObjectCode;
-    }
-
-    /**
-     * @return Returns the code and description in format: xx - xxxxxxxxxxxxxxxx
-     */
-    public String getCodeAndDescription() {
-        String theString = getChartOfAccountsCode() + " - " + getFinChartOfAccountDescription();
-        return theString;
-    }
-
-    public String getCode() {
-        return this.chartOfAccountsCode;
-    }
-
-    public String getName() {
-        return this.finChartOfAccountDescription;
-    }
-
 }

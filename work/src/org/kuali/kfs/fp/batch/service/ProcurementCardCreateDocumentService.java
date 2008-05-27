@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@
  */
 package org.kuali.module.financial.service;
 
+
 /**
- * 
  * Service interface for implementing methods to create procurement card documents.
+ * 
  * 
  */
 public interface ProcurementCardCreateDocumentService {
@@ -25,23 +26,23 @@ public interface ProcurementCardCreateDocumentService {
     /**
      * Creates procurement card documents and routes from the records loaded into the transaction table.
      * 
-     * @return True if the routing was successful, false otherwise.
+     * @return boolean indicating whether the routing was successful
      */
     public boolean createProcurementCardDocuments();
 
     /**
-     * Looks for ProcurementCardDocuments with a status of 'I', meaning they have been created and saved to "inbox", 
-     * but have not yet been routed.
+     * Looks for PCDO documents in 'I' status, meaning they have been created and saved to inbox, but need routed.
      * 
-     * @return True if the routing was successful, false otherwise.
+     * @param documentList list of documents to be routed
+     * @return boolean indicating whether the routing was successful
      */
     public boolean routeProcurementCardDocuments();
 
     /**
-     * Finds documents that have been in route status past the number of allowed days. Then calls document service 
-     * to auto approve the documents.
+     * Finds documents that have been in route status past the number of allowed days. Then calls document service to auto approve
+     * the documents.
      * 
-     * @return True if the auto approve was successful, false otherwise.
+     * @return boolean indicating whether the auto approve was successful
      */
     public boolean autoApproveProcurementCardDocuments();
 }

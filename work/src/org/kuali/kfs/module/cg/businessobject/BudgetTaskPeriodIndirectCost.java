@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +20,23 @@ package org.kuali.module.kra.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 
 /**
  * 
  */
-public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetTaskPeriodIndirectCost extends BusinessObjectBase implements Comparable {
 
     private String documentNumber; // RDOC_NBR
     private Integer budgetTaskSequenceNumber; // BDGT_TSK_SEQ_NBR
     private Integer budgetPeriodSequenceNumber; // BDGT_PRD_SEQ_NBR
     private KualiDecimal budgetManualIndirectCostRate; // BDGT_MAN_IDC_RT
     private KualiInteger budgetManualMtdcAmount; // BDGT_MAN_MTDC_AMT
+
+    // We will need to remove this, since this is properly storedin the parent IDC object.
+    private String budgetPurposeCode; // BDGT_PRPS_CD
 
     private BudgetTask task; // BudgetTask associated with this taskPeriodLine.
     private BudgetPeriod period; // BudgetPeriod associated with this taskPeriodLine.
@@ -55,24 +60,24 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      */
     public BudgetTaskPeriodIndirectCost() {
         super();
-
+        
         // Set our totals to zero by default.
-        this.setTotalDirectCost(KualiInteger.ZERO);
-        this.setBaseCost(KualiInteger.ZERO);
-        this.setCalculatedIndirectCost(KualiInteger.ZERO);
+        this.setTotalDirectCost(new KualiInteger(0));
+        this.setBaseCost(new KualiInteger(0));
+        this.setCalculatedIndirectCost(new KualiInteger(0));
 
-        this.setCostShareBaseCost(KualiInteger.ZERO);
-        this.setCostShareCalculatedIndirectCost(KualiInteger.ZERO);
-        this.setCostShareIndirectCostRate(KualiDecimal.ZERO);
-        this.setCostShareUnrecoveredIndirectCost(KualiInteger.ZERO);
+        this.setCostShareBaseCost(new KualiInteger(0));
+        this.setCostShareCalculatedIndirectCost(new KualiInteger(0));
+        this.setCostShareIndirectCostRate(new KualiDecimal(0));
+        this.setCostShareUnrecoveredIndirectCost(new KualiInteger(0));
 
-        this.setBudgetManualIndirectCostRate(KualiDecimal.ZERO);
-        this.setBudgetManualMtdcAmount(KualiInteger.ZERO);
+        this.setBudgetManualIndirectCostRate(new KualiDecimal(0));
+        this.setBudgetManualMtdcAmount(new KualiInteger(0));
     }
-
+    
     public BudgetTaskPeriodIndirectCost(BudgetTaskPeriodIndirectCost template) {
         this();
-
+     
         this.documentNumber = template.getDocumentNumber();
         this.budgetTaskSequenceNumber = template.getBudgetTaskSequenceNumber();
         this.budgetPeriodSequenceNumber = template.getBudgetPeriodSequenceNumber();
@@ -87,6 +92,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Gets the documentNumber attribute.
      * 
      * @return Returns the documentNumber
+     * 
      */
     public String getDocumentNumber() {
         return documentNumber;
@@ -96,6 +102,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Sets the documentNumber attribute.
      * 
      * @param documentNumber The documentNumber to set.
+     * 
      */
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -105,6 +112,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Gets the budgetTaskSequenceNumber attribute.
      * 
      * @return Returns the budgetTaskSequenceNumber
+     * 
      */
     public Integer getBudgetTaskSequenceNumber() {
         return budgetTaskSequenceNumber;
@@ -114,6 +122,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Sets the budgetTaskSequenceNumber attribute.
      * 
      * @param budgetTaskSequenceNumber The budgetTaskSequenceNumber to set.
+     * 
      */
     public void setBudgetTaskSequenceNumber(Integer budgetTaskSequenceNumber) {
         this.budgetTaskSequenceNumber = budgetTaskSequenceNumber;
@@ -123,6 +132,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Gets the budgetPeriodSequenceNumber attribute.
      * 
      * @return Returns the budgetPeriodSequenceNumber
+     * 
      */
     public Integer getBudgetPeriodSequenceNumber() {
         return budgetPeriodSequenceNumber;
@@ -132,6 +142,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Sets the budgetPeriodSequenceNumber attribute.
      * 
      * @param budgetPeriodSequenceNumber The budgetPeriodSequenceNumber to set.
+     * 
      */
     public void setBudgetPeriodSequenceNumber(Integer budgetPeriodSequenceNumber) {
         this.budgetPeriodSequenceNumber = budgetPeriodSequenceNumber;
@@ -141,6 +152,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Gets the budgetManualIndirectCostRate attribute.
      * 
      * @return Returns the budgetManualIndirectCostRate
+     * 
      */
     public KualiDecimal getBudgetManualIndirectCostRate() {
         return budgetManualIndirectCostRate;
@@ -150,6 +162,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Sets the budgetManualIndirectCostRate attribute.
      * 
      * @param budgetManualIndirectCostRate The budgetManualIndirectCostRate to set.
+     * 
      */
     public void setBudgetManualIndirectCostRate(KualiDecimal budgetManualIndirectCostRate) {
         this.budgetManualIndirectCostRate = budgetManualIndirectCostRate;
@@ -159,6 +172,7 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Gets the budgetManualMtdcAmount attribute.
      * 
      * @return Returns the budgetManualMtdcAmount
+     * 
      */
     public KualiInteger getBudgetManualMtdcAmount() {
         return budgetManualMtdcAmount;
@@ -168,9 +182,30 @@ public class BudgetTaskPeriodIndirectCost extends PersistableBusinessObjectBase 
      * Sets the budgetManualMtdcAmount attribute.
      * 
      * @param budgetManualMtdcAmount The budgetManualMtdcAmount to set.
+     * 
      */
     public void setBudgetManualMtdcAmount(KualiInteger budgetManualMtdcAmount) {
         this.budgetManualMtdcAmount = budgetManualMtdcAmount;
+    }
+
+    /**
+     * Gets the budgetPurposeCode attribute.
+     * 
+     * @return Returns the budgetPurposeCode
+     * 
+     */
+    public String getBudgetPurposeCode() {
+        return budgetPurposeCode;
+    }
+
+    /**
+     * Sets the budgetPurposeCode attribute.
+     * 
+     * @param budgetPurposeCode The budgetPurposeCode to set.
+     * 
+     */
+    public void setBudgetPurposeCode(String budgetPurposeCode) {
+        this.budgetPurposeCode = budgetPurposeCode;
     }
 
     /**

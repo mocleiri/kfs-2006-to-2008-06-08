@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,22 @@
 package org.kuali.module.chart.document;
 
 import org.apache.log4j.Logger;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.Constants;
+import org.kuali.core.authorization.MaintenanceDocumentAuthorizations;
+import org.kuali.core.bo.user.KualiGroup;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.core.document.MaintenanceDocument;
-import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizations;
-import org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.chart.bo.Org;
+import org.kuali.core.document.MaintenanceDocumentAuthorizerBase;
+import org.kuali.core.exceptions.ApplicationParameterException;
+import org.kuali.core.exceptions.GroupNotFoundException;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.service.KualiGroupService;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * Org/Organization specific authorization rules.
+ * 
+ * 
  */
 public class OrgDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase {
 
@@ -40,13 +45,15 @@ public class OrgDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase {
     }
 
     /**
+     * 
      * This method returns the set of authorization restrictions (if any) that apply to this Org in this context.
      * 
      * @param document
      * @param user
-     * @return a new set of {@link MaintenanceDocumentAuthorizations} that marks certain fields read-only if necessary
+     * @return
+     * 
      */
-    public MaintenanceDocumentAuthorizations getFieldAuthorizations(MaintenanceDocument document, UniversalUser user) {
+    public MaintenanceDocumentAuthorizations getFieldAuthorizations(MaintenanceDocument document, KualiUser user) {
 
         MaintenanceDocumentAuthorizations auths = new MaintenanceDocumentAuthorizations();
 
@@ -56,11 +63,29 @@ public class OrgDocumentAuthorizer extends MaintenanceDocumentAuthorizerBase {
             return auths;
         }
 
-        String groupName = SpringContext.getBean(ParameterService.class).getParameterValue(Org.class, KFSConstants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
+        // get the group name that we need here - ORG
+        KualiConfigurationService configService;
+        configService = SpringServiceLocator.getKualiConfigurationService();
+        KualiGroup group = null;
+        try {
+            String groupName = configService.getApplicationParameterValue(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.ORG_PLANT_WORKGROUP_PARM_NAME);
+
+            // create a new KualiGroup instance with that name
+            KualiGroupService groupService = SpringServiceLocator.getKualiGroupService();
+            try {
+                group = groupService.getByGroupName(groupName);
+            }
+            catch (GroupNotFoundException ex) {
+                LOG.error("The group by name '" + groupName + "' was not " + "found in the KualiGroupService.  This is a configuration error, and " + "authorization/business-rules cannot be processed without this.", ex);
+            }
+        }
+        catch (ApplicationParameterException ex) {
+            LOG.error("unable to load application parameter for org plant workgroup", ex);
+        }
 
         // if the user is NOT a member of the special group, then mark all the
         // ICR & CS fields read-only.
-        if (!user.isMember(groupName)) {
+        if (group == null || !user.isMember(group)) {
             auths.addReadonlyAuthField("organizationPlantChartCode");
             auths.addReadonlyAuthField("organizationPlantAccountNumber");
             auths.addReadonlyAuthField("campusPlantChartCode");

@@ -23,14 +23,15 @@ import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.util.ObjectUtil;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LaborGeneralLedgerEntry;
-import org.kuali.test.ConfigureContext;
+import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborGeneralLedgerEntryServiceTest extends KualiTestBase {
 
     private Properties properties;
@@ -38,6 +39,7 @@ public class LaborGeneralLedgerEntryServiceTest extends KualiTestBase {
     private String deliminator;
     private List<String> keyFieldList;
 
+    private BeanFactory beanFactory;
     private LaborGeneralLedgerEntryService laborGeneralLedgerEntryService;
     private BusinessObjectService businessObjectService;
 
@@ -52,8 +54,9 @@ public class LaborGeneralLedgerEntryServiceTest extends KualiTestBase {
         deliminator = properties.getProperty("deliminator");
         keyFieldList = Arrays.asList(StringUtils.split(fieldNames, deliminator));
 
-        laborGeneralLedgerEntryService = SpringContext.getBean(LaborGeneralLedgerEntryService.class);
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        laborGeneralLedgerEntryService = (LaborGeneralLedgerEntryService) beanFactory.getBean("laborGeneralLedgerEntryService");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
     }
 
     public void testSave() throws Exception {

@@ -15,8 +15,6 @@
  */
 package org.kuali.module.chart.dao.ojb;
 
-import java.util.List;
-
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
@@ -37,7 +35,7 @@ public class SubAccountDaoOjb extends PlatformAwareDaoBaseOjb implements SubAcco
      * @param accountNumber - part of composite key
      * @param subAccountNumber - part of composite key
      * @return SubAccount
-     * @see SubAccountDao#getByPrimaryId(String, String, String)
+     * @see SubAccountDao
      */
     public SubAccount getByPrimaryId(String chartOfAccountsCode, String accountNumber, String subAccountNumber) {
         Criteria criteria = new Criteria();
@@ -46,23 +44,5 @@ public class SubAccountDaoOjb extends PlatformAwareDaoBaseOjb implements SubAcco
         criteria.addEqualTo("subAccountNumber", subAccountNumber);
 
         return (SubAccount) getPersistenceBrokerTemplate().getObjectByQuery(QueryFactory.newQuery(SubAccount.class, criteria));
-    }
-
-    /**
-     * Retrieves SubAccount objects associated with the given chart-org-subAccount code combination
-     * 
-     * @param chartOfAccountsCode - 'Reports To' Chart of Accounts Code
-     * @param organizationCode - 'Reports To' Organization Code
-     * @param subAccountNumber - Sub Account Number
-     * @return a list of SubAccount objects
-     * @see SubAccountDao#getSubAccountsByReportsToOrganization(String, String, String)
-     */
-    public List getSubAccountsByReportsToOrganization(String chartOfAccountsCode, String organizationCode, String subAccountNumber) {
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("financialReportChartCode", chartOfAccountsCode);
-        criteria.addEqualTo("finReportOrganizationCode", organizationCode);
-        criteria.addEqualTo("subAccountNumber", subAccountNumber);
-
-        return (List) getPersistenceBrokerTemplate().getCollectionByQuery(QueryFactory.newQuery(SubAccount.class, criteria));
     }
 }

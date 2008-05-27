@@ -15,15 +15,15 @@
  */
 package org.kuali.module.purap.maintenance;
 
-import java.util.Map;
-
-import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.bo.PurchaseOrderQuoteLanguage;
 
 /* 
+ * THIS CODE IS NOT USED IN RELEASE 2 BUT THE CODE WAS LEFT IN TO
+ * FACILITATE TURNING IT BACK ON EARLY IN THE DEVELOPMENT CYCLE OF RELEASE 3.
+ * 
  * A special implementation of Maintainable specifically for PurchaseOrderQuoteLanguage
  * maintenance page to override the behavior when the PurchaseOrderQuoteLanguage 
  * maintenance document is copied.
@@ -37,9 +37,8 @@ public class PurchaseOrderQuoteLanguageMaintainableImpl extends KualiMaintainabl
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterCopy()
      */
     @Override
-    public void processAfterCopy( MaintenanceDocument document, Map<String,String[]> parameters ) {
+    public void processAfterCopy() {
         intializePoQuoteLangauge();
-        super.processAfterCopy(document, parameters);
     }
 
     /**

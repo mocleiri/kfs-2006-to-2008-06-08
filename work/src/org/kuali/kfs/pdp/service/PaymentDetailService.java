@@ -16,7 +16,6 @@
 package org.kuali.module.pdp.service;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.kuali.module.pdp.bo.PaymentDetail;
 
@@ -47,7 +46,7 @@ public interface PaymentDetailService {
      * @param subUnit
      * @return
      */
-    public Iterator getUnprocessedCancelledDetails(String organization, List<String> subUnits);
+    public Iterator getUnprocessedCancelledDetails(String organization, String subUnit);
 
     /**
      * This will return an iterator of all the paid payment details that haven't already been processed
@@ -56,5 +55,5 @@ public interface PaymentDetailService {
      * @param subUnit
      * @return
      */
-    public Iterator getUnprocessedPaidDetails(String organization, List<String> subUnits);
+    public Iterator getUnprocessedPaidDetails(String organization, String subUnit);
 }

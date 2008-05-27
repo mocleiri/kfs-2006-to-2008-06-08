@@ -16,38 +16,28 @@
 package org.kuali.module.labor.dao.ojb;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.core.util.TransactionalServiceUtils;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.labor.bo.LedgerEntry;
 import org.kuali.module.labor.dao.LaborLedgerEntryDao;
 
-/**
- * This is the data access object for ledger entry.
- * 
- * @see org.kuali.module.labor.bo.LedgerEntry
- */
 public class LaborLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb implements LaborLedgerEntryDao {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborLedgerEntryDaoOjb.class);
 
     /**
      * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#getMaxSquenceNumber(org.kuali.module.labor.bo.LedgerEntry)
      */
     public Integer getMaxSquenceNumber(LedgerEntry ledgerEntry) {
+        //TODO: this is a piece of duplicate code. We need to refactor it later
         Criteria criteria = new Criteria();
-
+        
         criteria.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, ledgerEntry.getUniversityFiscalYear());
         criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, ledgerEntry.getChartOfAccountsCode());
         criteria.addEqualTo(KFSPropertyConstants.ACCOUNT_NUMBER, ledgerEntry.getAccountNumber());
@@ -65,12 +55,12 @@ public class LaborLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb implements L
         query.setAttributes(new String[] { "max(" + KFSPropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER + ")" });
 
         Iterator iterator = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-        Integer maxSequenceNumber = Integer.valueOf(0);
-
+        Integer maxSequenceNumber = new Integer(0);
+        
         if (iterator.hasNext()) {
-            Object[] data = (Object[]) TransactionalServiceUtils.retrieveFirstAndExhaustIterator(iterator);
+            Object[] data = (Object[]) iterator.next();
             if (data[0] != null) {
-                maxSequenceNumber = ((BigDecimal) data[0]).intValue();
+                maxSequenceNumber = ((BigDecimal)data[0]).intValue();
             }
         }
         return maxSequenceNumber;
@@ -84,113 +74,11 @@ public class LaborLedgerEntryDaoOjb extends PlatformAwareDaoBaseOjb implements L
 
         QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
         return getPersistenceBrokerTemplate().getIteratorByQuery(query);
-    }
-
+}
     /**
-     * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#save(org.kuali.module.labor.bo.LedgerEntry)
+     * @return the Class type of the business object accessed and managed 
      */
-    public void save(LedgerEntry ledgerEntry) {
-        getPersistenceBrokerTemplate().store(ledgerEntry);
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#findEmployeesWithPayType(java.util.Map, java.util.List, java.util.List)
-     */
-    public List<String> findEmployeesWithPayType(Map<Integer, Set<String>> payPeriods, List<String> balanceTypes, Map<String, Set<String>> earnCodePayGroupMap) {
-        Criteria criteria = this.buildPayTypeCriteria(payPeriods, balanceTypes, earnCodePayGroupMap);
-
-        ReportQueryByCriteria query = QueryFactory.newReportQuery(this.getEntryClass(), criteria);
-        query.setAttributes(new String[] { KFSPropertyConstants.EMPLID });
-        query.setDistinct(true);
-
-        Iterator<Object[]> employees = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(query);
-        List<String> employeeList = new ArrayList<String>();
-
-        while (employees != null && employees.hasNext()) {
-            Object[] emplid = employees.next();
-            employeeList.add(emplid == null ? "" : emplid[0].toString());
-        }
-
-        return employeeList;
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#getLedgerEntriesForEmployeeWithPayType(java.lang.String, java.util.Map,
-     *      java.util.List, java.util.Map)
-     */
-    public Collection<LedgerEntry> getLedgerEntriesForEmployeeWithPayType(String emplid, Map<Integer, Set<String>> payPeriods, List<String> balanceTypes, Map<String, Set<String>> earnCodePayGroupMap) {
-        Criteria criteria = this.buildPayTypeCriteria(payPeriods, balanceTypes, earnCodePayGroupMap);
-        criteria.addEqualTo(KFSPropertyConstants.EMPLID, emplid);
-
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
-        return getPersistenceBrokerTemplate().getCollectionByQuery(query);
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#isEmployeeWithPayType(java.lang.String, java.util.Map, java.util.List,
-     *      java.util.Map)
-     */
-    public boolean isEmployeeWithPayType(String emplid, Map<Integer, Set<String>> payPeriods, List<String> balanceTypes, Map<String, Set<String>> earnCodePayGroupMap) {
-        Criteria criteria = this.buildPayTypeCriteria(payPeriods, balanceTypes, earnCodePayGroupMap);
-        criteria.addEqualTo(KFSPropertyConstants.EMPLID, emplid);
-
-        QueryByCriteria query = QueryFactory.newQuery(this.getEntryClass(), criteria);
-        return getPersistenceBrokerTemplate().getCount(query) > 0;
-    }
-
-    /**
-     * @see org.kuali.module.labor.dao.LaborLedgerEntryDao#deleteLedgerEntriesPriorToYear(java.lang.Integer, java.lang.String)
-     */
-    public void deleteLedgerEntriesPriorToYear(Integer fiscalYear, String chartOfAccountsCode) {
-        LOG.debug("deleteLedgerEntriesPriorToYear() started");
-
-        Criteria criteria = new Criteria();
-        criteria.addLessThan(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
-        criteria.addEqualTo(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, chartOfAccountsCode);
-
-        QueryByCriteria query = new QueryByCriteria(this.getEntryClass(), criteria);
-        getPersistenceBrokerTemplate().deleteByQuery(query);
-
-    }
-
-    // build the pay type criteria
-    private Criteria buildPayTypeCriteria(Map<Integer, Set<String>> payPeriods, List<String> balanceTypes, Map<String, Set<String>> earnCodePayGroupMap) {
-        Criteria criteria = new Criteria();
-
-        Criteria criteriaForPayPeriods = new Criteria();
-        for (Integer fiscalYear : payPeriods.keySet()) {
-            Criteria criteriaForFiscalYear = new Criteria();
-
-            criteriaForFiscalYear.addEqualTo(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, fiscalYear);
-            criteriaForFiscalYear.addIn(KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE, payPeriods.get(fiscalYear));
-
-            criteriaForPayPeriods.addOrCriteria(criteriaForFiscalYear);
-        }
-
-        Criteria criteriaForBalanceTypes = new Criteria();
-        criteriaForBalanceTypes.addIn(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, balanceTypes);
-
-        Criteria criteriaForEarnCodePayGroup = new Criteria();
-        for (String payGroup : earnCodePayGroupMap.keySet()) {
-            Criteria criteriaForEarnPay = new Criteria();
-
-            criteriaForEarnPay.addEqualTo(KFSPropertyConstants.PAY_GROUP, payGroup);
-            criteriaForEarnPay.addIn(KFSPropertyConstants.EARN_CODE, earnCodePayGroupMap.get(payGroup));
-
-            criteriaForEarnCodePayGroup.addOrCriteria(criteriaForEarnPay);
-        }
-
-        criteria.addAndCriteria(criteriaForPayPeriods);
-        criteria.addAndCriteria(criteriaForBalanceTypes);
-        criteria.addAndCriteria(criteriaForEarnCodePayGroup);
-
-        return criteria;
-    }
-
-    /**
-     * @return the Class type of the business object accessed and managed
-     */
-    private Class getEntryClass() {
+    private Class getEntryClass(){
         return LedgerEntry.class;
     }
 }

@@ -16,7 +16,6 @@
 package org.kuali.module.pdp.service.impl;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.kuali.module.pdp.bo.PaymentDetail;
 import org.kuali.module.pdp.dao.PaymentDetailDao;
@@ -24,6 +23,7 @@ import org.kuali.module.pdp.service.PaymentDetailService;
 import org.springframework.transaction.annotation.Transactional;
 
 
+@Transactional
 public class PaymentDetailServiceImpl implements PaymentDetailService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PaymentDetailServiceImpl.class);
 
@@ -72,18 +72,18 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
     /**
      * @see org.kuali.module.pdp.service.PaymentDetailService#getUnprocessedCancelledDetails(java.lang.String, java.lang.String)
      */
-    public Iterator getUnprocessedCancelledDetails(String organization, List<String> subUnits) {
+    public Iterator getUnprocessedCancelledDetails(String organization, String subUnit) {
         LOG.debug("getUnprocessedCancelledDetails() started");
 
-        return paymentDetailDao.getUnprocessedCancelledDetails(organization, subUnits);
+        return paymentDetailDao.getUnprocessedCancelledDetails(organization, subUnit);
     }
 
     /**
      * @see org.kuali.module.pdp.service.PaymentDetailService#getUnprocessedPaidDetails(java.lang.String, java.lang.String)
      */
-    public Iterator getUnprocessedPaidDetails(String organization, List<String> subUnits) {
+    public Iterator getUnprocessedPaidDetails(String organization, String subUnit) {
         LOG.debug("getUnprocessedPaidDetails() started");
 
-        return paymentDetailDao.getUnprocessedPaidDetails(organization, subUnits);
+        return paymentDetailDao.getUnprocessedPaidDetails(organization, subUnit);
     }
 }

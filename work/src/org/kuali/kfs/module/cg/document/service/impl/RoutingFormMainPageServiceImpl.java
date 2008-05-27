@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.Constants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.routingform.bo.DueDateType;
 import org.kuali.module.kra.routingform.bo.PersonRole;
 import org.kuali.module.kra.routingform.bo.ProjectType;
@@ -34,28 +32,30 @@ import org.kuali.module.kra.routingform.bo.ResearchTypeCode;
 import org.kuali.module.kra.routingform.bo.RoutingFormAgency;
 import org.kuali.module.kra.routingform.bo.RoutingFormDueDateType;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonRole;
-import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
 import org.kuali.module.kra.routingform.bo.RoutingFormProjectType;
 import org.kuali.module.kra.routingform.bo.RoutingFormPurpose;
 import org.kuali.module.kra.routingform.bo.RoutingFormResearchTypeCode;
+import org.kuali.module.kra.routingform.bo.RoutingFormSubmissionType;
+import org.kuali.module.kra.routingform.bo.SubmissionType;
 import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 import org.kuali.module.kra.routingform.service.PurposeService;
 import org.kuali.module.kra.routingform.service.RoutingFormMainPageService;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageService {
-
+    
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(RoutingFormMainPageServiceImpl.class);
 
     private BusinessObjectService businessObjectService;
     private PurposeService purposeService;
-    private ParameterService parameterService;
-
+    
     /**
      * @see org.kuali.module.kra.routingform.service.RoutingFormMainPageService#setupMainPageMaintainables(org.kuali.module.kra.routingform.document.RoutingFormDocument)
      */
     public void setupMainPageMaintainables(RoutingFormDocument routingFormDocument) {
         this.setupRoutingFormDueDateTypes(routingFormDocument);
+        this.setupRoutingFormSubmissionTypes(routingFormDocument);
         this.setupRoutingFormProjectTypes(routingFormDocument);
         this.setupRoutingFormPurposes(routingFormDocument);
         this.setupRoutingFormResearchTypeCodes(routingFormDocument);
@@ -67,20 +67,20 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
      */
     public List<DueDateType> getDueDateTypes() {
         Map fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, KFSConstants.ACTIVE_INDICATOR);
-
+        fieldValues.put(PropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, Constants.ACTIVE_INDICATOR);
+        
         return new ArrayList(businessObjectService.findMatching(DueDateType.class, fieldValues));
     }
-
+    
     /**
      * @see org.kuali.module.kra.routingform.service.RoutingFormMainPageService#getPersonRoles()
      */
     public List<PersonRole> getPersonRoles() {
         Map fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, KFSConstants.ACTIVE_INDICATOR);
-
-        Collection col = businessObjectService.findMatchingOrderBy(PersonRole.class, fieldValues, KFSPropertyConstants.PERSON_ROLE_SORT_NUMBER, true);
-
+        fieldValues.put(PropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, Constants.ACTIVE_INDICATOR);
+        
+        Collection col = businessObjectService.findMatchingOrderBy(PersonRole.class, fieldValues, PropertyConstants.PERSON_ROLE_SORT_NUMBER, true);
+        
         return new ArrayList(col);
     }
 
@@ -89,10 +89,10 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
      */
     public List<ProjectType> getProjectTypes() {
         Map fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, KFSConstants.ACTIVE_INDICATOR);
-
-        Collection col = businessObjectService.findMatchingOrderBy(ProjectType.class, fieldValues, KFSPropertyConstants.SORT_NUMBER, true);
-
+        fieldValues.put(PropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, Constants.ACTIVE_INDICATOR);
+        
+        Collection col = businessObjectService.findMatchingOrderBy(ProjectType.class, fieldValues, PropertyConstants.SORT_NUMBER, true);
+        
         return new ArrayList(col);
     }
 
@@ -101,57 +101,41 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
      */
     public List<ResearchTypeCode> getResearchTypeCodes() {
         Map fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, KFSConstants.ACTIVE_INDICATOR);
-
+        fieldValues.put(PropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, Constants.ACTIVE_INDICATOR);
+        
         Collection col = businessObjectService.findMatching(ResearchTypeCode.class, fieldValues);
-
+        
         return new ArrayList(col);
     }
 
     /**
-     * @see org.kuali.module.kra.routingform.service.RoutingFormMainPageService#checkCoPdExistance(java.util.List)
+     * @see org.kuali.module.kra.routingform.service.RoutingFormMainPageService#getSubmissionTypes()
      */
-    public boolean checkCoPdExistance(List<RoutingFormPersonnel> routingFormPersonnel) {
-        final String CO_PD_ROLE_CODE = parameterService.getParameterValue(RoutingFormDocument.class, KraConstants.PERSON_ROLE_CODE_CO_PROJECT_DIRECTOR);
-
-        for (RoutingFormPersonnel routingFormPerson : routingFormPersonnel) {
-            if (routingFormPerson.getPersonRoleCode().equals(CO_PD_ROLE_CODE)) {
-                return true;
-            }
-        }
-
-        return false;
+    public List<SubmissionType> getSubmissionTypes() {
+        Map fieldValues = new HashMap();
+        fieldValues.put(PropertyConstants.DATA_OBJECT_MAINTENANCE_CODE_ACTIVE_INDICATOR, Constants.ACTIVE_INDICATOR);
+        
+        Collection col = businessObjectService.findMatchingOrderBy(SubmissionType.class, fieldValues, PropertyConstants.USER_SORT_NUMBER, true);
+        
+        return new ArrayList(col);
     }
 
     /**
-     * @see org.kuali.module.kra.routingform.service.RoutingFormMainPageService#getProjectDirector(java.util.List)
+     * Setup routing form submission types.
+     * @param routingFormDocument
      */
-    public RoutingFormPersonnel getProjectDirector(List<RoutingFormPersonnel> routingFormPersonnel) {
-        for (RoutingFormPersonnel person : routingFormPersonnel) {
-            if (person.isProjectDirector()) {
-                return person;
-            }
+    private void setupRoutingFormSubmissionTypes(RoutingFormDocument routingFormDocument) {
+        List<SubmissionType> submissionTypes = getSubmissionTypes();
+        List<RoutingFormSubmissionType> routingFormSubmissionTypes = new ArrayList<RoutingFormSubmissionType>();
+        for (SubmissionType submissionType : submissionTypes) {
+            routingFormSubmissionTypes.add(new RoutingFormSubmissionType(routingFormDocument.getDocumentNumber(), submissionType));
         }
 
-        return null;
+        routingFormDocument.setRoutingFormSubmissionTypes(routingFormSubmissionTypes);
     }
-
-    /**
-     * @see org.kuali.module.kra.routingform.service.RoutingFormMainPageService#getContactPerson(java.util.List)
-     */
-    public RoutingFormPersonnel getContactPerson(List<RoutingFormPersonnel> routingFormPersonnel) {
-        for (RoutingFormPersonnel person : routingFormPersonnel) {
-            if (person.isContactPerson()) {
-                return person;
-            }
-        }
-
-        return null;
-    }
-
+    
     /**
      * Setup routing form research type code.
-     * 
      * @param routingFormDocument
      */
     private void setupRoutingFormResearchTypeCodes(RoutingFormDocument routingFormDocument) {
@@ -163,10 +147,9 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
 
         routingFormDocument.setRoutingFormResearchTypeCodes(routingFormResearchTypeCodes);
     }
-
+    
     /**
      * Setup routing form purpose.
-     * 
      * @param routingFormDocument
      */
     private void setupRoutingFormPurposes(RoutingFormDocument routingFormDocument) {
@@ -178,10 +161,9 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
 
         routingFormDocument.setRoutingFormPurposes(routingFormPurposes);
     }
-
+    
     /**
      * Setup routing form project type.
-     * 
      * @param routingFormDocument
      */
     private void setupRoutingFormProjectTypes(RoutingFormDocument routingFormDocument) {
@@ -193,10 +175,9 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
 
         routingFormDocument.setRoutingFormProjectTypes(routingFormProjectTypes);
     }
-
+    
     /**
      * Setup routing form person role.
-     * 
      * @param routingFormDocument
      */
     private void setupRoutingFormPersonRoles(RoutingFormDocument routingFormDocument) {
@@ -208,10 +189,9 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
 
         routingFormDocument.setRoutingFormPersonRoles(routingFormPersonRoles);
     }
-
+    
     /**
      * Setup routing form due date types.
-     * 
      * @param routingFormDocument
      */
     private void setupRoutingFormDueDateTypes(RoutingFormDocument routingFormDocument) {
@@ -225,7 +205,7 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
         routingFormAgency.setRoutingFormDueDateTypes(routingFormDueDateTypes);
         routingFormDocument.setRoutingFormAgency(routingFormAgency);
     }
-
+    
     /**
      * Setter for BusinessObjectService property.
      * 
@@ -243,9 +223,4 @@ public class RoutingFormMainPageServiceImpl implements RoutingFormMainPageServic
     public void setPurposeService(PurposeService purposeService) {
         this.purposeService = purposeService;
     }
-
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
-    }
-
 }

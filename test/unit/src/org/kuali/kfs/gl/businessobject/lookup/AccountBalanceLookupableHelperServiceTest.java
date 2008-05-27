@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,38 +20,32 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.lookup.LookupableSpringContext;
+import org.kuali.module.gl.GLSpringBeansRegistry;
 import org.kuali.module.gl.bo.AccountBalance;
 import org.kuali.module.gl.bo.AccountBalanceByConsolidation;
 import org.kuali.module.gl.service.AccountBalanceService;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class contains the test cases that can be applied to the method in AccountBalanceLookupableImpl class.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupableHelperServiceTestBase {
 
     private AccountBalanceService accountBalanceService;
-
-    /**
-     * Initializes the services needed for this test
-     * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableHelperServiceTestBase#setUp()
-     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        setAccountBalanceService(SpringContext.getBean(AccountBalanceService.class));
-        lookupableHelperServiceImpl = LookupableSpringContext.getLookupableHelperService("glAccountBalanceLookupableHelperService");
+        setAccountBalanceService((AccountBalanceService) beanFactory.getBean(GLSpringBeansRegistry.glAccountBalanceService));
+        lookupableHelperServiceImpl = (AccountBalanceLookupableHelperServiceImpl) beanFactory.getBean(GLSpringBeansRegistry.glAccountBalanceLookupableHelperService);
         lookupableHelperServiceImpl.setBusinessObjectClass(AccountBalanceByConsolidation.class);
     }
 
     /**
-     * Covers the search results returned by AccountBalanceLookupableService
-     * @throws Exception thrown if any exception is encountered for any reason
      * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableTestBase#testGetSearchResults()
      */
     public void testGetSearchResults() throws Exception {
@@ -97,7 +91,7 @@ public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupa
     /**
      * This method includes the test cases applied to the consolidation option: Consolidate and Detail
      * 
-     * @throws Exception thrown if any exception is encountered for any reason
+     * @throws Exception
      */
     public void testConsolidationOption() throws Exception {
         // ensure the transaction data does not exist in enty table. Otherwise, execption may be raised
@@ -139,7 +133,7 @@ public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupa
     /**
      * This method includes the test cases applied to the consolidation option: Consolidate and Detail
      * 
-     * @throws Exception thrown if any exception is encountered for any reason
+     * @throws Exception
      */
     public void testPerformance() throws Exception {
         long threshlod = 60000;
@@ -175,9 +169,6 @@ public class AccountBalanceLookupableHelperServiceTest extends AbstractGLLookupa
     }
 
     /**
-     * Returns a List of field names to check in the search results
-     * @param isExtended true if extended attributes should be included for checking, false otherwise
-     * @return a List of field names to check
      * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableTestBase#getLookupFields(boolean)
      */
     public List getLookupFields(boolean isExtended) {

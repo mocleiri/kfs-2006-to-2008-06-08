@@ -37,7 +37,7 @@ public class SubObjectCodeDaoOjb extends PlatformAwareDaoBaseOjb implements SubO
      * @param financialObjectCode - part of composite key
      * @param financialSubObjectCode - part of composite key
      * @return SubObjectCode
-     * @see SubObjectCodeDao#getByPrimaryId(Integer, String, String, String, String)
+     * @see SubObjectCodeDao
      */
     public SubObjCd getByPrimaryId(Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String financialObjectCode, String financialSubObjectCode) {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,140 +15,62 @@
  */
 package org.kuali.module.gl.service.impl.orgreversion;
 
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.service.ParameterEvaluator;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.Constants;
+import org.kuali.core.rule.KualiParameterRule;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.chart.bo.OrganizationReversionCategory;
 import org.kuali.module.gl.service.OrganizationReversionCategoryLogic;
 
-/**
- * A generic implementation of OrganizationReversionCategoryLogic; it is completely based off of parameters
- * @see org.kuali.module.gl.service.OrganizationReversionCategoryLogic
- */
 public class GenericOrganizationReversionCategory implements OrganizationReversionCategoryLogic {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GenericOrganizationReversionCategory.class);
+
+    private KualiConfigurationService kualiConfigurationService;
 
     private String categoryCode;
     private String categoryName;
     private boolean isExpense;
 
-    private ParameterService parameterService;
-    private ParameterEvaluator consolidationRules;
-    private ParameterEvaluator levelRules;
-    private ParameterEvaluator objectTypeRules;
-    private ParameterEvaluator objectSubTypeRules;
-
-    /**
-     * Constructs a GenericOrganizationReversionCategory
-     */
     public GenericOrganizationReversionCategory() {
     }
 
-    /**
-     * Sets the category code for this logic, so that the parameters for this category can be looked
-     * up in the database 
-     *
-     * @param code the code for this logic
-     */
     public void setCategoryCode(String code) {
         categoryCode = code;
-        isExpense = parameterService.getParameterEvaluator(OrganizationReversionCategory.class, KFSConstants.OrgReversion.IS_EXPENSE_PARAM, categoryCode).evaluationSucceeds();
+        isExpense = kualiConfigurationService.getApplicationParameterIndicator(Constants.ORG_REVERSION, categoryCode + Constants.EXPENSE_FLAG);
     }
 
-    /**
-     * Sets the name of this category
-     * 
-     * @param name the name to set
-     */
     public void setCategoryName(String name) {
         categoryName = name;
     }
 
-    /**
-     * Determines if balances with a given object code should be processed by this logic or not
-     * 
-     * @param oc the object code to qualify
-     * @return true if balances with the given object code should be processed by this logic, false if otherwise
-     * @see org.kuali.module.gl.service.OrganizationReversionCategoryLogic#containsObjectCode(org.kuali.module.chart.bo.ObjectCode)
-     */
     public boolean containsObjectCode(ObjectCode oc) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("containsObjectCode() started");
-        }
+        LOG.debug("containsObjectCode() started");
 
         String cons = oc.getFinancialObjectLevel().getFinancialConsolidationObjectCode();
         String level = oc.getFinancialObjectLevelCode();
-        String objType = oc.getFinancialObjectTypeCode();
-        String objSubType = oc.getFinancialObjectSubType().getCode();
+        String objTyp = oc.getFinancialObjectTypeCode();
+        String objSubTyp = oc.getFinancialObjectSubType().getCode();
 
-        if (consolidationRules == null) {
-            consolidationRules = parameterService.getParameterEvaluator(OrganizationReversionCategory.class, KFSConstants.OrgReversion.VALID_PREFIX + KFSConstants.OrgReversion.OBJECT_CONSOL_PARAM_SUFFIX, KFSConstants.OrgReversion.INVALID_PREFIX + KFSConstants.OrgReversion.OBJECT_CONSOL_PARAM_SUFFIX, categoryCode, cons);
-        }
-        else {
-            consolidationRules.setConstrainedValue(cons);
-        }
+        KualiParameterRule consolidationRules = kualiConfigurationService.getApplicationParameterRule(Constants.ORG_REVERSION, categoryCode + Constants.CONSOLIDATION);
+        KualiParameterRule levelRules = kualiConfigurationService.getApplicationParameterRule(Constants.ORG_REVERSION, categoryCode + Constants.LEVEL);
+        KualiParameterRule objectTypeRules = kualiConfigurationService.getApplicationParameterRule(Constants.ORG_REVERSION, categoryCode + Constants.OBJECT_TYPE);
+        KualiParameterRule objectSubTypeRules = kualiConfigurationService.getApplicationParameterRule(Constants.ORG_REVERSION, categoryCode + Constants.OBJECT_SUB_TYPE);
 
-        if (levelRules == null) {
-            levelRules = parameterService.getParameterEvaluator(OrganizationReversionCategory.class, KFSConstants.OrgReversion.VALID_PREFIX + KFSConstants.OrgReversion.OBJECT_LEVEL_PARAM_SUFFIX, KFSConstants.OrgReversion.INVALID_PREFIX + KFSConstants.OrgReversion.OBJECT_LEVEL_PARAM_SUFFIX, categoryCode, level);
-        }
-        else {
-            levelRules.setConstrainedValue(level);
-        }
-
-        if (objectTypeRules == null) {
-            objectTypeRules = parameterService.getParameterEvaluator(OrganizationReversionCategory.class, KFSConstants.OrgReversion.VALID_PREFIX + KFSConstants.OrgReversion.OBJECT_TYPE_PARAM_SUFFIX, KFSConstants.OrgReversion.INVALID_PREFIX + KFSConstants.OrgReversion.OBJECT_TYPE_PARAM_SUFFIX, categoryCode, objType);
-        }
-        else {
-            objectTypeRules.setConstrainedValue(objType);
-        }
-
-        if (objectSubTypeRules == null) {
-            objectSubTypeRules = parameterService.getParameterEvaluator(OrganizationReversionCategory.class, KFSConstants.OrgReversion.VALID_PREFIX + KFSConstants.OrgReversion.OBJECT_SUB_TYPE_PARAM_SUFFIX, KFSConstants.OrgReversion.INVALID_PREFIX + KFSConstants.OrgReversion.OBJECT_SUB_TYPE_PARAM_SUFFIX, categoryCode, objSubType);
-        }
-        else {
-            objectSubTypeRules.setConstrainedValue(objSubType);
-        }
-
-        boolean consolidationRulesPassed = consolidationRules.evaluationSucceeds();
-        boolean levelRulesPassed = levelRules.evaluationSucceeds();
-        boolean objectTypeRulesPassed = objectTypeRules.evaluationSucceeds();
-        boolean objectSubTypeRulesPassed = objectSubTypeRules.evaluationSucceeds();
-
-        return consolidationRulesPassed && levelRulesPassed && objectTypeRulesPassed && objectSubTypeRulesPassed;
+        return consolidationRules.succeedsRule(cons) && levelRules.succeedsRule(level) && objectTypeRules.succeedsRule(objTyp) && objectSubTypeRules.succeedsRule(objSubTyp);
     }
 
-    /**
-     * Returns the name of the category
-     * 
-     * @return the name of the category
-     * @see org.kuali.module.gl.service.OrganizationReversionCategoryLogic#getName()
-     */
     public String getName() {
         return categoryName;
     }
 
-    /**
-     * Returns the code of this category
-     * 
-     * @return the code of this category
-     * @see org.kuali.module.gl.service.OrganizationReversionCategoryLogic#getCode()
-     */
     public String getCode() {
         return categoryCode;
     }
 
-    /**
-     * Returns whether this category represents an expense or not
-     * 
-     * @return true if this category represents expenses, false if otherwise
-     * @see org.kuali.module.gl.service.OrganizationReversionCategoryLogic#isExpense()
-     */
     public boolean isExpense() {
         return isExpense;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 }

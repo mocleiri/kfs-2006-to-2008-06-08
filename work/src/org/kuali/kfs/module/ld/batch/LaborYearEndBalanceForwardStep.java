@@ -15,36 +15,28 @@
  */
 package org.kuali.module.labor.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.labor.service.LaborYearEndBalanceForwardService;
 
 /**
- * Labor End balance forward Batch Step.
+ * This class...
  */
 public class LaborYearEndBalanceForwardStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborYearEndBalanceForwardStep.class);
-    private LaborYearEndBalanceForwardService laborYearEndBalanceForwardService;
+
+    private LaborYearEndBalanceForwardService laborYearEndBalanceForwardService; 
 
     /**
-     * Executes the method that forwards the balance
-     * 
-     * @param jobName
-     * @param jobRunDate
-     * @return boolean
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
+     * @see org.kuali.kfs.batch.Step#execute()
      */
-    public boolean execute(String jobName, Date jobRunDate) {
+    public boolean execute(String jobName) {
         laborYearEndBalanceForwardService.forwardBalance();
         return true;
     }
 
     /**
      * Sets the laborYearEndBalanceForwardService attribute value.
-     * 
      * @param laborYearEndBalanceForwardService The laborYearEndBalanceForwardService to set.
-     * @return none
      */
     public void setLaborYearEndBalanceForwardService(LaborYearEndBalanceForwardService laborYearEndBalanceForwardService) {
         this.laborYearEndBalanceForwardService = laborYearEndBalanceForwardService;
