@@ -17,7 +17,6 @@ package org.kuali.module.labor.web.struts.action;
 
 import static org.kuali.kfs.KFSKeyConstants.ERROR_ZERO_AMOUNT;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,23 +41,24 @@ import org.kuali.core.service.KualiRuleService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.Timer;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
 import org.kuali.core.web.struts.form.KualiForm;
+import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rule.event.AddAccountingLineEvent;
-import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
+import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.kfs.web.ui.AccountingLineDecorator;
 import org.kuali.module.gl.GLConstants;
 import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
-import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;
-import org.kuali.module.labor.bo.ExpenseTransferTargetAccountingLine;
 import org.kuali.module.labor.bo.LaborAccountingLineOverride;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.document.LaborExpenseTransferDocumentBase;
@@ -67,12 +67,30 @@ import org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
-
 /**
- * Base Struts Action class for Benefit Expense Transfer Document.
+ * This class handles UI actions for all shared methods of expense transfer documents.
  */
-public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentActionBase {
+public class ExpenseTransferDocumentActionBase extends LaborDocumentActionBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ExpenseTransferDocumentActionBase.class);
+
+   @Override
+   public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+       ActionForward result=null;
+       try {
+           result = super.execute(mapping, form, request, response);
+       } catch (Exception e) {  
+           throw e;
+       } finally {
+           KualiAccountingDocumentFormBase transForm = (KualiAccountingDocumentFormBase) form;
+
+           // handle changes to accountingLines
+           if (transForm.hasDocumentId()) {
+               AccountingDocument financialDocument = (AccountingDocument) transForm.getDocument();
+               setNotRevertableAccountingLines(financialDocument, transForm, KFSConstants.SOURCE);
+           }                                 
+       }
+        return result;
+    }
 
     /**
      * Takes care of storing the action form in the user session and forwarding to the balance inquiry lookup action.
@@ -147,7 +165,7 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
         parameters.put(KFSConstants.DOC_FORM_KEY, GlobalVariables.getUserSession().addObject(form));
         parameters.put(KFSConstants.BUSINESS_OBJECT_CLASS_ATTRIBUTE, boClassName);
         parameters.put(KFSConstants.RETURN_LOCATION_PARAMETER, basePath + mapping.getPath() + ".do");
-        //parameters.put(GLConstants.LookupableBeanKeys.SEGMENTED_LOOKUP_FLAG_NAME, Boolean.TRUE.toString());
+        parameters.put(GLConstants.LookupableBeanKeys.SEGMENTED_LOOKUP_FLAG_NAME, Boolean.TRUE.toString());
 
         String lookupUrl = UrlFactory.parameterizeUrl(basePath + "/" + actionPath, parameters);
 
@@ -166,8 +184,6 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
      */
     @Override
     public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        super.refresh(mapping, form, request, response);
-
         ExpenseTransferDocumentFormBase expenseTransferDocumentForm = (ExpenseTransferDocumentFormBase) form;
 
         Collection<PersistableBusinessObject> rawValues = null;
@@ -216,7 +232,7 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
                                 KualiDecimal lineAmount = (new KualiDecimal(selectedPeriodAmount)).divide(new KualiDecimal(100));
 
                                 // Notice that user tried to import an accounting line which has Zero amount
-                                if (KualiDecimal.ZERO.compareTo(lineAmount) == 0) {
+                                if (KFSConstants.ZERO.compareTo(lineAmount) == 0) {
                                     GlobalVariables.getErrorMap().putError(KFSPropertyConstants.SOURCE_ACCOUNTING_LINES, ERROR_ZERO_AMOUNT, "an accounting line");
                                 }
                                 else {
@@ -248,7 +264,7 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
     }
 
     /**
-     * Overload the method in order to have balance importing section be populated with the last search criteria
+     * overload the method in order to have balance importing section be populated with the last search critera
      * 
      * @see org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase#loadDocument(org.kuali.core.web.struts.form.KualiDocumentFormBase)
      */
@@ -260,14 +276,8 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
     }
 
     /**
-     * This method copies all accounting lines from financial document form if they pass validation rules
-     * 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
+     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#copyAllAccountingLines(ActionMapping, ActionForm,
+     *      HttpServletRequest, HttpServletResponse)
      */
     public ActionForward copyAllAccountingLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
@@ -289,6 +299,32 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
     }
 
     /**
+     * Delete all accounting lines
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return mapping
+     * @throws Exception
+     */
+    public ActionForward deleteAllAccountingLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
+        boolean success = false;
+
+        List sourceAccountingLines = financialDocumentForm.getFinancialDocument().getSourceAccountingLines();
+        if (sourceAccountingLines != null) {
+            success = sourceAccountingLines.removeAll(sourceAccountingLines);
+        }
+
+        List targetAccountingLines = financialDocumentForm.getFinancialDocument().getTargetAccountingLines();
+        if (success && targetAccountingLines != null) {
+            success = targetAccountingLines.removeAll(targetAccountingLines);
+        }
+        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+    }
+
+    /**
      * Delete all source accounting lines
      * 
      * @param mapping
@@ -300,8 +336,11 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
      */
     public ActionForward deleteAllSourceAccountingLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
-        financialDocumentForm.getFinancialDocument().setSourceAccountingLines(new ArrayList());
-
+        boolean success = false;
+        List sourceAccountingLines = financialDocumentForm.getFinancialDocument().getSourceAccountingLines();
+        if (sourceAccountingLines != null) {
+            success = sourceAccountingLines.removeAll(sourceAccountingLines);
+        }
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
@@ -317,15 +356,16 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
      */
     public ActionForward deleteAllTargetAccountingLines(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
-        financialDocumentForm.getFinancialDocument().setTargetAccountingLines(new ArrayList());
-
+        boolean success = false;
+        List targetAccountingLines = financialDocumentForm.getFinancialDocument().getTargetAccountingLines();
+        if (targetAccountingLines != null) {
+            success = targetAccountingLines.removeAll(targetAccountingLines);
+        }
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
-
-
+    }     
+    
+    
     /**
-     * Copy a single accounting line
-     * 
      * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#copyAccountingLine(ActionMapping, ActionForm,
      *      HttpServletRequest, HttpServletResponse)
      */
@@ -335,7 +375,7 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
 
         int index = getSelectedLine(request);
 
-        ExpenseTransferAccountingLine line = (ExpenseTransferAccountingLine) financialDocumentForm.getFinancialDocument().getTargetAccountingLineClass().newInstance();
+        ExpenseTransferAccountingLine line = (ExpenseTransferAccountingLine) financialDocumentForm.getFinancialDocument().getTargetAccountingLineClass().newInstance();        
         copyAccountingLine((ExpenseTransferAccountingLine) financialDocument.getSourceAccountingLine(index), line);
 
         boolean rulePassed = runRule(new AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
@@ -347,12 +387,11 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
             insertAccountingLine(false, financialDocumentForm, line);
         }
         processAccountingLineOverrides(line);
-
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
     /**
-     * Reset the lookup fields in the given expense transfer form with the given ledger balance
+     * reset the looup fields in the given expense transfer form with the given ledger balance
      * 
      * @param expenseTransferDocumentForm the given expense transfer form
      * @param the given ledger balance
@@ -416,8 +455,6 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
     }
 
     /**
-     * Processes accounting line overrides for output to JSP
-     * 
      * @see org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase#processAccountingLineOverrides(java.util.List)
      */
     @Override
@@ -431,10 +468,8 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
             }
         }
     }
-
+    
     /**
-     * Clear all overrides that are not needed.
-     * 
      * @see org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase#clearOverridesThatBecameUnneeded(org.kuali.kfs.bo.AccountingLine)
      */
     @Override
@@ -447,11 +482,6 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
         formLine.setOverrideCode(currentOverride.mask(currentlyNeeded).getCode());
     }
 
-    /**
-     * For given accounting line, set the corresponding override code
-     * 
-     * @param line accounting line
-     */
     private void updateAccountOverrideCode(ExpenseTransferAccountingLine line) {
         AccountingLineOverride override = LaborAccountingLineOverride.determineNeededOverrides(line);
         line.setOverrideCode(override.getCode());
@@ -461,7 +491,6 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
      * Executes for the given event. This is more of a convenience method.
      * 
      * @param event to run the rules for
-     * @return true if rule passes
      */
     private boolean runRule(KualiDocumentEventBase event) {
         // check any business rules
@@ -487,78 +516,41 @@ public class ExpenseTransferDocumentActionBase extends KualiAccountingDocumentAc
         return SpringContext.getBean(SegmentedLookupResultsService.class);
     }
 
+    //**************************************************
 
     /**
-     * This method will revert a TargetAccountingLine by overwriting its current values with the values in the corresponding
-     * baseline accountingLine. This assumes that the user presses the revert button for a specific accounting line on the document
-     * and that the document is represented by a FinancialDocumentFormBase.
-     * 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return ActionForward
-     * @throws Exception
-     */
-    @Override
-    public ActionForward revertTargetLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
-        LaborExpenseTransferDocumentBase financialDocument = (LaborExpenseTransferDocumentBase) financialDocumentForm.getDocument();
-
-        int revertIndex = getSelectedLine(request);
-
-        ExpenseTransferTargetAccountingLine originalLine = (ExpenseTransferTargetAccountingLine) financialDocumentForm.getBaselineTargetAccountingLine(revertIndex);
-        ExpenseTransferTargetAccountingLine brokenLine = (ExpenseTransferTargetAccountingLine) financialDocument.getTargetAccountingLine(revertIndex);
-
-        SpringContext.getBean(PersistenceService.class).refreshAllNonUpdatingReferences(originalLine);
-
-        // *always* revert (so that if someone manually changes the line to its original values, then hits revert, they won't get an
-        // error message saying "couldn't revert")
-        brokenLine.copyFrom(originalLine);
-        if (super.isSalesTaxRequired((AccountingDocument) financialDocumentForm.getDocument(), brokenLine)) {
-            brokenLine.setSalesTaxRequired(true);
+     * This method was created with the purpose of hidding the reverse button from the SET and BET
+     * @param transDoc
+     * @param transForm
+     * @param lineSet
+     */    
+    private void setNotRevertableAccountingLines(AccountingDocument transDoc, KualiAccountingDocumentFormBase transForm, String lineSet) {        
+        // figure out which set of lines we're looking at
+        List formLines;
+        List<AccountingLineDecorator> decorators;
+        boolean source;
+        if (lineSet.equals(KFSConstants.SOURCE)) {
+            formLines = transDoc.getSourceAccountingLines();
+            decorators = transForm.getSourceLineDecorators(formLines.size());
+            source = true;
         }
-        financialDocumentForm.getTargetLineDecorator(revertIndex).setRevertible(false);
-        GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_REVERT_SUCCESSFUL);
+        else {
+            formLines = transDoc.getTargetAccountingLines();
+            decorators = transForm.getTargetLineDecorators(formLines.size());
+            source = false;
+        }
 
-        // no business rules to check, no events to create
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        // find and process corresponding form and baselines
+        int index = 0;
+        for (Iterator i = formLines.iterator(); i.hasNext(); index++) {
+            if (index == decorators.size()){
+                break;
+            }
+            AccountingLineDecorator decorator = decorators.get(index);
+
+            // always update decorator
+            decorator.setRevertible(false);
+        }
     }
 
-
-    /**
-     * This method will revert a SourceAccountingLine by overwriting its current values with the values in the corresponding
-     * baseline accountingLine. This assumes that the user presses the revert button for a specific accounting line on the document
-     * and that the document is represented by a FinancialDocumentFormBase.
-     * 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return ActionForward
-     * @throws Exception
-     */
-    @Override
-    public ActionForward revertSourceLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ExpenseTransferDocumentFormBase financialDocumentForm = (ExpenseTransferDocumentFormBase) form;
-        LaborExpenseTransferDocumentBase financialDocument = (LaborExpenseTransferDocumentBase) financialDocumentForm.getDocument();
-        int revertIndex = getSelectedLine(request);
-
-        ExpenseTransferSourceAccountingLine originalLine = (ExpenseTransferSourceAccountingLine) financialDocumentForm.getBaselineSourceAccountingLine(revertIndex);
-        ExpenseTransferSourceAccountingLine brokenLine = (ExpenseTransferSourceAccountingLine) financialDocument.getSourceAccountingLine(revertIndex);
-
-        SpringContext.getBean(PersistenceService.class).refreshAllNonUpdatingReferences(originalLine);
-
-        // *always* revert (so that if someone manually changes the line to its original values, then hits revert, they won't get an
-        // error message saying "couldn't revert")
-        brokenLine.copyFrom(originalLine);
-        if (super.isSalesTaxRequired((AccountingDocument) financialDocumentForm.getDocument(), brokenLine)) {
-            brokenLine.setSalesTaxRequired(true);
-        }
-        financialDocumentForm.getSourceLineDecorator(revertIndex).setRevertible(false);
-        GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_REVERT_SUCCESSFUL);
-
-        // no business rules to check, no events to create
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
 }
