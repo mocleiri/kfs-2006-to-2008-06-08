@@ -23,6 +23,10 @@ CREATE TABLE CM_CPTLAST_DOC_T(
         CPTLAST_CRT_DT                 DATE,        
         CPTL_AST_IN_SRVC_DT            DATE,
         CPTL_AST_DEPR_DT               DATE,
+        AST_REP_UNVL_ID                VARCHAR2(10),
+        ORG_OWNER_COA_CD               VARCHAR2(2),
+        ORG_OWNER_ACCT_NBR             VARCHAR2(7),
+        CG_AGENCY_NBR                  VARCHAR2(5),
      CONSTRAINT CM_CPTLAST_DOC_TP1 PRIMARY KEY (
         FDOC_NBR),
      CONSTRAINT CM_CPTLAST_DOC_TC0 UNIQUE (OBJ_ID)
