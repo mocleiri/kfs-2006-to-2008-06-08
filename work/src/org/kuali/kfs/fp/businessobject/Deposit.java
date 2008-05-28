@@ -29,7 +29,7 @@ import org.kuali.module.financial.document.CashReceiptDocument;
 
 
 /**
- * This class represents a deposit used in the cash management document
+ * 
  */
 public class Deposit extends PersistableBusinessObjectBase {
     // primary key
@@ -43,7 +43,7 @@ public class Deposit extends PersistableBusinessObjectBase {
     // related objects and foreign keys
     private String depositBankCode;
     private String depositBankAccountNumber;
-
+    
     private CurrencyDetail depositedCurrency;
     private CoinDetail depositedCoin;
 
@@ -266,8 +266,6 @@ public class Deposit extends PersistableBusinessObjectBase {
 
 
     /**
-     * Returns true if this deposit has the same document deposit line number as the passed in Deposit
-     * 
      * @param other
      * @return true if the given Deposit has primary key values equal to this Deposit
      */
@@ -282,25 +280,24 @@ public class Deposit extends PersistableBusinessObjectBase {
 
         return keysEqual;
     }
-
+    
     /**
-     * This method returns whether the given deposit contains the parameter cash receipt document
      * 
+     * This method returns whether the given deposit contains the parameter cash receipt document
      * @param crDoc the cash receipt document to look for
      * @return true if the cash receipt document is part of the deposit, false if otherwise
      */
     public boolean containsCashReceipt(CashReceiptDocument crDoc) {
         boolean result = false;
         for (int i = 0; i < this.getDepositCashReceiptControl().size() && !result; i++) {
-            DepositCashReceiptControl crCtrl = (DepositCashReceiptControl) getDepositCashReceiptControl().get(i);
+            DepositCashReceiptControl crCtrl = (DepositCashReceiptControl)getDepositCashReceiptControl().get(i);
             result = crCtrl.getFinancialDocumentCashReceiptNumber().equals(crDoc.getDocumentNumber());
         }
         return result;
     }
-
+    
     /**
-     * Gets the depositedCoin attribute.
-     * 
+     * Gets the depositedCoin attribute. 
      * @return Returns the depositedCoin.
      */
     public CoinDetail getDepositedCoin() {
@@ -310,7 +307,6 @@ public class Deposit extends PersistableBusinessObjectBase {
 
     /**
      * Sets the depositedCoin attribute value.
-     * 
      * @param depositedCoin The depositedCoin to set.
      */
     public void setDepositedCoin(CoinDetail depositedCoin) {
@@ -319,8 +315,7 @@ public class Deposit extends PersistableBusinessObjectBase {
 
 
     /**
-     * Gets the depositedCurrency attribute.
-     * 
+     * Gets the depositedCurrency attribute. 
      * @return Returns the depositedCurrency.
      */
     public CurrencyDetail getDepositedCurrency() {
@@ -330,7 +325,6 @@ public class Deposit extends PersistableBusinessObjectBase {
 
     /**
      * Sets the depositedCurrency attribute value.
-     * 
      * @param depositedCurrency The depositedCurrency to set.
      */
     public void setDepositedCurrency(CurrencyDetail depositedCurrency) {

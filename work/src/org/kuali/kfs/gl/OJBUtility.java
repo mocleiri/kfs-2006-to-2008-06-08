@@ -27,16 +27,17 @@ import org.apache.commons.beanutils.WrapDynaClass;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.Query;
 import org.kuali.core.dao.LookupDao;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
  * This class provides a set of utilities that can handle common tasks related to business objects.
  */
 public class OJBUtility {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OJBUtility.class);
+    private static BeanFactory beanFactory = SpringServiceLocator.getInstance().getApplicationContext();
 
     public static final String LOOKUP_DAO = "lookupDao";
 
@@ -97,7 +98,7 @@ public class OJBUtility {
     }
 
     /**
-     * Limit the size of the result set from the given query operation
+     * limit the size of the result set from the given query operation
      * 
      * @param query the given query operation
      */
@@ -138,7 +139,7 @@ public class OJBUtility {
      * @return the size of a result set from the given search criteria
      */
     public static Long getResultSizeFromMap(Map fieldValues, Object businessObject) {
-        LookupDao lookupDao = SpringContext.getBean(LookupDao.class);
+        LookupDao lookupDao = (LookupDao) beanFactory.getBean(LOOKUP_DAO);
         return lookupDao.findCountByMap(businessObject, fieldValues);
     }
 
@@ -149,7 +150,8 @@ public class OJBUtility {
      */
     public static Integer getResultLimit() {
         // get the result limit number from configuration
-        String limitConfig = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.NERVOUS_SYSTEM_LOOKUP.class, KFSConstants.LOOKUP_RESULTS_LIMIT_URL_KEY);
+        KualiConfigurationService kualiConfigurationService = SpringServiceLocator.getKualiConfigurationService();
+        String limitConfig = kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.LOOKUP_RESULTS_LIMIT_URL_KEY);
 
         Integer limit = Integer.MAX_VALUE;
         if (limitConfig != null) {
@@ -162,7 +164,7 @@ public class OJBUtility {
      * This method build OJB criteria from the given property value and name
      */
     public static boolean createCriteria(Object businessObject, String propertyValue, String propertyName, Criteria criteria) {
-        LookupDao lookupDao = SpringContext.getBean(LookupDao.class);
+        LookupDao lookupDao = (LookupDao) beanFactory.getBean(LOOKUP_DAO);
         return lookupDao.createCriteria(businessObject, propertyValue, propertyName, criteria);
     }
 }

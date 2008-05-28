@@ -1,5 +1,7 @@
 <%--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/financial/DisbursementVoucher.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,11 +15,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
+<%@ taglib tagdir="/WEB-INF/tags/dv" prefix="dv"%>
 
 <kul:documentPage showDocumentInfo="true"
 	htmlFormAction="financialDisbursementVoucher"
-	documentTypeName="DisbursementVoucherDocument"
+	documentTypeName="KualiDisbursementVoucherDocument"
 	renderMultipart="true" showTabButtons="true">
 
 	<dv:dvPrintCoverSheet />
@@ -84,10 +87,8 @@
 	<dv:dvNonEmployeeTravel />
 
 	<dv:dvPrePaidTravel />
-  
-  <dv:dvPDPStatus />
 
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 
 	<kul:notes />
 

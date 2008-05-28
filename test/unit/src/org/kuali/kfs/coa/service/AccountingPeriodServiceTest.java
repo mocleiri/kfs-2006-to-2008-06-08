@@ -15,30 +15,33 @@
  */
 package org.kuali.module.chart.service;
 
+import static org.kuali.kfs.util.SpringServiceLocator.getBusinessObjectService;
+import static org.kuali.kfs.util.SpringServiceLocator.getDateTimeService;
+import static org.kuali.kfs.util.SpringServiceLocator.getAccountingPeriodService;
+
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.bo.AccountingPeriod;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the AccountingPeriod business object from a persistence standpoint using the BusinessObjectService.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class AccountingPeriodServiceTest extends KualiTestBase {
 
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountingPeriodServiceTest.class);
 
     public void testPersistence() {
-        Date date = SpringContext.getBean(DateTimeService.class).getCurrentSqlDate();
-        AccountingPeriod period = SpringContext.getBean(AccountingPeriodService.class).getByDate(date);
+        Date date = getDateTimeService().getCurrentSqlDate();
+        AccountingPeriod period = getAccountingPeriodService().getByDate(date);
         assertNotNull(period);
 
         Integer year = period.getUniversityFiscalYear();
@@ -48,13 +51,13 @@ public class AccountingPeriodServiceTest extends KualiTestBase {
         period.setUniversityFiscalPeriodCode(universityFiscalPeriodCode);
         period.setUniversityFiscalPeriodName(periodName);
 
-        SpringContext.getBean(BusinessObjectService.class).save(period);
+        getBusinessObjectService().save(period);
 
         AccountingPeriod result = getAccountingPeriodByPrimaryKeys(year, universityFiscalPeriodCode);
         assertNotNull(result);
         assertEquals(periodName, result.getUniversityFiscalPeriodName());
 
-        SpringContext.getBean(BusinessObjectService.class).delete(result);
+        getBusinessObjectService().delete(result);
 
         result = getAccountingPeriodByPrimaryKeys(year, universityFiscalPeriodCode);
         assertNull(result);
@@ -64,18 +67,18 @@ public class AccountingPeriodServiceTest extends KualiTestBase {
         Map<String, Object> h = new HashMap<String, Object>();
         h.put("universityFiscalYear", fiscalYear);
         h.put("universityFiscalPeriodCode", fiscalPeriodcode);
-        AccountingPeriod ap2 = (AccountingPeriod) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(AccountingPeriod.class, h);
+        AccountingPeriod ap2 = (AccountingPeriod) getBusinessObjectService().findByPrimaryKey(AccountingPeriod.class, h);
         return ap2;
     }
 
     public void testGetAllAccountingPeriods() {
-        List<AccountingPeriod> accountingPeriods = (List<AccountingPeriod>) SpringContext.getBean(AccountingPeriodService.class).getAllAccountingPeriods();
+        List<AccountingPeriod> accountingPeriods = (List<AccountingPeriod>) getAccountingPeriodService().getAllAccountingPeriods();
         assertNotNull(accountingPeriods);
         assertFalse(accountingPeriods.isEmpty());
     }
 
     public void testGetOpenAccountingPeriods() {
-        List<AccountingPeriod> accountingPeriods = (List<AccountingPeriod>) SpringContext.getBean(AccountingPeriodService.class).getOpenAccountingPeriods();
+        List<AccountingPeriod> accountingPeriods = (List<AccountingPeriod>) getAccountingPeriodService().getOpenAccountingPeriods();
         LOG.info("Number of OpenAccountingPeriods found: " + accountingPeriods.size());
 
         assertNotNull(accountingPeriods);

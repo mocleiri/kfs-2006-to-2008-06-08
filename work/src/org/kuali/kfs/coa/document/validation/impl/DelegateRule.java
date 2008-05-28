@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.rules;
 
@@ -19,26 +26,25 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.kuali.core.bo.DocumentType;
-import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.Constants;
+import org.kuali.KeyConstants;
+import org.kuali.core.bo.user.KualiUser;
+import org.kuali.core.document.DocumentType;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.Delegate;
 
 /**
- * Validates content of a <code>{@link AccountDelegate}</code> maintenance document upon triggering of a approve, save, or route
- * event.
+ * This class...
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class DelegateRule extends MaintenanceDocumentRuleBase {
 
@@ -49,23 +55,18 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
 
     /**
      * Constructs a DelegateRule.java.
+     * 
      */
     public DelegateRule() {
         super();
     }
 
     /**
-     * This runs specific rules that are called when a document is saved:
-     * <ul>
-     * <li>{@link DelegateRule#checkSimpleRules()}</li>
-     * <li>{@link DelegateRule#checkOnlyOnePrimaryRoute(MaintenanceDocument)}</li>
-     * <li>{@link DelegateRule#checkDelegateUserRules(MaintenanceDocument)}</li>
-     * </ul>
+     * This method should be overridden to provide custom rules for processing document saving
      * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     * @return doesn't fail on save, even if sub-rules fail
+     * @param document
+     * @return boolean
      */
-    @Override
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
 
         LOG.info("Entering processCustomSaveDocumentBusinessRules()");
@@ -84,15 +85,11 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This runs specific rules that are called when a document is routed:
-     * <ul>
-     * <li>{@link DelegateRule#checkSimpleRules()}</li>
-     * <li>{@link DelegateRule#checkOnlyOnePrimaryRoute(MaintenanceDocument)}</li>
-     * <li>{@link DelegateRule#checkDelegateUserRules(MaintenanceDocument)}</li>
-     * </ul>
      * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     * @return fails if sub-rules fail
+     * This method should be overridden to provide custom rules for processing document routing
+     * 
+     * @param document
+     * @return boolean
      */
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
 
@@ -114,14 +111,10 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This runs specific rules that are called when a document is approved:
-     * <ul>
-     * <li>{@link DelegateRule#checkSimpleRules()}</li>
-     * <li>{@link DelegateRule#checkOnlyOnePrimaryRoute(MaintenanceDocument)}</li>
-     * <li>{@link DelegateRule#checkDelegateUserRules(MaintenanceDocument)}</li>
-     * </ul>
+     * This method should be overridden to provide custom rules for processing document approval.
      * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
+     * @param document
+     * @return booelan
      */
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
 
@@ -142,11 +135,15 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method sets the convenience objects like newAccount and oldAccount, so you have short and easy handles to the new and
-     * old objects contained in the maintenance document. It also calls the BusinessObjectBase.refresh(), which will attempt to load
-     * all sub-objects from the DB by their primary keys, if available.
+     * old objects contained in the maintenance document.
+     * 
+     * It also calls the BusinessObjectBase.refresh(), which will attempt to load all sub-objects from the DB by their primary keys,
+     * if available.
      * 
      * @param document - the maintenanceDocument being evaluated
+     * 
      */
     protected void setupConvenienceObjects(MaintenanceDocument document) {
 
@@ -158,46 +155,32 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
     }
 
 
-    /**
-     * This checks to see if
-     * <ul>
-     * <li>the delegate start date is valid and they are active</li>
-     * <li>from amount is >= 0</li>
-     * <li>to amount cannot be empty when from amount is filled out</li>
-     * <li>to amount is >= from amount</li>
-     * <li>account cannot be closed</li>
-     * </ul>
-     * 
-     * @return
-     */
     protected boolean checkSimpleRules() {
 
         boolean success = true;
-        boolean newActive;
         KualiDecimal fromAmount = newDelegate.getFinDocApprovalFromThisAmt();
         KualiDecimal toAmount = newDelegate.getFinDocApprovalToThisAmount();
-        newActive = newDelegate.isAccountDelegateActiveIndicator();
 
-        // start date must be greater than or equal to today if active
-        if ((ObjectUtils.isNotNull(newDelegate.getAccountDelegateStartDate())) && newActive) {
+        // start date must be greater than or equal to today
+        if (ObjectUtils.isNotNull(newDelegate.getAccountDelegateStartDate())) {
             Timestamp today = getDateTimeService().getCurrentTimestamp();
             today.setTime(DateUtils.truncate(today, Calendar.DAY_OF_MONTH).getTime());
             if (newDelegate.getAccountDelegateStartDate().before(today)) {
-                putFieldError("accountDelegateStartDate", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_STARTDATE_IN_PAST);
+                putFieldError("accountDelegateStartDate", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_STARTDATE_IN_PAST);
                 success &= false;
             }
         }
 
         // FROM amount must be >= 0 (may not be negative)
         if (ObjectUtils.isNotNull(fromAmount)) {
-            if (fromAmount.isLessThan(KualiDecimal.ZERO)) {
-                putFieldError("finDocApprovalFromThisAmt", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_FROM_AMOUNT_NONNEGATIVE);
+            if (fromAmount.isLessThan(new KualiDecimal(0))) {
+                putFieldError("finDocApprovalFromThisAmt", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_FROM_AMOUNT_NONNEGATIVE);
                 success &= false;
             }
         }
 
         if (ObjectUtils.isNotNull(fromAmount) && ObjectUtils.isNull(toAmount)) {
-            putFieldError("finDocApprovalToThisAmount", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
+            putFieldError("finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
             success &= false;
         }
 
@@ -206,26 +189,25 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
 
             if (ObjectUtils.isNull(fromAmount)) {
                 // case if FROM amount is null then TO amount must be zero
-                if (!toAmount.equals(KualiDecimal.ZERO)) {
-                    putFieldError("finDocApprovalToThisAmount", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
+                if (!toAmount.equals(new KualiDecimal(0))) {
+                    putFieldError("finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
                     success &= false;
                 }
             }
             else {
                 // case if FROM amount is non-null and positive, disallow TO amount being less
-                // if to amount is zero it is considered infinite (fromAmount -> infinity)
-                if (toAmount.isLessThan(fromAmount) && !toAmount.equals(KualiDecimal.ZERO)) {
-                    putFieldError("finDocApprovalToThisAmount", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
+                if (toAmount.isLessThan(fromAmount)) {
+                    putFieldError("finDocApprovalToThisAmount", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_TO_AMOUNT_MORE_THAN_FROM_OR_ZERO);
                     success &= false;
                 }
             }
         }
-
+        
         // the account that has been chosen cannot be closed
         Account account = newDelegate.getAccount();
-        if (ObjectUtils.isNotNull(account)) {
+        if(ObjectUtils.isNotNull(account)) {
             if (account.isAccountClosedIndicator()) {
-                putFieldError("accountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_ACCT_NOT_CLOSED);
+                putFieldError("accountNumber", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_ACCT_NOT_CLOSED);
                 success &= false;
             }
         }
@@ -233,12 +215,8 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    /**
-     * This checks to see if there is already a record for the primary route
-     * 
-     * @param document
-     * @return false if there is a record
-     */
+
+    // checks to see if there is already a record
     protected boolean checkOnlyOnePrimaryRoute(MaintenanceDocument document) {
 
         boolean success = true;
@@ -259,15 +237,15 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         if (!newActive) {
             return success;
         }
-
+    
         // exit if document group corresponding to document type = "EX"
         documentType = newDelegate.getDocumentType();
-        if (ObjectUtils.isNotNull(documentType)) {
+        if(ObjectUtils.isNotNull(documentType)) {
             if ((documentType.getFinancialDocumentGroupCode()).equals("EX")) {
                 return success;
             }
         }
-
+        
         // if its a new document, we are only interested if they have chosen this one
         // to be a primary route
         if (document.isNew()) {
@@ -290,34 +268,113 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
             return success;
         }
 
-        // if a primary already exists for a document type (including ALL), throw an error. However, current business rules
-        // should allow a primary for other document types, even if a primary for ALL already exists.
+        // okay, so if we get here, then the new value wants to be a primary,
+        // and if an edit, its changed from the old value. in other words,
+        // we need to check it.
 
-        Map whereMap = new HashMap();
+        /*
+         * check if there is an ALL primary, if so then the rule fails, we're done
+         * 
+         * check if this doctype is already defined with a primary, if so then the rule fails, we're done
+         * 
+         */
+
+        // **********************************************
+        // TESTING FOR AN ALL PRIMARY IN THE DB
+        //
+        // WHERE = an ALL primary route for this account/chart
+        Map whereMap;
+        whereMap = new HashMap();
         whereMap.put("chartOfAccountsCode", newDelegate.getChartOfAccountsCode());
         whereMap.put("accountNumber", newDelegate.getAccountNumber());
+        whereMap.put("financialDocumentTypeCode", "ALL");
         whereMap.put("accountsDelegatePrmrtIndicator", Boolean.valueOf(true));
-        whereMap.put("financialDocumentTypeCode", newDelegate.getFinancialDocumentTypeCode());
         whereMap.put("accountDelegateActiveIndicator", Boolean.valueOf(true));
 
         // find all the matching records
-        Collection primaryRoutes = getBoService().findMatching(Delegate.class, whereMap);
+        Collection primaryRoutes;
+        primaryRoutes = getBoService().findMatching(Delegate.class, whereMap);
 
         // if there is at least one result, then this business rule is tripped
         if (primaryRoutes.size() > 0) {
-            putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_PRIMARY_ROUTE_ALREADY_EXISTS_FOR_DOCTYPE);
+            putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_PRIMARY_ROUTE_ALL_TYPES_ALREADY_EXISTS);
             success &= false;
+            return success; // we're done, no sense in continuing
         }
+        //
+        // **********************************************
 
+        // **********************************************
+        // TESTING FOR ANY PRIMARY IF THIS IS ALL
+        //
+        if ("ALL".equalsIgnoreCase(newDelegate.getFinancialDocumentTypeCode())) {
+
+            // WHERE = any primary route for this account/chart
+            whereMap = new HashMap();
+            whereMap.put("chartOfAccountsCode", newDelegate.getChartOfAccountsCode());
+            whereMap.put("accountNumber", newDelegate.getAccountNumber());
+            whereMap.put("accountsDelegatePrmrtIndicator", Boolean.valueOf(true));
+            whereMap.put("accountDelegateActiveIndicator", Boolean.valueOf(true));
+
+            // find all the matching records
+            primaryRoutes = getBoService().findMatching(Delegate.class, whereMap);
+
+            // if there is at least one result, then this business rule is tripped
+            if (primaryRoutes.size() > 0) {
+
+                // get the docType of the primary route that is blocking this
+                String blockingDocType = "";
+                blockingDocumentExists = false;
+                for (Iterator iter = primaryRoutes.iterator(); iter.hasNext();) {
+                    Delegate delegate = (Delegate) iter.next();
+                 
+                    // don't consider as blocking if document group corresponding to document type = "EX"
+                    documentType = delegate.getDocumentType();
+                    if(ObjectUtils.isNotNull(documentType)) {
+                        if (!(documentType.getFinancialDocumentGroupCode()).equals("EX")) {
+                            blockingDocumentExists = true;
+                            blockingDocType = delegate.getFinancialDocumentTypeCode();
+                        }
+                    }                   
+                }
+
+                // add the error if blocking document found
+                
+                if (blockingDocumentExists == true){
+                    putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_PRIMARY_ROUTE_ALREADY_EXISTS_FOR_NEW_ALL, blockingDocType);
+                    success &= false;
+                    return success; // we're done, no sense in continuing
+                }
+            }
+        }
+        //
+        // **********************************************
+
+        // **********************************************
+        // TESTING FOR SAME DOCTYPE PRIMARY IF THIS IS NOT ALL
+        else {
+
+            // WHERE = primary route for this docType for this account/chart
+            whereMap = new HashMap();
+            whereMap.put("chartOfAccountsCode", newDelegate.getChartOfAccountsCode());
+            whereMap.put("accountNumber", newDelegate.getAccountNumber());
+            whereMap.put("accountsDelegatePrmrtIndicator", Boolean.valueOf(true));
+            whereMap.put("financialDocumentTypeCode", newDelegate.getFinancialDocumentTypeCode());
+            whereMap.put("accountDelegateActiveIndicator", Boolean.valueOf(true));
+
+            // find all the matching records
+            primaryRoutes = getBoService().findMatching(Delegate.class, whereMap);
+
+            // if there is at least one result, then this business rule is tripped
+            if (primaryRoutes.size() > 0) {
+                putGlobalError(KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_PRIMARY_ROUTE_ALREADY_EXISTS_FOR_DOCTYPE);
+                success &= false;
+                return success; // we're done, no sense in continuing
+            }
+        }
         return success;
     }
 
-    /**
-     * This checks to see if the user is valid and active for this module
-     * 
-     * @param document
-     * @return false if this user is not valid or active for being a delegate
-     */
     protected boolean checkDelegateUserRules(MaintenanceDocument document) {
 
         boolean success = true;
@@ -326,26 +383,21 @@ public class DelegateRule extends MaintenanceDocumentRuleBase {
         if (ObjectUtils.isNull(newDelegate.getAccountDelegate())) {
             return success;
         }
-        UniversalUser user = newDelegate.getAccountDelegate();
-
-        // user must be an active kuali user
-        if (!user.isActiveForModule(ChartUser.MODULE_ID)) {
-            success = false;
-            putFieldError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE_KUALI_USER);
-        }
+        KualiUser user = newDelegate.getAccountDelegate();
 
         // user must be of the allowable statuses (A - Active)
-        if (!SpringContext.getBean(ParameterService.class).getParameterEvaluator(Delegate.class, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_STATUSES, user.getEmployeeStatusCode()).evaluationSucceeds()) {
-            success = false;
-            putFieldError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE);
+        if (apcRuleFails(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.DELEGATE_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
+            success &= false;
+            putFieldError("accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_ACTIVE);
         }
 
         // user must be of the allowable types (P - Professional)
-        if (!SpringContext.getBean(ParameterService.class).getParameterEvaluator(Delegate.class, KFSConstants.ChartApcParms.DELEGATE_USER_EMP_TYPES, user.getEmployeeTypeCode()).evaluationSucceeds()) {
-            success = false;
-            putFieldError("accountDelegate.personUserIdentifier", KFSKeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_PROFESSIONAL);
+        if (apcRuleFails(Constants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, Constants.ChartApcParms.DELEGATE_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
+            success &= false;
+            putFieldError("accountDelegate.personUserIdentifier", KeyConstants.ERROR_DOCUMENT_ACCTDELEGATEMAINT_USER_NOT_PROFESSIONAL);
         }
 
         return success;
     }
+
 }

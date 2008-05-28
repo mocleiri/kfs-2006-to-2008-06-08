@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,26 @@
 package org.kuali.module.gl.service.impl;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Iterator;
 
+import org.kuali.Constants;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
+import org.kuali.module.gl.service.GeneralLedgerPendingEntryService;
 import org.kuali.module.gl.service.NightlyOutService;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.gl.service.OriginEntryService;
 import org.kuali.module.gl.service.ReportService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class implements the nightly out batch job.
+ * 
+ * 
  */
-@Transactional
 public class NightlyOutServiceImpl implements NightlyOutService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(NightlyOutServiceImpl.class);
 
@@ -45,23 +46,19 @@ public class NightlyOutServiceImpl implements NightlyOutService {
     private ReportService reportService;
 
     /**
-     * Constructs a NightlyOutServiceImpl instance
+     * Constructs a NightlyOutServiceImpl.java.
+     * 
      */
     public NightlyOutServiceImpl() {
     }
 
-    /**
-     * Deletes all the pending general ledger entries that have now been copied to origin entries
-     * @see org.kuali.module.gl.service.NightlyOutService#deleteCopiedPendingLedgerEntries()
-     */
     public void deleteCopiedPendingLedgerEntries() {
         LOG.debug("deleteCopiedPendingLedgerEntries() started");
 
-        generalLedgerPendingEntryService.deleteByFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+        generalLedgerPendingEntryService.deleteByFinancialDocumentApprovedCode(Constants.DV_PAYMENT_REASON_NONEMPLOYEE_HONORARIUM);
     }
 
     /**
-     * Copies the approved pending ledger entries to orign entry table and generates a report
      * @see org.kuali.module.gl.service.NightlyOutService#copyApprovedPendingLedgerEntries()
      */
     public void copyApprovedPendingLedgerEntries() {
@@ -81,24 +78,21 @@ public class NightlyOutServiceImpl implements NightlyOutService {
             saveAsOriginEntry(pendingEntry, group);
 
             // update the pending entry to indicate it has been copied
-            pendingEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.PROCESSED);
+            pendingEntry.setFinancialDocumentApprovedCode("X");
             pendingEntry.setTransactionDate(today);
             generalLedgerPendingEntryService.save(pendingEntry);
         }
 
         // Print reports
-        reportService.generatePendingEntryReport(today, group);
+        reportService.generatePendingEntryReport(today,group);
         reportService.generatePendingEntryLedgerSummaryReport(today, group);
     }
 
-    /**
-     * Saves pending ledger entry as origin entry
-     * 
-     * @param pendingEntry the pending entry to save as an origin entry
-     * @param group the group to save the new origin entry into
+    /*
+     * save pending ledger entry as origin entry
      */
     private void saveAsOriginEntry(GeneralLedgerPendingEntry pendingEntry, OriginEntryGroup group) {
-        OriginEntryFull originEntry = new OriginEntryFull(pendingEntry);
+        OriginEntry originEntry = new OriginEntry(pendingEntry);
         originEntry.setGroup(group);
 
         originEntryService.createEntry(originEntry, group);

@@ -23,18 +23,17 @@ import static org.kuali.test.fixtures.UserNameFixture.RORENFRO;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.rule.event.RouteDocumentEvent;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.KualiRuleService;
 import org.kuali.core.service.TransactionalDocumentDictionaryService;
 import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.document.AccountingDocumentTestUtils;
+import org.kuali.module.purap.bo.PurchaseOrderView;
 import org.kuali.module.purap.bo.PurchasingItem;
 import org.kuali.module.purap.fixtures.RequisitionDocumentFixture;
-import org.kuali.module.purap.fixtures.RequisitionDocumentWithCommodityCodeFixture;
 import org.kuali.module.purap.fixtures.RequisitionItemFixture;
+import org.kuali.module.purap.service.PurapService;
 import org.kuali.test.ConfigureContext;
 import org.kuali.test.DocumentTestUtils;
 import org.kuali.test.fixtures.UserNameFixture;
@@ -145,35 +144,8 @@ public class RequisitionDocumentTest extends KualiTestBase {
         AccountingDocumentTestUtils.testSaveDocument(altAPORequisition, SpringContext.getBean(DocumentService.class));
     }
 
-    @ConfigureContext(session = KHUNTLEY, shouldCommitTransactions = true)
-    public final void testRouteDocumentToFinalWithBasicActiveCommodityCode() throws Exception {
-        requisitionDocument = RequisitionDocumentWithCommodityCodeFixture.REQ_VALID_ACTIVE_COMMODITY_CODE.createRequisitionDocument();
-        final String docId = requisitionDocument.getDocumentNumber();
-        AccountingDocumentTestUtils.routeDocument(requisitionDocument, SpringContext.getBean(DocumentService.class));
-        WorkflowTestUtils.waitForNodeChange(requisitionDocument.getDocumentHeader().getWorkflowDocument(), ACCOUNT_REVIEW);
-
-        // the document should now be routed to VPUTMAN as Fiscal Officer
-        changeCurrentUser(RORENFRO);
-        requisitionDocument = (RequisitionDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
-        assertTrue("At incorrect node.", WorkflowTestUtils.isAtNode(requisitionDocument, ACCOUNT_REVIEW));
-        assertTrue("Document should be enroute.", requisitionDocument.getDocumentHeader().getWorkflowDocument().stateIsEnroute());
-        assertTrue("RORENFRO should have an approve request.", requisitionDocument.getDocumentHeader().getWorkflowDocument().isApprovalRequested());
-        SpringContext.getBean(DocumentService.class).approveDocument(requisitionDocument, "Test approving as RORENFRO", null);
-
-        WorkflowTestUtils.waitForStatusChange(requisitionDocument.getDocumentHeader().getWorkflowDocument(), EdenConstants.ROUTE_HEADER_FINAL_CD);
-
-        changeCurrentUser(KHUNTLEY);
-        requisitionDocument = (RequisitionDocument) SpringContext.getBean(DocumentService.class).getByDocumentHeaderId(docId);
-        assertTrue("Document should now be final.", requisitionDocument.getDocumentHeader().getWorkflowDocument().stateIsFinal());
-    }
-    
     private RequisitionDocument buildSimpleDocument() throws Exception {
         return RequisitionDocumentFixture.REQ_ONLY_REQUIRED_FIELDS.createRequisitionDocument();
-    }
-    
-    public void testRouteBrokenDocument_ItemQuantityBased_NoQuantity() {
-        requisitionDocument = RequisitionDocumentFixture.REQ_INVALID_ITEM_QUANTITY_BASED_NO_QUANTITY.createRequisitionDocument();
-        assertFalse(SpringContext.getBean(KualiRuleService.class).applyRules(new RouteDocumentEvent(requisitionDocument)));
     }
 
     private UserNameFixture getInitialUserName() {

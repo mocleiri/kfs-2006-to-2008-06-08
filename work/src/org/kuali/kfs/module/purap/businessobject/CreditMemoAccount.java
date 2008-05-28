@@ -31,11 +31,6 @@ public class CreditMemoAccount extends PurApAccountingLineBase {
 
     }
 
-    /**
-     * Constructs a Credit Memo Account object from an existing PurAp Accounting Line object.
-     * 
-     * @param accountingLine the accounting line to copy from.
-     */
     public CreditMemoAccount(PurApAccountingLineBase accountingLine) {
         super();
 
@@ -50,14 +45,23 @@ public class CreditMemoAccount extends PurApAccountingLineBase {
         setAccountLinePercent(accountingLine.getAccountLinePercent());
     }
 
+    /**
+     * Gets the creditMemoItem attribute.
+     * 
+     * @return Returns the creditMemoItem
+     */
     public CreditMemoItem getCreditMemoItem() {
         return creditMemoItem;
     }
 
     /**
+     * Sets the creditMemoItem attribute.
+     * 
+     * @param creditMemoItem The creditMemoItem to set.
      * @deprecated
      */
     public void setCreditMemoItem(CreditMemoItem creditMemoItem) {
         this.creditMemoItem = creditMemoItem;
     }
+
 }

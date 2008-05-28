@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
- * Represents a ledger report
  * 
  */
 public class LedgerReport {
@@ -91,15 +90,7 @@ public class LedgerReport {
         this.generatePDFReport(ledgerEntryHolder, reportingDate, title, fileprefix, destinationDirectory);
     }
 
-    /**
-     * Generate the PDF report with the given information
-     * 
-     * @param ledgerEntryHolder the given holder of ledger entries
-     * @param reportingDate the reporting date
-     * @param title the report title
-     * @param fileprefix the prefix of the generated report file
-     * @param destinationDirectory the directory where the report is located
-     */
+    // generate the PDF report with the given information
     private void generatePDFReport(Object ledgerEntryHolder, Date reportingDate, String title, String fileprefix, String destinationDirectory) {
         Document document = new Document(PageSize.A4.rotate());
 
@@ -130,13 +121,8 @@ public class LedgerReport {
         }
     }
 
-    /**
-     * draw a PDF table populated with the data held by ledger entry holder
-     * 
-     * @param ledgerEntryHolder the given holder of ledger entries
-     * @return PdfTable PDF table containing ledger entry information
-     */
-    public PdfPTable drawPdfTable(Object ledgerEntryHolder) {
+    // draw a PDF table populated with the data held by ledger entry holder
+    private PdfPTable drawPdfTable(Object ledgerEntryHolder) {
         PdfPTable ledgerEntryTable = null;
         if (ledgerEntryHolder instanceof Collection) {
             ledgerEntryTable = this.buildPdfTable((Collection) ledgerEntryHolder);
@@ -147,11 +133,7 @@ public class LedgerReport {
         return ledgerEntryTable;
     }
 
-    /**
-     * Draw a PDF table from a collection
-     * @param entryCollection collection of ledger entries
-     * @return PdfTable PDF table containing information about the collection of entries
-     */
+    // draw a PDF table from a collection
     private PdfPTable buildPdfTable(Collection entryCollection) {
 
         if (entryCollection == null || entryCollection.size() <= 0) {
@@ -173,11 +155,7 @@ public class LedgerReport {
         return ledgerEntryTable;
     }
 
-    /**
-     * draw a PDF table from ledger entry holder
-     * @param ledgerEntryHolder the given holder of ledger entries
-     * @return PdfTable PDF table containing information about the ledget entry holder
-     */
+    // draw a PDF table from ledger entry holder
     private PdfPTable buildPdfTable(LedgerEntryHolder ledgerEntryHolder) {
         SortedMap ledgerEntries = new TreeMap(ledgerEntryHolder.getLedgerEntries());
         Collection entryCollection = ledgerEntries.values();
@@ -199,12 +177,12 @@ public class LedgerReport {
             LedgerEntry ledgerEntry = (LedgerEntry) reportIter.next();
 
             // add the subtotal rows
-            if (!ledgerEntry.getBalanceType().equals(tempBalanceType)) {
+            if (!ledgerEntry.balanceType.equals(tempBalanceType)) {
                 if (subtotalMap.containsKey(tempBalanceType)) {
                     LedgerEntry subtotal = (LedgerEntry) subtotalMap.get(tempBalanceType);
                     this.addRow(ledgerEntryTable, subtotal, totalFieldFont, true);
                 }
-                tempBalanceType = ledgerEntry.getBalanceType();
+                tempBalanceType = ledgerEntry.balanceType;
             }
             this.addRow(ledgerEntryTable, ledgerEntry, textFont, false);
 
@@ -219,10 +197,7 @@ public class LedgerReport {
         return ledgerEntryTable;
     }
 
-    /**
-     * Draw a table with an informative messge, instead of data
-     * @return PdfTable empty PDF table
-     */
+    // draw a table with an informative messge, instead of data
     private PdfPTable buildEmptyTable() {
         float[] tableWidths = { 100 };
 
@@ -234,12 +209,7 @@ public class LedgerReport {
         return ledgerEntryTable;
     }
 
-    /**
-     * Add a table header
-     * 
-     * @param ledgerEntryTable PDF table containing ledger entry information
-     * @param headerFont font for header
-     */
+    // add a table header
     private void addHeader(PdfPTable ledgerEntryTable, Font headerFont) {
 
         PdfPCell cell = new PdfPCell(new Phrase("BAL TYP", headerFont));
@@ -276,14 +246,7 @@ public class LedgerReport {
         ledgerEntryTable.addCell(cell);
     }
 
-    /**
-     * Add a row with the given ledger entry into PDF table
-     * 
-     * @param ledgerEntryTable PDF table containing ledger entry information
-     * @param ledgerEntry ledger entry
-     * @param textFont font for text
-     * @param isTotal if added row is total row or not
-     */
+    // add a row with the given ledger entry into PDF table
     private void addRow(PdfPTable ledgerEntryTable, LedgerEntry ledgerEntry, Font textFont, boolean isTotal) {
         PdfPCell cell = null;
         if (isTotal) {
@@ -295,55 +258,50 @@ public class LedgerReport {
             ledgerEntryTable.addCell(cell);
         }
         else {
-            cell = new PdfPCell(new Phrase(ledgerEntry.getBalanceType(), textFont));
+            cell = new PdfPCell(new Phrase(ledgerEntry.balanceType, textFont));
             ledgerEntryTable.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(ledgerEntry.getOriginCode(), textFont));
+            cell = new PdfPCell(new Phrase(ledgerEntry.originCode, textFont));
             ledgerEntryTable.addCell(cell);
 
-            String fiscalYear = (ledgerEntry.getFiscalYear() != null) ? ledgerEntry.getFiscalYear().toString() : "";
+            String fiscalYear = (ledgerEntry.fiscalYear != null) ? ledgerEntry.fiscalYear.toString() : "";
             cell = new PdfPCell(new Phrase(fiscalYear, textFont));
             ledgerEntryTable.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(ledgerEntry.getPeriod(), textFont));
+            cell = new PdfPCell(new Phrase(ledgerEntry.period, textFont));
             ledgerEntryTable.addCell(cell);
         }
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.getRecordCount())), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.recordCount)), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         ledgerEntryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(ledgerEntry.getDebitAmount()), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(ledgerEntry.debitAmount), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         ledgerEntryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.getDebitCount())), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.debitCount)), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         ledgerEntryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(ledgerEntry.getCreditAmount()), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(ledgerEntry.creditAmount), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         ledgerEntryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.getCreditCount())), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.creditCount)), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         ledgerEntryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(ledgerEntry.getNoDCAmount()), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(ledgerEntry.noDCAmount), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         ledgerEntryTable.addCell(cell);
 
-        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.getNoDCCount())), textFont));
+        cell = new PdfPCell(new Phrase(this.formatNumber(new Integer(ledgerEntry.noDCCount)), textFont));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         ledgerEntryTable.addCell(cell);
     }
 
-    /**
-     * Format the given number based on its type: Integer or BigDecimal
-     * 
-     * @param number Integer or BigDecimal to format
-     * @return String number in string format
-     */
+    // format the given number based on its type: Integer or BigDecimal
     private String formatNumber(Number number) {
         DecimalFormat decimalFormat = new DecimalFormat();
 
@@ -356,11 +314,7 @@ public class LedgerReport {
         return decimalFormat.format(number);
     }
 
-    /**
-     * Close the document and release the resource
-     * 
-     * @param document
-     */
+    // close the document and release the resource
     private void closeDocument(Document document) {
         try {
             if ((document != null) && document.isOpen()) {

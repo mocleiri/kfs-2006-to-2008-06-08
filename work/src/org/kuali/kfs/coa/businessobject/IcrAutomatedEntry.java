@@ -16,14 +16,13 @@
 
 package org.kuali.module.chart.bo;
 
-import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.util.KualiPercent;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
  * 
@@ -35,7 +34,7 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
      */
     public IcrAutomatedEntry() {
         // initialize the object fiscal year to the current fiscal year
-        universityFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        universityFiscalYear = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear();
     }
 
     private Integer universityFiscalYear;
@@ -43,7 +42,7 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     private String balanceTypeCode;
     private Integer awardIndrCostRcvyEntryNbr;
     private String transactionDebitIndicator;
-    private BigDecimal awardIndrCostRcvyRatePct;
+    private KualiPercent awardIndrCostRcvyRatePct;
     private String chartOfAccountsCode;
     private String accountNumber;
     private String subAccountNumber;
@@ -55,13 +54,19 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     private BalanceTyp financialBalanceTyp;
 
     /*
-     * Don't use reference objects because Chart, Account, Sub-Account, etc. contain special characters. RO 2/8/06 private Chart
-     * chartOfAccounts; private Account account; private SubAccount subAccount; private ObjectCode financialObject; private SubObjCd
-     * financialSubObject; private ObjectCode offsetBalanceSheetObjectCode;
+     * Don't use reference objects because Chart, Account, Sub-Account, etc. contain special characters. RO 2/8/06
+     * 
+     * private Chart chartOfAccounts; private Account account; private SubAccount subAccount; private ObjectCode financialObject;
+     * private SubObjCd financialSubObject; private ObjectCode offsetBalanceSheetObjectCode;
+     * 
      */
 
     /*
-     * public Account getAccount() { return account; } public void setAccount(Account account) { this.account = account; }
+     * public Account getAccount() { return account; }
+     * 
+     * 
+     * public void setAccount(Account account) { this.account = account; }
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -83,12 +88,12 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
 
-    public BigDecimal getAwardIndrCostRcvyRatePct() {
+    public KualiPercent getAwardIndrCostRcvyRatePct() {
         return awardIndrCostRcvyRatePct;
     }
 
 
-    public void setAwardIndrCostRcvyRatePct(BigDecimal awardIndrCostRcvyRatePct) {
+    public void setAwardIndrCostRcvyRatePct(KualiPercent awardIndrCostRcvyRatePct) {
         this.awardIndrCostRcvyRatePct = awardIndrCostRcvyRatePct;
     }
 
@@ -103,8 +108,11 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
     /*
-     * public Chart getChartOfAccounts() { return chartOfAccounts; } public void setChartOfAccounts(Chart chartOfAccounts) {
-     * this.chartOfAccounts = chartOfAccounts; }
+     * public Chart getChartOfAccounts() { return chartOfAccounts; }
+     * 
+     * 
+     * public void setChartOfAccounts(Chart chartOfAccounts) { this.chartOfAccounts = chartOfAccounts; }
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -137,8 +145,11 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
 
 
     /*
-     * public ObjectCode getFinancialObject() { return financialObject; } public void setFinancialObject(ObjectCode financialObject) {
-     * this.financialObject = financialObject; }
+     * public ObjectCode getFinancialObject() { return financialObject; }
+     * 
+     * 
+     * public void setFinancialObject(ObjectCode financialObject) { this.financialObject = financialObject; }
+     * 
      */
     public String getFinancialObjectCode() {
         return financialObjectCode;
@@ -150,8 +161,10 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
     /*
-     * public SubObjCd getFinancialSubObject() { return financialSubObject; } public void setFinancialSubObject(SubObjCd
-     * financialSubObject) { this.financialSubObject = financialSubObject; }
+     * public SubObjCd getFinancialSubObject() { return financialSubObject; }
+     * 
+     * 
+     * public void setFinancialSubObject(SubObjCd financialSubObject) { this.financialSubObject = financialSubObject; }
      */
 
     public String getFinancialSubObjectCode() {
@@ -164,9 +177,12 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
     /*
-     * public ObjectCode getOffsetBalanceSheetObjectCode() { return offsetBalanceSheetObjectCode; } public void
-     * setOffsetBalanceSheetObjectCode(ObjectCode offsetBalanceSheetObjectCode) { this.offsetBalanceSheetObjectCode =
+     * public ObjectCode getOffsetBalanceSheetObjectCode() { return offsetBalanceSheetObjectCode; }
+     * 
+     * 
+     * public void setOffsetBalanceSheetObjectCode(ObjectCode offsetBalanceSheetObjectCode) { this.offsetBalanceSheetObjectCode =
      * offsetBalanceSheetObjectCode; }
+     * 
      */
     public String getOffsetBalanceSheetObjectCodeNumber() {
         return offsetBalanceSheetObjectCodeNumber;
@@ -179,8 +195,10 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
 
 
     /*
-     * public SubAccount getSubAccount() { return subAccount; } public void setSubAccount(SubAccount subAccount) { this.subAccount =
-     * subAccount; }
+     * public SubAccount getSubAccount() { return subAccount; }
+     * 
+     * 
+     * public void setSubAccount(SubAccount subAccount) { this.subAccount = subAccount; }
      */
 
     public String getSubAccountNumber() {

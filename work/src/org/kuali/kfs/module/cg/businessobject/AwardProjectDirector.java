@@ -18,25 +18,22 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 
 /**
- * This class represents an association between an award and a project director. It's like a reference to the project director from
- * the award. This way an award can maintain a collection of these references instead of owning project directors directly.
+ * 
  */
-public class AwardProjectDirector extends PersistableBusinessObjectBase implements Primaryable, CGProjectDirector, Inactivateable {
+public class AwardProjectDirector extends PersistableBusinessObjectBase implements Primaryable, CGProjectDirector {
 
     private String personUniversalIdentifier;
     private Long proposalNumber;
     private boolean awardPrimaryProjectDirectorIndicator;
     private String awardProjectDirectorProjectTitle;
-    private boolean active = true;
 
     private ProjectDirector projectDirector;
 
     /**
-     * Default no-args constructor.
+     * Default constructor.
      */
     public AwardProjectDirector() {
         // Struts needs this instance to populate the secondary key, personUserIdentifier.
@@ -130,20 +127,6 @@ public class AwardProjectDirector extends PersistableBusinessObjectBase implemen
      */
     public boolean isPrimary() {
         return isAwardPrimaryProjectDirectorIndicator();
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#isActive()
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**

@@ -26,13 +26,7 @@ public class VendorConstants {
         public static final String WORKGROUP_VENDOR_CONTRACT = "VENDOR_CONTRACT_GROUP";
         public static final String WORKGROUP_TAXNBR_ACCESSIBLE = "TAXNBR_ACCESSIBLE_GROUP";
     }
-    
-    public static class VendorTypes {
-        public static final String DISBURSEMENT_VOUCHER = "DV";
-        public static final String PURCHASE_ORDER = "PO";
-    }
 
-    public static final String CHANGE_TO_PARENT_QUESTION_ID = "confirmVendorChangeToParent";
     public static final String ACKNOWLEDGE_NEW_VENDOR_INFO_TEXT = "document.vendor.question.acknolwege.text";
     public static final String ACKNOWLEDGE_NEW_VENDOR_INFO = "NewVendorAcknowledgeQuestion";
 
@@ -59,7 +53,6 @@ public class VendorConstants {
     }
 
     public static class AddressTypes {
-        public static final String QUOTE = "QT";
         public static final String PURCHASE_ORDER = "PO";
         public static final String REMIT = "RM";
     }

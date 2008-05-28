@@ -16,7 +16,7 @@
 package org.kuali.module.financial.service;
 
 import org.kuali.module.financial.bo.OffsetAccount;
-import org.kuali.module.gl.bo.FlexibleAccountUpdateable;
+import org.kuali.module.gl.bo.OriginEntryFull;
 
 /**
  * 
@@ -54,5 +54,5 @@ public interface FlexibleOffsetAccountService {
      * @param transaction The OriginEntryFull object to be updated.
      * @return True if transaction was changed, false if not.
      */
-    public boolean updateOffset(FlexibleAccountUpdateable transaction);
+    public boolean updateOffset(OriginEntryFull transaction);
 }

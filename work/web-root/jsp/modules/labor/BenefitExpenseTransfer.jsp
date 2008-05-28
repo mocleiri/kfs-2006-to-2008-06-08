@@ -26,22 +26,10 @@
 	<c:set var="disabled" value="true"/>
 </c:if>	
 
-<c:if test="${fn:length(KualiForm.document.targetAccountingLines)>0 || readOnly}">
-	<c:set var="targetDisabled" value="true"/>
-</c:if>
-
-<c:set var="documentTypeName" value="BenefitExpenseTransferDocument"/>
-<c:set var="htmlFormAction" value="laborBenefitExpenseTransfer"/>
-
-<c:if test="${isYearEnd}">
-  <c:set var="documentTypeName" value="YearEndBenefitExpenseTransferDocument"/>
-  <c:set var="htmlFormAction" value="laborYearEndBenefitExpenseTransfer"/>
-</c:if>
-
 <kul:documentPage showDocumentInfo="true"
-    documentTypeName="${documentTypeName}"
-    htmlFormAction="${htmlFormAction}" renderMultipart="true"
-    showTabButtons="true">
+	documentTypeName="KualiBenefitExpenseTransferDocument"
+	htmlFormAction="laborBenefitExpenseTransfer" renderMultipart="true"
+	showTabButtons="true">
 
 	<kul:hiddenDocumentFields />
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
@@ -132,7 +120,6 @@
 								boClassName="org.kuali.module.labor.bo.LedgerBalanceForBenefitExpenseTransfer"
 								actionPath="glBalanceInquiryLookup.do"
 								lookupParameters="universityFiscalYear:universityFiscalYear,accountNumber:accountNumber,subAccountNumber:subAccountNumber,chartOfAccountsCode:chartOfAccountsCode,emplid:emplid"
-								tabindexOverride="KualiForm.currentTabIndex"
 								hideReturnLink="false" image="buttonsmall_search.gif"/>
 					</c:if>
 				</td>				
@@ -178,10 +165,10 @@
 							src="${ConfigProperties.externalizable.images.url}tinybutton-copyall.gif"
 							title="Copy all Source Accounting Lines"
 							alt="Copy all Source Lines" styleClass="tinybutton" />
-	                   <html:image property="methodToCall.deleteAllSourceAccountingLines"
-					       src="${ConfigProperties.externalizable.images.url}tinybutton-deleteall.gif"
-						   title="Delete all Source Accounting Lines"
-					       alt="Delete all Source Lines" styleClass="tinybutton" />
+						<html:image property="methodToCall.deleteAllAccountingLines"
+							src="${ConfigProperties.externalizable.images.url}tinybutton-deleteall.gif"
+							title="Delete all Source Accounting Lines"
+							alt="Delete all Source Lines" styleClass="tinybutton" />
 					</c:if>							
 							
                     </jsp:attribute>
@@ -212,12 +199,6 @@
 					forcedReadOnlyFields="${KualiForm.forcedReadOnlyTargetFields}"
 					accountingLineAttributes="${accountingLineAttributesMap}">
 					<jsp:attribute name="importRowOverride">
-					    <c:if test="${targetDisabled}">
-                          <html:image property="methodToCall.deleteAllTargetAccountingLines"
-					        src="${ConfigProperties.externalizable.images.url}tinybutton-deleteall.gif"
-						    title="Delete all Target Accounting Lines"
-						    alt="Delete all Target Lines" styleClass="tinybutton" />
-						</c:if>    
 					</jsp:attribute>
 				</ld:importedAccountingLineGroup>
 			</table>

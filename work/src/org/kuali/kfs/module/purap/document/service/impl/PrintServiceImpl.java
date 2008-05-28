@@ -26,8 +26,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.service.ParameterService;
 import org.kuali.kfs.service.impl.ParameterConstants;
@@ -57,9 +55,7 @@ public class PrintServiceImpl implements PrintService {
     private ImageDao imageDao;
     private ParameterService parameterService;
     private BusinessObjectService businessObjectService;
-    private KualiConfigurationService kualiConfigurationService;
-    
-    
+
     public void setParameterService(ParameterService parameterService) {
         this.parameterService = parameterService;
     }
@@ -70,10 +66,6 @@ public class PrintServiceImpl implements PrintService {
 
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
-    }
-
-    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
-        this.kualiConfigurationService = kualiConfigurationService;
     }
 
     /**
@@ -136,8 +128,7 @@ public class PrintServiceImpl implements PrintService {
         // We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the
         // images as blank space
         if (useImage) {
-            imageTempLocation = kualiConfigurationService.getPropertyString(KFSConstants.TEMP_DIRECTORY_KEY) + "/";
-
+            imageTempLocation = parameterService.getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapConstants.IMAGE_TEMP_PATH);
             if (imageTempLocation == null) {
                 LOG.debug("generatePurchaseOrderQuotePdf() ended");
                 throw new PurapConfigurationException("Application Setting IMAGE_TEMP_PATH is missing");
@@ -197,8 +188,7 @@ public class PrintServiceImpl implements PrintService {
         // We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the
         // images as blank space
         if (useImage) {
-            imageTempLocation = kualiConfigurationService.getPropertyString(KFSConstants.TEMP_DIRECTORY_KEY) + "/";
-
+            imageTempLocation = parameterService.getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapConstants.IMAGE_TEMP_PATH);
             if (imageTempLocation == null) {
                 LOG.debug("generatePurchaseOrderQuotePdf() ended");
                 throw new PurapConfigurationException("Application Setting IMAGE_TEMP_PATH is missing");
@@ -334,8 +324,7 @@ public class PrintServiceImpl implements PrintService {
         // We'll get the imageTempLocation and the actual images only if the useImage is true. If useImage is false, we'll leave the
         // images as blank space
         if (useImage) {
-            imageTempLocation = kualiConfigurationService.getPropertyString(KFSConstants.TEMP_DIRECTORY_KEY) + "/";
-
+            imageTempLocation = parameterService.getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapConstants.IMAGE_TEMP_PATH);
             if (imageTempLocation == null) {
                 throw new PurapConfigurationException("IMAGE_TEMP_PATH is missing");
             }
