@@ -548,12 +548,18 @@
             size="19" type="DECIMAL"/>
         <column name="ACLN_PCT" scale="20" size="35" type="DECIMAL"/>
         <column name="DISENC_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="FDOC_POST_YR" size="4" type="DECIMAL"/>
+        <column name="FDOC_POST_PRD_CD" size="2" type="VARCHAR"/>
         <foreign-key foreignTable="AP_PMT_RQST_T" name="AP_PMT_RQST_SUM_ACCT_TR1">
             <reference foreign="PMT_RQST_ID" local="PMT_RQST_ID"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ACCOUNT_T" name="AP_PMT_RQST_SUM_ACCT_TR3">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
             <reference foreign="ACCOUNT_NBR" local="ACCOUNT_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="SH_ACCT_PERIOD_T" name="AP_PMT_RQST_SUM_ACCT_TR5">
+            <reference foreign="UNIV_FISCAL_YR" local="FDOC_POST_YR"/>
+            <reference foreign="UNIV_FISCAL_PRD_CD" local="FDOC_POST_PRD_CD"/>
         </foreign-key>
         <foreign-key foreignTable="CA_CHART_T" name="AP_PMT_RQST_SUM_ACCT_TR2">
             <reference foreign="FIN_COA_CD" local="FIN_COA_CD"/>
@@ -4030,6 +4036,22 @@
             <index-column name="PO_NUMBER"/>
         </index>
     </table>
+    <table name="CM_AST_PMT_DOC_T">
+        <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
+        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
+        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
+        <column name="CPTLAST_NBR" size="12" type="DECIMAL"/>
+        <column name="CPTLAST_PREV_TOT_CST_AMT" scale="2" size="19" type="DECIMAL"/>
+        <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_PMT_DOC_TR1">
+            <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_PMT_DOC_TR2">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
+        </foreign-key>
+        <unique name="CM_AST_PMT_DOC_TC0">
+            <unique-column name="OBJ_ID"/>
+        </unique>
+    </table>
     <table name="CM_AST_PMT_DTL_T">
         <column name="FDOC_NBR" primaryKey="true" size="14" type="VARCHAR"/>
         <column name="FDOC_LINE_NBR" primaryKey="true" size="7" type="DECIMAL"/>
@@ -4216,12 +4238,16 @@
         <column name="AST_OFFCMP_ST_CD" size="2" type="VARCHAR"/>
         <column name="AST_OFFCMP_ZIP_CD" size="9" type="VARCHAR"/>
         <column name="AST_INTRDPTSALE_CD" size="1" type="CHAR"/>
+        <column name="CPTLAST_NBR" size="12" type="DECIMAL"/>
         <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_AST_TRNFR_DOC_TR3">
             <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
             <reference foreign="ACCOUNT_NBR" local="ORG_OWNER_ACCT_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_TRNFR_DOC_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_AST_TRNFR_DOC_TR10">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ORG_T" name="CM_AST_TRNFR_DOC_TR5">
             <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
@@ -4316,11 +4342,22 @@
         <column name="CPTLAST_CRT_DT" type="DATE"/>
         <column name="CPTL_AST_IN_SRVC_DT" type="DATE"/>
         <column name="CPTL_AST_DEPR_DT" type="DATE"/>
+        <column name="AST_REP_UNVL_ID" size="10" type="VARCHAR"/>
+        <column name="ORG_OWNER_COA_CD" size="2" type="VARCHAR"/>
+        <column name="ORG_OWNER_ACCT_NBR" size="7" type="VARCHAR"/>
+        <column name="CG_AGENCY_NBR" size="5" type="VARCHAR"/>
         <foreign-key foreignTable="CM_AST_STATUS_T" name="CM_CPTLAST_DOC_TR4">
             <reference foreign="AST_INVN_STAT_CD" local="AST_INVN_STAT_CD"/>
         </foreign-key>
+        <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_CPTLAST_DOC_TR6">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
+            <reference foreign="ACCOUNT_NBR" local="ORG_OWNER_ACCT_NBR"/>
+        </foreign-key>
         <foreign-key foreignTable="CM_ASSET_TYPE_T" name="CM_CPTLAST_DOC_TR2">
             <reference foreign="CPTLAST_TYP_CD" local="CPTLAST_TYP_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CA_CHART_T" name="CM_CPTLAST_DOC_TR5">
+            <reference foreign="FIN_COA_CD" local="ORG_OWNER_COA_CD"/>
         </foreign-key>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_CPTLAST_DOC_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
@@ -4621,11 +4658,15 @@
         <column name="AST_BORWRSTRPH_NBR" size="13" type="VARCHAR"/>
         <column name="CPTLAST_INS_CD" size="4" type="DECIMAL"/>
         <column name="AST_SIG_CD" size="1" type="VARCHAR"/>
+        <column name="CPTLAST_NBR" size="12" type="DECIMAL"/>
         <foreign-key foreignTable="CA_CHART_T" name="CM_EQPLNRTRN_DOC_TR2">
             <reference foreign="FIN_COA_CD" local="AST_INS_COA_CD"/>
         </foreign-key>
         <foreign-key foreignTable="SH_COUNTRY_T" name="CM_EQPLNRTRN_DOC_TR7">
             <reference foreign="POSTAL_CNTRY_CD" local="AST_BORWR_CNTRY_CD"/>
+        </foreign-key>
+        <foreign-key foreignTable="CM_CPTLAST_T" name="CM_EQPLNRTRN_DOC_TR9">
+            <reference foreign="CPTLAST_NBR" local="CPTLAST_NBR"/>
         </foreign-key>
         <foreign-key foreignTable="CA_ACCOUNT_T" name="CM_EQPLNRTRN_DOC_TR3">
             <reference foreign="FIN_COA_CD" local="AST_INS_COA_CD"/>
@@ -15323,7 +15364,7 @@
     <sequence name="PO_STAT_HIST_ID" nextval="1002"/>
     <sequence name="PO_VNDR_QT_ID" nextval="1002"/>
     <sequence name="PO_VNDR_STPLTN_ID" nextval="1002"/>
-    <sequence name="PUR_RCVNG_ADDR_ID" nextval="1001"/>
+    <sequence name="PUR_RCVNG_ADDR_ID" nextval="1002"/>
     <sequence name="PUR_THRSHLD_ID" nextval="1000"/>
     <sequence name="RCVNG_COR_ITM_ID" nextval="1000"/>
     <sequence name="RCVNG_LN_ITM_ID" nextval="1000"/>
@@ -15343,9 +15384,9 @@
     <sequence name="SEQ_EN_EDOCLT" nextval="2066"/>
     <sequence name="SEQ_HELP_ENTRY" nextval="146"/>
     <sequence name="SEQ_OUT_BOX_ITM" nextval="10000"/>
-    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5931"/>
+    <sequence name="SEQ_RESPONSIBILITY_ID" nextval="5951"/>
     <sequence name="SEQ_ROUTE_QUEUE" nextval="2020"/>
-    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13336"/>
+    <sequence name="SEQ_ROUTE_TEMPLATE" nextval="13356"/>
     <sequence name="SEQ_RTE_NODE" nextval="563358429"/>
     <sequence name="SEQ_RTE_NODE_CFG_PARM" nextval="2620"/>
     <sequence name="SEQ_RULE_EXPR" nextval="2000"/>

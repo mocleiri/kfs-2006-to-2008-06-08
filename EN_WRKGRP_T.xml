@@ -597,7 +597,7 @@
     <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="Workgroup that has permissions for restricted effort certification functionality."
-        WRKGRP_ID="317340" WRKGRP_NM="KUALI_EFFORT_ADMIN" WRKGRP_VER_NBR="0"/>
+        WRKGRP_ID="317340" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS" WRKGRP_VER_NBR="0"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1" WRKGRP_DESC="Capital Assets maintainers"
         WRKGRP_ID="317480" WRKGRP_NM="KUALI_CAMS_MAINTAINERS"

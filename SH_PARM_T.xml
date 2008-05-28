@@ -4241,52 +4241,52 @@
         SH_PARM_DESC="Gives the year for the report definition record in which we are going to extract the effort data for."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="RUN_FISCAL_YEAR" SH_PARM_NMSPC_CD="KFS-ER"
-        SH_PARM_TXT="2008" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TXT="2008" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="0E601BB6-BA76-D37F-6125-6AB4CD404A0D"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Gives the report number for the report definition record in which we are going to extract the effort data for."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="RUN_REPORT_NUMBER" SH_PARM_NMSPC_CD="KFS-ER"
-        SH_PARM_TXT="A01" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TXT="A01" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="B2D60704-C676-A015-302D-2750285E9229"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicates if the EffortCertificationExtractStep should be ran."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="RUN_IND" SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="FC401BAE-1CE7-3469-0371-04EB2BDAF383"
         SH_PARM_CONS_CD="D"
         SH_PARM_DESC="Gives valid/invalid account type codes for the extract balance select."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="ACCOUNT_TYPE_CODE_BALANCE_SELECT"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="WS"
-        SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TYP_CD="VALID" VER_NBR="2" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="5D856E93-F21E-5E99-9995-2BD7179CF723"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicates if only employees with federal or federal pass through pay should be included in effort report."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="FEDERAL_ONLY_BALANCE_IND" SH_PARM_NMSPC_CD="KFS-ER"
-        SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="D41FB585-5D2D-D3C0-F1C3-AF8B4D900C01"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Gives the federal agency type code."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="FEDERAL_AGENCY_TYPE_CODE" SH_PARM_NMSPC_CD="KFS-ER"
-        SH_PARM_TXT="F" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TXT="F" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="B6EC59FE-7A3A-A435-AB06-24E2BFBA87B7"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Gives the cost share sub account type code."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="COST_SHARE_SUB_ACCOUNT_TYPE_CODE"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="CS"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="E9D21C9F-EC37-C094-D0F8-79282B6D2EC4"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Gives the expense sub account type code."
         SH_PARM_DTL_TYP_CD="EffortCertificationExtractStep"
         SH_PARM_NM="EXPENSE_SUB_ACCOUNT_TYPE_CODE"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="EX"
-        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="419403FF3183201AE043814FD881201A"
         SH_PARM_CONS_CD="A" SH_PARM_DESC="Indiana University"
         SH_PARM_DTL_TYP_CD="OrganizationOptions"
@@ -4341,13 +4341,13 @@
         SH_PARM_DESC="The fiscal year for report record to create"
         SH_PARM_DTL_TYP_CD="EffortCertificationCreateStep"
         SH_PARM_NM="CREATE_FISCAL_YEAR" SH_PARM_NMSPC_CD="KFS-ER"
-        SH_PARM_TXT="2008" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TXT="2008" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="4360EAC1A8231078E043814FD8811078"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="The report number for the report record to create"
         SH_PARM_DTL_TYP_CD="EffortCertificationCreateStep"
         SH_PARM_NM="CREATE_REPORT_NUMBER" SH_PARM_NMSPC_CD="KFS-ER"
-        SH_PARM_TXT="A01" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TXT="A01" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="43C6DFB9C0EC8126E043814FD8818126"
         SH_PARM_CONS_CD="A" SH_PARM_DESC="Cash Control help"
         SH_PARM_DTL_TYP_CD="CashControl" SH_PARM_NM="CTRL"
@@ -4690,27 +4690,27 @@
         SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="ORGANIZATION_ROUTING_EDITABLE_IND"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="49E4AC894C8E0EA7E0404F8189D82D28"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allows editing of the effort document at the award (CG) routing level."
         SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="AWARD_ROUTING_EDITABLE_IND"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="49E4AC894C8F0EA7E0404F8189D82D28"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Allows editing of the effort document at the recreate administrator routing level."
         SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="ADMINISTRATOR_ROUTING_EDITABLE_IND"
         SH_PARM_NMSPC_CD="KFS-ER" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
-        VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="49E4AC894C900EA7E0404F8189D82D28"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Indicator to route to only federal or fed pass through account project directors."
         SH_PARM_DTL_TYP_CD="EffortCertification"
         SH_PARM_NM="FEDERAL_ONLY_ROUTE_IND" SH_PARM_NMSPC_CD="KFS-ER"
-        SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="KUALI_EFFORT_ADMIN"/>
+        SH_PARM_TXT="N" SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="LD_EFFORT_ADMINISTRATORS"/>
     <SH_PARM_T OBJ_ID="49EC0A8FFFAC6717E0404F8189D81F90"
         SH_PARM_CONS_CD="A"
         SH_PARM_DESC="Cutoff time for auto approve payment requests and extract jobs, represented in 24 hour time format. If either of these jobs run between midnight and the CUTOFF_TIME, they consider the job run date - 1 to be the current day. If they run between the CUTOFF_TIME and midnight, they consider the job run date to be the current day. For example, if the CUTOFF_TIME is 5 AM and the auto approve job runs at 2 AM on March 27th , it will consider March 26th to be the current day when looking for payment requests that meet the auto approve criteria and have a pay date less than or equal to the current day. If this parameter is blank, the jobs will always consider their run date to be the current day."
@@ -4798,4 +4798,18 @@
         SH_PARM_NM="RECEIVING_CORRECTION" SH_PARM_NMSPC_CD="KFS-PA"
         SH_PARM_TXT="default.htm?turl=WordDocuments%2Freceivingcorrectiondocument.htm"
         SH_PARM_TYP_CD="HELP" VER_NBR="1" WRKGRP_NM="FP_OPERATIONS"/>
+    <SH_PARM_T OBJ_ID="4E38D982D10834BCE0404F8189D82DAB"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="Flag indicating whether to run business rules that validate the salary transfer does not impact an effort certification period."
+        SH_PARM_DTL_TYP_CD="SalaryExpenseTransfer"
+        SH_PARM_NM="VALIDATE_AGAINST_EFFORT_CERTIFICATION_IND"
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="Y" SH_PARM_TYP_CD="CONFG"
+        VER_NBR="1" WRKGRP_NM="FP_OPERATIONS"/>
+    <SH_PARM_T OBJ_ID="4E38D982D10934BCE0404F8189D82DAB"
+        SH_PARM_CONS_CD="A"
+        SH_PARM_DESC="The name of the workgroup that contains users who are administrators for the effort certification module and can override any effort validation errors."
+        SH_PARM_DTL_TYP_CD="SalaryExpenseTransfer"
+        SH_PARM_NM="EFFORT_CERTIFICATION_ADMIN_GROUP"
+        SH_PARM_NMSPC_CD="KFS-LD" SH_PARM_TXT="LD_EFFORT_ADMINISTRATORS"
+        SH_PARM_TYP_CD="CONFG" VER_NBR="1" WRKGRP_NM="FP_OPERATIONS"/>
 </dataset>
