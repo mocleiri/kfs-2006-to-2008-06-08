@@ -44,8 +44,6 @@ import org.kuali.module.purap.dao.NegativePaymentRequestApprovalLimitDao;
 import org.kuali.module.purap.dao.PaymentRequestDao;
 import org.kuali.module.purap.document.PaymentRequestDocument;
 import org.kuali.module.purap.service.PurapAccountingService;
-import org.kuali.module.purap.service.PurapRunDateService;
-import org.kuali.module.purap.util.VendorGroupingHelper;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -59,7 +57,6 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
     private DateTimeService dateTimeService;
     private PurapAccountingService purapAccountingService;
     private KualiConfigurationService kualiConfigurationService;
-    private PurapRunDateService purapRunDateService;
 
     /**
      * The special payments query should be this: select * from pur.ap_pmt_rqst_t where pmt_rqst_stat_cd in ('AUTO', 'DPTA') and
@@ -69,8 +66,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
      * 
      * @see org.kuali.module.purap.dao.PaymentRequestDao#getPaymentRequestsToExtract(boolean, java.lang.String)
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract(boolean onlySpecialPayments, String chartCode,
-            Date onOrBeforePaymentRequestPayDate) {
+    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract(boolean onlySpecialPayments, String chartCode) {
         LOG.debug("getPaymentRequestsToExtract() started");
 
         Criteria criteria = new Criteria();
@@ -98,7 +94,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
             c1.addOrCriteria(c4);
 
             a.addAndCriteria(c1);
-            a.addLessOrEqualThan("paymentRequestPayDate", onOrBeforePaymentRequestPayDate);
+            a.addLessOrEqualThan("paymentRequestPayDate", dateTimeService.getCurrentSqlDateMidnight());
 
             Criteria c5 = new Criteria();
             c5.addEqualTo("immediatePaymentIndicator", Boolean.TRUE);
@@ -108,7 +104,7 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
         }
         else {
             Criteria c1 = new Criteria();
-            c1.addLessOrEqualThan("paymentRequestPayDate", onOrBeforePaymentRequestPayDate);
+            c1.addLessOrEqualThan("paymentRequestPayDate", dateTimeService.getCurrentSqlDateMidnight());
 
             Criteria c2 = new Criteria();
             c2.addEqualTo("immediatePaymentIndicator", Boolean.TRUE);
@@ -176,40 +172,6 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
         return getPersistenceBrokerTemplate().getIteratorByQuery(new QueryByCriteria(PaymentRequestDocument.class, criteria));
     }
 
-    /**
-     * 
-     * @see org.kuali.module.purap.dao.PaymentRequestDao#getPaymentRequestsToExtractForVendor(java.lang.String, org.kuali.module.purap.util.VendorGroupingHelper)
-     */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractForVendor(String campusCode, VendorGroupingHelper vendor, Date onOrBeforePaymentRequestPayDate) {
-        LOG.debug("getPaymentRequestsToExtract() started");
-
-        List statuses = new ArrayList();
-        statuses.add(PurapConstants.PaymentRequestStatuses.AUTO_APPROVED);
-        statuses.add(PurapConstants.PaymentRequestStatuses.DEPARTMENT_APPROVED);
-
-        Criteria criteria = new Criteria();
-        criteria.addEqualTo("processingCampusCode", campusCode);
-        criteria.addIn("statusCode", statuses);
-        criteria.addIsNull("extractedDate");
-        criteria.addEqualTo("holdIndicator", Boolean.FALSE);
-
-        Criteria c1 = new Criteria();
-        c1.addLessOrEqualThan("paymentRequestPayDate", onOrBeforePaymentRequestPayDate);
-
-        Criteria c2 = new Criteria();
-        c2.addEqualTo("immediatePaymentIndicator", Boolean.TRUE);
-
-        c1.addOrCriteria(c2);
-        criteria.addAndCriteria(c1);
-
-        criteria.addEqualTo( "vendorHeaderGeneratedIdentifier", vendor.getVendorHeaderGeneratedIdentifier() );
-        criteria.addEqualTo( "vendorDetailAssignedIdentifier", vendor.getVendorDetailAssignedIdentifier() );
-        criteria.addEqualTo( "vendorCountryCode", vendor.getVendorCountry() );
-        criteria.addEqualTo( "vendorPostalCode", vendor.getVendorPostalCode() );
-
-        return getPersistenceBrokerTemplate().getIteratorByQuery(new QueryByCriteria(PaymentRequestDocument.class, criteria));
-    }
-    
     /**
      * @see org.kuali.module.purap.dao.PaymentRequestDao#getEligibleForAutoApproval()
      */
@@ -371,25 +333,6 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
         }
     }
 
-    
-    public List<String> getActivePaymentRequestDocumentNumbersForPurchaseOrder(Integer purchaseOrderId){
-        LOG.debug("getActivePaymentRequestsByVendorNumberInvoiceNumber() started");
-                
-        List<String> returnList = new ArrayList<String>();
-        Criteria criteria = new Criteria();
-        
-        criteria.addEqualTo(PurapPropertyConstants.PURCHASE_ORDER_IDENTIFIER, purchaseOrderId);
-        criteria.addIn(PurapPropertyConstants.STATUS_CODE, Arrays.asList(PaymentRequestStatuses.STATUSES_POTENTIALLY_ACTIVE));
-        QueryByCriteria qbc = new QueryByCriteria(PaymentRequestDocument.class, criteria);
-        
-        Iterator<Object[]> iter = getDocumentNumbersOfPaymentRequestByCriteria(criteria, false);
-        while (iter.hasNext()) {
-            Object[] cols = (Object[]) iter.next();
-            returnList.add((String) cols[0]);
-        }
-        return returnList;
-    }
-    
     public void setNegativePaymentRequestApprovalLimitDao(NegativePaymentRequestApprovalLimitDao negativePaymentRequestApprovalLimitDao) {
         this.negativePaymentRequestApprovalLimitDao = negativePaymentRequestApprovalLimitDao;
     }
@@ -406,35 +349,4 @@ public class PaymentRequestDaoOjb extends PlatformAwareDaoBaseOjb implements Pay
         this.kualiConfigurationService = kualiConfigurationService;
     }
 
-    public void setPurapRunDateService(PurapRunDateService purapRunDateService) {
-        this.purapRunDateService = purapRunDateService;
-    }
-    
-    public List<PaymentRequestDocument> getPaymentRequestInReceivingStatus() {
-        Criteria criteria = new Criteria();
-        criteria.addNotEqualTo("holdIndicator", "Y");
-        criteria.addNotEqualTo("paymentRequestedCancelIndicator", "Y");
-//        criteria.addEqualTo("status", PurapConstants.PaymentRequestStatuses.AWAITING_RECEIVING);
-
-        Query query = new QueryByCriteria(PaymentRequestDocument.class, criteria);
-        Iterator<PaymentRequestDocument> documents = (Iterator<PaymentRequestDocument>) getPersistenceBrokerTemplate().getIteratorByQuery(query);
-        ArrayList<String> documentHeaderIds = new ArrayList<String>();
-        while (documents.hasNext()) {
-            PaymentRequestDocument document = (PaymentRequestDocument) documents.next();
-            documentHeaderIds.add(document.getDocumentNumber());
-        }
-
-        if (documentHeaderIds.size() > 0) {
-            try {
-                return SpringContext.getBean(DocumentService.class).getDocumentsByListOfDocumentHeaderIds(PaymentRequestDocument.class, documentHeaderIds);
-            }
-            catch (WorkflowException e) {
-                throw new InfrastructureException("unable to retrieve paymentRequestDocuments", e);
-            }
-        }
-        else {
-            return null;
-        }
-
-    }
 }

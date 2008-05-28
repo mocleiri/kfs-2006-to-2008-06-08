@@ -38,7 +38,6 @@ import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.ParameterEvaluator;
 import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.util.Message;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.chart.service.OffsetDefinitionService;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
@@ -55,6 +54,7 @@ import org.kuali.module.gl.service.ScrubberValidator;
 import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 import org.kuali.module.gl.util.CachingLookup;
+import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.ObjectHelper;
 import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.labor.bo.LaborOriginEntry;
@@ -209,7 +209,7 @@ public class LaborScrubberProcess {
             groupsToScrub.add(group);
         }
         else {
-            groupsToScrub = laborOriginEntryService.getLaborBackupGroups(runDate);
+            groupsToScrub = originEntryGroupService.getLaborBackupGroups(runDate);
         }
         LOG.debug("scrubEntries() number of groups to scrub: " + groupsToScrub.size());
 
@@ -404,7 +404,7 @@ public class LaborScrubberProcess {
                 }
 
                 if (transactionErrors.size() > 0) {
-                    scrubberReportErrors.put(unscrubbedEntry, transactionErrors);
+                    scrubberReportErrors.put(scrubbedEntry, transactionErrors);
                 }
 
                 lastEntry = scrubbedEntry;
@@ -783,10 +783,7 @@ public class LaborScrubberProcess {
         Iterator<LaborOriginEntry> errorEntryIterator = laborOriginEntryService.getEntriesByGroup(errorGroup);
         while (errorEntryIterator.hasNext()) {
             LaborOriginEntry errorEntry = errorEntryIterator.next();
-            String documentTypeCode = errorEntry.getFinancialDocumentTypeCode();
-            if (documentTypeCode != null) {
-                documentTypeCode.trim();
-            }
+            String documentTypeCode = errorEntry.getFinancialDocumentTypeCode().trim();
 
             // Check each entry is from Benefit Expense Transfer or Salary Expense Transfer
             Collection<LaborOriginEntry> transactions = null;

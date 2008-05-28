@@ -16,9 +16,7 @@
 package org.kuali.module.kra.routingform.web.struts.action;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,95 +24,96 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.Constants;
 import org.kuali.core.authorization.AuthorizationConstants;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.document.authorization.DocumentActionFlags;
-import org.kuali.core.service.DocumentAuthorizationService;
-import org.kuali.core.service.KualiRuleService;
-import org.kuali.core.service.PersistenceService;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.kra.budget.web.struts.form.BudgetOverviewFormHelper;
 import org.kuali.module.kra.routingform.bo.RoutingFormBudget;
 import org.kuali.module.kra.routingform.bo.RoutingFormPersonnel;
-import org.kuali.module.kra.routingform.document.RoutingFormDocument;
 import org.kuali.module.kra.routingform.rules.event.RunRoutingFormAuditEvent;
 import org.kuali.module.kra.routingform.web.struts.form.RoutingForm;
-import org.kuali.module.kra.util.AuditCluster;
 import org.kuali.module.kra.web.struts.action.ResearchDocumentActionBase;
 
 public class RoutingFormAction extends ResearchDocumentActionBase {
-
+    
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = super.execute(mapping, form, request, response);
 
         RoutingForm routingForm = (RoutingForm) form;
 
         if (routingForm.isAuditActivated()) {
-            SpringContext.getBean(KualiRuleService.class).applyRules(new RunRoutingFormAuditEvent(routingForm.getRoutingFormDocument()));
+            SpringServiceLocator.getKualiRuleService().applyRules(new RunRoutingFormAuditEvent(routingForm.getRoutingFormDocument()));
         }
 
         return forward;
     }
-
+    
     public ActionForward mainpage(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
-
+        routingForm.setTabStates(new ArrayList());
+        
         return mapping.findForward("mainpage");
     }
-
+    
     public ActionForward personnel(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
-
+        
+        routingForm.setTabStates(new ArrayList());
+        
         // Make sure all the reference objects fields are filled. Since most pages don't care about them this is important.
-        for (RoutingFormPersonnel routingFormPerson : routingForm.getRoutingFormDocument().getRoutingFormPersonnel()) {
+        for(RoutingFormPersonnel routingFormPerson : routingForm.getRoutingFormDocument().getRoutingFormPersonnel()) {
             routingFormPerson.refresh();
         }
-
+        
         return mapping.findForward("personnel");
     }
-
+    
     public ActionForward researchrisks(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        
         RoutingForm routingForm = (RoutingForm) form;
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObject(routingForm.getRoutingFormDocument(), "routingFormResearchRisks");
-
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObject(routingForm.getRoutingFormDocument(), "routingFormResearchRisks");
+        routingForm.setTabStates(new ArrayList());
         return mapping.findForward("researchrisks");
     }
-
+    
     public ActionForward projectdetails(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        
         RoutingForm routingForm = (RoutingForm) form;
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObject(routingForm.getRoutingFormDocument(), "routingFormQuestions");
-
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObject(routingForm.getRoutingFormDocument(), "routingFormQuestions");
+        routingForm.setTabStates(new ArrayList());
         return mapping.findForward("projectdetails");
     }
-
+    
     public ActionForward agencyspecific(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         return mapping.findForward("agencyspecific");
     }
-
+    
     public ActionForward sf424(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         return mapping.findForward("sf424");
     }
 
     public ActionForward link(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        RoutingForm routingForm = (RoutingForm) form;
-
+        RoutingForm routingForm = (RoutingForm)form;
+        routingForm.setTabStates(new ArrayList());
+        
         if (routingForm.getRoutingFormDocument().getRoutingFormBudgetNumber() != null) {
             new RoutingFormLinkAction().setupBudgetPeriodData(routingForm);
             RoutingFormBudget routingFormBudget = routingForm.getRoutingFormDocument().getRoutingFormBudget();
 
             for (BudgetOverviewFormHelper budgetOverviewFormHelper : routingForm.getPeriodBudgetOverviewFormHelpers()) {
-                if (budgetOverviewFormHelper.getBudgetPeriod().getBudgetPeriodSequenceNumber().compareTo(routingFormBudget.getRoutingFormBudgetMinimumPeriodNumber()) >= 0 && budgetOverviewFormHelper.getBudgetPeriod().getBudgetPeriodSequenceNumber().compareTo(routingFormBudget.getRoutingFormBudgetMaximumPeriodNumber()) <= 0) {
+                if (budgetOverviewFormHelper.getBudgetPeriod().getBudgetPeriodSequenceNumber().compareTo(routingFormBudget.getRoutingFormBudgetMinimumPeriodNumber()) >= 0 &&
+                        budgetOverviewFormHelper.getBudgetPeriod().getBudgetPeriodSequenceNumber().compareTo(routingFormBudget.getRoutingFormBudgetMaximumPeriodNumber()) <= 0) {
                     budgetOverviewFormHelper.setSelected(true);
                 }
             }
         }
         return mapping.findForward("link");
+    }
+
+    public ActionForward notes(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RoutingForm routingForm = (RoutingForm) form;
+        routingForm.setTabStates(new ArrayList());
+        return mapping.findForward("notes");
     }
 
     public ActionForward output(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -137,71 +136,32 @@ public class RoutingFormAction extends ResearchDocumentActionBase {
         referenceObjects.add("adhocPersons");
         referenceObjects.add("adhocOrgs");
         referenceObjects.add("adhocWorkgroups");
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(routingForm.getRoutingFormDocument(), referenceObjects);
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(routingForm.getRoutingFormDocument(), referenceObjects);
         return mapping.findForward("permissions");
     }
 
     public ActionForward approvals(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        this.load(mapping, form, request, response);
         RoutingForm routingForm = (RoutingForm) form;
-
-        activateAndCountAuditErrors(routingForm);
-
-        routingForm.getRoutingFormDocument().populateDocumentForRouting();
-        routingForm.getRoutingFormDocument().getDocumentHeader().getWorkflowDocument().saveRoutingData();
-
+        List referenceObjects = new ArrayList();
+        referenceObjects.add("adhocPersons");
+        referenceObjects.add("adhocOrgs");
+        referenceObjects.add("adhocWorkgroups");
+        SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(routingForm.getRoutingFormDocument(), referenceObjects);
         return mapping.findForward("approvals");
     }
-
+    
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         RoutingForm routingForm = (RoutingForm) form;
 
         // Check if user has permission to save
-        routingForm.populateAuthorizationFields(SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer(routingForm.getRoutingFormDocument()));
+        routingForm.populateAuthorizationFields(SpringServiceLocator.getDocumentAuthorizationService().getDocumentAuthorizer(routingForm.getRoutingFormDocument()));
         if (!"TRUE".equals(routingForm.getEditingMode().get(AuthorizationConstants.EditMode.VIEW_ONLY))) {
             super.save(mapping, form, request, response);
         }
-
+        
         if (routingForm.isAuditActivated()) {
             return mapping.findForward("auditmode");
         }
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
-
-    protected void setApprovalsMessage(RoutingForm routingForm) {
-        RoutingFormDocument routingFormDocument = routingForm.getRoutingFormDocument();
-        routingForm.populateAuthorizationFields(SpringContext.getBean(DocumentAuthorizationService.class).getDocumentAuthorizer(routingForm.getRoutingFormDocument()));
-        DocumentActionFlags flags = routingForm.getDocumentActionFlags();
-        if (flags.getCanRoute() || flags.getCanApprove()) {
-            UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
-            if (routingForm.getRoutingFormDocument().isUserProjectDirector(user.getPersonUniversalIdentifier())) {
-                routingForm.setApprovalsMessage(SpringContext.getBean(ParameterService.class).getParameterValue(RoutingFormDocument.class, KraConstants.APPROVALS_PROJECT_DIRECTOR_WORDING));
-            }
-            else if (routingFormDocument.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId().equalsIgnoreCase(user.getPersonUserIdentifier())) {
-                routingForm.setApprovalsMessage(SpringContext.getBean(ParameterService.class).getParameterValue(RoutingFormDocument.class, KraConstants.APPROVALS_INITIATOR_WORDING));
-            }
-            else {
-                routingForm.setApprovalsMessage(SpringContext.getBean(ParameterService.class).getParameterValue(RoutingFormDocument.class, KraConstants.APPROVALS_DEFAULT_WORDING));
-            }
-        }
-    }
-
-    protected void activateAndCountAuditErrors(RoutingForm routingForm) {
-        boolean auditErrorsPassed = SpringContext.getBean(KualiRuleService.class).applyRules(new RunRoutingFormAuditEvent(routingForm.getRoutingFormDocument()));
-
-        Map auditErrorMap = GlobalVariables.getAuditErrorMap();
-        int auditCount = 0;
-        for (Iterator iter = auditErrorMap.keySet().iterator(); iter.hasNext();) {
-            AuditCluster auditCluster = (AuditCluster) auditErrorMap.get(iter.next());
-            auditCount += auditCluster.getSize();
-        }
-
-        routingForm.setNumAuditErrors(auditCount);
-        if (!auditErrorsPassed) {
-            routingForm.setAuditActivated(true);
-        }
-        else {
-            setApprovalsMessage(routingForm);
-        }
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 }
