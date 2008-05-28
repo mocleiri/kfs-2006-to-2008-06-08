@@ -16,401 +16,336 @@
 package org.kuali.module.gl.bo;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.LinkedHashMap;
 
+import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.DocumentType;
+import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.KFSKeyConstants;
+import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
+import org.kuali.kfs.bo.Options;
+import org.kuali.kfs.bo.OriginationCode;
+import org.kuali.module.chart.bo.A21SubAccount;
+import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.AccountingPeriod;
+import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.ObjectType;
+import org.kuali.module.chart.bo.ProjectCode;
+import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.module.chart.bo.SubObjCd;
+import org.kuali.module.chart.bo.codes.BalanceTyp;
+import org.kuali.module.gl.GLConstants;
+import org.kuali.module.gl.exception.LoadException;
 
-/**
- * Represents an origin entry
- */
-public interface OriginEntry {
+public class OriginEntry extends OriginEntryLite implements Transaction, OriginEntryable {
+    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(OriginEntry.class);
+
+    // bo references
+    private OriginEntryGroup group;
+    private Account account;
+    private SubAccount subAccount;
+    private A21SubAccount a21SubAccount;
+    private BalanceTyp balanceType;
+    private Chart chart;
+    private ObjectCode financialObject;
+    private SubObjCd financialSubObject;
+    private ObjectType objectType;
+    private ProjectCode project;
+    private DocumentType documentType;
+    private UniversityDate universityDate;
+    private Options option;
+    private AccountingPeriod accountingPeriod;
+    private UniversityDate reversalDate;
+    private OriginationCode origination;
+    private DocumentType referenceDocumentType;
+
+    public OriginEntry(GeneralLedgerPendingEntry glpe) {
+        accountNumber = glpe.getAccountNumber();
+        documentNumber = glpe.getDocumentNumber();
+        referenceFinancialDocumentNumber = glpe.getReferenceFinancialDocumentNumber();
+        referenceFinancialDocumentTypeCode = glpe.getReferenceFinancialDocumentTypeCode();
+        financialDocumentReversalDate = glpe.getFinancialDocumentReversalDate();
+        financialDocumentTypeCode = glpe.getFinancialDocumentTypeCode();
+        financialBalanceTypeCode = glpe.getFinancialBalanceTypeCode();
+        chartOfAccountsCode = glpe.getChartOfAccountsCode();
+        financialObjectTypeCode = glpe.getFinancialObjectTypeCode();
+        financialObjectCode = glpe.getFinancialObjectCode();
+        financialSubObjectCode = glpe.getFinancialSubObjectCode();
+        financialSystemOriginationCode = glpe.getFinancialSystemOriginationCode();
+        referenceFinancialSystemOriginationCode = glpe.getReferenceFinancialSystemOriginationCode();
+        organizationDocumentNumber = glpe.getOrganizationDocumentNumber();
+        organizationReferenceId = glpe.getOrganizationReferenceId();
+        projectCode = glpe.getProjectCode();
+        subAccountNumber = glpe.getSubAccountNumber();
+        transactionDate = glpe.getTransactionDate();
+        transactionDebitCreditCode = glpe.getTransactionDebitCreditCode();
+        transactionEncumbranceUpdateCode = glpe.getTransactionEncumbranceUpdateCode();
+        transactionLedgerEntrySequenceNumber = glpe.getTransactionLedgerEntrySequenceNumber();
+        transactionLedgerEntryAmount = glpe.getTransactionLedgerEntryAmount();
+        transactionLedgerEntryDescription = glpe.getTransactionLedgerEntryDescription();
+        universityFiscalPeriodCode = glpe.getUniversityFiscalPeriodCode();
+        universityFiscalYear = glpe.getUniversityFiscalYear();
+    }
 
     /**
-     * gets the transactionLedgerEntryDescription attribute value
      * 
-     * @return
      */
-    String getTransactionLedgerEntryDescription();
+    public OriginEntry(String financialDocumentTypeCode, String financialSystemOriginationCode) {
+        super();
+
+        setChartOfAccountsCode(KFSConstants.EMPTY_STRING);
+        setAccountNumber(KFSConstants.EMPTY_STRING);
+        setSubAccountNumber(KFSConstants.getDashSubAccountNumber());
+        setProjectCode(KFSConstants.getDashProjectCode());
+
+        setFinancialDocumentTypeCode(financialDocumentTypeCode);
+        setFinancialSystemOriginationCode(financialSystemOriginationCode);
+
+        setFinancialObjectCode(KFSConstants.EMPTY_STRING);
+        setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
+        setFinancialBalanceTypeCode(KFSConstants.EMPTY_STRING);
+        setFinancialObjectTypeCode(KFSConstants.EMPTY_STRING);
+        setDocumentNumber(KFSConstants.EMPTY_STRING);
+        setFinancialDocumentReversalDate(null);
+
+        setUniversityFiscalYear(new Integer(0));
+        setUniversityFiscalPeriodCode(KFSConstants.EMPTY_STRING);
+
+        setTransactionLedgerEntrySequenceNumber(new Integer(1));
+        setTransactionLedgerEntryAmount(new KualiDecimal(0));
+        setTransactionLedgerEntryDescription(KFSConstants.EMPTY_STRING);
+        setTransactionDate(null);
+        setTransactionDebitCreditCode(KFSConstants.EMPTY_STRING);
+        setTransactionEncumbranceUpdateCode(KFSConstants.EMPTY_STRING);
+
+        setOrganizationDocumentNumber(KFSConstants.EMPTY_STRING);
+        setOrganizationReferenceId(KFSConstants.EMPTY_STRING);
+
+        setReferenceFinancialDocumentTypeCode(KFSConstants.EMPTY_STRING);
+        setReferenceFinancialSystemOriginationCode(KFSConstants.EMPTY_STRING);
+        setReferenceFinancialDocumentNumber(KFSConstants.EMPTY_STRING);
+    }
 
     /**
-     * sets the transactionLedgerEntryDescription attribute value
      * 
-     * @param transactionLedgerEntryDescription
      */
-    void setTransactionLedgerEntryDescription(String transactionLedgerEntryDescription);
+    public OriginEntry() {
+        this(null, null);
+    }
+    
+    public OriginEntry(Transaction t) {
+        this();
+        copyFieldsFromTransaction(t);
+    }
 
-    /**
-     * gets the documentNumber attribute value
-     * 
-     * @return
-     */
-    String getDocumentNumber();
+    public OriginEntry(String line) {
+        try {
+            setFromTextFile(line, 0);
+        }
+        catch (LoadException e) {
+            LOG.error("OriginEntry() Error loading line", e);
+        }
+    }
 
-    /**
-     * sets the documentNumber attribute value
-     * 
-     * @param documentNumber
-     */
-    void setDocumentNumber(String documentNumber);
+    protected LinkedHashMap toStringMapper() {
+        LinkedHashMap map = new LinkedHashMap();
+        map.put("entryId", getEntryId());
+        map.put("entryGroupId", getEntryGroupId());
+        map.put("universityFiscalYear", getUniversityFiscalYear());
+        map.put("universityFiscalPeriodCode", getUniversityFiscalPeriodCode());
+        map.put("chartOfAccountsCode", getChartOfAccountsCode());
+        map.put("accountNumber", getAccountNumber());
+        map.put("subAccountNumber", getSubAccountNumber());
+        map.put("financialObjectCode", getFinancialObjectCode());
+        map.put("financialObjectTypeCode", getFinancialObjectTypeCode());
+        map.put("financialSubObjectCode", getFinancialSubObjectCode());
+        map.put("financialBalanceTypeCode", getFinancialBalanceTypeCode());
+        map.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        map.put("financialDocumentTypeCode", getFinancialDocumentTypeCode());
+        map.put("financialSystemOriginationCode", getFinancialSystemOriginationCode());
+        map.put("transactionLedgerEntrySequenceNumber", getTransactionLedgerEntrySequenceNumber());
+        map.put("transactionLedgerEntryDescription", getTransactionLedgerEntryDescription());
+        return map;
+    }
 
-    /**
-     * This gets the origin entry in its standard string output form
-     * 
-     * @return
-     */
-    String getLine();
+    public OriginEntryGroup getGroup() {
+        return group;
+    }
 
-    /**
-     * gets the referenceFinancialDocumentNumber attribute value
-     * 
-     * @return
-     */
-    String getReferenceFinancialDocumentNumber();
+    public void setGroup(OriginEntryGroup oeg) {
+        if (oeg != null) {
+            setEntryGroupId(oeg.getId());
+            group = oeg;
+        }
+        else {
+            setEntryGroupId(null);
+            group = null;
+        }
+    }
 
-    /**
-     * sets the referenceFinancialDocumentNumber attribute value
-     * 
-     * @param referenceFinancialDocumentNumber
-     */
-    void setReferenceFinancialDocumentNumber(String referenceFinancialDocumentNumber);
+    public A21SubAccount getA21SubAccount() {
+        return a21SubAccount;
+    }
 
-    /**
-     * gets the organizationReferenceId attribute value
-     * 
-     * @return
-     */
-    String getOrganizationReferenceId();
+    public void setA21SubAccount(A21SubAccount subAccount) {
+        a21SubAccount = subAccount;
+    }
 
-    /**
-     * sets the organizationReferenceId attribute value
-     * 
-     * @param organizationReferenceId
-     */
-    void setOrganizationReferenceId(String organizationReferenceId);
+    public Account getAccount() {
+        return account;
+    }
 
-    /**
-     * gets the accountNumber attribute value
-     * 
-     * @return
-     */
-    String getAccountNumber();
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
-    /**
-     * sets the accountNumber attribute value
-     * 
-     * @param accountNumber
-     */
-    void setAccountNumber(String accountNumber);
+    public BalanceTyp getBalanceType() {
+        return balanceType;
+    }
 
-    /**
-     * gets the subAccountNumber attribute value
-     * 
-     * @return
-     */
-    String getSubAccountNumber();
+    public void setBalanceType(BalanceTyp balanceType) {
+        this.balanceType = balanceType;
+    }
 
-    /**
-     * sets the subAccountNumber attribute value
-     * 
-     * @param subAccountNumber
-     */
-    void setSubAccountNumber(String subAccountNumber);
+    public Chart getChart() {
+        return chart;
+    }
 
-    /**
-     * gets the chartOfAccountsCode attribute value
-     * 
-     * @return
-     */
-    String getChartOfAccountsCode();
+    public void setChart(Chart chart) {
+        this.chart = chart;
+    }
 
-    /**
-     * sets the chartOfAccountsCode attribute value
-     * 
-     * @param chartOfAccountsCode
-     */
-    void setChartOfAccountsCode(String chartOfAccountsCode);
+    public DocumentType getDocumentType() {
+        return documentType;
+    }
 
-    /**
-     * gets the projectCode attribute value
-     * 
-     * @return
-     */
-    String getProjectCode();
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
+    }
 
-    /**
-     * sets the projectCode attribute value
-     * 
-     * @param projectCode
-     */
-    void setProjectCode(String projectCode);
+    public ObjectCode getFinancialObject() {
+        return financialObject;
+    }
 
-    /**
-     * gets the universityFiscalYear attribute value
-     * 
-     * @return
-     */
-    Integer getUniversityFiscalYear();
+    public void setFinancialObject(ObjectCode financialObject) {
+        this.financialObject = financialObject;
+    }
 
-    /**
-     * sets the universityFiscalYear attribute value
-     * 
-     * @param fiscalYear
-     */
-    void setUniversityFiscalYear(Integer fiscalYear);
+    public SubObjCd getFinancialSubObject() {
+        return financialSubObject;
+    }
 
-    /**
-     * gets the transactionDate attribute value
-     * 
-     * @return
-     */
-    Date getTransactionDate();
+    public void setFinancialSubObject(SubObjCd financialSubObject) {
+        this.financialSubObject = financialSubObject;
+    }
 
-    /**
-     * sets the transactionDate attribute value
-     * 
-     * @param transactionDate
-     */
-    void setTransactionDate(Date transactionDate);
+    public ObjectType getObjectType() {
+        return objectType;
+    }
 
-    /**
-     * gets the financialDocumentTypeCode attribute value
-     * 
-     * @return
-     */
-    String getFinancialDocumentTypeCode();
+    public void setObjectType(ObjectType objectType) {
+        this.objectType = objectType;
+    }
 
-    /**
-     * sets the financialDocumentTypeCode attribute value
-     * 
-     * @param financialDocumentTypeCode
-     */
-    void setFinancialDocumentTypeCode(String financialDocumentTypeCode);
+    public Options getOption() {
+        return option;
+    }
 
-    /**
-     * gets the financialSystemOriginationCode attribute value
-     * 
-     * @return
-     */
-    String getFinancialSystemOriginationCode();
+    public void setOption(Options option) {
+        this.option = option;
+    }
 
-    /**
-     * sets the financialSystemOriginationCode attribute value
-     * 
-     * @param origCode
-     */
-    void setFinancialSystemOriginationCode(String origCode);
+    public ProjectCode getProject() {
+        return project;
+    }
 
-    /**
-     * gets the financialObjectCode attribute value
-     * 
-     * @return
-     */
-    String getFinancialObjectCode();
+    public void setProject(ProjectCode project) {
+        this.project = project;
+    }
 
-    /**
-     * sets the financialObjectCode attribute value
-     * 
-     * @param financialObjectCode
-     */
-    void setFinancialObjectCode(String financialObjectCode);
+    public SubAccount getSubAccount() {
+        return subAccount;
+    }
 
-    /**
-     * gets the financialObjectTypeCode attribute value
-     * 
-     * @return
-     */
-    String getFinancialObjectTypeCode();
+    public void setSubAccount(SubAccount subAccount) {
+        this.subAccount = subAccount;
+    }
 
-    /**
-     * sets the financialObjectTypeCode attribute value
-     * 
-     * @param financialObjectTypeCode
-     */
-    void setFinancialObjectTypeCode(String financialObjectTypeCode);
+    public UniversityDate getUniversityDate() {
+        return universityDate;
+    }
 
-    /**
-     * gets the financialSubObjectCode attribute value
-     * 
-     * @return
-     */
-    String getFinancialSubObjectCode();
+    public void setUniversityDate(UniversityDate universityDate) {
+        this.universityDate = universityDate;
+    }
 
-    /**
-     * sets the financialSubObjectCode attribute value
-     * 
-     * @param financialSubObjectCode
-     */
-    void setFinancialSubObjectCode(String financialSubObjectCode);
+    public AccountingPeriod getAccountingPeriod() {
+        return accountingPeriod;
+    }
 
-    /**
-     * gets the transactionLedgerEntryAmount attribute value
-     * 
-     * @return
-     */
-    KualiDecimal getTransactionLedgerEntryAmount();
+    public void setAccountingPeriod(AccountingPeriod accountingPeriod) {
+        this.accountingPeriod = accountingPeriod;
+    }
 
-    /**
-     * sets the transactionLedgerEntryAmount attribute value
-     * 
-     * @param amount
-     */
-    void setTransactionLedgerEntryAmount(KualiDecimal amount);
+    public UniversityDate getReversalDate() {
+        return reversalDate;
+    }
 
-    /**
-     * gets the transactionDebitCreditCode attribute value
-     * 
-     * @return
-     */
-    String getTransactionDebitCreditCode();
+    public void setReversalDate(UniversityDate reversalDate) {
+        this.reversalDate = reversalDate;
+    }
 
-    /**
-     * sets the transactionDebitCreditCode attribute value
-     * 
-     * @param debitCreditCode
-     */
-    void setTransactionDebitCreditCode(String debitCreditCode);
+    public OriginationCode getOrigination() {
+        return origination;
+    }
 
-    /**
-     * gets the financialBalanceTypeCode attribute value
-     * 
-     * @return
-     */
-    String getFinancialBalanceTypeCode();
+    public void setOrigination(OriginationCode origination) {
+        this.origination = origination;
+    }
 
-    /**
-     * sets the financialBalanceTypeCode attribute value
-     * 
-     * @param balanceTypeCode
-     */
-    void setFinancialBalanceTypeCode(String balanceTypeCode);
 
-    /**
-     * gets the financialDocumentReversalDate attribute value
-     * 
-     * @return
-     */
-    Date getFinancialDocumentReversalDate();
+    public DocumentType getReferenceDocumentType() {
+        return referenceDocumentType;
+    }
 
-    /**
-     * sets the financialDocumentReversalDate attribute value
-     * 
-     * @param reversalDate
-     */
-    void setFinancialDocumentReversalDate(Date reversalDate);
+    public void setReferenceDocumentType(DocumentType referenceDocumentType) {
+        this.referenceDocumentType = referenceDocumentType;
+    }
 
-    /**
-     * true if this origin entry is a credit, false otherwise
-     * 
-     * @return
-     */
-    boolean isCredit();
-
-    /**
-     * true if this origin entry is a debit, false otherwise
-     * 
-     * @return
-     */
-    boolean isDebit();
-
-    /**
-     * gets the universityFiscalPeriodCode attribute value
-     * 
-     * @return
-     */
-    String getUniversityFiscalPeriodCode();
-
-    /**
-     * sets the universityFiscalPeriodCode attribute value
-     * 
-     * @param fiscalPeriodCode
-     */
-    void setUniversityFiscalPeriodCode(String fiscalPeriodCode);
-
-    /**
-     * gets the referenceFinancialDocumentTypeCode attribute value
-     * 
-     * @return
-     */
-    String getReferenceFinancialDocumentTypeCode();
-
-    /**
-     * sets the referenceFinancialDocumentTypeCode attribute value
-     * 
-     * @param refernenceFinancialDocumentTypeCode
-     */
-    void setReferenceFinancialDocumentTypeCode(String refernenceFinancialDocumentTypeCode);
-
-    /**
-     * gets the referenceFinancialSystemOriginationCode attribute value
-     * 
-     * @return
-     */
-    String getReferenceFinancialSystemOriginationCode();
-
-    /**
-     * sets referenceFinancialSystemOriginationCode attribute value
-     * 
-     * @param referenceFinancialSystemOriginationCode
-     */
-    void setReferenceFinancialSystemOriginationCode(String referenceFinancialSystemOriginationCode);
-
-    /**
-     * gets transactionEncumbranceUpdateCode attribute value
-     * 
-     * @return
-     */
-    String getTransactionEncumbranceUpdateCode();
-
-    /**
-     * sets transactionEncumbranceUpdateCode attribute value
-     * 
-     * @param code
-     */
-    void setTransactionEncumbranceUpdateCode(String code);
-
-    /**
-     * gets the organizationDocumentNumber attribute value
-     * 
-     * @return
-     */
-    String getOrganizationDocumentNumber();
-
-    /**
-     * sets the organizationDocumentNumber attribute value
-     * 
-     * @param organizationDocumentNumber
-     */
-    void setOrganizationDocumentNumber(String organizationDocumentNumber);
-
-    /**
-     * gets the transactionLedgerEntrySequenceNumber attribute value
-     * 
-     * @return
-     */
-    Integer getTransactionLedgerEntrySequenceNumber();
-
-    /**
-     * sets the transactionLedgerEntrySequenceNumber attribute value
-     * 
-     * @param transactionLedgerEntrySequenceNumber
-     */
-    void setTransactionLedgerEntrySequenceNumber(Integer transactionLedgerEntrySequenceNumber);
-
-    /**
-     * gets the transactionScrubberOffsetGenerationIndicator attribute value
-     * 
-     * @param b
-     */
-    void setTransactionScrubberOffsetGenerationIndicator(boolean b);
-
-    /**
-     * sets the entryGroupId attribute value
-     * 
-     * @param groupId
-     */
-    void setEntryGroupId(Integer groupId);
-
-    /**
-     * This method forces the origin entryable to reset its id to null
-     */
-    void resetEntryId();
+    public static OriginEntry copyFromOriginEntryable(OriginEntryable oe) {
+        OriginEntry newOriginEntry = new OriginEntry();
+        newOriginEntry.setAccountNumber(oe.getAccountNumber());
+        newOriginEntry.setDocumentNumber(oe.getDocumentNumber());
+        newOriginEntry.setReferenceFinancialDocumentNumber(oe.getReferenceFinancialDocumentNumber());
+        newOriginEntry.setReferenceFinancialDocumentTypeCode(oe.getReferenceFinancialDocumentTypeCode());
+        newOriginEntry.setFinancialDocumentReversalDate(oe.getFinancialDocumentReversalDate());
+        newOriginEntry.setFinancialDocumentTypeCode(oe.getFinancialDocumentTypeCode());
+        newOriginEntry.setFinancialBalanceTypeCode(oe.getFinancialBalanceTypeCode());
+        newOriginEntry.setChartOfAccountsCode(oe.getChartOfAccountsCode());
+        newOriginEntry.setFinancialObjectTypeCode(oe.getFinancialObjectTypeCode());
+        newOriginEntry.setFinancialObjectCode(oe.getFinancialObjectCode());
+        newOriginEntry.setFinancialSubObjectCode(oe.getFinancialSubObjectCode());
+        newOriginEntry.setFinancialSystemOriginationCode(oe.getFinancialSystemOriginationCode());
+        newOriginEntry.setReferenceFinancialSystemOriginationCode(oe.getReferenceFinancialSystemOriginationCode());
+        newOriginEntry.setOrganizationDocumentNumber(oe.getOrganizationDocumentNumber());
+        newOriginEntry.setOrganizationReferenceId(oe.getOrganizationReferenceId());
+        newOriginEntry.setProjectCode(oe.getProjectCode());
+        newOriginEntry.setSubAccountNumber(oe.getSubAccountNumber());
+        newOriginEntry.setTransactionDate(oe.getTransactionDate());
+        newOriginEntry.setTransactionDebitCreditCode(oe.getTransactionDebitCreditCode());
+        newOriginEntry.setTransactionEncumbranceUpdateCode(oe.getTransactionEncumbranceUpdateCode());
+        newOriginEntry.setTransactionLedgerEntrySequenceNumber(oe.getTransactionLedgerEntrySequenceNumber());
+        newOriginEntry.setTransactionLedgerEntryAmount(oe.getTransactionLedgerEntryAmount());
+        newOriginEntry.setTransactionLedgerEntryDescription(oe.getTransactionLedgerEntryDescription());
+        newOriginEntry.setUniversityFiscalPeriodCode(oe.getUniversityFiscalPeriodCode());
+        newOriginEntry.setUniversityFiscalYear(oe.getUniversityFiscalYear());
+        return newOriginEntry;
+    }
 }
