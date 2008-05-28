@@ -1,5 +1,5 @@
 <%--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -27,11 +27,12 @@
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
 
 	<!-- LABOR JOURNAL VOUCHER SPECIFIC FIELDS -->
-	<kul:tab tabTitle="Labor Distribution Journal Voucher Details" defaultOpen="true"
-		tabErrorKey="${KFSConstants.EDIT_JOURNAL_VOUCHER_ERRORS}">
+	<kul:tab tabTitle="Labor Journal Voucher Details" defaultOpen="true"
+		tabErrorKey="${Constants.EDIT_JOURNAL_VOUCHER_ERRORS}">
 		<div class="tab-container" align=center>
-		<div class="h2-container"><h2>Labor Distribution Journal Voucher Details</h2></div>
-		
+		<div class="h2-container">
+		<h2>Lable Journal Voucher Details</h2>
+		</div>
 		<table cellpadding=0 class="datatable"
 			summary="view/edit ad hoc recipients">
 			<tbody>
@@ -77,6 +78,9 @@
 						<NOSCRIPT><html:submit value="refresh"
 							alt="press this button to refresh the page after changing the accounting period" />
 						</NOSCRIPT>
+						<kul:lookup
+							boClassName="org.kuali.module.chart.bo.AccountingPeriod"
+							fieldLabel="${journalVoucherAttributes.accountingPeriod.label}" />
 					</c:if></td>
 				</tr>
 				<tr>
@@ -156,9 +160,9 @@
 
 	<fin:voucherAccountingLines
 		isDebitCreditAmount="${KualiForm.selectedBalanceType.financialOffsetGenerationIndicator}"
-		optionalFields="positionNumber,emplid,employeeRecord,earnCode,payGroup,salaryAdministrationPlan,grade,runIdentifier,payPeriodEndDate,payrollEndDateFiscalYear,payrollEndDateFiscalPeriodCode,transactionTotalHours,laborLedgerOriginalChartOfAccountsCode,laborLedgerOriginalAccountNumber,laborLedgerOriginalSubAccountNumber,laborLedgerOriginalFinancialObjectCode,laborLedgerOriginalFinancialSubObjectCode,hrmsCompany,encumbranceUpdateCode,setid"
+		optionalFields="positionNumber,emplid,employeeRecord,earnCode,payGroup,salaryAdministrationPlan,grade,runIdentifier,payPeriodEndDate,payrollEndDateFiscalYear,payrollEndDateFiscalPeriodCode,transactionTotalHours,laborLedgerOriginalChartOfAccountsCode,laborLedgerOriginalAccountNumber,laborLedgerOriginalSubAccountNumber,laborLedgerOriginalFinancialObjectCode,laborLedgerOriginalFinancialSubObjectCode,hrmsCompany,setid"
 		isOptionalFieldsInNewRow="true"
-		displayExternalEncumbranceFields="${KualiForm.selectedBalanceType.finBalanceTypeEncumIndicator}"
+		displayExternalEncumbranceFields="${KualiForm.selectedBalanceType.code==Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE}"
 		editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}"
 		includeObjectTypeCode="true" />

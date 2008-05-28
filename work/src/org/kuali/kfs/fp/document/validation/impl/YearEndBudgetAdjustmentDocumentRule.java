@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,28 +18,52 @@ package org.kuali.module.financial.rules;
 
 import static org.kuali.module.financial.rules.TransferOfFundsDocumentRuleConstants.YEAR_END_TRANSFER_OF_FUNDS_DOC_TYPE_CODE;
 
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.financial.document.BudgetAdjustmentDocument;
+import org.kuali.core.bo.AccountingLine;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.module.financial.document.YearEndDocumentUtil;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 
 /**
  * Business rules applicable to <code>YearEndBudgetAdjustmentDocument</code>
+ * 
+ * 
  */
 public class YearEndBudgetAdjustmentDocumentRule extends BudgetAdjustmentDocumentRule {
 
     /**
-     * Overriding to return the corresponding parent class BudgetAdjustmentDocument.
+     * year end document set:
+     * <ol>
+     * <li> the fiscal period code = 13
+     * <li> fiscal year = previous fiscal year
+     * </ol>
      * 
-     * @param financialDocument The financial document the class will be determined for.
-     * @return The class type of the document passed in.
-     * 
-     * @see org.kuali.kfs.rules.AccountingDocumentRuleBase#getAccountingLineDocumentClass(org.kuali.kfs.document.AccountingDocument)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.TransactionalDocument,
+     *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
      */
     @Override
-    protected Class getAccountingLineDocumentClass(AccountingDocument financialDocument) {
-        return BudgetAdjustmentDocument.class;
+    protected void customizeExplicitGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        super.customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
+        YearEndDocumentUtil.customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
     }
+
+    
+    
+    @Override
+    protected boolean customizeOffsetGeneralLedgerPendingEntry(TransactionalDocument transactionalDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
+        boolean success = super.customizeOffsetGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry, offsetEntry);
+        YearEndDocumentUtil.customizeExplicitGeneralLedgerPendingEntry(transactionalDocument, accountingLine, explicitEntry);
+        return success;
+    }
+
+
+
+    /**
+     * @see org.kuali.module.financial.rules.BudgetAdjustmentDocumentRule#getTransferDocumentType()
+     */
+    @Override
+    protected String getTransferDocumentType() {
+        return YEAR_END_TRANSFER_OF_FUNDS_DOC_TYPE_CODE;
+    }
+
+
 }

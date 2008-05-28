@@ -16,11 +16,13 @@
 package org.kuali.module.financial.document.authorization;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.Constants.CashDrawerConstants;
+import org.kuali.core.authorization.AuthorizationConstants;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.authorization.DocumentActionFlags;
@@ -28,19 +30,9 @@ import org.kuali.core.document.authorization.DocumentAuthorizerBase;
 import org.kuali.core.exceptions.DocumentInitiationAuthorizationException;
 import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.exceptions.GroupNotFoundException;
-import org.kuali.core.service.KualiGroupService;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSConstants.CashDrawerConstants;
-import org.kuali.kfs.authorization.KfsAuthorizationConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.document.CashManagementDocument;
-import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.module.financial.service.CashManagementService;
-import org.kuali.module.financial.service.CashReceiptService;
-
-import edu.iu.uis.eden.EdenConstants;
-import edu.iu.uis.eden.clientapp.vo.ValidActionsVO;
 
 /**
  * DocumentAuthorizer containing authorization code for CashManagement documents
@@ -58,30 +50,30 @@ public class CashManagementDocumentAuthorizer extends DocumentAuthorizerBase {
     public Map getEditMode(Document document, UniversalUser user) {
         // default is UNVIEWABLE for this doctype
         Map editModeMap = new HashMap();
-        editModeMap.put(KfsAuthorizationConstants.CashManagementEditMode.UNVIEWABLE, "TRUE");
+        editModeMap.put(AuthorizationConstants.CashManagementEditMode.UNVIEWABLE, "TRUE");
 
         // update editMode if possible
         try {
             CashManagementDocument cmDoc = (CashManagementDocument) document;
 
-            if (SpringContext.getBean(KualiGroupService.class).getByGroupName(cmDoc.getWorkgroupName()).hasMember(user)) {
+            if (SpringServiceLocator.getKualiGroupService().getByGroupName(cmDoc.getWorkgroupName()).hasMember(user)) {
                 editModeMap.clear();
 
                 KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
 
                 if (workflowDocument.stateIsInitiated()) {
-                    editModeMap.put(KfsAuthorizationConstants.CashManagementEditMode.FULL_ENTRY, "TRUE");
+                    editModeMap.put(AuthorizationConstants.CashManagementEditMode.FULL_ENTRY, "TRUE");
                 }
                 else if (workflowDocument.stateIsSaved()) {
-                    editModeMap.put(KfsAuthorizationConstants.CashManagementEditMode.FULL_ENTRY, "TRUE");
+                    editModeMap.put(AuthorizationConstants.CashManagementEditMode.FULL_ENTRY, "TRUE");
 
-                    editModeMap.put(KfsAuthorizationConstants.CashManagementEditMode.ALLOW_CANCEL_DEPOSITS, "TRUE");
+                    editModeMap.put(AuthorizationConstants.CashManagementEditMode.ALLOW_CANCEL_DEPOSITS, "TRUE");
                     if (!cmDoc.hasFinalDeposit()) {
-                        editModeMap.put(KfsAuthorizationConstants.CashManagementEditMode.ALLOW_ADDITIONAL_DEPOSITS, "TRUE");
+                        editModeMap.put(AuthorizationConstants.CashManagementEditMode.ALLOW_ADDITIONAL_DEPOSITS, "TRUE");
                     }
                 }
                 else {
-                    editModeMap.put(KfsAuthorizationConstants.CashManagementEditMode.VIEW_ONLY, "TRUE");
+                    editModeMap.put(AuthorizationConstants.CashManagementEditMode.VIEW_ONLY, "TRUE");
                 }
             }
         }
@@ -101,62 +93,23 @@ public class CashManagementDocumentAuthorizer extends DocumentAuthorizerBase {
         DocumentActionFlags flags = super.getDocumentActionFlags(document, user);
 
         CashManagementDocument cmDoc = (CashManagementDocument) document;
-        KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
-        ValidActionsVO validActions = workflowDocument.getRouteHeader().getValidActions();
 
-        if (workflowDocument.stateIsInitiated() || workflowDocument.stateIsSaved()) {
-            // CM document can only be saved (via the save button) if the CashDrawer is not closed
-            if (cmDoc.getCashDrawerStatus() == null || cmDoc.getCashDrawerStatus().equals(CashDrawerConstants.STATUS_CLOSED)) {
-                flags.setCanSave(false);
-            }
-            else {
-                flags.setCanSave(validActions.contains(EdenConstants.ACTION_TAKEN_SAVED_CD));
-            }
-
-            // CM document can only be routed if it contains a Final Deposit
-            if (!cmDoc.hasFinalDeposit() || !SpringContext.getBean(CashManagementService.class).allVerifiedCashReceiptsAreDeposited(cmDoc)) {
-                flags.setCanRoute(false);
-                flags.setCanBlanketApprove(false);
-            }
-            else {
-                flags.setCanRoute(validActions.contains(EdenConstants.ACTION_TAKEN_ROUTED_CD));
-                flags.setCanBlanketApprove(validActions.contains(EdenConstants.ACTION_TAKEN_BLANKET_APPROVE_CD));
-            }
-
-            if (!SpringContext.getBean(CashManagementService.class).allowDocumentCancellation(cmDoc)) {
-                flags.setCanCancel(false);
-            }
-            else {
-                flags.setCanCancel(validActions.contains(EdenConstants.ACTION_TAKEN_CANCELED_CD));
-            }
+        // CM document can never be BlanketApproved
+        if (cmDoc.getCashDrawerStatus().equals(CashDrawerConstants.STATUS_CLOSED)) {
+            flags.setCanBlanketApprove(false);
         }
 
-        if (workflowDocument.stateIsEnroute()) {
-            flags.setCanApprove(validActions.contains(EdenConstants.ACTION_TAKEN_APPROVED_CD));
-            flags.setCanDisapprove(validActions.contains(EdenConstants.ACTION_TAKEN_DENIED_CD));
-            flags.setCanFYI(validActions.contains(EdenConstants.ACTION_TAKEN_FYI_CD));
+        // CM document can only be saved (via the save button) if the CashDrawer is not closed
+        if (cmDoc.getCashDrawerStatus().equals(CashDrawerConstants.STATUS_CLOSED)) {
+            flags.setCanSave(false);
+        }
+
+        // CM document can only be routed if it contains a Final Deposit
+        if (!cmDoc.hasFinalDeposit()) {
+            flags.setCanRoute(false);
         }
 
         return flags;
-    }
-
-    /**
-     * This method checks that all verified cash receipts are deposited
-     * 
-     * @param cmDoc the cash management document to check
-     * @return true if all verified cash receipts are deposited, false if otherwise
-     */
-    private boolean areAllVerifiedCashReceiptsDeposited(CashManagementDocument cmDoc) {
-        boolean theyAre = true;
-        List verifiedReceipts = SpringContext.getBean(CashReceiptService.class).getCashReceipts(cmDoc.getWorkgroupName(), KFSConstants.DocumentStatusCodes.CashReceipt.VERIFIED);
-        CashManagementService cms = SpringContext.getBean(CashManagementService.class);
-        for (Object o : verifiedReceipts) {
-            if (!cms.verifyCashReceiptIsDeposited(cmDoc, (CashReceiptDocument) o)) {
-                theyAre = false;
-                break;
-            }
-        }
-        return theyAre;
     }
 
     /**
@@ -166,14 +119,11 @@ public class CashManagementDocumentAuthorizer extends DocumentAuthorizerBase {
     public void canInitiate(String documentTypeName, UniversalUser user) throws DocumentTypeAuthorizationException {
         try {
             super.canInitiate(documentTypeName, user);
-            // to initiate, you have to be a member of the bursar's group for your campus
-            String unitName = SpringContext.getBean(CashReceiptService.class).getCashReceiptVerificationUnitForUser(user);
-            if (!user.isMember(unitName)) {
-                throw new DocumentTypeAuthorizationException(user.getPersonUserIdentifier(), "initiate", documentTypeName);
-            }
         }
         catch (DocumentInitiationAuthorizationException e) {
             throw new DocumentTypeAuthorizationException(user.getPersonUserIdentifier(), "add deposits to", documentTypeName);
         }
     }
+
+
 }

@@ -1,86 +1,45 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="ResponsibilityCenterMaintenanceDocument" parent="ResponsibilityCenterMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.chart.bo.ResponsibilityCenter</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="ResponsibilityCenterMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.chart.bo.ResponsibilityCenter" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="ResponsibilityCenterMaintenanceDocument-EditResponsibilityCenter" />
-      </list>
-    </property>
-    <property name="lockingKeys" >
-      <list>
-        <value>responsibilityCenterCode</value>
-      </list>
-    </property>
-    <property name="label" value="Responsibility Center" />
-    <property name="shortLabel" value="Responsibility Center" />
-    <property name="summary" value="Responsibility Center maintenance document" />
-    <property name="description" value="Document used to create or update Responsibility Center objects" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-CA"
-            p:parameterName="RESPONSIBILITY_CENTER"
-            p:parameterDetailType="ResponsibilityCenter" />
-    </property>
-    <property name="documentTypeName" value="ResponsibilityCenterMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="RCEN" />
-    <property name="workflowProperties" >
-      <ref bean="ResponsibilityCenterMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>SY_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiResponsibilityCenterMaintenanceDocument</documentTypeName>
+        <documentTypeCode>RCEN</documentTypeCode>
 
+        <label>Responsibility Center Maintenance Document</label>
+        <shortLabel>ResponsibilityCenterMaintDoc</shortLabel>
 
-  <bean id="ResponsibilityCenterMaintenanceDocument-EditResponsibilityCenter" parent="ResponsibilityCenterMaintenanceDocument-EditResponsibilityCenter-parentBean" />
+        <summary>Responsibility Center maintenance document</summary>
+        <description>Document used to create or update Responsibility Center objects</description>
 
-  <bean id="ResponsibilityCenterMaintenanceDocument-EditResponsibilityCenter-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Responsibility Center" />
-    <property name="title" value="Edit Responsibility Center" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="responsibilityCenterCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="responsibilityCenterName"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="responsibilityCenterShortName"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="responsibilityCenterActiveIndicator" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="responsibilityCenterCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="ResponsibilityCenterMaintenanceDocument-workflowProperties" parent="ResponsibilityCenterMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="ResponsibilityCenterMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit Responsibility Center">
+                <maintainableItems>
+                    <maintainableField name="responsibilityCenterCode" required="true" />
+                    <maintainableField name="responsibilityCenterName" required="true" />
+                    <maintainableField name="responsibilityCenterShortName" required="true" />
+                    <maintainableField name="responsibilityCenterActiveIndicator"  />
+                    <maintainableField name="versionNumber" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

@@ -15,24 +15,24 @@
  */
 package org.kuali.module.financial.rules;
 
+import static org.kuali.kfs.util.SpringServiceLocator.getDataDictionaryService;
 import static org.kuali.test.util.KualiTestAssertionUtils.assertGlobalErrorMapEmpty;
 import static org.kuali.test.util.KualiTestAssertionUtils.assertSparselyEqualBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.exceptions.ValidationException;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.BusinessRule;
 import org.kuali.core.rule.RouteDocumentRule;
 import org.kuali.core.rule.SaveDocumentRule;
 import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.rule.AddAccountingLineRule;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryGenerationProcess;
+import org.kuali.kfs.rule.GenerateGeneralLedgerPendingEntriesRule;
+import org.kuali.test.KualiTestBase;
 import org.kuali.test.fixtures.GeneralLedgerPendingEntryFixture;
 
 public abstract class AccountingDocumentRuleTestUtils extends KualiTestBase {
@@ -40,17 +40,17 @@ public abstract class AccountingDocumentRuleTestUtils extends KualiTestBase {
     // test methods
     public static void testAddAccountingLineRule_IsObjectTypeAllowed(Class<? extends AccountingDocument> documentClass, AccountingLine line, boolean expected) throws Exception {
         AddAccountingLineRule rule = getBusinessRule(documentClass, AddAccountingLineRule.class);
-        assertEquals(expected, rule.isObjectTypeAllowed(documentClass, line));
+        assertEquals(expected, rule.isObjectTypeAllowed(line));
     }
 
     public static void testAddAccountingLineRule_IsObjectCodeAllowed(Class<? extends AccountingDocument> documentClass, AccountingLine line, boolean expected) throws Exception {
         AddAccountingLineRule rule = getBusinessRule(documentClass, AddAccountingLineRule.class);
-        assertEquals(expected, rule.isObjectCodeAllowed(documentClass, line));
+        assertEquals(expected, rule.isObjectCodeAllowed(line));
     }
 
     public static void testAddAccountingLine_IsObjectSubTypeAllowed(Class<? extends AccountingDocument> documentClass, AccountingLine line, boolean expected) throws Exception {
         AddAccountingLineRule rule = getBusinessRule(documentClass, AddAccountingLineRule.class);
-        assertEquals(expected, rule.isObjectSubTypeAllowed(documentClass, line));
+        assertEquals(expected, rule.isObjectSubTypeAllowed(line));
     }
 
     public static <T extends AccountingDocument> void testAddAccountingLineRule_ProcessAddAccountingLineBusinessRules(T document, boolean expected) throws Exception {
@@ -89,16 +89,15 @@ public abstract class AccountingDocumentRuleTestUtils extends KualiTestBase {
     }
 
     public static boolean testGenerateGeneralLedgerPendingEntriesRule_ProcessGenerateGeneralLedgerPendingEntries(AccountingDocument document, AccountingLine line, GeneralLedgerPendingEntryFixture expectedExplicitFixture, GeneralLedgerPendingEntryFixture expectedOffsetFixture) throws Exception {
-        boolean success = true;
         assertEquals(0, document.getGeneralLedgerPendingEntries().size());
-        GeneralLedgerPendingEntryGenerationProcess glPostingHelper = document.getGeneralLedgerPostingHelper();
-        success &= glPostingHelper.generateGeneralLedgerPendingEntries(document, line, new GeneralLedgerPendingEntrySequenceHelper());
+        GenerateGeneralLedgerPendingEntriesRule rule = getBusinessRule(document.getClass(), GenerateGeneralLedgerPendingEntriesRule.class);
+        boolean result = rule.processGenerateGeneralLedgerPendingEntries(document, line, new GeneralLedgerPendingEntrySequenceHelper());
         assertEquals(expectedOffsetFixture == null ? 1 : 2, document.getGeneralLedgerPendingEntries().size());
         assertSparselyEqualBean(expectedExplicitFixture.createGeneralLedgerPendingEntry(), document.getGeneralLedgerPendingEntry(0));
         if (expectedOffsetFixture != null) {
             assertSparselyEqualBean(expectedOffsetFixture.createGeneralLedgerPendingEntry(), document.getGeneralLedgerPendingEntry(1));
         }
-        return success;
+        return result;
     }
 
 
@@ -113,9 +112,9 @@ public abstract class AccountingDocumentRuleTestUtils extends KualiTestBase {
      * @throws Exception
      */
     public static <T extends BusinessRule> T getBusinessRule(Class<? extends AccountingDocument> documentClass, Class<T> businessRuleClass) throws Exception {
-        DataDictionaryService dataDictionaryService = SpringContext.getBean(DataDictionaryService.class);
+        DataDictionaryService dataDictionaryService = getDataDictionaryService();
         final String documentTypeName = dataDictionaryService.getDocumentTypeNameByClass(documentClass);
-        T businessRule = (T) dataDictionaryService.getDataDictionary().getDocumentEntry(documentTypeName).getBusinessRulesClass().newInstance();
+        T businessRule = (T) dataDictionaryService.getDataDictionary().getBusinessRulesClass(documentTypeName).newInstance();
         return businessRule;
     }
 }

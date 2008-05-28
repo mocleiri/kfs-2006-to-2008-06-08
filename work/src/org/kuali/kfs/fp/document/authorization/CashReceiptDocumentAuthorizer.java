@@ -21,24 +21,25 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
 import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
+import org.kuali.core.exceptions.GroupNotFoundException;
 import org.kuali.core.util.Timer;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.module.financial.service.CashDrawerService;
-import org.kuali.module.financial.service.CashReceiptService;
 
 /**
  * Abstract base class for all TransactionalDocumentAuthorizers, since there's this one bit of common code.
+ * 
+ * 
  */
 public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerBase {
     private static Log LOG = LogFactory.getLog(CashReceiptDocumentAuthorizer.class);
@@ -57,11 +58,11 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
 
         // if an approval is requested, check to make sure that the cash drawer is open
         // if it's not, then they should not be able to verify the CR document
-        if (document.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && !document.getDocumentHeader().getWorkflowDocument().isAdHocRequested()) {
+        if (document.getDocumentHeader().getWorkflowDocument().isApprovalRequested()) {
             CashReceiptDocument crd = (CashReceiptDocument) document;
 
-            String unitName = SpringContext.getBean(CashReceiptService.class).getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
-            CashDrawer cd = SpringContext.getBean(CashDrawerService.class).getByWorkgroupName(unitName, true);
+            String unitName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
+            CashDrawer cd = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(unitName, false);
             if (cd == null) {
                 throw new IllegalStateException("There is no cash drawer associated with cash receipt: " + crd.getDocumentNumber());
             }
@@ -101,17 +102,6 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
     }
 
     /**
-     * Overrides parent to return an empty Map since FO routing doesn't apply to the CR doc.
-     * 
-     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List,
-     *      org.kuali.module.chart.bo.ChartUser)
-     */
-    @Override
-    public Map getEditableAccounts(List<AccountingLine> lines, ChartUser user) {
-        return new HashMap();
-    }
-
-    /**
      * CR docs cannot be initiated by users in a verification unit that the CR is associated with. Right now, since there is a
      * single verification unit, we only need this to check for exitence in that one.
      * 
@@ -120,9 +110,9 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
     @Override
     public void canInitiate(String documentTypeName, UniversalUser user) {
         boolean authorized = false;
-        String unitName = SpringContext.getBean(CashReceiptService.class).getCashReceiptVerificationUnitForUser(user);
+        String unitName = SpringServiceLocator.getCashReceiptService().getCashReceiptVerificationUnitForUser(user);
         if (unitName != null) {
-            authorized = !user.isMember(unitName);
+            authorized = !user.isMember( unitName );
         }
         if (!authorized) {
             // TODO: customize message indicating the required unitName using DocumentInitiationAuthorizationException

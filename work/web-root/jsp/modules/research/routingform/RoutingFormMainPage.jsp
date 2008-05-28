@@ -1,5 +1,7 @@
 <%--
- Copyright 2006-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ $Source: /opt/cvs/kfs/work/web-root/jsp/modules/research/routingform/RoutingFormMainPage.jsp,v $
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,45 +15,59 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
+
+<c:set var="routingFormMainPageAttributes"
+	value="${DataDictionary['RoutingFormDocument'].attributes}" />
+<c:set var="readOnly"
+	value="${!empty KualiForm.editingMode['viewOnly']}" />
 
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
 	htmlFormAction="researchRoutingFormMainPage" headerDispatch="save"
-	headerTabActive="mainpage" showTabButtons="true">
+	feedbackKey="app.krafeedback.link" headerTabActive="mainpage"
+	showTabButtons="true">
+
+<kra-rf:routingFormHiddenDocumentFields excludeRoutingFormMainPage="true" />
 
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS_LESS_DOCUMENT}" />
 
-    <kra-rf:routingFormHiddenDocumentFields includeRoutingFormMainPage="true" />
-    
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Main Page" altText="page help"/>
-	</div>    
-
 	<kul:documentOverview editingMode="${KualiForm.editingMode}" />
+	<SCRIPT type="text/javascript">
+	    <!--
+	        function submitForm() {
+	            document.forms[0].submit();
+	        }
+	    //-->
+	</SCRIPT>
 
-	<kra-rf:routingFormMainPageAgencyDeliveryInfo/>
+	<kra-rf:routingFormMainPageAgencyDeliveryInfo editingMode="${KualiForm.editingMode}" />
 
-	<kra-rf:routingFormMainPagePersonnelOrg/>
+    <!-- TAB -->
 
-	<kra-rf:routingFormMainPageSubmissionDetails/>
+	<kra-rf:routingFormMainPagePersonnel editingMode="${KualiForm.editingMode}" />
 
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="b3" summary="">
-      <tr>
-        <td align="left" class="footer"><img src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" width="12" height="14" class="bl3"></td>
-        <td align="right" class="footer-right"><img src="${ConfigProperties.kr.externalizable.images.url}pixel_clear.gif" alt="" width="12" height="14" class="br3"></td>
-      </tr>
-    </table>
+    <!-- TAB -->
 
-    <kul:documentControls transactionalDocument="false" suppressRoutingControls="true" viewOnly="${KualiForm.editingMode['viewOnly']}" />
+	<kra-rf:routingFormMainPageSubmissionDetails editingMode="${KualiForm.editingMode}" />
 
-<SCRIPT type="text/javascript">
-var kualiForm = document.forms['KualiForm'];
-var kualiElements = kualiForm.elements;
-</SCRIPT>
-<script language="javascript" src="scripts/research/researchDocument.js"></script>
-<script language="javascript" src="dwr/interface/AgencyService.js"></script>
-<script language="javascript" src="dwr/interface/CfdaService.js"></script>
-<script language="javascript" src="dwr/interface/ProjectDirectorService.js"></script>
+    <!-- TAB -->
 
+	<!-- kra-rf:routingFormMainPageCustomAttributes editingMode="${KualiForm.editingMode}" /-->
+
+    <!-- TAB -->
+
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="b3" summary="">
+            <tr>
+              <td align="left" class="footer"><img src="images/pixel_clear.gif" alt="" width="12" height="14" class="bl3"></td>
+              <td align="right" class="footer-right"><img src="images/pixel_clear.gif" alt="" width="12" height="14" class="br3"></td>
+            </tr>
+
+          </table>
+        </div>
+        <kul:documentControls transactionalDocument="false" suppressRoutingControls="true" viewOnly="${KualiForm.editingMode['viewOnly']}" />
+      <td class="column-right"><img src="images/pixel_clear.gif" alt="" width="20" height="20"></td>
+    </tr>
+  </table>
 </kul:documentPage>
+

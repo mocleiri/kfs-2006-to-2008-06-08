@@ -44,7 +44,9 @@ public abstract class PurchasingAccountsPayableItemEventBase extends KualiDocume
     public PurchasingAccountsPayableItemEventBase(String description, String errorPathPrefix, Document document, PurApItem item) {
         super(description, errorPathPrefix, document);
 
-        this.item = item;
+        // by doing a deep copy, we are ensuring that the business rule class can't update
+        // the original object by reference
+        this.item = (PurApItem) ObjectUtils.deepCopy(item);
 
         logEvent();
     }

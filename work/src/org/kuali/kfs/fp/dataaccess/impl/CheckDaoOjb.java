@@ -33,7 +33,6 @@ import org.springframework.dao.DataAccessException;
 /**
  * This class is the OJB implementation of the AccountingLineDao interface.
  */
-
 public class CheckDaoOjb extends PlatformAwareDaoBaseOjb implements CheckDao {
     private static Logger LOG = Logger.getLogger(ChartDaoOjb.class);
 

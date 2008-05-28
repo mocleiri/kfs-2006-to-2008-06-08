@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Copyright 2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 	<bean id="properties" class="org.kuali.kfs.context.PropertyLoadingFactoryBean" />
@@ -29,16 +14,16 @@
 
 	<bean id="dataSource" class="org.kuali.rice.database.XAPoolDataSource">
 		<property name="transactionManager" ref="jotm" />
-		<property name="driverClassName" value="${datasource.driver.class}" />
-		<property name="maxSize" value="${datasource.pool.size}" />
-		<property name="minSize" value="5" />
-		<property name="maxWait" value="${datasource.connection.timeout}" />
-		<property name="validationQuery" value="${datasource.validating.query}" />
-		<property name="url" value="${datasource.url}" />
-		<property name="username" value="${datasource.username}" />
-		<property name="password" value="${datasource.password}" />
+		<property name="driverClassName" value="${dataSource.driverClassName}" />
+		<property name="maxSize" value="${dataSource.maxSize}" />
+		<property name="minSize" value="${dataSource.minSize}" />
+		<property name="maxWait" value="${dataSource.maxWait}" />
+		<property name="validationQuery" value="${dataSource.validationQuery}" />
+		<property name="url" value="${dataSource.url}" />
+		<property name="username" value="${dataSource.username}" />
+		<property name="password" value="${dataSource.password}" />
 	</bean>
-
+	
 	<bean id="dbPlatformFactory" class="org.kuali.core.dbplatform.ConfigurableKualiDBPlatformFactory">
 		<property name="ojbPlatform" value="${datasource.ojb.platform}" />
 		<property name="dataSource" ref="dataSource" />
@@ -46,7 +31,7 @@
 
 	<bean id="dbPlatform" factory-bean="dbPlatformFactory" factory-method="getPlatform" />
 	
-	<bean id="platformAwareDaoJdbc" abstract="true" class="org.kuali.core.dao.jdbc.PlatformAwareDaoBaseJdbc">
+	<bean id="platformAwareDaoJdbc" abstract="true" class="org.kuali.core.dao.jdbc.PlatformAwareDaoBasejDBC">
 		<property name="dataSource" ref="dataSource" />
 		<property name="dbPlatform" ref="dbPlatform" />
 	</bean>
@@ -116,6 +101,35 @@
 		</property>
 	</bean>
 
+	<bean id="rice" class="org.kuali.rice.config.RiceConfigurer">
+		<property name="dataSource" ref="dataSource" />
+		<property name="transactionManager" ref="jotm" />
+		<property name="userTransaction" ref="jotm" />
+		<property name="messageEntity" value="KFS" />
+		<property name="environment">
+			<value>${build.environment}</value>
+		</property>
+		<property name="properties" ref="properties" />
+		<property name="rootResourceLoader" ref="kfsRootResourceLoader" />
+		<property name="modules">
+			<list>
+				<bean class="edu.iu.uis.eden.messaging.config.KSBConfigurer">
+					<property name="serviceServletUrl" value="${workflow.url}/remote" />
+                    <property name="exceptionMessagingScheduler" ref="scheduler"/>
+                    <property name="authorizationService">
+                      <bean class="org.kuali.kfs.authorization.KSBAuthorizationService"/>
+                    </property>
+				</bean>
+				<bean class="org.kuali.workflow.config.KEWConfigurer">
+					<property name="clientProtocol" value="local" />
+				</bean>
+				<bean class="org.kuali.rice.kns.config.KNSConfigurer">
+					<property name="suppressAutoModuleConfiguration" value="true"></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
 	<alias name="universalUserService" alias="enUserService" />
 	<alias name="webAuthenticationService" alias="enWebAuthenticationService" />
 	<alias name="encryptionService" alias="enEncryptionService" />
@@ -157,22 +171,10 @@
 		<property name="pointcut" ref="methodCachePointcut" />
 	</bean>
 
-    <bean id="methodCacheNoCopyAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
-        <property name="advice" ref="methodCacheNoCopyInterceptor" />
-        <property name="pointcut" ref="methodCacheNoCopyPointcut" />
-    </bean>
-
 	<bean id="methodCacheInterceptor" class="org.kuali.core.util.cache.MethodCacheInterceptor">
 		<property name="cache" ref="methodCache" />
 		<property name="expirationTimeInSeconds">
-			<value>60</value>
-		</property>
-	</bean>
-
-    <bean id="methodCacheNoCopyInterceptor" class="org.kuali.core.util.cache.MethodCacheNoCopyInterceptor">
-        <property name="cache" ref="methodCacheNoCopy" />
-        <property name="expirationTimeInSeconds">
-            <value>600</value>
+			<value>10</value>
 		</property>
 	</bean>
 
@@ -190,26 +192,8 @@
 		</constructor-arg>
 	</bean>
 
-    <bean id="methodCacheNoCopy" factory-bean="methodResultsCacheNoCopyAdministrator" factory-method="getCache" />
-
-    <bean id="methodResultsCacheNoCopyAdministrator" class="com.opensymphony.oscache.general.GeneralCacheAdministrator" destroy-method="destroy">
-        <constructor-arg index="0">
-            <props>
-                <prop key="cache.memory">true</prop>
-                <prop key="cache.key">__oscache_mrcache</prop>
-                <prop key="cache.persistence.overflow.only">false</prop>
-                <prop key="cache.capacity">1000</prop>
-                <prop key="cache.event.listeners">org.kuali.core.util.cache.MethodResultsCacheNoCopyMonitor</prop>
-            </props>
-        </constructor-arg>
-    </bean>
-
 	<bean id="methodCachePointcut" class="org.kuali.core.util.spring.ClassOrMethodAnnotationPointcut">
 		<constructor-arg value="org.kuali.core.util.spring.Cached" />
-	</bean>
-
-    <bean id="methodCacheNoCopyPointcut" class="org.kuali.core.util.spring.ClassOrMethodAnnotationPointcut">
-        <constructor-arg value="org.kuali.core.util.spring.CacheNoCopy" />
 	</bean>
 
 	<bean id="methodLoggingAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
@@ -344,52 +328,16 @@
 		</property>
 	</bean>
 
+	<bean id="validationCompletionUtils" class="org.kuali.core.datadictionary.ValidationCompletionUtils">
+		<property name="persistenceStructureService" ref="persistenceStructureService" />
+	</bean>
+	
 	<bean id="dataDictionaryService" class="org.kuali.core.service.impl.DataDictionaryServiceImpl">
+		<constructor-arg ref="validationCompletionUtils" />
 		<property name="kualiConfigurationService" ref="kualiConfigurationService" />
 		<property name="authorizationService" ref="authorizationService" />
 		<property name="kualiGroupService" ref="kualiGroupService" />
 		<property name="kualiModuleService" ref="kualiModuleService" />
-        <property name="baselinePackages">
-            <list>
-				<value>classpath:org/kuali/core/bo/datadictionary/DataDictionaryBaseTypes.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/AdHocRoutePerson.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/AdHocRouteWorkgroup.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/Attachment.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/AttributeReferenceDummy.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/BusinessObjectAttributeEntry.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/Campus.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/CampusType.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/DocumentGroup.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/DocumentHeader.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/DocumentStatus.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/DocumentType.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/EmployeeStatus.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/EmployeeType.xml</value>
-
-                <value>classpath:org/kuali/core/bo/datadictionary/ParameterNamespace.xml</value>
-                <value>classpath:org/kuali/core/bo/datadictionary/ParameterType.xml</value>
-                <value>classpath:org/kuali/core/bo/datadictionary/ParameterDetailType.xml</value>
-                <value>classpath:org/kuali/core/bo/datadictionary/Parameter.xml</value>
-
-				<value>classpath:org/kuali/core/bo/datadictionary/Note.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/NoteType.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/UniversalUser.xml</value>
-				<value>classpath:org/kuali/core/bo/datadictionary/RiceUser.xml</value>
-
-                <value>classpath:org/kuali/core/document/datadictionary/ParameterNamespaceMaintenanceDocument.xml</value>
-                <value>classpath:org/kuali/core/document/datadictionary/ParameterTypeMaintenanceDocument.xml</value>
-                <value>classpath:org/kuali/core/document/datadictionary/ParameterDetailTypeMaintenanceDocument.xml</value>
-                <value>classpath:org/kuali/core/document/datadictionary/ParameterMaintenanceDocument.xml</value>
-
-				<value>classpath:org/kuali/core/document/datadictionary/CampusMaintenanceDocument.xml</value>
-				<value>classpath:org/kuali/core/document/datadictionary/CampusTypeMaintenanceDocument.xml</value>
-				<value>classpath:org/kuali/core/document/datadictionary/DocumentTypeMaintenanceDocument.xml</value>
-				<value>classpath:org/kuali/core/document/datadictionary/EmployeeStatusMaintenanceDocument.xml</value>
-				<value>classpath:org/kuali/core/document/datadictionary/EmployeeTypeMaintenanceDocument.xml</value>
-				<value>classpath:org/kuali/core/document/datadictionary/UniversalUserMaintenanceDocument.xml</value>
-				<value>classpath:org/kuali/core/document/datadictionary/RiceUserMaintenanceDocument.xml</value>
-            </list>
-        </property>
 	</bean>
 
 	<bean id="businessObjectService" class="org.kuali.core.service.impl.BusinessObjectServiceImpl">
@@ -410,7 +358,7 @@
 		</property>
 	</bean>
 
-	<bean id="kualiConfigurationService" class="org.kuali.core.service.impl.KualiConfigurationServiceImpl" depends-on="rice"/>
+	<bean id="kualiConfigurationService" class="org.kuali.core.service.impl.KualiConfigurationServiceImpl" />
 
 	<bean id="authorizationService" class="org.kuali.core.service.impl.AuthorizationServiceImpl">
 		<property name="dataDictionaryService">
@@ -612,9 +560,6 @@
 		<property name="configService">
 			<ref bean="kualiConfigurationService" />
 		</property>
-		<property name="persistenceStructureService">
-			<ref bean="persistenceStructureService" />
-		</property>
 	</bean>
 
 	<bean id="documentAuthorizationService" class="org.kuali.core.service.impl.DocumentAuthorizationServiceImpl">
@@ -744,7 +689,6 @@
 		<property name="businessObjectMetaDataService">
 			<ref bean="businessObjectMetaDataService" />
 		</property>
-        <property name="kualiConfigurationService" ref="kualiConfigurationService" />
 	</bean>
 
 	<bean id="kualiInquirable" class="org.kuali.core.inquiry.KualiInquirableImpl" singleton="false" />
@@ -776,6 +720,5 @@
 		<property name="persistenceStructureService">
 			<ref bean="persistenceStructureService" />
 		</property>
-        <property name="ojbCollectionHelper" ref="ojbCollectionHelper" />
 	</bean>
 </beans>

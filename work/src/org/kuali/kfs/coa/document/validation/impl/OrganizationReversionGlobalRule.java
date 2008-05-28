@@ -226,16 +226,14 @@ public class OrganizationReversionGlobalRule extends GlobalDocumentRuleBase {
         boolean success = true;
         for (int i = 0; i < globalOrgRev.getOrganizationReversionGlobalDetails().size(); i++) {
             OrganizationReversionGlobalDetail detail = globalOrgRev.getOrganizationReversionGlobalDetails().get(i);
-            
-            String errorPath = MAINTAINABLE_ERROR_PREFIX + "organizationReversionGlobalDetails[" + i + "]";
-            GlobalVariables.getErrorMap().addToErrorPath(errorPath);
-
             if (!StringUtils.isBlank(detail.getOrganizationReversionObjectCode()) && !StringUtils.isBlank(detail.getOrganizationReversionCode())) {
+                String errorPath = MAINTAINABLE_ERROR_PREFIX + "organizationReversionGlobalDetails[" + i + "]";
+                GlobalVariables.getErrorMap().addToErrorPath(errorPath);
                 success &= this.checkDetailOrgReversionCategoryValidity(detail);
                 success &= this.checkDetailObjectCodeValidity(globalOrgRev, detail);
                 success &= this.checkDetailObjectReversionCodeValidity(detail);
+                GlobalVariables.getErrorMap().removeFromErrorPath(errorPath);
             }
-            GlobalVariables.getErrorMap().removeFromErrorPath(errorPath);
         }
         return success;
     }

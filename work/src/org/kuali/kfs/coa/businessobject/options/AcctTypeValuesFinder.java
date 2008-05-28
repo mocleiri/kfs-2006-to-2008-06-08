@@ -24,22 +24,22 @@ import java.util.List;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.AcctType;
 
 /**
- * This class creates a new finder for our forms view (creates a drop-down of Account types)
+ * This class...
+ * 
+ * 
  */
 public class AcctTypeValuesFinder extends KeyValuesBase {
 
-    /**
-     * Creates a list of {@link AcctType}s using their code as their key, and their code "-" account type name as the display value
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         Collection codes = boService.findAll(AcctType.class);
 
         List sortList = (List) codes;

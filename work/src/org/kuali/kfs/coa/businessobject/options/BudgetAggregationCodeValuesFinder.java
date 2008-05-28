@@ -23,24 +23,23 @@ import java.util.List;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
 
 /**
  * This class returns list of Budget Aggregation Code type value pairs.
+ * 
+ * 
  */
 public class BudgetAggregationCodeValuesFinder extends KeyValuesBase {
 
-    /**
-     * Creates a list of {@link BudgetAggregationCode}s using their code as their key, and their code "-" aggregation code as the
-     * display value
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
         // get a list of all budget aggregations codes
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         List budgetAggregationCodes = (List) boService.findAll(BudgetAggregationCode.class);
 
         // calling comparator.

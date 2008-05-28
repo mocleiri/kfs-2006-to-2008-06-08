@@ -15,25 +15,25 @@
  */
 package org.kuali.module.chart.maintenance;
 
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.Account;
 
 /**
+ * 
  * This class overrides the saveBusinessObject() method which is called during post process from the KualiPostProcessor so that it
- * can automatically deactivate the Sub-Accounts related to the account It also overrides the processAfterCopy so that it sets
- * specific fields that shouldn't be copied to default values {@link KualiPostProcessor}
+ * can automatically deactivate the Sub-Accounts related to the account
+ * 
+ * 
+ * @link KualiPostProcessor
  */
 public class KualiAccountMaintainableImpl extends KualiMaintainableImpl {
     /**
-     * Automatically deactivates {@link SubAccount}s after saving the {@link Account}
      * 
      * @see org.kuali.core.maintenance.Maintainable#saveBusinessObject()
      */
@@ -41,12 +41,12 @@ public class KualiAccountMaintainableImpl extends KualiMaintainableImpl {
     public void saveBusinessObject() {
         // make sure we save account first
         super.saveBusinessObject();
+        BusinessObjectService boService = SpringServiceLocator.getBusinessObjectService();
         Account acct = (Account) businessObject;
 
         // deactivate any indicated BOs
         List<PersistableBusinessObject> bosToDeactivate = acct.generateDeactivationsToPersist();
         if (bosToDeactivate != null) {
-            BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
             if (!bosToDeactivate.isEmpty()) {
                 boService.save(bosToDeactivate);
             }
@@ -54,17 +54,15 @@ public class KualiAccountMaintainableImpl extends KualiMaintainableImpl {
     }
 
     /**
-     * After a copy is done set specific fields on {@link Account} to default values
      * 
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterCopy()
      */
     @Override
-    public void processAfterCopy( MaintenanceDocument document, Map<String,String[]> parameters ) {
+    public void processAfterCopy() {
         Account account = (Account) this.getBusinessObject();
-        account.setAccountCreateDate(null); // account's pre-rules will fill this field in
-        account.setAccountEffectiveDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
+        account.setAccountEffectiveDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
         account.setAccountClosedIndicator(false);
-        super.processAfterCopy( document, parameters );
+        super.processAfterCopy();
     }
 
 

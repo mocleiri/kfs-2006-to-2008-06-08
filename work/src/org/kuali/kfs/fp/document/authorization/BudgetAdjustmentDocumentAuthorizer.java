@@ -25,11 +25,9 @@ import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
 import org.kuali.core.exceptions.InactiveDocumentTypeAuthorizationException;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.authorization.KfsAuthorizationConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.document.BudgetAdjustmentDocument;
-import org.kuali.module.financial.service.FiscalYearFunctionControlService;
 
 /**
  * Document Authorizer for the Budget Adjustment document.
@@ -58,8 +56,8 @@ public class BudgetAdjustmentDocumentAuthorizer extends AccountingDocumentAuthor
         KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
 
         Map editModeMap = super.getEditMode(document, user, sourceLines, targetLines);
-        if (SpringContext.getBean(FiscalYearFunctionControlService.class).isBaseAmountChangeAllowed(((BudgetAdjustmentDocument) document).getPostingYear())) {
-            editModeMap.put(KfsAuthorizationConstants.BudgetAdjustmentEditMode.BASE_AMT_ENTRY, "TRUE");
+        if (SpringServiceLocator.getFiscalYearFunctionControlService().isBaseAmountChangeAllowed(((BudgetAdjustmentDocument) document).getPostingYear())) {
+            editModeMap.put(AuthorizationConstants.BudgetAdjustmentEditMode.BASE_AMT_ENTRY, "TRUE");
         }
 
         return editModeMap;
@@ -72,11 +70,11 @@ public class BudgetAdjustmentDocumentAuthorizer extends AccountingDocumentAuthor
      */
     @Override
     public void canInitiate(String documentTypeName, UniversalUser user) {
-        List allowedYears = SpringContext.getBean(FiscalYearFunctionControlService.class).getBudgetAdjustmentAllowedYears();
+        List allowedYears = SpringServiceLocator.getFiscalYearFunctionControlService().getBudgetAdjustmentAllowedYears();
 
         // if no allowed years found, BA document is not allowed to be initiated
         if (allowedYears == null || allowedYears.isEmpty()) {
-            throw new InactiveDocumentTypeAuthorizationException("initiate", "BudgetAdjustmentDocument");
+            throw new InactiveDocumentTypeAuthorizationException("initiate", "KualiBudgetAdjustmentDocument");
         }
 
         super.canInitiate(documentTypeName, user);

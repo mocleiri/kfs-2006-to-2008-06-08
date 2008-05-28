@@ -21,12 +21,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.kuali.core.service.PersistenceService;
 import org.kuali.core.web.struts.form.KualiForm;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.budget.bo.BudgetConstructionHeader;
-import org.kuali.module.budget.service.SalarySettingService;
-
+import org.kuali.rice.KNSServiceLocator;
 
 /**
  * This class...
@@ -37,10 +34,10 @@ public class BudgetConstructionSelectionForm extends KualiForm {
     private BudgetConstructionHeader budgetConstructionHeader;
     private boolean hideDetails = false;
 
-    // holds the BC fiscal year that is currently active
+    //holds the BC fiscal year that is currently active 
     private Integer universityFiscalYear;
 
-    public BudgetConstructionSelectionForm() {
+    public BudgetConstructionSelectionForm(){
         super();
         setBudgetConstructionHeader(new BudgetConstructionHeader());
     }
@@ -52,15 +49,14 @@ public class BudgetConstructionSelectionForm extends KualiForm {
     public void populate(HttpServletRequest request) {
 
         super.populate(request);
-
-        final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] { "chartOfAccounts", "account", "subAccount", "budgetConstructionAccountReports" }));
-        SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(this.getBudgetConstructionHeader(), REFRESH_FIELDS);
-
+        
+        final List REFRESH_FIELDS = Collections.unmodifiableList(Arrays.asList(new String[] {"chartOfAccounts", "account", "subAccount", "budgetConstructionAccountReports"}));
+        KNSServiceLocator.getPersistenceService().retrieveReferenceObjects(this.getBudgetConstructionHeader(), REFRESH_FIELDS);
+        
     }
 
     /**
-     * Gets the budgetConstructionHeader attribute.
-     * 
+     * Gets the budgetConstructionHeader attribute. 
      * @return Returns the budgetConstructionHeader.
      */
     public BudgetConstructionHeader getBudgetConstructionHeader() {
@@ -69,7 +65,6 @@ public class BudgetConstructionSelectionForm extends KualiForm {
 
     /**
      * Sets the budgetConstructionHeader attribute value.
-     * 
      * @param budgetConstructionHeader The budgetConstructionHeader to set.
      */
     public void setBudgetConstructionHeader(BudgetConstructionHeader budgetConstructionHeader) {
@@ -77,8 +72,7 @@ public class BudgetConstructionSelectionForm extends KualiForm {
     }
 
     /**
-     * Gets the universityFiscalYear attribute.
-     * 
+     * Gets the universityFiscalYear attribute. 
      * @return Returns the universityFiscalYear.
      */
     public Integer getUniversityFiscalYear() {
@@ -87,7 +81,6 @@ public class BudgetConstructionSelectionForm extends KualiForm {
 
     /**
      * Sets the universityFiscalYear attribute value.
-     * 
      * @param universityFiscalYear The universityFiscalYear to set.
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
@@ -95,8 +88,7 @@ public class BudgetConstructionSelectionForm extends KualiForm {
     }
 
     /**
-     * Gets the hideDetails attribute.
-     * 
+     * Gets the hideDetails attribute. 
      * @return Returns the hideDetails.
      */
     public boolean isHideDetails() {
@@ -105,20 +97,10 @@ public class BudgetConstructionSelectionForm extends KualiForm {
 
     /**
      * Sets the hideDetails attribute value.
-     * 
      * @param hideDetails The hideDetails to set.
      */
     public void setHideDetails(boolean hideDetails) {
         this.hideDetails = hideDetails;
-    }
-
-    /**
-     * Gets the salarySettingDisabled attribute.
-     * 
-     * @return Returns the salarySettingDisabled.
-     */
-    public boolean isSalarySettingDisabled() {
-        return SpringContext.getBean(SalarySettingService.class).isSalarySettingDisabled();
     }
 
 }

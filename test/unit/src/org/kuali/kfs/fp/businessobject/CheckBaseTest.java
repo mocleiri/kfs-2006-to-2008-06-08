@@ -1,76 +1,86 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.bo;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBaseWithSpring;
 
 /**
  * This class...
+ * 
+ * @author Kuali Financial Transactions Red Team (kualidev@oncourse.iu.edu)
  */
-@ConfigureContext
-public class CheckBaseTest extends KualiTestBase {
-    private CheckBase crchk = null;
-    private static final KualiDecimal AMOUNT = new KualiDecimal("100.27");
-    private static final String GUID = "123456789012345678901234567890123456";
-    private static final Long VER_NBR = new Long(1);
-    private static Date date;
-    private static final String CHECK_NUMBER = "123456";
-    private static final String DESCRIPTION = "Description 123.";
-    private static final String DOC_HDR_ID = "999999";
-    private static final Integer SEQ_ID = new Integer(1);
-    private static final Integer DEPOSIT_LINE_NUMBER = new Integer(1);
-    private static final String DOCUMENT_TYPE = "CR";
-    private static final String CASHIERING_SOURCE = "R";
+public class CheckBaseTest extends KualiTestBaseWithSpring {
+    CheckBase crchk = null;
+    public static final KualiDecimal AMOUNT = new KualiDecimal("100.27");
+    public static final String GUID = "123456789012345678901234567890123456";
+    public static final Long VER_NBR = new Long(1);
+    public static final Date DATE = new Date(System.currentTimeMillis());
+    public static final String CHECK_NUMBER = "123456";
+    public static final String DESCRIPTION = "Description 123.";
+    public static final String DOC_HDR_ID = "999999";
+    public static final Integer SEQ_ID = new Integer(1);
 
-    @Override
+    /*
+     * @see TestCase#setUp()
+     */
     protected void setUp() throws Exception {
         super.setUp();
-        date = new Date(SpringContext.getBean(DateTimeService.class).getCurrentDate().getTime());
         crchk = new CheckBase();
         crchk.setAmount(AMOUNT);
-        crchk.setCheckDate(date);
+        crchk.setCheckDate(DATE);
         crchk.setCheckNumber(CHECK_NUMBER);
         crchk.setDescription(DESCRIPTION);
-        crchk.setDocumentNumber(DOC_HDR_ID);
-        crchk.setFinancialDocumentDepositLineNumber(DEPOSIT_LINE_NUMBER);
+        crchk.setFinancialDocumentNumber(DOC_HDR_ID);
+        crchk.setExtendedAttributeValues(new ArrayList());
+        crchk.setInterimDepositAmount(false);
         crchk.setObjectId(GUID);
         crchk.setSequenceId(SEQ_ID);
         crchk.setVersionNumber(VER_NBR);
-        crchk.setCashieringRecordSource(CASHIERING_SOURCE);
-        crchk.setFinancialDocumentTypeCode(DOCUMENT_TYPE);
+    }
+
+    /*
+     * @see TestCase#tearDown()
+     */
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        crchk = null;
     }
 
     public void testCashReceiptCheckPojo() {
         assertEquals(AMOUNT, crchk.getAmount());
-        assertEquals(date, crchk.getCheckDate());
+        assertEquals(DATE, crchk.getCheckDate());
         assertEquals(CHECK_NUMBER, crchk.getCheckNumber());
         assertEquals(DESCRIPTION, crchk.getDescription());
-        assertEquals(DOC_HDR_ID, crchk.getDocumentNumber());
-        assertEquals(DEPOSIT_LINE_NUMBER, crchk.getFinancialDocumentDepositLineNumber());
+        assertEquals(DOC_HDR_ID, crchk.getFinancialDocumentNumber());
+        assertEquals(0, crchk.getExtendedAttributeValues().size());
+        assertEquals(false, crchk.isInterimDepositAmount());
         assertEquals(GUID, crchk.getObjectId());
         assertEquals(SEQ_ID, crchk.getSequenceId());
         assertEquals(VER_NBR, crchk.getVersionNumber());
-        assertEquals(DOCUMENT_TYPE, crchk.getFinancialDocumentTypeCode());
-        assertEquals(CASHIERING_SOURCE, crchk.getCashieringRecordSource());
     }
 }

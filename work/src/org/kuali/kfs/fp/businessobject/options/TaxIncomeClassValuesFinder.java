@@ -20,13 +20,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
-import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.TaxIncomeClassCode;
 
 /**
  * This class returns list of tax income class value pairs.
+ * 
+ * 
  */
 public class TaxIncomeClassValuesFinder extends KeyValuesBase {
 
@@ -34,7 +35,7 @@ public class TaxIncomeClassValuesFinder extends KeyValuesBase {
      * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-        List boList = (List) SpringContext.getBean(KeyValuesService.class).findAllOrderBy(TaxIncomeClassCode.class, "name", true);
+        List boList = (List) SpringServiceLocator.getKeyValuesService().findAllOrderBy(TaxIncomeClassCode.class, "name", true);
         List keyValues = new ArrayList();
         keyValues.add(new KeyLabelPair("", ""));
         for (Iterator iter = boList.iterator(); iter.hasNext();) {

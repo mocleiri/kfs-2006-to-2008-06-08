@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,22 @@
 package org.kuali.module.labor.web.lookupable;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
 import org.kuali.core.lookup.CollectionIncomplete;
-import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.module.gl.web.Constant;
+import org.kuali.kfs.context.SpringContext;
+import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.web.inquirable.InquirableFinancialDocument;
 import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
-import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.service.LaborInquiryOptionsService;
 import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
-import org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl;
 import org.kuali.module.labor.web.inquirable.LedgerPendingEntryInquirableImpl;
-import org.kuali.module.labor.web.inquirable.PositionDataDetailsInquirableImpl;
 
 /**
  * Helper Service for looking up instances of <code>{@link LaborLedgerPendingEntry}</code>
@@ -44,7 +40,6 @@ public class LaborPendingEntryLookupableHelperServiceImpl extends AbstractLookup
     private static org.apache.commons.logging.Log LOG = org.apache.commons.logging.LogFactory.getLog(LaborPendingEntryLookupableHelperServiceImpl.class);
 
     private LaborLedgerPendingEntryService laborLedgerPendingEntryService;
-    private LaborInquiryOptionsService laborInquiryOptionsService;
 
     /**
      * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#getInquiryUrl(org.kuali.core.bo.BusinessObject,
@@ -55,17 +50,6 @@ public class LaborPendingEntryLookupableHelperServiceImpl extends AbstractLookup
         if (KFSPropertyConstants.DOCUMENT_NUMBER.equals(propertyName) && businessObject instanceof LaborLedgerPendingEntry) {
             LaborLedgerPendingEntry pendingEntry = (LaborLedgerPendingEntry) businessObject;
             return new InquirableFinancialDocument().getInquirableDocumentUrl(pendingEntry);
-        }
-        else if (KFSPropertyConstants.POSITION_NUMBER.equals(propertyName)) {
-            LaborLedgerPendingEntry pendingEntry = (LaborLedgerPendingEntry) businessObject;
-            AbstractLaborInquirableImpl positionDataDetailsInquirable = new PositionDataDetailsInquirableImpl();
-
-            Map<String, String> fieldValues = new HashMap<String, String>();
-            fieldValues.put(propertyName, pendingEntry.getPositionNumber());
-
-            BusinessObject positionData = positionDataDetailsInquirable.getBusinessObject(fieldValues);
-
-            return positionData == null ? KFSConstants.EMPTY_STRING : positionDataDetailsInquirable.getInquiryUrl(positionData, propertyName);
         }
         return (new LedgerPendingEntryInquirableImpl()).getInquiryUrl(businessObject, propertyName);
     }
@@ -78,33 +62,33 @@ public class LaborPendingEntryLookupableHelperServiceImpl extends AbstractLookup
         setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
         setDocFormKey((String) fieldValues.get(KFSConstants.DOC_FORM_KEY));
 
-        // determine if only approved pending entries need to be returned
-        String pendingEntryOption = laborInquiryOptionsService.getSelectedPendingEntryOption(fieldValues);
-        boolean isApprovedPendingSelected = Constant.APPROVED_PENDING_ENTRY.equals(pendingEntryOption) ? true : false;
+        UniversityDate currentUniversityDate = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+        String currentFiscalPeriodCode = currentUniversityDate.getUniversityFiscalAccountingPeriod();
+        Integer currentFiscalYear = currentUniversityDate.getUniversityFiscalYear();
 
-        Collection<LaborLedgerPendingEntry> searchResults = laborLedgerPendingEntryService.findPendingEntries(fieldValues, isApprovedPendingSelected);
-        Long resultSize = searchResults == null ? 0 : new Long(searchResults.size());
-
-        return this.buildSearchResultList(searchResults, resultSize);
-    }
-
-    /**
-     * build the serach result list from the given collection and the number of all qualified search results
-     * 
-     * @param searchResultsCollection the given search results, which may be a subset of the qualified search results
-     * @param actualSize the number of all qualified search results
-     * @return the serach result list with the given results and actual size
-     */
-    protected List buildSearchResultList(Collection searchResultsCollection, Long actualSize) {
-        CollectionIncomplete results = new CollectionIncomplete(searchResultsCollection, actualSize);
-
-        // sort list if default sort column given
-        List searchResults = (List) results;
-        List defaultSortColumns = getDefaultSortColumns();
-        if (defaultSortColumns.size() > 0) {
-            Collections.sort(results, new BeanPropertyComparator(defaultSortColumns, true));
+        String fiscalPeriodFromForm = null;
+        if (fieldValues.containsKey(KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE)) {
+            fiscalPeriodFromForm = ((String) fieldValues.get(KFSPropertyConstants.UNIVERSITY_FISCAL_PERIOD_CODE)).trim();
         }
-        return searchResults;
+
+        String fiscalYearFromForm = null;
+        if (fieldValues.containsKey(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR)) {
+            fiscalYearFromForm = ((String) fieldValues.get(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR)).trim();
+        }
+        // Set null fy and ap to current values.
+        Collection<LaborLedgerPendingEntry> searchResults = laborLedgerPendingEntryService.findPendingEntries(fieldValues, false);
+        for (LaborLedgerPendingEntry pendingEntry : searchResults) {
+
+            if (currentFiscalPeriodCode.equals(fiscalPeriodFromForm) && StringUtils.isEmpty(pendingEntry.getUniversityFiscalPeriodCode())) {
+                pendingEntry.setUniversityFiscalPeriodCode(currentFiscalPeriodCode);
+            }
+
+            if (currentFiscalYear.toString().equals(fiscalYearFromForm) && pendingEntry.getUniversityFiscalYear() == null) {
+                pendingEntry.setUniversityFiscalYear(currentFiscalYear);
+            }
+        }
+
+        return new CollectionIncomplete(searchResults, new Long(searchResults.size()));
     }
 
     /**
@@ -114,14 +98,5 @@ public class LaborPendingEntryLookupableHelperServiceImpl extends AbstractLookup
      */
     public void setLaborLedgerPendingEntryService(LaborLedgerPendingEntryService laborLedgerPendingEntryService) {
         this.laborLedgerPendingEntryService = laborLedgerPendingEntryService;
-    }
-
-    /**
-     * Sets the laborInquiryOptionsService attribute value.
-     * 
-     * @param laborInquiryOptionsService The laborInquiryOptionsService to set.
-     */
-    public void setLaborInquiryOptionsService(LaborInquiryOptionsService laborInquiryOptionsService) {
-        this.laborInquiryOptionsService = laborInquiryOptionsService;
     }
 }

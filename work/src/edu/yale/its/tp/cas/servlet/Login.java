@@ -15,31 +15,16 @@
  */
 package edu.yale.its.tp.cas.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
+import java.io.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.kuali.Constants;
+import org.kuali.kfs.util.SpringServiceLocator;
 
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.service.WebAuthenticationService;
-import org.kuali.kfs.context.SpringContext;
-
-import edu.yale.its.tp.cas.auth.AuthHandler;
-import edu.yale.its.tp.cas.auth.PasswordHandler;
-import edu.yale.its.tp.cas.auth.TrustHandler;
-import edu.yale.its.tp.cas.ticket.GrantorCache;
-import edu.yale.its.tp.cas.ticket.LoginTicketCache;
-import edu.yale.its.tp.cas.ticket.ServiceTicket;
-import edu.yale.its.tp.cas.ticket.ServiceTicketCache;
-import edu.yale.its.tp.cas.ticket.TicketException;
-import edu.yale.its.tp.cas.ticket.TicketGrantingTicket;
+import edu.yale.its.tp.cas.ticket.*;
+import edu.yale.its.tp.cas.auth.*;
 
 /**
  * Handles logins for the Central Authentication Service.
@@ -47,7 +32,7 @@ import edu.yale.its.tp.cas.ticket.TicketGrantingTicket;
 public class Login extends HttpServlet {
 
     // *********************************************************************
-    // KFSConstants
+    // Constants
 
     // cookie IDs
     private static final String TGC_ID = "CASTGC";
@@ -66,7 +51,6 @@ public class Login extends HttpServlet {
     private LoginTicketCache ltCache;
     private AuthHandler handler;
     private String loginForm, genericSuccess, serviceSuccess, confirmService, redirect;
-    private boolean requireHttps;
     private ServletContext app;
 
     // *********************************************************************
@@ -104,7 +88,6 @@ public class Login extends HttpServlet {
         genericSuccess = app.getInitParameter("edu.yale.its.tp.cas.genericSuccess");
         confirmService = app.getInitParameter("edu.yale.its.tp.cas.confirmService");
         redirect = app.getInitParameter("edu.yale.its.tp.cas.redirect");
-        requireHttps = Boolean.getBoolean(app.getInitParameter("org.kuali.cas.auth.requireHttps"));
         if (loginForm == null || genericSuccess == null || redirect == null || confirmService == null)
             throw new ServletException("need edu.yale.its.tp.cas.loginForm, " + "-genericSuccess, -serviceSuccess, -redirect, and -confirmService");
     }
@@ -222,7 +205,7 @@ public class Login extends HttpServlet {
             throw new ServletException(ex);
         }
         // check if the password field should be shown and set a flag to be used by the JSP
-        request.setAttribute("showPasswordField", SpringContext.getBean(KualiConfigurationService.class).isProductionEnvironment() || SpringContext.getBean(WebAuthenticationService.class).isValidatePassword());
+        request.setAttribute( "showPasswordField", SpringServiceLocator.getKualiConfigurationService().isProductionEnvironment() || SpringServiceLocator.getWebAuthenticationService().isValidatePassword() );
         app.getRequestDispatcher(loginForm).forward(request, response);
     }
 
@@ -268,7 +251,7 @@ public class Login extends HttpServlet {
             TicketGrantingTicket t = new TicketGrantingTicket(username);
             String token = tgcCache.addTicket(t);
             Cookie tgc = new Cookie(TGC_ID, token);
-            if (request.getRequestURI().startsWith("https") || !requireHttps) {
+            if (request.getRequestURI().startsWith("https") || SpringServiceLocator.getKualiConfigurationService().isProductionEnvironment() ) {
                 tgc.setSecure(true);
             }
             tgc.setMaxAge(-1);

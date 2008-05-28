@@ -1,124 +1,79 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.financial.bo.OwnershipTypeCode">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="OwnershipTypeCode" parent="OwnershipTypeCode-parentBean" />
+        <inquiry>
+            <title>Ownership Type Code Inquiry</title>
 
-  <bean id="OwnershipTypeCode-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.financial.bo.OwnershipTypeCode" />
-    <property name="inquiryDefinition" >
-      <ref bean="OwnershipTypeCode-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="OwnershipTypeCode-lookupDefinition" />
-    </property>
-    <property name="titleAttribute" value="code" />
-    <property name="objectLabel" value="Disbursement Voucher Ownership Type" />
-    <property name="attributes" >
-      <list>
-        <ref bean="OwnershipTypeCode-code" />
-        <ref bean="OwnershipTypeCode-name" />
-        <ref bean="OwnershipTypeCode-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="code" />
+                <field attributeName="name" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Ownership Type Code Lookup</title>
 
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.financial.bo.OwnershipTypeCode">Create New</a>]]>
+            </menubar>
 
-  <bean id="OwnershipTypeCode-code" parent="OwnershipTypeCode-code-parentBean" />
+            <instructions>Lookup an Ownership Type Code</instructions>
 
-  <bean id="OwnershipTypeCode-code-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="code" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Ownership Type Code" />
-    <property name="shortLabel" value="Type Code" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="AlphaNumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="1" />
-    </property>
-  </bean>
-  <bean id="OwnershipTypeCode-name" parent="OwnershipTypeCode-name-parentBean" />
+            <defaultSort attributeName="code" sortAscending="true" />
 
-  <bean id="OwnershipTypeCode-name-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="name" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Ownership Type Name" />
-    <property name="shortLabel" value="Name" />
-    <property name="maxLength" value="25" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="25" />
-    </property>
-  </bean>
-  <bean id="OwnershipTypeCode-versionNumber" parent="OwnershipTypeCode-versionNumber-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="code" required="false" />
+                <lookupField attributeName="name" required="false" />
+            </lookupFields>
 
-  <bean id="OwnershipTypeCode-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+            <resultFields>
+                <field attributeName="code" />
+                <field attributeName="name" />
+            </resultFields>
+        </lookup>
 
-<!-- Business Object Inquiry Definition -->
+        <titleAttribute>code</titleAttribute>
 
+        <attributes>
 
-  <bean id="OwnershipTypeCode-inquiryDefinition" parent="OwnershipTypeCode-inquiryDefinition-parentBean" />
+            <attribute name="code" forceUppercase="true">
+                <label>Ownership Type Code</label>
+                <shortLabel>Type Code</shortLabel>
 
-  <bean id="OwnershipTypeCode-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Disbursement Voucher Ownership Type Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="code" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="name" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <maxLength>1</maxLength>
+                <validationPattern>
+                    <alphaNumeric />
+                </validationPattern>
 
-<!-- Business Object Lookup Definition -->
+                <control>
+                    <text size="1" />
+                </control>
 
+                <summary>Ownership Type Code</summary>
+                <description>The code uniquely identify an ownership type.</description>
+            </attribute>
 
-  <bean id="OwnershipTypeCode-lookupDefinition" parent="OwnershipTypeCode-lookupDefinition-parentBean" />
+            <attribute name="name" forceUppercase="false">
+                <label>Ownership Type Name</label>
+                <shortLabel>Name</shortLabel>
 
-  <bean id="OwnershipTypeCode-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Disbursement Voucher Ownership Type Lookup" />
-    <property name="instructions" value="Lookup an Ownership Type Code" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-        <property name="attributeNames" >
-          <list>
-            <value>code</value>
-          </list>
-        </property>
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="code" />
-        <bean parent="FieldDefinition"
-              p:attributeName="name" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="code" />
-        <bean parent="FieldDefinition"
-              p:attributeName="name" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <maxLength>25</maxLength>
+
+                <control>
+                    <text size="25" />
+                </control>
+
+                <summary>Ownership Type Name</summary>
+                <description>Ownership Type Name</description>
+            </attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+        </attributes>
+    </businessObject>
+</dictionaryEntry>
+

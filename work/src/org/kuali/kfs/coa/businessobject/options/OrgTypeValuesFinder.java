@@ -23,29 +23,26 @@ import java.util.List;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.OrgType;
 
-/**
- * This class creates a new finder for our forms view (creates a drop-down of {@link OrgType}s)
- */
 public class OrgTypeValuesFinder extends KeyValuesBase {
 
     /**
+     * 
      * Constructs a OrgTypeValuesFinder.java.
      */
     public OrgTypeValuesFinder() {
     }
 
     /**
-     * Creates a list of {@link OrgType}s using their code as their key, and their code "-" name as the display value
      * 
      * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
         // get a list of all OrgTypes
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         List orgTypes = (List) boService.findAll(OrgType.class);
 
         // calling comparator.

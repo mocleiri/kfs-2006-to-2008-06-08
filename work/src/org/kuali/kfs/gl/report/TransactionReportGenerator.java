@@ -1,20 +1,28 @@
 /*
- * Copyright 2006 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.util;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -25,8 +33,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.module.gl.bo.Transaction;
+import org.kuali.module.gl.util.TransactionReport.PageHelper;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.ExceptionConverter;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
@@ -34,11 +46,9 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfWriter;
 
-/**
- * This class generates the actual transaction report
- */
 public class TransactionReportGenerator {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(TransactionReportGenerator.class);
     public static final String PDF_FILE_EXTENSION = ".pdf";
@@ -58,12 +68,12 @@ public class TransactionReportGenerator {
      */
     public void generateSummaryReport(List reportSummary, Date reportingDate, String title, String reportNamePrefix, String destinationDirectory) {
         LOG.debug("generateSummaryReport() started");
-
-        if (reportSummary != null) {
+        
+        if(reportSummary != null){
             this.generatePDFReport(this.buildSummaryTable(reportSummary), reportingDate, title, reportNamePrefix, destinationDirectory);
         }
     }
-
+    
     /**
      * This method generates report based on the given error information
      * 
@@ -75,21 +85,13 @@ public class TransactionReportGenerator {
      */
     public void generateErrorReport(Map reportErrors, Date reportingDate, String title, String reportNamePrefix, String destinationDirectory) {
         LOG.debug("generateErrorReport() started");
-
-        if (reportErrors != null) {
+        
+        if(reportErrors != null){
             this.generatePDFReport(this.buildErrorTable(reportErrors), reportingDate, title, reportNamePrefix, destinationDirectory);
         }
-    }
+    }    
 
-    /**
-     * Generate the PDF report with the given information
-     * 
-     * @param pdfContents contents of PDF
-     * @param reportingDate date being reported on
-     * @param title title of report
-     * @param reportNamePrefix name of report prefix
-     * @param destinationDirectory directory report file will reside
-     */
+    // generate the PDF report with the given information
     private void generatePDFReport(PdfPTable pdfContents, Date reportingDate, String title, String reportNamePrefix, String destinationDirectory) {
         Document document = new Document(PageSize.A4.rotate());
 
@@ -118,19 +120,14 @@ public class TransactionReportGenerator {
             this.closeDocument(document);
         }
     }
-
-    /**
-     * Construct the summary table
-     * 
-     * @param reportSummary list of report summaries
-     * @return PdfPTable summary table
-     */
+    
+    // construct the summary table
     private PdfPTable buildSummaryTable(List reportSummary) {
 
         float[] cellWidths = { 80, 20 };
         PdfPTable summaryTable = new PdfPTable(cellWidths);
         summaryTable.setWidthPercentage(40);
-
+        
         PdfPCell cell = new PdfPCell(new Phrase("S T A T I S T I C S", headerFont));
         cell.setColspan(2);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -145,20 +142,13 @@ public class TransactionReportGenerator {
         return summaryTable;
     }
 
-
-    /**
-     * Add a row with the given ledger entry into PDF table
-     * 
-     * @param summaryTable table to add row to
-     * @param summary summary object
-     * @param textFont font for text
-     */
+    // add a row with the given ledger entry into PDF table
     private void addRow(PdfPTable summaryTable, Summary summary, Font textFont) {
-
+        
         PdfPCell cell = new PdfPCell(new Phrase(summary.getDescription(), textFont));
         cell.setBorder(Rectangle.NO_BORDER);
         summaryTable.addCell(cell);
-
+    
         if ("".equals(summary.getDescription())) {
             cell = new PdfPCell(new Phrase("", textFont));
             cell.setBorder(Rectangle.NO_BORDER);
@@ -173,12 +163,7 @@ public class TransactionReportGenerator {
         }
     }
 
-    /**
-     * Construct the error table
-     * @param reportErrors map containing error'd transactions
-     * 
-     * @return PdfPTable error containing errors
-     */
+    // construct the error table
     private PdfPTable buildErrorTable(Map reportErrors) {
 
         float[] cellWidths = { 4, 3, 6, 5, 5, 4, 5, 5, 4, 5, 5, 9, 4, 36 };
@@ -190,7 +175,7 @@ public class TransactionReportGenerator {
         cell.setColspan(14);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         errorTable.addCell(cell);
-
+        
         if (reportErrors != null && reportErrors.size() > 0) {
             this.addHeader(errorTable, headerFont);
             for (Iterator errorIter = reportErrors.keySet().iterator(); errorIter.hasNext();) {
@@ -198,20 +183,15 @@ public class TransactionReportGenerator {
                 this.addRow(errorTable, reportErrors, transaction, textFont);
             }
         }
-        else {
-            cell = new PdfPCell(new Phrase("No errors occurred!", headerFont));
+        else{
+            cell = new PdfPCell(new Phrase("No errors occured!", headerFont));
             cell.setColspan(14);
-            errorTable.addCell(cell);
+            errorTable.addCell(cell);            
         }
         return errorTable;
     }
 
-    /**
-     * Add a table header
-     * 
-     * @param errorTable table containing errors
-     * @param headerFont font for header
-     */
+    // add a table header
     private void addHeader(PdfPTable errorTable, Font headerFont) {
 
         PdfPCell cell = new PdfPCell(new Phrase("Year", headerFont));
@@ -244,14 +224,7 @@ public class TransactionReportGenerator {
         errorTable.addCell(cell);
     }
 
-    /**
-     * Add a row with the given ledger entry into PDF table
-     * 
-     * @param errorTable PdfPTable for report errors
-     * @param reportErrors map containing actual errors
-     * @param transaction transaction containing information for given row
-     * @param textFont font for text
-     */
+    // add a row with the given ledger entry into PDF table
     private void addRow(PdfPTable errorTable, Map reportErrors, Transaction transaction, Font textFont) {
         PdfPCell cell = null;
         boolean first = true;
@@ -288,7 +261,7 @@ public class TransactionReportGenerator {
                 errorTable.addCell(cell);
                 cell = new PdfPCell(new Phrase(transaction.getFinancialSystemOriginationCode(), textFont));
                 errorTable.addCell(cell);
-                cell = new PdfPCell(new Phrase(transaction.getDocumentNumber(), textFont));
+                cell = new PdfPCell(new Phrase(transaction.getFinancialDocumentNumber(), textFont));
                 errorTable.addCell(cell);
 
                 String squenceNumber = transaction.getUniversityFiscalYear() == null ? "NULL" : transaction.getTransactionLedgerEntrySequenceNumber().toString();
@@ -305,11 +278,7 @@ public class TransactionReportGenerator {
         }
     }
 
-    /**
-     * Close the document and release the resource
-     * 
-     * @param document document to be closed
-     */
+    // close the document and release the resource
     private void closeDocument(Document document) {
         try {
             if ((document != null) && document.isOpen()) {

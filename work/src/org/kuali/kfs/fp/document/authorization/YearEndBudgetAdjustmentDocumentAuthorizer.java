@@ -20,13 +20,13 @@ import java.util.List;
 
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.exceptions.InactiveDocumentTypeAuthorizationException;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
-import org.kuali.module.financial.service.FiscalYearFunctionControlService;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
  * Document Authorizer for the Year End Budget Adjustment document.
+ * 
+ * 
  */
 public class YearEndBudgetAdjustmentDocumentAuthorizer extends BudgetAdjustmentDocumentAuthorizer {
 
@@ -37,14 +37,14 @@ public class YearEndBudgetAdjustmentDocumentAuthorizer extends BudgetAdjustmentD
      */
     @Override
     public void canInitiate(String documentTypeName, UniversalUser user) {
-        List allowedYears = SpringContext.getBean(FiscalYearFunctionControlService.class).getBudgetAdjustmentAllowedYears();
-        Integer previousPostingYear = new Integer(SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().intValue() - 1);
+        List allowedYears = SpringServiceLocator.getFiscalYearFunctionControlService().getBudgetAdjustmentAllowedYears();
+        Integer previousPostingYear = new Integer(SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear().intValue() - 1);
 
         // if previous fiscal year not active, BA document is not allowed to be initiated
         if (allowedYears == null || allowedYears.isEmpty()) {
-            throw new InactiveDocumentTypeAuthorizationException("initiate", "BudgetAdjustmentDocument");
+            throw new InactiveDocumentTypeAuthorizationException("initiate", "KualiBudgetAdjustmentDocument");
         }
-
+        
         boolean previousActive = false;
         for (Iterator iter = allowedYears.iterator(); iter.hasNext();) {
             FiscalYearFunctionControl fyControl = (FiscalYearFunctionControl) iter.next();
@@ -52,9 +52,9 @@ public class YearEndBudgetAdjustmentDocumentAuthorizer extends BudgetAdjustmentD
                 previousActive = true;
             }
         }
-
+        
         if (!previousActive) {
-            throw new InactiveDocumentTypeAuthorizationException("initiate", "BudgetAdjustmentDocument");
+            throw new InactiveDocumentTypeAuthorizationException("initiate", "KualiBudgetAdjustmentDocument");
         }
 
         super.canInitiate(documentTypeName, user);

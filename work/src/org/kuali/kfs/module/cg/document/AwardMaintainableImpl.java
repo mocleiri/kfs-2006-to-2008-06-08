@@ -26,49 +26,37 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Award;
 import org.kuali.module.cg.bo.AwardAccount;
 import org.kuali.module.cg.bo.AwardOrganization;
 import org.kuali.module.cg.bo.AwardProjectDirector;
 import org.kuali.module.cg.bo.CGProjectDirector;
 import org.kuali.module.cg.bo.ProjectDirector;
-import org.kuali.module.cg.bo.Proposal;
 import org.kuali.module.cg.rules.AwardRuleUtil;
-import org.kuali.module.cg.service.ProjectDirectorService;
+import org.kuali.rice.KNSServiceLocator;
 
 /**
  * Methods for the Award maintenance document UI.
  */
 public class AwardMaintainableImpl extends KualiMaintainableImpl {
-
-    /**
-     * Constructs an AwardMaintainableImpl.
-     */
     public AwardMaintainableImpl() {
         super();
     }
 
-    /**
-     * Constructs a AwardMaintainableImpl.
-     * 
-     * @param award
-     */
     public AwardMaintainableImpl(Award award) {
         super(award);
         this.setBoClass(award.getClass());
     }
+
 
     /**
      * This method is called for refreshing the Agency before display to show the full name in case the agency number was changed by
@@ -101,14 +89,11 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
 
     /**
      * This method is called for refreshing the Agency after a lookup to display its full name without AJAX.
-     * 
-     * @see org.kuali.core.maintenance.KualiMaintainableImpl#refresh(java.lang.String, java.util.Map,
-     *      org.kuali.core.document.MaintenanceDocument)
      */
     @SuppressWarnings("unchecked")
     @Override
     public void refresh(String refreshCaller, Map fieldValues, MaintenanceDocument document) {
-
+        
         if (StringUtils.equals(KFSPropertyConstants.PROPOSAL, (String) fieldValues.get(KFSConstants.REFERENCES_TO_REFRESH))) {
             String pathToMaintainable = DOCUMENT + "." + NEW_MAINTAINABLE_OBJECT;
             GlobalVariables.getErrorMap().addToErrorPath(pathToMaintainable);
@@ -117,34 +102,26 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
             if (awarded) {
                 GlobalVariables.getErrorMap().putError(KFSPropertyConstants.PROPOSAL_NUMBER, KFSKeyConstants.ERROR_AWARD_PROPOSAL_AWARDED, new String[] { getAward().getProposalNumber().toString() });
             }
-            // SEE KULCG-315 for details on why this code is commented out.
-            // if (AwardRuleUtil.isProposalInactive(getAward())) {
-            // GlobalVariables.getErrorMap().putError(KFSPropertyConstants.PROPOSAL_NUMBER,
-            // KFSKeyConstants.ERROR_AWARD_PROPOSAL_INACTIVE, new String[] { getAward().getProposalNumber().toString() });
-            // }
+            if (AwardRuleUtil.isProposalInactive(getAward())) {
+                GlobalVariables.getErrorMap().putError(KFSPropertyConstants.PROPOSAL_NUMBER, KFSKeyConstants.ERROR_AWARD_PROPOSAL_INACTIVE, new String[] { getAward().getProposalNumber().toString() });
+            }
             GlobalVariables.getErrorMap().removeFromErrorPath(pathToMaintainable);
 
             // copy over proposal values after refresh
             if (!awarded) {
-                refreshAward(KFSConstants.KUALI_LOOKUPABLE_IMPL.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
+                refreshAward(KNSServiceLocator.KUALI_LOOKUPABLE.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
                 super.refresh(refreshCaller, fieldValues, document);
                 Award award = getAward();
                 award.populateFromProposal(award.getProposal());
-                refreshAward(KFSConstants.KUALI_LOOKUPABLE_IMPL.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
+                refreshAward(KNSServiceLocator.KUALI_LOOKUPABLE.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
             }
-        }
-        else {
-            refreshAward(KFSConstants.KUALI_LOOKUPABLE_IMPL.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
+        }else{
+            refreshAward(KNSServiceLocator.KUALI_LOOKUPABLE.equals(fieldValues.get(KFSConstants.REFRESH_CALLER)));
             super.refresh(refreshCaller, fieldValues, document);
         }
 
     }
 
-    /**
-     * Load related objects from the database as needed.
-     * 
-     * @param refreshFromLookup
-     */
     private void refreshAward(boolean refreshFromLookup) {
         Award award = getAward();
         award.refreshNonUpdateableReferences();
@@ -161,7 +138,7 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
     }
 
     /**
-     * Refresh the collection of associated AwardProjectDirectors.
+     * Refreshs this maintainable's AwardProjectDirectors.
      * 
      * @param refreshFromLookup a lookup returns only the primary key, so ignore the secondary key when true
      */
@@ -169,6 +146,7 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
         if (refreshFromLookup) {
             getNewCollectionLine(AWARD_PROJECT_DIRECTORS).refreshNonUpdateableReferences();
             refreshNonUpdateableReferences(getAward().getAwardProjectDirectors());
+
 
             getNewCollectionLine(AWARD_ACCOUNTS).refreshNonUpdateableReferences();
             refreshNonUpdateableReferences(getAward().getAwardAccounts());
@@ -186,9 +164,7 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
         }
     }
 
-    /**
-     * @param collection
-     */
+    // todo: move to ObjectUtils?
     private static void refreshNonUpdateableReferences(Collection<? extends PersistableBusinessObject> collection) {
         for (PersistableBusinessObject item : collection) {
             item.refreshNonUpdateableReferences();
@@ -208,27 +184,22 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
         if (ObjectUtils.isNotNull(director.getProjectDirector())) {
             String secondaryKey = director.getProjectDirector().getPersonUserIdentifier();
             if (StringUtils.isNotBlank(secondaryKey)) {
-                ProjectDirector dir = SpringContext.getBean(ProjectDirectorService.class).getByPersonUserIdentifier(secondaryKey);
+                ProjectDirector dir = SpringServiceLocator.getProjectDirectorService().getByPersonUserIdentifier(secondaryKey);
                 director.setPersonUniversalIdentifier(dir == null ? null : dir.getPersonUniversalIdentifier());
             }
-            if (StringUtils.isNotBlank(director.getPersonUniversalIdentifier()) && SpringContext.getBean(ProjectDirectorService.class).primaryIdExists(director.getPersonUniversalIdentifier())) {
+            if (StringUtils.isNotBlank(director.getPersonUniversalIdentifier()) && SpringServiceLocator.getProjectDirectorService().primaryIdExists(director.getPersonUniversalIdentifier())) {
                 ((PersistableBusinessObject) director).refreshNonUpdateableReferences();
             }
         }
     }
 
-    /**
-     * Gets the underlying Award.
-     * 
-     * @return
-     */
     public Award getAward() {
         return (Award) getBusinessObject();
     }
 
     /**
-     * Called for refreshing the {@link Subcontractor} on {@link ProposalSubcontractor} before adding to the proposalSubcontractors
-     * collection on the proposal. this is to ensure that the summary fields are show correctly. i.e. {@link Subcontractor} name
+     * called for refreshing the subcontractor on proposalSubcontractor before adding to the proposalSubcontractors collection on
+     * the proposal. this is to ensure that the summary fields are show correctly. i.e. subcontractor name
      * 
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#addNewLineToCollection(java.lang.String)
      */
@@ -236,27 +207,5 @@ public class AwardMaintainableImpl extends KualiMaintainableImpl {
     public void addNewLineToCollection(String collectionName) {
         refreshAward(false);
         super.addNewLineToCollection(collectionName);
-    }
-
-    /**
-     * This method overrides the parent method to check the status of the award document and change the linked
-     * {@link ProposalStatus} to A (Approved) if the {@link Award} is now in approved status.
-     * 
-     * @see org.kuali.core.maintenance.KualiMaintainableImpl#handleRouteStatusChange(org.kuali.core.bo.DocumentHeader)
-     */
-    @Override
-    public void handleRouteStatusChange(DocumentHeader header) {
-        super.handleRouteStatusChange(header);
-
-        Award award = getAward();
-        KualiWorkflowDocument workflowDoc = header.getWorkflowDocument();
-
-        // Use the stateIsProcessed() method so this code is only executed when the final approval occurs
-        if (workflowDoc.stateIsProcessed()) {
-            Proposal proposal = award.getProposal();
-            proposal.setProposalStatusCode(Proposal.AWARD_CODE);
-            SpringContext.getBean(BusinessObjectService.class).save(proposal);
-        }
-
     }
 }

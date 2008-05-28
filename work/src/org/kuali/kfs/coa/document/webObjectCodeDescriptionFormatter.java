@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.kuali.core.bo.PersistableBusinessObject;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.Constants;
+import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.ObjectCode;
 
 public class ObjectCodeDescriptionFormatter extends CodeDescriptionFormatterBase {
@@ -37,19 +36,19 @@ public class ObjectCodeDescriptionFormatter extends CodeDescriptionFormatterBase
     }
 
     @Override
-    protected String getDescriptionOfBO(PersistableBusinessObject bo) {
+    protected String getDescriptionOfBO(BusinessObject bo) {
         return ((ObjectCode) bo).getFinancialObjectCodeName();
     }
 
     @Override
-    protected Map<String, PersistableBusinessObject> getValuesToBusinessObjectsMap(Set values) {
+    protected Map<String, BusinessObject> getValuesToBusinessObjectsMap(Set values) {
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put(KFSConstants.UNIVERSITY_FISCAL_YEAR_PROPERTY_NAME, universityFiscalYear);
-        criteria.put(KFSConstants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, chartOfAccountsCode);
-        criteria.put(KFSConstants.FINANCIAL_OBJECT_CODE_PROPERTY_NAME, values);
-        Collection<ObjectCode> coll = SpringContext.getBean(BusinessObjectService.class).findMatchingOrderBy(ObjectCode.class, criteria, KFSConstants.VERSION_NUMBER, true);
+        criteria.put(Constants.UNIVERSITY_FISCAL_YEAR_PROPERTY_NAME, universityFiscalYear);
+        criteria.put(Constants.CHART_OF_ACCOUNTS_CODE_PROPERTY_NAME, chartOfAccountsCode);
+        criteria.put(Constants.FINANCIAL_OBJECT_CODE_PROPERTY_NAME, values);
+        Collection<ObjectCode> coll = SpringServiceLocator.getBusinessObjectService().findMatchingOrderBy(ObjectCode.class, criteria, Constants.VERSION_NUMBER, true);
 
-        Map<String, PersistableBusinessObject> results = new HashMap<String, PersistableBusinessObject>();
+        Map<String, BusinessObject> results = new HashMap<String, BusinessObject>();
         // TODO: worry about active flag?
         for (ObjectCode oc : coll) {
             results.put(oc.getFinancialObjectCode(), oc);

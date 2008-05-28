@@ -1,27 +1,32 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.service.impl;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.spring.Cached;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;
@@ -29,6 +34,8 @@ import org.kuali.module.chart.service.AccountService;
 
 /**
  * This class is the service implementation for the Account structure. This is the default, Kuali provided implementation.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class AccountServiceImpl implements AccountService {
     private static final Logger LOG = Logger.getLogger(AccountServiceImpl.class);
@@ -57,37 +64,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
-     * Method is used by KualiAccountAttribute to enable caching of accounts for routing.
-     * 
-     * @see org.kuali.module.chart.service.impl.AccountServiceImpl#getByPrimaryId(java.lang.String, java.lang.String)
-     */
-    @Cached
-    public Account getByPrimaryIdWithCaching(String chartOfAccountsCode, String accountNumber) {
-        return accountDao.getByPrimaryId(chartOfAccountsCode, accountNumber);
-    }
-
-    /**
      * @see org.kuali.module.chart.service.AccountService#getAccountsThatUserIsResponsibleFor(org.kuali.bo.user.KualiUser)
      */
-    public List getAccountsThatUserIsResponsibleFor(UniversalUser universalUser) {
+    public List getAccountsThatUserIsResponsibleFor(KualiUser kualiUser) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieving accountsResponsible list for user " + universalUser.getPersonName());
+            LOG.debug("retrieving accountsResponsible list for user " + kualiUser.getPersonName());
         }
 
         // gets the list of accounts that the user is the Fiscal Officer of
-        List accountList = accountDao.getAccountsThatUserIsResponsibleFor(universalUser);
+        List accountList = accountDao.getAccountsThatUserIsResponsibleFor(kualiUser);
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("retrieved accountsResponsible list for user " + universalUser.getPersonName());
+            LOG.debug("retrieved accountsResponsible list for user " + kualiUser.getPersonName());
         }
         return accountList;
-    }
-
-    /**
-     * @see org.kuali.module.chart.service.AccountService#hasResponsibilityOnAccount(org.kuali.core.bo.user.UniversalUser,
-     *      org.kuali.module.chart.bo.Account)
-     */
-    public boolean hasResponsibilityOnAccount(UniversalUser kualiUser, Account account) {
-        return accountDao.determineUserResponsibilityOnAccount(kualiUser, account);
     }
 
     /**
@@ -99,6 +89,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.service.AccountService#getSecondaryDelegationsByExample(org.kuali.module.chart.bo.Delegate,
      *      java.lang.String)
      */
@@ -114,12 +105,7 @@ public class AccountServiceImpl implements AccountService {
     public Iterator getAllAccounts() {
         LOG.debug("getAllAccounts() started");
 
-        Iterator accountIter = accountDao.getAllAccounts();
-        List accountList = new ArrayList();
-        while (accountIter.hasNext()) {
-            accountList.add(accountIter.next());
-        }
-        return accountList.iterator();
+        return accountDao.getAllAccounts();
     }
 
     /**
@@ -128,5 +114,4 @@ public class AccountServiceImpl implements AccountService {
     public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
-
 }

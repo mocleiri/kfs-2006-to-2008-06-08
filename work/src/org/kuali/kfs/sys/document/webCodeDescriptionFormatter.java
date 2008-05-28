@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@ import java.util.Set;
 
 public interface CodeDescriptionFormatter {
     /**
-     * Given a set of codes, this class will form a format a string that includes their description Example: Codes A, B, C may be
-     * formatted to "A, descA; B, descB; and C; descC"
+     * Given a set of codes, this class will form a format a string that includes their description
+     * 
+     * Example: Codes A, B, C may be formatted to "A, descA; B, descB; and C; descC"
      * 
      * @param values
      * @param startConjunction a conjunction or phrase to be used for the beginning of the series (e.g. "either", "neither", "any 3
