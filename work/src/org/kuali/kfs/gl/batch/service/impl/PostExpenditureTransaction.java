@@ -18,7 +18,6 @@ package org.kuali.module.gl.batch.poster.impl;
 import java.util.Date;
 
 import org.apache.ojb.broker.metadata.MetadataManager;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
@@ -38,10 +37,6 @@ import org.kuali.module.gl.service.IcrTransaction;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-/**
- * This implementation of PostTransaction creates ExpenditureTransactions, temporary records used
- * for ICR generation
- */
 @Transactional
 public class PostExpenditureTransaction implements IcrTransaction, PostTransaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostExpenditureTransaction.class);
@@ -68,7 +63,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
     }
 
     /**
-     * Creates a PostExpenditureTransaction instance
+     * 
      */
     public PostExpenditureTransaction() {
         super();
@@ -77,12 +72,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
     /**
      * This will determine if this transaction is an ICR eligible transaction
      * 
-     * @param objectType the object type of the transaction
-     * @param account the account of the transaction
-     * @param subAccountNumber the subAccountNumber of the transaction
-     * @param objectCode the object code of the transaction
-     * @param universityFiscalPeriodCode the accounting period code of the transactoin
-     * @return true if the transaction is an ICR transaction and therefore should have an expenditure transaction created for it; false if otherwise
+     * @return
      */
     public boolean isIcrTransaction(ObjectType objectType, Account account, String subAccountNumber, ObjectCode objectCode, String universityFiscalPeriodCode) {
         LOG.debug("isIcrTransaction() started");
@@ -114,7 +104,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
             }
             else {
                 // If the ICR type code is empty or 10, don't post
-
+                
                 // TODO: use type 10 constant
                 if ((!StringUtils.hasText(account.getAcctIndirectCostRcvyTypeCd())) || KFSConstants.MONTH10.equals(account.getAcctIndirectCostRcvyTypeCd())) {
                     // No need to post this
@@ -126,14 +116,13 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
                 ObjectCode currentObjectCode = objectCode;
                 boolean foundIt = false;
                 while (!foundIt) {
-                    if (currentObjectCode.getChartOfAccountsCode().equals(currentObjectCode.getReportsToChartOfAccountsCode()) && currentObjectCode.getFinancialObjectCode().equals(currentObjectCode.getReportsToFinancialObjectCode())) {
+                    if (currentObjectCode.getChartOfAccountsCode().equals(currentObjectCode.getReportsToChartOfAccountsCode()) &&
+                            currentObjectCode.getFinancialObjectCode().equals(currentObjectCode.getReportsToFinancialObjectCode())) {
                         foundIt = true;
-                    }
-                    else {
-                        if (ObjectUtils.isNull(currentObjectCode.getReportsToFinancialObject())) {
+                    } else {
+                        if (currentObjectCode.getReportsToFinancialObject() == null) {
                             foundIt = true;
-                        }
-                        else {
+                        } else {
                             currentObjectCode = currentObjectCode.getReportsToFinancialObject();
                         }
                     }
@@ -155,44 +144,32 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
         }
     }
 
-    /**
-     * If the transaction is a valid ICR transaction, posts an expenditure transaction record for the transaction
+    /*
+     * (non-Javadoc)
      * 
-     * @param t the transaction which is being posted
-     * @param mode the mode the poster is currently running in
-     * @param postDate the date this transaction should post to
-     * @return the accomplished post type
-     * @see org.kuali.module.gl.batch.poster.PostTransaction#post(org.kuali.module.gl.bo.Transaction, int, java.util.Date)
+     * @see org.kuali.module.gl.batch.poster.PostTransaction#post(org.kuali.module.gl.bo.Transaction)
      */
     public String post(Transaction t, int mode, Date postDate) {
         LOG.debug("post() started");
 
         if (isIcrTransaction(t.getObjectType(), t.getAccount(), t.getSubAccountNumber(), t.getFinancialObject(), t.getUniversityFiscalPeriodCode())) {
-            return postTransaction(t, mode);
+            return postTransaction(t, mode, postDate);
         }
         return GLConstants.EMPTY_CODE;
     }
 
-    /**
-     * Actually posts the transaction to the appropriate expenditure transaction record
-     * 
-     * @param t the transaction to post
-     * @param mode the mode of the poster as it is currently running
-     * @return the accomplished post type
-     */
-    private String postTransaction(Transaction t, int mode) {
+    private String postTransaction(Transaction t, int mode, Date postDate) {
         LOG.debug("postTransaction() started");
 
         String returnCode = GLConstants.UPDATE_CODE;
 
         ExpenditureTransaction et = expenditureTransactionDao.getByTransaction(t);
         if (et == null) {
-            LOG.warn("Posting expenditure transation");
             et = new ExpenditureTransaction(t);
             returnCode = GLConstants.INSERT_CODE;
         }
 
-        if (org.apache.commons.lang.StringUtils.isBlank(t.getOrganizationReferenceId())) {
+        if (t.getOrganizationReferenceId() == null) {
             et.setOrganizationReferenceId(GLConstants.getDashOrganizationReferenceId());
         }
 
@@ -208,9 +185,6 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
         return returnCode;
     }
 
-    /**
-     * @see org.kuali.module.gl.batch.poster.PostTransaction#getDestinationName()
-     */
     public String getDestinationName() {
         return MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(ExpenditureTransaction.class).getFullTableName();
     }
