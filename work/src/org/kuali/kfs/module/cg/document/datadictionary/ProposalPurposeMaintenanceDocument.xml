@@ -1,0 +1,84 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <bean id="ProposalPurposeMaintenanceDocument" parent="ProposalPurposeMaintenanceDocument-parentBean" />
+
+  <bean id="ProposalPurposeMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
+    <property name="businessObjectClass" value="org.kuali.module.cg.bo.ProposalPurpose" />
+    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
+    <property name="maintainableSections" >
+      <list>
+        <ref bean="ProposalPurposeMaintenanceDocument-EditProposalPurpose" />
+      </list>
+    </property>
+    <property name="lockingKeys" >
+      <list>
+        <value>proposalPurposeCode</value>
+      </list>
+    </property>
+    <property name="label" value="Proposal Purpose" />
+    <property name="shortLabel" value="Proposal Purpose" />
+    <property name="summary" value="Proposal Purpose Maintenance Document" />
+    <property name="description" value="Document used to create or update Proposal Purpose objects" />
+    <property name="helpDefinition" >
+      <bean parent="HelpDefinition"
+            p:parameterNamespace="KFS-CG"
+            p:parameterName="PROPOSAL_PURPOSE"
+            p:parameterDetailType="ProposalPurpose" />
+    </property>
+    <property name="documentTypeName" value="ProposalPurposeMaintenanceDocument" />
+    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
+    <property name="documentTypeCode" value="PURP" />
+    <property name="workflowProperties" >
+      <ref bean="ProposalPurposeMaintenanceDocument-workflowProperties" />
+    </property>
+    <property name="authorizations" >
+      <list>
+        <bean parent="AuthorizationDefinition">
+          <property name="action" value="initiate" />
+          <property name="authorizedGroups" >
+            <set>
+              <value>kualiUniversalGroup</value>
+            </set>
+          </property>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+<!-- Maintenance Section Definitions -->
+
+
+  <bean id="ProposalPurposeMaintenanceDocument-EditProposalPurpose" parent="ProposalPurposeMaintenanceDocument-EditProposalPurpose-parentBean" />
+
+  <bean id="ProposalPurposeMaintenanceDocument-EditProposalPurpose-parentBean" abstract="true" parent="MaintainableSectionDefinition">
+    <property name="id" value="Edit Proposal Purpose" />
+    <property name="title" value="Edit Proposal Purpose" />
+    <property name="maintainableItems" >
+      <list>
+        <bean parent="MaintainableFieldDefinition"
+              p:name="proposalPurposeCode"
+              p:required="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="proposalPurposeDescription"
+              p:required="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="rowActiveIndicator"
+              p:defaultValue="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="versionNumber" />
+      </list>
+    </property>
+  </bean>
+
+<!-- Exported Workflow Properties -->
+
+
+  <bean id="ProposalPurposeMaintenanceDocument-workflowProperties" parent="ProposalPurposeMaintenanceDocument-workflowProperties-parentBean" />
+
+  <bean id="ProposalPurposeMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
+  </bean>
+</beans>

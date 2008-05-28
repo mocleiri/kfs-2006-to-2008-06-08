@@ -1,0 +1,66 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <bean id="EffortCertificationPeriodStatusCodeMaintenanceDocument" parent="EffortCertificationPeriodStatusCodeMaintenanceDocument-parentBean" />
+
+  <bean id="EffortCertificationPeriodStatusCodeMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
+    <property name="businessObjectClass" value="org.kuali.module.effort.bo.EffortCertificationPeriodStatusCode" />
+    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
+    <property name="maintainableSections" >
+      <list>
+        <ref bean="EffortCertificationPeriodStatusCodeMaintenanceDocument-EditReportPeriodStatusCode" />
+      </list>
+    </property>
+    <property name="allowsNewOrCopy" value="false" />
+    <property name="lockingKeys" >
+      <list>
+        <value>effortCertificationReportPeriodStatusCode</value>
+      </list>
+    </property>
+    <property name="label" value="Report Period Status Code  Maintenance Document" />
+    <property name="shortLabel" value="Effort Cert Prd Status Code Maint Doc" />
+    <property name="summary" value="Period Status Code  Maintenance Document" />
+    <property name="description" value="Document used to create or update Effort Certification Period Status Code  Maintenance Document" />
+    <property name="documentTypeName" value="EffortCertificationPeriodStatusCodeMaintenanceDocument" />
+    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
+    <property name="documentTypeCode" value="ARPS" />
+    <property name="authorizations" >
+      <list>
+        <bean parent="AuthorizationDefinition">
+          <property name="action" value="initiate" />
+          <property name="authorizedGroups" >
+            <set>
+              <value>LD_EFFORT_ADMINISTRATORS</value>
+            </set>
+          </property>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+<!-- Maintenance Section Definitions -->
+
+
+  <bean id="EffortCertificationPeriodStatusCodeMaintenanceDocument-EditReportPeriodStatusCode" parent="EffortCertificationPeriodStatusCodeMaintenanceDocument-EditReportPeriodStatusCode-parentBean" />
+
+  <bean id="EffortCertificationPeriodStatusCodeMaintenanceDocument-EditReportPeriodStatusCode-parentBean" abstract="true" parent="MaintainableSectionDefinition">
+    <property name="id" value="Edit Report Period Status Code" />
+    <property name="title" value="Edit Report Period Status Code" />
+    <property name="maintainableItems" >
+      <list>
+        <bean parent="MaintainableFieldDefinition"
+              p:name="effortCertificationReportPeriodStatusCode"
+              p:readOnly="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="effortCertificationReportPeriodStatusDescription"
+              p:required="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="versionNumber"
+              p:readOnly="true" />
+      </list>
+    </property>
+  </bean>
+</beans>
