@@ -1,216 +1,210 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.BillingAddress">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="BillingAddress" parent="BillingAddress-parentBean" />
+        <inquiry>
+            <title>Billing Address Inquiry</title>
 
-  <bean id="BillingAddress-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.BillingAddress" />
-    <property name="inquiryDefinition" >
-      <ref bean="BillingAddress-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="BillingAddress-lookupDefinition" />
-    </property>
-    <property name="titleAttribute" value="billingCampusCode" />
-    <property name="objectLabel" value="Billing Address" />
-    <property name="attributes" >
-      <list>
-        <ref bean="BillingAddress-billingCampusCode" />
-        <ref bean="BillingAddress-billingCityName" />
-        <ref bean="BillingAddress-billingCountryCode" />
-        <ref bean="BillingAddress-billingLine1Address" />
-        <ref bean="BillingAddress-billingLine2Address" />
-        <ref bean="BillingAddress-billingName" />
-        <ref bean="BillingAddress-billingPhoneNumber" />
-        <ref bean="BillingAddress-billingPostalCode" />
-        <ref bean="BillingAddress-billingStateCode" />
-        <ref bean="BillingAddress-active" />
-        <ref bean="BillingAddress-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="billingCampusCode" />
+                <field attributeName="billingName" />
+                <field attributeName="billingLine1Address" />
+                <field attributeName="billingLine2Address" />
+                <field attributeName="billingCityName" />
+                <field attributeName="billingStateCode" />
+                <field attributeName="billingPostalCode" />
+                <field attributeName="billingCountryCode" />
+                <field attributeName="billingPhoneNumber" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Billing Address Lookup</title>
+
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.BillingAddress">Create New</a>]]></menubar>
+
+            <instructions>Lookup a Billing Address</instructions>
+
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="billingCampusCode" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="billingCampusCode" required="false" />
+                <lookupField attributeName="billingName" required="false" />
+                <lookupField attributeName="billingLine1Address" required="false" />
+                <lookupField attributeName="billingLine2Address" required="false" />
+                <lookupField attributeName="billingCityName" required="false" />
+                <lookupField attributeName="billingStateCode" required="false" />
+                <lookupField attributeName="billingPostalCode" required="false" />
+                <lookupField attributeName="billingCountryCode" required="false" />
+                <lookupField attributeName="billingPhoneNumber" required="false" />
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="billingCampusCode" />
+                <field attributeName="billingName" />
+                <field attributeName="billingLine1Address" />
+                <field attributeName="billingLine2Address" />
+                <field attributeName="billingCityName" />
+                <field attributeName="billingStateCode" />
+                <field attributeName="billingPostalCode" />
+                <field attributeName="billingCountryCode" />
+                <field attributeName="billingPhoneNumber" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+            </resultFields>
+        </lookup>
+
+        <attributes>
+
+            <attribute name="billingCampusCode" forceUppercase="true">
+                <label>Billing Campus Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>billingCampusCode</summary>
+                <description>billingCampusCode description...</description>
+			</attribute>
+
+            <attribute name="billingCityName">
+                <label>Billing City Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingCityName</summary>
+                <description>billingCityName description...</description>
+			</attribute>
+
+            <attribute name="billingCountryCode" forceUppercase="true">
+                <label>Billing Country Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>billingCountryCode</summary>
+                <description>billingCountryCode description...</description>
+			</attribute>
+
+            <attribute name="billingLine1Address">
+                <label>Billing Line1 Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingLine1Address</summary>
+                <description>billingLine1Address description...</description>
+			</attribute>
+
+            <attribute name="billingLine2Address">
+                <label>Billing Line2 Address</label>
+                <shortLabel>Address</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingLine2Address</summary>
+                <description>billingLine2Address description...</description>
+			</attribute>
+
+            <attribute name="billingName">
+                <label>Billing Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingName</summary>
+                <description>billingName description...</description>
+			</attribute>
+
+            <attribute name="billingPhoneNumber">
+                <label>Billing Phone Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>billingPhoneNumber</summary>
+                <description>billingPhoneNumber description...</description>
+			</attribute>
+
+            <attribute name="billingPostalCode">
+                <label>Billing Postal Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>20</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="22" />
+                </control>
+
+                <summary>billingPostalCode</summary>
+                <description>billingPostalCode description...</description>
+			</attribute>
+
+            <attribute name="billingStateCode" forceUppercase="true">
+                <label>Billing State Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>billingStateCode</summary>
+                <description>billingStateCode description...</description>
+			</attribute>
+
+            <attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
 
-  <bean id="BillingAddress-billingCampusCode" parent="BillingAddress-billingCampusCode-parentBean" />
-
-  <bean id="BillingAddress-billingCampusCode-parentBean" abstract="true" parent="VendorGenericAttributes-campusCode">
-    <property name="name" value="billingCampusCode" />
-    <property name="label" value="Billing Campus Code" />
-  </bean>
-  <bean id="BillingAddress-billingCityName" parent="BillingAddress-billingCityName-parentBean" />
-
-  <bean id="BillingAddress-billingCityName-parentBean" abstract="true" parent="VendorGenericAttributes-cityName">
-    <property name="name" value="billingCityName" />
-    <property name="label" value="Billing City Name" />
-  </bean>
-  <bean id="BillingAddress-billingCountryCode" parent="BillingAddress-billingCountryCode-parentBean" />
-
-  <bean id="BillingAddress-billingCountryCode-parentBean" abstract="true" parent="VendorGenericAttributes-countryCode">
-    <property name="name" value="billingCountryCode" />
-    <property name="label" value="Billing Country Code" />
-  </bean>
-  <bean id="BillingAddress-billingLine1Address" parent="BillingAddress-billingLine1Address-parentBean" />
-
-  <bean id="BillingAddress-billingLine1Address-parentBean" abstract="true" parent="VendorGenericAttributes-line1Address">
-    <property name="name" value="billingLine1Address" />
-    <property name="label" value="Billing Line 1 Address" />
-  </bean>
-  <bean id="BillingAddress-billingLine2Address" parent="BillingAddress-billingLine2Address-parentBean" />
-
-  <bean id="BillingAddress-billingLine2Address-parentBean" abstract="true" parent="VendorGenericAttributes-line2Address">
-    <property name="name" value="billingLine2Address" />
-    <property name="label" value="Billing Line 2 Address" />
-  </bean>
-  <bean id="BillingAddress-billingName" parent="BillingAddress-billingName-parentBean" />
-
-  <bean id="BillingAddress-billingName-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="billingName" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Billing Name" />
-    <property name="shortLabel" value="Name" />
-    <property name="maxLength" value="45" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="47" />
-    </property>
-  </bean>
-  <bean id="BillingAddress-billingPhoneNumber" parent="BillingAddress-billingPhoneNumber-parentBean" />
-
-  <bean id="BillingAddress-billingPhoneNumber-parentBean" abstract="true" parent="VendorGenericAttributes-phoneNumberWithValidation">
-    <property name="name" value="billingPhoneNumber" />
-    <property name="label" value="Billing Phone Number" />
-  </bean>
-  <bean id="BillingAddress-billingPostalCode" parent="BillingAddress-billingPostalCode-parentBean" />
-
-  <bean id="BillingAddress-billingPostalCode-parentBean" abstract="true" parent="VendorGenericAttributes-zipCode">
-    <property name="name" value="billingPostalCode" />
-    <property name="label" value="Billing Postal Code" />
-  </bean>
-  <bean id="BillingAddress-billingStateCode" parent="BillingAddress-billingStateCode-parentBean" />
-
-  <bean id="BillingAddress-billingStateCode-parentBean" abstract="true" parent="VendorGenericAttributes-stateCode">
-    <property name="name" value="billingStateCode" />
-    <property name="label" value="Billing State Code" />
-  </bean>
-  <bean id="BillingAddress-active" parent="BillingAddress-active-parentBean" />
-
-  <bean id="BillingAddress-active-parentBean" abstract="true" parent="GenericAttributes-activeIndicator">
-    <property name="name" value="active" />
-  </bean>
-  <bean id="BillingAddress-versionNumber" parent="BillingAddress-versionNumber-parentBean" />
-
-  <bean id="BillingAddress-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
-
-<!-- Business Object Inquiry Definition -->
-
-
-  <bean id="BillingAddress-inquiryDefinition" parent="BillingAddress-inquiryDefinition-parentBean" />
-
-  <bean id="BillingAddress-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Billing Address Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingCampusCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingName" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingLine1Address" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingLine2Address" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingCityName" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingStateCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingPostalCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingCountryCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="billingPhoneNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="active" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-<!-- Business Object Lookup Definition -->
-
-
-  <bean id="BillingAddress-lookupDefinition" parent="BillingAddress-lookupDefinition-parentBean" />
-
-  <bean id="BillingAddress-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Billing Address Lookup" />
-    <property name="instructions" value="Lookup a Billing Address" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="billingCampusCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingLine1Address" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingLine2Address" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingCityName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingStateCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingPostalCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingCountryCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingPhoneNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="active" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="billingCampusCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingLine1Address" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingLine2Address" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingCityName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingStateCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingPostalCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingCountryCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="billingPhoneNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="active" />
-      </list>
-    </property>
-  </bean>
-</beans>
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

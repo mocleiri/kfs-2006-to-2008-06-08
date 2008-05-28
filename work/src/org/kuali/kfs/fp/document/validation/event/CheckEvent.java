@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import org.kuali.module.financial.bo.Check;
 
 /**
  * Defines methods common to all CheckEvents.
+ * 
+ * 
  */
 public interface CheckEvent extends KualiDocumentEvent {
     /**

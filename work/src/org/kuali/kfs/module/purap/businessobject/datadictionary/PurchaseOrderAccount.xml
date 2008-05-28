@@ -1,466 +1,289 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.PurchaseOrderAccount">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="PurchaseOrderAccount" parent="PurchaseOrderAccount-parentBean" />
+        <inquiry>
+            <title>Purchase Order Account Inquiry</title>
 
-  <bean id="PurchaseOrderAccount-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.PurchaseOrderAccount" />
-    <property name="attributes" >
-      <list>
-        <ref bean="PurchaseOrderAccount-objectCode.financialObjectTypeCode" />
-        <ref bean="PurchaseOrderAccount-objectCode.financialObjectSubTypeCode" />
-        <ref bean="PurchaseOrderAccount-objectCode.financialObjectLevelCode" />
-        <ref bean="PurchaseOrderAccount-account.financialHigherEdFunctionCd" />
-        <ref bean="PurchaseOrderAccount-account.subFundGroupCode" />
-        <ref bean="PurchaseOrderAccount-account.subFundGroup.fundGroupCode" />
-        <ref bean="PurchaseOrderAccount-balanceTypeCode" />
-        <ref bean="PurchaseOrderAccount-referenceNumber" />
-        <ref bean="PurchaseOrderAccount-sequenceNumber" />
-        <ref bean="PurchaseOrderAccount-financialObjectCode" />
-        <ref bean="PurchaseOrderAccount-accountNumber" />
-        <ref bean="PurchaseOrderAccount-objectId" />
-        <ref bean="PurchaseOrderAccount-organizationReferenceId" />
-        <ref bean="PurchaseOrderAccount-chartOfAccountsCode" />
-        <ref bean="PurchaseOrderAccount-postingYear" />
-        <ref bean="PurchaseOrderAccount-referenceOriginCode" />
-        <ref bean="PurchaseOrderAccount-overrideCode" />
-        <ref bean="PurchaseOrderAccount-amount" />
-        <ref bean="PurchaseOrderAccount-subAccountNumber" />
-        <ref bean="PurchaseOrderAccount-referenceTypeCode" />
-        <ref bean="PurchaseOrderAccount-projectCode" />
-        <ref bean="PurchaseOrderAccount-financialSubObjectCode" />
-        <ref bean="PurchaseOrderAccount-versionNumber" />
-        <ref bean="PurchaseOrderAccount-documentNumber" />
-        <ref bean="PurchaseOrderAccount-debitCreditCode" />
-        <ref bean="PurchaseOrderAccount-encumbranceUpdateCode" />
-        <ref bean="PurchaseOrderAccount-objectTypeCode" />
-        <ref bean="PurchaseOrderAccount-accountExpiredOverride" />
-        <ref bean="PurchaseOrderAccount-nonFringeAccountOverride" />
-        <ref bean="PurchaseOrderAccount-objectBudgetOverride" />
-        <ref bean="PurchaseOrderAccount-financialDocumentLineDescription" />
-        <ref bean="PurchaseOrderAccount-salesTaxRequired" />
-        <ref bean="PurchaseOrderAccount-salesTax.chartOfAccountsCode" />
-        <ref bean="PurchaseOrderAccount-salesTax.accountNumber" />
-        <ref bean="PurchaseOrderAccount-salesTax.financialDocumentGrossSalesAmount" />
-        <ref bean="PurchaseOrderAccount-salesTax.financialDocumentTaxableSalesAmount" />
-        <ref bean="PurchaseOrderAccount-salesTax.financialDocumentSaleDate" />
-        <ref bean="PurchaseOrderAccount-itemIdentifier" />
-        <ref bean="PurchaseOrderAccount-accountLinePercent" />
-        <ref bean="PurchaseOrderAccount-accountIdentifier" />
-        <ref bean="PurchaseOrderAccount-itemAccountOutstandingEncumbranceAmount" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="accountLinePercent" />
+                <field attributeName="accountNumber" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="itemAccountOutstandingEncumbranceAmount" />
+                <field attributeName="itemAccountPaidAmount" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="organizationReferenceId" />
+                <field attributeName="projectCode" />
+                <field attributeName="purchaseOrderAccountIdentifier" />
+                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="subAccountNumber" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Purchase Order Account Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PurchaseOrderAccount">Create New</a>]]></menubar>
 
-  <bean id="PurchaseOrderAccount-objectCode.financialObjectTypeCode" parent="PurchaseOrderAccount-objectCode.financialObjectTypeCode-parentBean" />
+            <instructions>Lookup an Purchase Order Account</instructions>
 
-  <bean id="PurchaseOrderAccount-objectCode.financialObjectTypeCode-parentBean" abstract="true" parent="ObjectCode-financialObjectTypeCode">
-    <property name="name" value="objectCode.financialObjectTypeCode" />
-  </bean>
-  <bean id="PurchaseOrderAccount-objectCode.financialObjectSubTypeCode" parent="PurchaseOrderAccount-objectCode.financialObjectSubTypeCode-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="accountLinePercent" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="PurchaseOrderAccount-objectCode.financialObjectSubTypeCode-parentBean" abstract="true" parent="ObjectCode-financialObjectSubTypeCode">
-    <property name="name" value="objectCode.financialObjectSubTypeCode" />
-  </bean>
-  <bean id="PurchaseOrderAccount-objectCode.financialObjectLevelCode" parent="PurchaseOrderAccount-objectCode.financialObjectLevelCode-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="accountLinePercent" required="false" />
+                <lookupField attributeName="accountNumber" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="financialObjectCode" required="false" />
+                <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="itemAccountOutstandingEncumbranceAmount" required="false" />
+                <lookupField attributeName="itemAccountPaidAmount" required="false" />
+                <lookupField attributeName="itemLineNumber" required="false" />
+                <lookupField attributeName="organizationReferenceId" required="false" />
+                <lookupField attributeName="projectCode" required="false" />
+                <lookupField attributeName="purchaseOrderAccountIdentifier" required="false" />
+                <lookupField attributeName="purchaseOrderIdentifier" required="false" />
+                <lookupField attributeName="subAccountNumber" required="false" />
+            </lookupFields>
 
-  <bean id="PurchaseOrderAccount-objectCode.financialObjectLevelCode-parentBean" abstract="true" parent="ObjectCode-financialObjectLevelCode">
-    <property name="name" value="objectCode.financialObjectLevelCode" />
-  </bean>
-  <bean id="PurchaseOrderAccount-account.financialHigherEdFunctionCd" parent="PurchaseOrderAccount-account.financialHigherEdFunctionCd-parentBean" />
+            <resultFields>
+                <field attributeName="accountLinePercent" />
+                <field attributeName="accountNumber" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="itemAccountOutstandingEncumbranceAmount" />
+                <field attributeName="itemAccountPaidAmount" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="organizationReferenceId" />
+                <field attributeName="projectCode" />
+                <field attributeName="purchaseOrderAccountIdentifier" />
+                <field attributeName="purchaseOrderIdentifier" />
+                <field attributeName="subAccountNumber" />
+            </resultFields>
+        </lookup>
 
-  <bean id="PurchaseOrderAccount-account.financialHigherEdFunctionCd-parentBean" abstract="true" parent="Account-financialHigherEdFunctionCd">
-    <property name="name" value="account.financialHigherEdFunctionCd" />
-  </bean>
-  <bean id="PurchaseOrderAccount-account.subFundGroupCode" parent="PurchaseOrderAccount-account.subFundGroupCode-parentBean" />
+        <attributes>
 
-  <bean id="PurchaseOrderAccount-account.subFundGroupCode-parentBean" abstract="true" parent="Account-subFundGroupCode">
-    <property name="name" value="account.subFundGroupCode" />
-  </bean>
-  <bean id="PurchaseOrderAccount-account.subFundGroup.fundGroupCode" parent="PurchaseOrderAccount-account.subFundGroup.fundGroupCode-parentBean" />
+            <attribute name="accountLinePercent" forceUppercase="true">
+                <label>Account Line Percent</label>
+                <shortLabel>Percent</shortLabel>
 
-  <bean id="PurchaseOrderAccount-account.subFundGroup.fundGroupCode-parentBean" abstract="true" parent="SubFundGroup-fundGroupCode">
-    <property name="name" value="account.subFundGroup.fundGroupCode" />
-  </bean>
-  <bean id="PurchaseOrderAccount-balanceTypeCode" parent="PurchaseOrderAccount-balanceTypeCode-parentBean" />
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-balanceTypeCode-parentBean" abstract="true" parent="BalanceTyp-code">
-    <property name="name" value="balanceTypeCode" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="PurchaseOrderAccount-referenceNumber" parent="PurchaseOrderAccount-referenceNumber-parentBean" />
+                <control>
+                    <text size="5" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-referenceNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="referenceNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Reference Number" />
-    <property name="shortLabel" value="Ref Number" />
-    <property name="maxLength" value="14" />
-    <property name="validationPattern" >
-      <bean parent="AlphaNumericValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="16" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The transaction number on the deposit slip assigned by the bank." />
-  </bean>
-  <bean id="PurchaseOrderAccount-sequenceNumber" parent="PurchaseOrderAccount-sequenceNumber-parentBean" />
+                <summary>accountLinePercent</summary>
+                <description>accountLinePercent description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-sequenceNumber-parentBean" abstract="true" parent="GenericAttributes-transactionEntrySequenceId">
-    <property name="name" value="sequenceNumber" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="PurchaseOrderAccount-financialObjectCode" parent="PurchaseOrderAccount-financialObjectCode-parentBean" />
+            <attribute name="accountNumber" forceUppercase="true">
+                <label>Account Number</label>
+                <shortLabel>Number</shortLabel>
 
-  <bean id="PurchaseOrderAccount-financialObjectCode-parentBean" abstract="true" parent="ObjectCode-financialObjectCode">
-    <property name="description" value="The code that identifies the &quot;object&quot; of accounting for a transaction, expressed as a 4-digit numeric text, including leading zeros. For Search Criteria, select the Help for the Object Code search." />
-  </bean>
-  <bean id="PurchaseOrderAccount-accountNumber" parent="PurchaseOrderAccount-accountNumber-parentBean" />
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-accountNumber-parentBean" abstract="true" parent="Account-accountNumber">
-  </bean>
-  <bean id="PurchaseOrderAccount-objectId" parent="PurchaseOrderAccount-objectId-parentBean" />
+                <control>
+                    <text size="9" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-objectId-parentBean" abstract="true" parent="GenericAttributes-objectId">
-    <property name="required" value="false" />
-  </bean>
-  <bean id="PurchaseOrderAccount-organizationReferenceId" parent="PurchaseOrderAccount-organizationReferenceId-parentBean" />
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-organizationReferenceId-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="organizationReferenceId" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Organization Reference Id" />
-    <property name="shortLabel" value="Org Ref Id" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The identifier of an Organization which has been associated with the Account Line." />
-  </bean>
-  <bean id="PurchaseOrderAccount-chartOfAccountsCode" parent="PurchaseOrderAccount-chartOfAccountsCode-parentBean" />
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="PurchaseOrderAccount-chartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.SimpleChartValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-    <property name="description" value="The code that identifies the Chart of Accounts for an Account. Kuali accommodates more than one Chart of Accounts." />
-  </bean>
-  <bean id="PurchaseOrderAccount-postingYear" parent="PurchaseOrderAccount-postingYear-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-postingYear-parentBean" abstract="true" parent="GenericAttributes-genericFiscalYear">
-    <property name="name" value="postingYear" />
-    <property name="required" value="true" />
-  </bean>
-  <bean id="PurchaseOrderAccount-referenceOriginCode" parent="PurchaseOrderAccount-referenceOriginCode-parentBean" />
+                <control>
+                    <text size="4" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-referenceOriginCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="referenceOriginCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Reference Origin Code" />
-    <property name="shortLabel" value="Ref Origin Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for that identifies the system from which the original encumbering transaction came, selected from a pulldown list." />
-  </bean>
-  <bean id="PurchaseOrderAccount-overrideCode" parent="PurchaseOrderAccount-overrideCode-parentBean" />
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-overrideCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="overrideCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Override Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.kfs.lookup.keyvalues.AccountingLineOverrideOptionFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for the type of override in an Accounting Line, selected from a pulldown list." />
-  </bean>
-  <bean id="PurchaseOrderAccount-amount" parent="PurchaseOrderAccount-amount-parentBean" />
+            <attribute name="financialObjectCode" forceUppercase="true">
+                <label>Financial Object Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="PurchaseOrderAccount-amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="amount" />
-    <property name="required" value="true" />
-    <property name="description" value="The total dollar amount of check or batch of checks." />
-  </bean>
-  <bean id="PurchaseOrderAccount-subAccountNumber" parent="PurchaseOrderAccount-subAccountNumber-parentBean" />
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-subAccountNumber-parentBean" abstract="true" parent="SubAccount-subAccountNumber">
-    <property name="label" value="Sub-Account Code" />
-    <property name="required" value="false" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The identifier to further partition the financial activity of an Account, expressed as a 5-character code" />
-  </bean>
-  <bean id="PurchaseOrderAccount-referenceTypeCode" parent="PurchaseOrderAccount-referenceTypeCode-parentBean" />
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-referenceTypeCode-parentBean" abstract="true" parent="DocumentType-financialDocumentTypeCode">
-    <property name="name" value="referenceTypeCode" />
-    <property name="label" value="Reference Type Code" />
-    <property name="shortLabel" value="Ref Type Code" />
-    <property name="required" value="false" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for the type of the system from which the original encumbering transaction came, selected from a pulldown list." />
-  </bean>
-  <bean id="PurchaseOrderAccount-projectCode" parent="PurchaseOrderAccount-projectCode-parentBean" />
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-projectCode-parentBean" abstract="true" parent="ProjectCode-code">
-    <property name="name" value="projectCode" />
-    <property name="required" value="false" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The title of the project." />
-  </bean>
-  <bean id="PurchaseOrderAccount-financialSubObjectCode" parent="PurchaseOrderAccount-financialSubObjectCode-parentBean" />
+            <attribute name="financialSubObjectCode" forceUppercase="true">
+                <label>Financial Sub Object Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="PurchaseOrderAccount-financialSubObjectCode-parentBean" abstract="true" parent="SubObjCd-financialSubObjectCode">
-    <property name="required" value="false" />
-    <property name="description" value="The code that partitions the Object Code into a greater amount of detail. Sub-Object Code acquire most of the attributes of the official Object Code to which they report, including Object Type and Object SubType." />
-  </bean>
-  <bean id="PurchaseOrderAccount-versionNumber" parent="PurchaseOrderAccount-versionNumber-parentBean" />
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-    <property name="required" value="false" />
-  </bean>
-  <bean id="PurchaseOrderAccount-documentNumber" parent="PurchaseOrderAccount-documentNumber-parentBean" />
+                <control>
+                    <text size="5" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-documentNumber-parentBean" abstract="true" parent="DocumentHeader-documentNumber">
-    <property name="required" value="false" />
-  </bean>
-  <bean id="PurchaseOrderAccount-debitCreditCode" parent="PurchaseOrderAccount-debitCreditCode-parentBean" />
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-debitCreditCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="debitCreditCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Credit or Debit Code" />
-    <property name="shortLabel" value="Credit/Debit" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="CharsetValidationPattern"
-            p:validChars="DC" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="2" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="If it&apos;s a &quot;C&quot; then this accounting line is a credit, if it&apos;s a &quot;D&quot;, then it&apos;s a debit." />
-  </bean>
-  <bean id="PurchaseOrderAccount-encumbranceUpdateCode" parent="PurchaseOrderAccount-encumbranceUpdateCode-parentBean" />
+            <attribute name="itemAccountOutstandingEncumbranceAmount" forceUppercase="true">
+                <label>Item Account Outstanding Encumbrance Amount</label>
+                <shortLabel>Amount</shortLabel>
 
-  <bean id="PurchaseOrderAccount-encumbranceUpdateCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="encumbranceUpdateCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Encumbrance Update Code" />
-    <property name="shortLabel" value="Encumbrance Update" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="AlphaValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="2" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for the type of encumbrance update in an Accounting Line, selected from a pulldown list." />
-  </bean>
-  <bean id="PurchaseOrderAccount-objectTypeCode" parent="PurchaseOrderAccount-objectTypeCode-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-objectTypeCode-parentBean" abstract="true" parent="ObjectType-code">
-    <property name="name" value="objectTypeCode" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="PurchaseOrderAccount-accountExpiredOverride" parent="PurchaseOrderAccount-accountExpiredOverride-parentBean" />
+                <control>
+                    <text size="21" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-accountExpiredOverride-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountExpiredOverride" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Account Expired Override" />
-    <property name="shortLabel" value="Expired Override" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="This override indicates that the user has explicitly decided to use an account even though it has expired." />
-  </bean>
-  <bean id="PurchaseOrderAccount-nonFringeAccountOverride" parent="PurchaseOrderAccount-nonFringeAccountOverride-parentBean" />
+                <summary>itemAccountOutstandingEncumbranceAmount</summary>
+                <description>itemAccountOutstandingEncumbranceAmount description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-nonFringeAccountOverride-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="nonFringeAccountOverride" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Non-fringe Account Override" />
-    <property name="shortLabel" value="Non-fringe Override" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="This override indicates that the user has explicitly decided to use an account even though it does not accept fringe benefit." />
-  </bean>
-  <bean id="PurchaseOrderAccount-objectBudgetOverride" parent="PurchaseOrderAccount-objectBudgetOverride-parentBean" />
+            <attribute name="itemAccountPaidAmount" forceUppercase="true">
+                <label>Item Account Paid Amount</label>
+                <shortLabel>Amount</shortLabel>
 
-  <bean id="PurchaseOrderAccount-objectBudgetOverride-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="objectBudgetOverride" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Object Non-Budgeted Override" />
-    <property name="shortLabel" value="Non-Budgeted Override" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="This override indicates that the user has explicitly decided to use a non budgeted object code even though presence control is on for the account." />
-  </bean>
-  <bean id="PurchaseOrderAccount-financialDocumentLineDescription" parent="PurchaseOrderAccount-financialDocumentLineDescription-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-financialDocumentLineDescription-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="financialDocumentLineDescription" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Line Description" />
-    <property name="shortLabel" value="Line Desc" />
-    <property name="maxLength" value="40" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="40" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="A free-form text field that describes the purpose or function of the Accounting Line." />
-  </bean>
-  <bean id="PurchaseOrderAccount-salesTaxRequired" parent="PurchaseOrderAccount-salesTaxRequired-parentBean" />
+                <control>
+                    <text size="21" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-salesTaxRequired-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="salesTaxRequired" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Sales Tax Required" />
-    <property name="shortLabel" value="Sales Tax Reqd" />
-    <property name="maxLength" value="10" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="Added in specifically so that I can override the formatter for booleans" />
-  </bean>
-  <bean id="PurchaseOrderAccount-salesTax.chartOfAccountsCode" parent="PurchaseOrderAccount-salesTax.chartOfAccountsCode-parentBean" />
+                <summary>itemAccountPaidAmount</summary>
+                <description>itemAccountPaidAmount description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-salesTax.chartOfAccountsCode-parentBean" abstract="true" parent="SalesTax-chartOfAccountsCode">
-    <property name="name" value="salesTax.chartOfAccountsCode" />
-    <property name="label" value="Sales Tax Chart of Accounts Code" />
-    <property name="shortLabel" value="Sales Tax Chart" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="Chart of Accounts Code that Sales Tax is collected against" />
-  </bean>
-  <bean id="PurchaseOrderAccount-salesTax.accountNumber" parent="PurchaseOrderAccount-salesTax.accountNumber-parentBean" />
+            <attribute name="itemLineNumber" forceUppercase="true">
+                <label>Item Line Number</label>
+                <shortLabel>Number</shortLabel>
 
-  <bean id="PurchaseOrderAccount-salesTax.accountNumber-parentBean" abstract="true" parent="SalesTax-accountNumber">
-    <property name="name" value="salesTax.accountNumber" />
-    <property name="label" value="Sales Tax Account Number" />
-    <property name="shortLabel" value="Sales Tax Account" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="Account Number that Sales Tax is collected against" />
-  </bean>
-  <bean id="PurchaseOrderAccount-salesTax.financialDocumentGrossSalesAmount" parent="PurchaseOrderAccount-salesTax.financialDocumentGrossSalesAmount-parentBean" />
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-salesTax.financialDocumentGrossSalesAmount-parentBean" abstract="true" parent="SalesTax-financialDocumentGrossSalesAmount">
-    <property name="name" value="salesTax.financialDocumentGrossSalesAmount" />
-    <property name="label" value="Gross Sales Amount" />
-    <property name="shortLabel" value="Gross Sales Amt." />
-    <property name="description" value="Gross Sales Amount to be taxed" />
-  </bean>
-  <bean id="PurchaseOrderAccount-salesTax.financialDocumentTaxableSalesAmount" parent="PurchaseOrderAccount-salesTax.financialDocumentTaxableSalesAmount-parentBean" />
+                <control>
+                    <text size="5" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-salesTax.financialDocumentTaxableSalesAmount-parentBean" abstract="true" parent="SalesTax-financialDocumentTaxableSalesAmount">
-    <property name="name" value="salesTax.financialDocumentTaxableSalesAmount" />
-    <property name="label" value="Taxable Sales Amount" />
-    <property name="shortLabel" value="Taxable Sales Amt." />
-    <property name="description" value="Taxable Sales Amount to be taxed" />
-  </bean>
-  <bean id="PurchaseOrderAccount-salesTax.financialDocumentSaleDate" parent="PurchaseOrderAccount-salesTax.financialDocumentSaleDate-parentBean" />
+                <summary>itemLineNumber</summary>
+                <description>itemLineNumber description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-salesTax.financialDocumentSaleDate-parentBean" abstract="true" parent="SalesTax-financialDocumentSaleDate">
-    <property name="name" value="salesTax.financialDocumentSaleDate" />
-    <property name="label" value="Sale Date" />
-    <property name="description" value="Date of Sale" />
-  </bean>
-  <bean id="PurchaseOrderAccount-itemIdentifier" parent="PurchaseOrderAccount-itemIdentifier-parentBean" />
+            <attribute name="organizationReferenceId" forceUppercase="true">
+                <label>Organization Reference Id</label>
+                <shortLabel>Id</shortLabel>
 
-  <bean id="PurchaseOrderAccount-itemIdentifier-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemIdentifier">
-    <property name="name" value="itemIdentifier" />
-    <property name="label" value="Item Identifier" />
-  </bean>
-  <bean id="PurchaseOrderAccount-accountLinePercent" parent="PurchaseOrderAccount-accountLinePercent-parentBean" />
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="PurchaseOrderAccount-accountLinePercent-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountLinePercent" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Account Line Percent" />
-    <property name="shortLabel" value="Percent" />
-    <property name="maxLength" value="340" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="5" />
-    </property>
-  </bean>
-  <bean id="PurchaseOrderAccount-accountIdentifier" parent="PurchaseOrderAccount-accountIdentifier-parentBean" />
+                <control>
+                    <text size="10" />
+                </control>
 
-  <bean id="PurchaseOrderAccount-accountIdentifier-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountIdentifier" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Account Identifier" />
-    <property name="shortLabel" value="Identifier" />
-    <property name="maxLength" value="10" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="12" />
-    </property>
-  </bean>
-  <bean id="PurchaseOrderAccount-itemAccountOutstandingEncumbranceAmount" parent="PurchaseOrderAccount-itemAccountOutstandingEncumbranceAmount-parentBean" />
+                <summary>organizationReferenceId</summary>
+                <description>organizationReferenceId description...</description>
+			</attribute>
 
-  <bean id="PurchaseOrderAccount-itemAccountOutstandingEncumbranceAmount-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemAmount">
-    <property name="name" value="itemAccountOutstandingEncumbranceAmount" />
-    <property name="label" value="Item Account Outstanding Encumbrance Amount" />
-  </bean>
-</beans>
+            <attribute name="projectCode" forceUppercase="true">
+                <label>Project Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>projectCode</summary>
+                <description>projectCode description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderAccountIdentifier" forceUppercase="true">
+                <label>Purchase Order Account Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>purchaseOrderAccountIdentifier</summary>
+                <description>purchaseOrderAccountIdentifier description...</description>
+			</attribute>
+
+            <attribute name="purchaseOrderIdentifier" forceUppercase="true">
+                <label>Purchase Order Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="11" />
+                </control>
+
+                <summary>purchaseOrderIdentifier</summary>
+                <description>purchaseOrderIdentifier description...</description>
+			</attribute>
+
+            <attribute name="subAccountNumber" forceUppercase="true">
+                <label>Sub Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>subAccountNumber</summary>
+                <description>subAccountNumber description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

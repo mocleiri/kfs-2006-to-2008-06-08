@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.kra.budget.bo;
@@ -22,16 +31,16 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiInteger;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class BudgetModular extends PersistableBusinessObjectBase {
+public class BudgetModular extends BusinessObjectBase {
 
     // Stored values - Budget Modular table
-    private String documentNumber;
+    private String documentHeaderId;
     private KualiInteger budgetModularIncrementAmount;
     private Integer budgetModularTaskNumber;
     private String budgetModularConsortiumDescription;
@@ -61,33 +70,36 @@ public class BudgetModular extends PersistableBusinessObjectBase {
         this.increments = new ArrayList();
     }
 
-    public BudgetModular(String documentNumber) {
+    public BudgetModular(String documentHeaderId) {
         this();
-        this.documentNumber = documentNumber;
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the documentHeaderId
+     * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the documentHeaderId attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
+     * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
      * Gets the budgetModularIncrementAmount attribute.
      * 
-     * @return Returns the budgetModularIncrementAmount
+     * @return - Returns the budgetModularIncrementAmount
+     * 
      */
     public KualiInteger getBudgetModularIncrementAmount() {
         return budgetModularIncrementAmount;
@@ -97,6 +109,7 @@ public class BudgetModular extends PersistableBusinessObjectBase {
      * Sets the budgetModularIncrementAmount attribute.
      * 
      * @param budgetModularIncrementAmount The budgetModularIncrementAmount to set.
+     * 
      */
     public void setBudgetModularIncrementAmount(KualiInteger budgetModularIncrementAmount) {
         this.budgetModularIncrementAmount = budgetModularIncrementAmount;
@@ -105,7 +118,8 @@ public class BudgetModular extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetModularTaskNumber attribute.
      * 
-     * @return Returns the budgetModularTaskNumber
+     * @return - Returns the budgetModularTaskNumber
+     * 
      */
     public Integer getBudgetModularTaskNumber() {
         return budgetModularTaskNumber;
@@ -115,6 +129,7 @@ public class BudgetModular extends PersistableBusinessObjectBase {
      * Sets the budgetModularTaskNumber attribute.
      * 
      * @param budgetModularTaskNumber The budgetModularTaskNumber to set.
+     * 
      */
     public void setBudgetModularTaskNumber(Integer budgetModularTaskNumber) {
         this.budgetModularTaskNumber = budgetModularTaskNumber;
@@ -123,7 +138,8 @@ public class BudgetModular extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetModularConsortiumDescription attribute.
      * 
-     * @return Returns the budgetModularConsortiumDescription
+     * @return - Returns the budgetModularConsortiumDescription
+     * 
      */
     public String getBudgetModularConsortiumDescription() {
         return budgetModularConsortiumDescription;
@@ -133,6 +149,7 @@ public class BudgetModular extends PersistableBusinessObjectBase {
      * Sets the budgetModularConsortiumDescription attribute.
      * 
      * @param budgetModularConsortiumDescription The budgetModularConsortiumDescription to set.
+     * 
      */
     public void setBudgetModularConsortiumDescription(String budgetModularConsortiumDescription) {
         this.budgetModularConsortiumDescription = budgetModularConsortiumDescription;
@@ -141,7 +158,8 @@ public class BudgetModular extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetModularPersonnelDescription attribute.
      * 
-     * @return Returns the budgetModularPersonnelDescription
+     * @return - Returns the budgetModularPersonnelDescription
+     * 
      */
     public String getBudgetModularPersonnelDescription() {
         return budgetModularPersonnelDescription;
@@ -151,6 +169,7 @@ public class BudgetModular extends PersistableBusinessObjectBase {
      * Sets the budgetModularPersonnelDescription attribute.
      * 
      * @param budgetModularPersonnelDescription The budgetModularPersonnelDescription to set.
+     * 
      */
     public void setBudgetModularPersonnelDescription(String budgetModularPersonnelDescription) {
         this.budgetModularPersonnelDescription = budgetModularPersonnelDescription;
@@ -159,7 +178,8 @@ public class BudgetModular extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetModularVariableAdjustmentDescription attribute.
      * 
-     * @return Returns the budgetModularVariableAdjustmentDescription
+     * @return - Returns the budgetModularVariableAdjustmentDescription
+     * 
      */
     public String getBudgetModularVariableAdjustmentDescription() {
         return budgetModularVariableAdjustmentDescription;
@@ -169,6 +189,7 @@ public class BudgetModular extends PersistableBusinessObjectBase {
      * Sets the budgetModularVariableAdjustmentDescription attribute.
      * 
      * @param budgetModularVariableAdjustmentDescription The budgetModularVariableAdjustmentDescription to set.
+     * 
      */
     public void setBudgetModularVariableAdjustmentDescription(String budgetModularVariableAdjustmentDescription) {
         this.budgetModularVariableAdjustmentDescription = budgetModularVariableAdjustmentDescription;
@@ -177,7 +198,8 @@ public class BudgetModular extends PersistableBusinessObjectBase {
     /**
      * Gets the budgetPeriodMaximumAmount attribute.
      * 
-     * @return Returns the budgetPeriodMaximumAmount
+     * @return - Returns the budgetPeriodMaximumAmount
+     * 
      */
     public KualiInteger getBudgetPeriodMaximumAmount() {
         return budgetPeriodMaximumAmount;
@@ -187,6 +209,7 @@ public class BudgetModular extends PersistableBusinessObjectBase {
      * Sets the budgetPeriodMaximumAmount attribute.
      * 
      * @param budgetPeriodMaximumAmount The budgetPeriodMaximumAmount to set.
+     * 
      */
     public void setBudgetPeriodMaximumAmount(KualiInteger budgetPeriodMaximumAmount) {
         this.budgetPeriodMaximumAmount = budgetPeriodMaximumAmount;
@@ -288,7 +311,7 @@ public class BudgetModular extends PersistableBusinessObjectBase {
         if (this.getTotalAdjustedModularDirectCostAmount() != null && this.getTotalActualDirectCostAmount() != null) {
             return this.getTotalAdjustedModularDirectCostAmount().subtract(this.getTotalActualDirectCostAmount());
         }
-        return KualiInteger.ZERO;
+        return new KualiInteger(0);
     }
 
     public boolean isInvalidMode() {

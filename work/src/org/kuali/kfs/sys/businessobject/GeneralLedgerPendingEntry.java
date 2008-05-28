@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.GENERAL_LEDGER_PENDING_ENTRY_CODE;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
@@ -38,6 +37,7 @@ import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
+import org.kuali.PropertyConstants;
 
 /**
  * The general ledger pending entry structure holds financial transaction info that will post to the general ledger as an entry.
@@ -73,6 +73,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     private String acctSufficientFundsFinObjCd;
     private boolean transactionEntryOffsetIndicator;
     private Date transactionEntryProcessedTs;
+    private String budgetYear;
 
     private DocumentType documentType;
     private DocumentHeader documentHeader;
@@ -82,7 +83,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     private Account account;
     private SubAccount subAccount;
     private ObjectCode financialObject;
-    private SubObjCd financialSubObject;
+    private SubObjCd subObjectCode;
     private BalanceTyp balanceType;
     private ObjectType objectType;
     private A21SubAccount a21SubAccount;
@@ -91,9 +92,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     private ProjectCode project;
     private OriginationCode referenceOriginationCode;
     private DocumentType referenceDocumentType;
-    
-    @Deprecated
-    private transient AccountingPeriod accountingPeriod;
+    private AccountingPeriod accountingPeriod;
 
     /**
      * Default no-arg constructor.
@@ -106,57 +105,43 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     }
 
     /**
-     * Copy constructor Constructs a GeneralLedgerPendingEntry.java.
+     * Copy constructor
+     * 
+     * Constructs a GeneralLedgerPendingEntry.java.
      * 
      * @param original entry to copy
      */
     public GeneralLedgerPendingEntry(GeneralLedgerPendingEntry original) {
-        financialSystemOriginationCode = original.getFinancialSystemOriginationCode();
-        documentNumber = original.getDocumentNumber();
-        transactionLedgerEntrySequenceNumber = original.getTransactionLedgerEntrySequenceNumber();
-        chartOfAccountsCode = original.getChartOfAccountsCode();
-        accountNumber = original.getAccountNumber();
-        subAccountNumber = original.getSubAccountNumber();
-        financialObjectCode = original.getFinancialObjectCode();
-        financialSubObjectCode = original.getFinancialSubObjectCode();
-        financialBalanceTypeCode = original.getFinancialBalanceTypeCode();
-        financialObjectTypeCode = original.getFinancialObjectTypeCode();
-        universityFiscalYear = original.getUniversityFiscalYear();
-        universityFiscalPeriodCode = original.getUniversityFiscalPeriodCode();
-        transactionLedgerEntryDescription = original.getTransactionLedgerEntryDescription();
-        transactionLedgerEntryAmount = original.getTransactionLedgerEntryAmount();
-        transactionDebitCreditCode = original.getTransactionDebitCreditCode();
-        transactionDate = original.getTransactionDate();
-        financialDocumentTypeCode = original.getFinancialDocumentTypeCode();
-        organizationDocumentNumber = original.getOrganizationDocumentNumber();
-        projectCode = original.getProjectCode();
-        organizationReferenceId = original.getOrganizationReferenceId();
-        referenceFinancialDocumentTypeCode = original.getReferenceFinancialDocumentTypeCode();
-        referenceFinancialSystemOriginationCode = original.getReferenceFinancialSystemOriginationCode();
-        referenceFinancialDocumentNumber = original.getReferenceFinancialDocumentNumber();
-        financialDocumentReversalDate = original.getFinancialDocumentReversalDate();
-        transactionEncumbranceUpdateCode = original.getTransactionEncumbranceUpdateCode();
-        financialDocumentApprovedCode = original.getFinancialDocumentApprovedCode();
-        acctSufficientFundsFinObjCd = original.getAcctSufficientFundsFinObjCd();
-        transactionEntryOffsetIndicator = original.isTransactionEntryOffsetIndicator();
-        transactionEntryProcessedTs = original.getTransactionEntryProcessedTs();
-        
-        documentType = original.getDocumentType();
-        documentHeader = original.getDocumentHeader();
-
-        option = original.getOption();
-        chart = original.getChart();
-        account = original.getAccount();
-        subAccount = original.getSubAccount();
-        financialObject = original.getFinancialObject();
-        financialSubObject = original.getFinancialSubObject();
-        balanceType = original.getBalanceType();
-        a21SubAccount = original.getA21SubAccount();
-        dummyBusinessObject = original.getDummyBusinessObject();
-        originationCode = original.getOriginationCode();
-        project = original.getProject();
-        referenceOriginationCode = original.getReferenceOriginationCode();
-        referenceDocumentType = original.getReferenceDocumentType();
+        financialSystemOriginationCode = original.financialSystemOriginationCode;
+        documentNumber = original.documentNumber;
+        transactionLedgerEntrySequenceNumber = original.transactionLedgerEntrySequenceNumber;
+        chartOfAccountsCode = original.chartOfAccountsCode;
+        accountNumber = original.accountNumber;
+        subAccountNumber = original.subAccountNumber;
+        financialObjectCode = original.financialObjectCode;
+        financialSubObjectCode = original.financialSubObjectCode;
+        financialBalanceTypeCode = original.financialBalanceTypeCode;
+        financialObjectTypeCode = original.financialObjectTypeCode;
+        universityFiscalYear = original.universityFiscalYear;
+        universityFiscalPeriodCode = original.universityFiscalPeriodCode;
+        transactionLedgerEntryDescription = original.transactionLedgerEntryDescription;
+        transactionLedgerEntryAmount = original.transactionLedgerEntryAmount;
+        transactionDebitCreditCode = original.transactionDebitCreditCode;
+        transactionDate = original.transactionDate;
+        financialDocumentTypeCode = original.financialDocumentTypeCode;
+        organizationDocumentNumber = original.organizationDocumentNumber;
+        projectCode = original.projectCode;
+        organizationReferenceId = original.organizationReferenceId;
+        referenceFinancialDocumentTypeCode = original.referenceFinancialDocumentTypeCode;
+        referenceFinancialSystemOriginationCode = original.referenceFinancialSystemOriginationCode;
+        referenceFinancialDocumentNumber = original.referenceFinancialDocumentNumber;
+        financialDocumentReversalDate = original.financialDocumentReversalDate;
+        transactionEncumbranceUpdateCode = original.transactionEncumbranceUpdateCode;
+        financialDocumentApprovedCode = original.financialDocumentApprovedCode;
+        acctSufficientFundsFinObjCd = original.acctSufficientFundsFinObjCd;
+        transactionEntryOffsetIndicator = original.transactionEntryOffsetIndicator;
+        transactionEntryProcessedTs = original.transactionEntryProcessedTs;
+        budgetYear = original.budgetYear;
     }
 
     public DocumentType getReferenceDocumentType() {
@@ -619,6 +604,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
      * Gets the transactionEncumbranceUpdateCode attribute.
      * 
      * @return Returns the transactionEncumbranceUpdateCode
+     * 
      */
     public String getTransactionEncumbranceUpdateCode() {
         return transactionEncumbranceUpdateCode;
@@ -707,6 +693,24 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     }
 
     /**
+     * Gets the budgetYear attribute.
+     * 
+     * @return Returns the budgetYear
+     */
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    /**
+     * Sets the budgetYear attribute.
+     * 
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
+    }
+
+    /**
      * @return Returns the financialSystemOriginationCode.
      */
     public String getFinancialSystemOriginationCode() {
@@ -726,7 +730,7 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         m.put("financialSystemOriginationCode", this.financialSystemOriginationCode);
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put(PropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
         if (transactionLedgerEntrySequenceNumber == null) {
             m.put("transactionLedgerEntrySequenceNumber", null);
         }
@@ -906,41 +910,35 @@ public class GeneralLedgerPendingEntry extends PersistableBusinessObjectBase imp
         this.subAccount = subAccount;
     }
 
-    public SubObjCd getFinancialSubObject() {
-        return financialSubObject;
+    public SubObjCd getSubObjectCode() {
+        return subObjectCode;
     }
 
-    public void setFinancialSubObject(SubObjCd financialSubObject) {
-        this.financialSubObject = financialSubObject;
+    public void setSubObjectCode(SubObjCd subObjectCode) {
+        this.subObjectCode = subObjectCode;
+    }
+
+    public void setAccountingPeriod(AccountingPeriod accountingPeriod) {
+        this.accountingPeriod = accountingPeriod;
     }
 
     public boolean isSubAccountNumberBlank() {
-        return subAccountNumber == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankSubAccountNumber().equals(subAccountNumber);
+        return subAccountNumber == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_ACCOUNT_NUMBER.equals(subAccountNumber);
     }
 
     public boolean isFinancialObjectCodeBlank() {
-        return financialObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectCode().equals(financialObjectCode);
+        return financialObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_CODE.equals(financialObjectCode);
     }
 
     public boolean isFinancialSubObjectCodeBlank() {
-        return financialSubObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialSubObjectCode().equals(financialSubObjectCode);
+        return financialSubObjectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_SUB_OBJECT_CODE.equals(financialSubObjectCode);
     }
 
     public boolean isProjectCodeBlank() {
-        return projectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankProjectCode().equals(projectCode);
+        return projectCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_PROJECT_STRING.equals(projectCode);
     }
 
     public boolean isFinancialObjectTypeCodeBlank() {
-        return financialObjectTypeCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.getBlankFinancialObjectType().equals(financialObjectTypeCode);
-    }
-
-    @Deprecated
-    public AccountingPeriod getAccountingPeriod() {
-        return accountingPeriod;
-    }
-
-    @Deprecated
-    public void setAccountingPeriod(AccountingPeriod accountingPeriod) {
-        this.accountingPeriod = accountingPeriod;
+        return financialObjectTypeCode == null || GENERAL_LEDGER_PENDING_ENTRY_CODE.BLANK_OBJECT_TYPE_CODE.equals(financialObjectTypeCode);
     }
 }

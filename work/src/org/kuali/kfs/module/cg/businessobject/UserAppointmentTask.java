@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.kra.budget.bo;
@@ -20,28 +29,30 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.apache.ojb.broker.PersistenceBroker;
+import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiInteger;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class UserAppointmentTask extends PersistableBusinessObjectBase implements Comparable {
+public class UserAppointmentTask extends BusinessObjectBase implements Comparable {
 
-    private String documentNumber;
+    private String documentHeaderId;
     private Integer budgetTaskSequenceNumber;
     private Integer budgetUserSequenceNumber;
-    private String institutionAppointmentTypeCode;
+    private String universityAppointmentTypeCode;
 
-    private KualiInteger agencyFringeBenefitTotalAmountTask = KualiInteger.ZERO;
-    private KualiInteger agencyRequestTotalAmountTask = KualiInteger.ZERO;
-    private KualiInteger institutionCostShareFringeBenefitTotalAmountTask = KualiInteger.ZERO;
-    private KualiInteger institutionCostShareRequestTotalAmountTask = KualiInteger.ZERO;
-
-    private KualiInteger gradAsstAgencySalaryTotal = KualiInteger.ZERO;
-    private KualiInteger gradAsstAgencyHealthInsuranceTotal = KualiInteger.ZERO;
-    private KualiInteger gradAsstInstSalaryTotal = KualiInteger.ZERO;
-    private KualiInteger gradAsstInstHealthInsuranceTotal = KualiInteger.ZERO;
+    private KualiInteger agencyFringeBenefitTotalAmountTask = new KualiInteger(0); 
+    private KualiInteger agencyRequestTotalAmountTask = new KualiInteger(0); 
+    private KualiInteger universityCostShareFringeBenefitTotalAmountTask = new KualiInteger(0);
+    private KualiInteger universityCostShareRequestTotalAmountTask = new KualiInteger(0);
+    
+    private KualiInteger gradAsstAgencySalaryTotal = new KualiInteger(0);
+    private KualiInteger gradAsstAgencyHealthInsuranceTotal = new KualiInteger(0);
+    private KualiInteger gradAsstUnivSalaryTotal = new KualiInteger(0);
+    private KualiInteger gradAsstUnivHealthInsuranceTotal = new KualiInteger(0);
 
     private List userAppointmentTaskPeriods = new ArrayList();
 
@@ -59,37 +70,40 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
 
     public UserAppointmentTask(UserAppointmentTask userAppointmentTask) {
         super();
-        this.documentNumber = userAppointmentTask.getDocumentNumber();
+        this.documentHeaderId = userAppointmentTask.getDocumentHeaderId();
         this.budgetTaskSequenceNumber = userAppointmentTask.getBudgetTaskSequenceNumber();
         this.budgetUserSequenceNumber = userAppointmentTask.getBudgetUserSequenceNumber();
-        this.institutionAppointmentTypeCode = userAppointmentTask.getInstitutionAppointmentTypeCode();
+        this.universityAppointmentTypeCode = userAppointmentTask.getUniversityAppointmentTypeCode();
 
         this.userAppointmentTaskPeriods = new ArrayList(userAppointmentTask.getUserAppointmentTaskPeriods() != null ? userAppointmentTask.getUserAppointmentTaskPeriods() : null);
     }
 
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the documentHeaderId
+     * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the documentHeaderId attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
+     * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
      * Gets the budgetTaskSequenceNumber attribute.
      * 
-     * @return Returns the budgetTaskSequenceNumber
+     * @return - Returns the budgetTaskSequenceNumber
+     * 
      */
     public Integer getBudgetTaskSequenceNumber() {
         return budgetTaskSequenceNumber;
@@ -99,6 +113,7 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
      * Sets the budgetTaskSequenceNumber attribute.
      * 
      * @param budgetTaskSequenceNumber The budgetTaskSequenceNumber to set.
+     * 
      */
     public void setBudgetTaskSequenceNumber(Integer budgetTaskSequenceNumber) {
         this.budgetTaskSequenceNumber = budgetTaskSequenceNumber;
@@ -107,7 +122,8 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
     /**
      * Gets the budgetUserSequenceNumber attribute.
      * 
-     * @return Returns the budgetUserSequenceNumber
+     * @return - Returns the budgetUserSequenceNumber
+     * 
      */
     public Integer getBudgetUserSequenceNumber() {
         return budgetUserSequenceNumber;
@@ -117,42 +133,47 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
      * Sets the budgetUserSequenceNumber attribute.
      * 
      * @param budgetUserSequenceNumber The budgetUserSequenceNumber to set.
+     * 
      */
     public void setBudgetUserSequenceNumber(Integer budgetUserSequenceNumber) {
         this.budgetUserSequenceNumber = budgetUserSequenceNumber;
     }
 
     /**
-     * Sets the institutionAppointmentTypeCode attribute.
+     * Sets the universityAppointmentTypeCode attribute.
      * 
-     * @param institutionAppointmentTypeCode The institutionAppointmentTypeCode to set.
+     * @param universityAppointmentTypeCode The universityAppointmentTypeCode to set.
+     * 
      */
-    public String getInstitutionAppointmentTypeCode() {
-        return institutionAppointmentTypeCode;
+    public String getUniversityAppointmentTypeCode() {
+        return universityAppointmentTypeCode;
     }
 
     /**
-     * Gets the institutionAppointmentTypeCode attribute.
+     * Gets the universityAppointmentTypeCode attribute.
      * 
-     * @return Returns the institutionAppointmentTypeCode
+     * @return - Returns the universityAppointmentTypeCode
+     * 
      */
-    public void setInstitutionAppointmentTypeCode(String institutionAppointmentTypeCode) {
-        this.institutionAppointmentTypeCode = institutionAppointmentTypeCode;
+    public void setUniversityAppointmentTypeCode(String universityAppointmentTypeCode) {
+        this.universityAppointmentTypeCode = universityAppointmentTypeCode;
     }
 
     /**
-     * Gets the institutionAppointmentType attribute.
+     * Gets the universityAppointmentType attribute.
      * 
-     * @return Returns the institutionAppointmentType
+     * @return - Returns the universityAppointmentType
+     * 
      */
     public BudgetFringeRate getBudgetFringeRate() {
         return budgetFringeRate;
     }
 
     /**
-     * Sets the institutionAppointmentType attribute.
+     * Sets the universityAppointmentType attribute.
      * 
-     * @param institutionAppointmentType The institutionAppointmentType to set.
+     * @param universityAppointmentType The universityAppointmentType to set.
+     * 
      */
     public void setBudgetFringeRate(BudgetFringeRate budgetFringeRate) {
         this.budgetFringeRate = budgetFringeRate;
@@ -215,6 +236,30 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
     }
 
     /**
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeInsert(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeInsert(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        super.beforeInsert(persistenceBroker);
+        this.refreshReferenceObject("budgetFringeRate");
+    }
+
+    /**
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeUpdate(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeUpdate(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        super.beforeUpdate(persistenceBroker);
+        this.refreshReferenceObject("budgetFringeRate");
+    }
+
+    /**
+     * @see org.apache.ojb.broker.PersistenceBrokerAware#beforeDelete(org.apache.ojb.broker.PersistenceBroker)
+     */
+    public void beforeDelete(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        super.beforeDelete(persistenceBroker);
+        this.refreshReferenceObject("userAppointmentTaskPeriods");
+    }
+
+    /**
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Object o) {
@@ -258,39 +303,39 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
     }
 
     /**
-     * Gets the institutionCostShareFringeBenefitTotalAmountTask attribute.
+     * Gets the universityCostShareFringeBenefitTotalAmountTask attribute.
      * 
-     * @return Returns the institutionCostShareFringeBenefitTotalAmountTask.
+     * @return Returns the universityCostShareFringeBenefitTotalAmountTask.
      */
-    public KualiInteger getInstitutionCostShareFringeBenefitTotalAmountTask() {
-        return institutionCostShareFringeBenefitTotalAmountTask;
+    public KualiInteger getUniversityCostShareFringeBenefitTotalAmountTask() {
+        return universityCostShareFringeBenefitTotalAmountTask;
     }
 
     /**
-     * Sets the institutionCostShareFringeBenefitTotalAmountTask attribute value.
+     * Sets the universityCostShareFringeBenefitTotalAmountTask attribute value.
      * 
-     * @param institutionCostShareFringeBenefitTotalAmountTask The institutionCostShareFringeBenefitTotalAmountTask to set.
+     * @param universityCostShareFringeBenefitTotalAmountTask The universityCostShareFringeBenefitTotalAmountTask to set.
      */
-    public void setInstitutionCostShareFringeBenefitTotalAmountTask(KualiInteger institutionCostShareFringeBenefitTotalAmountTask) {
-        this.institutionCostShareFringeBenefitTotalAmountTask = institutionCostShareFringeBenefitTotalAmountTask;
+    public void setUniversityCostShareFringeBenefitTotalAmountTask(KualiInteger universityCostShareFringeBenefitTotalAmountTask) {
+        this.universityCostShareFringeBenefitTotalAmountTask = universityCostShareFringeBenefitTotalAmountTask;
     }
 
     /**
-     * Gets the institutionCostShareRequestTotalAmountTask attribute.
+     * Gets the universityCostShareRequestTotalAmountTask attribute.
      * 
-     * @return Returns the institutionCostShareRequestTotalAmountTask.
+     * @return Returns the universityCostShareRequestTotalAmountTask.
      */
-    public KualiInteger getInstitutionCostShareRequestTotalAmountTask() {
-        return institutionCostShareRequestTotalAmountTask;
+    public KualiInteger getUniversityCostShareRequestTotalAmountTask() {
+        return universityCostShareRequestTotalAmountTask;
     }
 
     /**
-     * Sets the institutionCostShareRequestTotalAmountTask attribute value.
+     * Sets the universityCostShareRequestTotalAmountTask attribute value.
      * 
-     * @param institutionCostShareRequestTotalAmountTask The institutionCostShareRequestTotalAmountTask to set.
+     * @param universityCostShareRequestTotalAmountTask The universityCostShareRequestTotalAmountTask to set.
      */
-    public void setInstitutionCostShareRequestTotalAmountTask(KualiInteger institutionCostShareRequestTotalAmountTask) {
-        this.institutionCostShareRequestTotalAmountTask = institutionCostShareRequestTotalAmountTask;
+    public void setUniversityCostShareRequestTotalAmountTask(KualiInteger universityCostShareRequestTotalAmountTask) {
+        this.universityCostShareRequestTotalAmountTask = universityCostShareRequestTotalAmountTask;
     }
 
     /**
@@ -334,8 +379,8 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
      * 
      * @return Returns the gradAsstUnivHealthInsurance.
      */
-    public KualiInteger getGradAsstInstHealthInsuranceTotal() {
-        return gradAsstInstHealthInsuranceTotal;
+    public KualiInteger getGradAsstUnivHealthInsuranceTotal() {
+        return gradAsstUnivHealthInsuranceTotal;
     }
 
     /**
@@ -343,8 +388,8 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
      * 
      * @param gradAsstUnivHealthInsurance The gradAsstUnivHealthInsurance to set.
      */
-    public void setGradAsstInstHealthInsuranceTotal(KualiInteger gradAsstInstHealthInsuranceTotal) {
-        this.gradAsstInstHealthInsuranceTotal = gradAsstInstHealthInsuranceTotal;
+    public void setGradAsstUnivHealthInsuranceTotal(KualiInteger gradAsstUnivHealthInsuranceTotal) {
+        this.gradAsstUnivHealthInsuranceTotal = gradAsstUnivHealthInsuranceTotal;
     }
 
     /**
@@ -352,8 +397,8 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
      * 
      * @return Returns the gradAsstUnivSalary.
      */
-    public KualiInteger getGradAsstInstSalaryTotal() {
-        return gradAsstInstSalaryTotal;
+    public KualiInteger getGradAsstUnivSalaryTotal() {
+        return gradAsstUnivSalaryTotal;
     }
 
     /**
@@ -361,8 +406,8 @@ public class UserAppointmentTask extends PersistableBusinessObjectBase implement
      * 
      * @param gradAsstUnivSalary The gradAsstUnivSalary to set.
      */
-    public void setGradAsstInstSalaryTotal(KualiInteger gradAsstInstSalaryTotal) {
-        this.gradAsstInstSalaryTotal = gradAsstInstSalaryTotal;
+    public void setGradAsstUnivSalaryTotal(KualiInteger gradAsstUnivSalaryTotal) {
+        this.gradAsstUnivSalaryTotal = gradAsstUnivSalaryTotal;
     }
 
     public boolean isSecondaryAppointment() {

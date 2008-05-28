@@ -26,10 +26,8 @@ public interface AchBankDao {
     public void save(AchBank ab);
 
     /**
-     * Get a bank
-     *
-     * @param bankRoutingNumber
-     * @return
+     * Remove all data from the table
+     * 
      */
-    public AchBank getBank(String bankRoutingNumber);
+    public void emptyTable();
 }

@@ -20,40 +20,43 @@ import org.apache.log4j.Logger;
 import org.kuali.core.document.Document;
 import org.kuali.core.rule.event.KualiDocumentEventBase;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.module.financial.bo.Check;
+import org.kuali.module.purap.bo.PurchasingApItem;
 
 /**
- * Event Base class for Purchasing Accounts Payable Item
+ * ItemEvents.
  * 
- * contains the base methods for item events
+ * 
  */
 public abstract class PurchasingAccountsPayableItemEventBase extends KualiDocumentEventBase implements PurchasingAccountsPayableItemEvent {
     private static final Logger LOG = Logger.getLogger(PurchasingAccountsPayableItemEventBase.class);
 
 
-    private final PurApItem item;
+    private final PurchasingApItem item;
 
     /**
-     * Copies the item and calls the super constructor
+     * Initializes fields common to all subclasses
      * 
-     * @param description the description of the event
-     * @param errorPathPrefix the error path
-     * @param document the document the event is being called on
-     * @param item the item that is having the event called on
+     * @param description
+     * @param errorPathPrefix
+     * @param document
+     * @param check
      */
-    public PurchasingAccountsPayableItemEventBase(String description, String errorPathPrefix, Document document, PurApItem item) {
+    public PurchasingAccountsPayableItemEventBase(String description, String errorPathPrefix, Document document, PurchasingApItem item) {
         super(description, errorPathPrefix, document);
 
-        this.item = item;
+        // by doing a deep copy, we are ensuring that the business rule class can't update
+        // the original object by reference
+        this.item = (PurchasingApItem) ObjectUtils.deepCopy(item);
 
         logEvent();
     }
 
+
     /**
-     * 
-     * @see org.kuali.module.purap.rule.event.PurchasingAccountsPayableItemEvent#getItem()
+     * @see org.kuali.core.rule.event.CheckEvent#getCheck()
      */
-    public PurApItem getItem() {
+    public PurchasingApItem getItem() {
         return item;
     }
 
@@ -69,7 +72,7 @@ public abstract class PurchasingAccountsPayableItemEventBase extends KualiDocume
     }
 
     /**
-     * Logs the event type and some information about the associated item
+     * Logs the event type and some information about the associated accountingLine
      */
     private void logEvent() {
         StringBuffer logMessage = new StringBuffer(StringUtils.substringAfterLast(this.getClass().getName(), "."));

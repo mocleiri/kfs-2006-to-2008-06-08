@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.web.struts.form;
 
@@ -29,6 +36,8 @@ import org.kuali.module.kra.budget.bo.NonpersonnelCategory;
 
 /**
  * This is used by the UI to get totals, counts, and other things needed to render the page properly.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetNonpersonnelFormHelper {
 
@@ -76,8 +85,8 @@ public class BudgetNonpersonnelFormHelper {
                 budgetNonpersonnel.setAgencyCopyIndicator(false);
             }
 
-            if (budgetNonpersonnel.getBudgetInstitutionCostShareAmountBackup() != null && !budgetNonpersonnel.getBudgetInstitutionCostShareAmountBackup().equals(budgetNonpersonnel.getBudgetInstitutionCostShareAmount())) {
-                budgetNonpersonnel.setBudgetInstitutionCostShareCopyIndicator(false);
+            if (budgetNonpersonnel.getBudgetUniversityCostShareAmountBackup() != null && !budgetNonpersonnel.getBudgetUniversityCostShareAmountBackup().equals(budgetNonpersonnel.getBudgetUniversityCostShareAmount())) {
+                budgetNonpersonnel.setBudgetUniversityCostShareCopyIndicator(false);
             }
 
             if (budgetNonpersonnel.getBudgetThirdPartyCostShareAmountBackup() != null && !budgetNonpersonnel.getBudgetThirdPartyCostShareAmountBackup().equals(budgetNonpersonnel.getBudgetThirdPartyCostShareAmount())) {
@@ -87,7 +96,7 @@ public class BudgetNonpersonnelFormHelper {
             // Set the duplicate amounts to what we currently have so that the comparision can take place again
             // next request.
             budgetNonpersonnel.setAgencyRequestAmountBackup(budgetNonpersonnel.getAgencyRequestAmount());
-            budgetNonpersonnel.setBudgetInstitutionCostShareAmountBackup(budgetNonpersonnel.getBudgetInstitutionCostShareAmount());
+            budgetNonpersonnel.setBudgetUniversityCostShareAmountBackup(budgetNonpersonnel.getBudgetUniversityCostShareAmount());
             budgetNonpersonnel.setBudgetThirdPartyCostShareAmountBackup(budgetNonpersonnel.getBudgetThirdPartyCostShareAmount());
         }
     }
@@ -96,9 +105,9 @@ public class BudgetNonpersonnelFormHelper {
      * This method aggregates Nonpesronnel Item data into the proper Category breakdown.
      * 
      * @param currentTaskNumber
-     * @param currentPeriodNumber
-     * @param nonpersonnelItems
-     * @param includesModularExcluded
+	 * @param currentPeriodNumber
+	 * @param nonpersonnelItems
+	 * @param includesModularExcluded
      */
     public void addNonpersonnelItems(Integer currentTaskNumber, Integer currentPeriodNumber, List nonpersonnelItems, boolean includesModularExcluded) {
         int itemIndex = 0;
@@ -159,7 +168,7 @@ public class BudgetNonpersonnelFormHelper {
      */
     public KualiInteger getNonpersonnelAgencyTotal() {
         Iterator iter = nonpersonnelCategoryHelperMap.values().iterator();
-        KualiInteger agencyTotal = KualiInteger.ZERO;
+        KualiInteger agencyTotal = new KualiInteger(0);
 
         while (iter.hasNext()) {
             NonpersonnelCategoryHelper helper = (NonpersonnelCategoryHelper) iter.next();
@@ -176,7 +185,7 @@ public class BudgetNonpersonnelFormHelper {
      */
     public KualiInteger getNonpersonnelUnivCostShareTotal() {
         Iterator iter = nonpersonnelCategoryHelperMap.values().iterator();
-        KualiInteger univCostShareTotal = KualiInteger.ZERO;
+        KualiInteger univCostShareTotal = new KualiInteger(0);
 
         while (iter.hasNext()) {
             NonpersonnelCategoryHelper helper = (NonpersonnelCategoryHelper) iter.next();
@@ -193,7 +202,7 @@ public class BudgetNonpersonnelFormHelper {
      */
     public KualiInteger getNonpersonnelThirdPartyCostShareTotal() {
         Iterator iter = nonpersonnelCategoryHelperMap.values().iterator();
-        KualiInteger thirdPartyCostShareTotal = KualiInteger.ZERO;
+        KualiInteger thirdPartyCostShareTotal = new KualiInteger(0);
 
         while (iter.hasNext()) {
             NonpersonnelCategoryHelper helper = (NonpersonnelCategoryHelper) iter.next();
@@ -206,15 +215,17 @@ public class BudgetNonpersonnelFormHelper {
     /**
      * This class holds information relevent to each NonpersonnelCategory. It tells the number of items, totals (agency, univ. cost
      * share, and third party cost share), and item indexes.
+     * 
+     * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
      */
 
     public class NonpersonnelCategoryHelper {
 
         private String nonpersonnelCategoryCode;
         private int numItems = 0;
-        private KualiInteger agencyTotal = KualiInteger.ZERO;
-        private KualiInteger univCostShareTotal = KualiInteger.ZERO;
-        private KualiInteger thirdPartyCostShareTotal = KualiInteger.ZERO;
+        private KualiInteger agencyTotal = new KualiInteger(0);
+        private KualiInteger univCostShareTotal = new KualiInteger(0);
+        private KualiInteger thirdPartyCostShareTotal = new KualiInteger(0);
         private List itemIndexes = new ArrayList();
 
         /**
@@ -247,8 +258,8 @@ public class BudgetNonpersonnelFormHelper {
             if (nonpersonnelItem.getAgencyRequestAmount() != null)
                 agencyTotal = agencyTotal.add(nonpersonnelItem.getAgencyRequestAmount());
 
-            if (nonpersonnelItem.getBudgetInstitutionCostShareAmount() != null)
-                univCostShareTotal = univCostShareTotal.add(nonpersonnelItem.getBudgetInstitutionCostShareAmount());
+            if (nonpersonnelItem.getBudgetUniversityCostShareAmount() != null)
+                univCostShareTotal = univCostShareTotal.add(nonpersonnelItem.getBudgetUniversityCostShareAmount());
 
             if (nonpersonnelItem.getBudgetThirdPartyCostShareAmount() != null)
                 thirdPartyCostShareTotal = thirdPartyCostShareTotal.add(nonpersonnelItem.getBudgetThirdPartyCostShareAmount());

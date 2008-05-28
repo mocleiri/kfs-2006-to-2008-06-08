@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,11 @@ import java.util.Comparator;
 
 import org.kuali.module.chart.bo.codes.BudgetAggregationCode;
 
-/**
- * This class allows us to compare two {@link BudgetAggregationCode} objects using their codes for comparison
- */
 public class BudgetAggregationCodeComparator implements Comparator {
 
     public BudgetAggregationCodeComparator() {
     }
 
-    /**
-     * compares two {@link BudgetAggregationCode}
-     * 
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-     */
     public int compare(Object o1, Object o2) {
 
         BudgetAggregationCode obj1 = (BudgetAggregationCode) o1;

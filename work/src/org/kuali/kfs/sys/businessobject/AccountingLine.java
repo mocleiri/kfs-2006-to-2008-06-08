@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,20 @@ import org.kuali.module.chart.bo.ProjectCode;
 import org.kuali.module.chart.bo.SubAccount;
 import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.bo.SalesTax;
 
 /**
  * An AccountLine contains all the accounting items typically necessary to create a pending entry to the G/L. All transaction
  * documents will use this business object inherently. Specific accounting line business rules should exist not in this
  * implementation, but rather in the document business object that uses it.
+ * 
+ * 
  */
-public interface AccountingLine extends PersistableBusinessObject, GeneralLedgerPendingEntrySourceDetail {
+public interface AccountingLine extends PersistableBusinessObject {
+
+    /**
+     * @return Returns the account.
+     */
+    public Account getAccount();
 
     /**
      * @param account The account to set.
@@ -55,6 +61,16 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setChart(Chart chart);
 
     /**
+     * @return Returns the documentNumber.
+     */
+    public String getDocumentNumber();
+
+    /**
+     * @return Returns the amount.
+     */
+    public KualiDecimal getAmount();
+
+    /**
      * @param amount The amount to set.
      */
     public void setAmount(KualiDecimal amount);
@@ -71,10 +87,20 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setBalanceTyp(BalanceTyp balanceTyp);
 
     /**
+     * @return Returns the objectCode.
+     */
+    public ObjectCode getObjectCode();
+
+    /**
      * @param objectCode The objectCode to set.
      * @deprecated
      */
     public void setObjectCode(ObjectCode objectCode);
+
+    /**
+     * @return Returns the referenceOriginCode.
+     */
+    public String getReferenceOriginCode();
 
     /**
      * @param originCode The referenceOriginCode to set.
@@ -112,6 +138,11 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setReferenceType(DocumentType referenceType);
 
     /**
+     * @return Returns the organizationReferenceId.
+     */
+    public String getOrganizationReferenceId();
+
+    /**
      * @param organizationReferenceId The organizationReferenceId to set.
      */
     public void setOrganizationReferenceId(String organizationReferenceId);
@@ -127,9 +158,19 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setOverrideCode(String overrideCode);
 
     /**
+     * @return Returns the postingYear.
+     */
+    public Integer getPostingYear();
+
+    /**
      * @param postingYear The postingYear to set.
      */
     public void setPostingYear(Integer postingYear);
+
+    /**
+     * @return Returns the projectCode.
+     */
+    public String getProjectCode();
 
     /**
      * @param projectCode The projectCode to set.
@@ -137,9 +178,19 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setProjectCode(String projectCode);
 
     /**
+     * @return Returns the referenceNumber.
+     */
+    public String getReferenceNumber();
+
+    /**
      * @param referenceNumber The referenceNumber to set.
      */
     public void setReferenceNumber(String referenceNumber);
+
+    /**
+     * @return Returns the referenceTypeCode.
+     */
+    public String getReferenceTypeCode();
 
     /**
      * @param referenceTypeCode The referenceTypeCode to set.
@@ -232,9 +283,19 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setObjectType(ObjectType objectType);
 
     /**
+     * @return Returns the accountNumber.
+     */
+    public String getAccountNumber();
+
+    /**
      * @param accountNumber The accountNumber to set.
      */
     public void setAccountNumber(String accountNumber);
+
+    /**
+     * @return Returns the balanceTypeCode.
+     */
+    public String getBalanceTypeCode();
 
     /**
      * @param balanceTypeCode The balanceTypeCode to set.
@@ -242,14 +303,29 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setBalanceTypeCode(String balanceTypeCode);
 
     /**
+     * @return Returns the chartOfAccountsCode.
+     */
+    public String getChartOfAccountsCode();
+
+    /**
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode);
 
     /**
+     * @return Returns the financialObjectCode.
+     */
+    public String getFinancialObjectCode();
+
+    /**
      * @param financialObjectCode The financialObjectCode to set.
      */
     public void setFinancialObjectCode(String financialObjectCode);
+
+    /**
+     * @return Returns the financialSubObjectCode.
+     */
+    public String getFinancialSubObjectCode();
 
     /**
      * @param financialSubObjectCode The financialSubObjectCode to set.
@@ -267,14 +343,14 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setObjectTypeCode(String objectTypeCode);
 
     /**
-     * @return Returns the financialDocumentLineTypeCode.
+     * @return Returns the ojbConcreteClass.
      */
-    public String getFinancialDocumentLineTypeCode();
+    public String getOjbConcreteClass();
 
     /**
-     * @param financialDocumentLineTypeCode The financialDocumentLineTypeCode to set.
+     * @param ojbConcreteClass The ojbConcreteClass to set.
      */
-    public void setFinancialDocumentLineTypeCode(String financialDocumentLineTypeCode);
+    public void setOjbConcreteClass(String ojbConcreteClass);
 
     /**
      * @return Returns the project.
@@ -288,38 +364,24 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
     public void setProject(ProjectCode project);
 
     /**
+     * @return Returns the subAccountNumber.
+     */
+    public String getSubAccountNumber();
+
+    /**
      * @param subAccountNumber The subAccountNumber to set.
      */
     public void setSubAccountNumber(String subAccountNumber);
 
     /**
+     * @return Returns the financialDocumentLineDescription.
+     */
+    public abstract String getFinancialDocumentLineDescription();
+
+    /**
      * @param financialDocumentLineDescription The financialDocumentLineDescription to set.
      */
     public abstract void setFinancialDocumentLineDescription(String financialDocumentLineDescription);
-
-    /**
-     * @return the sales tax associated with this line if any
-     */
-    public abstract SalesTax getSalesTax();
-
-    /**
-     * @param salesTax The sales tax associated with this AccountingLine
-     */
-    public abstract void setSalesTax(SalesTax salesTax);
-
-    /**
-     * This method checks to see if sales tax is required for this accounting line or not
-     * 
-     * @return true if it is required, false otherwise
-     */
-    public boolean isSalesTaxRequired();
-
-    /**
-     * You can set whether or not sales tax is required for this accounting line or not
-     * 
-     * @param salesTaxRequired - true if required
-     */
-    public void setSalesTaxRequired(boolean salesTaxRequired);
 
     /**
      * @see org.kuali.core.bo.AccountingLine#isSourceAccountingLine()
@@ -330,6 +392,17 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
      * @see org.kuali.core.bo.AccountingLine#isTargetAccountingLine()
      */
     public boolean isTargetAccountingLine();
+
+    /**
+     * @return Returns the budgetYear.
+     */
+    public String getBudgetYear();
+
+    /**
+     * @param budgetYear The budgetYear to set.
+     */
+    public void setBudgetYear(String budgetYear);
+
 
     /**
      * @param other
@@ -409,34 +482,6 @@ public interface AccountingLine extends PersistableBusinessObject, GeneralLedger
      * @param b the objectBudgetOverride to set
      */
     public void setObjectBudgetOverrideNeeded(boolean b);
-
-    /**
-     * Gets the nonFringeAccountOverride attribute.
-     * 
-     * @return Returns the nonFringeAccountOverride.
-     */
-    public boolean getNonFringeAccountOverride();
-
-    /**
-     * Sets the nonFringeAccountOverride attribute value.
-     * 
-     * @param nonFringeAccountOverride The nonFringeAccountOverride to set.
-     */
-    public void setNonFringeAccountOverride(boolean nonFringeAccountOverride);
-
-    /**
-     * Gets the nonFringeAccountOverrideNeeded attribute.
-     * 
-     * @return Returns the nonFringeAccountOverrideNeeded.
-     */
-    public boolean getNonFringeAccountOverrideNeeded();
-
-    /**
-     * Sets the nonFringeAccountOverrideNeeded attribute value.
-     * 
-     * @param nonFringeAccountOverrideNeeded The nonFringeAccountOverrideNeeded to set.
-     */
-    public void setNonFringeAccountOverrideNeeded(boolean nonFringeAccountOverrideNeeded);
 
     /**
      * Returns a Map with the accounting line primitive field names as the key of the map and the primitive values as the value.

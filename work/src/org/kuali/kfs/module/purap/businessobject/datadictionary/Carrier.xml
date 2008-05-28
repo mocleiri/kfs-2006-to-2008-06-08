@@ -1,136 +1,83 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.Carrier">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="Carrier" parent="Carrier-parentBean" />
+        <inquiry>
+            <title>Carrier Inquiry</title>
 
-  <bean id="Carrier-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.Carrier" />
-    <property name="inquiryDefinition" >
-      <ref bean="Carrier-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="Carrier-lookupDefinition" />
-    </property>
-    <property name="titleAttribute" value="carrierCode" />
-    <property name="objectLabel" value="Carrier" />
-    <property name="attributes" >
-      <list>
-        <ref bean="Carrier-carrierCode" />
-        <ref bean="Carrier-carrierDescription" />
-        <ref bean="Carrier-active" />
-        <ref bean="Carrier-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="carrierCode" />
+                <field attributeName="carrierDescription" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Carrier Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.Carrier">Create New</a>]]></menubar>
 
-  <bean id="Carrier-carrierCode" parent="Carrier-carrierCode-parentBean" />
+            <instructions>Lookup a Carrier</instructions>
 
-  <bean id="Carrier-carrierCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="carrierCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Carrier Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="6" />
-    </property>
-  </bean>
-  <bean id="Carrier-carrierDescription" parent="Carrier-carrierDescription-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="carrierDescription" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="Carrier-carrierDescription-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="carrierDescription" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Carrier Description" />
-    <property name="shortLabel" value="Description" />
-    <property name="maxLength" value="45" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="47" />
-    </property>
-  </bean>
-  <bean id="Carrier-active" parent="Carrier-active-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="carrierCode" required="false" />
+                <lookupField attributeName="carrierDescription" required="false" />
+                <lookupField attributeName="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+            </lookupFields>
 
-  <bean id="Carrier-active-parentBean" abstract="true" parent="GenericAttributes-activeIndicator">
-    <property name="name" value="active" />
-  </bean>
-  <bean id="Carrier-versionNumber" parent="Carrier-versionNumber-parentBean" />
+            <resultFields>
+                <field attributeName="carrierCode" />
+                <field attributeName="carrierDescription" />
+                <field attributeName="dataObjectMaintenanceCodeActiveIndicator" />
+            </resultFields>
+        </lookup>
 
-  <bean id="Carrier-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+        <attributes>
 
-<!-- Business Object Inquiry Definition -->
+            <attribute name="carrierCode" forceUppercase="true">
+                <label>Carrier Code</label>
+                <shortLabel>Code</shortLabel>
 
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="Carrier-inquiryDefinition" parent="Carrier-inquiryDefinition-parentBean" />
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="Carrier-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Carrier Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="carrierCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="carrierDescription" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="active" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <summary>carrierCode</summary>
+                <description>carrierCode description...</description>
+			</attribute>
 
-<!-- Business Object Lookup Definition -->
+            <attribute name="carrierDescription" >
+                <label>Carrier Description</label>
+                <shortLabel>Description</shortLabel>
 
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
 
-  <bean id="Carrier-lookupDefinition" parent="Carrier-lookupDefinition-parentBean" />
+                <control>
+                    <text size="47" />
+                </control>
 
-  <bean id="Carrier-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Carrier Lookup" />
-    <property name="instructions" value="Lookup a Carrier" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="carrierCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="carrierDescription" />
-        <bean parent="FieldDefinition"
-              p:defaultValue="Y"
-              p:attributeName="active" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="carrierCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="carrierDescription" />
-        <bean parent="FieldDefinition"
-              p:attributeName="active" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <summary>carrierDescription</summary>
+                <description>carrierDescription description...</description>
+			</attribute>
+
+            <attributeReference name="dataObjectMaintenanceCodeActiveIndicator" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

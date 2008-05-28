@@ -30,13 +30,13 @@ import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.labor.LaborConstants;
+import org.kuali.module.labor.bo.BenefitsCalculation;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
 import org.kuali.module.labor.bo.ExpenseTransferSourceAccountingLine;
 import org.kuali.module.labor.bo.ExpenseTransferTargetAccountingLine;
 import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
 import org.kuali.module.labor.bo.PositionObjectBenefit;
 import org.kuali.module.labor.document.LaborLedgerPostingDocument;
-import org.kuali.module.labor.service.LaborBenefitsCalculationService;
 import org.kuali.module.labor.service.LaborPositionObjectBenefitService;
 
 /**
@@ -97,9 +97,14 @@ public class LaborPendingEntryGenerator {
 
         List<LaborLedgerPendingEntry> benefitPendingEntries = new ArrayList<LaborLedgerPendingEntry>();
         for (PositionObjectBenefit positionObjectBenefit : positionObjectBenefits) {
-            String fringeBenefitObjectCode = positionObjectBenefit.getBenefitsCalculation().getPositionFringeBenefitObjectCode();
+            BenefitsCalculation benefitsCalculation = positionObjectBenefit.getBenefitsCalculation();
+            String fringeBenefitObjectCode = benefitsCalculation.getPositionFringeBenefitObjectCode();
+            String benefitTypeCode = benefitsCalculation.getPositionBenefitTypeCode();
 
-            KualiDecimal benefitAmount = SpringContext.getBean(LaborBenefitsCalculationService.class).calculateFringeBenefit(positionObjectBenefit, accountingLine.getAmount());
+            // calculate the benefit amount (ledger amt * (benfit pct/100) )
+            KualiDecimal fringeBenefitPercent = benefitsCalculation.getPositionFringeBenefitPercent();
+            KualiDecimal benefitAmount = fringeBenefitPercent.multiply(accountingLine.getAmount()).divide(new KualiDecimal(100));
+
             if (benefitAmount.isNonZero()) {
                 List<LaborLedgerPendingEntry> pendingEntries = generateBenefitPendingEntries(document, accountingLine, sequenceHelper, benefitAmount, fringeBenefitObjectCode);
                 benefitPendingEntries.addAll(pendingEntries);
@@ -211,12 +216,18 @@ public class LaborPendingEntryGenerator {
         Integer payrollFiscalyear = accountingLine.getPayrollEndDateFiscalYear();
         String chartOfAccountsCode = accountingLine.getChartOfAccountsCode();
         String objectCode = accountingLine.getFinancialObjectCode();
-
         Collection<PositionObjectBenefit> positionObjectBenefits = SpringContext.getBean(LaborPositionObjectBenefitService.class).getPositionObjectBenefits(payrollFiscalyear, chartOfAccountsCode, objectCode);
-        for (PositionObjectBenefit positionObjectBenefit : positionObjectBenefits) {
-            String benefitTypeCode = positionObjectBenefit.getBenefitsCalculation().getPositionBenefitTypeCode();
 
-            KualiDecimal benefitAmount = SpringContext.getBean(LaborBenefitsCalculationService.class).calculateFringeBenefit(positionObjectBenefit, accountingLine.getAmount());
+        for (PositionObjectBenefit positionObjectBenefit : positionObjectBenefits) {
+            BenefitsCalculation benefitsCalculation = positionObjectBenefit.getBenefitsCalculation();
+            String fringeBenefitObjectCode = benefitsCalculation.getPositionFringeBenefitObjectCode();
+            String benefitTypeCode = benefitsCalculation.getPositionBenefitTypeCode();
+
+            KualiDecimal fringeBenefitPercent = benefitsCalculation.getPositionFringeBenefitPercent();
+            KualiDecimal benefitAmount = fringeBenefitPercent.multiply(accountingLine.getAmount()).divide(new KualiDecimal(100));
+            // KualiDecimal numericBenefitAmount = DebitCreditUtil.getNumericAmount(benefitAmount,
+            // accountingLine.getDebitCreditCode());
+
             if (benefitAmountSumByBenefitType.containsKey(benefitTypeCode)) {
                 benefitAmount = benefitAmount.add(benefitAmountSumByBenefitType.get(benefitTypeCode));
             }

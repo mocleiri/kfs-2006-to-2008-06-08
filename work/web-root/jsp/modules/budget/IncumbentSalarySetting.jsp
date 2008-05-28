@@ -1,5 +1,5 @@
 <%--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,17 +15,6 @@
 --%>
 <%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
 
-<c:if test="${KualiForm.orgSalSetClose}">
-<kul:page showDocumentInfo="false"
-	htmlFormAction="budgetIncumbentSalarySetting" renderMultipart="false"
-	showTabButtons="false"
-	docTitle="Salary Setting by Incumbent"
-    transactionalDocument="false"
-	>
-</kul:page>
-</c:if>
-
-<c:if test="${!KualiForm.orgSalSetClose}">
 <kul:page showDocumentInfo="false"
 	htmlFormAction="budgetIncumbentSalarySetting" renderMultipart="true"
 	showTabButtons="true"
@@ -45,11 +34,12 @@
     <bc:incumbentSalarySetting />
 	<kul:panelFooter />
 
+<%--TODO need to create save and close(and prompt to save) actions that calls returnToCaller --%>
     <div id="globalbuttons" class="globalbuttons">
         <c:if test="${!KualiForm.editingMode['systemViewOnly'] && KualiForm.editingMode['fullEntry']}">
-	        <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_save.gif" styleClass="globalbuttons" property="methodToCall.save" title="save" alt="save"/>
+	        <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_save.gif" styleClass="globalbuttons" property="methodToCall.returnToCaller" title="save" alt="save"/>
 	    </c:if>
-        <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_close.gif" styleClass="globalbuttons" property="methodToCall.close" title="close" alt="close"/>
+        <html:image src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_close.gif" styleClass="globalbuttons" property="methodToCall.returnToCaller" title="close" alt="close"/>
     </div>
 
 <%-- Need these here to override and initialize vars used by objectinfo.js to BC specific --%>
@@ -59,4 +49,3 @@
   var kualiElements = kualiForm.elements;
 </SCRIPT>
 </kul:page>
-</c:if>

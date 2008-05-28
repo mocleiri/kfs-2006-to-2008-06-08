@@ -1,254 +1,187 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.GraduateAssistantRate">
+        <customAttributeEnabled>true</customAttributeEnabled>
 
-  <bean id="GraduateAssistantRate" parent="GraduateAssistantRate-parentBean" />
+        <inquiry>
+            <title>Graduate Assistant Rate Inquiry</title>
 
-  <bean id="GraduateAssistantRate-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.kra.budget.bo.GraduateAssistantRate" />
-    <property name="inquiryDefinition" >
-      <ref bean="GraduateAssistantRate-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="GraduateAssistantRate-lookupDefinition" />
-    </property>
-    <property name="objectLabel" value="Graduate Assistant Rate" />
-    <property name="objectDescription" value="words" />
-    <property name="attributes" >
-      <list>
-        <ref bean="GraduateAssistantRate-campusCode" />
-        <ref bean="GraduateAssistantRate-active" />
-        <ref bean="GraduateAssistantRate-campusMaximumPeriod1Rate" />
-        <ref bean="GraduateAssistantRate-campusMaximumPeriod2Rate" />
-        <ref bean="GraduateAssistantRate-campusMaximumPeriod3Rate" />
-        <ref bean="GraduateAssistantRate-campusMaximumPeriod4Rate" />
-        <ref bean="GraduateAssistantRate-campusMaximumPeriod5Rate" />
-        <ref bean="GraduateAssistantRate-campusMaximumPeriod6Rate" />
-        <ref bean="GraduateAssistantRate-objectId" />
-        <ref bean="GraduateAssistantRate-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="campusCode" />
+                <field attributeName="active" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Graduate Assistant Rate Lookup</title>
 
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.kra.budget.bo.GraduateAssistantRate">Create New</a>]]>
+            </menubar>
 
-  <bean id="GraduateAssistantRate-campusCode" parent="GraduateAssistantRate-campusCode-parentBean" />
+            <instructions>Lookup a Graduate Assistant Rate</instructions>
 
-  <bean id="GraduateAssistantRate-campusCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="campusCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Campus Code" />
-    <property name="shortLabel" value="Campus Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="2" />
-    </property>
-    <property name="summary" value="Campus Code..." />
-    <property name="description" value="Campus Code..." />
-  </bean>
-  <bean id="GraduateAssistantRate-active" parent="GraduateAssistantRate-active-parentBean" />
+            <defaultSort attributeName="campusCode" sortAscending="false" />
 
-  <bean id="GraduateAssistantRate-active-parentBean" abstract="true" parent="GenericAttributes-activeIndicator">
-    <property name="name" value="active" />
-  </bean>
-  <bean id="GraduateAssistantRate-campusMaximumPeriod1Rate" parent="GraduateAssistantRate-campusMaximumPeriod1Rate-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="campusCode" required="false" />
+                <lookupField attributeName="active" required="false">
+                    <defaultValue>Y</defaultValue>
+                </lookupField>
+            </lookupFields>
 
-  <bean id="GraduateAssistantRate-campusMaximumPeriod1Rate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="campusMaximumPeriod1Rate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Period 1 Remission Rate" />
-    <property name="shortLabel" value="Period 1 Remission Rate" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="Period 1 Remission Rate" />
-    <property name="description" value="Period 1 Remission Rate..." />
-  </bean>
-  <bean id="GraduateAssistantRate-campusMaximumPeriod2Rate" parent="GraduateAssistantRate-campusMaximumPeriod2Rate-parentBean" />
+            <resultFields>
+                <field attributeName="campusCode" />
+                <field attributeName="campusMaximumPeriod1Rate" />
+                <field attributeName="campusMaximumPeriod2Rate" />
+                <field attributeName="campusMaximumPeriod3Rate" />
+                <field attributeName="campusMaximumPeriod4Rate" />
+                <field attributeName="campusMaximumPeriod5Rate" />
+                <field attributeName="campusMaximumPeriod6Rate" />
+                <field attributeName="active" />
+            </resultFields>
+        </lookup>
 
-  <bean id="GraduateAssistantRate-campusMaximumPeriod2Rate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="campusMaximumPeriod2Rate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Period 2 Remission Rate" />
-    <property name="shortLabel" value="Period 2 Remission Rate" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="Period 2 Remission Rate" />
-    <property name="description" value="Period 2 Remission Rate..." />
-  </bean>
-  <bean id="GraduateAssistantRate-campusMaximumPeriod3Rate" parent="GraduateAssistantRate-campusMaximumPeriod3Rate-parentBean" />
+        <attributes>
 
-  <bean id="GraduateAssistantRate-campusMaximumPeriod3Rate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="campusMaximumPeriod3Rate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Period 3 Remission Rate" />
-    <property name="shortLabel" value="Period 3 Remission Rate" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="Period 3 Remission Rate" />
-    <property name="description" value="Period 3 Remission Rate..." />
-  </bean>
-  <bean id="GraduateAssistantRate-campusMaximumPeriod4Rate" parent="GraduateAssistantRate-campusMaximumPeriod4Rate-parentBean" />
+            <attribute name="campusCode" forceUppercase="true">
+                <label>Campus Code</label>
+                <shortLabel>Campus Code</shortLabel>
 
-  <bean id="GraduateAssistantRate-campusMaximumPeriod4Rate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="campusMaximumPeriod4Rate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Period 4 Remission Rate" />
-    <property name="shortLabel" value="Period 4 Remission Rate" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="Period 4 Remission Rate" />
-    <property name="description" value="Period 4 Remission Rate..." />
-  </bean>
-  <bean id="GraduateAssistantRate-campusMaximumPeriod5Rate" parent="GraduateAssistantRate-campusMaximumPeriod5Rate-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern>
+                    <anyCharacter />
+                </validationPattern>
+                <required>true</required>
 
-  <bean id="GraduateAssistantRate-campusMaximumPeriod5Rate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="campusMaximumPeriod5Rate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Period 5 Remission Rate" />
-    <property name="shortLabel" value="Period 5 Remission Rate" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="Period 5 Remission Rate" />
-    <property name="description" value="Period 5 Remission Rate..." />
-  </bean>
-  <bean id="GraduateAssistantRate-campusMaximumPeriod6Rate" parent="GraduateAssistantRate-campusMaximumPeriod6Rate-parentBean" />
+                <control>
+                    <text size="2" />
+                </control>
 
-  <bean id="GraduateAssistantRate-campusMaximumPeriod6Rate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="campusMaximumPeriod6Rate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Period 6 Remission Rate" />
-    <property name="shortLabel" value="Period 6 Remission Rate" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="Period 6 Remission Rate" />
-    <property name="description" value="Period 6 Remission Rate..." />
-  </bean>
-  <bean id="GraduateAssistantRate-objectId" parent="GraduateAssistantRate-objectId-parentBean" />
+                <summary>Campus Code...</summary>
+                <description>Campus Code...</description>
+            </attribute>
 
-  <bean id="GraduateAssistantRate-objectId-parentBean" abstract="true" parent="GenericAttributes-objectId">
-  </bean>
-  <bean id="GraduateAssistantRate-versionNumber" parent="GraduateAssistantRate-versionNumber-parentBean" />
+            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
 
-  <bean id="GraduateAssistantRate-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+            <attribute name="campusMaximumPeriod1Rate">
+                <label>Period 1 Remission Rate</label>
+                <shortLabel>Period 1 Remission Rate</shortLabel>
 
-<!-- Business Object Inquiry Definition -->
+                <maxLength>8</maxLength>
+                <validationPattern>
+                    <floatingPoint />
+                </validationPattern>
+                <required>true</required>
 
+                <control>
+                    <text size="10" />
+                </control>
 
-  <bean id="GraduateAssistantRate-inquiryDefinition" parent="GraduateAssistantRate-inquiryDefinition-parentBean" />
+                <summary>Period 1 Remission Rate</summary>
+                <description>Period 1 Remission Rate...</description>
+            </attribute>
 
-  <bean id="GraduateAssistantRate-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Graduate Assistant Rate Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="campusCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="active" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+            <attribute name="campusMaximumPeriod2Rate">
+                <label>Period 2 Remission Rate</label>
+                <shortLabel>Period 2 Remission Rate</shortLabel>
 
-<!-- Business Object Lookup Definition -->
+                <maxLength>8</maxLength>
+                <validationPattern>
+                    <floatingPoint />
+                </validationPattern>
+                <required>true</required>
 
+                <control>
+                    <text size="10" />
+                </control>
 
-  <bean id="GraduateAssistantRate-lookupDefinition" parent="GraduateAssistantRate-lookupDefinition-parentBean" />
+                <summary>Period 2 Remission Rate</summary>
+                <description>Period 2 Remission Rate...</description>
+            </attribute>
 
-  <bean id="GraduateAssistantRate-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Graduate Assistant Rate Lookup" />
-    <property name="instructions" value="Lookup a Graduate Assistant Rate" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-        <property name="attributeNames" >
-          <list>
-            <value>campusCode</value>
-          </list>
-        </property>
-        <property name="sortAscending" value="false" />
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="campusCode" />
-        <bean parent="FieldDefinition"
-              p:defaultValue="Y"
-              p:attributeName="active" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="campusCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="campusMaximumPeriod1Rate" />
-        <bean parent="FieldDefinition"
-              p:attributeName="campusMaximumPeriod2Rate" />
-        <bean parent="FieldDefinition"
-              p:attributeName="campusMaximumPeriod3Rate" />
-        <bean parent="FieldDefinition"
-              p:attributeName="campusMaximumPeriod4Rate" />
-        <bean parent="FieldDefinition"
-              p:attributeName="campusMaximumPeriod5Rate" />
-        <bean parent="FieldDefinition"
-              p:attributeName="campusMaximumPeriod6Rate" />
-        <bean parent="FieldDefinition"
-              p:attributeName="active" />
-      </list>
-    </property>
-  </bean>
-</beans>
+            <attribute name="campusMaximumPeriod3Rate">
+                <label>Period 3 Remission Rate</label>
+                <shortLabel>Period 3 Remission Rate</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern>
+                    <floatingPoint />
+                </validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>Period 3 Remission Rate</summary>
+                <description>Period 3 Remission Rate...</description>
+            </attribute>
+
+            <attribute name="campusMaximumPeriod4Rate">
+                <label>Period 4 Remission Rate</label>
+                <shortLabel>Period 4 Remission Rate</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern>
+                    <floatingPoint />
+                </validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>Period 4 Remission Rate</summary>
+                <description>Period 4 Remission Rate...</description>
+            </attribute>
+
+            <attribute name="campusMaximumPeriod5Rate">
+                <label>Period 5 Remission Rate</label>
+                <shortLabel>Period 5 Remission Rate</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern>
+                    <floatingPoint />
+                </validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>Period 5 Remission Rate</summary>
+                <description>Period 5 Remission Rate...</description>
+            </attribute>
+
+            <attribute name="campusMaximumPeriod6Rate">
+                <label>Period 6 Remission Rate</label>
+                <shortLabel>Period 6 Remission Rate</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern>
+                    <floatingPoint />
+                </validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>Period 6 Remission Rate</summary>
+                <description>Period 6 Remission Rate...</description>
+            </attribute>
+
+            <attributeReference name="objectId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="objectId" />
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+
+        <objectLabel>Budget Grad Assistant Fringe Rates</objectLabel>
+        <objectDescription>words</objectDescription>
+        
+        <objectHelp securityGroupName="KraAdminGroup" parameterName="budgetRatesHelp" />
+
+    </businessObject>
+</dictionaryEntry>
+

@@ -15,8 +15,6 @@
  */
 package org.kuali.module.pdp.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.pdp.service.ExtractGlTransactionService;
 
@@ -25,10 +23,7 @@ public class ExtractGlTransactionsStep extends AbstractStep {
 
     private ExtractGlTransactionService extractGlTransactionService;
 
-    /**
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
+    public boolean execute(String jobName) throws InterruptedException {
         LOG.debug("execute() started");
 
         extractGlTransactionService.extractGlTransactions();

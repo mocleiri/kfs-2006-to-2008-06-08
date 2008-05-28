@@ -27,9 +27,10 @@ import org.kuali.kfs.KFSConstants;
 
 public class VendorPhoneLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
     /**
-     * Overrides the getSearchResults in the super class so that we can do some customization in our vendor phone number lookup.
+     * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map) 
      * 
-     * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
+     * This method overrides the getSearchResults in the super class so that we can do some customization 
+     * in our vendor phone number lookup. 
      */
     @Override
     public List<PersistableBusinessObject> getSearchResults(Map<String, String> fieldValues) {
@@ -45,7 +46,6 @@ public class VendorPhoneLookupableHelperServiceImpl extends AbstractLookupableHe
         if (defaultSortColumns.size() > 0) {
             Collections.sort(searchResults, new BeanPropertyComparator(getDefaultSortColumns(), true));
         }
-
         return searchResults;
     }
 

@@ -1,155 +1,109 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.CapitalAssetTransactionTypeRule">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="CapitalAssetTransactionTypeRule" parent="CapitalAssetTransactionTypeRule-parentBean" />
+        <inquiry>
+            <title>Capital Asset Transaction Type Rule Inquiry</title>
 
-  <bean id="CapitalAssetTransactionTypeRule-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.CapitalAssetTransactionTypeRule" />
-    <property name="inquiryDefinition" >
-      <ref bean="CapitalAssetTransactionTypeRule-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="CapitalAssetTransactionTypeRule-lookupDefinition" />
-    </property>
-    <property name="attributes" >
-      <list>
-        <ref bean="CapitalAssetTransactionTypeRule-capitalAssetTransactionTypeCode" />
-        <ref bean="CapitalAssetTransactionTypeRule-financialObjectSubTypeCode" />
-        <ref bean="CapitalAssetTransactionTypeRule-capitalAssetRelationshipLimitNumber" />
-        <ref bean="CapitalAssetTransactionTypeRule-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="capitalAssetRelationshipLimitNumber" />
+                <field attributeName="capitalAssetTransactionTypeCode" />
+                <field attributeName="financialObjectSubTypeCode" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Capital Asset Transaction Type Rule Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.CapitalAssetTransactionTypeRule">Create New</a>]]></menubar>
 
-  <bean id="CapitalAssetTransactionTypeRule-capitalAssetTransactionTypeCode" parent="CapitalAssetTransactionTypeRule-capitalAssetTransactionTypeCode-parentBean" />
+            <instructions>Lookup a Capital Asset Transaction Type Rule</instructions>
 
-  <bean id="CapitalAssetTransactionTypeRule-capitalAssetTransactionTypeCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="capitalAssetTransactionTypeCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Capital Asset Transaction Type Code" />
-    <property name="shortLabel" value="Tran Type Code" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="6" />
-    </property>
-  </bean>
-  <bean id="CapitalAssetTransactionTypeRule-financialObjectSubTypeCode" parent="CapitalAssetTransactionTypeRule-financialObjectSubTypeCode-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="capitalAssetRelationshipLimitNumber" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="CapitalAssetTransactionTypeRule-financialObjectSubTypeCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="financialObjectSubTypeCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Financial Object Sub Type Code" />
-    <property name="shortLabel" value="Subobject Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-  </bean>
-  <bean id="CapitalAssetTransactionTypeRule-capitalAssetRelationshipLimitNumber" parent="CapitalAssetTransactionTypeRule-capitalAssetRelationshipLimitNumber-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="capitalAssetRelationshipLimitNumber" required="false" />
+                <lookupField attributeName="capitalAssetTransactionTypeCode" required="false" />
+                <lookupField attributeName="financialObjectSubTypeCode" required="false" />
+            </lookupFields>
 
-  <bean id="CapitalAssetTransactionTypeRule-capitalAssetRelationshipLimitNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="capitalAssetRelationshipLimitNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Capital Asset Relationship Limit Number" />
-    <property name="shortLabel" value="Relationship Limit" />
-    <property name="maxLength" value="3" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="5" />
-    </property>
-  </bean>
-  <bean id="CapitalAssetTransactionTypeRule-versionNumber" parent="CapitalAssetTransactionTypeRule-versionNumber-parentBean" />
+            <resultFields>
+                <field attributeName="capitalAssetRelationshipLimitNumber" />
+                <field attributeName="capitalAssetTransactionTypeCode" />
+                <field attributeName="financialObjectSubTypeCode" />
+            </resultFields>
+        </lookup>
 
-  <bean id="CapitalAssetTransactionTypeRule-versionNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="versionNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Version Number" />
-    <property name="shortLabel" value="Number" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-  </bean>
+        <attributes>
 
-<!-- Business Object Inquiry Definition -->
+            <attribute name="capitalAssetRelationshipLimitNumber" forceUppercase="true">
+                <label>Capital Asset Relationship Limit Number</label>
+                <shortLabel>Number</shortLabel>
 
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="CapitalAssetTransactionTypeRule-inquiryDefinition" parent="CapitalAssetTransactionTypeRule-inquiryDefinition-parentBean" />
+                <control>
+                    <text size="5" />
+                </control>
 
-  <bean id="CapitalAssetTransactionTypeRule-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Capital Asset Transaction Type Rule Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="capitalAssetTransactionTypeCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialObjectSubTypeCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="capitalAssetRelationshipLimitNumber" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <summary>capitalAssetRelationshipLimitNumber</summary>
+                <description>capitalAssetRelationshipLimitNumber description...</description>
+			</attribute>
 
-<!-- Business Object Lookup Definition -->
+            <attribute name="capitalAssetTransactionTypeCode" forceUppercase="true">
+                <label>Capital Asset Transaction Type Code</label>
+                <shortLabel>Code</shortLabel>
 
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="CapitalAssetTransactionTypeRule-lookupDefinition" parent="CapitalAssetTransactionTypeRule-lookupDefinition-parentBean" />
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="CapitalAssetTransactionTypeRule-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Capital Asset Transaction Type Rule Lookup" />
-    <property name="instructions" value="Lookup a Capital Asset Transaction Type Rule" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="capitalAssetTransactionTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectSubTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="capitalAssetRelationshipLimitNumber" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="capitalAssetTransactionTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectSubTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="capitalAssetRelationshipLimitNumber" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <summary>capitalAssetTransactionTypeCode</summary>
+                <description>capitalAssetTransactionTypeCode description...</description>
+			</attribute>
+
+            <attribute name="financialObjectSubTypeCode" forceUppercase="true">
+                <label>Financial Object Sub Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>financialObjectSubTypeCode</summary>
+                <description>financialObjectSubTypeCode description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

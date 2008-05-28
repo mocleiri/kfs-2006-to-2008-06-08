@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@ package org.kuali.module.financial.lookup.keyvalues;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.Constants.BudgetAdjustmentDocumentConstants;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants.BudgetAdjustmentDocumentConstants;
 
 /**
  * This class returns list of ba sub fund restriction levels.
+ * 
+ * 
  */
 public class BudgetAdjustmentSubFundRestrictionsValuesFinder extends KeyValuesBase {
 

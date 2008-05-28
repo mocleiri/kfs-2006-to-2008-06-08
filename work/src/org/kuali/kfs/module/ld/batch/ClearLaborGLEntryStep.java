@@ -15,27 +15,14 @@
  */
 package org.kuali.module.labor.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.labor.service.LaborNightlyOutService;
 
-/**
- * Clean Labor entry Batch Step.
- */
 public class ClearLaborGLEntryStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ClearLaborPendingStep.class);
     private LaborNightlyOutService laborNightlyOutService;
 
-    /**
-     * Deletes labor general ledger entries.
-     * 
-     * @param jobName String that contains the job that will be executed.
-     * @param jobRunDate the time/date the job is run
-     * @return boolean
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) {
+    public boolean execute(String jobName) {
         laborNightlyOutService.deleteCopiedLaborGenerealLedgerEntries();
         return true;
     }
@@ -48,4 +35,5 @@ public class ClearLaborGLEntryStep extends AbstractStep {
     public void setLaborNightlyOutService(LaborNightlyOutService laborNightlyOutService) {
         this.laborNightlyOutService = laborNightlyOutService;
     }
+
 }

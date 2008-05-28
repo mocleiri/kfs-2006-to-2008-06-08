@@ -24,11 +24,9 @@ import org.apache.ojb.broker.metadata.CollectionDescriptor;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.Query;
 import org.apache.ojb.broker.query.QueryByCriteria;
-import org.kuali.core.util.ObjectUtils;
 
 public class OjbQueryCustomizer extends QueryCustomizerDefaultImpl {
     // used to AND in additional criteria on a collection
-    private static final String FIELD_PREFIX = "parent.";
 
     @Override
     public Query customizeQuery(Object arg0, PersistenceBroker arg1, CollectionDescriptor arg2, QueryByCriteria arg3) {
@@ -38,35 +36,27 @@ public class OjbQueryCustomizer extends QueryCustomizerDefaultImpl {
         Field field = null;
         try {
             field = this.getClass().getSuperclass().getDeclaredField("m_attributeList");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         field.setAccessible(true);
-        Map<String, String> m_attributeList = null;
+        Map<String,String> m_attributeList = null;
         try {
             m_attributeList = (Map) field.get(this);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        
         // now, do what we wanted to do to start with if we could've just gotten m_attributeList easily
         Criteria criteria = arg3.getCriteria();
         for (String key : m_attributeList.keySet()) {
-            // if beginning with FIELD_PREFIX is too hacky, or more flexibility is needed, another query customizer class can be
-            // made,
-            // and this method can be renamed to take a parameter to specify which we want to do
-            // (and the customizeQuery method here made to call the new method with the parameter).
-            // However, making another class would mean you couldn't intermix constants and field values,
-            // since OJB won't use have multiple query-customizers per collection-descriptor.
-            if (this.getAttribute(key).startsWith(FIELD_PREFIX)) {
-                criteria.addEqualTo(key, ObjectUtils.getPropertyValue(arg0, this.getAttribute(key).substring(FIELD_PREFIX.length())));
-            }
-            else {
-                criteria.addEqualTo(key, this.getAttribute(key));
-            }
+            criteria.addEqualTo(key, this.getAttribute(key));
         }
+        // below line is how this was originally coded
+        // if there is any problem with the reflection stuff above or with the for loop (i.e. efficiency problem or exceptions being thrown),
+        // just comment out or remove everything above the Criteria declaration, plus the for loop, and re-add the below line
+        // (assuming no other fields have taken advantage of this yet)
+        // criteria.addEqualTo("financialDocumentLineTypeCode", this.getAttribute("financialDocumentLineTypeCode"));
         arg3.setCriteria(criteria);
         return arg3;
     }

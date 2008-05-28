@@ -22,7 +22,6 @@ var objectCodeSuffix = ".financialObjectCode";
 var objectCodeNameSuffix = ".objectCode.financialObjectCodeName";
 var subObjectCodeSuffix = ".financialSubObjectCode";
 var subObjectCodeNameSuffix = ".subObjectCode.financialSubObjectCodeName";
-var universityFiscalYearSuffix =".universityFiscalYear";
 
 
 function loadChartInfo(coaCodeFieldName, coaNameFieldName ) {
@@ -46,29 +45,6 @@ function loadChartInfo(coaCodeFieldName, coaNameFieldName ) {
 	}
 }
 
-function setReportsToChartCode() {
-	// TODO: detect if in lookup or document mode
-	// make AJAX call to get reports-to chart
-	var coaCode = DWRUtil.getValue( "document.newMaintainableObject" + chartCodeSuffix );
-
-	if (coaCode!='') {
-		var dwrReply = {
-			callback:function(data) {
-			if ( data != null && typeof data == 'object' ) {
-				document.getElementsByName("document.newMaintainableObject.reportsToChartOfAccountsCode").item(0).value = data.reportsToChartOfAccountsCode;
-				document.getElementsByName("document.newMaintainableObject.reportsToChartOfAccountsCode").item(0).disabled = true;
-			} else {
-				window.status = "chart not found."; 
-			} },
-			errorHandler:function( errorMessage ) { 
-				window.status = "Unable to get reports-to chart."; 
-			}
-		};
-		ChartService.getByPrimaryId( coaCode, dwrReply );
-	}		
-	
-}
-
 function loadAccountInfo( accountCodeFieldName, accountNameFieldName ) {
     var elPrefix = findElPrefix( accountCodeFieldName );
     var accountCode = DWRUtil.getValue( accountCodeFieldName );
@@ -84,7 +60,7 @@ function loadAccountInfo( accountCodeFieldName, accountNameFieldName ) {
     if (accountCode=='') {
 		clearRecipients(accountNameFieldName);
 	} else if (coaCode=='') {
-		setRecipientValue(accountNameFieldName, wrapError( 'chart code is empty' ), true );
+		setRecipientValue(accountNameFieldName, wrapError( 'chart code is empty' ) );
 	} else {
 		var dwrReply = {
 			callback:function(data) {
@@ -161,37 +137,6 @@ function loadObjectInfo(fiscalYear, objectTypeNameRecipient, objectTypeCodeRecip
 				setRecipientValue( objectNameFieldName, wrapError( "object not found" ), true );
 				clearRecipients( objectTypeCodeRecipient );
 				clearRecipients( objectTypeNameRecipient );
-			}
-		};
-		ObjectCodeService.getByPrimaryId( fiscalYear, coaCode, objectCode, dwrReply );
-	}
-}
-
-function loadObjectCodeInfo(objectCodeFieldName, objectNameFieldName) {
-    var elPrefix = findElPrefix( objectCodeFieldName );
-    var objectCode = getElementValue( objectCodeFieldName );
-    var coaCode = getElementValue( elPrefix + chartCodeSuffix );
-    var fiscalYear = getElementValue( elPrefix + universityFiscalYearSuffix);
-
-    if (valueChanged( objectCodeFieldName )) {
-        clearRecipients(objectNameFieldName );
-    }
-	if (objectCode=='') {
-		clearRecipients(objectNameFieldName);
-	} else if (coaCode=='') {
-		setRecipientValue(objectNameFieldName, wrapError( 'chart code is empty' ), true );
-	} else if (fiscalYear=='') {
-		setRecipientValue(objectNameFieldName, wrapError( 'fiscal year is missing' ), true );
-	} else {
-		var dwrReply = {
-			callback:function(data) {
-			if ( data != null && typeof data == 'object' ) {
-				setRecipientValue( objectNameFieldName, data.financialObjectCodeName );
-			} else {
-				setRecipientValue( objectNameFieldName, wrapError( "object not found" ), true );			
-			} },
-			errorHandler:function( errorMessage ) { 
-				setRecipientValue( objectNameFieldName, wrapError( "object not found" ), true );
 			}
 		};
 		ObjectCodeService.getByPrimaryId( fiscalYear, coaCode, objectCode, dwrReply );
@@ -313,27 +258,5 @@ function loadDocumentTypeInfo(documentTypeCodeFieldName, documentTypeNameFieldNa
 			}
 		};
 		DocumentTypeService.getDocumentTypeByCode( documentTypeCode, dwrReply );
-    }
-}
-
-function loadEmplInfo( emplIdFieldName, userNameFieldName ) {
-    var userId = DWRUtil.getValue( emplIdFieldName );
-    var containerDiv = document.getElementById(userNameFieldName + divSuffix);
-
-    if (userId == "") {
-        DWRUtil.setValue( containerDiv.id, "" );
-    } else {
-        var dwrReply = {
-            callback:function(data) {
-            if ( data != null && typeof data == 'object' ) {
-                DWRUtil.setValue(containerDiv.id, data.personName, {escapeHtml:true} );
-            } else {
-                DWRUtil.setValue(containerDiv.id, wrapError( "person not found" ));
-            } },
-            errorHandler:function( errorMessage ) { 
-                DWRUtil.setValue(containerDiv.id, wrapError( "person not found" ));
-            }
-        };
-        KfsUniversalUserService.getUniversalUserByPersonPayrollIdentifier( userId, dwrReply );
     }
 }

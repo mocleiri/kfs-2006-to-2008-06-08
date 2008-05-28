@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.kuali.kfs.rule.event;
 
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.BusinessRule;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.bo.AccountingLine;
@@ -40,7 +41,7 @@ public final class UpdateAccountingLineEvent extends AccountingLineEventBase {
     public UpdateAccountingLineEvent(String errorPathPrefix, Document document, AccountingLine originalAccountingLine, AccountingLine updatedAccountingLine) {
         super("updating accountingLine in document " + getDocumentId(document), errorPathPrefix, document, originalAccountingLine);
 
-        this.updatedAccountingLine = updatedAccountingLine;
+        this.updatedAccountingLine = (AccountingLine) ObjectUtils.deepCopy(updatedAccountingLine);
     }
 
 

@@ -1,231 +1,184 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.budget.bo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
-public class BudgetConstructionIntendedIncumbent extends PersistableBusinessObjectBase implements BudgetConstructionDetail {
+/**
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
+ */
+public class BudgetConstructionIntendedIncumbent extends BusinessObjectBase {
 
-    private String emplid;
-    private String personName;
-    private String setidSalary;
-    private String salaryAdministrationPlan;
-    private String grade;
-    private String iuClassificationLevel;
+	private String emplid;
+	private String personName;
+	private String setidSalary;
+	private String salaryAdministrationPlan;
+	private String grade;
+	private String iuClassificationLevel;
 
-    private List<BudgetConstructionSalarySocialSecurityNumber> budgetConstructionSalarySocialSecurity;
-    private List<PendingBudgetConstructionAppointmentFunding> pendingBudgetConstructionAppointmentFunding;
+	/**
+	 * Default constructor.
+	 */
+	public BudgetConstructionIntendedIncumbent() {
 
-    /**
-     * Default constructor.
-     */
-    public BudgetConstructionIntendedIncumbent() {
-        budgetConstructionSalarySocialSecurity = new ArrayList<BudgetConstructionSalarySocialSecurityNumber>();
-        pendingBudgetConstructionAppointmentFunding = new ArrayList<PendingBudgetConstructionAppointmentFunding>();
-    }
+	}
 
-    /**
-     * Gets the emplid attribute.
-     * 
-     * @return Returns the emplid
-     */
-    public String getEmplid() {
-        return emplid;
-    }
+	/**
+	 * Gets the emplid attribute.
+	 * 
+	 * @return - Returns the emplid
+	 * 
+	 */
+	public String getEmplid() { 
+		return emplid;
+	}
 
-    /**
-     * Sets the emplid attribute.
-     * 
-     * @param emplid The emplid to set.
-     */
-    public void setEmplid(String emplid) {
-        this.emplid = emplid;
-    }
-
-
-    /**
-     * Gets the personName attribute.
-     * 
-     * @return Returns the personName
-     */
-    public String getPersonName() {
-        return personName;
-    }
-
-    /**
-     * Sets the personName attribute.
-     * 
-     * @param personName The personName to set.
-     */
-    public void setPersonName(String personName) {
-        this.personName = personName;
-    }
+	/**
+	 * Sets the emplid attribute.
+	 * 
+	 * @param - emplid The emplid to set.
+	 * 
+	 */
+	public void setEmplid(String emplid) {
+		this.emplid = emplid;
+	}
 
 
-    /**
-     * Gets the setidSalary attribute.
-     * 
-     * @return Returns the setidSalary
-     */
-    public String getSetidSalary() {
-        return setidSalary;
-    }
+	/**
+	 * Gets the personName attribute.
+	 * 
+	 * @return - Returns the personName
+	 * 
+	 */
+	public String getPersonName() { 
+		return personName;
+	}
 
-    /**
-     * Sets the setidSalary attribute.
-     * 
-     * @param setidSalary The setidSalary to set.
-     */
-    public void setSetidSalary(String setidSalary) {
-        this.setidSalary = setidSalary;
-    }
-
-
-    /**
-     * Gets the salaryAdministrationPlan attribute.
-     * 
-     * @return Returns the salaryAdministrationPlan
-     */
-    public String getSalaryAdministrationPlan() {
-        return salaryAdministrationPlan;
-    }
-
-    /**
-     * Sets the salaryAdministrationPlan attribute.
-     * 
-     * @param salaryAdministrationPlan The salaryAdministrationPlan to set.
-     */
-    public void setSalaryAdministrationPlan(String salaryAdministrationPlan) {
-        this.salaryAdministrationPlan = salaryAdministrationPlan;
-    }
+	/**
+	 * Sets the personName attribute.
+	 * 
+	 * @param - personName The personName to set.
+	 * 
+	 */
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
 
 
-    /**
-     * Gets the grade attribute.
-     * 
-     * @return Returns the grade
-     */
-    public String getGrade() {
-        return grade;
-    }
+	/**
+	 * Gets the setidSalary attribute.
+	 * 
+	 * @return - Returns the setidSalary
+	 * 
+	 */
+	public String getSetidSalary() { 
+		return setidSalary;
+	}
 
-    /**
-     * Sets the grade attribute.
-     * 
-     * @param grade The grade to set.
-     */
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-
-    /**
-     * Gets the iuClassificationLevel attribute.
-     * 
-     * @return Returns the iuClassificationLevel
-     */
-    public String getIuClassificationLevel() {
-        return iuClassificationLevel;
-    }
-
-    /**
-     * Sets the iuClassificationLevel attribute.
-     * 
-     * @param iuClassificationLevel The iuClassificationLevel to set.
-     */
-    public void setIuClassificationLevel(String iuClassificationLevel) {
-        this.iuClassificationLevel = iuClassificationLevel;
-    }
+	/**
+	 * Sets the setidSalary attribute.
+	 * 
+	 * @param - setidSalary The setidSalary to set.
+	 * 
+	 */
+	public void setSetidSalary(String setidSalary) {
+		this.setidSalary = setidSalary;
+	}
 
 
-    /**
-     * Gets the budgetConstructionSalarySocialSecurity attribute.
-     * 
-     * @return Returns the budgetConstructionSalarySocialSecurity.
-     */
-    public List<BudgetConstructionSalarySocialSecurityNumber> getBudgetConstructionSalarySocialSecurity() {
-        return budgetConstructionSalarySocialSecurity;
-    }
+	/**
+	 * Gets the salaryAdministrationPlan attribute.
+	 * 
+	 * @return - Returns the salaryAdministrationPlan
+	 * 
+	 */
+	public String getSalaryAdministrationPlan() { 
+		return salaryAdministrationPlan;
+	}
 
-    /**
-     * Sets the budgetConstructionSalarySocialSecurity attribute value.
-     * 
-     * @param budgetConstructionSalarySocialSecurity The budgetConstructionSalarySocialSecurity to set.
-     */
-    @Deprecated
-    public void setBudgetConstructionSalarySocialSecurity(List<BudgetConstructionSalarySocialSecurityNumber> budgetConstructionSalarySocialSecurity) {
-        this.budgetConstructionSalarySocialSecurity = budgetConstructionSalarySocialSecurity;
-    }
+	/**
+	 * Sets the salaryAdministrationPlan attribute.
+	 * 
+	 * @param - salaryAdministrationPlan The salaryAdministrationPlan to set.
+	 * 
+	 */
+	public void setSalaryAdministrationPlan(String salaryAdministrationPlan) {
+		this.salaryAdministrationPlan = salaryAdministrationPlan;
+	}
 
-    /**
-     * Gets the pendingBudgetConstructionAppointmentFunding attribute.
-     * 
-     * @return Returns the pendingBudgetConstructionAppointmentFunding.
-     */
-    public List<PendingBudgetConstructionAppointmentFunding> getPendingBudgetConstructionAppointmentFunding() {
-        return pendingBudgetConstructionAppointmentFunding;
-    }
 
-    /**
-     * Sets the pendingBudgetConstructionAppointmentFunding attribute value.
-     * 
-     * @param pendingBudgetConstructionAppointmentFunding The pendingBudgetConstructionAppointmentFunding to set.
-     */
-    @Deprecated
-    public void setPendingBudgetConstructionAppointmentFunding(List<PendingBudgetConstructionAppointmentFunding> pendingBudgetConstructionAppointmentFunding) {
-        this.pendingBudgetConstructionAppointmentFunding = pendingBudgetConstructionAppointmentFunding;
-    }
+	/**
+	 * Gets the grade attribute.
+	 * 
+	 * @return - Returns the grade
+	 * 
+	 */
+	public String getGrade() { 
+		return grade;
+	}
 
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
+	/**
+	 * Sets the grade attribute.
+	 * 
+	 * @param - grade The grade to set.
+	 * 
+	 */
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
 
-        List managedLists = super.buildListOfDeletionAwareLists();
-        managedLists.add(getPendingBudgetConstructionAppointmentFunding());
-        return managedLists;
-    }
 
-    /**
-     * Returns a map with the primitive field names as the key and the primitive values as the map value.
-     * 
-     * @return Map
-     */
-    public Map getValuesMap() {
-        Map simpleValues = new HashMap();
+	/**
+	 * Gets the iuClassificationLevel attribute.
+	 * 
+	 * @return - Returns the iuClassificationLevel
+	 * 
+	 */
+	public String getIuClassificationLevel() { 
+		return iuClassificationLevel;
+	}
 
-        simpleValues.put("emplid", getEmplid());
+	/**
+	 * Sets the iuClassificationLevel attribute.
+	 * 
+	 * @param - iuClassificationLevel The iuClassificationLevel to set.
+	 * 
+	 */
+	public void setIuClassificationLevel(String iuClassificationLevel) {
+		this.iuClassificationLevel = iuClassificationLevel;
+	}
 
-        return simpleValues;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("emplid", this.emplid);
-        return m;
+	    return m;
     }
 }

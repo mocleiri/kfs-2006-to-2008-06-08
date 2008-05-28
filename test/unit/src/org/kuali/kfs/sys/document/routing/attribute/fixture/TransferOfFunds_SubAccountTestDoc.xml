@@ -1,18 +1,3 @@
-<!--
- Copyright 2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <documentContent><applicationContent><org.kuali.core.workflow.KualiDocumentXmlMaterializer>
   <kualiTransactionalDocumentInformation>
     <documentInitiator>
@@ -76,6 +61,14 @@
         </employeeType>
         <moduleUsers>
           <entry>
+            <string>cams</string>
+            <org.kuali.module.cams.bo.CamsUser>
+              <personUniversalIdentifier>6162502038</personUniversalIdentifier>
+              <universalUser reference="../../../.."/>
+              <moduleId>cams</moduleId>
+            </org.kuali.module.cams.bo.CamsUser>
+          </entry>
+          <entry>
             <string>vendor</string>
             <org.kuali.module.vendor.bo.VendorUser>
               <personUniversalIdentifier>6162502038</personUniversalIdentifier>
@@ -108,6 +101,14 @@
             </org.kuali.module.kra.budget.bo.KraUser>
           </entry>
           <entry>
+            <string>budget</string>
+            <org.kuali.module.budget.bo.BudgetUser>
+              <personUniversalIdentifier>6162502038</personUniversalIdentifier>
+              <universalUser reference="../../../.."/>
+              <moduleId>budget</moduleId>
+            </org.kuali.module.budget.bo.BudgetUser>
+          </entry>
+          <entry>
             <string>purap</string>
             <org.kuali.module.purap.bo.PurapUser>
               <personUniversalIdentifier>6162502038</personUniversalIdentifier>
@@ -130,6 +131,14 @@
               <universalUser reference="../../../.."/>
               <moduleId>labor</moduleId>
             </org.kuali.module.labor.bo.LaborUser>
+          </entry>
+          <entry>
+            <string>ar</string>
+            <org.kuali.module.ar.bo.ArUser>
+              <personUniversalIdentifier>6162502038</personUniversalIdentifier>
+              <universalUser reference="../../../.."/>
+              <moduleId>ar</moduleId>
+            </org.kuali.module.ar.bo.ArUser>
           </entry>
           <entry>
             <string>cg</string>
@@ -251,7 +260,7 @@
           <continuationAccount class="org.kuali.module.chart.bo.Account--EnhancerByCGLIB--f0abfdb0"/>
           <incomeStreamAccount class="org.kuali.module.chart.bo.Account--EnhancerByCGLIB--f0abfdb0"/>
           <postalZipCode class="org.kuali.kfs.bo.PostalZipCode--EnhancerByCGLIB--514fcb62"/>
-          <budgetRecordingLevel class="org.kuali.module.chart.bo.codes.BudgetRecordingLevel--EnhancerByCGLIB--dba033c6"/>
+          <budgetRecordingLevel class="org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode--EnhancerByCGLIB--dba033c6"/>
           <sufficientFundsCode class="org.kuali.module.chart.bo.codes.SufficientFundsCode--EnhancerByCGLIB--f84fa298"/>
           <forContractsAndGrants>false</forContractsAndGrants>
           <accountGuideline>

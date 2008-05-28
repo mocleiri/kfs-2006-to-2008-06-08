@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.bo.FiscalYearFunctionControl;
-import org.kuali.module.financial.service.FiscalYearFunctionControlService;
 
 /**
  * This class...
+ * 
+ * 
  */
 public class BudgetAdjustmentFiscalYearValuesFinder extends KeyValuesBase {
 
@@ -36,7 +37,7 @@ public class BudgetAdjustmentFiscalYearValuesFinder extends KeyValuesBase {
     public List getKeyValues() {
 
         List returnControls = new ArrayList();
-        List controls = SpringContext.getBean(FiscalYearFunctionControlService.class).getBudgetAdjustmentAllowedYears();
+        List controls = SpringServiceLocator.getKeyValuesService().getBudgetAdjustmentAllowedYears();
 
         for (Iterator iter = controls.iterator(); iter.hasNext();) {
             FiscalYearFunctionControl control = (FiscalYearFunctionControl) iter.next();

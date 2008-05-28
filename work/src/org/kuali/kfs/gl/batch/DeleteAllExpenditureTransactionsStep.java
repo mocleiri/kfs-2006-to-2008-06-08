@@ -15,38 +15,20 @@
  */
 package org.kuali.module.gl.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
-import org.kuali.kfs.batch.TestingStep;
-import org.kuali.module.gl.service.ExpenditureTransactionService;
+import org.kuali.module.gl.dao.ExpenditureTransactionDao;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * A step to remove all expenditure transactions held in the database
- */
-public class DeleteAllExpenditureTransactionsStep extends AbstractStep implements TestingStep {
-    private ExpenditureTransactionService expenditureTransactionService;
-
-    /**
-     * Runs the process of deleting all expenditure transactions
-     * 
-     * @param jobName the name of the job this step is being run as part of
-     * @param jobRunDate the time/date when the job was started
-     * @return true if the job finished successfully, false if otherwise
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String)
-     */
-    public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
-        expenditureTransactionService.deleteAllExpenditureTransactions();
+@Transactional
+public class DeleteAllExpenditureTransactionsStep extends AbstractStep {
+    private ExpenditureTransactionDao expenditureTransactionDao;
+    
+    public boolean execute(String jobName) throws InterruptedException {
+        expenditureTransactionDao.deleteAllExpenditureTransactions();
         return true;
     }
 
-    /**
-     * Sets the expenditureTransactionService attribute, allowing the inject of an implementation of this service
-     * 
-     * @param expenditureTransactionService
-     * @see org.kuali.module.gl.service.ExpenditureTransactionService
-     */
-    public void setExpenditureTransactionService(ExpenditureTransactionService expenditureTransactionService) {
-        this.expenditureTransactionService = expenditureTransactionService;
+    public void setExpenditureTransactionDao(ExpenditureTransactionDao expenditureTransactionDao) {
+        this.expenditureTransactionDao = expenditureTransactionDao;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,14 @@ import org.kuali.core.web.struts.form.KualiForm;
 
 /**
  * This class is the action form for balance inquiries.
+ * 
+ * 
  */
 public class KualiBalanceInquiryReportMenuForm extends KualiForm {
     private static final long serialVersionUID = 1L;
 
     // parameter fields
+    private String budgetYear;
     private String referenceOriginCode;
     private String referenceNumber;
     private String referenceTypeCode;
@@ -123,6 +126,9 @@ public class KualiBalanceInquiryReportMenuForm extends KualiForm {
         if (StringUtils.isNotBlank(projectCode)) {
             lookupParameters += ",projectCode:projectCode";
         }
+        if (StringUtils.isNotBlank(budgetYear)) {
+            lookupParameters += ",budgetYear:budgetYear";
+        }
 
         return lookupParameters;
     }
@@ -181,6 +187,20 @@ public class KualiBalanceInquiryReportMenuForm extends KualiForm {
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    /**
+     * @return String
+     */
+    public String getBudgetYear() {
+        return budgetYear;
+    }
+
+    /**
+     * @param budgetYear
+     */
+    public void setBudgetYear(String budgetYear) {
+        this.budgetYear = budgetYear;
     }
 
     /**

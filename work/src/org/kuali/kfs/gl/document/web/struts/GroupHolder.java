@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,6 @@ import java.io.Serializable;
 import org.kuali.module.gl.bo.CorrectionChange;
 import org.kuali.module.gl.bo.CorrectionCriteria;
 
-/**
- * This represents a Group Holder which contains correction change and criteria objects
- */
 public class GroupHolder implements Serializable {
     private CorrectionChange correctionChange = new CorrectionChange();
     private CorrectionCriteria correctionCriteria = new CorrectionCriteria();
@@ -30,15 +27,12 @@ public class GroupHolder implements Serializable {
     public CorrectionChange getCorrectionChange() {
         return correctionChange;
     }
-
     public void setCorrectionChange(CorrectionChange correctionChange) {
         this.correctionChange = correctionChange;
     }
-
     public CorrectionCriteria getCorrectionCriteria() {
         return correctionCriteria;
     }
-
     public void setCorrectionCriteria(CorrectionCriteria correctionCriteria) {
         this.correctionCriteria = correctionCriteria;
     }

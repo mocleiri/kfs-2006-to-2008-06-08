@@ -1,82 +1,43 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="FundingSourceMaintenanceDocument" parent="FundingSourceMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.FundingSource</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="FundingSourceMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.FundingSource" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="FundingSourceMaintenanceDocument-EditFundingSource" />
-      </list>
-    </property>
-    <property name="lockingKeys" >
-      <list>
-        <value>fundingSourceCode</value>
-      </list>
-    </property>
-    <property name="label" value="Funding Source" />
-    <property name="shortLabel" value="Funding Source" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-PA"
-            p:parameterName="FUNDING_SOURCE"
-            p:parameterDetailType="FundingSource" />
-    </property>
-    <property name="documentTypeName" value="FundingSourceMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMFS" />
-    <property name="workflowProperties" >
-      <ref bean="FundingSourceMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_PUR_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiFundingSourceMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMFS</documentTypeCode>
 
+        <label>Funding Source Maintenance Document</label>
+        <shortLabel>Funding Source Maint Doc</shortLabel>
 
-  <bean id="FundingSourceMaintenanceDocument-EditFundingSource" parent="FundingSourceMaintenanceDocument-EditFundingSource-parentBean" />
+        <summary>Funding Source Maintenance Document</summary>
+        <description>Document used to create or update Funding Source objects</description>
 
-  <bean id="FundingSourceMaintenanceDocument-EditFundingSource-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Funding Source" />
-    <property name="title" value="Edit Funding Source" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="fundingSourceCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="fundingSourceDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="active"
-              p:defaultValue="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="fundingSourceCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="FundingSourceMaintenanceDocument-workflowProperties" parent="FundingSourceMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="FundingSourceMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit Funding Source">
+                <maintainableItems>
+                    <maintainableField name="fundingSourceCode" required="true" />
+                	<maintainableField name="fundingSourceDescription" required="true" />
+                	<maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

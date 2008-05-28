@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2008 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
 <data xmlns="ns:workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ns:workflow resource:WorkflowData">
   <documentTypes xmlns="ns:workflow/DocumentType" xsi:schemaLocation="ns:workflow/DocumentType resource:DocumentType">
     <documentType>
@@ -6,9 +21,9 @@
       <parent>KualiFinancialDocument</parent>
       <label>Year End Benefit Expense Transfer</label>
       <postProcessorName>org.kuali.workflow.postprocessor.KualiPostProcessor</postProcessorName>
-      <superUserWorkgroupName>SY_FUNCTIONAL_SUPER_USERS</superUserWorkgroupName>
-      <blanketApproveWorkgroupName>SY_BLANKET_APPROVERS</blanketApproveWorkgroupName>
-      <defaultExceptionWorkgroupName>SY_FUNCTIONAL_SUPER_USERS</defaultExceptionWorkgroupName>
+      <superUserWorkgroupName>KUALI_ROLE_SUPERVISOR</superUserWorkgroupName>
+      <blanketApproveWorkgroupName>KUALI_ROLE_ADMINISTRATOR</blanketApproveWorkgroupName>
+      <defaultExceptionWorkgroupName>KUALI_ROLE_SUPERVISOR</defaultExceptionWorkgroupName>
       <docHandler>${application.url}/laborYearEndBenefitExpenseTransfer.do?methodToCall=docHandler</docHandler>
       <active>true</active>
       <policies>
@@ -26,8 +41,7 @@
         <routePath>
           <start name="Adhoc Routing" nextNode="Org Review" />
           <requests name="Org Review" nextNode="Subfund" />
-          <requests name="Subfund" nextNode="Award Workgroup" />
-          <requests name="Award Workgroup" />
+          <requests name="Subfund" />
         </routePath>
       </routePaths>
       <routeNodes>
@@ -45,12 +59,6 @@
         <requests name="Subfund">
           <activationType>S</activationType>
           <ruleTemplate>KualiSubFundTemplate</ruleTemplate>
-          <mandatoryRoute>false</mandatoryRoute>
-          <finalApproval>false</finalApproval>
-        </requests>
-        <requests name="Award Workgroup">
-          <activationType>S</activationType>
-          <ruleTemplate>KualiAwardWorkgroupTemplate</ruleTemplate>
           <mandatoryRoute>false</mandatoryRoute>
           <finalApproval>false</finalApproval>
         </requests>

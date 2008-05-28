@@ -1,81 +1,43 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="PurchaseOrderTransmissionMethodMaintenanceDocument" parent="PurchaseOrderTransmissionMethodMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="PurchaseOrderTransmissionMethodMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="PurchaseOrderTransmissionMethodMaintenanceDocument-EditMethodofPOTransmission" />
-      </list>
-    </property>
-    <property name="lockingKeys" >
-      <list>
-        <value>purchaseOrderTransmissionMethodCode</value>
-      </list>
-    </property>
-    <property name="label" value="Method of PO Transmission" />
-    <property name="shortLabel" value="Method of PO Transmission" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-PA"
-            p:parameterName="PURCHASE_ORDER_TRANSMISSION_METHOD"
-            p:parameterDetailType="PurchaseOrderTransmissionMethod" />
-    </property>
-    <property name="documentTypeName" value="PurchaseOrderTransmissionMethodMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMTM" />
-    <property name="workflowProperties" >
-      <ref bean="PurchaseOrderTransmissionMethodMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_PUR_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiPoTransmissionMethodMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMTM</documentTypeCode>
 
+        <label>Purchase Order Transmission Method Maintenance Document</label>
+        <shortLabel>PO Transmission Method Maint Doc</shortLabel>
 
-  <bean id="PurchaseOrderTransmissionMethodMaintenanceDocument-EditMethodofPOTransmission" parent="PurchaseOrderTransmissionMethodMaintenanceDocument-EditMethodofPOTransmission-parentBean" />
+        <summary>Purchase Order Transmission Method Maintenance Document</summary>
+        <description>Document used to create or update Purchase Order Transmission Method objects</description>
 
-  <bean id="PurchaseOrderTransmissionMethodMaintenanceDocument-EditMethodofPOTransmission-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Method of PO Transmission" />
-    <property name="title" value="Edit Method of PO Transmission" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="purchaseOrderTransmissionMethodCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="purchaseOrderTransmissionMethodDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="active" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="purchaseOrderTransmissionMethodCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="PurchaseOrderTransmissionMethodMaintenanceDocument-workflowProperties" parent="PurchaseOrderTransmissionMethodMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="PurchaseOrderTransmissionMethodMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit PO Transmission Method">
+                <maintainableItems>
+                    <maintainableField name="purchaseOrderTransmissionMethodCode" required="true" />
+                    <maintainableField name="purchaseOrderTransmissionMethodDescription" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

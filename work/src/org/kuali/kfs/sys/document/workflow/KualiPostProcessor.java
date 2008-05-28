@@ -1,27 +1,27 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Created on Apr 20, 2005
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
-
 package org.kuali.workflow.postprocessor;
 
 import java.rmi.RemoteException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.naming.Context;
 
 import org.apache.log4j.Logger;
-import org.kuali.core.service.PostProcessorService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.Constants;
+import org.kuali.KualiSpringServiceLocator;
+import org.kuali.core.UserSession;
+import org.kuali.core.bo.DocumentStatusChange;
+import org.kuali.core.util.GlobalVariables;
+import org.kuali.core.util.SpringServiceLocator;
 
+import edu.iu.uis.eden.EdenConstants;
 import edu.iu.uis.eden.clientapp.PostProcessorRemote;
 import edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO;
 import edu.iu.uis.eden.clientapp.vo.DeleteEventVO;
@@ -29,42 +29,43 @@ import edu.iu.uis.eden.clientapp.vo.DocumentRouteLevelChangeVO;
 import edu.iu.uis.eden.clientapp.vo.DocumentRouteStatusChangeVO;
 
 /**
- * This class is the public entry point by which workflow communicates status changes, level changes, and other useful changes. Note
- * that this class delegates all of these activities to the PostProcessorService, which does the actual work. This is done to ensure
- * proper transaction scoping, and to resolve some issues present otherwise. Because of this, its important to understand that a
- * transaction will be started at the PostProcessorService method call, so any work that needs to be done within the same
- * transaction needs to happen inside that service implementation, rather than in here.
+ * @author bmcgough
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
 public class KualiPostProcessor implements PostProcessorRemote {
 
     private static Logger LOG = Logger.getLogger(KualiPostProcessor.class);
+    
 
-    /**
-     * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doRouteStatusChange(edu.iu.uis.eden.clientapp.vo.DocumentRouteStatusChangeVO)
-     */
     public boolean doRouteStatusChange(DocumentRouteStatusChangeVO statusChangeEvent) throws RemoteException {
-        return SpringContext.getBean(PostProcessorService.class).doRouteStatusChange(statusChangeEvent);
-    }
+        LOG.debug("entering post processor");
+        try {
+            if (EdenConstants.ROUTE_HEADER_PROCESSED_CD.equals(statusChangeEvent.getNewRouteStatus()) || EdenConstants.ROUTE_HEADER_CANCEL_CD.equals(statusChangeEvent.getNewRouteStatus()) || EdenConstants.ROUTE_HEADER_DISAPPROVED_CD.equals(statusChangeEvent.getNewRouteStatus()) || EdenConstants.ROUTE_HEADER_ENROUTE_CD.equals(statusChangeEvent.getNewRouteStatus())) {
+                LOG.debug("passing document " + statusChangeEvent.getRouteHeaderId() + " to DocumentService");
+                DocumentStatusChange docStatChange = new DocumentStatusChange();
+                docStatChange.setFinancialDocumentNumber(statusChangeEvent.getRouteHeaderId().toString());
+                docStatChange.setStatusChangeEvent(statusChangeEvent.getNewRouteStatus());
+                GlobalVariables.setUserSession(new UserSession(Constants.SCHEDULED_TASK_USER_ID));
+                SpringServiceLocator.getDocumentService().handleDocumentRouteStatusChangeEvent(docStatChange);
+                // writeOutDocumentStatusChange(statusChangeEvent);org.kuali.workflow.postprocessor.KualiPostProcessor
+            }
+        } catch (Exception e) {
+            LOG.error("Caught Exception handing StatusChangeEvent", e);
+            throw new RuntimeException(e.getMessage());
+        }
 
-    /**
-     * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doActionTaken(edu.iu.uis.eden.clientapp.vo.ActionTakenEventVO)
-     */
+        return true;
+    }
+    
     public boolean doActionTaken(ActionTakenEventVO event) throws RemoteException {
-        return SpringContext.getBean(PostProcessorService.class).doActionTaken(event);
+        return true;
     }
-
-    /**
-     * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doDeleteRouteHeader(edu.iu.uis.eden.clientapp.vo.DeleteEventVO)
-     */
     public boolean doDeleteRouteHeader(DeleteEventVO event) throws RemoteException {
-        return SpringContext.getBean(PostProcessorService.class).doDeleteRouteHeader(event);
+        return true;
     }
-
-    /**
-     * @see edu.iu.uis.eden.clientapp.PostProcessorRemote#doRouteLevelChange(edu.iu.uis.eden.clientapp.vo.DocumentRouteLevelChangeVO)
-     */
     public boolean doRouteLevelChange(DocumentRouteLevelChangeVO levelChangeEvent) throws RemoteException {
-        return SpringContext.getBean(PostProcessorService.class).doRouteLevelChange(levelChangeEvent);
+        return true;
     }
-
 }

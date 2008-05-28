@@ -15,55 +15,10 @@
  */
 package org.kuali.module.labor.service;
 
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.integration.bo.LaborLedgerObject;
 import org.kuali.module.labor.bo.BenefitsCalculation;
-import org.kuali.module.labor.bo.LaborObject;
-import org.kuali.module.labor.bo.PositionObjectBenefit;
 
-/**
- * The interface provides its clients with access to the benefit calculation.
- * 
- * @see org.kuali.module.labor.bo.BenefitsCalculation
- */
 public interface LaborBenefitsCalculationService {
 
-    /**
-     * get the benefit calculation object based on the given information
-     * 
-     * @param universityFiscalYear the given fiscal year
-     * @param chartOfAccountsCode the given chart of accounts code
-     * @param benefitTypeCode the given benefit type code
-     * @return the benefit calculation object matching the given information
-     */
     public BenefitsCalculation getBenefitsCalculation(Integer universityFiscalYear, String chartOfAccountsCode, String benefitTypeCode);
-
-    /**
-     * calculate the fringe benefit amount for the given labor object and salary amount
-     * 
-     * @param laborLedgerObject the given labor object
-     * @param salaryAmount the given salary amount
-     * @return the fringe benefit amount for the given labor object and salary amount
-     */
-    public KualiDecimal calculateFringeBenefit(LaborLedgerObject laborLedgerObject, KualiDecimal salaryAmount);
     
-    /**
-     * calculate the fringe benefit amount for the given object code and salary amount
-     * 
-     * @param fiscalYear the year for object code record
-     * @param chartCode the chart for object code record
-     * @param objectCode the object code
-     * @param salaryAmount amount to calculate benefits for
-     * @return the fringe benefit amount 
-     */
-    public KualiDecimal calculateFringeBenefit(Integer fiscalYear, String chartCode, String objectCode, KualiDecimal salaryAmount);
-    
-    /**
-     * calculate the fringe benefit amount from the given position object benefit and salary amount
-     * 
-     * @param positionObjectBenefit the given position object benefit
-     * @param salaryAmount the given salary amount
-     * @return the fringe benefit amount for the given position object benefit and salary amount
-     */
-    public KualiDecimal calculateFringeBenefit(PositionObjectBenefit positionObjectBenefit, KualiDecimal salaryAmount);
 }

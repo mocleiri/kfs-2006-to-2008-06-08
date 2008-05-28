@@ -15,7 +15,6 @@
  */
 package org.kuali.module.labor.util;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,13 +30,11 @@ import org.kuali.kfs.service.HomeOriginationService;
 import org.kuali.kfs.service.OptionsService;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.service.ObjectCodeService;
-import org.kuali.module.financial.document.YearEndDocument;
-import org.kuali.module.financial.document.YearEndDocumentUtil;
-import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.BenefitsCalculation;
 import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
 import org.kuali.module.labor.bo.LaborLedgerPendingEntry;
 import org.kuali.module.labor.document.LaborLedgerPostingDocument;
+import org.kuali.module.labor.rules.DebitCreditUtil;
 import org.kuali.module.labor.service.LaborBenefitsCalculationService;
 
 /**
@@ -60,13 +57,7 @@ public class LaborPendingEntryConverter {
 
         pendingEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_ACTUAL);
         pendingEntry.setTransactionLedgerEntrySequenceNumber(getNextSequenceNumber(sequenceHelper));
-
-        // year end document should post to previous fiscal year and final period
-        if (document instanceof YearEndDocument) {
-            pendingEntry.setUniversityFiscalYear(YearEndDocumentUtil.getPreviousFiscalYear());
-            pendingEntry.setUniversityFiscalPeriodCode(YearEndDocumentUtil.getFINAL_ACCOUNTING_PERIOD());
-        }
-
+        
         return pendingEntry;
     }
 
@@ -84,7 +75,7 @@ public class LaborPendingEntryConverter {
         pendingEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_A21);
         String debitCreditCode = DebitCreditUtil.getReverseDebitCreditCode(pendingEntry.getTransactionDebitCreditCode());
         pendingEntry.setTransactionDebitCreditCode(debitCreditCode);
-
+        
         return pendingEntry;
     }
 
@@ -104,7 +95,7 @@ public class LaborPendingEntryConverter {
 
         String debitCreditCode = DebitCreditUtil.getReverseDebitCreditCode(pendingEntry.getTransactionDebitCreditCode());
         pendingEntry.setTransactionDebitCreditCode(debitCreditCode);
-
+        
         return pendingEntry;
     }
 
@@ -120,7 +111,7 @@ public class LaborPendingEntryConverter {
      */
     public static LaborLedgerPendingEntry getBenefitPendingEntry(LaborLedgerPostingDocument document, ExpenseTransferAccountingLine accountingLine, GeneralLedgerPendingEntrySequenceHelper sequenceHelper, KualiDecimal benefitAmount, String fringeBenefitObjectCode) {
         LaborLedgerPendingEntry pendingEntry = getDefaultPendingEntry(document, accountingLine);
-
+        
         // if account doesn't accept fringe charges, use reports to account
         if (!accountingLine.getAccount().isAccountsFringesBnftIndicator()) {
             pendingEntry.setChartOfAccountsCode(accountingLine.getAccount().getReportsToChartOfAccountsCode());
@@ -129,22 +120,16 @@ public class LaborPendingEntryConverter {
 
         pendingEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_ACTUAL);
         pendingEntry.setFinancialObjectCode(pickValue(fringeBenefitObjectCode, KFSConstants.getDashFinancialObjectCode()));
-
+        
         ObjectCode fringeObjectCode = SpringContext.getBean(ObjectCodeService.class).getByPrimaryId(accountingLine.getPayrollEndDateFiscalYear(), accountingLine.getChartOfAccountsCode(), fringeBenefitObjectCode);
         pendingEntry.setFinancialObjectTypeCode(fringeObjectCode.getFinancialObjectTypeCode());
-
+        
         pendingEntry.setFinancialSubObjectCode(KFSConstants.getDashFinancialSubObjectCode());
         pendingEntry.setTransactionLedgerEntryAmount(benefitAmount.abs());
-        pendingEntry.setPositionNumber(LaborConstants.getDashPositionNumber());
-        pendingEntry.setEmplid(LaborConstants.getDashEmplId());
+        pendingEntry.setPositionNumber(KFSConstants.getDashPositionNumber());
+        pendingEntry.setEmplid(KFSConstants.getDashEmplId());
         pendingEntry.setTransactionLedgerEntrySequenceNumber(getNextSequenceNumber(sequenceHelper));
-
-        // year end document should post to previous fiscal year and final period
-        if (document instanceof YearEndDocument) {
-            pendingEntry.setUniversityFiscalYear(YearEndDocumentUtil.getPreviousFiscalYear());
-            pendingEntry.setUniversityFiscalPeriodCode(YearEndDocumentUtil.getFINAL_ACCOUNTING_PERIOD());
-        }
-
+        
         return pendingEntry;
     }
 
@@ -164,7 +149,7 @@ public class LaborPendingEntryConverter {
         pendingEntry.setFinancialBalanceTypeCode(KFSConstants.BALANCE_TYPE_A21);
         String debitCreditCode = DebitCreditUtil.getReverseDebitCreditCode(pendingEntry.getTransactionDebitCreditCode());
         pendingEntry.setTransactionDebitCreditCode(debitCreditCode);
-
+        
         return pendingEntry;
     }
 
@@ -186,7 +171,7 @@ public class LaborPendingEntryConverter {
 
         String debitCreditCode = DebitCreditUtil.getReverseDebitCreditCode(pendingEntry.getTransactionDebitCreditCode());
         pendingEntry.setTransactionDebitCreditCode(debitCreditCode);
-
+        
         return pendingEntry;
     }
 
@@ -225,15 +210,9 @@ public class LaborPendingEntryConverter {
         pendingEntry.setTransactionLedgerEntryAmount(clearingAmount.abs());
 
         pendingEntry.setProjectCode(KFSConstants.getDashProjectCode());
-        pendingEntry.setPositionNumber(LaborConstants.getDashPositionNumber());
-        pendingEntry.setEmplid(LaborConstants.getDashEmplId());
+        pendingEntry.setPositionNumber(KFSConstants.getDashPositionNumber());
+        pendingEntry.setEmplid(KFSConstants.getDashEmplId());
         pendingEntry.setTransactionTotalHours(null);
-
-        // year end document should post to previous fiscal year and final period
-        if (document instanceof YearEndDocument) {
-            pendingEntry.setUniversityFiscalYear(YearEndDocumentUtil.getPreviousFiscalYear());
-            pendingEntry.setUniversityFiscalPeriodCode(YearEndDocumentUtil.getFINAL_ACCOUNTING_PERIOD());
-        }
 
         return pendingEntry;
     }
@@ -350,7 +329,7 @@ public class LaborPendingEntryConverter {
     private static Integer getNextSequenceNumber(GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
         Integer nextSequenceNumber = sequenceHelper.getSequenceCounter();
         sequenceHelper.increment();
-
+        
         return nextSequenceNumber;
     }
 }

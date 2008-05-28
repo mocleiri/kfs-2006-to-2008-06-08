@@ -15,6 +15,8 @@
  */
 package org.kuali.module.gl.service.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,64 +24,54 @@ import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
 import org.kuali.core.bo.LookupResults;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.service.GlCorrectionProcessOriginEntryService;
 import org.springframework.transaction.annotation.Transactional;
+import sun.font.GlyphLayout.GVData;
 
 /**
  * This implementation of GlCorrectionProcessOriginEntryService uses the database to temporarily store lists of origin entries.
- * While this implementation does not clear out persisted origin entries, the batch job defined using the
+ * While this implementation does not clear out persisted origin entries, the batch job defined using the 
  * org.kuali.kfs.batch.PurgeOldLookupResultsStep class may cause the purging of origin entries persisted with this implementation.
  * 
  * @see GlCorrectionProcessOriginEntryService
  */
 @Transactional
 public class GlCorrectionProcessOriginEntryServiceImpl implements GlCorrectionProcessOriginEntryService {
-
+    
     private BusinessObjectService businessObjectService;
-
+    
     /**
-     * Persists the origin entries under a given sequence number. If entries are persisted again under the same sequence number,
-     * then they will be overridden.
-     * 
-     * @param glcpSearchResuiltsSequenceNumber a sequence number
-     * @param allEntries a list of origin entries
-     * @throws Exception thrown if anything goes wrong
      * @see org.kuali.module.gl.service.GlCorrectionProcessOriginEntryService#persistAllEntries(java.lang.String, java.util.List)
      */
-    public void persistAllEntries(String glcpSearchResuiltsSequenceNumber, List<OriginEntryFull> allEntries) throws Exception {
+    public void persistAllEntries(String glcpSearchResuiltsSequenceNumber, List<OriginEntry> allEntries) throws Exception {
         String serializedOriginEntries = new String(Base64.encodeBase64(ObjectUtils.toByteArray(allEntries)));
-
+        
         LookupResults lookupResults = retrieveGlcpAllOriginEntries(glcpSearchResuiltsSequenceNumber);
         if (lookupResults == null) {
             lookupResults = new LookupResults();
             lookupResults.setLookupResultsSequenceNumber(glcpSearchResuiltsSequenceNumber);
             lookupResults.setLookupUniversalUserId(GlobalVariables.getUserSession().getUniversalUser().getPersonUniversalIdentifier());
         }
-        lookupResults.setLookupDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
+        lookupResults.setLookupDate(SpringServiceLocator.getDateTimeService().getCurrentTimestamp());
         lookupResults.setSerializedLookupResults(serializedOriginEntries);
         businessObjectService.save(lookupResults);
     }
 
     /**
-     * Retrieves the origin entries stored under the given sequence number
-     * 
-     * @param glcpSearchResuiltsSequenceNumber a sequence number
-     * @return a list of origin entries, or null if no results are currently not in the system.
-     * @throws Exception thrown if something goes wrong - vague documentation for a vague exception
      * @see org.kuali.module.gl.service.GlCorrectionProcessOriginEntryService#retrieveAllEntries(java.lang.String)
      */
-    public List<OriginEntryFull> retrieveAllEntries(String glcpSearchResuiltsSequenceNumber) throws Exception {
+    public List<OriginEntry> retrieveAllEntries(String glcpSearchResuiltsSequenceNumber) throws Exception {
         LookupResults lookupResults = retrieveGlcpAllOriginEntries(glcpSearchResuiltsSequenceNumber);
         if (lookupResults == null) {
             return null;
         }
-        List<OriginEntryFull> allOEs = (List<OriginEntryFull>) ObjectUtils.fromByteArray(Base64.decodeBase64(lookupResults.getSerializedLookupResults().getBytes()));
+        List<OriginEntry> allOEs = (List<OriginEntry>) ObjectUtils.fromByteArray(Base64.decodeBase64(lookupResults.getSerializedLookupResults().getBytes()));
         return allOEs;
     }
 
@@ -91,8 +83,7 @@ public class GlCorrectionProcessOriginEntryServiceImpl implements GlCorrectionPr
     }
 
     /**
-     * Gets the businessObjectService attribute.
-     * 
+     * Gets the businessObjectService attribute. 
      * @return Returns the businessObjectService.
      */
     protected BusinessObjectService getBusinessObjectService() {
@@ -101,7 +92,6 @@ public class GlCorrectionProcessOriginEntryServiceImpl implements GlCorrectionPr
 
     /**
      * Sets the businessObjectService attribute value.
-     * 
      * @param businessObjectService The businessObjectService to set.
      */
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {

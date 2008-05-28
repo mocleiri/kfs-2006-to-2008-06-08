@@ -1,150 +1,99 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+<dictionaryEntry>
+	<businessObject businessObjectClass="org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount">
+		<customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="IndirectCostRecoveryExclusionAccount" parent="IndirectCostRecoveryExclusionAccount-parentBean" />
+		<inquiry>
+			<title>Indirect Cost Recovery Exclusion by Account Inquiry</title>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount" />
-    <property name="inquiryDefinition" >
-      <ref bean="IndirectCostRecoveryExclusionAccount-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="IndirectCostRecoveryExclusionAccount-lookupDefinition" />
-    </property>
-    <property name="objectLabel" value="Indirect Cost Recovery Exclusion By Account" />
-    <property name="attributes" >
-      <list>
-        <ref bean="IndirectCostRecoveryExclusionAccount-chartOfAccountsCode" />
-        <ref bean="IndirectCostRecoveryExclusionAccount-accountNumber" />
-        <ref bean="IndirectCostRecoveryExclusionAccount-financialObjectCode" />
-        <ref bean="IndirectCostRecoveryExclusionAccount-financialObjectChartOfAccountCode" />
-        <ref bean="IndirectCostRecoveryExclusionAccount-versionNumber" />
-      </list>
-    </property>
-  </bean>
+			<inquiryFields>
+				<field attributeName="chartOfAccounts.chartOfAccountsCode" />
+				<field attributeName="account.accountNumber" />			
+				<field attributeName="objectChartOfAccounts.chartOfAccountsCode"  />
+				<field attributeName="object.financialObjectCode" />			
+			</inquiryFields>
+		</inquiry>
 
-<!-- Attribute Definitions -->
+		<lookup>
+			<title>Indirect Cost Recovery Exclusion by Account Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount">Create New</a>]]></menubar>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-chartOfAccountsCode" parent="IndirectCostRecoveryExclusionAccount-chartOfAccountsCode-parentBean" />
+			<instructions>Lookup an Indirect Cost Recovery Exclusion by Account</instructions>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-chartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-  </bean>
-  <bean id="IndirectCostRecoveryExclusionAccount-accountNumber" parent="IndirectCostRecoveryExclusionAccount-accountNumber-parentBean" />
+			<defaultSort attributeName="account.accountNumber" sortAscending="true" />
 
-  <bean id="IndirectCostRecoveryExclusionAccount-accountNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountNumber" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Account Number" />
-    <property name="shortLabel" value="Acct" />
-    <property name="maxLength" value="7" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="7" />
-    </property>
-  </bean>
-  <bean id="IndirectCostRecoveryExclusionAccount-financialObjectCode" parent="IndirectCostRecoveryExclusionAccount-financialObjectCode-parentBean" />
+			<lookupFields>
+				<lookupField attributeName="chartOfAccounts.chartOfAccountsCode" required="false" />
+				<lookupField attributeName="account.accountNumber" required="false" />
+				<lookupField attributeName="objectChartOfAccounts.chartOfAccountsCode" required="false" />
+				<lookupField attributeName="object.financialObjectCode" required="false" />
+			</lookupFields>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-financialObjectCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="financialObjectCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Object Code" />
-    <property name="shortLabel" value="Object" />
-    <property name="maxLength" value="4" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-  </bean>
-  <bean id="IndirectCostRecoveryExclusionAccount-financialObjectChartOfAccountCode" parent="IndirectCostRecoveryExclusionAccount-financialObjectChartOfAccountCode-parentBean" />
+			<resultFields>
+				<field attributeName="chartOfAccounts.chartOfAccountsCode" />
+				<field attributeName="account.accountNumber" />			
+				<field attributeName="objectChartOfAccounts.chartOfAccountsCode" />
+				<field attributeName="object.financialObjectCode"  />			
+			</resultFields>
+		</lookup>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-financialObjectChartOfAccountCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-    <property name="name" value="financialObjectChartOfAccountCode" />
-    <property name="label" value="Object Chart" />
-    <property name="shortLabel" value="Object Chart" />
-  </bean>
-  <bean id="IndirectCostRecoveryExclusionAccount-versionNumber" parent="IndirectCostRecoveryExclusionAccount-versionNumber-parentBean" />
+		<attributes>
+			<attributeReference name="chartOfAccounts.chartOfAccountsCode" 
+								sourceClassName="org.kuali.module.chart.bo.Chart" 
+								sourceAttributeName="chartOfAccountsCode" />
 
-  <bean id="IndirectCostRecoveryExclusionAccount-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+			<attribute name="account.accountNumber"	forceUppercase="false">
+				<label>Account Number</label>
+				<shortLabel>
+					Acct
+				</shortLabel>
 
-<!-- Business Object Inquiry Definition -->
+				<maxLength>7</maxLength>
+				<validationPattern><anyCharacter /></validationPattern>
 
+				<control>
+					<text size="7" />
+				</control>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-inquiryDefinition" parent="IndirectCostRecoveryExclusionAccount-inquiryDefinition-parentBean" />
+				<summary>Account Number</summary>
+				<description>
+					Account Number
+				</description>
+			</attribute>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Indirect Cost Recovery Exclusion By Account Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="chartOfAccountsCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="accountNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialObjectChartOfAccountCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialObjectCode" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+			<attribute name="object.financialObjectCode" forceUppercase="true">
+                <label>Object Code</label>
+                <shortLabel>Object</shortLabel>
 
-<!-- Business Object Lookup Definition -->
+                <maxLength>4</maxLength>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>Object Code</summary>
+                <description>Object Code...</description>
+            </attribute>
 
 
-  <bean id="IndirectCostRecoveryExclusionAccount-lookupDefinition" parent="IndirectCostRecoveryExclusionAccount-lookupDefinition-parentBean" />
+			<attributeReference name="objectChartOfAccounts.chartOfAccountsCode" 
+								sourceClassName="org.kuali.module.chart.bo.Chart" 
+								sourceAttributeName="chartOfAccountsCode">
+								<label>Object Chart</label>
+				                <shortLabel>Object Chart</shortLabel>
+				                <summary>Object Chart</summary>
+								<description>Object Chart...</description>	                
+			</attributeReference>
 
-  <bean id="IndirectCostRecoveryExclusionAccount-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Indirect Cost Recovery Exclusion By Account Lookup" />
-    <property name="instructions" value="Lookup an Indirect Cost Recovery Exclusion By Account" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-        <property name="attributeNames" >
-          <list>
-            <value>accountNumber</value>
-          </list>
-        </property>
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectChartOfAccountCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectCode" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectChartOfAccountCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectCode" />
-      </list>
-    </property>
-  </bean>
-</beans>
+ 			<attributeReference name="versionNumber" 
+ 				sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" 
+ 				sourceAttributeName="versionNumber" />
+			
+		</attributes>
+	</businessObject>
+</dictionaryEntry>
+

@@ -19,23 +19,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.authorization.AuthorizationConstants;
 import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.authorization.KfsAuthorizationConstants;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
+import org.kuali.module.chart.bo.ChartUser;
 
-public class InternalBillingDocumentAuthorizer extends AccountingDocumentAuthorizerBase {
+public class InternalBillingDocumentAuthorizer extends AccountingDocumentAuthorizerBase{
 
     @Override
     public Map getEditMode(Document document, UniversalUser user, List sourceAccountingLines, List targetAccountingLines) {
-        String editMode = KfsAuthorizationConstants.TransactionalEditMode.VIEW_ONLY;
+        String editMode = AuthorizationConstants.TransactionalEditMode.VIEW_ONLY;
 
         KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
 
         if (workflowDocument.stateIsInitiated() || workflowDocument.stateIsSaved()) {
             if (workflowDocument.userIsInitiator(user)) {
-                editMode = KfsAuthorizationConstants.TransactionalEditMode.FULL_ENTRY;
+                editMode = AuthorizationConstants.TransactionalEditMode.FULL_ENTRY;
             }
         }
 

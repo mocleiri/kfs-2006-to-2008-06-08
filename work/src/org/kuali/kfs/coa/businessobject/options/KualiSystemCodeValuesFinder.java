@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,48 +20,46 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.bo.KualiCodeBase;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
-import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.KualiSystemCode;
 
 /**
- * This class is the base class for all the ValueFinders for any class extending KualiSystemCode. Subclasses should extend this, but
- * do nothing. Just extending this class will be sufficient to work.
+ * 
+ * This class is the base class for all the ValueFinders for any class extending KualiSystemCode.
+ * 
+ * Subclasses should extend this, but do nothing. Just extending this class will be sufficient to work.
+ * 
+ * 
+ * 
  */
 public abstract class KualiSystemCodeValuesFinder extends KeyValuesBase {
 
-    /**
-     * Calls getValuesClass() to generate a list of key/value pairs from the {@link KualiCodeBase}'s code as the key and the code
-     * and description as the value
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
-     * @return list of key/value pairs for displaying on the client side
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
+
         // get all the KualiCodeService objects that are associated with this class
-        Collection businessObjects = SpringContext.getBean(KeyValuesService.class).findAll(this.getValuesClass());
+        Collection keys = SpringServiceLocator.getKualiCodeService().getAll(this.getValuesClass());
         List keyLabels = new ArrayList();
 
         // add a blank pair for the first/default key/value pair
         keyLabels.add(new KeyLabelPair("", ""));
 
         // build the list of code/name combos
-        for (Iterator iter = businessObjects.iterator(); iter.hasNext();) {
-            KualiCodeBase businessObject = (KualiCodeBase) iter.next();
-            keyLabels.add(new KeyLabelPair(businessObject.getCode(), businessObject.getCodeAndDescription()));
+        for (Iterator iter = keys.iterator(); iter.hasNext();) {
+            KualiSystemCode code = (KualiSystemCode) iter.next();
+            keyLabels.add(new KeyLabelPair(code.getCode(), code.getCode() + " - " + code.getName()));
         }
 
         return keyLabels;
     }
 
-    /**
-     * This method must be implemented by the base class, should return the Class of the object being looked up
-     * 
-     * @return class of object being looked up
-     */
+    // must be implemented by the base class, should return the Class of the
+    // object being looked up
     protected abstract Class getValuesClass();
 
 }

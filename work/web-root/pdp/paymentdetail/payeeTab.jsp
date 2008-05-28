@@ -1,20 +1,15 @@
-<%--
- Copyright 2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+
+<%@ page language="java"%>
+
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-template" prefix="template" %>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-nested" prefix="nested" %>
 <%@ taglib uri="/WEB-INF/app.tld" prefix="app" %>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
 
 			  	<!-- PAYEE TAB -->
 					<tr>
@@ -73,13 +68,13 @@
 				          </tr>
 									<tr>
 				            <th align=right valign=top nowrap>
-											Is Payee an Employee? 
+											Is Payee an IU Employee? 
 				            </th>
 				            <td align=left class="datacell">						
-											<c:if test="${PaymentDetail.paymentGroup.employeeIndicator == true}" >
+											<c:if test="${PaymentDetail.paymentGroup.iuEmployee == true}" >
 												Yes
 											</c:if>
-											<c:if test="${PaymentDetail.paymentGroup.employeeIndicator == false}" >
+											<c:if test="${PaymentDetail.paymentGroup.iuEmployee == false}" >
 												No
 											</c:if>
 											&nbsp;
@@ -137,7 +132,7 @@
 				            <td align=left class="datacell">
                       <c:if test="${not empty PaymentDetail.paymentGroup.adviceEmailAddress}">
                         <c:choose>
-                          <c:when test="${(SecurityRecord.sysAdminRole == true) or (SecurityRecord.viewAllRole == true) or (SecurityRecord.viewBankRole == true) or (SecurityRecord.viewIdPartialBank == true)}">
+                          <c:when test="${SecurityRecord.anyViewRole == true}">
                             <c:out value="${PaymentDetail.paymentGroup.adviceEmailAddress}"/>
                           </c:when>
                           <c:otherwise>

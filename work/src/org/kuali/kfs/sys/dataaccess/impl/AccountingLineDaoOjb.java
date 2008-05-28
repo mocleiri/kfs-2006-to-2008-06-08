@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +19,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.apache.ojb.broker.metadata.MetadataManager;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.Query;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.bo.TargetAccountingLine;
+import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.dao.AccountingLineDao;
 import org.kuali.module.chart.dao.ojb.ChartDaoOjb;
 import org.springframework.dao.DataAccessException;
+import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the AccountingLineDao interface.
+ * 
+ * 
  */
 
-public class AccountingLineDaoOjb extends PlatformAwareDaoBaseOjb implements AccountingLineDao {
+public class AccountingLineDaoOjb extends PersistenceBrokerDaoSupport implements AccountingLineDao {
     private static Logger LOG = Logger.getLogger(ChartDaoOjb.class);
 
     /**
@@ -52,14 +50,14 @@ public class AccountingLineDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
      * 
      * @param line
      */
-    public void save(AccountingLine line) throws DataAccessException {
+    public void save(AccountingLineBase line) throws DataAccessException {
         getPersistenceBrokerTemplate().store(line);
     }
 
     /**
      * Deletes an accounting line from the DB using OJB.
      */
-    public void deleteAccountingLine(AccountingLine line) throws DataAccessException {
+    public void deleteAccountingLine(AccountingLineBase line) throws DataAccessException {
         getPersistenceBrokerTemplate().delete(line);
     }
 
@@ -73,16 +71,9 @@ public class AccountingLineDaoOjb extends PlatformAwareDaoBaseOjb implements Acc
     public ArrayList findByDocumentHeaderId(Class clazz, String documentHeaderId) throws DataAccessException {
         Criteria criteria = new Criteria();
         criteria.addEqualTo("FDOC_NBR", documentHeaderId);
-        if (MetadataManager.getInstance().getRepository().getDescriptorFor(clazz).getFieldDescriptorByName("financialDocumentLineTypeCode") != null) {
-            if (SourceAccountingLine.class.isAssignableFrom(clazz)) {
-                criteria.addEqualTo("FDOC_LN_TYP_CD", KFSConstants.SOURCE_ACCT_LINE_TYPE_CODE);
-            }
-            else if (TargetAccountingLine.class.isAssignableFrom(clazz)) {
-                criteria.addEqualTo("FDOC_LN_TYP_CD", KFSConstants.TARGET_ACCT_LINE_TYPE_CODE);
-            }
-        }
 
         QueryByCriteria query = QueryFactory.newQuery(clazz, criteria);
+
         Collection lines = findCollection(query);
 
         return new ArrayList(lines);

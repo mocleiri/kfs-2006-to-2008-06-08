@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,12 @@ package org.kuali.kfs.service;
 
 import java.util.List;
 
-import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.kfs.bo.AccountingLineBase;
 
 /**
  * This interface defines methods that an AccountingLine service implementation must provide.
+ * 
+ * 
  */
 public interface AccountingLineService {
     /**
@@ -33,4 +35,21 @@ public interface AccountingLineService {
      */
     public List getByDocumentHeaderId(Class clazz, String documentHeaderId);
 
+    /**
+     * Saves an accounting line.
+     * 
+     * @param line
+     * @return The saved accounting line
+     * @throws Exception
+     */
+    public AccountingLineBase save(AccountingLineBase line);
+
+
+    /**
+     * Deletes an accounting line.
+     * 
+     * @param line
+     * @throws Exception
+     */
+    public void deleteAccountingLine(AccountingLineBase line);
 }

@@ -15,8 +15,6 @@
  */
 package org.kuali.module.purap.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.purap.service.ProcessPdpCancelPaidService;
 
@@ -25,10 +23,7 @@ public class ProcessPdPCancelsAndPaidStep extends AbstractStep {
 
     private ProcessPdpCancelPaidService processPdpCancelPaidService;
 
-    /**
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String, java.util.Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
+    public boolean execute(String jobName) throws InterruptedException {
         LOG.debug("execute() started");
 
         processPdpCancelPaidService.processPdpCancelsAndPaids();

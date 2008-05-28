@@ -15,34 +15,38 @@
  */
 package org.kuali.module.labor.util;
 
-import java.util.Date;
-
-import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.batch.BatchSpringContext;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.labor.service.LaborPosterService;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.fixtures.UserNameFixture;
 
-@ConfigureContext(session = UserNameFixture.KULUSER)
-public class LaborPosterRunner extends KualiTestBase {
+public class LaborPosterRunner {
     private LaborPosterService laborPosterService;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-        laborPosterService = SpringContext.getBean(LaborPosterService.class);
+    public LaborPosterRunner() {
+        SpringServiceLocator.initializeApplicationContext();
+        laborPosterService = (LaborPosterService) SpringServiceLocator.getBeanFactory().getBean("laborPosterService");
     }
 
-    public void testPoster() throws Exception {
-        System.out.println("Labor Poster started");
-        long start = System.currentTimeMillis();
-        System.out.println("Labor Poster is running ...");
-        System.out.printf("Starting Time = %d (ms)\n", start);
-        Date jobRunDate = SpringContext.getBean(DateTimeService.class).getCurrentDate();
-        BatchSpringContext.getJobDescriptor("laborBatchJob").getSteps().get(2).execute("laborBatchJob", jobRunDate);
-        long elapsedTime = System.currentTimeMillis() - start;
-        System.out.printf("Execution Time = %d (ms)\n", elapsedTime);
-        System.out.println("Labor Poster stopped");
+    public void runPoster() {
+        laborPosterService.postMainEntries();
+    }
+
+    public static void main(String[] args) {
+        try {
+            LaborPosterRunner laborPosterRunner = new LaborPosterRunner();
+
+            System.out.println("Labor Poster started");
+            long start = System.currentTimeMillis();
+            System.out.println("Labor Poster is running ...");
+            laborPosterRunner.runPoster();
+            long elapsedTime = System.currentTimeMillis() - start;
+            System.out.printf("Execution Time = %d (ms)\n", elapsedTime);
+            System.out.println("Labor Poster stopped");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            System.exit(0);
+        }
     }
 }

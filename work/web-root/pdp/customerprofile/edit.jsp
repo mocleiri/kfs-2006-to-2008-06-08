@@ -21,7 +21,7 @@
 <app:getBank active="Y" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html locale="true">
-<link rel="stylesheet" type="text/css"  href="<%= request.getContextPath() %>/pdp/css/pdp_styles.css">
+<link rel="stylesheet" type="text/css"  href="https://docs.onestart.iu.edu/dav/MY/channels/css/styles.css">
   <head>
     <html:base />
     <title>Customer Profile Maintenance</title>
@@ -53,14 +53,14 @@
           <logic:empty name="PdpCustomerProfileForm" property="id"><div align="center">New Customer Profile</div></logic:empty>
           <logic:notEmpty name="PdpCustomerProfileForm" property="id">
             <logic:equal name="PdpCustomerProfileForm" property="id" value="0"><div align="center">New Customer Profile</div></logic:equal>
-            <logic:notEqual name="PdpCustomerProfileForm" property="id" value="0"><div align="center">Customer Profile ID: <c:out value="${PdpCustomerProfileForm.id}"/></div></logic:notEqual>
+            <logic:notEqual name="PdpCustomerProfileForm" property="id" value="0"><div align="center">Customer Profile ID: <c:out value="${CustomerProfileForm.id}"/></div></logic:notEqual>
           </logic:notEmpty>
           </strong>
         </th>
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Chart:
+          <font color=red>*</font> Chart:
          </th>
         <td align=left class="datacell">
           <html:hidden property="version" />
@@ -73,7 +73,7 @@
           </logic:notEmpty>
         </td>
         <th align=right valign="top" nowrap="true">
-          * Default Chart:
+          <font color=red>*</font> Default Chart:
          </th>
         <td align=left class="datacell" >
           <html:text property="defaultChartCode" tabindex="23" maxlength="2"  />
@@ -81,7 +81,7 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Organization:
+          <font color=red>*</font> Organization:
          </th>
         <td align=left class="datacell" >
           <logic:empty name="PdpCustomerProfileForm" property="id">
@@ -93,7 +93,7 @@
           </logic:notEmpty>
         </td>
         <th align=right valign="top" nowrap="true">
-           * Default Account #:
+           <font color=red>*</font> Default Account #:
          </th>
         <td align=left class="datacell">
            <html:text property="defaultAccountNumber" tabindex="24" maxlength="7" />
@@ -101,7 +101,7 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Sub-Unit:
+          <font color=red>*</font> Sub-Unit:
          </th>
         <td align=left class="datacell" >
           <logic:empty name="PdpCustomerProfileForm" property="id">
@@ -113,7 +113,7 @@
           </logic:notEmpty>
         </td>
         <th align=right valign="top" nowrap="true">
-           * Default Sub Account #:
+           <font color=red>*</font> Default Sub Account #:
          </th>
         <td align=left class="datacell">
            <html:text property="defaultSubAccountNumber" tabindex="25" maxlength="5" />
@@ -121,13 +121,13 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Campus Process Location:
+          Campus Process Location:
          </th>
         <td align=left class="datacell">
           <html:text property="defaultPhysicalCampusProcessingCode" tabindex="4" maxlength="2"  />
         </td>
          <th align=right valign="top" nowrap="true">
-          * Default Object Code:
+          <font color=red>*</font> Default Object Code:
          </th>
         <td align=left class="datacell">
           <html:text property="defaultObjectCode" tabindex="26" maxlength="4" />
@@ -135,13 +135,13 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Description:
+          Description:
          </th>
         <td align=left class="datacell">
           <html:text property="customerDescription" tabindex="5" maxlength="50"  />
         </td>
         <th align=right valign="top" nowrap="true">
-          * Default Sub Object Code:
+          <font color=red>*</font> Default Sub Object Code:
          </th>
         <td align=left class="datacell" >
           <html:text property="defaultSubObjectCode" tabindex="27" maxlength="3"  />
@@ -149,13 +149,13 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Primary Contact Name:
+          Primary Contact Name:
          </th>
         <td align=left class="datacell">
           <html:text property="contactFullName" tabindex="6" maxlength="50" size="50" />
         </td>
         <th align=right valign="top" nowrap="true">
-          * Address Line 1:
+          Address Line 1:
          </th>
         <td align=left class="datacell">
           <html:text property="address1" tabindex="28" maxlength="55"  />
@@ -163,7 +163,7 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Customer Process E-Mail Address:  
+          Customer Process E-Mail Address:  
          </th>
         <td align=left class="datacell" >
           <html:text property="processingEmailAddr" tabindex="7" maxlength="200" size="50" />
@@ -177,7 +177,7 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Payment Threshold Amount:
+          Payment Threshold Amount:
          </th>
         <td align=left class="datacell" >
           <html:text property="paymentThresholdAmount" tabindex="8" maxlength="14"  />
@@ -191,7 +191,7 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * Payment Threshold E-Mail Address:  
+          Payment Threshold E-Mail Address:  
          </th>
         <td align=left class="datacell" >
           <html:text property="paymentThresholdEmailAddress" tabindex="9" maxlength="200" size="50" />
@@ -205,13 +205,13 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * File Threshold Amount:  
+          File Threshold Amount:  
          </th>
         <td align=left class="datacell" >
           <html:text property="fileThresholdAmount" tabindex="10" maxlength="14"  />
         </td>
         <th align=right valign="top" nowrap="true">
-          * City:  
+          City:  
          </th>
         <td align=left class="datacell" >
           <html:text property="city" tabindex="32" maxlength="30"  />
@@ -219,13 +219,13 @@
       </tr>
       <tr>
         <th align=right valign="top" nowrap="true">
-          * File Threshold E-Mail Address:  
+          File Threshold E-Mail Address:  
          </th>
         <td align=left class="datacell" >
           <html:text property="fileThresholdEmailAddress" tabindex="11" maxlength="200" size="50" />
         </td>
         <th align=right valign="top" nowrap="true">
-          * State:  
+          State:  
          </th>
         <td align=left class="datacell" >
           <html:text property="state" tabindex="33" maxlength="30"  />
@@ -468,14 +468,14 @@
         </th>
         <td align=left class="datacell" >
           <logic:empty name="PdpCustomerProfileForm" property="id">
-            <html:select size="1" property="customerActive" value="N" tabindex="22">
+            <html:select size="1" property="customerActive" value="Y" tabindex="22">
               <html:option value="N">No</html:option>
               <html:option value="Y">Yes</html:option>
             </html:select>
           </logic:empty>
           <logic:notEmpty name="PdpCustomerProfileForm" property="id">
             <logic:equal name="PdpCustomerProfileForm" property="id" value="0">
-              <html:select size="1" property="customerActive" value="N" tabindex="22">
+              <html:select size="1" property="customerActive" value="Y" tabindex="22">
                 <html:option value="N">No</html:option>
                 <html:option value="Y">Yes</html:option>
               </html:select>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.AccountingLineParser;
+import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
+import org.kuali.module.chart.bo.AccountingPeriod;
 
 /**
  * This is the FinancialDocument interface. The TransactionalDocument interface should extend this. It represents any document that
@@ -28,7 +30,7 @@ import org.kuali.kfs.bo.TargetAccountingLine;
  * place to facilitate the CashManagementDocument which is a Financial Transaction module document, but doesn't have accounting
  * lines.
  */
-public interface AccountingDocument extends GeneralLedgerPostingDocument, GeneralLedgerPendingEntrySource {
+public interface AccountingDocument extends GeneralLedgerPostingDocument {
     /**
      * This method is used to return the title that a transactional document should give to it's source accounting line section.
      * 
@@ -69,18 +71,7 @@ public interface AccountingDocument extends GeneralLedgerPostingDocument, Genera
      * @return Class of the document's target accounting lines
      */
     public Class getTargetAccountingLineClass();
-
-    /*
-     * @return Name of the document's source accounting lines
-     */
-    public String getSourceAccountingLineEntryName();
-
-
-    /*
-     * @return Name of the document's target accounting lines
-     */
-    public String getTargetAccountingLineEntryName();
-
+    
     /**
      * Retrieves the next line sequence number for an accounting line in the Source accounting line section on a transactional
      * document.
@@ -162,5 +153,5 @@ public interface AccountingDocument extends GeneralLedgerPostingDocument, Genera
      * @param targetLines
      */
     public void setTargetAccountingLines(List targetLines);
-
+   
 }

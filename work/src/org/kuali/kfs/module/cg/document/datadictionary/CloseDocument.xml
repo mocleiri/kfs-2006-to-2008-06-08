@@ -1,87 +1,49 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2006-2007 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="CloseDocument" parent="CloseDocument-parentBean" />
+<dictionaryEntry>
+    <transactionalDocument>
+        <documentClass>org.kuali.module.cg.bo.Close</documentClass>
+        <businessRulesClass>org.kuali.module.cg.rules.CloseDocumentRule</businessRulesClass>
+        <documentAuthorizerClass>org.kuali.module.cg.document.authorization.CloseDocumentAuthorizer</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-  <bean id="CloseDocument-parentBean" abstract="true" parent="TransactionalDocumentEntry">
-    <property name="label" value="Post-Award Close" />
-    <property name="shortLabel" value="Post-Award Close" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-CG"
-            p:parameterName="CLOSE"
-            p:parameterDetailType="Close" />
-    </property>
-    <property name="documentTypeName" value="CloseDocument" />
-    <property name="documentClass" value="org.kuali.module.cg.bo.Close" />
-    <property name="businessRulesClass" value="org.kuali.module.cg.rules.CloseDocumentRule" />
-    <property name="documentAuthorizerClass" value="org.kuali.module.cg.document.authorization.CloseDocumentAuthorizer" />
-    <property name="documentTypeCode" value="CLOS" />
-    <property name="workflowProperties" >
-      <ref bean="CloseDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>kualiUniversalGroup</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-    <property name="attributes">
-      <list>
-        <ref bean="CloseDocument-userInitiatedCloseDate" />
-        <ref bean="CloseDocument-closeOnOrBeforeDate" />
-      </list>
-    </property>
-  </bean> 
+        <documentTypeName>KualiContractsAndGrantsCloseTransactionalDocument</documentTypeName>
+        <documentTypeCode>CLOS</documentTypeCode>
+
+        <label>Close</label>
+        <shortLabel>ClosDoc</shortLabel>
+
+        <summary>
+            <![CDATA[&nbsp;]]>
+        </summary>
+        <description>FILL ME IN.</description>
+        <help securityGroupName="Kuali.ContractsAndGrants.CloseDocument" parameterName="CG_HELP_CLOSE_DOCUMENT" />
   
-  <bean id="CloseDocument-closeOnOrBeforeDate" parent="CloseDocument-closeOnOrBeforeDate-parentBean" />
-
-  <bean id="CloseDocument-closeOnOrBeforeDate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="closeOnOrBeforeDate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Close On Or Before Date" />
-    <property name="shortLabel" value="Close on or before" />
-    <property name="maxLength" value="10" />
-    <!-- Required checking will be handled within the CloseDocumentRule class -->
-    <property name="required" value="true" />
-    <property name="control">
-      <bean parent="TextControlDefinition" p:size="10" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="&amp;nbsp;" />
-  </bean>
-  
-  <bean id="CloseDocument-userInitiatedCloseDate" parent="CloseDocument-userInitiatedCloseDate-parentBean" />
-
-  <bean id="CloseDocument-userInitiatedCloseDate-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="userInitiatedCloseDate" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Close Date" />
-    <property name="shortLabel" value="Date closed" />
-    <property name="maxLength" value="10" />
-    <!-- Required checking will be handled within the CloseDocumentRule class -->
-    <property name="required" value="true" />
-    <property name="control">
-      <bean parent="TextControlDefinition" p:size="10" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="&amp;nbsp;" />
-  </bean>
-
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="CloseDocument-workflowProperties" parent="CloseDocument-workflowProperties-parentBean" />
-
-  <bean id="CloseDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <allowsCopy>false</allowsCopy>
+        <allowsErrorCorrection>false</allowsErrorCorrection>
+    </transactionalDocument>
+</dictionaryEntry>

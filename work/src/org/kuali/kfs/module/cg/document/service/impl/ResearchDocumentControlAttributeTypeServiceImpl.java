@@ -22,14 +22,16 @@ import java.util.List;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.module.kra.routingform.bo.ControlAttributeType;
 import org.kuali.module.kra.service.ResearchDocumentControlAttributeTypeService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is used to access and retrieve ControlAttributeType attributes and related information.
  */
+@Transactional
 public class ResearchDocumentControlAttributeTypeServiceImpl implements ResearchDocumentControlAttributeTypeService {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ResearchDocumentControlAttributeTypeServiceImpl.class);
-
+    
     private BusinessObjectService businessObjectService;
 
     /**
@@ -39,7 +41,7 @@ public class ResearchDocumentControlAttributeTypeServiceImpl implements Research
         Collection<ControlAttributeType> allTypes = new ArrayList();
         allTypes = businessObjectService.findAll(ControlAttributeType.class);
         List<ControlAttributeType> controlAttributeTypes = new ArrayList();
-        for (ControlAttributeType type : allTypes) {
+        for(ControlAttributeType type: allTypes) {
             controlAttributeTypes.add(type);
         }
         return controlAttributeTypes;

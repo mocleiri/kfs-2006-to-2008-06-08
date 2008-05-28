@@ -1,344 +1,649 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
 
-import static org.kuali.core.util.KualiDecimal.ZERO;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.document.PurchaseOrderDocument;
 
 /**
- * Purchase Order Item Business Object.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PurchaseOrderItem extends PurchasingItemBase {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderItem.class);
+public class PurchaseOrderItem extends BusinessObjectBase {
 
-    private String documentNumber;
-    private KualiDecimal itemInvoicedTotalQuantity;
-    private KualiDecimal itemInvoicedTotalAmount;
-    private KualiDecimal itemReceivedTotalQuantity;
-    private KualiDecimal itemOutstandingEncumberedQuantity;
-    private KualiDecimal itemOutstandingEncumberedAmount;
-    private boolean itemActiveIndicator = true;
-    private KualiDecimal itemDamagedTotalQuantity;
-    private Integer capitalAssetManagementSystemNumber;    
-    
-    private List<PurchaseOrderItemCapitalAsset> purchaseOrderItemCapitalAssets;
+	private Integer purchaseOrderItemIdentifier;
+	private Integer purchaseOrderIdentifier;
+	private Integer itemLineNumber;
+	private String itemTypeCode;
+	private String capitalAssetTransactionTypeCode;
+	private String itemUnitOfMeasureCode;
+	private KualiDecimal itemOrderedQuantity;
+	private KualiDecimal itemInvoicedTotalQuantity;
+	private KualiDecimal itemInvoicedTotalAmount;
+	private String itemCatalogNumber;
+	private KualiDecimal itemReceivedTotalQuantity;
+	private String itemDescription;
+	private KualiDecimal itemReturnedTotalQuantity;
+	private String itemCapitalAssetNoteText;
+	private BigDecimal itemUnitPrice;
+	private KualiDecimal itemOutstandingEncumberedQuantity;
+	private KualiDecimal itemOutstandingEncumbranceAmount;
+	private String requisitionLineIdentifier;
+	private String itemAuxiliaryPartIdentifier;
+	private boolean itemActiveIndicator;
+	private String purchaseOrderCommodityCd;
+	private String externalOrganizationB2bProductReferenceNumber;
+	private String externalOrganizationB2bProductTypeName;
+	private boolean itemAssignedToTradeInIndicator;
 
-    private PurchaseOrderDocument purchaseOrder;
-    private RequisitionCapitalAssetSystem capitalAssetManagementSystem;
-    
-    // Not persisted to DB
-    private boolean itemSelectedForRetransmitIndicator;
-    private boolean movingToSplit;
+    private PurchaseOrder purchaseOrder;
+	private ItemType itemType;
+	private CapitalAssetTransactionType capitalAssetTransactionType;
 
-    /**
-     * Default constructor.
-     */
-    public PurchaseOrderItem() {
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderItem() {
 
-    }
+	}
 
-    /**
-     * Constructor.
-     * 
-     * @param ri - Requisition Item
-     * @param po - Purchase Order Document
-     */
-    public PurchaseOrderItem(RequisitionItem ri, PurchaseOrderDocument po) {
-        super();
+	/**
+	 * Gets the purchaseOrderItemIdentifier attribute.
+	 * 
+	 * @return - Returns the purchaseOrderItemIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderItemIdentifier() { 
+		return purchaseOrderItemIdentifier;
+	}
 
-        this.setPurchaseOrder(po);
+	/**
+	 * Sets the purchaseOrderItemIdentifier attribute.
+	 * 
+	 * @param - purchaseOrderItemIdentifier The purchaseOrderItemIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderItemIdentifier(Integer purchaseOrderItemIdentifier) {
+		this.purchaseOrderItemIdentifier = purchaseOrderItemIdentifier;
+	}
 
-        this.setItemLineNumber(ri.getItemLineNumber());
-        this.setItemUnitOfMeasureCode(ri.getItemUnitOfMeasureCode());
-        this.setItemQuantity(ri.getItemQuantity());
-        this.setItemCatalogNumber(ri.getItemCatalogNumber());
-        this.setItemDescription(ri.getItemDescription());
-        this.setItemCapitalAssetNoteText(ri.getItemCapitalAssetNoteText());
-        this.setItemUnitPrice(ri.getItemUnitPrice());
-        this.setItemAuxiliaryPartIdentifier(ri.getItemAuxiliaryPartIdentifier());
-        this.setItemAssignedToTradeInIndicator(ri.getItemAssignedToTradeInIndicator());
 
-        this.setExternalOrganizationB2bProductReferenceNumber(ri.getExternalOrganizationB2bProductReferenceNumber());
-        this.setExternalOrganizationB2bProductTypeName(ri.getExternalOrganizationB2bProductTypeName());
+	/**
+	 * Gets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @return - Returns the purchaseOrderIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderIdentifier() { 
+		return purchaseOrderIdentifier;
+	}
 
-        this.setItemReceivedTotalQuantity(ZERO);
-        this.setItemDamagedTotalQuantity(ZERO);
-        
-        this.setCapitalAssetTransactionTypeCode(ri.getCapitalAssetTransactionTypeCode());
-        this.setItemTypeCode(ri.getItemTypeCode());
+	/**
+	 * Sets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @param - purchaseOrderIdentifier The purchaseOrderIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderIdentifier(Integer purchaseOrderIdentifier) {
+		this.purchaseOrderIdentifier = purchaseOrderIdentifier;
+	}
 
-        if (ri.getSourceAccountingLines() != null && ri.getSourceAccountingLines().size() > 0) {
-            List accounts = new ArrayList();
-            for (PurApAccountingLine account : ri.getSourceAccountingLines()) {
-                PurchaseOrderAccount poAccount = new PurchaseOrderAccount(account);
-                poAccount.setPurchaseOrderItem(this);
-                accounts.add(poAccount);
-            }
-            this.setSourceAccountingLines(accounts);
+
+	/**
+	 * Gets the itemLineNumber attribute.
+	 * 
+	 * @return - Returns the itemLineNumber
+	 * 
+	 */
+	public Integer getItemLineNumber() { 
+		return itemLineNumber;
+	}
+
+	/**
+	 * Sets the itemLineNumber attribute.
+	 * 
+	 * @param - itemLineNumber The itemLineNumber to set.
+	 * 
+	 */
+	public void setItemLineNumber(Integer itemLineNumber) {
+		this.itemLineNumber = itemLineNumber;
+	}
+
+
+	/**
+	 * Gets the itemTypeCode attribute.
+	 * 
+	 * @return - Returns the itemTypeCode
+	 * 
+	 */
+	public String getItemTypeCode() { 
+		return itemTypeCode;
+	}
+
+	/**
+	 * Sets the itemTypeCode attribute.
+	 * 
+	 * @param - itemTypeCode The itemTypeCode to set.
+	 * 
+	 */
+	public void setItemTypeCode(String itemTypeCode) {
+		this.itemTypeCode = itemTypeCode;
+	}
+
+
+	/**
+	 * Gets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @return - Returns the capitalAssetTransactionTypeCode
+	 * 
+	 */
+	public String getCapitalAssetTransactionTypeCode() { 
+		return capitalAssetTransactionTypeCode;
+	}
+
+	/**
+	 * Sets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @param - capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
+		this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
+	}
+
+
+	/**
+	 * Gets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @return - Returns the itemUnitOfMeasureCode
+	 * 
+	 */
+	public String getItemUnitOfMeasureCode() { 
+		return itemUnitOfMeasureCode;
+	}
+
+	/**
+	 * Sets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @param - itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
+	 * 
+	 */
+	public void setItemUnitOfMeasureCode(String itemUnitOfMeasureCode) {
+		this.itemUnitOfMeasureCode = itemUnitOfMeasureCode;
+	}
+
+
+	/**
+	 * Gets the itemOrderedQuantity attribute.
+	 * 
+	 * @return - Returns the itemOrderedQuantity
+	 * 
+	 */
+	public KualiDecimal getItemOrderedQuantity() { 
+		return itemOrderedQuantity;
+	}
+
+	/**
+	 * Sets the itemOrderedQuantity attribute.
+	 * 
+	 * @param - itemOrderedQuantity The itemOrderedQuantity to set.
+	 * 
+	 */
+	public void setItemOrderedQuantity(KualiDecimal itemOrderedQuantity) {
+		this.itemOrderedQuantity = itemOrderedQuantity;
+	}
+
+
+	/**
+	 * Gets the itemInvoicedTotalQuantity attribute.
+	 * 
+	 * @return - Returns the itemInvoicedTotalQuantity
+	 * 
+	 */
+	public KualiDecimal getItemInvoicedTotalQuantity() { 
+		return itemInvoicedTotalQuantity;
+	}
+
+	/**
+	 * Sets the itemInvoicedTotalQuantity attribute.
+	 * 
+	 * @param - itemInvoicedTotalQuantity The itemInvoicedTotalQuantity to set.
+	 * 
+	 */
+	public void setItemInvoicedTotalQuantity(KualiDecimal itemInvoicedTotalQuantity) {
+		this.itemInvoicedTotalQuantity = itemInvoicedTotalQuantity;
+	}
+
+
+	/**
+	 * Gets the itemInvoicedTotalAmount attribute.
+	 * 
+	 * @return - Returns the itemInvoicedTotalAmount
+	 * 
+	 */
+	public KualiDecimal getItemInvoicedTotalAmount() { 
+		return itemInvoicedTotalAmount;
+	}
+
+	/**
+	 * Sets the itemInvoicedTotalAmount attribute.
+	 * 
+	 * @param - itemInvoicedTotalAmount The itemInvoicedTotalAmount to set.
+	 * 
+	 */
+	public void setItemInvoicedTotalAmount(KualiDecimal itemInvoicedTotalAmount) {
+		this.itemInvoicedTotalAmount = itemInvoicedTotalAmount;
+	}
+
+
+	/**
+	 * Gets the itemCatalogNumber attribute.
+	 * 
+	 * @return - Returns the itemCatalogNumber
+	 * 
+	 */
+	public String getItemCatalogNumber() { 
+		return itemCatalogNumber;
+	}
+
+	/**
+	 * Sets the itemCatalogNumber attribute.
+	 * 
+	 * @param - itemCatalogNumber The itemCatalogNumber to set.
+	 * 
+	 */
+	public void setItemCatalogNumber(String itemCatalogNumber) {
+		this.itemCatalogNumber = itemCatalogNumber;
+	}
+
+
+	/**
+	 * Gets the itemReceivedTotalQuantity attribute.
+	 * 
+	 * @return - Returns the itemReceivedTotalQuantity
+	 * 
+	 */
+	public KualiDecimal getItemReceivedTotalQuantity() { 
+		return itemReceivedTotalQuantity;
+	}
+
+	/**
+	 * Sets the itemReceivedTotalQuantity attribute.
+	 * 
+	 * @param - itemReceivedTotalQuantity The itemReceivedTotalQuantity to set.
+	 * 
+	 */
+	public void setItemReceivedTotalQuantity(KualiDecimal itemReceivedTotalQuantity) {
+		this.itemReceivedTotalQuantity = itemReceivedTotalQuantity;
+	}
+
+
+	/**
+	 * Gets the itemDescription attribute.
+	 * 
+	 * @return - Returns the itemDescription
+	 * 
+	 */
+	public String getItemDescription() { 
+		return itemDescription;
+	}
+
+	/**
+	 * Sets the itemDescription attribute.
+	 * 
+	 * @param - itemDescription The itemDescription to set.
+	 * 
+	 */
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
+	}
+
+
+	/**
+	 * Gets the itemReturnedTotalQuantity attribute.
+	 * 
+	 * @return - Returns the itemReturnedTotalQuantity
+	 * 
+	 */
+	public KualiDecimal getItemReturnedTotalQuantity() { 
+		return itemReturnedTotalQuantity;
+	}
+
+	/**
+	 * Sets the itemReturnedTotalQuantity attribute.
+	 * 
+	 * @param - itemReturnedTotalQuantity The itemReturnedTotalQuantity to set.
+	 * 
+	 */
+	public void setItemReturnedTotalQuantity(KualiDecimal itemReturnedTotalQuantity) {
+		this.itemReturnedTotalQuantity = itemReturnedTotalQuantity;
+	}
+
+
+	/**
+	 * Gets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @return - Returns the itemCapitalAssetNoteText
+	 * 
+	 */
+	public String getItemCapitalAssetNoteText() { 
+		return itemCapitalAssetNoteText;
+	}
+
+	/**
+	 * Sets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @param - itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
+	 * 
+	 */
+	public void setItemCapitalAssetNoteText(String itemCapitalAssetNoteText) {
+		this.itemCapitalAssetNoteText = itemCapitalAssetNoteText;
+	}
+
+
+	/**
+	 * Gets the itemUnitPrice attribute.
+	 * 
+	 * @return - Returns the itemUnitPrice
+	 * 
+	 */
+	public BigDecimal getItemUnitPrice() { 
+		return itemUnitPrice;
+	}
+
+	/**
+	 * Sets the itemUnitPrice attribute.
+	 * 
+	 * @param - itemUnitPrice The itemUnitPrice to set.
+	 * 
+	 */
+	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
+		this.itemUnitPrice = itemUnitPrice;
+	}
+
+
+	/**
+	 * Gets the itemOutstandingEncumberedQuantity attribute.
+	 * 
+	 * @return - Returns the itemOutstandingEncumberedQuantity
+	 * 
+	 */
+	public KualiDecimal getItemOutstandingEncumberedQuantity() { 
+		return itemOutstandingEncumberedQuantity;
+	}
+
+	/**
+	 * Sets the itemOutstandingEncumberedQuantity attribute.
+	 * 
+	 * @param - itemOutstandingEncumberedQuantity The itemOutstandingEncumberedQuantity to set.
+	 * 
+	 */
+	public void setItemOutstandingEncumberedQuantity(KualiDecimal itemOutstandingEncumberedQuantity) {
+		this.itemOutstandingEncumberedQuantity = itemOutstandingEncumberedQuantity;
+	}
+
+
+	/**
+	 * Gets the itemOutstandingEncumbranceAmount attribute.
+	 * 
+	 * @return - Returns the itemOutstandingEncumbranceAmount
+	 * 
+	 */
+	public KualiDecimal getItemOutstandingEncumbranceAmount() { 
+		return itemOutstandingEncumbranceAmount;
+	}
+
+	/**
+	 * Sets the itemOutstandingEncumbranceAmount attribute.
+	 * 
+	 * @param - itemOutstandingEncumbranceAmount The itemOutstandingEncumbranceAmount to set.
+	 * 
+	 */
+	public void setItemOutstandingEncumbranceAmount(KualiDecimal itemOutstandingEncumbranceAmount) {
+		this.itemOutstandingEncumbranceAmount = itemOutstandingEncumbranceAmount;
+	}
+
+
+	/**
+	 * Gets the requisitionLineIdentifier attribute.
+	 * 
+	 * @return - Returns the requisitionLineIdentifier
+	 * 
+	 */
+	public String getRequisitionLineIdentifier() { 
+		return requisitionLineIdentifier;
+	}
+
+	/**
+	 * Sets the requisitionLineIdentifier attribute.
+	 * 
+	 * @param - requisitionLineIdentifier The requisitionLineIdentifier to set.
+	 * 
+	 */
+	public void setRequisitionLineIdentifier(String requisitionLineIdentifier) {
+		this.requisitionLineIdentifier = requisitionLineIdentifier;
+	}
+
+
+	/**
+	 * Gets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @return - Returns the itemAuxiliaryPartIdentifier
+	 * 
+	 */
+	public String getItemAuxiliaryPartIdentifier() { 
+		return itemAuxiliaryPartIdentifier;
+	}
+
+	/**
+	 * Sets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @param - itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
+	 * 
+	 */
+	public void setItemAuxiliaryPartIdentifier(String itemAuxiliaryPartIdentifier) {
+		this.itemAuxiliaryPartIdentifier = itemAuxiliaryPartIdentifier;
+	}
+
+
+	/**
+	 * Gets the itemActiveIndicator attribute.
+	 * 
+	 * @return - Returns the itemActiveIndicator
+	 * 
+	 */
+	public boolean getItemActiveIndicator() { 
+		return itemActiveIndicator;
+	}
+
+	/**
+	 * Sets the itemActiveIndicator attribute.
+	 * 
+	 * @param - itemActiveIndicator The itemActiveIndicator to set.
+	 * 
+	 */
+	public void setItemActiveIndicator(boolean itemActiveIndicator) {
+		this.itemActiveIndicator = itemActiveIndicator;
+	}
+
+
+	/**
+	 * Gets the purchaseOrderCommodityCd attribute.
+	 * 
+	 * @return - Returns the purchaseOrderCommodityCd
+	 * 
+	 */
+	public String getPurchaseOrderCommodityCd() { 
+		return purchaseOrderCommodityCd;
+	}
+
+	/**
+	 * Sets the purchaseOrderCommodityCd attribute.
+	 * 
+	 * @param - purchaseOrderCommodityCd The purchaseOrderCommodityCd to set.
+	 * 
+	 */
+	public void setPurchaseOrderCommodityCd(String purchaseOrderCommodityCd) {
+		this.purchaseOrderCommodityCd = purchaseOrderCommodityCd;
+	}
+
+
+	/**
+	 * Gets the externalOrganizationB2bProductReferenceNumber attribute.
+	 * 
+	 * @return - Returns the externalOrganizationB2bProductReferenceNumber
+	 * 
+	 */
+	public String getExternalOrganizationB2bProductReferenceNumber() { 
+		return externalOrganizationB2bProductReferenceNumber;
+	}
+
+	/**
+	 * Sets the externalOrganizationB2bProductReferenceNumber attribute.
+	 * 
+	 * @param - externalOrganizationB2bProductReferenceNumber The externalOrganizationB2bProductReferenceNumber to set.
+	 * 
+	 */
+	public void setExternalOrganizationB2bProductReferenceNumber(String externalOrganizationB2bProductReferenceNumber) {
+		this.externalOrganizationB2bProductReferenceNumber = externalOrganizationB2bProductReferenceNumber;
+	}
+
+
+	/**
+	 * Gets the externalOrganizationB2bProductTypeName attribute.
+	 * 
+	 * @return - Returns the externalOrganizationB2bProductTypeName
+	 * 
+	 */
+	public String getExternalOrganizationB2bProductTypeName() { 
+		return externalOrganizationB2bProductTypeName;
+	}
+
+	/**
+	 * Sets the externalOrganizationB2bProductTypeName attribute.
+	 * 
+	 * @param - externalOrganizationB2bProductTypeName The externalOrganizationB2bProductTypeName to set.
+	 * 
+	 */
+	public void setExternalOrganizationB2bProductTypeName(String externalOrganizationB2bProductTypeName) {
+		this.externalOrganizationB2bProductTypeName = externalOrganizationB2bProductTypeName;
+	}
+
+
+	/**
+	 * Gets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @return - Returns the itemAssignedToTradeInIndicator
+	 * 
+	 */
+	public boolean getItemAssignedToTradeInIndicator() { 
+		return itemAssignedToTradeInIndicator;
+	}
+
+	/**
+	 * Sets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @param - itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
+	 * 
+	 */
+	public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
+		this.itemAssignedToTradeInIndicator = itemAssignedToTradeInIndicator;
+	}
+
+
+	/**
+	 * Gets the purchaseOrder attribute.
+	 * 
+	 * @return - Returns the purchaseOrder
+	 * 
+	 */
+	public PurchaseOrder getPurchaseOrder() { 
+		return purchaseOrder;
+	}
+
+	/**
+	 * Sets the purchaseOrder attribute.
+	 * 
+	 * @param - purchaseOrder The purchaseOrder to set.
+	 * @deprecated
+	 */
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
+
+	/**
+	 * Gets the itemType attribute.
+	 * 
+	 * @return - Returns the itemType
+	 * 
+	 */
+	public ItemType getItemType() { 
+		return itemType;
+	}
+
+	/**
+	 * Sets the itemType attribute.
+	 * 
+	 * @param - itemType The itemType to set.
+	 * @deprecated
+	 */
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
+	}
+
+	/**
+	 * Gets the capitalAssetTransactionType attribute.
+	 * 
+	 * @return - Returns the capitalAssetTransactionType
+	 * 
+	 */
+	public CapitalAssetTransactionType getCapitalAssetTransactionType() { 
+		return capitalAssetTransactionType;
+	}
+
+	/**
+	 * Sets the capitalAssetTransactionType attribute.
+	 * 
+	 * @param - capitalAssetTransactionType The capitalAssetTransactionType to set.
+	 * @deprecated
+	 */
+	public void setCapitalAssetTransactionType(CapitalAssetTransactionType capitalAssetTransactionType) {
+		this.capitalAssetTransactionType = capitalAssetTransactionType;
+	}
+
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        if (this.purchaseOrderItemIdentifier != null) {
+            m.put("purchaseOrderItemIdentifier", this.purchaseOrderItemIdentifier.toString());
         }
-        // By default, set the item active indicator to true.
-        // In amendment, the user can set it to false when they click on
-        // the inactivate button.
-        this.setItemActiveIndicator(true);
-        
-        this.setPurchasingCommodityCode(ri.getPurchasingCommodityCode());
+	    return m;
     }
-
-    public boolean isItemActiveIndicator() {
-        return itemActiveIndicator;
-    }
-
-    public void setItemActiveIndicator(boolean itemActiveIndicator) {
-        this.itemActiveIndicator = itemActiveIndicator;
-    }
-
-    public KualiDecimal getItemInvoicedTotalAmount() {
-        return itemInvoicedTotalAmount;
-    }
-
-    public void setItemInvoicedTotalAmount(KualiDecimal itemInvoicedTotalAmount) {
-        this.itemInvoicedTotalAmount = itemInvoicedTotalAmount;
-    }
-
-    public KualiDecimal getItemInvoicedTotalQuantity() {
-        return itemInvoicedTotalQuantity;
-    }
-
-    public void setItemInvoicedTotalQuantity(KualiDecimal itemInvoicedTotalQuantity) {
-        this.itemInvoicedTotalQuantity = itemInvoicedTotalQuantity;
-    }
-
-    public KualiDecimal getItemOutstandingEncumberedQuantity() {
-        return itemOutstandingEncumberedQuantity;
-    }
-
-    public void setItemOutstandingEncumberedQuantity(KualiDecimal itemOutstandingEncumberedQuantity) {
-        this.itemOutstandingEncumberedQuantity = itemOutstandingEncumberedQuantity;
-    }
-
-    public KualiDecimal getItemOutstandingEncumberedAmount() {
-        return itemOutstandingEncumberedAmount;
-    }
-
-    public void setItemOutstandingEncumberedAmount(KualiDecimal itemOutstandingEncumbranceAmount) {
-        this.itemOutstandingEncumberedAmount = itemOutstandingEncumbranceAmount;
-    }
-
-    public KualiDecimal getItemReceivedTotalQuantity() {
-        return itemReceivedTotalQuantity;
-    }
-
-    public void setItemReceivedTotalQuantity(KualiDecimal itemReceivedTotalQuantity) {
-        this.itemReceivedTotalQuantity = itemReceivedTotalQuantity;
-    }
-
-    /**
-     * Gets the itemDamagedTotalQuantity attribute. 
-     * @return Returns the itemDamagedTotalQuantity.
-     */
-    public KualiDecimal getItemDamagedTotalQuantity() {
-        return itemDamagedTotalQuantity;
-    }
-
-    /**
-     * Sets the itemDamagedTotalQuantity attribute value.
-     * @param itemDamagedTotalQuantity The itemDamagedTotalQuantity to set.
-     */
-    public void setItemDamagedTotalQuantity(KualiDecimal itemDamagedTotalQuantity) {
-        this.itemDamagedTotalQuantity = itemDamagedTotalQuantity;
-    }
-
-    public PurchaseOrderDocument getPurchaseOrder() {
-        if (ObjectUtils.isNull(purchaseOrder)) {
-            refreshReferenceObject(PurapPropertyConstants.PURCHASE_ORDER);
-        }
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(PurchaseOrderDocument purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
-    }
-
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    public boolean isItemSelectedForRetransmitIndicator() {
-        return itemSelectedForRetransmitIndicator;
-    }
-
-    public void setItemSelectedForRetransmitIndicator(boolean itemSelectedForRetransmitIndicator) {
-        this.itemSelectedForRetransmitIndicator = itemSelectedForRetransmitIndicator;
-    }    
-
-    public List<PurchaseOrderItemCapitalAsset> getPurchaseOrderItemCapitalAssets() {
-        return purchaseOrderItemCapitalAssets;
-    }
-
-    public void setPurchaseOrderItemCapitalAssets(List<PurchaseOrderItemCapitalAsset> purchaseOrderItemCapitalAssets) {
-        this.purchaseOrderItemCapitalAssets = purchaseOrderItemCapitalAssets;
-    }
-
-    public Integer getCapitalAssetManagementSystemNumber() {
-        return capitalAssetManagementSystemNumber;
-    }
-
-    public void setCapitalAssetManagementSystemNumber(Integer capitalAssetManagementSystemNumber) {
-        this.capitalAssetManagementSystemNumber = capitalAssetManagementSystemNumber;
-    }
-
-    public RequisitionCapitalAssetSystem getCapitalAssetManagementSystem() {
-        return capitalAssetManagementSystem;
-    }
-
-    /**
-     * Sets the capitalAssetManagementSystem attribute value.
-     * @param capitalAssetManagementSystem The capitalAssetManagementSystem to set.
-     * @deprecated
-     */
-    public void setCapitalAssetManagementSystem(RequisitionCapitalAssetSystem capitalAssetManagementSystem) {
-        this.capitalAssetManagementSystem = capitalAssetManagementSystem;
-    }
-    
-    public boolean isMovingToSplit() {
-        return movingToSplit;
-    }
-
-    public void setMovingToSplit(boolean movingToSplit) {
-        this.movingToSplit = movingToSplit;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    @Override
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-        m.put("documentNumber", this.documentNumber);
-        if (this.getItemIdentifier() != null) {
-            m.put("itemIdentifier", this.getItemIdentifier().toString());
-        }
-        return m;
-    }
-
-    /**
-     * @see org.kuali.module.purap.bo.PurApItem#getAccountingLineClass()
-     */
-    public Class getAccountingLineClass() {
-        return PurchaseOrderAccount.class;
-    }
-    
-    /**
-     * 
-     * This method returns the total item paid amount
-     * @return
-     */
-    public KualiDecimal getItemPaidAmount() {
-        if (!(this.isItemActiveIndicator())) {
-            return KualiDecimal.ZERO;
-        }
-        return this.getItemInvoicedTotalAmount();
-    }
-
-    public KualiDecimal getItemEncumbranceRelievedAmount() {
-        // check that it is active else return zero
-        if (this == null || !this.isItemActiveIndicator()) {
-            return KualiDecimal.ZERO;
-        }
-        // setup outstanding amount and get totalEncumberance from this.getExtendedCost()
-        KualiDecimal outstandingAmount = KualiDecimal.ZERO;
-        KualiDecimal totalEncumberance = this.getExtendedPrice();
-
-        ItemType iT = this.getItemType();
-        // if service add the po outstanding amount to outstandingamount
-        if (!iT.isQuantityBasedGeneralLedgerIndicator()) {
-            outstandingAmount = outstandingAmount.add(this.getItemOutstandingEncumberedAmount());
-        }
-        else {
-            // else add outstanding quantity * unitprice
-            BigDecimal qty = new BigDecimal(this.getOutstandingQuantity().toString());
-            outstandingAmount = outstandingAmount.add(new KualiDecimal(this.getItemUnitPrice().multiply(qty)));
-        }
-
-
-        // return the total encumberance subtracted by the outstandingamount from above
-        return totalEncumberance.subtract(outstandingAmount);
-    }
-    
-    public KualiDecimal getOutstandingQuantity() {
-            KualiDecimal outstandingQuantity = (this.getItemQuantity() != null) ? this.getItemQuantity() : KualiDecimal.ZERO;
-            KualiDecimal invoicedQuantity = (this.getItemInvoicedTotalQuantity() != null) ? this.getItemInvoicedTotalQuantity() : KualiDecimal.ZERO;
-            return outstandingQuantity.subtract(invoicedQuantity);
-    }
-    
-    public boolean isCanInactivateItem() {
-        if (versionNumber == null) {
-            // don't allow newly added item to be inactivatable.
-            return false;
-        }
-        else if (versionNumber != null && itemActiveIndicator && !getPurchaseOrder().getContainsUnpaidPaymentRequestsOrCreditMemos()) {
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Constructs a new PurchasingItemCapitalAsset from the number stored in the addCapitalAsset field and adds it to
-     * the Collection.
-     */
-    public void addAsset(){
-        if (ObjectUtils.isNull(this.getPurchasingItemCapitalAssets())) {
-            setPurchasingItemCapitalAssets(new ArrayList());
-        }
-        if (ObjectUtils.isNotNull(this.getAddCapitalAssetNumber())) {
-            PurchaseOrderItemCapitalAsset asset = new PurchaseOrderItemCapitalAsset(new Long(this.getAddCapitalAssetNumber()));
-            getPurchasingItemCapitalAssets().add(asset);
-        }
-    }
-    
-    /**
-     * Override the method in PurApItemBase so that if the item is
-     * not eligible to be displayed in the account summary tab,
-     * which is if the item is inactive, we'll return null and
-     * the item won't be added to the list of account summary.
-     * 
-     * @see org.kuali.module.purap.bo.PurApItemBase#getSummaryItem()
-     */
-    @Override
-    public PurApSummaryItem getSummaryItem() {
-        if (!this.itemActiveIndicator) {
-            return null;
-        }
-        else {
-            return super.getSummaryItem();
-        }
-    }
-
 }

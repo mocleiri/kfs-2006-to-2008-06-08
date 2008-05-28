@@ -1,19 +1,4 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Created on Jul 9, 2004
  *
  */
@@ -32,156 +17,159 @@ import org.apache.ojb.broker.PersistenceBrokerException;
 
 /**
  * @author delyea
- * @hibernate.class table="PDP.PDP_PMT_NTE_TXT_T"
+ * 
+ * @hibernate.class  table="PDP.PDP_PMT_NTE_TXT_T"
  */
 
-public class PaymentNoteText implements Serializable, PersistenceBrokerAware {
+public class PaymentNoteText implements Serializable,PersistenceBrokerAware {
 
-    private Integer id; // PMT_NTE_ID
+  private Integer id;                   // PMT_NTE_ID
 
-    private Integer paymentDetailId;
-    private PaymentDetail paymentDetail; // PMT_DTL_ID
+  private Integer paymentDetailId;
+  private PaymentDetail paymentDetail;  // PMT_DTL_ID
 
-    private Integer customerNoteLineNbr; // CUST_NTE_LN_NBR
-    private String customerNoteText; // CUST_NTE_TXT
-    private Timestamp lastUpdate;
-    private Integer version; // VER_NBR
+  private Integer customerNoteLineNbr;  // CUST_NTE_LN_NBR
+  private String customerNoteText;      // CUST_NTE_TXT
+  private Timestamp lastUpdate;
+  private Integer version;              // VER_NBR
+  
+  public PaymentNoteText() {
+    super();
+  }
 
-    public PaymentNoteText() {
-        super();
-    }
+  /**
+   * @hibernate.id column="PMT_NTE_ID" generator-class="sequence"
+   * @hibernate.generator-param name="sequence" value="PDP.PDP_PMT_NTE_ID_SEQ"
+   * @return Returns the paymentNoteId.
+   */
+  public Integer getId() {
+    return id;
+  }
 
-    /**
-     * @hibernate.id column="PMT_NTE_ID" generator-class="sequence"
-     * @hibernate.generator-param name="sequence" value="PDP.PDP_PMT_NTE_ID_SEQ"
-     * @return Returns the paymentNoteId.
-     */
-    public Integer getId() {
-        return id;
-    }
+  /**
+   * @param paymentNoteId The paymentNoteId to set.
+   */
+  public void setId(Integer paymentNoteId) {
+    this.id = paymentNoteId;
+  }
+  /** 
+   * @return
+   * @hibernate.version column="VER_NBR" not-null="true"
+   */
+  public Integer getVersion() {
+    return version;
+  }
 
-    /**
-     * @param paymentNoteId The paymentNoteId to set.
-     */
-    public void setId(Integer paymentNoteId) {
-        this.id = paymentNoteId;
-    }
+  /**
+   * @return
+   * @hibernate.property column="CUST_NTE_LN_NBR" not-null="true"
+   */
+  public Integer getCustomerNoteLineNbr() {
+    return customerNoteLineNbr;
+  }
 
-    /**
-     * @return
-     * @hibernate.version column="VER_NBR" not-null="true"
-     */
-    public Integer getVersion() {
-        return version;
-    }
+  /**
+   * @return
+   * @hibernate.property column="CUST_NTE_TXT" length="60" not-null="true"
+   */
+  public String getCustomerNoteText() {
+    return customerNoteText;
+  }
 
-    /**
-     * @return
-     * @hibernate.property column="CUST_NTE_LN_NBR" not-null="true"
-     */
-    public Integer getCustomerNoteLineNbr() {
-        return customerNoteLineNbr;
-    }
+  /**
+   * @return
+   * @hibernate.many-to-one column="PMT_DTL_ID" class="edu.iu.uis.pdp.bo.PaymentDetail"
+   */
+  public PaymentDetail getPaymentDetail() {
+    return paymentDetail;
+  }
 
-    /**
-     * @return
-     * @hibernate.property column="CUST_NTE_TXT" length="60" not-null="true"
-     */
-    public String getCustomerNoteText() {
-        return customerNoteText;
-    }
+  /**
+   * @param integer
+   */
+  public void setCustomerNoteLineNbr(Integer integer) {
+    customerNoteLineNbr = integer;
+  }
 
-    /**
-     * @return
-     * @hibernate.many-to-one column="PMT_DTL_ID" class="edu.iu.uis.pdp.bo.PaymentDetail"
-     */
-    public PaymentDetail getPaymentDetail() {
-        return paymentDetail;
-    }
+  /**
+   * @param string
+   */
+  public void setCustomerNoteText(String string) {
+    customerNoteText = string;
+  }
 
-    /**
-     * @param integer
-     */
-    public void setCustomerNoteLineNbr(Integer integer) {
-        customerNoteLineNbr = integer;
-    }
+  /**
+   * @param integer
+   */
+  public void setPaymentDetail(PaymentDetail pd) {
+    paymentDetail = pd;
+  }
 
-    /**
-     * @param string
-     */
-    public void setCustomerNoteText(String string) {
-        customerNoteText = string;
-    }
+  /**
+   * @param integer
+   */
+  public void setVersion(Integer integer) {
+    version = integer;
+  }
 
-    /**
-     * @param integer
-     */
-    public void setPaymentDetail(PaymentDetail pd) {
-        paymentDetail = pd;
-    }
+  public boolean equals(Object obj) {
+    if (! (obj instanceof PaymentNoteText) ) { return false; }
+    PaymentNoteText o = (PaymentNoteText)obj;
+    return new EqualsBuilder()
+    .append(id, o.getId())
+    .isEquals();
+  }
 
-    /**
-     * @param integer
-     */
-    public void setVersion(Integer integer) {
-        version = integer;
-    }
+  public int hashCode() {
+    return new HashCodeBuilder(83,7)
+      .append(id)
+      .toHashCode();
+  }
 
-    public boolean equals(Object obj) {
-        if (!(obj instanceof PaymentNoteText)) {
-            return false;
-        }
-        PaymentNoteText o = (PaymentNoteText) obj;
-        return new EqualsBuilder().append(id, o.getId()).isEquals();
-    }
+  public String toString() {
+    return new ToStringBuilder(this)
+      .append("id",  this.id)
+      .toString();
+  }
 
-    public int hashCode() {
-        return new HashCodeBuilder(83, 7).append(id).toHashCode();
-    }
+  /**
+   * @return Returns the lastUpdate.
+   */
+  public Timestamp getLastUpdate() {
+    return lastUpdate;
+  }
+  /**
+   * @param lastUpdate The lastUpdate to set.
+   */
+  public void setLastUpdate(Timestamp lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-    public String toString() {
-        return new ToStringBuilder(this).append("id", this.id).toString();
-    }
+  public void beforeInsert(PersistenceBroker broker) throws PersistenceBrokerException {
+    lastUpdate = new Timestamp( (new Date()).getTime() );
+  }
 
-    /**
-     * @return Returns the lastUpdate.
-     */
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
+  public void afterInsert(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    /**
-     * @param lastUpdate The lastUpdate to set.
-     */
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+  }
 
-    public void beforeInsert(PersistenceBroker broker) throws PersistenceBrokerException {
-        lastUpdate = new Timestamp((new Date()).getTime());
-    }
+  public void beforeUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+    lastUpdate = new Timestamp( (new Date()).getTime() );    
+  }
 
-    public void afterInsert(PersistenceBroker broker) throws PersistenceBrokerException {
+  public void afterUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+    
+  }
 
-    }
+  public void beforeDelete(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public void beforeUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
-        lastUpdate = new Timestamp((new Date()).getTime());
-    }
+  }
+  
+  public void afterDelete(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public void afterUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+  }
 
-    }
+  public void afterLookup(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public void beforeDelete(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
-
-    public void afterDelete(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
-
-    public void afterLookup(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
+  }
 }

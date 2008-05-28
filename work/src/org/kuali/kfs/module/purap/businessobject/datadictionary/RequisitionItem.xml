@@ -1,458 +1,359 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.RequisitionItem">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="RequisitionItem" parent="RequisitionItem-parentBean" />
+        <inquiry>
+            <title>Requisition Item Inquiry</title>
 
-  <bean id="RequisitionItem-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.RequisitionItem" />
-    <property name="inquiryDefinition" >
-      <ref bean="RequisitionItem-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="RequisitionItem-lookupDefinition" />
-    </property>
-    <property name="attributes" >
-      <list>
-        <ref bean="RequisitionItem-versionNumber" />
-        <ref bean="RequisitionItem-itemIdentifier" />
-        <ref bean="RequisitionItem-itemLineNumber" />
-        <ref bean="RequisitionItem-itemUnitOfMeasureCode" />
-        <ref bean="RequisitionItem-purapDocumentIdentifier" />
-        <ref bean="RequisitionItem-itemAssignedToTradeInIndicator" />
-        <ref bean="RequisitionItem-extendedPrice" />
-        <ref bean="RequisitionItem-itemUnitPrice" />
-        <ref bean="RequisitionItem-itemTypeCode" />
-        <ref bean="RequisitionItem-itemCatalogNumber" />
-        <ref bean="RequisitionItem-itemDescription" />
-        <ref bean="RequisitionItem-capitalAssetTransactionTypeCode" />
-        <ref bean="RequisitionItem-itemCapitalAssetNoteText" />
-        <ref bean="RequisitionItem-itemAuxiliaryPartIdentifier" />
-        <ref bean="RequisitionItem-externalOrganizationB2bProductReferenceNumber" />
-        <ref bean="RequisitionItem-externalOrganizationB2bProductTypeName" />
-        <ref bean="RequisitionItem-itemQuantity" />
-        <ref bean="RequisitionItem-addCapitalAssetNumber" />
-        <ref bean="RequisitionItem-commodityCode" />
-        <ref bean="RequisitionItem-itemRestrictedIndicator" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="capitalAssetTransactionTypeCode" />
+                <field attributeName="externalOrganizationB2bProductReferenceNumber" />
+                <field attributeName="externalOrganizationB2bProductTypeName" />
+                <field attributeName="itemAssignedToTradeInIndicator" />
+                <field attributeName="itemAuxiliaryPartIdentifier" />
+                <field attributeName="itemCapitalAssetNoteText" />
+                <field attributeName="itemCatalogNumber" />
+                <field attributeName="itemDescription" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="itemQuantity" />
+                <field attributeName="itemRestrictedIndicator" />
+                <field attributeName="itemTypeCode" />
+                <field attributeName="itemUnitOfMeasureCode" />
+                <field attributeName="itemUnitPrice" />
+                <field attributeName="requisitionIdentifier" />
+                <field attributeName="requisitionItemIdentifier" />
+                <field attributeName="requisitionLineIdentifier" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Requisition Item Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.RequisitionItem">Create New</a>]]></menubar>
 
-  <bean id="RequisitionItem-versionNumber" parent="RequisitionItem-versionNumber-parentBean" />
+            <instructions>Lookup an Requisition Item</instructions>
 
-  <bean id="RequisitionItem-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
-  <bean id="RequisitionItem-itemIdentifier" parent="RequisitionItem-itemIdentifier-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="capitalAssetTransactionTypeCode" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="RequisitionItem-itemIdentifier-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemIdentifier">
-    <property name="name" value="itemIdentifier" />
-    <property name="label" value="Item Identifier" />
-  </bean>
-  <bean id="RequisitionItem-itemLineNumber" parent="RequisitionItem-itemLineNumber-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="capitalAssetTransactionTypeCode" required="false" />
+                <lookupField attributeName="externalOrganizationB2bProductReferenceNumber" required="false" />
+                <lookupField attributeName="externalOrganizationB2bProductTypeName" required="false" />
+                <lookupField attributeName="itemAssignedToTradeInIndicator" required="false" />
+                <lookupField attributeName="itemAuxiliaryPartIdentifier" required="false" />
+                <lookupField attributeName="itemCapitalAssetNoteText" required="false" />
+                <lookupField attributeName="itemCatalogNumber" required="false" />
+                <lookupField attributeName="itemDescription" required="false" />
+                <lookupField attributeName="itemLineNumber" required="false" />
+                <lookupField attributeName="itemQuantity" required="false" />
+                <lookupField attributeName="itemRestrictedIndicator" required="false" />
+                <lookupField attributeName="itemTypeCode" required="false" />
+                <lookupField attributeName="itemUnitOfMeasureCode" required="false" />
+                <lookupField attributeName="itemUnitPrice" required="false" />
+                <lookupField attributeName="requisitionIdentifier" required="false" />
+                <lookupField attributeName="requisitionItemIdentifier" required="false" />
+                <lookupField attributeName="requisitionLineIdentifier" required="false" />
+            </lookupFields>
 
-  <bean id="RequisitionItem-itemLineNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemLineNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Line Number" />
-    <property name="shortLabel" value="Item Line #" />
-    <property name="maxLength" value="3" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="5" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemUnitOfMeasureCode" parent="RequisitionItem-itemUnitOfMeasureCode-parentBean" />
+            <resultFields>
+                <field attributeName="capitalAssetTransactionTypeCode" />
+                <field attributeName="externalOrganizationB2bProductReferenceNumber" />
+                <field attributeName="externalOrganizationB2bProductTypeName" />
+                <field attributeName="itemAssignedToTradeInIndicator" />
+                <field attributeName="itemAuxiliaryPartIdentifier" />
+                <field attributeName="itemCapitalAssetNoteText" />
+                <field attributeName="itemCatalogNumber" />
+                <field attributeName="itemDescription" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="itemQuantity" />
+                <field attributeName="itemRestrictedIndicator" />
+                <field attributeName="itemTypeCode" />
+                <field attributeName="itemUnitOfMeasureCode" />
+                <field attributeName="itemUnitPrice" />
+                <field attributeName="requisitionIdentifier" />
+                <field attributeName="requisitionItemIdentifier" />
+                <field attributeName="requisitionLineIdentifier" />
+            </resultFields>
+        </lookup>
 
-  <bean id="RequisitionItem-itemUnitOfMeasureCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemUnitOfMeasureCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Unit Of Measure Code" />
-    <property name="shortLabel" value="UOM" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.kfs.lookup.keyvalues.UnitOfMeasureValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-purapDocumentIdentifier" parent="RequisitionItem-purapDocumentIdentifier-parentBean" />
+        <attributes>
 
-  <bean id="RequisitionItem-purapDocumentIdentifier-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="purapDocumentIdentifier" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Requisition Identifier" />
-    <property name="shortLabel" value="Identifier" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemAssignedToTradeInIndicator" parent="RequisitionItem-itemAssignedToTradeInIndicator-parentBean" />
+            <attribute name="capitalAssetTransactionTypeCode" forceUppercase="true">
+                <label>Capital Asset Transaction Type Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="RequisitionItem-itemAssignedToTradeInIndicator-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemAssignedToTradeInIndicator" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Assigned To Trade In Indicator" />
-    <property name="shortLabel" value="Trade In" />
-    <property name="maxLength" value="1" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-extendedPrice" parent="RequisitionItem-extendedPrice-parentBean" />
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="RequisitionItem-extendedPrice-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="extendedPrice" />
-    <property name="label" value="Extended Price" />
-    <property name="shortLabel" value="Extended Cost" />
-  </bean>
-  <bean id="RequisitionItem-itemUnitPrice" parent="RequisitionItem-itemUnitPrice-parentBean" />
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="RequisitionItem-itemUnitPrice-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemUnitPrice">
-    <property name="name" value="itemUnitPrice" />
-    <property name="label" value="Unit Cost" />
-    <property name="shortLabel" value="Unit Cost" />
-  </bean>
-  <bean id="RequisitionItem-itemTypeCode" parent="RequisitionItem-itemTypeCode-parentBean" />
+                <summary>capitalAssetTransactionTypeCode</summary>
+                <description>capitalAssetTransactionTypeCode description...</description>
+			</attribute>
 
-  <bean id="RequisitionItem-itemTypeCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemTypeCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Type Code" />
-    <property name="shortLabel" value="Item Type" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.ItemTypeValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemCatalogNumber" parent="RequisitionItem-itemCatalogNumber-parentBean" />
+            <attribute name="externalOrganizationB2bProductReferenceNumber" forceUppercase="true">
+                <label>External OrganizationB2b Product Reference Number</label>
+                <shortLabel>Number</shortLabel>
 
-  <bean id="RequisitionItem-itemCatalogNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemCatalogNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Catalog Number" />
-    <property name="shortLabel" value="Catalog #" />
-    <property name="maxLength" value="30" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="15" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemDescription" parent="RequisitionItem-itemDescription-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="RequisitionItem-itemDescription-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemDescription" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Description" />
-    <property name="shortLabel" value="Description" />
-    <property name="maxLength" value="4000" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextareaControlDefinition"
-            p:rows="4"
-            p:cols="50" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-capitalAssetTransactionTypeCode" parent="RequisitionItem-capitalAssetTransactionTypeCode-parentBean" />
+                <control>
+                    <text size="21" />
+                </control>
 
-  <bean id="RequisitionItem-capitalAssetTransactionTypeCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="capitalAssetTransactionTypeCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Capital Asset Transaction Type" />
-    <property name="shortLabel" value="Asset Tran Type" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.CapitalAssetTransactionTypeValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemCapitalAssetNoteText" parent="RequisitionItem-itemCapitalAssetNoteText-parentBean" />
+                <summary>externalOrganizationB2bProductReferenceNumber</summary>
+                <description>externalOrganizationB2bProductReferenceNumber description...</description>
+			</attribute>
 
-  <bean id="RequisitionItem-itemCapitalAssetNoteText-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemCapitalAssetNoteText" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Capital Asset Comments" />
-    <property name="shortLabel" value="Comments" />
-    <property name="maxLength" value="800" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextareaControlDefinition"
-            p:rows="3"
-            p:cols="40" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemAuxiliaryPartIdentifier" parent="RequisitionItem-itemAuxiliaryPartIdentifier-parentBean" />
+            <attribute name="externalOrganizationB2bProductTypeName" forceUppercase="true">
+                <label>External OrganizationB2b Product Type Name</label>
+                <shortLabel>Name</shortLabel>
 
-  <bean id="RequisitionItem-itemAuxiliaryPartIdentifier-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemAuxiliaryPartIdentifier" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Auxiliary Part Identifier" />
-    <property name="shortLabel" value="Identifier" />
-    <property name="maxLength" value="300" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextareaControlDefinition"
-            p:rows="5"
-            p:cols="80" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-externalOrganizationB2bProductReferenceNumber" parent="RequisitionItem-externalOrganizationB2bProductReferenceNumber-parentBean" />
+                <maxLength>15</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="RequisitionItem-externalOrganizationB2bProductReferenceNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="externalOrganizationB2bProductReferenceNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="External OrganizationB2b Product Reference Number" />
-    <property name="shortLabel" value="Number" />
-    <property name="maxLength" value="19" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="21" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-externalOrganizationB2bProductTypeName" parent="RequisitionItem-externalOrganizationB2bProductTypeName-parentBean" />
+                <control>
+                    <text size="17" />
+                </control>
 
-  <bean id="RequisitionItem-externalOrganizationB2bProductTypeName-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="externalOrganizationB2bProductTypeName" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="External OrganizationB2b Product Type Name" />
-    <property name="shortLabel" value="Name" />
-    <property name="maxLength" value="15" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="17" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemQuantity" parent="RequisitionItem-itemQuantity-parentBean" />
+                <summary>externalOrganizationB2bProductTypeName</summary>
+                <description>externalOrganizationB2bProductTypeName description...</description>
+			</attribute>
 
-  <bean id="RequisitionItem-itemQuantity-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemQuantity">
-    <property name="name" value="itemQuantity" />
-    <property name="exclusiveMin" value="0" />
-  </bean>
-  <bean id="RequisitionItem-addCapitalAssetNumber" parent="RequisitionItem-addCapitalAssetNumber-parentBean" />
+            <attribute name="itemAssignedToTradeInIndicator" forceUppercase="true">
+                <label>Item Assigned To Trade In Indicator</label>
+                <shortLabel>Indicator</shortLabel>
 
-  <bean id="RequisitionItem-addCapitalAssetNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="addCapitalAssetNumber" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Add Asset Number" />
-    <property name="shortLabel" value="Add Asset #" />
-    <property name="maxLength" value="12" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="14" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-commodityCode" parent="RequisitionItem-commodityCode-parentBean" />
+                <maxLength>1</maxLength>
 
-  <bean id="RequisitionItem-commodityCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="commodityCode" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Commodity Code" />
-    <property name="shortLabel" value="Commodity Code" />
-    <property name="maxLength" value="45" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-  </bean>
-  <bean id="RequisitionItem-itemRestrictedIndicator" parent="RequisitionItem-itemRestrictedIndicator-parentBean" />
+                <control>
+                    <checkbox />
+                </control>
 
-  <bean id="RequisitionItem-itemRestrictedIndicator-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemRestrictedIndicator" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Restricted Indicator" />
-    <property name="shortLabel" value="Restricted" />
-    <property name="maxLength" value="1" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-  </bean>
+                <summary>itemAssignedToTradeInIndicator</summary>
+                <description>itemAssignedToTradeInIndicator description...</description>
+			</attribute>
 
-<!-- Business Object Inquiry Definition -->
+            <attribute name="itemAuxiliaryPartIdentifier" forceUppercase="true">
+                <label>Item Auxiliary Part Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
+                <maxLength>300</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="RequisitionItem-inquiryDefinition" parent="RequisitionItem-inquiryDefinition-parentBean" />
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
 
-  <bean id="RequisitionItem-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Requisition Item Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="capitalAssetTransactionTypeCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="externalOrganizationB2bProductReferenceNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="externalOrganizationB2bProductTypeName" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemAssignedToTradeInIndicator" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemAuxiliaryPartIdentifier" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemCapitalAssetNoteText" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemCatalogNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemDescription" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemLineNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemQuantity" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemRestrictedIndicator" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemTypeCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemUnitOfMeasureCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemUnitPrice" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="purapDocumentIdentifier" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="itemIdentifier" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <summary>itemAuxiliaryPartIdentifier</summary>
+                <description>itemAuxiliaryPartIdentifier description...</description>
+			</attribute>
 
-<!-- Business Object Lookup Definition -->
+            <attribute name="itemCapitalAssetNoteText" forceUppercase="true">
+                <label>Item Capital Asset Note Text</label>
+                <shortLabel>Text</shortLabel>
 
+                <maxLength>800</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="RequisitionItem-lookupDefinition" parent="RequisitionItem-lookupDefinition-parentBean" />
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
 
-  <bean id="RequisitionItem-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Requisition Item Lookup" />
-    <property name="instructions" value="Lookup an Requisition Item" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="capitalAssetTransactionTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="externalOrganizationB2bProductReferenceNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="externalOrganizationB2bProductTypeName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemAssignedToTradeInIndicator" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemAuxiliaryPartIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemCapitalAssetNoteText" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemCatalogNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemDescription" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemLineNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemQuantity" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemRestrictedIndicator" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemUnitOfMeasureCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemUnitPrice" />
-        <bean parent="FieldDefinition"
-              p:attributeName="purapDocumentIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemIdentifier" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="capitalAssetTransactionTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="externalOrganizationB2bProductReferenceNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="externalOrganizationB2bProductTypeName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemAssignedToTradeInIndicator" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemAuxiliaryPartIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemCapitalAssetNoteText" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemCatalogNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemDescription" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemLineNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemQuantity" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemRestrictedIndicator" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemUnitOfMeasureCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemUnitPrice" />
-        <bean parent="FieldDefinition"
-              p:attributeName="purapDocumentIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="itemIdentifier" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <summary>itemCapitalAssetNoteText</summary>
+                <description>itemCapitalAssetNoteText description...</description>
+			</attribute>
+
+            <attribute name="itemCatalogNumber" forceUppercase="true">
+                <label>Item Catalog Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>30</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="32" />
+                </control>
+
+                <summary>itemCatalogNumber</summary>
+                <description>itemCatalogNumber description...</description>
+			</attribute>
+
+            <attribute name="itemDescription" forceUppercase="true">
+                <label>Item Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>4000</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <textarea rows="5" cols="80"/>
+                </control>
+
+                <summary>itemDescription</summary>
+                <description>itemDescription description...</description>
+			</attribute>
+
+            <attribute name="itemLineNumber" forceUppercase="true">
+                <label>Item Line Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>3</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>itemLineNumber</summary>
+                <description>itemLineNumber description...</description>
+			</attribute>
+
+            <attribute name="itemQuantity" forceUppercase="true">
+                <label>Item Quantity</label>
+                <shortLabel>Quantity</shortLabel>
+
+                <maxLength>11</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="13" />
+                </control>
+
+                <summary>itemQuantity</summary>
+                <description>itemQuantity description...</description>
+			</attribute>
+
+            <attribute name="itemRestrictedIndicator" forceUppercase="true">
+                <label>Item Restricted Indicator</label>
+                <shortLabel>Indicator</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>itemRestrictedIndicator</summary>
+                <description>itemRestrictedIndicator description...</description>
+			</attribute>
+
+            <attribute name="itemTypeCode" forceUppercase="true">
+                <label>Item Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemTypeCode</summary>
+                <description>itemTypeCode description...</description>
+			</attribute>
+
+            <attribute name="itemUnitOfMeasureCode" forceUppercase="true">
+                <label>Item Unit Of Measure Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemUnitOfMeasureCode</summary>
+                <description>itemUnitOfMeasureCode description...</description>
+			</attribute>
+
+            <attribute name="itemUnitPrice" forceUppercase="true">
+                <label>Item Unit Price</label>
+                <shortLabel>Price</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>itemUnitPrice</summary>
+                <description>itemUnitPrice description...</description>
+			</attribute>
+
+            <attribute name="requisitionIdentifier" forceUppercase="true">
+                <label>Requisition Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>requisitionIdentifier</summary>
+                <description>requisitionIdentifier description...</description>
+			</attribute>
+
+            <attribute name="requisitionItemIdentifier" forceUppercase="true">
+                <label>Requisition Item Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>requisitionItemIdentifier</summary>
+                <description>requisitionItemIdentifier description...</description>
+			</attribute>
+
+            <attribute name="requisitionLineIdentifier" forceUppercase="true">
+                <label>Requisition Line Identifier</label>
+                <shortLabel>Identifier</shortLabel>
+
+                <maxLength>64</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="66" />
+                </control>
+
+                <summary>requisitionLineIdentifier</summary>
+                <description>requisitionLineIdentifier description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

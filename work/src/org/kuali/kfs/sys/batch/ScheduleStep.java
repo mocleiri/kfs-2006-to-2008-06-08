@@ -15,36 +15,20 @@
  */
 package org.kuali.kfs.batch;
 
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.service.SchedulerService;
 
 public class ScheduleStep extends AbstractStep {
-    private static final Logger LOG = Logger.getLogger(ScheduleStep.class);
     private SchedulerService schedulerService;
 
     /**
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
+     * @see org.kuali.kfs.batch.Step#execute()
      */
-    public boolean execute(String jobName, Date jobRunDate) {
-        boolean isPastScheduleCutoffTime = false;
-        while (schedulerService.hasIncompleteJob() && !isPastScheduleCutoffTime) {
+    public boolean execute() {
+        while (schedulerService.hasIncompleteJob()) {
             schedulerService.processWaitingJobs();
-            isPastScheduleCutoffTime = schedulerService.isPastScheduleCutoffTime();
-            try {
-                Thread.sleep(Integer.parseInt(getParameterService().getParameterValue(getClass(), KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_STATUS_CHECK_INTERVAL)));
-            }
-            catch (InterruptedException e) {
-                throw new RuntimeException("Schedule step encountered interrupt exception while trying to wait for the specified batch schedule status check interval", e);
-            }
-        }
-        if (isPastScheduleCutoffTime) {
-            LOG.info("Schedule exceeded cutoff time, so it was terminated before completion");
         }
         schedulerService.logScheduleResults();
-        return !isPastScheduleCutoffTime;
+        return true;
     }
 
     /**

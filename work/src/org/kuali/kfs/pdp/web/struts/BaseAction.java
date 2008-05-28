@@ -1,17 +1,6 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Created on Feb 20, 2004
+ *
  */
 package org.kuali.module.pdp.action;
 
@@ -29,13 +18,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.core.UserSession;
+import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.pdp.PdpConstants;
 import org.kuali.module.pdp.bo.PdpUser;
 import org.kuali.module.pdp.service.PdpSecurityService;
@@ -44,9 +31,13 @@ import org.kuali.module.pdp.service.SecurityRecord;
 import edu.iu.uis.eden.web.WebAuthenticationService;
 
 /**
- * This Action will do most request processing for the PDP part of appliation. Your action should override the proper methods to do
- * it's work. This idea and most of the concepts were stolen from the Scafold base action mentioned in Struts in Action. The bugs
- * are probably entirely mine. This should be refactored out of the application to make full use of the Kuali Request Processor.
+ * @author jsissom
+ *
+ * This Action will do most request processing for this appliation.
+ * Your action should override the proper methods to do it's work.
+ * 
+ * This idea and most of the concepts were stolen from the Scafold base action
+ * mentioned in Struts in Action.  The bugs are probably entirely mine.
  */
 public abstract class BaseAction extends Action {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(BaseAction.class);
@@ -72,22 +63,18 @@ public abstract class BaseAction extends Action {
     protected PdpSecurityService securityService = null;
 
     public BaseAction() {
+        setUniversalUserService( SpringServiceLocator.getUniversalUserService() );
+        setKualiConfigurationService( SpringServiceLocator.getKualiConfigurationService() );
+        setWebAuthenticationService( SpringServiceLocator.getWebAuthenticationService() );
+        setSecurityService( (PdpSecurityService)SpringServiceLocator.getService("pdpPdpSecurityService") );
     }
 
     /**
-     * Struts execute method. Don't override this unless you want to completely replace the functionality of base action.
+     * Struts execute method.  Don't override this unless you want to completely
+     * replace the functionality of base action.
      */
-    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         LOG.debug("execute() started");
-
-        // For some reason, these don't always get set when they are in the constructor. We'll get them here
-        // the first time they are needed.
-        if (userService == null) {
-            setUniversalUserService(SpringContext.getBean(UniversalUserService.class));
-            setKualiConfigurationService(SpringContext.getBean(KualiConfigurationService.class));
-            setWebAuthenticationService(SpringContext.getBean(WebAuthenticationService.class));
-            setSecurityService(SpringContext.getBean(PdpSecurityService.class));
-        }
 
         ActionForward forward = null;
 
@@ -95,38 +82,36 @@ public abstract class BaseAction extends Action {
 
         // Log4j settings
         ServletContext sc = request.getSession().getServletContext();
-        MDC.put("user", "-");
+        MDC.put("user","-");
 
         // Check for precondition errors; fail if found
         LOG.debug("execute() calling preProcess()");
-        forward = preProcess(mapping, form, request, response);
-        if (forward != null) {
+        forward = preProcess(mapping,form,request,response);
+        if ( forward != null ) {
             LOG.debug("execute() preProcess returned forward");
             return forward;
         }
 
         // Do authentication
-        forward = doAuthentication(mapping, form, request, response);
-        if (forward != null) {
+        forward = doAuthentication(mapping,form,request,response);
+        if ( forward != null ) {
             LOG.debug("execute() doAuthentication returned forward");
             return forward;
         }
 
         // Do authorization (check again if backdoorId is set)
-        SecurityRecord securityRecord = (SecurityRecord) session.getAttribute("SecurityRecord");
-        String srUser = (String) session.getAttribute("SecurityRecordUser");
-        if ((securityRecord == null) || (srUser == null) || !srUser.equals(getUser(request).getNetworkId())) {
+        SecurityRecord securityRecord = (SecurityRecord)session.getAttribute("SecurityRecord");
+        if ( (securityRecord == null) || (request.getParameter("backdoorId") != null) ) {
             LOG.debug("execute() Security Check");
             securityRecord = securityService.getSecurityRecord(getUser(request));
-            session.setAttribute("SecurityRecord", securityRecord);
-            session.setAttribute("SecurityRecordUser", getUser(request).getNetworkId());
+            session.setAttribute("SecurityRecord",securityRecord);
         }
 
-        if (!isAuthorized(mapping, form, request, response)) {
+        if ( ! isAuthorized(mapping,form,request,response) ) {
             LOG.debug("execute() Unauthorized");
             return mapping.findForward("pdp_unauthorized");
         }
-
+    
         Timestamp disbExpireDate = getLastGoodDisbursementActionDate();
         if (disbExpireDate == null) {
             return forward;
@@ -135,16 +120,14 @@ public abstract class BaseAction extends Action {
 
         try {
             LOG.debug("execute() Calling executeLogic()");
-            forward = executeLogic(mapping, form, request, response);
+            forward = executeLogic(mapping,form,request,response);
             LOG.debug("execute() executeLogic() returned forward '" + forward + "'");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.error("execute() Exception received.  Calling catchException", e);
-            forward = catchException(mapping, form, request, response, e);
-        }
-        finally {
+            forward = catchException(mapping,form,request,response,e);
+        } finally {
             LOG.debug("execute() Calling postProcess()");
-            postProcess(mapping, form, request, response);
+            postProcess(mapping,form,request,response);
         }
 
         LOG.debug("execute() Returning");
@@ -154,7 +137,7 @@ public abstract class BaseAction extends Action {
     protected Timestamp getLastGoodDisbursementActionDate() {
         LOG.debug("getLastGoodDisbursementActionDate() started");
 
-        String daysStr = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.PRE_DISBURSEMENT_ALL.class, PdpConstants.ApplicationParameterKeys.DISBURSEMENT_ACTION_EXPIRATION_DAYS);
+        String daysStr = kualiConfigurationService.getApplicationParameterValue(PdpConstants.PDP_APPLICATION, PdpConstants.ApplicationParameterKeys.DISBURSEMENT_ACTION_EXPIRATION_DAYS);
         int days = Integer.valueOf(daysStr);
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, (days * -1));
@@ -172,12 +155,11 @@ public abstract class BaseAction extends Action {
 
         Enumeration enumer = request.getParameterNames();
         while (enumer.hasMoreElements()) {
-            paramName = (String) enumer.nextElement();
+            paramName = (String)enumer.nextElement();
             if (paramName.startsWith("btn")) { // All the button names start with btn
-                if (paramName.indexOf(".") > -1) {
-                    return paramName.substring(0, paramName.indexOf("."));
-                }
-                else {
+                if ( paramName.indexOf(".") > -1 ) {
+                    return paramName.substring(0,paramName.indexOf("."));
+                } else {
                     return paramName;
                 }
             }
@@ -186,7 +168,8 @@ public abstract class BaseAction extends Action {
     }
 
     /**
-     * This method does authentication. Override if you want to do a different authentication or none.
+     * This method does authentication.  Override if you want to do
+     * a different authentication or none.
      * 
      * @param mapping
      * @param form
@@ -194,23 +177,95 @@ public abstract class BaseAction extends Action {
      * @param response
      * @return
      */
-    protected ActionForward doAuthentication(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+    protected ActionForward doAuthentication(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) {
         LOG.debug("doAuthentication() started");
 
         HttpSession session = request.getSession();
 
-        UserSession userSession = (UserSession) request.getSession().getAttribute(KFSConstants.USER_SESSION_KEY);
+        String actualUserId = webAuthenticationService.getNetworkId(request);
+        PdpUser user = (PdpUser)session.getAttribute("user");
 
-        // This is needed for PDP. At some point, PDP should be refactored to use UserSession
-        session.setAttribute("user", new PdpUser(userSession.getUniversalUser()));
+        // Is back door needed and enabled?
+        String backdoorId = request.getParameter("backdoorId");
+    
+        if ( (backdoorId != null) && isBackDoorAllowed() ) {
+            if ( ! backdoorId.equals(actualUserId)) {
+                LOG.debug("doAuthentication() Backdoor requested");
+                try {
+                    UniversalUser u = userService.getUniversalUserByAuthenticationUserId(backdoorId);
+                    if ( u != null ) {
+                        user = new PdpUser(u);
+                    }
+                } catch (UserNotFoundException e) {
+                    LOG.error("doAuthentication() Sponsored user with no empl ID " + backdoorId);
+                    return mapping.findForward("pdp_authentication_error");
+                }
+                if ( user != null ) {
+                    LOG.debug("doAuthentication() backdoor active");
+                    session.setAttribute("backdoor","Y");
+                    actualUserId = backdoorId;
+                    session.setAttribute("user",user);
+                } else {
+                    LOG.error("doAuthentication() Unable to find backdoor user " + backdoorId);
+                    return mapping.findForward("pdp_authentication_error");
+                }
+            } else {
+                session.removeAttribute("backdoor");
+                user = null;
+            }
+        }
 
-        MDC.put("user", userSession.getNetworkId());
+        if ( user == null ) {
+            LOG.debug("doAuthentication() Regular login");
 
+            try {
+                UniversalUser u = userService.getUniversalUserByAuthenticationUserId(actualUserId);
+                if ( u != null ) {
+                    user = new PdpUser(u);
+                }
+            } catch (UserNotFoundException e) {
+                LOG.error("doAuthentication() GDS user with no empl ID " + actualUserId, e);
+                return mapping.findForward("pdp_authentication_error");
+            }
+            if ( user == null ) {
+                LOG.error("doAuthentication() Unable to find user " + actualUserId);
+                return mapping.findForward("pdp_authentication_error");
+            } else {
+                session.setAttribute("user",user);      
+            }
+        }
+
+        MDC.put("user",user.getUniversalUser().getPersonUserIdentifier());
         return null;
     }
 
     /**
-     * This group authorization. Override to change the authorization type.
+     * Check to see if this request is operating under a backdoor account.
+     * @param request
+     * @return
+     */
+    protected boolean isBackDoorEnabled(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Object bd = session.getAttribute("backdoor");
+        return ( bd != null );
+    }
+
+    /**
+     * This checks the database to see if it is ok to have a back door.
+     * @return
+     */
+    private boolean isBackDoorAllowed() {
+        Boolean b = kualiConfigurationService.getPropertyAsBoolean("BACKDOOR");
+        if ( b == null ) {
+            return false;
+        } else {
+            return b.booleanValue();
+        }
+    }
+ 
+    /**
+     * This group authorization.  Override to change the authorization
+     * type.
      * 
      * @param mapping
      * @param form
@@ -219,97 +274,106 @@ public abstract class BaseAction extends Action {
      * @return
      * @throws SharedException
      */
-    protected boolean isAuthorized(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+    protected boolean isAuthorized(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) {
         LOG.debug("isAuthorized() Default method = returning true");
         return true;
     }
 
     /**
-     * Get the user object for the user that is logged in. This only works after doAuthentication() has run for the first request
-     * from a user.
+     * Get the user object for the user that is logged in.
+     * This only works after doAuthentication() has run 
+     * for the first request from a user.
      * 
      * @param request
      * @return The user object
      */
     protected PdpUser getUser(HttpServletRequest request) {
-        return (PdpUser) request.getSession().getAttribute("user");
+        return (PdpUser)request.getSession().getAttribute("user");
     }
 
     /**
-     * Get the security record for the user that is logged in. This only works after doAuthentication() is run.
+     * Get the security record for the user that is logged in.
+     * This only works after doAuthentication() is run.
      * 
      * @param request
      * @return The security record object
      */
     protected SecurityRecord getSecurityRecord(HttpServletRequest request) {
-        return (SecurityRecord) request.getSession().getAttribute("SecurityRecord");
+        return (SecurityRecord)request.getSession().getAttribute("SecurityRecord");
     }
-
+  
     /**
-     * Get the disbursement action expiration date where a disbursement date before this date is not allowed to be cancelled or
-     * cancelled and reissued
+     * Get the disbursement action expiration date where a disbursement
+     * date before this date is not allowed to be cancelled or cancelled 
+     * and reissued
      * 
      * @param request
      * @return The last disbursement date that is allowed for cancel
      */
     protected Timestamp getDisbursementActionExpirationDate(HttpServletRequest request) {
-        return (Timestamp) request.getSession().getAttribute("DisbursementExpireDate");
+        return (Timestamp)request.getSession().getAttribute("DisbursementExpireDate");
     }
 
     /**
      * Execute the business logic for this Action.
-     * 
+     *
      * @param mapping The ActionMapping used to select this instance
      * @param form The optional ActionForm bean for this request
      * @param request The HTTP request we are processing
      * @param response The resonse we are creating
      */
-    protected abstract ActionForward executeLogic(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception;
+    protected abstract ActionForward executeLogic(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception;
 
     /**
-     * Optional extension point for pre-processing. Default method does nothing.
-     * 
+     * Optional extension point for pre-processing.
+     * Default method does nothing.
+     *
      * @param mapping The ActionMapping used to select this instance
      * @param actionForm The optional ActionForm bean for this request
      * @param request The HTTP request we are processing
      * @param response The resonse we are creating
      */
-    protected ActionForward preProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+    protected ActionForward preProcess(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) {
         // override to provide functionality
         LOG.info("preProcess() default preProcess()");
         return null;
     }
 
     /**
-     * Optional extension point for post-processing. Default method does nothing. This is called from a finally{} clause, and so is
-     * guaranteed to be called after executeLogic() or catchException().
-     * 
+     * Optional extension point for post-processing.
+     * Default method does nothing.
+     * This is called from a finally{} clause,
+     * and so is guaranteed to be called after executeLogic() or
+     * catchException().
+     *
      * @param mapping The ActionMapping used to select this instance
      * @param actionForm The optional ActionForm bean for this request
      * @param request The HTTP request we are processing
      * @param response The resonse we are creating
      */
-    protected void postProcess(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+    protected void postProcess(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) {
         // override to provide functionality
         LOG.info("postProcess() default postProcess()");
     }
 
     /**
-     * Process the exception handling for this Action. Default method just returns a standard system error page.
-     * 
+     * Process the exception handling for this Action.
+     * Default method just returns a standard system error page.
+     *
      * @param mapping The ActionMapping used to select this instance
      * @param actionForm The optional ActionForm bean for this request
      * @param request The HTTP request we are processing
      * @param response The response we are creating
      */
-    protected ActionForward catchException(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, Exception exception) {
+    protected ActionForward catchException(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response,Exception exception) {
         // override to provide functionality
         LOG.info("catchException() default catchException()");
         return mapping.findForward("pdp_system_error");
     }
 
     /**
-     * This method returns the network id of the user accessing this action.
+     * This method returns the network id of the user accessing
+     * this action.
      * 
      * @param request
      * @return
@@ -317,18 +381,16 @@ public abstract class BaseAction extends Action {
     protected String getNetworkId(HttpServletRequest request) {
         PdpUser user = getUser(request);
 
-        if (user == null) {
+        if ( user == null ) {
             LOG.error("getNetworkId() not authenticated");
             return null;
-        }
-        else {
+        } else {
             return user.getUniversalUser().getPersonUserIdentifier();
         }
     }
 
     /**
      * Have the user service set for us
-     * 
      * @param us
      */
     public void setUniversalUserService(UniversalUserService us) {
@@ -337,7 +399,6 @@ public abstract class BaseAction extends Action {
 
     /**
      * Have the application settings service set for us
-     * 
      * @param ass
      */
     public void setKualiConfigurationService(KualiConfigurationService kcs) {
@@ -346,7 +407,6 @@ public abstract class BaseAction extends Action {
 
     /**
      * Have the web authentication service set for us
-     * 
      * @param was
      */
     public void setWebAuthenticationService(WebAuthenticationService was) {
@@ -355,7 +415,6 @@ public abstract class BaseAction extends Action {
 
     /**
      * Have the security service set for us
-     * 
      * @param ss
      */
     public void setSecurityService(PdpSecurityService ss) {

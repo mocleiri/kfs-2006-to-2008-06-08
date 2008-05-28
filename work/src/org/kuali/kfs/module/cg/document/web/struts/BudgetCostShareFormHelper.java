@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 package org.kuali.module.kra.budget.web.struts.form;
 
@@ -23,17 +32,18 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.BudgetAbstractCostShare;
 import org.kuali.module.kra.budget.bo.BudgetAbstractPeriodCostShare;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
+import org.kuali.module.kra.budget.bo.BudgetPeriodUniversityCostShare;
 import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
+import org.kuali.module.kra.budget.bo.BudgetUniversityCostShare;
 import org.kuali.module.kra.budget.bo.BudgetUser;
-import org.kuali.module.kra.budget.bo.InstitutionCostSharePersonnel;
+import org.kuali.module.kra.budget.bo.UniversityCostSharePersonnel;
 import org.kuali.module.kra.budget.bo.UserAppointmentTask;
 import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
 import org.kuali.module.kra.budget.service.BudgetPeriodService;
@@ -41,6 +51,8 @@ import org.kuali.module.kra.budget.service.BudgetPeriodService;
 
 /**
  * Used by UI to get totals, counts, aggregations, and other things to render the Cost Share page.
+ * 
+ * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetCostShareFormHelper {
 
@@ -55,60 +67,65 @@ public class BudgetCostShareFormHelper {
     private KualiInteger[] institutionIndirectCostShare;
     private KualiInteger[] subcontractorCostShare;
     private KualiInteger[] total;
-    private KualiInteger totalInstitutionIndirectCostShare = KualiInteger.ZERO;
-    private KualiInteger totalSubcontractorCostShare = KualiInteger.ZERO;
-    private KualiInteger totalTotal = KualiInteger.ZERO;
+    private KualiInteger totalInstitutionIndirectCostShare = new KualiInteger(0);
+    private KualiInteger totalSubcontractorCostShare = new KualiInteger(0);
+    private KualiInteger totalTotal = new KualiInteger(0);
 
     public BudgetCostShareFormHelper() {
-        budgetPeriodService = SpringContext.getBean(BudgetPeriodService.class);
+        budgetPeriodService = SpringServiceLocator.getBudgetPeriodService();
     }
 
     /**
      * Constructor for the BudgetCostShareFormHelper object. Convenience argument of BudgetForm.
-     * 
      * @param budgetForm
      */
     public BudgetCostShareFormHelper(BudgetForm budgetForm) {
-        this(budgetForm.getBudgetDocument().getBudget().getPeriods(), budgetForm.getBudgetDocument().getBudget().getPersonnel(), budgetForm.getBudgetDocument().getBudget().getNonpersonnelItems(), budgetForm.getBudgetDocument().getBudget().getInstitutionCostSharePersonnelItems(), budgetForm.getBudgetDocument().getBudget().getInstitutionCostShareItems(), budgetForm.getBudgetDocument().getBudget().getThirdPartyCostShareItems(), budgetForm.getBudgetIndirectCostFormHelper());
+        this(budgetForm.getBudgetDocument().getBudget().getPeriods(),
+                budgetForm.getBudgetDocument().getBudget().getPersonnel(),
+                budgetForm.getBudgetDocument().getBudget().getNonpersonnelItems(),
+                budgetForm.getBudgetDocument().getBudget().getUniversityCostSharePersonnelItems(),
+                budgetForm.getBudgetDocument().getBudget().getUniversityCostShareItems(),
+                budgetForm.getBudgetDocument().getBudget().getThirdPartyCostShareItems(),
+                budgetForm.getBudgetIndirectCostFormHelper());
     }
-
+    
     /**
      * Constructor for the BudgetCostShareFormHelper object. Initializes all sections in order for the Cost Share page to function.
      * 
      * @param periods
      * @param personnel
      * @param budgetNonpersonnelItems
-     * @param institutionCostSharePersonnel
-     * @param budgetInstitutionCostShare
+     * @param universityCostSharePersonnel
+     * @param budgetUniversityCostShare
      * @param budgetThirdPartyCostShare
      * @param budgetIndirectCostFormHelper
      */
-    public BudgetCostShareFormHelper(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<InstitutionCostSharePersonnel> institutionCostSharePersonnel, List<BudgetInstitutionCostShare> budgetInstitutionCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare, BudgetIndirectCostFormHelper budgetIndirectCostFormHelper) {
+    public BudgetCostShareFormHelper(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<UniversityCostSharePersonnel> universityCostSharePersonnel, List<BudgetUniversityCostShare> budgetUniversityCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare, BudgetIndirectCostFormHelper budgetIndirectCostFormHelper) {
         this();
-
+        
         // Subcontractors has to happen before 3rd Party Direct so that it can calculate correct totals.
         setupSubcontractors(periods, budgetNonpersonnelItems);
-
-        setupDirect(periods, personnel, budgetNonpersonnelItems, institutionCostSharePersonnel, budgetInstitutionCostShare, budgetThirdPartyCostShare);
+        
+        setupDirect(periods, personnel, budgetNonpersonnelItems, universityCostSharePersonnel, budgetUniversityCostShare, budgetThirdPartyCostShare);
 
         setupTotals(periods, budgetIndirectCostFormHelper);
     }
-
+    
     /**
-     * Constructor for the BudgetCostShareFormHelper object. Initializes direct (institution & third party) sections in order for
-     * audit mode to do its checks.
+     * Constructor for the BudgetCostShareFormHelper object. Initializes direct (institution & third party) sections in order for audit mode
+     * to do its checks.
      * 
      * @param periods
      * @param personnel
      * @param budgetNonpersonnelItems
-     * @param institutionCostSharePersonnel
-     * @param budgetInstitutionCostShare
+     * @param universityCostSharePersonnel
+     * @param budgetUniversityCostShare
      * @param budgetThirdPartyCostShare
      */
-    public BudgetCostShareFormHelper(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<InstitutionCostSharePersonnel> institutionCostSharePersonnel, List<BudgetInstitutionCostShare> budgetInstitutionCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare) {
+    public BudgetCostShareFormHelper(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<UniversityCostSharePersonnel> universityCostSharePersonnel, List<BudgetUniversityCostShare> budgetUniversityCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare) {
         this();
-
-        setupDirect(periods, personnel, budgetNonpersonnelItems, institutionCostSharePersonnel, budgetInstitutionCostShare, budgetThirdPartyCostShare);
+        
+        setupDirect(periods, personnel, budgetNonpersonnelItems, universityCostSharePersonnel, budgetUniversityCostShare, budgetThirdPartyCostShare);
     }
 
     /**
@@ -117,11 +134,11 @@ public class BudgetCostShareFormHelper {
      * 
      * @param periods
      * @param nonpersonnelItems
-     * @param budgetInstitutionCostShare
+     * @param budgetUniversityCostShare
      * @param budgetThirdPartyCostShare
      */
-    private void setupDirect(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<InstitutionCostSharePersonnel> institutionCostSharePersonnel, List<BudgetInstitutionCostShare> budgetInstitutionCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare) {
-        institutionDirect = new Direct(periods, personnel, budgetNonpersonnelItems, institutionCostSharePersonnel, budgetInstitutionCostShare);
+    private void setupDirect(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<UniversityCostSharePersonnel> universityCostSharePersonnel, List<BudgetUniversityCostShare> budgetUniversityCostShare, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShare) {
+        institutionDirect = new Direct(periods, personnel, budgetNonpersonnelItems, universityCostSharePersonnel, budgetUniversityCostShare);
         thirdPartyDirect = new Direct(subcontractorCostShare, periods, budgetNonpersonnelItems, budgetThirdPartyCostShare);
     }
 
@@ -136,7 +153,7 @@ public class BudgetCostShareFormHelper {
         HashMap<String, Subcontractor> addedSubcontractors = new HashMap();
 
         subcontractorCostShare = new KualiInteger[periods.size()];
-        Arrays.fill(subcontractorCostShare, KualiInteger.ZERO);
+        Arrays.fill(subcontractorCostShare, new KualiInteger(0));
 
         // Loop and check below assumes origin items are always found before copy over items. Sort to make sure.
         Collections.sort(nonpersonnelItems);
@@ -277,25 +294,25 @@ public class BudgetCostShareFormHelper {
 
     /**
      * Inner helper class that assists in the management of the data for the Institution & 3rd party direct section.
+     * 
+     * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
      */
     public class Direct {
         private KualiInteger[] totalBudgeted;
         private KualiInteger[] amountDistributed;
         private KualiInteger[] balanceToBeDistributed;
-        private KualiInteger totalTotalBudgeted = KualiInteger.ZERO;
-        private KualiInteger totalAmountDistributed = KualiInteger.ZERO;
-        private KualiInteger totalBalanceToBeDistributed = KualiInteger.ZERO;
+        private KualiInteger totalTotalBudgeted = new KualiInteger(0);
+        private KualiInteger totalAmountDistributed = new KualiInteger(0);
+        private KualiInteger totalBalanceToBeDistributed = new KualiInteger(0);
 
         private KualiInteger[] totalSource;
-
-        // Following fields are only used for institution direct cost share. That is the only one that imports the personnel
-        // amounts.
+        
+        // Following fields are only used for institution direct cost share. That is the only one that imports the personnel amounts.
         private KualiInteger[][] institutionDirectPersonnel;
         private KualiInteger[] totalInstitutionDirectPersonnel;
 
         /**
          * Constructs a BudgetCostShareFormHelper, helper constructor with common variable initializations.
-         * 
          * @param periodsSize
          * @param sourceSize
          */
@@ -304,46 +321,43 @@ public class BudgetCostShareFormHelper {
             totalBudgeted = new KualiInteger[periodsSize];
             amountDistributed = new KualiInteger[periodsSize];
             balanceToBeDistributed = new KualiInteger[periodsSize];
-            Arrays.fill(totalBudgeted, KualiInteger.ZERO);
-            Arrays.fill(amountDistributed, KualiInteger.ZERO);
-            Arrays.fill(balanceToBeDistributed, KualiInteger.ZERO);
+            Arrays.fill(totalBudgeted, new KualiInteger(0));
+            Arrays.fill(amountDistributed, new KualiInteger(0));
+            Arrays.fill(balanceToBeDistributed, new KualiInteger(0));
 
             totalSource = new KualiInteger[sourceSize];
-            Arrays.fill(totalSource, KualiInteger.ZERO);
+            Arrays.fill(totalSource, new KualiInteger(0));
         }
-
+        
         /**
-         * Constructs a BudgetCostShareFormHelper with institution cost share values.
-         * 
+         * Constructs a BudgetCostShareFormHelper with university cost share values.
          * @param periods
          * @param personnel
          * @param budgetNonpersonnelItems
          * @param budgetThirdPartyCostShareItems
          */
-        public Direct(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<InstitutionCostSharePersonnel> institutionCostSharePersonnel, List<BudgetInstitutionCostShare> budgetInstitutionCostShareItems) {
-            this(periods.size(), budgetInstitutionCostShareItems.size());
-
-            // Setup arrays for institution direct personnel data (third party doesn't use those, so they arn't done in the commen
-            // constructor).
-            institutionDirectPersonnel = new KualiInteger[institutionCostSharePersonnel.size()][periods.size()];
-            totalInstitutionDirectPersonnel = new KualiInteger[institutionCostSharePersonnel.size()];
-            for (int i = 0; i < institutionDirectPersonnel.length; i++) {
-                Arrays.fill(institutionDirectPersonnel[i], KualiInteger.ZERO);
+        public Direct(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<UniversityCostSharePersonnel> universityCostSharePersonnel, List<BudgetUniversityCostShare> budgetUniversityCostShareItems) {
+            this(periods.size(), budgetUniversityCostShareItems.size());
+            
+            // Setup arrays for institution direct personnel data (third party doesn't use those, so they arn't done in the commen constructor).
+            institutionDirectPersonnel = new KualiInteger[universityCostSharePersonnel.size()][periods.size()];
+            totalInstitutionDirectPersonnel = new KualiInteger[universityCostSharePersonnel.size()];
+            for(int i = 0; i < institutionDirectPersonnel.length; i++) {
+                Arrays.fill(institutionDirectPersonnel[i], new KualiInteger(0));
             }
-            Arrays.fill(totalInstitutionDirectPersonnel, KualiInteger.ZERO);
-
-            calculateInstitutionDirectPersonnel(periods, personnel, institutionCostSharePersonnel);
-
+            Arrays.fill(totalInstitutionDirectPersonnel, new KualiInteger(0));
+            
+            calculateInstitutionDirectPersonnel(periods, personnel, universityCostSharePersonnel);
+            
             calculateNonpersonnelInstitutionTotalBudgeted(periods, budgetNonpersonnelItems);
 
-            calculateAmountDistributedAndTotalSource(budgetInstitutionCostShareItems);
+            calculateAmountDistributedAndTotalSource(budgetUniversityCostShareItems);
 
             calculateSubcontractorAndBalanceToBeDistributed(null);
         }
-
+        
         /**
          * Constructs a BudgetCostShareFormHelper with third party cost share values.
-         * 
          * @param subcontractorCostShare
          * @param periods
          * @param budgetNonpersonnelItems
@@ -351,7 +365,7 @@ public class BudgetCostShareFormHelper {
          */
         public Direct(KualiInteger[] subcontractorCostShare, List<BudgetPeriod> periods, List<BudgetNonpersonnel> budgetNonpersonnelItems, List<BudgetThirdPartyCostShare> budgetThirdPartyCostShareItems) {
             this(periods.size(), budgetThirdPartyCostShareItems.size());
-
+            
             calculateNonpersonnelThirdPartyTotalBudgeted(periods, budgetNonpersonnelItems);
 
             calculateAmountDistributedAndTotalSource(budgetThirdPartyCostShareItems);
@@ -361,36 +375,35 @@ public class BudgetCostShareFormHelper {
 
         /**
          * Calculates totalBudgeted for personnel institution cost share.
-         * 
          * @param periods
          * @param personnel
-         * @param institutionCostSharePersonnel
+         * @param universityCostSharePersonnel
          */
-        private void calculateInstitutionDirectPersonnel(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<InstitutionCostSharePersonnel> institutionCostSharePersonnel) {
+        private void calculateInstitutionDirectPersonnel(List<BudgetPeriod> periods, List<BudgetUser> personnel, List<UniversityCostSharePersonnel> universityCostSharePersonnel) {
             // First we look at each chart/org.
-            for (int i = 0; i < institutionCostSharePersonnel.size(); i++) {
-                InstitutionCostSharePersonnel institutionCostSharePerson = institutionCostSharePersonnel.get(i);
-
+            for(int i = 0; i < universityCostSharePersonnel.size(); i++) {
+                UniversityCostSharePersonnel universityCostSharePerson = universityCostSharePersonnel.get(i);
+                
                 // Second we check each person if it matches the chart/org we are currently evaluating.
                 for (BudgetUser person : personnel) {
-                    if (institutionCostSharePerson.getChartOfAccountsCode().equals(StringUtils.defaultString(person.getFiscalCampusCode())) && institutionCostSharePerson.getOrganizationCode().equals(StringUtils.defaultString(person.getPrimaryDepartmentCode()))) {
-
+                    if(universityCostSharePerson.getChartOfAccountsCode().equals(StringUtils.defaultString(person.getFiscalCampusCode())) &&
+                            universityCostSharePerson.getOrganizationCode().equals(StringUtils.defaultString(person.getPrimaryDepartmentCode()))) {
+                        
                         // Third we look at each Task.
-                        for (UserAppointmentTask userAppointmentTask : person.getUserAppointmentTasks()) {
+                        for(UserAppointmentTask userAppointmentTask : person.getUserAppointmentTasks()) {
                             // Fourth we look at each Period. Cost Share takes task summation / display of each period.
-                            for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
+                            for(UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
                                 int periodIndex = budgetPeriodService.getPeriodIndex(userAppointmentTaskPeriod.getBudgetPeriodSequenceNumber(), periods);
-                                KualiInteger institutionDirectPersonnelAmount = userAppointmentTaskPeriod.getInstitutionCostShareFringeBenefitTotalAmount().add(userAppointmentTaskPeriod.getInstitutionCostShareRequestTotalAmount());
-                                institutionDirectPersonnelAmount = institutionDirectPersonnelAmount.add(userAppointmentTaskPeriod.getInstitutionHealthInsuranceAmount()).add(userAppointmentTaskPeriod.getInstitutionSalaryAmount()).add(userAppointmentTaskPeriod.getInstitutionRequestedFeesAmount());
-
+                                KualiInteger institutionDirectPersonnelAmount = userAppointmentTaskPeriod.getUniversityCostShareFringeBenefitTotalAmount().add(userAppointmentTaskPeriod.getUniversityCostShareRequestTotalAmount());
+                                
                                 // Take the value and put it into i (location of the chart / org) and j (period location).
                                 institutionDirectPersonnel[i][periodIndex] = institutionDirectPersonnel[i][periodIndex].add(institutionDirectPersonnelAmount);
                                 totalInstitutionDirectPersonnel[i] = totalInstitutionDirectPersonnel[i].add(institutionDirectPersonnelAmount);
-
+                                
                                 // Finally update the total budgeted and amount distributed with the same numbers.
                                 totalBudgeted[periodIndex] = totalBudgeted[periodIndex].add(institutionDirectPersonnelAmount);
                                 totalTotalBudgeted = totalTotalBudgeted.add(institutionDirectPersonnelAmount);
-
+                                
                                 amountDistributed[periodIndex] = amountDistributed[periodIndex].add(institutionDirectPersonnelAmount);
                                 totalAmountDistributed = totalAmountDistributed.add(institutionDirectPersonnelAmount);
                             }
@@ -403,7 +416,6 @@ public class BudgetCostShareFormHelper {
         /**
          * Calculates Amount Distributed and Total Source. Both of them are done together so to eliminate unnecessary loops. This is
          * just a helper method to consolidate code.
-         * 
          * @param budgetThirdPartyCostShareItems
          */
         private void calculateAmountDistributedAndTotalSource(List budgetAbstractCostShareItems) {
@@ -425,7 +437,6 @@ public class BudgetCostShareFormHelper {
 
         /**
          * Calculates Institution Total Budget for Nonpersonnel items. This is just a helper method to consolidate code.
-         * 
          * @param periods
          * @param budgetNonpersonnelItems
          */
@@ -433,14 +444,13 @@ public class BudgetCostShareFormHelper {
             for (BudgetNonpersonnel budgetNonpersonnel : budgetNonpersonnelItems) {
                 int periodIndex = budgetPeriodService.getPeriodIndex(budgetNonpersonnel.getBudgetPeriodSequenceNumber(), periods);
 
-                totalBudgeted[periodIndex] = totalBudgeted[periodIndex].add(budgetNonpersonnel.getBudgetInstitutionCostShareAmount());
-                totalTotalBudgeted = totalTotalBudgeted.add(budgetNonpersonnel.getBudgetInstitutionCostShareAmount());
+                totalBudgeted[periodIndex] = totalBudgeted[periodIndex].add(budgetNonpersonnel.getBudgetUniversityCostShareAmount());
+                totalTotalBudgeted = totalTotalBudgeted.add(budgetNonpersonnel.getBudgetUniversityCostShareAmount());
             }
         }
-
+        
         /**
          * Calculates Third Party Total Budget for Nonpersonnel items. This is just a helper method to consolidate code.
-         * 
          * @param periods
          * @param budgetNonpersonnelItems
          */
@@ -454,20 +464,19 @@ public class BudgetCostShareFormHelper {
         }
 
         /**
-         * Calculates the balance to be distributed (and it's total) based on totalBudgeted - amountDistributed. This is just a
-         * helper method to consolidate code.
-         * 
+         * Calculates the balance to be distributed (and it's total) based on totalBudgeted - amountDistributed. This is just a helper method to
+         * consolidate code.
          * @param subcontractorCostShare applicable for 3rd Party Direct cost share, otherwise null
          */
         private void calculateSubcontractorAndBalanceToBeDistributed(KualiInteger[] subcontractorCostShare) {
             // calculate totalBalanceToBeDistributed
             for (int i = 0; i < balanceToBeDistributed.length; i++) {
-                if (subcontractorCostShare != null) {
+                if(subcontractorCostShare != null) {
                     // subcontractorCostShare needs to be added in
                     amountDistributed[i] = amountDistributed[i].add(subcontractorCostShare[i]);
                     totalAmountDistributed = totalAmountDistributed.add(subcontractorCostShare[i]);
                 }
-
+                
                 balanceToBeDistributed[i] = totalBudgeted[i].subtract(amountDistributed[i]);
                 totalBalanceToBeDistributed = totalBalanceToBeDistributed.add(balanceToBeDistributed[i]);
             }
@@ -537,8 +546,7 @@ public class BudgetCostShareFormHelper {
         }
 
         /**
-         * Gets the institutionDirectPersonnel attribute.
-         * 
+         * Gets the institutionDirectPersonnel attribute. 
          * @return Returns the institutionDirectPersonnel.
          */
         public KualiInteger[][] getInstitutionDirectPersonnel() {
@@ -546,8 +554,7 @@ public class BudgetCostShareFormHelper {
         }
 
         /**
-         * Gets the totalInstitutionDirectPersonnel attribute.
-         * 
+         * Gets the totalInstitutionDirectPersonnel attribute. 
          * @return Returns the totalInstitutionDirectPersonnel.
          */
         public KualiInteger[] getTotalInstitutionDirectPersonnel() {
@@ -557,6 +564,8 @@ public class BudgetCostShareFormHelper {
 
     /**
      * Inner helper class that assists in the management of the data for the Subcontractor section.
+     * 
+     * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
      */
     public class Subcontractor {
         private String budgetNonpersonnelDescription;
@@ -576,7 +585,7 @@ public class BudgetCostShareFormHelper {
             budgetNonpersonnelDescription = budgetNonpersonnel.getBudgetNonpersonnelDescription();
 
             periodAmounts = new KualiInteger[periodsSize];
-            Arrays.fill(periodAmounts, KualiInteger.ZERO);
+            Arrays.fill(periodAmounts, new KualiInteger(0));
 
             periodAmounts[periodAmountsIndex] = budgetNonpersonnel.getBudgetThirdPartyCostShareAmount();
             totalPeriodAmount = budgetNonpersonnel.getBudgetThirdPartyCostShareAmount();

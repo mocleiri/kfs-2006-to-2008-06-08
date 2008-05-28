@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import org.kuali.core.web.ui.KeyLabelPair;
 
 /**
  * This class returns list of payment method key value pairs.
+ * 
+ * 
  */
 public class PaymentMethodValuesFinder extends KeyValuesBase {
 
@@ -31,7 +33,6 @@ public class PaymentMethodValuesFinder extends KeyValuesBase {
      */
     public List getKeyValues() {
         List activeLabels = new ArrayList();
-        activeLabels.add(new KeyLabelPair("", ""));
         activeLabels.add(new KeyLabelPair("P", "P - Check/ACH"));
         activeLabels.add(new KeyLabelPair("F", "F - Foreign Draft"));
         activeLabels.add(new KeyLabelPair("W", "W - Wire Transfer"));

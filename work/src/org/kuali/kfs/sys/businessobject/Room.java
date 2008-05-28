@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package org.kuali.kfs.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.module.chart.bo.Campus;
 
 /**
  * 
@@ -32,10 +32,8 @@ public class Room extends PersistableBusinessObjectBase {
     private String buildingRoomType;
     private String buildingRoomDepartment;
     private String buildingRoomDescription;
-    private boolean active;
 
     private Campus campus;
-    private Building building;
 
     /**
      * Default constructor.
@@ -48,6 +46,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Gets the campusCode attribute.
      * 
      * @return Returns the campusCode
+     * 
      */
     public String getCampusCode() {
         return campusCode;
@@ -57,6 +56,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Sets the campusCode attribute.
      * 
      * @param campusCode The campusCode to set.
+     * 
      */
     public void setCampusCode(String campusCode) {
         this.campusCode = campusCode;
@@ -67,6 +67,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Gets the buildingCode attribute.
      * 
      * @return Returns the buildingCode
+     * 
      */
     public String getBuildingCode() {
         return buildingCode;
@@ -76,6 +77,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Sets the buildingCode attribute.
      * 
      * @param buildingCode The buildingCode to set.
+     * 
      */
     public void setBuildingCode(String buildingCode) {
         this.buildingCode = buildingCode;
@@ -86,6 +88,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Gets the buildingRoomNumber attribute.
      * 
      * @return Returns the buildingRoomNumber
+     * 
      */
     public String getBuildingRoomNumber() {
         return buildingRoomNumber;
@@ -95,6 +98,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Sets the buildingRoomNumber attribute.
      * 
      * @param buildingRoomNumber The buildingRoomNumber to set.
+     * 
      */
     public void setBuildingRoomNumber(String buildingRoomNumber) {
         this.buildingRoomNumber = buildingRoomNumber;
@@ -105,6 +109,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Gets the buildingRoomType attribute.
      * 
      * @return Returns the buildingRoomType
+     * 
      */
     public String getBuildingRoomType() {
         return buildingRoomType;
@@ -114,6 +119,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Sets the buildingRoomType attribute.
      * 
      * @param buildingRoomType The buildingRoomType to set.
+     * 
      */
     public void setBuildingRoomType(String buildingRoomType) {
         this.buildingRoomType = buildingRoomType;
@@ -124,6 +130,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Gets the buildingRoomDepartment attribute.
      * 
      * @return Returns the buildingRoomDepartment
+     * 
      */
     public String getBuildingRoomDepartment() {
         return buildingRoomDepartment;
@@ -133,6 +140,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Sets the buildingRoomDepartment attribute.
      * 
      * @param buildingRoomDepartment The buildingRoomDepartment to set.
+     * 
      */
     public void setBuildingRoomDepartment(String buildingRoomDepartment) {
         this.buildingRoomDepartment = buildingRoomDepartment;
@@ -143,6 +151,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Gets the buildingRoomDescription attribute.
      * 
      * @return Returns the buildingRoomDescription
+     * 
      */
     public String getBuildingRoomDescription() {
         return buildingRoomDescription;
@@ -152,6 +161,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Sets the buildingRoomDescription attribute.
      * 
      * @param buildingRoomDescription The buildingRoomDescription to set.
+     * 
      */
     public void setBuildingRoomDescription(String buildingRoomDescription) {
         this.buildingRoomDescription = buildingRoomDescription;
@@ -162,6 +172,7 @@ public class Room extends PersistableBusinessObjectBase {
      * Gets the campus attribute.
      * 
      * @return Returns the campus
+     * 
      */
     public Campus getCampus() {
         return campus;
@@ -186,44 +197,5 @@ public class Room extends PersistableBusinessObjectBase {
         m.put("buildingCode", this.buildingCode);
         m.put("buildingRoomNumber", this.buildingRoomNumber);
         return m;
-    }
-
-    /**
-     * Gets the building attribute.
-     * 
-     * @return Returns the building
-     */
-    public Building getBuilding() {
-        return building;
-    }
-
-    /**
-     * Sets the building attribute.
-     * 
-     * @param building The building to set.
-     * @deprecated
-     */
-    public void setBuilding(Building building) {
-        this.building = building;
-    }
-
-    /**
-     * Gets the active attribute.
-     * 
-     * @return Returns the active
-     * 
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute.
-     * 
-     * @param active The active to set.
-     * 
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

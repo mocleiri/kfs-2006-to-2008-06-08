@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Gets the postalZipCode attribute.
      * 
      * @return Returns the postalZipCode
+     * 
      */
     public String getPostalZipCode() {
         return postalZipCode;
@@ -52,6 +53,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Sets the postalZipCode attribute.
      * 
      * @param postalZipCode The postalZipCode to set.
+     * 
      */
     public void setPostalZipCode(String postalZipCode) {
         this.postalZipCode = postalZipCode;
@@ -61,6 +63,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Gets the postalStateCode attribute.
      * 
      * @return Returns the postalStateCode
+     * 
      */
     public String getPostalStateCode() {
         return postalStateCode;
@@ -70,6 +73,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Sets the postalStateCode attribute.
      * 
      * @param postalStateCode The postalStateCode to set.
+     * 
      */
     public void setPostalStateCode(String postalStateCode) {
         this.postalStateCode = postalStateCode;
@@ -79,6 +83,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Gets the postalCityName attribute.
      * 
      * @return Returns the postalCityName
+     * 
      */
     public String getPostalCityName() {
         return postalCityName;
@@ -88,6 +93,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Sets the postalCityName attribute.
      * 
      * @param postalCityName The postalCityName to set.
+     * 
      */
     public void setPostalCityName(String postalCityName) {
         this.postalCityName = postalCityName;
@@ -97,6 +103,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Gets the buildingCode attribute.
      * 
      * @return Returns the buildingCode
+     * 
      */
     public String getBuildingCode() {
         return buildingCode;
@@ -106,6 +113,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Sets the buildingCode attribute.
      * 
      * @param buildingCode The buildingCode to set.
+     * 
      */
     public void setBuildingCode(String buildingCode) {
         this.buildingCode = buildingCode;
@@ -115,6 +123,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Gets the buildingRoomNumber attribute.
      * 
      * @return Returns the buildingRoomNumber
+     * 
      */
     public String getBuildingRoomNumber() {
         return buildingRoomNumber;
@@ -124,6 +133,7 @@ public class PostalZipCode extends PersistableBusinessObjectBase {
      * Sets the buildingRoomNumber attribute.
      * 
      * @param buildingRoomNumber The buildingRoomNumber to set.
+     * 
      */
     public void setBuildingRoomNumber(String buildingRoomNumber) {
         this.buildingRoomNumber = buildingRoomNumber;

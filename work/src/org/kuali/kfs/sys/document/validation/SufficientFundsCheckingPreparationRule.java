@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package org.kuali.kfs.rule;
 
 /**
  * Defines a rule which gets invoked to determine if there are sufficient funds for an account
+ * 
+ * 
  */
 public interface SufficientFundsCheckingPreparationRule extends AccountingLineRule {
     /**

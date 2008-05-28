@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.xml;
 
@@ -27,23 +34,20 @@ import java.util.Locale;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.kra.KraConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
 import org.kuali.module.kra.budget.bo.Budget;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetModular;
 import org.kuali.module.kra.budget.bo.BudgetModularPeriod;
 import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
-import org.kuali.module.kra.budget.bo.BudgetPeriodInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetPeriodThirdPartyCostShare;
+import org.kuali.module.kra.budget.bo.BudgetPeriodUniversityCostShare;
 import org.kuali.module.kra.budget.bo.BudgetTask;
 import org.kuali.module.kra.budget.bo.BudgetTaskPeriodIndirectCost;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
+import org.kuali.module.kra.budget.bo.BudgetUniversityCostShare;
 import org.kuali.module.kra.budget.document.BudgetDocument;
-import org.kuali.module.kra.budget.service.BudgetIndirectCostService;
-import org.kuali.module.kra.budget.service.BudgetModularService;
-import org.kuali.module.kra.budget.service.BudgetNonpersonnelService;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetIndirectCostFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelFormHelper;
@@ -54,15 +58,12 @@ import org.w3c.dom.Element;
 
 /**
  * This class creates an XML representation of a Budget's data.
+ * 
+ * @author KRA (era_team@indiana.edu)
  */
 public class BudgetXml {
 
-    // The following field is hard coded as checks in nih-2590, nih-398, nih-modular, and NSFSummaryProposalBudget. Hence if
-    // this field name is changed, the XLTs have to be updated. This also prevents us from using the more elegant:
-    // SpringContext.getBean(KualiConfigurationService.class).getParameterValue(ParameterConstants.RESEARCH_ADMINISTRATION_DOCUMENT.class,
-    // KraConstants.TO_BE_NAMED_LABEL)
-    private static final String TO_BE_NAMED = "To Be Named";
-
+    private static String TO_BE_NAMED;
     private static final String OUTPUT_PERCENT_SYMBOL = "%";
 
     /**
@@ -70,20 +71,21 @@ public class BudgetXml {
      * 
      * @param budgetDoc data representation of a budget
      * @param xmlDoc target xml representation for the budget. This field will be side effected.
-     * @param imagesUrl location of the images the stylesheets use
      * @param param a parameter that is to be added to the XML as PARAMETER1. Useful for custom functions of a style sheet.
      * @throws Exception
      */
-    public static void makeXml(BudgetDocument budgetDoc, Document xmlDoc, String imagesUrl, String param) throws Exception {
+    public static void makeXml(BudgetDocument budgetDoc, Document xmlDoc, String baseUrl, String param) throws Exception {
         Budget budget = budgetDoc.getBudget();
+
+        TO_BE_NAMED = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "toBeNamedLabel");
 
         // Initialize data needed. This is data true for the budget as global. There is some data in createTaskPeriodsElement
         // that is only true for a certain task / period.
-        List nonpersonnelCategories = SpringContext.getBean(BudgetNonpersonnelService.class).getAllNonpersonnelCategories();
+        List nonpersonnelCategories = SpringServiceLocator.getBudgetNonpersonnelService().getAllNonpersonnelCategories();
         if (budget.isAgencyModularIndicator()) {
-            SpringContext.getBean(BudgetModularService.class).generateModularBudget(budget, nonpersonnelCategories);
+            SpringServiceLocator.getBudgetModularService().generateModularBudget(budget, nonpersonnelCategories);
         }
-        SpringContext.getBean(BudgetIndirectCostService.class).refreshIndirectCost(budgetDoc);
+        SpringServiceLocator.getBudgetIndirectCostService().refreshIndirectCost(budgetDoc);
         BudgetIndirectCostFormHelper budgetIndirectCostFormHelper = new BudgetIndirectCostFormHelper(budget.getTasks(), budget.getPeriods(), budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems());
 
         // Start of XML elements
@@ -93,9 +95,9 @@ public class BudgetXml {
         Element budgetElement = xmlDoc.createElement("BUDGET");
         proposalElement.appendChild(budgetElement);
 
-        budgetElement.setAttribute("BUDGET_NUMBER", budget.getDocumentNumber());
+        budgetElement.setAttribute("BUDGET_NUMBER", budget.getDocumentHeaderId());
         budgetElement.setAttribute("CURRENT_BASE", budget.getIndirectCost().getBudgetBaseCode());
-        budgetElement.setAttribute("PURPOSE", budget.getIndirectCost().getPurpose() == null ? "" : budget.getIndirectCost().getPurpose().getPurposeDescription());
+        budgetElement.setAttribute("PURPOSE", budget.getIndirectCost().getBudgetPurposeCode());
         budgetElement.setAttribute("GRANT_NUMBER", budget.getElectronicResearchAdministrationGrantNumber());
 
         // Code to get the current date/time
@@ -104,7 +106,7 @@ public class BudgetXml {
         DateFormat localFormat = DateFormat.getDateTimeInstance();
 
         budgetElement.setAttribute("XML_CREATE_DATE_TIME", localFormat.format(date));
-        budgetElement.setAttribute("IMAGES_URL", imagesUrl);
+        budgetElement.setAttribute("BASE_URL", baseUrl);
         budgetElement.setAttribute("PARAMETER1", param);
 
         budgetElement.appendChild(createProjectDirectorElement(budget, xmlDoc));
@@ -262,7 +264,10 @@ public class BudgetXml {
         costShareElement.setAttribute("INSTITUTION_COST_SHARE_INDICATOR", "YES");
         costShareElement.setAttribute("THIRD_PARTY_COST_SHARE_INDICATOR", "NO");
 
-        BudgetCostShareFormHelper budgetCostShareFormHelper = new BudgetCostShareFormHelper(budget.getPeriods(), budget.getPersonnel(), budget.getNonpersonnelItems(), budget.getInstitutionCostSharePersonnelItems(), budget.getInstitutionCostShareItems(), budget.getThirdPartyCostShareItems(), budgetIndirectCostFormHelper);
+        BudgetCostShareFormHelper budgetCostShareFormHelper =
+            new BudgetCostShareFormHelper(budget.getPeriods(), budget.getPersonnel(), budget.getNonpersonnelItems(),
+                    budget.getUniversityCostSharePersonnelItems(), budget.getUniversityCostShareItems(), budget.getThirdPartyCostShareItems(),
+                    budgetIndirectCostFormHelper);
 
         costShareElement.appendChild(createInstitutionCostShareElement(budgetCostShareFormHelper, budget, xmlDoc));
         costShareElement.appendChild(createInstitutionIndirectCostShareElement(budgetIndirectCostFormHelper, budget, xmlDoc));
@@ -309,17 +314,17 @@ public class BudgetXml {
         institutionCostShareElement.appendChild(institutionCostSharePeriodsElement);
 
         Element institutionCostShareChartOrgsElement = xmlDoc.createElement("INSTITUTION_COST_SHARE_CHART_ORGS");
-        for (int i = 0; i < budget.getInstitutionCostShareItems().size(); i++) {
-            BudgetInstitutionCostShare budgetInstitutionCostShare = budget.getInstitutionCostShareItem(i);
+        for (int i = 0; i < budget.getUniversityCostShareItems().size(); i++) {
+            BudgetUniversityCostShare budgetUniversityCostShare = budget.getUniversityCostShareItem(i);
 
             Element institutionCostShareChartOrgElement = xmlDoc.createElement("INSTITUTION_COST_SHARE_CHART_ORG");
-            institutionCostShareChartOrgElement.setAttribute("CHART", budgetInstitutionCostShare.getChartOfAccountsCode());
-            institutionCostShareChartOrgElement.setAttribute("ORG", budgetInstitutionCostShare.getOrganizationCode());
+            institutionCostShareChartOrgElement.setAttribute("CHART", budgetUniversityCostShare.getChartOfAccountsCode());
+            institutionCostShareChartOrgElement.setAttribute("ORG", budgetUniversityCostShare.getOrganizationCode());
             institutionCostShareChartOrgElement.setAttribute("TOTAL", budgetCostShareFormHelper.getInstitutionDirect().getTotalSource()[i].toString());
 
-            Iterator innerIter = budgetInstitutionCostShare.getBudgetPeriodCostShare().iterator();
+            Iterator innerIter = budgetUniversityCostShare.getBudgetPeriodCostShare().iterator();
             for (int j = 0; innerIter.hasNext(); j++) {
-                BudgetPeriodInstitutionCostShare periodInstitutionCostShare = (BudgetPeriodInstitutionCostShare) innerIter.next();
+                BudgetPeriodUniversityCostShare periodInstitutionCostShare = (BudgetPeriodUniversityCostShare) innerIter.next();
 
                 Element institutionCostShareChartOrgPeriodElement = xmlDoc.createElement("INSTITUTION_COST_SHARE_CHART_ORG_PERIOD");
                 institutionCostShareChartOrgPeriodElement.setAttribute("PERIOD_NUMBER", Integer.toString(j + 1));
@@ -347,13 +352,13 @@ public class BudgetXml {
      */
     private static Element createInstitutionIndirectCostShareElement(BudgetIndirectCostFormHelper budgetIndirectCostFormHelper, Budget budget, Document xmlDoc) {
         Element institutionIndirectCostShareElement = xmlDoc.createElement("INSTITUTION_INDIRECT_COST_SHARE");
-
+        
         institutionIndirectCostShareElement.setAttribute("TOTAL_INDIRECT_COST_SHARE", budgetIndirectCostFormHelper.getPeriodSubTotal().getCostShareCalculatedIndirectCost().toString());
         institutionIndirectCostShareElement.setAttribute("TOTAL_UNRECOVERED_INDIRECT_COST", budgetIndirectCostFormHelper.getPeriodSubTotal().getCostShareUnrecoveredIndirectCost().toString());
 
         for (int i = 0; i < budget.getPeriods().size(); i++) {
             BudgetTaskPeriodIndirectCost periodTotal = budgetIndirectCostFormHelper.getPeriodTotal(i);
-
+            
             Element institutionIndirectCostSharePeriodElement = xmlDoc.createElement("INSTITUTION_INDIRECT_COST_SHARE_PERIOD");
             institutionIndirectCostSharePeriodElement.setAttribute("PERIOD_NUMBER", Integer.toString(i + 1));
 
@@ -386,7 +391,7 @@ public class BudgetXml {
         thirdPartyCostSharePeriodsElement.setAttribute("THIRD_PARTY_TOTAL_BUDGETED", budgetCostShareFormHelper.getThirdPartyDirect().getTotalTotalBudgeted().toString());
         thirdPartyCostSharePeriodsElement.setAttribute("THIRD_PARTY_AMOUNT_DISTRIBUTED", budgetCostShareFormHelper.getThirdPartyDirect().getTotalAmountDistributed().toString());
         thirdPartyCostSharePeriodsElement.setAttribute("THIRD_PARTY_BALANCE", budgetCostShareFormHelper.getThirdPartyDirect().getTotalBalanceToBeDistributed().toString());
-
+        
         for (int i = 0; i < budget.getPeriods().size(); i++) {
             Element thirdPartyCostSharePeriodElement = xmlDoc.createElement("THIRD_PARTY_COST_SHARE_PERIOD");
             thirdPartyCostSharePeriodElement.setAttribute("PERIOD_NUMBER", Integer.toString(i + 1));
@@ -421,7 +426,7 @@ public class BudgetXml {
 
                 Element thirdPartyCostSharePeriodAmount = xmlDoc.createElement("THIRD_PARTY_COST_SHARE_PERIOD_AMOUNT");
                 thirdPartyCostSharePeriodAmount.setAttribute("PERIOD_NUMBER", Integer.toString(j + 1));
-                thirdPartyCostSharePeriodAmount.appendChild(xmlDoc.createTextNode(periodThirdPartyCostShare.getBudgetCostShareAmount() != null ? periodThirdPartyCostShare.getBudgetCostShareAmount().toString() : "0"));
+                thirdPartyCostSharePeriodAmount.appendChild(xmlDoc.createTextNode(periodThirdPartyCostShare.getBudgetCostShareAmount().toString()));
 
                 thirdPartyCostShareSourcesElement.appendChild(thirdPartyCostSharePeriodAmount);
             }
@@ -519,7 +524,7 @@ public class BudgetXml {
                 taskPeriodElement.setAttribute("TOTAL_AGENCY_REQUEST_INDIRECT_COST", budgetOverviewFormHelper.getTotalIndirectCostsAgencyRequest().toString());
                 taskPeriodElement.setAttribute("TOTAL_INSTITUTION_INDIRECT_COST", budgetOverviewFormHelper.getTotalIndirectCostsInstitutionCostShare().toString());
                 taskPeriodElement.setAttribute("TOTAL_INSTITUTION_UNRECOVERED_INDIRECT_COST", budgetOverviewFormHelper.getTotalIndirectCostsInstitutionCostShareUnrecovered().toString());
-
+                
                 // Not so sure why this exists as there doesn't appear to be a third party Indirect Cost. Maybe legacy XSLT support?
                 taskPeriodElement.setAttribute("TOTAL_THIRD_PARTY_INDIRECT_COST", "0");
 
@@ -561,11 +566,11 @@ public class BudgetXml {
 
             Element appointmentElement = xmlDoc.createElement("APPOINTMENT");
             appointmentElement.setAttribute("APPOINTMENT_TYPE", budgetOverviewPersonnelHelper.getAppointmentTypeDescription());
-            appointmentElement.setAttribute("APPOINTMENT_CODE", budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode());
+            appointmentElement.setAttribute("APPOINTMENT_CODE", budgetOverviewPersonnelHelper.getUniversityAppointmentTypeCode());
             personElement.appendChild(appointmentElement);
 
             personElement.setAttribute("PROJECT_DIRECTOR", ObjectUtils.toString(budgetOverviewPersonnelHelper.isPersonProjectDirectorIndicator()).toUpperCase());
-
+            
             // CREATE_TIMESTAMP was dropped in KRA, it is replaced with this field
             personElement.setAttribute("SEQUENCE_NUMBER", ObjectUtils.toString(budgetOverviewPersonnelHelper.getBudgetUserSequenceNumber()));
 
@@ -575,41 +580,40 @@ public class BudgetXml {
             personElement.setAttribute("AGENCY_PERCENT_SALARY", ObjectUtils.toString(budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount()) + OUTPUT_PERCENT_SYMBOL);
             personElement.setAttribute("AGENCY_HOURS", ObjectUtils.toString(budgetOverviewPersonnelHelper.getUserAgencyHours()));
             personElement.setAttribute("AGENCY_AMOUNT_SALARY", ObjectUtils.toString(budgetOverviewPersonnelHelper.getAgencyRequestTotalAmount()));
-            personElement.setAttribute("INSTITUTION_PERCENT_SALARY", ObjectUtils.toString(budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount()) + OUTPUT_PERCENT_SYMBOL);
-            personElement.setAttribute("INSTITUTION_HOURS", ObjectUtils.toString(budgetOverviewPersonnelHelper.getUserInstitutionHours()));
-            personElement.setAttribute("INSTITUTION_AMOUNT_SALARY", ObjectUtils.toString(budgetOverviewPersonnelHelper.getInstitutionCostShareRequestTotalAmount()));
+            personElement.setAttribute("INSTITUTION_PERCENT_SALARY", ObjectUtils.toString(budgetOverviewPersonnelHelper.getUniversityCostSharePercentEffortAmount()) + OUTPUT_PERCENT_SYMBOL);
+            personElement.setAttribute("INSTITUTION_HOURS", ObjectUtils.toString(budgetOverviewPersonnelHelper.getUserUniversityHours()));
+            personElement.setAttribute("INSTITUTION_AMOUNT_SALARY", ObjectUtils.toString(budgetOverviewPersonnelHelper.getUniversityCostShareRequestTotalAmount()));
             personElement.setAttribute("AGENCY_FRINGE_BENEFIT_RATE", ObjectUtils.toString(budgetOverviewPersonnelHelper.getContractsAndGrantsFringeRateAmount()) + OUTPUT_PERCENT_SYMBOL);
             personElement.setAttribute("AGENCY_FRINGE_BENEFIT_AMOUNT", ObjectUtils.toString(budgetOverviewPersonnelHelper.getAgencyFringeBenefitTotalAmount()));
-            personElement.setAttribute("INSTITUTION_FRINGE_BENEFIT_RATE", ObjectUtils.toString(budgetOverviewPersonnelHelper.getInstitutionCostShareFringeRateAmount()) + OUTPUT_PERCENT_SYMBOL);
-            personElement.setAttribute("INSTITUTION_FRINGE_BENEFIT_AMOUNT", ObjectUtils.toString(budgetOverviewPersonnelHelper.getInstitutionCostShareFringeBenefitTotalAmount()));
+            personElement.setAttribute("INSTITUTION_FRINGE_BENEFIT_RATE", ObjectUtils.toString(budgetOverviewPersonnelHelper.getUniversityCostShareFringeRateAmount()) + OUTPUT_PERCENT_SYMBOL);
+            personElement.setAttribute("INSTITUTION_FRINGE_BENEFIT_AMOUNT", ObjectUtils.toString(budgetOverviewPersonnelHelper.getUniversityCostShareFringeBenefitTotalAmount()));
 
             // Following calculation should probably be somewhere else.
-            /** TODO Create App KFSConstants for the below or move into Personnel? Does it already exist there? */
-            KualiInteger agencyPercentEffortAmount = budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount() == null ? KualiInteger.ZERO : budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount();
-            KualiInteger institutionCostSharePercentEffortAmount = budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount() == null ? KualiInteger.ZERO : budgetOverviewPersonnelHelper.getInstitutionCostSharePercentEffortAmount();
-            BigDecimal combinedPercentEffort = agencyPercentEffortAmount.add(institutionCostSharePercentEffortAmount).divide(new KualiInteger(100));
+            /** TODO Create App Constants for the below or move into Personnel? Does it already exist there? */
+            KualiInteger agencyPercentEffortAmount = budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getAgencyPercentEffortAmount();
+            KualiInteger universityCostSharePercentEffortAmount = budgetOverviewPersonnelHelper.getUniversityCostSharePercentEffortAmount() == null ? new KualiInteger(0) : budgetOverviewPersonnelHelper.getUniversityCostSharePercentEffortAmount();
+            BigDecimal combinedPercentEffort = agencyPercentEffortAmount.add(universityCostSharePercentEffortAmount).divide(new KualiInteger(100));
             String calendarMonths = "";
             String academicMonths = "";
             String summerMonths = "";
-            if (budgetOverviewFormHelper.FULL_YEAR_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode()) || budgetOverviewFormHelper.GRADUATE_RA_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode())) {
+            if (budgetOverviewFormHelper.FULL_YEAR_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getUniversityAppointmentTypeCode()) || budgetOverviewFormHelper.GRADUATE_RA_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getUniversityAppointmentTypeCode())) {
                 BigDecimal personMonths = new BigDecimal(12 * combinedPercentEffort.doubleValue()).setScale(1, BigDecimal.ROUND_HALF_DOWN);
                 calendarMonths = personMonths.toString();
             }
-            else if (budgetOverviewFormHelper.SUMMER_GRID_APPOINTMENT.contains(budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode())) {
+            else if (budgetOverviewFormHelper.SUMMER_GRID_APPOINTMENT.contains(budgetOverviewPersonnelHelper.getUniversityAppointmentTypeCode())) {
                 // AS
                 BigDecimal personMonths = new BigDecimal(3 * combinedPercentEffort.doubleValue()).setScale(1, BigDecimal.ROUND_HALF_DOWN);
                 summerMonths = personMonths.toString();
             }
-            else if (budgetOverviewFormHelper.SUMMER_GRID_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode())) {
-                // A2 & AS, note that AS got caught above though and it should. Just trying to avoid creating another application
-                // constant
+            else if (budgetOverviewFormHelper.SUMMER_GRID_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getUniversityAppointmentTypeCode())) {
+                // A2 & AS, note that AS got caught above though and it should. Just trying to avoid creating another application constant
                 // as personnel already uses this one.
                 BigDecimal personMonths = new BigDecimal(9 * combinedPercentEffort.doubleValue()).setScale(1, BigDecimal.ROUND_HALF_DOWN);
                 academicMonths = personMonths.toString();
             }
-            else if (budgetOverviewFormHelper.HOURLY_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getInstitutionAppointmentTypeCode())) {
-                KualiInteger totalsHours = budgetOverviewPersonnelHelper.getUserAgencyHours().add(budgetOverviewPersonnelHelper.getUserInstitutionHours());
-
+            else if (budgetOverviewFormHelper.HOURLY_APPOINTMENTS.contains(budgetOverviewPersonnelHelper.getUniversityAppointmentTypeCode())) {
+                KualiInteger totalsHours = budgetOverviewPersonnelHelper.getUserAgencyHours().add(budgetOverviewPersonnelHelper.getUserUniversityHours());
+                
                 // 173.33 = 2080 hours per year / 12 months
                 calendarMonths = "" + totalsHours.divide(new BigDecimal(173.33)).setScale(1, BigDecimal.ROUND_HALF_DOWN);
             }
@@ -669,7 +673,7 @@ public class BudgetXml {
                 nonpersonnelItemElement.appendChild(agencyRequestAmountElement);
 
                 Element institutionCostShareAmountElement = xmlDoc.createElement("INSTITUTION_COST_SHARE_AMOUNT");
-                institutionCostShareAmountElement.appendChild(xmlDoc.createTextNode(currentItem.getBudgetInstitutionCostShareAmount().toString()));
+                institutionCostShareAmountElement.appendChild(xmlDoc.createTextNode(currentItem.getBudgetUniversityCostShareAmount().toString()));
                 nonpersonnelItemElement.appendChild(institutionCostShareAmountElement);
 
                 Element thirdPartyCostShareAmountElement = xmlDoc.createElement("THIRD_PARTY_COST_SHARE_AMOUNT");
@@ -713,7 +717,8 @@ public class BudgetXml {
                 for (Iterator indirectCostItemsIter = budget.getIndirectCost().getBudgetTaskPeriodIndirectCostItems().iterator(); indirectCostItemsIter.hasNext();) {
                     indirectCostItem = (BudgetTaskPeriodIndirectCost) indirectCostItemsIter.next();
 
-                    if (indirectCostItem.getBudgetTaskSequenceNumber().equals(budget.getTask(i).getBudgetTaskSequenceNumber()) && indirectCostItem.getBudgetPeriodSequenceNumber().equals(budget.getPeriod(j).getBudgetPeriodSequenceNumber())) {
+                    if (indirectCostItem.getBudgetTaskSequenceNumber().equals(budget.getTask(i).getBudgetTaskSequenceNumber())
+                            && indirectCostItem.getBudgetPeriodSequenceNumber().equals(budget.getPeriod(j).getBudgetPeriodSequenceNumber())) {
                         break;
                     }
                 }

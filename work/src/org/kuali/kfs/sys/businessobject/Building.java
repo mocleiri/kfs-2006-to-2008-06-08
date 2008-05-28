@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package org.kuali.kfs.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.module.chart.bo.Campus;
 
 /**
  * 
@@ -34,12 +34,11 @@ public class Building extends PersistableBusinessObjectBase {
     private String buildingAddressStateCode;
     private String buildingAddressZipCode;
     private String alternateBuildingCode;
-    private boolean active;
     
     private Campus campus;
     private State buildingAddressState;
     private PostalZipCode buildingAddressZip;
-
+    
     /**
      * Default constructor.
      */
@@ -51,6 +50,7 @@ public class Building extends PersistableBusinessObjectBase {
      * Gets the campusCode attribute.
      * 
      * @return Returns the campusCode
+     * 
      */
     public String getCampusCode() {
         return campusCode;
@@ -60,6 +60,7 @@ public class Building extends PersistableBusinessObjectBase {
      * Sets the campusCode attribute.
      * 
      * @param campusCode The campusCode to set.
+     * 
      */
     public void setCampusCode(String campusCode) {
         this.campusCode = campusCode;
@@ -70,6 +71,7 @@ public class Building extends PersistableBusinessObjectBase {
      * Gets the buildingCode attribute.
      * 
      * @return Returns the buildingCode
+     * 
      */
     public String getBuildingCode() {
         return buildingCode;
@@ -79,6 +81,7 @@ public class Building extends PersistableBusinessObjectBase {
      * Sets the buildingCode attribute.
      * 
      * @param buildingCode The buildingCode to set.
+     * 
      */
     public void setBuildingCode(String buildingCode) {
         this.buildingCode = buildingCode;
@@ -89,6 +92,7 @@ public class Building extends PersistableBusinessObjectBase {
      * Gets the buildingName attribute.
      * 
      * @return Returns the buildingName
+     * 
      */
     public String getBuildingName() {
         return buildingName;
@@ -98,6 +102,7 @@ public class Building extends PersistableBusinessObjectBase {
      * Sets the buildingName attribute.
      * 
      * @param buildingName The buildingName to set.
+     * 
      */
     public void setBuildingName(String buildingName) {
         this.buildingName = buildingName;
@@ -122,8 +127,7 @@ public class Building extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the alternateBuildingCode attribute.
-     * 
+     * Gets the alternateBuildingCode attribute. 
      * @return Returns the alternateBuildingCode.
      */
     public String getAlternateBuildingCode() {
@@ -132,7 +136,6 @@ public class Building extends PersistableBusinessObjectBase {
 
     /**
      * Sets the alternateBuildingCode attribute value.
-     * 
      * @param alternateBuildingCode The alternateBuildingCode to set.
      */
     public void setAlternateBuildingCode(String alternateBuildingCode) {
@@ -140,8 +143,7 @@ public class Building extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the buildingAddressCityName attribute.
-     * 
+     * Gets the buildingAddressCityName attribute. 
      * @return Returns the buildingAddressCityName.
      */
     public String getBuildingAddressCityName() {
@@ -150,7 +152,6 @@ public class Building extends PersistableBusinessObjectBase {
 
     /**
      * Sets the buildingAddressCityName attribute value.
-     * 
      * @param buildingAddressCityName The buildingAddressCityName to set.
      */
     public void setBuildingAddressCityName(String buildingAddressCityName) {
@@ -158,8 +159,7 @@ public class Building extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the buildingAddressStateCode attribute.
-     * 
+     * Gets the buildingAddressStateCode attribute. 
      * @return Returns the buildingAddressStateCode.
      */
     public String getBuildingAddressStateCode() {
@@ -168,7 +168,6 @@ public class Building extends PersistableBusinessObjectBase {
 
     /**
      * Sets the buildingAddressStateCode attribute value.
-     * 
      * @param buildingAddressStateCode The buildingAddressStateCode to set.
      */
     public void setBuildingAddressStateCode(String buildingAddressStateCode) {
@@ -176,8 +175,7 @@ public class Building extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the buildingAddressZipCode attribute.
-     * 
+     * Gets the buildingAddressZipCode attribute. 
      * @return Returns the buildingAddressZipCode.
      */
     public String getBuildingAddressZipCode() {
@@ -186,7 +184,6 @@ public class Building extends PersistableBusinessObjectBase {
 
     /**
      * Sets the buildingAddressZipCode attribute value.
-     * 
      * @param buildingAddressZipCode The buildingAddressZipCode to set.
      */
     public void setBuildingAddressZipCode(String buildingAddressZipCode) {
@@ -194,8 +191,7 @@ public class Building extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the buildingStreetAddress attribute.
-     * 
+     * Gets the buildingStreetAddress attribute. 
      * @return Returns the buildingStreetAddress.
      */
     public String getBuildingStreetAddress() {
@@ -204,7 +200,6 @@ public class Building extends PersistableBusinessObjectBase {
 
     /**
      * Sets the buildingStreetAddress attribute value.
-     * 
      * @param buildingStreetAddress The buildingStreetAddress to set.
      */
     public void setBuildingStreetAddress(String buildingStreetAddress) {
@@ -212,24 +207,7 @@ public class Building extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the active attribute. 
-     * @return Returns the active.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * @param active The active to set.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * Gets the buildingAddressState attribute.
-     * 
+     * Gets the buildingAddressState attribute. 
      * @return Returns the buildingAddressState.
      */
     public State getBuildingAddressState() {
@@ -238,7 +216,6 @@ public class Building extends PersistableBusinessObjectBase {
 
     /**
      * Sets the buildingAddressState attribute value.
-     * 
      * @param buildingAddressState The buildingAddressState to set.
      * @deprecated
      */
@@ -247,8 +224,7 @@ public class Building extends PersistableBusinessObjectBase {
     }
 
     /**
-     * Gets the buildingAddressZip attribute.
-     * 
+     * Gets the buildingAddressZip attribute. 
      * @return Returns the buildingAddressZip.
      */
     public PostalZipCode getBuildingAddressZip() {
@@ -257,7 +233,6 @@ public class Building extends PersistableBusinessObjectBase {
 
     /**
      * Sets the buildingAddressZip attribute value.
-     * 
      * @param buildingAddressZip The buildingAddressZip to set.
      * @deprecated
      */
@@ -274,6 +249,6 @@ public class Building extends PersistableBusinessObjectBase {
         m.put("buildingCode", this.buildingCode);
         return m;
     }
-
-
+    
+    
 }

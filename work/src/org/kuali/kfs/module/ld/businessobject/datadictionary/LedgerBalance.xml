@@ -1,561 +1,530 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.labor.bo.LedgerBalance">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="LedgerBalance" parent="LedgerBalance-parentBean" />
+        <inquiry>
+            <title>Ledger Balance Inquiry</title>
 
-  <bean id="LedgerBalance-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.labor.bo.LedgerBalance" />
-    <property name="inquiryDefinition" >
-      <ref bean="LedgerBalance-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="LedgerBalance-lookupDefinition" />
-    </property>
-    <property name="attributes" >
-      <list>
-        <ref bean="LedgerBalance-laborObject.financialObjectFringeOrSalaryCode" />
-        <ref bean="LedgerBalance-emplid" />
-        <ref bean="LedgerBalance-ledgerPerson.personUniversalIdentifier" />
-        <ref bean="LedgerBalance-ledgerPerson.personUserIdentifier" />
-        <ref bean="LedgerBalance-ledgerPerson.personName" />
-        <ref bean="LedgerBalance-positionNumber" />
-        <ref bean="LedgerBalance-universityFiscalYear" />
-        <ref bean="LedgerBalance-subAccountNumber" />
-        <ref bean="LedgerBalance-accountNumber" />
-        <ref bean="LedgerBalance-chartOfAccountsCode" />
-        <ref bean="LedgerBalance-financialBalanceTypeCode" />
-        <ref bean="LedgerBalance-financialObjectCode" />
-        <ref bean="LedgerBalance-financialObjectTypeCode" />
-        <ref bean="LedgerBalance-financialSubObjectCode" />
-        <ref bean="LedgerBalance-accountLineAnnualBalanceAmount" />
-        <ref bean="LedgerBalance-financialBeginningBalanceLineAmount" />
-        <ref bean="LedgerBalance-contractsGrantsBeginningBalanceAmount" />
-        <ref bean="LedgerBalance-month1Amount" />
-        <ref bean="LedgerBalance-month2Amount" />
-        <ref bean="LedgerBalance-month3Amount" />
-        <ref bean="LedgerBalance-month4Amount" />
-        <ref bean="LedgerBalance-month5Amount" />
-        <ref bean="LedgerBalance-month6Amount" />
-        <ref bean="LedgerBalance-month7Amount" />
-        <ref bean="LedgerBalance-month8Amount" />
-        <ref bean="LedgerBalance-month9Amount" />
-        <ref bean="LedgerBalance-month10Amount" />
-        <ref bean="LedgerBalance-month11Amount" />
-        <ref bean="LedgerBalance-month12Amount" />
-        <ref bean="LedgerBalance-month13Amount" />
-        <ref bean="LedgerBalance-transactionDateTimeStamp" />
-        <ref bean="LedgerBalance-versionNumber" />
-        <ref bean="LedgerBalance-dummyBusinessObject.genericAmount" />
-        <ref bean="LedgerBalance-dummyBusinessObject.consolidationOption" />
-        <ref bean="LedgerBalance-dummyBusinessObject.pendingEntryOption" />
-      </list>
-    </property>
-    <property name="relationships" >
-      <list>
-        <bean parent="RelationshipDefinition">
-          <property name="objectAttributeName" value="ledgerPerson" />
-          <property name="primitiveAttributes" >
-            <list>
-              <bean parent="PrimitiveAttributeDefinition"
-                    p:sourceName="ledgerPerson.personUniversalIdentifier"
-                    p:targetName="personUniversalIdentifier" />
-            </list>
-          </property>
-          <property name="supportAttributes" >
-            <list>
-              <bean parent="SupportAttributeDefinition"
-                    p:identifier="true"
-                    p:sourceName="emplid"
-                    p:targetName="personPayrollIdentifier" />
-              <bean parent="SupportAttributeDefinition"
-                    p:identifier="true"
-                    p:sourceName="ledgerPerson.personUserIdentifier"
-                    p:targetName="personUserIdentifier" />
-              <bean parent="SupportAttributeDefinition"
-                    p:sourceName="ledgerPerson.personName"
-                    p:targetName="personName" />
-            </list>
-          </property>
-        </bean>
-        <bean parent="RelationshipDefinition">
-          <property name="objectAttributeName" value="laborObject" />
-          <property name="primitiveAttributes" >
-            <list>
-              <bean parent="PrimitiveAttributeDefinition"
-                    p:sourceName="laborObject.chartOfAccountsCode"
-                    p:targetName="chartOfAccountsCode" />
-            </list>
-          </property>
-          <property name="supportAttributes" >
-            <list>
-              <bean parent="SupportAttributeDefinition"
-                    p:sourceName="laborObject.financialObjectFringeOrSalaryCode"
-                    p:targetName="financialObjectFringeOrSalaryCode" />
-              <bean parent="SupportAttributeDefinition"
-                    p:identifier="true"
-                    p:sourceName="laborObject.financialObjectCode"
-                    p:targetName="financialObjectCode" />
-              <bean parent="SupportAttributeDefinition"
-                    p:sourceName="laborObject.universityFiscalYear"
-                    p:targetName="universityFiscalYear" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="accountLineAnnualBalanceAmount" />
+                <field attributeName="accountNumber" />
+                <field attributeName="beginningBalanceAccountAmount" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="emplid" />
+                <field attributeName="financialBalanceTypeCode" />
+                <field attributeName="financialBeginningBalanceLineAmount" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialObjectTypeCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="month10AccountLineAmount" />
+                <field attributeName="month11AccountLineAmount" />
+                <field attributeName="month12AccountLineAmount" />
+                <field attributeName="month13AccountLineAmount" />
+                <field attributeName="month1AccountLineAmount" />
+                <field attributeName="month2AccountLineAmount" />
+                <field attributeName="month3AccountLineAmount" />
+                <field attributeName="month4AccountLineAmount" />
+                <field attributeName="month5AccountLineAmount" />
+                <field attributeName="month6AccountLineAmount" />
+                <field attributeName="month7AccountLineAmount" />
+                <field attributeName="month8AccountLineAmount" />
+                <field attributeName="month9AccountLineAmount" />
+                <field attributeName="positionNumber" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="transactionDateTimeStamp" />
+                <field attributeName="universityFiscalYear" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Ledger Balance Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.labor.bo.LedgerBalance">Create New</a>]]></menubar>
 
-  <bean id="LedgerBalance-laborObject.financialObjectFringeOrSalaryCode" parent="LedgerBalance-laborObject.financialObjectFringeOrSalaryCode-parentBean" />
+            <instructions>Look up a Ledger Balance</instructions>
 
-  <bean id="LedgerBalance-laborObject.financialObjectFringeOrSalaryCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="laborObject.financialObjectFringeOrSalaryCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Financial Object Fringe Or Salary Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-emplid" parent="LedgerBalance-emplid-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="universityFiscalYear" />
+                    <sortAttribute attributeName="chartOfAccountsCode" />
+                    <sortAttribute attributeName="accountNumber" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="LedgerBalance-emplid-parentBean" abstract="true" parent="UniversalUser-personPayrollIdentifier">
-    <property name="name" value="emplid" />
-  </bean>
-  <bean id="LedgerBalance-ledgerPerson.personUniversalIdentifier" parent="LedgerBalance-ledgerPerson.personUniversalIdentifier-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="accountLineAnnualBalanceAmount" required="false" />
+                <lookupField attributeName="accountNumber" required="false" />
+                <lookupField attributeName="beginningBalanceAccountAmount" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="emplid" required="false" />
+                <lookupField attributeName="financialBalanceTypeCode" required="false" />
+                <lookupField attributeName="financialBeginningBalanceLineAmount" required="false" />
+                <lookupField attributeName="financialObjectCode" required="false" />
+                <lookupField attributeName="financialObjectTypeCode" required="false" />
+                <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="month10AccountLineAmount" required="false" />
+                <lookupField attributeName="month11AccountLineAmount" required="false" />
+                <lookupField attributeName="month12AccountLineAmount" required="false" />
+                <lookupField attributeName="month13AccountLineAmount" required="false" />
+                <lookupField attributeName="month1AccountLineAmount" required="false" />
+                <lookupField attributeName="month2AccountLineAmount" required="false" />
+                <lookupField attributeName="month3AccountLineAmount" required="false" />
+                <lookupField attributeName="month4AccountLineAmount" required="false" />
+                <lookupField attributeName="month5AccountLineAmount" required="false" />
+                <lookupField attributeName="month6AccountLineAmount" required="false" />
+                <lookupField attributeName="month7AccountLineAmount" required="false" />
+                <lookupField attributeName="month8AccountLineAmount" required="false" />
+                <lookupField attributeName="month9AccountLineAmount" required="false" />
+                <lookupField attributeName="positionNumber" required="false" />
+                <lookupField attributeName="subAccountNumber" required="false" />
+                <lookupField attributeName="transactionDateTimeStamp" required="false" />
+                <lookupField attributeName="universityFiscalYear" required="false" />
+            </lookupFields>
 
-  <bean id="LedgerBalance-ledgerPerson.personUniversalIdentifier-parentBean" abstract="true" parent="UniversalUser-personUniversalIdentifier">
-    <property name="name" value="ledgerPerson.personUniversalIdentifier" />
-    <property name="label" value="Employee Univ ID" />
-    <property name="shortLabel" value="EmplUnvId" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-    <property name="displayLabelAttribute" value="ledgerPerson.personUserIdentifier" />
-  </bean>
-  <bean id="LedgerBalance-ledgerPerson.personUserIdentifier" parent="LedgerBalance-ledgerPerson.personUserIdentifier-parentBean" />
+            <resultFields>
+                <field attributeName="accountLineAnnualBalanceAmount" />
+                <field attributeName="accountNumber" />
+                <field attributeName="beginningBalanceAccountAmount" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="emplid" />
+                <field attributeName="financialBalanceTypeCode" />
+                <field attributeName="financialBeginningBalanceLineAmount" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialObjectTypeCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="month10AccountLineAmount" />
+                <field attributeName="month11AccountLineAmount" />
+                <field attributeName="month12AccountLineAmount" />
+                <field attributeName="month13AccountLineAmount" />
+                <field attributeName="month1AccountLineAmount" />
+                <field attributeName="month2AccountLineAmount" />
+                <field attributeName="month3AccountLineAmount" />
+                <field attributeName="month4AccountLineAmount" />
+                <field attributeName="month5AccountLineAmount" />
+                <field attributeName="month6AccountLineAmount" />
+                <field attributeName="month7AccountLineAmount" />
+                <field attributeName="month8AccountLineAmount" />
+                <field attributeName="month9AccountLineAmount" />
+                <field attributeName="positionNumber" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="transactionDateTimeStamp" />
+                <field attributeName="universityFiscalYear" />
+            </resultFields>
+        </lookup>
 
-  <bean id="LedgerBalance-ledgerPerson.personUserIdentifier-parentBean" abstract="true" parent="UniversalUser-personUserIdentifier">
-    <property name="name" value="ledgerPerson.personUserIdentifier" />
-    <property name="label" value="Employee User ID" />
-    <property name="shortLabel" value="UserID" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="KualiUserControlDefinition"
-            p:personNameAttributeName="ledgerPerson.personName"
-            p:universalIdAttributeName="ledgerPerson.personUniversalIdentifier"
-            p:userIdAttributeName="ledgerPerson.personUserIdentifier" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-ledgerPerson.personName" parent="LedgerBalance-ledgerPerson.personName-parentBean" />
+        <attributes>
 
-  <bean id="LedgerBalance-ledgerPerson.personName-parentBean" abstract="true" parent="UniversalUser-personName">
-    <property name="name" value="ledgerPerson.personName" />
-    <property name="label" value="Employee Name" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="LedgerBalance-positionNumber" parent="LedgerBalance-positionNumber-parentBean" />
+            <attribute name="accountLineAnnualBalanceAmount" forceUppercase="true">
+                <label>Account Line Annual Balance Amount</label>
+                <shortLabel>Amount</shortLabel>
 
-  <bean id="LedgerBalance-positionNumber-parentBean" abstract="true" parent="PositionData-positionNumber">
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-universityFiscalYear" parent="LedgerBalance-universityFiscalYear-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="LedgerBalance-universityFiscalYear-parentBean" abstract="true" parent="GenericAttributes-genericFiscalYear">
-    <property name="name" value="universityFiscalYear" />
-    <property name="label" value="Fiscal Year" />
-    <property name="shortLabel" value="Fiscal Year" />
-  </bean>
-  <bean id="LedgerBalance-subAccountNumber" parent="LedgerBalance-subAccountNumber-parentBean" />
+                <control>
+                    <text size="21" />
+                </control>
 
-  <bean id="LedgerBalance-subAccountNumber-parentBean" abstract="true" parent="SubAccount-subAccountNumber">
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-accountNumber" parent="LedgerBalance-accountNumber-parentBean" />
+                <summary>accountLineAnnualBalanceAmount</summary>
+                <description>accountLineAnnualBalanceAmount description...</description>
+			</attribute>
 
-  <bean id="LedgerBalance-accountNumber-parentBean" abstract="true" parent="Account-accountNumber">
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-chartOfAccountsCode" parent="LedgerBalance-chartOfAccountsCode-parentBean" />
+            <attribute name="accountNumber" forceUppercase="true">
+                <label>Account Number</label>
+                <shortLabel>Number</shortLabel>
 
-  <bean id="LedgerBalance-chartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-financialBalanceTypeCode" parent="LedgerBalance-financialBalanceTypeCode-parentBean" />
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="LedgerBalance-financialBalanceTypeCode-parentBean" abstract="true" parent="BalanceTyp-code">
-    <property name="name" value="financialBalanceTypeCode" />
-    <property name="control" >
-      <bean parent="RadioControlDefinition"
-            p:valuesFinderClass="org.kuali.module.labor.web.optionfinder.BalanceTypeCodeOptionFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-financialObjectCode" parent="LedgerBalance-financialObjectCode-parentBean" />
+                <control>
+                    <text size="9" />
+                </control>
 
-  <bean id="LedgerBalance-financialObjectCode-parentBean" abstract="true" parent="ObjectCode-financialObjectCode">
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-financialObjectTypeCode" parent="LedgerBalance-financialObjectTypeCode-parentBean" />
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
+			</attribute>
 
-  <bean id="LedgerBalance-financialObjectTypeCode-parentBean" abstract="true" parent="ObjectType-code">
-    <property name="name" value="financialObjectTypeCode" />
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-financialSubObjectCode" parent="LedgerBalance-financialSubObjectCode-parentBean" />
+            <attribute name="beginningBalanceAccountAmount" forceUppercase="true">
+                <label>Beginning Balance Account Amount</label>
+                <shortLabel>Amount</shortLabel>
 
-  <bean id="LedgerBalance-financialSubObjectCode-parentBean" abstract="true" parent="SubObjCd-financialSubObjectCode">
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-  </bean>
-  <bean id="LedgerBalance-accountLineAnnualBalanceAmount" parent="LedgerBalance-accountLineAnnualBalanceAmount-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="LedgerBalance-accountLineAnnualBalanceAmount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="accountLineAnnualBalanceAmount" />
-    <property name="label" value="Account Line Annual Balance Amount" />
-    <property name="shortLabel" value="Account Line Annual Balance Amount" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-financialBeginningBalanceLineAmount" parent="LedgerBalance-financialBeginningBalanceLineAmount-parentBean" />
+                <control>
+                    <text size="21" />
+                </control>
 
-  <bean id="LedgerBalance-financialBeginningBalanceLineAmount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="financialBeginningBalanceLineAmount" />
-    <property name="label" value="Beginning Balance Line Amount" />
-    <property name="shortLabel" value="Beginning Balance Line Amount" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-contractsGrantsBeginningBalanceAmount" parent="LedgerBalance-contractsGrantsBeginningBalanceAmount-parentBean" />
+                <summary>beginningBalanceAccountAmount</summary>
+                <description>beginningBalanceAccountAmount description...</description>
+			</attribute>
 
-  <bean id="LedgerBalance-contractsGrantsBeginningBalanceAmount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="contractsGrantsBeginningBalanceAmount" />
-    <property name="label" value="Contracts Grants Beginning Balance Amount" />
-    <property name="shortLabel" value="CG Amount" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month1Amount" parent="LedgerBalance-month1Amount-parentBean" />
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="LedgerBalance-month1Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month1Amount" />
-    <property name="label" value="July" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month2Amount" parent="LedgerBalance-month2Amount-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="LedgerBalance-month2Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month2Amount" />
-    <property name="label" value="August" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month3Amount" parent="LedgerBalance-month3Amount-parentBean" />
+                <control>
+                    <text size="4" />
+                </control>
 
-  <bean id="LedgerBalance-month3Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month3Amount" />
-    <property name="label" value="September" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month4Amount" parent="LedgerBalance-month4Amount-parentBean" />
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
 
-  <bean id="LedgerBalance-month4Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month4Amount" />
-    <property name="label" value="October" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month5Amount" parent="LedgerBalance-month5Amount-parentBean" />
+            <attribute name="emplid" forceUppercase="true">
+                <label>Emplid</label>
+                <shortLabel>Emplid</shortLabel>
 
-  <bean id="LedgerBalance-month5Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month5Amount" />
-    <property name="label" value="November" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month6Amount" parent="LedgerBalance-month6Amount-parentBean" />
+                <maxLength>11</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="LedgerBalance-month6Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month6Amount" />
-    <property name="label" value="December" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month7Amount" parent="LedgerBalance-month7Amount-parentBean" />
+                <control>
+                    <text size="13" />
+                </control>
 
-  <bean id="LedgerBalance-month7Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month7Amount" />
-    <property name="label" value="January" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month8Amount" parent="LedgerBalance-month8Amount-parentBean" />
+                <summary>emplid</summary>
+                <description>emplid description...</description>
+			</attribute>
 
-  <bean id="LedgerBalance-month8Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month8Amount" />
-    <property name="label" value="February" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month9Amount" parent="LedgerBalance-month9Amount-parentBean" />
+            <attribute name="financialBalanceTypeCode" forceUppercase="true">
+                <label>Financial Balance Type Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="LedgerBalance-month9Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month9Amount" />
-    <property name="label" value="March" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month10Amount" parent="LedgerBalance-month10Amount-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="LedgerBalance-month10Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month10Amount" />
-    <property name="label" value="April" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month11Amount" parent="LedgerBalance-month11Amount-parentBean" />
+                <control>
+                    <text size="4" />
+                </control>
 
-  <bean id="LedgerBalance-month11Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month11Amount" />
-    <property name="label" value="May" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month12Amount" parent="LedgerBalance-month12Amount-parentBean" />
+                <summary>financialBalanceTypeCode</summary>
+                <description>financialBalanceTypeCode description...</description>
+			</attribute>
 
-  <bean id="LedgerBalance-month12Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month12Amount" />
-    <property name="label" value="June" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-month13Amount" parent="LedgerBalance-month13Amount-parentBean" />
+            <attribute name="financialBeginningBalanceLineAmount" forceUppercase="true">
+                <label>Financial Beginning Balance Line Amount</label>
+                <shortLabel>Amount</shortLabel>
 
-  <bean id="LedgerBalance-month13Amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="month13Amount" />
-    <property name="label" value="Year End" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-transactionDateTimeStamp" parent="LedgerBalance-transactionDateTimeStamp-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="LedgerBalance-transactionDateTimeStamp-parentBean" abstract="true" parent="GenericAttributes-genericTimestamp">
-    <property name="name" value="transactionDateTimeStamp" />
-    <property name="label" value="Transaction Entry Processed" />
-    <property name="shortLabel" value="Entry Processed" />
-  </bean>
-  <bean id="LedgerBalance-versionNumber" parent="LedgerBalance-versionNumber-parentBean" />
+                <control>
+                    <text size="21" />
+                </control>
 
-  <bean id="LedgerBalance-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
-  <bean id="LedgerBalance-dummyBusinessObject.genericAmount" parent="LedgerBalance-dummyBusinessObject.genericAmount-parentBean" />
+                <summary>financialBeginningBalanceLineAmount</summary>
+                <description>financialBeginningBalanceLineAmount description...</description>
+			</attribute>
 
-  <bean id="LedgerBalance-dummyBusinessObject.genericAmount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="dummyBusinessObject.genericAmount" />
-    <property name="label" value="Year End Close" />
-    <property name="shortLabel" value="Year End Close" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="LedgerBalance-dummyBusinessObject.consolidationOption" parent="LedgerBalance-dummyBusinessObject.consolidationOption-parentBean" />
+            <attribute name="financialObjectCode" forceUppercase="true">
+                <label>Financial Object Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="LedgerBalance-dummyBusinessObject.consolidationOption-parentBean" abstract="true" parent="TransientBalanceInquiryAttributes-consolidationOption">
-    <property name="name" value="dummyBusinessObject.consolidationOption" />
-  </bean>
-  <bean id="LedgerBalance-dummyBusinessObject.pendingEntryOption" parent="LedgerBalance-dummyBusinessObject.pendingEntryOption-parentBean" />
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="LedgerBalance-dummyBusinessObject.pendingEntryOption-parentBean" abstract="true" parent="TransientBalanceInquiryAttributes-pendingEntryOption">
-    <property name="name" value="dummyBusinessObject.pendingEntryOption" />
-  </bean>
+                <control>
+                    <text size="6" />
+                </control>
 
-<!-- Business Object Inquiry Definition -->
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
+			</attribute>
 
+            <attribute name="financialObjectTypeCode" forceUppercase="true">
+                <label>Financial Object Type Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="LedgerBalance-inquiryDefinition" parent="LedgerBalance-inquiryDefinition-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="LedgerBalance-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Labor Ledger A21 View" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="accountLineAnnualBalanceAmount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="accountNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialBeginningBalanceLineAmount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="chartOfAccountsCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="emplid" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialBalanceTypeCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="contractsGrantsBeginningBalanceAmount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialObjectCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialObjectTypeCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialSubObjectCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month10Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month11Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month12Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month13Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month1Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month2Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month3Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month4Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month5Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month6Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month7Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month8Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="month9Amount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="positionNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="subAccountNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="transactionDateTimeStamp" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universityFiscalYear" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="dummyBusinessObject.consolidationOption"
-                    p:forceInquiry="true" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <control>
+                    <text size="4" />
+                </control>
 
-<!-- Business Object Lookup Definition -->
+                <summary>financialObjectTypeCode</summary>
+                <description>financialObjectTypeCode description...</description>
+			</attribute>
 
+            <attribute name="financialSubObjectCode" forceUppercase="true">
+                <label>Financial Sub Object Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="LedgerBalance-lookupDefinition" parent="LedgerBalance-lookupDefinition-parentBean" />
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="LedgerBalance-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Labor Ledger View" />
-    <property name="lookupableID" value="laborLedgerBalanceLookupable" />
-    <property name="instructions" value="Look up a Ledger Balance" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:required="true"
-              p:attributeName="universityFiscalYear"
-              p:defaultValueFinderClass="org.kuali.kfs.lookup.valuefinder.FiscalYearFinder" />
-        <bean parent="FieldDefinition"
-              p:attributeName="laborObject.financialObjectFringeOrSalaryCode" />
-        <bean parent="FieldDefinition"
-              p:required="true"
-              p:attributeName="emplid" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialBalanceTypeCode"
-              p:defaultValueFinderClass="org.kuali.module.labor.web.optionfinder.BalanceTypeCodeOptionFinder" />
-        <bean parent="FieldDefinition"
-              p:attributeName="dummyBusinessObject.consolidationOption"
-              p:defaultValueFinderClass="org.kuali.module.gl.web.optionfinder.GLConsolidationOptionFinder" />
-        <bean parent="FieldDefinition"
-              p:attributeName="dummyBusinessObject.pendingEntryOption"
-              p:defaultValueFinderClass="org.kuali.module.gl.web.optionfinder.GLPendingEntryOptionFinder" />
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="subAccountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialSubObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="positionNumber" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="universityFiscalYear" />
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="subAccountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialSubObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialBalanceTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="positionNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="ledgerPerson.personName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialBeginningBalanceLineAmount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="contractsGrantsBeginningBalanceAmount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountLineAnnualBalanceAmount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month1Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month2Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month3Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month4Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month5Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month6Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month7Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month8Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month9Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month10Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month11Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month12Amount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="month13Amount" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <control>
+                    <text size="5" />
+                </control>
+
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
+			</attribute>
+
+            <attribute name="month10AccountLineAmount" forceUppercase="true">
+                <label>Month10 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month10AccountLineAmount</summary>
+                <description>month10AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month11AccountLineAmount" forceUppercase="true">
+                <label>Month11 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month11AccountLineAmount</summary>
+                <description>month11AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month12AccountLineAmount" forceUppercase="true">
+                <label>Month12 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month12AccountLineAmount</summary>
+                <description>month12AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month13AccountLineAmount" forceUppercase="true">
+                <label>Month13 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month13AccountLineAmount</summary>
+                <description>month13AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month1AccountLineAmount" forceUppercase="true">
+                <label>Month1 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month1AccountLineAmount</summary>
+                <description>month1AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month2AccountLineAmount" forceUppercase="true">
+                <label>Month2 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month2AccountLineAmount</summary>
+                <description>month2AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month3AccountLineAmount" forceUppercase="true">
+                <label>Month3 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month3AccountLineAmount</summary>
+                <description>month3AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month4AccountLineAmount" forceUppercase="true">
+                <label>Month4 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month4AccountLineAmount</summary>
+                <description>month4AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month5AccountLineAmount" forceUppercase="true">
+                <label>Month5 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month5AccountLineAmount</summary>
+                <description>month5AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month6AccountLineAmount" forceUppercase="true">
+                <label>Month6 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month6AccountLineAmount</summary>
+                <description>month6AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month7AccountLineAmount" forceUppercase="true">
+                <label>Month7 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month7AccountLineAmount</summary>
+                <description>month7AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month8AccountLineAmount" forceUppercase="true">
+                <label>Month8 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month8AccountLineAmount</summary>
+                <description>month8AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="month9AccountLineAmount" forceUppercase="true">
+                <label>Month9 Account Line Amount</label>
+                <shortLabel>Amount</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>month9AccountLineAmount</summary>
+                <description>month9AccountLineAmount description...</description>
+			</attribute>
+
+            <attribute name="positionNumber" forceUppercase="true">
+                <label>Position Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>positionNumber</summary>
+                <description>positionNumber description...</description>
+			</attribute>
+
+            <attribute name="subAccountNumber" forceUppercase="true">
+                <label>Sub Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>subAccountNumber</summary>
+                <description>subAccountNumber description...</description>
+			</attribute>
+
+            <attribute name="transactionDateTimeStamp" forceUppercase="true">
+                <label>Transaction Date Time Stamp</label>
+                <shortLabel>Stamp</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><date /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>transactionDateTimeStamp</summary>
+                <description>transactionDateTimeStamp description...</description>
+			</attribute>
+
+            <attribute name="universityFiscalYear" forceUppercase="true">
+                <label>University Fiscal Year</label>
+                <shortLabel>Year</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>universityFiscalYear</summary>
+                <description>universityFiscalYear description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

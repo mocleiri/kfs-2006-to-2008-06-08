@@ -1,18 +1,3 @@
-/*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
@@ -22,109 +7,228 @@ import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.kfs.bo.Building;
 
 /**
- * Building Parameter Business Object. Maintenance document for building parameters.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BuildingParameter extends PersistableBusinessObjectBase {
 
-    private String campusCode;
-    private String buildingCode;
-    private String buildingOverrideCode;
-    private String buildingOverrideName;
-    private String buildingOverrideStreetAddress;
-    private String buildingOverrideAddressCityName;
-    private String buildingOverrideAddressStateCode;
-    private String buildingOverrideAddressZipCode;
+	private String campusCode;
+	private String buildingCode;
+	private String buildingOverrideCode;
+	private String buildingOverrideName;
+	private String buildingOverrideStreetAddress;
+	private String buildingOverrideAddressCityName;
+	private String buildingOverrideAddressStateCode;
+	private String buildingOverrideAddressZipCode;
 
     private Campus campus;
     private Building building;
+    
+	/**
+	 * Default constructor.
+	 */
+	public BuildingParameter() {
 
-    /**
-     * Default constructor.
+	}
+
+	/**
+	 * Gets the campusCode attribute.
+	 * 
+	 * @return Returns the campusCode
+	 * 
+	 */
+	public String getCampusCode() { 
+		return campusCode;
+	}
+
+	/**
+	 * Sets the campusCode attribute.
+	 * 
+	 * @param campusCode The campusCode to set.
+	 * 
+	 */
+	public void setCampusCode(String campusCode) {
+		this.campusCode = campusCode;
+	}
+
+
+	/**
+	 * Gets the buildingCode attribute.
+	 * 
+	 * @return Returns the buildingCode
+	 * 
+	 */
+	public String getBuildingCode() { 
+		return buildingCode;
+	}
+
+	/**
+	 * Sets the buildingCode attribute.
+	 * 
+	 * @param buildingCode The buildingCode to set.
+	 * 
+	 */
+	public void setBuildingCode(String buildingCode) {
+		this.buildingCode = buildingCode;
+	}
+
+
+	/**
+	 * Gets the buildingOverrideCode attribute.
+	 * 
+	 * @return Returns the buildingOverrideCode
+	 * 
+	 */
+	public String getBuildingOverrideCode() { 
+		return buildingOverrideCode;
+	}
+
+	/**
+	 * Sets the buildingOverrideCode attribute.
+	 * 
+	 * @param buildingOverrideCode The buildingOverrideCode to set.
+	 * 
+	 */
+	public void setBuildingOverrideCode(String buildingOverrideCode) {
+		this.buildingOverrideCode = buildingOverrideCode;
+	}
+
+
+	/**
+	 * Gets the buildingOverrideName attribute.
+	 * 
+	 * @return Returns the buildingOverrideName
+	 * 
+	 */
+	public String getBuildingOverrideName() { 
+		return buildingOverrideName;
+	}
+
+	/**
+	 * Sets the buildingOverrideName attribute.
+	 * 
+	 * @param buildingOverrideName The buildingOverrideName to set.
+	 * 
+	 */
+	public void setBuildingOverrideName(String buildingOverrideName) {
+		this.buildingOverrideName = buildingOverrideName;
+	}
+
+
+	/**
+	 * Gets the buildingOverrideStreetAddress attribute.
+	 * 
+	 * @return Returns the buildingOverrideStreetAddress
+	 * 
+	 */
+	public String getBuildingOverrideStreetAddress() { 
+		return buildingOverrideStreetAddress;
+	}
+
+	/**
+	 * Sets the buildingOverrideStreetAddress attribute.
+	 * 
+	 * @param buildingOverrideStreetAddress The buildingOverrideStreetAddress to set.
+	 * 
+	 */
+	public void setBuildingOverrideStreetAddress(String buildingOverrideStreetAddress) {
+		this.buildingOverrideStreetAddress = buildingOverrideStreetAddress;
+	}
+
+
+	/**
+	 * Gets the buildingOverrideAddressCityName attribute.
+	 * 
+	 * @return Returns the buildingOverrideAddressCityName
+	 * 
+	 */
+	public String getBuildingOverrideAddressCityName() { 
+		return buildingOverrideAddressCityName;
+	}
+
+	/**
+	 * Sets the buildingOverrideAddressCityName attribute.
+	 * 
+	 * @param buildingOverrideAddressCityName The buildingOverrideAddressCityName to set.
+	 * 
+	 */
+	public void setBuildingOverrideAddressCityName(String buildingOverrideAddressCityName) {
+		this.buildingOverrideAddressCityName = buildingOverrideAddressCityName;
+	}
+
+
+	/**
+	 * Gets the buildingOverrideAddressStateCode attribute.
+	 * 
+	 * @return Returns the buildingOverrideAddressStateCode
+	 * 
+	 */
+	public String getBuildingOverrideAddressStateCode() { 
+		return buildingOverrideAddressStateCode;
+	}
+
+	/**
+	 * Sets the buildingOverrideAddressStateCode attribute.
+	 * 
+	 * @param buildingOverrideAddressStateCode The buildingOverrideAddressStateCode to set.
+	 * 
+	 */
+	public void setBuildingOverrideAddressStateCode(String buildingOverrideAddressStateCode) {
+		this.buildingOverrideAddressStateCode = buildingOverrideAddressStateCode;
+	}
+
+
+	/**
+	 * Gets the buildingOverrideAddressZipCode attribute.
+	 * 
+	 * @return Returns the buildingOverrideAddressZipCode
+	 * 
+	 */
+	public String getBuildingOverrideAddressZipCode() { 
+		return buildingOverrideAddressZipCode;
+	}
+
+	/**
+	 * Sets the buildingOverrideAddressZipCode attribute.
+	 * 
+	 * @param buildingOverrideAddressZipCode The buildingOverrideAddressZipCode to set.
+	 * 
+	 */
+	public void setBuildingOverrideAddressZipCode(String buildingOverrideAddressZipCode) {
+		this.buildingOverrideAddressZipCode = buildingOverrideAddressZipCode;
+	}
+
+
+	/**
+	 * Gets the campus attribute.
+	 * 
+	 * @return Returns the campus
+	 * 
+	 */
+	public Campus getCampus() { 
+		return campus;
+	}
+
+	/**
+	 * Sets the campus attribute.
+	 * 
+	 * @param campus The campus to set.
+	 * @deprecated
+	 */
+	public void setCampus(Campus campus) {
+		this.campus = campus;
+	}
+
+	/**
+     * Gets the building attribute. 
+     * @return Returns the building.
      */
-    public BuildingParameter() {
-
-    }
-
-    public String getCampusCode() {
-        return campusCode;
-    }
-
-    public void setCampusCode(String campusCode) {
-        this.campusCode = campusCode;
-    }
-
-    public String getBuildingCode() {
-        return buildingCode;
-    }
-
-    public void setBuildingCode(String buildingCode) {
-        this.buildingCode = buildingCode;
-    }
-
-    public String getBuildingOverrideCode() {
-        return buildingOverrideCode;
-    }
-
-    public void setBuildingOverrideCode(String buildingOverrideCode) {
-        this.buildingOverrideCode = buildingOverrideCode;
-    }
-
-    public String getBuildingOverrideName() {
-        return buildingOverrideName;
-    }
-
-    public void setBuildingOverrideName(String buildingOverrideName) {
-        this.buildingOverrideName = buildingOverrideName;
-    }
-
-    public String getBuildingOverrideStreetAddress() {
-        return buildingOverrideStreetAddress;
-    }
-
-    public void setBuildingOverrideStreetAddress(String buildingOverrideStreetAddress) {
-        this.buildingOverrideStreetAddress = buildingOverrideStreetAddress;
-    }
-
-    public String getBuildingOverrideAddressCityName() {
-        return buildingOverrideAddressCityName;
-    }
-
-    public void setBuildingOverrideAddressCityName(String buildingOverrideAddressCityName) {
-        this.buildingOverrideAddressCityName = buildingOverrideAddressCityName;
-    }
-
-    public String getBuildingOverrideAddressStateCode() {
-        return buildingOverrideAddressStateCode;
-    }
-
-    public void setBuildingOverrideAddressStateCode(String buildingOverrideAddressStateCode) {
-        this.buildingOverrideAddressStateCode = buildingOverrideAddressStateCode;
-    }
-
-    public String getBuildingOverrideAddressZipCode() {
-        return buildingOverrideAddressZipCode;
-    }
-
-    public void setBuildingOverrideAddressZipCode(String buildingOverrideAddressZipCode) {
-        this.buildingOverrideAddressZipCode = buildingOverrideAddressZipCode;
-    }
-
-    public Campus getCampus() {
-        return campus;
-    }
-
-    /**
-     * @deprecated
-     */
-    public void setCampus(Campus campus) {
-        this.campus = campus;
-    }
-
     public Building getBuilding() {
         return building;
     }
 
     /**
+     * Sets the building attribute value.
+     * @param building The building to set.
      * @deprecated
      */
     public void setBuilding(Building building) {
@@ -132,13 +236,13 @@ public class BuildingParameter extends PersistableBusinessObjectBase {
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("campusCode", this.campusCode);
         m.put("buildingCode", this.buildingCode);
         m.put("buildingOverrideCode", this.buildingOverrideCode);
-        return m;
+	    return m;
     }
 }

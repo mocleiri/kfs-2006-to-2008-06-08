@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,42 +17,38 @@ package org.kuali.module.purap.lookup.keyvalues;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.purap.PurapParameterConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants.POTransmissionMethods;
 import org.kuali.module.purap.bo.PurchaseOrderTransmissionMethod;
-import org.kuali.module.purap.document.PurchaseOrderDocument;
 
 /**
- * Value Finder for Purchase Order Retransmission Methods.
+ * This class...
+ * 
  */
 public class PurchaseOrderRetransmissionMethodValuesFinder extends KeyValuesBase {
 
-    /**
-     * Returns code/description pairs of all Purchase Order Retransmission Methods.
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
+
+        KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
         Collection<PurchaseOrderTransmissionMethod> codes = boService.findAll(PurchaseOrderTransmissionMethod.class);
-        String retransmitTypes = SpringContext.getBean(ParameterService.class).getParameterValue(PurchaseOrderDocument.class,PurapParameterConstants.PURAP_PO_RETRANSMIT_TRANSMISSION_METHOD_TYPES);
         List labels = new ArrayList();
-        if (retransmitTypes != null){
-            for (PurchaseOrderTransmissionMethod purchaseOrderTransmissionMethod : codes) {
-                if (StringUtils.contains(retransmitTypes,
-                                         StringUtils.left(purchaseOrderTransmissionMethod.getPurchaseOrderTransmissionMethodCode(),4))){
-                    labels.add(new KeyLabelPair(purchaseOrderTransmissionMethod.getPurchaseOrderTransmissionMethodCode(), purchaseOrderTransmissionMethod.getPurchaseOrderTransmissionMethodDescription()));
-                }
+        for (PurchaseOrderTransmissionMethod purchaseOrderTransmissionMethod : codes) {
+            if (purchaseOrderTransmissionMethod.getPurchaseOrderTransmissionMethodCode().equals(POTransmissionMethods.FAX) ||
+                purchaseOrderTransmissionMethod.getPurchaseOrderTransmissionMethodCode().equals(POTransmissionMethods.PRINT)) {
+                labels.add(new KeyLabelPair(purchaseOrderTransmissionMethod.getPurchaseOrderTransmissionMethodCode(), purchaseOrderTransmissionMethod.getPurchaseOrderTransmissionMethodDescription()));
             }
         }
+
         return labels;
     }
+
 }

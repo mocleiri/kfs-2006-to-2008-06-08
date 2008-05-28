@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
@@ -19,89 +28,161 @@ package org.kuali.module.purap.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.module.purap.document.PurchaseOrderDocument;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Purchase Order Vendor Stipulation.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class PurchaseOrderVendorStipulation extends PersistableBusinessObjectBase {
+public class PurchaseOrderVendorStipulation extends BusinessObjectBase {
 
-    private String documentNumber;
-    private Integer purchaseOrderVendorStipulationIdentifier;
-    private String vendorStipulationDescription;
-    private String vendorStipulationAuthorEmployeeIdentifier;
-    private Date vendorStipulationCreateDate;
+	private Integer purchaseOrderVendorStipulationIdentifier;
+	private Integer purchaseOrderIdentifier;
+	private String vendorStipulationDescription;
+	private String vendorStipulationAuthorEmployeeIdentifier;
+	private Date vendorStipulationCreateDate;
 
-    private PurchaseOrderDocument purchaseOrder;
+    private PurchaseOrder purchaseOrder;
 
-    public PurchaseOrderVendorStipulation() {
-    }
+	/**
+	 * Default constructor.
+	 */
+	public PurchaseOrderVendorStipulation() {
 
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
+	}
 
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
+	/**
+	 * Gets the purchaseOrderVendorStipulationIdentifier attribute.
+	 * 
+	 * @return - Returns the purchaseOrderVendorStipulationIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderVendorStipulationIdentifier() { 
+		return purchaseOrderVendorStipulationIdentifier;
+	}
 
-    public Integer getPurchaseOrderVendorStipulationIdentifier() {
-        return purchaseOrderVendorStipulationIdentifier;
-    }
+	/**
+	 * Sets the purchaseOrderVendorStipulationIdentifier attribute.
+	 * 
+	 * @param - purchaseOrderVendorStipulationIdentifier The purchaseOrderVendorStipulationIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderVendorStipulationIdentifier(Integer purchaseOrderVendorStipulationIdentifier) {
+		this.purchaseOrderVendorStipulationIdentifier = purchaseOrderVendorStipulationIdentifier;
+	}
 
-    public void setPurchaseOrderVendorStipulationIdentifier(Integer purchaseOrderVendorStipulationIdentifier) {
-        this.purchaseOrderVendorStipulationIdentifier = purchaseOrderVendorStipulationIdentifier;
-    }
 
-    public String getVendorStipulationDescription() {
-        return vendorStipulationDescription;
-    }
+	/**
+	 * Gets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @return - Returns the purchaseOrderIdentifier
+	 * 
+	 */
+	public Integer getPurchaseOrderIdentifier() { 
+		return purchaseOrderIdentifier;
+	}
 
-    public void setVendorStipulationDescription(String vendorStipulationDescription) {
-        this.vendorStipulationDescription = vendorStipulationDescription;
-    }
+	/**
+	 * Sets the purchaseOrderIdentifier attribute.
+	 * 
+	 * @param - purchaseOrderIdentifier The purchaseOrderIdentifier to set.
+	 * 
+	 */
+	public void setPurchaseOrderIdentifier(Integer purchaseOrderIdentifier) {
+		this.purchaseOrderIdentifier = purchaseOrderIdentifier;
+	}
 
-    public String getVendorStipulationAuthorEmployeeIdentifier() {
-        return vendorStipulationAuthorEmployeeIdentifier;
-    }
 
-    public void setVendorStipulationAuthorEmployeeIdentifier(String vendorStipulationAuthorEmployeeIdentifier) {
-        this.vendorStipulationAuthorEmployeeIdentifier = vendorStipulationAuthorEmployeeIdentifier;
-    }
+	/**
+	 * Gets the vendorStipulationDescription attribute.
+	 * 
+	 * @return - Returns the vendorStipulationDescription
+	 * 
+	 */
+	public String getVendorStipulationDescription() { 
+		return vendorStipulationDescription;
+	}
 
-    public Date getVendorStipulationCreateDate() {
-        return vendorStipulationCreateDate;
-    }
+	/**
+	 * Sets the vendorStipulationDescription attribute.
+	 * 
+	 * @param - vendorStipulationDescription The vendorStipulationDescription to set.
+	 * 
+	 */
+	public void setVendorStipulationDescription(String vendorStipulationDescription) {
+		this.vendorStipulationDescription = vendorStipulationDescription;
+	}
 
-    public void setVendorStipulationCreateDate(Date vendorStipulationCreateDate) {
-        this.vendorStipulationCreateDate = vendorStipulationCreateDate;
-    }
 
-    public PurchaseOrderDocument getPurchaseOrder() {
-        return purchaseOrder;
-    }
+	/**
+	 * Gets the vendorStipulationAuthorEmployeeIdentifier attribute.
+	 * 
+	 * @return - Returns the vendorStipulationAuthorEmployeeIdentifier
+	 * 
+	 */
+	public String getVendorStipulationAuthorEmployeeIdentifier() { 
+		return vendorStipulationAuthorEmployeeIdentifier;
+	}
 
-    /**
-     * Sets the purchaseOrder attribute.
-     * 
-     * @param purchaseOrder The purchaseOrder to set.
-     * @deprecated
-     */
-    public void setPurchaseOrder(PurchaseOrderDocument purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
-    }
+	/**
+	 * Sets the vendorStipulationAuthorEmployeeIdentifier attribute.
+	 * 
+	 * @param - vendorStipulationAuthorEmployeeIdentifier The vendorStipulationAuthorEmployeeIdentifier to set.
+	 * 
+	 */
+	public void setVendorStipulationAuthorEmployeeIdentifier(String vendorStipulationAuthorEmployeeIdentifier) {
+		this.vendorStipulationAuthorEmployeeIdentifier = vendorStipulationAuthorEmployeeIdentifier;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
-        m.put("documentNumber", this.documentNumber);
+
+	/**
+	 * Gets the vendorStipulationCreateDate attribute.
+	 * 
+	 * @return - Returns the vendorStipulationCreateDate
+	 * 
+	 */
+	public Date getVendorStipulationCreateDate() { 
+		return vendorStipulationCreateDate;
+	}
+
+	/**
+	 * Sets the vendorStipulationCreateDate attribute.
+	 * 
+	 * @param - vendorStipulationCreateDate The vendorStipulationCreateDate to set.
+	 * 
+	 */
+	public void setVendorStipulationCreateDate(Date vendorStipulationCreateDate) {
+		this.vendorStipulationCreateDate = vendorStipulationCreateDate;
+	}
+
+
+	/**
+	 * Gets the purchaseOrder attribute.
+	 * 
+	 * @return - Returns the purchaseOrder
+	 * 
+	 */
+	public PurchaseOrder getPurchaseOrder() { 
+		return purchaseOrder;
+	}
+
+	/**
+	 * Sets the purchaseOrder attribute.
+	 * 
+	 * @param - purchaseOrder The purchaseOrder to set.
+	 * @deprecated
+	 */
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
+
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.purchaseOrderVendorStipulationIdentifier != null) {
             m.put("purchaseOrderVendorStipulationIdentifier", this.purchaseOrderVendorStipulationIdentifier.toString());
         }
-        return m;
+	    return m;
     }
-
 }

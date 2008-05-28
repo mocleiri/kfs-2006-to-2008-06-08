@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package org.kuali.kfs.service.impl;
 
 import java.util.List;
 
-import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.dao.AccountingLineDao;
 import org.kuali.kfs.service.AccountingLineService;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * that this service can be used for performing services for both the Source and Target AccountingLineBase structures. This is the
  * default, Kuali provided implementation.
  */
+@Transactional
 public class AccountingLineServiceImpl implements AccountingLineService {
     // set up logging
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AccountingLineServiceImpl.class);
@@ -38,6 +39,27 @@ public class AccountingLineServiceImpl implements AccountingLineService {
      */
     public AccountingLineServiceImpl() {
         super();
+    }
+
+    /**
+     * Saves an accounting line to the DB.
+     * 
+     * @param AccountingLineBase The accounting line object to save - can be any object that extends AccountingLineBase (i.e. Source
+     *        and Target lines).
+     */
+    public AccountingLineBase save(AccountingLineBase line) {
+        accountingLineDao.save(line);
+        return line;
+    }
+
+    /**
+     * Deletes an accounting line from the DB.
+     * 
+     * @param AccountingLineBase The accounting line object to save - can be any object that extends AccountingLineBase (i.e. Source
+     *        and Target lines).
+     */
+    public void deleteAccountingLine(AccountingLineBase line) {
+        accountingLineDao.deleteAccountingLine(line);
     }
 
     /**

@@ -1,43 +1,54 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.chart.service.impl;
 
-
-import org.apache.log4j.Logger;
+import org.kuali.core.service.KualiUserService;
 import org.kuali.module.chart.bo.PriorYearAccount;
 import org.kuali.module.chart.dao.PriorYearAccountDao;
-import org.kuali.module.chart.dao.jdbc.PriorYearAccountDaoJdbc;
 import org.kuali.module.chart.service.PriorYearAccountService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This class implements the PriorYearAccountService interface.
+ * @author Laran Evans <lc278@cornell.edu>
+ * @version $Id: PriorYearAccountServiceImpl.java,v 1.1.2.2 2006-09-20 20:09:32 abyrne Exp $
  */
-@Transactional
 public class PriorYearAccountServiceImpl implements PriorYearAccountService {
-    private static final Logger LOG = Logger.getLogger(PriorYearAccountServiceImpl.class);
 
     private PriorYearAccountDao priorYearAccountDao;
-    private PriorYearAccountDaoJdbc priorYearAccountDaoJdbc;
-
+    private KualiUserService kualiUserService;
+    
     public PriorYearAccountServiceImpl() {
         super();
     }
 
     /**
+     * @param priorYearAccountDao The priorYearAccountDao to set.
+     */
+    public void setPriorYearAccountDao(PriorYearAccountDao priorYearAccountDao) {
+        this.priorYearAccountDao = priorYearAccountDao;
+    }
+
+    /*
+     * (non-Javadoc)
      * 
      * @see org.kuali.module.chart.service.PriorYearAccountService#getByPrimaryKey(java.lang.String, java.lang.String)
      */
@@ -45,38 +56,8 @@ public class PriorYearAccountServiceImpl implements PriorYearAccountService {
         return priorYearAccountDao.getByPrimaryId(chartCode, accountNumber);
     }
 
-    /**
-     * @see org.kuali.module.chart.service.PriorYearAccountService#populatePriorYearAccountsFromCurrent()
-     */
-    public void populatePriorYearAccountsFromCurrent() {
-
-        int purgedCount = priorYearAccountDaoJdbc.purgePriorYearAccounts();
-        if (LOG.isInfoEnabled()) {
-            LOG.info("number of prior year accounts purged : " + purgedCount);
-        }
-
-        int copiedCount = priorYearAccountDaoJdbc.copyCurrentAccountsToPriorYearTable();
-        if (LOG.isInfoEnabled()) {
-            LOG.info("number of current year accounts copied to prior year : " + copiedCount);
-        }
-    }
-
-
-    /**
-     * This method sets the local dao variable to the value provided.
-     * 
-     * @param priorYearAccountDao The priorYearAccountDao to set.
-     */
-    public void setPriorYearAccountDao(PriorYearAccountDao priorYearAccountDao) {
-        this.priorYearAccountDao = priorYearAccountDao;
-    }
-
-    /**
-     * This method sets the local dao jdbc variable to the value provided.
-     * 
-     * @param priorYearAccountDaoJdbc The priorYearAccountDaoJdbc to set.
-     */
-    public void setPriorYearAccountDaoJdbc(PriorYearAccountDaoJdbc priorYearAccountDaoJdbc) {
-        this.priorYearAccountDaoJdbc = priorYearAccountDaoJdbc;
-    }
+    public void setKualiUserService(KualiUserService kualiUserService) {
+        this.kualiUserService = kualiUserService;
+    }    
+    
 }

@@ -1,19 +1,4 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Created on Dec 10, 2003
  *
  * To change the template for this generated file go to
@@ -29,7 +14,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.module.pdp.PdpConstants;
 import org.kuali.module.pdp.exception.ConfigurationError;
 
 
@@ -41,32 +27,28 @@ public class GeneralUtilities {
 
     // GENERAL UTILITIES SECTION
 
-    public static int getParameterInteger(ParameterService parameterService, Class componentClass, String parm) {
-        String srpp = parameterService.getParameterValue(componentClass, parm);
-        if (srpp != null) {
+    public static int getParameterInteger(String parm,KualiConfigurationService kcs) {
+        String srpp = kcs.getApplicationParameterValue(PdpConstants.PDP_APPLICATION, parm);
+        if ( srpp != null ) {
             try {
                 return Integer.parseInt(srpp);
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 throw new ConfigurationError(parm + " is not a number");
             }
-        }
-        else {
+        } else {
             throw new ConfigurationError("Unable to find " + parm);
         }
     }
 
-    public static int getParameterInteger(ParameterService parameterService, Class componentClass, String parm, int defaultValue) {
-        String srpp = parameterService.getParameterValue(componentClass, parm);
-        if (srpp != null) {
+    public static int getParameterInteger(String parm,KualiConfigurationService kcs,int defaultValue) {
+        String srpp = kcs.getApplicationParameterValue(PdpConstants.PDP_APPLICATION, parm);
+        if ( srpp != null ) {
             try {
                 return Integer.parseInt(srpp);
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return defaultValue;
             }
-        }
-        else {
+        } else {
             return defaultValue;
         }
     }
@@ -237,9 +219,6 @@ public class GeneralUtilities {
 
     /**
      * Method to check if a String field is all numbers. Return true if String is numeric, otherwise return false.
-     * 
-     * NOTE: This returns true if the string is all spaces which is probably bad but since it is used
-     * so many places, I'm not changing it now.
      */
     public static boolean isStringAllNumbers(String field) {
         LOG.debug("Entered isStringAllNumbers().");

@@ -16,24 +16,27 @@
 package org.kuali.module.purap.rule.event;
 
 import org.kuali.core.document.Document;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.rule.BusinessRule;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.module.financial.bo.Check;
+import org.kuali.module.financial.rule.AddCheckRule;
+import org.kuali.module.purap.bo.PurchasingApItem;
 import org.kuali.module.purap.rule.AddPurchasingAccountsPayableItemRule;
 
 /**
- * Add Purchasing Accounts Payble Item Event. 
- * This is triggered when a user presses the add button for a given document's item line.
+ * This class represents the add item event. This could be triggered when a user presses the add button for a given document's
+ * item line.
  */
 public final class AddPurchasingAccountsPayableItemEvent extends PurchasingAccountsPayableItemEventBase {
     /**
      * Constructs an AddItemEvent with the given errorPathPrefix, document, and item.
      * 
-     * @param errorPathPrefix the error path
-     * @param document document the event was invoked on
-     * @param item the item being added 
+     * @param errorPathPrefix
+     * @param document
+     * @param accountingLine
      */
-    public AddPurchasingAccountsPayableItemEvent(String errorPathPrefix, Document document, PurApItem item) {
+    public AddPurchasingAccountsPayableItemEvent(String errorPathPrefix, Document document, PurchasingApItem item) {
         super("adding item to document " + getDocumentId(document), errorPathPrefix, document, item);
     }
 

@@ -1,100 +1,118 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Item Type Business Object. Defines various types of items.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class ItemType extends PersistableBusinessObjectBase {
+public class ItemType extends BusinessObjectBase {
 
-    private String itemTypeCode;
-    private String itemTypeDescription;
-    private boolean quantityBasedGeneralLedgerIndicator;
-    private boolean itemTypeAboveTheLineIndicator;
-    private boolean active;
+	private String itemTypeCode;
+	private String itemTypeDescription;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public ItemType() {
+	/**
+	 * Default constructor.
+	 */
+	public ItemType() {
 
-    }
+	}
 
-    public String getItemTypeCode() {
-        return itemTypeCode;
-    }
+	/**
+	 * Gets the itemTypeCode attribute.
+	 * 
+	 * @return - Returns the itemTypeCode
+	 * 
+	 */
+	public String getItemTypeCode() { 
+		return itemTypeCode;
+	}
 
-    public void setItemTypeCode(String itemTypeCode) {
-        this.itemTypeCode = itemTypeCode;
-    }
+	/**
+	 * Sets the itemTypeCode attribute.
+	 * 
+	 * @param - itemTypeCode The itemTypeCode to set.
+	 * 
+	 */
+	public void setItemTypeCode(String itemTypeCode) {
+		this.itemTypeCode = itemTypeCode;
+	}
 
-    public String getItemTypeDescription() {
-        return itemTypeDescription;
-    }
 
-    public void setItemTypeDescription(String itemTypeDescription) {
-        this.itemTypeDescription = itemTypeDescription;
-    }
+	/**
+	 * Gets the itemTypeDescription attribute.
+	 * 
+	 * @return - Returns the itemTypeDescription
+	 * 
+	 */
+	public String getItemTypeDescription() { 
+		return itemTypeDescription;
+	}
 
-    public boolean isQuantityBasedGeneralLedgerIndicator() {
-        return quantityBasedGeneralLedgerIndicator;
-    }
+	/**
+	 * Sets the itemTypeDescription attribute.
+	 * 
+	 * @param - itemTypeDescription The itemTypeDescription to set.
+	 * 
+	 */
+	public void setItemTypeDescription(String itemTypeDescription) {
+		this.itemTypeDescription = itemTypeDescription;
+	}
 
-    public void setQuantityBasedGeneralLedgerIndicator(boolean quantityBasedGeneralLedgerIndicator) {
-        this.quantityBasedGeneralLedgerIndicator = quantityBasedGeneralLedgerIndicator;
-    }
 
-    public boolean isItemTypeBelowTheLineIndicator() {
-        return !itemTypeAboveTheLineIndicator;
-    }
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return - Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    public boolean isItemTypeAboveTheLineIndicator() {
-        return itemTypeAboveTheLineIndicator;
-    }
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param - dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
 
-    public void setItemTypeAboveTheLineIndicator(boolean itemTypeAboveTheLineIndicator) {
-        this.itemTypeAboveTheLineIndicator = itemTypeAboveTheLineIndicator;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * @return Returns the opposite of quantityBasedGeneralLedgerIndicator.
-     */
-    public boolean isAmountBasedGeneralLedgerIndicator() {
-        return !quantityBasedGeneralLedgerIndicator;
-    }
-
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("itemTypeCode", this.itemTypeCode);
-        return m;
+	    return m;
     }
 }

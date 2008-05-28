@@ -1,169 +1,198 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.CreditMemoItem">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="CreditMemoItem" parent="CreditMemoItem-parentBean" />
+        <inquiry>
+            <title>Credit Memo Item Inquiry</title>
 
-  <bean id="CreditMemoItem-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.CreditMemoItem" />
-    <property name="attributes" >
-      <list>
-        <ref bean="CreditMemoItem-itemLineNumber" />
-        <ref bean="CreditMemoItem-poInvoicedTotalQuantity" />
-        <ref bean="CreditMemoItem-preqInvoicedTotalQuantity" />
-        <ref bean="CreditMemoItem-poUnitPrice" />
-        <ref bean="CreditMemoItem-preqUnitPrice" />
-        <ref bean="CreditMemoItem-poExtendedPrice" />
-        <ref bean="CreditMemoItem-preqExtendedPrice" />
-        <ref bean="CreditMemoItem-itemTypeCode" />
-        <ref bean="CreditMemoItem-itemQuantity" />
-        <ref bean="CreditMemoItem-itemUnitPrice" />
-        <ref bean="CreditMemoItem-extendedPrice" />
-        <ref bean="CreditMemoItem-itemCatalogNumber" />
-        <ref bean="CreditMemoItem-itemDescription" />
-        <ref bean="CreditMemoItem-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="creditMemoItemIdentifier" />
+                <field attributeName="itemAssignedToTradeInIndicator" />
+                <field attributeName="itemCreditQuantity" />
+                <field attributeName="itemExtendedPrice" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="itemTypeCode" />
+                <field attributeName="itemUnitPrice" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Credit Memo Item Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.CreditMemoItem">Create New</a>]]></menubar>
 
-  <bean id="CreditMemoItem-itemLineNumber" parent="CreditMemoItem-itemLineNumber-parentBean" />
+            <instructions>Lookup a Credit Memo Item</instructions>
 
-  <bean id="CreditMemoItem-itemLineNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemLineNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Line Number" />
-    <property name="shortLabel" value="#" />
-    <property name="maxLength" value="3" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="5" />
-    </property>
-  </bean>
-  <bean id="CreditMemoItem-poInvoicedTotalQuantity" parent="CreditMemoItem-poInvoicedTotalQuantity-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="creditMemoIdentifier" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="CreditMemoItem-poInvoicedTotalQuantity-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemQuantity">
-    <property name="name" value="poInvoicedTotalQuantity" />
-    <property name="label" value="PO Qty Invoiced" />
-    <property name="shortLabel" value="PO Qty" />
-  </bean>
-  <bean id="CreditMemoItem-preqInvoicedTotalQuantity" parent="CreditMemoItem-preqInvoicedTotalQuantity-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="creditMemoIdentifier" required="false" />
+                <lookupField attributeName="creditMemoItemIdentifier" required="false" />
+                <lookupField attributeName="itemAssignedToTradeInIndicator" required="false" />
+                <lookupField attributeName="itemCreditQuantity" required="false" />
+                <lookupField attributeName="itemExtendedPrice" required="false" />
+                <lookupField attributeName="itemLineNumber" required="false" />
+                <lookupField attributeName="itemTypeCode" required="false" />
+                <lookupField attributeName="itemUnitPrice" required="false" />
+            </lookupFields>
 
-  <bean id="CreditMemoItem-preqInvoicedTotalQuantity-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemQuantity">
-    <property name="name" value="preqInvoicedTotalQuantity" />
-    <property name="label" value="PREQ Qty Invoiced" />
-    <property name="shortLabel" value="PREQ Qty Invoiced" />
-  </bean>
-  <bean id="CreditMemoItem-poUnitPrice" parent="CreditMemoItem-poUnitPrice-parentBean" />
+            <resultFields>
+                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="creditMemoItemIdentifier" />
+                <field attributeName="itemAssignedToTradeInIndicator" />
+                <field attributeName="itemCreditQuantity" />
+                <field attributeName="itemExtendedPrice" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="itemTypeCode" />
+                <field attributeName="itemUnitPrice" />
+            </resultFields>
+        </lookup>
 
-  <bean id="CreditMemoItem-poUnitPrice-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemUnitPrice">
-    <property name="name" value="poUnitPrice" />
-    <property name="label" value="PO Unit Price" />
-    <property name="shortLabel" value="PO Unit Price" />
-  </bean>
-  <bean id="CreditMemoItem-preqUnitPrice" parent="CreditMemoItem-preqUnitPrice-parentBean" />
+        <attributes>
 
-  <bean id="CreditMemoItem-preqUnitPrice-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemUnitPrice">
-    <property name="name" value="preqUnitPrice" />
-    <property name="label" value="PREQ Unit Price" />
-    <property name="shortLabel" value="PREQ Unit Price" />
-  </bean>
-  <bean id="CreditMemoItem-poExtendedPrice" parent="CreditMemoItem-poExtendedPrice-parentBean" />
+            <attribute name="creditMemoIdentifier" forceUppercase="true">
+                <label>Credit Memo Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-  <bean id="CreditMemoItem-poExtendedPrice-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="poExtendedPrice" />
-    <property name="label" value="Total Invoice Cost" />
-    <property name="shortLabel" value="Total Invoice Cost" />
-  </bean>
-  <bean id="CreditMemoItem-preqExtendedPrice" parent="CreditMemoItem-preqExtendedPrice-parentBean" />
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="CreditMemoItem-preqExtendedPrice-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="preqExtendedPrice" />
-    <property name="label" value="Total Invoice Cost" />
-    <property name="shortLabel" value="Total Invoice Cost" />
-  </bean>
-  <bean id="CreditMemoItem-itemTypeCode" parent="CreditMemoItem-itemTypeCode-parentBean" />
+                <control>
+                    <text size="11" />
+                </control>
 
-  <bean id="CreditMemoItem-itemTypeCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemTypeCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Type Code" />
-    <property name="shortLabel" value="Item Type" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.purap.lookup.keyvalues.ItemTypeValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="CreditMemoItem-itemQuantity" parent="CreditMemoItem-itemQuantity-parentBean" />
+                <summary>creditMemoIdentifier</summary>
+                <description>creditMemoIdentifier description...</description>
+			</attribute>
 
-  <bean id="CreditMemoItem-itemQuantity-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemQuantity">
-    <property name="name" value="itemQuantity" />
-    <property name="label" value="CM Cty" />
-    <property name="shortLabel" value="CM Qty" />
-  </bean>
-  <bean id="CreditMemoItem-itemUnitPrice" parent="CreditMemoItem-itemUnitPrice-parentBean" />
+            <attribute name="creditMemoItemIdentifier" forceUppercase="true">
+                <label>Credit Memo Item Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-  <bean id="CreditMemoItem-itemUnitPrice-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemUnitPrice">
-    <property name="name" value="itemUnitPrice" />
-    <property name="label" value="CM Unit Price" />
-    <property name="shortLabel" value="CM Unit Price" />
-  </bean>
-  <bean id="CreditMemoItem-extendedPrice" parent="CreditMemoItem-extendedPrice-parentBean" />
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="CreditMemoItem-extendedPrice-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="extendedPrice" />
-    <property name="label" value="Credit Processed" />
-    <property name="shortLabel" value="Credit Processed" />
-  </bean>
-  <bean id="CreditMemoItem-itemCatalogNumber" parent="CreditMemoItem-itemCatalogNumber-parentBean" />
+                <control>
+                    <text size="12" />
+                </control>
 
-  <bean id="CreditMemoItem-itemCatalogNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemCatalogNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Catalog Number" />
-    <property name="shortLabel" value="Catalog #" />
-    <property name="maxLength" value="30" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="15" />
-    </property>
-  </bean>
-  <bean id="CreditMemoItem-itemDescription" parent="CreditMemoItem-itemDescription-parentBean" />
+                <summary>creditMemoItemIdentifier</summary>
+                <description>creditMemoItemIdentifier description...</description>
+			</attribute>
 
-  <bean id="CreditMemoItem-itemDescription-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="itemDescription" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Item Description" />
-    <property name="shortLabel" value="Description" />
-    <property name="maxLength" value="4000" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextareaControlDefinition"
-            p:rows="4"
-            p:cols="50" />
-    </property>
-  </bean>
-  <bean id="CreditMemoItem-versionNumber" parent="CreditMemoItem-versionNumber-parentBean" />
+            <attribute name="itemAssignedToTradeInIndicator" forceUppercase="true">
+                <label>Item Assigned To Trade In Indicator</label>
+                <shortLabel>Indicator</shortLabel>
 
-  <bean id="CreditMemoItem-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
-</beans>
+                <maxLength>1</maxLength>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>itemAssignedToTradeInIndicator</summary>
+                <description>itemAssignedToTradeInIndicator description...</description>
+			</attribute>
+
+            <attribute name="itemCreditQuantity" forceUppercase="true">
+                <label>Item Credit Quantity</label>
+                <shortLabel>Quantity</shortLabel>
+
+                <maxLength>11</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="13" />
+                </control>
+
+                <summary>itemCreditQuantity</summary>
+                <description>itemCreditQuantity description...</description>
+			</attribute>
+
+            <attribute name="itemExtendedPrice" forceUppercase="true">
+                <label>Item Extended Price</label>
+                <shortLabel>Price</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>itemExtendedPrice</summary>
+                <description>itemExtendedPrice description...</description>
+			</attribute>
+
+            <attribute name="itemLineNumber" forceUppercase="true">
+                <label>Item Line Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemLineNumber</summary>
+                <description>itemLineNumber description...</description>
+			</attribute>
+
+            <attribute name="itemTypeCode" forceUppercase="true">
+                <label>Item Type Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>itemTypeCode</summary>
+                <description>itemTypeCode description...</description>
+			</attribute>
+
+            <attribute name="itemUnitPrice" forceUppercase="true">
+                <label>Item Unit Price</label>
+                <shortLabel>Price</shortLabel>
+
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
+
+                <control>
+                    <text size="21" />
+                </control>
+
+                <summary>itemUnitPrice</summary>
+                <description>itemUnitPrice description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

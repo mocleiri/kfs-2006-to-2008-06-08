@@ -21,13 +21,13 @@ import java.util.Map;
 
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryFactory;
+import org.kuali.Constants;
+import org.kuali.core.bo.ApplicationConstant;
 import org.kuali.core.bo.KualiCode;
-import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.core.bo.KualiSystemCode;
 import org.kuali.kfs.dao.KualiCodeDao;
 import org.kuali.module.cg.bo.AgencyType;
 import org.kuali.module.chart.bo.FundGroup;
-import org.kuali.module.chart.bo.KualiSystemCode;
 import org.kuali.module.chart.bo.ObjSubTyp;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.bo.ObjectType;
@@ -41,18 +41,22 @@ import org.kuali.module.financial.bo.PaymentReasonCode;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.kra.budget.bo.NonpersonnelSubCategory;
 import org.springframework.dao.DataAccessException;
+import org.springmodules.orm.ojb.support.PersistenceBrokerDaoSupport;
 
 /**
  * This class is the OJB implementation of the KualiCodeDao interface.
+ * 
+ *
  */
 
-public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCodeDao {
+public class KualiCodeDaoOjb extends PersistenceBrokerDaoSupport implements KualiCodeDao {
 
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(KualiCodeDaoOjb.class);
 
     private static Map codeColumns = new HashMap();
     static {
         codeColumns.put(AgencyType.class, "code");
+        codeColumns.put(ApplicationConstant.class, "code");
         codeColumns.put(BalanceTyp.class, "code");
         codeColumns.put(BudgetAggregationCode.class, "code");
         codeColumns.put(PaymentReasonCode.class, "code");
@@ -73,6 +77,7 @@ public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCod
     private static Map nameColumns = new HashMap();
     static {
         nameColumns.put(AgencyType.class, "name");
+        nameColumns.put(ApplicationConstant.class, "name");
         nameColumns.put(BalanceTyp.class, "name");
         nameColumns.put(BudgetAggregationCode.class, "name");
         nameColumns.put(PaymentReasonCode.class, "name");
@@ -94,7 +99,9 @@ public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCod
     /**
      * @param className - the name of the object being used, either KualiCodeBase or a subclass
      * @param code - code to search for
-     * @return KualiCodeBase Retrieves an KualiCodeBase object by a given code.
+     * @return KualiCodeBase
+     * 
+     * Retrieves an KualiCodeBase object by a given code.
      */
     public KualiCode getByCode(Class queryClass, String code) {
         Criteria criteria = getCriteriaForGivenClass(codeColumns, queryClass, code);
@@ -128,7 +135,9 @@ public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCod
     /**
      * @param className - the name of the object being used, either KualiCodeBase or a subclass
      * @param name - name to search for
-     * @return KualiCodeBase Retrieves an KualiCodeBase object by a given exact name.
+     * @return KualiCodeBase
+     * 
+     * Retrieves an KualiCodeBase object by a given exact name.
      */
     public KualiCode getByName(Class queryClass, String name) {
         Criteria criteria = getCriteriaForGivenClass(nameColumns, queryClass, name);
@@ -141,7 +150,9 @@ public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCod
     }
 
     /**
-     * @param kualiCode Pass the method a populated KualiCodeBase object, and it will be saved.
+     * @param kualiCode
+     * 
+     * Pass the method a populated KualiCodeBase object, and it will be saved.
      */
     public void save(KualiCode kualiCode) throws DataAccessException {
         getPersistenceBrokerTemplate().store(kualiCode);
@@ -163,7 +174,7 @@ public class KualiCodeDaoOjb extends PlatformAwareDaoBaseOjb implements KualiCod
      */
     public Collection getAllActive(Class queryClass) {
         Criteria criteria = new Criteria();
-        criteria.addEqualTo("FIN_OBJ_ACTIVE_CD", KFSConstants.ACTIVE_INDICATOR);
+        criteria.addEqualTo("FIN_OBJ_ACTIVE_CD", Constants.ACTIVE_INDICATOR);
         if (KualiSystemCode.class.isAssignableFrom(queryClass)) {
             criteria.addEqualTo("className", queryClass.getName());
             queryClass = KualiSystemCode.class;

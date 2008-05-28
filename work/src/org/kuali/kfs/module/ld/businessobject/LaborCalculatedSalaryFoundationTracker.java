@@ -21,10 +21,8 @@ import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.module.budget.bo.CalculatedSalaryFoundationTracker;
 
-/**
- * Labor business object for LaborCalculatedSalaryFoundationTracker.
- */
 public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoundationTracker {
 
     private KualiDecimal july1BudgetAmount;
@@ -42,7 +40,7 @@ public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoun
     }
 
     /**
-     * Gets the july1BudgetAmount.
+     * Gets the july1BudgetAmount attribute.
      * 
      * @return Returns the july1BudgetAmount.
      */
@@ -51,7 +49,7 @@ public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoun
     }
 
     /**
-     * Sets the july1BudgetAmount.
+     * Sets the july1BudgetAmount attribute value.
      * 
      * @param july1BudgetAmount The july1BudgetAmount to set.
      */
@@ -60,7 +58,7 @@ public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoun
     }
 
     /**
-     * Gets the july1BudgetFteQuantity.
+     * Gets the july1BudgetFteQuantity attribute.
      * 
      * @return Returns the july1BudgetFteQuantity.
      */
@@ -69,7 +67,7 @@ public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoun
     }
 
     /**
-     * Sets the july1BudgetFteQuantity.
+     * Sets the july1BudgetFteQuantity attribute value.
      * 
      * @param july1BudgetFteQuantity The july1BudgetFteQuantity to set.
      */
@@ -78,7 +76,7 @@ public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoun
     }
 
     /**
-     * Gets the july1BudgetTimePercent.
+     * Gets the july1BudgetTimePercent attribute.
      * 
      * @return Returns the july1BudgetTimePercent.
      */
@@ -87,14 +85,14 @@ public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoun
     }
 
     /**
-     * Sets the july1BudgetTimePercent.
+     * Sets the july1BudgetTimePercent attribute value.
      * 
      * @param july1BudgetTimePercent The july1BudgetTimePercent to set.
      */
     public void setJuly1BudgetTimePercent(BigDecimal july1BudgetTimePercent) {
         this.july1BudgetTimePercent = july1BudgetTimePercent;
     }
-
+    
     /**
      * construct the key list of the business object
      * 
@@ -110,7 +108,6 @@ public class LaborCalculatedSalaryFoundationTracker extends CalculatedSalaryFoun
         keyFieldList.add(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
         keyFieldList.add(KFSPropertyConstants.POSITION_NUMBER);
         keyFieldList.add(KFSPropertyConstants.EMPLID);
-
         return keyFieldList;
     }
 }

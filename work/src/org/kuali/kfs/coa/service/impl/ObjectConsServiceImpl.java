@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,12 @@ package org.kuali.module.chart.service.impl;
 import org.kuali.module.chart.bo.ObjectCons;
 import org.kuali.module.chart.dao.ObjectConsDao;
 import org.kuali.module.chart.service.ObjectConsService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This service implementation is the default implementation of the BalanceTyp service that is delivered with Kuali.
+ * This class is the service implementation for the ObjLevel structure. This is the default implementation, that is delivered with
+ * Kuali.
+ * 
+ * 
  */
 public class ObjectConsServiceImpl implements ObjectConsService {
     private ObjectConsDao objectConsDao;

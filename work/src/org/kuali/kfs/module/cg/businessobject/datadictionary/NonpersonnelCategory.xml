@@ -1,176 +1,113 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.kra.budget.bo.NonpersonnelCategory">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="NonpersonnelCategory" parent="NonpersonnelCategory-parentBean" />
+        <inquiry>
+            <title>Nonpersonnel Category Inquiry</title>
 
-  <bean id="NonpersonnelCategory-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.kra.budget.bo.NonpersonnelCategory" />
-    <property name="inquiryDefinition" >
-      <ref bean="NonpersonnelCategory-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="NonpersonnelCategory-lookupDefinition" />
-    </property>
-    <property name="titleAttribute" value="code" />
-    <property name="objectLabel" value="Non-Personnel Category" />
-    <property name="attributes" >
-      <list>
-        <ref bean="NonpersonnelCategory-code" />
-        <ref bean="NonpersonnelCategory-active" />
-        <ref bean="NonpersonnelCategory-name" />
-        <ref bean="NonpersonnelCategory-sortNumber" />
-        <ref bean="NonpersonnelCategory-objectId" />
-        <ref bean="NonpersonnelCategory-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="code" />
+                <field attributeName="name" />
+                <field attributeName="active" />
+                <field attributeName="sortNumber" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Nonpersonnel Category Lookup</title>
 
+            <menubar>
+                <![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.kra.budget.bo.NonpersonnelCategory">Create New</a>]]>
+            </menubar>
 
-  <bean id="NonpersonnelCategory-code" parent="NonpersonnelCategory-code-parentBean" />
+            <instructions>Lookup a Nonpersonnel Category</instructions>
 
-  <bean id="NonpersonnelCategory-code-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="code" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Nonpersonnel Category Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AlphaValidationPattern"
-            p:exactLength="2" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-    <property name="summary" value="Nonpersonnel Category Code" />
-    <property name="description" value="Nonpersonnel Category Code" />
-  </bean>
-  <bean id="NonpersonnelCategory-active" parent="NonpersonnelCategory-active-parentBean" />
+            <defaultSort attributeName="code" sortAscending="false" />
 
-  <bean id="NonpersonnelCategory-active-parentBean" abstract="true" parent="GenericAttributes-activeIndicator">
-    <property name="name" value="active" />
-  </bean>
-  <bean id="NonpersonnelCategory-name" parent="NonpersonnelCategory-name-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="code" required="false" />
+                <lookupField attributeName="name" required="false" />
+                <lookupField attributeName="active" required="false">
+                    <defaultValue>Y</defaultValue>
+                </lookupField>
+            </lookupFields>
 
-  <bean id="NonpersonnelCategory-name-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="name" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Nonpersonnel Category Name" />
-    <property name="shortLabel" value="Name" />
-    <property name="maxLength" value="40" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="42" />
-    </property>
-    <property name="summary" value="Nonpersonnel Category Name" />
-    <property name="description" value="The name of the Nonpersonnel Category." />
-  </bean>
-  <bean id="NonpersonnelCategory-sortNumber" parent="NonpersonnelCategory-sortNumber-parentBean" />
-
-  <bean id="NonpersonnelCategory-sortNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="sortNumber" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Nonpersonnel Category Sort Number" />
-    <property name="shortLabel" value="Sort Number" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="2" />
-    </property>
-    <property name="summary" value="Nonpersonnel Category Sort Number" />
-    <property name="description" value="The order in which Nonpersonnel Categories will be displayed within the application." />
-  </bean>
-  <bean id="NonpersonnelCategory-objectId" parent="NonpersonnelCategory-objectId-parentBean" />
-
-  <bean id="NonpersonnelCategory-objectId-parentBean" abstract="true" parent="GenericAttributes-objectId">
-  </bean>
-  <bean id="NonpersonnelCategory-versionNumber" parent="NonpersonnelCategory-versionNumber-parentBean" />
-
-  <bean id="NonpersonnelCategory-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
-
-<!-- Business Object Inquiry Definition -->
+            <resultFields>
+                <field attributeName="code" />
+                <field attributeName="name" />
+                <field attributeName="active" />
+            </resultFields>
+        </lookup>
 
 
-  <bean id="NonpersonnelCategory-inquiryDefinition" parent="NonpersonnelCategory-inquiryDefinition-parentBean" />
+        <titleAttribute>code</titleAttribute>
 
-  <bean id="NonpersonnelCategory-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Non-Personnel Category Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="code" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="name" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="sortNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="active" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <attributes>
+            <attribute name="code" forceUppercase="true">
+                <label>Nonpersonnel Category Code</label>
+                <shortLabel>Code</shortLabel>
 
-<!-- Business Object Lookup Definition -->
+                <maxLength>2</maxLength>
+
+                <validationPattern>
+                    <alpha exactLength="2" />
+                </validationPattern>
+                <required>true</required>
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>Nonpersonnel Category Code</summary>
+                <description>Nonpersonnel Category Code</description>
+            </attribute>
+
+            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
+
+            <attribute name="name">
+                <label>Nonpersonnel Category Name</label>
+                <shortLabel>Name</shortLabel>
+
+                <maxLength>40</maxLength>
+                <validationPattern>
+                    <anyCharacter allowWhitespace="true" />
+                </validationPattern>
+                <required>true</required>
+
+                <control>
+                    <text size="42" />
+                </control>
+
+                <summary>Nonpersonnel Category Name</summary>
+                <description>The name of the Nonpersonnel Category.</description>
+            </attribute>
+
+            <attribute name="sortNumber">
+                <label>Nonpersonnel Category Sort Number</label>
+                <shortLabel>Sort Number</shortLabel>
+
+                <maxLength>2</maxLength>
+
+                <validationPattern>
+                    <numeric />
+                </validationPattern>
+
+                <control>
+                    <text size="2" />
+                </control>
+
+                <summary>Nonpersonnel Category Sort Number</summary>
+                <description>The order in which Nonpersonnel Categories will be displayed within the application.</description>
+            </attribute>
 
 
-  <bean id="NonpersonnelCategory-lookupDefinition" parent="NonpersonnelCategory-lookupDefinition-parentBean" />
+            <attributeReference name="objectId" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="objectId" />
 
-  <bean id="NonpersonnelCategory-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Non-Personnel Category Lookup" />
-    <property name="instructions" value="Lookup a Nonpersonnel Category" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-        <property name="attributeNames" >
-          <list>
-            <value>code</value>
-          </list>
-        </property>
-        <property name="sortAscending" value="false" />
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="code" />
-        <bean parent="FieldDefinition"
-              p:attributeName="name" />
-        <bean parent="FieldDefinition"
-              p:defaultValue="Y"
-              p:attributeName="active" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="code"
-              p:noInquiry="true" />
-        <bean parent="FieldDefinition"
-              p:attributeName="name" />
-        <bean parent="FieldDefinition"
-              p:attributeName="active" />
-      </list>
-    </property>
-  </bean>
-</beans>
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

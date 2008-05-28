@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 package org.kuali.module.kra.budget.web.struts.action;
 
@@ -24,16 +33,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
 import org.kuali.module.kra.budget.bo.Budget;
-import org.kuali.module.kra.budget.bo.BudgetInstitutionCostShare;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.bo.BudgetThirdPartyCostShare;
+import org.kuali.module.kra.budget.bo.BudgetUniversityCostShare;
 import org.kuali.module.kra.budget.web.struts.form.BudgetCostShareFormHelper;
 import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
 
 /**
  * Action for BudgetCostShare page.
+ * 
+ * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetCostShareAction extends BudgetAction {
 
@@ -53,14 +64,12 @@ public class BudgetCostShareAction extends BudgetAction {
         budget.refreshReferenceObject("personnel");
         budget.refreshReferenceObject("nonpersonnelItems");
         budget.refreshReferenceObject("indirectCost");
-
+        
         // super.execute has to be called before re-creating BudgetCostShareFormHelper because the super call may
         // completly reload data such as for example for the reload button
         ActionForward forward = super.execute(mapping, form, request, response);
-
+        
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
-
-        setupBudgetCostSharePermissionDisplay(budgetForm);
 
         return forward;
     }
@@ -83,7 +92,7 @@ public class BudgetCostShareAction extends BudgetAction {
     }
 
     /**
-     * Insert Institution Cost Share button.
+     * Insert University Cost Share button.
      * 
      * @param mapping
      * @param form
@@ -92,22 +101,21 @@ public class BudgetCostShareAction extends BudgetAction {
      * @return
      * @throws Exception
      */
-    public ActionForward insertInstitutionCostShareDirect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward insertUniversityCostShareDirect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BudgetForm budgetForm = (BudgetForm) form;
 
-        // Add the new institution cost share item and create a new one
-        budgetForm.getBudgetDocument().addInstitutionCostShare(budgetForm.getBudgetDocument().getBudget().getPeriods(), budgetForm.getNewInstitutionCostShare());
-        budgetForm.setNewInstitutionCostShare(new BudgetInstitutionCostShare());
+        // Add the new university cost share item and create a new one
+        budgetForm.getBudgetDocument().addUniversityCostShare(budgetForm.getBudgetDocument().getBudget().getPeriods(), budgetForm.getNewUniversityCostShare());
+        budgetForm.setNewUniversityCostShare(new BudgetUniversityCostShare());
 
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
-        budgetForm.getNewInstitutionCostShare().setPermissionIndicator(true);
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
-     * Delete Institution Cost Share button.
+     * Delete University Cost Share button.
      * 
      * @param mapping
      * @param form
@@ -116,15 +124,15 @@ public class BudgetCostShareAction extends BudgetAction {
      * @return
      * @throws Exception
      */
-    public ActionForward deleteInstitutionCostShareDirect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward deleteUniversityCostShareDirect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BudgetForm budgetForm = (BudgetForm) form;
 
-        budgetForm.getBudgetDocument().getBudget().getInstitutionCostShareItems().remove(getLineToDelete(request));
+        budgetForm.getBudgetDocument().getBudget().getUniversityCostShareItems().remove(getLineToDelete(request));
 
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -147,7 +155,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -168,7 +176,7 @@ public class BudgetCostShareAction extends BudgetAction {
         // Make sure new values are taken into account for calculations.
         budgetForm.setBudgetCostShareFormHelper(new BudgetCostShareFormHelper(budgetForm));
 
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
+        return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
     /**
@@ -186,20 +194,20 @@ public class BudgetCostShareAction extends BudgetAction {
         Budget budget = budgetForm.getBudgetDocument().getBudget();
         List<BudgetPeriod> periods = budgetForm.getBudgetDocument().getBudget().getPeriods();
 
-        Integer institutionCostShareNextSequenceNumber = budgetForm.getBudgetDocument().getInstitutionCostShareNextSequenceNumber();
+        Integer universityCostShareNextSequenceNumber = budgetForm.getBudgetDocument().getUniversityCostShareNextSequenceNumber();
         Integer thirdPartyCostShareNextSequenceNumber = budgetForm.getBudgetDocument().getThirdPartyCostShareNextSequenceNumber();
-        List institutionCostShare = new ArrayList(budget.getInstitutionCostShareItems());
-        List institutionCostSharePersonnel = new ArrayList(budget.getInstitutionCostSharePersonnelItems());
+        List universityCostShare = new ArrayList(budget.getUniversityCostShareItems());
+        List universityCostSharePersonnel = new ArrayList(budget.getUniversityCostSharePersonnelItems());
         List thirdPartyCostShare = new ArrayList(budget.getThirdPartyCostShareItems());
 
         this.load(mapping, form, request, response);
 
         // Only set the objects that potentially changed. The interface doesn't keep hiddens for fields that arn't used. Careful
         // not to use "budget" variable above, that doesn't effect budgetForm.
-        if (budget.isInstitutionCostShareIndicator()) {
-            budgetForm.getBudgetDocument().setInstitutionCostShareNextSequenceNumber(institutionCostShareNextSequenceNumber);
-            budgetForm.getBudgetDocument().getBudget().setInstitutionCostShareItems(institutionCostShare);
-            budgetForm.getBudgetDocument().getBudget().setInstitutionCostSharePersonnelItems(institutionCostSharePersonnel);
+        if (budget.isUniversityCostShareIndicator()) {
+            budgetForm.getBudgetDocument().setUniversityCostShareNextSequenceNumber(universityCostShareNextSequenceNumber);
+            budgetForm.getBudgetDocument().getBudget().setUniversityCostShareItems(universityCostShare);
+            budgetForm.getBudgetDocument().getBudget().setUniversityCostSharePersonnelItems(universityCostSharePersonnel);
         }
         if (budget.isBudgetThirdPartyCostShareIndicator()) {
             budgetForm.getBudgetDocument().setThirdPartyCostShareNextSequenceNumber(thirdPartyCostShareNextSequenceNumber);
@@ -207,12 +215,5 @@ public class BudgetCostShareAction extends BudgetAction {
         }
 
         return super.save(mapping, form, request, response);
-    }
-
-    @Override
-    public ActionForward reload(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ActionForward forward = super.reload(mapping, form, request, response);
-        ((BudgetForm) form).getNewInstitutionCostShare().setPermissionIndicator(true);
-        return forward;
     }
 }

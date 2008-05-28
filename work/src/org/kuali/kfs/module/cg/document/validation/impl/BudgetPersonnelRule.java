@@ -1,17 +1,24 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.rules.budget;
 
@@ -23,33 +30,27 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.KeyConstants;
 import org.kuali.core.document.Document;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DictionaryValidationService;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
-import org.kuali.module.kra.KraConstants;
-import org.kuali.module.kra.KraKeyConstants;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.KraConstants;
+import org.kuali.module.kra.budget.KraKeyConstants;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetUser;
 import org.kuali.module.kra.budget.bo.UserAppointmentTask;
 import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
 import org.kuali.module.kra.budget.document.BudgetDocument;
-import org.kuali.module.kra.budget.service.BudgetPersonnelService;
-import org.kuali.module.kra.util.AuditCluster;
-import org.kuali.module.kra.util.AuditError;
+import org.kuali.module.kra.budget.util.AuditCluster;
+import org.kuali.module.kra.budget.util.AuditError;
 
 public class BudgetPersonnelRule {
 
     protected boolean runPersonnelAuditErrors(List personnel) {
         List<AuditError> personnelAuditErrors = new ArrayList<AuditError>();
-        String INVALID_STATUSES = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.RESEARCH_ADMINISTRATION_DOCUMENT.class, KraConstants.PERSONNEL_STATUSES);
+        String INVALID_STATUSES = SpringServiceLocator.getKualiConfigurationService().getApplicationParameterValue("KraDevelopmentGroup", "invalidPersonnelStatuses");
         for (Iterator iter = personnel.iterator(); iter.hasNext();) {
             BudgetUser person = (BudgetUser) iter.next();
             if (ObjectUtils.isNotNull(person.getUser()) && person.getUser().getEmployeeStatusCode() != null && StringUtils.contains(INVALID_STATUSES, person.getUser().getEmployeeStatusCode())) {
@@ -67,11 +68,11 @@ public class BudgetPersonnelRule {
         }
         return true;
     }
-
+    
     protected boolean isPersonnelListValid(Budget budget) {
         boolean valid = true;
 
-        HashMap appointmentTypeMappings = SpringContext.getBean(BudgetPersonnelService.class).getAppointmentTypeMappings();
+        HashMap appointmentTypeMappings = SpringServiceLocator.getBudgetPersonnelService().getAppointmentTypeMappings();
 
         valid &= verifyPersonnelEffortAmounts(budget, false, appointmentTypeMappings);
         valid &= verifySummerAppointmentLength(budget, appointmentTypeMappings);
@@ -88,7 +89,7 @@ public class BudgetPersonnelRule {
         BudgetDocument budgetDocument = (BudgetDocument) document;
         Budget budget = budgetDocument.getBudget();
 
-        HashMap appointmentTypeMappings = SpringContext.getBean(BudgetPersonnelService.class).getAppointmentTypeMappings();
+        HashMap appointmentTypeMappings = SpringServiceLocator.getBudgetPersonnelService().getAppointmentTypeMappings();
 
         valid &= verifySummerAppointmentLength(budget, appointmentTypeMappings);
         valid &= verifyPersonnelEffortAmounts(budget, true, appointmentTypeMappings);
@@ -106,7 +107,6 @@ public class BudgetPersonnelRule {
 
         valid &= verifyPersonnelChartOrg(personnel);
         valid &= verifyGradAssistantFeeRemission(personnel);
-        valid &= validateGradAssistantPerCreditHour(personnel);
 
         GlobalVariables.getErrorMap().removeFromErrorPath("document");
 
@@ -123,8 +123,8 @@ public class BudgetPersonnelRule {
 
             GlobalVariables.getErrorMap().addToErrorPath("budget.personFromList[" + personnelListIndex + "]");
 
-            if (StringUtils.isBlank(budgetUser.getFiscalCampusCode()) || StringUtils.isBlank(budgetUser.getPrimaryDepartmentCode())) {
-                GlobalVariables.getErrorMap().putError("chartOrg", KraKeyConstants.ERROR_MISSING, new String[] { "Chart/Org" });
+            if (!StringUtils.isNotBlank(budgetUser.getFiscalCampusCode()) && !StringUtils.isNotBlank(budgetUser.getPrimaryDepartmentCode())) {
+                GlobalVariables.getErrorMap().putError("chartOrg", KeyConstants.ERROR_MISSING, new String[] { "Chart/Org" });
                 valid = false;
             }
 
@@ -155,8 +155,8 @@ public class BudgetPersonnelRule {
 
                     UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
 
-                    if (userAppointmentTaskPeriod.getTotalFeeRemissionsAmount().compareTo(userAppointmentTaskPeriod.getAgencyRequestedFeesAmount().add(userAppointmentTaskPeriod.getInstitutionRequestedFeesAmount())) != 0) {
-                        GlobalVariables.getErrorMap().putError("feeRemissions", KraKeyConstants.ERROR_FEE_REMISSION_DISTRIBUTION);
+                    if (userAppointmentTaskPeriod.getTotalFeeRemissionsAmount().compareTo(userAppointmentTaskPeriod.getAgencyRequestedFeesAmount().add(userAppointmentTaskPeriod.getUniversityRequestedFeesAmount())) != 0) {
+                        GlobalVariables.getErrorMap().putError("feeRemissions", KeyConstants.ERROR_FEE_REMISSION_DISTRIBUTION);
                         valid = false;
                     }
 
@@ -170,63 +170,17 @@ public class BudgetPersonnelRule {
         return valid;
     }
 
-    /**
-     * This method...
-     * 
-     * @param personnelList
-     * @return
-     */
-    private boolean validateGradAssistantPerCreditHour(List personnelList) {
-        boolean valid = true;
-
-        int personnelListIndex = 0;
-
-        for (Iterator budgetUserIter = personnelList.iterator(); budgetUserIter.hasNext(); personnelListIndex++) {
-            BudgetUser budgetUser = (BudgetUser) budgetUserIter.next();
-
-            GlobalVariables.getErrorMap().addToErrorPath("budget.personFromList[" + personnelListIndex + "]");
-
-            int userAppointmentTaskListIndex = 0;
-
-            for (Iterator userAppointmentTaskIter = budgetUser.getUserAppointmentTasks().iterator(); userAppointmentTaskIter.hasNext(); userAppointmentTaskListIndex++) {
-                int userAppointmentTaskPeriodIndex = 0;
-
-                for (Iterator userAppointmentTaskPeriodIter = ((UserAppointmentTask) userAppointmentTaskIter.next()).getUserAppointmentTaskPeriods().iterator(); userAppointmentTaskPeriodIter.hasNext(); userAppointmentTaskPeriodIndex++) {
-
-                    GlobalVariables.getErrorMap().addToErrorPath("userAppointmentTask[" + userAppointmentTaskListIndex + "].userAppointmentTaskPeriod[" + userAppointmentTaskPeriodIndex + "]");
-
-                    UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
-
-                    if (ObjectUtils.isNotNull(userAppointmentTaskPeriod.getUserCreditHourAmount()) && userAppointmentTaskPeriod.getUserCreditHourAmount().isGreaterEqual(new KualiDecimal(10000.00))) {
-                        GlobalVariables.getErrorMap().putError("userCreditHourAmount", KraKeyConstants.ERROR_PER_CREDIT_HOUR_AMOUNT_ABOVE_MAXIMUM, userAppointmentTaskPeriod.getUserCreditHourAmount().toString());
-                        valid = false;
-                    }
-
-                    GlobalVariables.getErrorMap().removeFromErrorPath("userAppointmentTask[" + userAppointmentTaskListIndex + "].userAppointmentTaskPeriod[" + userAppointmentTaskPeriodIndex + "]");
-                }
-            }
-
-            GlobalVariables.getErrorMap().removeFromErrorPath("budget.personFromList[" + personnelListIndex + "]");
-        }
-
-        return valid;
-    }
-
-    protected boolean processInsertPersonnelBusinessRules(List personnelList, BudgetUser newBudgetUser, boolean isToBeNamed) {
+    protected boolean processInsertPersonnelBusinessRules(List personnelList, BudgetUser newBudgetUser) {
         boolean valid = true;
 
         if (StringUtils.isNotEmpty(newBudgetUser.getPersonUniversalIdentifier())) {
             for (Iterator budgetUserIter = personnelList.iterator(); budgetUserIter.hasNext();) {
                 if (StringUtils.equals(newBudgetUser.getPersonUniversalIdentifier(), ((BudgetUser) budgetUserIter.next()).getPersonUniversalIdentifier())) {
-                    GlobalVariables.getErrorMap().putError("newPersonnel", KraKeyConstants.ERROR_PERSON_ALREADY_EXISTS_ON_BUDGET, new String[] {});
+                    GlobalVariables.getErrorMap().putError("newPersonnel", KeyConstants.ERROR_PERSON_ALREADY_EXISTS_ON_BUDGET, new String[] {});
                     valid = false;
                     break;
                 }
             }
-        }
-        else if (!isToBeNamed) {
-            GlobalVariables.getErrorMap().putError("newPersonnel", KraKeyConstants.ERROR_PERSON_NOT_SELECTED, new String[] {});
-            valid = false;
         }
         return valid;
     }
@@ -251,9 +205,9 @@ public class BudgetPersonnelRule {
                     GlobalVariables.getErrorMap().addToErrorPath("userAppointmentTask[" + userAppointmentTaskListIndex + "].userAppointmentTaskPeriod[" + userAppointmentTaskPeriodIndex + "]");
 
                     UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
-                    if (StringUtils.equals(userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
+                    if (StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
                         if (userAppointmentTaskPeriod.getPersonWeeksAmount().compareTo(new Integer(13)) == 1) {
-                            GlobalVariables.getErrorMap().putError("personWeeksAmount", KraKeyConstants.ERROR_PERSONNEL_SUMMER_WEEKS_TOO_MUCH, new String[] { "Period " + (userAppointmentTaskPeriodIndex + 1), "13" });
+                            GlobalVariables.getErrorMap().putError("personWeeksAmount", KeyConstants.ERROR_PERSONNEL_SUMMER_WEEKS_TOO_MUCH, new String[] { "Period " + (userAppointmentTaskPeriodIndex + 1), "13" });
                             valid = false;
                         }
                     }
@@ -277,9 +231,10 @@ public class BudgetPersonnelRule {
 
             GlobalVariables.getErrorMap().addToErrorPath("budget.personFromList[" + personnelListIndex + "]");
 
+            budgetUser.refreshReferenceObject("user");
             // salary justification required for changes to personnel salary
             if (budgetUser.getUser() != null && budgetUser.getUser().getPersonBaseSalaryAmount() != null && budgetUser.getBaseSalary() != null && !budgetUser.getBaseSalary().equals(budgetUser.getUser().getPersonBaseSalaryAmount()) && StringUtils.isEmpty(budgetUser.getPersonSalaryJustificationText())) {
-                GlobalVariables.getErrorMap().putError("personSalaryJustificationText", KraKeyConstants.ERROR_PERSONNEL_SALARY_CHANGE_JUSTIFICATION_REQUIRED, new String[] {});
+                GlobalVariables.getErrorMap().putError("personSalaryJustificationText", KeyConstants.ERROR_PERSONNEL_SALARY_CHANGE_JUSTIFICATION_REQUIRED, new String[] {});
                 valid = false;
             }
 
@@ -306,45 +261,38 @@ public class BudgetPersonnelRule {
                 int userAppointmentTaskListIndex = 0;
 
                 for (Iterator userAppointmentTaskIter = budgetUser.getUserAppointmentTasks().iterator(); userAppointmentTaskIter.hasNext(); userAppointmentTaskListIndex++) {
-                    UserAppointmentTask userAppointmentTask = (UserAppointmentTask) userAppointmentTaskIter.next();
-
-                    GlobalVariables.getErrorMap().addToErrorPath("userAppointmentTask[" + userAppointmentTaskListIndex + "]");
-
                     int userAppointmentTaskPeriodIndex = 0;
 
-                    for (Iterator userAppointmentTaskPeriodIter = userAppointmentTask.getUserAppointmentTaskPeriods().iterator(); userAppointmentTaskPeriodIter.hasNext(); userAppointmentTaskPeriodIndex++) {
-
+                    for (Iterator userAppointmentTaskPeriodIter = ((UserAppointmentTask) userAppointmentTaskIter.next()).getUserAppointmentTaskPeriods().iterator(); userAppointmentTaskPeriodIter.hasNext(); userAppointmentTaskPeriodIndex++) {
                         Integer periodNumber = new Integer(userAppointmentTaskPeriodIndex + 1);
 
                         UserAppointmentTaskPeriod userAppointmentTaskPeriod = (UserAppointmentTaskPeriod) userAppointmentTaskPeriodIter.next();
-
-                        valid &= SpringContext.getBean(DictionaryValidationService.class).isBusinessObjectValid(userAppointmentTaskPeriod, "userAppointmentTaskPeriod[" + userAppointmentTaskPeriodIndex + "]");
-
-                        if (!StringUtils.equals(userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString()) && !StringUtils.contains(appointmentTypeMappings.get("gradResAssistant").toString(), userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode()) && !StringUtils.contains(appointmentTypeMappings.get("hourly").toString(), userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode())) {
+                        if (!StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString()) &&
+                                !StringUtils.contains(appointmentTypeMappings.get("gradResAssistant").toString(), userAppointmentTaskPeriod.getUniversityAppointmentTypeCode()) &&
+                                !StringUtils.contains(appointmentTypeMappings.get("hourly").toString(), userAppointmentTaskPeriod.getUniversityAppointmentTypeCode())) {
                             if (periodEffortMap.get(periodNumber) == null) {
-                                periodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount()));
+                                periodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount()));
                             }
                             else {
-                                periodEffortMap.put(periodNumber, ((KualiInteger) periodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount())));
+                                periodEffortMap.put(periodNumber, ((KualiInteger) periodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount())));
                             }
                         }
-                        else if (StringUtils.equals(userAppointmentTaskPeriod.getInstitutionAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
+                        else if (StringUtils.equals(userAppointmentTaskPeriod.getUniversityAppointmentTypeCode(), appointmentTypeMappings.get("academicSummer").toString())) {
                             if (summerPeriodEffortMap.get(periodNumber) == null) {
-                                summerPeriodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount()));
+                                summerPeriodEffortMap.put(periodNumber, userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount()));
                             }
                             else {
-                                summerPeriodEffortMap.put(periodNumber, ((KualiInteger) summerPeriodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount())));
+                                summerPeriodEffortMap.put(periodNumber, ((KualiInteger) summerPeriodEffortMap.get(periodNumber)).add(userAppointmentTaskPeriod.getAgencyPercentEffortAmount().add(userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount())));
                             }
                         }
                     }
-                    GlobalVariables.getErrorMap().removeFromErrorPath("userAppointmentTask[" + userAppointmentTaskListIndex + "]");
                 }
 
                 for (Iterator periodSalaryIter = periodEffortMap.keySet().iterator(); periodSalaryIter.hasNext();) {
                     Integer periodNumber = (Integer) periodSalaryIter.next();
                     KualiInteger periodEffort = (KualiInteger) periodEffortMap.get(periodNumber);
                     if (periodEffort.compareTo(new KualiInteger(100)) == 1) {
-                        GlobalVariables.getErrorMap().putError("periodEffort.tooMuch", KraKeyConstants.ERROR_PERSONNEL_PERIOD_EFFORT_TOO_MUCH, new String[] { "Period " + periodNumber, periodEffort.toString() });
+                        GlobalVariables.getErrorMap().putError("periodEffort.tooMuch", KeyConstants.ERROR_PERSONNEL_PERIOD_EFFORT_TOO_MUCH, new String[] { "Period " + periodNumber, periodEffort.toString() });
                         valid = false;
                     }
                 }
@@ -353,7 +301,7 @@ public class BudgetPersonnelRule {
                     Integer periodNumber = (Integer) summerPeriodEffortIter.next();
                     KualiInteger periodEffort = (KualiInteger) summerPeriodEffortMap.get(periodNumber);
                     if (periodEffort.compareTo(new KualiInteger(100)) == 1) {
-                        GlobalVariables.getErrorMap().putError("periodEffort.tooMuch", KraKeyConstants.ERROR_PERSONNEL_PERIOD_EFFORT_TOO_MUCH_SUMMER, new String[] { "Period " + periodNumber, periodEffort.toString() });
+                        GlobalVariables.getErrorMap().putError("periodEffort.tooMuch", KeyConstants.ERROR_PERSONNEL_PERIOD_EFFORT_TOO_MUCH_SUMMER, new String[] { "Period " + periodNumber, periodEffort.toString() });
                         valid = false;
                     }
                 }
@@ -363,17 +311,16 @@ public class BudgetPersonnelRule {
         return valid;
     }
 
-
+    
     protected boolean verifyRequiredFields(Document document) {
-        Budget budget = ((BudgetDocument) document).getBudget();
-
-        DataDictionaryService dataDictionaryService = SpringContext.getBean(DataDictionaryService.class);
-        HashMap appointmentTypeMappings = SpringContext.getBean(BudgetPersonnelService.class).getAppointmentTypeMappings();
-
+        Budget budget = ((BudgetDocument)document).getBudget();
+            
+        HashMap appointmentTypeMappings = SpringServiceLocator.getBudgetPersonnelService().getAppointmentTypeMappings();
+        
         boolean valid = true;
 
         GlobalVariables.getErrorMap().addToErrorPath("document.budget");
-
+        
         int personIndex = 0;
         for (BudgetUser budgetUser : budget.getPersonnel()) {
             GlobalVariables.getErrorMap().addToErrorPath("personFromList[" + personIndex + "]");
@@ -383,115 +330,109 @@ public class BudgetPersonnelRule {
                 int period = 0;
                 for (UserAppointmentTaskPeriod userAppointmentTaskPeriod : userAppointmentTask.getUserAppointmentTaskPeriods()) {
                     GlobalVariables.getErrorMap().addToErrorPath("userAppointmentTaskPeriod[" + period + "]");
-
-                    if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.FULL_YEAR).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { // Salary
+                    
+                    if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.FULL_YEAR).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Salary
                         if (userAppointmentTaskPeriod.getAgencyPercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyPercentEffortAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort Amount");
                             valid = false;
                         }
-
-                        if (userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionCostSharePercentEffortAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionCostSharePercentEffortAmount"));
+                        
+                        if (userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityCostSharePercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Institution Cost Share Percent Effort Amount");
                             valid = false;
                         }
-
-                    }
-                    else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { // Academic
-                        // 9/Summer
+                        
+                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.ACADEMIC_YEAR_SUMMER).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Academic 9/Summer
                         if (userAppointmentTaskPeriod.getPersonWeeksAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("personWeeksAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "personWeeksAmount"));
+                            GlobalVariables.getErrorMap().putError("personWeeksAmount", KeyConstants.ERROR_REQUIRED, "Number of Weeks");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getAgencyPercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyPercentEffortAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyPercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort Amount");
                             valid = false;
                         }
-
-                        if (userAppointmentTaskPeriod.getInstitutionCostSharePercentEffortAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionCostSharePercentEffortAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionCostSharePercentEffortAmount"));
+                        
+                        if (userAppointmentTaskPeriod.getUniversityCostSharePercentEffortAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityCostSharePercentEffortAmount", KeyConstants.ERROR_REQUIRED, "Institution Cost Share Percent Effort Amount");
                             valid = false;
                         }
-                    }
-                    else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.HOURLY).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { // Hourly
+                    } else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.HOURLY).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Hourly
                         if (userAppointmentTaskPeriod.getUserHourlyRate() == null) {
-                            GlobalVariables.getErrorMap().putError("userHourlyRate", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userHourlyRate"));
+                            GlobalVariables.getErrorMap().putError("userHourlyRate", KeyConstants.ERROR_REQUIRED, "Hourly Rate");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getUserAgencyHours() == null) {
-                            GlobalVariables.getErrorMap().putError("userAgencyHours", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userAgencyHours"));
+                            GlobalVariables.getErrorMap().putError("userAgencyHours", KeyConstants.ERROR_REQUIRED, "Agency Request Number of Hours");
                             valid = false;
                         }
-
-                        if (userAppointmentTaskPeriod.getUserInstitutionHours() == null) {
-                            GlobalVariables.getErrorMap().putError("userInstitutionHours", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userInstitutionHours"));
+                        
+                        if (userAppointmentTaskPeriod.getUserUniversityHours() == null) {
+                            GlobalVariables.getErrorMap().putError("userUniversityHours", KeyConstants.ERROR_REQUIRED, "Institution Request Number of Hours");
                             valid = false;
                         }
-                    }
-                    else if (StringUtils.contains(appointmentTypeMappings.get(KraConstants.GRADUATE_ASSISTANT).toString(), userAppointmentTask.getInstitutionAppointmentTypeCode())) { // Grad
-                        // Asst
+                    } else if(StringUtils.contains(appointmentTypeMappings.get(KraConstants.GRADUATE_ASSISTANT).toString(), userAppointmentTask.getUniversityAppointmentTypeCode())) { //Grad Asst
                         if (userAppointmentTaskPeriod.getAgencyFullTimeEquivalentPercent() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyFullTimeEquivalentPercent", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyPercentEffortAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyFullTimeEquivalentPercent", KeyConstants.ERROR_REQUIRED, "Agency Percent Effort");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getAgencySalaryAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencySalaryAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencySalaryAmount"));
+                            GlobalVariables.getErrorMap().putError("agencySalaryAmount", KeyConstants.ERROR_REQUIRED, "Agency Salary Amount");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getAgencyHealthInsuranceAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyHealthInsuranceAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyHealthInsuranceAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyHealthInsuranceAmount", KeyConstants.ERROR_REQUIRED, "Agency Health Insurance Amount");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getUserCreditHoursNumber() == null) {
-                            GlobalVariables.getErrorMap().putError("userCreditHoursNumber", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userCreditHoursNumber"));
+                            GlobalVariables.getErrorMap().putError("userCreditHoursNumber", KeyConstants.ERROR_REQUIRED, "Number of Credit Hours");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getUserCreditHourAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("userCreditHourAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userCreditHourAmount"));
+                            GlobalVariables.getErrorMap().putError("userCreditHourAmount", KeyConstants.ERROR_REQUIRED, "Amount Per Credit Hour");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getUserMiscellaneousFeeAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("userMiscellaneousFeesAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "userMiscellaneousFeeAmount"));
+                            GlobalVariables.getErrorMap().putError("userMiscellaneousFeesAmount", KeyConstants.ERROR_REQUIRED, "Miscellaneous Fees Amount");
                             valid = false;
                         }
-
+                        
                         if (userAppointmentTaskPeriod.getAgencyRequestedFeesAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("agencyRequestedFeesAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "agencyRequestedFeesAmount"));
+                            GlobalVariables.getErrorMap().putError("agencyRequestedFeesAmount", KeyConstants.ERROR_REQUIRED, "Agency Requested Fees");
+                            valid = false;
+                        }
+                        
+                        if (userAppointmentTaskPeriod.getUniversityRequestedFeesAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityRequestedFeesAmount", KeyConstants.ERROR_REQUIRED, "Institution Requested Fees");
+                            valid = false;
+                        }
+                        
+                        if (userAppointmentTaskPeriod.getUniversityFullTimeEquivalentPercent() == null) {
+                            GlobalVariables.getErrorMap().putError("universityFullTimeEquivalentPercent", KeyConstants.ERROR_REQUIRED, "Institution Percent Effort");
                             valid = false;
                         }
 
-                        if (userAppointmentTaskPeriod.getInstitutionRequestedFeesAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionRequestedFeesAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionRequestedFeesAmount"));
+                        if (userAppointmentTaskPeriod.getUniversitySalaryAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universitySalaryAmount", KeyConstants.ERROR_REQUIRED, "Institution Salary Amount");
                             valid = false;
                         }
-
-                        if (userAppointmentTaskPeriod.getInstitutionFullTimeEquivalentPercent() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionFullTimeEquivalentPercent", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionCostSharePercentEffortAmount"));
+                        
+                        if (userAppointmentTaskPeriod.getUniversityHealthInsuranceAmount() == null) {
+                            GlobalVariables.getErrorMap().putError("universityHealthInsuranceAmount", KeyConstants.ERROR_REQUIRED, "Institution Health Insurance Amount");
                             valid = false;
                         }
-
-                        if (userAppointmentTaskPeriod.getInstitutionSalaryAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionSalaryAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionSalaryAmount"));
-                            valid = false;
-                        }
-
-                        if (userAppointmentTaskPeriod.getInstitutionHealthInsuranceAmount() == null) {
-                            GlobalVariables.getErrorMap().putError("institutionHealthInsuranceAmount", KFSKeyConstants.ERROR_REQUIRED, dataDictionaryService.getAttributeLabel(UserAppointmentTaskPeriod.class, "institutionHealthInsuranceAmount"));
-                            valid = false;
-                        }
-
+                        
+                    } else {
+                        //Some unrecognized type
                     }
-                    else {
-                        // Some unrecognized type
-                    }
-
-
+                    
+                    
                     GlobalVariables.getErrorMap().removeFromErrorPath("userAppointmentTaskPeriod[" + period + "]");
                     period++;
                 }
@@ -501,9 +442,9 @@ public class BudgetPersonnelRule {
             GlobalVariables.getErrorMap().removeFromErrorPath("personFromList[" + personIndex + "]");
             personIndex++;
         }
-
+        
         GlobalVariables.getErrorMap().removeFromErrorPath("document.budget");
-
+        
         return valid;
     }
 }

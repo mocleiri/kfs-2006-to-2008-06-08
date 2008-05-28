@@ -15,146 +15,60 @@
  */
 package org.kuali.module.purap.web.struts.form;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.web.ui.ExtraButton;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
-import org.kuali.module.purap.PurapParameterConstants;
-import org.kuali.module.purap.bo.PurApItem;
-import org.kuali.module.purap.document.AccountsPayableDocument;
-import org.kuali.module.purap.service.PurchaseOrderService;
-import org.kuali.module.purap.util.PurApItemUtils;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase;
+import org.kuali.module.purap.bo.PurchasingApItem;
 
 /**
- * Struts Action Form for Accounts Payable documents.
+ * This class is the form class for the Purchasing documents. This method extends the parent KualiTransactionalDocumentFormBase
+ * class which contains all of the common form methods and form attributes needed by the Purchasing documents.
+ * 
  */
-public class AccountsPayableFormBase extends PurchasingAccountsPayableFormBase {
-
-    private PurApItem newPurchasingItemLine;
-    private boolean calculated;
-    private int countOfAboveTheLine = 0;
-    private int countOfBelowTheLine = 0;
-
+public class AccountsPayableFormBase extends KualiTransactionalDocumentFormBase {
+    
+    private PurchasingApItem newPurchasingItemLine;
+    private Boolean notOtherDelBldg = true;
+    
     /**
-     * Constructs an AccountsPayableForm instance and sets up the appropriately casted document.
+     * Constructs a RequisitionForm instance and sets up the appropriately casted document. 
      */
     public AccountsPayableFormBase() {
         super();
-        calculated = false;
     }
-
-    public PurApItem getNewPurchasingItemLine() {
+    /**
+     * Gets the newPurchasingItemLine attribute. 
+     * @return Returns the newPurchasingItemLine.
+     */
+    public PurchasingApItem getNewPurchasingItemLine() {
         return newPurchasingItemLine;
     }
-
-    public void setNewPurchasingItemLine(PurApItem newPurchasingItemLine) {
+    /**
+     * Sets the newPurchasingItemLine attribute value.
+     * @param newPurchasingItemLine The newPurchasingItemLine to set.
+     */
+    public void setNewPurchasingItemLine(PurchasingApItem newPurchasingItemLine) {
         this.newPurchasingItemLine = newPurchasingItemLine;
     }
-
-    public PurApItem getAndResetNewPurchasingItemLine() {
-        PurApItem aPurchasingItemLine = getNewPurchasingItemLine();
+    
+    public PurchasingApItem getAndResetNewPurchasingItemLine() {
+        PurchasingApItem aPurchasingItemLine = getNewPurchasingItemLine();
         setNewPurchasingItemLine(setupNewPurchasingItemLine());
         return aPurchasingItemLine;
     }
-
+    
     /**
-     * This method should be overriden (or see accountingLines for an alternate way of doing this with newInstance)
      * 
-     * @return - null, enforces overriding
+     * This method should be overriden (or see accountingLines for an alternate way of doing this with newInstance)
+     * @return
      */
-    public PurApItem setupNewPurchasingItemLine() {
+    public PurchasingApItem setupNewPurchasingItemLine() {
         return null;
     }
-
-    public boolean isCalculated() {
-        return calculated;
+    public Boolean getNotOtherDelBldg() {
+        return notOtherDelBldg;
     }
-
-    public void setCalculated(boolean calculated) {
-        this.calculated = calculated;
+    public void setNotOtherDelBldg(Boolean notOtherDelBldg) {
+        this.notOtherDelBldg = notOtherDelBldg;
     }
-
-    public int getCountOfAboveTheLine() {
-        return countOfAboveTheLine;
-    }
-
-    public void setCountOfAboveTheLine(int countOfAboveTheLine) {
-        this.countOfAboveTheLine = countOfAboveTheLine;
-    }
-
-    public int getCountOfBelowTheLine() {
-        return countOfBelowTheLine;
-    }
-
-    public void setCountOfBelowTheLine(int countOfBelowTheLine) {
-        this.countOfBelowTheLine = countOfBelowTheLine;
-    }
-
-    /**
-     * Determines if the current user is an AP user and returns true, false otherwise.
-     * 
-     * @return - true if current user is AP user, false otherwise.
-     */
-    public boolean isApUser() {
-
-        boolean apUser = false;
-        UniversalUser user = GlobalVariables.getUserSession().getUniversalUser();
-
-        String apGroup = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapParameterConstants.Workgroups.WORKGROUP_ACCOUNTS_PAYABLE);
-
-        if (user.isMember(apGroup)) {
-            apUser = true;
-        }
-
-        return apUser;
-    }
-
-    /**
-     * Adds a new button to the extra buttons collection.
-     * 
-     * @param property - property for button
-     * @param source - location of image
-     * @param altText - alternate text for button if images don't appear
-     */
-    protected void addExtraButton(String property, String source, String altText) {
-
-        ExtraButton newButton = new ExtraButton();
-
-        newButton.setExtraButtonProperty(property);
-        newButton.setExtraButtonSource(source);
-        newButton.setExtraButtonAltText(altText);
-
-        extraButtons.add(newButton);
-    }
-
-    /**
-     * @see org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase#populate(javax.servlet.http.HttpServletRequest)
-     */
-    @Override
-    public void populate(HttpServletRequest request) {
-        super.populate(request);
-        AccountsPayableDocument apDoc = (AccountsPayableDocument) this.getDocument();
-
-        // update po doc
-        apDoc.setPurchaseOrderDocument(SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(apDoc.getPurchaseOrderIdentifier()));
-
-        // update counts after populate
-        updateItemCounts();
-    }
-
-    /**
-     * Updates item counts for display
-     */
-    public void updateItemCounts() {
-        List<PurApItem> items = ((AccountsPayableDocument) this.getDocument()).getItems();
-        countOfBelowTheLine = PurApItemUtils.countBelowTheLineItems(items);
-        countOfAboveTheLine = items.size() - countOfBelowTheLine;
-    }
-
+       
 }

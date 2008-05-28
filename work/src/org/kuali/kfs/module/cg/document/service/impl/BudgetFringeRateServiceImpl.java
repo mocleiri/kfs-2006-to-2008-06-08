@@ -1,100 +1,94 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.budget.service.impl;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DocumentService;
+import org.kuali.Constants;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
-import org.kuali.module.kra.KraConstants;
 import org.kuali.module.kra.budget.bo.AppointmentType;
 import org.kuali.module.kra.budget.bo.Budget;
 import org.kuali.module.kra.budget.bo.BudgetFringeRate;
 import org.kuali.module.kra.budget.bo.BudgetUser;
+import org.kuali.module.kra.budget.dao.AppointmentTypeDao;
+import org.kuali.module.kra.budget.dao.BudgetFringeRateDao;
 import org.kuali.module.kra.budget.service.BudgetFringeRateService;
 
 /**
  * This class is the service implementation for the Account structure. This is the default, Kuali provided implementation.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
+    private AppointmentTypeDao appointmentTypeDao;
+    private BudgetFringeRateDao budgetFringeRateDao;
+    private KualiConfigurationService kualiConfigurationService;
 
-    private ParameterService parameterService;
-    private BusinessObjectService businessObjectService;
-    private DocumentService documentService;
-
-    public BudgetFringeRate getBudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode) {
-
-        BudgetFringeRate budgetFringeRate = (BudgetFringeRate) businessObjectService.retrieve(new BudgetFringeRate(documentNumber, institutionAppointmentTypeCode));
-
+    public BudgetFringeRate getBudgetFringeRate(String documentHeaderId, String universityAppointmentTypeCode) {
+        BudgetFringeRate budgetFringeRate = budgetFringeRateDao.getBudgetFringeRate(documentHeaderId, universityAppointmentTypeCode);
         if (budgetFringeRate == null) {
-            AppointmentType appointmentType = (AppointmentType) businessObjectService.retrieve(new AppointmentType(institutionAppointmentTypeCode));
-            budgetFringeRate = new BudgetFringeRate(documentNumber, appointmentType);
+            AppointmentType appointmentType = appointmentTypeDao.getAppointmentType(universityAppointmentTypeCode);
+            budgetFringeRate = new BudgetFringeRate(documentHeaderId, appointmentType);
         }
-
         return budgetFringeRate;
     }
 
     /**
-     * @see org.kuali.module.kra.budget.service.BudgetFringeRateService#getDefaultFringeRates()
+     * @param accountDao The accountDao to set.
      */
     public Collection getDefaultFringeRates() {
-        Map fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.ACTIVE, KFSConstants.ACTIVE_INDICATOR);
-
-        return businessObjectService.findMatching(AppointmentType.class, fieldValues);
+        return appointmentTypeDao.getAll();
     }
 
-    public BudgetFringeRate getBudgetFringeRateForDefaultAppointmentType(String documentNumber) {
-
-        AppointmentType appointmentType = (AppointmentType) businessObjectService.retrieve(new AppointmentType(parameterService.getParameterValue(ParameterConstants.RESEARCH_ADMINISTRATION_DOCUMENT.class, KraConstants.DEFAULT_APPOINTMENT_TYPE)));
-
-        BudgetFringeRate defaultFringeRate = (BudgetFringeRate) businessObjectService.retrieve(new BudgetFringeRate(documentNumber, appointmentType.getAppointmentTypeCode()));
-
+    public BudgetFringeRate getBudgetFringeRateForDefaultAppointmentType(String documentHeaderId) {
+        AppointmentType appointmentType = appointmentTypeDao.getAppointmentType(kualiConfigurationService.getApplicationParameterValue("KraDevelopmentGroup", "defaultAppointmentType"));
+        BudgetFringeRate defaultFringeRate = budgetFringeRateDao.getBudgetFringeRate(documentHeaderId, appointmentType.getAppointmentTypeCode());
         if (defaultFringeRate != null) {
             return defaultFringeRate;
         }
         else {
-            return new BudgetFringeRate(documentNumber, appointmentType);
+            return new BudgetFringeRate(documentHeaderId, appointmentType);
         }
     }
 
     public BudgetFringeRate getBudgetFringeRateForPerson(BudgetUser budgetUser) {
         if (StringUtils.isNotEmpty(budgetUser.getAppointmentTypeCode())) {
-            return this.getBudgetFringeRate(budgetUser.getDocumentNumber(), budgetUser.getAppointmentTypeCode());
+            return this.getBudgetFringeRate(budgetUser.getDocumentHeaderId(), budgetUser.getAppointmentTypeCode());
         }
-        else if (budgetUser.getUserAppointmentTasks().size() > 0 && StringUtils.isNotEmpty(budgetUser.getUserAppointmentTask(0).getInstitutionAppointmentTypeCode())) {
-            return this.getBudgetFringeRate(budgetUser.getDocumentNumber(), budgetUser.getUserAppointmentTask(0).getInstitutionAppointmentTypeCode());
+        else if (budgetUser.getUserAppointmentTasks().size() > 0 && StringUtils.isNotEmpty(budgetUser.getUserAppointmentTask(0).getUniversityAppointmentTypeCode())) {
+            return this.getBudgetFringeRate(budgetUser.getDocumentHeaderId(), budgetUser.getUserAppointmentTask(0).getUniversityAppointmentTypeCode());
         }
         else {
-            return this.getBudgetFringeRateForDefaultAppointmentType(budgetUser.getDocumentNumber());
+            return this.getBudgetFringeRateForDefaultAppointmentType(budgetUser.getDocumentHeaderId());
         }
     }
 
     public boolean isValidFringeRate(KualiDecimal fringeRate) {
         if (fringeRate != null) {
-            return fringeRate.isLessEqual(KFSConstants.CONTRACTS_AND_GRANTS_FRINGE_RATE_MAX);
+            return fringeRate.isLessEqual(Constants.CONTRACTS_AND_GRANTS_FRINGE_RATE_MAX);
         }
         else {
             return false;
@@ -103,7 +97,7 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
 
     public boolean isValidCostShare(KualiDecimal costShare) {
         if (costShare != null) {
-            return costShare.isLessEqual(KFSConstants.CONTRACTS_AND_GRANTS_COST_SHARE_MAX);
+            return costShare.isLessEqual(Constants.CONTRACTS_AND_GRANTS_COST_SHARE_MAX);
         }
         else {
             return false;
@@ -113,20 +107,26 @@ public class BudgetFringeRateServiceImpl implements BudgetFringeRateService {
     public void setupDefaultFringeRates(Budget budget) {
         for (Iterator iter = getDefaultFringeRates().iterator(); iter.hasNext();) {
             AppointmentType appType = (AppointmentType) iter.next();
-            BudgetFringeRate bfr = new BudgetFringeRate(budget.getDocumentNumber(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), appType.getCostShareFringeRateAmount(), appType);
+            BudgetFringeRate bfr = new BudgetFringeRate(budget.getDocumentHeaderId(), appType.getAppointmentTypeCode(), appType.getFringeRateAmount(), appType.getCostShareFringeRateAmount(), appType);
             budget.getFringeRates().add(bfr);
         }
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    /**
+     * @param budgetFringeRateDao The budgetFringeRateDao to set.
+     */
+    public void setBudgetFringeRateDao(BudgetFringeRateDao budgetFringeRateDao) {
+        this.budgetFringeRateDao = budgetFringeRateDao;
     }
 
-    public void setBusinessObjectService(BusinessObjectService businessObjectService) {
-        this.businessObjectService = businessObjectService;
+    /**
+     * @param appointmentTypeDao The appointmentTypeDao to set.
+     */
+    public void setAppointmentTypeDao(AppointmentTypeDao appointmentTypeDao) {
+        this.appointmentTypeDao = appointmentTypeDao;
     }
 
-    public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 }

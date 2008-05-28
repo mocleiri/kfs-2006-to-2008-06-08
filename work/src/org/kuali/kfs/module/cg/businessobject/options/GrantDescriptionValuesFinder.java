@@ -20,14 +20,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
-import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.GrantDescription;
 
-/**
- * Gets a custom-formatted list of {@link GrantDescription} values.
- */
 public class GrantDescriptionValuesFinder extends KeyValuesBase {
 
     /**
@@ -35,15 +31,13 @@ public class GrantDescriptionValuesFinder extends KeyValuesBase {
      */
     public List getKeyValues() {
 
-        Collection<GrantDescription> codes = SpringContext.getBean(KeyValuesService.class).findAll(GrantDescription.class);
+        Collection<GrantDescription> codes = SpringServiceLocator.getKeyValuesService().findAll(GrantDescription.class);
 
         List<KeyLabelPair> labels = new ArrayList<KeyLabelPair>();
         labels.add(new KeyLabelPair("", ""));
 
         for (GrantDescription code : codes) {
-            if (code.isRowActiveIndicator()) {
-                labels.add(new KeyLabelPair(code.getGrantDescriptionCode(), code.getGrantDescriptionCode() + " - " + code.getGrantDescription()));
-            }
+            labels.add(new KeyLabelPair(code.getGrantDescriptionCode(), code.getGrantDescriptionCode() + " - " + code.getGrantDescription()));
         }
 
         return labels;

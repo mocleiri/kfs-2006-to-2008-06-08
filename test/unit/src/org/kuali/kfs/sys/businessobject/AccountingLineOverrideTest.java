@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@ import java.sql.Timestamp;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests AccountingLineOverride.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class AccountingLineOverrideTest extends KualiTestBase {
     private static final AccountingLineOverride EXPIRED = AccountingLineOverride.valueOf(AccountingLineOverride.CODE.EXPIRED_ACCOUNT);
     private static final AccountingLineOverride NONE = AccountingLineOverride.valueOf(AccountingLineOverride.CODE.NONE);
@@ -224,7 +226,6 @@ public class AccountingLineOverrideTest extends KualiTestBase {
         assertEquals(false, line.getAccountExpiredOverrideNeeded());
         assertEquals(AccountingLineOverride.CODE.NONE, line.getOverrideCode());
     }
-
     @SuppressWarnings("deprecation")
     public void testProcessForOutput_unexpired() {
         AccountingLine line = new SourceAccountingLine();
@@ -237,7 +238,6 @@ public class AccountingLineOverrideTest extends KualiTestBase {
         assertEquals(false, line.getAccountExpiredOverrideNeeded());
         assertEquals(AccountingLineOverride.CODE.NONE, line.getOverrideCode());
     }
-
     @SuppressWarnings("deprecation")
     public void testProcessForOutput_expired() {
         AccountingLine line = new SourceAccountingLine();
@@ -263,7 +263,6 @@ public class AccountingLineOverrideTest extends KualiTestBase {
         assertEquals(false, line.getAccountExpiredOverrideNeeded());
         assertEquals(AccountingLineOverride.CODE.NONE, line.getOverrideCode());
     }
-
     @SuppressWarnings("deprecation")
     public void testProcessForOutput_alreadyExpired() {
         AccountingLine line = new SourceAccountingLine();
@@ -276,7 +275,6 @@ public class AccountingLineOverrideTest extends KualiTestBase {
         assertEquals(true, line.getAccountExpiredOverrideNeeded());
         assertEquals(AccountingLineOverride.CODE.EXPIRED_ACCOUNT, line.getOverrideCode());
     }
-
     @SuppressWarnings("deprecation")
     public void testProcessForOutput_becomingExpired() {
         AccountingLine line = new SourceAccountingLine();
@@ -289,7 +287,6 @@ public class AccountingLineOverrideTest extends KualiTestBase {
         assertEquals(true, line.getAccountExpiredOverrideNeeded());
         assertEquals(AccountingLineOverride.CODE.NONE, line.getOverrideCode());
     }
-
     @SuppressWarnings("deprecation")
     public void testProcessForOutput_becomingUnexpired() {
         AccountingLine line = new SourceAccountingLine();
@@ -302,7 +299,6 @@ public class AccountingLineOverrideTest extends KualiTestBase {
         assertEquals(false, line.getAccountExpiredOverrideNeeded());
         assertEquals(AccountingLineOverride.CODE.EXPIRED_ACCOUNT, line.getOverrideCode());
     }
-
     @SuppressWarnings("deprecation")
     public void testProcessForOutput_becomingClosed() {
         AccountingLine line = new SourceAccountingLine();

@@ -20,24 +20,19 @@ import org.kuali.core.document.Document;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 
-import edu.iu.uis.eden.exception.EdenUserNotFoundException;
-import edu.iu.uis.eden.routeheader.DocumentRouteHeaderValue;
-
 public interface PurApWorkflowIntegrationService {
 
     /**
-     * Determine if action is requested of user at given node name
-     * 
+     * TODO delyea - documentation
      * @param documentNumber
      * @param nodeName
      * @param user
-     * @return boolean indicating if action is requested of user at given node name
+     * @return
      */
     public boolean isActionRequestedOfUserAtNodeName(String documentNumber, String nodeName, UniversalUser user);
 
     /**
-     * Take all actions on the given document based on the given criteria
-     * 
+     * TODO delyea - documentation
      * @param document
      * @param potentialAnnotation
      * @param nodeName
@@ -48,13 +43,10 @@ public interface PurApWorkflowIntegrationService {
     public boolean takeAllActionsForGivenCriteria(Document document, String potentialAnnotation, String nodeName, UniversalUser user, String superUserNetworkId);
 
     /**
-     * Determine if the document will stop at the given node in the future routing process
-     * 
+     * TODO delyea - documentation
      * @param document
      * @param givenNodeDetail
-     * @return boolean indicating if document is going to stop at the given node
+     * @return
      */
     public boolean willDocumentStopAtGivenFutureRouteNode(PurchasingAccountsPayableDocument document, NodeDetails givenNodeDetail);
-
-    public String getLastUserId(DocumentRouteHeaderValue routeHeader) throws EdenUserNotFoundException;
 }

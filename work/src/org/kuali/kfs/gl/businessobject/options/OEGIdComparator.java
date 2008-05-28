@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +19,11 @@ import java.util.Comparator;
 
 import org.kuali.module.gl.bo.OriginEntryGroup;
 
-/**
- * A comparator for origin entry groups, based on their group IDs
- */
 public class OEGIdComparator implements Comparator {
 
-    /**
-     * Constructs a OEGIdComparator
-     */
     public OEGIdComparator() {
     }
 
-    /**
-     * Compares two origin entry groups based on their group ids
-     * 
-     * @param c1 the first origin entry group to compare
-     * @param c2 the second origin entry group to comare
-     * @return a negative if c1's group ID is less than c2's; a zero if the group IDs are equal; a positive number otherwise
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-     */
     public int compare(Object c1, Object c2) {
 
         OriginEntryGroup oeg1 = (OriginEntryGroup) c1;

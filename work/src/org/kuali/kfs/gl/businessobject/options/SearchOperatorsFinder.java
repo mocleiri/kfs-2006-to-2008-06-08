@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
-import org.kuali.core.web.ui.KeyLabelPair;
+import org.kuali.core.web.uidraw.KeyLabelPair;
 
-/**
- * An extension of KeyValueBase that gives the user a choice of search operator options
- */
 public class SearchOperatorsFinder extends KeyValuesBase {
 
-    /**
-     * Returns a list of all valid search operations that can be carried out by certain GL inquiries
-     * 
-     * @return a List of key/value pair options
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
-     */
     public List getKeyValues() {
         List activeLabels = new ArrayList();
         activeLabels.add(new KeyLabelPair("eq", "Equals"));

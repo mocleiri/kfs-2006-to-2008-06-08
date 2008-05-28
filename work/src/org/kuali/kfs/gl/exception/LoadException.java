@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,10 @@
  */
 package org.kuali.module.gl.exception;
 
-/**
- * An exception that is thrown if a data file cannot be loaded by a batch process.
- */
 public class LoadException extends RuntimeException {
-    /**
-     * Constructs a LoadException instance
-     */
     public LoadException() {
         super();
     }
-
-    /**
-     * Constructs a LoadException instance, encapsulating a messaging
-     * @param msg a helpful message
-     */
     public LoadException(String msg) {
         super(msg);
     }

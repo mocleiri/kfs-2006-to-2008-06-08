@@ -1,35 +1,44 @@
-/*
- * Copyright 2006-2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.kuali.module.kra.budget.bo;
+
+/*
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
+ * 
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
+ * 
+ * You may obtain a copy of the License at:
+ * 
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiInteger;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSPropertyConstants;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
 
-public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements Comparable {
+public class BudgetNonpersonnel extends BusinessObjectBase implements Comparable {
     private static final long serialVersionUID = -7058371220805374107L;
 
-    private String documentNumber;
+    private String documentHeaderId;
     private Integer budgetTaskSequenceNumber;
     private Integer budgetPeriodSequenceNumber;
     private String budgetNonpersonnelCategoryCode;
@@ -38,13 +47,13 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     private String budgetNonpersonnelDescription;
     private KualiInteger agencyRequestAmount;
     private KualiInteger budgetThirdPartyCostShareAmount;
-    private KualiInteger budgetInstitutionCostShareAmount;
+    private KualiInteger budgetUniversityCostShareAmount;
     private Integer budgetOriginSequenceNumber;
     private boolean agencyCopyIndicator;
-    private boolean budgetInstitutionCostShareCopyIndicator;
+    private boolean budgetUniversityCostShareCopyIndicator;
     private boolean budgetThirdPartyCostShareCopyIndicator;
     private KualiInteger budgetOriginAgencyAmount;
-    private KualiInteger budgetOriginInstitutionCostShareAmount;
+    private KualiInteger budgetOriginUniversityCostShareAmount;
     private KualiInteger budgetOriginThirdPartyCostShareAmount;
     private String subcontractorNumber;
 
@@ -55,7 +64,7 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     // the indicator should be dropped).
     private KualiInteger agencyRequestAmountBackup;
     private KualiInteger budgetThirdPartyCostShareAmountBackup;
-    private KualiInteger budgetInstitutionCostShareAmountBackup;
+    private KualiInteger budgetUniversityCostShareAmountBackup;
 
     private NonpersonnelObjectCode nonpersonnelObjectCode;
 
@@ -63,9 +72,9 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
      * Default no-arg constructor.
      */
     public BudgetNonpersonnel() {
-        agencyRequestAmount = KualiInteger.ZERO;
-        budgetThirdPartyCostShareAmount = KualiInteger.ZERO;
-        budgetInstitutionCostShareAmount = KualiInteger.ZERO;
+        agencyRequestAmount = new KualiInteger(0);
+        budgetThirdPartyCostShareAmount = new KualiInteger(0);
+        budgetUniversityCostShareAmount = new KualiInteger(0);
     }
 
     /**
@@ -74,7 +83,7 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
      * @param budgetNonpersonnel to be used to copy source
      */
     public BudgetNonpersonnel(BudgetNonpersonnel budgetNonpersonnel) {
-        documentNumber = budgetNonpersonnel.getDocumentNumber();
+        documentHeaderId = budgetNonpersonnel.getDocumentHeaderId();
         budgetTaskSequenceNumber = budgetNonpersonnel.getBudgetTaskSequenceNumber();
         budgetPeriodSequenceNumber = budgetNonpersonnel.getBudgetPeriodSequenceNumber();
         budgetNonpersonnelCategoryCode = budgetNonpersonnel.getBudgetNonpersonnelCategoryCode();
@@ -83,13 +92,13 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
         budgetNonpersonnelDescription = budgetNonpersonnel.getBudgetNonpersonnelDescription();
         agencyRequestAmount = budgetNonpersonnel.getAgencyRequestAmount();
         budgetThirdPartyCostShareAmount = budgetNonpersonnel.getBudgetThirdPartyCostShareAmount();
-        budgetInstitutionCostShareAmount = budgetNonpersonnel.getBudgetInstitutionCostShareAmount();
+        budgetUniversityCostShareAmount = budgetNonpersonnel.getBudgetUniversityCostShareAmount();
         budgetOriginSequenceNumber = budgetNonpersonnel.getBudgetOriginSequenceNumber();
         agencyCopyIndicator = budgetNonpersonnel.getAgencyCopyIndicator();
-        budgetInstitutionCostShareCopyIndicator = budgetNonpersonnel.getBudgetInstitutionCostShareCopyIndicator();
+        budgetUniversityCostShareCopyIndicator = budgetNonpersonnel.getBudgetUniversityCostShareCopyIndicator();
         budgetThirdPartyCostShareCopyIndicator = budgetNonpersonnel.getBudgetThirdPartyCostShareCopyIndicator();
         budgetOriginAgencyAmount = budgetNonpersonnel.getBudgetOriginAgencyAmount();
-        budgetOriginInstitutionCostShareAmount = budgetNonpersonnel.getBudgetOriginInstitutionCostShareAmount();
+        budgetOriginUniversityCostShareAmount = budgetNonpersonnel.getBudgetOriginUniversityCostShareAmount();
         budgetOriginThirdPartyCostShareAmount = budgetNonpersonnel.getBudgetOriginThirdPartyCostShareAmount();
         subcontractorNumber = budgetNonpersonnel.getSubcontractorNumber();
 
@@ -106,9 +115,9 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
      * @param budgetNonpersonnelSubCategoryCode
      * @param budgetNonpersonnelDescription
      * @param agencyRequestAmount
-     * @param budgetInstitutionCostShareAmount
+     * @param budgetUniversityCostShareAmount
      */
-    public BudgetNonpersonnel(Integer budgetTaskSequenceNumber, Integer budgetPeriodSequenceNumber, String budgetNonpersonnelCategoryCode, String budgetNonpersonnelSubCategoryCode, String budgetNonpersonnelDescription, KualiInteger agencyRequestAmount, KualiInteger budgetInstitutionCostShareAmount) {
+    public BudgetNonpersonnel(Integer budgetTaskSequenceNumber, Integer budgetPeriodSequenceNumber, String budgetNonpersonnelCategoryCode, String budgetNonpersonnelSubCategoryCode, String budgetNonpersonnelDescription, KualiInteger agencyRequestAmount, KualiInteger budgetUniversityCostShareAmount) {
         this();
 
         this.budgetTaskSequenceNumber = budgetTaskSequenceNumber;
@@ -117,7 +126,7 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
         this.budgetNonpersonnelSubCategoryCode = budgetNonpersonnelSubCategoryCode;
         this.budgetNonpersonnelDescription = budgetNonpersonnelDescription;
         this.agencyRequestAmount = agencyRequestAmount;
-        this.budgetInstitutionCostShareAmount = budgetInstitutionCostShareAmount;
+        this.budgetUniversityCostShareAmount = budgetUniversityCostShareAmount;
     }
 
     /**
@@ -194,21 +203,21 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     }
 
     /**
-     * Gets the documentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return Returns the documentNumber.
+     * @return Returns the documentHeaderId.
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * Sets the documentNumber attribute value.
+     * Sets the documentHeaderId attribute value.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
@@ -276,21 +285,21 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     }
 
     /**
-     * Gets the budgetInstitutionCostShareAmount attribute.
+     * Gets the budgetUniversityCostShareAmount attribute.
      * 
-     * @return Returns the budgetInstitutionCostShareAmount.
+     * @return Returns the budgetUniversityCostShareAmount.
      */
-    public KualiInteger getBudgetInstitutionCostShareAmount() {
-        return budgetInstitutionCostShareAmount;
+    public KualiInteger getBudgetUniversityCostShareAmount() {
+        return budgetUniversityCostShareAmount;
     }
 
     /**
-     * Sets the budgetInstitutionCostShareAmount attribute value.
+     * Sets the budgetUniversityCostShareAmount attribute value.
      * 
-     * @param budgetInstitutionCostShareAmount The budgetInstitutionCostShareAmount to set.
+     * @param budgetUniversityCostShareAmount The budgetUniversityCostShareAmount to set.
      */
-    public void setBudgetInstitutionCostShareAmount(KualiInteger budgetInstitutionCostShareAmount) {
-        this.budgetInstitutionCostShareAmount = budgetInstitutionCostShareAmount;
+    public void setBudgetUniversityCostShareAmount(KualiInteger budgetUniversityCostShareAmount) {
+        this.budgetUniversityCostShareAmount = budgetUniversityCostShareAmount;
     }
 
     /**
@@ -324,15 +333,15 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     /**
      * o
      */
-    public void setBudgetInstitutionCostShareCopyIndicator(boolean o) {
-        budgetInstitutionCostShareCopyIndicator = o;
+    public void setBudgetUniversityCostShareCopyIndicator(boolean o) {
+        budgetUniversityCostShareCopyIndicator = o;
     }
 
     /**
-     * budgetInstitutionCostShareCopyIndicator
+     * budgetUniversityCostShareCopyIndicator
      */
-    public boolean getBudgetInstitutionCostShareCopyIndicator() {
-        return budgetInstitutionCostShareCopyIndicator;
+    public boolean getBudgetUniversityCostShareCopyIndicator() {
+        return budgetUniversityCostShareCopyIndicator;
     }
 
     /**
@@ -366,15 +375,15 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     /**
      * o
      */
-    public void setBudgetOriginInstitutionCostShareAmount(KualiInteger o) {
-        budgetOriginInstitutionCostShareAmount = o;
+    public void setBudgetOriginUniversityCostShareAmount(KualiInteger o) {
+        budgetOriginUniversityCostShareAmount = o;
     }
 
     /**
-     * budgetOriginInstitutionCostShareAmount
+     * budgetOriginUniversityCostShareAmount
      */
-    public KualiInteger getBudgetOriginInstitutionCostShareAmount() {
-        return budgetOriginInstitutionCostShareAmount;
+    public KualiInteger getBudgetOriginUniversityCostShareAmount() {
+        return budgetOriginUniversityCostShareAmount;
     }
 
     /**
@@ -411,7 +420,7 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("documentHeaderId", this.documentHeaderId);
         m.put("budgetTaskSequenceNumber", this.budgetTaskSequenceNumber);
         m.put("budgetPeriodSequenceNumber", this.budgetPeriodSequenceNumber);
         m.put("budgetNonpersonnelCategoryCode", this.budgetNonpersonnelCategoryCode);
@@ -530,21 +539,21 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
     }
 
     /**
-     * Gets the budgetInstitutionCostShareAmountBackup attribute.
+     * Gets the budgetUniversityCostShareAmountBackup attribute.
      * 
-     * @return Returns the budgetInstitutionCostShareAmountBackup.
+     * @return Returns the budgetUniversityCostShareAmountBackup.
      */
-    public KualiInteger getBudgetInstitutionCostShareAmountBackup() {
-        return budgetInstitutionCostShareAmountBackup;
+    public KualiInteger getBudgetUniversityCostShareAmountBackup() {
+        return budgetUniversityCostShareAmountBackup;
     }
 
     /**
-     * Sets the budgetInstitutionCostShareAmountBackup attribute value.
+     * Sets the budgetUniversityCostShareAmountBackup attribute value.
      * 
-     * @param budgetInstitutionCostShareAmountBackup The budgetInstitutionCostShareAmountBackup to set.
+     * @param budgetUniversityCostShareAmountBackup The budgetUniversityCostShareAmountBackup to set.
      */
-    public void setBudgetInstitutionCostShareAmountBackup(KualiInteger budgetInstitutionCostShareAmountDuplicate) {
-        this.budgetInstitutionCostShareAmountBackup = budgetInstitutionCostShareAmountDuplicate;
+    public void setBudgetUniversityCostShareAmountBackup(KualiInteger budgetUniversityCostShareAmountDuplicate) {
+        this.budgetUniversityCostShareAmountBackup = budgetUniversityCostShareAmountDuplicate;
     }
 
     /**
@@ -563,10 +572,10 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
 
         if (ObjectUtils.isNotNull(obj) && obj instanceof BudgetNonpersonnel) {
             BudgetNonpersonnel objCompare = (BudgetNonpersonnel) obj;
-            equals &= this.documentNumber.equals(objCompare.getDocumentNumber());
+            equals &= this.documentHeaderId.equals(objCompare.getDocumentHeaderId());
             equals &= this.agencyCopyIndicator == objCompare.getAgencyCopyIndicator();
             equals &= this.budgetThirdPartyCostShareCopyIndicator == objCompare.getBudgetThirdPartyCostShareCopyIndicator();
-            equals &= this.budgetInstitutionCostShareCopyIndicator == objCompare.getBudgetInstitutionCostShareCopyIndicator();
+            equals &= this.budgetUniversityCostShareCopyIndicator == objCompare.getBudgetUniversityCostShareCopyIndicator();
 
             if (this.agencyRequestAmount == null && objCompare.getAgencyRequestAmount() == null) {
             }
@@ -608,10 +617,10 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
             else {
                 equals &= this.budgetOriginThirdPartyCostShareAmount != null && objCompare.getBudgetOriginThirdPartyCostShareAmount() != null && this.budgetOriginThirdPartyCostShareAmount.equals(objCompare.getBudgetOriginThirdPartyCostShareAmount());
             }
-            if (this.budgetOriginInstitutionCostShareAmount == null && objCompare.getBudgetOriginInstitutionCostShareAmount() == null) {
+            if (this.budgetOriginUniversityCostShareAmount == null && objCompare.getBudgetOriginUniversityCostShareAmount() == null) {
             }
             else {
-                equals &= this.budgetOriginInstitutionCostShareAmount != null && objCompare.getBudgetOriginInstitutionCostShareAmount() != null && this.budgetOriginInstitutionCostShareAmount.equals(objCompare.getBudgetOriginInstitutionCostShareAmount());
+                equals &= this.budgetOriginUniversityCostShareAmount != null && objCompare.getBudgetOriginUniversityCostShareAmount() != null && this.budgetOriginUniversityCostShareAmount.equals(objCompare.getBudgetOriginUniversityCostShareAmount());
             }
             if (this.budgetPeriodSequenceNumber == null && objCompare.getBudgetPeriodSequenceNumber() == null) {
             }
@@ -628,10 +637,10 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
             else {
                 equals &= this.budgetThirdPartyCostShareAmount != null && objCompare.getBudgetThirdPartyCostShareAmount() != null && this.budgetThirdPartyCostShareAmount.equals(objCompare.getBudgetThirdPartyCostShareAmount());
             }
-            if (this.budgetInstitutionCostShareAmount == null && objCompare.getBudgetInstitutionCostShareAmount() == null) {
+            if (this.budgetUniversityCostShareAmount == null && objCompare.getBudgetUniversityCostShareAmount() == null) {
             }
             else {
-                equals &= this.budgetInstitutionCostShareAmount != null && objCompare.getBudgetInstitutionCostShareAmount() != null && this.budgetInstitutionCostShareAmount.equals(objCompare.getBudgetInstitutionCostShareAmount());
+                equals &= this.budgetUniversityCostShareAmount != null && objCompare.getBudgetUniversityCostShareAmount() != null && this.budgetUniversityCostShareAmount.equals(objCompare.getBudgetUniversityCostShareAmount());
             }
             if (this.subcontractorNumber == null && objCompare.getSubcontractorNumber() == null) {
             }
@@ -639,18 +648,16 @@ public class BudgetNonpersonnel extends PersistableBusinessObjectBase implements
                 equals &= this.subcontractorNumber != null && objCompare.getSubcontractorNumber() != null && this.subcontractorNumber.equals(objCompare.getSubcontractorNumber());
             }
         }
-        else {
-            return false;
-        }
 
         return equals;
     }
 
     /**
+     * 
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        String hashString = this.getDocumentNumber() + "|" + this.getBudgetNonpersonnelCategoryCode() + "|" + this.getBudgetNonpersonnelDescription() + "|" + this.getBudgetNonpersonnelSubCategoryCode() + "|" + this.getDocumentNumber() + "|" + this.getSubcontractorNumber() + "|" + this.getAgencyRequestAmount().toString() + "|" + this.getAgencyRequestAmountBackup().toString() + "|" + this.getBudgetNonpersonnelSequenceNumber().toString() + "|" + this.getBudgetOriginAgencyAmount().toString() + "|" + this.getBudgetPeriodSequenceNumber().toString() + "|" + this.getBudgetTaskSequenceNumber().toString() + "|" + this.getBudgetOriginSequenceNumber().toString() + "|" + this.getBudgetOriginThirdPartyCostShareAmount().toString() + "|" + this.getBudgetOriginInstitutionCostShareAmount().toString() + "|" + this.getBudgetInstitutionCostShareAmountBackup().toString() + "|" + this.getNonpersonnelObjectCode().toString();
+        String hashString = this.getDocumentHeaderId() + "|" + this.getBudgetNonpersonnelCategoryCode() + "|" + this.getBudgetNonpersonnelDescription() + "|" + this.getBudgetNonpersonnelSubCategoryCode() + "|" + this.getDocumentHeaderId() + "|" + this.getSubcontractorNumber() + "|" + this.getAgencyRequestAmount().toString() + "|" + this.getAgencyRequestAmountBackup().toString() + "|" + this.getBudgetNonpersonnelSequenceNumber().toString() + "|" + this.getBudgetOriginAgencyAmount().toString() + "|" + this.getBudgetPeriodSequenceNumber().toString() + "|" + this.getBudgetTaskSequenceNumber().toString() + "|" + this.getBudgetOriginSequenceNumber().toString() + "|" + this.getBudgetOriginThirdPartyCostShareAmount().toString() + "|" + this.getBudgetOriginUniversityCostShareAmount().toString() + "|" + this.getBudgetUniversityCostShareAmountBackup().toString() + "|" + this.getNonpersonnelObjectCode().toString();
         return hashString.hashCode();
     }
 }

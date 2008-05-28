@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.kra.budget.bo;
@@ -19,15 +28,15 @@ package org.kuali.module.kra.budget.bo;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase {
+public class AppointmentTypeEffectiveDate extends BusinessObjectBase {
 
     private String appointmentTypeCode;
-    private Integer institutionFiscalYear;
+    private Integer universityFiscalYear;
     private Date appointmentTypeBeginDate;
     private Date appointmentTypeEndDate;
 
@@ -38,25 +47,21 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
 
     }
 
-    public AppointmentTypeEffectiveDate(String appointmentTypeCode, Integer institutionFiscalYear) {
-        this();
-        this.appointmentTypeCode = appointmentTypeCode;
-        this.institutionFiscalYear = institutionFiscalYear;
-    }
-
     /**
      * Gets the appointmentTypeCode attribute.
      * 
-     * @return Returns the appointmentTypeCode
+     * @return - Returns the appointmentTypeCode
+     * 
      */
     public String getAppointmentTypeCode() {
         return appointmentTypeCode;
     }
 
     /**
-     * Sets the institutionAppointmentTypeCode attribute.
+     * Sets the universityAppointmentTypeCode attribute.
      * 
-     * @param institutionAppointmentTypeCode The institutionAppointmentTypeCode to set.
+     * @param universityAppointmentTypeCode The universityAppointmentTypeCode to set.
+     * 
      */
     public void setAppointmentTypeCode(String appointmentTypeCode) {
         this.appointmentTypeCode = appointmentTypeCode;
@@ -64,28 +69,31 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
 
 
     /**
-     * Gets the institutionFiscalYear attribute.
+     * Gets the universityFiscalYear attribute.
      * 
-     * @return Returns the institutionFiscalYear
+     * @return - Returns the universityFiscalYear
+     * 
      */
-    public Integer getInstitutionFiscalYear() {
-        return institutionFiscalYear;
+    public Integer getUniversityFiscalYear() {
+        return universityFiscalYear;
     }
 
     /**
-     * Sets the institutionFiscalYear attribute.
+     * Sets the universityFiscalYear attribute.
      * 
-     * @param institutionFiscalYear The institutionFiscalYear to set.
+     * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
-    public void setInstitutionFiscalYear(Integer institutionFiscalYear) {
-        this.institutionFiscalYear = institutionFiscalYear;
+    public void setUniversityFiscalYear(Integer universityFiscalYear) {
+        this.universityFiscalYear = universityFiscalYear;
     }
 
 
     /**
      * Gets the appointmentTypeBeginDate attribute.
      * 
-     * @return Returns the appointmentTypeBeginDate
+     * @return - Returns the appointmentTypeBeginDate
+     * 
      */
     public Date getAppointmentTypeBeginDate() {
         return appointmentTypeBeginDate;
@@ -95,6 +103,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Sets the appointmentTypeBeginDate attribute.
      * 
      * @param appointmentTypeBeginDate The appointmentTypeBeginDate to set.
+     * 
      */
     public void setAppointmentTypeBeginDate(Date appointmentTypeBeginDate) {
         this.appointmentTypeBeginDate = appointmentTypeBeginDate;
@@ -104,7 +113,8 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
     /**
      * Gets the appointmentTypeEndDate attribute.
      * 
-     * @return Returns the appointmentTypeEndDate
+     * @return - Returns the appointmentTypeEndDate
+     * 
      */
     public Date getAppointmentTypeEndDate() {
         return appointmentTypeEndDate;
@@ -114,6 +124,7 @@ public class AppointmentTypeEffectiveDate extends PersistableBusinessObjectBase 
      * Sets the appointmentTypeEndDate attribute.
      * 
      * @param appointmentTypeEndDate The appointmentTypeEndDate to set.
+     * 
      */
     public void setAppointmentTypeEndDate(Date appointmentTypeEndDate) {
         this.appointmentTypeEndDate = appointmentTypeEndDate;

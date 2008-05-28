@@ -17,7 +17,6 @@ package org.kuali.module.purap.rule;
 
 
 /**
- * Purchasing Accounts Payable Item Rule
  * Parent interface for item related rules
  */
 public interface PurchasingAccountsPayableItemRule {

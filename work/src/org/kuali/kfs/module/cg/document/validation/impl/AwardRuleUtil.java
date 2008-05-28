@@ -15,14 +15,14 @@
  */
 package org.kuali.module.cg.rules;
 
+import static org.kuali.rice.KNSServiceLocator.getBusinessObjectService;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.cg.bo.Award;
 
 /**
@@ -30,7 +30,7 @@ import org.kuali.module.cg.bo.Award;
  */
 public class AwardRuleUtil {
     /**
-     * Determines if a proposal has already been awarded
+     * determines if a proposal has already been awarded
      * 
      * @param award the award to check the proposal for
      * @return true if the award's proposal has already been awarded
@@ -43,36 +43,31 @@ public class AwardRuleUtil {
         Long proposalNumber = award.getProposalNumber();
         Map<String, Object> awardPrimaryKeys = new HashMap<String, Object>();
         awardPrimaryKeys.put(KFSPropertyConstants.PROPOSAL_NUMBER, proposalNumber);
-        Award result = (Award) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(Award.class, awardPrimaryKeys);
+        Award result = (Award) getBusinessObjectService().findByPrimaryKey(Award.class, awardPrimaryKeys);
 
         boolean awarded = ObjectUtils.isNotNull(result) && !StringUtils.equals(award.getObjectId(), result.getObjectId());
 
         return awarded;
     }
 
-
     /**
-     * Per KULCG-315 - Proposals should not be designated as inactive. This functionality is not yet implemented and this rule
-     * should not be applied at this time. I'm leaving this code here in case the functionality gets added down the road.
+     * determines if a proposal is inactive
+     * 
+     * @param award the award to check the proposal for
+     * @return true if the award's proposal has already been set to inactive
      */
-    // /**
-    // * determines if a proposal is inactive
-    // *
-    // * @param award the award to check the proposal for
-    // * @return true if the award's proposal has already been set to inactive
-    // */
-    // public static boolean isProposalInactive(Award award) {
-    // if (ObjectUtils.isNull(award)) {
-    // return false;
-    // }
-    //
-    // Long proposalNumber = award.getProposalNumber();
-    // Map<String, Object> awardPrimaryKeys = new HashMap<String, Object>();
-    // awardPrimaryKeys.put(KFSPropertyConstants.PROPOSAL_NUMBER, proposalNumber);
-    // Award result = (Award) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(Award.class, awardPrimaryKeys);
-    //
-    // boolean inactive = ObjectUtils.isNotNull(result) && !result.isActive();
-    //
-    // return inactive;
-    // }
+    public static boolean isProposalInactive(Award award) {
+        if (ObjectUtils.isNull(award)) {
+            return false;
+        }
+
+        Long proposalNumber = award.getProposalNumber();
+        Map<String, Object> awardPrimaryKeys = new HashMap<String, Object>();
+        awardPrimaryKeys.put(KFSPropertyConstants.PROPOSAL_NUMBER, proposalNumber);
+        Award result = (Award) getBusinessObjectService().findByPrimaryKey(Award.class, awardPrimaryKeys);
+
+        boolean inactive = ObjectUtils.isNotNull(result) && !result.isActive();
+
+        return inactive;
+    }
 }

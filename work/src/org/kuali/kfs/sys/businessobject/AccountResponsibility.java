@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,7 +113,7 @@ public class AccountResponsibility extends TransientBusinessObjectBase implement
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
         if (account != null) {
-            m.put("accountNumber", this.account.getAccountNumber());
+          m.put("accountNumber", this.account.getAccountNumber());
         }
         m.put("accountResponsibilityType", this.accountResponsibilityType);
         m.put("minimumDollarAmount", this.minimumDollarAmount);
@@ -121,6 +121,7 @@ public class AccountResponsibility extends TransientBusinessObjectBase implement
         m.put("documentTypeId", this.documentTypeId);
         return m;
     }
-
+    
+    
 
 }

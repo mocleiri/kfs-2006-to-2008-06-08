@@ -16,9 +16,6 @@
 package org.kuali.module.labor.bo;
 
 
-/**
- * Labor business object for LedgerEntryForExpenseTransfer
- */
 public class LedgerEntryForExpenseTransfer extends LedgerEntry {
 
 }

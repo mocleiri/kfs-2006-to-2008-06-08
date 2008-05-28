@@ -1,459 +1,271 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.CreditMemoAccount">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="CreditMemoAccount" parent="CreditMemoAccount-parentBean" />
+        <inquiry>
+            <title>Credit Memo Account Inquiry</title>
 
-  <bean id="CreditMemoAccount-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.CreditMemoAccount" />
-    <property name="attributes" >
-      <list>
-        <ref bean="CreditMemoAccount-objectCode.financialObjectTypeCode" />
-        <ref bean="CreditMemoAccount-objectCode.financialObjectSubTypeCode" />
-        <ref bean="CreditMemoAccount-objectCode.financialObjectLevelCode" />
-        <ref bean="CreditMemoAccount-account.financialHigherEdFunctionCd" />
-        <ref bean="CreditMemoAccount-account.subFundGroupCode" />
-        <ref bean="CreditMemoAccount-account.subFundGroup.fundGroupCode" />
-        <ref bean="CreditMemoAccount-balanceTypeCode" />
-        <ref bean="CreditMemoAccount-referenceNumber" />
-        <ref bean="CreditMemoAccount-sequenceNumber" />
-        <ref bean="CreditMemoAccount-financialObjectCode" />
-        <ref bean="CreditMemoAccount-accountNumber" />
-        <ref bean="CreditMemoAccount-objectId" />
-        <ref bean="CreditMemoAccount-organizationReferenceId" />
-        <ref bean="CreditMemoAccount-chartOfAccountsCode" />
-        <ref bean="CreditMemoAccount-postingYear" />
-        <ref bean="CreditMemoAccount-referenceOriginCode" />
-        <ref bean="CreditMemoAccount-overrideCode" />
-        <ref bean="CreditMemoAccount-amount" />
-        <ref bean="CreditMemoAccount-subAccountNumber" />
-        <ref bean="CreditMemoAccount-referenceTypeCode" />
-        <ref bean="CreditMemoAccount-projectCode" />
-        <ref bean="CreditMemoAccount-financialSubObjectCode" />
-        <ref bean="CreditMemoAccount-versionNumber" />
-        <ref bean="CreditMemoAccount-documentNumber" />
-        <ref bean="CreditMemoAccount-debitCreditCode" />
-        <ref bean="CreditMemoAccount-encumbranceUpdateCode" />
-        <ref bean="CreditMemoAccount-objectTypeCode" />
-        <ref bean="CreditMemoAccount-accountExpiredOverride" />
-        <ref bean="CreditMemoAccount-nonFringeAccountOverride" />
-        <ref bean="CreditMemoAccount-objectBudgetOverride" />
-        <ref bean="CreditMemoAccount-financialDocumentLineDescription" />
-        <ref bean="CreditMemoAccount-salesTaxRequired" />
-        <ref bean="CreditMemoAccount-salesTax.chartOfAccountsCode" />
-        <ref bean="CreditMemoAccount-salesTax.accountNumber" />
-        <ref bean="CreditMemoAccount-salesTax.financialDocumentGrossSalesAmount" />
-        <ref bean="CreditMemoAccount-salesTax.financialDocumentTaxableSalesAmount" />
-        <ref bean="CreditMemoAccount-salesTax.financialDocumentSaleDate" />
-        <ref bean="CreditMemoAccount-itemIdentifier" />
-        <ref bean="CreditMemoAccount-accountLinePercent" />
-        <ref bean="CreditMemoAccount-accountIdentifier" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="accountLinePercent" />
+                <field attributeName="accountNumber" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="creditMemoAccountIdentifier" />
+                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="itemAccountTotalAmount" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="organizationReferenceId" />
+                <field attributeName="projectCode" />
+                <field attributeName="subAccountNumber" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Credit Memo Account Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.CreditMemoAccount">Create New</a>]]></menubar>
 
-  <bean id="CreditMemoAccount-objectCode.financialObjectTypeCode" parent="CreditMemoAccount-objectCode.financialObjectTypeCode-parentBean" />
+            <instructions>Lookup a Credit Memo Account</instructions>
 
-  <bean id="CreditMemoAccount-objectCode.financialObjectTypeCode-parentBean" abstract="true" parent="ObjectCode-financialObjectTypeCode">
-    <property name="name" value="objectCode.financialObjectTypeCode" />
-  </bean>
-  <bean id="CreditMemoAccount-objectCode.financialObjectSubTypeCode" parent="CreditMemoAccount-objectCode.financialObjectSubTypeCode-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="accountLinePercent" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="CreditMemoAccount-objectCode.financialObjectSubTypeCode-parentBean" abstract="true" parent="ObjectCode-financialObjectSubTypeCode">
-    <property name="name" value="objectCode.financialObjectSubTypeCode" />
-  </bean>
-  <bean id="CreditMemoAccount-objectCode.financialObjectLevelCode" parent="CreditMemoAccount-objectCode.financialObjectLevelCode-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="accountLinePercent" required="false" />
+                <lookupField attributeName="accountNumber" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="creditMemoAccountIdentifier" required="false" />
+                <lookupField attributeName="creditMemoIdentifier" required="false" />
+                <lookupField attributeName="financialObjectCode" required="false" />
+                <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="itemAccountTotalAmount" required="false" />
+                <lookupField attributeName="itemLineNumber" required="false" />
+                <lookupField attributeName="organizationReferenceId" required="false" />
+                <lookupField attributeName="projectCode" required="false" />
+                <lookupField attributeName="subAccountNumber" required="false" />
+            </lookupFields>
 
-  <bean id="CreditMemoAccount-objectCode.financialObjectLevelCode-parentBean" abstract="true" parent="ObjectCode-financialObjectLevelCode">
-    <property name="name" value="objectCode.financialObjectLevelCode" />
-  </bean>
-  <bean id="CreditMemoAccount-account.financialHigherEdFunctionCd" parent="CreditMemoAccount-account.financialHigherEdFunctionCd-parentBean" />
+            <resultFields>
+                <field attributeName="accountLinePercent" />
+                <field attributeName="accountNumber" />
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="creditMemoAccountIdentifier" />
+                <field attributeName="creditMemoIdentifier" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />
+                <field attributeName="itemAccountTotalAmount" />
+                <field attributeName="itemLineNumber" />
+                <field attributeName="organizationReferenceId" />
+                <field attributeName="projectCode" />
+                <field attributeName="subAccountNumber" />
+            </resultFields>
+        </lookup>
 
-  <bean id="CreditMemoAccount-account.financialHigherEdFunctionCd-parentBean" abstract="true" parent="Account-financialHigherEdFunctionCd">
-    <property name="name" value="account.financialHigherEdFunctionCd" />
-  </bean>
-  <bean id="CreditMemoAccount-account.subFundGroupCode" parent="CreditMemoAccount-account.subFundGroupCode-parentBean" />
+        <attributes>
 
-  <bean id="CreditMemoAccount-account.subFundGroupCode-parentBean" abstract="true" parent="Account-subFundGroupCode">
-    <property name="name" value="account.subFundGroupCode" />
-  </bean>
-  <bean id="CreditMemoAccount-account.subFundGroup.fundGroupCode" parent="CreditMemoAccount-account.subFundGroup.fundGroupCode-parentBean" />
+            <attribute name="accountLinePercent" forceUppercase="true">
+                <label>Account Line Percent</label>
+                <shortLabel>Percent</shortLabel>
 
-  <bean id="CreditMemoAccount-account.subFundGroup.fundGroupCode-parentBean" abstract="true" parent="SubFundGroup-fundGroupCode">
-    <property name="name" value="account.subFundGroup.fundGroupCode" />
-  </bean>
-  <bean id="CreditMemoAccount-balanceTypeCode" parent="CreditMemoAccount-balanceTypeCode-parentBean" />
+                <maxLength>7</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="CreditMemoAccount-balanceTypeCode-parentBean" abstract="true" parent="BalanceTyp-code">
-    <property name="name" value="balanceTypeCode" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="CreditMemoAccount-referenceNumber" parent="CreditMemoAccount-referenceNumber-parentBean" />
+                <control>
+                    <text size="9" />
+                </control>
 
-  <bean id="CreditMemoAccount-referenceNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="referenceNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Reference Number" />
-    <property name="shortLabel" value="Ref Number" />
-    <property name="maxLength" value="14" />
-    <property name="validationPattern" >
-      <bean parent="AlphaNumericValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="16" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The transaction number on the deposit slip assigned by the bank." />
-  </bean>
-  <bean id="CreditMemoAccount-sequenceNumber" parent="CreditMemoAccount-sequenceNumber-parentBean" />
+                <summary>accountLinePercent</summary>
+                <description>accountLinePercent description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-sequenceNumber-parentBean" abstract="true" parent="GenericAttributes-transactionEntrySequenceId">
-    <property name="name" value="sequenceNumber" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="CreditMemoAccount-financialObjectCode" parent="CreditMemoAccount-financialObjectCode-parentBean" />
+            <attribute name="accountNumber" forceUppercase="true">
+                <label>Account Number</label>
+                <shortLabel>Number</shortLabel>
 
-  <bean id="CreditMemoAccount-financialObjectCode-parentBean" abstract="true" parent="ObjectCode-financialObjectCode">
-    <property name="description" value="The code that identifies the &quot;object&quot; of accounting for a transaction, expressed as a 4-digit numeric text, including leading zeros. For Search Criteria, select the Help for the Object Code search." />
-  </bean>
-  <bean id="CreditMemoAccount-accountNumber" parent="CreditMemoAccount-accountNumber-parentBean" />
+                <maxLength>7</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="CreditMemoAccount-accountNumber-parentBean" abstract="true" parent="Account-accountNumber">
-  </bean>
-  <bean id="CreditMemoAccount-objectId" parent="CreditMemoAccount-objectId-parentBean" />
+                <control>
+                    <text size="9" />
+                </control>
 
-  <bean id="CreditMemoAccount-objectId-parentBean" abstract="true" parent="GenericAttributes-objectId">
-    <property name="required" value="false" />
-  </bean>
-  <bean id="CreditMemoAccount-organizationReferenceId" parent="CreditMemoAccount-organizationReferenceId-parentBean" />
+                <summary>accountNumber</summary>
+                <description>accountNumber description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-organizationReferenceId-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="organizationReferenceId" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Organization Reference Id" />
-    <property name="shortLabel" value="Org Ref Id" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The identifier of an Organization which has been associated with the Account Line." />
-  </bean>
-  <bean id="CreditMemoAccount-chartOfAccountsCode" parent="CreditMemoAccount-chartOfAccountsCode-parentBean" />
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="CreditMemoAccount-chartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.SimpleChartValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-    <property name="description" value="The code that identifies the Chart of Accounts for an Account. Kuali accommodates more than one Chart of Accounts." />
-  </bean>
-  <bean id="CreditMemoAccount-postingYear" parent="CreditMemoAccount-postingYear-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="CreditMemoAccount-postingYear-parentBean" abstract="true" parent="GenericAttributes-genericFiscalYear">
-    <property name="name" value="postingYear" />
-    <property name="required" value="true" />
-  </bean>
-  <bean id="CreditMemoAccount-referenceOriginCode" parent="CreditMemoAccount-referenceOriginCode-parentBean" />
+                <control>
+                    <text size="4" />
+                </control>
 
-  <bean id="CreditMemoAccount-referenceOriginCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="referenceOriginCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Reference Origin Code" />
-    <property name="shortLabel" value="Ref Origin Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for that identifies the system from which the original encumbering transaction came, selected from a pulldown list." />
-  </bean>
-  <bean id="CreditMemoAccount-overrideCode" parent="CreditMemoAccount-overrideCode-parentBean" />
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-overrideCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="overrideCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Override Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.kfs.lookup.keyvalues.AccountingLineOverrideOptionFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for the type of override in an Accounting Line, selected from a pulldown list." />
-  </bean>
-  <bean id="CreditMemoAccount-amount" parent="CreditMemoAccount-amount-parentBean" />
+            <attribute name="creditMemoAccountIdentifier" forceUppercase="true">
+                <label>Credit Memo Account Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-  <bean id="CreditMemoAccount-amount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="amount" />
-    <property name="required" value="true" />
-    <property name="description" value="The total dollar amount of check or batch of checks." />
-  </bean>
-  <bean id="CreditMemoAccount-subAccountNumber" parent="CreditMemoAccount-subAccountNumber-parentBean" />
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="CreditMemoAccount-subAccountNumber-parentBean" abstract="true" parent="SubAccount-subAccountNumber">
-    <property name="label" value="Sub-Account Code" />
-    <property name="required" value="false" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The identifier to further partition the financial activity of an Account, expressed as a 5-character code" />
-  </bean>
-  <bean id="CreditMemoAccount-referenceTypeCode" parent="CreditMemoAccount-referenceTypeCode-parentBean" />
+                <control>
+                    <text size="12" />
+                </control>
 
-  <bean id="CreditMemoAccount-referenceTypeCode-parentBean" abstract="true" parent="DocumentType-financialDocumentTypeCode">
-    <property name="name" value="referenceTypeCode" />
-    <property name="label" value="Reference Type Code" />
-    <property name="shortLabel" value="Ref Type Code" />
-    <property name="required" value="false" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for the type of the system from which the original encumbering transaction came, selected from a pulldown list." />
-  </bean>
-  <bean id="CreditMemoAccount-projectCode" parent="CreditMemoAccount-projectCode-parentBean" />
+                <summary>creditMemoAccountIdentifier</summary>
+                <description>creditMemoAccountIdentifier description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-projectCode-parentBean" abstract="true" parent="ProjectCode-code">
-    <property name="name" value="projectCode" />
-    <property name="required" value="false" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The title of the project." />
-  </bean>
-  <bean id="CreditMemoAccount-financialSubObjectCode" parent="CreditMemoAccount-financialSubObjectCode-parentBean" />
+            <attribute name="creditMemoIdentifier" forceUppercase="true">
+                <label>Credit Memo Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-  <bean id="CreditMemoAccount-financialSubObjectCode-parentBean" abstract="true" parent="SubObjCd-financialSubObjectCode">
-    <property name="required" value="false" />
-    <property name="description" value="The code that partitions the Object Code into a greater amount of detail. Sub-Object Code acquire most of the attributes of the official Object Code to which they report, including Object Type and Object SubType." />
-  </bean>
-  <bean id="CreditMemoAccount-versionNumber" parent="CreditMemoAccount-versionNumber-parentBean" />
+                <maxLength>9</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="CreditMemoAccount-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-    <property name="required" value="false" />
-  </bean>
-  <bean id="CreditMemoAccount-documentNumber" parent="CreditMemoAccount-documentNumber-parentBean" />
+                <control>
+                    <text size="11" />
+                </control>
 
-  <bean id="CreditMemoAccount-documentNumber-parentBean" abstract="true" parent="DocumentHeader-documentNumber">
-    <property name="required" value="false" />
-  </bean>
-  <bean id="CreditMemoAccount-debitCreditCode" parent="CreditMemoAccount-debitCreditCode-parentBean" />
+                <summary>creditMemoIdentifier</summary>
+                <description>creditMemoIdentifier description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-debitCreditCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="debitCreditCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Credit or Debit Code" />
-    <property name="shortLabel" value="Credit/Debit" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="CharsetValidationPattern"
-            p:validChars="DC" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="2" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="If it&apos;s a &quot;C&quot; then this accounting line is a credit, if it&apos;s a &quot;D&quot;, then it&apos;s a debit." />
-  </bean>
-  <bean id="CreditMemoAccount-encumbranceUpdateCode" parent="CreditMemoAccount-encumbranceUpdateCode-parentBean" />
+            <attribute name="financialObjectCode" forceUppercase="true">
+                <label>Financial Object Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="CreditMemoAccount-encumbranceUpdateCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="encumbranceUpdateCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Encumbrance Update Code" />
-    <property name="shortLabel" value="Encumbrance Update" />
-    <property name="maxLength" value="1" />
-    <property name="validationPattern" >
-      <bean parent="AlphaValidationPattern" />
-    </property>
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="2" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The system code for the type of encumbrance update in an Accounting Line, selected from a pulldown list." />
-  </bean>
-  <bean id="CreditMemoAccount-objectTypeCode" parent="CreditMemoAccount-objectTypeCode-parentBean" />
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="CreditMemoAccount-objectTypeCode-parentBean" abstract="true" parent="ObjectType-code">
-    <property name="name" value="objectTypeCode" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="CreditMemoAccount-accountExpiredOverride" parent="CreditMemoAccount-accountExpiredOverride-parentBean" />
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="CreditMemoAccount-accountExpiredOverride-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountExpiredOverride" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Account Expired Override" />
-    <property name="shortLabel" value="Expired Override" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="This override indicates that the user has explicitly decided to use an account even though it has expired." />
-  </bean>
-  <bean id="CreditMemoAccount-nonFringeAccountOverride" parent="CreditMemoAccount-nonFringeAccountOverride-parentBean" />
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-nonFringeAccountOverride-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="nonFringeAccountOverride" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Non-fringe Account Override" />
-    <property name="shortLabel" value="Non-fringe Override" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="This override indicates that the user has explicitly decided to use an account even though it does not accept fringe benefit." />
-  </bean>
-  <bean id="CreditMemoAccount-objectBudgetOverride" parent="CreditMemoAccount-objectBudgetOverride-parentBean" />
+            <attribute name="financialSubObjectCode" forceUppercase="true">
+                <label>Financial Sub Object Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="CreditMemoAccount-objectBudgetOverride-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="objectBudgetOverride" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Object Non-Budgeted Override" />
-    <property name="shortLabel" value="Non-Budgeted Override" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="This override indicates that the user has explicitly decided to use a non budgeted object code even though presence control is on for the account." />
-  </bean>
-  <bean id="CreditMemoAccount-financialDocumentLineDescription" parent="CreditMemoAccount-financialDocumentLineDescription-parentBean" />
+                <maxLength>3</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="CreditMemoAccount-financialDocumentLineDescription-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="financialDocumentLineDescription" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Line Description" />
-    <property name="shortLabel" value="Line Desc" />
-    <property name="maxLength" value="40" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="40" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="A free-form text field that describes the purpose or function of the Accounting Line." />
-  </bean>
-  <bean id="CreditMemoAccount-salesTaxRequired" parent="CreditMemoAccount-salesTaxRequired-parentBean" />
+                <control>
+                    <text size="5" />
+                </control>
 
-  <bean id="CreditMemoAccount-salesTaxRequired-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="salesTaxRequired" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Sales Tax Required" />
-    <property name="shortLabel" value="Sales Tax Reqd" />
-    <property name="maxLength" value="10" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="Added in specifically so that I can override the formatter for booleans" />
-  </bean>
-  <bean id="CreditMemoAccount-salesTax.chartOfAccountsCode" parent="CreditMemoAccount-salesTax.chartOfAccountsCode-parentBean" />
+                <summary>financialSubObjectCode</summary>
+                <description>financialSubObjectCode description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-salesTax.chartOfAccountsCode-parentBean" abstract="true" parent="SalesTax-chartOfAccountsCode">
-    <property name="name" value="salesTax.chartOfAccountsCode" />
-    <property name="label" value="Sales Tax Chart of Accounts Code" />
-    <property name="shortLabel" value="Sales Tax Chart" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="Chart of Accounts Code that Sales Tax is collected against" />
-  </bean>
-  <bean id="CreditMemoAccount-salesTax.accountNumber" parent="CreditMemoAccount-salesTax.accountNumber-parentBean" />
+            <attribute name="itemAccountTotalAmount" forceUppercase="true">
+                <label>Item Account Total Amount</label>
+                <shortLabel>Amount</shortLabel>
 
-  <bean id="CreditMemoAccount-salesTax.accountNumber-parentBean" abstract="true" parent="SalesTax-accountNumber">
-    <property name="name" value="salesTax.accountNumber" />
-    <property name="label" value="Sales Tax Account Number" />
-    <property name="shortLabel" value="Sales Tax Account" />
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="Account Number that Sales Tax is collected against" />
-  </bean>
-  <bean id="CreditMemoAccount-salesTax.financialDocumentGrossSalesAmount" parent="CreditMemoAccount-salesTax.financialDocumentGrossSalesAmount-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="CreditMemoAccount-salesTax.financialDocumentGrossSalesAmount-parentBean" abstract="true" parent="SalesTax-financialDocumentGrossSalesAmount">
-    <property name="name" value="salesTax.financialDocumentGrossSalesAmount" />
-    <property name="label" value="Gross Sales Amount" />
-    <property name="shortLabel" value="Gross Sales Amt." />
-    <property name="description" value="Gross Sales Amount to be taxed" />
-  </bean>
-  <bean id="CreditMemoAccount-salesTax.financialDocumentTaxableSalesAmount" parent="CreditMemoAccount-salesTax.financialDocumentTaxableSalesAmount-parentBean" />
+                <control>
+                    <text size="21" />
+                </control>
 
-  <bean id="CreditMemoAccount-salesTax.financialDocumentTaxableSalesAmount-parentBean" abstract="true" parent="SalesTax-financialDocumentTaxableSalesAmount">
-    <property name="name" value="salesTax.financialDocumentTaxableSalesAmount" />
-    <property name="label" value="Taxable Sales Amount" />
-    <property name="shortLabel" value="Taxable Sales Amt." />
-    <property name="description" value="Taxable Sales Amount to be taxed" />
-  </bean>
-  <bean id="CreditMemoAccount-salesTax.financialDocumentSaleDate" parent="CreditMemoAccount-salesTax.financialDocumentSaleDate-parentBean" />
+                <summary>itemAccountTotalAmount</summary>
+                <description>itemAccountTotalAmount description...</description>
+			</attribute>
 
-  <bean id="CreditMemoAccount-salesTax.financialDocumentSaleDate-parentBean" abstract="true" parent="SalesTax-financialDocumentSaleDate">
-    <property name="name" value="salesTax.financialDocumentSaleDate" />
-    <property name="label" value="Sale Date" />
-    <property name="description" value="Date of Sale" />
-  </bean>
-  <bean id="CreditMemoAccount-itemIdentifier" parent="CreditMemoAccount-itemIdentifier-parentBean" />
+            <attribute name="itemLineNumber" forceUppercase="true">
+                <label>Item Line Number</label>
+                <shortLabel>Number</shortLabel>
 
-  <bean id="CreditMemoAccount-itemIdentifier-parentBean" abstract="true" parent="PurApGenericAttributes-genericItemIdentifier">
-    <property name="name" value="itemIdentifier" />
-    <property name="label" value="Item Identifier" />
-  </bean>
-  <bean id="CreditMemoAccount-accountLinePercent" parent="CreditMemoAccount-accountLinePercent-parentBean" />
+                <maxLength>4</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
-  <bean id="CreditMemoAccount-accountLinePercent-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountLinePercent" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Account Line Percent" />
-    <property name="shortLabel" value="Percent" />
-    <property name="maxLength" value="340" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="5" />
-    </property>
-  </bean>
-  <bean id="CreditMemoAccount-accountIdentifier" parent="CreditMemoAccount-accountIdentifier-parentBean" />
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="CreditMemoAccount-accountIdentifier-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountIdentifier" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Account Identifier" />
-    <property name="shortLabel" value="Identifier" />
-    <property name="maxLength" value="10" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="12" />
-    </property>
-  </bean>
-</beans>
+                <summary>itemLineNumber</summary>
+                <description>itemLineNumber description...</description>
+			</attribute>
+
+            <attribute name="organizationReferenceId" forceUppercase="true">
+                <label>Organization Reference Id</label>
+                <shortLabel>Id</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>organizationReferenceId</summary>
+                <description>organizationReferenceId description...</description>
+			</attribute>
+
+            <attribute name="projectCode" forceUppercase="true">
+                <label>Project Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>10</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="12" />
+                </control>
+
+                <summary>projectCode</summary>
+                <description>projectCode description...</description>
+			</attribute>
+
+            <attribute name="subAccountNumber" forceUppercase="true">
+                <label>Sub Account Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>5</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="7" />
+                </control>
+
+                <summary>subAccountNumber</summary>
+                <description>subAccountNumber description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

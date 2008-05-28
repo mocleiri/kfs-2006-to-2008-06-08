@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-	<bean id="kewDataSource" class="org.kuali.rice.database.XAPoolDataSource">
+
+	<bean id="dataSource" class="org.kuali.rice.database.XAPoolDataSource">
 		<property name="transactionManager" ref="jotm" />
-		<property name="driverClassName" value="${rice.workflow.datasource.driver.class}" />
-		<property name="maxSize" value="${rice.workflow.datasource.pool.size}" />
-		<property name="minSize" value="5" />
-		<property name="maxWait" value="${rice.workflow.datasource.connection.timeout}" />
-		<property name="validationQuery" value="${rice.workflow.datasource.validating.query}" />
-		<property name="url" value="${rice.workflow.datasource.url}" />
-		<property name="username" value="${rice.workflow.datasource.username}" />
-		<property name="password" value="${rice.workflow.datasource.password}" />
+		<property name="driverClassName" value="${dataSource.driverClassName}" />
+		<property name="maxSize" value="${dataSource.maxSize}" />
+		<property name="minSize" value="${dataSource.minSize}" />
+		<property name="maxWait" value="${dataSource.maxWait}" />
+		<property name="validationQuery" value="${dataSource.validationQuery}" />
+		<property name="url" value="${dataSource.url}" />
+		<property name="username" value="${dataSource.username}" />
+		<property name="password" value="${dataSource.password}" />
 	</bean>
 
+    <bean id="kewDataSource" class="org.kuali.rice.database.XAPoolDataSource">
+        <property name="transactionManager" ref="jotm" />
+        <property name="driverClassName" value="${kew.dataSource.driverClassName}" />
+        <property name="maxSize" value="${kew.dataSource.maxSize}" />
+        <property name="minSize" value="${kew.dataSource.minSize}" />
+        <property name="maxWait" value="${kew.dataSource.maxWait}" />
+        <property name="validationQuery" value="${kew.dataSource.validationQuery}" />
+        <property name="url" value="${kew.dataSource.url}" />
+        <property name="username" value="${kew.dataSource.username}" />
+        <property name="password" value="${kew.dataSource.password}" />
+    </bean>
+
     <alias name="kewDataSource" alias="registryDataSource"/>
+
 </beans>

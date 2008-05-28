@@ -15,38 +15,17 @@
  */
 package org.kuali.module.gl.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
-import org.kuali.kfs.batch.TestingStep;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
-/**
- * This step, which would only be run in testing or extraordinary production circumstances, stops the posting of all indirect cost
- * recovery groups.
- */
-public class MarkPostableIcrGroupsAsUnpostableStep extends AbstractStep implements TestingStep {
+public class MarkPostableIcrGroupsAsUnpostableStep extends AbstractStep {
     private OriginEntryGroupService originEntryGroupService;
-
-    /**
-     * Marks all postable ICR groups as unpostable
-     * 
-     * @param jobName the name of the job this step is being run as part of
-     * @param jobRunDate the time/date the job is being run
-     * @return true if the step completed successfully, false if otherwise
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
+    
+    public boolean execute(String jobName) throws InterruptedException {
         originEntryGroupService.markPostableIcrGroupsAsUnpostable();
         return true;
     }
 
-    /**
-     * Sets the originEntryGroupSerivce, allowing the injection of an implementation of that service
-     * 
-     * @param originEntryGroupService the originEntryGroupService to set
-     * @see org.kuali.module.gl.service.OriginEntryGroupService
-     */
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }

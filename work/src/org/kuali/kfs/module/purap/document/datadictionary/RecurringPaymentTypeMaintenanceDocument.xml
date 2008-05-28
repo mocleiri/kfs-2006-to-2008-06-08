@@ -1,81 +1,43 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="RecurringPaymentTypeMaintenanceDocument" parent="RecurringPaymentTypeMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.RecurringPaymentType</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="RecurringPaymentTypeMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.RecurringPaymentType" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="RecurringPaymentTypeMaintenanceDocument-EditRecurringPaymentType" />
-      </list>
-    </property>
-    <property name="lockingKeys" >
-      <list>
-        <value>recurringPaymentTypeCode</value>
-      </list>
-    </property>
-    <property name="label" value="Recurring Payment Type" />
-    <property name="shortLabel" value="Recurring Payment Type" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-PA"
-            p:parameterName="RECURRING_PAYMENT_TYPE"
-            p:parameterDetailType="RecurringPaymentType" />
-    </property>
-    <property name="documentTypeName" value="RecurringPaymentTypeMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMRP" />
-    <property name="workflowProperties" >
-      <ref bean="RecurringPaymentTypeMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_PUR_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiRecurringPaymentTypeMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMRP</documentTypeCode>
 
+        <label>Recurring Payment Type Maintenance Document</label>
+        <shortLabel>Recurring Payment Type Maint Doc</shortLabel>
 
-  <bean id="RecurringPaymentTypeMaintenanceDocument-EditRecurringPaymentType" parent="RecurringPaymentTypeMaintenanceDocument-EditRecurringPaymentType-parentBean" />
+        <summary>Recurring Payment Type Maintenance Document</summary>
+        <description>Document used to create or update Recurring Payment Type objects</description>
 
-  <bean id="RecurringPaymentTypeMaintenanceDocument-EditRecurringPaymentType-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Recurring Payment Type" />
-    <property name="title" value="Edit Recurring Payment Type" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="recurringPaymentTypeCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="recurringPaymentTypeDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="active" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="recurringPaymentTypeCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="RecurringPaymentTypeMaintenanceDocument-workflowProperties" parent="RecurringPaymentTypeMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="RecurringPaymentTypeMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit Recurring Payment Type">
+                <maintainableItems>
+                    <maintainableField name="recurringPaymentTypeCode" required="true" />
+                    <maintainableField name="recurringPaymentTypeDescription" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

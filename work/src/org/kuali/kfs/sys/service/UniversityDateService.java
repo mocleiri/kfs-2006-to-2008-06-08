@@ -17,48 +17,46 @@ package org.kuali.module.financial.service;
 
 import org.kuali.module.gl.bo.UniversityDate;
 
-/**
- * 
- * This service interface defines methods that a UniversityDateService implementation must provide.
- * 
- */
 public interface UniversityDateService {
     
     /**
-     * Returns the current university date.
+     * Returns the current university date
      * 
-     * @return The current university date.
+     * @return current university date
      */
     public UniversityDate getCurrentUniversityDate();
     
     /**
-     * Given a Date, returns the fiscal year corresponding to that date.
+     * Given a Date, returns the fiscal year corresponding to that date
      * 
-     * @return Fiscal year associated with the given Date.
-     * @throws IllegalArgumentException if the given Date is null.
+     * @return fiscal year for the given Date
+     * @throws IllegalArgumentException if the given Date is null
      */
     public Integer getFiscalYear(java.util.Date date);
+    
 
     /**
-     * Returns the first date of the specified Fiscal Year.
+     * Returns the first date of the specified Fiscal Year
      * 
-     * @param fiscalYear The fiscal year to retrieve the first date for.
-     * @return java.util.Date The first date of the fiscal year given.
+     * @param fiscalYear
+     * @return java.util.Date
      */
     public java.util.Date getFirstDateOfFiscalYear(Integer fiscalYear);
+    
 
     /**
-     * Returns the last date of the specified Fiscal Year.
+     * Returns the last date of the specified Fiscal Year
      * 
-     * @param fiscalYear The fiscal year to retrieve the last date for.
-     * @return java.util.Date The last date of the fiscal year given.
+     * @param fiscalYear
+     * @return java.util.Date
      */
     public java.util.Date getLastDateOfFiscalYear(Integer fiscalYear);
+    
 
     /**
-     * Returns the current fiscal year.
+     * Returns the current fiscal year
      * 
-     * @return The current fiscal year
+     * @return current fiscal year
      */
     public Integer getCurrentFiscalYear();
 

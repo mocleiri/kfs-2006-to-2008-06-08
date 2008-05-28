@@ -23,7 +23,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 
 /**
- * This class wraps the spring version to allow deploy time determination of whether to actually create a scheduler and whether to
+ * This class wraps the spring version to allow deploy time determinination of whether to actually create a scheduler and whether to
  * use the jdbc or ram job store.
  */
 public class SchedulerFactoryBean extends org.springframework.scheduling.quartz.SchedulerFactoryBean {
@@ -32,8 +32,7 @@ public class SchedulerFactoryBean extends org.springframework.scheduling.quartz.
     private boolean useJdbcJobstore;
     private DataSource dataSourceReference;
     private Properties quartzPropertiesReference;
-    private DataSource nonTransactionalDataSourceReference;
-
+    
     @Override
     public void destroy() throws SchedulerException {
         if (useQuartzScheduling) {
@@ -44,15 +43,14 @@ public class SchedulerFactoryBean extends org.springframework.scheduling.quartz.
     public void afterPropertiesSet() throws Exception {
         if (useQuartzScheduling) {
             if (useJdbcJobstore) {
-                quartzPropertiesReference.put("org.quartz.jobStore.useProperties", "false");
+                quartzPropertiesReference.put("org.quartz.jobStore.useProperties", "true");
                 setDataSource(dataSourceReference);
-                setNonTransactionalDataSource(nonTransactionalDataSourceReference);
             }
             setQuartzProperties(quartzPropertiesReference);
             super.afterPropertiesSet();
         }
     }
-
+    
     public Object getObject() {
         if (useQuartzScheduling) {
             return super.getObject();
@@ -89,18 +87,9 @@ public class SchedulerFactoryBean extends org.springframework.scheduling.quartz.
 
     /**
      * Sets the quartzPropertiesReference attribute value.
-     * 
      * @param quartzPropertiesReference The quartzPropertiesReference to set.
      */
     public void setQuartzPropertiesReference(Properties quartzPropertiesReference) {
         this.quartzPropertiesReference = quartzPropertiesReference;
-    }
-
-    public DataSource getNonTransactionalDataSourceReference() {
-        return nonTransactionalDataSourceReference;
-    }
-
-    public void setNonTransactionalDataSourceReference(DataSource nonTransactionalDataSourceReference) {
-        this.nonTransactionalDataSourceReference = nonTransactionalDataSourceReference;
     }
 }

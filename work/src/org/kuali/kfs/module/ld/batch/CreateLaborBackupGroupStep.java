@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,19 @@
  */
 package org.kuali.module.labor.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.labor.service.LaborOriginEntryService;
+import org.kuali.module.gl.service.OriginEntryGroupService;
 
-/**
- * Create Labor backup Batch Step.
- */
 public class CreateLaborBackupGroupStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CreateLaborBackupGroupStep.class);
+    private OriginEntryGroupService originEntryGroupService;
 
-    /**
-     * Invokes the method that creates labor backup group
-     * 
-     * @param jobName the job running this step
-     * @param jobRunDate the time/date when the job was started
-     * @return whether the job should continue executing other steps
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
-     */
-    public boolean execute(String jobName, Date jobRunDate) {
-        LOG.info("createLaborBackupGroup() started");
-        
-        SpringContext.getBean(LaborOriginEntryService.class).createLaborBackupGroup();
-        
+    public boolean execute() {
+        originEntryGroupService.createLaborBackupGroup();
         return true;
+    }
+
+    public void setOriginEntryGroupService(OriginEntryGroupService oegs) {
+        originEntryGroupService = oegs;
     }
 }

@@ -1,23 +1,14 @@
-<%--
- Copyright 2007 The Kuali Foundation.
- 
- Licensed under the Educational Community License, Version 1.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl1.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
---%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
-<%@ taglib uri="/WEB-INF/app.tld" prefix="app" %>
+<%@ page language="java"%>
+
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/struts-template.tld" prefix="template" %>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html locale="true">
-<link rel="stylesheet" type="text/css"  href="<%= request.getContextPath() %>/pdp/css/pdp_styles.css">
+<link rel="stylesheet" type="text/css"  href="https://docs.onestart.iu.edu/dav/MY/channels/css/styles.css">
   <head><title>PDP Error</title></head>
   <body>
   	<c:if test="${not empty title}">
@@ -51,7 +42,7 @@
 					    <table width="50%" border=0 cellpadding=0 cellspacing=0 class="bord-r-t" align="center">
 					      <tr>
 					        <th align=left valign=top class="datacell">
-					          <center><font color="#800000" size="2"><br><b>An unexpected error has been encountered.</b></font><br><br></center>
+					          <center><font color="#800000" size="2"><br><b>An unexpected error has been encountered, please contact <a href="mailto:pdphelp@indiana.edu">pdphelp@indiana.edu</a> for assistance.</b></font><br><br></center>
 					        </th>
 					      </tr>
 					    </table>

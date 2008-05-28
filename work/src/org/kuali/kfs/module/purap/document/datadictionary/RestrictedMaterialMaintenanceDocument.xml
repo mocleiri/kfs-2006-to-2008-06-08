@@ -1,82 +1,45 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="RestrictedMaterialMaintenanceDocument" parent="RestrictedMaterialMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.RestrictedMaterial</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="RestrictedMaterialMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.RestrictedMaterial" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="RestrictedMaterialMaintenanceDocument-EditRestrictedMaterial" />
-      </list>
-    </property>
-    <property name="lockingKeys" >
-      <list>
-        <value>restrictedMaterialCode</value>
-      </list>
-    </property>
-    <property name="label" value="Restricted Material" />
-    <property name="shortLabel" value="Restricted Material" />
-    <property name="documentTypeName" value="RestrictedMaterialMaintenanceDocument" />
-    <property name="businessRulesClass" value="org.kuali.module.purap.rules.RestrictedMaterialRule" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMRM" />
-    <property name="workflowProperties" >
-      <ref bean="RestrictedMaterialMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_PUR_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiRestrictedMaterialMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMRM</documentTypeCode>
 
+        <label>Restricted Material Maintenance Document</label>
+        <shortLabel>Restricted Material Maint Doc</shortLabel>
 
-  <bean id="RestrictedMaterialMaintenanceDocument-EditRestrictedMaterial" parent="RestrictedMaterialMaintenanceDocument-EditRestrictedMaterial-parentBean" />
+        <summary>Restricted Material Maintenance Document</summary>
+        <description>Document used to create or update Restricted Material objects</description>
 
-  <bean id="RestrictedMaterialMaintenanceDocument-EditRestrictedMaterial-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Restricted Material" />
-    <property name="title" value="Edit Restricted Material" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="restrictedMaterialCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="restrictedMaterialDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="restrictedMaterialDefaultDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="restrictedMaterialWorkgroupName"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="active" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="restrictedMaterialCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="RestrictedMaterialMaintenanceDocument-workflowProperties" parent="RestrictedMaterialMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="RestrictedMaterialMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit Restricted Material">
+                <maintainableItems>
+                    <maintainableField name="restrictedMaterialCode" required="true" />
+                    <maintainableField name="restrictedMaterialDescription" required="true" />
+                    <maintainableField name="restrictedMaterialDefaultDescription" required="true" />
+                    <maintainableField name="restrictedMaterialWorkgroupName" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

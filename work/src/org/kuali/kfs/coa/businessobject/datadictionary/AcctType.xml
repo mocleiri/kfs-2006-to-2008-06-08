@@ -1,131 +1,62 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+<dictionaryEntry>
+	<businessObject
+		businessObjectClass="org.kuali.module.chart.bo.AcctType">
+		<customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="AcctType" parent="AcctType-parentBean" />
+		<inquiry>
+			<title>Account Type</title>
 
-  <bean id="AcctType-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.chart.bo.AcctType" />
-    <property name="inquiryDefinition" >
-      <ref bean="AcctType-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="AcctType-lookupDefinition" />
-    </property>
-    <property name="titleAttribute" value="accountTypeCode" />
-    <property name="objectLabel" value="Account Type" />
-    <property name="attributes" >
-      <list>
-        <ref bean="AcctType-accountTypeCode" />
-        <ref bean="AcctType-accountTypeName" />
-        <ref bean="AcctType-versionNumber" />
-      </list>
-    </property>
-  </bean>
+			<inquiryFields>
+				<field attributeName="accountTypeCode" />
+				<field attributeName="accountTypeName" />
+			</inquiryFields>
+		</inquiry>
 
-<!-- Attribute Definitions -->
+		<attributes>
+			<attribute name="accountTypeCode" forceUppercase="true">
+				<label>Account Type Code</label>
+				<shortLabel>AcctType</shortLabel>
 
+				<maxLength>2</maxLength>
+				<validationPattern><alpha exactLength="2" /></validationPattern>
+				<required>true</required>
+				
+				<control>
+					<select valuesFinderClass="org.kuali.core.lookup.keyvalues.AcctTypeValuesFinder"/>					
+				</control>
 
-  <bean id="AcctType-accountTypeCode" parent="AcctType-accountTypeCode-parentBean" />
+				<summary>Account Type Code</summary>
+				<description>
+					Account Code
+				</description>
+			</attribute>
 
-  <bean id="AcctType-accountTypeCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountTypeCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Account Type Code" />
-    <property name="shortLabel" value="Account Type" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AlphaNumericValidationPattern"
-            p:exactLength="2" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="2" />
-    </property>
-  </bean>
-  <bean id="AcctType-accountTypeName" parent="AcctType-accountTypeName-parentBean" />
+			<attribute name="accountTypeName" forceUppercase="false">
+				<label>Account Type Name</label>
+				<shortLabel>Name</shortLabel>
 
-  <bean id="AcctType-accountTypeName-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountTypeName" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Account Type Name" />
-    <property name="shortLabel" value="Name" />
-    <property name="maxLength" value="40" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="50" />
-    </property>
-  </bean>
-  <bean id="AcctType-versionNumber" parent="AcctType-versionNumber-parentBean" />
+				<maxLength>50</maxLength>
+				<validationPattern><anyCharacter allowWhitespace="true" /></validationPattern>
 
-  <bean id="AcctType-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+				<control>
+					<text size="50" />
+				</control>
 
-<!-- Business Object Inquiry Definition -->
+				<summary>Account Type Name</summary>
+				<description>
+					Account Type Name
+				</description>
+			</attribute>
+			
+ 			<attributeReference name="versionNumber" 
+ 				sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" 
+ 				sourceAttributeName="versionNumber" />
+	        
+		</attributes>
+	</businessObject>
+</dictionaryEntry>
 
-
-  <bean id="AcctType-inquiryDefinition" parent="AcctType-inquiryDefinition-parentBean" />
-
-  <bean id="AcctType-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Account Type Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="accountTypeCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="accountTypeName" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-<!-- Business Object Lookup Definition -->
-
-
-  <bean id="AcctType-lookupDefinition" parent="AcctType-lookupDefinition-parentBean" />
-
-  <bean id="AcctType-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Account Type Lookup" />
-    <property name="instructions" value="Lookup an Account Type" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-        <property name="attributeNames" >
-          <list>
-            <value>accountTypeCode</value>
-          </list>
-        </property>
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="accountTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountTypeName" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="accountTypeCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountTypeName" />
-      </list>
-    </property>
-  </bean>
-</beans>

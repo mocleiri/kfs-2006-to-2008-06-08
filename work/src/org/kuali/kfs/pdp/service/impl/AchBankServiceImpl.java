@@ -46,46 +46,34 @@ public class AchBankServiceImpl implements AchBankService {
     public boolean reloadTable(String filename) {
         LOG.debug("reloadTable() started");
 
-        BufferedReader inputStream = null;
+        achBankDao.emptyTable();
 
+        BufferedReader inputStream = null;
+        
         try {
             inputStream = new BufferedReader(new FileReader(filename));
 
             String str = null;
             while ((str = inputStream.readLine()) != null) {
-                String bankRoutingNumber = getField(str, 1, 9);
-
-                AchBank tableBank = achBankDao.getBank(bankRoutingNumber);
                 AchBank ab = new AchBank(str);
-                if ( tableBank != null ) {
-                    ab.setVersionNumber(tableBank.getVersionNumber());
-                }
                 achBankDao.save(ab);
             }
-        }
-        catch (FileNotFoundException fnfe) {
-            LOG.error("reloadTable() File Not Found: " + filename, fnfe);
+        } catch (FileNotFoundException fnfe) {
+            LOG.error("reloadTable() File Not Found: " + filename,fnfe);
             return false;
-        }
-        catch (IOException ie) {
-            LOG.error("reloadTable() Problem reading file:  " + filename, ie);
+        } catch (IOException ie) {
+            LOG.error("reloadTable() Problem reading file:  "+ filename,ie);
             return false;
-        }
-        finally {
+        } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
-                }
-                catch (IOException ie) {
+                } catch (IOException ie) {
                     // Not much we can do now
                 }
             }
         }
         return true;
-    }
-
-    private String getField(String data, int startChar, int length) {
-        return data.substring(startChar - 1, startChar + length - 1).trim();
     }
 
     public void setAchBankDao(AchBankDao abd) {

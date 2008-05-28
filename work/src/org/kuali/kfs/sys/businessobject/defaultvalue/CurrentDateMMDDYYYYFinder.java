@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,13 @@ import java.util.Date;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.kuali.core.lookup.valueFinder.ValueFinder;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 
 public class CurrentDateMMDDYYYYFinder implements ValueFinder {
 
     public String getValue() {
         // get the current date from the service
-        Date date = SpringContext.getBean(DateTimeService.class).getCurrentDate();
+        Date date = SpringServiceLocator.getDateTimeService().getCurrentDate();
 
         // remove the time component
         date = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);

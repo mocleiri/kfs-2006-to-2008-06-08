@@ -1,207 +1,133 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionOrganizationReports">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="BudgetConstructionOrganizationReports" parent="BudgetConstructionOrganizationReports-parentBean" />
+        <inquiry>
+            <title>Budget Construction Organization Reports Inquiry</title>
 
-  <bean id="BudgetConstructionOrganizationReports-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.budget.bo.BudgetConstructionOrganizationReports" />
-    <property name="inquiryDefinition" >
-      <ref bean="BudgetConstructionOrganizationReports-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="BudgetConstructionOrganizationReports-lookupDefinition" />
-    </property>
-    <property name="attributes" >
-      <list>
-        <ref bean="BudgetConstructionOrganizationReports-chartOfAccountsCode" />
-        <ref bean="BudgetConstructionOrganizationReports-chartOfAccounts.codeAndDescription" />
-        <ref bean="BudgetConstructionOrganizationReports-organizationCode" />
-        <ref bean="BudgetConstructionOrganizationReports-reportsToChartOfAccountsCode" />
-        <ref bean="BudgetConstructionOrganizationReports-reportsToChartOfAccounts.codeAndDescription" />
-        <ref bean="BudgetConstructionOrganizationReports-reportsToOrganizationCode" />
-        <ref bean="BudgetConstructionOrganizationReports-responsibilityCenterCode" />
-        <ref bean="BudgetConstructionOrganizationReports-selectionKeyCode" />
-        <ref bean="BudgetConstructionOrganizationReports-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="organizationCode" />
+                <field attributeName="reportsToChartOfAccountsCode" />
+                <field attributeName="reportsToOrganizationCode" />
+                <field attributeName="responsibilityCenterCode" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Budget Construction Organization Reports Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionOrganizationReports">Create New</a>]]></menubar>
 
-  <bean id="BudgetConstructionOrganizationReports-chartOfAccountsCode" parent="BudgetConstructionOrganizationReports-chartOfAccountsCode-parentBean" />
+            <instructions>Look up Budget Construction Organization Reports</instructions>
 
-  <bean id="BudgetConstructionOrganizationReports-chartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-chartOfAccounts.codeAndDescription" parent="BudgetConstructionOrganizationReports-chartOfAccounts.codeAndDescription-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="chartOfAccountsCode" />
+                    <sortAttribute attributeName="organizationCode" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="BudgetConstructionOrganizationReports-chartOfAccounts.codeAndDescription-parentBean" abstract="true" parent="Chart-codeAndDescription">
-    <property name="name" value="chartOfAccounts.codeAndDescription" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="Chart Code and Description" />
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-organizationCode" parent="BudgetConstructionOrganizationReports-organizationCode-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+                <lookupField attributeName="organizationCode" required="false" />
+                <lookupField attributeName="reportsToChartOfAccountsCode" required="false" />
+                <lookupField attributeName="reportsToOrganizationCode" required="false" />
+                <lookupField attributeName="responsibilityCenterCode" required="false" />
+            </lookupFields>
 
-  <bean id="BudgetConstructionOrganizationReports-organizationCode-parentBean" abstract="true" parent="Org-organizationCode">
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-reportsToChartOfAccountsCode" parent="BudgetConstructionOrganizationReports-reportsToChartOfAccountsCode-parentBean" />
+            <resultFields>
+                <field attributeName="chartOfAccountsCode" />
+                <field attributeName="organizationCode" />
+                <field attributeName="reportsToChartOfAccountsCode" />
+                <field attributeName="reportsToOrganizationCode" />
+                <field attributeName="responsibilityCenterCode" />
+            </resultFields>
+        </lookup>
 
-  <bean id="BudgetConstructionOrganizationReports-reportsToChartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-    <property name="name" value="reportsToChartOfAccountsCode" />
-    <property name="label" value="Reports To Chart" />
-    <property name="shortLabel" value="Repts to Cht" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.chart.lookup.keyvalues.ChartValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-    <property name="description" value="The Chart for the Reports To organization." />
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-reportsToChartOfAccounts.codeAndDescription" parent="BudgetConstructionOrganizationReports-reportsToChartOfAccounts.codeAndDescription-parentBean" />
+        <attributes>
 
-  <bean id="BudgetConstructionOrganizationReports-reportsToChartOfAccounts.codeAndDescription-parentBean" abstract="true" parent="Chart-codeAndDescription">
-    <property name="name" value="reportsToChartOfAccounts.codeAndDescription" />
-    <property name="label" value="Reports To Chart" />
-    <property name="shortLabel" value="Repts to Cht" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="HiddenControlDefinition" />
-    </property>
-    <property name="summary" value="&amp;nbsp;" />
-    <property name="description" value="The Chart for the Reports To organization." />
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-reportsToOrganizationCode" parent="BudgetConstructionOrganizationReports-reportsToOrganizationCode-parentBean" />
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="BudgetConstructionOrganizationReports-reportsToOrganizationCode-parentBean" abstract="true" parent="Org-organizationCode">
-    <property name="name" value="reportsToOrganizationCode" />
-    <property name="label" value="Reports To Organization" />
-    <property name="shortLabel" value="Rpts To Org" />
-    <property name="description" value="The Reports To organization for the account." />
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-responsibilityCenterCode" parent="BudgetConstructionOrganizationReports-responsibilityCenterCode-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="BudgetConstructionOrganizationReports-responsibilityCenterCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="responsibilityCenterCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Responsibility Center Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="2" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="4" />
-    </property>
-    <property name="summary" value="Responsibility Center Code" />
-    <property name="description" value="The code uniquely identifying a particular Responsibility Center." />
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-selectionKeyCode" parent="BudgetConstructionOrganizationReports-selectionKeyCode-parentBean" />
+                <control>
+                    <text size="4" />
+                </control>
 
-  <bean id="BudgetConstructionOrganizationReports-selectionKeyCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="selectionKeyCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Point Of View Key Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="7" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.budget.lookup.keyvalues.PointOfViewOrgValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-    <property name="summary" value="Point Of View Organization Selection Key" />
-    <property name="description" value="The composite key uniquely identifying a point of view organization." />
-  </bean>
-  <bean id="BudgetConstructionOrganizationReports-versionNumber" parent="BudgetConstructionOrganizationReports-versionNumber-parentBean" />
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
 
-  <bean id="BudgetConstructionOrganizationReports-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+            <attribute name="organizationCode" forceUppercase="true">
+                <label>Organization Code</label>
+                <shortLabel>Code</shortLabel>
 
-<!-- Business Object Inquiry Definition -->
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="BudgetConstructionOrganizationReports-inquiryDefinition" parent="BudgetConstructionOrganizationReports-inquiryDefinition-parentBean" />
+                <summary>organizationCode</summary>
+                <description>organizationCode description...</description>
+			</attribute>
 
-  <bean id="BudgetConstructionOrganizationReports-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Budget Construction Organization Reports Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="chartOfAccounts.codeAndDescription" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="organizationCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="reportsToChartOfAccounts.codeAndDescription" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="reportsToOrganizationCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="responsibilityCenterCode" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+            <attribute name="reportsToChartOfAccountsCode" forceUppercase="true">
+                <label>Reports To Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
-<!-- Business Object Lookup Definition -->
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
+                <control>
+                    <text size="4" />
+                </control>
 
-  <bean id="BudgetConstructionOrganizationReports-lookupDefinition" parent="BudgetConstructionOrganizationReports-lookupDefinition-parentBean" />
+                <summary>reportsToChartOfAccountsCode</summary>
+                <description>reportsToChartOfAccountsCode description...</description>
+			</attribute>
 
-  <bean id="BudgetConstructionOrganizationReports-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Budget Construction Organization Reports Lookup" />
-    <property name="instructions" value="Look up Budget Construction Organization Reports" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="organizationCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="reportsToChartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="reportsToOrganizationCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="responsibilityCenterCode" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="organizationCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="reportsToChartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="reportsToOrganizationCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="responsibilityCenterCode" />
-      </list>
-    </property>
-  </bean>
-</beans>
+            <attribute name="reportsToOrganizationCode" forceUppercase="true">
+                <label>Reports To Organization Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>reportsToOrganizationCode</summary>
+                <description>reportsToOrganizationCode description...</description>
+			</attribute>
+
+            <attribute name="responsibilityCenterCode" forceUppercase="true">
+                <label>Responsibility Center Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>responsibilityCenterCode</summary>
+                <description>responsibilityCenterCode description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

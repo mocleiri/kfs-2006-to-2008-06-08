@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,17 @@ import org.kuali.core.service.BusinessObjectService;
 import org.kuali.module.chart.bo.Account;
 
 public enum AccountFixture {
-    ACTIVE_ACCOUNT(null, null, false, null, null, "2101-09-30 00:00:00.000000000"), CLOSED_ACCOUNT(null, null, true, null, null, null), EXPIRIED_ACCOUNT(null, "1031467", false, "BL", "2331489", "2001-09-30 00:00:00.000000000"), EXPIRIED_ACCOUNT_NO_CONTINUATION(null, null, false, null, null, "2001-09-30 00:00:00.000000000"), EXPIRIED_ACCOUNT_EXPIRIED_AND_OPEN_CONTINUATION(null, "fixture1", false, "BL", "4631644", "2001-09-30 00:00:00.000000000"), EXPIRIED_ACCOUNT_EXPIRIED_AND_CLOSED_CONTINUATION(null, "fixture1", false, "BL", "4031425", "2001-09-30 00:00:00.000000000"), ACCOUNT_PRESENCE_ACCOUNT("BL", "4031416", false, null, null, null), ACCOUNT_NON_PRESENCE_ACCOUNT("BA", "6044900", false, null, null, null), ACCOUNT_PRESENCE_ACCOUNT_WITH_EXPIRED("BL", "4831483", false, null, null, "2001-09-30 00:00:00.000000000"), ACCOUNT_PRESENCE_ACCOUNT_BUT_CLOSED("BL", "4831483", false, null, null, null), ;
+    ACTIVE_ACCOUNT(null, null, false, null, null, "2101-09-30 00:00:00.000000000"),
+    CLOSED_ACCOUNT(null, null, true, null, null, null),
+    EXPIRIED_ACCOUNT(null, "1031467", false, "BL", "2331489", "2001-09-30 00:00:00.000000000"),
+    EXPIRIED_ACCOUNT_NO_CONTINUATION(null, null, false, null, null, "2001-09-30 00:00:00.000000000"),
+    EXPIRIED_ACCOUNT_EXPIRIED_AND_OPEN_CONTINUATION(null, "fixture1", false, "BL", "4631644", "2001-09-30 00:00:00.000000000"),
+    EXPIRIED_ACCOUNT_EXPIRIED_AND_CLOSED_CONTINUATION(null, "fixture1", false, "BL", "4031425", "2001-09-30 00:00:00.000000000"),
+    ACCOUNT_PRESENCE_ACCOUNT("BL", "4031416", false, null, null, null),
+    ACCOUNT_NON_PRESENCE_ACCOUNT("BA", "6044900", false, null, null, null),
+    ACCOUNT_PRESENCE_ACCOUNT_WITH_EXPIRED("BL", "4831483", false, null, null, "2001-09-30 00:00:00.000000000"),
+    ACCOUNT_PRESENCE_ACCOUNT_BUT_CLOSED("BL", "4831483", false, null, null, null),
+    ;
 
     public final String accountNumber;
     public final String chartOfAccountsCode;

@@ -1,80 +1,43 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="PaymentRequestStatusMaintenanceDocument" parent="PaymentRequestStatusMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.PaymentRequestStatus</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="PaymentRequestStatusMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.PaymentRequestStatus" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="PaymentRequestStatusMaintenanceDocument-EditPaymentRequestStatus" />
-      </list>
-    </property>
-    <property name="allowsNewOrCopy" value="false" />
-    <property name="lockingKeys" >
-      <list>
-        <value>statusCode</value>
-      </list>
-    </property>
-    <property name="label" value="Payment Request Status" />
-    <property name="shortLabel" value="Payment Request Status" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-PA"
-            p:parameterName="PAYMENT_REQUEST_STATUS"
-            p:parameterDetailType="PaymentRequestStatus" />
-    </property>
-    <property name="documentTypeName" value="PaymentRequestStatusMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMPR" />
-    <property name="workflowProperties" >
-      <ref bean="PaymentRequestStatusMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_AP_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiPaymentRequestStatusMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMPR</documentTypeCode>
 
+        <label>Payment Request Status Maintenance Document</label>
+        <shortLabel>Payment Request Status Maint Doc</shortLabel>
 
-  <bean id="PaymentRequestStatusMaintenanceDocument-EditPaymentRequestStatus" parent="PaymentRequestStatusMaintenanceDocument-EditPaymentRequestStatus-parentBean" />
+        <summary>Payment Request Status Maintenance Document</summary>
+        <description>Document used to create or update Payment Request Status objects</description>
 
-  <bean id="PaymentRequestStatusMaintenanceDocument-EditPaymentRequestStatus-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Payment Request Status" />
-    <property name="title" value="Edit Payment Request Status" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="statusCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="statusDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="paymentRequestStatusCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="PaymentRequestStatusMaintenanceDocument-workflowProperties" parent="PaymentRequestStatusMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="PaymentRequestStatusMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit Payment Request Status">
+                <maintainableItems>
+                    <maintainableField name="paymentRequestStatusCode" required="true" />
+                    <maintainableField name="paymentRequestStatusDescription" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

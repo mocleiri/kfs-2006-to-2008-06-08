@@ -1,80 +1,43 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="RequisitionStatusMaintenanceDocument" parent="RequisitionStatusMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.RequisitionStatus</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="RequisitionStatusMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.RequisitionStatus" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="RequisitionStatusMaintenanceDocument-EditRequisitionStatus" />
-      </list>
-    </property>
-    <property name="allowsNewOrCopy" value="false" />
-    <property name="lockingKeys" >
-      <list>
-        <value>statusCode</value>
-      </list>
-    </property>
-    <property name="label" value="Requisition Status" />
-    <property name="shortLabel" value="Requisition Status" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-PA"
-            p:parameterName="REQUISITION_STATUS"
-            p:parameterDetailType="RequisitionStatus" />
-    </property>
-    <property name="documentTypeName" value="RequisitionStatusMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMRS" />
-    <property name="workflowProperties" >
-      <ref bean="RequisitionStatusMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_PUR_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiRequisitionStatusMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMRS</documentTypeCode>
 
+        <label>Requisition Status Maintenance Document</label>
+        <shortLabel>Requisition Status Maint Doc</shortLabel>
 
-  <bean id="RequisitionStatusMaintenanceDocument-EditRequisitionStatus" parent="RequisitionStatusMaintenanceDocument-EditRequisitionStatus-parentBean" />
+        <summary>Requisition Status Maintenance Document</summary>
+        <description>Document used to create or update Requisition Status objects</description>
 
-  <bean id="RequisitionStatusMaintenanceDocument-EditRequisitionStatus-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Requisition Status" />
-    <property name="title" value="Edit Requisition Status" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="statusCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="statusDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="requisitionStatusCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="RequisitionStatusMaintenanceDocument-workflowProperties" parent="RequisitionStatusMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="RequisitionStatusMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit Requisition Status">
+                <maintainableItems>
+                    <maintainableField name="requisitionStatusCode" required="true" />
+                    <maintainableField name="requisitionStatusDescription" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

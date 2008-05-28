@@ -1,91 +1,43 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="AutoApproveExcludeMaintenanceDocument" parent="AutoApproveExcludeMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.AutoApproveExclude</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="AutoApproveExcludeMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.AutoApproveExclude" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="AutoApproveExcludeMaintenanceDocument-EditAutoApproveExclude" />
-      </list>
-    </property>
-    <property name="defaultExistenceChecks" >
-      <list>
-        <bean parent="ReferenceDefinition"
-              p:attributeName="chartOfAccounts"
-              p:attributeToHighlightOnFail="chartOfAccountsCode" />
-        <bean parent="ReferenceDefinition"
-              p:attributeName="account"
-              p:attributeToHighlightOnFail="accountNumber" />
-      </list>
-    </property>
-    <property name="lockingKeys" >
-      <list>
-        <value>accountNumber</value>
-      </list>
-    </property>
-    <property name="label" value="Payment Request Auto Approve Exclusions" />
-    <property name="shortLabel" value="Payment Request Auto Approve Exclusions" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-PA"
-            p:parameterName="AUTO_APPROVE_EXCLUDE"
-            p:parameterDetailType="AutoApproveExclude" />
-    </property>
-    <property name="documentTypeName" value="AutoApproveExcludeMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMAA" />
-    <property name="workflowProperties" >
-      <ref bean="AutoApproveExcludeMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_AP_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiAutoApproveExclusionMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMAA</documentTypeCode>
 
+        <label>Auto Approve Exclude Maintenance Document</label>
+        <shortLabel>Auto Approve Exclude Maint Doc</shortLabel>
 
-  <bean id="AutoApproveExcludeMaintenanceDocument-EditAutoApproveExclude" parent="AutoApproveExcludeMaintenanceDocument-EditAutoApproveExclude-parentBean" />
+        <summary>Auto Approve Exclude Maintenance Document</summary>
+        <description>Document used to create or update Auto Approve Exclude objects</description>
 
-  <bean id="AutoApproveExcludeMaintenanceDocument-EditAutoApproveExclude-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit Auto Approve Exclude" />
-    <property name="title" value="Edit Auto Approve Exclude" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="chartOfAccountsCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="accountNumber"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="active" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="accountNumber" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="AutoApproveExcludeMaintenanceDocument-workflowProperties" parent="AutoApproveExcludeMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="AutoApproveExcludeMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit Auto Approve Exclude">
+                <maintainableItems>
+                    <maintainableField name="accountNumber" required="true" />
+                    <maintainableField name="chartOfAccountsCode" required="true" />
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="false" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

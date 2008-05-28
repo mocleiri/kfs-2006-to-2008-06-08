@@ -1,120 +1,91 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.PaymentRequestThresholdNotToExceed">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="PaymentRequestThresholdNotToExceed" parent="PaymentRequestThresholdNotToExceed-parentBean" />
+        <inquiry>
+            <title>Payment Request Threshold Not To Exceed Inquiry</title>
 
-  <bean id="PaymentRequestThresholdNotToExceed-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.PaymentRequestThresholdNotToExceed" />
-    <property name="inquiryDefinition" >
-      <ref bean="PaymentRequestThresholdNotToExceed-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="PaymentRequestThresholdNotToExceed-lookupDefinition" />
-    </property>
-    <property name="attributes" >
-      <list>
-        <ref bean="PaymentRequestThresholdNotToExceed-accountsPayableThresholdNotToExceedAmount" />
-        <ref bean="PaymentRequestThresholdNotToExceed-versionNumber" />
-        <ref bean="PaymentRequestThresholdNotToExceed-chartOfAccountsCode" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="accountsPayableThresholdNotToExceedAmount" />
+                <field attributeName="chartOfAccountsCode" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Payment Request Threshold Not To Exceed Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.purap.bo.PaymentRequestThresholdNotToExceed">Create New</a>]]></menubar>
 
-  <bean id="PaymentRequestThresholdNotToExceed-accountsPayableThresholdNotToExceedAmount" parent="PaymentRequestThresholdNotToExceed-accountsPayableThresholdNotToExceedAmount-parentBean" />
+            <instructions>Lookup a Payment Request Threshold Not To Exceed</instructions>
 
-  <bean id="PaymentRequestThresholdNotToExceed-accountsPayableThresholdNotToExceedAmount-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="accountsPayableThresholdNotToExceedAmount" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Accounts Payable Threshold Not To Exceed Amount" />
-    <property name="shortLabel" value="Amount" />
-    <property name="maxLength" value="19" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="21" />
-    </property>
-  </bean>
-  <bean id="PaymentRequestThresholdNotToExceed-versionNumber" parent="PaymentRequestThresholdNotToExceed-versionNumber-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="accountsPayableThresholdNotToExceedAmount" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="PaymentRequestThresholdNotToExceed-versionNumber-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="versionNumber" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Version Number" />
-    <property name="shortLabel" value="Number" />
-    <property name="maxLength" value="8" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-  </bean>
-  <bean id="PaymentRequestThresholdNotToExceed-chartOfAccountsCode" parent="PaymentRequestThresholdNotToExceed-chartOfAccountsCode-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="accountsPayableThresholdNotToExceedAmount" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />
+            </lookupFields>
 
-  <bean id="PaymentRequestThresholdNotToExceed-chartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-  </bean>
+            <resultFields>
+                <field attributeName="accountsPayableThresholdNotToExceedAmount" />
+                <field attributeName="chartOfAccountsCode" />
+            </resultFields>
+        </lookup>
 
-<!-- Business Object Inquiry Definition -->
+        <attributes>
 
+            <attribute name="accountsPayableThresholdNotToExceedAmount" forceUppercase="true">
+                <label>Accounts Payable Threshold Not To Exceed Amount</label>
+                <shortLabel>Amount</shortLabel>
 
-  <bean id="PaymentRequestThresholdNotToExceed-inquiryDefinition" parent="PaymentRequestThresholdNotToExceed-inquiryDefinition-parentBean" />
+                <maxLength>19</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="PaymentRequestThresholdNotToExceed-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Payment Request Threshold Not To Exceed Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="accountsPayableThresholdNotToExceedAmount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="chartOfAccountsCode" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <control>
+                    <text size="21" />
+                </control>
 
-<!-- Business Object Lookup Definition -->
+                <summary>accountsPayableThresholdNotToExceedAmount</summary>
+                <description>accountsPayableThresholdNotToExceedAmount description...</description>
+			</attribute>
 
+            <attribute name="chartOfAccountsCode" forceUppercase="true">
+                <label>Chart Of Accounts Code</label>
+                <shortLabel>Code</shortLabel>
 
-  <bean id="PaymentRequestThresholdNotToExceed-lookupDefinition" parent="PaymentRequestThresholdNotToExceed-lookupDefinition-parentBean" />
+                <maxLength>2</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="PaymentRequestThresholdNotToExceed-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Payment Request Threshold Not To Exceed Lookup" />
-    <property name="instructions" value="Lookup a Payment Request Threshold Not To Exceed" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="accountsPayableThresholdNotToExceedAmount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="accountsPayableThresholdNotToExceedAmount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <control>
+                    <text size="4" />
+                </control>
+
+                <summary>chartOfAccountsCode</summary>
+                <description>chartOfAccountsCode description...</description>
+			</attribute>
+
+            <attribute name="versionNumber" forceUppercase="true">
+                <label>Version Number</label>
+                <shortLabel>Number</shortLabel>
+
+                <maxLength>8</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="10" />
+                </control>
+
+                <summary>versionNumber</summary>
+                <description>versionNumber description...</description>
+			</attribute>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

@@ -1,17 +1,26 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.kra.budget.bo;
@@ -20,15 +29,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectBase {
+public abstract class BudgetAbstractCostShare extends BusinessObjectBase {
 
-    protected String documentNumber;
+    protected String documentHeaderId;
     protected Integer budgetCostShareSequenceNumber;
     protected String budgetCostShareDescription;
     protected List budgetPeriodCostShare;
@@ -42,55 +50,55 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
     }
 
     /**
-     * Populates the key fields for BudgetAbstractPeriodCostShare object. This could be done on object creation, unfortunatly at
-     * that time we don't have budgetCostShareSequenceNumber set yet (object is created on page load, while sequence number is set
-     * on pressing "add" on the page). Thus we opted for this solution.
-     * 
-     * @param documentNumber
+     * Populates the key fields for BudgetAbstractPeriodCostShare object. This could be done on object creation, unfortunatly at that time
+     * we don't have budgetCostShareSequenceNumber set yet (object is created on page load, while sequence number is set on pressing "add"
+     * on the page). Thus we opted for this solution.
+     * @param documentHeaderId
      * @param periods
      * @param budgetAbstractCostShare
      */
-    public void populateKeyFields(String documentNumber, List<BudgetPeriod> periods) {
-        this.setDocumentNumber(documentNumber);
+    public void populateKeyFields(String documentHeaderId, List<BudgetPeriod> periods) {
+        this.setDocumentHeaderId(documentHeaderId);
 
         for (int i = 0; i < periods.size(); i++) {
             BudgetPeriod period = periods.get(i);
             BudgetAbstractPeriodCostShare budgetAbstractPeriodCostShare = this.getBudgetPeriodCostShareItem(i);
 
-            budgetAbstractPeriodCostShare.setDocumentNumber(documentNumber);
+            budgetAbstractPeriodCostShare.setDocumentHeaderId(documentHeaderId);
             budgetAbstractPeriodCostShare.setBudgetCostShareSequenceNumber(this.getBudgetCostShareSequenceNumber());
             budgetAbstractPeriodCostShare.setBudgetPeriodSequenceNumber(period.getBudgetPeriodSequenceNumber());
         }
     }
-
+    
     public abstract List getBudgetPeriodCostShare();
-
     public abstract void setBudgetPeriodCostShare(List budgetPeriodCostShare);
-
     public abstract BudgetAbstractPeriodCostShare getBudgetPeriodCostShareItem(int index);
-
+    
     /**
-     * Gets the documentNumber attribute.
+     * Gets the documentHeaderId attribute.
      * 
-     * @return Returns the documentNumber
+     * @return - Returns the documentHeaderId
+     * 
      */
-    public String getDocumentNumber() {
-        return documentNumber;
+    public String getDocumentHeaderId() {
+        return documentHeaderId;
     }
 
     /**
-     * Sets the documentNumber attribute.
+     * Sets the documentHeaderId attribute.
      * 
-     * @param documentNumber The documentNumber to set.
+     * @param documentHeaderId The documentHeaderId to set.
+     * 
      */
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
+    public void setDocumentHeaderId(String documentHeaderId) {
+        this.documentHeaderId = documentHeaderId;
     }
 
     /**
      * Gets the budgetThirdPartyCostShareSequenceNumber attribute.
      * 
-     * @return Returns the budgetThirdPartyCostShareSequenceNumber
+     * @return - Returns the budgetThirdPartyCostShareSequenceNumber
+     * 
      */
     public Integer getBudgetCostShareSequenceNumber() {
         return budgetCostShareSequenceNumber;
@@ -100,6 +108,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
      * Sets the budgetThirdPartyCostShareSequenceNumber attribute.
      * 
      * @param budgetThirdPartyCostShareSequenceNumber The budgetThirdPartyCostShareSequenceNumber to set.
+     * 
      */
     public void setBudgetCostShareSequenceNumber(Integer budgetThirdPartyCostShareSequenceNumber) {
         this.budgetCostShareSequenceNumber = budgetThirdPartyCostShareSequenceNumber;
@@ -108,7 +117,8 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
     /**
      * Gets the budgetThirdPartyCostShareDescription attribute.
      * 
-     * @return Returns the budgetThirdPartyCostShareDescription
+     * @return - Returns the budgetThirdPartyCostShareDescription
+     * 
      */
     public String getBudgetCostShareDescription() {
         return budgetCostShareDescription;
@@ -118,6 +128,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
      * Sets the budgetThirdPartyCostShareDescription attribute.
      * 
      * @param budgetThirdPartyCostShareDescription The budgetThirdPartyCostShareDescription to set.
+     * 
      */
     public void setBudgetCostShareDescription(String budgetThirdPartyCostShareDescription) {
         this.budgetCostShareDescription = budgetThirdPartyCostShareDescription;
@@ -129,7 +140,7 @@ public abstract class BudgetAbstractCostShare extends PersistableBusinessObjectB
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
 
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, this.documentNumber);
+        m.put("documentHeaderId", this.documentHeaderId);
         m.put("budgetCostShareSequenceNumber", this.budgetCostShareSequenceNumber);
 
         return m;

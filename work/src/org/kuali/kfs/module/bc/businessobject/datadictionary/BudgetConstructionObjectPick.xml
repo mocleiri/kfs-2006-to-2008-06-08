@@ -1,157 +1,96 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.budget.bo.BudgetConstructionObjectPick">
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-  <bean id="BudgetConstructionObjectPick" parent="BudgetConstructionObjectPick-parentBean" />
+        <inquiry>
+            <title>Budget Construction Object Pick Inquiry</title>
 
-  <bean id="BudgetConstructionObjectPick-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.budget.bo.BudgetConstructionObjectPick" />
-    <property name="inquiryDefinition" >
-      <ref bean="BudgetConstructionObjectPick-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="BudgetConstructionObjectPick-lookupDefinition" />
-    </property>
-    <property name="attributes" >
-      <list>
-        <ref bean="BudgetConstructionObjectPick-financialObjectCode" />
-        <ref bean="BudgetConstructionObjectPick-personUniversalIdentifier" />
-        <ref bean="BudgetConstructionObjectPick-selectFlag" />
-        <ref bean="BudgetConstructionObjectPick-objectCodeDescription" />
-        <ref bean="BudgetConstructionObjectPick-versionNumber" />
-      </list>
-    </property>
-  </bean>
+            <inquiryFields>
+                <field attributeName="financialObjectCode" />
+                <field attributeName="personUniversalIdentifier" />
+                <field attributeName="selectFlag" />
+            </inquiryFields>
+        </inquiry>
 
-<!-- Attribute Definitions -->
+        <lookup>
+            <title>Budget Construction Object Pick Lookup</title>
 
+			<menubar><![CDATA[<a href="maintenance.do?methodToCall=start&businessObjectClassName=org.kuali.module.budget.bo.BudgetConstructionObjectPick">Create New</a>]]></menubar>
 
-  <bean id="BudgetConstructionObjectPick-financialObjectCode" parent="BudgetConstructionObjectPick-financialObjectCode-parentBean" />
+            <instructions>Look up a Budget Construction Object Pick</instructions>
 
-  <bean id="BudgetConstructionObjectPick-financialObjectCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="financialObjectCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Object Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="6" />
-    </property>
-    <property name="summary" value="financialObjectCode" />
-    <property name="description" value="financialObjectCode description..." />
-  </bean>
-  <bean id="BudgetConstructionObjectPick-personUniversalIdentifier" parent="BudgetConstructionObjectPick-personUniversalIdentifier-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="financialObjectCode" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="BudgetConstructionObjectPick-personUniversalIdentifier-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="personUniversalIdentifier" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Person Universal Identifier" />
-    <property name="shortLabel" value="Identifier" />
-    <property name="maxLength" value="10" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="12" />
-    </property>
-    <property name="summary" value="personUniversalIdentifier" />
-    <property name="description" value="personUniversalIdentifier description..." />
-  </bean>
-  <bean id="BudgetConstructionObjectPick-selectFlag" parent="BudgetConstructionObjectPick-selectFlag-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="financialObjectCode" required="false" />
+                <lookupField attributeName="personUniversalIdentifier" required="false" />
+                <lookupField attributeName="selectFlag" required="false" />
+            </lookupFields>
 
-  <bean id="BudgetConstructionObjectPick-selectFlag-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="selectFlag" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Select Flag" />
-    <property name="shortLabel" value="Flag" />
-    <property name="maxLength" value="7" />
-    <property name="validationPattern" >
-      <bean parent="NumericValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="9" />
-    </property>
-    <property name="summary" value="selectFlag" />
-    <property name="description" value="selectFlag description..." />
-  </bean>
-  <bean id="BudgetConstructionObjectPick-objectCodeDescription" parent="BudgetConstructionObjectPick-objectCodeDescription-parentBean" />
+            <resultFields>
+                <field attributeName="financialObjectCode" />
+                <field attributeName="personUniversalIdentifier" />
+                <field attributeName="selectFlag" />
+            </resultFields>
+        </lookup>
 
-  <bean id="BudgetConstructionObjectPick-objectCodeDescription-parentBean" abstract="true" parent="ObjectCode-financialObjectCodeName">
-    <property name="name" value="objectCodeDescription" />
-    <property name="label" value="Object Description" />
-    <property name="required" value="false" />
-  </bean>
-  <bean id="BudgetConstructionObjectPick-versionNumber" parent="BudgetConstructionObjectPick-versionNumber-parentBean" />
+        <attributes>
 
-  <bean id="BudgetConstructionObjectPick-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+            <attribute name="financialObjectCode" forceUppercase="true">
+                <label>Financial Object Code</label>
+                <shortLabel>Code</shortLabel>
 
-<!-- Business Object Inquiry Definition -->
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
+                <control>
+                    <text size="6" />
+                </control>
 
-  <bean id="BudgetConstructionObjectPick-inquiryDefinition" parent="BudgetConstructionObjectPick-inquiryDefinition-parentBean" />
+                <summary>financialObjectCode</summary>
+                <description>financialObjectCode description...</description>
+			</attribute>
 
-  <bean id="BudgetConstructionObjectPick-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Budget Construction Object Pick Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialObjectCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="personUniversalIdentifier" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="selectFlag" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+            <attribute name="personUniversalIdentifier" forceUppercase="true">
+                <label>Person Universal Identifier</label>
+                <shortLabel>Identifier</shortLabel>
 
-<!-- Business Object Lookup Definition -->
+                <maxLength>10</maxLength>
+                <validationPattern><numeric /></validationPattern>
 
+                <control>
+                    <text size="12" />
+                </control>
 
-  <bean id="BudgetConstructionObjectPick-lookupDefinition" parent="BudgetConstructionObjectPick-lookupDefinition-parentBean" />
+                <summary>personUniversalIdentifier</summary>
+                <description>personUniversalIdentifier description...</description>
+			</attribute>
 
-  <bean id="BudgetConstructionObjectPick-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Budget Construction Object Pick Lookup" />
-    <property name="instructions" value="Look up a Budget Construction Object Pick" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="personUniversalIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="selectFlag" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="personUniversalIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="selectFlag" />
-      </list>
-    </property>
-  </bean>
-</beans>
+            <attribute name="selectFlag" forceUppercase="true">
+                <label>Select Flag</label>
+                <shortLabel>Flag</shortLabel>
+
+                <maxLength>7</maxLength>
+                <validationPattern><numeric /></validationPattern>
+
+                <control>
+                    <text size="9" />
+                </control>
+
+                <summary>selectFlag</summary>
+                <description>selectFlag description...</description>
+			</attribute>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

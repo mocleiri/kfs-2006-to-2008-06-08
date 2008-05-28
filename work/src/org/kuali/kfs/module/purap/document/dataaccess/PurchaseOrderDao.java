@@ -15,44 +15,11 @@
  */
 package org.kuali.module.purap.dao;
 
-import org.kuali.module.purap.bo.PurchaseOrderItem;
+import org.kuali.module.purap.document.PurchaseOrderDocument;
 
-
-/**
- * Purchase Order DAO Interface.
- */
 public interface PurchaseOrderDao {
 
-    /**
-     * Retrieves the Purchase Order Document's document number using the purapDocumentIdentifier as criteria
-     * 
-     * @param id - purapDocument Identifier
-     * @return - the document number of the purchase order found or null if no purchase order found
-     */
-    public String getDocumentNumberForPurchaseOrderId(Integer id);
+    public void save(PurchaseOrderDocument PurchaseOrderDocument);
 
-    /**
-     * Retrieves the current Purchase Order Document's document number by the purapDocumentIdentifier.
-     * 
-     * @param id - purapDocument Identifier
-     * @return - the document number of the purchase order found or null if no purchase order found
-     */
-    public String getDocumentNumberForCurrentPurchaseOrder(Integer id);
-
-    /**
-     * Retrieves the oldest purchase order's (defined by the one having the smallest document number) document number.
-     * 
-     * @param id - the purapDocumentIdentifier.
-     * @return - the document numbers of the purchase order found or null if none found
-     */
-    public String getOldestPurchaseOrderDocumentNumber(Integer id);
-    
-    /**
-     * Determines if the purchase order item exists on the current purchase order.
-     * 
-     * @param poItemIdentifier
-     * @param docNumber
-     * @return
-     */
-    public boolean itemExistsOnPurchaseOrder(Integer poItemIdentifier, String docNumber);
+    public PurchaseOrderDocument getPurchaseOrderById(Integer id);
 }

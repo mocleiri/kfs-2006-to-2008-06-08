@@ -19,27 +19,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.util.ObjectUtil;
+import org.kuali.PropertyConstants;
 import org.kuali.module.gl.bo.OriginEntryGroup;
+import org.kuali.module.labor.LaborConstants;
+import org.kuali.module.labor.util.ObjectUtil;
 
 public class OriginEntryGroupForTesting extends OriginEntryGroup {
-
-    @Override
-    public boolean equals(Object otherOriginEntryGroup) {
-        return ObjectUtil.equals(this, otherOriginEntryGroup, this.getKeyValueList());
+    
+    @ Override
+    public boolean equals(Object otherOriginEntryGroup){
+        return ObjectUtil.compareObject(this, otherOriginEntryGroup, this.getKeyValueList());
     }
-
+    
     public Map getKeyValueMap() {
         return ObjectUtil.buildPropertyMap(this, this.getKeyValueList());
     }
-
-    public List<String> getKeyValueList() {
+    
+    public List<String> getKeyValueList(){
         List<String> keyValueList = new ArrayList<String>();
-        keyValueList.add(KFSPropertyConstants.SOURCE_CODE);
-        keyValueList.add(KFSPropertyConstants.PROCESS);
-        keyValueList.add(KFSPropertyConstants.VALID);
-        keyValueList.add(KFSPropertyConstants.SCRUB);
+        keyValueList.add(PropertyConstants.SOURCE_CODE);
+        keyValueList.add(PropertyConstants.PROCESS);
+        keyValueList.add(PropertyConstants.VALID);
+        keyValueList.add(PropertyConstants.SCRUB);
         return keyValueList;
     }
 }

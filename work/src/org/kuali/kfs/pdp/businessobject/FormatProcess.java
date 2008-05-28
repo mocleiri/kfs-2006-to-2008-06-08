@@ -1,19 +1,4 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Created on Jul 9, 2004
  *
  */
@@ -32,113 +17,117 @@ import org.apache.ojb.broker.PersistenceBrokerException;
 
 /**
  * @author delyea
- * @hibernate.class table="PDP.PDP_FMT_PROC_T"
+ * 
+ * @hibernate.class  table="PDP.PDP_FMT_PROC_T"
  */
 
-public class FormatProcess implements Serializable, PersistenceBrokerAware {
+public class FormatProcess implements Serializable,PersistenceBrokerAware {
 
-    private String physicalCampusProcessCode; // PHYS_CMP_PROC_CD
-    private Timestamp beginFormat; // BEG_FMT_TS
-    private Timestamp lastUpdate;
-    private Integer version; // VER_NBR
+  private String physicalCampusProcessCode; // PHYS_CMP_PROC_CD       
+  private Timestamp beginFormat;            // BEG_FMT_TS
+  private Timestamp lastUpdate;
+  private Integer version;                  //  VER_NBR
 
-    public FormatProcess() {
-        super();
-    }
+  public FormatProcess() {
+    super();
+  }
 
-    public Timestamp getBeginFormat() {
-        return beginFormat;
-    }
+  public Timestamp getBeginFormat() {
+    return beginFormat;
+  }
 
-    public void setBeginFormat(Timestamp beginFormat) {
-        this.beginFormat = beginFormat;
-    }
+  public void setBeginFormat(Timestamp beginFormat) {
+    this.beginFormat = beginFormat;
+  }
 
-    /**
-     * @return
-     * @hibernate.version column="VER_NBR" not-null="true"
-     */
-    public Integer getVersion() {
-        return version;
-    }
+  /** 
+   * @return
+   * @hibernate.version column="VER_NBR" not-null="true"
+   */
+  public Integer getVersion() {
+    return version;
+  }
 
-    /**
-     * @return
-     * @hibernate.id column="PHYS_CMP_PROC_CD" length="2" generator-class="assigned"
-     */
-    public String getPhysicalCampusProcessCode() {
-        return physicalCampusProcessCode;
-    }
+  /**
+   * @return
+   * @hibernate.id column="PHYS_CMP_PROC_CD" length="2"  generator-class="assigned"
+   */
+  public String getPhysicalCampusProcessCode() {
+    return physicalCampusProcessCode;
+  }
 
-    /**
-     * @param string
-     */
-    public void setPhysicalCampusProcessCode(String string) {
-        physicalCampusProcessCode = string;
-    }
+  /**
+   * @param string
+   */
+  public void setPhysicalCampusProcessCode(String string) {
+    physicalCampusProcessCode = string;
+  }
 
-    /**
-     * @param integer
-     */
-    public void setVersion(Integer integer) {
-        version = integer;
-    }
+  /**
+   * @param integer
+   */
+  public void setVersion(Integer integer) {
+    version = integer;
+  }
 
-    public boolean equals(Object obj) {
-        if (!(obj instanceof FormatProcess)) {
-            return false;
-        }
-        FormatProcess o = (FormatProcess) obj;
-        return new EqualsBuilder().append(physicalCampusProcessCode, o.getPhysicalCampusProcessCode()).isEquals();
-    }
+  public boolean equals(Object obj) {
+    if (! (obj instanceof FormatProcess) ) { return false; }
+    FormatProcess o = (FormatProcess)obj;
+    return new EqualsBuilder()
+    .append(physicalCampusProcessCode, o.getPhysicalCampusProcessCode())
+    .isEquals();
+  }
 
-    public int hashCode() {
-        return new HashCodeBuilder(83, 91).append(physicalCampusProcessCode).toHashCode();
-    }
+  public int hashCode() {
+    return new HashCodeBuilder(83,91)
+      .append(physicalCampusProcessCode)
+      .toHashCode();
+  }
 
-    public String toString() {
-        return new ToStringBuilder(this).append("physicalCampusProcessCode", this.physicalCampusProcessCode).toString();
-    }
+  public String toString() {
+    return new ToStringBuilder(this)
+      .append("physicalCampusProcessCode",  this.physicalCampusProcessCode)
+      .toString();
+  }
 
-    /**
-     * @return Returns the lastUpdate.
-     */
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
+  /**
+   * @return Returns the lastUpdate.
+   */
+  public Timestamp getLastUpdate() {
+    return lastUpdate;
+  }
+  /**
+   * @param lastUpdate The lastUpdate to set.
+   */
+  public void setLastUpdate(Timestamp lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-    /**
-     * @param lastUpdate The lastUpdate to set.
-     */
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+  public void beforeInsert(PersistenceBroker broker) throws PersistenceBrokerException {
+    lastUpdate = new Timestamp( (new Date()).getTime() );
+  }
 
-    public void beforeInsert(PersistenceBroker broker) throws PersistenceBrokerException {
-        lastUpdate = new Timestamp((new Date()).getTime());
-    }
+  public void afterInsert(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public void afterInsert(PersistenceBroker broker) throws PersistenceBrokerException {
+  }
 
-    }
+  public void beforeUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+    lastUpdate = new Timestamp( (new Date()).getTime() );    
+  }
 
-    public void beforeUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
-        lastUpdate = new Timestamp((new Date()).getTime());
-    }
+  public void afterUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+    
+  }
 
-    public void afterUpdate(PersistenceBroker broker) throws PersistenceBrokerException {
+  public void beforeDelete(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    }
+  }
+  
+  public void afterDelete(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public void beforeDelete(PersistenceBroker broker) throws PersistenceBrokerException {
+  }
 
-    }
+  public void afterLookup(PersistenceBroker broker) throws PersistenceBrokerException {
 
-    public void afterDelete(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
-
-    public void afterLookup(PersistenceBroker broker) throws PersistenceBrokerException {
-
-    }
+  }
 }

@@ -15,73 +15,28 @@
  */
 package org.kuali.module.purap.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.module.purap.bo.PurApItem;
 import org.kuali.module.purap.bo.PurchaseOrderItem;
+import org.kuali.module.purap.bo.PurchasingApItem;
 
 /**
- * Purchasing Accounts Payable Item Utilities.
- * This class contains item utilities.
+ * This class contains item utilities
  */
 public class PurApItemUtils {
-
+    
     /**
-     * Checks if an item is active. It is used mainly when were dealing with generic items (which may be po) And need to
-     * make sure the active rules are applied if it is a poitem
      * 
-     * @param item the purap item passed in
-     * @return true if item is active
+     * This method checks if an item is active.  It is used mainly when were dealing with generic items (which may be po)  
+     * And need to make sure the active rules are applied if it is a poitem
+     * @param item
+     * @return
      */
-    public static boolean checkItemActive(PurApItem item) {
+    public static boolean checkItemActive(PurchasingApItem item) {
         boolean active = true;
-        if (item instanceof PurchaseOrderItem) {
-            PurchaseOrderItem poi = (PurchaseOrderItem) item;
+        if(item instanceof PurchaseOrderItem) {
+            PurchaseOrderItem poi = (PurchaseOrderItem)item;
             active = poi.isItemActiveIndicator();
         }
         return active;
     }
-
-    public static boolean isNonZeroExtended(PurApItem item) {
-        return (ObjectUtils.isNotNull(item) && ObjectUtils.isNotNull(item.getExtendedPrice()) && !item.getExtendedPrice().isZero());
-    }
-
-    /**
-     * Helper to get aboveTheLineItems only from an item list
-     * 
-     * @param items a list of items including above and below the line
-     * @return below the line items only
-     */
-    public static List<PurApItem> getAboveTheLineOnly(List<PurApItem> items) {
-        List<PurApItem> returnItems = new ArrayList<PurApItem>();
-        for (PurApItem item : items) {
-            if (item.getItemType().isItemTypeAboveTheLineIndicator()) {
-                returnItems.add((PurApItem) ObjectUtils.deepCopy(item));
-            }
-        }
-        return returnItems;
-    }
-
-    /**
-     * Counts the below the line, currently it relies on below the line being at the bottom
-     * 
-     * @return a count of below the line items
-     */
-    public static int countBelowTheLineItems(List<PurApItem> items) {
-        int count = 0;
-        for (int i = items.size() - 1; i > 0; i--) {
-            PurApItem item = items.get(i);
-            // will have to change if we stop putting below the line at bottom
-            if (item.getItemType().isItemTypeAboveTheLineIndicator()) {
-                break;
-            }
-            else {
-                count++;
-            }
-        }
-        return count;
-    }
-
+    
 }

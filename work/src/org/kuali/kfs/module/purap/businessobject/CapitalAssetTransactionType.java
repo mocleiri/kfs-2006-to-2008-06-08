@@ -1,88 +1,140 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.purap.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
- * Capital Asset Transaction Type Business Object.
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class CapitalAssetTransactionType extends PersistableBusinessObjectBase {
+public class CapitalAssetTransactionType extends BusinessObjectBase {
 
-    private String capitalAssetTransactionTypeCode;
-    private String capitalAssetTransactionTypeDescription;
-    private boolean capitalAssetTransactionTypeServiceIndicator;
-    private boolean active;
+	private String capitalAssetTransactionTypeCode;
+	private String capitalAssetTransactionTypeDescription;
+	private boolean capitalAssetTransactionTypeServiceIndicator;
+	private boolean dataObjectMaintenanceCodeActiveIndicator;
 
-    /**
-     * Default constructor.
-     */
-    public CapitalAssetTransactionType() {
+	/**
+	 * Default constructor.
+	 */
+	public CapitalAssetTransactionType() {
 
-    }
-    
-    /**
-     * Constructs a CapitalAssetTransactionType.java.
-     * @param capitalAssetTransactionTypeCode
-     */
-    public CapitalAssetTransactionType(String capitalAssetTransactionTypeCode) {
-        this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
-    }
+	}
 
-    public String getCapitalAssetTransactionTypeCode() {
-        return capitalAssetTransactionTypeCode;
-    }
+	/**
+	 * Gets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @return - Returns the capitalAssetTransactionTypeCode
+	 * 
+	 */
+	public String getCapitalAssetTransactionTypeCode() { 
+		return capitalAssetTransactionTypeCode;
+	}
 
-    public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
-        this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
-    }
+	/**
+	 * Sets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @param - capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
+		this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
+	}
 
-    public String getCapitalAssetTransactionTypeDescription() {
-        return capitalAssetTransactionTypeDescription;
-    }
 
-    public void setCapitalAssetTransactionTypeDescription(String capitalAssetTransactionTypeDescription) {
-        this.capitalAssetTransactionTypeDescription = capitalAssetTransactionTypeDescription;
-    }
+	/**
+	 * Gets the capitalAssetTransactionTypeDescription attribute.
+	 * 
+	 * @return - Returns the capitalAssetTransactionTypeDescription
+	 * 
+	 */
+	public String getCapitalAssetTransactionTypeDescription() { 
+		return capitalAssetTransactionTypeDescription;
+	}
 
-    public boolean getCapitalAssetTransactionTypeServiceIndicator() {
-        return capitalAssetTransactionTypeServiceIndicator;
-    }
+	/**
+	 * Sets the capitalAssetTransactionTypeDescription attribute.
+	 * 
+	 * @param - capitalAssetTransactionTypeDescription The capitalAssetTransactionTypeDescription to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeDescription(String capitalAssetTransactionTypeDescription) {
+		this.capitalAssetTransactionTypeDescription = capitalAssetTransactionTypeDescription;
+	}
 
-    public void setCapitalAssetTransactionTypeServiceIndicator(boolean capitalAssetTransactionTypeServiceIndicator) {
-        this.capitalAssetTransactionTypeServiceIndicator = capitalAssetTransactionTypeServiceIndicator;
-    }
 
-    public boolean isActive() {
-        return active;
-    }
+	/**
+	 * Gets the capitalAssetTransactionTypeServiceIndicator attribute.
+	 * 
+	 * @return - Returns the capitalAssetTransactionTypeServiceIndicator
+	 * 
+	 */
+	public boolean getCapitalAssetTransactionTypeServiceIndicator() { 
+		return capitalAssetTransactionTypeServiceIndicator;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	/**
+	 * Sets the capitalAssetTransactionTypeServiceIndicator attribute.
+	 * 
+	 * @param - capitalAssetTransactionTypeServiceIndicator The capitalAssetTransactionTypeServiceIndicator to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeServiceIndicator(boolean capitalAssetTransactionTypeServiceIndicator) {
+		this.capitalAssetTransactionTypeServiceIndicator = capitalAssetTransactionTypeServiceIndicator;
+	}
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+
+	/**
+	 * Gets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @return - Returns the dataObjectMaintenanceCodeActiveIndicator
+	 * 
+	 */
+	public boolean getDataObjectMaintenanceCodeActiveIndicator() { 
+		return dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * Sets the dataObjectMaintenanceCodeActiveIndicator attribute.
+	 * 
+	 * @param - dataObjectMaintenanceCodeActiveIndicator The dataObjectMaintenanceCodeActiveIndicator to set.
+	 * 
+	 */
+	public void setDataObjectMaintenanceCodeActiveIndicator(boolean dataObjectMaintenanceCodeActiveIndicator) {
+		this.dataObjectMaintenanceCodeActiveIndicator = dataObjectMaintenanceCodeActiveIndicator;
+	}
+
+	/**
+	 * @see org.kuali.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("capitalAssetTransactionTypeCode", this.capitalAssetTransactionTypeCode);
-        return m;
+	    return m;
     }
 }

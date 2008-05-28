@@ -15,38 +15,21 @@
  */
 package org.kuali.module.gl.batch;
 
-import java.util.Date;
-
 import org.kuali.kfs.batch.AbstractStep;
-import org.kuali.kfs.batch.TestingStep;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
- * This step will mark all backup groups in the database so that they will not be scrubbed when the nightly scrubber step runs
- * again.
+ * This step will mark all backup groups in the database so that they will not be scrubbed when the
+ * nightly scrubber step runs again.
  */
-public class MarkScrubbableBackupGroupsAsUnscrubbableStep extends AbstractStep implements TestingStep {
+public class MarkScrubbableBackupGroupsAsUnscrubbableStep extends AbstractStep{
     private OriginEntryGroupService originEntryGroupService;
-
-    /**
-     * Marks all scrubbable backup groups as unscrubbable
-     * 
-     * @param jobName the name of the job this step is being run as part of
-     * @param jobRunDate the time/date the job is being run
-     * @return true if the step completed successfully, false if otherwise
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String)
-     */
-    public boolean execute(String jobName, Date jobRunDate) throws InterruptedException {
+    
+    public boolean execute(String jobName) throws InterruptedException {
         originEntryGroupService.markScrubbableBackupGroupsAsUnscrubbable();
         return true;
     }
 
-    /**
-     * Sets the originEntryGroupSerivce, allowing the injection of an implementation of that service
-     * 
-     * @param originEntryGroupService an implementation originEntryGroupService to set
-     * @see org.kuali.module.gl.service.OriginEntryGroupService
-     */
     public void setOriginEntryGroupService(OriginEntryGroupService originEntryGroupService) {
         this.originEntryGroupService = originEntryGroupService;
     }

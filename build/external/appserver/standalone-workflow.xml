@@ -4,13 +4,13 @@
   <param name="dev.mode">false</param>
   <param name="bam.enabled">false</param>
 
-  <param name="ksb.org.quartz.jobStore.tablePrefix">KR_QRTZ_</param>
+  <param name="ksb.org.quartz.jobStore.tablePrefix">QRTZ_</param>
 
   <param name="transaction.timeout">${transaction.timeout}</param>
 
-  <param name="plugin.dir">/opt/j2ee/en-plugins/${build.environment}</param>
+  <param name="plugin.dir">/opt/j2ee/en-plugins/${environment}</param>
 
-  <param name="data.xml.root.location">/opt/ears/${build.environment}/en/xml</param>
+  <param name="data.xml.root.location">/opt/ears/${environment}/en/xml</param>
   <param name="data.xml.pending.location">${data.xml.root.location}pending</param>
   <param name="data.xml.loaded.location">${data.xml.root.location}loaded</param>
   <param name="data.xml.problem.location">${data.xml.root.location}problem</param>
@@ -20,14 +20,14 @@
   <param name="datasource.platform">${rice.workflow.datasource.platform}</param>
   <param name="datasource.ojb.platform">${datasource.ojb.platform}</param>
   <param name="datasource.ojb.sequenceManager">${datasource.ojb.sequence.manager}</param>
-  <param name="datasource.driver.name">${rice.workflow.driver.class}</param>
-  <param name="datasource.url">${rice.workflow.datasource.url}</param>
-  <param name="datasource.username">${rice.workflow.datasource.username}</param>
-  <param name="datasource.password">${rice.workflow.datasource.password}</param>
-  <param name="datasource.pool.minSize">${rice.workflow.datasource.minSize}</param>
-  <param name="datasource.pool.maxSize">${rice.workflow.datasource.maxSize}</param>
-  <param name="datasource.pool.maxWait">${rice.workflow.datasource.maxWait}</param>
-  <param name="datasource.pool.validationQuery">${rice.workflow.datasource.validationQuery}</param>
+  <param name="datasource.driver.name">${kew.driver.class}</param>
+  <param name="datasource.url">${kew.datasource.url}</param>
+  <param name="datasource.username">${kew.datasource.username}</param>
+  <param name="datasource.password">${kew.datasource.password}</param>
+  <param name="datasource.pool.minSize">2</param>
+  <param name="datasource.pool.maxSize">50</param>
+  <param name="datasource.pool.maxWait">10000</param>
+  <param name="datasource.pool.validationQuery">select 1 from dual</param>
 
   <param name="attachment.dir.location">${attachments.directory}</param>
 

@@ -1,54 +1,33 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.opensource.org/licenses/ecl1.php
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * Created on Jan 19, 2005
  *
  */
 package org.kuali.module.pdp.service.impl;
 
-import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.kfs.KFSConstants;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author local-jsissom
+ *
  */
+@Transactional
 public class EnvironmentServiceImpl implements org.kuali.module.pdp.service.EnvironmentService {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EnvironmentServiceImpl.class);
+  private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EnvironmentServiceImpl.class);
 
-    private KualiConfigurationService kualiConfigurationService;
+  private String environment;
+  
+  public void setEnvironment(String e) {
+    environment = e;
+  }
 
-    public void setKualiConfigurationService(KualiConfigurationService kcs) {
-        kualiConfigurationService = kcs;
-    }
+  public EnvironmentServiceImpl() {
+    super();
+  }
 
-    public EnvironmentServiceImpl() {
-        super();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.iu.uis.pdp.service.EnvironmentService#getEnvironment()
-     */
-    public String getEnvironment() {
-        return kualiConfigurationService.getPropertyString(KFSConstants.ENVIRONMENT_KEY).toUpperCase();
-    }
-
-    public boolean isProduction() {
-        return kualiConfigurationService.isProductionEnvironment();
-    }
+  /* (non-Javadoc)
+   * @see edu.iu.uis.pdp.service.EnvironmentService#getEnvironment()
+   */
+  public String getEnvironment() {
+    return environment;
+  }
 }

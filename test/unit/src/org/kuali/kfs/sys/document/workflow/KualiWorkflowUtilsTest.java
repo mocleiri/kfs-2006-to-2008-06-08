@@ -15,28 +15,31 @@
  */
 package org.kuali.workflow;
 
+import java.io.IOException;
+
+import javax.xml.xpath.XPathExpressionException;
+
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 import org.kuali.workflow.attribute.KualiAttributeTestUtil;
 
+import edu.iu.uis.eden.exception.InvalidXmlException;
 import edu.iu.uis.eden.routeheader.DocumentContent;
 
 /**
  * This class...
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class KualiWorkflowUtilsTest extends KualiTestBase {
-
-    public void testGetFinancialDocumentTotalAmount() throws Exception {
-        KualiDecimal validAmount = new KualiDecimal(3.00);
-        DocumentContent docContent = KualiAttributeTestUtil.getDocumentContentFromXmlFileAndPath(KualiAttributeTestUtil.PURCHASE_ORDER_DOCUMENT, KualiAttributeTestUtil.RELATIVE_PATH_IN_PROJECT_WORKFLOW, "PurchaseOrderDocument");
+    
+    public void testTemp() throws IOException, InvalidXmlException, XPathExpressionException {
+        DocumentContent docContent = KualiAttributeTestUtil.getDocumentContentFromXmlFileAndPath(KualiAttributeTestUtil.PURCHASE_ORDER_DOCUMENT, KualiAttributeTestUtil.RELATIVE_PATH_IN_PROJECT_WORKFLOW,"KualiPurchaseOrderDocument");
 
         KualiDecimal testAmount = KualiWorkflowUtils.getFinancialDocumentTotalAmount(docContent.getDocument());
-        assertEquals(validAmount, testAmount);
-
-        testAmount = KualiWorkflowUtils.getFinancialDocumentTotalAmount(docContent.getRouteContext());
-        assertEquals(validAmount, testAmount);
+        assertEquals(new KualiDecimal(3.00), testAmount);
     }
 
 }

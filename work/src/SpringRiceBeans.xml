@@ -4,8 +4,8 @@
 
   <bean id="rice" class="org.kuali.rice.config.RiceConfigurer">
     <property name="dataSource" ref="dataSource" />
-	<property name="transactionManager" ref="jotm" />
-	<property name="userTransaction" ref="jotm" />
+    <property name="transactionManager" ref="jotm" />
+    <property name="userTransaction" ref="jotm" />
     <property name="messageEntity" value="KFS" />
     <property name="environment">
       <value>${build.environment}</value>
@@ -20,7 +20,7 @@
           <property name="serviceServletUrl" value="${workflow.url}/remote" />
                     <property name="exceptionMessagingScheduler" ref="scheduler"/>
                     <property name="authorizationService">
-                      <bean class="org.kuali.kfs.authorization.ServiceBusAuthorizationService"/>
+                      <bean class="org.kuali.kfs.authorization.KSBAuthorizationService"/>
                     </property>
         </bean>
         <bean class="org.kuali.workflow.config.KEWConfigurer">

@@ -1,5 +1,5 @@
 <%--
- Copyright 2007 The Kuali Foundation.
+ Copyright 2006-2007 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 <kul:page showDocumentInfo="false"
 	headerTitle="Balance Inquiry Report Menu" docTitle=""
 	transactionalDocument="false"
-	htmlFormAction="${KFSConstants.MAPPING_BALANCE_INQUIRY_REPORT_MENU}">
+	htmlFormAction="${Constants.MAPPING_BALANCE_INQUIRY_REPORT_MENU}">
 	<html:hidden property="backLocation" write="false" />
 	<html:hidden property="docFormKey" write="false" />
 	<html:hidden property="balanceInquiryReportMenuCallerDocFormKey"
@@ -33,6 +33,7 @@
 	<html:hidden property="referenceTypeCode" write="false" />
 	<html:hidden property="referenceNumber" write="false" />
 	<html:hidden property="projectCode" write="false" />
+	<html:hidden property="budgetYear" write="false" />
 	<div class="topblurb">
 	<div align="center"><b><font size="+1">Balance Inquiry Report Menu</font></b>
 	<br />
@@ -43,7 +44,7 @@
 			<td><b>Available Balances</b>&nbsp;</td>
 			<td><gl:balanceInquiryLookup
 				boClassName="org.kuali.module.gl.bo.AccountBalance"
-				actionPath="${KFSConstants.GL_MODIFIED_INQUIRY_ACTION}"
+				actionPath="${Constants.GL_MODIFIED_INQUIRY_ACTION}"
 				lookupParameters="${KualiForm.availableBalancesBalanceInquiryLookupParameters}"
 				hideReturnLink="true" /></td>
 		</tr>
@@ -51,7 +52,7 @@
 			<td><b>Balances by Consolidation</b>&nbsp;</td>
 			<td><gl:balanceInquiryLookup
 				boClassName="org.kuali.module.gl.bo.AccountBalanceByConsolidation"
-				actionPath="${KFSConstants.GL_ACCOUNT_BALANCE_BY_CONSOLIDATION_LOOKUP_ACTION}"
+				actionPath="${Constants.GL_ACCOUNT_BALANCE_BY_CONSOLIDATION_LOOKUP_ACTION}"
 				lookupParameters="${KualiForm.balancesByConsolidationBalanceInquiryLookupParameters}"
 				hideReturnLink="true" /></td>
 		</tr>
@@ -59,7 +60,7 @@
 			<td><b>Cash Balances</b>&nbsp;</td>
 			<td><gl:balanceInquiryLookup
 				boClassName="org.kuali.module.gl.bo.CashBalance"
-				actionPath="${KFSConstants.GL_MODIFIED_INQUIRY_ACTION}"
+				actionPath="${Constants.GL_MODIFIED_INQUIRY_ACTION}"
 				lookupParameters="${KualiForm.cashBalancesBalanceInquiryLookupParameters}"
 				hideReturnLink="true" /></td>
 		</tr>
@@ -67,7 +68,7 @@
 			<td><b>General Ledger Balance</b>&nbsp;</td>
 			<td><gl:balanceInquiryLookup
 				boClassName="org.kuali.module.gl.bo.Balance"
-				actionPath="${KFSConstants.GL_BALANCE_INQUIRY_ACTION}"
+				actionPath="${Constants.GL_BALANCE_INQUIRY_ACTION}"
 				lookupParameters="${KualiForm.generalLedgerBalanceBalanceInquiryLookupParameters}"
 				hideReturnLink="true" /></td>
 		</tr>
@@ -75,7 +76,7 @@
 			<td><b>General Ledger Entry</b>&nbsp;</td>
 			<td><gl:balanceInquiryLookup
 				boClassName="org.kuali.module.gl.bo.Entry"
-				actionPath="${KFSConstants.GL_MODIFIED_INQUIRY_ACTION}"
+				actionPath="${Constants.GL_MODIFIED_INQUIRY_ACTION}"
 				lookupParameters="${KualiForm.generalLedgerEntryBalanceInquiryLookupParameters}"
 				hideReturnLink="true" /></td>
 		</tr>
@@ -83,7 +84,7 @@
 			<td><b>General Ledger Pending Entry</b>&nbsp;</td>
 			<td><gl:balanceInquiryLookup
 				boClassName="org.kuali.kfs.bo.GeneralLedgerPendingEntry"
-				actionPath="${KFSConstants.GL_MODIFIED_INQUIRY_ACTION}"
+				actionPath="${Constants.GL_MODIFIED_INQUIRY_ACTION}"
 				lookupParameters="${KualiForm.generalLedgerPendingEntryBalanceInquiryLookupParameters}"
 				hideReturnLink="true" /></td>
 		</tr>
@@ -91,7 +92,7 @@
 			<td><b>Open Encumbrances</b>&nbsp;</td>
 			<td><gl:balanceInquiryLookup
 				boClassName="org.kuali.module.gl.bo.Encumbrance"
-				actionPath="${KFSConstants.GL_MODIFIED_INQUIRY_ACTION}"
+				actionPath="${Constants.GL_MODIFIED_INQUIRY_ACTION}"
 				lookupParameters="${KualiForm.openEncumbrancesBalanceInquiryLookupParameters}"
 				hideReturnLink="true" /></td>
 		</tr>
@@ -100,7 +101,7 @@
 		</tr>
 		<tr>
 			<td align="center" colspan="2"><html:image
-				src="${ConfigProperties.kr.externalizable.images.url}buttonsmall_cancel.gif" styleClass="globalbuttons"
+				src="${pageContext.request.contextPath}/kr/images/buttonsmall_cancel.gif" styleClass="globalbuttons"
 				property="methodToCall.cancel" alt="cancel" title="cancel" /></td>
 		</tr>
 	</table>

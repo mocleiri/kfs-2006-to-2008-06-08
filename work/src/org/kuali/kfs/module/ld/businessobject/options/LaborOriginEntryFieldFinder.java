@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,8 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.KFSPropertyConstants;
 
-/**
- * Field Finder for Labor Origin Entry.
- */
 public class LaborOriginEntryFieldFinder extends KeyValuesBase {
 
-    /**
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
-     */
     public List getKeyValues() {
         List activeLabels = new ArrayList();
         activeLabels.add(new KeyLabelPair("universityFiscalYear", "Fiscal Year"));
@@ -51,6 +45,7 @@ public class LaborOriginEntryFieldFinder extends KeyValuesBase {
         activeLabels.add(new KeyLabelPair("financialSystemOriginationCode", "Origin code"));
         activeLabels.add(new KeyLabelPair(KFSPropertyConstants.DOCUMENT_NUMBER, "Document Number"));
         activeLabels.add(new KeyLabelPair("transactionLedgerEntrySequenceNumber", "Sequence Number"));
+        
         activeLabels.add(new KeyLabelPair("positionNumber", "Position Number"));
         activeLabels.add(new KeyLabelPair("projectCode", "Project Code"));
         activeLabels.add(new KeyLabelPair("transactionLedgerEntryDescription", "Description"));
@@ -64,6 +59,7 @@ public class LaborOriginEntryFieldFinder extends KeyValuesBase {
         activeLabels.add(new KeyLabelPair("referenceFinancialDocumentNumber", "Ref Doc Number"));
         activeLabels.add(new KeyLabelPair("financialDocumentReversalDate", "Reversal Date"));
         activeLabels.add(new KeyLabelPair("transactionEncumbranceUpdateCode", "Enc Update Code"));
+        
         activeLabels.add(new KeyLabelPair("transactionPostingDate", "Transaction Posting Date"));
         activeLabels.add(new KeyLabelPair("payPeriodEndDate", "Pay Period End Date"));
         activeLabels.add(new KeyLabelPair("transactionTotalHours", "Trn Total Hours"));
@@ -76,112 +72,79 @@ public class LaborOriginEntryFieldFinder extends KeyValuesBase {
         activeLabels.add(new KeyLabelPair("salaryAdministrationPlan", "Salary Admin Plan"));
         activeLabels.add(new KeyLabelPair("grade", "Grade"));
         activeLabels.add(new KeyLabelPair("runIdentifier", "Run Id"));
-        activeLabels.add(new KeyLabelPair("laborLedgerOriginalChartOfAccountsCode", "Original Chart Code"));
-        activeLabels.add(new KeyLabelPair("laborLedgerOriginalAccountNumber", "Original Account Number"));
-        activeLabels.add(new KeyLabelPair("laborLedgerOriginalSubAccountNumber", "Original Sub-Account Numbere"));
-        activeLabels.add(new KeyLabelPair("laborLedgerOriginalFinancialObjectCode", "Original Object Code"));
-        activeLabels.add(new KeyLabelPair("laborLedgerOriginalFinancialSubObjectCode", "Original Sub-Object Code"));
+        activeLabels.add(new KeyLabelPair("laborLedgerOriginalChartOfAccountsCode", "LD Original Accounts Code"));
+        activeLabels.add(new KeyLabelPair("laborLedgerOriginalAccountNumber", "LD Original Account Number"));
+        activeLabels.add(new KeyLabelPair("laborLedgerOriginalSubAccountNumber", "LD Original Sub-Account Numbere"));
+        activeLabels.add(new KeyLabelPair("laborLedgerOriginalFinancialObjectCode", "LD Original Object Code"));
+        activeLabels.add(new KeyLabelPair("laborLedgerOriginalFinancialSubObjectCode", "LD Original Sub-Object Code"));
         activeLabels.add(new KeyLabelPair("hrmsCompany", "Company"));
         activeLabels.add(new KeyLabelPair("setid", "SetId"));
-
+        
         return activeLabels;
     }
 
-    /**
-     * Get field display name.
-     * 
-     * @param fieldName
-     * @return Returns the label
-     */
     public String getFieldDisplayName(String fieldName) {
         for (Iterator iter = getKeyValues().iterator(); iter.hasNext();) {
-            KeyLabelPair klp = (KeyLabelPair) iter.next();
-            if (klp.getKey().equals(fieldName)) {
+            KeyLabelPair klp = (KeyLabelPair)iter.next();
+            if ( klp.getKey().equals(fieldName) ) {
                 return klp.getLabel();
             }
         }
-
         return "Error";
     }
 
-    /**
-     * Get field name
-     * 
-     * @param fieldDisplayName
-     * @return Returns the key
-     */
     public String getFieldName(String fieldDisplayName) {
         for (Iterator iter = getKeyValues().iterator(); iter.hasNext();) {
-            KeyLabelPair klp = (KeyLabelPair) iter.next();
-            if (klp.getLabel().equals(fieldDisplayName)) {
-                return (String) klp.getKey();
+            KeyLabelPair klp = (KeyLabelPair)iter.next();
+            if ( klp.getLabel().equals(fieldDisplayName) ) {
+                return (String)klp.getKey();
             }
         }
-
         return "Error";
     }
 
-    /**
-     * Check each field for valid value.
-     * 
-     * @param fieldName
-     * @param value
-     * @return Returns a boolean
-     */
-    public boolean isValidValue(String fieldName, String value) {
+    public boolean isValidValue(String fieldName,String value) {
         if (StringUtils.isBlank(fieldName)) {
             return false;
         }
         String fieldType = getFieldType(fieldName);
         int fieldLength = getFieldLength(fieldName);
 
-        if (allowNull(fieldName) && (value == null || value.length() == 0)) {
+        if ( allowNull(fieldName) && (value == null || value.length() == 0)) {
             return true;
         }
         if (!allowNull(fieldName) && (value == null || value.length() == 0)) {
             return false;
         }
-        if (value.length() > fieldLength) {
+        if ( value.length() > fieldLength ) {
             return false;
         }
-        if ("KualiDecimal".equals(fieldType)) {
+        if ( "KualiDecimal".equals(fieldType) ) {
             try {
                 KualiDecimal d = new KualiDecimal(value);
                 return true;
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 return false;
             }
-        }
-        else if ("Integer".equals(fieldType)) {
+        } else if ( "Integer".equals(fieldType) ) {
             try {
                 Integer d = new Integer(value);
                 return true;
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 return false;
             }
-        }
-        else if ("Date".equals(fieldType)) {
+        } else if ( "Date".equals(fieldType) ) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date d = df.parse(value);
                 return true;
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
                 return false;
             }
         }
-
         return true;
     }
 
-    /**
-     * Get field type.
-     * 
-     * @param fieldName
-     * @return Returns the fieldType
-     */
     public String getFieldType(String fieldName) {
         if (fieldName.equals("universityFiscalYear")) {
             return "Integer";
@@ -198,6 +161,7 @@ public class LaborOriginEntryFieldFinder extends KeyValuesBase {
         if (fieldName.equals("financialDocumentReversalDate")) {
             return "Date";
         }
+        
         if (fieldName.equals("transactionPostingDate")) {
             return "Date";
         }
@@ -210,174 +174,116 @@ public class LaborOriginEntryFieldFinder extends KeyValuesBase {
         if (fieldName.equals("payrollEndDateFiscalYear")) {
             return "Integer";
         }
-        if (fieldName.equals("transactionEntryProcessedTimestamp")) {
-            return "Date";
-        }
         if (fieldName.equals("employeeRecord")) {
             return "Integer";
         }
         if (fieldName.equals("transactionDateTimeStamp")) {
             return "Date";
         }
-        return "String";
+        
+          return "String";
     }
 
-    /**
-     * Check if field allows null value
-     * 
-     * @param fieldName
-     * @return Returns a boolean
-     */
     public boolean allowNull(String fieldName) {
         if (fieldName.equals("transactionLedgerEntryAmount")) {
             return false;
         }
         return true;
     }
-
-    /**
-     * Get length of field from fieldName
-     * 
-     * @param fieldName
-     * @return Returns an int
-     */
+    
     public int getFieldLength(String fieldName) {
         if (fieldName.equals("universityFiscalYear")) {
             return 4;
-        }
-        else if (fieldName.equals("transactionLedgerEntrySequenceNumber")) {
+        } else if (fieldName.equals("transactionLedgerEntrySequenceNumber")) {
             return 5;
-        }
-        else if (fieldName.equals("transactionLedgerEntryAmount")) {
+        } else if (fieldName.equals("transactionLedgerEntryAmount")) {
             return 19;
-        }
-        else if (fieldName.equals("transactionDate")) {
+        } else if (fieldName.equals("transactionDate")) {
             return 10;
-        }
-        else if (fieldName.equals("financialDocumentReversalDate")) {
+        } else if (fieldName.equals("financialDocumentReversalDate")) {
             return 10;
-        }
-        else if (fieldName.equals("chartOfAccountsCode")) {
+        } else if (fieldName.equals("chartOfAccountsCode")) {
             return 2;
-        }
-        else if (fieldName.equals("accountNumber")) {
+        } else if (fieldName.equals("accountNumber")) {
             return 7;
-        }
-        else if (fieldName.equals("subAccountNumber")) {
+        } else if (fieldName.equals("subAccountNumber")) {
             return 5;
-        }
-        else if (fieldName.equals("financialObjectCode")) {
+        } else if (fieldName.equals("financialObjectCode")) {
             return 4;
-        }
-        else if (fieldName.equals("financialSubObjectCode")) {
+        } else if (fieldName.equals("financialSubObjectCode")) {
             return 3;
-        }
-        else if (fieldName.equals("financialBalanceTypeCode")) {
+        } else if (fieldName.equals("financialBalanceTypeCode")) {
             return 2;
-        }
-        else if (fieldName.equals("financialObjectTypeCode")) {
+        } else if (fieldName.equals("financialObjectTypeCode")) {
             return 2;
-        }
-        else if (fieldName.equals("universityFiscalPeriodCode")) {
+        } else if (fieldName.equals("universityFiscalPeriodCode")) {
             return 2;
-        }
-        else if (fieldName.equals("financialDocumentTypeCode")) {
+        } else if (fieldName.equals("financialDocumentTypeCode")) {
             return 4;
-        }
-        else if (fieldName.equals("financialSystemOriginationCode")) {
+        } else if (fieldName.equals("financialSystemOriginationCode")) {
             return 2;
-        }
-        else if (fieldName.equals(KFSPropertyConstants.DOCUMENT_NUMBER)) {
+        } else if (fieldName.equals(KFSPropertyConstants.DOCUMENT_NUMBER)) {
             return 14;
-        }
-        else if (fieldName.equals("transactionLedgerEntryDescription")) {
+        } else if (fieldName.equals("transactionLedgerEntryDescription")) {
             return 40;
-        }
-        else if (fieldName.equals("transactionDebitCreditCode")) {
+        } else if (fieldName.equals("transactionDebitCreditCode")) {
             return 1;
-        }
-        else if (fieldName.equals("organizationDocumentNumber")) {
+        } else if (fieldName.equals("organizationDocumentNumber")) {
             return 10;
-        }
-        else if (fieldName.equals("projectCode")) {
+        } else if (fieldName.equals("projectCode")) {
             return 10;
-        }
-        else if (fieldName.equals("organizationReferenceId")) {
+        } else if (fieldName.equals("organizationReferenceId")) {
             return 8;
-        }
-        else if (fieldName.equals("referenceFinancialDocumentTypeCode")) {
+        } else if (fieldName.equals("referenceFinancialDocumentTypeCode")) {
             return 4;
-        }
-        else if (fieldName.equals("referenceFinancialSystemOriginationCode")) {
+        } else if (fieldName.equals("referenceFinancialSystemOriginationCode")) {
             return 2;
-        }
-        else if (fieldName.equals("referenceFinancialDocumentNumber")) {
+        } else if (fieldName.equals("referenceFinancialDocumentNumber")) {
             return 14;
-        }
-        else if (fieldName.equals("transactionEncumbranceUpdateCode")) {
+        } else if (fieldName.equals("transactionEncumbranceUpdateCode")) {
             return 1;
-        }
-        else if (fieldName.equals("positionNumber")) {
+        } else if (fieldName.equals("positionNumber")) {
             return 8;
+        } else if (fieldName.equals("transactionPostingDate")) {
+           return 7;
+        } else if (fieldName.equals("payPeriodEndDate")) {
+           return 7;
+        } else if (fieldName.equals("transactionTotalHours")) {
+           return 22;
+        } else if (fieldName.equals("payrollEndDateFiscalYear")) {
+           return 4;
+        } else if (fieldName.equals("payrollEndDateFiscalPeriodCode")) {
+           return 2;
+        } else if (fieldName.equals("emplid")) {
+           return 11;
+        } else if (fieldName.equals("employeeRecord")) {
+           return 3;
+        } else if (fieldName.equals("earnCode")) {
+           return 3;
+        } else if (fieldName.equals("payGroup")) {
+           return 3;
+        } else if (fieldName.equals("salaryAdministrationPlan")) {
+           return 4;
+        } else if (fieldName.equals("grade")) {
+           return 3;
+        } else if (fieldName.equals("runIdentifier")) {
+           return 10;
+        } else if (fieldName.equals("laborLedgerOriginalChartOfAccountsCode")) {
+           return 2;
+        } else if (fieldName.equals("laborLedgerOriginalAccountNumber")) {
+           return 7;
+        } else if (fieldName.equals("laborLedgerOriginalSubAccountNumber")) {
+           return 5;
+        } else if (fieldName.equals("laborLedgerOriginalFinancialObjectCode")) {
+           return 4;
+        } else if (fieldName.equals("laborLedgerOriginalFinancialSubObjectCode")) {
+           return 3;
+        } else if (fieldName.equals("hrmsCompany")) {
+           return 3;
+        } else if (fieldName.equals("setid")) {
+           return 5;
         }
-        else if (fieldName.equals("transactionPostingDate")) {
-            return 7;
-        }
-        else if (fieldName.equals("payPeriodEndDate")) {
-            return 7;
-        }
-        else if (fieldName.equals("transactionTotalHours")) {
-            return 22;
-        }
-        else if (fieldName.equals("payrollEndDateFiscalYear")) {
-            return 4;
-        }
-        else if (fieldName.equals("payrollEndDateFiscalPeriodCode")) {
-            return 2;
-        }
-        else if (fieldName.equals("emplid")) {
-            return 11;
-        }
-        else if (fieldName.equals("employeeRecord")) {
-            return 3;
-        }
-        else if (fieldName.equals("earnCode")) {
-            return 3;
-        }
-        else if (fieldName.equals("payGroup")) {
-            return 3;
-        }
-        else if (fieldName.equals("salaryAdministrationPlan")) {
-            return 4;
-        }
-        else if (fieldName.equals("grade")) {
-            return 3;
-        }
-        else if (fieldName.equals("runIdentifier")) {
-            return 10;
-        }
-        else if (fieldName.equals("laborLedgerOriginalChartOfAccountsCode")) {
-            return 2;
-        }
-        else if (fieldName.equals("laborLedgerOriginalAccountNumber")) {
-            return 7;
-        }
-        else if (fieldName.equals("laborLedgerOriginalSubAccountNumber")) {
-            return 5;
-        }
-        else if (fieldName.equals("laborLedgerOriginalFinancialObjectCode")) {
-            return 4;
-        }
-        else if (fieldName.equals("laborLedgerOriginalFinancialSubObjectCode")) {
-            return 3;
-        }
-        else if (fieldName.equals("hrmsCompany")) {
-            return 3;
-        }
-        else if (fieldName.equals("setid")) {
-            return 5;
-        }
-
+                    
         return 0;
     }
 }

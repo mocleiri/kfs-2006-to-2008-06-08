@@ -1,81 +1,43 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="PurchaseOrderVendorChoiceMaintenanceDocument" parent="PurchaseOrderVendorChoiceMaintenanceDocument-parentBean" />
+<dictionaryEntry>
+    <maintenanceDocument>
+        <businessObjectClass>org.kuali.module.purap.bo.PurchaseOrderVendorChoice</businessObjectClass>
+        <maintainableClass>org.kuali.core.maintenance.KualiMaintainableImpl</maintainableClass>
 
-  <bean id="PurchaseOrderVendorChoiceMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.PurchaseOrderVendorChoice" />
-    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
-    <property name="maintainableSections" >
-      <list>
-        <ref bean="PurchaseOrderVendorChoiceMaintenanceDocument-EditPOVendorChoice" />
-      </list>
-    </property>
-    <property name="lockingKeys" >
-      <list>
-        <value>purchaseOrderVendorChoiceCode</value>
-      </list>
-    </property>
-    <property name="label" value="Purchase Order Vendor Choice" />
-    <property name="shortLabel" value="Purchase Order Vendor Choice" />
-    <property name="helpDefinition" >
-      <bean parent="HelpDefinition"
-            p:parameterNamespace="KFS-PA"
-            p:parameterName="PURCHASE_ORDER_VENDOR_CHOICE"
-            p:parameterDetailType="PurchaseOrderVendorChoice" />
-    </property>
-    <property name="documentTypeName" value="PurchaseOrderVendorChoiceMaintenanceDocument" />
-    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
-    <property name="documentTypeCode" value="PMVC" />
-    <property name="workflowProperties" >
-      <ref bean="PurchaseOrderVendorChoiceMaintenanceDocument-workflowProperties" />
-    </property>
-    <property name="authorizations" >
-      <list>
-        <bean parent="AuthorizationDefinition">
-          <property name="action" value="initiate" />
-          <property name="authorizedGroups" >
-            <set>
-              <value>PA_PUR_MAINTENANCE_USERS</value>
-            </set>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+        <documentAuthorizerClass>org.kuali.core.document.MaintenanceDocumentAuthorizerBase</documentAuthorizerClass>
+        <authorizations>
+            <authorization action="initiate">
+                <workgroups>
+                    <workgroup>kualiUniversalGroup</workgroup>
+                </workgroups>
+            </authorization>
+        </authorizations>
 
-<!-- Maintenance Section Definitions -->
+        <documentTypeName>KualiPoVendorChoiceMaintenanceDocument</documentTypeName>
+        <documentTypeCode>PMVC</documentTypeCode>
 
+        <label>Purchase Order Vendor Choice Maintenance Document</label>
+        <shortLabel>PO Vendor Choice Maint Doc</shortLabel>
 
-  <bean id="PurchaseOrderVendorChoiceMaintenanceDocument-EditPOVendorChoice" parent="PurchaseOrderVendorChoiceMaintenanceDocument-EditPOVendorChoice-parentBean" />
+        <summary>Purchase Order Vendor Choice Maintenance Document</summary>
+        <description>Document used to create or update Purchase Order Vendor Choice objects</description>
 
-  <bean id="PurchaseOrderVendorChoiceMaintenanceDocument-EditPOVendorChoice-parentBean" abstract="true" parent="MaintainableSectionDefinition">
-    <property name="id" value="Edit PO Vendor Choice" />
-    <property name="title" value="Edit PO Vendor Choice" />
-    <property name="maintainableItems" >
-      <list>
-        <bean parent="MaintainableFieldDefinition"
-              p:name="purchaseOrderVendorChoiceCode"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="purchaseOrderVendorChoiceDescription"
-              p:required="true" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="active" />
-        <bean parent="MaintainableFieldDefinition"
-              p:name="versionNumber" />
-      </list>
-    </property>
-  </bean>
+        <lockingKeys>
+            <field attributeName="purchaseOrderVendorChoiceCode" />
+        </lockingKeys>
 
-<!-- Exported Workflow Properties -->
-
-
-  <bean id="PurchaseOrderVendorChoiceMaintenanceDocument-workflowProperties" parent="PurchaseOrderVendorChoiceMaintenanceDocument-workflowProperties-parentBean" />
-
-  <bean id="PurchaseOrderVendorChoiceMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
-  </bean>
-</beans>
+        <maintainableSections>
+            <maintainableSection title="Edit PO Vendor Choice">
+                <maintainableItems>
+                	<maintainableField name="purchaseOrderVendorChoiceCode" required="true"/>
+                	<maintainableField name="purchaseOrderVendorChoiceDescription" required="true"/>
+                    <maintainableField name="dataObjectMaintenanceCodeActiveIndicator" required="true" />
+                </maintainableItems>
+            </maintainableSection>
+        </maintainableSections>
+    </maintenanceDocument>
+</dictionaryEntry>

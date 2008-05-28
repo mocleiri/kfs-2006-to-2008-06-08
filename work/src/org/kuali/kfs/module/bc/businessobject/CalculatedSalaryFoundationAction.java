@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/bc/businessobject/CalculatedSalaryFoundationAction.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,88 +20,94 @@ package org.kuali.module.budget.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class CalculatedSalaryFoundationAction extends PersistableBusinessObjectBase {
+public class CalculatedSalaryFoundationAction extends BusinessObjectBase {
 
-    private String action;
-    private String actionReason;
-    private String csfFundingStatusCode;
+	private String action;
+	private String actionReason;
+	private String csfFundingStatusCode;
 
-    /**
-     * Default constructor.
-     */
-    public CalculatedSalaryFoundationAction() {
+	/**
+	 * Default constructor.
+	 */
+	public CalculatedSalaryFoundationAction() {
 
-    }
+	}
 
-    /**
-     * Gets the action attribute.
-     * 
-     * @return Returns the action
-     */
-    public String getAction() {
-        return action;
-    }
+	/**
+	 * Gets the action attribute.
+	 * 
+	 * @return Returns the action
+	 * 
+	 */
+	public String getAction() { 
+		return action;
+	}
 
-    /**
-     * Sets the action attribute.
-     * 
-     * @param action The action to set.
-     */
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-
-    /**
-     * Gets the actionReason attribute.
-     * 
-     * @return Returns the actionReason
-     */
-    public String getActionReason() {
-        return actionReason;
-    }
-
-    /**
-     * Sets the actionReason attribute.
-     * 
-     * @param actionReason The actionReason to set.
-     */
-    public void setActionReason(String actionReason) {
-        this.actionReason = actionReason;
-    }
+	/**
+	 * Sets the action attribute.
+	 * 
+	 * @param action The action to set.
+	 * 
+	 */
+	public void setAction(String action) {
+		this.action = action;
+	}
 
 
-    /**
-     * Gets the csfFundingStatusCode attribute.
-     * 
-     * @return Returns the csfFundingStatusCode
-     */
-    public String getCsfFundingStatusCode() {
-        return csfFundingStatusCode;
-    }
+	/**
+	 * Gets the actionReason attribute.
+	 * 
+	 * @return Returns the actionReason
+	 * 
+	 */
+	public String getActionReason() { 
+		return actionReason;
+	}
 
-    /**
-     * Sets the csfFundingStatusCode attribute.
-     * 
-     * @param csfFundingStatusCode The csfFundingStatusCode to set.
-     */
-    public void setCsfFundingStatusCode(String csfFundingStatusCode) {
-        this.csfFundingStatusCode = csfFundingStatusCode;
-    }
+	/**
+	 * Sets the actionReason attribute.
+	 * 
+	 * @param actionReason The actionReason to set.
+	 * 
+	 */
+	public void setActionReason(String actionReason) {
+		this.actionReason = actionReason;
+	}
 
 
-    /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	/**
+	 * Gets the csfFundingStatusCode attribute.
+	 * 
+	 * @return Returns the csfFundingStatusCode
+	 * 
+	 */
+	public String getCsfFundingStatusCode() { 
+		return csfFundingStatusCode;
+	}
+
+	/**
+	 * Sets the csfFundingStatusCode attribute.
+	 * 
+	 * @param csfFundingStatusCode The csfFundingStatusCode to set.
+	 * 
+	 */
+	public void setCsfFundingStatusCode(String csfFundingStatusCode) {
+		this.csfFundingStatusCode = csfFundingStatusCode;
+	}
+
+
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         m.put("action", this.action);
         m.put("actionReason", this.actionReason);
-        return m;
+	    return m;
     }
 }
