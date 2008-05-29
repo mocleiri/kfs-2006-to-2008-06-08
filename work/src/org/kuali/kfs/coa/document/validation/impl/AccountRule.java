@@ -18,7 +18,6 @@ package org.kuali.module.chart.rules;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -39,7 +38,6 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.Building;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.ParameterService;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.AccountDescription;
 import org.kuali.module.chart.bo.AccountGuideline;
@@ -50,10 +48,12 @@ import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.chart.service.SubFundGroupService;
 import org.kuali.module.gl.service.BalanceService;
-import org.kuali.module.integration.service.LaborModuleService;
+import org.kuali.module.labor.service.LaborLedgerPendingEntryService;
 
 /**
  * Business rule(s) applicable to AccountMaintenance documents.
+ * 
+ * 
  */
 public class AccountRule extends MaintenanceDocumentRuleBase {
 
@@ -74,6 +74,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     private static final String BUDGET_RECORDING_LEVEL_MIXED = "M";
 
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
+    private LaborLedgerPendingEntryService laborLedgerPendingEntryService;
     private BalanceService balanceService;
     private AccountService accountService;
 
@@ -91,12 +92,17 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         this.setGeneralLedgerPendingEntryService(SpringContext.getBean(GeneralLedgerPendingEntryService.class));
         this.setBalanceService(SpringContext.getBean(BalanceService.class));
         this.setAccountService(SpringContext.getBean(AccountService.class));
+        this.setLaborLedgerPendingEntryService(SpringContext.getBean(LaborLedgerPendingEntryService.class));
     }
 
     /**
+     * 
      * This method sets the convenience objects like newAccount and oldAccount, so you have short and easy handles to the new and
-     * old objects contained in the maintenance document. It also calls the BusinessObjectBase.refresh(), which will attempt to load
-     * all sub-objects from the DB by their primary keys, if available.
+     * old objects contained in the maintenance document.
+     * 
+     * It also calls the BusinessObjectBase.refresh(), which will attempt to load all sub-objects from the DB by their primary keys,
+     * if available.
+     * 
      */
     public void setupConvenienceObjects() {
 
@@ -108,7 +114,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method calls the route rules but does not fail if any of them fail (this only happens on routing)
      * 
      * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
      */
@@ -122,13 +127,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return true;
     }
 
-    /**
-     * This method calls the following rules: checkAccountGuidelinesValidation checkEmptyValues checkGeneralRules checkCloseAccount
-     * checkContractsAndGrants checkExpirationDate checkFundGroup checkSubFundGroup checkFiscalOfficerIsValidKualiUser this rule
-     * will fail on routing
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
 
         LOG.info("processCustomRouteDocumentBusinessRules called");
@@ -137,9 +135,9 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         // default to success
         boolean success = true;
 
-        // validate the embedded AccountGuideline object
-        success &= checkAccountGuidelinesValidation(newAccount.getAccountGuideline());
-
+		// validate the embedded AccountGuideline object
+        success &= checkAccountGuidelinesValidation( newAccount.getAccountGuideline() ); 
+        
         success &= checkEmptyValues(document);
         success &= checkGeneralRules(document);
         success &= checkCloseAccount(document);
@@ -153,13 +151,11 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method checks the basic rules for empty values in an account and associated objects with this account If guidelines are
-     * required for this Business Object it checks to make sure that it is filled out It also checks for partially filled out
-     * reference keys on the following: continuationAccount incomeStreamAccount endowmentIncomeAccount reportsToAccount
-     * contractControlAccount indirectCostRecoveryAcct
+     * 
+     * This method checks the basic rules for empty values in an account and associated objects with this account
      * 
      * @param maintenanceDocument
-     * @return false if any of these are empty
+     * @return
      */
     protected boolean checkEmptyValues(MaintenanceDocument maintenanceDocument) {
 
@@ -178,7 +174,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             success &= checkEmptyBOField("accountGuideline.accountPurposeText", newAccount.getAccountGuideline().getAccountPurposeText(), "Account Purpose");
         }
 
-        // this set confirms that all fields which are grouped (ie, foreign keys of a reference
+        // this set confirms that all fields which are grouped (ie, foreign keys of a referenc
         // object), must either be none filled out, or all filled out.
         success &= checkForPartiallyFilledOutReferenceForeignKeys("continuationAccount");
         success &= checkForPartiallyFilledOutReferenceForeignKeys("incomeStreamAccount");
@@ -190,26 +186,22 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    /**
-     * This method validates that the account guidelines object is valid
-     * 
-     * @param accountGuideline
-     * @return true if account guideline is valid
-     */
-    protected boolean checkAccountGuidelinesValidation(AccountGuideline accountGuideline) {
+    protected boolean checkAccountGuidelinesValidation( AccountGuideline accountGuideline ) {
         ErrorMap map = GlobalVariables.getErrorMap();
         int errorCount = map.getErrorCount();
         GlobalVariables.getErrorMap().addToErrorPath("document.newMaintainableObject.accountGuideline");
-        dictionaryValidationService.validateBusinessObject(accountGuideline, false);
+        dictionaryValidationService.validateBusinessObject( accountGuideline, false ); 
         GlobalVariables.getErrorMap().removeFromErrorPath("document.newMaintainableObject.accountGuideline");
-        return map.getErrorCount() == errorCount;
+        return map.getErrorCount() == errorCount; 
     }
-
+    
     /**
+     * 
      * This method determines whether the guidelines are required, based on business rules.
      * 
      * @param account - the populated Account bo to be evaluated
      * @return true if guidelines are required, false otherwise
+     * 
      */
     protected boolean areGuidelinesRequired(Account account) {
 
@@ -226,25 +218,33 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method tests whether the accountNumber passed in is prefixed with an allowed prefix, or an illegal one. The illegal
-     * prefixes are passed in as an array of strings.
+     * 
+     * This method tests whether the accountNumber passed in is prefixed with an allowed prefix, or an illegal one.
+     * 
+     * The illegal prefixes are passed in as an array of strings.
      * 
      * @param accountNumber - The Account Number to be tested.
      * @param illegalValues - An Array of Strings of the unallowable prefixes.
      * @return false if the accountNumber starts with any of the illegalPrefixes, true otherwise
+     * 
      */
-    protected boolean accountNumberStartsWithAllowedPrefix(String accountNumber, List<String> illegalValues) {
+    protected boolean accountNumberStartsWithAllowedPrefix(String accountNumber, String[] illegalValues) {
+
         boolean result = true;
-        for (String illegalValue : illegalValues) {
-            if (accountNumber.startsWith(illegalValue)) {
+
+        // for each disallowed value, make sure the account doesnt start with it
+        for (int i = 0; i < illegalValues.length; i++) {
+            if (accountNumber.startsWith(illegalValues[i])) {
                 result = false;
-                putFieldError("accountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_NMBR_NOT_ALLOWED, new String[] { accountNumber, illegalValue });
+                putFieldError("accountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_NMBR_NOT_ALLOWED, new String[] { accountNumber, illegalValues[i] });
             }
         }
+
         return result;
     }
 
     /**
+     * 
      * This method tests whether an account is being ReOpened by anyone except a system supervisor. Only system supervisors may
      * reopen closed accounts.
      * 
@@ -252,6 +252,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      * @param user - the user who is trying to possibly reopen the account
      * @return true if: document is an edit document, old was closed and new is open, and the user is not one of the System
      *         Supervisors
+     * 
      */
     protected boolean isNonSystemSupervisorEditingAClosedAccount(MaintenanceDocument document, UniversalUser user) {
 
@@ -272,11 +273,12 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method tests whether a given account has the T - Temporary value for Restricted Status Code, but does not have a
      * Restricted Status Date, which is required when the code is T.
      * 
      * @param account
-     * @return true if the account is temporarily restricted but the status date is empty
+     * @return
      */
     protected boolean hasTemporaryRestrictedStatusCodeButNoRestrictedStatusDate(Account account) {
 
@@ -296,7 +298,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      * Checks whether the account restricted status code is the default from the sub fund group.
      * 
      * @param account
-     * @return true if the restricted status code is the same as the sub fund group's
+     * @return
      */
     protected boolean hasDefaultRestrictedStatusCode(Account account) {
         boolean result = false;
@@ -309,11 +311,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method checks some of the general business rules associated with this document Calls the following rules:
-     * accountNumberStartsWithAllowedPrefix isNonSystemSupervisorEditingAClosedAccount
-     * hasTemporaryRestrictedStatusCodeButNoRestrictedStatusDate checkFringeBenefitAccountRule checkUserStatusAndType (on fiscal
-     * officer, supervisor and manager) ensures that the fiscal officer, supervisor and manager are not the same
-     * isContinuationAccountExpired
+     * 
+     * This method checks some of the general business rules associated with this document
      * 
      * @param maintenanceDocument
      * @return false on rules violation
@@ -331,8 +330,9 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         // (e.g. the account number cannot begin with a 3 or with 00.)
         // Only bother trying if there is an account string to test
         if (!StringUtils.isBlank(newAccount.getAccountNumber())) {
+            String[] illegalValues = getConfigService().getParameterValues(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, ACCT_PREFIX_RESTRICTION);
             // test the number
-            success &= accountNumberStartsWithAllowedPrefix(newAccount.getAccountNumber(), SpringContext.getBean(ParameterService.class).getParameterValues(Account.class, ACCT_PREFIX_RESTRICTION));
+            success &= accountNumberStartsWithAllowedPrefix(newAccount.getAccountNumber(), illegalValues);
         }
 
         // only a FIS supervisor can reopen a closed account. (This is the central super user, not an account supervisor).
@@ -377,10 +377,12 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method tests whether the continuation account entered (if any) has expired or not.
      * 
      * @param newAccount
-     * @return true if continuation account has expired
+     * @return
+     * 
      */
     protected boolean isContinuationAccountExpired(Account newAccount) {
 
@@ -414,13 +416,9 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return result;
     }
 
-    /**
-     * the fringe benefit account (otherwise known as the reportsToAccount) is required if the fringe benefit code is set to N. The
-     * fringe benefit code of the account designated to accept the fringes must be Y.
-     * 
-     * @param newAccount
-     * @return
-     */
+    // the fringe benefit account (otherwise known as the reportsToAccount) is required if
+    // the fringe benefit code is set to N.
+    // The fringe benefit code of the account designated to accept the fringes must be Y.
     protected boolean checkFringeBenefitAccountRule(Account newAccount) {
 
         boolean result = true;
@@ -474,35 +472,14 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return result;
     }
 
-    /**
-     * This method is a helper method for checking if the supervisor user is the same as the fiscal officer Calls
-     * {@link AccountRule#areTwoUsersTheSame(UniversalUser, UniversalUser)}
-     * 
-     * @param accountGlobals
-     * @return true if the two users are the same
-     */
     protected boolean isSupervisorSameAsFiscalOfficer(Account account) {
         return areTwoUsersTheSame(account.getAccountSupervisoryUser(), account.getAccountFiscalOfficerUser());
     }
 
-    /**
-     * This method is a helper method for checking if the supervisor user is the same as the manager Calls
-     * {@link AccountRule#areTwoUsersTheSame(UniversalUser, UniversalUser)}
-     * 
-     * @param accountGlobals
-     * @return true if the two users are the same
-     */
     protected boolean isSupervisorSameAsManager(Account account) {
         return areTwoUsersTheSame(account.getAccountSupervisoryUser(), account.getAccountManagerUser());
     }
 
-    /**
-     * This method checks to see if two users are the same BusinessObject using their identifiers
-     * 
-     * @param user1
-     * @param user2
-     * @return true if these two users are the same
-     */
     protected boolean areTwoUsersTheSame(UniversalUser user1, UniversalUser user2) {
         if (ObjectUtils.isNull(user1)) {
             return false;
@@ -519,31 +496,35 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method checks to see if the user passed in is of the type requested. If so, it returns true. If not, it returns false,
-     * and adds an error to the GlobalErrors.
      * 
-     * @param propertyName - property to attach error to
+     * This method checks to see if the user passed in is of the type requested.
+     * 
+     * If so, it returns true. If not, it returns false, and adds an error to the GlobalErrors.
+     *
+     * @param propertyName -
      * @param user - UniversalUser to be tested
+     *
      * @return true if user is of the requested employee type, false if not, true if the user object is null
+     * 
      */
     protected boolean checkUserStatusAndType(String propertyName, UniversalUser user) {
 
         boolean success = true;
 
-        // if the user isn't populated, exit with success
+        // if the user isnt populated, exit with success
         // the actual existence check is performed in the general rules so not testing here
         if (ObjectUtils.isNull(user)) {
             return success;
         }
 
         // user must be of the allowable statuses (A - Active)
-        if (!SpringContext.getBean(ParameterService.class).getParameterEvaluator(Account.class, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_STATUSES, user.getEmployeeStatusCode()).evaluationSucceeds()) {
+        if (apcRuleFails(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_STATUSES, user.getEmployeeStatusCode())) {
             success &= false;
             putFieldError(propertyName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACTIVE_REQD_FOR_EMPLOYEE, getDdService().getAttributeLabel(Account.class, propertyName));
         }
 
         // user must be of the allowable types (P - Professional)
-        if (!SpringContext.getBean(ParameterService.class).getParameterEvaluator(Account.class, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_TYPES, user.getEmployeeTypeCode()).evaluationSucceeds()) {
+        if (apcRuleFails(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, KFSConstants.ChartApcParms.ACCOUNT_USER_EMP_TYPES, user.getEmployeeTypeCode())) {
             success &= false;
             putFieldError(propertyName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_PRO_TYPE_REQD_FOR_EMPLOYEE, getDdService().getAttributeLabel(Account.class, propertyName));
         }
@@ -552,8 +533,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method checks to see if the user is trying to close the account and if so if any rules are being violated Calls the
-     * additional rule checkAccountExpirationDateValidTodayOrEarlier
+     * 
+     * This method checks to see if the user is trying to close the account and if so if any rules are being violated
      * 
      * @param maintenanceDocument
      * @return false on rules violation
@@ -593,7 +574,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCOUNT_CLOSED_PENDING_LEDGER_ENTRIES);
             success &= false;
         }
-
+        
         // beginning balance must be loaded in order to close account
         if (!balanceService.beginningBalanceLoaded(newAccount)) {
             putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCOUNT_CLOSED_NO_LOADED_BEGINNING_BALANCE);
@@ -610,20 +591,14 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         }
 
         // We must not have any pending labor ledger entries
-        if (SpringContext.getBean(LaborModuleService.class).hasPendingLaborLedgerEntry(newAccount.getChartOfAccountsCode(), newAccount.getAccountNumber())) {
-            putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCOUNT_CLOSED_PENDING_LABOR_LEDGER_ENTRIES);
-            success &= false;
+        if (laborLedgerPendingEntryService.hasPendingLaborLedgerEntry(newAccount)) {
+        putGlobalError(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCOUNT_CLOSED_PENDING_LABOR_LEDGER_ENTRIES);
+        success &= false;
         }
 
         return success;
     }
 
-    /**
-     * This method checsk to see if the account expiration date is today's date or earlier
-     * 
-     * @param newAccount
-     * @return fails if the expiration date is null or after today's date
-     */
     protected boolean checkAccountExpirationDateValidTodayOrEarlier(Account newAccount) {
 
         // get today's date, with no time component
@@ -649,8 +624,8 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method checks to see if any Contracts and Grants business rules were violated Calls the following sub-rules:
-     * checkCgRequiredFields checkCgIncomeStreamRequired
+     * 
+     * This method checks to see if any Contracts and Grants business rules were violated
      * 
      * @param maintenanceDocument
      * @return false on rules violation
@@ -671,12 +646,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    /**
-     * This method checks to see if the income stream account is required
-     * 
-     * @param newAccount
-     * @return fails if it is required and not entered, or not valid
-     */
     protected boolean checkCgIncomeStreamRequired(Account newAccount) {
 
         boolean result = true;
@@ -693,7 +662,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
 
         String requiredByValue = "";
         String requiredByLabel = "";
-
+        
         // if this is a CG fund group, then its required
         if (SpringContext.getBean(SubFundGroupService.class).isForContractsAndGrants(newAccount.getSubFundGroup())) {
             required = true;
@@ -716,34 +685,33 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             return result;
         }
 
-        DictionaryValidationService dvService = super.getDictionaryValidationService();
-
         // make sure both coaCode and accountNumber are filled out
         boolean incomeStreamAccountIsValid = true;
-        if (!checkEmptyValue(newAccount.getIncomeStreamFinancialCoaCode())) {
-            putFieldError("incomeStreamFinancialCoaCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_COA_CANNOT_BE_EMPTY, new String[] { requiredByLabel, requiredByValue });
-            incomeStreamAccountIsValid = false;
+        if ( !checkEmptyValue( newAccount.getIncomeStreamFinancialCoaCode() ) ) {
+        	putFieldError( "incomeStreamFinancialCoaCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_COA_CANNOT_BE_EMPTY, new String[] { requiredByLabel, requiredByValue } );
+        	incomeStreamAccountIsValid = false;
         }
-        if (!checkEmptyValue(newAccount.getIncomeStreamAccountNumber())) {
-            putFieldError("incomeStreamAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_NBR_CANNOT_BE_EMPTY, new String[] { requiredByLabel, requiredByValue });
-            incomeStreamAccountIsValid = false;
-        } else {
-            // validate that the income stream account exists
-            if(null != newAccount.getIncomeStreamAccountNumber() && null != newAccount.getIncomeStreamFinancialCoaCode()) {
-                if(newAccount.getIncomeStreamAccountNumber().equals(newAccount.getAccountNumber()) && newAccount.getIncomeStreamFinancialCoaCode().equals(newAccount.getChartOfAccountsCode())) {
-                    // income stream account is valid
-                } else if (!dvService.validateReferenceExists(newAccount, "incomeStreamAccount")) {
-                    putFieldError("incomeStreamAccountNumber", KFSKeyConstants.ERROR_EXISTENCE, "Income Stream Account: " + newAccount.getIncomeStreamFinancialCoaCode() + "-" + newAccount.getIncomeStreamAccountNumber());
-                    incomeStreamAccountIsValid = false;
-                }
+        if ( !checkEmptyValue( newAccount.getIncomeStreamAccountNumber() ) ) {
+        	putFieldError( "incomeStreamAccountNumber", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_INCOME_STREAM_ACCT_NBR_CANNOT_BE_EMPTY, new String[] { requiredByLabel, requiredByValue } );
+        	incomeStreamAccountIsValid = false;
+        }
+
+        // if both fields arent present, then we're done
+        if (incomeStreamAccountIsValid) {
+            // do an existence/active test
+            DictionaryValidationService dvService = super.getDictionaryValidationService();
+            boolean referenceExists = dvService.validateReferenceExists(newAccount, "incomeStreamAccount");
+            if (!referenceExists) {
+                putFieldError("incomeStreamAccountNumber", KFSKeyConstants.ERROR_EXISTENCE, "Income Stream Account: " + newAccount.getIncomeStreamFinancialCoaCode() + "-" + newAccount.getIncomeStreamAccountNumber());
+                incomeStreamAccountIsValid = false;
             }
         }
 
-        if (incomeStreamAccountIsValid) {
+        if(incomeStreamAccountIsValid) {
             result = true;
         } else {
             result = null != newAccount.getAccountNumber() && null != newAccount.getIncomeStreamAccountNumber();
-            if (result) {
+            if(result) {
                 result &= newAccount.getAccountNumber().equals(newAccount.getIncomeStreamAccountNumber());
                 result &= newAccount.getChartOfAccountsCode().equals(newAccount.getIncomeStreamFinancialCoaCode());
             }
@@ -752,12 +720,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return result;
     }
 
-    /**
-     * This method checks to make sure that if the contracts and grants fields are required they are entered correctly
-     * 
-     * @param newAccount
-     * @return
-     */
     protected boolean checkCgRequiredFields(Account newAccount) {
 
         boolean result = true;
@@ -767,23 +729,22 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             if (SpringContext.getBean(SubFundGroupService.class).isForContractsAndGrants(newAccount.getSubFundGroup())) {
                 result &= checkEmptyBOField("acctIndirectCostRcvyTypeCd", newAccount.getAcctIndirectCostRcvyTypeCd(), replaceTokens(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_TYPE_CODE_CANNOT_BE_EMPTY));
                 result &= checkEmptyBOField("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier(), replaceTokens(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_SERIES_IDENTIFIER_CANNOT_BE_EMPTY));
-
+                
                 // Validation for financialIcrSeriesIdentifier
-                if (checkEmptyBOField("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier(), replaceTokens(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_SERIES_IDENTIFIER_CANNOT_BE_EMPTY))) {
+                if (checkEmptyBOField("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier(), replaceTokens(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_SERIES_IDENTIFIER_CANNOT_BE_EMPTY))){
                     Map pkMap = new HashMap();
                     pkMap.put("financialIcrSeriesIdentifier", newAccount.getFinancialIcrSeriesIdentifier());
-                    if (getBoService().countMatching(IcrAutomatedEntry.class, pkMap) == 0) {
+                    if (getBoService().countMatching(IcrAutomatedEntry.class, pkMap) == 0){
                         putFieldError("financialIcrSeriesIdentifier", KFSKeyConstants.ERROR_EXISTENCE, "financialIcrSeriesIdentifier");
                         result &= false;
                     }
                 }
-
+                
                 result &= checkEmptyBOField("indirectCostRcvyFinCoaCode", newAccount.getIndirectCostRcvyFinCoaCode(), replaceTokens(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_CHART_CODE_CANNOT_BE_EMPTY));
                 result &= checkEmptyBOField("indirectCostRecoveryAcctNbr", newAccount.getIndirectCostRecoveryAcctNbr(), replaceTokens(KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ICR_ACCOUNT_CANNOT_BE_EMPTY));
                 result &= checkContractControlAccountNumberRequired(newAccount);
-            }
-            else {
-                // this is not a C&G fund group. So users should not fill in any fields in the C&G tab.
+            } else {
+                // this is not a C&G fund group.  So users should not fill in any fields in the C&G tab.
                 result &= checkCGFieldNotFilledIn(newAccount, "acctIndirectCostRcvyTypeCd");
                 result &= checkCGFieldNotFilledIn(newAccount, "financialIcrSeriesIdentifier");
                 result &= checkCGFieldNotFilledIn(newAccount, "indirectCostRcvyFinCoaCode");
@@ -793,13 +754,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return result;
     }
 
-    /**
-     * This method is a helper method that replaces error tokens with values for contracts and grants labels
-     * 
-     * @param errorConstant
-     * @return error string that has had tokens "{0}" and "{1}" replaced
-     */
-    private String replaceTokens(String errorConstant) {
+    private String replaceTokens(String errorConstant){
         String cngLabel = SpringContext.getBean(SubFundGroupService.class).getContractsAndGrantsDenotingAttributeLabel();
         String cngValue = SpringContext.getBean(SubFundGroupService.class).getContractsAndGrantsDenotingValue();
         String result = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(errorConstant);
@@ -808,13 +763,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return result;
     }
 
-    /**
-     * This method checks to make sure that if the contract control account exists it is the same as the Account that we are working
-     * on
-     * 
-     * @param newAccount
-     * @return false if the contract control account is entered and is not the same as the account we are maintaining
-     */
     protected boolean checkContractControlAccountNumberRequired(Account newAccount) {
 
         boolean result = true;
@@ -843,6 +791,7 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
+     * 
      * This method checks to see if any expiration date field rules were violated
      * 
      * @param maintenanceDocument
@@ -902,12 +851,6 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
         return success;
     }
 
-    /**
-     * This method checks to see if the new expiration date is different from the old expiration and if it has if it is invalid
-     * 
-     * @param maintDoc
-     * @return true if expiration date has changed and is invalid
-     */
     protected boolean isUpdatedExpirationDateInvalid(MaintenanceDocument maintDoc) {
 
         // if this isnt an Edit document, we're not interested
@@ -955,11 +898,12 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
     }
 
     /**
-     * This method checks to see if any Fund Group rules were violated Specifically: if we are dealing with a "GF" (General Fund) we
-     * cannot have an account with a budget recording level of "M" (Mixed)
+     * 
+     * This method checks to see if any Fund Group rules were violated
      * 
      * @param maintenanceDocument
      * @return false on rules violation
+     * 
      */
     protected boolean checkFundGroup(MaintenanceDocument maintenanceDocument) {
 
@@ -979,16 +923,27 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             if (StringUtils.isNotBlank(newAccount.getAccountRestrictedStatusCode())) {
                 restrictedStatusCode = newAccount.getAccountRestrictedStatusCode().trim();
             }
+
+            // an account in the general fund fund group cannot have a budget recording level of mixed.
+            if (fundGroupCode.equalsIgnoreCase(GENERAL_FUND_CD)) {
+                String budgetRecordingLevelCode = newAccount.getBudgetRecordingLevelCode();
+                if (StringUtils.isNotEmpty(budgetRecordingLevelCode)) {
+                    if (budgetRecordingLevelCode.equalsIgnoreCase(BUDGET_RECORDING_LEVEL_MIXED)) {
+                        putFieldError("budgetRecordingLevelCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_ACCT_GF_BUDGET_RECORD_LVL_MIXED);
+                        success &= false;
+                    }
+                }
+            }
         }
 
         return success;
     }
 
     /**
-     * This method insures the fiscal officer is a valid Kuali User
      * 
+     * This method insures the fiscal officer is a valid Kuali User
      * @param fiscalOfficerUserId
-     * @return true if they are a valid Kuali user
+     * @return
      */
     protected boolean checkFiscalOfficerIsValidKualiUser(String fiscalOfficerUserId) {
         boolean result = true;
@@ -1003,157 +958,129 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
             result = false;
         }
 
-        return result;
+        return result;        
     }
-
+    
     /**
-     * This method checks to see if any SubFund Group rules were violated Specifically: if SubFundGroup is empty or not "PFCMR" we
-     * cannot have a campus code or building code if SubFundGroup is "PFCMR" then campus code and building code "must" be entered
-     * and be valid codes
+     * 
+     * This method checks to see if any SubFund Group rules were violated
      * 
      * @param maintenanceDocument
      * @return false on rules violation
+     * 
      */
     protected boolean checkSubFundGroup(MaintenanceDocument maintenanceDocument) {
 
         LOG.info("checkSubFundGroup called");
 
         boolean success = true;
-
+        
         String subFundGroupCode = newAccount.getSubFundGroupCode();
-
-        if (newAccount.getAccountDescription() != null) {
-
+        
+        if( newAccount.getAccountDescription() != null ){
+            
             String campusCode = newAccount.getAccountDescription().getCampusCode();
             String buildingCode = newAccount.getAccountDescription().getBuildingCode();
 
-            // check if sub fund group code is blank
+            //check if sub fund group code is blank
             if (StringUtils.isBlank(subFundGroupCode)) {
-
+                
                 // check if campus code and building code are NOT blank
-                if (!StringUtils.isBlank(campusCode) || !StringUtils.isBlank(buildingCode)) {
-
+                if( !StringUtils.isBlank(campusCode) || !StringUtils.isBlank(buildingCode)){
+                    
                     // if sub_fund_grp_cd is blank, campus code should NOT be entered
                     if (!StringUtils.isBlank(campusCode)) {
-                        putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_BLANK_SUBFUNDGROUP_WITH_CAMPUS_CD_FOR_BLDG, subFundGroupCode);
+                        putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_BLANK_SUBFUNDGROUP_WITH_CAMPUS_CD_FOR_BLDG, subFundGroupCode );
                         success &= false;
                     }
-
+    
                     // if sub_fund_grp_cd is blank, then bldg_cd should NOT be entered
                     if (!StringUtils.isBlank(buildingCode)) {
                         putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_BLANK_SUBFUNDGROUP_WITH_BUILDING_CD, subFundGroupCode);
                         success &= false;
-                    }
-
-                }
-                else {
-
-                    // if all sub fund group, campus code, building code are all blank return true
+                    }                   
+                    
+                } else {
+                    
+                    //if all sub fund group, campus code, building code are all blank return true
                     return success;
                 }
 
+            } else if( !StringUtils.isBlank(subFundGroupCode) && !ObjectUtils.isNull(newAccount.getSubFundGroup()) ){
+
+        // Attempt to get the right SubFundGroup code to check the following logic with. If the value isn't available, go ahead
+        // and die, as this indicates a misconfigured app, and important business rules wont be implemented without it.
+        String capitalSubFundGroup = getConfigService().getParameterValue(KFSConstants.CHART_NAMESPACE, KFSConstants.Components.ACCOUNT, ACCT_CAPITAL_SUBFUNDGROUP);
+
+        if (capitalSubFundGroup.equalsIgnoreCase(subFundGroupCode.trim())) {
+
+            // if sub_fund_grp_cd is 'PFCMR' then campus_cd must be entered
+            if (StringUtils.isBlank(campusCode)) {
+                putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CAMS_SUBFUNDGROUP_WITH_MISSING_CAMPUS_CD_FOR_BLDG);
+                success &= false;
             }
-            else if (!StringUtils.isBlank(subFundGroupCode) && !ObjectUtils.isNull(newAccount.getSubFundGroup())) {
 
-                // Attempt to get the right SubFundGroup code to check the following logic with. If the value isn't available, go
-                // ahead
-                // and die, as this indicates a misconfigured app, and important business rules wont be implemented without it.
-                String capitalSubFundGroup = SpringContext.getBean(ParameterService.class).getParameterValue(Account.class, ACCT_CAPITAL_SUBFUNDGROUP);
-
-                if (capitalSubFundGroup.equalsIgnoreCase(subFundGroupCode.trim())) {
-
-                    // if sub_fund_grp_cd is 'PFCMR' then campus_cd must be entered
-                    if (StringUtils.isBlank(campusCode)) {
-                        putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CAMS_SUBFUNDGROUP_WITH_MISSING_CAMPUS_CD_FOR_BLDG);
-                        success &= false;
-                    }
-
-                    // if sub_fund_grp_cd is 'PFCMR' then bldg_cd must be entered
-                    if (StringUtils.isBlank(buildingCode)) {
+            // if sub_fund_grp_cd is 'PFCMR' then bldg_cd must be entered
+            if (StringUtils.isBlank(buildingCode)) {
                         putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CAMS_SUBFUNDGROUP_WITH_MISSING_BUILDING_CD);
-                        success &= false;
-                    }
+                success &= false;
+            }
 
-                    // the building object (campusCode & buildingCode) must exist in the DB
-                    if (!StringUtils.isBlank(campusCode) && !StringUtils.isBlank(buildingCode)) {
-
-                        // make sure that primary key fields are upper case
-                        DataDictionaryService dds = SpringContext.getBean(DataDictionaryService.class);
-                        Boolean buildingCodeForceUppercase = dds.getAttributeForceUppercase(AccountDescription.class, KFSPropertyConstants.BUILDING_CODE);
-                        if (StringUtils.isNotBlank(buildingCode) && buildingCodeForceUppercase != null && buildingCodeForceUppercase.booleanValue() == true) {
-                            buildingCode = buildingCode.toUpperCase();
-                        }
-
-                        Boolean campusCodeForceUppercase = dds.getAttributeForceUppercase(AccountDescription.class, KFSPropertyConstants.CAMPUS_CODE);
-                        if (StringUtils.isNotBlank(campusCode) && campusCodeForceUppercase != null && campusCodeForceUppercase.booleanValue() == true) {
-                            campusCode = campusCode.toUpperCase();
-                        }
-
-                        Map pkMap = new HashMap();
-                        pkMap.put("campusCode", campusCode);
-                        pkMap.put("buildingCode", buildingCode);
-
-                        Building building = (Building) getBoService().findByPrimaryKey(Building.class, pkMap);
-                        if (building == null) {
-                            putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_EXISTENCE, campusCode);
-                            putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_EXISTENCE, buildingCode);
-                            success &= false;
-                        }
-                    }
+            // the building object (campusCode & buildingCode) must exist in the DB
+            if (!StringUtils.isBlank(campusCode) && !StringUtils.isBlank(buildingCode)) {
+                                
+                //make sure that primary key fields are upper case
+                DataDictionaryService dds = SpringContext.getBean(DataDictionaryService.class);
+                Boolean buildingCodeForceUppercase = dds.getAttributeForceUppercase(AccountDescription.class, KFSPropertyConstants.BUILDING_CODE );
+                if (StringUtils.isNotBlank(buildingCode) && buildingCodeForceUppercase != null && buildingCodeForceUppercase.booleanValue() == true ) {
+                    buildingCode = buildingCode.toUpperCase();
                 }
-                else {
+                
+                Boolean campusCodeForceUppercase = dds.getAttributeForceUppercase(AccountDescription.class, KFSPropertyConstants.CAMPUS_CODE );
+                if (StringUtils.isNotBlank(campusCode) && campusCodeForceUppercase != null && campusCodeForceUppercase.booleanValue() == true ) {
+                    campusCode = campusCode.toUpperCase();
+                }   
+                
+                Map pkMap = new HashMap();
+                pkMap.put("campusCode", campusCode);
+                pkMap.put("buildingCode", buildingCode);                
 
+                Building building = (Building) getBoService().findByPrimaryKey(Building.class, pkMap);
+                if (building == null) {
+                    putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_EXISTENCE, campusCode);
+                    putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_EXISTENCE, buildingCode);
+                    success &= false;
+                }
+            }
+                } else {
+                    
                     // if sub_fund_grp_cd is NOT 'PFCMR', campus code should NOT be entered
                     if (!StringUtils.isBlank(campusCode)) {
-                        putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_NONCAMS_SUBFUNDGROUP_WITH_CAMPUS_CD_FOR_BLDG, subFundGroupCode);
+                        putFieldError("accountDescription.campusCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_NONCAMS_SUBFUNDGROUP_WITH_CAMPUS_CD_FOR_BLDG, subFundGroupCode );
                         success &= false;
                     }
-
+    
                     // if sub_fund_grp_cd is NOT 'PFCMR' then bldg_cd should NOT be entered
                     if (!StringUtils.isBlank(buildingCode)) {
                         putFieldError("accountDescription.buildingCode", KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_NONCAMS_SUBFUNDGROUP_WITH_BUILDING_CD, subFundGroupCode);
                         success &= false;
-                    }
-                }
+                    }   
+                }            
             }
-
+        
         }
 
         return success;
     }
 
-    /**
-     * This method checks to see if the contracts and grants fields are filled in or not
-     * 
-     * @param account
-     * @param propertyName - property to attach error to
-     * @return false if the contracts and grants fields are blank
-     */
-    protected boolean checkCGFieldNotFilledIn(Account account, String propertyName) {
-        boolean success = true;
-        Object value = ObjectUtils.getPropertyValue(account, propertyName);
-        if ((value instanceof String && !StringUtils.isBlank(value.toString())) || (value != null)) {
-            success = false;
-            putFieldError(propertyName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CG_FIELDS_FILLED_FOR_NON_CG_ACCOUNT, new String[] { account.getSubFundGroupCode() });
-        }
-
-        return success;
-    }
-
-    /**
-     * This method sets the generalLedgerPendingEntryService
-     * 
-     * @param generalLedgerPendingEntryService
-     */
     public void setGeneralLedgerPendingEntryService(GeneralLedgerPendingEntryService generalLedgerPendingEntryService) {
         this.generalLedgerPendingEntryService = generalLedgerPendingEntryService;
     }
 
-    /**
-     * This method sets the balanceService
-     * 
-     * @param balanceService
-     */
+    public void setLaborLedgerPendingEntryService(LaborLedgerPendingEntryService laborLedgerPendingEntryService) {
+        this.laborLedgerPendingEntryService = laborLedgerPendingEntryService;
+    }
+
     public void setBalanceService(BalanceService balanceService) {
         this.balanceService = balanceService;
     }
@@ -1165,6 +1092,17 @@ public class AccountRule extends MaintenanceDocumentRuleBase {
      */
     public final void setAccountService(AccountService accountService) {
         this.accountService = accountService;
+    }
+    
+    protected boolean checkCGFieldNotFilledIn(Account account, String propertyName) {
+        boolean success = true;
+        Object value = ObjectUtils.getPropertyValue(account, propertyName);
+        if ((value instanceof String && !StringUtils.isBlank(value.toString())) || (value != null)) {
+            success = false;
+            putFieldError(propertyName, KFSKeyConstants.ERROR_DOCUMENT_ACCMAINT_CG_FIELDS_FILLED_FOR_NON_CG_ACCOUNT, new String[] { account.getSubFundGroupCode() });
+        }
+        
+        return success;
     }
 
 }
