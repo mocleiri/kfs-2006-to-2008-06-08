@@ -81,6 +81,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the universityFiscalYear attribute.
      * 
      * @return Returns the universityFiscalYear
+     * 
      */
     public Integer getUniversityFiscalYear() {
         return universityFiscalYear;
@@ -90,6 +91,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the universityFiscalYear attribute.
      * 
      * @param universityFiscalYear The universityFiscalYear to set.
+     * 
      */
     public void setUniversityFiscalYear(Integer universityFiscalYear) {
         this.universityFiscalYear = universityFiscalYear;
@@ -100,6 +102,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -109,6 +112,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -119,6 +123,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the organizationCode attribute.
      * 
      * @return Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -128,6 +133,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -138,6 +144,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the budgetReversionChartOfAccountsCode attribute.
      * 
      * @return Returns the budgetReversionChartOfAccountsCode
+     * 
      */
     public String getBudgetReversionChartOfAccountsCode() {
         return budgetReversionChartOfAccountsCode;
@@ -147,6 +154,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the budgetReversionChartOfAccountsCode attribute.
      * 
      * @param budgetReversionChartOfAccountsCode The budgetReversionChartOfAccountsCode to set.
+     * 
      */
     public void setBudgetReversionChartOfAccountsCode(String budgetReversionChartOfAccountsCode) {
         this.budgetReversionChartOfAccountsCode = budgetReversionChartOfAccountsCode;
@@ -157,6 +165,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the budgetReversionAccountNumber attribute.
      * 
      * @return Returns the budgetReversionAccountNumber
+     * 
      */
     public String getBudgetReversionAccountNumber() {
         return budgetReversionAccountNumber;
@@ -166,6 +175,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the budgetReversionAccountNumber attribute.
      * 
      * @param budgetReversionAccountNumber The budgetReversionAccountNumber to set.
+     * 
      */
     public void setBudgetReversionAccountNumber(String budgetReversionAccountNumber) {
         this.budgetReversionAccountNumber = budgetReversionAccountNumber;
@@ -176,6 +186,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the carryForwardByObjectCodeIndicator attribute.
      * 
      * @return Returns the carryForwardByObjectCodeIndicator
+     * 
      */
     public boolean isCarryForwardByObjectCodeIndicator() {
         return carryForwardByObjectCodeIndicator;
@@ -186,6 +197,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the carryForwardByObjectCodeIndicator attribute.
      * 
      * @param carryForwardByObjectCodeIndicator The carryForwardByObjectCodeIndicator to set.
+     * 
      */
     public void setCarryForwardByObjectCodeIndicator(boolean carryForwardByObjectCodeIndicator) {
         this.carryForwardByObjectCodeIndicator = carryForwardByObjectCodeIndicator;
@@ -196,6 +208,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the cashReversionFinancialChartOfAccountsCode attribute.
      * 
      * @return Returns the cashReversionFinancialChartOfAccountsCode
+     * 
      */
     public String getCashReversionFinancialChartOfAccountsCode() {
         return cashReversionFinancialChartOfAccountsCode;
@@ -205,6 +218,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the cashReversionFinancialChartOfAccountsCode attribute.
      * 
      * @param cashReversionFinancialChartOfAccountsCode The cashReversionFinancialChartOfAccountsCode to set.
+     * 
      */
     public void setCashReversionFinancialChartOfAccountsCode(String cashReversionFinancialChartOfAccountsCode) {
         this.cashReversionFinancialChartOfAccountsCode = cashReversionFinancialChartOfAccountsCode;
@@ -215,6 +229,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the cashReversionAccountNumber attribute.
      * 
      * @return Returns the cashReversionAccountNumber
+     * 
      */
     public String getCashReversionAccountNumber() {
         return cashReversionAccountNumber;
@@ -224,6 +239,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Sets the cashReversionAccountNumber attribute.
      * 
      * @param cashReversionAccountNumber The cashReversionAccountNumber to set.
+     * 
      */
     public void setCashReversionAccountNumber(String cashReversionAccountNumber) {
         this.cashReversionAccountNumber = cashReversionAccountNumber;
@@ -234,6 +250,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -253,6 +270,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public List<Org> getOrganizations() {
         return organizations;
@@ -272,6 +290,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the cashReversionAccount attribute.
      * 
      * @return Returns the cashReversionAccount
+     * 
      */
     public Account getCashReversionAccount() {
         return cashReversionAccount;
@@ -291,6 +310,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the budgetReversionAccount attribute.
      * 
      * @return Returns the budgetReversionAccount
+     * 
      */
     public Account getBudgetReversionAccount() {
         return budgetReversionAccount;
@@ -310,6 +330,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the budgetReversionChartOfAccounts attribute.
      * 
      * @return Returns the budgetReversionChartOfAccounts
+     * 
      */
     public Chart getBudgetReversionChartOfAccounts() {
         return budgetReversionChartOfAccounts;
@@ -329,6 +350,7 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
      * Gets the cashReversionFinancialChartOfAccounts attribute.
      * 
      * @return Returns the cashReversionFinancialChartOfAccounts
+     * 
      */
     public Chart getCashReversionFinancialChartOfAccounts() {
         return cashReversionFinancialChartOfAccounts;
@@ -383,11 +405,12 @@ public class OrganizationReversion extends PersistableBusinessObjectBase {
     public void setOrganization(Org organization) {
         this.organization = organization;
     }
-
+    
     /**
-     * This method (a hack by any other name...) returns a string so that an organization reversion can have a link to view its own
-     * inquiry page after a look up
      * 
+     * This method (a hack by any other name...) returns a string so that an
+     * organization reversion can have a link to view its own inquiry page
+     * after a look up
      * @return the String "View Organization Reversion"
      */
     public String getOrganizationReversionViewer() {

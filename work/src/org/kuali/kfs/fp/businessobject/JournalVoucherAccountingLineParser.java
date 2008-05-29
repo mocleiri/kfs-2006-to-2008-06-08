@@ -16,31 +16,31 @@
 
 package org.kuali.module.financial.bo;
 
-import static org.kuali.kfs.KFSPropertyConstants.ACCOUNT_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.CREDIT;
-import static org.kuali.kfs.KFSPropertyConstants.DEBIT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.OBJECT_TYPE_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
-import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_ORIGIN_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.REFERENCE_TYPE_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.SUB_ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.AMOUNT;
+import static org.kuali.PropertyConstants.CHART_OF_ACCOUNTS_CODE;
+import static org.kuali.PropertyConstants.CREDIT;
+import static org.kuali.PropertyConstants.DEBIT;
+import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
+import static org.kuali.PropertyConstants.OBJECT_TYPE_CODE;
+import static org.kuali.PropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.PropertyConstants.OVERRIDE_CODE;
+import static org.kuali.PropertyConstants.PROJECT_CODE;
+import static org.kuali.PropertyConstants.REFERENCE_NUMBER;
+import static org.kuali.PropertyConstants.REFERENCE_ORIGIN_CODE;
+import static org.kuali.PropertyConstants.REFERENCE_TYPE_CODE;
+import static org.kuali.PropertyConstants.SUB_ACCOUNT_NUMBER;
 
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.service.BalanceTypService;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 /**
- * This class represents a <code>JournalVoucherDocument</code> accounting line parser.
+ * <code>JournalVoucherDocument</code> accounting line parser
  */
 public class JournalVoucherAccountingLineParser extends AuxiliaryVoucherAccountingLineParser {
     private String balanceTypeCode;
@@ -65,8 +65,8 @@ public class JournalVoucherAccountingLineParser extends AuxiliaryVoucherAccounti
     @Override
     protected void performCustomSourceAccountingLinePopulation(Map<String, String> attributeValueMap, SourceAccountingLine sourceAccountingLine, String accountingLineAsString) {
 
-        boolean isFinancialOffsetGeneration = SpringContext.getBean(BalanceTypService.class).getBalanceTypByCode(balanceTypeCode).isFinancialOffsetGenerationIndicator();
-        if (isFinancialOffsetGeneration || StringUtils.equals(balanceTypeCode, KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
+        boolean isFinancialOffsetGeneration = SpringServiceLocator.getBalanceTypService().getBalanceTypByCode(balanceTypeCode).isFinancialOffsetGenerationIndicator();
+        if (isFinancialOffsetGeneration || StringUtils.equals(balanceTypeCode, Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
             super.performCustomSourceAccountingLinePopulation(attributeValueMap, sourceAccountingLine, accountingLineAsString);
         }
         sourceAccountingLine.setBalanceTypeCode(balanceTypeCode);
@@ -86,10 +86,10 @@ public class JournalVoucherAccountingLineParser extends AuxiliaryVoucherAccounti
      * @return String []
      */
     private String[] selectFormat() {
-        if (StringUtils.equals(balanceTypeCode, KFSConstants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
+        if (StringUtils.equals(balanceTypeCode, Constants.BALANCE_TYPE_EXTERNAL_ENCUMBRANCE)) {
             return ENCUMBRANCE_ENTRY;
         }
-        else if (SpringContext.getBean(BalanceTypService.class).getBalanceTypByCode(balanceTypeCode).isFinancialOffsetGenerationIndicator()) {
+        else if (SpringServiceLocator.getBalanceTypService().getBalanceTypByCode(balanceTypeCode).isFinancialOffsetGenerationIndicator()) {
             return OFFSET_ENTRY;
         }
         else {

@@ -18,21 +18,11 @@ package org.kuali.module.financial.document;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Copyable;
-import org.kuali.core.service.DocumentTypeService;
-import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.web.format.CurrencyFormatter;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.ElectronicPaymentClaim;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.AccountingDocumentRuleHelperService;
-import org.kuali.kfs.service.ElectronicPaymentClaimingService;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 
 /**
@@ -41,7 +31,7 @@ import org.kuali.module.financial.bo.AdvanceDepositDetail;
  * transactional document, only accepting funds into the university, the accounting line data will be held in the source accounting
  * line data structure only.
  */
-public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Copyable, AmountTotaling {
+public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Copyable  {
     // holds details about each advance deposit
     private List<AdvanceDepositDetail> advanceDeposits = new ArrayList<AdvanceDepositDetail>();
 
@@ -132,7 +122,7 @@ public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Cop
         advanceDepositDetail.setFinancialDocumentLineNumber(this.nextAdvanceDepositLineNumber);
         advanceDepositDetail.setFinancialDocumentColumnTypeCode(KFSConstants.AdvanceDepositConstants.CASH_RECEIPT_ADVANCE_DEPOSIT_COLUMN_TYPE_CODE);
         advanceDepositDetail.setDocumentNumber(this.getDocumentNumber());
-        advanceDepositDetail.setFinancialDocumentTypeCode(SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(this.getClass()));
+        advanceDepositDetail.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(this.getClass()));
     }
 
     /**
@@ -175,29 +165,12 @@ public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Cop
     /**
      * This method returns the overall total of the document - the advance deposit total.
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
      * @return KualiDecimal
      */
     @Override
     public KualiDecimal getTotalDollarAmount() {
         return this.totalAdvanceDepositAmount;
     }
-
-    /**
-     * This method defers to its parent's version of handleRouteStatusChange, but then, if the document is processed, it creates ElectronicPaymentClaim records
-     * for any qualifying accountings lines in the document.
-     * 
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocumentBase#handleRouteStatusChange()
-     */
-    @Override
-    public void handleRouteStatusChange() {
-        super.handleRouteStatusChange();
-        if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            SpringContext.getBean(ElectronicPaymentClaimingService.class).generateElectronicPaymentClaimRecords(this);
-        }
-    }
-    
-    
 
     /**
      * Overrides super to call super and then also add in the new list of advance deposits that have to be managed.
@@ -210,42 +183,5 @@ public class AdvanceDepositDocument extends CashReceiptFamilyBase implements Cop
         managedLists.add(getAdvanceDeposits());
 
         return managedLists;
-    }
-    
-    /**
-     * Generates bank offset GLPEs for deposits, if enabled.
-     * 
-     * @param financialDocument submitted financial document
-     * @param sequenceHelper helper class which will allows us to increment a reference without using an Integer
-     * @return true if there are no issues creating GLPE's
-     * @see org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.document.FinancialDocument,org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
-     */
-    @Override
-    public boolean generateDocumentGeneralLedgerPendingEntries(GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
-        boolean success = true;
-        if (isBankCashOffsetEnabled()) {
-            int displayedDepositNumber = 1;
-            GeneralLedgerPendingEntryService glpeService = SpringContext.getBean(GeneralLedgerPendingEntryService.class);
-            for (AdvanceDepositDetail detail : getAdvanceDeposits()) {
-                detail.refreshReferenceObject(KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT);
-
-                GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
-                if (!glpeService.populateBankOffsetGeneralLedgerPendingEntry(detail.getFinancialDocumentBankAccount(), detail.getFinancialDocumentAdvanceDepositAmount(), this, getPostingYear(), sequenceHelper, bankOffsetEntry, KFSConstants.ADVANCE_DEPOSITS_LINE_ERRORS)) {
-                    success = false;
-                    continue; // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at
-                    // all.
-                }
-                AccountingDocumentRuleHelperService accountingDocumentRuleUtil = SpringContext.getBean(AccountingDocumentRuleHelperService.class);
-                bankOffsetEntry.setTransactionLedgerEntryDescription(accountingDocumentRuleUtil.formatProperty(KFSKeyConstants.AdvanceDeposit.DESCRIPTION_GLPE_BANK_OFFSET, displayedDepositNumber++));
-                addPendingEntry(bankOffsetEntry);
-                sequenceHelper.increment();
-
-                GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(bankOffsetEntry);
-                success &= glpeService.populateOffsetGeneralLedgerPendingEntry(getPostingYear(), bankOffsetEntry, sequenceHelper, offsetEntry);
-                addPendingEntry(offsetEntry);
-                sequenceHelper.increment();
-            }
-        }
-        return success;
     }
 }

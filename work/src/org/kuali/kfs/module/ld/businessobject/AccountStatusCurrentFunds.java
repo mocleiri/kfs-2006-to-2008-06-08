@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,16 +28,17 @@ import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.labor.LaborConstants;
+import org.kuali.module.labor.dao.LaborDao;
 
-/**
- * Labor business object for Account Status (Current Funds).
- */
 public class AccountStatusCurrentFunds extends LedgerBalance {
+
     private String personName;
+    //private KualiDecimal ytdActualAmount;
     private KualiDecimal outstandingEncum;
+    private LaborDao laborDao;
     private KualiDecimal july1BudgetAmount;
-    private KualiDecimal annualActualAmount;
     private KualiDecimal variance;
+    
 
     /**
      * Constructs an AccountStatusCurrentFunds.java.
@@ -48,49 +49,48 @@ public class AccountStatusCurrentFunds extends LedgerBalance {
         this.setOutstandingEncum(KualiDecimal.ZERO);
         this.setVariance(KualiDecimal.ZERO);
         this.setJuly1BudgetAmount(KualiDecimal.ZERO);
-        this.setAnnualActualAmount(KualiDecimal.ZERO);
     }
 
     /**
-     * Gets the person name
      * 
-     * @return the person name
+     * This method returns the person name
+     * @return
      */
     public String getPersonName() {
         UserId empl = new PersonPayrollId(getEmplid());
         UniversalUser universalUser = null;
-
-        try {
+        
+        try{
             universalUser = SpringContext.getBean(UniversalUserService.class).getUniversalUser(empl);
-        }
-        catch (UserNotFoundException e) {
+        }catch(UserNotFoundException e){
             return LaborConstants.BalanceInquiries.UnknownPersonName;
         }
 
         return universalUser.getPersonName();
-    }
-
+    }        
+    
     /**
-     * Sets the persons name
      * 
+     * This method set thes persons name
      * @param personName
      */
+    
     public void setPersonName(String personName) {
         this.personName = personName;
     }
 
     /**
-     * Gets an outstanding encumberance value
      * 
-     * @return outstanding encumberance value
+     * This method returns an outstanding encumberance value 
+     * @return
      */
     public KualiDecimal getOutstandingEncum() {
         return outstandingEncum;
     }
 
     /**
-     * Sets an outstanding encumberance value
      * 
+     * This method sets an outstanding encumberance value 
      * @param outstandingEncum
      */
     public void setOutstandingEncum(KualiDecimal outstandingEncum) {
@@ -98,8 +98,8 @@ public class AccountStatusCurrentFunds extends LedgerBalance {
     }
 
     /**
-     * Gets the Jul1BudgerAmount
      * 
+     * This method...
      * @return July1st amount
      */
     public KualiDecimal getJuly1BudgetAmount() {
@@ -107,74 +107,39 @@ public class AccountStatusCurrentFunds extends LedgerBalance {
     }
 
     /**
-     * Sets the july1BudgetAmount
      * 
+     * This method...
      * @param july1BudgetAmount
      */
     public void setJuly1BudgetAmount(KualiDecimal july1BudgetAmount) {
         this.july1BudgetAmount = july1BudgetAmount;
     }
 
-    /**
-     * Gets the variance which is calculated by substracting from July1BudgetAmount the YTD Actual, and outstanding encumbrance.
-     * 
-     * @return
-     */
     public KualiDecimal getVariance() {
-        return this.getJuly1BudgetAmount().subtract(getAnnualActualAmount()).subtract(getOutstandingEncum());
+        return this.variance;        
     }
 
-    /**
-     * Sets the variance which is calculated by substracting from July1BudgetAmount the YTD Actual, and outstanding encumbrance.
-     * 
-     * @param variance
-     */
     public void setVariance(KualiDecimal variance) {
         this.variance = variance;
     }
-
-    /**
-     * Returns a list of keys used to generate a query.
-     * 
-     * @param consolidated
-     * @return a list with the keys needed to generate a query
-     */
-    public List<String> getKeyFieldList(boolean consolidated) {
+    
+    public List<String> getKeyFieldList(boolean consolidated) {      
         List<String> primaryKeyList = new ArrayList<String>();
         primaryKeyList.add(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR);
         primaryKeyList.add(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE);
         primaryKeyList.add(KFSPropertyConstants.ACCOUNT_NUMBER);
-
-        if (!consolidated) {
+        
+        if (!consolidated) {        
             primaryKeyList.add(KFSPropertyConstants.SUB_ACCOUNT_NUMBER);
         }
-
+        
         primaryKeyList.add(KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
-
+        
         if (!consolidated) {
             primaryKeyList.add(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
-        }
+        }                    
         primaryKeyList.add(KFSPropertyConstants.POSITION_NUMBER);
         primaryKeyList.add(KFSPropertyConstants.EMPLID);
-
         return primaryKeyList;
-    }
-
-    /**
-     * Gets the annualActualAmount attribute.
-     * 
-     * @return Returns the annualActualAmount.
-     */
-    public KualiDecimal getAnnualActualAmount() {
-        return this.getAccountLineAnnualBalanceAmount().add(this.getContractsGrantsBeginningBalanceAmount());
-    }
-
-    /**
-     * Sets the annualActualAmount attribute value.
-     * 
-     * @param annualActualAmount The annualActualAmount to set.
-     */
-    public void setAnnualActualAmount(KualiDecimal annualActualAmount) {
-        this.annualActualAmount = annualActualAmount;
     }
 }

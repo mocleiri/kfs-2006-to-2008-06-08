@@ -15,46 +15,24 @@
  */
 package org.kuali.module.purap.document;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.dao.ojb.DocumentDaoOjb;
 import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.rule.event.KualiDocumentEvent;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.bo.Country;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
-import org.kuali.module.purap.bo.ItemType;
-import org.kuali.module.purap.bo.PurApItem;
+import org.kuali.module.purap.bo.PurApItemBase;
+import org.kuali.module.purap.bo.PurchasingApItem;
+import org.kuali.module.purap.bo.SourceDocumentReference;
 import org.kuali.module.purap.bo.Status;
-import org.kuali.module.purap.service.PurapAccountingService;
-import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.util.PurApOjbCollectionHelper;
-import org.kuali.module.purap.util.PurApRelatedViews;
-import org.kuali.module.vendor.bo.VendorAddress;
-import org.kuali.module.vendor.bo.VendorDetail;
-
-import edu.iu.uis.eden.exception.WorkflowException;
+import org.kuali.module.purap.bo.StatusHistory;
+import org.kuali.module.purap.bo.VendorDetail;
 
 /**
- * Base class for Purchasing-Accounts Payable Documents.
+ * Purchasing-Accounts Payable Document Base
  */
 public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDocumentBase implements PurchasingAccountsPayableDocument, AmountTotaling {
-
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchasingAccountsPayableDocumentBase.class);
 
     // SHARED FIELDS BETWEEN REQUISITION, PURCHASE ORDER, PAYMENT REQUEST, AND CREDIT MEMO
@@ -63,463 +41,104 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     private Integer vendorHeaderGeneratedIdentifier;
     private Integer vendorDetailAssignedIdentifier;
     private String vendorCustomerNumber;
-    private String vendorName;
-    private String vendorLine1Address;
-    private String vendorLine2Address;
-    private String vendorCityName;
-    private String vendorStateCode;
-    private String vendorAddressInternationalProvinceName;
-    private String vendorPostalCode;
-    private String vendorCountryCode;
-    private Integer accountsPayablePurchasingDocumentLinkIdentifier;
 
-    // NOT PERSISTED IN DB
-    private String vendorNumber;
-    private Integer vendorAddressGeneratedIdentifier;
-    private Boolean overrideWorkflowButtons = null;
-    private transient PurApRelatedViews relatedViews;
-    
+    // COMMON ELEMENTS
+    protected List<StatusHistory> statusHistories;
+    protected List<SourceDocumentReference> sourceDocumentReferences;
     // COLLECTIONS
-    private List<PurApItem> items;
-    private List<SourceAccountingLine> accountsForRouting; // don't use me for anything else!!
-
+    private List<PurchasingApItem> items;
+    
     // REFERENCE OBJECTS
     private Status status;
     private VendorDetail vendorDetail;
-    private Country vendorCountry;
 
-    // STATIC
-    public transient String[] belowTheLineTypes;
-
-    // workaround for purapOjbCollectionHelper - remove when merged into rice
-    public boolean allowDeleteAwareCollection = false;
-    
-
-    /**
-     * Default constructor to be overridden.
-     */
+    // CONSTRUCTORS
     public PurchasingAccountsPayableDocumentBase() {
-        items = new TypedArrayList(getItemClass());
+        items = new TypedArrayList(PurApItemBase.class);
+        this.statusHistories = new TypedArrayList( StatusHistory.class );
+    }
+    
+    public KualiDecimal getTotalDollarAmount() {
+        //FIXME get real total
+//        return Constants.ZERO;
+        return new KualiDecimal(100);
     }
 
     /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#getItemClass()
+     * Retrieve all references common to purchasing and ap
      */
-    public abstract Class getItemClass();
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#getPurApSourceDocumentIfPossible()
-     */
-    public abstract PurchasingAccountsPayableDocument getPurApSourceDocumentIfPossible();
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#getPurApSourceDocumentLabelIfPossible()
-     */
-    public abstract String getPurApSourceDocumentLabelIfPossible();
-
-    /**
-     * @see org.kuali.core.document.DocumentBase#prepareForSave()
-     */
-    @Override
-    public void prepareForSave(KualiDocumentEvent event) {
-        customPrepareForSave(event);
-        super.prepareForSave(event);
-    }
-
-    /**
-     * PURAP documents are all overriding this method to return false because sufficient funds checking should not be performed on
-     * route of any PURAP documents. Only the Purchase Order performs a sufficient funds check and it is manually forced during
-     * routing.
-     * 
-     * @see org.kuali.kfs.document.GeneralLedgerPostingDocumentBase#documentPerformsSufficientFundsCheck()
-     */
-    @Override
-    public boolean documentPerformsSufficientFundsCheck() {
-        return false;
-    }
-
-    /**
-     * @see org.kuali.core.document.DocumentBase#populateDocumentForRouting()
-     */
-    @Override
-    public void populateDocumentForRouting() {
-        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(this);
-        setAccountsForRouting(SpringContext.getBean(PurapAccountingService.class).generateSummary(getItems()));
-
-        // need to refresh to get the references for the searchable attributes (ie status) and for invoking route levels (ie account
-        // objects) -hjs
-        refreshNonUpdateableReferences();
-        for (SourceAccountingLine sourceLine : getAccountsForRouting()) {
-            sourceLine.refreshNonUpdateableReferences();
-        }
-        super.populateDocumentForRouting();
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#isDocumentStoppedInRouteNode(NodeDetails nodeDetails)
-     */
-    public boolean isDocumentStoppedInRouteNode(NodeDetails nodeDetails) {
-        List<String> currentRouteLevels = new ArrayList<String>();
-        try {
-            KualiWorkflowDocument workflowDoc = getDocumentHeader().getWorkflowDocument();
-            currentRouteLevels = Arrays.asList(getDocumentHeader().getWorkflowDocument().getNodeNames());
-            if (currentRouteLevels.contains(nodeDetails.getName()) && workflowDoc.isApprovalRequested()) {
-                return true;
-            }
-            return false;
-        }
-        catch (WorkflowException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Records the specified error message into the Log file and throws a runtime exception.
-     * 
-     * @param errorMessage the error message to be logged.
-     */
-    protected void logAndThrowRuntimeException(String errorMessage) {
-        this.logAndThrowRuntimeException(errorMessage, null);
-    }
-
-    /**
-     * Records the specified error message into the Log file and throws the specified runtime exception.
-     * 
-     * @param errorMessage the specified error message.
-     * @param e the specified runtime exception.
-     */
-    protected void logAndThrowRuntimeException(String errorMessage, Exception e) {
-        if (ObjectUtils.isNotNull(e)) {
-            LOG.error(errorMessage, e);
-            throw new RuntimeException(errorMessage, e);
-        }
-        else {
-            LOG.error(errorMessage);
-            throw new RuntimeException(errorMessage);
-        }
-    }
-
-    /**
-     * Allows child PO classes to customize the prepareForSave method. Most of the subclasses need to call the super's method to get
-     * the GL entry creation, but they each need to do different things to prepare for those entries to be created. This is only for
-     * PO since it has children classes that need different prep work for GL creation.
-     * 
-     * @param event the event involved in this action.
-     */
-    public void customPrepareForSave(KualiDocumentEvent event) {
-        // Need this here so that it happens before the GL work is done
-        SpringContext.getBean(PurapAccountingService.class).updateAccountAmounts(this);
-
-        // These next 5 lines are temporary changes so that we can use PurApOjbCollectionHelper for release 2.
-        // But these 5 lines will not be necessary anymore if the changes in PurApOjbCollectionHelper is
-        // merge into Rice. KULPURAP-1370 is the related jira.
-        this.allowDeleteAwareCollection = true;
-        DocumentDaoOjb docDao = SpringContext.getBean(DocumentDaoOjb.class);
-        PurchasingAccountsPayableDocumentBase retrievedDocument = (PurchasingAccountsPayableDocumentBase) docDao.findByDocumentHeaderId(this.getClass(), this.getDocumentNumber());
-        if (retrievedDocument != null) {
-            retrievedDocument.allowDeleteAwareCollection = true;
-        }
-
-        SpringContext.getBean(PurApOjbCollectionHelper.class).processCollections(docDao, this, retrievedDocument);
-        this.allowDeleteAwareCollection = false;
-        if (retrievedDocument != null) {
-            retrievedDocument.allowDeleteAwareCollection = false;
-        }
-    }
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getPersistedSourceAccountingLinesForComparison()
-     */
-    @Override
-    protected List getPersistedSourceAccountingLinesForComparison() {
-        PurapAccountingService purApAccountingService = SpringContext.getBean(PurapAccountingService.class);
-        List persistedSourceLines = new ArrayList();
-
-        for (PurApItem item : (List<PurApItem>) this.getItems()) {
-            // only check items that already have been persisted since last save
-            if (ObjectUtils.isNotNull(item.getItemIdentifier())) {
-                persistedSourceLines.addAll(purApAccountingService.getAccountsFromItem(item));
-            }
-        }
-        return persistedSourceLines;
-    }
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getSourceAccountingLinesForComparison()
-     */
-    @Override
-    protected List getSourceAccountingLinesForComparison() {
-        PurapAccountingService purApAccountingService = SpringContext.getBean(PurapAccountingService.class);
-        List currentSourceLines = new ArrayList();
-        for (PurApItem item : (List<PurApItem>) this.getItems()) {
-            currentSourceLines.addAll(item.getSourceAccountingLines());
-        }
-        return currentSourceLines;
-    }
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#buildListOfDeletionAwareLists()
-     */
-    @Override
-    public List buildListOfDeletionAwareLists() {
-        List managedLists = super.buildListOfDeletionAwareLists();
-        if (allowDeleteAwareCollection) {
-            managedLists.add(this.getItems());
-        }
-        return managedLists;
-    }
-
-    /**
-     * Populate the document for routing to the specified node.
-     * 
-     * @param routeNodeName the specified node to route to.
-     * @return false.
-     */
-    protected boolean documentWillStopInRouteNode(String routeNodeName) {
-        populateDocumentForRouting();
-        return false;
+    public void refreshAllReferences() {
+        this.refreshReferenceObject("status");
+        this.refreshReferenceObject("vendorDetail");
     }
 
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
-    @Override
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+        LinkedHashMap m = new LinkedHashMap();      
         m.put("purapDocumentIdentifier", this.purapDocumentIdentifier);
         return m;
     }
 
+    // GETTERS AND SETTERS
     /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#addItem(PurApItem item)
-     */
-    public void addItem(PurApItem item) {
-        int itemLinePosition = getItemLinePosition();
-        if (ObjectUtils.isNotNull(item.getItemLineNumber()) && (item.getItemLineNumber() > 0) && (item.getItemLineNumber() <= itemLinePosition)) {
-            itemLinePosition = item.getItemLineNumber().intValue() - 1;
-        }
-        items.add(itemLinePosition, item);
-        renumberItems(itemLinePosition);
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#deleteItem(int lineNum)
-     */
-    public void deleteItem(int lineNum) {
-        if (items.remove(lineNum) == null) {
-            // throw error here
-        }
-        renumberItems(lineNum);
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#renumberItems(int start)
-     */
-    public void renumberItems(int start) {
-        for (int i = start; i < items.size(); i++) {
-            PurApItem item = (PurApItem) items.get(i);
-            // only set the item line number for above the line items
-            if (item.getItemType().isItemTypeAboveTheLineIndicator()) {
-                item.setItemLineNumber(new Integer(i + 1));
-            }
-        }
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#itemSwap(int positionFrom, int positionTo)
-     */
-    public void itemSwap(int positionFrom, int positionTo) {
-        // if out of range do nothing
-        if ((positionTo < 0) || (positionTo >= getItemLinePosition())) {
-            return;
-        }
-        PurApItem item1 = this.getItem(positionFrom);
-        PurApItem item2 = this.getItem(positionTo);
-        Integer oldFirstPos = item1.getItemLineNumber();
-        // swap line numbers
-        item1.setItemLineNumber(item2.getItemLineNumber());
-        item2.setItemLineNumber(oldFirstPos);
-        // fix ordering in list
-        items.remove(positionFrom);
-        items.add(positionTo, item1);
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#getItemLinePosition()
-     */
-    public int getItemLinePosition() {
-        int belowTheLineCount = 0;
-        for (PurApItem item : items) {
-            if (!item.getItemType().isItemTypeAboveTheLineIndicator()) {
-                belowTheLineCount++;
-            }
-        }
-        return items.size() - belowTheLineCount;
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#getItem(int pos)
-     */
-    public PurApItem getItem(int pos) {
-        return (PurApItem) items.get(pos);
-    }
-
-    /**
-     * Iterates through the items of the document and returns the item with the line number equal to the number given, or null if a
-     * match is not found.
+     * Gets the vendorHeaderGeneratedIdentifier attribute.
      * 
-     * @param lineNumber line number to match on.
-     * @return the PurchasingAp Item if a match is found, else null.
-     */
-    public PurApItem getItemByLineNumber(int lineNumber) {
-        for (Iterator iter = items.iterator(); iter.hasNext();) {
-            PurApItem item = (PurApItem) iter.next();
-            if (item.getItemLineNumber().intValue() == lineNumber) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
-     */
-    @Override
-    public KualiDecimal getTotalDollarAmount() {
-        return getTotalDollarAmountAllItems();
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#setTotalDollarAmount(KualiDecimal amount)
-     */
-    public void setTotalDollarAmount(KualiDecimal amount) {
-        // do nothing, this is so that the jsp won't complain about totalDollarAmount have no setter method.
-    }
-
-    /**
-     * Computes the total dollar amount of all items.
+     * @return Returns the vendorHeaderGeneratedIdentifier
      * 
-     * @return the total dollar amount of all items.
      */
-    public KualiDecimal getTotalDollarAmountAllItems() {
-        return getTotalDollarAmountAllItems(null);
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#getTotalDollarAmountAllItems(String[] excludedTypes)
-     */
-    public KualiDecimal getTotalDollarAmountAllItems(String[] excludedTypes) {
-        return getTotalDollarAmountWithExclusions(excludedTypes, true);
-    }
-
-    /**
-     * Computes the total dollar amount of all above the line items.
-     * 
-     * @return the total dollar amount of all above the line items.
-     */
-    public KualiDecimal getTotalDollarAmountAboveLineItems() {
-        return getTotalDollarAmountAboveLineItems(null);
-    }
-
-    /**
-     * Computes the total dollar amount of all above the line items with the specified item types excluded.
-     * 
-     * @param excludedTypes the types of items to be excluded.
-     * @return the total dollar amount of all above the line items with the specified item types excluded..
-     */
-    public KualiDecimal getTotalDollarAmountAboveLineItems(String[] excludedTypes) {
-        return getTotalDollarAmountWithExclusions(excludedTypes, false);
-    }
-
-    /**
-     * Computes the total dollar amount with the specified item types and possibly below the line items excluded.
-     * 
-     * @param excludedTypes the types of items to be excluded.
-     * @param includeBelowTheLine indicates whether below the line items shall be included.
-     * @return the total dollar amount with the specified item types excluded.
-     */
-    public KualiDecimal getTotalDollarAmountWithExclusions(String[] excludedTypes, boolean includeBelowTheLine) {
-        if (excludedTypes == null) {
-            excludedTypes = new String[] {};
-        }
-
-        KualiDecimal total = new KualiDecimal(BigDecimal.ZERO);
-        for (PurApItem item : (List<PurApItem>) getItems()) {
-            item.refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
-            ItemType it = item.getItemType();
-            if ((includeBelowTheLine || it.isItemTypeAboveTheLineIndicator()) && !ArrayUtils.contains(excludedTypes, it.getItemTypeCode())) {
-                KualiDecimal extendedPrice = item.getExtendedPrice();
-                KualiDecimal itemTotal = (extendedPrice != null) ? extendedPrice : KualiDecimal.ZERO;
-                total = total.add(itemTotal);
-            }
-        }
-        return total;
-    }
-
-    /**
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#templateVendorAddress(VendorAddress)
-     */
-    public void templateVendorAddress(VendorAddress vendorAddress) {
-        if (vendorAddress == null) {
-            return;
-        }
-        this.setVendorLine1Address(vendorAddress.getVendorLine1Address());
-        this.setVendorLine2Address(vendorAddress.getVendorLine2Address());
-        this.setVendorCityName(vendorAddress.getVendorCityName());
-        this.setVendorStateCode(vendorAddress.getVendorStateCode());
-        this.setVendorPostalCode(vendorAddress.getVendorZipCode());
-        this.setVendorCountryCode(vendorAddress.getVendorCountryCode());
-    }
-
-    /**
-     * Returns the vendor number for this document.
-     * 
-     * @return the vendor number for this document.
-     * @see org.kuali.module.purap.document.PurchasingAccountsPayableDocument#getVendorNumber()
-     */
-    public String getVendorNumber() {
-        if (StringUtils.isNotEmpty(vendorNumber)) {
-            return vendorNumber;
-        }
-        else if (ObjectUtils.isNotNull(vendorDetail)) {
-            return vendorDetail.getVendorNumber();
-        }
-        else
-            return "";
-    }
-
-    public void setVendorNumber(String vendorNumber) {
-        this.vendorNumber = vendorNumber;
-    }
-
-    public Boolean getOverrideWorkflowButtons() {
-        return overrideWorkflowButtons;
-    }
-
-    public void setOverrideWorkflowButtons(Boolean overrideWorkflowButtons) {
-        this.overrideWorkflowButtons = overrideWorkflowButtons;
-    }
-
-    public Integer getVendorHeaderGeneratedIdentifier() {
+    public Integer getVendorHeaderGeneratedIdentifier() { 
         return vendorHeaderGeneratedIdentifier;
     }
 
+    /**
+     * Sets the vendorHeaderGeneratedIdentifier attribute.
+     * 
+     * @param vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier to set.
+     * 
+     */
     public void setVendorHeaderGeneratedIdentifier(Integer vendorHeaderGeneratedIdentifier) {
         this.vendorHeaderGeneratedIdentifier = vendorHeaderGeneratedIdentifier;
     }
 
-    public Integer getVendorDetailAssignedIdentifier() {
+
+    /**
+     * Gets the vendorDetailAssignedIdentifier attribute.
+     * 
+     * @return Returns the vendorDetailAssignedIdentifier
+     * 
+     */
+    public Integer getVendorDetailAssignedIdentifier() { 
         return vendorDetailAssignedIdentifier;
     }
 
+    /**
+     * Sets the vendorDetailAssignedIdentifier attribute.
+     * 
+     * @param vendorDetailAssignedIdentifier The vendorDetailAssignedIdentifier to set.
+     * 
+     */
     public void setVendorDetailAssignedIdentifier(Integer vendorDetailAssignedIdentifier) {
         this.vendorDetailAssignedIdentifier = vendorDetailAssignedIdentifier;
     }
 
-    public String getVendorCustomerNumber() {
+    /**
+     * Gets the vendorCustomerNumber attribute.
+     * 
+     * @return Returns the vendorCustomerNumber
+     * 
+     */
+    public String getVendorCustomerNumber() { 
         return vendorCustomerNumber;
     }
 
+    /**
+     * Sets the vendorCustomerNumber attribute.
+     * 
+     * @param vendorCustomerNumber The vendorCustomerNumber to set.
+     * 
+     */
     public void setVendorCustomerNumber(String vendorCustomerNumber) {
         this.vendorCustomerNumber = vendorCustomerNumber;
     }
@@ -533,9 +152,6 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
     }
 
     public Status getStatus() {
-        if (ObjectUtils.isNull(this.status) && StringUtils.isNotEmpty(this.getStatusCode())) {
-            this.refreshReferenceObject(PurapPropertyConstants.STATUS);
-        }
         return status;
     }
 
@@ -551,152 +167,101 @@ public abstract class PurchasingAccountsPayableDocumentBase extends AccountingDo
         this.statusCode = statusCode;
     }
 
-    public VendorDetail getVendorDetail() {
-        return vendorDetail;
+    public List<StatusHistory> getStatusHistories() {
+        return statusHistories;
     }
 
+    public void setStatusHistories(List<StatusHistory> statusHistories) {
+        this.statusHistories = statusHistories;
+    }
+
+    public VendorDetail getVendorDetail() {
+        return vendorDetail;
+}
     public void setVendorDetail(VendorDetail vendorDetail) {
         this.vendorDetail = vendorDetail;
     }
 
+    public List<SourceDocumentReference> getSourceDocumentReferences() {
+        return sourceDocumentReferences;
+}
+    public void setSourceDocumentReferences(List<SourceDocumentReference> sourceDocumentReferences) {
+        this.sourceDocumentReferences = sourceDocumentReferences;
+    }
+    
+    /**
+     * Gets the items attribute. 
+     * @return Returns the items.
+     */
     public List getItems() {
         return items;
     }
 
+    /**
+     * Sets the items attribute value.
+     * @param items The items to set.
+     */
     public void setItems(List items) {
         this.items = items;
     }
 
-    public String getVendorCityName() {
-        return vendorCityName;
-    }
-
-    public void setVendorCityName(String vendorCityName) {
-        this.vendorCityName = vendorCityName;
-    }
-
-    public String getVendorCountryCode() {
-        return vendorCountryCode;
-    }
-
-    public void setVendorCountryCode(String vendorCountryCode) {
-        this.vendorCountryCode = vendorCountryCode;
-    }
-
-    public String getVendorLine1Address() {
-        return vendorLine1Address;
-    }
-
-    public void setVendorLine1Address(String vendorLine1Address) {
-        this.vendorLine1Address = vendorLine1Address;
-    }
-
-    public String getVendorLine2Address() {
-        return vendorLine2Address;
-    }
-
-    public void setVendorLine2Address(String vendorLine2Address) {
-        this.vendorLine2Address = vendorLine2Address;
-    }
-
-    public String getVendorName() {
-        return vendorName;
-    }
-
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
-    }
-
-    public String getVendorPostalCode() {
-        return vendorPostalCode;
-    }
-
-    public void setVendorPostalCode(String vendorPostalCode) {
-        this.vendorPostalCode = vendorPostalCode;
-    }
-
-    public String getVendorStateCode() {
-        return vendorStateCode;
-    }
-
-    public void setVendorStateCode(String vendorStateCode) {
-        this.vendorStateCode = vendorStateCode;
-    }
-    
-    public String getVendorAddressInternationalProvinceName() {
-        return vendorAddressInternationalProvinceName;
-    }
-
-    public void setVendorAddressInternationalProvinceName(String vendorAddressInternationalProvinceName) {
-        this.vendorAddressInternationalProvinceName = vendorAddressInternationalProvinceName;
-    }
-
-    public Integer getVendorAddressGeneratedIdentifier() {
-        return vendorAddressGeneratedIdentifier;
-    }
-
-    public void setVendorAddressGeneratedIdentifier(Integer vendorAddressGeneratedIdentifier) {
-        this.vendorAddressGeneratedIdentifier = vendorAddressGeneratedIdentifier;
-    }
-
-    public Integer getAccountsPayablePurchasingDocumentLinkIdentifier() {
-        return accountsPayablePurchasingDocumentLinkIdentifier;
-    }
-
-    public void setAccountsPayablePurchasingDocumentLinkIdentifier(Integer accountsPayablePurchasingDocumentLinkIdentifier) {
-        this.accountsPayablePurchasingDocumentLinkIdentifier = accountsPayablePurchasingDocumentLinkIdentifier;
-    }
-
-    public String[] getBelowTheLineTypes() {
-        if (this.belowTheLineTypes == null) {
-            this.belowTheLineTypes = SpringContext.getBean(PurapService.class).getBelowTheLineForDocument(this);
+    public void addItem(PurchasingApItem item) {
+        int itemLinePosition = items.size();
+        if(item.getItemLineNumber()!=null) {
+            itemLinePosition = item.getItemLineNumber().intValue();
         }
-        return belowTheLineTypes;
-    }
-
-    public Country getVendorCountry() {
-        return vendorCountry;
-    }
-
-    /**
-     * Added only to allow for {@link org.kuali.module.purap.util.PurApObjectUtils} class to work correctly.
-     * 
-     * @deprecated
-     */
-    public void setVendorCountry(Country vendorCountry) {
-        this.vendorCountry = vendorCountry;
-    }
-
-    public List<SourceAccountingLine> getAccountsForRouting() {
-        return accountsForRouting;
-    }
-
-    public void setAccountsForRouting(List<SourceAccountingLine> accountsForRouting) {
-        this.accountsForRouting = accountsForRouting;
-    }
-    
-    /**
-     * Determines whether the account is debit. It always returns false.
-     * 
-     * @param financialDocument The document containing the account to be validated.
-     * @param accountingLine The account to be validated.
-     * @return boolean false.
-     * @see org.kuali.kfs.rule.AccountingLineRule#isDebit(org.kuali.kfs.document.AccountingDocument,
-     *      org.kuali.kfs.bo.AccountingLine)
-     */
-    public boolean isDebit(GeneralLedgerPendingEntrySourceDetail postable) {
-        return false;
-    }
-    
-    public PurApRelatedViews getRelatedViews() {
-        if (relatedViews == null) {
-            relatedViews = new PurApRelatedViews(this.documentNumber, this.accountsPayablePurchasingDocumentLinkIdentifier);
+       
+        //if the user entered something set line number to that
+        if(itemLinePosition>0&&itemLinePosition<items.size()) {
+            itemLinePosition = item.getItemLineNumber() - 1;
         }
-        return relatedViews;
+        
+        items.add(itemLinePosition,item);
+        renumberItems(itemLinePosition);
+    }
+    
+    public void deleteItem(int lineNum) {
+        if(items.remove(lineNum)==null) {
+            //throw error here
+        }
+        renumberItems(lineNum);
+    }
+    
+    public void renumberItems(int start) {
+        for (int i = start; i<items.size(); i++) {
+            PurchasingApItem item = (PurchasingApItem)items.get(i);
+            item.setItemLineNumber(new Integer(i+1));
+        }
+    }
+    
+    public PurchasingApItem getItem(int pos) {
+        while (getItems().size() <= pos) {
+            
+            try {
+                getItems().add(getItemClass().newInstance());
+            }
+            catch (InstantiationException e) {
+                throw new RuntimeException("Unable to get class");
+            }
+            catch (IllegalAccessException e) {
+                throw new RuntimeException("Unable to get class");
+            }
+            catch (NullPointerException e) {
+                throw new RuntimeException("Can't instantiate Purchasing Item from base");
+            }
+        }
+        return (PurchasingApItem)items.get(pos);
+    }
+    public KualiDecimal getTotal() {
+        KualiDecimal total = new KualiDecimal("0");
+        for (PurchasingApItem item : items) {
+           total = total.add(item.getExtendedPrice());
+       }
+       return total;
     }
 
-    public void setRelatedViews(PurApRelatedViews relatedViews) {
-        this.relatedViews = relatedViews;
+    public Class getItemClass() {
+        //should we throw unimplemented method here
+        return null;
     }
-
 }

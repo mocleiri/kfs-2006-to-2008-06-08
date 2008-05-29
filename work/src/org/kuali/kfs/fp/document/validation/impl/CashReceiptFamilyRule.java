@@ -54,7 +54,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
     public boolean isAmountValid(AccountingDocument document, AccountingLine accountingLine) {
         KualiDecimal amount = accountingLine.getAmount();
 
-        if (KualiDecimal.ZERO.compareTo(amount) == 0) { // amount == 0
+        if (KFSConstants.ZERO.compareTo(amount) == 0) { // amount == 0
             GlobalVariables.getErrorMap().putError(KFSConstants.AMOUNT_PROPERTY_NAME, KFSKeyConstants.ERROR_ZERO_AMOUNT, "an accounting line");
             return false;
         }
@@ -83,7 +83,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
             if (cd == null) {
                 throw new IllegalStateException("There is no cash drawer associated with unitName '" + unitName + "' from cash receipt " + crd.getDocumentNumber());
             }
-            else if (cd.isClosed() && !crd.getDocumentHeader().getWorkflowDocument().isAdHocRequested()) {
+            else if (cd.isClosed()) {
                 GlobalVariables.getErrorMap().putError(KFSConstants.GLOBAL_ERRORS, KFSKeyConstants.CashReceipt.MSG_CASH_DRAWER_CLOSED_VERIFICATION_NOT_ALLOWED, cd.getWorkgroupName());
                 valid = false;
             }
@@ -106,7 +106,7 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
         CashReceiptFamilyBase cr = (CashReceiptFamilyBase) financialDocument;
 
         // make sure that cash reconciliation total is greater than zero
-        boolean isValid = cr.getTotalDollarAmount().compareTo(KualiDecimal.ZERO) > 0;
+        boolean isValid = cr.getTotalDollarAmount().compareTo(KFSConstants.ZERO) > 0;
         if (!isValid) {
             GlobalVariables.getErrorMap().putError(DOCUMENT_ERROR_PREFIX + KFSPropertyConstants.SUM_TOTAL_AMOUNT, KFSKeyConstants.CashReceipt.ERROR_DOCUMENT_CASH_RECEIPT_NO_CASH_RECONCILIATION_TOTAL);
         }
@@ -155,6 +155,41 @@ public class CashReceiptFamilyRule extends AccountingDocumentRuleBase implements
             return true;
         }
     }
+
+    /**
+     * Overrides to set the entry's description to the description from the accounting line, if a value exists.
+     * 
+     * @param financialDocument submitted accounting document
+     * @param accountingLine accounting line in accounting document
+     * @param explicitEntry general ledger pending entry
+     * 
+     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
+     *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
+     */
+    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument financialDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        String accountingLineDescription = accountingLine.getFinancialDocumentLineDescription();
+        if (StringUtils.isNotBlank(accountingLineDescription)) {
+            explicitEntry.setTransactionLedgerEntryDescription(accountingLineDescription);
+        }
+    }
+
+    /**
+     * Returns true if accounting line is debit
+     * 
+     * @param financialDocument
+     * @param accountingLine
+     * @param true if accountline line 
+     * 
+     * @see IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
+     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
+     *      org.kuali.core.bo.AccountingLine)
+     */
+    public boolean isDebit(AccountingDocument financialDocument, AccountingLine accountingLine) {
+        // error corrections are not allowed
+        IsDebitUtils.disallowErrorCorrectionDocumentCheck(this, financialDocument);
+        return IsDebitUtils.isDebitConsideringType(this, financialDocument, accountingLine);
+    }
+
 
     /**
      * Return true if source total is non-zero

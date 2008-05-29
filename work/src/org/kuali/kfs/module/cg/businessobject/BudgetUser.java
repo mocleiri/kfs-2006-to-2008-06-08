@@ -18,6 +18,7 @@ package org.kuali.module.kra.budget.bo;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.ojb.broker.PersistenceBroker;
 import org.apache.ojb.broker.PersistenceBrokerException;
@@ -28,13 +29,14 @@ import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.service.ChartUserService;
 import org.kuali.module.kra.budget.document.BudgetDocument;
 import org.kuali.module.kra.budget.service.BudgetPersonnelService;
 
 /**
  * This class...
+ * 
+ * 
  */
 public class BudgetUser extends PersistableBusinessObjectBase implements Comparable {
 
@@ -80,7 +82,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
         budgetPersonnelService = SpringContext.getBean(BudgetPersonnelService.class);
         chartUserService = (ChartUserService) SpringContext.getBean(KualiModuleService.class).getModule("chart").getModuleUserService();
     }
-
+    
     public BudgetUser(String documentNumber, Integer budgetUserSequenceNumber) {
         this();
         this.documentNumber = documentNumber;
@@ -104,7 +106,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
         this.personSecretarialClericalIndicator = budgetUser.isPersonSecretarialClericalIndicator();
         this.personPostDoctoralIndicator = budgetUser.isPersonPostDoctoralIndicator();
         this.budgetSalaryFiscalYear = budgetUser.getBudgetSalaryFiscalYear();
-
+        
         this.userAppointmentTasks = new ArrayList(budgetUser.getUserAppointmentTasks());
     }
 
@@ -264,7 +266,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Sets the user attribute value.
      * 
      * @param user The user to set.
-     * @deprecated - Should not be set, should be retrieved by SpringContext each time. See getUser() above.
+     * @deprecated - Should not be set, should be retrieved by SpringContext each time.  See getUser() above.
      */
     public void setUser(UniversalUser user) {
         this.user = user;
@@ -294,6 +296,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Gets the personNamePrefixText attribute.
      * 
      * @return Returns the personNamePrefixText
+     * 
      */
     public String getPersonNamePrefixText() {
         return personNamePrefixText;
@@ -303,6 +306,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Sets the personNamePrefixText attribute.
      * 
      * @param personNamePrefixText The personNamePrefixText to set.
+     * 
      */
     public void setPersonNamePrefixText(String personNamePrefixText) {
         this.personNamePrefixText = personNamePrefixText;
@@ -312,6 +316,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Gets the personNameSuffixText attribute.
      * 
      * @return Returns the personNameSuffixText
+     * 
      */
     public String getPersonNameSuffixText() {
         return personNameSuffixText;
@@ -321,6 +326,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Sets the personNameSuffixText attribute.
      * 
      * @param personNameSuffixText The personNameSuffixText to set.
+     * 
      */
     public void setPersonNameSuffixText(String personNameSuffixText) {
         this.personNameSuffixText = personNameSuffixText;
@@ -330,6 +336,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Gets the personPostDoctoralIndicator attribute.
      * 
      * @return Returns the personPostDoctoralIndicator
+     * 
      */
     public boolean isPersonPostDoctoralIndicator() {
         return personPostDoctoralIndicator;
@@ -339,6 +346,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Sets the personPostDoctoralIndicator attribute.
      * 
      * @param personPostDoctoralIndicator The personPostDoctoralIndicator to set.
+     * 
      */
     public void setPersonPostDoctoralIndicator(boolean personPostDoctoralIndicator) {
         this.personPostDoctoralIndicator = personPostDoctoralIndicator;
@@ -348,6 +356,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Gets the personSecretarialClericalIndicator attribute.
      * 
      * @return Returns the personSecretarialClericalIndicator
+     * 
      */
     public boolean isPersonSecretarialClericalIndicator() {
         return personSecretarialClericalIndicator;
@@ -357,6 +366,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Sets the personSecretarialClericalIndicator attribute.
      * 
      * @param personSecretarialClericalIndicator The personSecretarialClericalIndicator to set.
+     * 
      */
     public void setPersonSecretarialClericalIndicator(boolean personSecretarialClericalIndicator) {
         this.personSecretarialClericalIndicator = personSecretarialClericalIndicator;
@@ -366,6 +376,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Gets the personSeniorKeyIndicator attribute.
      * 
      * @return Returns the personSeniorKeyIndicator
+     * 
      */
     public boolean isPersonSeniorKeyIndicator() {
         return personSeniorKeyIndicator;
@@ -375,6 +386,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Sets the personSeniorKeyIndicator attribute.
      * 
      * @param personSeniorKeyIndicator The personSeniorKeyIndicator to set.
+     * 
      */
     public void setPersonSeniorKeyIndicator(boolean personSeniorKeyIndicator) {
         this.personSeniorKeyIndicator = personSeniorKeyIndicator;
@@ -390,25 +402,16 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
                 this.baseSalary = this.user.getPersonBaseSalaryAmount();
             }
             else {
-                this.baseSalary = KualiDecimal.ZERO;
+                this.baseSalary = new KualiDecimal(0);
             }
 
-            String chart = "";
-            String org = "";
-            if (this.user.getModuleUser(ChartUser.MODULE_ID) != null) {
-                chart = ((ChartUser) this.user.getModuleUser(ChartUser.MODULE_ID)).getChartOfAccountsCode();
-                org = ((ChartUser) this.user.getModuleUser(ChartUser.MODULE_ID)).getOrganizationCode();
-            }
-            else {
-                chart = SpringContext.getBean(ChartUserService.class).getDefaultChartCode(this.user);
-                org = SpringContext.getBean(ChartUserService.class).getDefaultOrganizationCode(this.user);
-            }
-
-            this.fiscalCampusCode = chart;
-            this.primaryDepartmentCode = org;
+            StringTokenizer chartOrg = new StringTokenizer(this.user.getPrimaryDepartmentCode(), "-");
+            
+            this.fiscalCampusCode = chartOrg.nextToken();
+            this.primaryDepartmentCode = chartOrg.hasMoreElements() ? chartOrg.nextToken() : this.fiscalCampusCode;
         }
         else {
-            this.baseSalary = KualiDecimal.ZERO;
+            this.baseSalary = new KualiDecimal(0);
             this.fiscalCampusCode = "";
             this.primaryDepartmentCode = "";
         }
@@ -451,7 +454,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
     public void setAppointmentTypeDescription(String appointmentTypeDescription) {
         this.appointmentTypeDescription = appointmentTypeDescription;
     }
-
+    
     /**
      * Log the state of this object.
      */
@@ -562,6 +565,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Gets the personProjectDirectorIndicator attribute.
      * 
      * @return Returns the personProjectDirectorIndicator
+     * 
      */
     public boolean isPersonProjectDirectorIndicator() {
         return personProjectDirectorIndicator;
@@ -571,6 +575,7 @@ public class BudgetUser extends PersistableBusinessObjectBase implements Compara
      * Sets the personProjectDirectorIndicator attribute.
      * 
      * @param personProjectDirectorIndicator The personProjectDirectorIndicator to set.
+     * 
      */
     public void setPersonProjectDirectorIndicator(boolean personProjectDirectorIndicator) {
         this.personProjectDirectorIndicator = personProjectDirectorIndicator;
