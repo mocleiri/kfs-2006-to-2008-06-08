@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,7 @@ package org.kuali.module.gl.batch.poster.impl;
 
 import java.util.Date;
 
-import org.apache.ojb.broker.metadata.MetadataManager;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
+import org.kuali.Constants;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.IndirectCostRecoveryExclusionAccount;
@@ -35,14 +33,12 @@ import org.kuali.module.gl.bo.ExpenditureTransaction;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.ExpenditureTransactionDao;
 import org.kuali.module.gl.service.IcrTransaction;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * This implementation of PostTransaction creates ExpenditureTransactions, temporary records used
- * for ICR generation
+ * 
+ * 
  */
-@Transactional
 public class PostExpenditureTransaction implements IcrTransaction, PostTransaction {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostExpenditureTransaction.class);
 
@@ -68,7 +64,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
     }
 
     /**
-     * Creates a PostExpenditureTransaction instance
+     * 
      */
     public PostExpenditureTransaction() {
         super();
@@ -77,31 +73,26 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
     /**
      * This will determine if this transaction is an ICR eligible transaction
      * 
-     * @param objectType the object type of the transaction
-     * @param account the account of the transaction
-     * @param subAccountNumber the subAccountNumber of the transaction
-     * @param objectCode the object code of the transaction
-     * @param universityFiscalPeriodCode the accounting period code of the transactoin
-     * @return true if the transaction is an ICR transaction and therefore should have an expenditure transaction created for it; false if otherwise
+     * @return
      */
     public boolean isIcrTransaction(ObjectType objectType, Account account, String subAccountNumber, ObjectCode objectCode, String universityFiscalPeriodCode) {
         LOG.debug("isIcrTransaction() started");
 
         // Is the ICR indicator set and the ICR Series identifier set?
         // Is the period code a non-balance period? If so, continue, if not, we aren't posting this transaction
-        if (objectType.isFinObjectTypeIcrSelectionIndicator() && StringUtils.hasText(account.getFinancialIcrSeriesIdentifier()) && (!KFSConstants.PERIOD_CODE_ANNUAL_BALANCE.equals(universityFiscalPeriodCode)) && (!KFSConstants.PERIOD_CODE_BEGINNING_BALANCE.equals(universityFiscalPeriodCode)) && (!KFSConstants.PERIOD_CODE_CG_BEGINNING_BALANCE.equals(universityFiscalPeriodCode))) {
+        if (objectType.isFinObjectTypeIcrSelectionIndicator() && StringUtils.hasText(account.getFinancialIcrSeriesIdentifier()) && (!Constants.PERIOD_CODE_ANNUAL_BALNCE.equals(universityFiscalPeriodCode)) && (!Constants.PERIOD_CODE_BEGINNING_BALNCE.equals(universityFiscalPeriodCode)) && (!Constants.PERIOD_CODE_CG_BEGINNING_BALNCE.equals(universityFiscalPeriodCode))) {
             // Continue on the posting process
 
             // Check the sub account type code. A21 subaccounts with the type of CS don't get posted
             A21SubAccount a21SubAccount = a21SubAccountDao.getByPrimaryKey(account.getChartOfAccountsCode(), account.getAccountNumber(), subAccountNumber);
-            if ((a21SubAccount != null) && KFSConstants.COST_SHARE.equals(a21SubAccount.getSubAccountTypeCode())) {
+            if ((a21SubAccount != null) && Constants.COST_SHARE.equals(a21SubAccount.getSubAccountTypeCode())) {
                 // No need to post this
                 LOG.debug("isIcrTransaction() A21 subaccounts with type of CS - not posted");
                 return false;
             }
 
             // Do we exclude this account from ICR because account/object is in the table?
-            IndirectCostRecoveryExclusionAccount excAccount = indirectCostRecoveryExclusionAccountDao.getByPrimaryKey(account.getChartOfAccountsCode(), account.getAccountNumber(), objectCode.getChartOfAccountsCode(), objectCode.getFinancialObjectCode());
+            IndirectCostRecoveryExclusionAccount excAccount = indirectCostRecoveryExclusionAccountDao.getByPrimaryKey(account.getChartOfAccountsCode(), account.getAccountNumber(), objectCode.getReportsToChartOfAccountsCode(), objectCode.getReportsToFinancialObjectCode());
             if (excAccount != null) {
                 // No need to post this
                 LOG.debug("isIcrTransaction() ICR Excluded account - not posted");
@@ -114,32 +105,14 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
             }
             else {
                 // If the ICR type code is empty or 10, don't post
-
-                // TODO: use type 10 constant
-                if ((!StringUtils.hasText(account.getAcctIndirectCostRcvyTypeCd())) || KFSConstants.MONTH10.equals(account.getAcctIndirectCostRcvyTypeCd())) {
+                if ((!StringUtils.hasText(account.getAcctIndirectCostRcvyTypeCd())) || Constants.MONTH10.equals(account.getAcctIndirectCostRcvyTypeCd())) {
                     // No need to post this
                     LOG.debug("isIcrTransaction() ICR type is null or 10 - not posted");
                     return false;
                 }
 
-                // If the type is excluded, don't post. First step finds the top level object code...
-                ObjectCode currentObjectCode = objectCode;
-                boolean foundIt = false;
-                while (!foundIt) {
-                    if (currentObjectCode.getChartOfAccountsCode().equals(currentObjectCode.getReportsToChartOfAccountsCode()) && currentObjectCode.getFinancialObjectCode().equals(currentObjectCode.getReportsToFinancialObjectCode())) {
-                        foundIt = true;
-                    }
-                    else {
-                        if (ObjectUtils.isNull(currentObjectCode.getReportsToFinancialObject())) {
-                            foundIt = true;
-                        }
-                        else {
-                            currentObjectCode = currentObjectCode.getReportsToFinancialObject();
-                        }
-                    }
-                }
-                // second step checks if the top level object code is to be excluded...
-                IndirectCostRecoveryExclusionType excType = indirectCostRecoveryExclusionTypeDao.getByPrimaryKey(account.getAcctIndirectCostRcvyTypeCd(), currentObjectCode.getChartOfAccountsCode(), currentObjectCode.getFinancialObjectCode());
+                // If the type is excluded, don't post
+                IndirectCostRecoveryExclusionType excType = indirectCostRecoveryExclusionTypeDao.getByPrimaryKey(account.getAcctIndirectCostRcvyTypeCd(), objectCode.getReportsToChartOfAccountsCode(), objectCode.getReportsToFinancialObjectCode());
                 if (excType != null) {
                     // No need to post this
                     LOG.debug("isIcrTransaction() ICR Excluded type - not posted");
@@ -155,48 +128,36 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
         }
     }
 
-    /**
-     * If the transaction is a valid ICR transaction, posts an expenditure transaction record for the transaction
+    /*
+     * (non-Javadoc)
      * 
-     * @param t the transaction which is being posted
-     * @param mode the mode the poster is currently running in
-     * @param postDate the date this transaction should post to
-     * @return the accomplished post type
-     * @see org.kuali.module.gl.batch.poster.PostTransaction#post(org.kuali.module.gl.bo.Transaction, int, java.util.Date)
+     * @see org.kuali.module.gl.batch.poster.PostTransaction#post(org.kuali.module.gl.bo.Transaction)
      */
     public String post(Transaction t, int mode, Date postDate) {
         LOG.debug("post() started");
 
         if (isIcrTransaction(t.getObjectType(), t.getAccount(), t.getSubAccountNumber(), t.getFinancialObject(), t.getUniversityFiscalPeriodCode())) {
-            return postTransaction(t, mode);
+            return postTransaction(t, mode, postDate);
         }
-        return GLConstants.EMPTY_CODE;
+        return "";
     }
 
-    /**
-     * Actually posts the transaction to the appropriate expenditure transaction record
-     * 
-     * @param t the transaction to post
-     * @param mode the mode of the poster as it is currently running
-     * @return the accomplished post type
-     */
-    private String postTransaction(Transaction t, int mode) {
+    private String postTransaction(Transaction t, int mode, Date postDate) {
         LOG.debug("postTransaction() started");
 
-        String returnCode = GLConstants.UPDATE_CODE;
+        String returnCode = "U";
 
         ExpenditureTransaction et = expenditureTransactionDao.getByTransaction(t);
         if (et == null) {
-            LOG.warn("Posting expenditure transation");
             et = new ExpenditureTransaction(t);
-            returnCode = GLConstants.INSERT_CODE;
+            returnCode = "I";
         }
 
-        if (org.apache.commons.lang.StringUtils.isBlank(t.getOrganizationReferenceId())) {
-            et.setOrganizationReferenceId(GLConstants.getDashOrganizationReferenceId());
+        if (t.getOrganizationReferenceId() == null) {
+            et.setOrganizationReferenceId(GLConstants.DASH_ORGANIZATION_REFERENCE_ID);
         }
 
-        if (KFSConstants.GL_DEBIT_CODE.equals(t.getTransactionDebitCreditCode()) || KFSConstants.GL_BUDGET_CODE.equals(t.getTransactionDebitCreditCode())) {
+        if (Constants.GL_DEBIT_CODE.equals(t.getTransactionDebitCreditCode()) || Constants.GL_BUDGET_CODE.equals(t.getTransactionDebitCreditCode())) {
             et.setAccountObjectDirectCostAmount(et.getAccountObjectDirectCostAmount().add(t.getTransactionLedgerEntryAmount()));
         }
         else {
@@ -208,10 +169,7 @@ public class PostExpenditureTransaction implements IcrTransaction, PostTransacti
         return returnCode;
     }
 
-    /**
-     * @see org.kuali.module.gl.batch.poster.PostTransaction#getDestinationName()
-     */
     public String getDestinationName() {
-        return MetadataManager.getInstance().getGlobalRepository().getDescriptorFor(ExpenditureTransaction.class).getFullTableName();
+        return "GL_EXPEND_TRN_T";
     }
 }

@@ -27,6 +27,7 @@ import org.kuali.module.chart.bo.SubObjCd;
  */
 public class SubObjectPreRules extends MaintenancePreRulesBase {
     private SubObjCd newSubObjectCode;
+    private SubObjCd copySubObjectCode;
 
 
     public SubObjectPreRules() {
@@ -78,5 +79,7 @@ public class SubObjectPreRules extends MaintenancePreRulesBase {
 
         // setup newAccount convenience objects, make sure all possible sub-objects are populated
         newSubObjectCode = (SubObjCd) document.getNewMaintainableObject().getBusinessObject();
+        copySubObjectCode = (SubObjCd) ObjectUtils.deepCopy(newSubObjectCode);
+        copySubObjectCode.refresh();
     }
 }

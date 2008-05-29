@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/gl/businessobject/lookup/BusinessObjectFieldConverter.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +23,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.PropertyConstants;
 
 /**
- * This class converts field values from G/L Business Objects to G?L transactions
+ * This class...
+ * 
+ * 
  */
 public class BusinessObjectFieldConverter {
 
     /**
      * This method converts the field values from normal GL business objects to GL transaction
      * 
-     * @param fields list of fields in GL business object
+     * @param fields
      * @return the list of fields for GL transaction
      */
     public static List convertToTransactionFields(List fields) {
@@ -132,14 +136,14 @@ public class BusinessObjectFieldConverter {
     private static Map getPropertyMappingTable() {
         Map propertyMappingTable = new HashMap();
 
-        propertyMappingTable.put(KFSPropertyConstants.OBJECT_CODE, KFSPropertyConstants.FINANCIAL_OBJECT_CODE);
-        propertyMappingTable.put(KFSPropertyConstants.SUB_OBJECT_CODE, KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
-        propertyMappingTable.put(KFSPropertyConstants.OBJECT_TYPE_CODE, KFSPropertyConstants.FINANCIAL_OBJECT_TYPE_CODE);
+        propertyMappingTable.put(PropertyConstants.OBJECT_CODE, PropertyConstants.FINANCIAL_OBJECT_CODE);
+        propertyMappingTable.put(PropertyConstants.SUB_OBJECT_CODE, PropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
+        propertyMappingTable.put(PropertyConstants.OBJECT_TYPE_CODE, PropertyConstants.FINANCIAL_OBJECT_TYPE_CODE);
 
-        propertyMappingTable.put(KFSPropertyConstants.BALANCE_TYPE_CODE, KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
-        propertyMappingTable.put(KFSPropertyConstants.DOCUMENT_TYPE_CODE, KFSPropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE);
-        propertyMappingTable.put(KFSPropertyConstants.ORIGIN_CODE, KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE);
-        propertyMappingTable.put(KFSPropertyConstants.DOCUMENT_NUMBER, KFSPropertyConstants.DOCUMENT_NUMBER);
+        propertyMappingTable.put(PropertyConstants.BALANCE_TYPE_CODE, PropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
+        propertyMappingTable.put(PropertyConstants.DOCUMENT_TYPE_CODE, PropertyConstants.FINANCIAL_DOCUMENT_TYPE_CODE);
+        propertyMappingTable.put(PropertyConstants.ORIGIN_CODE, PropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE);
+        propertyMappingTable.put(PropertyConstants.DOCUMENT_NUMBER, PropertyConstants.DOCUMENT_NUMBER);
 
         return propertyMappingTable;
     }
@@ -181,13 +185,6 @@ public class BusinessObjectFieldConverter {
         return transactionPropertyName;
     }
 
-    /**
-     * Escapes any special characters in map name/property values
-     * 
-     * @param fieldValues map of field keys and their values
-     * @param specialCharacter special characters to replace
-     * @param replacement value to replace special characters with
-     */
     public static void escapeSpecialCharacter(Map fieldValues, String specialCharacter, String replacement) {
         Iterator propsIter = fieldValues.keySet().iterator();
         while (propsIter.hasNext()) {
@@ -199,10 +196,6 @@ public class BusinessObjectFieldConverter {
         }
     }
 
-    /**
-     * Escapes any single quotes in map name/property values
-     * @param fieldValues
-     */
     public static void escapeSingleQuote(Map fieldValues) {
         String specialCharacter = "'";
         String replacement = " ";

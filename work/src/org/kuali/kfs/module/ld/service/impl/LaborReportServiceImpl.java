@@ -15,6 +15,7 @@
  */
 package org.kuali.module.labor.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kuali.kfs.util.Message;
 import org.kuali.module.gl.bo.GlSummary;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.Transaction;
@@ -35,8 +35,10 @@ import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
 import org.kuali.module.gl.util.BalanceEncumbranceReport;
 import org.kuali.module.gl.util.BalanceReport;
+import org.kuali.module.gl.util.GeneralLedgerPendingEntryReport;
 import org.kuali.module.gl.util.LedgerEntryHolder;
 import org.kuali.module.gl.util.LedgerReport;
+import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.PosterOutputSummaryEntry;
 import org.kuali.module.gl.util.PosterOutputSummaryReport;
 import org.kuali.module.gl.util.Summary;
@@ -55,6 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * This class provides a set of facilities to generate reports.
  */
+@Transactional
 public class LaborReportServiceImpl implements LaborReportService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborReportServiceImpl.class);
 
@@ -184,9 +187,9 @@ public class LaborReportServiceImpl implements LaborReportService {
      * @see org.kuali.module.labor.service.LaborReportService#generateFeedSummaryReport(org.kuali.module.gl.bo.OriginEntryGroup,
      *      org.kuali.module.labor.util.ReportRegistry, java.lang.String, java.util.Date)
      */
-    public void generateGLSummaryReport(OriginEntryGroup group, ReportRegistry reportInfo, String reportsDirectory, Date runDate) {
+    public void generateFeedSummaryReport(OriginEntryGroup group, ReportRegistry reportInfo, String reportsDirectory, Date runDate) {
         LOG.info("generateFeedSummaryReport() started");
-
+        
         List<OriginEntryGroup> groups = new ArrayList<OriginEntryGroup>();
         groups.add(group);
 
@@ -198,8 +201,7 @@ public class LaborReportServiceImpl implements LaborReportService {
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateScrubberLedgerSummaryReportBatch(java.util.Collection,
-     *      java.lang.String, java.util.Date)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportBatch(java.util.Date, java.util.Collection)
      */
     public void generateScrubberLedgerSummaryReportBatch(Collection groups, String reportsDirectory, Date runDate) {
         // LOG.debug("generateScrubberLedgerSummaryReport() started");
@@ -214,8 +216,8 @@ public class LaborReportServiceImpl implements LaborReportService {
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateScrubberLedgerSummaryReportOnline(org.kuali.module.gl.bo.OriginEntryGroup,
-     *      java.lang.String, java.lang.String, java.util.Date)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberLedgerSummaryReportOnline(java.util.Date,
+     *      org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public void generateScrubberLedgerSummaryReportOnline(OriginEntryGroup group, String documentNumber, String reportsDirectory, Date runDate) {
         // LOG.debug("generateScrubberLedgerSummaryReport() started");
@@ -232,8 +234,8 @@ public class LaborReportServiceImpl implements LaborReportService {
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateBatchScrubberStatisticsReport(org.kuali.module.gl.service.impl.scrubber.ScrubberReportData,
-     *      java.util.Map, java.lang.String, java.util.Date)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberStatisticsReport(java.util.Date,
+     *      org.kuali.module.gl.service.impl.scrubber.ScrubberReportData, java.util.Map)
      */
     public void generateBatchScrubberStatisticsReport(ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors, String reportsDirectory, Date runDate) {
         // LOG.debug("generateScrubberStatisticsReport() started");
@@ -271,9 +273,8 @@ public class LaborReportServiceImpl implements LaborReportService {
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateOnlineScrubberStatisticsReport(java.lang.Integer,
-     *      org.kuali.module.gl.service.impl.scrubber.ScrubberReportData, java.util.Map, java.lang.String, java.lang.String,
-     *      java.util.Date)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberStatisticsReport(java.util.Date,
+     *      org.kuali.module.gl.service.impl.scrubber.ScrubberReportData, java.util.Map)
      */
     public void generateOnlineScrubberStatisticsReport(Integer groupId, ScrubberReportData scrubberReport, Map<Transaction, List<Message>> scrubberReportErrors, String documentNumber, String reportsDirectory, Date runDate) {
         // log.debug("generateScrubberStatisticsReport() started");
@@ -285,8 +286,8 @@ public class LaborReportServiceImpl implements LaborReportService {
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateScrubberDemergerStatisticsReports(org.kuali.module.gl.service.impl.scrubber.DemergerReportData,
-     *      java.lang.String, java.util.Date)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberDemergerStatisticsReports(java.util.Date,
+     *      org.kuali.module.gl.service.impl.scrubber.DemergerReportData)
      */
     public void generateScrubberDemergerStatisticsReports(DemergerReportData demergerReport, String reportsDirectory, Date runDate) {
         // log.debug("generateScrubberDemergerStatisticsReports() started");
@@ -300,8 +301,8 @@ public class LaborReportServiceImpl implements LaborReportService {
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateScrubberBadBalanceTypeListingReport(java.util.Collection,
-     *      java.lang.String, java.util.Date)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberBadBalanceTypeListingReport(java.util.Date,
+     *      java.util.Collection)
      */
     public void generateScrubberBadBalanceTypeListingReport(Collection groups, String reportsDirectory, Date runDate) {
         // log.debug("generateScrubberBadBalanceTypeListingReport() started");
@@ -315,10 +316,6 @@ public class LaborReportServiceImpl implements LaborReportService {
         rept.generateReport(i, runDate, "Labor Scrubber Input Transactions with Bad Balance Types", "labor_scrubber_badbal", reportsDirectory);
     }
 
-    /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateScrubberTransactionsOnline(org.kuali.module.gl.bo.OriginEntryGroup,
-     *      java.lang.String, java.lang.String, java.util.Date)
-     */
     public void generateScrubberTransactionsOnline(OriginEntryGroup validGroup, String documentNumber, String reportsDirectory, Date runDate) {
         // log.debug("generateScrubberTransactionsOnline() started");
 
@@ -329,8 +326,8 @@ public class LaborReportServiceImpl implements LaborReportService {
     }
 
     /**
-     * @see org.kuali.module.labor.service.LaborReportService#generateScrubberRemovedTransactions(org.kuali.module.gl.bo.OriginEntryGroup,
-     *      java.lang.String, java.util.Date)
+     * @see org.kuali.module.gl.service.ReportService#generateScrubberRemovedTransactions(java.util.Date,
+     *      org.kuali.module.gl.bo.OriginEntryGroup)
      */
     public void generateScrubberRemovedTransactions(OriginEntryGroup errorGroup, String reportsDirectory, Date runDate) {
         // log.debug("generateScrubberRemovedTransactions() started");
@@ -338,7 +335,7 @@ public class LaborReportServiceImpl implements LaborReportService {
         Iterator ti = laborOriginEntryService.getEntriesByGroupListingReportOrder(errorGroup);
 
         TransactionListingReport rept = new TransactionListingReport();
-        rept.generateReport(ti, runDate, "Labor Error Listing - Transactions Removed From the Scrubber", "labor_scrubber_error_listing", reportsDirectory);
+        rept.generateReport(ti, runDate, "Labor Error Listing - Transactions Removed From the Scrubber", "labor_scrubber_error_listing_", reportsDirectory);
     }
 
 

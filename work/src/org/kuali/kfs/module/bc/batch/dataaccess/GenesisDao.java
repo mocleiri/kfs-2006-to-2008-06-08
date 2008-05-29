@@ -14,67 +14,47 @@
  * limitations under the License.
  */
 package org.kuali.module.budget.dao;
-
-import java.util.Map;
+import java.util.*;
+import org.kuali.module.budget.bo.*;
 
 public interface GenesisDao {
 
     /*
-     * return a map of values for the budget construction control flags for the fiscal year (flag name, flag value)
+     * return a map of values for the budget construction control flags
+     * for the fiscal year (flag name, flag value)
      */
-    public Map<String, String> getBudgetConstructionControlFlags(Integer universityFiscalYear);
+   public Map<String,String> getBudgetConstructionControlFlags 
+                             (Integer universityFiscalYear);
+   /*
+    *  check the value of a specific budget construction control flag
+    *  (on = true, off = false)
+    */
+   public boolean getBudgetConstructionControlFlag (Integer universityFiscalYear,
+               String FlagID);
+   /*
+    *  get the initiator ID for budget construction
+    */
+   public String getBudgetConstructionInitiatorID();
+   
+   // clear locks in headers
+   public void clearHangingBCLocks (Integer currentFiscalYear);
 
-    /*
-     * fetch the fiscal year corresponding to today's date
-     */
-    public Integer fiscalYearFromToday();
-
-    /*
-     * check the value of a specific budget construction control flag (on = true, off = false)
-     */
-    public boolean getBudgetConstructionControlFlag(Integer universityFiscalYear, String FlagID);
-
-    // clear locks in headers
-    public void clearHangingBCLocks(Integer currentFiscalYear);
-
-    // control flags
-    public void setControlFlagsAtTheStartOfGenesis(Integer currentFiscalYear);
-
-    public void setControlFlagsAtTheEndOfGenesis(Integer currentFiscalYear);
-
-    // chart and organization hierarchy
-    public void createChartForNextBudgetCycle();
-
-    public void rebuildOrganizationHierarchy(Integer currentFiscalYear);
-
-    // intialization for genesis
-    public void clearDBForGenesis(Integer BaseYear);
-
-    // pending budget construction general ledger
-    public void ensureObjectClassRIForBudget(Integer BaseYear);
-
-    public void initialLoadToPBGL(Integer currentFiscalYear);
-
-    public void updateToPBGL(Integer currentFiscalYear);
-
-    // document creation
-    // create document with embedded workflow
-    public void createNewBCDocumentsFromGLCSF(Integer BaseYear, boolean GLUpdatesAllowed, boolean CSFUpdatesAllowed);
-
-    // budget construction CSF and budget construction appointment funding
-    public void buildAppointmentFundingAndBCSF(Integer BaseYear);
-
-    // this is a junk method in genesis that was used to unit test various SQL
-    public void genesisUnitTest(Integer BaseYear);
-
-    // this is used to test the document route log
-    public Object returnWkflwDocHeader();
-
-    // this is a junk method to do some testing for batch
-    public void testObjectID();
-    public void testNullForeignKeys();
-    
-    // this is also a junk method to do some testing for batch
-    public String testFindBCDocumentNumber (Integer fiscalYear, String chartOfAccounts, String accountNumber, String subAccountNumber);
-
+   // control flags
+   public void setControlFlagsAtTheStartOfGenesis(Integer currentFiscalYear);
+   public void setControlFlagsAtTheEndOfGenesis(Integer currentFiscalYear);
+   
+   // chart and organization hierarchy
+   public void createChartForNextBudgetCycle();
+   public void rebuildOrganizationHierarchy(Integer currentFiscalYear);
+   
+   // intialization for genesis
+   public void clearDBForGenesis(Integer BaseYear);
+   
+   // pending budget construction general ledger
+   public void initialLoadToPBGL(Integer currentFiscalYear);
+   public void updateToPBGL(Integer currentFiscalYear);
+   
+   // document creation
+   public void createNewBCDocuments(Integer currentFiscalYear);
+   public void primeNewBCHeadersDocumentCreation(Integer currentFiscalYear);
 }

@@ -17,249 +17,205 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 
+import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.document.CreditMemoDocument;
-import org.kuali.module.purap.service.AccountsPayableService;
-import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
 
 /**
- * Item line Business Object for Credit Memo Document.
+ * 
  */
 public class CreditMemoItem extends AccountsPayableItemBase {
-    private KualiDecimal poInvoicedTotalQuantity;
-    private BigDecimal poUnitPrice;
-    private KualiDecimal poExtendedPrice;
-    private KualiDecimal preqInvoicedTotalQuantity;
-    private BigDecimal preqUnitPrice;
-    private KualiDecimal preqExtendedPrice;
 
-    /**
-     * Default constructor.
-     */
-    public CreditMemoItem() {
-    }
 
-    /**
-     * Constructs a CreditMemoItem object from an existing Purchase Order Item. - Delegate
-     * 
-     * @param cmDocument the Credit Memo Document this item belongs to.
-     * @param poItem the Purchase Order Item to copy from.
-     */
-    public CreditMemoItem(CreditMemoDocument cmDocument, PurchaseOrderItem poItem) {
-        this(cmDocument, poItem, new HashMap<String, ExpiredOrClosedAccountEntry>());
-    }
 
-    /**
-     * Constructs a CreditMemoItem object from an existing Purchase Order Item, and check and process expired or closed accounts
-     * item might contain.
-     * 
-     * @param cmDocument the Credit Memo Document this item belongs to.
-     * @param poItem the Purchase Order Item to copy from.
-     * @param expiredOrClosedAccountList the list of expired or closed accounts to check against.
-     */
-    public CreditMemoItem(CreditMemoDocument cmDocument, PurchaseOrderItem poItem, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
-        super();
+	private Integer creditMemoIdentifier;
+	private Integer itemLineNumber;
+	private String itemTypeCode;
+	private KualiDecimal itemCreditQuantity;
+	private BigDecimal itemUnitPrice;
+	private KualiDecimal itemExtendedPrice;
+	private boolean itemAssignedToTradeInIndicator;
 
-        setPurapDocumentIdentifier(cmDocument.getPurapDocumentIdentifier());
-        setItemLineNumber(poItem.getItemLineNumber());
-        setPoInvoicedTotalQuantity(poItem.getItemInvoicedTotalQuantity());
-        setPoUnitPrice(poItem.getItemUnitPrice());
-        setPoExtendedPrice(poItem.getItemInvoicedTotalAmount());
-        setItemTypeCode(poItem.getItemTypeCode());
+    private CreditMemoDocument creditMemo;
 
-        if ((ObjectUtils.isNotNull(this.getItemType()) && !this.getItemType().isQuantityBasedGeneralLedgerIndicator())) {
-            // setting unit price to be null to be more consistent with other below the line
-            this.setItemUnitPrice(null);
-        }
-        else {
-            setItemUnitPrice(poItem.getItemUnitPrice());
-        }
+	/**
+	 * Default constructor.
+	 */
+	public CreditMemoItem() {
 
-        setItemCatalogNumber(poItem.getItemCatalogNumber());
-        setItemDescription(poItem.getItemDescription());
+	}
 
-        if (getPoInvoicedTotalQuantity() == null) {
-            setPoInvoicedTotalQuantity(KualiDecimal.ZERO);
-        }
-        if (getPoUnitPrice() == null) {
-            setPoUnitPrice(BigDecimal.ZERO);
-        }
-        if (getPoExtendedPrice() == null) {
-            setPoExtendedPrice(KualiDecimal.ZERO);
-        }
 
-        for (Iterator iter = poItem.getSourceAccountingLines().iterator(); iter.hasNext();) {
-            PurchaseOrderAccount account = (PurchaseOrderAccount) iter.next();
 
-            // check if this account is expired/closed and replace as needed
-            SpringContext.getBean(AccountsPayableService.class).processExpiredOrClosedAccount(account, expiredOrClosedAccountList);
+	/**
+	 * Gets the creditMemoIdentifier attribute.
+	 * 
+	 * @return Returns the creditMemoIdentifier
+	 * 
+	 */
+	public Integer getCreditMemoIdentifier() { 
+		return creditMemoIdentifier;
+	}
 
-            getSourceAccountingLines().add(new CreditMemoAccount(account));
-        }
-    }
+	/**
+	 * Sets the creditMemoIdentifier attribute.
+	 * 
+	 * @param creditMemoIdentifier The creditMemoIdentifier to set.
+	 * 
+	 */
+	public void setCreditMemoIdentifier(Integer creditMemoIdentifier) {
+		this.creditMemoIdentifier = creditMemoIdentifier;
+	}
 
-    /**
-     * Constructs a CreditMemoItem object from an existing Payment Request or Purchase Order Item.
-     * 
-     * @param cmDocument the Credit Memo Document this item belongs to.
-     * @param preqItem the Payment Request Item to copy from.
-     * @param poItem the Purchase Order Item to copy from.
-     */
-    public CreditMemoItem(CreditMemoDocument cmDocument, PaymentRequestItem preqItem, PurchaseOrderItem poItem) {
-        super();
 
-        setPurapDocumentIdentifier(cmDocument.getPurapDocumentIdentifier());
-        setItemLineNumber(preqItem.getItemLineNumber());
+	/**
+	 * Gets the itemLineNumber attribute.
+	 * 
+	 * @return Returns the itemLineNumber
+	 * 
+	 */
+	public Integer getItemLineNumber() { 
+		return itemLineNumber;
+	}
 
-        // take invoiced quantities from the lower of the preq and po if different
-        if (poItem.getItemInvoicedTotalQuantity() != null && preqItem.getItemQuantity() != null && poItem.getItemInvoicedTotalQuantity().isLessThan(preqItem.getItemQuantity())) {
-            setPreqInvoicedTotalQuantity(poItem.getItemInvoicedTotalQuantity());
-            setPreqExtendedPrice(poItem.getItemInvoicedTotalAmount());
-        }
-        else {
-            setPreqInvoicedTotalQuantity(preqItem.getItemQuantity());
-            setPreqExtendedPrice(preqItem.getExtendedPrice());
-        }
+	/**
+	 * Sets the itemLineNumber attribute.
+	 * 
+	 * @param itemLineNumber The itemLineNumber to set.
+	 * 
+	 */
+	public void setItemLineNumber(Integer itemLineNumber) {
+		this.itemLineNumber = itemLineNumber;
+	}
 
-        setPreqUnitPrice(preqItem.getItemUnitPrice());
-        setItemTypeCode(preqItem.getItemTypeCode());
 
-        if ((ObjectUtils.isNotNull(this.getItemType()) && !this.getItemType().isQuantityBasedGeneralLedgerIndicator())) {
-            // setting unit price to be null to be more consistent with other below the line
-            this.setItemUnitPrice(null);
-        }
-        else {
-            setItemUnitPrice(preqItem.getItemUnitPrice());
-        }
+	/**
+	 * Gets the itemTypeCode attribute.
+	 * 
+	 * @return Returns the itemTypeCode
+	 * 
+	 */
+	public String getItemTypeCode() { 
+		return itemTypeCode;
+	}
 
-        setItemCatalogNumber(preqItem.getItemCatalogNumber());
-        setItemDescription(preqItem.getItemDescription());
+	/**
+	 * Sets the itemTypeCode attribute.
+	 * 
+	 * @param itemTypeCode The itemTypeCode to set.
+	 * 
+	 */
+	public void setItemTypeCode(String itemTypeCode) {
+		this.itemTypeCode = itemTypeCode;
+	}
 
-        if (getPreqInvoicedTotalQuantity() == null) {
-            setPreqInvoicedTotalQuantity(KualiDecimal.ZERO);
-        }
-        if (getPreqUnitPrice() == null) {
-            setPreqUnitPrice(BigDecimal.ZERO);
-        }
-        if (getPreqExtendedPrice() == null) {
-            setPreqExtendedPrice(KualiDecimal.ZERO);
-        }
 
-        for (Iterator iter = preqItem.getSourceAccountingLines().iterator(); iter.hasNext();) {
-            PaymentRequestAccount account = (PaymentRequestAccount) iter.next();
-            getSourceAccountingLines().add(new CreditMemoAccount(account));
-        }
-    }
+	/**
+	 * Gets the itemCreditQuantity attribute.
+	 * 
+	 * @return Returns the itemCreditQuantity
+	 * 
+	 */
+	public KualiDecimal getItemCreditQuantity() { 
+		return itemCreditQuantity;
+	}
 
-    /**
-     * Constructs a CreditMemoItem object from an existing Payment Request Item, and check and process expired or closed accounts
-     * item might contain.
-     * 
-     * @param cmDocument the Credit Memo Document this item belongs to.
-     * @param preqItem the Payment Request Item to copy from.
-     * @param poItem the Purchase Order Item to copy from.
-     * @param expiredOrClosedAccountList the list of expired or closed accounts to check against.
-     */
-    public CreditMemoItem(CreditMemoDocument cmDocument, PaymentRequestItem preqItem, PurchaseOrderItem poItem, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
-        super();
+	/**
+	 * Sets the itemCreditQuantity attribute.
+	 * 
+	 * @param itemCreditQuantity The itemCreditQuantity to set.
+	 * 
+	 */
+	public void setItemCreditQuantity(KualiDecimal itemCreditQuantity) {
+		this.itemCreditQuantity = itemCreditQuantity;
+	}
 
-        setPurapDocumentIdentifier(cmDocument.getPurapDocumentIdentifier());
-        setItemLineNumber(preqItem.getItemLineNumber());
 
-        // take invoiced quantities from the lower of the preq and po if different
-        if (poItem.getItemInvoicedTotalQuantity() != null && preqItem.getItemQuantity() != null && poItem.getItemInvoicedTotalQuantity().isLessThan(preqItem.getItemQuantity())) {
-            setPreqInvoicedTotalQuantity(poItem.getItemInvoicedTotalQuantity());
-            setPreqExtendedPrice(poItem.getItemInvoicedTotalAmount());
-        }
-        else {
-            setPreqInvoicedTotalQuantity(preqItem.getItemQuantity());
-            setPreqExtendedPrice(preqItem.getExtendedPrice());
-        }
+	/**
+	 * Gets the itemUnitPrice attribute.
+	 * 
+	 * @return Returns the itemUnitPrice
+	 * 
+	 */
+	public BigDecimal getItemUnitPrice() { 
+		return itemUnitPrice;
+	}
 
-        setPreqUnitPrice(preqItem.getItemUnitPrice());
-        setItemTypeCode(preqItem.getItemTypeCode());
-        setItemUnitPrice(preqItem.getItemUnitPrice());
-        setItemCatalogNumber(preqItem.getItemCatalogNumber());
-        setItemDescription(preqItem.getItemDescription());
+	/**
+	 * Sets the itemUnitPrice attribute.
+	 * 
+	 * @param itemUnitPrice The itemUnitPrice to set.
+	 * 
+	 */
+	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
+		this.itemUnitPrice = itemUnitPrice;
+	}
 
-        if (getPreqInvoicedTotalQuantity() == null) {
-            setPreqInvoicedTotalQuantity(KualiDecimal.ZERO);
-        }
-        if (getPreqUnitPrice() == null) {
-            setPreqUnitPrice(BigDecimal.ZERO);
-        }
-        if (getPreqExtendedPrice() == null) {
-            setPreqExtendedPrice(KualiDecimal.ZERO);
-        }
 
-        for (Iterator iter = preqItem.getSourceAccountingLines().iterator(); iter.hasNext();) {
-            PaymentRequestAccount account = (PaymentRequestAccount) iter.next();
+	/**
+	 * Gets the itemExtendedPrice attribute.
+	 * 
+	 * @return Returns the itemExtendedPrice
+	 * 
+	 */
+	public KualiDecimal getItemExtendedPrice() { 
+		return itemExtendedPrice;
+	}
 
-            // check if this account is expired/closed and replace as needed
-            SpringContext.getBean(AccountsPayableService.class).processExpiredOrClosedAccount(account, expiredOrClosedAccountList);
+	/**
+	 * Sets the itemExtendedPrice attribute.
+	 * 
+	 * @param itemExtendedPrice The itemExtendedPrice to set.
+	 * 
+	 */
+	public void setItemExtendedPrice(KualiDecimal itemExtendedPrice) {
+		this.itemExtendedPrice = itemExtendedPrice;
+	}
 
-            getSourceAccountingLines().add(new CreditMemoAccount(account));
-        }
-    }
 
+	/**
+	 * Gets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @return Returns the itemAssignedToTradeInIndicator
+	 * 
+	 */
+	public boolean getItemAssignedToTradeInIndicator() { 
+		return itemAssignedToTradeInIndicator;
+	}
+
+	/**
+	 * Sets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @param itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
+	 * 
+	 */
+	public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
+		this.itemAssignedToTradeInIndicator = itemAssignedToTradeInIndicator;
+	}
+
+    
     /**
      * @see org.kuali.module.purap.bo.PurApItemBase#getAccountingLineClass()
      */
     @Override
-    public Class<CreditMemoAccount> getAccountingLineClass() {
+    public Class getAccountingLineClass() {
         return CreditMemoAccount.class;
     }
 
-    public KualiDecimal getPoExtendedPrice() {
-        return poExtendedPrice;
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        if (this.getItemIdentifier() != null) {
+            m.put("creditMemoItemIdentifier", this.getItemIdentifier().toString());
+        }
+	    return m;
     }
 
-    public void setPoExtendedPrice(KualiDecimal poExtendedCost) {
-        this.poExtendedPrice = poExtendedCost;
-    }
-
-    public KualiDecimal getPoInvoicedTotalQuantity() {
-        return poInvoicedTotalQuantity;
-    }
-
-    public void setPoInvoicedTotalQuantity(KualiDecimal poInvoicedTotalQuantity) {
-        this.poInvoicedTotalQuantity = poInvoicedTotalQuantity;
-    }
-
-    public BigDecimal getPoUnitPrice() {
-        return poUnitPrice;
-    }
-
-    public void setPoUnitPrice(BigDecimal poUnitPrice) {
-        this.poUnitPrice = poUnitPrice;
-    }
-
-    public KualiDecimal getPreqExtendedPrice() {
-        return preqExtendedPrice;
-    }
-
-    public void setPreqExtendedPrice(KualiDecimal preqExtendedCost) {
-        this.preqExtendedPrice = preqExtendedCost;
-    }
-
-    public KualiDecimal getPreqInvoicedTotalQuantity() {
-        return preqInvoicedTotalQuantity;
-    }
-
-    public void setPreqInvoicedTotalQuantity(KualiDecimal preqInvoicedTotalQuantity) {
-        this.preqInvoicedTotalQuantity = preqInvoicedTotalQuantity;
-    }
-
-    public BigDecimal getPreqUnitPrice() {
-        return preqUnitPrice;
-    }
-
-    public void setPreqUnitPrice(BigDecimal preqUnitPrice) {
-        this.preqUnitPrice = preqUnitPrice;
+    public CreditMemoDocument getCreditMemo() {
+        return creditMemo;
     }
 }

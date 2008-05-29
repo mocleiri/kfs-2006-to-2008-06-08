@@ -18,27 +18,21 @@ package org.kuali.module.financial.document;
 import java.sql.Timestamp;
 import java.util.Iterator;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.core.service.KualiRuleService;
+import org.kuali.Constants;
+import org.kuali.core.document.TransactionalDocumentBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.document.AccountingDocumentBase;
 import org.kuali.kfs.rule.AccountingLineRule;
-import org.kuali.kfs.service.DebitDeterminerService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
+import org.kuali.module.financial.rules.CashReceiptFamilyRule;
 
 /**
  * Abstract class which defines behavior common to CashReceipt-like documents.
  */
 abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CashReceiptFamilyBase.class);
     private String campusLocationCode; // TODO Needs to be an actual object - also need to clarify this
     private Timestamp depositDate;
 
@@ -46,13 +40,13 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
      * Constructs a CashReceiptFamilyBase
      */
     public CashReceiptFamilyBase() {
-        setCampusLocationCode(KFSConstants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE);
+        setCampusLocationCode(Constants.CashReceiptConstants.DEFAULT_CASH_RECEIPT_CAMPUS_LOCATION_CODE);
     }
 
     /**
      * Documents in the CashReceiptFamily do not perform Sufficient Funds checking
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#documentPerformsSufficientFundsCheck()
+     * @see org.kuali.core.document.TransactionalDocumentBase#documentPerformsSufficientFundsCheck()
      */
     @Override
     public boolean documentPerformsSufficientFundsCheck() {
@@ -102,34 +96,28 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
      * having the 'income' object type, less the sum of the amounts on accounting lines belonging to object codes having the
      * 'expense' object type.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceTotal()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceTotal()
      */
     @Override
     public KualiDecimal getSourceTotal() {
+        CashReceiptFamilyRule crFamilyRule = (CashReceiptFamilyRule) SpringServiceLocator.getKualiRuleService().getBusinessRulesInstance(this, AccountingLineRule.class);
         KualiDecimal total = KualiDecimal.ZERO;
         AccountingLineBase al = null;
         Iterator iter = sourceAccountingLines.iterator();
         while (iter.hasNext()) {
             al = (AccountingLineBase) iter.next();
-            try {
-                KualiDecimal amount = al.getAmount().abs();
-                if (amount != null && amount.isNonZero()) {
-                    if (isDebit(al)) {
-                        total = total.subtract(amount);
-                    }
-                    else if (!isDebit(al)) { // in this context, if it's not a debit, it's a credit
-                        total = total.add(amount);
-                    }
-                    else {
-                        LOG.error("could not determine credit/debit for accounting line");
-                        return KualiDecimal.ZERO;
-                    }
+
+            KualiDecimal amount = al.getAmount().abs();
+            if (amount != null && amount.isNonZero()) {
+                if (crFamilyRule.isDebit(this, al)) {
+                    total = total.subtract(amount);
                 }
-            }
-            catch (Exception e) {
-                // Possibly caused by accounting lines w/ bad data
-                LOG.error("Error occured trying to compute Cash receipt total, returning 0", e);
-                return KualiDecimal.ZERO;
+                else if (crFamilyRule.isCredit(al, this)) {
+                    total = total.add(amount);
+                }
+                else {
+                    throw new IllegalStateException("could not determine credit/debit for accounting line");
+                }
             }
         }
         return total;
@@ -138,7 +126,7 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
     /**
      * Cash Receipts only have source lines, so this should always return 0.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetTotal()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetTotal()
      */
     @Override
     public KualiDecimal getTargetTotal() {
@@ -148,65 +136,29 @@ abstract public class CashReceiptFamilyBase extends AccountingDocumentBase {
     /**
      * Overrides the base implementation to return an empty string.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getSourceAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getSourceAccountingLinesSectionTitle()
      */
     @Override
     public String getSourceAccountingLinesSectionTitle() {
-        return KFSConstants.EMPTY_STRING;
+        return Constants.EMPTY_STRING;
     }
 
     /**
      * Overrides the base implementation to return an empty string.
      * 
-     * @see org.kuali.kfs.document.AccountingDocument#getTargetAccountingLinesSectionTitle()
+     * @see org.kuali.core.document.TransactionalDocument#getTargetAccountingLinesSectionTitle()
      */
     @Override
     public String getTargetAccountingLinesSectionTitle() {
-        return KFSConstants.EMPTY_STRING;
+        return Constants.EMPTY_STRING;
     }
 
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
         return new BasicFormatWithLineDescriptionAccountingLineParser();
-    }
-    
-    /**
-     * Returns true if accounting line is debit
-     * 
-     * @param financialDocument
-     * @param accountingLine
-     * @param true if accountline line 
-     * 
-     * @see IsDebitUtils#isDebitConsideringType(FinancialDocumentRuleBase, FinancialDocument, AccountingLine)
-     * @see org.kuali.core.rule.AccountingLineRule#isDebit(org.kuali.core.document.FinancialDocument,
-     *      org.kuali.core.bo.AccountingLine)
-     */
-    public boolean isDebit(GeneralLedgerPendingEntrySourceDetail postable) {
-        // error corrections are not allowed
-        DebitDeterminerService isDebitUtils = SpringContext.getBean(DebitDeterminerService.class);
-        isDebitUtils.disallowErrorCorrectionDocumentCheck(this);
-        return isDebitUtils.isDebitConsideringType(this, (AccountingLine)postable);
-    }
-    
-    /**
-     * Overrides to set the entry's description to the description from the accounting line, if a value exists.
-     * 
-     * @param financialDocument submitted accounting document
-     * @param accountingLine accounting line in accounting document
-     * @param explicitEntry general ledger pending entry
-     * 
-     * @see org.kuali.module.financial.rules.FinancialDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.core.document.FinancialDocument,
-     *      org.kuali.core.bo.AccountingLine, org.kuali.module.gl.bo.GeneralLedgerPendingEntry)
-     */
-    @Override
-    public void customizeExplicitGeneralLedgerPendingEntry(GeneralLedgerPendingEntrySourceDetail postable, GeneralLedgerPendingEntry explicitEntry) {
-        String accountingLineDescription = postable.getFinancialDocumentLineDescription();
-        if (StringUtils.isNotBlank(accountingLineDescription)) {
-            explicitEntry.setTransactionLedgerEntryDescription(accountingLineDescription);
-        }
     }
 }

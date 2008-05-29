@@ -16,21 +16,17 @@
 package org.kuali.module.chart.service.impl;
 
 import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.FundGroup;
 import org.kuali.module.chart.bo.SubFundGroup;
 import org.kuali.module.chart.dao.SubFundGroupDao;
 import org.kuali.module.chart.service.SubFundGroupService;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This service implementation is the default implementation of the SubFundGroup service that is delivered with Kuali.
- */
+@Transactional
 public class SubFundGroupServiceImpl implements SubFundGroupService {
-    private ParameterService parameterService;
+    private KualiConfigurationService configurationService;
     private DataDictionaryService dataDictionaryService;
     private SubFundGroupDao subFundGroupDao;
 
@@ -38,17 +34,14 @@ public class SubFundGroupServiceImpl implements SubFundGroupService {
      * @see org.kuali.module.chart.service.SubFundGroupService#isForContractsAndGrants(org.kuali.module.chart.bo.SubFundGroup)
      */
     public boolean isForContractsAndGrants(SubFundGroup subFundGroup) {
-        if (ObjectUtils.isNull(subFundGroup)) {
-            return false;
-        }
-        else if (fundGroupDenotesContractsAndGrants()) {
+        if (fundGroupDenotesContractsAndGrants()) {
             return getContractsAndGrantsDenotingValue().equals(subFundGroup.getFundGroupCode());
         }
         else {
             return getContractsAndGrantsDenotingValue().equals(subFundGroup.getSubFundGroupCode());
         }
     }
-
+        
     /**
      * @see org.kuali.module.chart.service.SubFundGroupService#getContractsAndGrantsDenotingAttributeLabel()
      */
@@ -60,35 +53,16 @@ public class SubFundGroupServiceImpl implements SubFundGroupService {
             return dataDictionaryService.getAttributeLabel(SubFundGroup.class, KFSConstants.SUB_FUND_GROUP_CODE_PROPERTY_NAME);
         }
     }
-
-    /**
-     * 
-     * @see org.kuali.module.chart.service.SubFundGroupService#getContractsAndGrantsDenotingValue(org.kuali.module.chart.bo.SubFundGroup)
-     */
-    public String getContractsAndGrantsDenotingValue(SubFundGroup subFundGroup) {
-        if (fundGroupDenotesContractsAndGrants()) {
-            return subFundGroup.getFundGroupCode();
-        }
-        else {
-            return subFundGroup.getSubFundGroupCode();
-        }
-    }
-
-
+    
     /**
      * @see org.kuali.module.chart.service.SubFundGroupService#getContractsAndGrantsDenotingValue()
      */
     public String getContractsAndGrantsDenotingValue() {
-        return parameterService.getParameterValue(Account.class, KFSConstants.ChartApcParms.ACCOUNT_CG_DENOTING_VALUE);
+        return configurationService.getApplicationParameterValue(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ACCOUNT_CG_DENOTING_VALUE);
     }
 
-    /**
-     * 
-     * This checks to see if there is a value for checking if a Fund Group denotes Contracts and Grants
-     * @return false if there is no value
-     */
     private boolean fundGroupDenotesContractsAndGrants() {
-        return parameterService.getIndicatorParameter(Account.class, KFSConstants.ChartApcParms.ACCOUNT_FUND_GROUP_DENOTES_CG);
+        return configurationService.getApplicationParameterIndicator(KFSConstants.ChartApcParms.GROUP_CHART_MAINT_EDOCS, KFSConstants.ChartApcParms.ACCOUNT_FUND_GROUP_DENOTES_CG);
     }
 
     /**
@@ -106,12 +80,12 @@ public class SubFundGroupServiceImpl implements SubFundGroupService {
     }
 
     /**
+     * Sets the configurationService attribute value.
      * 
-     * This method injects the ParameterService
-     * @param parameterService
+     * @param configurationService The configurationService to set.
      */
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    public void setConfigurationService(KualiConfigurationService configurationService) {
+        this.configurationService = configurationService;
     }
 
     /**
@@ -122,10 +96,10 @@ public class SubFundGroupServiceImpl implements SubFundGroupService {
     public void setSubFundGroupDao(SubFundGroupDao subFundGroupDao) {
         this.subFundGroupDao = subFundGroupDao;
     }
-
+    
     /**
      * Sets the dataDictionarySerivce
-     * 
+     *
      * @param dataDictionaryService The dataDictionaryService implementation to set.
      */
     public void setDataDictionaryService(DataDictionaryService dataDictionaryService) {

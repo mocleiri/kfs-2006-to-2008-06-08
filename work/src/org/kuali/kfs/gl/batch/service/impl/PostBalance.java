@@ -1,17 +1,24 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.gl.batch.poster.impl;
 
@@ -19,41 +26,36 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.batch.poster.BalanceCalculator;
 import org.kuali.module.gl.batch.poster.PostTransaction;
 import org.kuali.module.gl.bo.Balance;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.BalanceDao;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This implementation of PostTransaction updates the appropriate Balance
+ * @author jsissom
+ * 
  */
-@Transactional
 public class PostBalance implements PostTransaction, BalanceCalculator {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PostBalance.class);
 
     private BalanceDao balanceDao;
+    private DateTimeService dateTimeService;
 
     /**
-     * Constructs a PostBalance instance
+     * 
      */
     public PostBalance() {
         super();
     }
 
-    /**
-     * This posts the effect of the transaction upon the appropriate balance record.
+    /*
+     * (non-Javadoc)
      * 
-     * @param t the transaction which is being posted
-     * @param mode the mode the poster is currently running in
-     * @param postDate the date this transaction should post to
-     * @return the accomplished post type
-     * @see org.kuali.module.gl.batch.poster.PostTransaction#post(org.kuali.module.gl.bo.Transaction, int, java.util.Date)
+     * @see org.kuali.module.gl.batch.poster.PostTransaction#post(org.kuali.module.gl.bo.Transaction)
      */
     public String post(Transaction t, int mode, Date postDate) {
         LOG.debug("post() started");
@@ -85,15 +87,8 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
         return postType;
     }
 
-    /**
-     * Given a list of balances, determines which one the given trsnaction should post to
-     * 
-     * @param balanceList a Collection of balances
-     * @param t the transaction that is being posted
-     * @return the balance, either found from the list, or, if not present in the list, newly created
-     * @see org.kuali.module.gl.batch.poster.BalanceCalculator#findBalance(java.util.Collection, org.kuali.module.gl.bo.Transaction)
-     */
     public Balance findBalance(Collection balanceList, Transaction t) {
+
         // Try to find one that already exists
         for (Iterator iter = balanceList.iterator(); iter.hasNext();) {
             Balance b = (Balance) iter.next();
@@ -111,6 +106,7 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
     }
 
     /**
+     * 
      * @param t
      * @param enc
      */
@@ -145,21 +141,27 @@ public class PostBalance implements PostTransaction, BalanceCalculator {
         // update the balance amount of the cooresponding period
         String period = t.getUniversityFiscalPeriodCode();
         if (period == null) {
-            UniversityDate currentUniversityDate = SpringContext.getBean(UniversityDateService.class).getCurrentUniversityDate();
+            UniversityDate currentUniversityDate = dateTimeService.getCurrentUniversityDate();
             period = currentUniversityDate.getUniversityFiscalAccountingPeriod();
         }
 
         b.addAmount(period, amount);
     }
 
-    /**
-     * @see org.kuali.module.gl.batch.poster.PostTransaction#getDestinationName()
-     */
     public String getDestinationName() {
         return "GL_BALANCE_T";
     }
 
     public void setBalanceDao(BalanceDao bd) {
         balanceDao = bd;
+    }
+
+    /**
+     * Sets the dateTimeService attribute value.
+     * 
+     * @param dateTimeService The dateTimeService to set.
+     */
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
     }
 }

@@ -27,6 +27,7 @@ import org.kuali.core.bo.BusinessObject;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
 import org.kuali.core.lookup.CollectionIncomplete;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.kfs.KFSConstants;
@@ -35,32 +36,21 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.module.gl.web.inquirable.EntryInquirableImpl;
 import org.kuali.module.gl.web.inquirable.InquirableFinancialDocument;
 
-/**
- * An extension of KualiLookupableImpl to support balance lookups
- */
 public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PendingEntryLookupableHelperServiceImpl.class);
 
     private GeneralLedgerPendingEntryService generalLedgerPendingEntryService;
-    private ParameterService parameterService;
+    private KualiConfigurationService kualiConfigurationService;
 
     private final static String UNIVERSITY_FISCAL_YEAR = "universityFiscalYear";
     private final static String UNIVERSITY_FISCAL_PERIOD_CODE = "universityFiscalPeriodCode";
 
     /**
-     * Returns the url for any drill down links within the lookup (defers to its superclass unless it needs
-     * to get the url of the document that created this result pending entry)
-     * @param bo the business object with a property being drilled down on
-     * @param propertyName the name of the property being drilled down on
-     * @return a String with the URL of the property
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
@@ -69,16 +59,10 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
             GeneralLedgerPendingEntry pendingEntry = (GeneralLedgerPendingEntry) businessObject;
             return new InquirableFinancialDocument().getInquirableDocumentUrl(pendingEntry);
         }
-        return (new EntryInquirableImpl()).getInquiryUrl(businessObject, propertyName);
-        //return super.getInquiryUrl(businessObject, propertyName);
+        return super.getInquiryUrl(businessObject, propertyName);
     }
 
 
-    /**
-     * Validates the fiscal year searched for in the inquiry
-     * @param fieldValues the values of the query
-     * @see org.kuali.core.lookup.AbstractLookupableHelperServiceImpl#validateSearchParameters(java.util.Map)
-     */
     @Override
     public void validateSearchParameters(Map fieldValues) {
         super.validateSearchParameters(fieldValues);
@@ -97,9 +81,6 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
 
 
     /**
-     * Generates the list of search results for this inquiry
-     * @param fieldValues the field values of the query to carry out
-     * @return List the search results returned by the lookup
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     public List getSearchResults(Map fieldValues) {
@@ -117,7 +98,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
         }
 
         // get the result limit number from configuration
-        String limitConfig = parameterService.getParameterValue(ParameterConstants.NERVOUS_SYSTEM_LOOKUP.class, KFSConstants.LOOKUP_RESULTS_LIMIT_URL_KEY);
+        String limitConfig = kualiConfigurationService.getParameterValue(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.LOOKUP, KFSConstants.LOOKUP_RESULTS_LIMIT_URL_KEY);
         Integer limit = null;
         if (limitConfig != null) {
             limit = Integer.valueOf(limitConfig);
@@ -183,7 +164,7 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
 
         return new CollectionIncomplete(collection, new Long(collection.size()));
     }
-
+    
     /**
      * Sets the generalLedgerPendingEntryService attribute value.
      * 
@@ -193,8 +174,8 @@ public class PendingEntryLookupableHelperServiceImpl extends AbstractLookupableH
         this.generalLedgerPendingEntryService = generalLedgerPendingEntryService;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 
 }
