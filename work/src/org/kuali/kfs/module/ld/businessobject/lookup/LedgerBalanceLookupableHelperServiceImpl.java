@@ -15,42 +15,50 @@
  */
 package org.kuali.module.labor.web.lookupable;
 
-import static org.kuali.module.labor.LaborConstants.BalanceInquiries.BALANCE_TYPE_AC_AND_A21;
-
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.core.bo.BusinessObject;
+import org.kuali.core.bo.PersistableBusinessObject;
+import org.kuali.core.datadictionary.mask.Mask;
 import org.kuali.core.lookup.AbstractLookupableHelperServiceImpl;
 import org.kuali.core.lookup.CollectionIncomplete;
+import org.kuali.core.service.AuthorizationService;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.web.comparator.CellComparatorHelper;
+import org.kuali.core.web.format.BooleanFormatter;
+import org.kuali.core.web.format.Formatter;
+import org.kuali.core.web.struts.form.LookupForm;
+import org.kuali.core.web.ui.Column;
+import org.kuali.core.web.ui.ResultRow;
+import org.kuali.core.web.ui.Row;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.kfs.context.SpringContext;
+import org.kuali.module.gl.bo.TransientBalanceInquiryAttributes;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
+import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.LedgerBalance;
+import org.kuali.module.labor.bo.SegmentedBusinessObject;
 import org.kuali.module.labor.service.LaborInquiryOptionsService;
 import org.kuali.module.labor.service.LaborLedgerBalanceService;
-import org.kuali.module.labor.util.ConsolidationUtil;
-import org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl;
 import org.kuali.module.labor.web.inquirable.LedgerBalanceInquirableImpl;
-import org.kuali.module.labor.web.inquirable.PositionDataDetailsInquirableImpl;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service implementation of LedgerBalanceLookupableHelperService. The class is the front-end for all Ledger balance inquiry
- * processing.
- */
+@Transactional
 public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
     private static final Log LOG = LogFactory.getLog(LedgerBalanceLookupableHelperServiceImpl.class);
 
@@ -62,17 +70,6 @@ public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupable
      */
     @Override
     public String getInquiryUrl(BusinessObject bo, String propertyName) {
-        if (KFSPropertyConstants.POSITION_NUMBER.equals(propertyName)) {
-            LedgerBalance balance = (LedgerBalance) bo;
-            AbstractLaborInquirableImpl positionDataDetailsInquirable = new PositionDataDetailsInquirableImpl();
-
-            Map<String, String> fieldValues = new HashMap<String, String>();
-            fieldValues.put(propertyName, balance.getPositionNumber());
-
-            BusinessObject positionData = positionDataDetailsInquirable.getBusinessObject(fieldValues);
-
-            return positionData == null ? KFSConstants.EMPTY_STRING : positionDataDetailsInquirable.getInquiryUrl(positionData, propertyName);
-        }
         return (new LedgerBalanceInquirableImpl()).getInquiryUrl(bo, propertyName);
     }
 
@@ -80,19 +77,18 @@ public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupable
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     @Override
-    public List<? extends BusinessObject> getSearchResults(Map<String, String> fieldValues) {
-        String wildCards = "";
-        for (int i = 0; i < KFSConstants.QUERY_CHARACTERS.length; i++) {
-            wildCards += KFSConstants.QUERY_CHARACTERS[i];
+    public List getSearchResults(Map fieldValues) {
+        String wildCards ="";
+        for(int i=0;i<KFSConstants.QUERY_CHARACTERS.length;i++) {
+            wildCards+=KFSConstants.QUERY_CHARACTERS[i];
         }
-
+        
         if (wildCards.indexOf(fieldValues.get(KFSPropertyConstants.EMPLID).toString().trim()) != -1) {
-            // StringUtils.indexOfAny(fieldValues.get(KFSPropertyConstants.EMPLID).toString().trim(), KFSConstants.QUERY_CHARACTERS)
-            // != 0) {
+                //StringUtils.indexOfAny(fieldValues.get(KFSPropertyConstants.EMPLID).toString().trim(), KFSConstants.QUERY_CHARACTERS) != 0) {            
             List emptySearchResults = new ArrayList();
             Long actualCountIfTruncated = new Long(0);
-            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.EMPLID, KFSConstants.WILDCARD_NOT_ALLOWED_ON_FIELD, "Employee ID field ");
-            return new CollectionIncomplete(emptySearchResults, actualCountIfTruncated);
+            GlobalVariables.getErrorMap().putError(KFSPropertyConstants.EMPLID, KFSConstants.WILDCARD_NOT_ALLOWED_ON_FIELD,"Employee ID field ");
+            return new CollectionIncomplete(emptySearchResults, actualCountIfTruncated);           
         }
 
         setBackLocation((String) fieldValues.get(KFSConstants.BACK_LOCATION));
@@ -104,33 +100,23 @@ public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupable
         // test if the consolidation option is selected or not
         boolean isConsolidated = laborInquiryOptionsService.isConsolidationSelected(fieldValues);
 
-        // get the input balance type code
-        String balanceTypeCode = fieldValues.get(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE);
-        boolean isA21Balance = StringUtils.isNotEmpty(balanceTypeCode) && BALANCE_TYPE_AC_AND_A21.equals(balanceTypeCode.trim());
-
-        // get the ledger balances with actual balance type code
-        if (isA21Balance) {
-            fieldValues.put(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSConstants.BALANCE_TYPE_ACTUAL);
-        }
-        Integer recordCountForActualBalance = balanceService.getBalanceRecordCount(fieldValues, isConsolidated);
-        Iterator actualBalanceIterator = balanceService.findBalance(fieldValues, isConsolidated);
-        Collection searchResultsCollection = buildBalanceCollection(actualBalanceIterator, isConsolidated, pendingEntryOption);
-        laborInquiryOptionsService.updateLedgerBalanceByPendingLedgerEntry(searchResultsCollection, fieldValues, pendingEntryOption, isConsolidated);
+        // get Amount View Option and determine if the results has to be accumulated
+        // String amountViewOption = getSelectedAmountViewOption(fieldValues);
+        // boolean isAccumulated = amountViewOption.equals(Constant.ACCUMULATE);
+        boolean isAccumulated = false;
 
         // get the search result collection
-        Integer recordCountForEffortBalance = 0;
-        if (isA21Balance) {
-            fieldValues.put(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, KFSConstants.BALANCE_TYPE_A21);
-            recordCountForEffortBalance = balanceService.getBalanceRecordCount(fieldValues, isConsolidated);
+        Iterator balanceIterator = balanceService.findBalance(fieldValues, isConsolidated);
+        Collection searchResultsCollection = this.buildBalanceCollection(balanceIterator, isConsolidated, pendingEntryOption);
 
-            Iterator effortBalanceIterator = balanceService.findBalance(fieldValues, isConsolidated);
-            Collection effortBalances = buildBalanceCollection(effortBalanceIterator, isConsolidated, pendingEntryOption);
-            laborInquiryOptionsService.updateLedgerBalanceByPendingLedgerEntry(effortBalances, fieldValues, pendingEntryOption, isConsolidated);
-            searchResultsCollection = ConsolidationUtil.consolidateA2Balances(searchResultsCollection, effortBalances, BALANCE_TYPE_AC_AND_A21);
-        }
+        // update search results according to the selected pending entry option
+        laborInquiryOptionsService.updateByPendingLedgerEntry(searchResultsCollection, fieldValues, pendingEntryOption, isConsolidated);
+
+        // perform the accumulation of the amounts
+        this.accumulate(searchResultsCollection, isAccumulated);
 
         // get the actual size of all qualified search results
-        Integer recordCount = recordCountForActualBalance + recordCountForEffortBalance;
+        Integer recordCount = balanceService.getBalanceRecordCount(fieldValues, isConsolidated);
         Long actualSize = OJBUtility.getResultActualSize(searchResultsCollection, recordCount, fieldValues, new LedgerBalance());
 
         return this.buildSearchResultList(searchResultsCollection, actualSize);
@@ -293,6 +279,106 @@ public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupable
     }
 
     /**
+     * This method updates the balance collection with accumulated amounts if required (isAccumulated is true)
+     * 
+     * @param balanceCollection the balance collection to be updated
+     * @param isAccumulated determine if the accumulated result is desired
+     */
+    private void accumulate(Collection balanceCollection, boolean isAccumulated) {
+
+        if (isAccumulated) {
+            for (Iterator iterator = balanceCollection.iterator(); iterator.hasNext();) {
+                LedgerBalance balance = (LedgerBalance) (iterator.next());
+                accumulateByBalance(balance, isAccumulated);
+            }
+        }
+    }
+
+    /**
+     * This method computes the accumulate amount of the given balance and updates its fields
+     * 
+     * @param balance the given balance object
+     * @param isAccumulated determine if the accumulated result is desired
+     */
+    private void accumulateByBalance(LedgerBalance balance, boolean isAccumulated) {
+
+        KualiDecimal annualAmount = balance.getAccountLineAnnualBalanceAmount();
+        KualiDecimal beginningAmount = balance.getBeginningBalanceLineAmount();
+        KualiDecimal CGBeginningAmount = balance.getContractsGrantsBeginningBalanceAmount();
+
+        KualiDecimal month0Amount = beginningAmount.add(CGBeginningAmount);
+        KualiDecimal month1Amount = balance.getMonth1Amount();
+        month1Amount = accumulateAmount(month1Amount, month0Amount, isAccumulated);
+        balance.setMonth1Amount(month1Amount);
+
+        KualiDecimal month2Amount = balance.getMonth2Amount();
+        month2Amount = accumulateAmount(month2Amount, month1Amount, isAccumulated);
+        balance.setMonth2Amount(month2Amount);
+
+        KualiDecimal month3Amount = balance.getMonth3Amount();
+        month3Amount = accumulateAmount(month3Amount, month2Amount, isAccumulated);
+        balance.setMonth3Amount(month3Amount);
+
+        KualiDecimal month4Amount = balance.getMonth4Amount();
+        month4Amount = accumulateAmount(month4Amount, month3Amount, isAccumulated);
+        balance.setMonth4Amount(month4Amount);
+
+        KualiDecimal month5Amount = balance.getMonth5Amount();
+        month5Amount = accumulateAmount(month5Amount, month4Amount, isAccumulated);
+        balance.setMonth5Amount(month5Amount);
+
+        KualiDecimal month6Amount = balance.getMonth6Amount();
+        month6Amount = accumulateAmount(month6Amount, month5Amount, isAccumulated);
+        balance.setMonth6Amount(month6Amount);
+
+        KualiDecimal month7Amount = balance.getMonth7Amount();
+        month7Amount = accumulateAmount(month7Amount, month6Amount, isAccumulated);
+        balance.setMonth7Amount(month7Amount);
+
+        KualiDecimal month8Amount = balance.getMonth8Amount();
+        month8Amount = accumulateAmount(month8Amount, month7Amount, isAccumulated);
+        balance.setMonth8Amount(month8Amount);
+
+        KualiDecimal month9Amount = balance.getMonth9Amount();
+        month9Amount = accumulateAmount(month9Amount, month8Amount, isAccumulated);
+        balance.setMonth9Amount(month9Amount);
+
+        KualiDecimal month10Amount = balance.getMonth10Amount();
+        month10Amount = accumulateAmount(month10Amount, month9Amount, isAccumulated);
+        balance.setMonth10Amount(month10Amount);
+
+        KualiDecimal month11Amount = balance.getMonth11Amount();
+        month11Amount = accumulateAmount(month11Amount, month10Amount, isAccumulated);
+        balance.setMonth11Amount(month11Amount);
+
+        KualiDecimal month12Amount = balance.getMonth12Amount();
+        month12Amount = accumulateAmount(month12Amount, month11Amount, isAccumulated);
+        balance.setMonth12Amount(month12Amount);
+
+        KualiDecimal month13Amount = balance.getMonth13Amount();
+        month13Amount = accumulateAmount(month13Amount, month12Amount, isAccumulated);
+        balance.setMonth13Amount(month13Amount);
+    }
+
+    /**
+     * This method converts the amount from String and adds it with the input addend
+     * 
+     * @param stringAugend a String-type augend
+     * @param addend an addend
+     * @param isAccumulated determine if the accumulated result is desired
+     * @return the accumulated amount if accumulate option is selected; otherwise, the input amount itself
+     */
+    private KualiDecimal accumulateAmount(Object stringAugend, KualiDecimal addend, boolean isAccumulated) {
+
+        KualiDecimal augend = new KualiDecimal(stringAugend.toString());
+        if (isAccumulated) {
+            augend = augend.add(addend);
+        }
+        return augend;
+    }
+
+
+    /**
      * build the serach result list from the given collection and the number of all qualified search results
      * 
      * @param searchResultsCollection the given search results, which may be a subset of the qualified search results
@@ -309,6 +395,163 @@ public class LedgerBalanceLookupableHelperServiceImpl extends AbstractLookupable
             Collections.sort(results, new BeanPropertyComparator(defaultSortColumns, true));
         }
         return searchResults;
+    }
+
+    /**
+     * This method performs the lookup and returns a collection of lookup items
+     * 
+     * @param lookupForm
+     * @param lookupable
+     * @param resultTable
+     * @param bounded
+     * @return
+     */
+    public Collection performLookup(LookupForm lookupForm, Collection resultTable, boolean bounded) {
+        Collection<BusinessObject> displayList;
+
+        // call search method to get results
+        if (bounded) {
+            displayList = (Collection<BusinessObject>) getSearchResults(lookupForm.getFieldsForLookup());
+        }
+        else {
+            displayList = (Collection<BusinessObject>) getSearchResultsUnbounded(lookupForm.getFieldsForLookup());
+        }
+
+        // iterate through result list and wrap rows with return url and action urls
+        for (BusinessObject element : displayList) {
+            LOG.debug("Doing lookup for " + element.getClass());
+            String returnUrl = getReturnUrl(element, lookupForm.getFieldConversions(), lookupForm.getLookupableImplServiceName());
+
+            if (element instanceof PersistableBusinessObject) {
+                if (element instanceof SegmentedBusinessObject) {
+                    LOG.debug("segmented property names " + ((SegmentedBusinessObject) element).getSegmentedPropertyNames());
+                    for (String propertyName : ((SegmentedBusinessObject) element).getSegmentedPropertyNames()) {
+                        Collection<Column> columns = getColumns(element);
+                        columns.add(setupResultsColumn(element, propertyName));
+
+                        ResultRow row = new ResultRow((List<Column>) columns, returnUrl, getActionUrls(element));
+                     
+                        String extraReturnData = ((SegmentedBusinessObject) element).getAdditionalReturnData(propertyName);
+                        row.setObjectId(((PersistableBusinessObject) element).getObjectId() + "." + propertyName + "." + extraReturnData);
+                        resultTable.add(row);
+                    }
+                }
+                else {
+                    Collection<Column> columns = getColumns(element);
+                 
+                    ResultRow row = new ResultRow((List<Column>) columns, returnUrl, getActionUrls(element));
+                    row.setObjectId(((PersistableBusinessObject) element).getObjectId());
+                    resultTable.add(row);
+                }
+            }
+        }
+
+        return displayList;
+    }
+
+    /**
+     * @param element
+     * @param attributeName
+     * @return Column
+     */
+    protected Column setupResultsColumn(BusinessObject element, String attributeName) {
+        Column col = new Column();
+
+        col.setPropertyName(attributeName);
+
+        String columnTitle = getDataDictionaryService().getAttributeLabel(getBusinessObjectClass(), attributeName);
+        if (StringUtils.isBlank(columnTitle)) {
+            columnTitle = getDataDictionaryService().getCollectionLabel(getBusinessObjectClass(), attributeName);
+        }
+        col.setColumnTitle(columnTitle);
+        if (getBusinessObjectDictionaryService().getLookupResultFieldNames(getBusinessObjectClass()).contains(attributeName)) {
+            col.setMaxLength(getBusinessObjectDictionaryService().getLookupResultFieldMaxLength(getBusinessObjectClass(), attributeName));
+        }
+        else {
+            col.setMaxLength(getDataDictionaryService().getAttributeMaxLength(getBusinessObjectClass(), attributeName));
+        }
+
+        Class formatterClass = getDataDictionaryService().getAttributeFormatter(getBusinessObjectClass(), attributeName);
+        Formatter formatter = null;
+        if (formatterClass != null) {
+            try {
+                formatter = (Formatter) formatterClass.newInstance();
+                col.setFormatter(formatter);
+            }
+            catch (InstantiationException e) {
+                LOG.error("Unable to get new instance of formatter class: " + formatterClass.getName());
+                throw new RuntimeException("Unable to get new instance of formatter class: " + formatterClass.getName());
+            }
+            catch (IllegalAccessException e) {
+                LOG.error("Unable to get new instance of formatter class: " + formatterClass.getName());
+                throw new RuntimeException("Unable to get new instance of formatter class: " + formatterClass.getName());
+            }
+        }
+
+        // pick off result column from result list, do formatting
+        String propValue = KFSConstants.EMPTY_STRING;
+        Object prop = ObjectUtils.getPropertyValue(element, attributeName);
+
+        // set comparator and formatter based on property type
+        Class propClass = null;
+        try {
+            PropertyDescriptor propDescriptor = PropertyUtils.getPropertyDescriptor(element, col.getPropertyName());
+            if (propDescriptor != null) {
+                propClass = propDescriptor.getPropertyType();
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Cannot access PropertyType for property " + "'" + col.getPropertyName() + "' " + " on an instance of '" + element.getClass().getName() + "'.", e);
+        }
+
+        // formatters
+        if (prop != null) {
+            // for Booleans, always use BooleanFormatter
+            if (prop instanceof Boolean) {
+                formatter = new BooleanFormatter();
+            }
+
+            if (formatter != null) {
+                propValue = (String) formatter.format(prop);
+            }
+            else {
+                propValue = prop.toString();
+            }
+        }
+
+        // comparator
+        col.setComparator(CellComparatorHelper.getAppropriateComparatorForPropertyClass(propClass));
+        col.setValueComparator(CellComparatorHelper.getAppropriateValueComparatorForPropertyClass(propClass));
+
+        // check security on field and do masking if necessary
+        boolean viewAuthorized = SpringContext.getBean(AuthorizationService.class).isAuthorizedToViewAttribute(GlobalVariables.getUserSession().getUniversalUser(), element.getClass().getName(), col.getPropertyName());
+        if (!viewAuthorized) {
+            Mask displayMask = getDataDictionaryService().getAttributeDisplayMask(element.getClass().getName(), col.getPropertyName());
+            propValue = displayMask.maskValue(propValue);
+        }
+        col.setPropertyValue(propValue);
+
+
+        if (StringUtils.isNotBlank(propValue)) {
+            col.setPropertyURL(getInquiryUrl(element, col.getPropertyName()));
+        }
+        return col;
+    }
+
+
+    /**
+     * Constructs the list of columns for the search results. All properties for the column objects come from the DataDictionary.
+     * 
+     * @param bo
+     * @return Collection<Column>
+     */
+    protected Collection<Column> getColumns(BusinessObject bo) {
+        Collection<Column> columns = new ArrayList<Column>();
+
+        for (String attributeName : getBusinessObjectDictionaryService().getLookupResultFieldNames(getBusinessObjectClass())) {
+            columns.add(setupResultsColumn(bo, attributeName));
+        }
+        return columns;
     }
 
     /**

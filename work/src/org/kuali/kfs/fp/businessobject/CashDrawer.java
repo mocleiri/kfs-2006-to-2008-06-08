@@ -722,7 +722,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
      * @return the total amount of currency
      */
     public KualiDecimal getCurrencyTotalAmount() {
-        KualiDecimal result = KualiDecimal.ZERO;
+        KualiDecimal result = new KualiDecimal(0);
         if (this.financialDocumentHundredDollarAmount != null) {
             result = result.add(this.financialDocumentHundredDollarAmount);
         }
@@ -756,7 +756,7 @@ public class CashDrawer extends PersistableBusinessObjectBase {
      * @return the total amount of coin
      */
     public KualiDecimal getCoinTotalAmount() {
-        KualiDecimal result = KualiDecimal.ZERO;
+        KualiDecimal result = new KualiDecimal(0);
         if (this.financialDocumentHundredCentAmount != null) {
             result = result.add(this.financialDocumentHundredCentAmount);
         }

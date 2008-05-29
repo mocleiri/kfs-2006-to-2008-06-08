@@ -15,151 +15,181 @@
  */
 package org.kuali.module.purap.service.impl;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.Note;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DocumentService;
-import org.kuali.core.service.KualiRuleService;
+import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.rule.event.DocumentSystemSaveEvent;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.KFSConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapRuleConstants;
-import org.kuali.module.purap.bo.RequisitionItem;
+import org.kuali.module.purap.bo.OrganizationParameter;
 import org.kuali.module.purap.dao.RequisitionDao;
-import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.document.RequisitionDocument;
-import org.kuali.module.purap.rule.event.ValidateCapitalAssetsForAutomaticPurchaseOrderEvent;
-import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.RequisitionService;
-import org.kuali.module.vendor.bo.VendorCommodityCode;
+import org.kuali.module.vendor.bo.VendorContract;
 import org.kuali.module.vendor.bo.VendorDetail;
+import org.kuali.module.vendor.service.VendorService;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.iu.uis.eden.exception.WorkflowException;
-
-
-
-/**
- * Implementation of RequisitionService
- */
 @Transactional
 public class RequisitionServiceImpl implements RequisitionService {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(RequisitionServiceImpl.class);
 
     private BusinessObjectService businessObjectService;
-    private DocumentService documentService;
-    private PurapService purapService;
+    private DateTimeService dateTimeService;
     private RequisitionDao requisitionDao;
-    private KualiRuleService ruleService;
-    private ParameterService parameterService;
+    private VendorService vendorService;
 
-
-    /**
-     * @see org.kuali.module.purap.service.RequisitionService#saveDocumentWithoutValidation(org.kuali.module.purap.document.RequisitionDocument)
-     */
-    public void saveDocumentWithoutValidation(RequisitionDocument document) {
-        try {
-            documentService.saveDocument(document, DocumentSystemSaveEvent.class);
-        }
-        catch (WorkflowException we) {
-            String errorMsg = "Error saving document # " + document.getDocumentHeader().getDocumentNumber() + " " + we.getMessage();
-            LOG.error(errorMsg, we);
-            throw new RuntimeException(errorMsg, we);
-        }
+    public void save(RequisitionDocument requisitionDocument) {
+        requisitionDao.save(requisitionDocument);
     }
-
-    /**
-     * @see org.kuali.module.purap.service.RequisitionService#getRequisitionById(java.lang.Integer)
-     */
+    
     public RequisitionDocument getRequisitionById(Integer id) {
-        String documentNumber = requisitionDao.getDocumentNumberForRequisitionId(id);
-        if (ObjectUtils.isNotNull(documentNumber)) {
-            try {
-                RequisitionDocument doc = (RequisitionDocument) documentService.getByDocumentHeaderId(documentNumber);
-
-                return doc;
-            }
-            catch (WorkflowException e) {
-                String errorMessage = "Error getting requisition document from document service";
-                LOG.error("getRequisitionById() " + errorMessage, e);
-                throw new RuntimeException(errorMessage, e);
-            }
+        return requisitionDao.getRequisitionById(id);
+    }
+    
+    public KualiDecimal getApoLimit(Integer vendorContractGeneratedIdentifier, String chart, String org) {
+        if ( ObjectUtils.isNull(chart) || ObjectUtils.isNull(org) ) {
+            return null;
         }
 
-        return null;
-    }
+        KualiDecimal purchaseOrderTotalLimit = SpringServiceLocator.getVendorService().getApoLimitFromContract(
+          vendorContractGeneratedIdentifier, chart, org);
+        
+        if ( ObjectUtils.isNull(purchaseOrderTotalLimit)) {
+        // We didn't find the limit on the vendor contract, get it from the org parameter table.
+            OrganizationParameter organizationParameter = new OrganizationParameter();
+            organizationParameter.setChartOfAccountsCode(chart);
+            organizationParameter.setOrganizationCode(org);
+            Map orgParamKeys = SpringServiceLocator.getPersistenceService().getPrimaryKeyFieldValues(organizationParameter);
+            organizationParameter = (OrganizationParameter) SpringServiceLocator.getBusinessObjectService().findByPrimaryKey(OrganizationParameter.class, orgParamKeys);
+            purchaseOrderTotalLimit = organizationParameter.getOrganizationAutomaticPurchaseOrderLimit();
+        }
 
-    /**
-     * @see org.kuali.module.purap.service.RequisitionService#isAutomaticPurchaseOrderAllowed(org.kuali.module.purap.document.RequisitionDocument)
-     */
+        return purchaseOrderTotalLimit;
+    }
+    
+//    public void disapproveRequisition(String docHeaderId, String level, String networkId) {
+//        if(RoutingService.REQ_CONTENT_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapproved content
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_CONTENT, networkId);
+//        }
+//        else if(RoutingService.REQ_SUB_ACCT_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapproved subaccount
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_SUB_ACCT, networkId);
+//        }
+//        else if(RoutingService.REQ_FISCAL_OFFICER_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapproved fiscal
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_FISCAL, networkId);
+//        }
+//        else if(RoutingService.REQ_CHART_ORG_NODE_NAME.equalsIgnoreCase(level)){
+//            //disapprove base hierarchy
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_CHART, networkId);
+//        }
+//        else if(RoutingService.REQ_SOD_NODE_NAME.equalsIgnoreCase(level)){
+//            changeRequisitionStatus(docHeaderId, EpicConstants.REQ_STAT_DAPRVD_SEP_OF_DUTY, networkId);
+//        }
+//    }
+//        
+//   
+//    public boolean failsSeparationOfDuties(String docHeaderId, String networkId, String approverId, int approvals) {
+//        LOG.debug("failsSeparationOfDuties() ");
+//        boolean fails = false;
+//        Requisition r = requisitionService.getRequisitionByDocumentId(docHeaderId);
+//        BigDecimal totalCost = r.getTotalCost();
+//        LOG.debug("failsSeparationOfDuties() - approvals = " + approvals);
+//        LOG.debug("failsSeparationOfDuties() - total cost = " + totalCost);
+//        LOG.debug("failsSeparationOfDuties() - ApproverID = " + networkId);
+//        LOG.debug("failsSeparationOfDuties() - InitiatorID = " + approverId);
+//        if((totalCost.compareTo(new BigDecimal(10000.00)) == 1) && (networkId.equals(approverId)) && (approvals <= 1)){
+//          return true;
+//        }
+//        LOG.debug("failsSeparationOfDuties() return value: " + fails);
+//        return fails;
+//    }
+//
+    
     public boolean isAutomaticPurchaseOrderAllowed(RequisitionDocument requisition) {
-        LOG.debug("isAutomaticPurchaseOrderAllowed() started");
+      LOG.debug("isAutomaticPurchaseOrderAllowed() started");
+      
+      /*
+       * The private checkAutomaticPurchaseOrderRules method contains rules to check 
+       * if a requisition can become an APO (Automatic Purchase Order).  The method 
+       * returns a string containing the reason why this method should return false.  
+       * Save the reason as a note on the requisition.
+       */
+      String note = checkAutomaticPurchaseOrderRules(requisition);
+      if (StringUtils.isNotEmpty(note)) {
+        note = "Requisition did not become an APO because: " + note;
+// TODO create new note on REQ with "note" that contains reason REQ didn't become an APO
+//        DocumentNote docNote = new DocumentNote(docHeaderId, note, u);
+//        //This has to changed because I'm changing requisitionService.saveRequisitionDocumentNote KULAPP 1293
+//        //requisitionService.saveRequisitionDocumentNote(r.getId(), docNote, u);
+//        requisitionService.saveRequisitionDocumentNote(docNote);
+        LOG.debug("isAutomaticPurchaseOrderAllowed() return false; " + note);
+        return false;
+      }
 
-        /*
-         * The private checkAutomaticPurchaseOrderRules method contains rules to check if a requisition can become an APO (Automatic
-         * Purchase Order). The method returns a string containing the reason why this method should return false. Save the reason
-         * as a note on the requisition.
-         */
-        String note = checkAutomaticPurchaseOrderRules(requisition);
-        if (StringUtils.isNotEmpty(note)) {
-            note = PurapConstants.REQ_REASON_NOT_APO + note;
-            try {
-                Note apoNote = documentService.createNoteFromDocument(requisition, note);
-                documentService.addNoteToDocument(requisition, apoNote);
-            }
-            catch (Exception e) {
-                throw new RuntimeException(PurapConstants.REQ_UNABLE_TO_CREATE_NOTE + " " + e);
-            }
-            LOG.debug("isAutomaticPurchaseOrderAllowed() return false; " + note);
-
-            return false;
-        }
-
-        LOG.debug("isAutomaticPurchaseOrderAllowed() You made it!  Your REQ can become an APO; return true.");
-
-        return true;
+      LOG.debug("isAutomaticPurchaseOrderAllowed() You made it!  Your REQ can become an APO; return true.");
+      return true;
     }
-
-    /**
-     * Checks the rule for Automatic Purchase Order eligibility of the requisition and return a String containing the reason why the
-     * requisition was not eligible to become an APO if it was not eligible, or return an empty String if the requisition is
-     * eligible to become an APO
-     * 
-     * @param requisition the requisition document to be checked for APO eligibility.
-     * @return String containing the reason why the requisition was not eligible to become an APO if it was not eligible, or an
-     *         empty String if the requisition is eligible to become an APO.
-     */
+    
     private String checkAutomaticPurchaseOrderRules(RequisitionDocument requisition) {
         String requisitionSource = requisition.getRequisitionSourceCode();
         KualiDecimal reqTotal = requisition.getTotalDollarAmount();
-        KualiDecimal apoLimit = purapService.getApoLimit(requisition.getVendorContractGeneratedIdentifier(), requisition.getChartOfAccountsCode(), requisition.getOrganizationCode());
+        KualiDecimal apoLimit = getApoLimit(requisition.getVendorContractGeneratedIdentifier(),
+          requisition.getChartOfAccountsCode(), requisition.getOrganizationCode());
         requisition.setOrganizationAutomaticPurchaseOrderLimit(apoLimit);
-
+        
         LOG.debug("isAPO() reqId = " + requisition.getPurapDocumentIdentifier() + "; apoLimit = " + apoLimit + "; reqTotal = " + reqTotal);
         if (apoLimit == null) {
-
             return "APO limit is empty.";
         }
         else {
             if (reqTotal.compareTo(apoLimit) == 1) {
-
                 return "Requisition total is greater than the APO limit.";
             }
         }
 
-        if (reqTotal.compareTo(KualiDecimal.ZERO) <= 0) {
-
+        if (reqTotal.compareTo(KFSConstants.ZERO) <= 0) {
             return "Requisition total is not greater than zero.";
         }
 
+// TODO finish item logic (david and chris)
+//      Collection items = requisition.getItems();
+//      Iterator i = items.iterator();
+//      while (i.hasNext()) {
+//        RequisitionItem item = (RequisitionItem)i.next();
+//        if (item.getRestricted().booleanValue()) {
+//          return "Requisition contains an item that is marked as restricted.";
+//        }
+//        if (EpicConstants.ITEM_TYPE_ORDER_DISCOUNT_CODE.equals(item.getItemType().getCode()) ||
+//                EpicConstants.ITEM_TYPE_TRADE_IN_CODE.equals(item.getItemType().getCode())) {
+//          if ( (item.getUnitPrice() != null) && ((zero.compareTo(item.getUnitPrice())) != 0) ) {
+//            // discount or trade-in item has unit price that is not empty or zero
+//            return "Requisition contains a " + item.getItemType().getDescription() + " item, so it does not qualify as an APO.";
+//          }
+//        }
+//        if (!EpicConstants.REQ_SOURCE_B2B.equals(requisitionSource)) {
+//          Collection accounts = item.getAccounts();
+//          Iterator a = accounts.iterator();
+//          while (a.hasNext()) {
+//            RequisitionAccount account = (RequisitionAccount)a.next();
+//            ObjectCode code = chartOfAccountsService.getObjectCode(account.getFinancialChartOfAccountsCode(), 
+//                account.getFinancialObjectCode(), requisition.getPurchaseOrderEncumbranceFiscalYear());
+//            if (EpicConstants.FIS_CAPITAL_ASSET_OBJECT_LEVEL_CODE.equals(code.getFinancialObjectLevelCode())) {
+//              return "Standard requisition with a capital asset object code.";
+//            }
+//          }//endwhile accounts
+//        }
+//      }//endwhile items
+
         LOG.debug("isAPO() vendor #" + requisition.getVendorHeaderGeneratedIdentifier() + "-" + requisition.getVendorDetailAssignedIdentifier());
         if (requisition.getVendorHeaderGeneratedIdentifier() == null || requisition.getVendorDetailAssignedIdentifier() == null) {
-
             return "Vendor was not selected from the vendor database.";
         }
         else {
@@ -168,132 +198,83 @@ public class RequisitionServiceImpl implements RequisitionService {
             vendorDetail.setVendorDetailAssignedIdentifier(requisition.getVendorDetailAssignedIdentifier());
             vendorDetail = (VendorDetail) businessObjectService.retrieve(vendorDetail);
             if (vendorDetail == null) {
-
                 return "Error retrieving vendor from the database.";
             }
 
-            requisition.setVendorRestrictedIndicator(vendorDetail.getVendorRestrictedIndicator());
-            if (requisition.getVendorRestrictedIndicator() != null && requisition.getVendorRestrictedIndicator()) {
-
+//TODO fix this
+//            Boolean vendorRestricted = vendorDetail.getVendorRestrictedIndicator();
+//            if (vendorRestricted != requisition.getVendorRestrictedIndicator()) {
+//                // restricted status of vendor has changed; save new status to requisition 
+//                requisition.setVendorRestrictedIndicator(vendorDetail.getVendorRestrictedIndicator());
+//                save(requisition);
+//            }
+            if (requisition.getVendorRestrictedIndicator()) {
                 return "Selected vendor is marked as restricted.";
             }
-            requisition.setVendorDetail(vendorDetail);
-        }
-        
-        //These are needed for commodity codes. They are put in here so that
-        //we don't have to loop through items too many times.
-        String purchaseOrderRequiresCommodityCode = parameterService.getParameterValue(PurchaseOrderDocument.class, PurapRuleConstants.ITEMS_REQUIRE_COMMODITY_CODE_IND);
-        
-        for (Iterator iter = requisition.getItems().iterator(); iter.hasNext();) {
-            RequisitionItem item = (RequisitionItem) iter.next();
-            if (item.isItemRestrictedIndicator()) {
 
-                return "Requisition contains an item that is marked as restricted.";
+            if ((!PurapConstants.RequisitionSources.B2B.equals(requisitionSource)) && (requisition.getVendorContractGeneratedIdentifier() == null)) {
+                // TODO check what campus we should be using:  REQ initiator?  doc initiator?  delivery campus?
+                VendorContract b2bContract = vendorService.getVendorB2BContract(vendorDetail, requisition.getDeliveryCampusCode());
+                if (b2bContract != null) {
+                    return "Standard requisition with no contract selected but a B2B contract exists for the selected vendorequisition.";
+                }
             }
-            
-            String commodityCodesReason = "";
-            if (purchaseOrderRequiresCommodityCode.equals("Y")) {
-                List<VendorCommodityCode> vendorCommodityCodes = requisition.getVendorDetail().getVendorCommodities();
-                commodityCodesReason = checkAPORulesPerItemForCommodityCodes(item, vendorCommodityCodes);
-            }
-            if (StringUtils.isNotBlank(commodityCodesReason)) {
-                return commodityCodesReason;    
-            }
-        }// endfor items
+        }
 
         if (StringUtils.isNotEmpty(requisition.getRecurringPaymentTypeCode())) {
-
             return "Payment type is marked as recurring.";
         }
 
-        if ((requisition.getPurchaseOrderTotalLimit() != null) && (KualiDecimal.ZERO.compareTo(requisition.getPurchaseOrderTotalLimit()) != 0)) {
-            LOG.debug("isAPO() po total limit is not null and not equal to zero; return false.");
-
+        if ((requisition.getPurchaseOrderTotalLimit() != null) && (KFSConstants.ZERO.compareTo(requisition.getPurchaseOrderTotalLimit()) != 0)) {
+            LOG.debug("isAPO() po total limit is not null or not equal to zero; return false.");
             return "The 'PO not to exceed' amount has been entered.";
         }
 
-        if (StringUtils.isNotEmpty(requisition.getAlternate1VendorName()) || StringUtils.isNotEmpty(requisition.getAlternate2VendorName()) || StringUtils.isNotEmpty(requisition.getAlternate3VendorName()) || StringUtils.isNotEmpty(requisition.getAlternate4VendorName()) || StringUtils.isNotEmpty(requisition.getAlternate5VendorName())) {
+        if (StringUtils.isNotEmpty(requisition.getAlternate1VendorName()) || 
+                StringUtils.isNotEmpty(requisition.getAlternate2VendorName()) || 
+                StringUtils.isNotEmpty(requisition.getAlternate3VendorName()) || 
+                StringUtils.isNotEmpty(requisition.getAlternate4VendorName()) || 
+                StringUtils.isNotEmpty(requisition.getAlternate5VendorName())) {
             LOG.debug("isAPO() alternate vendor name exists; return false.");
-
             return "Requisition contains alternate vendor names.";
         }
-        
-        if (!ruleService.applyRules(new ValidateCapitalAssetsForAutomaticPurchaseOrderEvent("", requisition))) {
-            
-            return "Requisition has failed Capital Asset rules.";
-        }
-        
-        return "";
-    }
-    
-    /**
-     * Checks the APO rules for Commodity Codes. 
-     * The rules are as follow :
-     * 1. If an institution does not require a commodity code on a requisition but 
-     *    does require a commodity code on a purchase order:
-     *    a. If the requisition qualifies for an APO and the commodity code is blank
-     *       on any line item then the system should use the default commodity code
-     *       for the vendor.
-     *    b. If there is not a default commodity code for the vendor then the
-     *       requisition is not eligible to become an APO.
-     * 2. The commodity codes where the restricted indicator is Y should disallow
-     *    the requisition from becoming an APO.
-     * 3. If the commodity code is Inactive when the requisition is finally approved 
-     *    do not allow the requisition to become an APO.
-     *    
-     * @param requisition
-     * @return
-     */
-    private String checkAPORulesPerItemForCommodityCodes(RequisitionItem purItem, List<VendorCommodityCode>vendorCommodityCodes) {
-        // If the commodity code is blank on any line item, then the system should use
-        // the default commodity code for the vendor
-        if (purItem.getCommodityCode() == null) {
-            for (VendorCommodityCode vcc : vendorCommodityCodes) {
-                if (vcc.isCommodityDefaultIndicator()) {
-                    purItem.setCommodityCode(vcc.getCommodityCode());
-                }
-            }
-            // If there is not a default commodity code for the vendor then the requisition
-            // is not eligible to become an APO.
-            if (purItem.getCommodityCode() == null) {
-                return "there are missing commodity code(s).";
-            }
-        }
-        if (!purItem.getCommodityCode().isActive()) {
-            return "Requisition contains inactive commodity codes.";
-        }
-        else if (purItem.getCommodityCode().isRestrictedItemsIndicator()) {
-            return "Requisition contains an item that is marked as restricted.";
-        }
+
+        // TODO need to implement validateCapitalASsetNumbersForAPO
+//        if( !validateCapitalAssetNumbersForAPO( requisition ) ) {
+//            return "Requisition did not pass CAMS validation.";
+//        }
+
+// TODO finish converting logic
+        Calendar today = dateTimeService.getCurrentCalendar(); 
+//      Calendar allowApoDate = chartOfAccountsService.getDateRangeWithClosingDate(-appSettingService.getInt("ALLOW_APO_NEXT_FY_DAYS").intValue());
+//      Integer currentFY = chartOfAccountsService.getFiscalPeriodForToday().getUniversityFiscalYear();
+//      SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+//      LOG.debug("isApo() req FY = " + requisition.getPurchaseOrderEncumbranceFiscalYear() + " and currentFY = " + currentFY);
+//      LOG.debug("isApo() today = " + sdf.format(today.getTime()) + " and allowApoDate = " + sdf.format(allowApoDate.getTime()));
+//
+//      if (requisition.getPurchaseOrderEncumbranceFiscalYear().compareTo(currentFY) > 0 &&
+//          today.before(allowApoDate)) {
+//        return "Requisition is set to encumber next fiscal year and approval is not within APO allowed date range.";
+//      }
+
         return "";
     }
     
     public void setBusinessObjectService(BusinessObjectService boService) {
-        this.businessObjectService = boService;
+        this.businessObjectService = boService;    
     }
 
-    public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
+    public void setDateTimeService(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;    
     }
 
     public void setRequisitionDao(RequisitionDao requisitionDao) {
         this.requisitionDao = requisitionDao;
     }
 
-    public void setPurapService(PurapService purapService) {
-        this.purapService = purapService;
+    public void setVendorService(VendorService vendorService) {
+        this.vendorService = vendorService;    
     }
 
-    
-    public KualiRuleService getRuleService() {
-        return ruleService;
-    }
-
-    public void setRuleService(KualiRuleService ruleService) {
-        this.ruleService = ruleService;
-    }
-    
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
-    }
 }
+

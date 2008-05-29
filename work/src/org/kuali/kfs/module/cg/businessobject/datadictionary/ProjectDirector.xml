@@ -1,227 +1,151 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-
-  <bean id="ProjectDirector" parent="ProjectDirector-parentBean" />
-
-  <bean id="ProjectDirector-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.cg.bo.ProjectDirector" />
-    <property name="inquiryDefinition" >
-      <ref bean="ProjectDirector-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="ProjectDirector-lookupDefinition" />
-    </property>
-    <property name="objectLabel" value="Project Director" />
-    <property name="attributes" >
-      <list>
-        <ref bean="ProjectDirector-universalUser.personPayrollIdentifier" />
-        <ref bean="ProjectDirector-personUniversalIdentifier" />
-        <ref bean="ProjectDirector-universalUser.personUserIdentifier" />
-        <ref bean="ProjectDirector-universalUser.personName" />
-        <ref bean="ProjectDirector-universalUser.personLastName" />
-        <ref bean="ProjectDirector-universalUser.personFirstName" />
-        <ref bean="ProjectDirector-universalUser.campusCode" />
-        <ref bean="ProjectDirector-universalUser.primaryDepartmentCode" />
-        <ref bean="ProjectDirector-universalUser.employeeStatusCode" />
-        <ref bean="ProjectDirector-universalUser.employeeTypeCode" />
-        <ref bean="ProjectDirector-versionNumber" />
-      </list>
-    </property>
-    <property name="relationships" >
-      <list>
-        <bean parent="RelationshipDefinition">
-          <property name="objectAttributeName" value="universalUser" />
-          <property name="primitiveAttributes" >
-            <list>
-              <bean parent="PrimitiveAttributeDefinition"
-                    p:sourceName="personUniversalIdentifier"
-                    p:targetName="personUniversalIdentifier" />
-            </list>
-          </property>
-          <property name="supportAttributes" >
-            <list>
-              <bean parent="SupportAttributeDefinition"
-                    p:identifier="true"
-                    p:sourceName="universalUser.personUserIdentifier"
-                    p:targetName="personUserIdentifier" />
-              <bean parent="SupportAttributeDefinition"
-                    p:sourceName="universalUser.personName"
-                    p:targetName="personName" />
-              <bean parent="SupportAttributeDefinition"
-                    p:sourceName="universalUser.primaryDepartmentCode"
-                    p:targetName="primaryDepartmentCode" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-<!-- Attribute Definitions -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2005-2007 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.cg.bo.ProjectDirector">
 
 
-  <bean id="ProjectDirector-universalUser.personPayrollIdentifier" parent="ProjectDirector-universalUser.personPayrollIdentifier-parentBean" />
+        <inquiry>
+            <title>Project Director Inquiry</title>
 
-  <bean id="ProjectDirector-universalUser.personPayrollIdentifier-parentBean" abstract="true" parent="UniversalUser-personPayrollIdentifier">
-    <property name="name" value="universalUser.personPayrollIdentifier" />
-  </bean>
-  <bean id="ProjectDirector-personUniversalIdentifier" parent="ProjectDirector-personUniversalIdentifier-parentBean" />
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+                <field attributeName="personUniversalIdentifier" />
+                <field attributeName="universalUser.personUserIdentifier" />
+                <field attributeName="universalUser.personName" />
+                <field attributeName="universalUser.campusCode" />
+                <field attributeName="universalUser.primaryDepartmentCode" />
+                <field attributeName="universalUser.employeeStatusCode" />
+                <field attributeName="universalUser.employeeTypeCode" />
+            </inquiryFields></inquirySection></inquirySections>
+        </inquiry>
 
-  <bean id="ProjectDirector-personUniversalIdentifier-parentBean" abstract="true" parent="GenericAttributes-genericSystemId">
-    <property name="name" value="personUniversalIdentifier" />
-    <property name="label" value="Universal ID" />
-    <property name="shortLabel" value="ID" />
-    <property name="required" value="true" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.personUserIdentifier" parent="ProjectDirector-universalUser.personUserIdentifier-parentBean" />
+        <lookup>
+            <title>Project Director Lookup</title>
 
-  <bean id="ProjectDirector-universalUser.personUserIdentifier-parentBean" abstract="true" parent="UniversalUser-personUserIdentifier">
-    <property name="name" value="universalUser.personUserIdentifier" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.personName" parent="ProjectDirector-universalUser.personName-parentBean" />
+            <instructions>Lookup a Project Director</instructions>
 
-  <bean id="ProjectDirector-universalUser.personName-parentBean" abstract="true" parent="UniversalUser-personName">
-    <property name="name" value="universalUser.personName" />
-    <property name="label" value="Project Director Name" />
-    <property name="shortLabel" value="Proj Dir Name" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.personLastName" parent="ProjectDirector-universalUser.personLastName-parentBean" />
+            <defaultSort attributeName="universalUser.personName" sortAscending="true" />
 
-  <bean id="ProjectDirector-universalUser.personLastName-parentBean" abstract="true" parent="UniversalUser-personLastName">
-    <property name="name" value="universalUser.personLastName" />
-    <property name="label" value="Project Director Last Name" />
-    <property name="shortLabel" value="Proj Dir Last Name" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.personFirstName" parent="ProjectDirector-universalUser.personFirstName-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="universalUser.personUserIdentifier" required="false" />
+                <lookupField attributeName="personUniversalIdentifier" required="false" />
+                <lookupField attributeName="universalUser.personPayrollIdentifier" required="false" />
+                <lookupField attributeName="universalUser.personName" required="false" />
+                <lookupField attributeName="universalUser.primaryDepartmentCode" required="false" />
+                <lookupField attributeName="universalUser.employeeStatusCode" required="false" />
+                <lookupField attributeName="universalUser.employeeTypeCode" required="false" />
+            </lookupFields>
 
-  <bean id="ProjectDirector-universalUser.personFirstName-parentBean" abstract="true" parent="UniversalUser-personFirstName">
-    <property name="name" value="universalUser.personFirstName" />
-    <property name="label" value="Project Director First Name" />
-    <property name="shortLabel" value="Proj Dir First Name" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.campusCode" parent="ProjectDirector-universalUser.campusCode-parentBean" />
+            <resultFields>
+                <field attributeName="universalUser.personUserIdentifier" />
+                <field attributeName="personUniversalIdentifier" />
+                <field attributeName="universalUser.personPayrollIdentifier" />
+                <field attributeName="universalUser.personName" />
+                <field attributeName="universalUser.primaryDepartmentCode" />
+                <field attributeName="universalUser.employeeStatusCode" />
+                <field attributeName="universalUser.employeeTypeCode" />
+            </resultFields>
 
-  <bean id="ProjectDirector-universalUser.campusCode-parentBean" abstract="true" parent="Campus-campusCode">
-    <property name="name" value="universalUser.campusCode" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.primaryDepartmentCode" parent="ProjectDirector-universalUser.primaryDepartmentCode-parentBean" />
+        </lookup>
 
-  <bean id="ProjectDirector-universalUser.primaryDepartmentCode-parentBean" abstract="true" parent="UniversalUser-primaryDepartmentCode">
-    <property name="name" value="universalUser.primaryDepartmentCode" />
-    <property name="label" value="Dept ID" />
-    <property name="shortLabel" value="Dept ID" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.employeeStatusCode" parent="ProjectDirector-universalUser.employeeStatusCode-parentBean" />
+        <attributes>
+            <attributeReference name="universalUser.personPayrollIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personPayrollIdentifier">
+            </attributeReference>
 
-  <bean id="ProjectDirector-universalUser.employeeStatusCode-parentBean" abstract="true" parent="UniversalUser-employeeStatusCode">
-    <property name="name" value="universalUser.employeeStatusCode" />
-    <property name="label" value="Employee Status" />
-    <property name="shortLabel" value="Empl Status" />
-  </bean>
-  <bean id="ProjectDirector-universalUser.employeeTypeCode" parent="ProjectDirector-universalUser.employeeTypeCode-parentBean" />
+            <attributeReference name="personUniversalIdentifier" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericSystemId">
+                <label>Universal ID</label>
+                <shortLabel>ID</shortLabel>
+                <required>true</required>
+                <summary>Universal ID</summary>
+                <description>
+					This field corresponds to the individual’s Universal ID.  This 
+					is a unique 9-digit number assigned to each individual who has 
+					a role at the university or is in a university system.
+				</description>
+            </attributeReference>
 
-  <bean id="ProjectDirector-universalUser.employeeTypeCode-parentBean" abstract="true" parent="UniversalUser-employeeTypeCode">
-    <property name="name" value="universalUser.employeeTypeCode" />
-    <property name="label" value="Employee Type" />
-    <property name="shortLabel" value="Empl Type" />
-  </bean>
-  <bean id="ProjectDirector-versionNumber" parent="ProjectDirector-versionNumber-parentBean" />
+            <attributeReference name="universalUser.personUserIdentifier" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personUserIdentifier">
+                <label>User ID</label>
+                <shortLabel>User ID</shortLabel>
+                <summary>User ID</summary>
+                <description>
+					This field lists the individual’s network ID.  This is typically an 
+					alphanumeric field up to 8 characters.
+				</description>
+            </attributeReference>
 
-  <bean id="ProjectDirector-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+            <attributeReference name="universalUser.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
+                <label>Project Director Name</label>
+                <shortLabel>Proj Dir Name</shortLabel>
+                <summary>Project Director Name</summary>
+                <description>
+					This is the full name of the Project Director.  The field is in LAST,FIRST MIDDLE format.
+				</description>
+            </attributeReference>
 
-<!-- Business Object Inquiry Definition -->
+			<attributeReference name="universalUser.campusCode" sourceClassName="org.kuali.core.bo.Campus" sourceAttributeName="campusCode">
+				<summary>Campus Code</summary>
+				<description>
+					Insert desc here.
+				</description>
+			</attributeReference>
 
+            <attributeReference name="universalUser.primaryDepartmentCode" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="primaryDepartmentCode">
+                <label>Dept ID</label>
+                <shortLabel>Dept ID</shortLabel>
+                <summary>Dept ID</summary>
+                <description>
+                	This is the home organization of the individual as listed in the HRMS system.
+                </description>
+            </attributeReference>
 
-  <bean id="ProjectDirector-inquiryDefinition" parent="ProjectDirector-inquiryDefinition-parentBean" />
+            <attributeReference name="universalUser.employeeStatusCode" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="employeeStatusCode">
+                <label>Employee Status</label>
+                <shortLabel>Empl Status</shortLabel>
+                <summary>Employee Status</summary>
+                <description>
+					This one-letter value reflects the current employment status of the employee.  
+				</description>
+            </attributeReference>
 
-  <bean id="ProjectDirector-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Project Director Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Project Director Details" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="personUniversalIdentifier" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universalUser.personUserIdentifier" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universalUser.personName" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universalUser.campusCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universalUser.primaryDepartmentCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universalUser.employeeStatusCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universalUser.employeeTypeCode" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+            <attributeReference name="universalUser.employeeTypeCode" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="employeeTypeCode">
+                <label>Employee Type</label>
+                <shortLabel>Empl Type</shortLabel>
+                <summary>Employee Type</summary>
+                <description>
+					This one-letter value corresponds to the general appointment type of the 
+					employee’s position.  Values include P=Professional, N=Non-Professional, and O=Other.
+				</description>
+            </attributeReference>
 
-<!-- Business Object Lookup Definition -->
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
+        </attributes>
 
-  <bean id="ProjectDirector-lookupDefinition" parent="ProjectDirector-lookupDefinition-parentBean" />
+        <relationships>
+            <relationship objectAttributeName="universalUser" >
+                <primitiveAttribute sourceName="personUniversalIdentifier" targetName="personUniversalIdentifier" />
+				<supportAttribute sourceName="universalUser.personUserIdentifier" targetName="personUserIdentifier" identifier="true" />
+				<supportAttribute sourceName="universalUser.personName" targetName="personName" />
+            </relationship>
+        </relationships>
+        
+    </businessObject>
+</dictionaryEntry>
 
-  <bean id="ProjectDirector-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Project Director Lookup" />
-    <property name="instructions" value="Lookup a Project Director" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-        <property name="attributeNames" >
-          <list>
-            <value>universalUser.personName</value>
-          </list>
-        </property>
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.personUserIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="personUniversalIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.personPayrollIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.personLastName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.personFirstName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.primaryDepartmentCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.employeeStatusCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.employeeTypeCode" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.personUserIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="personUniversalIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.personPayrollIdentifier" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.personName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.primaryDepartmentCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.employeeStatusCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="universalUser.employeeTypeCode" />
-      </list>
-    </property>
-  </bean>
-</beans>

@@ -29,14 +29,13 @@ import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.core.bo.Campus;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.service.UniversalUserService;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.bo.PostalZipCode;
 import org.kuali.kfs.bo.State;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.chart.bo.codes.BudgetRecordingLevel;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.chart.bo.codes.BudgetRecordingLevelCode;
 import org.kuali.module.chart.bo.codes.SufficientFundsCode;
-import org.kuali.module.chart.service.SubFundGroupService;
 
 /**
  * 
@@ -74,6 +73,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     private String accountCfdaNumber;
     private boolean accountOffCampusIndicator;
     private boolean accountClosedIndicator;
+    private String programCode;
 
     private String accountFiscalOfficerSystemIdentifier;
     private String accountsSupervisorySystemsIdentifier;
@@ -115,9 +115,9 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     private UniversalUser accountSupervisoryUser;
     private UniversalUser accountManagerUser;
     private PostalZipCode postalZipCode;
-    private BudgetRecordingLevel budgetRecordingLevel;
+    private BudgetRecordingLevelCode budgetRecordingLevel;
     private SufficientFundsCode sufficientFundsCode;
-
+    private Program program;
 
     // Several kinds of Dummy Attributes for dividing sections on Inquiry page
     private String accountResponsibilitySectionBlank;
@@ -134,7 +134,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     private AccountDescription accountDescription;
 
     private List subAccounts;
-    private Boolean forContractsAndGrants;
+    private boolean forContractsAndGrants;
 
     /**
      * Default no-arg constructor.
@@ -142,10 +142,18 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     public PriorYearAccount() {
     }
 
+    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
+        super.afterLookup(persistenceBroker);
+        // This is needed to put a value in the object so the persisted XML has a flag that
+        // can be used in routing to determine if an account is a C&G Account
+        forContractsAndGrants = SpringServiceLocator.getSubFundGroupService().isForContractsAndGrants(getSubFundGroup());
+    }
+    
     /**
      * Gets the accountNumber attribute.
      * 
      * @return Returns the accountNumber
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -155,6 +163,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountNumber attribute.
      * 
      * @param accountNumber The accountNumber to set.
+     * 
      */
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -164,6 +173,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountName attribute.
      * 
      * @return Returns the accountName
+     * 
      */
     public String getAccountName() {
         return accountName;
@@ -173,6 +183,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountName attribute.
      * 
      * @param accountName The accountName to set.
+     * 
      */
     public void setAccountName(String accountName) {
         this.accountName = accountName;
@@ -182,6 +193,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the _AccountsFringesBnftIndicator_ attribute.
      * 
      * @return Returns the _AccountsFringesBnftIndicator_
+     * 
      */
     public boolean isAccountsFringesBnftIndicator() {
         return accountsFringesBnftIndicator;
@@ -191,6 +203,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the _AccountsFringesBnftIndicator_ attribute.
      * 
      * @param _AccountsFringesBnftIndicator_ The _AccountsFringesBnftIndicator_ to set.
+     * 
      */
     public void setAccountsFringesBnftIndicator(boolean _AccountsFringesBnftIndicator_) {
         this.accountsFringesBnftIndicator = _AccountsFringesBnftIndicator_;
@@ -200,6 +213,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountRestrictedStatusDate attribute.
      * 
      * @return Returns the accountRestrictedStatusDate
+     * 
      */
     public Timestamp getAccountRestrictedStatusDate() {
         return accountRestrictedStatusDate;
@@ -209,6 +223,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountRestrictedStatusDate attribute.
      * 
      * @param accountRestrictedStatusDate The accountRestrictedStatusDate to set.
+     * 
      */
     public void setAccountRestrictedStatusDate(Timestamp accountRestrictedStatusDate) {
         this.accountRestrictedStatusDate = accountRestrictedStatusDate;
@@ -218,6 +233,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountCityName attribute.
      * 
      * @return Returns the accountCityName
+     * 
      */
     public String getAccountCityName() {
         return accountCityName;
@@ -227,6 +243,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountCityName attribute.
      * 
      * @param accountCityName The accountCityName to set.
+     * 
      */
     public void setAccountCityName(String accountCityName) {
         this.accountCityName = accountCityName;
@@ -236,6 +253,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountStateCode attribute.
      * 
      * @return Returns the accountStateCode
+     * 
      */
     public String getAccountStateCode() {
         return accountStateCode;
@@ -245,6 +263,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountStateCode attribute.
      * 
      * @param accountStateCode The accountStateCode to set.
+     * 
      */
     public void setAccountStateCode(String accountStateCode) {
         this.accountStateCode = accountStateCode;
@@ -254,6 +273,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountStreetAddress attribute.
      * 
      * @return Returns the accountStreetAddress
+     * 
      */
     public String getAccountStreetAddress() {
         return accountStreetAddress;
@@ -263,6 +283,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountStreetAddress attribute.
      * 
      * @param accountStreetAddress The accountStreetAddress to set.
+     * 
      */
     public void setAccountStreetAddress(String accountStreetAddress) {
         this.accountStreetAddress = accountStreetAddress;
@@ -272,6 +293,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountZipCode attribute.
      * 
      * @return Returns the accountZipCode
+     * 
      */
     public String getAccountZipCode() {
         return accountZipCode;
@@ -281,6 +303,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountZipCode attribute.
      * 
      * @param accountZipCode The accountZipCode to set.
+     * 
      */
     public void setAccountZipCode(String accountZipCode) {
         this.accountZipCode = accountZipCode;
@@ -290,6 +313,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountCreateDate attribute.
      * 
      * @return Returns the accountCreateDate
+     * 
      */
     public Timestamp getAccountCreateDate() {
         return accountCreateDate;
@@ -299,6 +323,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountCreateDate attribute.
      * 
      * @param accountCreateDate The accountCreateDate to set.
+     * 
      */
     public void setAccountCreateDate(Timestamp accountCreateDate) {
         this.accountCreateDate = accountCreateDate;
@@ -308,6 +333,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountEffectiveDate attribute.
      * 
      * @return Returns the accountEffectiveDate
+     * 
      */
     public Timestamp getAccountEffectiveDate() {
         return accountEffectiveDate;
@@ -317,6 +343,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountEffectiveDate attribute.
      * 
      * @param accountEffectiveDate The accountEffectiveDate to set.
+     * 
      */
     public void setAccountEffectiveDate(Timestamp accountEffectiveDate) {
         this.accountEffectiveDate = accountEffectiveDate;
@@ -326,6 +353,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountExpirationDate attribute.
      * 
      * @return Returns the accountExpirationDate
+     * 
      */
     public Timestamp getAccountExpirationDate() {
         return accountExpirationDate;
@@ -335,18 +363,24 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountExpirationDate attribute.
      * 
      * @param accountExpirationDate The accountExpirationDate to set.
+     * 
      */
     public void setAccountExpirationDate(Timestamp accountExpirationDate) {
         this.accountExpirationDate = accountExpirationDate;
     }
 
     /**
-     * This method determines whether the account is expired or not. Note that if Expiration Date is the same as today, then this
-     * will return false. It will only return true if the account expiration date is one day earlier than today or earlier. Note
-     * that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on date
-     * values, not time-values.
+     * 
+     * This method determines whether the account is expired or not.
+     * 
+     * Note that if Expiration Date is the same as today, then this will return false. It will only return true if the account
+     * expiration date is one day earlier than today or earlier.
+     * 
+     * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
+     * date values, not time-values.
      * 
      * @return true or false based on the logic outlined above
+     * 
      */
     public boolean isExpired() {
         LOG.debug("entering isExpired()");
@@ -355,18 +389,23 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
             return false;
         }
 
-        return this.isExpired(SpringContext.getBean(DateTimeService.class).getCurrentCalendar());
+        return this.isExpired(SpringServiceLocator.getDateTimeService().getCurrentCalendar());
     }
 
     /**
-     * This method determines whether the account is expired or not. Note that if Expiration Date is the same date as testDate, then
-     * this will return false. It will only return true if the account expiration date is one day earlier than testDate or earlier.
+     * 
+     * This method determines whether the account is expired or not.
+     * 
+     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
+     * account expiration date is one day earlier than testDate or earlier.
+     * 
      * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
      * date values, not time-values.
      * 
      * @param testDate - Calendar instance with the date to test the Account's Expiration Date against. This is most commonly set to
      *        today's date.
      * @return true or false based on the logic outlined above
+     * 
      */
     public boolean isExpired(Calendar testDate) {
         if (LOG.isDebugEnabled()) {
@@ -397,14 +436,19 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     }
 
     /**
-     * This method determines whether the account is expired or not. Note that if Expiration Date is the same date as testDate, then
-     * this will return false. It will only return true if the account expiration date is one day earlier than testDate or earlier.
+     * 
+     * This method determines whether the account is expired or not.
+     * 
+     * Note that if Expiration Date is the same date as testDate, then this will return false. It will only return true if the
+     * account expiration date is one day earlier than testDate or earlier.
+     * 
      * Note that this logic ignores all time components when doing the comparison. It only does the before/after comparison based on
      * date values, not time-values.
      * 
      * @param testDate - java.util.Date instance with the date to test the Account's Expiration Date against. This is most commonly
      *        set to today's date.
      * @return true or false based on the logic outlined above
+     * 
      */
     public boolean isExpired(Date testDate) {
 
@@ -422,6 +466,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the awardPeriodEndYear attribute.
      * 
      * @return Returns the awardPeriodEndYear
+     * 
      */
     public Integer getAwardPeriodEndYear() {
         return awardPeriodEndYear;
@@ -431,6 +476,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the awardPeriodEndYear attribute.
      * 
      * @param awardPeriodEndYear The awardPeriodEndYear to set.
+     * 
      */
     public void setAwardPeriodEndYear(Integer awardPeriodEndYear) {
         this.awardPeriodEndYear = awardPeriodEndYear;
@@ -440,6 +486,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the awardPeriodEndMonth attribute.
      * 
      * @return Returns the awardPeriodEndMonth
+     * 
      */
     public String getAwardPeriodEndMonth() {
         return awardPeriodEndMonth;
@@ -449,6 +496,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the awardPeriodEndMonth attribute.
      * 
      * @param awardPeriodEndMonth The awardPeriodEndMonth to set.
+     * 
      */
     public void setAwardPeriodEndMonth(String awardPeriodEndMonth) {
         this.awardPeriodEndMonth = awardPeriodEndMonth;
@@ -458,6 +506,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the awardPeriodBeginYear attribute.
      * 
      * @return Returns the awardPeriodBeginYear
+     * 
      */
     public Integer getAwardPeriodBeginYear() {
         return awardPeriodBeginYear;
@@ -467,6 +516,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the awardPeriodBeginYear attribute.
      * 
      * @param awardPeriodBeginYear The awardPeriodBeginYear to set.
+     * 
      */
     public void setAwardPeriodBeginYear(Integer awardPeriodBeginYear) {
         this.awardPeriodBeginYear = awardPeriodBeginYear;
@@ -476,6 +526,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the awardPeriodBeginMonth attribute.
      * 
      * @return Returns the awardPeriodBeginMonth
+     * 
      */
     public String getAwardPeriodBeginMonth() {
         return awardPeriodBeginMonth;
@@ -485,6 +536,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the awardPeriodBeginMonth attribute.
      * 
      * @param awardPeriodBeginMonth The awardPeriodBeginMonth to set.
+     * 
      */
     public void setAwardPeriodBeginMonth(String awardPeriodBeginMonth) {
         this.awardPeriodBeginMonth = awardPeriodBeginMonth;
@@ -494,6 +546,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the acctIndirectCostRcvyTypeCd attribute.
      * 
      * @return Returns the acctIndirectCostRcvyTypeCd
+     * 
      */
     public String getAcctIndirectCostRcvyTypeCd() {
         return acctIndirectCostRcvyTypeCd;
@@ -503,6 +556,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the acctIndirectCostRcvyTypeCd attribute.
      * 
      * @param acctIndirectCostRcvyTypeCd The acctIndirectCostRcvyTypeCd to set.
+     * 
      */
     public void setAcctIndirectCostRcvyTypeCd(String acctIndirectCostRcvyTypeCd) {
         this.acctIndirectCostRcvyTypeCd = acctIndirectCostRcvyTypeCd;
@@ -512,6 +566,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the acctCustomIndCstRcvyExclCd attribute.
      * 
      * @return Returns the acctCustomIndCstRcvyExclCd
+     * 
      */
     public String getAcctCustomIndCstRcvyExclCd() {
         return acctCustomIndCstRcvyExclCd;
@@ -521,6 +576,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the acctCustomIndCstRcvyExclCd attribute.
      * 
      * @param acctCustomIndCstRcvyExclCd The acctCustomIndCstRcvyExclCd to set.
+     * 
      */
     public void setAcctCustomIndCstRcvyExclCd(String acctCustomIndCstRcvyExclCd) {
         this.acctCustomIndCstRcvyExclCd = acctCustomIndCstRcvyExclCd;
@@ -530,6 +586,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the financialIcrSeriesIdentifier attribute.
      * 
      * @return Returns the financialIcrSeriesIdentifier
+     * 
      */
     public String getFinancialIcrSeriesIdentifier() {
         return financialIcrSeriesIdentifier;
@@ -539,6 +596,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the financialIcrSeriesIdentifier attribute.
      * 
      * @param financialIcrSeriesIdentifier The financialIcrSeriesIdentifier to set.
+     * 
      */
     public void setFinancialIcrSeriesIdentifier(String financialIcrSeriesIdentifier) {
         this.financialIcrSeriesIdentifier = financialIcrSeriesIdentifier;
@@ -548,6 +606,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountInFinancialProcessingIndicator attribute.
      * 
      * @return Returns the accountInFinancialProcessingIndicator
+     * 
      */
     public boolean getAccountInFinancialProcessingIndicator() {
         return accountInFinancialProcessingIndicator;
@@ -557,6 +616,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountInFinancialProcessingIndicator attribute.
      * 
      * @param accountInFinancialProcessingIndicator The accountInFinancialProcessingIndicator to set.
+     * 
      */
     public void setAccountInFinancialProcessingIndicator(boolean accountInFinancialProcessingIndicator) {
         this.accountInFinancialProcessingIndicator = accountInFinancialProcessingIndicator;
@@ -566,6 +626,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the budgetRecordingLevelCode attribute.
      * 
      * @return Returns the budgetRecordingLevelCode
+     * 
      */
     public String getBudgetRecordingLevelCode() {
         return budgetRecordingLevelCode;
@@ -575,6 +636,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the budgetRecordingLevelCode attribute.
      * 
      * @param budgetRecordingLevelCode The budgetRecordingLevelCode to set.
+     * 
      */
     public void setBudgetRecordingLevelCode(String budgetRecordingLevelCode) {
         this.budgetRecordingLevelCode = budgetRecordingLevelCode;
@@ -584,6 +646,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountSufficientFundsCode attribute.
      * 
      * @return Returns the accountSufficientFundsCode
+     * 
      */
     public String getAccountSufficientFundsCode() {
         return accountSufficientFundsCode;
@@ -593,6 +656,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountSufficientFundsCode attribute.
      * 
      * @param accountSufficientFundsCode The accountSufficientFundsCode to set.
+     * 
      */
     public void setAccountSufficientFundsCode(String accountSufficientFundsCode) {
         this.accountSufficientFundsCode = accountSufficientFundsCode;
@@ -602,6 +666,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the pendingAcctSufficientFundsIndicator attribute.
      * 
      * @return Returns the pendingAcctSufficientFundsIndicator
+     * 
      */
     public boolean isPendingAcctSufficientFundsIndicator() {
         return pendingAcctSufficientFundsIndicator;
@@ -611,6 +676,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the pendingAcctSufficientFundsIndicator attribute.
      * 
      * @param pendingAcctSufficientFundsIndicator The pendingAcctSufficientFundsIndicator to set.
+     * 
      */
     public void setPendingAcctSufficientFundsIndicator(boolean pendingAcctSufficientFundsIndicator) {
         this.pendingAcctSufficientFundsIndicator = pendingAcctSufficientFundsIndicator;
@@ -620,6 +686,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the extrnlFinEncumSufficntFndIndicator attribute.
      * 
      * @return Returns the extrnlFinEncumSufficntFndIndicator
+     * 
      */
     public boolean isExtrnlFinEncumSufficntFndIndicator() {
         return extrnlFinEncumSufficntFndIndicator;
@@ -629,6 +696,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the extrnlFinEncumSufficntFndIndicator attribute.
      * 
      * @param extrnlFinEncumSufficntFndIndicator The extrnlFinEncumSufficntFndIndicator to set.
+     * 
      */
     public void setExtrnlFinEncumSufficntFndIndicator(boolean extrnlFinEncumSufficntFndIndicator) {
         this.extrnlFinEncumSufficntFndIndicator = extrnlFinEncumSufficntFndIndicator;
@@ -638,6 +706,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the intrnlFinEncumSufficntFndIndicator attribute.
      * 
      * @return Returns the intrnlFinEncumSufficntFndIndicator
+     * 
      */
     public boolean isIntrnlFinEncumSufficntFndIndicator() {
         return intrnlFinEncumSufficntFndIndicator;
@@ -647,6 +716,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the intrnlFinEncumSufficntFndIndicator attribute.
      * 
      * @param intrnlFinEncumSufficntFndIndicator The intrnlFinEncumSufficntFndIndicator to set.
+     * 
      */
     public void setIntrnlFinEncumSufficntFndIndicator(boolean intrnlFinEncumSufficntFndIndicator) {
         this.intrnlFinEncumSufficntFndIndicator = intrnlFinEncumSufficntFndIndicator;
@@ -656,6 +726,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the finPreencumSufficientFundIndicator attribute.
      * 
      * @return Returns the finPreencumSufficientFundIndicator
+     * 
      */
     public boolean isFinPreencumSufficientFundIndicator() {
         return finPreencumSufficientFundIndicator;
@@ -665,6 +736,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the finPreencumSufficientFundIndicator attribute.
      * 
      * @param finPreencumSufficientFundIndicator The finPreencumSufficientFundIndicator to set.
+     * 
      */
     public void setFinPreencumSufficientFundIndicator(boolean finPreencumSufficientFundIndicator) {
         this.finPreencumSufficientFundIndicator = finPreencumSufficientFundIndicator;
@@ -674,6 +746,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the _FinancialObjectivePrsctrlIndicator_ attribute.
      * 
      * @return Returns the _FinancialObjectivePrsctrlIndicator_
+     * 
      */
     public boolean isFinancialObjectivePrsctrlIndicator() {
         return financialObjectivePrsctrlIndicator;
@@ -683,6 +756,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the _FinancialObjectivePrsctrlIndicator_ attribute.
      * 
      * @param _FinancialObjectivePrsctrlIndicator_ The _FinancialObjectivePrsctrlIndicator_ to set.
+     * 
      */
     public void setFinancialObjectivePrsctrlIndicator(boolean _FinancialObjectivePrsctrlIndicator_) {
         this.financialObjectivePrsctrlIndicator = _FinancialObjectivePrsctrlIndicator_;
@@ -692,6 +766,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountCfdaNumber attribute.
      * 
      * @return Returns the accountCfdaNumber
+     * 
      */
     public String getAccountCfdaNumber() {
         return accountCfdaNumber;
@@ -701,6 +776,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountCfdaNumber attribute.
      * 
      * @param accountCfdaNumber The accountCfdaNumber to set.
+     * 
      */
     public void setAccountCfdaNumber(String accountCfdaNumber) {
         this.accountCfdaNumber = accountCfdaNumber;
@@ -710,6 +786,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountOffCampusIndicator attribute.
      * 
      * @return Returns the accountOffCampusIndicator
+     * 
      */
     public boolean isAccountOffCampusIndicator() {
         return accountOffCampusIndicator;
@@ -719,6 +796,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountOffCampusIndicator attribute.
      * 
      * @param accountOffCampusIndicator The accountOffCampusIndicator to set.
+     * 
      */
     public void setAccountOffCampusIndicator(boolean accountOffCampusIndicator) {
         this.accountOffCampusIndicator = accountOffCampusIndicator;
@@ -728,6 +806,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountClosedIndicator attribute.
      * 
      * @return Returns the accountClosedIndicator
+     * 
      */
     public boolean isAccountClosedIndicator() {
         return accountClosedIndicator;
@@ -737,6 +816,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Sets the accountClosedIndicator attribute.
      * 
      * @param accountClosedIndicator The accountClosedIndicator to set.
+     * 
      */
     public void setAccountClosedIndicator(boolean accountClosedIndicator) {
         this.accountClosedIndicator = accountClosedIndicator;
@@ -746,6 +826,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -765,6 +846,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public Org getOrganization() {
         return organization;
@@ -784,6 +866,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountType attribute.
      * 
      * @return Returns the accountType
+     * 
      */
     public AcctType getAccountType() {
         return accountType;
@@ -803,6 +886,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountPhysicalCampus attribute.
      * 
      * @return Returns the accountPhysicalCampus
+     * 
      */
     public Campus getAccountPhysicalCampus() {
         return accountPhysicalCampus;
@@ -841,6 +925,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the subFundGroup attribute.
      * 
      * @return Returns the subFundGroup
+     * 
      */
     public SubFundGroup getSubFundGroup() {
         return subFundGroup;
@@ -860,6 +945,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the financialHigherEdFunction attribute.
      * 
      * @return Returns the financialHigherEdFunction
+     * 
      */
     public HigherEdFunction getFinancialHigherEdFunction() {
         return financialHigherEdFunction;
@@ -879,6 +965,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the accountRestrictedStatus attribute.
      * 
      * @return Returns the accountRestrictedStatus
+     * 
      */
     public RestrictedStatus getAccountRestrictedStatus() {
         return accountRestrictedStatus;
@@ -898,6 +985,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the reportsToAccount attribute.
      * 
      * @return Returns the reportsToAccount
+     * 
      */
     public Account getReportsToAccount() {
         return reportsToAccount;
@@ -917,6 +1005,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the endowmentIncomeAccount attribute.
      * 
      * @return Returns the endowmentIncomeAccount
+     * 
      */
     public Account getEndowmentIncomeAccount() {
         return endowmentIncomeAccount;
@@ -936,6 +1025,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the contractControlAccount attribute.
      * 
      * @return Returns the contractControlAccount
+     * 
      */
     public Account getContractControlAccount() {
         return contractControlAccount;
@@ -956,6 +1046,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the incomeStreamAccount attribute.
      * 
      * @return Returns the incomeStreamAccount
+     * 
      */
     public Account getIncomeStreamAccount() {
         return incomeStreamAccount;
@@ -975,6 +1066,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * Gets the indirectCostRecoveryAcct attribute.
      * 
      * @return Returns the indirectCostRecoveryAcct
+     * 
      */
     public Account getIndirectCostRecoveryAcct() {
         return indirectCostRecoveryAcct;
@@ -991,7 +1083,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     }
 
     public UniversalUser getAccountFiscalOfficerUser() {
-        accountFiscalOfficerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
+        accountFiscalOfficerUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountFiscalOfficerSystemIdentifier, accountFiscalOfficerUser);
         return accountFiscalOfficerUser;
     }
 
@@ -1005,7 +1097,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     }
 
     public UniversalUser getAccountManagerUser() {
-        accountManagerUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
+        accountManagerUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountManagerSystemIdentifier, accountManagerUser);
         return accountManagerUser;
     }
 
@@ -1019,7 +1111,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
 
 
     public UniversalUser getAccountSupervisoryUser() {
-        accountSupervisoryUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
+        accountSupervisoryUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(accountsSupervisorySystemsIdentifier, accountSupervisoryUser);
         return accountSupervisoryUser;
     }
 
@@ -1049,6 +1141,20 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
         this.continuationAccount = continuationAccount;
     }
 
+    /**
+     * @return Returns the program.
+     */
+    public Program getProgram() {
+        return program;
+    }
+
+    /**
+     * @param program The program to set.
+     * @deprecated
+     */
+    public void setProgram(Program program) {
+        this.program = program;
+    }
 
     /**
      * @return Returns the accountGuideline.
@@ -1056,6 +1162,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     public AccountGuideline getAccountGuideline() {
         return accountGuideline;
     }
+
 
     /**
      * @param accountGuideline The accountGuideline to set.
@@ -1408,7 +1515,6 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      */
     public void setSubFundGroupCode(String subFundGroupCode) {
         this.subFundGroupCode = subFundGroupCode;
-        forContractsAndGrants = null;
     }
 
     /**
@@ -1434,7 +1540,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * 
      * @return Returns the budgetRecordingLevel.
      */
-    public BudgetRecordingLevel getBudgetRecordingLevel() {
+    public BudgetRecordingLevelCode getBudgetRecordingLevel() {
         return budgetRecordingLevel;
     }
 
@@ -1443,7 +1549,7 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
      * 
      * @param budgetRecordingLevel The budgetRecordingLevel to set.
      */
-    public void setBudgetRecordingLevel(BudgetRecordingLevel budgetRecordingLevel) {
+    public void setBudgetRecordingLevel(BudgetRecordingLevelCode budgetRecordingLevel) {
         this.budgetRecordingLevel = budgetRecordingLevel;
     }
 
@@ -1465,7 +1571,20 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
         this.sufficientFundsCode = sufficientFundsCode;
     }
 
+    /**
+     * @return Returns the programCode.
+     */
+    public String getProgramCode() {
+        return programCode;
+    }
 
+    /**
+     * @param programCode The programCode to set.
+     */
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+  
     /**
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
@@ -1642,14 +1761,10 @@ public class PriorYearAccount extends PersistableBusinessObjectBase implements A
     }
 
     /**
-     * Gets the forContractsAndGrants attribute.
-     * 
+     * Gets the forContractsAndGrants attribute. 
      * @return Returns the forContractsAndGrants.
      */
     public boolean isForContractsAndGrants() {
-        if ( forContractsAndGrants == null ) {
-            forContractsAndGrants = SpringContext.getBean(SubFundGroupService.class).isForContractsAndGrants(getSubFundGroup());
-        }
         return forContractsAndGrants;
     }
 }

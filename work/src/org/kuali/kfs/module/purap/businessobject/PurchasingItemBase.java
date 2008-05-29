@@ -16,24 +16,15 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.module.vendor.bo.CommodityCode;
 
 /**
  * Purchasing Item Base Business Object.
  */
 public abstract class PurchasingItemBase extends PurApItemBase implements PurchasingItem {
-    
-    private static List<PurchasingItemCapitalAsset> purchasingItemCapitalAssets;
-    private String addCapitalAssetNumber;
-    private String purchasingCommodityCode;
-    
-    private CommodityCode commodityCode;
-    
+
     /**
      * @see org.kuali.module.purap.bo.PurApItem#isConsideredEntered()
      */
@@ -77,35 +68,4 @@ public abstract class PurchasingItemBase extends PurApItemBase implements Purcha
         return empty;
     }
 
-    public List<PurchasingItemCapitalAsset> getPurchasingItemCapitalAssets() {
-        return purchasingItemCapitalAssets;
-    }
-
-    public void setPurchasingItemCapitalAssets(List<PurchasingItemCapitalAsset> purchasingItemCapitalAssets) {
-        this.purchasingItemCapitalAssets = purchasingItemCapitalAssets;
-    }
-
-    public String getAddCapitalAssetNumber() {
-        return addCapitalAssetNumber;
-    }
-
-    public void setAddCapitalAssetNumber(String addCapitalAssetNumber) {
-        this.addCapitalAssetNumber = addCapitalAssetNumber;
-    }
-
-    public CommodityCode getCommodityCode() {
-        return commodityCode;
-    }
-
-    public void setCommodityCode(CommodityCode commodityCode) {
-        this.commodityCode = commodityCode;
-    }
-
-    public String getPurchasingCommodityCode() {
-        return purchasingCommodityCode;
-    }
-
-    public void setPurchasingCommodityCode(String purchasingCommodityCode) {
-        this.purchasingCommodityCode = purchasingCommodityCode;
-    }
 }

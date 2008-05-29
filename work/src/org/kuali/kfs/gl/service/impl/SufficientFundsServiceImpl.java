@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,36 +22,35 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.Constants;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.document.TransactionalDocument;
 import org.kuali.core.service.KualiConfigurationService;
+import org.kuali.core.service.OptionsService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.GeneralLedgerPostingDocument;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.OptionsService;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.chart.service.AccountService;
 import org.kuali.module.chart.service.ObjectLevelService;
-import org.kuali.module.chart.service.ObjectTypeService;
 import org.kuali.module.financial.document.YearEndDocument;
 import org.kuali.module.gl.bo.SufficientFundBalances;
 import org.kuali.module.gl.bo.SufficientFundRebuild;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.SufficientFundBalancesDao;
 import org.kuali.module.gl.dao.SufficientFundsDao;
+import org.kuali.module.gl.service.GeneralLedgerPendingEntryService;
 import org.kuali.module.gl.service.SufficientFundRebuildService;
 import org.kuali.module.gl.service.SufficientFundsService;
 import org.kuali.module.gl.service.SufficientFundsServiceConstants;
 import org.kuali.module.gl.util.SufficientFundsItem;
-import org.springframework.transaction.annotation.Transactional;
+
 
 /**
- * The base implementation of SufficientFundsService
+ * Sufficient Funds implementation
+ * 
+ * 
  */
-@Transactional
 public class SufficientFundsServiceImpl implements SufficientFundsService, SufficientFundsServiceConstants {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SufficientFundsServiceImpl.class);
 
@@ -72,12 +71,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     }
 
     /**
-     * This operation derives the acct_sf_finobj_cd which is used to populate the General Ledger Pending entry table, so that later
-     * we can do Suff Fund checking against that entry
      * 
-     * @param financialObject the object code being checked against
-     * @param accountSufficientFundsCode the kind of sufficient funds checking turned on in this system
-     * @return the object code that should be used for the sufficient funds inquiry, or a blank String
      * @see org.kuali.module.gl.service.SufficientFundsService#getSufficientFundsObjectCode(org.kuali.module.chart.bo.ObjectCode,
      *      java.lang.String)
      */
@@ -86,22 +80,22 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
 
         financialObject.refreshNonUpdateableReferences();
 
-        if (KFSConstants.SF_TYPE_NO_CHECKING.equals(accountSufficientFundsCode)) {
-            return KFSConstants.NOT_AVAILABLE_STRING;
+        if (Constants.SF_TYPE_NO_CHECKING.equals(accountSufficientFundsCode)) {
+            return Constants.NOT_AVAILABLE_STRING;
         }
-        else if (KFSConstants.SF_TYPE_ACCOUNT.equals(accountSufficientFundsCode)) {
+        else if (Constants.SF_TYPE_ACCOUNT.equals(accountSufficientFundsCode)) {
             return "    ";
         }
-        else if (KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(accountSufficientFundsCode)) {
+        else if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(accountSufficientFundsCode)) {
             return "    ";
         }
-        else if (KFSConstants.SF_TYPE_OBJECT.equals(accountSufficientFundsCode)) {
+        else if (Constants.SF_TYPE_OBJECT.equals(accountSufficientFundsCode)) {
             return financialObject.getFinancialObjectCode();
         }
-        else if (KFSConstants.SF_TYPE_LEVEL.equals(accountSufficientFundsCode)) {
+        else if (Constants.SF_TYPE_LEVEL.equals(accountSufficientFundsCode)) {
             return financialObject.getFinancialObjectLevelCode();
         }
-        else if (KFSConstants.SF_TYPE_CONSOLIDATION.equals(accountSufficientFundsCode)) {
+        else if (Constants.SF_TYPE_CONSOLIDATION.equals(accountSufficientFundsCode)) {
             return financialObject.getFinancialObjectLevel().getFinancialConsolidationObjectCode();
         }
         else {
@@ -110,13 +104,10 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     }
 
     /**
-     * Checks for sufficient funds on a single document
      * 
-     * @param document document to check
-     * @return Empty List if has sufficient funds for all accounts, List of SufficientFundsItem if not
      * @see org.kuali.module.gl.service.SufficientFundsService#checkSufficientFunds(org.kuali.core.document.FinancialDocument)
      */
-    public List<SufficientFundsItem> checkSufficientFunds(GeneralLedgerPostingDocument document) {
+    public List<SufficientFundsItem> checkSufficientFunds(TransactionalDocument document) {
         LOG.debug("checkSufficientFunds() started");
 
         return checkSufficientFunds((List<? extends Transaction>) document.getPendingLedgerEntriesForSufficientFundsChecking());
@@ -125,7 +116,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     /**
      * checks to see if a document is a <code>YearEndDocument</code>
      * 
-     * @param documentClass the class of a Document to check
+     * @param documentClass
      * @return true if the class implements <code>YearEndDocument</code>
      */
     private boolean isYearEndDocument(Class documentClass) {
@@ -133,10 +124,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     }
 
     /**
-     * Checks for sufficient funds on a list of transactions
      * 
-     * @param transactions list of transactions
-     * @return Empty List if has sufficient funds for all accounts, List of SufficientFundsItem if not
      * @see org.kuali.module.gl.service.SufficientFundsService#checkSufficientFunds(java.util.List)
      */
     public List<SufficientFundsItem> checkSufficientFunds(List<? extends Transaction> transactions) {
@@ -145,7 +133,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         for (Transaction e : transactions) {
             e.refreshNonUpdateableReferences();
         }
-
+        
         List<SufficientFundsItem> summaryItems = summarizeTransactions(transactions);
         for (Iterator iter = summaryItems.iterator(); iter.hasNext();) {
             SufficientFundsItem item = (SufficientFundsItem) iter.next();
@@ -158,12 +146,6 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         return summaryItems;
     }
 
-    /**
-     * For each transaction, fetches the appropriate sufficient funds item to check against
-     * 
-     * @param transactions a list of Transactions
-     * @return a List of corresponding SufficientFundsItem
-     */
     private List<SufficientFundsItem> summarizeTransactions(List<? extends Transaction> transactions) {
         Map<String, SufficientFundsItem> items = new HashMap<String, SufficientFundsItem>();
 
@@ -194,20 +176,14 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         return new ArrayList<SufficientFundsItem>(items.values());
     }
 
-    /**
-     * Given a sufficient funds item record, determines if there are sufficient funds available for the transaction
-     * 
-     * @param item the item to check
-     * @return true if there are sufficient funds available, false otherwise
-     */
     private boolean hasSufficientFundsOnItem(SufficientFundsItem item) {
 
         if (item.getAmount().equals(KualiDecimal.ZERO)) {
             LOG.debug("hasSufficientFundsOnItem() Transactions with zero amounts shold pass");
             return true;
         }
-
-        if (!item.getYear().isBudgetCheckingOptionsCode()) {
+        
+        if (!StringUtils.equals(Constants.BUDGET_CHECKING_OPTIONS_CD_ACTIVE, item.getYear().getBudgetCheckingOptionsCode())) {
             LOG.debug("hasSufficientFundsOnItem() No sufficient funds checking");
             return true;
         }
@@ -218,20 +194,16 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         }
 
         // exit sufficient funds checking if not enabled for an account
-        if (KFSConstants.SF_TYPE_NO_CHECKING.equals(item.getAccountSufficientFundsCode())) {
+        if (Constants.SF_TYPE_NO_CHECKING.equals(item.getAccountSufficientFundsCode())) {
             LOG.debug("hasSufficientFundsOnItem() sufficient funds not enabled for account " + item.getAccount().getChartOfAccountsCode() + "-" + item.getAccount().getAccountNumber());
             return true;
         }
 
-        ObjectTypeService objectTypeService = (ObjectTypeService) SpringContext.getBean(ObjectTypeService.class);
-        List<String> expenseObjectTypes = objectTypeService.getCurrentYearExpenseObjectTypes();
-
-        if (KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode()) && !item.getFinancialObject().getChartOfAccounts().getFinancialCashObjectCode().equals(item.getFinancialObject().getFinancialObjectCode())) {
+        if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode()) && !item.getFinancialObject().getChartOfAccounts().getFinancialCashObjectCode().equals(item.getFinancialObject().getFinancialObjectCode())) {
             LOG.debug("hasSufficientFundsOnItem() SF checking is cash and transaction is not cash");
             return true;
         }
-
-        else if (!KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode()) && !expenseObjectTypes.contains(item.getFinancialObjectType().getCode())) {
+        else if (!Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode()) && kualiConfigurationService.getApplicationParameterRule(Constants.ParameterGroups.SYSTEM, Constants.SystemGroupParameterNames.SUFFICIENT_FINDS_EXPENSE_OBJECT_TYPES).failsRule(item.getFinancialObjectType().getCode())) {
             LOG.debug("hasSufficientFundsOnItem() SF checking is budget and transaction is not expense");
             return true;
         }
@@ -253,12 +225,12 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         }
 
         KualiDecimal balanceAmount = item.getAmount();
-        if (KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode()) || item.getYear().getBudgetCheckingBalanceTypeCd().equals(item.getBalanceTyp().getCode())) {
+        if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode()) || item.getYear().getBudgetCheckingBalanceTypeCd().equals(item.getBalanceTyp().getCode())) {
             // We need to change the sign on the amount because the amount in the item is an increase in cash. We only care
             // about decreases in cash.
-
-            // Also, negating if this is a balance type code of budget checking and the transaction is a budget transaction.
-
+           
+            //Also, negating if this is a balance type code of budget checking and the transaction is a budget transaction.
+            
             balanceAmount = balanceAmount.negated();
         }
 
@@ -268,14 +240,14 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         }
 
         PendingAmounts priorYearPending = new PendingAmounts();
-        if ((KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode())) && (!item.getYear().isFinancialBeginBalanceLoadInd())) {
+        if ((Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode())) && (!item.getYear().isFinancialBeginBalanceLoadInd())) {
             priorYearPending = getPendingPriorYearBalanceAmount(item);
         }
 
         PendingAmounts pending = getPendingBalanceAmount(item);
 
         KualiDecimal availableBalance = null;
-        if (KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode())) {
+        if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(item.getAccount().getAccountSufficientFundsCode())) {
             if (!item.getYear().isFinancialBeginBalanceLoadInd()) {
                 availableBalance = sfBalance.getCurrentBudgetBalanceAmount().add(priorYearPending.budget).add(pending.actual).subtract(sfBalance.getAccountEncumbranceAmount()).subtract(priorYearPending.encumbrance);
             }
@@ -297,17 +269,11 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         return true;
     }
 
-    /**
-     * An inner class to hold summary totals of pending ledger entry amounts
-     */
     private class PendingAmounts {
         public KualiDecimal budget;
         public KualiDecimal actual;
         public KualiDecimal encumbrance;
 
-        /**
-         * Constructs a SufficientFundsServiceImpl.PendingAmounts instance
-         */
         public PendingAmounts() {
             budget = KualiDecimal.ZERO;
             actual = KualiDecimal.ZERO;
@@ -316,12 +282,6 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
 
     }
 
-    /**
-     * Given a sufficient funds item to check, gets the prior year sufficient funds balance to check against
-     * 
-     * @param item the sufficient funds item to check against
-     * @return a PendingAmounts record with the pending budget and encumbrance
-     */
     private PendingAmounts getPendingPriorYearBalanceAmount(SufficientFundsItem item) {
         LOG.debug("getPendingBalanceAmount() started");
 
@@ -342,12 +302,6 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         return amounts;
     }
 
-    /**
-     * Totals the amounts of actual, encumbrance, and budget amounts from related pending entries
-     * 
-     * @param item a sufficient funds item to find pending amounts for
-     * @return the totals encapsulated in a PendingAmounts object
-     */
     private PendingAmounts getPendingBalanceAmount(SufficientFundsItem item) {
         LOG.debug("getPendingBalanceAmount() started");
 
@@ -358,7 +312,7 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
 
         PendingAmounts amounts = new PendingAmounts();
 
-        if (KFSConstants.SF_TYPE_CASH_AT_ACCOUNT.equals(sfCode)) {
+        if (Constants.SF_TYPE_CASH_AT_ACCOUNT.equals(sfCode)) {
             // Cash checking
             List years = new ArrayList();
             years.add(item.getYear().getUniversityFiscalYear());
@@ -400,20 +354,19 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     }
 
     /**
-     * Determines the current sufficient funds
+     * fp_sasfc:operation chk_suff_funds
      * 
-     * @param propertyNames not referenced in the method
-     * @param universityFiscalYear the university fiscal year to check
-     * @param chartOfAccountsCode the chart to check
-     * @param accountNumber the account to check
-     * @param sufficientFundsObjectCode the object code to check
-     * @param amount the amount to check if sufficient funds exist for
-     * @param documentClass the class of the document doing the check
-     * @return true is sufficientFunds were found, false otherwise
+     * @param propertyNames
+     * @param universityFiscalYear
+     * @param chartOfAccountsCode
+     * @param accountNumber
+     * @param sufficientFundsObjectCode
+     * @param amount
+     * @param documentClass
+     * @return true is sufficientFunds were found
      */
     private boolean checkSufficientFunds(List propertyNames, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber, String sufficientFundsObjectCode, KualiDecimal amount, Class documentClass) {
-        // fp_sasfc:operation chk_suff_funds
-        // I'm not certain this method is actually used currently
+
         if (universityFiscalYear == null) {
             throw new IllegalArgumentException("Invalid (null) universityFiscalYear");
         }
@@ -426,12 +379,12 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         boolean isYearEndDocument = isYearEndDocument(documentClass);
         // universityFiscalYear is universityFiscalYear-1 if year end document & chash
         // level checking
-        if (isYearEndDocument && StringUtils.equals(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT, account.getAccountSufficientFundsCode())) {
+        if (isYearEndDocument && StringUtils.equals(Constants.SF_TYPE_CASH_AT_ACCOUNT, account.getAccountSufficientFundsCode())) {
             universityFiscalYear = new Integer(originalUniversityFiscalYear.intValue() - 1);
         }
 
         // exit sufficient funds checking if not enabled for an account
-        if (StringUtils.equals(KFSConstants.SF_TYPE_NO_CHECKING, account.getAccountSufficientFundsCode()) || !account.isPendingAcctSufficientFundsIndicator()) {
+        if (StringUtils.equals(Constants.SF_TYPE_NO_CHECKING, account.getAccountSufficientFundsCode()) || !account.isPendingAcctSufficientFundsIndicator()) {
             LOG.debug("sufficient funds not enabled for account " + account.getAccountNumber());
             return true;
         }
@@ -442,23 +395,23 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
         sfBalances.setUniversityFiscalYear(universityFiscalYear);
         sfBalances.setChartOfAccountsCode(chartOfAccountsCode);
         sfBalances.setAccountNumber(accountNumber);
-        if (!StringUtils.equals(KFSConstants.NOT_AVAILABLE_STRING, sufficientFundsObjectCode)) {
+        if (!StringUtils.equals(Constants.NOT_AVAILABLE_STRING, sufficientFundsObjectCode)) {
             sfBalances.setFinancialObjectCode(sufficientFundsObjectCode);
         }
-        else if (StringUtils.equals(KFSConstants.SF_TYPE_ACCOUNT, account.getAccountSufficientFundsCode())) {
+        else if (StringUtils.equals(Constants.SF_TYPE_ACCOUNT, account.getAccountSufficientFundsCode())) {
             // dont set anything for account level checking
         }
         else {
-            sfBalances.setAccountSufficientFundsCode(KFSConstants.SF_TYPE_CASH_AT_ACCOUNT);
+            sfBalances.setAccountSufficientFundsCode(Constants.SF_TYPE_CASH_AT_ACCOUNT);
         }
 
         sfBalances = sufficientFundBalancesDao.getByPrimaryId(sfBalances.getUniversityFiscalYear(), sfBalances.getChartOfAccountsCode(), sfBalances.getAccountNumber(), sfBalances.getFinancialObjectCode());
         // fp_sasfc:32-1
         if (sfBalances == null) {
             sfBalances = new SufficientFundBalances();
-            sfBalances.setCurrentBudgetBalanceAmount(KualiDecimal.ZERO);
-            sfBalances.setAccountActualExpenditureAmt(KualiDecimal.ZERO);
-            sfBalances.setAccountEncumbranceAmount(KualiDecimal.ZERO);
+            sfBalances.setCurrentBudgetBalanceAmount(new KualiDecimal(0));
+            sfBalances.setAccountActualExpenditureAmt(new KualiDecimal(0));
+            sfBalances.setAccountEncumbranceAmount(new KualiDecimal(0));
             sfBalances.setChartOfAccountsCode(chartOfAccountsCode);
             sfBalances.setAccountNumber(accountNumber);
             sfBalances.setAccountSufficientFundsCode(account.getAccountSufficientFundsCode());
@@ -476,8 +429,8 @@ public class SufficientFundsServiceImpl implements SufficientFundsService, Suffi
     /**
      * Purge the sufficient funds balance table by year/chart
      * 
-     * @param chart the chart of sufficient fund balances to purge
-     * @param year the fiscal year of sufficient fund balances to purge
+     * @param chart
+     * @param year
      */
     public void purgeYearByChart(String chart, int year) {
         LOG.debug("setAccountService() started");

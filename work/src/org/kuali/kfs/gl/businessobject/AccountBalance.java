@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.PropertyConstants;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.A21SubAccount;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.Chart;
@@ -34,10 +34,10 @@ import org.kuali.module.gl.GLConstants;
 import org.kuali.module.gl.web.Constant;
 
 /**
- * Just as Balance is a summarization of Entry, so AccountBalance is a summarization of Balance.
- * Specifically, it stores the current budget, actual, and encumbrance totals in one record.
+ * 
+ * 
  */
-public class AccountBalance extends PersistableBusinessObjectBase {
+public class AccountBalance extends BusinessObjectBase {
     static final long serialVersionUID = 6873573726961704771L;
 
     private Integer universityFiscalYear;
@@ -57,22 +57,23 @@ public class AccountBalance extends PersistableBusinessObjectBase {
     private ObjectCode financialObject;
     private SubObjCd financialSubObject;
     private A21SubAccount a21SubAccount;
-    private TransientBalanceInquiryAttributes dummyBusinessObject;
+    private DummyBusinessObject dummyBusinessObject;
     private Options option;
     private String title;
 
-    public static final String TYPE_CONSOLIDATION = "Consolidation";
-    public static final String TYPE_LEVEL = "Level";
-    public static final String TYPE_OBJECT = "Object";
+    static final public String EXPENSE_SORT_CODE = "B";
+    static final public String TYPE_CONSOLIDATION = "Consolidation";
+    static final public String TYPE_LEVEL = "Level";
+    static final public String TYPE_OBJECT = "Object";
 
     public AccountBalance() {
         super();
-        this.dummyBusinessObject = new TransientBalanceInquiryAttributes();
+        this.dummyBusinessObject = new DummyBusinessObject();
         this.financialObject = new ObjectCode();
     }
 
     public AccountBalance(Transaction t) {
-        this();
+        super();
         universityFiscalYear = t.getUniversityFiscalYear();
         chartOfAccountsCode = t.getChartOfAccountsCode();
         accountNumber = t.getAccountNumber();
@@ -82,6 +83,9 @@ public class AccountBalance extends PersistableBusinessObjectBase {
         currentBudgetLineBalanceAmount = KualiDecimal.ZERO;
         accountLineActualsBalanceAmount = KualiDecimal.ZERO;
         accountLineEncumbranceBalanceAmount = KualiDecimal.ZERO;
+
+        this.dummyBusinessObject = new DummyBusinessObject();
+        this.financialObject = new ObjectCode();
     }
 
     public AccountBalance(String type, Map data, Integer universityFiscalYear, String chartOfAccountsCode, String accountNumber) {
@@ -110,7 +114,7 @@ public class AccountBalance extends PersistableBusinessObjectBase {
             financialObject.getFinancialObjectLevel().setFinancialObjectLevelCode((String) data.get(GLConstants.ColumnNames.OBJECT_LEVEL_CODE2));
 
             // tricking it so getVariance() works
-            financialObject.getFinancialObjectType().setFinancialReportingSortCode(Constant.START_CHAR_OF_REPORTING_SORT_CODE_B);
+            financialObject.getFinancialObjectType().setFinancialReportingSortCode(EXPENSE_SORT_CODE);
             fixVariance();
         }
         else if (TYPE_OBJECT.equals(type)) {
@@ -119,7 +123,7 @@ public class AccountBalance extends PersistableBusinessObjectBase {
             financialObject.getFinancialObjectLevel().setFinancialObjectLevelCode((String) data.get(GLConstants.ColumnNames.OBJECT_LEVEL_CODE));
 
             // tricking it so getVariance() works
-            financialObject.getFinancialObjectType().setFinancialReportingSortCode(Constant.START_CHAR_OF_REPORTING_SORT_CODE_B);
+            financialObject.getFinancialObjectType().setFinancialReportingSortCode(EXPENSE_SORT_CODE);
             fixVariance();
         }
         else {
@@ -172,12 +176,12 @@ public class AccountBalance extends PersistableBusinessObjectBase {
     protected LinkedHashMap toStringMapper() {
 
         LinkedHashMap map = new LinkedHashMap();
-        map.put(KFSPropertyConstants.UNIVERSITY_FISCAL_YEAR, getUniversityFiscalYear());
-        map.put(KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE, getChartOfAccountsCode());
-        map.put(KFSPropertyConstants.ACCOUNT_NUMBER, getAccountNumber());
-        map.put(KFSPropertyConstants.SUB_ACCOUNT_NUMBER, getSubAccountNumber());
-        map.put(KFSPropertyConstants.OBJECT_CODE, getObjectCode());
-        map.put(KFSPropertyConstants.SUB_OBJECT_CODE, getSubObjectCode());
+        map.put(PropertyConstants.UNIVERSITY_FISCAL_YEAR, getUniversityFiscalYear());
+        map.put(PropertyConstants.CHART_OF_ACCOUNTS_CODE, getChartOfAccountsCode());
+        map.put(PropertyConstants.ACCOUNT_NUMBER, getAccountNumber());
+        map.put(PropertyConstants.SUB_ACCOUNT_NUMBER, getSubAccountNumber());
+        map.put(PropertyConstants.OBJECT_CODE, getObjectCode());
+        map.put(PropertyConstants.SUB_OBJECT_CODE, getSubObjectCode());
         return map;
     }
 
@@ -340,7 +344,7 @@ public class AccountBalance extends PersistableBusinessObjectBase {
      * 
      * @return Returns the dummyBusinessObject.
      */
-    public TransientBalanceInquiryAttributes getDummyBusinessObject() {
+    public DummyBusinessObject getDummyBusinessObject() {
         return dummyBusinessObject;
     }
 
@@ -349,7 +353,7 @@ public class AccountBalance extends PersistableBusinessObjectBase {
      * 
      * @param dummyBusinessObject The dummyBusinessObject to set.
      */
-    public void setDummyBusinessObject(TransientBalanceInquiryAttributes dummyBusinessObject) {
+    public void setDummyBusinessObject(DummyBusinessObject dummyBusinessObject) {
         this.dummyBusinessObject = dummyBusinessObject;
     }
 
