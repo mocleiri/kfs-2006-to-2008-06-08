@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/businessobject/NonResidentAlienTaxPercent.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +20,13 @@ package org.kuali.module.financial.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
 
 /**
- * This class is used to represent a non-resident alien tax percent.  This is the percentage of a total 
- * reimbursement that is collected in taxes for non-resident aliens.
+ * 
  */
-public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
+public class NonResidentAlienTaxPercent extends BusinessObjectBase {
 
     private String incomeClassCode;
     private String incomeTaxTypeCode;
@@ -44,6 +45,7 @@ public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
      * Gets the incomeClassCode attribute.
      * 
      * @return Returns the incomeClassCode
+     * 
      */
     public String getIncomeClassCode() {
         return incomeClassCode;
@@ -54,6 +56,7 @@ public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
      * Sets the incomeClassCode attribute.
      * 
      * @param incomeClassCode The incomeClassCode to set.
+     * 
      */
     public void setIncomeClassCode(String incomeClassCode) {
         this.incomeClassCode = incomeClassCode;
@@ -63,6 +66,7 @@ public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
      * Gets the incomeTaxTypeCode attribute.
      * 
      * @return Returns the incomeTaxTypeCode
+     * 
      */
     public String getIncomeTaxTypeCode() {
         return incomeTaxTypeCode;
@@ -73,6 +77,7 @@ public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
      * Sets the incomeTaxTypeCode attribute.
      * 
      * @param incomeTaxTypeCode The incomeTaxTypeCode to set.
+     * 
      */
     public void setIncomeTaxTypeCode(String incomeTaxTypeCode) {
         this.incomeTaxTypeCode = incomeTaxTypeCode;
@@ -82,6 +87,7 @@ public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
      * Gets the incomeTaxPercent attribute.
      * 
      * @return Returns the incomeTaxPercent
+     * 
      */
     public KualiDecimal getIncomeTaxPercent() {
         return incomeTaxPercent;
@@ -92,6 +98,7 @@ public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
      * Sets the incomeTaxPercent attribute.
      * 
      * @param incomeTaxPercent The incomeTaxPercent to set.
+     * 
      */
     public void setIncomeTaxPercent(KualiDecimal incomeTaxPercent) {
         this.incomeTaxPercent = incomeTaxPercent;
@@ -101,6 +108,7 @@ public class NonResidentAlienTaxPercent extends PersistableBusinessObjectBase {
      * Gets the incomeClass attribute.
      * 
      * @return Returns the incomeClass
+     * 
      */
     public TaxIncomeClassCode getIncomeClass() {
         return incomeClass;

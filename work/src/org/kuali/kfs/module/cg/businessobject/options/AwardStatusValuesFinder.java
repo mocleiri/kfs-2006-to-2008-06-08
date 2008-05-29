@@ -17,32 +17,30 @@ package org.kuali.module.cg.lookup.keyvalues;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.AwardStatus;
 
-/**
- * Allows custom handling of {@link AwardStatus} values in the UI.
- */
 public class AwardStatusValuesFinder extends KeyValuesBase {
 
-    /**
+    /*
      * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
 
-        Collection<AwardStatus> codes = SpringContext.getBean(KeyValuesService.class).findAll(AwardStatus.class);
+        Collection<AwardStatus> codes = SpringServiceLocator.getKeyValuesService().findAll(AwardStatus.class);
 
         List<KeyLabelPair> labels = new ArrayList<KeyLabelPair>();
         labels.add(new KeyLabelPair("", ""));
 
         for (AwardStatus awardStatus : codes) {
-            if (awardStatus.isRowActiveIndicator()) {
-                labels.add(new KeyLabelPair(awardStatus.getAwardStatusCode(), awardStatus.getAwardStatusCode() + "-" + awardStatus.getAwardStatusDescription()));
+            if(awardStatus.isRowActiveIndicator()) {
+                labels.add(new KeyLabelPair(awardStatus.getAwardStatusCode(), awardStatus.getAwardStatusCode()+"-"+awardStatus.getAwardStatusDescription()));
             }
         }
 

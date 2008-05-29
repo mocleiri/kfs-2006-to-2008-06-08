@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.module.kra.budget.bo.AppointmentType;
 import org.kuali.module.kra.budget.bo.BudgetBaseCode;
-import org.kuali.module.kra.budget.service.BudgetIndirectCostService;
 
 public class BudgetBaseCodeValuesFinder extends KeyValuesBase {
 
@@ -31,10 +31,10 @@ public class BudgetBaseCodeValuesFinder extends KeyValuesBase {
     }
 
     public List getKeyValues() {
-
-        List<BudgetBaseCode> baseCodes = new ArrayList(SpringContext.getBean(BudgetIndirectCostService.class).getDefaultBudgetBaseCodeValues());
+        
+        List<BudgetBaseCode> baseCodes = new ArrayList(SpringServiceLocator.getBudgetIndirectCostService().getDefaultBudgetBaseCodeValues());
         List baseCodeKeyLabelPairList = new ArrayList();
-        for (BudgetBaseCode element : baseCodes) {
+        for (BudgetBaseCode element: baseCodes) {
             baseCodeKeyLabelPairList.add(new KeyLabelPair(element.getBudgetBaseCode(), element.getBudgetBaseDescription()));
         }
 

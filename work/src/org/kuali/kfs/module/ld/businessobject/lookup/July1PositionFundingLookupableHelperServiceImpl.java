@@ -17,7 +17,6 @@ package org.kuali.module.labor.web.lookupable;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,20 +26,17 @@ import org.kuali.core.lookup.CollectionIncomplete;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.util.BeanPropertyComparator;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.service.BalanceService;
 import org.kuali.module.labor.bo.July1PositionFunding;
-import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.dao.LaborDao;
 import org.kuali.module.labor.service.LaborInquiryOptionsService;
-import org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl;
 import org.kuali.module.labor.web.inquirable.July1PositionFundingInquirableImpl;
-import org.kuali.module.labor.web.inquirable.PositionDataDetailsInquirableImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The July1PositionFundingLookupableHelperServiceImpl class is the front-end for all July 1 funds balance inquiry processing.
  */
+@Transactional
 public class July1PositionFundingLookupableHelperServiceImpl extends AbstractLookupableHelperServiceImpl {
     private static org.apache.commons.logging.Log LOG = org.apache.commons.logging.LogFactory.getLog(July1PositionFundingLookupableHelperServiceImpl.class);
     
@@ -51,17 +47,6 @@ public class July1PositionFundingLookupableHelperServiceImpl extends AbstractLoo
      */
     @Override
     public String getInquiryUrl(BusinessObject bo, String propertyName) {
-        if (KFSPropertyConstants.POSITION_NUMBER.equals(propertyName)) {
-            LedgerBalance balance = (LedgerBalance) bo;
-            AbstractLaborInquirableImpl positionDataDetailsInquirable = new PositionDataDetailsInquirableImpl();
-
-            Map<String, String> fieldValues = new HashMap<String, String>();
-            fieldValues.put(propertyName, balance.getPositionNumber());
-
-            BusinessObject positionData = positionDataDetailsInquirable.getBusinessObject(fieldValues);
-
-            return positionData == null ? KFSConstants.EMPTY_STRING : positionDataDetailsInquirable.getInquiryUrl(positionData, propertyName);
-        }
         return (new July1PositionFundingInquirableImpl()).getInquiryUrl(bo, propertyName);
     }
     

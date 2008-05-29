@@ -25,20 +25,18 @@ import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * Contains core routing form services.
+ * 
  */
 public interface RoutingFormService {
-
+    
+    public void initializeRoutingForm(RoutingFormDocument routingFormDocument) throws WorkflowException;
+    
     /**
      * Prepares a Routing Form for save.
-     * 
      * @param RoutingFormDocument
      * @throws WorkflowException
      */
     public void prepareRoutingFormForSave(RoutingFormDocument RoutingFormDocument) throws WorkflowException;
-
     public BudgetDocument retrieveBudgetForLinking(String budgetDocumentNumber) throws WorkflowException;
-
     public void linkImportBudgetDataToRoutingForm(RoutingFormDocument routingFormDocument, String budgetDocumentHeaderId, List<BudgetOverviewFormHelper> periodOverviews) throws WorkflowException;
-
-    public Long createAndRouteProposalMaintenanceDocument(RoutingFormDocument routingFormDocument);
 }

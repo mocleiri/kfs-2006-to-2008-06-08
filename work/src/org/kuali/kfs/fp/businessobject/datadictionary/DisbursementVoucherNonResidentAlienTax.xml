@@ -1,123 +1,148 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2005-2006 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE dictionaryEntry PUBLIC
+     "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../../../core/datadictionary/dataDictionary-1_0.dtd">
 
-  <bean id="DisbursementVoucherNonResidentAlienTax" parent="DisbursementVoucherNonResidentAlienTax-parentBean" />
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax">
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax" />
-    <property name="attributes" >
-      <list>
-        <ref bean="DisbursementVoucherNonResidentAlienTax-federalIncomeTaxPercent" />
-        <ref bean="DisbursementVoucherNonResidentAlienTax-stateIncomeTaxPercent" />
-        <ref bean="DisbursementVoucherNonResidentAlienTax-incomeClassCode" />
-        <ref bean="DisbursementVoucherNonResidentAlienTax-postalCountryCode" />
-        <ref bean="DisbursementVoucherNonResidentAlienTax-incomeTaxTreatyExemptCode" />
-        <ref bean="DisbursementVoucherNonResidentAlienTax-foreignSourceIncomeCode" />
-        <ref bean="DisbursementVoucherNonResidentAlienTax-incomeTaxGrossUpCode" />
-        <ref bean="DisbursementVoucherNonResidentAlienTax-referenceFinancialDocumentNumber" />
-      </list>
-    </property>
-  </bean>
+        <customAttributeEnabled>false</customAttributeEnabled>
 
-<!-- Attribute Definitions -->
+        <attributes>
 
+            <attribute name="federalIncomeTaxPercent">
+                <label>Federal Tax Percent</label>
+                <shortLabel>Fed Tax</shortLabel>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-federalIncomeTaxPercent" parent="DisbursementVoucherNonResidentAlienTax-federalIncomeTaxPercent-parentBean" />
+                <maxLength>22</maxLength>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-federalIncomeTaxPercent-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="federalIncomeTaxPercent" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Federal Tax Percent" />
-    <property name="shortLabel" value="Fed Tax" />
-    <property name="maxLength" value="22" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-  </bean>
-  <bean id="DisbursementVoucherNonResidentAlienTax-stateIncomeTaxPercent" parent="DisbursementVoucherNonResidentAlienTax-stateIncomeTaxPercent-parentBean" />
+                <required>false</required>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-stateIncomeTaxPercent-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="stateIncomeTaxPercent" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="State Tax Percent" />
-    <property name="shortLabel" value="St Tax" />
-    <property name="maxLength" value="22" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="10" />
-    </property>
-  </bean>
-  <bean id="DisbursementVoucherNonResidentAlienTax-incomeClassCode" parent="DisbursementVoucherNonResidentAlienTax-incomeClassCode-parentBean" />
+                <control>
+                    <text size="10" />
+                </control>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-incomeClassCode-parentBean" abstract="true" parent="TaxIncomeClassCode-code">
-    <property name="name" value="incomeClassCode" />
-    <property name="required" value="true" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.module.financial.lookup.keyvalues.TaxIncomeClassValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="DisbursementVoucherNonResidentAlienTax-postalCountryCode" parent="DisbursementVoucherNonResidentAlienTax-postalCountryCode-parentBean" />
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The percentage of Federal tax that needs to be withheld from the payment, entered directly or searched from valid values for a given Income Class Code in the Federal Tax Percent lookup.</description>
+            </attribute>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-postalCountryCode-parentBean" abstract="true" parent="Country-postalCountryCode">
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="SelectControlDefinition"
-            p:valuesFinderClass="org.kuali.kfs.lookup.keyvalues.CountryValuesFinder"
-            p:includeKeyInLabel="false" />
-    </property>
-  </bean>
-  <bean id="DisbursementVoucherNonResidentAlienTax-incomeTaxTreatyExemptCode" parent="DisbursementVoucherNonResidentAlienTax-incomeTaxTreatyExemptCode-parentBean" />
+            <attribute name="stateIncomeTaxPercent">
+                <label>State Tax Percent</label>
+                <shortLabel>St Tax</shortLabel>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-incomeTaxTreatyExemptCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="incomeTaxTreatyExemptCode" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Treaty Exempt" />
-    <property name="shortLabel" value="Treaty Exmt" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-  </bean>
-  <bean id="DisbursementVoucherNonResidentAlienTax-foreignSourceIncomeCode" parent="DisbursementVoucherNonResidentAlienTax-foreignSourceIncomeCode-parentBean" />
+                <maxLength>22</maxLength>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-foreignSourceIncomeCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="foreignSourceIncomeCode" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Foreign Source" />
-    <property name="shortLabel" value="Frgn Src" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-  </bean>
-  <bean id="DisbursementVoucherNonResidentAlienTax-incomeTaxGrossUpCode" parent="DisbursementVoucherNonResidentAlienTax-incomeTaxGrossUpCode-parentBean" />
+                <required>false</required>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-incomeTaxGrossUpCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="incomeTaxGrossUpCode" />
-    <property name="forceUppercase" value="false" />
-    <property name="label" value="Gross Up" />
-    <property name="shortLabel" value="Grs" />
-    <property name="maxLength" value="1" />
-    <property name="required" value="false" />
-    <property name="control" >
-      <bean parent="CheckboxControlDefinition" />
-    </property>
-  </bean>
-  <bean id="DisbursementVoucherNonResidentAlienTax-referenceFinancialDocumentNumber" parent="DisbursementVoucherNonResidentAlienTax-referenceFinancialDocumentNumber-parentBean" />
+                <control>
+                    <text size="10" />
+                </control>
 
-  <bean id="DisbursementVoucherNonResidentAlienTax-referenceFinancialDocumentNumber-parentBean" abstract="true" parent="DocumentHeader-documentNumber">
-    <property name="name" value="referenceFinancialDocumentNumber" />
-    <property name="label" value="Reference Doc" />
-    <property name="shortLabel" value="Ref Doc" />
-  </bean>
-</beans>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The percentage of State tax that needs to be withheld from the payment, entered directly or searched from valid values for a given Income Class Code in the State Tax Percent lookup.</description>
+            </attribute>
+
+            <attributeReference name="incomeClassCode" sourceClassName="org.kuali.module.financial.bo.TaxIncomeClassCode" sourceAttributeName="code">
+
+                <required>true</required>
+                <control>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.TaxIncomeClassValuesFinder" />
+                </control>
+                <description>The description of the Income Class for the Nonresident Alien (NRA) Tax. Select one from the pulldown list.</description>
+            </attributeReference>
+
+            <attributeReference name="postalCountryCode" sourceClassName="org.kuali.core.bo.Country" sourceAttributeName="postalCountryCode">
+            
+            	<required>false</required>
+                <control>
+                    <select valuesFinderClass="org.kuali.core.lookup.keyvalues.CountryValuesFinder" />
+                </control>
+                <description>The code that identifies the country of residence for the Nonresident Alien (NRA) Tax</description>
+
+            </attributeReference>
+
+            <attribute name="incomeTaxTreatyExemptCode">
+                <label>Treaty Exempt</label>
+                <shortLabel>Treaty Exmt</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <required>false</required>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code to specify that the Nonresident Alien (NRA) Tax is treaty exempt, expressed as "Yes" or "No"</description>
+            </attribute>
+
+            <attribute name="foreignSourceIncomeCode">
+                <label>Foreign Source</label>
+                <shortLabel>Frgn Src</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <required>false</required>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>
+                    Checkbox to indicate if the payment is defined as foreign source based on U.S. income sourcing rules.  It also indicates that there is no tax withholding on the payment.
+                </description>
+            </attribute>
+
+            <attribute name="incomeTaxGrossUpCode">
+                <label>Gross Up</label>
+                <shortLabel>Grs</shortLabel>
+
+                <maxLength>1</maxLength>
+
+                <required>false</required>
+
+                <control>
+                    <checkbox />
+                </control>
+
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>The code to specify that the Nonresident Alien (NRA) Tax is "grossed up" to the original Account, expressed as "Yes" or "No".</description>
+            </attribute>
+
+            <attributeReference name="referenceFinancialDocumentNumber" sourceClassName="org.kuali.core.document.DocumentHeader" sourceAttributeName="financialDocumentNumber">
+                <label>Reference Doc</label>
+                <shortLabel>Ref Doc</shortLabel>
+                <description>A free-form text field that identifies a reference document for the Nonresident Alien (NRA) Tax.</description>
+
+            </attributeReference>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

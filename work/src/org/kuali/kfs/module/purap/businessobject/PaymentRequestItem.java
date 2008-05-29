@@ -17,314 +17,439 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 
-import org.apache.ojb.broker.PersistenceBroker;
-import org.apache.ojb.broker.PersistenceBrokerException;
+import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.document.PaymentRequestDocument;
-import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.exceptions.PurError;
-import org.kuali.module.purap.service.AccountsPayableService;
-import org.kuali.module.purap.service.PurapService;
-import org.kuali.module.purap.util.ExpiredOrClosedAccountEntry;
-import org.kuali.module.purap.util.PurApItemUtils;
-import org.kuali.module.purap.util.PurApObjectUtils;
 
 /**
- * Payment Request Item Business Object.
+ * 
  */
 public class PaymentRequestItem extends AccountsPayableItemBase {
-    private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PaymentRequestItem.class);
 
-    private BigDecimal purchaseOrderItemUnitPrice;
+	private Integer paymentRequestItemIdentifier;
+	private Integer paymentRequestIdentifier;
+	private Integer itemLineNumber;
+	private String itemTypeCode;
+	private String itemDescription;
+	private String itemCatalogNumber;
+	private String itemAuxiliaryPartIdentifier;
+	private String itemUnitOfMeasureCode;
+	private KualiDecimal itemInvoicedQuantity;
+	private BigDecimal itemUnitPrice;
+	private BigDecimal purchaseOrderItemUnitPrice;
+	private KualiDecimal itemExtendedPrice;
+	private String capitalAssetTransactionTypeCode;
+	private String itemCapitalAssetNoteText;
+	private String purchaseOrderCommodityCode;
+	private boolean itemAssignedToTradeInIndicator;
     private KualiDecimal itemOutstandingInvoiceQuantity;
     private KualiDecimal itemOutstandingInvoiceAmount;
-
-    private transient PaymentRequestDocument paymentRequest;
-
-    /**
-     * Default constructor.
-     */
-    public PaymentRequestItem() {
-
-    }
-
-    /**
-     * preq item constructor - Delegate
-     * 
-     * @param poi - purchase order item
-     * @param preq - payment request document
-     */
-    public PaymentRequestItem(PurchaseOrderItem poi, PaymentRequestDocument preq) {
-        this(poi, preq, new HashMap<String, ExpiredOrClosedAccountEntry>());
-    }
-
-    /**
-     * Constructs a new payment request item, but also merges expired accounts.
-     * 
-     * @param poi - purchase order item
-     * @param preq - payment request document
-     * @param expiredOrClosedAccountList - list of expired or closed accounts to merge
-     */
-    public PaymentRequestItem(PurchaseOrderItem poi, PaymentRequestDocument preq, HashMap<String, ExpiredOrClosedAccountEntry> expiredOrClosedAccountList) {
-
-        // copy base attributes w/ extra array of fields not to be copied
-        PurApObjectUtils.populateFromBaseClass(PurApItemBase.class, poi, this, PurapConstants.PREQ_ITEM_UNCOPYABLE_FIELDS);
-
-        // set up accounts
-        List accounts = new ArrayList();
-        for (PurApAccountingLine account : poi.getSourceAccountingLines()) {
-            PurchaseOrderAccount poa = (PurchaseOrderAccount) account;
-
-            // check if this account is expired/closed and replace as needed
-            SpringContext.getBean(AccountsPayableService.class).processExpiredOrClosedAccount(poa, expiredOrClosedAccountList);
-
-            accounts.add(new PaymentRequestAccount(this, poa));
-        }
-        this.setSourceAccountingLines(accounts);
-
-        // clear amount and desc on below the line - we probably don't need that null
-        // itemType check but it's there just in case remove if it causes problems
-        // also do this if of type service, kulpurap - 1242
-        if ((ObjectUtils.isNotNull(this.getItemType()) && !this.getItemType().isQuantityBasedGeneralLedgerIndicator())) {
-            // setting unit price to be null to be more consistent with other below the line
-            this.setItemUnitPrice(null);
-
-            // if below the line item
-            if (!this.getItemType().isItemTypeAboveTheLineIndicator()) {
-                this.setItemDescription("");
-            }
-        }
-
-        // copy custom
-        this.purchaseOrderItemUnitPrice = poi.getItemUnitPrice();
-//        this.purchaseOrderCommodityCode = poi.getPurchaseOrderCommodityCd();
-
-        // set doc fields
-        this.setPurapDocumentIdentifier(preq.getPurapDocumentIdentifier());
-        this.paymentRequest = preq;
-    }
-
-    /**
-     * Retreives a purchase order item by inspecting the item type to see if its above the line or below the line and returns the
-     * appropriate type.
-     * 
-     * @return - purchase order item
-     */
-    public PurchaseOrderItem getPurchaseOrderItem() {
-        if (ObjectUtils.isNotNull(this.getPurapDocumentIdentifier())) {
-            if (ObjectUtils.isNull(this.getPaymentRequest())) {
-                this.refreshReferenceObject(PurapPropertyConstants.PAYMENT_REQUEST);
-            }
-        }
-        // ideally we should do this a different way - maybe move it all into the service or save this info somehow (make sure and
-        // update though)
-        if (getPaymentRequest() != null) {
-            PurchaseOrderDocument po = getPaymentRequest().getPurchaseOrderDocument();
-            PurchaseOrderItem poi = null;
-            if (this.getItemType().isItemTypeAboveTheLineIndicator()) {
-                poi = (PurchaseOrderItem) po.getItem(this.getItemLineNumber().intValue() - 1);
-                // throw error if line numbers don't match
-            }
-            else {
-                poi = (PurchaseOrderItem) SpringContext.getBean(PurapService.class).getBelowTheLineByType(po, this.getItemType());
-            }
-            if (poi != null) {
-                return poi;
-            }
-            else {
-                LOG.debug("getPurchaseOrderItem() Returning null because PurchaseOrderItem object for line number" + getItemLineNumber() + "or itemType " + getItemTypeCode() + " is null");
-                return null;
-            }
-        }
-        else {
-
-            LOG.error("getPurchaseOrderItem() Returning null because paymentRequest object is null");
-            throw new PurError("Payment Request Object in Purchase Order item line number " + getItemLineNumber() + "or itemType " + getItemTypeCode() + " is null");
-        }
-    }
-
-    public KualiDecimal getPoOutstandingAmount() {
-        PurchaseOrderItem poi = getPurchaseOrderItem();
-        return this.getPoOutstandingAmount(poi);
-    }
-
-    private KualiDecimal getPoOutstandingAmount(PurchaseOrderItem poi) {
-        if (poi == null) {
-            return KualiDecimal.ZERO;
-        }
-        else {
-            return poi.getItemOutstandingEncumberedAmount();
-        }
-    }
-
-    public KualiDecimal getPoOriginalAmount() {
-        PurchaseOrderItem poi = getPurchaseOrderItem();
-        if (poi == null) {
-            return null;
-        }
-        else {
-            return poi.getExtendedPrice();
-        }
-    }
-
-    /**
-     * Exists due to a setter requirement by the htmlControlAttribute
-     * @deprecated
-     * @param amount - po outstanding amount
-     */
-    public void setPoOutstandingAmount(KualiDecimal amount) {
-        // do nothing
-    }
-
-
-    public KualiDecimal getPoOutstandingQuantity() {
-        PurchaseOrderItem poi = getPurchaseOrderItem();
-        if (poi == null) {
-            return null;
-        }
-        else {
-            return poi.getOutstandingQuantity();
-        }
-    }
-
-    /**
-     * Exists due to a setter requirement by the htmlControlAttribute
-     * @deprecated
-     * @param amount - po outstanding quantity
-     */
-    public void setPoOutstandingQuantity(KualiDecimal qty) {
-        // do nothing
-    }
-
-    public BigDecimal getPurchaseOrderItemUnitPrice() {
-        return purchaseOrderItemUnitPrice;
-    }
     
-    public BigDecimal getOriginalAmountfromPO() {
-        return purchaseOrderItemUnitPrice;
-    }
-    
-    public void setOriginalAmountfromPO(BigDecimal purchaseOrderItemUnitPrice) {
-        // Do nothing
-    }
+    private PaymentRequest paymentRequest;
 
-    public void setPurchaseOrderItemUnitPrice(BigDecimal purchaseOrderItemUnitPrice) {
-        this.purchaseOrderItemUnitPrice = purchaseOrderItemUnitPrice;
-    }
+	/**
+	 * Default constructor.
+	 */
+	public PaymentRequestItem() {
 
+	}
+
+	/**
+	 * Gets the paymentRequestItemIdentifier attribute.
+	 * 
+	 * @return Returns the paymentRequestItemIdentifier
+	 * 
+	 */
+	public Integer getPaymentRequestItemIdentifier() { 
+		return paymentRequestItemIdentifier;
+	}
+
+	/**
+	 * Sets the paymentRequestItemIdentifier attribute.
+	 * 
+	 * @param paymentRequestItemIdentifier The paymentRequestItemIdentifier to set.
+	 * 
+	 */
+	public void setPaymentRequestItemIdentifier(Integer paymentRequestItemIdentifier) {
+		this.paymentRequestItemIdentifier = paymentRequestItemIdentifier;
+	}
+
+
+	/**
+	 * Gets the paymentRequestIdentifier attribute.
+	 * 
+	 * @return Returns the paymentRequestIdentifier
+	 * 
+	 */
+	public Integer getPaymentRequestIdentifier() { 
+		return paymentRequestIdentifier;
+	}
+
+	/**
+	 * Sets the paymentRequestIdentifier attribute.
+	 * 
+	 * @param paymentRequestIdentifier The paymentRequestIdentifier to set.
+	 * 
+	 */
+	public void setPaymentRequestIdentifier(Integer paymentRequestIdentifier) {
+		this.paymentRequestIdentifier = paymentRequestIdentifier;
+	}
+
+
+	/**
+	 * Gets the itemLineNumber attribute.
+	 * 
+	 * @return Returns the itemLineNumber
+	 * 
+	 */
+	public Integer getItemLineNumber() { 
+		return itemLineNumber;
+	}
+
+	/**
+	 * Sets the itemLineNumber attribute.
+	 * 
+	 * @param itemLineNumber The itemLineNumber to set.
+	 * 
+	 */
+	public void setItemLineNumber(Integer itemLineNumber) {
+		this.itemLineNumber = itemLineNumber;
+	}
+
+
+	/**
+	 * Gets the itemTypeCode attribute.
+	 * 
+	 * @return Returns the itemTypeCode
+	 * 
+	 */
+	public String getItemTypeCode() { 
+		return itemTypeCode;
+	}
+
+	/**
+	 * Sets the itemTypeCode attribute.
+	 * 
+	 * @param itemTypeCode The itemTypeCode to set.
+	 * 
+	 */
+	public void setItemTypeCode(String itemTypeCode) {
+		this.itemTypeCode = itemTypeCode;
+	}
+
+
+	/**
+	 * Gets the itemDescription attribute.
+	 * 
+	 * @return Returns the itemDescription
+	 * 
+	 */
+	public String getItemDescription() { 
+		return itemDescription;
+	}
+
+	/**
+	 * Sets the itemDescription attribute.
+	 * 
+	 * @param itemDescription The itemDescription to set.
+	 * 
+	 */
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
+	}
+
+
+	/**
+	 * Gets the itemCatalogNumber attribute.
+	 * 
+	 * @return Returns the itemCatalogNumber
+	 * 
+	 */
+	public String getItemCatalogNumber() { 
+		return itemCatalogNumber;
+	}
+
+	/**
+	 * Sets the itemCatalogNumber attribute.
+	 * 
+	 * @param itemCatalogNumber The itemCatalogNumber to set.
+	 * 
+	 */
+	public void setItemCatalogNumber(String itemCatalogNumber) {
+		this.itemCatalogNumber = itemCatalogNumber;
+	}
+
+
+	/**
+	 * Gets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @return Returns the itemAuxiliaryPartIdentifier
+	 * 
+	 */
+	public String getItemAuxiliaryPartIdentifier() { 
+		return itemAuxiliaryPartIdentifier;
+	}
+
+	/**
+	 * Sets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @param itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
+	 * 
+	 */
+	public void setItemAuxiliaryPartIdentifier(String itemAuxiliaryPartIdentifier) {
+		this.itemAuxiliaryPartIdentifier = itemAuxiliaryPartIdentifier;
+	}
+
+
+	/**
+	 * Gets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @return Returns the itemUnitOfMeasureCode
+	 * 
+	 */
+	public String getItemUnitOfMeasureCode() { 
+		return itemUnitOfMeasureCode;
+	}
+
+	/**
+	 * Sets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @param itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
+	 * 
+	 */
+	public void setItemUnitOfMeasureCode(String itemUnitOfMeasureCode) {
+		this.itemUnitOfMeasureCode = itemUnitOfMeasureCode;
+	}
+
+
+	/**
+	 * Gets the itemInvoicedQuantity attribute.
+	 * 
+	 * @return Returns the itemInvoicedQuantity
+	 * 
+	 */
+	public KualiDecimal getItemInvoicedQuantity() { 
+		return itemInvoicedQuantity;
+	}
+
+	/**
+	 * Sets the itemInvoicedQuantity attribute.
+	 * 
+	 * @param itemInvoicedQuantity The itemInvoicedQuantity to set.
+	 * 
+	 */
+	public void setItemInvoicedQuantity(KualiDecimal itemInvoicedQuantity) {
+		this.itemInvoicedQuantity = itemInvoicedQuantity;
+	}
+
+
+	/**
+	 * Gets the itemUnitPrice attribute.
+	 * 
+	 * @return Returns the itemUnitPrice
+	 * 
+	 */
+	public BigDecimal getItemUnitPrice() { 
+		return itemUnitPrice;
+	}
+
+	/**
+	 * Sets the itemUnitPrice attribute.
+	 * 
+	 * @param itemUnitPrice The itemUnitPrice to set.
+	 * 
+	 */
+	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
+		this.itemUnitPrice = itemUnitPrice;
+	}
+
+
+	/**
+	 * Gets the purchaseOrderItemUnitPrice attribute.
+	 * 
+	 * @return Returns the purchaseOrderItemUnitPrice
+	 * 
+	 */
+	public BigDecimal getPurchaseOrderItemUnitPrice() { 
+		return purchaseOrderItemUnitPrice;
+	}
+
+	/**
+	 * Sets the purchaseOrderItemUnitPrice attribute.
+	 * 
+	 * @param purchaseOrderItemUnitPrice The purchaseOrderItemUnitPrice to set.
+	 * 
+	 */
+	public void setPurchaseOrderItemUnitPrice(BigDecimal purchaseOrderItemUnitPrice) {
+		this.purchaseOrderItemUnitPrice = purchaseOrderItemUnitPrice;
+	}
+
+
+	/**
+	 * Gets the itemExtendedPrice attribute.
+	 * 
+	 * @return Returns the itemExtendedPrice
+	 * 
+	 */
+	public KualiDecimal getItemExtendedPrice() { 
+		return itemExtendedPrice;
+	}
+
+	/**
+	 * Sets the itemExtendedPrice attribute.
+	 * 
+	 * @param itemExtendedPrice The itemExtendedPrice to set.
+	 * 
+	 */
+	public void setItemExtendedPrice(KualiDecimal itemExtendedPrice) {
+		this.itemExtendedPrice = itemExtendedPrice;
+	}
+
+
+	/**
+	 * Gets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @return Returns the capitalAssetTransactionTypeCode
+	 * 
+	 */
+	public String getCapitalAssetTransactionTypeCode() { 
+		return capitalAssetTransactionTypeCode;
+	}
+
+	/**
+	 * Sets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @param capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
+		this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
+	}
+
+
+	/**
+	 * Gets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @return Returns the itemCapitalAssetNoteText
+	 * 
+	 */
+	public String getItemCapitalAssetNoteText() { 
+		return itemCapitalAssetNoteText;
+	}
+
+	/**
+	 * Sets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @param itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
+	 * 
+	 */
+	public void setItemCapitalAssetNoteText(String itemCapitalAssetNoteText) {
+		this.itemCapitalAssetNoteText = itemCapitalAssetNoteText;
+	}
+
+
+	/**
+	 * Gets the purchaseOrderCommodityCode attribute.
+	 * 
+	 * @return Returns the purchaseOrderCommodityCode
+	 * 
+	 */
+	public String getPurchaseOrderCommodityCode() { 
+		return purchaseOrderCommodityCode;
+	}
+
+	/**
+	 * Sets the purchaseOrderCommodityCode attribute.
+	 * 
+	 * @param purchaseOrderCommodityCode The purchaseOrderCommodityCode to set.
+	 * 
+	 */
+	public void setPurchaseOrderCommodityCode(String purchaseOrderCommodityCode) {
+		this.purchaseOrderCommodityCode = purchaseOrderCommodityCode;
+	}
+
+
+	/**
+	 * Gets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @return Returns the itemAssignedToTradeInIndicator
+	 * 
+	 */
+	public boolean getItemAssignedToTradeInIndicator() { 
+		return itemAssignedToTradeInIndicator;
+	}
+
+	/**
+	 * Sets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @param itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
+	 * 
+	 */
+	public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
+		this.itemAssignedToTradeInIndicator = itemAssignedToTradeInIndicator;
+	}
+
+    /**
+     * Gets the itemOutstandingInvoiceAmount attribute. 
+     * @return Returns the itemOutstandingInvoiceAmount.
+     */
     public KualiDecimal getItemOutstandingInvoiceAmount() {
         return itemOutstandingInvoiceAmount;
     }
 
+    /**
+     * Sets the itemOutstandingInvoiceAmount attribute value.
+     * @param itemOutstandingInvoiceAmount The itemOutstandingInvoiceAmount to set.
+     */
     public void setItemOutstandingInvoiceAmount(KualiDecimal itemOutstandingInvoiceAmount) {
         this.itemOutstandingInvoiceAmount = itemOutstandingInvoiceAmount;
     }
 
+    /**
+     * Gets the itemOutstandingInvoiceQuantity attribute. 
+     * @return Returns the itemOutstandingInvoiceQuantity.
+     */
     public KualiDecimal getItemOutstandingInvoiceQuantity() {
         return itemOutstandingInvoiceQuantity;
     }
 
+    /**
+     * Sets the itemOutstandingInvoiceQuantity attribute value.
+     * @param itemOutstandingInvoiceQuantity The itemOutstandingInvoiceQuantity to set.
+     */
     public void setItemOutstandingInvoiceQuantity(KualiDecimal itemOutstandingInvoiceQuantity) {
         this.itemOutstandingInvoiceQuantity = itemOutstandingInvoiceQuantity;
     }
+    
+	/**
+	 * Gets the paymentRequest attribute.
+	 * 
+	 * @return Returns the paymentRequest
+	 * 
+	 */
+	public PaymentRequest getPaymentRequest() { 
+		return paymentRequest;
+	}
 
-    public PaymentRequestDocument getPaymentRequest() {
-        return paymentRequest;
-    }
+	/**
+	 * Sets the paymentRequest attribute.
+	 * 
+	 * @param paymentRequest The paymentRequest to set.
+	 * @deprecated
+	 */
+	public void setPaymentRequest(PaymentRequest paymentRequest) {
+		this.paymentRequest = paymentRequest;
+	}
 
-    public void setPaymentRequest(PaymentRequestDocument paymentRequest) {
-        this.paymentRequest = paymentRequest;
-    }
-
-    public void generateAccountListFromPoItemAccounts(List<PurApAccountingLine> accounts) {
-        for (PurApAccountingLine line : accounts) {
-            PurchaseOrderAccount poa = (PurchaseOrderAccount) line;
-            if (!line.isEmpty()) {
-                getSourceAccountingLines().add(new PaymentRequestAccount(this, poa));
-            }
+	/**
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
+        if (this.paymentRequestItemIdentifier != null) {
+            m.put("paymentRequestItemIdentifier", this.paymentRequestItemIdentifier.toString());
         }
+	    return m;
     }
-
-    /**
-     * @see org.kuali.module.purap.bo.PurApItem#getAccountingLineClass()
-     */
-    public Class getAccountingLineClass() {
-        return PaymentRequestAccount.class;
-    }
-
-    public boolean isDisplayOnPreq() {
-        PurchaseOrderItem poi = getPurchaseOrderItem();
-        if (ObjectUtils.isNull(poi)) {
-            LOG.debug("poi was null");
-            return false;
-        }
-
-        // if the po item is not active... skip it
-        if (!poi.isItemActiveIndicator()) {
-            LOG.debug("poi was not active: " + poi.toString());
-            return false;
-        }
-
-        ItemType poiType = poi.getItemType();
-
-        if (poiType.isQuantityBasedGeneralLedgerIndicator()) {
-            if (poi.getItemQuantity().isGreaterThan(poi.getItemInvoicedTotalQuantity())) {
-                return true;
-            }
-            else {
-                if (ObjectUtils.isNotNull(this.getItemQuantity()) && this.getItemQuantity().isGreaterThan(KualiDecimal.ZERO)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        else { // not quantity based
-            if (poi.getItemOutstandingEncumberedAmount().isGreaterThan(KualiDecimal.ZERO)) {
-                return true;
-            }
-            else {
-                if (PurApItemUtils.isNonZeroExtended(this)) {
-                    return true;
-                }
-                return false;
-            }
-
-        }
-    }
-
-    /**
-     * sets account line percentage to zero.
-     * 
-     * @see org.kuali.module.purap.bo.PurApItem#resetAccount()
-     */
-    @Override
-    public void resetAccount() {
-        super.resetAccount();
-        this.getNewSourceLine().setAccountLinePercent(new BigDecimal(0));
-    }
-
-    /**
-     * Refreshes payment request object.
-     * 
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#afterLookup(org.apache.ojb.broker.PersistenceBroker)
-     */
-    @Override
-    public void afterLookup(PersistenceBroker persistenceBroker) throws PersistenceBrokerException {
-        super.afterLookup(persistenceBroker);
-        if (ObjectUtils.isNotNull(this.getPurapDocumentIdentifier())) {
-            if (ObjectUtils.isNull(this.getPaymentRequest())) {
-                this.refreshReferenceObject(PurapPropertyConstants.PAYMENT_REQUEST);
-            }
-        }
-    }
-
 }

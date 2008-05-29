@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ObjectType.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,14 +39,13 @@ public class ObjectType extends KualiCodeBase {
     private boolean finObjectTypeIcrSelectionIndicator;
     private boolean fundBalanceIndicator;
     private String financialReportingSortCode;
-    private String basicAccountingCategoryCode;
 
-    private BasicAccountingCategory basicAccountingCategory;
 
     /**
      * Gets the finObjectTypeDebitcreditCd attribute.
      * 
      * @return Returns the finObjectTypeDebitcreditCd
+     * 
      */
     public String getFinObjectTypeDebitcreditCd() {
         return finObjectTypeDebitcreditCd;
@@ -54,6 +55,7 @@ public class ObjectType extends KualiCodeBase {
      * Sets the finObjectTypeDebitcreditCd attribute.
      * 
      * @param finObjectTypeDebitcreditCd The finObjectTypeDebitcreditCd to set.
+     * 
      */
     public void setFinObjectTypeDebitcreditCd(String finObjectTypeDebitcreditCd) {
         this.finObjectTypeDebitcreditCd = finObjectTypeDebitcreditCd;
@@ -63,6 +65,7 @@ public class ObjectType extends KualiCodeBase {
      * Gets the finObjectTypeIcrSelectionIndicator attribute.
      * 
      * @return Returns the finObjectTypeIcrSelectionIndicator
+     * 
      */
     public boolean isFinObjectTypeIcrSelectionIndicator() {
         return finObjectTypeIcrSelectionIndicator;
@@ -72,6 +75,7 @@ public class ObjectType extends KualiCodeBase {
      * Sets the finObjectTypeIcrSelectionIndicator attribute.
      * 
      * @param finObjectTypeIcrSelectionIndicator The finObjectTypeIcrSelectionIndicator to set.
+     * 
      */
     public void setFinObjectTypeIcrSelectionIndicator(boolean finObjectTypeIcrSelectionIndicator) {
         this.finObjectTypeIcrSelectionIndicator = finObjectTypeIcrSelectionIndicator;
@@ -81,6 +85,7 @@ public class ObjectType extends KualiCodeBase {
      * Gets the fundBalanceIndicator attribute.
      * 
      * @return Returns the fundBalanceIndicator
+     * 
      */
     public boolean isFundBalanceIndicator() {
         return fundBalanceIndicator;
@@ -90,6 +95,7 @@ public class ObjectType extends KualiCodeBase {
      * Sets the fundBalanceIndicator attribute.
      * 
      * @param fundBalanceIndicator The fundBalanceIndicator to set.
+     * 
      */
     public void setFundBalanceIndicator(boolean fundBalanceIndicator) {
         this.fundBalanceIndicator = fundBalanceIndicator;
@@ -99,6 +105,7 @@ public class ObjectType extends KualiCodeBase {
      * Gets the financialReportingSortCode attribute.
      * 
      * @return Returns the financialReportingSortCode
+     * 
      */
     public String getFinancialReportingSortCode() {
         return financialReportingSortCode;
@@ -108,46 +115,10 @@ public class ObjectType extends KualiCodeBase {
      * Sets the financialReportingSortCode attribute.
      * 
      * @param financialReportingSortCode The financialReportingSortCode to set.
+     * 
      */
     public void setFinancialReportingSortCode(String financialReportingSortCode) {
         this.financialReportingSortCode = financialReportingSortCode;
-    }
-
-    /**
-     * Gets the accountCategoryCode attribute.
-     * 
-     * @return Returns the accountCategoryCode.
-     */
-    public String getBasicAccountingCategoryCode() {
-        return basicAccountingCategoryCode;
-    }
-
-    /**
-     * Sets the accountCategoryCode attribute value.
-     * 
-     * @param accountCategoryCode The accountCategoryCode to set.
-     */
-    public void setBasicAccountingCategoryCode(String accountCategoryCode) {
-        this.basicAccountingCategoryCode = accountCategoryCode;
-    }
-
-    /**
-     * Gets the basicAccountingCategory attribute.
-     * 
-     * @return Returns the basicAccountingCategory.
-     */
-    public BasicAccountingCategory getBasicAccountingCategory() {
-        return basicAccountingCategory;
-    }
-
-    /**
-     * Sets the basicAccountingCategory attribute value.
-     * 
-     * @param basicAccountingCategory The basicAccountingCategory to set.
-     * @deprecated
-     */
-    public void setBasicAccountingCategory(BasicAccountingCategory basicAccountingCategory) {
-        this.basicAccountingCategory = basicAccountingCategory;
     }
 
 }

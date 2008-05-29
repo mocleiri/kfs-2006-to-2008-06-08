@@ -24,14 +24,10 @@ import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
 import org.apache.ojb.broker.query.ReportQueryByCriteria;
 import org.kuali.core.dao.ojb.PlatformAwareDaoBaseOjb;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.Entry;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.dao.EntryDao;
 
-/**
- * An OJB implementation of EntryDao
- */
 public class EntryDaoOjb extends PlatformAwareDaoBaseOjb implements EntryDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(EntryDaoOjb.class);
 
@@ -46,23 +42,14 @@ public class EntryDaoOjb extends PlatformAwareDaoBaseOjb implements EntryDao {
     private final static String UNIVERISTY_FISCAL_PERIOD_CODE = "universityFiscalPeriodCode";
     private final static String FINANCIAL_DOCUMENT_TYPE_CODE = "financialDocumentTypeCode";
     private final static String FINANCIAL_SYSTEM_ORIGINATION_CODE = "financialSystemOriginationCode";
-    private final static String MAX_CONSTANT = "max(documentNumber)";
+    private final static String FINANCIAL_DOCUMENT_NUMBER = "financialDocumentNumber";
+    private final static String MAX_CONSTANT = "max(financialDocumentNumber)";
 
 
-    /**
-     * Constructs a EntryDaoOjb instance
-     */
     public EntryDaoOjb() {
         super();
     }
 
-    /**
-     * Turns the given transaction into an entry and then saves that entry in the database
-     * 
-     * @param t the transaction to save
-     * @param postDate the officially reported posting date
-     * @see org.kuali.module.gl.dao.EntryDao#addEntry(org.kuali.module.gl.bo.Transaction, java.util.Date)
-     */
     public void addEntry(Transaction t, Date postDate) {
         LOG.debug("addEntry() started");
 
@@ -74,9 +61,6 @@ public class EntryDaoOjb extends PlatformAwareDaoBaseOjb implements EntryDao {
     /**
      * Find the maximum transactionLedgerEntrySequenceNumber in the entry table for a specific transaction. This is used to make
      * sure that rows added have a unique primary key.
-     * 
-     * @param t the transaction to check
-     * @return the max sequence number
      */
     public int getMaxSequenceNumber(Transaction t) {
         LOG.debug("getSequenceNumber() ");
@@ -93,31 +77,32 @@ public class EntryDaoOjb extends PlatformAwareDaoBaseOjb implements EntryDao {
         crit.addEqualTo(UNIVERISTY_FISCAL_PERIOD_CODE, t.getUniversityFiscalPeriodCode());
         crit.addEqualTo(FINANCIAL_DOCUMENT_TYPE_CODE, t.getFinancialDocumentTypeCode());
         crit.addEqualTo(FINANCIAL_SYSTEM_ORIGINATION_CODE, t.getFinancialSystemOriginationCode());
-        crit.addEqualTo(KFSPropertyConstants.DOCUMENT_NUMBER, t.getDocumentNumber());
+        crit.addEqualTo(FINANCIAL_DOCUMENT_NUMBER, t.getFinancialDocumentNumber());
 
         ReportQueryByCriteria q = QueryFactory.newReportQuery(Entry.class, crit);
         q.setAttributes(new String[] { "max(transactionLedgerEntrySequenceNumber)" });
 
         Iterator iter = getPersistenceBrokerTemplate().getReportQueryIteratorByQuery(q);
-        // would this work better? max = (BigDecimal) getPersistenceBrokerTemplate().getObjectByQuery(q);
-        BigDecimal max = null;
-        while (iter.hasNext()) {
+        if (iter.hasNext()) {
             Object[] data = (Object[]) iter.next();
-            max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
-        }
-        if (max == null) {
-            return 0;
+            BigDecimal max = (BigDecimal) data[0]; // Don't know why OJB returns a BigDecimal, but it does
+            if (max == null) {
+                return 0;
+            }
+            else {
+                return max.intValue();
+            }
         }
         else {
-            return max.intValue();
+            return 0;
         }
     }
 
     /**
      * Purge the entry table by chart/year
      * 
-     * @param chart the chart of accounts code of entries to purge
-     * @param year the university fiscal year of entries to purge
+     * @param chart
+     * @param year
      */
     public void purgeYearByChart(String chartOfAccountsCode, int year) {
         LOG.debug("purgeYearByChart() started");

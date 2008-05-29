@@ -17,258 +17,432 @@
 package org.kuali.module.purap.bo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.TypedArrayList;
+import org.kuali.kfs.KFSConstants;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
-import org.kuali.module.purap.util.PurApObjectUtils;
 
 /**
- * Purap Item Base Business Object.
+ * 
  */
-public abstract class PurApItemBase extends PersistableBusinessObjectBase implements PurApItem {
+public abstract class PurApItemBase extends PersistableBusinessObjectBase implements PurchasingApItem {
 
-    private Integer itemIdentifier;
-    private Integer itemLineNumber;
-    private String capitalAssetTransactionTypeCode;
-    private String itemUnitOfMeasureCode;
-    private String itemCatalogNumber;
-    private String itemDescription;
-    private String itemCapitalAssetNoteText;
-    private BigDecimal itemUnitPrice;
-    private String itemTypeCode;
-    private String itemAuxiliaryPartIdentifier;
-    private String externalOrganizationB2bProductReferenceNumber;
-    private String externalOrganizationB2bProductTypeName;
-    private boolean itemAssignedToTradeInIndicator;
-    private KualiDecimal extendedPrice; // not currently in DB
-
+	private Integer itemIdentifier;
+	private Integer itemLineNumber;
+	private String capitalAssetTransactionTypeCode;
+	private String itemUnitOfMeasureCode;
+	private String itemCatalogNumber;
+	private String itemDescription;
+	private String itemCapitalAssetNoteText;
+	private BigDecimal itemUnitPrice;
+	private String itemTypeCode;
+	private String itemAuxiliaryPartIdentifier;
+	private String externalOrganizationB2bProductReferenceNumber;
+	private String externalOrganizationB2bProductTypeName;
+	private boolean itemAssignedToTradeInIndicator;
+    private KualiDecimal extendedPrice; //not currently in DB
+    
     private List<PurApAccountingLine> sourceAccountingLines;
-    private transient List<PurApAccountingLine> baselineSourceAccountingLines;
     private transient PurApAccountingLine newSourceLine;
-
-    private CapitalAssetTransactionType capitalAssetTransactionType;
-    private ItemType itemType;
+    
+	private CapitalAssetTransactionType capitalAssetTransactionType;
+	private ItemType itemType;
     private Integer purapDocumentIdentifier;
     private KualiDecimal itemQuantity;
 
-    /**
-     * Default constructor.
-     */
-    public PurApItemBase() {
-        itemTypeCode = PurapConstants.ItemTypeCodes.ITEM_TYPE_ITEM_CODE;
+	/**
+	 * Default constructor.
+	 */
+	public PurApItemBase() {
+	    //TODO: Chris - default itemType (should probably get this from spring or KFSConstants file)
+//        itemTypeCode = "ITEM";
+//        this.refreshNonUpdateableReferences();
         sourceAccountingLines = new TypedArrayList(getAccountingLineClass());
-        baselineSourceAccountingLines = new TypedArrayList(getAccountingLineClass());
         resetAccount();
+	}
+
+    public boolean isCanInactivateItem() {
+        //By default, the items of all documents cannot be inactivated.
+        //The only exception is for PurchaseOrderItem, therefore this method
+        //will be overridden in PurchaseOrderItem to indicate whether the item
+        //can be inactivated.
+        return false;
     }
+    
+	/**
+	 * Gets the ItemIdentifier attribute.
+	 * 
+	 * @return Returns the ItemIdentifier
+	 * 
+	 */
+	public Integer getItemIdentifier() { 
+		return itemIdentifier;
+	}
 
-    /**
-     * @see org.kuali.module.purap.bo.PurApItem#getItemIdentifierString()
-     */
-    public String getItemIdentifierString() {
-        String itemLineNumberString = (getItemLineNumber() != null ? getItemLineNumber().toString() : "");
-        String identifierString = (getItemType().isItemTypeAboveTheLineIndicator() ? "Item " + itemLineNumberString : getItemType().getItemTypeDescription());
-        return identifierString;
-    }
+	/**
+	 * Sets the ItemIdentifier attribute.
+	 * 
+	 * @param ItemIdentifier The ItemIdentifier to set.
+	 * 
+	 */
+	public void setItemIdentifier(Integer ItemIdentifier) {
+		this.itemIdentifier = ItemIdentifier;
+	}
 
-    public Integer getItemIdentifier() {
-        return itemIdentifier;
-    }
 
-    public void setItemIdentifier(Integer ItemIdentifier) {
-        this.itemIdentifier = ItemIdentifier;
-    }
+	/**
+	 * Gets the itemLineNumber attribute.
+	 * 
+	 * @return Returns the itemLineNumber
+	 * 
+	 */
+	public Integer getItemLineNumber() { 
+		return itemLineNumber;
+	}
 
-    public Integer getItemLineNumber() {
-        return itemLineNumber;
-    }
+	/**
+	 * Sets the itemLineNumber attribute.
+	 * 
+	 * @param itemLineNumber The itemLineNumber to set.
+	 * 
+	 */
+	public void setItemLineNumber(Integer itemLineNumber) {
+		this.itemLineNumber = itemLineNumber;
+	}
 
-    public void setItemLineNumber(Integer itemLineNumber) {
-        this.itemLineNumber = itemLineNumber;
-    }
 
-    public String getCapitalAssetTransactionTypeCode() {
-        return capitalAssetTransactionTypeCode;
-    }
+	/**
+	 * Gets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @return Returns the capitalAssetTransactionTypeCode
+	 * 
+	 */
+	public String getCapitalAssetTransactionTypeCode() { 
+		return capitalAssetTransactionTypeCode;
+	}
 
-    public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
-        this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
-    }
+	/**
+	 * Sets the capitalAssetTransactionTypeCode attribute.
+	 * 
+	 * @param capitalAssetTransactionTypeCode The capitalAssetTransactionTypeCode to set.
+	 * 
+	 */
+	public void setCapitalAssetTransactionTypeCode(String capitalAssetTransactionTypeCode) {
+		this.capitalAssetTransactionTypeCode = capitalAssetTransactionTypeCode;
+	}
 
-    public String getItemUnitOfMeasureCode() {
-        return itemUnitOfMeasureCode;
-    }
 
-    public void setItemUnitOfMeasureCode(String itemUnitOfMeasureCode) {
-        this.itemUnitOfMeasureCode = itemUnitOfMeasureCode;
-    }
+	/**
+	 * Gets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @return Returns the itemUnitOfMeasureCode
+	 * 
+	 */
+	public String getItemUnitOfMeasureCode() { 
+		return itemUnitOfMeasureCode;
+	}
 
-    public String getItemCatalogNumber() {
-        return itemCatalogNumber;
-    }
+	/**
+	 * Sets the itemUnitOfMeasureCode attribute.
+	 * 
+	 * @param itemUnitOfMeasureCode The itemUnitOfMeasureCode to set.
+	 * 
+	 */
+	public void setItemUnitOfMeasureCode(String itemUnitOfMeasureCode) {
+		this.itemUnitOfMeasureCode = itemUnitOfMeasureCode;
+	}
 
-    public void setItemCatalogNumber(String itemCatalogNumber) {
-        this.itemCatalogNumber = itemCatalogNumber;
-    }
+	/**
+	 * Gets the itemCatalogNumber attribute.
+	 * 
+	 * @return Returns the itemCatalogNumber
+	 * 
+	 */
+	public String getItemCatalogNumber() { 
+		return itemCatalogNumber;
+	}
 
-    public String getItemDescription() {
-        return itemDescription;
-    }
+	/**
+	 * Sets the itemCatalogNumber attribute.
+	 * 
+	 * @param itemCatalogNumber The itemCatalogNumber to set.
+	 * 
+	 */
+	public void setItemCatalogNumber(String itemCatalogNumber) {
+		this.itemCatalogNumber = itemCatalogNumber;
+	}
 
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
-    }
 
-    public String getItemCapitalAssetNoteText() {
-        return itemCapitalAssetNoteText;
-    }
+	/**
+	 * Gets the itemDescription attribute.
+	 * 
+	 * @return Returns the itemDescription
+	 * 
+	 */
+	public String getItemDescription() { 
+		return itemDescription;
+	}
 
-    public void setItemCapitalAssetNoteText(String itemCapitalAssetNoteText) {
-        this.itemCapitalAssetNoteText = itemCapitalAssetNoteText;
-    }
+	/**
+	 * Sets the itemDescription attribute.
+	 * 
+	 * @param itemDescription The itemDescription to set.
+	 * 
+	 */
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
+	}
 
-    public BigDecimal getItemUnitPrice() {
-        // KULPURAP-1096 Setting scale on retrieval of unit price
-        if (itemUnitPrice != null) {
-            if (itemUnitPrice.scale() < PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, KualiDecimal.ROUND_BEHAVIOR);
-            }
-            else if (itemUnitPrice.scale() > PurapConstants.UNIT_PRICE_MAX_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, KualiDecimal.ROUND_BEHAVIOR);
-            }
-        }
 
+	/**
+	 * Gets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @return Returns the itemCapitalAssetNoteText
+	 * 
+	 */
+	public String getItemCapitalAssetNoteText() { 
+		return itemCapitalAssetNoteText;
+	}
+
+	/**
+	 * Sets the itemCapitalAssetNoteText attribute.
+	 * 
+	 * @param itemCapitalAssetNoteText The itemCapitalAssetNoteText to set.
+	 * 
+	 */
+	public void setItemCapitalAssetNoteText(String itemCapitalAssetNoteText) {
+		this.itemCapitalAssetNoteText = itemCapitalAssetNoteText;
+	}
+
+
+	/**
+	 * Gets the itemUnitPrice attribute.
+	 * 
+	 * @return Returns the itemUnitPrice
+	 * 
+	 */
+	public BigDecimal getItemUnitPrice() { 
         return itemUnitPrice;
-    }
+	}
 
-    public void setItemUnitPrice(BigDecimal itemUnitPrice) {
-        if (itemUnitPrice != null) {
-            if (itemUnitPrice.scale() < PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, KualiDecimal.ROUND_BEHAVIOR);
-            }
-            else if (itemUnitPrice.scale() > PurapConstants.UNIT_PRICE_MAX_SCALE) {
-                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, KualiDecimal.ROUND_BEHAVIOR);
+	/**
+	 * Sets the itemUnitPrice attribute.
+	 * 
+	 * @param itemUnitPrice The itemUnitPrice to set.
+	 * 
+	 */
+	public void setItemUnitPrice(BigDecimal itemUnitPrice) {
+		if(itemUnitPrice!=null) {
+            if(itemUnitPrice.scale()<PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
+                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.DOLLAR_AMOUNT_MIN_SCALE, BigDecimal.ROUND_HALF_EVEN);
+            } else if(itemUnitPrice.scale()>PurapConstants.DOLLAR_AMOUNT_MIN_SCALE) {
+                itemUnitPrice = itemUnitPrice.setScale(PurapConstants.UNIT_PRICE_MAX_SCALE, BigDecimal.ROUND_HALF_EVEN);
             }
         }
         this.itemUnitPrice = itemUnitPrice;
-    }
+	}
 
-    public String getItemTypeCode() {
-        return itemTypeCode;
-    }
+	/**
+	 * Gets the itemTypeCode attribute.
+	 * 
+	 * @return Returns the itemTypeCode
+	 * 
+	 */
+	public String getItemTypeCode() { 
+		return itemTypeCode;
+	}
 
-    public void setItemTypeCode(String itemTypeCode) {
-        this.itemTypeCode = itemTypeCode;
-    }
+	/**
+	 * Sets the itemTypeCode attribute.
+	 * 
+	 * @param itemTypeCode The itemTypeCode to set.
+	 * 
+	 */
+	public void setItemTypeCode(String itemTypeCode) {
+		this.itemTypeCode = itemTypeCode;
+	}
 
-    public String getItemAuxiliaryPartIdentifier() {
-        return itemAuxiliaryPartIdentifier;
-    }
+	/**
+	 * Gets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @return Returns the itemAuxiliaryPartIdentifier
+	 * 
+	 */
+	public String getItemAuxiliaryPartIdentifier() { 
+		return itemAuxiliaryPartIdentifier;
+	}
 
-    public void setItemAuxiliaryPartIdentifier(String itemAuxiliaryPartIdentifier) {
-        this.itemAuxiliaryPartIdentifier = itemAuxiliaryPartIdentifier;
-    }
+	/**
+	 * Sets the itemAuxiliaryPartIdentifier attribute.
+	 * 
+	 * @param itemAuxiliaryPartIdentifier The itemAuxiliaryPartIdentifier to set.
+	 * 
+	 */
+	public void setItemAuxiliaryPartIdentifier(String itemAuxiliaryPartIdentifier) {
+		this.itemAuxiliaryPartIdentifier = itemAuxiliaryPartIdentifier;
+	}
 
-    public String getExternalOrganizationB2bProductReferenceNumber() {
-        return externalOrganizationB2bProductReferenceNumber;
-    }
 
-    public void setExternalOrganizationB2bProductReferenceNumber(String externalOrganizationB2bProductReferenceNumber) {
-        this.externalOrganizationB2bProductReferenceNumber = externalOrganizationB2bProductReferenceNumber;
-    }
+	/**
+	 * Gets the externalOrganizationB2bProductReferenceNumber attribute.
+	 * 
+	 * @return Returns the externalOrganizationB2bProductReferenceNumber
+	 * 
+	 */
+	public String getExternalOrganizationB2bProductReferenceNumber() { 
+		return externalOrganizationB2bProductReferenceNumber;
+	}
 
-    public String getExternalOrganizationB2bProductTypeName() {
-        return externalOrganizationB2bProductTypeName;
-    }
+	/**
+	 * Sets the externalOrganizationB2bProductReferenceNumber attribute.
+	 * 
+	 * @param externalOrganizationB2bProductReferenceNumber The externalOrganizationB2bProductReferenceNumber to set.
+	 * 
+	 */
+	public void setExternalOrganizationB2bProductReferenceNumber(String externalOrganizationB2bProductReferenceNumber) {
+		this.externalOrganizationB2bProductReferenceNumber = externalOrganizationB2bProductReferenceNumber;
+	}
 
-    public void setExternalOrganizationB2bProductTypeName(String externalOrganizationB2bProductTypeName) {
-        this.externalOrganizationB2bProductTypeName = externalOrganizationB2bProductTypeName;
-    }
 
-    public boolean getItemAssignedToTradeInIndicator() {
-        return itemAssignedToTradeInIndicator;
-    }
+	/**
+	 * Gets the externalOrganizationB2bProductTypeName attribute.
+	 * 
+	 * @return Returns the externalOrganizationB2bProductTypeName
+	 * 
+	 */
+	public String getExternalOrganizationB2bProductTypeName() { 
+		return externalOrganizationB2bProductTypeName;
+	}
 
-    public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
-        this.itemAssignedToTradeInIndicator = itemAssignedToTradeInIndicator;
-    }
+	/**
+	 * Sets the externalOrganizationB2bProductTypeName attribute.
+	 * 
+	 * @param externalOrganizationB2bProductTypeName The externalOrganizationB2bProductTypeName to set.
+	 * 
+	 */
+	public void setExternalOrganizationB2bProductTypeName(String externalOrganizationB2bProductTypeName) {
+		this.externalOrganizationB2bProductTypeName = externalOrganizationB2bProductTypeName;
+	}
 
-    public CapitalAssetTransactionType getCapitalAssetTransactionType() {
-        return capitalAssetTransactionType;
-    }
 
-    /**
-     * Sets the capitalAssetTransactionType attribute.
-     * 
-     * @param capitalAssetTransactionType The capitalAssetTransactionType to set.
-     * @deprecated
+	/**
+	 * Gets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @return Returns the itemAssignedToTradeInIndicator
+	 * 
+	 */
+	public boolean getItemAssignedToTradeInIndicator() { 
+		return itemAssignedToTradeInIndicator;
+	}
+
+	/**
+	 * Sets the itemAssignedToTradeInIndicator attribute.
+	 * 
+	 * @param itemAssignedToTradeInIndicator The itemAssignedToTradeInIndicator to set.
+	 * 
+	 */
+	public void setItemAssignedToTradeInIndicator(boolean itemAssignedToTradeInIndicator) {
+		this.itemAssignedToTradeInIndicator = itemAssignedToTradeInIndicator;
+	}
+
+	/**
+	 * Gets the capitalAssetTransactionType attribute.
+	 * 
+	 * @return Returns the capitalAssetTransactionType
+	 * 
+	 */
+	public CapitalAssetTransactionType getCapitalAssetTransactionType() { 
+		return capitalAssetTransactionType;
+	}
+
+	/**
+	 * Sets the capitalAssetTransactionType attribute.
+	 * 
+	 * @param capitalAssetTransactionType The capitalAssetTransactionType to set.
+	 * @deprecated
+	 */
+	public void setCapitalAssetTransactionType(CapitalAssetTransactionType capitalAssetTransactionType) {
+		this.capitalAssetTransactionType = capitalAssetTransactionType;
+	}
+
+	/**
+	 * Gets the itemType attribute.
+	 * 
+	 * @return Returns the itemType
+	 * 
+	 */
+	public ItemType getItemType() { 
+		return itemType;
+	}
+
+	/**
+	 * Sets the itemType attribute.
+	 * 
+	 * @param itemType The itemType to set.
+	 * @deprecated
+	 */
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
+	}
+
+    
+// from epic
+//    public BigDecimal getExtendedCost() {
+//        if (this.unitPrice == null) {
+//          return null;
+//        } else if (this.getIsServiceItem()) {
+//          return getUnitPrice().setScale(2,BigDecimal.ROUND_HALF_UP);
+//        } else {
+//          return this.orderQuantity.multiply(getUnitPrice()).setScale(2,BigDecimal.ROUND_HALF_UP);
+//        }
+//      }
+
+	/**
+     * Gets the extendedPrice attribute. 
+     * @return Returns the extendedPrice.
      */
-    public void setCapitalAssetTransactionType(CapitalAssetTransactionType capitalAssetTransactionType) {
-        this.capitalAssetTransactionType = capitalAssetTransactionType;
-    }
-
-    public ItemType getItemType() {
-        if (ObjectUtils.isNull(itemType)) {
-            refreshReferenceObject(PurapPropertyConstants.ITEM_TYPE);
-        }
-        return itemType;
-    }
-
-    /**
-     * Sets the itemType attribute.
-     * 
-     * @param itemType The itemType to set.
-     * @deprecated
-     */
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
-    }
-
     public KualiDecimal getExtendedPrice() {
-        return calculateExtendedPrice();
-    }
-
-    public KualiDecimal calculateExtendedPrice() {
-        KualiDecimal extendedPrice = KualiDecimal.ZERO;
-        if (ObjectUtils.isNotNull(itemUnitPrice)) {
-            if (!this.itemType.isQuantityBasedGeneralLedgerIndicator()) {
-                // SERVICE ITEM: return unit price as extended price
-                extendedPrice = new KualiDecimal(this.itemUnitPrice.toString());
+        if (this.itemUnitPrice != null) {
+            if (!this.itemType.isQuantityBasedGeneralLedgerIndicator() || this.itemQuantity == null) {
+                //SERVICE ITEM: return unit price as extended price
+                return new KualiDecimal(this.itemUnitPrice.toString());
             }
-            else if (ObjectUtils.isNotNull(this.getItemQuantity())) {
-                BigDecimal calcExtendedPrice = this.itemUnitPrice.multiply(this.itemQuantity.bigDecimalValue());
-                // ITEM TYPE (qty driven): return (unitPrice x qty)
-                extendedPrice = new KualiDecimal(calcExtendedPrice);
-            }
+            BigDecimal extendedPrice = this.itemUnitPrice.multiply(this.itemQuantity.bigDecimalValue());
+            //ITEM TYPE (qty driven): return (unitPrice x qty)
+            return new KualiDecimal(extendedPrice);
         }
-        return extendedPrice;
+        else {
+            //unit price is null; return zero
+            return KFSConstants.ZERO;
+        }
     }
-
+    
+     /**
+     * Sets the extendedPrice attribute value.
+     * @param extendedPrice The extendedPrice to set.
+     */
     public void setExtendedPrice(KualiDecimal extendedPrice) {
         this.extendedPrice = extendedPrice;
     }
-
+    
+    /**
+     * Gets the accountingLines attribute. 
+     * @return Returns the accountingLines.
+     */
     public List<PurApAccountingLine> getSourceAccountingLines() {
         return sourceAccountingLines;
     }
 
+    /**
+     * Sets the accountingLines attribute value.
+     * @param accountingLines The accountingLines to set.
+     */
     public void setSourceAccountingLines(List<PurApAccountingLine> accountingLines) {
         this.sourceAccountingLines = accountingLines;
-    }
-
-    public List<PurApAccountingLine> getBaselineSourceAccountingLines() {
-        return baselineSourceAccountingLines;
-    }
-
-    public void setBaselineSourceAccountingLines(List<PurApAccountingLine> baselineSourceLines) {
-        this.baselineSourceAccountingLines = baselineSourceLines;
     }
 
     /**
@@ -281,18 +455,26 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
      * @see org.kuali.core.document.FinancialDocument#getTargetAccountingLine(int)
      */
     public PurApAccountingLine getSourceAccountingLine(int index) {
+        //TODO: we probably don't need this because of the TypedArrayList
+//        while (getAccountingLines().size() <= index) {
+//            PurApAccountingLine newAccount = getNewAccount();
+//            getAccountingLines().add(newAccount);
+//        }
+        
         return (PurApAccountingLine) getSourceAccountingLines().get(index);
     }
 
-    public PurApAccountingLine getBaselineSourceAccountingLine(int index) {
-        return (PurApAccountingLine) getBaselineSourceAccountingLines().get(index);
-    }
-
+    /**
+     * This method...
+     * @param newAccount
+     * @return
+     * @throws RuntimeException
+     */
     private PurApAccountingLine getNewAccount() throws RuntimeException {
-
-        PurApAccountingLine newAccount = null;
+        
+        PurApAccountingLine newAccount=null;
         try {
-            newAccount = (PurApAccountingLine) getAccountingLineClass().newInstance();
+            newAccount = (PurApAccountingLine)getAccountingLineClass().newInstance();
         }
         catch (InstantiationException e) {
             throw new RuntimeException("Unable to get class");
@@ -307,19 +489,22 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
     }
 
     public abstract Class getAccountingLineClass();
-
+    
+    /**
+     * 
+     * @see org.kuali.module.purap.bo.PurchasingApItem#resetAccount()
+     */
     public void resetAccount() {
-        // add a blank accounting line
-        PurApAccountingLine purApAccountingLine = getNewAccount();
-        setNewSourceLine(purApAccountingLine);
+        //add a blank accounting line
+        setNewSourceLine(getNewAccount());
     }
-
+    
     /**
      * @see org.kuali.core.document.DocumentBase#buildListOfDeletionAwareLists()
      */
     @Override
     public List buildListOfDeletionAwareLists() {
-        List managedLists = new ArrayList();
+        List managedLists = super.buildListOfDeletionAwareLists();
 
         managedLists.add(getSourceAccountingLines());
 
@@ -327,20 +512,28 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
     }
 
     /**
-     * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
-     */
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+	 * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
+	 */
+	protected LinkedHashMap toStringMapper() {
+	    LinkedHashMap m = new LinkedHashMap();	    
         if (this.itemIdentifier != null) {
             m.put("requisitionItemIdentifier", this.itemIdentifier.toString());
         }
-        return m;
+	    return m;
     }
 
+    /**
+     * Gets the newSourceLine attribute. 
+     * @return Returns the newSourceLine.
+     */
     public PurApAccountingLine getNewSourceLine() {
         return newSourceLine;
     }
 
+    /**
+     * Sets the newSourceLine attribute value.
+     * @param newSourceLine The newSourceLine to set.
+     */
     public void setNewSourceLine(PurApAccountingLine newAccountingLine) {
         this.newSourceLine = newAccountingLine;
     }
@@ -360,24 +553,4 @@ public abstract class PurApItemBase extends PersistableBusinessObjectBase implem
     public void setItemQuantity(KualiDecimal itemQuantity) {
         this.itemQuantity = itemQuantity;
     }
-
-    public boolean isAccountListEmpty() {
-        List<PurApAccountingLine> accounts = getSourceAccountingLines();
-        if (ObjectUtils.isNotNull(accounts)) {
-            for (PurApAccountingLine element : accounts) {
-                if (!element.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public PurApSummaryItem getSummaryItem() {
-        PurApSummaryItem summaryItem = new PurApSummaryItem();
-        PurApObjectUtils.populateFromBaseClass(PurApItemBase.class, this, summaryItem, new HashMap());
-        summaryItem.getItemType().setItemTypeDescription(this.itemType.getItemTypeDescription());
-        return summaryItem;
-    }
-
 }

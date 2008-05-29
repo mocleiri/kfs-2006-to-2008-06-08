@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/ObjSubTyp.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +35,7 @@ public class ObjSubTyp extends KualiCodeBase {
      * Gets the financialObjectSubTypeCode attribute.
      * 
      * @return Returns the financialObjectSubTypeCode
+     * 
      */
     public String getFinancialObjectSubTypeCode() {
         return this.getCode();
@@ -43,6 +46,7 @@ public class ObjSubTyp extends KualiCodeBase {
      * Sets the financialObjectSubTypeCode attribute.
      * 
      * @param financialObjectSubTypeCode The financialObjectSubTypeCode to set.
+     * 
      */
     public void setFinancialObjectSubTypeCode(String financialObjectSubTypeCode) {
         this.setCode(financialObjectSubTypeCode);
@@ -52,6 +56,7 @@ public class ObjSubTyp extends KualiCodeBase {
      * Gets the financialObjectSubTypeName attribute.
      * 
      * @return Returns the financialObjectSubTypeName
+     * 
      */
     public String getFinancialObjectSubTypeName() {
         return this.getName();
@@ -61,6 +66,7 @@ public class ObjSubTyp extends KualiCodeBase {
      * Sets the financialObjectSubTypeName attribute.
      * 
      * @param financialObjectSubTypeName The financialObjectSubTypeName to set.
+     * 
      */
     public void setFinancialObjectSubTypeName(String financialObjectSubTypeName) {
         this.setName(financialObjectSubTypeName);

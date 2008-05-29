@@ -27,22 +27,20 @@ import org.kuali.core.service.ConfigurableDateService;
 import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.UnitTestSqlDao;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.context.TestUtils;
-import org.kuali.module.chart.bo.OffsetDefinition;
-import org.kuali.module.financial.bo.Bank;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.dao.OriginEntryDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.dao.LaborOriginEntryDao;
 import org.kuali.module.labor.service.LaborOriginEntryService;
+import org.kuali.test.KualiTestBase;
+import org.springframework.beans.factory.BeanFactory;
 
 public class LaborOriginEntryTestBase extends KualiTestBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborOriginEntryTestBase.class);
 
+    protected BeanFactory beanFactory;
     protected ConfigurableDateService dateTimeService;
     protected PersistenceService persistenceService;
     protected UnitTestSqlDao unitTestSqlDao = null;
@@ -64,19 +62,21 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
 
         LOG.debug("setUp() starting");
 
-        dateTimeService = SpringContext.getBean(ConfigurableDateService.class);
+        beanFactory = SpringServiceLocator.getBeanFactory();
+
+        dateTimeService = (ConfigurableDateService) beanFactory.getBean("testDateTimeService");
         date = dateTimeService.getCurrentDate();
 
         // Other objects needed for the tests
-        persistenceService = SpringContext.getBean(PersistenceService.class);
-        unitTestSqlDao = SpringContext.getBean(UnitTestSqlDao.class);
-        laborOriginEntryService = SpringContext.getBean(LaborOriginEntryService.class);
+        persistenceService = (PersistenceService) beanFactory.getBean("persistenceService");
+        unitTestSqlDao = (UnitTestSqlDao) beanFactory.getBean("glUnitTestSqlDao");
+        laborOriginEntryService = (LaborOriginEntryService) beanFactory.getBean("laborOriginEntryService");
 
-        originEntryDao = SpringContext.getBean(OriginEntryDao.class);
-        laborOriginEntryDao = SpringContext.getBean(LaborOriginEntryDao.class);
+        originEntryDao = (OriginEntryDao) beanFactory.getBean("glOriginEntryDao");
+        laborOriginEntryDao = (LaborOriginEntryDao) beanFactory.getBean("laborOriginEntryDao");
 
-        originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
-        kualiConfigurationService = SpringContext.getBean(KualiConfigurationService.class);
+        originEntryGroupService = (OriginEntryGroupService) beanFactory.getBean("glOriginEntryGroupService");
+        kualiConfigurationService = (KualiConfigurationService) beanFactory.getBean("kualiConfigurationService");
 
         // Set all enhancements to off
         resetAllEnhancementFlags();
@@ -182,18 +182,22 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
             // Check group
             int group = getGroup(groups, requiredEntries[count].groupCode);
 
-            //assertEquals("Group for transaction " + foundTransaction.getEntryId() + " is wrong", group, foundTransaction.getEntryGroupId().intValue());
+            assertEquals("Group for transaction " + foundTransaction.getEntryId() + " is wrong", group, foundTransaction.getEntryGroupId().intValue());
 
             // Check transaction - this is done this way so that Anthill prints the two transactions to make
             // resolving the issue easier.
+            
+            //This test is not good for Labor because input and output is little different.  -- Amount data 
+            /*String expected = requiredEntries[count].transactionLine.substring(0, 294);// trim();
+            String found = foundTransaction.getLine().substring(0, 294);// trim();
 
-            // This test is not good for Labor because input and output is little different. -- Amount data
-            /*
-             * String expected = requiredEntries[count].transactionLine.substring(0, 294);// trim(); String found =
-             * foundTransaction.getLine().substring(0, 294);// trim(); if (!found.equals(expected)) { System.err.println("Expected
-             * transaction: " + expected); System.err.println("Found transaction: " + found); fail("Transaction " +
-             * foundTransaction.getEntryId() + " doesn't match expected output"); }
-             */
+            if (!found.equals(expected)) {
+                System.err.println("Expected transaction: " + expected);
+                System.err.println("Found transaction:    " + found);
+
+                fail("Transaction " + foundTransaction.getEntryId() + " doesn't match expected output");
+            }
+            */            
             count++;
         }
     }
@@ -211,16 +215,25 @@ public class LaborOriginEntryTestBase extends KualiTestBase {
         return -1;
     }
 
-    protected static Object[] FLEXIBLE_OFFSET_ENABLED_FLAG = { OffsetDefinition.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_OFFSET_ENABLED_FLAG };
-    protected static Object[] FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = { Bank.class, KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG };
+    protected static String BUDGET_YEAR_ENABLED_FLAG = "BUDGET_YEAR_ENABLED_FLAG";
+    protected static String ICR_ENCUMBRANCE_ENABLED_FLAG = "ICR_ENCUMBRANCE_ENABLED_FLAG";
+    protected static String FLEXIBLE_OFFSET_ENABLED_FLAG = "FLEXIBLE_OFFSET_ENABLED_FLAG";
+    protected static String FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG = "FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG";
 
-    protected void resetAllEnhancementFlags() throws Exception {
-        setApplicationConfigurationFlag((Class) FLEXIBLE_OFFSET_ENABLED_FLAG[0], (String) FLEXIBLE_OFFSET_ENABLED_FLAG[1], false);
-        setApplicationConfigurationFlag((Class) FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG[0], (String) FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG[1], false);
+    protected void resetAllEnhancementFlags() {
+        setApplicationConfigurationFlag(LaborOriginEntryTestBase.BUDGET_YEAR_ENABLED_FLAG, false);
+        setApplicationConfigurationFlag(LaborOriginEntryTestBase.ICR_ENCUMBRANCE_ENABLED_FLAG, false);
+        setApplicationConfigurationFlag(LaborOriginEntryTestBase.FLEXIBLE_OFFSET_ENABLED_FLAG, false);
+        setApplicationConfigurationFlag(LaborOriginEntryTestBase.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG, false);
     }
 
-    protected void setApplicationConfigurationFlag(Class componentClass, String name, boolean value) throws Exception {
-        TestUtils.setSystemParameter(componentClass, name, value ? "Y" : "N");
+    protected boolean getApplicationConfigurationFlag(String name) {
+        return kualiConfigurationService.getApplicationParameterIndicator("SYSTEM", name);
+    }
+
+    protected void setApplicationConfigurationFlag(String name, boolean value) {
+        unitTestSqlDao.sqlCommand("delete from fs_parm_t where fs_scr_nm = 'SYSTEM' and fs_parm_nm = '" + name + "'");
+        unitTestSqlDao.sqlCommand("insert into fs_parm_t (fs_scr_nm,fs_parm_nm,obj_id,ver_nbr,fs_parm_txt,fs_parm_desc,fs_mult_val_ind" + ") values ('SYSTEM','" + name + "',SYS_GUID(),1,'" + (value ? "Y" : "N") + "','Y','N')");
     }
 
 

@@ -24,16 +24,17 @@ import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.util.ObjectUtil;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LedgerEntry;
+import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.module.labor.util.TestDataPreparator;
 import org.kuali.module.labor.util.testobject.LedgerEntryForTesting;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.util.TestDataPreparator;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborLedgerEntryServiceTest extends KualiTestBase {
 
     private Properties properties;
@@ -42,6 +43,7 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
     private List<String> keyFieldList;
     private Map fieldValues;
 
+    private BeanFactory beanFactory;
     private LaborLedgerEntryService laborLedgerEntryService;
     private BusinessObjectService businessObjectService;
 
@@ -56,9 +58,10 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
         deliminator = properties.getProperty("deliminator");
         keyFieldList = Arrays.asList(StringUtils.split(fieldNames, deliminator));
 
-        laborLedgerEntryService = SpringContext.getBean(LaborLedgerEntryService.class);
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        laborLedgerEntryService = (LaborLedgerEntryService) beanFactory.getBean("laborLedgerEntryService");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
+        
         LedgerEntry cleanup = new LedgerEntry();
         ObjectUtil.populateBusinessObject(cleanup, properties, "dataCleanup", fieldNames, deliminator);
         fieldValues = ObjectUtil.buildPropertyMap(cleanup, Arrays.asList(StringUtils.split(fieldNames, deliminator)));
@@ -122,7 +125,7 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
         maxSeqNumber = laborLedgerEntryService.getMaxSequenceNumber(input2);
         assertEquals(Integer.valueOf(expectedSeqNumber2), maxSeqNumber);
     }
-
+    
     public void testFind() throws Exception {
         String testTarget = "find.";
         int numberOfTestData = Integer.valueOf(properties.getProperty(testTarget + "numOfData"));
@@ -133,7 +136,7 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
 
         Iterator<LedgerEntry> ledgerEntries = laborLedgerEntryService.find(fieldValues);
         int counter = 0;
-        List expectedDataList = TestDataPreparator.buildExpectedValueList(LedgerEntryForTesting.class, properties, testTarget + "expected", fieldNames, deliminator, expectedNumOfData);
+        List expectedDataList = TestDataPreparator.buildExpectedValueList(LedgerEntryForTesting.class, properties, testTarget + "expected", fieldNames, deliminator, expectedNumOfData);       
         while (ledgerEntries != null && ledgerEntries.hasNext()) {
             LedgerEntry entry = ledgerEntries.next();
             LedgerEntryForTesting ledgerEntryForTesting = new LedgerEntryForTesting();
@@ -142,5 +145,5 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
             counter++;
         }
         assertEquals(expectedNumOfData, counter);
-    }
+    }    
 }

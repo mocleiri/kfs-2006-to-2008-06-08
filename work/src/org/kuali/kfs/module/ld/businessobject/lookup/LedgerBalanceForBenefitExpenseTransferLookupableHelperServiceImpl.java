@@ -19,25 +19,32 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.core.bo.BusinessObject;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.Options;
 import org.kuali.kfs.service.OptionsService;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.module.labor.LaborPropertyConstants;
 import org.kuali.module.labor.LaborConstants.BenefitExpenseTransfer;
 import org.kuali.module.labor.bo.LedgerBalance;
 import org.kuali.module.labor.util.ConsolidationUtil;
+import org.kuali.module.labor.web.inquirable.LedgerBalanceForExpenseTransferInquirableImpl;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * The class is the front-end for the balance inquiry of Ledger Balance For Benefit Expense Transfer processing.
- */
-public class LedgerBalanceForBenefitExpenseTransferLookupableHelperServiceImpl extends LedgerBalanceForExpenseTransferLookupableHelperServiceImpl {
+@Transactional
+public class LedgerBalanceForBenefitExpenseTransferLookupableHelperServiceImpl extends LedgerBalanceLookupableHelperServiceImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LedgerBalanceForBenefitExpenseTransferLookupableHelperServiceImpl.class);
 
     private OptionsService optionsService;
+
+    /**
+     * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
+     */
+    @Override
+    public String getInquiryUrl(BusinessObject bo, String propertyName) {
+        return (new LedgerBalanceForExpenseTransferInquirableImpl()).getInquiryUrl(bo, propertyName);
+    }
 
     /**
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)

@@ -22,27 +22,22 @@ import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.service.OriginEntryGroupService;
 
 /**
- * This class returns list of correction group entries key value pairs.
+ * This class returns list of payment method key value pairs.
  */
 public class CorrectionGroupEntriesFinder extends KeyValuesBase {
 
-    /**
-     * Returns a list of key/value pairs to display correction groups that can be used in a Labor Ledger Correction Document
-     * 
-     * @return a List of key/value pairs for correction groups
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
         List activeLabels = new ArrayList();
 
-
-        OriginEntryGroupService originEntryGroupService = SpringContext.getBean(OriginEntryGroupService.class);
+        OriginEntryGroupService originEntryGroupService = SpringServiceLocator.getOriginEntryGroupService();
 
         Collection<OriginEntryGroup> groupList = originEntryGroupService.getAllOriginEntryGroup();
 
@@ -51,16 +46,10 @@ public class CorrectionGroupEntriesFinder extends KeyValuesBase {
         OEGTypeComparator oegTypeComparator = new OEGTypeComparator();
         Collections.sort(sortedGroupList, oegTypeComparator);
 
-        String groupException = "";
-        for (int i = 0; i < KFSConstants.LLCP_GROUP_FILTER_EXCEPTION.length; i++) {
-            groupException += KFSConstants.LLCP_GROUP_FILTER_EXCEPTION[i] + " ";
+        for (OriginEntryGroup oeg : sortedGroupList) {
+            activeLabels.add(new KeyLabelPair(oeg.getId().toString(), oeg.getName()));
         }
 
-        for (OriginEntryGroup oeg : sortedGroupList) {
-            if (!oeg.getSourceCode().startsWith("L") || groupException.contains(oeg.getSourceCode())) {
-                activeLabels.add(new KeyLabelPair(oeg.getId().toString(), oeg.getName()));
-            }
-        }
         return activeLabels;
     }
 

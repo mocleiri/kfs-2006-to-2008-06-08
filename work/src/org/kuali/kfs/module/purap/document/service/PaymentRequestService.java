@@ -16,339 +16,536 @@
 package org.kuali.module.purap.service;
 
 import java.sql.Date;
+//import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.service.BusinessObjectService;
+import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.DocumentService;
+import org.kuali.core.service.NoteService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.module.purap.document.CreditMemoDocument;
+import org.kuali.core.workflow.service.WorkflowDocumentService;
+import org.kuali.module.purap.dao.PaymentRequestDao;
 import org.kuali.module.purap.document.PaymentRequestDocument;
-import org.kuali.module.purap.util.VendorGroupingHelper;
-import org.kuali.module.vendor.bo.PaymentTermType;
+import org.kuali.module.vendor.service.VendorService;
 
-import edu.iu.uis.eden.exception.WorkflowException;
 
-/**
- * Defines methods that must be implemented by a PaymentRequestService implementation.
- */
-public interface PaymentRequestService extends AccountsPayableDocumentSpecificService {
+public interface PaymentRequestService {
 
-    /**
-     * Obtains a list of payment request documents given the purchase order id.
-     * 
-     * @param poDocId  The purchase order id to be used to obtain a list of payment request documents.
-     * @return         The List of payment request documents given the purchase order id.
-     */
+    public void save(PaymentRequestDocument paymentRequestDocument);
+    
     public List<PaymentRequestDocument> getPaymentRequestsByPurchaseOrderId(Integer poDocId);
-
-    /**
-     * Obtains a list of payment request documents given the purchase order id, the invoice amount
-     * and the invoice date.
-     * 
-     * @param poId           The purchase order id used to obtain the payment request documents.
-     * @param invoiceAmount  The invoice amount used to obtain the payment request documents.
-     * @param invoiceDate    The invoice date used to obtain the payment request documents.
-     * @return               The List of payment request documents that match the given criterias (purchase order id, invoice amount and invoice date).
-     */
+    
     public List getPaymentRequestsByPOIdInvoiceAmountInvoiceDate(Integer poId, KualiDecimal invoiceAmount, Date invoiceDate);
-
-    /**
-     * Obtains a list of payment request documents given the vendorHeaderGeneratedIdentifier, vendorDetailAssignedIdentifier and the invoice number.
-     *
-     * @param vendorHeaderGeneratedIdentifier The vendorHeaderGeneratedIdentifier used to obtain the payment request documents.
-     * @param vendorDetailAssignedIdentifier  The vendorDetailAssignedIdentifier used to obtain the payment request documents.
-     * @param invoiceNumber                   The invoice number used to obtain the payment request documents.
-     * @return                                The List of payment request documents that match the given criterias.
-     */
+    
+    // TODO: Implement me.
     public List getPaymentRequestsByVendorNumberInvoiceNumber(Integer vendorHeaderGeneratedIdentifier, Integer vendorDetailAssignedIdentifier, String invoiceNumber);
-
-    /**
-     * Determines whether the invoice date is after today.
-     * 
-     * @param invoiceDate  The invoice date to be determined whether it's after today.
-     * @return             boolean true if the given invoice date is after today.
-     */
+    
     public boolean isInvoiceDateAfterToday(Date invoiceDate);
-
-    /**
-     * Performs the processing to check whether the payment request is a duplicate and if so, adds
-     * the information about the type of duplication into the resulting HashMap to be returned by this method.
-     * 
-     * @param document  The payment request document to be processed/checked for duplicates.
-     * @return          The HashMap containing "PREQDuplicateInvoice" as the key and the string
-     *                  describing the types of duplication as the value.
-     */
+    
     public HashMap<String, String> paymentRequestDuplicateMessages(PaymentRequestDocument document);
-
-    /**
-     * Calculate based on the terms and calculate a date 10 days from today. Pick the one that is the farthest out. We always
-     * calculate the discount date, if there is one.
-     * 
-     * @param invoiceDate  The invoice date to be used in the pay date calculation.
-     * @param terms        The payment term type to be used in the pay date calculation.
-     * @return             The resulting pay date given the invoice date and the terms.
-     */
-    public Date calculatePayDate(Date invoiceDate, PaymentTermType terms);
-
-    /**
-     * Marks a payment request on hold.
-     * 
-     * @param document    The payment request document to be marked as on hold.
-     * @param note        The note to be added to the payment request document while being marked as on hold.
-     * @return            The PaymentRequestDocument with updated information.
-     * @throws Exception
-     */
-    public PaymentRequestDocument addHoldOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception;
-
-    /**
-     * Determines if a user has permission to put the payment request on hold.
-     * 
-     * @param document  The payment request document to be determined whether the user has permission to put it on hold.
-     * @param user      The user whose permission to put the payment request on hold is to be determined.
-     * @return          boolean true if the user has permission to put the payment request on hold.
-     */
+    
+    public HashMap<String, String> expiredOrClosedAccountsList(PaymentRequestDocument document);
+    
+    public void addContinuationAccountsNote(PaymentRequestDocument document, HashMap<String, String> accounts);
+    
+    public void addHoldOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception;
+    
+    public boolean isPaymentRequestHoldable(PaymentRequestDocument document);
+    
     public boolean canHoldPaymentRequest(PaymentRequestDocument document, UniversalUser user);
-
-    /**
-     * Determines if a user has permission to remove a hold on the payment request.
-     * 
-     * @param document  The payment request document to be determined whether the user has permission to remove hold on it.
-     * @param user      The user whose permission to remove hold on the payment request is to be determined.
-     * @return          boolean true if the user has permission to remove hold on the payment request.
-     */
+    
     public boolean canRemoveHoldPaymentRequest(PaymentRequestDocument document, UniversalUser user);
-
-    /**
-     * Removes a hold on a payment request.
-     * 
-     * @param document    The payment request document whose hold is to be removed.
-     * @param note        The note to be added to the payment request document while its hold is being removed.
-     * @return            The PaymentRequestDocument with updated information.
-     * @throws Exception
-     */
-    public PaymentRequestDocument removeHoldOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception;
-
-    /**
-     * Obtains the payment request document given the purapDocumentIdentifier.
-     * 
-     * @param poDocId  The purapDocumentIdentifier of the payment request document to be obtained.
-     * @return         The payment request document whose purapDocumentIdentifier matches with the input parameter.
-     */
+    
+    public void removeHoldOnPaymentRequest(PaymentRequestDocument document);
+       
     public PaymentRequestDocument getPaymentRequestById(Integer poDocId);
-
-    /**
-     * Obtains the payment request document given the document number.
-     * 
-     * @param documentNumber  The document number to be used to obtain the payment request document.
-     * @return                The payment request document whose document number matches with the given input parameter.
-     */
-    public PaymentRequestDocument getPaymentRequestByDocumentNumber(String documentNumber);
-
-    /**
-     * Marks a payment request as requested to be canceled.
-     * 
-     * @param document    The payment request document to be marked as requested to be canceled.
-     * @param note        The note to be added to the payment request document while being marked as requested to be canceled.
-     * @throws Exception
-     */
+    
     public void requestCancelOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception;
-
-    /**
-     * Returns true if the payment request has been extracted
-     * 
-     * @param document  The payment request document to be determined whether it is extracted.
-     * @return          boolean true if the payment request document is extracted.
-     */
-    public boolean isExtracted(PaymentRequestDocument document);
-
-    /**
-     * Determines if a user has permission to request cancel on the payment request.
-     * 
-     * @param document  The payment request document to be determined whether the user has permission to request cancel on it.
-     * @param user      The user whose permission to request cancel on the payment request is to be determined.
-     * @return          boolean true if the user has permission to request cancel on the payment request.
-     */
+    
+    public boolean canRequestCancelOnPaymentRequest(PaymentRequestDocument document);
+    
     public boolean canUserRequestCancelOnPaymentRequest(PaymentRequestDocument document, UniversalUser user);
-
-    /**
-     * Determines if a user has permission to remove a request for cancel on the payment request.
-     * 
-     * @param document  The payment request document to be determined whether the user has permission to remove a request for cancel on it.
-     * @param user      The user whose permission to remove a request for cancel on the payment request is to be determined.
-     * @return          boolean true if the user has permission to remove a request for cancel on the payment request.
-     */
+    
     public boolean canUserRemoveRequestCancelOnPaymentRequest(PaymentRequestDocument document, UniversalUser user);
-
-    /**
-     * Removes a request cancel on payment request.
-     * 
-     * @param document    The payment request document to be used for request cancel.
-     * @param note        The note to be added to the payment request document upon the removal of the request cancel.
-     * @throws Exception
-     */
+    
     public void removeRequestCancelOnPaymentRequest(PaymentRequestDocument document, String note) throws Exception;
 
     /**
-     * Resets a Payment Request that had an associated Payment Request or Credit Memo cancelled externally.
+     * Recalculate the payment request
      * 
-     * @param paymentRequest  The extracted payment request document to be resetted.
-     * @param note            The note to be added to the payment request document upon its reset.
+     * @param pr
      */
-    public void resetExtractedPaymentRequest(PaymentRequestDocument paymentRequest, String note);
+    public void calculatePaymentRequest(PaymentRequestDocument pr,boolean updateDiscount);
 
+    
+    /* Start Paste from EPIC */
+     
     /**
-     * Cancels a PREQ that has already been extracted if allowed.
+     * Gets the User object for the AP Supervisor
+     * user id stored in constant
      * 
-     * @param paymentRequest  The extracted payment request document to be canceled.
-     * @param note            The note to be added to the payment request document.
+     * @return  User
      */
-    public void cancelExtractedPaymentRequest(PaymentRequestDocument paymentRequest, String note);
-
-    /**
-     * Get all the payment requests that are immediate and need to be extracted to PDP.
-     * 
-     * @param chartCode  The chart code to be used as one of the criterias to retrieve the payment request documents. 
-     * @return           The iterator of the list of the resulting payment request documents returned by the paymentRequestDao.
-     */
-    public Iterator<PaymentRequestDocument> getImmediatePaymentRequestsToExtract(String chartCode);
-
-    /**
-     * Get all the payment requests that match a credit memo.
-     * 
-     * @param cmd   The credit memo document to be used to obtain the payment requests.
-     * @return      The iterator of the resulting payment request documents returned by the paymentRequestDao.
-     */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByCM(String campusCode, CreditMemoDocument cmd);
-
-    /**
-     * Get all the payment requests that match a vendor.
-     * 
-     * @param vendor
-     * @param onOrBeforePaymentRequestPayDate only payment requests with a pay date on or before this date will be extracted
-     * @return      The iterator of the resulting payment request documents returned by the paymentRequestDao.
-     */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractByVendor(String campusCode, VendorGroupingHelper vendor, Date onOrBeforePaymentRequestPayDate);
+ ///   public User getAccountsPayableSupervisorUser();
     
     /**
-     * Get all the payment requests that need to be extracted.
+     * Create payment request from electronic invoice.  
      * 
-     * @return The iterator of the resulting payment request documents returned by the paymentRequestDao.
+     * @param poId               Integer - purchase order id.
+     * @param u                  User
+     * @return PurchaseOrder or null if not created
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtract(Date onOrBeforePaymentRequestPayDate);
+ /*
+    public PaymentRequestDocument createPaymentRequestFromElectronicInvoice(Integer poID, String invoiceNumber, 
+        Timestamp invoiceDate, BigDecimal vendorInvoiceAmount, String specialHandlingInstructionsLine1, 
+        String specialHandlingInstructionsLine2, String specialHandlingInstructionsLine3, 
+        List closedAccounts, List expiredAccounts);
+ */
+    /**
+     * Create payment request.  
+     * 
+     * @param poId               Integer - purchase order id.
+     * @param u                  User
+     * @return PaymentRequest or null if not created
+     */
+ /*
+    public PaymentRequestDocument createPaymentRequest(Integer poID, String invoiceNumber, 
+        Timestamp invoiceDate, BigDecimal vendorInvoiceAmount, String specialHandlingInstructionsLine1, 
+        String specialHandlingInstructionsLine2, String specialHandlingInstructionsLine3, UniversalUser u,
+        List closedAccounts, List expiredAccounts);
+*/
+    /**
+     * Get a payment request by id
+     * 
+     * @param id PaymentRequest Id
+     * @return PaymentRequest or null if not found
+     */
+ //  public PaymentRequestDocument getPaymentRequestById(Integer id);
 
     /**
-     * Get all the special payment requests for a single chart that need to be extracted.
+     * Get a payment request document by id
      * 
-     * @param chartCode  The chart code to be used as one of the criterias to retrieve the payment request documents. 
-     * @return           The iterator of the resulting payment request documents returned by the paymentRequestDao.
+     * @param id PaymentRequest Id
+     * @return PaymentRequestDocument or null if not found
      */
-    public Iterator<PaymentRequestDocument> getPaymentRequestsToExtractSpecialPayments(String chartCode, Date onOrBeforePaymentRequestPayDate);
-
-    /**
-     * Get all the regular payment requests for a single campus.
-     * 
-     * @param chartCode  The chart code to be used as one of the criterias to retrieve the payment request documents. 
-     * @return           The iterator of the resulting payment request documents returned by the paymentRequestDao.
-     */
-    public Iterator<PaymentRequestDocument> getPaymentRequestToExtractByChart(String chartCode, Date onOrBeforePaymentRequestPayDate);
-
-    /**
-     * Recalculate the payment request.
-     * 
-     * @param pr              The payment request document to be calculated.
-     * @param updateDiscount  boolean true if we also want to calculate the discount items for the payment request.
-     */
-    public void calculatePaymentRequest(PaymentRequestDocument pr, boolean updateDiscount);
-
-    /**
-     * Populate payment request.
-     * 
-     * @param preq  The payment request document to be populated.
-     */
-    public void populatePaymentRequest(PaymentRequestDocument preq);
-
-    /**
-     * Populate and save payment request.
-     * 
-     * @param preq  The payment request document to be populated and saved.
-     */
-    public void populateAndSavePaymentRequest(PaymentRequestDocument preq) throws WorkflowException;
-
-    /**
-     * Retrieve a list of PREQs that aren't approved, check to see if they match specific requirements, then auto-approve them if
-     * possible.
-     * 
-     * @return  boolean true if the auto approval of payment requests has at least one error.
-     */
-    public boolean autoApprovePaymentRequests();
-    /**
-     * Checks whether the payment request document is eligible for auto approval. If so, then updates
-     * the status of the document to auto approved and calls the documentService to blanket approve
-     * the document, then returns false.
-     * If the document is not eligible for auto approval then returns true.
-     * 
-     * @param docNumber            The payment request document number (not the payment request ID) to be auto approved.
-     * @param defaultMinimumLimit  The default minimum limit amount to be used in determining the eligibility of the document to be auto approved.
-     * @return                     boolean true if the payment request document is not eligible for auto approval.
-     * @throws RuntimeException    To indicate to Spring transactional management that the transaction for this document should be rolled back
-     */
-    public boolean autoApprovePaymentRequest(String docNumber, KualiDecimal defaultMinimumLimit);
+ //   public PaymentRequestDocument getPaymentRequestDocumentById(Integer id, UniversalUser user);
     
     /**
-     * Checks whether the payment request document is eligible for auto approval. If so, then updates
-     * the status of the document to auto approved and calls the documentService to blanket approve
-     * the document, then returns false.
-     * If the document is not eligible for auto approval then returns true.
+     * Get a payment request document by id without calling
+     * workflow
      * 
-     * @param doc                  The payment request document to be auto approved.
-     * @param defaultMinimumLimit  The default minimum limit amount to be used in determining the eligibility of the document to be auto approved.
-     * @return                     boolean true if the payment request document is not eligible for auto approval.
-     * @throws RuntimeException    To indicate to Spring transactional management that the transaction for this document should be rolled back
+     * @param id PaymentRequest Id
+     * @return PaymentRequestDocument or null if not found
      */
-    public boolean autoApprovePaymentRequest(PaymentRequestDocument doc, KualiDecimal defaultMinimumLimit);
+  //  public PaymentRequestDocument getPaymentRequestDocumentByIdNoWorkflow(Integer id, UniversalUser user);
+    
+    /**
+     * Get a payment request by Workflow Doc id
+     * 
+     * @param l Workflow Doc Id
+     * @return PaymentRequest or null if not found
+     */
+ //   public PaymentRequestDocument getPaymentRequestByDocId(Long l);
 
     /**
-     * Mark a payment request as being paid and set the payment request's paid date as the processDate.
+     * Get a bundle of payment request info by req id
      * 
-     * @param pr           The payment request document to be marked as paid and paid date to be set.
-     * @param processDate  The date to be set as the payment request's paid date.
+     * @param reqId requisition id
+     * @return A bunch of cool stuff
      */
-    public void markPaid(PaymentRequestDocument pr, Date processDate);
+ //  public List getPaymentRequestDocumentsByReqID(Integer reqId, UniversalUser u);
 
     /**
-     * This method specifies whether the payment request document has a discount item.
+     * Get a bundle of payment request info by PO id
      * 
-     * @param preq  The payment request document to be verified whether it has a discount item.
-     * @return      boolean true if the payment request document has at least one discount item.
+     * @param poId purchase order id
+     * @return A bunch of cool stuff
      */
-    public boolean hasDiscountItem(PaymentRequestDocument preq);
+  //  public List getPaymentRequestDocumentsByPOID(Integer poId, UniversalUser u);
+
+ //   public List getAllPREQsByPOIdAndStatus(Integer purchaseOrderID,Collection statusCodes);
     
     /**
-     * Changes the current vendor to the vendor passed in.
+     * Check a payment request to make sure accounting strings and asset
+     * numbers are valid as well as validating reference fields.
      * 
-     * @param preq
-     * @param headerId
-     * @param detailId
-     * @param primaryHeaderId
-     * @param primaryDetailId
+     * @param paymentRequest PaymentRequest
+     * @return A collection of ServiceError objects.  
      */
-    public void changeVendor(PaymentRequestDocument preq, Integer headerId, Integer detailId);
+ //   public Collection validatePaymentRequestReview(PaymentRequestDocument paymentRequestDocument);
+
+    /**
+     * Check a payment request to make sure accounting strings and asset
+     * numbers are valid as well as validating reference fields. This
+     * also will calculate the payment request if formatters are valid.
+     * 
+     * @param paymentRequest PaymentRequest
+     * @param closePO        value to tell whether to close the PO or not
+     * @return A collection of ServiceError objects.  
+     */
+  //  public Collection validateAndCalculatePayReqReview(PaymentRequestDocument paymentRequestDocument, boolean closePO);
     
     /**
-     * A method to create the description for the payment request document.
+     * Check a payment request for validation that is normally run
+     * in the PaymentRequestForm object.  This is used for electronic
+     * invoicing.  Currently mimiks following methods:
      * 
-     * @param purchaseOrderIdentifier  The purchase order identifier to be used as part of the description.
-     * @param vendorName               The vendor name to be used as part of the description.
-     * @return                         The resulting description string for the payment request document.
+     * PaymentRequestForm.validateFormatters()
+     * PaymentRequestForm.validateRequired()
+     * PaymentRequestForm.validateTotalOverZero()
+     * 
+     * @param paymentRequest PaymentRequest
+     * @return A collection of ServiceError objects.  
      */
-    public String createPreqDocumentDescription(Integer purchaseOrderIdentifier, String vendorName);
+ //   public Collection validateElecInvoiceUsingFormValidation(PaymentRequestDocument paymentRequest);
     
     /**
-     * Determines if there are active payment requests for a purchase order.
+     * Check a payment request to make sure accounting strings and asset
+     * numbers are valid as well as validating reference fields. It also 
+     * checks to make sure every item has at least one account and that 
+     * all percents in each account are filled in and total 100%/item. It
+     * does this only where the account object has the 'isFiscallyEditable'
+     * flag set to true.  If the flag is set to null then it validates it
+     * only if the user is the fiscal officer or a delegate of that 
+     * accounting string.
      * 
-     * @param purchaseOrderIdentifier
+     * @param paymentRequest PaymentRequest
+     * @param user User calling this
+     * @return A collection of ServiceError objects.  
+     */
+ //   public Collection validateRouteFiscal(PaymentRequestDocument paymentRequest, UniversalUser user);
+    
+    /**
+     * Check to see if a PREQ is allowed to be Cancelled.  
+     * 
+     * @param paymentRequest PaymentRequest to save
+     * @return errors Collection of ServiceErrors
+     */
+ //   public Collection validateCancel(PaymentRequestDocument paymentRequest);
+    
+    /**
+     * Save a payment request.  This saves it only if the 
+     * accounting information is valid.  This saves it to the
+     * tables.
+     * 
+     * @param paymentRequest PaymentRequest to save
+     * @param u User saving the Req
+     */
+    /* I don't think this method is being used at all, can we remove this ?
+    public Collection savePaymentRequestForReview(PaymentRequest paymentRequest, User u);
+    */
+    
+    /**
+     * Save a payment request with a status change.  This saves 
+     * it only if the accounting information is valid.  This saves 
+     * it to the tables.
+     * 
+     * @param paymentRequest PaymentRequest to save
+     * @param newStatusCode PaymentRequestStatus to set
+     * @param u User saving the Req
+     */
+    /* I don't think this method is being used at all, can we remove this ?
+    public void savePaymentRequestWithStatusChange(PaymentRequest paymentRequest, String newStatusCode, User u);
+    */
+    
+    /**
+     * Cancel a PREQ if allowed.  
+     * 
+     * @param paymentRequest PaymentRequest to save
+     * @param note String for status change note
+     * @param u User saving the Req
+     */
+//    public Collection cancelPaymentRequest(PaymentRequestDocument paymentRequestDocument, UniversalUser u, String note, boolean openPO, String sendNoteEmailAddress);
+
+    /**
+     * Cancel a PREQ that has already been extracted if required.  
+     * 
+     * @param paymentRequest   PaymentRequest to cancel
+     * @param note             String for cancel note
+     * @param u                User cancelling the PREQ
+     */
+ //   public void cancelExtractedPaymentRequest(PaymentRequestDocument paymentRequestDocument, UniversalUser u, String note);
+    
+    /**
+     * Reset a Payment Request that had an associated Payment Request
+     * or Credit Memo cancelled externally.  
+     * 
+     * @param paymentRequest   PaymentRequest to reset
+     * @param note             String for the status change note
+     * @param u                User resetting the PREQ
+     */
+//    public void resetExtractedPaymentRequest(PaymentRequestDocument paymentRequestDocument, UniversalUser u, String note);
+    
+    /**
+     * Mark a payment request paid in external payment application.  
+     * 
+     * @param paymentRequest   PaymentRequest to mark as paid
+     * @param u                User marking the PREQ
+     */
+ //   public void markPaymentRequestPaid(PaymentRequestDocument paymentRequestDocument, UniversalUser u);
+    
+    /**
+     * Save a pay req.  This saves it to the
+     * tables.  
+     * 
+     * @param pr PaymentRequest to save
+     */
+ //   public PaymentRequestDocument savePaymentRequest(PaymentRequestDocument pr, UniversalUser user, Collection serviceErrors, String sendNoteEmailAddress);
+
+    /**
+     * Save a pay req.  This saves it to the
+     * tables.  
+     * 
+     * @param pr PaymentRequest to save
+     */
+ //   public PaymentRequestDocument savePaymentRequestNoRetrieveReferences(PaymentRequestDocument pr, UniversalUser user, Collection serviceErrors, String sendNoteEmailAddress);
+
+    /**
+     * This method is needed to retrofit the old savePaymentRequest, which did not have PaymentRequestDocument nor 
+     * sendNoteEmailAddress, in the cases where we might not need to send emails. I'll delete this method if we 
+     * decide later that it's not necessary
+     * 
+     * @param pr
+     * @param user
      * @return
      */
-    public boolean hasActivePaymentRequestsForPurchaseOrder(Integer purchaseOrderIdentifier);
+  //  public PaymentRequestDocument savePaymentRequest(PaymentRequestDocument pr, UniversalUser user);
+    
+
+    /**
+     * Saves a Doc Note and sends e-mail if necessary.
+     * 
+     * @param docNote  DocumentNote to save
+     */
+  ////  public ServiceError savePaymentRequestDocumentNote(DocumentNote docNote);
+
+    /**
+     * Retreives a list of Pay Reqs with the given PO Id.
+     * 
+     * @param id
+     * @return List of Pay Reqs.
+     */
+ //   public List getPaymentRequestsByPOId(Integer id);
+    
+    /**
+     * Retreives a list of Pay Reqs with the given PO Id.
+     * 
+     * @param id
+     * @return List of Pay Reqs.
+     */
+  //  public List getPaymentRequestsByPOId(Integer id, Integer returnListMax);
+
+    /**
+     * Verify's that a PREQ can be created against the given information and
+     * warns against possible duplicates.
+     * 
+     * @param purchaseOrderId
+     * @param invoiceNumber
+     * @param invoiceAmount
+     * @param invoiceDate
+     * @return List of messages describing problems with verification.
+     */
+  /*
+    public PaymentRequestInitializationValidationErrors verifyPreqInitialization(
+        Integer purchaseOrderId, String invoiceNumber, BigDecimal invoiceAmount, Timestamp invoiceDate,
+        List expiredAccounts, List closedAccounts, UniversalUser u);
+*/
+    /**
+     * Verify's that a PREQ can be created against the given information and
+     * warns against possible duplicates.
+     * 
+     * @param legacyPurchaseOrderID
+     * @param invoiceNumber
+     * @param invoiceAmount
+     * @param invoiceDate
+     * @return List of messages describing problems with verification.
+     */
+/* 
+    public PaymentRequestInitializationValidationErrors verifyPreqInitialization(
+        String legacyPurchaseOrderID, String invoiceNumber, BigDecimal invoiceAmount, Timestamp invoiceDate,
+        List expiredAccounts, List closedAccounts, UniversalUser u);
+*/
+    /**
+     * Checks PREQ for errors. If no errors then calculates and approves
+     * If no errors but warnings checks for overridden indicator and 
+     * approves if overriden and always returns warnings.
+     * 
+     * @param pr Payment Request
+     * @param u User that did it
+     * @param overRideWarnings override any warnings
+     * @param closePO Close the PO if true
+     * @return collection of ServiceErrors
+     */
+ //   public Collection reviewCalculateAndApprovePREQ(PaymentRequestDocument pr,UniversalUser u, boolean overRideWarnings, boolean closePO, String sendNoteEmail);
+
+    /**
+     * Method takes existing Payment Request and marks is as Approved by AP
+     * which can be two different statuses depending on whether the PREQ
+     * is from an e-invoice or not
+     * 
+     * @param pr                     Payment Request to process
+     * @param u                      User making approval
+     * @param sendNoteEmailAddress   String of multiple addresses to send note notification to
+     * @return  Collection of ServiceError messages relating to e-mail errors encountered
+     */
+ //   public Collection apApprove(PaymentRequestDocument pr,UniversalUser u, String sendNoteEmailAddress);
+    
+    /**
+     * Saves a PaymentRequestStatusHistory object with a note
+     * 
+     * @param user        User performing the action
+     * @param request     PaymentRequest
+     * @param oldStatus   the current PaymentRequestStatus
+     * @param newStatus   the PaymentRequestStatus being changed to
+     * @param note        a text that should be saved as a note
+     * @return List of messages describing problems with verification.
+     */
+  /*
+    public void savePaymentRequestStatusHistory(UniversalUser user, PaymentRequestDocument request,
+        PaymentRequestStatus oldStatus, PaymentRequestStatus newStatus,
+        String note);
+*/
+    /**
+     * Saves a PaymentRequestStatusHistory object
+     * 
+     * @param user        User performing the action
+     * @param request     PaymentRequest
+     * @param oldStatus   the current PaymentRequestStatus
+     * @param newStatus   the PaymentRequestStatus being changed to
+     * @return List of messages describing problems with verification.
+     */
+ /*
+    public void savePaymentRequestStatusHistory(UniversalUser user, PaymentRequestDocument request,
+            PaymentRequestStatus oldStatus, PaymentRequestStatus newStatus);
+*/
+    /**
+     * Set the Vendor address of the given ID.
+     * 
+     * @param addressID   ID of the address to set
+     * @param pr          PaymentRequest to set in
+     * @return            New PaymentRequest to use
+     */
+//    public PaymentRequestDocument setVendorAddress(Long addressID, PaymentRequestDocument pr);
+    
+    /**
+     * Retrieve a list of PREQs that aren't approved, check to see if they match specific
+     * requirements, then auto-approve them if possible.
+     *
+     */
+//    public void autoApprovePaymentRequests();
+
+    /**
+     * Retrieve all initiated PREQs and check for onbase images.  If an image is found,
+     * route the PREQ.
+     *
+     */
+//    public void routePreqsWithImage();
+    
+    /**
+     * This should ONLY be called for testing.  NEVER EVER CALL IT IN PROD!
+     * 
+     * @param preqId
+     */
+//    public void routePaymentRequestAsEpicWorkflowUser(PaymentRequestDocument preq);
+    
+//    public void fakeRoutePaymentRequest(Integer preqID);
+    
+    /**
+     * To Do Nasser
+     * Returns POId given legacyPOId 
+     * 
+     * @param legacyPOId
+     */ 
+  /*
+    public Integer getPoIdFromLegacyId(Integer legacyPOId); 
+
+    }
+
+  */
+    
+    /**
+     * @param paymentRequest PaymentRequest to save
+     * @param u User saving the Req
+     */
+//    public Collection convertMoneyToPercent(PaymentRequestDocument pr);
+
+    /**
+     * This send the note emails to the addresses entered on the tabbed page 
+     * 
+     * @param pr             PaymentRequest object for this note
+     * @param emailAddresses String the email address to send note emails
+     * @param user           User current user doing the note emailing
+     * @return A collection of ServiceError objects
+     * 
+     */  
+//    public Collection sendNoteEmails(PaymentRequestDocument pr, String emailAddresses, UniversalUser user);  
+
+    /**
+     * This send the note emails to the addresses entered on the display doc page 
+     * 
+     * @param prId           Integer The payment request id of the payment request for this note
+     * @param emailAddresses String the email address to send note emails
+     * @param user           User current user doing the note emailing
+     * @return A collection of ServiceError objects
+     * 
+     */
+//    public Collection sendNoteEmailsFromDisplayDoc(Integer prId, String emailAddresses, UniversalUser user);
+    
+    /* (non-Javadoc)
+     * @see edu.iu.uis.pur.service.PaymentRequestService#updateAlternateVendorFromVendorSearch
+     * (edu.iu.uis.pur.po.bo.PaymentRequest, edu.iu.uis.services.user.User, 
+     *  java.lang.Integer, java.lang.Integer)
+     */
+//    public PaymentRequestDocument useAlternateVendor(PaymentRequestDocument preq, UniversalUser u, Integer headerId, Integer detailId);
+    
+//    public PaymentRequestDocument changeVendor(PaymentRequestDocument preq, UniversalUser u, Integer headerId, Integer detailId, Integer primaryHeaderId, Integer primaryDetailId);
+        
+    /**
+     * This validates an electronic invoice and makes sure it can be turned into a Payment Request
+     * 
+     * @param purchaseOrderID  PO ID from E-Invoice
+     * @param invoiceDate      invoice date from E-Invoice
+     * @param invoiceNumber    invoice number of the electronic invoice file
+     * @param filename         filename of electronic invoice file
+     * @return A PaymentRequestInitializationValidationErrors object containing continuation accounting
+     *             and error messages if need be
+     */
+  //  public PaymentRequestInitializationValidationErrors validateElectronicInvoicePaymentRequest(Integer purchaseOrderID, 
+  //      Date invoiceDate, String invoiceNumber, String invoiceFilename);
+    
+    /**
+     * This method takes the payment request and uses the tax values in it to calculate
+     * the necessary item changes for the tax edits and then saves the payment request
+     * 
+     * @param pr    Payment Request to calculate taxes on and save if possible
+     * @param user  user requesting the calculation
+     * @return      Collection of error messages in ServiceError objects
+     */
+//    public PaymentRequestDocument calculateAndSaveTaxEdits(PaymentRequestDocument pr, UniversalUser user);
+    
+    /**
+     * This method takes the payment request and uses the tax values in it to calculate
+     * the necessary item changes for the tax edits
+     * 
+     * @param pr    Payment Request to calculate taxes on
+     * @param user  user requesting the calculation
+     * @return      Collection of error messages in ServiceError objects
+     */
+//    public PaymentRequestDocument calculateTaxEdits(PaymentRequestDocument pr, UniversalUser user);
+    
+    /**
+     * This method is for legacy PREQs that were created prior to the new tax 
+     * routing edits.  These preqs will not have existing tax items on them 
+     * and they must be created for the tax edit methods to work correctly
+     * 
+     * @param paymentRequest  Payment request with all tax items included
+     */
+//    public void addTaxItemsIfNecessary(PaymentRequestDocument paymentRequestDocument);
+    
+    
+    
+    /* End of Paste from EPIC */
 }

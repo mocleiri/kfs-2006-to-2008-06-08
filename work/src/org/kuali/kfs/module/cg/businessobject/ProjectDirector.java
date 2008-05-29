@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/module/cg/businessobject/ProjectDirector.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,38 +20,31 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.UserId;
+import org.kuali.core.bo.user.UuId;
 import org.kuali.core.exceptions.UserNotFoundException;
-import org.kuali.core.service.UniversalUserService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 
 /**
  * 
  */
-public class ProjectDirector extends PersistableBusinessObjectBase implements Inactivateable {
+public class ProjectDirector extends BusinessObjectBase {
 
     private static final long serialVersionUID = -8864103362445919041L;
     private String personUniversalIdentifier;
-    private String personUserIdentifier; // secondary key from user input, not persisted but takes priority over primary key.
     private UniversalUser universalUser;
-    private boolean active;
 
     /**
      * Default no-arg constructor.
      */
     public ProjectDirector() {
+        universalUser = new UniversalUser();
     }
 
-    /**
-     * @return the {@link UniversalUser} to which the project director refers.
-     */
     public UniversalUser getUniversalUser() {
-        // If personUserIdentifier is not set, then fall back to personUniversalIdentifier.
-        if (personUserIdentifier == null) {
-            universalUser = SpringContext.getBean(UniversalUserService.class).updateUniversalUserIfNecessary(personUniversalIdentifier, universalUser);
-        }
+        universalUser = SpringServiceLocator.getUniversalUserService().updateUniversalUserIfNecessary(personUniversalIdentifier, universalUser);
         return universalUser;
     }
 
@@ -86,122 +81,9 @@ public class ProjectDirector extends PersistableBusinessObjectBase implements In
      */
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put("universalUser.getUniversalIdentifier", this.getPersonUniversalIdentifier());
+        m.put("universaliUser.getUniversalIdentifier", this.getPersonUniversalIdentifier());
         return m;
     }
 
-    /**
-     * @return the person name
-     */
-    public String getPersonName() {
-        UniversalUser u = getUniversalUser();
-        return u == null ? "" : u.getPersonName();
-    }
-
-    /**
-     * @param personName the person name.
-     */
-    public void setPersonName(String personName) {
-        if (universalUser == null) {
-            universalUser = new UniversalUser();
-        }
-        universalUser.setPersonName(personName);
-    }
-
-    /**
-     * @return the persons first name
-     */
-    public String getPersonFirstName() {
-        UniversalUser u = getUniversalUser();
-        return u == null ? "" : u.getPersonFirstName();
-    }
-
-    /**
-     * @param personFirstName the persons first name
-     */
-    public void setPersonFirstName(String personFirstName) {
-        if (universalUser == null) {
-            universalUser = new UniversalUser();
-        }
-        universalUser.setPersonFirstName(personFirstName);
-    }
-
-    /**
-     * @return the persons last name
-     */
-    public String getPersonLastName() {
-        UniversalUser u = getUniversalUser();
-        return u == null ? "" : u.getPersonLastName();
-    }
-
-    /**
-     * @param personLastName the persons last name
-     */
-    public void setPersonLastName(String personLastName) {
-        if (universalUser == null) {
-            universalUser = new UniversalUser();
-        }
-        universalUser.setPersonName(personLastName);
-    }
-
-    /**
-     * @return the userID for the person.
-     */
-    public String getPersonUserIdentifier() {
-        if (personUserIdentifier != null) {
-            return personUserIdentifier;
-        }
-        UniversalUser u = getUniversalUser();
-        return u == null ? "" : u.getPersonUserIdentifier();
-    }
-
-    /**
-     * @param personUserIdentifier the userID for the person.
-     */
-    public void setPersonUserIdentifier(String personUserIdentifier) {
-        this.personUserIdentifier = personUserIdentifier;
-        if (universalUser == null || !personUserIdentifier.equals(universalUser.getPersonUserIdentifier())) {
-            try {
-                universalUser = SpringContext.getBean(UniversalUserService.class).getUniversalUserByAuthenticationUserId(personUserIdentifier);
-            }
-            catch (UserNotFoundException ex) {
-                universalUser = null;
-            }
-        }
-    }
-
-
-    /**
-     * @return the primary DepartmentCodee
-     */
-    public String getPrimaryDepartmentCode() {
-        UniversalUser u = getUniversalUser();
-        return u == null ? "" : u.getPrimaryDepartmentCode();
-    }
-
-    /**
-     * @param personName the primary DepartmentCode.
-     */
-    public void setPrimaryDepartmentCode(String primaryDepartmentCode) {
-        if (universalUser == null) {
-            universalUser = new UniversalUser();
-        }
-        universalUser.setPrimaryDepartmentCode(primaryDepartmentCode);
-    }
-
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#isActive()
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
 }

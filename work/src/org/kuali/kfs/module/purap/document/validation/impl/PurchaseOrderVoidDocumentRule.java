@@ -23,6 +23,7 @@ import org.kuali.core.document.Document;
 import org.kuali.core.exceptions.UserNotFoundException;
 import org.kuali.core.exceptions.ValidationException;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
@@ -31,8 +32,6 @@ import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapParameterConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
@@ -40,11 +39,7 @@ import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
 import org.kuali.module.purap.PurapConstants.PurchaseOrderStatuses;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
-import org.kuali.module.purap.service.PurchaseOrderService;
 
-/**
- * Rules for Purchase Order Void document creation.
- */
 public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
 
     /**
@@ -57,9 +52,6 @@ public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
         return isValid &= processValidation(porDocument);
     }
 
-    /**
-     * @see org.kuali.core.rules.DocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.Document)
-     */
     @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
         boolean isValid = true;
@@ -67,9 +59,6 @@ public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
         return isValid &= processValidation(porDocument);
     }
 
-    /**
-     * @see org.kuali.core.rules.DocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.rule.event.ApproveDocumentEvent)
-     */
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(ApproveDocumentEvent approveEvent) {
         boolean isValid = true;
@@ -77,13 +66,6 @@ public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
         return isValid;
     }
 
-    /**
-     * Central method to control the processing of rule checks. Checks that the purchase order document is not null, that it is in
-     * the correct status, and that the user is in the purchasing workgroup.
-     * 
-     * @param document A PurchaseOrderDocument.
-     * @return True if the document passes all the validations.
-     */
     public boolean processValidation(PurchaseOrderDocument document) {
         boolean valid = true;
 
@@ -92,9 +74,9 @@ public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
             throw new ValidationException("Purchase Order Void document was null on validation.");
         }
         else {
-            PurchaseOrderDocument currentPO = SpringContext.getBean(PurchaseOrderService.class).getCurrentPurchaseOrder(document.getPurapDocumentIdentifier());
+            // TODO: Get this from Business Rules.
             // The PO must be in OPEN status.
-            if (!StringUtils.equalsIgnoreCase(currentPO.getStatusCode(), PurchaseOrderStatuses.OPEN) && !StringUtils.equalsIgnoreCase(currentPO.getStatusCode(), PurchaseOrderStatuses.PENDING_VOID) && !StringUtils.equalsIgnoreCase(currentPO.getStatusCode(), PurchaseOrderStatuses.PENDING_PRINT)) {
+            if (!StringUtils.equalsIgnoreCase(document.getStatusCode(), PurchaseOrderStatuses.OPEN)) {
                 valid = false;
                 GlobalVariables.getErrorMap().putError(PurapPropertyConstants.STATUS_CODE, PurapKeyConstants.ERROR_PURCHASE_ORDER_STATUS_NOT_REQUIRED_STATUS, PurchaseOrderStatuses.OPEN);
             }
@@ -105,7 +87,7 @@ public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
             UniversalUser user = null;
             try {
                 user = uus.getUniversalUserByAuthenticationUserId(initiatorNetworkId);
-                String purchasingGroup = SpringContext.getBean(ParameterService.class).getParameterValue(ParameterConstants.PURCHASING_DOCUMENT.class, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
+                String purchasingGroup = SpringContext.getBean(KualiConfigurationService.class).getParameterValue(KFSConstants.PURAP_NAMESPACE, KFSConstants.Components.DOCUMENT, PurapParameterConstants.Workgroups.WORKGROUP_PURCHASING);
                 if (!uus.isMember(user, purchasingGroup)) {
                     valid = false;
                 }
@@ -116,4 +98,17 @@ public class PurchaseOrderVoidDocumentRule extends PurchasingDocumentRuleBase {
         }
         return valid;
     }
+
+    @Override
+    protected void customizeExplicitGeneralLedgerPendingEntry(AccountingDocument accountingDocument, AccountingLine accountingLine, GeneralLedgerPendingEntry explicitEntry) {
+        super.customizeExplicitGeneralLedgerPendingEntry(accountingDocument, accountingLine, explicitEntry);
+        PurchaseOrderDocument po = (PurchaseOrderDocument)accountingDocument;
+
+        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(po, 
+                accountingLine, explicitEntry, po.getPurapDocumentIdentifier(), GL_CREDIT_CODE, PurapDocTypeCodes.PO_DOCUMENT, true);
+
+        explicitEntry.setFinancialDocumentTypeCode(PurapDocTypeCodes.PO_VOID_DOCUMENT);  //don't think i should have to override this, but default isn't getting the right PO doc
+
+    }
+
 }

@@ -24,39 +24,30 @@ import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.lookup.valueFinder.ValueFinder;
 import org.kuali.core.web.ui.KeyLabelPair;
 import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.OptionsService;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
 import org.kuali.module.chart.service.BalanceTypService;
 
-/**
- * A value finder that returns all balance type, but selects the actual balance type
- */
 public class GLActualBalanceTypeOptionFinder extends KeyValuesBase implements ValueFinder {
 
     /**
-     * Returns the value to select: here the value of the actual balance type
-     * 
-     * @return the balance type code for actual balances
      * @see org.kuali.core.lookup.valueFinder.ValueFinder#getValue()
      */
     public String getValue() {
-        OptionsService os = SpringContext.getBean(OptionsService.class);
+        OptionsService os = SpringServiceLocator.getOptionsService();
         Options o = os.getCurrentYearOptions();
 
         return o.getActualFinancialBalanceTypeCd();
     }
 
     /**
-     * Returns a list of the key value pairs of all balance type codes and their names
-     * 
-     * @return a List of all balance types to populate a dropdown control
      * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
      */
     public List getKeyValues() {
         List labels = new ArrayList();
 
-        BalanceTypService bts = SpringContext.getBean(BalanceTypService.class);
+        BalanceTypService bts = SpringServiceLocator.getBalanceTypService();
         Collection c = bts.getAllBalanceTyps();
 
         for (Iterator iter = c.iterator(); iter.hasNext();) {

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/service/impl/AccountServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +18,24 @@
 package org.kuali.module.chart.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.GlobalVariables;
-import org.kuali.core.util.spring.Cached;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.core.service.DataDictionaryService;
+
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.Delegate;
 import org.kuali.module.chart.dao.AccountDao;
 import org.kuali.module.chart.service.AccountService;
 
 /**
  * This class is the service implementation for the Account structure. This is the default, Kuali provided implementation.
+ * 
+ * 
  */
 public class AccountServiceImpl implements AccountService {
     private static final Logger LOG = Logger.getLogger(AccountServiceImpl.class);
@@ -66,7 +68,6 @@ public class AccountServiceImpl implements AccountService {
      * 
      * @see org.kuali.module.chart.service.impl.AccountServiceImpl#getByPrimaryId(java.lang.String, java.lang.String)
      */
-    @Cached
     public Account getByPrimaryIdWithCaching(String chartOfAccountsCode, String accountNumber) {
         return accountDao.getByPrimaryId(chartOfAccountsCode, accountNumber);
     }
@@ -88,14 +89,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
-     * @see org.kuali.module.chart.service.AccountService#hasResponsibilityOnAccount(org.kuali.core.bo.user.UniversalUser,
-     *      org.kuali.module.chart.bo.Account)
-     */
-    public boolean hasResponsibilityOnAccount(UniversalUser kualiUser, Account account) {
-        return accountDao.determineUserResponsibilityOnAccount(kualiUser, account);
-    }
-
-    /**
      * @see org.kuali.module.chart.service.AccountService#getPrimaryDelegationByExample(org.kuali.module.chart.bo.Delegate,
      *      java.lang.String)
      */
@@ -104,6 +97,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.service.AccountService#getSecondaryDelegationsByExample(org.kuali.module.chart.bo.Delegate,
      *      java.lang.String)
      */
@@ -125,43 +119,6 @@ public class AccountServiceImpl implements AccountService {
             accountList.add(accountIter.next());
         }
         return accountList.iterator();
-    }
-
-    /**
-     * @see org.kuali.module.chart.service.AccountService#accountIsAccessible(org.kuali.kfs.document.AccountingDocument, org.kuali.kfs.bo.AccountingLine, org.kuali.module.chart.bo.ChartUser)
-     */
-    public boolean accountIsAccessible(AccountingDocument financialDocument, AccountingLine accountingLine, ChartUser user) {
-        LOG.debug("accountIsAccessible(AccountingDocument, AccountingLine) - start");
-
-        boolean isAccessible = false;
-
-        KualiWorkflowDocument workflowDocument = financialDocument.getDocumentHeader().getWorkflowDocument();
-
-        if (workflowDocument.stateIsInitiated() || workflowDocument.stateIsSaved()) {
-            isAccessible = true;
-        }
-        else {
-            if (workflowDocument.stateIsEnroute()) {
-                String chartCode = accountingLine.getChartOfAccountsCode();
-                String accountNumber = accountingLine.getAccountNumber();
-
-                // if a document is enroute, user can only refer to for accounts for which they are responsible
-                isAccessible = user.isResponsibleForAccount(chartCode, accountNumber);
-            }
-            else {
-                if (workflowDocument.stateIsApproved() || workflowDocument.stateIsFinal() || workflowDocument.stateIsDisapproved()) {
-                    isAccessible = false;
-                }
-                else {
-                    if (workflowDocument.stateIsException() && user.getUniversalUser().isWorkflowExceptionUser()) {
-                        isAccessible = true;
-                    }
-                }
-            }
-        }
-
-        LOG.debug("accountIsAccessible(AccountingDocument, AccountingLine) - end");
-        return isAccessible;
     }
 
     /**

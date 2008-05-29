@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +19,11 @@ package org.kuali.module.gl.service;
 
 import java.util.List;
 
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.util.Message;
+import org.kuali.module.gl.bo.GeneralLedgerPendingEntry;
 import org.kuali.module.gl.bo.OriginEntry;
 import org.kuali.module.gl.bo.UniversityDate;
+import org.kuali.module.gl.service.impl.scrubber.Message;
 
-/**
- * An interface that declares methods that would be needed to validate origin entries and transactions run through the scrubber
- */
 public interface ScrubberValidator {
     /**
      * Validate a transaction in the scrubber
@@ -34,7 +33,7 @@ public interface ScrubberValidator {
      * @param universityRunDate Date of scrubber run
      * @return List of Message objects based for warnings or errors that happened when validating the transaction
      */
-    public List<Message> validateTransaction(OriginEntry originEntry, OriginEntry scrubbedEntry, UniversityDate universityRunDate, boolean laborIndicator);
+    public List<Message> validateTransaction(OriginEntry originEntry, OriginEntry scrubbedEntry, UniversityDate universityRunDate);
 
     /**
      * Validate a transaction for use in balance inquiry
@@ -42,11 +41,4 @@ public interface ScrubberValidator {
      * @param entry Input transaction
      */
     public void validateForInquiry(GeneralLedgerPendingEntry entry);
-
-    /**
-     * This method gives the scrubber step a way to populate the origin entry lookup service on validators that need it
-     * 
-     * @param originEntryableLookupService
-     */
-    public void setReferenceLookup(OriginEntryLookupService originEntryLookupService);
 }
