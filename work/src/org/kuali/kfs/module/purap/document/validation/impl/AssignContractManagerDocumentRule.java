@@ -20,30 +20,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.kuali.core.document.Document;
 import org.kuali.core.rule.event.ApproveDocumentEvent;
 import org.kuali.core.rules.TransactionalDocumentRuleBase;
-import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
 import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.bo.AssignContractManagerDetail;
+import org.kuali.module.purap.bo.ContractManager;
 import org.kuali.module.purap.document.AssignContractManagerDocument;
-import org.kuali.module.vendor.bo.ContractManager;
 
-/**
- * Business rule(s) applicable to Contract Manager Assignment document.
- */
 public class AssignContractManagerDocumentRule extends TransactionalDocumentRuleBase {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(AssignContractManagerDocumentRule.class);
 
     /**
-     * @see org.kuali.core.rules.TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(Document)
+     * @see org.kuali.module.financial.rules.TransactionalDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.Document)
      */
     @Override
     protected boolean processCustomRouteDocumentBusinessRules(Document document) {
@@ -52,65 +46,57 @@ public class AssignContractManagerDocumentRule extends TransactionalDocumentRule
         return isValid &= processValidation(acmDocument);
     }
 
-    /**
-     * @see org.kuali.core.rules.DocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.rule.event.ApproveDocumentEvent)
-     */
+    @Override
+    protected boolean processCustomSaveDocumentBusinessRules(Document document) {
+        boolean isValid = true;
+        AssignContractManagerDocument acmDocument = (AssignContractManagerDocument) document;
+        return isValid &= processValidation(acmDocument);
+    }
+
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(ApproveDocumentEvent approveEvent) {
         boolean isValid = true;
         AssignContractManagerDocument acmDocument = (AssignContractManagerDocument) approveEvent.getDocument();
-        // isValid &= processValidation(acmDocument);
+//        isValid &= processValidation(acmDocument);
         return isValid;
     }
 
-    /**
-     * Perform validation for Contract Manager Assignment document such as validating contract manager codes.
-     * 
-     * @param document Contract Manager Assignment document
-     * @return Boolean indicating if validation succeeded
-     */
     private boolean processValidation(AssignContractManagerDocument document) {
-        return validateContractManagerCodes(document.getAssignContractManagerDetails());
+        boolean valid = true;
+
+        valid &= this.validateContractManagerCodes(document.getAssignContractManagerDetails());
+        
+        return valid;
     }
+    
+    boolean processContractManagerValidation(AssignContractManagerDocument document) {
+        return false;
+    }
+    
 
     /**
-     * Review the list of AssignContractManagerDetails where the user has entered ContractManagerCodes,
-     * validates that each entered code is valid;
-     * on the other hand, validate that at least one row has a valid CM code assigned.
+     * This method takes the list of AssignContractManagerDetails where the user has
+     * entered ContractManagerCodes and validates that each code is valid.
      * 
-     * @param assignContractManagerDetails A list containing the code to be validated.
-     * @return Boolean indicating if validation succeeded
+     * @param fieldValues   A Map containing the code to be validated.
      */
-    public boolean validateContractManagerCodes(List assignContractManagerDetails) {
+    public boolean validateContractManagerCodes(List assignContractManagerDetails){
         LOG.debug("validateContractManagerCodes(): entered method.");
         boolean isValid = true;
-        int count = 0;
-        
         for (Iterator iter = assignContractManagerDetails.iterator(); iter.hasNext();) {
             AssignContractManagerDetail detail = (AssignContractManagerDetail) iter.next();
-
+            
             // Look for the contractManagerCode in the table. If not there the code is invalid.
-            if (ObjectUtils.isNotNull(detail.getContractManagerCode())) {
+            if ( ObjectUtils.isNotNull( detail.getContractManagerCode() ) ) {
                 Map fieldValues = new HashMap();
                 fieldValues.put(PurapPropertyConstants.CONTRACT_MANAGER_CODE, detail.getContractManagerCode());
-                if (SpringContext.getBean(BusinessObjectService.class).countMatching(ContractManager.class, fieldValues) != 1) {
-                    GlobalVariables.getErrorMap().putError(PurapConstants.ASSIGN_CONTRACT_MANAGER_TAB_ERRORS, PurapKeyConstants.INVALID_CONTRACT_MANAGER_CODE, detail.getContractManagerCode().toString());
-                    isValid = false;
-                }
-                else count++;
-                if (detail.getContractManagerCode().equals(PurapConstants.APO_CONTRACT_MANAGER)) {
-                    GlobalVariables.getErrorMap().putError(PurapConstants.ASSIGN_CONTRACT_MANAGER_TAB_ERRORS, PurapKeyConstants.ERROR_APO_CONTRACT_MANAGER_CODE_CHOSEN, detail.getContractManagerCode().toString());
+                if ( SpringServiceLocator.getBusinessObjectService().countMatching(ContractManager.class, fieldValues) != 1 ) {
+                    GlobalVariables.getErrorMap().putError(PurapConstants.ASSIGN_CONTRACT_MANAGER_TAB_ERRORS,
+                            PurapKeyConstants.INVALID_CONTRACT_MANAGER_CODE);
                     isValid = false;
                 }
             }
         }
-        
-        // check if at least one row has a valid CM code assigned
-        if (count < 1) {
-            GlobalVariables.getErrorMap().putError(PurapConstants.ASSIGN_CONTRACT_MANAGER_TAB_ERRORS, PurapKeyConstants.NO_CONTRACT_MANAGER_ASSIGNED);
-            isValid = false;
-        }
-        
         LOG.debug("validateContractManagerCodes(): leaving method.");
         return isValid;
     }

@@ -15,6 +15,7 @@
  */
 package org.kuali.module.labor.service.impl;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -26,8 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.kuali.core.bo.DocumentHeader;
+import org.kuali.core.bo.DocumentType;
+import org.kuali.core.bo.FinancialSystemParameter;
+import org.kuali.core.rule.KualiParameterRule;
 import org.kuali.core.service.DateTimeService;
 import org.kuali.core.service.DocumentTypeService;
 import org.kuali.core.service.KualiConfigurationService;
@@ -35,37 +38,42 @@ import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.ParameterEvaluator;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.util.Message;
+import org.kuali.kfs.bo.OriginationCode;
+import org.kuali.module.chart.bo.Account;
+import org.kuali.module.chart.bo.AccountingPeriod;
+import org.kuali.module.chart.bo.Chart;
+import org.kuali.module.chart.bo.ObjectCode;
+import org.kuali.module.chart.bo.SubAccount;
+import org.kuali.module.chart.bo.SubObjCd;
 import org.kuali.module.chart.service.ObjectCodeService;
 import org.kuali.module.chart.service.OffsetDefinitionService;
 import org.kuali.module.financial.service.FlexibleOffsetAccountService;
 import org.kuali.module.gl.GLConstants;
-import org.kuali.module.gl.batch.ScrubberStep;
 import org.kuali.module.gl.bo.OriginEntryGroup;
 import org.kuali.module.gl.bo.OriginEntrySource;
 import org.kuali.module.gl.bo.Transaction;
 import org.kuali.module.gl.bo.UniversityDate;
 import org.kuali.module.gl.dao.UniversityDateDao;
 import org.kuali.module.gl.service.OriginEntryGroupService;
-import org.kuali.module.gl.service.OriginEntryLookupService;
+import org.kuali.module.gl.service.ReportService;
 import org.kuali.module.gl.service.ScrubberValidator;
-import org.kuali.module.gl.service.impl.scrubber.DemergerReportData;
+//TODO: should be changed to RaborScrubberReportData
 import org.kuali.module.gl.service.impl.scrubber.ScrubberReportData;
-import org.kuali.module.gl.util.CachingLookup;
+import org.kuali.module.gl.util.Message;
 import org.kuali.module.gl.util.ObjectHelper;
-import org.kuali.module.gl.util.OriginEntryStatistics;
 import org.kuali.module.labor.bo.LaborOriginEntry;
 import org.kuali.module.labor.service.LaborOriginEntryService;
 import org.kuali.module.labor.service.LaborReportService;
 import org.kuali.module.labor.util.ReportRegistry;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.util.StringUtils;
 
 /**
  * This class has the logic for the scrubber. It is required because the scrubber process needs instance variables. Instance
  * variables in a spring service are shared between all code calling the service. This will make sure each run of the scrubber has
  * it's own instance variables instead of being shared.
+ * 
+ * 
  */
 public class LaborScrubberProcess {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(LaborScrubberProcess.class);
@@ -76,6 +84,7 @@ public class LaborScrubberProcess {
     /* Services required */
     private FlexibleOffsetAccountService flexibleOffsetAccountService;
     private DocumentTypeService documentTypeService;
+    private BeanFactory beanFactory;
     private LaborOriginEntryService laborOriginEntryService;
     private OriginEntryGroupService originEntryGroupService;
     private DateTimeService dateTimeService;
@@ -87,20 +96,22 @@ public class LaborScrubberProcess {
     private LaborReportService laborReportService;
     private ScrubberValidator scrubberValidator;
 
+    private Map<String, FinancialSystemParameter> parameters;
+    private Map<String, KualiParameterRule> rules;
+
     /* These are all different forms of the run date for this job */
     private Date runDate;
     private Calendar runCal;
     private UniversityDate universityRunDate;
     private String offsetString;
 
-    /*
-     * These fields are used to control whether the job was run before some set time, if so, the rundate of the job will be set to
-     * 11:59 PM of the previous day
+    /* These fields are used to control whether the job was run before some set time,
+     * if so, the rundate of the job will be set to 11:59 PM of the previous day
      */
     private Integer cutoffHour;
     private Integer cutoffMinute;
     private Integer cutoffSecond;
-
+    
     /* These are the output groups */
     private OriginEntryGroup validGroup;
     private OriginEntryGroup errorGroup;
@@ -128,10 +139,11 @@ public class LaborScrubberProcess {
     /**
      * These parameters are all the dependencies.
      */
-    public LaborScrubberProcess(FlexibleOffsetAccountService flexibleOffsetAccountService, DocumentTypeService documentTypeService, LaborOriginEntryService laborOriginEntryService, OriginEntryGroupService originEntryGroupService, DateTimeService dateTimeService, OffsetDefinitionService offsetDefinitionService, ObjectCodeService objectCodeService, KualiConfigurationService kualiConfigurationService, UniversityDateDao universityDateDao, PersistenceService persistenceService, LaborReportService laborReportService, ScrubberValidator scrubberValidator) {
+    public LaborScrubberProcess(FlexibleOffsetAccountService flexibleOffsetAccountService, DocumentTypeService documentTypeService, BeanFactory beanFactory, LaborOriginEntryService laborOriginEntryService, OriginEntryGroupService originEntryGroupService, DateTimeService dateTimeService, OffsetDefinitionService offsetDefinitionService, ObjectCodeService objectCodeService, KualiConfigurationService kualiConfigurationService, UniversityDateDao universityDateDao, PersistenceService persistenceService, LaborReportService laborReportService, ScrubberValidator scrubberValidator) {
         super();
         this.flexibleOffsetAccountService = flexibleOffsetAccountService;
         this.documentTypeService = documentTypeService;
+        this.beanFactory = beanFactory;
         this.laborOriginEntryService = laborOriginEntryService;
         this.originEntryGroupService = originEntryGroupService;
         this.dateTimeService = dateTimeService;
@@ -143,10 +155,13 @@ public class LaborScrubberProcess {
         this.laborReportService = laborReportService;
         this.scrubberValidator = scrubberValidator;
 
+        parameters = kualiConfigurationService.getParametersByGroup(GLConstants.GL_SCRUBBER_GROUP);
+        rules = kualiConfigurationService.getRulesByGroup(GLConstants.GL_SCRUBBER_GROUP);
+        
         cutoffHour = null;
         cutoffMinute = null;
         cutoffSecond = null;
-
+        
         initCutoffTime();
     }
 
@@ -155,28 +170,28 @@ public class LaborScrubberProcess {
      * 
      * @param group
      */
-    public void scrubGroupReportOnly(OriginEntryGroup group, String documentNumber) {
+    public void scrubGroupReportOnly(OriginEntryGroup group,String documentNumber) {
         LOG.debug("scrubGroupReportOnly() started");
 
-        scrubEntries(group, documentNumber);
+        scrubEntries(group,documentNumber);
     }
 
     public void scrubEntries() {
-        scrubEntries(null, null);
+        scrubEntries(null,null);
     }
 
     /**
      * Scrub all entries that need it in origin entry. Put valid scrubbed entries in a scrubber valid group, put errors in a
      * scrubber error group, and transactions with an expired account in the scrubber expired account group.
      */
-    public void scrubEntries(OriginEntryGroup group, String documentNumber) {
+    public void scrubEntries(OriginEntryGroup group,String documentNumber) {
         LOG.debug("scrubEntries() started");
 
         // We are in report only mode if we pass a group to this method.
         // if not, we are in batch mode and we scrub the backup group
         reportOnlyMode = (group != null);
-
-        // get reportDirectory
+        
+        //get reportDirectory
         String reportsDirectory = ReportRegistry.getReportsDirectory();
 
         scrubberReportErrors = new HashMap<Transaction, List<Message>>();
@@ -209,15 +224,14 @@ public class LaborScrubberProcess {
             groupsToScrub.add(group);
         }
         else {
-            groupsToScrub = laborOriginEntryService.getLaborBackupGroups(runDate);
+            groupsToScrub = originEntryGroupService.getLaborBackupGroups(runDate);
         }
         LOG.debug("scrubEntries() number of groups to scrub: " + groupsToScrub.size());
 
         // generate the reports based on the origin entries to be processed by scrubber
         if (reportOnlyMode) {
-            laborReportService.generateScrubberLedgerSummaryReportOnline(group, documentNumber, reportsDirectory, runDate);
-        }
-        else {
+            laborReportService.generateScrubberLedgerSummaryReportOnline(group,documentNumber, reportsDirectory, runDate);
+        } else {
             laborReportService.generateScrubberLedgerSummaryReportBatch(groupsToScrub, reportsDirectory, runDate);
         }
 
@@ -240,23 +254,24 @@ public class LaborScrubberProcess {
 
         // generate the scrubber status summary report
         if (reportOnlyMode) {
-            laborReportService.generateOnlineScrubberStatisticsReport(group.getId(), scrubberReport, scrubberReportErrors, documentNumber, reportsDirectory, runDate);
+            laborReportService.generateOnlineScrubberStatisticsReport(group.getId(), scrubberReport, scrubberReportErrors,documentNumber, reportsDirectory, runDate);
         }
         else {
             laborReportService.generateBatchScrubberStatisticsReport(scrubberReport, scrubberReportErrors, reportsDirectory, runDate);
         }
 
         // run the demerger
-        if (!reportOnlyMode) {
+        
+       //TODO: Check
+       /* if (!reportOnlyMode) {
             performDemerger(errorGroup, validGroup);
         }
-
+*/
         // Run the reports
-        if (reportOnlyMode) {
+        if ( reportOnlyMode ) {
             // Run transaction list
-            laborReportService.generateScrubberTransactionsOnline(group, documentNumber, reportsDirectory, runDate);
-        }
-        else {
+            laborReportService.generateScrubberTransactionsOnline(group,documentNumber, reportsDirectory, runDate);
+        } else {
             // Run bad balance type report and removed transaction report
             laborReportService.generateScrubberBadBalanceTypeListingReport(groupsToScrub, reportsDirectory, runDate);
 
@@ -302,8 +317,9 @@ public class LaborScrubberProcess {
     }
 
     /**
-     * This will process a group of origin entries. The COBOL code was refactored a lot to get this so there isn't a 1 to 1 section
-     * of Cobol relating to this.
+     * This will process a group of origin entries.
+     * 
+     * The COBOL code was refactored a lot to get this so there isn't a 1 to 1 section of Cobol relating to this.
      * 
      * @param originEntryGroup Group to process
      */
@@ -312,14 +328,10 @@ public class LaborScrubberProcess {
         LaborOriginEntry lastEntry = null;
         scrubCostShareAmount = KualiDecimal.ZERO;
         unitOfWork = new UnitOfWorkInfo();
-        OriginEntryLookupService refLookup = SpringContext.getBean(OriginEntryLookupService.class);
-        refLookup.setLookupService(SpringContext.getBean(CachingLookup.class));
-        scrubberValidator.setReferenceLookup(refLookup);
 
         Iterator entries = laborOriginEntryService.getEntriesByGroup(originEntryGroup);
         while (entries.hasNext()) {
             LaborOriginEntry unscrubbedEntry = (LaborOriginEntry) entries.next();
-            unscrubbedEntry.refresh();
             scrubberReport.incrementUnscrubbedRecordsRead();
 
             transactionErrors = new ArrayList<Message>();
@@ -337,11 +349,11 @@ public class LaborScrubberProcess {
             // Labor has more fields
             LaborOriginEntry scrubbedEntry = new LaborOriginEntry();
             buildScrubbedEntry(unscrubbedEntry, scrubbedEntry);
-
-            // For Labor Scrubber
-            boolean laborIndicator = true;
-
-            List<Message> tmperrors = scrubberValidator.validateTransaction(unscrubbedEntry, scrubbedEntry, universityRunDate, laborIndicator);
+            
+            //For Labor Scrubber
+            boolean validateAccountIndicator = false;
+            
+            List<Message> tmperrors = scrubberValidator.validateTransaction(unscrubbedEntry, scrubbedEntry, universityRunDate, validateAccountIndicator);
             transactionErrors.addAll(tmperrors);
 
             // Expired account?
@@ -358,19 +370,21 @@ public class LaborScrubberProcess {
                 saveValidTransaction = true;
 
                 // See if unit of work has changed
+                
+                //TODO: Check it in Unit test
                 if (!unitOfWork.isSameUnitOfWork(scrubbedEntry)) {
                     // Generate offset for last unit of work
-
-                    // generateOffset(lastEntry);
+                    
+                    //generateOffset(lastEntry);
 
                     unitOfWork = new UnitOfWorkInfo(scrubbedEntry);
                 }
 
                 KualiDecimal transactionAmount = scrubbedEntry.getTransactionLedgerEntryAmount();
 
-                ParameterEvaluator offsetFiscalPeriods = SpringContext.getBean(ParameterService.class).getParameterEvaluator(ScrubberStep.class, GLConstants.GlScrubberGroupRules.OFFSET_FISCAL_PERIOD_CODES, scrubbedEntry.getUniversityFiscalPeriodCode());
+                KualiParameterRule offsetFiscalPeriods = getRule(GLConstants.GlScrubberGroupRules.OFFSET_FISCAL_PERIOD_CODES);
 
-                if (scrubbedEntry.getBalanceType().isFinancialOffsetGenerationIndicator() && offsetFiscalPeriods.evaluationSucceeds()) {
+                if (scrubbedEntry.getBalanceType().isFinancialOffsetGenerationIndicator() && offsetFiscalPeriods.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode())) {
                     if (scrubbedEntry.isDebit()) {
                         unitOfWork.offsetAmount = unitOfWork.offsetAmount.add(transactionAmount);
                     }
@@ -385,26 +399,95 @@ public class LaborScrubberProcess {
                     subAccountTypeCode = scrubbedEntry.getA21SubAccount().getSubAccountTypeCode();
                 }
 
-                ParameterService parameterService = SpringContext.getBean(ParameterService.class);
-                ParameterEvaluator costShareObjectTypeCodes = parameterService.getParameterEvaluator(ScrubberStep.class, GLConstants.GlScrubberGroupRules.COST_SHARE_OBJ_TYPE_CODES, scrubbedEntry.getFinancialObjectTypeCode());
-                ParameterEvaluator costShareEncBalanceTypeCodes = parameterService.getParameterEvaluator(ScrubberStep.class, GLConstants.GlScrubberGroupRules.COST_SHARE_ENC_BAL_TYP_CODES, scrubbedEntry.getFinancialBalanceTypeCode());
-                ParameterEvaluator costShareEncFiscalPeriodCodes = parameterService.getParameterEvaluator(ScrubberStep.class, GLConstants.GlScrubberGroupRules.COST_SHARE_ENC_FISCAL_PERIOD_CODES, scrubbedEntry.getUniversityFiscalPeriodCode());
-                ParameterEvaluator costShareEncDocTypeCodes = parameterService.getParameterEvaluator(ScrubberStep.class, GLConstants.GlScrubberGroupRules.COST_SHARE_ENC_DOC_TYPE_CODES, scrubbedEntry.getFinancialDocumentTypeCode().trim());
-                ParameterEvaluator costShareFiscalPeriodCodes = parameterService.getParameterEvaluator(ScrubberStep.class, GLConstants.GlScrubberGroupRules.COST_SHARE_FISCAL_PERIOD_CODES, scrubbedEntry.getUniversityFiscalPeriodCode());
+                KualiParameterRule costShareObjectTypeCodes = getRule(GLConstants.GlScrubberGroupRules.COST_SHARE_OBJ_TYPE_CODES);
+                KualiParameterRule costShareEncBalanceTypeCodes = getRule(GLConstants.GlScrubberGroupRules.COST_SHARE_ENC_BAL_TYP_CODES);
+                KualiParameterRule costShareEncFiscalPeriodCodes = getRule(GLConstants.GlScrubberGroupRules.COST_SHARE_ENC_FISCAL_PERIOD_CODES);
+                KualiParameterRule costShareEncDocTypeCodes = getRule(GLConstants.GlScrubberGroupRules.COST_SHARE_ENC_DOC_TYPE_CODES);
+                KualiParameterRule costShareFiscalPeriodCodes = getRule(GLConstants.GlScrubberGroupRules.COST_SHARE_FISCAL_PERIOD_CODES);
 
-                if (scrubbedEntry.getAccount() != null) {
-                    if (costShareObjectTypeCodes.evaluationSucceeds() && scrubbedEntry.getOption().getActualFinancialBalanceTypeCd().equals(scrubbedEntry.getFinancialBalanceTypeCode()) && scrubbedEntry.getAccount().isForContractsAndGrants() && KFSConstants.COST_SHARE.equals(subAccountTypeCode) && costShareFiscalPeriodCodes.evaluationSucceeds() && costShareEncDocTypeCodes.evaluationSucceeds()) {
-                        if (scrubbedEntry.isDebit()) {
-                            scrubCostShareAmount = scrubCostShareAmount.subtract(transactionAmount);
-                        }
-                        else {
-                            scrubCostShareAmount = scrubCostShareAmount.add(transactionAmount);
-                        }
+                if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
+                        costShareEncBalanceTypeCodes.succeedsRule(scrubbedEntry.getFinancialBalanceTypeCode()) && 
+                        scrubbedEntry.getAccount().isForContractsAndGrants() && KFSConstants.COST_SHARE.equals(subAccountTypeCode) && 
+                        costShareEncFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
+                        costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
+
+                    //TODO: Check 
+                    /*TransactionError te1 = generateCostShareEncumbranceEntries(scrubbedEntry);
+                    if (te1 != null) {
+                        List errors = new ArrayList();
+                        errors.add(te1.message);
+                        scrubberReportErrors.put(te1.transaction, errors);
+
+                        saveValidTransaction = false;
+                        saveErrorTransaction = true;
+                    }
+*/                }
+
+                if (costShareObjectTypeCodes.succeedsRule(scrubbedEntry.getFinancialObjectTypeCode()) && 
+                        scrubbedEntry.getOption().getActualFinancialBalanceTypeCd().equals(scrubbedEntry.getFinancialBalanceTypeCode()) && 
+                        scrubbedEntry.getAccount().isForContractsAndGrants() && 
+                        KFSConstants.COST_SHARE.equals(subAccountTypeCode) && 
+                        costShareFiscalPeriodCodes.succeedsRule(scrubbedEntry.getUniversityFiscalPeriodCode()) && 
+                        costShareEncDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode().trim())) {
+                    if (scrubbedEntry.isDebit()) {
+                        scrubCostShareAmount = scrubCostShareAmount.subtract(transactionAmount);
+                    }
+                    else {
+                        scrubCostShareAmount = scrubCostShareAmount.add(transactionAmount);
                     }
                 }
 
+                KualiParameterRule otherDocTypeCodes = getRule(GLConstants.GlScrubberGroupRules.CAP_LIAB_PLANT_DOC_TYPE_CODES);
+
+                //TODO: Check
+                /*if (otherDocTypeCodes.succeedsRule(scrubbedEntry.getFinancialDocumentTypeCode())) {
+                    String m = processCapitalization(scrubbedEntry);
+                    if (m != null) {
+                        saveValidTransaction = false;
+                        saveErrorTransaction = false;
+                        addTransactionError(m, "", Message.TYPE_FATAL);
+                    }
+
+                    m = processLiabilities(scrubbedEntry);
+                    if (m != null) {
+                        saveValidTransaction = false;
+                        saveErrorTransaction = false;
+                        addTransactionError(m, "", Message.TYPE_FATAL);
+                    }
+
+                    m = processPlantIndebtedness(scrubbedEntry);
+                    if (m != null) {
+                        saveValidTransaction = false;
+                        saveErrorTransaction = false;
+                        addTransactionError(m, "", Message.TYPE_FATAL);
+                    }
+                }
+*/
+                
+                //TODO: Check
+/*                if (!scrubCostShareAmount.isZero()) {
+                    TransactionError te = generateCostShareEntries(scrubbedEntry);
+
+                    if (te != null) {
+                        saveValidTransaction = false;
+                        saveErrorTransaction = false;
+
+                        // Make a copy of it so OJB doesn't just update the row in the original
+                        // group. It needs to make a new one in the error group
+                        LaborOriginEntry errorEntry = new LaborOriginEntry(te.transaction);
+                        errorEntry.setTransactionScrubberOffsetGenerationIndicator(false);
+                        createOutputEntry(errorEntry, errorGroup);
+                        scrubberReport.incrementErrorRecordWritten();
+
+                        List messages = new ArrayList();
+                        messages.add(te.message);
+                        scrubberReportErrors.put(errorEntry, messages);
+                    }
+                    scrubCostShareAmount = KualiDecimal.ZERO;
+                }*/
+
                 if (transactionErrors.size() > 0) {
-                    scrubberReportErrors.put(unscrubbedEntry, transactionErrors);
+                    scrubberReportErrors.put(scrubbedEntry, transactionErrors);
                 }
 
                 lastEntry = scrubbedEntry;
@@ -433,7 +516,8 @@ public class LaborScrubberProcess {
         }
 
         // Generate last offset (if necessary)
-        // generateOffset(lastEntry);
+        //TODO: check
+        //generateOffset(lastEntry);
     }
 
     private boolean isFatal(List<Message> errors) {
@@ -446,8 +530,25 @@ public class LaborScrubberProcess {
         return false;
     }
 
+    private KualiParameterRule getRule(String rule) {
+        KualiParameterRule r = rules.get(rule);
+        if (r == null) {
+            throw new IllegalArgumentException("Business Rule: " + GLConstants.GL_SCRUBBER_GROUP + "/" + rule + " does not exist");
+        }
+        return r;
+    }
+
+    private FinancialSystemParameter getParameter(String param) {
+        FinancialSystemParameter p = parameters.get(param);
+        if (p == null) {
+            throw new IllegalArgumentException("Financial System Parameter: " + GLConstants.GL_SCRUBBER_GROUP + "/" + param + " does not exist");
+        }
+        return p;
+    }
+
     /**
      * Get all the transaction descriptions from the param table
+     * 
      */
     private void setDescriptions() {
         offsetDescription = kualiConfigurationService.getPropertyString(KFSKeyConstants.MSG_GENERATED_OFFSET);
@@ -459,6 +560,7 @@ public class LaborScrubberProcess {
 
     /**
      * Generate the flag for the end of specific descriptions. This will be used in the demerger step
+     * 
      */
     private void setOffsetString() {
 
@@ -473,6 +575,7 @@ public class LaborScrubberProcess {
 
     /**
      * Generate the offset message with the flag at the end
+     * 
      * 
      * @return Offset message
      */
@@ -490,17 +593,16 @@ public class LaborScrubberProcess {
      */
     private void createOutputEntry(LaborOriginEntry entry, OriginEntryGroup group) {
         // Write the entry if we aren't running in report only mode.
-        if (reportOnlyMode) {
-            // If the group is null don't write it because the error and expired groups aren't created in reportOnlyMode
-            if (group != null) {
-                entry.setGroup(group);
-                laborOriginEntryService.save(entry);
-            }
-        }
-        else {
+        if ( reportOnlyMode ) {
+            // If the group is null don't write it because the error and expired groups aren't created in reportOnlyMode 
+            if ( group != null ) {
             entry.setGroup(group);
             laborOriginEntryService.save(entry);
         }
+        } else {
+            entry.setGroup(group);
+            laborOriginEntryService.save(entry);
+    }
     }
 
     /**
@@ -514,7 +616,7 @@ public class LaborScrubberProcess {
      */
     private boolean ifNullAddTransactionErrorAndReturnFalse(Object glObject, String errorMessage, String errorValue, int type) {
         if (glObject == null) {
-            if (StringUtils.isNotBlank(errorMessage)) {
+            if (StringUtils.hasText(errorMessage)) {
                 addTransactionError(errorMessage, errorValue, type);
             }
             else {
@@ -611,17 +713,17 @@ public class LaborScrubberProcess {
             message = m;
         }
     }
-
+    
     protected void setCutoffTimeForPreviousDay(int hourOfDay, int minuteOfDay, int secondOfDay) {
         this.cutoffHour = hourOfDay;
         this.cutoffMinute = minuteOfDay;
         this.cutoffSecond = secondOfDay;
-
+        
         LOG.info("Setting cutoff time to hour: " + hourOfDay + ", minute: " + minuteOfDay + ", second: " + secondOfDay);
     }
-
+    
     protected void setCutoffTime(String cutoffTime) {
-        if (StringUtils.isBlank(cutoffTime)) {
+        if (!StringUtils.hasText(cutoffTime)) {
             LOG.debug("Cutoff time is blank");
             unsetCutoffTimeForPreviousDay();
         }
@@ -629,16 +731,16 @@ public class LaborScrubberProcess {
             cutoffTime = cutoffTime.trim();
             LOG.debug("Cutoff time value found: " + cutoffTime);
             StringTokenizer st = new StringTokenizer(cutoffTime, ":", false);
-
+            
             try {
                 String hourStr = st.nextToken();
                 String minuteStr = st.nextToken();
                 String secondStr = st.nextToken();
-
+                
                 int hourInt = Integer.parseInt(hourStr, 10);
                 int minuteInt = Integer.parseInt(minuteStr, 10);
                 int secondInt = Integer.parseInt(secondStr, 10);
-
+                
                 if (hourInt < 0 || hourInt > 23 || minuteInt < 0 || minuteInt > 59 || secondInt < 0 || secondInt > 59) {
                     throw new IllegalArgumentException("Cutoff time must be in the format \"HH:mm:ss\", where HH, mm, ss are defined in the java.text.SimpleDateFormat class.  In particular, 0 <= hour <= 23, 0 <= minute <= 59, and 0 <= second <= 59");
                 }
@@ -649,17 +751,21 @@ public class LaborScrubberProcess {
             }
         }
     }
-
-
+    
+    
     public void unsetCutoffTimeForPreviousDay() {
         this.cutoffHour = null;
         this.cutoffMinute = null;
         this.cutoffSecond = null;
     }
-
+    
     /**
-     * This method modifies the run date if it is before the cutoff time specified by calling the setCutoffTimeForPreviousDay
-     * method. See KULRNE-70 This method is public to facilitate unit testing
+     * This method modifies the run date if it is before the cutoff time specified by calling
+     * the setCutoffTimeForPreviousDay method.
+     * 
+     * See https://test.kuali.org/jira/browse/KULRNE-70
+     * 
+     * This method is public to facilitate unit testing
      * 
      * @param currentDate
      * @return
@@ -667,11 +773,11 @@ public class LaborScrubberProcess {
     public java.sql.Date calculateRunDate(java.util.Date currentDate) {
         Calendar currentCal = Calendar.getInstance();
         currentCal.setTime(currentDate);
-
+        
         if (isCurrentDateBeforeCutoff(currentCal)) {
             // time to set the date to the previous day's last minute/second
             currentCal.add(Calendar.DAY_OF_MONTH, -1);
-            // per old COBOL code (see KULRNE-70),
+            // per old COBOL code (see https://test.kuali.org/jira/browse/KULRNE-70),
             // the time is set to 23:59:59 (assuming 0 ms)
             currentCal.set(Calendar.HOUR_OF_DAY, 23);
             currentCal.set(Calendar.MINUTE, 59);
@@ -681,12 +787,12 @@ public class LaborScrubberProcess {
         }
         return new java.sql.Date(currentDate.getTime());
     }
-
+    
     protected boolean isCurrentDateBeforeCutoff(Calendar currentCal) {
         if (cutoffHour != null && cutoffMinute != null && cutoffSecond != null) {
             // if cutoff date is not properly defined
             // 24 hour clock (i.e. hour is 0 - 23)
-
+            
             // clone the calendar so we get the same month, day, year
             // then change the hour, minute, second fields
             // then see if the cutoff is before or after
@@ -696,24 +802,26 @@ public class LaborScrubberProcess {
             cutoffTime.set(Calendar.MINUTE, cutoffMinute);
             cutoffTime.set(Calendar.SECOND, cutoffSecond);
             cutoffTime.set(Calendar.MILLISECOND, 0);
-
+            
             return currentCal.before(cutoffTime);
         }
         // if cutoff date is not properly defined, then it is considered to be after the cutoff
         return false;
     }
-
+    
     protected void initCutoffTime() {
-        String cutoffTime = SpringContext.getBean(ParameterService.class).getParameterValue(ScrubberStep.class, GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME);
-        if (StringUtils.isBlank(cutoffTime)) {
+        FinancialSystemParameter cutoffParam = parameters.get(GLConstants.GlScrubberGroupParameters.SCRUBBER_CUTOFF_TIME);
+        String cutoffTime = null;
+        if (cutoffParam == null) {
             LOG.debug("Cutoff time system parameter not found");
             unsetCutoffTimeForPreviousDay();
             return;
         }
+        cutoffTime = cutoffParam.getFinancialSystemParameterText();
         setCutoffTime(cutoffTime);
     }
-
-    protected void buildScrubbedEntry(LaborOriginEntry unscrubbedEntry, LaborOriginEntry scrubbedEntry) {
+    
+    protected void buildScrubbedEntry(LaborOriginEntry unscrubbedEntry, LaborOriginEntry scrubbedEntry){
         scrubbedEntry.setDocumentNumber(unscrubbedEntry.getDocumentNumber());
         scrubbedEntry.setOrganizationDocumentNumber(unscrubbedEntry.getOrganizationDocumentNumber());
         scrubbedEntry.setOrganizationReferenceId(unscrubbedEntry.getOrganizationReferenceId());
@@ -724,10 +832,10 @@ public class LaborScrubberProcess {
         scrubbedEntry.setTransactionLedgerEntryDescription(unscrubbedEntry.getTransactionLedgerEntryDescription());
         scrubbedEntry.setTransactionLedgerEntryAmount(unscrubbedEntry.getTransactionLedgerEntryAmount());
         scrubbedEntry.setTransactionDebitCreditCode(unscrubbedEntry.getTransactionDebitCreditCode());
-
-        // For Labor's more fields
+        
+        // For Labor's more fields 
         // It might be changed based on Labor Scrubber's business rule
-
+        
         scrubbedEntry.setPositionNumber(unscrubbedEntry.getPositionNumber());
         scrubbedEntry.setTransactionPostingDate(unscrubbedEntry.getTransactionPostingDate());
         scrubbedEntry.setPayPeriodEndDate(unscrubbedEntry.getPayPeriodEndDate());
@@ -752,72 +860,10 @@ public class LaborScrubberProcess {
         scrubbedEntry.setHrmsCompany(unscrubbedEntry.getHrmsCompany());
         scrubbedEntry.setSetid(unscrubbedEntry.getSetid());
         scrubbedEntry.setTransactionDateTimeStamp(unscrubbedEntry.getTransactionDateTimeStamp());
+        scrubbedEntry.setFinancialDocument(unscrubbedEntry.getFinancialDocument());
         scrubbedEntry.setReferenceFinancialDocumentType(unscrubbedEntry.getReferenceFinancialDocumentType());
         scrubbedEntry.setReferenceFinancialSystemOrigination(unscrubbedEntry.getReferenceFinancialSystemOrigination());
         scrubbedEntry.setPayrollEndDateFiscalPeriod(unscrubbedEntry.getPayrollEndDateFiscalPeriod());
-
-    }
-
-    /**
-     * The demerger process reads all of the documents in the error group, then moves all of the original entries for that document
-     * from the valid group to the error group. It does not move generated entries to the error group. Those are deleted. It also
-     * modifies the doc number and origin code of cost share transfers.
-     * 
-     * @param errorGroup
-     * @param validGroup
-     */
-    private void performDemerger(OriginEntryGroup errorGroup, OriginEntryGroup validGroup) {
-        LOG.debug("performDemerger() started");
-
-        // Without this step, the job fails with Optimistic Lock Exceptions
-        persistenceService.clearCache();
-
-        DemergerReportData demergerReport = new DemergerReportData();
-        OriginEntryStatistics eOes = laborOriginEntryService.getStatistics(errorGroup.getId());
-        demergerReport.setErrorTransactionsRead(eOes.getRowCount());
-
-        String[] documentTypesBeProcessed = { "BT", "YEBT", "ST", "YEST" };
-
-        // Read all the documents from the error group and move all non-generated
-        // transactions for these documents from the valid group into the error group
-        Iterator<LaborOriginEntry> errorEntryIterator = laborOriginEntryService.getEntriesByGroup(errorGroup);
-        while (errorEntryIterator.hasNext()) {
-            LaborOriginEntry errorEntry = errorEntryIterator.next();
-            String documentTypeCode = errorEntry.getFinancialDocumentTypeCode();
-            if (documentTypeCode != null) {
-                documentTypeCode.trim();
-            }
-
-            // Check each entry is from Benefit Expense Transfer or Salary Expense Transfer
-            Collection<LaborOriginEntry> transactions = null;
-            if (ArrayUtils.contains(documentTypesBeProcessed, documentTypeCode)) {
-                String documentNumber = errorEntry.getDocumentNumber();
-                String originationCode = errorEntry.getFinancialSystemOriginationCode();
-
-                // if so, get entry from valid group. It should be Source or Target accounting line
-                transactions = laborOriginEntryService.getEntriesByDocument(validGroup, documentNumber, documentTypeCode, originationCode);
-            }
-
-            // put the transactions into an error group
-            if (transactions != null) {
-                for (LaborOriginEntry transaction : transactions) {
-                    demergerReport.incrementErrorTransactionsSaved();
-                    transaction.setGroup(errorGroup);
-                    laborOriginEntryService.save(transaction);
-                }
-            }
-        }
-
-        Collection<OriginEntryGroup> validGroups = new ArrayList<OriginEntryGroup>();
-        validGroups.add(validGroup);
-
-        int validTransactionsSaved = laborOriginEntryService.getCountOfEntriesInGroups(validGroups);
-        demergerReport.setValidTransactionsSaved(validTransactionsSaved);
-
-        eOes = laborOriginEntryService.getStatistics(errorGroup.getId());
-        demergerReport.setErrorTransactionWritten(eOes.getRowCount());
-
-        String reportsDirectory = ReportRegistry.getReportsDirectory();
-        laborReportService.generateScrubberDemergerStatisticsReports(demergerReport, reportsDirectory, runDate);
+        
     }
 }

@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/service/impl/ChartServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +24,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.core.util.spring.Cached;
+
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.dao.ChartDao;
 import org.kuali.module.chart.service.ChartService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is the service implementation for the Chart structure. This is the default, Kuali delivered implementation.
+ * 
+ * 
  */
 public class ChartServiceImpl implements ChartService {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ChartServiceImpl.class);
@@ -44,10 +48,6 @@ public class ChartServiceImpl implements ChartService {
         return chartDao.getByPrimaryId(chartOfAccountsCode);
     }
 
-    /**
-     * 
-     * @see org.kuali.module.chart.service.ChartService#getUniversityChart()
-     */
     public Chart getUniversityChart() {
         return chartDao.getUniversityChart();
     }
@@ -70,7 +70,6 @@ public class ChartServiceImpl implements ChartService {
     /**
      * @see org.kuali.module.chart.service.getReportsToHierarchy()
      */
-    @Cached
     public Map<String, String> getReportsToHierarchy() {
 
         LOG.debug("getReportsToHierarchy");
@@ -90,6 +89,7 @@ public class ChartServiceImpl implements ChartService {
     }
 
     /**
+     * 
      * @see org.kuali.module.chart.service.ChartService#getChartsThatUserIsResponsibleFor(org.kuali.core.bo.user.KualiUser)
      */
     public List getChartsThatUserIsResponsibleFor(UniversalUser universalUser) {

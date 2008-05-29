@@ -23,8 +23,8 @@ import java.util.Properties;
 
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSPropertyConstants;
+import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.web.Constant;
-import org.kuali.module.labor.LaborPropertyConstants;
 import org.kuali.module.labor.bo.LedgerBalance;
 
 /**
@@ -49,32 +49,31 @@ public class CurrentFundsInquirableImpl extends AbstractLaborInquirableImpl {
         keys.add(KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE);
         keys.add(KFSPropertyConstants.EMPLID);
         keys.add(KFSPropertyConstants.POSITION_NUMBER);
-
+        
         keys.add(Constant.CONSOLIDATION_OPTION);
         keys.add(Constant.PENDING_ENTRY_OPTION);
         return keys;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getUserDefinedAttributeMap()
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getUserDefinedAttributeMap()
      */
     protected Map getUserDefinedAttributeMap() {
 
         Map userDefinedAttributeMap = new HashMap();
-        userDefinedAttributeMap.put(LaborPropertyConstants.ANNUAL_ACTUAL_AMOUNT, KFSConstants.BALANCE_TYPE_ACTUAL);
-        userDefinedAttributeMap.put(LaborPropertyConstants.OUTSTANDING_ENCUMBRANCE, KFSConstants.BALANCE_TYPE_INTERNAL_ENCUMBRANCE);
+        userDefinedAttributeMap.put(KFSPropertyConstants.MONTH1_AMOUNT, "");
         return userDefinedAttributeMap;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getAttributeName(java.lang.String)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getAttributeName(java.lang.String)
      */
     protected String getAttributeName(String attributeName) {
         return attributeName;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyValue(java.lang.String, java.lang.Object)
      */
     protected Object getKeyValue(String keyName, Object keyValue) {
         if (isExclusiveField(keyName, keyValue)) {
@@ -84,38 +83,36 @@ public class CurrentFundsInquirableImpl extends AbstractLaborInquirableImpl {
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getKeyName(java.lang.String)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getKeyName(java.lang.String)
      */
     protected String getKeyName(String keyName) {
         return keyName;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getLookupableImplAttributeName()
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getLookupableImplAttributeName()
      */
     protected String getLookupableImplAttributeName() {
         return Constant.EMPTY_STRING;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getBaseUrl()
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getBaseUrl()
      */
     protected String getBaseUrl() {
         return KFSConstants.GL_BALANCE_INQUIRY_ACTION;
     }
 
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#getInquiryBusinessObjectClass(java.lang.String)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#getInquiryBusinessObjectClass(String)
      */
     protected Class getInquiryBusinessObjectClass(String attributeName) {
         return LedgerBalance.class;
     }
-    
+
     /**
-     * @see org.kuali.module.labor.web.inquirable.AbstractLaborInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
+     * @see org.kuali.module.gl.web.inquirable.AbstractGLInquirableImpl#addMoreParameters(java.util.Properties, java.lang.String)
      */
     protected void addMoreParameters(Properties parameter, String attributeName) {
-        String balanceTypeCode = (String) getUserDefinedAttributeMap().get(attributeName);
-        parameter.put(KFSPropertyConstants.FINANCIAL_BALANCE_TYPE_CODE, balanceTypeCode);
     }
 }

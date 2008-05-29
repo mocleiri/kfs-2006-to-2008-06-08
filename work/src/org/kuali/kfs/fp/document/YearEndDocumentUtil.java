@@ -19,27 +19,30 @@ package org.kuali.module.financial.document;
 import org.kuali.core.document.TransactionalDocument;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.kfs.util.SpringServiceLocator;
 
 
 /**
+ * 
  * utils for <code>YearEndDocument</code>s
  * 
  * @see org.kuali.module.gl.service.SufficientFundsService
+ * 
  */
 public class YearEndDocumentUtil {
     private static final String FINAL_ACCOUNTING_PERIOD = "13";
 
     /**
+     * 
      * @return the previous fiscal year used with all GLPE
      */
     public static final Integer getPreviousFiscalYear() {
-        int i = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().intValue() - 1;
+        int i = SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear().intValue() - 1;
         return new Integer(i);
     }
 
     /**
+     * 
      * @return the accounting period code used with all GLPE
      */
     public static final String getFinalAccountingPeriod() {
@@ -65,14 +68,5 @@ public class YearEndDocumentUtil {
         YearEndDocument yearEndDocument = (YearEndDocument) transactionalDocument;
         explicitEntry.setUniversityFiscalPeriodCode(getFinalAccountingPeriod());
         explicitEntry.setUniversityFiscalYear(getPreviousFiscalYear());
-    }
-
-    /**
-     * Gets the FINAL_ACCOUNTING_PERIOD attribute.
-     * 
-     * @return Returns the FINAL_ACCOUNTING_PERIOD.
-     */
-    public static String getFINAL_ACCOUNTING_PERIOD() {
-        return FINAL_ACCOUNTING_PERIOD;
     }
 }

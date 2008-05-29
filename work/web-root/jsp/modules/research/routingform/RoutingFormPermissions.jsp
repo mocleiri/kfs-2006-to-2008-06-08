@@ -18,15 +18,12 @@
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="KualiRoutingFormDocument"
 	htmlFormAction="researchRoutingFormPermissions"
-	headerDispatch="save" headerTabActive="permissions" showTabButtons="true">
+	headerDispatch="save" feedbackKey="app.krafeedback.link"
+	headerTabActive="permissions">
 	
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 	
 	<kra-rf:routingFormHiddenDocumentFields />
-	
-	<div align="right">
-		<kul:help documentTypeName="${DataDictionary.KualiRoutingFormDocument.documentTypeName}" pageName="Permissions" altText="page help"/>
-	</div>
 	
 	<kra:kraAdHocRecipients adhocType="P" adhocLabel="Permissions" excludeActionRequested="true" disableActionRequested="true" actionRequestedDefault="" editingMode="${KualiForm.editingMode}"/>
 	

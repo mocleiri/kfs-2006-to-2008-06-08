@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 The Kuali Foundation.
+ * Copyright 2006-2007 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,26 @@
 
 package org.kuali.module.purap.document;
 
-import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
+import static org.kuali.core.util.KualiDecimal.ZERO;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
+import org.kuali.core.util.KualiDecimal;
+import org.kuali.core.util.ObjectUtils;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
-import org.kuali.module.purap.service.PurapGeneralLedgerService;
+import org.kuali.module.purap.bo.PurchaseOrderAccount;
+import org.kuali.module.purap.bo.PurchaseOrderItem;
+import org.kuali.module.purap.service.PurapAccountingService;
 import org.kuali.module.purap.service.PurapService;
 import org.kuali.module.purap.service.PurchaseOrderService;
 
 /**
- * Purchase Order Reopen Document
+ * Purchase Order Document
  */
 public class PurchaseOrderReopenDocument extends PurchaseOrderDocument {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurchaseOrderReopenDocument.class);
@@ -46,49 +47,86 @@ public class PurchaseOrderReopenDocument extends PurchaseOrderDocument {
         super();
     }
 
-    /**
-     * General Ledger pending entries are not created on save for this document. They are created when the document has been finally
-     * processed. Overriding this method so that entries are not created yet.
-     * 
-     * @see org.kuali.module.purap.document.PurchaseOrderDocument#prepareForSave(org.kuali.core.rule.event.KualiDocumentEvent)
-     */
-    @Override
-    public void prepareForSave(KualiDocumentEvent event) {
-        LOG.info("prepareForSave(KualiDocumentEvent) do not create gl entries");
-        setSourceAccountingLines(new ArrayList());
-        setGeneralLedgerPendingEntries(new ArrayList());
-    }
+    public void customPrepareForSave(KualiDocumentEvent event) {
+        LOG.info("customPrepareForSave(KualiDocumentEvent) enter method for PO Close doc #" + getDocumentNumber());
 
+        // Set outstanding encumbered quantity/amount on items
+        for (Iterator items = this.getItems().iterator(); items.hasNext();) {
+            PurchaseOrderItem item = (PurchaseOrderItem) items.next();
 
-    /**
-     * When Purchase Order Reopen document has been processed through Workflow, the general ledger entries are created and the PO
-     * status changes to "OPEN".
-     * 
-     * @see org.kuali.module.purap.document.PurchaseOrderDocument#handleRouteStatusChange()
-     */
+            String logItmNbr = "Item # " + item.getItemLineNumber();
+
+            if (!item.isItemActiveIndicator()) {
+                continue;
+            }
+
+            KualiDecimal itemAmount = null;
+            if (!item.getItemType().isQuantityBasedGeneralLedgerIndicator()) {
+                LOG.debug("poCloseReopen() " + logItmNbr + " Calculate based on amounts");
+                itemAmount = item.getItemOutstandingEncumberedAmount() == null ? ZERO  : item.getItemOutstandingEncumberedAmount();
+            }
+            else {
+                LOG.debug("poCloseReopen() " + logItmNbr + " Calculate based on quantities");
+                itemAmount = item.getItemOutstandingEncumberedQuantity().multiply(new KualiDecimal(item.getItemUnitPrice()));
+            }
+
+            KualiDecimal accountTotal = ZERO;
+            PurchaseOrderAccount lastAccount = null;
+            if ( itemAmount.compareTo(ZERO) != 0 ) {
+                // Sort accounts
+                Collections.sort((List) item.getSourceAccountingLines());
+              
+                for (Iterator iterAcct = item.getSourceAccountingLines().iterator(); iterAcct.hasNext();) {
+                    PurchaseOrderAccount acct = (PurchaseOrderAccount) iterAcct.next();
+                    if (!acct.isEmpty()) {
+                        KualiDecimal acctAmount = itemAmount.multiply(new KualiDecimal(acct.getAccountLinePercent().toString())).divide(PurapConstants.HUNDRED);
+                        accountTotal = accountTotal.add(acctAmount);
+                        acct.setAlternateAmountForGLEntryCreation(acctAmount);
+                        lastAccount = acct;
+                    }
+                }
+
+                // account for rounding by adjusting last account as needed
+                if (lastAccount != null) {
+                    KualiDecimal difference = itemAmount.subtract(accountTotal);
+                    LOG.debug("poCloseReopen() difference: " + logItmNbr + " " + difference);
+
+                    KualiDecimal amount = lastAccount.getAlternateAmountForGLEntryCreation();
+                    if (ObjectUtils.isNotNull(amount)) {
+                        lastAccount.setAlternateAmountForGLEntryCreation(amount.add(difference));
+                    }
+                    else {
+                        lastAccount.setAlternateAmountForGLEntryCreation(difference);
+                    }
+                }
+
+            }
+        }// endfor
+          
+        setSourceAccountingLines(SpringContext.getBean(PurapAccountingService.class).generateSummaryWithNoZeroTotalsUsingAlternateAmount(getItemsActiveOnly()));
+
+    }//end customPrepareForSave(KualiDocumentEvent)
+
     @Override
     public void handleRouteStatusChange() {
         super.handleRouteStatusChange();
-
+        
         // DOCUMENT PROCESSED
         if (getDocumentHeader().getWorkflowDocument().stateIsProcessed()) {
-            // generate GL entries
-            SpringContext.getBean(PurapGeneralLedgerService.class).generateEntriesReopenPurchaseOrder(this);
-
-            // update indicators
             SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForApprovedPODocuments(this);
 
-            // set purap status
-            SpringContext.getBean(PurapService.class).updateStatus(this, PurapConstants.PurchaseOrderStatuses.OPEN);
+            //set purap status and status history and status history note
+            SpringContext.getBean(PurapService.class).updateStatusAndStatusHistory(this, PurapConstants.PurchaseOrderStatuses.OPEN );
             SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
         }
         // DOCUMENT DISAPPROVED
         else if (getDocumentHeader().getWorkflowDocument().stateIsDisapproved()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedReopenPODocuments(this);
+            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForDisapprovedPODocuments(this);
+            SpringContext.getBean(PurchaseOrderService.class).saveDocumentNoValidation(this);
         }
         // DOCUMENT CANCELED
         else if (getDocumentHeader().getWorkflowDocument().stateIsCanceled()) {
-            SpringContext.getBean(PurchaseOrderService.class).setCurrentAndPendingIndicatorsForCancelledReopenPODocuments(this);
+            // TODO code
         }
 
     }
@@ -97,19 +135,5 @@ public class PurchaseOrderReopenDocument extends PurchaseOrderDocument {
         // no statuses to set means no node details
         return null;
     }
-
-    /**
-     * @see org.kuali.module.purap.rules.PurapAccountingDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.kfs.document.AccountingDocument,
-     *      org.kuali.kfs.bo.AccountingLine, org.kuali.kfs.bo.GeneralLedgerPendingEntry)
-     */
-    @Override
-    public void customizeExplicitGeneralLedgerPendingEntry(GeneralLedgerPendingEntrySourceDetail postable, GeneralLedgerPendingEntry explicitEntry) {
-        super.customizeExplicitGeneralLedgerPendingEntry(postable, explicitEntry);
- 
-        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(this, (AccountingLine)postable, explicitEntry, getPurapDocumentIdentifier(), GL_DEBIT_CODE, PurapDocTypeCodes.PO_DOCUMENT, true);
-
-        // don't think i should have to override this, but default isn't getting the right PO doc
-        explicitEntry.setFinancialDocumentTypeCode(PurapDocTypeCodes.PO_REOPEN_DOCUMENT);
-        explicitEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
-    }
+    
 }

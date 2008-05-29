@@ -1,123 +1,99 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-
-  <bean id="CreditMemoStatus" parent="CreditMemoStatus-parentBean" />
-
-  <bean id="CreditMemoStatus-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.purap.bo.CreditMemoStatus" />
-    <property name="inquiryDefinition" >
-      <ref bean="CreditMemoStatus-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="CreditMemoStatus-lookupDefinition" />
-    </property>
-    <property name="titleAttribute" value="creditMemoStatusCode" />
-    <property name="objectLabel" value="Credit Memo Status" />
-    <property name="attributes" >
-      <list>
-        <ref bean="CreditMemoStatus-statusCode" />
-        <ref bean="CreditMemoStatus-statusDescription" />
-        <ref bean="CreditMemoStatus-versionNumber" />
-      </list>
-    </property>
-  </bean>
-
-<!-- Attribute Definitions -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2006-2007 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.purap.bo.CreditMemoStatus">
 
 
-  <bean id="CreditMemoStatus-statusCode" parent="CreditMemoStatus-statusCode-parentBean" />
+        <inquiry>
+            <title>Credit Memo Status Inquiry</title>
 
-  <bean id="CreditMemoStatus-statusCode-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="statusCode" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Credit Memo Status Code" />
-    <property name="shortLabel" value="Code" />
-    <property name="maxLength" value="4" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="6" />
-    </property>
-  </bean>
-  <bean id="CreditMemoStatus-statusDescription" parent="CreditMemoStatus-statusDescription-parentBean" />
+            <inquirySections><inquirySection title="Header Text"><inquiryFields>
+                <field attributeName="creditMemoStatusCode" />
+                <field attributeName="creditMemoStatusDescription" />
+                <field attributeName="active" />
+            </inquiryFields></inquirySection></inquirySections>
+        </inquiry>
 
-  <bean id="CreditMemoStatus-statusDescription-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="statusDescription" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="Credit Memo Status Description" />
-    <property name="shortLabel" value="Description" />
-    <property name="maxLength" value="45" />
-    <property name="validationPattern" >
-      <bean parent="AnyCharacterValidationPattern"
-            p:allowWhitespace="true" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="47" />
-    </property>
-  </bean>
-  <bean id="CreditMemoStatus-versionNumber" parent="CreditMemoStatus-versionNumber-parentBean" />
+        <lookup>
+            <title>Credit Memo Status Lookup</title>
 
-  <bean id="CreditMemoStatus-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
+            <instructions>Lookup a Credit Memo Status</instructions>
 
-<!-- Business Object Inquiry Definition -->
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="creditMemoStatusDescription" />
+                </sortAttributes>
+            </defaultSort>
+
+            <lookupFields>
+                <lookupField attributeName="creditMemoStatusCode" required="false" />
+                <lookupField attributeName="creditMemoStatusDescription" required="false" />
+                <lookupField attributeName="active" required="false" />
+            </lookupFields>
+
+            <resultFields>
+                <field attributeName="creditMemoStatusCode" />
+                <field attributeName="creditMemoStatusDescription" />
+                <field attributeName="active" />
+            </resultFields>
+        </lookup>
+
+        <titleAttribute>creditMemoStatusCode</titleAttribute>
+
+        <attributes>
+
+            <attribute name="creditMemoStatusCode" forceUppercase="true">
+                <label>Credit Memo Status Code</label>
+                <shortLabel>Code</shortLabel>
+
+                <maxLength>4</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
+
+                <control>
+                    <text size="6" />
+                </control>
+
+                <summary>creditMemoStatusCode</summary>
+                <description>creditMemoStatusCode description...</description>
+			</attribute>
+
+            <attribute name="creditMemoStatusDescription" forceUppercase="true">
+                <label>Credit Memo Status Description</label>
+                <shortLabel>Description</shortLabel>
+
+                <maxLength>45</maxLength>
+                <validationPattern><anyCharacter allowWhitespace="true"/></validationPattern>
+
+                <control>
+                    <text size="47" />
+                </control>
+
+                <summary>creditMemoStatusDescription</summary>
+                <description>creditMemoStatusDescription description...</description>
+			</attribute>
+
+            <attributeReference name="active" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="activeIndicator" />
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
 
 
-  <bean id="CreditMemoStatus-inquiryDefinition" parent="CreditMemoStatus-inquiryDefinition-parentBean" />
-
-  <bean id="CreditMemoStatus-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="Credit Memo Status Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="statusCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="statusDescription" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-<!-- Business Object Lookup Definition -->
-
-
-  <bean id="CreditMemoStatus-lookupDefinition" parent="CreditMemoStatus-lookupDefinition-parentBean" />
-
-  <bean id="CreditMemoStatus-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="Credit Memo Status Lookup" />
-    <property name="instructions" value="Lookup a Credit Memo Status" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="statusCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="statusDescription" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="statusCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="statusDescription" />
-      </list>
-    </property>
-  </bean>
-</beans>
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

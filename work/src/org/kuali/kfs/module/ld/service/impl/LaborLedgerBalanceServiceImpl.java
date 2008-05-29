@@ -15,26 +15,31 @@
  */
 package org.kuali.module.labor.service.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.kuali.core.bo.user.PersonPayrollId;
+import org.kuali.core.bo.user.UniversalUser;
+import org.kuali.core.bo.user.UserId;
+import org.kuali.core.exceptions.UserNotFoundException;
+import org.kuali.core.service.UniversalUserService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.util.ObjectUtil;
+import org.kuali.core.util.TransactionalServiceUtils;
+import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.gl.util.OJBUtility;
+import org.kuali.module.labor.LaborConstants;
 import org.kuali.module.labor.bo.EmployeeFunding;
 import org.kuali.module.labor.bo.LaborBalanceSummary;
 import org.kuali.module.labor.bo.LaborTransaction;
 import org.kuali.module.labor.bo.LedgerBalance;
-import org.kuali.module.labor.bo.LedgerBalanceForYearEndBalanceForward;
 import org.kuali.module.labor.dao.LaborLedgerBalanceDao;
+import org.kuali.module.labor.rules.DebitCreditUtil;
 import org.kuali.module.labor.service.LaborCalculatedSalaryFoundationTrackerService;
 import org.kuali.module.labor.service.LaborLedgerBalanceService;
-import org.kuali.module.labor.util.DebitCreditUtil;
+import org.kuali.module.labor.util.ObjectUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -48,14 +53,7 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
      * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findBalancesForFiscalYear(java.lang.Integer)
      */
     public Iterator<LedgerBalance> findBalancesForFiscalYear(Integer fiscalYear) {
-        return laborLedgerBalanceDao.findBalancesForFiscalYear(fiscalYear);
-    }
-
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findBalancesForFiscalYear(java.lang.Integer, java.util.Map)
-     */
-    public Iterator<LedgerBalance> findBalancesForFiscalYear(Integer fiscalYear, Map<String, String> fieldValues) {
-        return laborLedgerBalanceDao.findBalancesForFiscalYear(fiscalYear, fieldValues);
+        return (Iterator<LedgerBalance>) TransactionalServiceUtils.copyToExternallyUsuableIterator(laborLedgerBalanceDao.findBalancesForFiscalYear(fiscalYear));
     }
 
     /**
@@ -63,7 +61,7 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
      */
     public Iterator findBalance(Map fieldValues, boolean isConsolidated) {
         LOG.debug("findBalance() started");
-        return laborLedgerBalanceDao.findBalance(fieldValues, isConsolidated);
+        return TransactionalServiceUtils.copyToExternallyUsuableIterator(laborLedgerBalanceDao.findBalance(fieldValues, isConsolidated));
     }
 
     /**
@@ -83,14 +81,14 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
         }
         return recordCount;
     }
-
+    
     /**
      * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findLedgerBalance(java.util.Collection,
      *      org.kuali.module.labor.bo.LaborTransaction)
      */
-    public <T extends LedgerBalance> T findLedgerBalance(Collection<T> ledgerBalanceCollection, LaborTransaction transaction, List<String> keyList) {
-        for (T ledgerBalance : ledgerBalanceCollection) {
-            boolean found = ObjectUtil.equals(ledgerBalance, transaction, keyList);
+    public LedgerBalance findLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction, List<String> keyList) {
+        for (LedgerBalance ledgerBalance : ledgerBalanceCollection) {
+            boolean found = ObjectUtil.compareObject(ledgerBalance, transaction, keyList);
             if (found) {
                 return ledgerBalance;
             }
@@ -102,9 +100,9 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
      * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findLedgerBalance(java.util.Collection,
      *      org.kuali.module.labor.bo.LaborTransaction)
      */
-    public <T extends LedgerBalance> T findLedgerBalance(Collection<T> ledgerBalanceCollection, LaborTransaction transaction) {
-        for (T ledgerBalance : ledgerBalanceCollection) {
-            boolean found = ObjectUtil.equals(ledgerBalance, transaction, ledgerBalance.getPrimaryKeyList());
+    public LedgerBalance findLedgerBalance(Collection<LedgerBalance> ledgerBalanceCollection, LaborTransaction transaction) {
+        for (LedgerBalance ledgerBalance : ledgerBalanceCollection) {
+            boolean found = ObjectUtil.compareObject(ledgerBalance, transaction, ledgerBalance.getPrimaryKeyList());
             if (found) {
                 return ledgerBalance;
             }
@@ -116,10 +114,11 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
      * @see org.kuali.module.labor.service.LaborLedgerBalanceService#updateLedgerBalance(org.kuali.module.labor.bo.LedgerBalance,
      *      org.kuali.module.labor.bo.LaborTransaction)
      */
-    public <T extends LedgerBalance> void updateLedgerBalance(T ledgerBalance, LaborTransaction transaction) {
+    public void updateLedgerBalance(LedgerBalance ledgerBalance, LaborTransaction transaction) {
         String debitCreditCode = transaction.getTransactionDebitCreditCode();
         KualiDecimal amount = transaction.getTransactionLedgerEntryAmount();
         amount = DebitCreditUtil.getNumericAmount(amount, debitCreditCode);
+
         ledgerBalance.addAmount(transaction.getUniversityFiscalPeriodCode(), amount);
     }
 
@@ -134,7 +133,7 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
             LedgerBalance newLedgerBalance = new LedgerBalance();
             ObjectUtil.buildObject(newLedgerBalance, transaction);
             updateLedgerBalance(newLedgerBalance, transaction);
-
+            
             ledgerBalanceCollection.add(newLedgerBalance);
             return newLedgerBalance;
         }
@@ -155,9 +154,9 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
 
             if (currentFundsCollection.contains(encumbranceFunding)) {
                 int index = currentFundsCollection.indexOf(encumbranceFunding);
-                currentFundsCollection.get(index).setOutstandingEncumbrance(encumbrance);
+                currentFundsCollection.get(index).setOutstandingEncumbrance(encumbranceFunding.getOutstandingEncumbrance());
             }
-            else if(encumbrance != null && encumbrance.isNonZero()){
+            else {
                 currentFundsCollection.add(encumbranceFunding);
             }
         }
@@ -176,7 +175,7 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
     public List<EmployeeFunding> findEmployeeFundingWithCSFTracker(Map fieldValues, boolean isConsolidated) {
         List<EmployeeFunding> currentFundsCollection = this.findEmployeeFunding(fieldValues, isConsolidated);
         List<EmployeeFunding> CSFTrackersCollection = laborCalculatedSalaryFoundationTrackerService.findCSFTrackersAsEmployeeFunding(fieldValues, isConsolidated);
-
+        
         for (EmployeeFunding CSFTrackerAsEmployeeFunding : CSFTrackersCollection) {
             if (currentFundsCollection.contains(CSFTrackerAsEmployeeFunding)) {
                 int index = currentFundsCollection.indexOf(CSFTrackerAsEmployeeFunding);
@@ -188,8 +187,10 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
                 currentFunds.setCsfAmount(CSFTrackerAsEmployeeFunding.getCsfAmount());
                 currentFunds.setCsfFullTimeEmploymentQuantity(CSFTrackerAsEmployeeFunding.getCsfFullTimeEmploymentQuantity());
             }
+            else{
+                currentFundsCollection.add(CSFTrackerAsEmployeeFunding);              
+            }
         }
-
         return currentFundsCollection;
     }
 
@@ -200,42 +201,18 @@ public class LaborLedgerBalanceServiceImpl implements LaborLedgerBalanceService 
         return laborLedgerBalanceDao.findBalanceSummary(fiscalYear, balanceTypes);
     }
 
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerBalanceService#save(org.kuali.module.labor.bo.LedgerBalance)
-     */
-    public void save(LedgerBalance ledgerBalance) {
-        laborLedgerBalanceDao.save(ledgerBalance);
-    }
+    // get the person name through employee id
+    private String getPersonName(String emplid) {
+        UserId empl = new PersonPayrollId(emplid);
+        UniversalUser universalUser = null;
 
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findBalancesForFiscalYear(java.lang.Integer, java.util.Map,
-     *      java.util.List, java.util.List)
-     */
-    public Iterator<LedgerBalanceForYearEndBalanceForward> findBalancesForFiscalYear(Integer fiscalYear, Map<String, String> fieldValues, List<String> subFundGroupCodes, List<String> fundGroupCodes) {
-        return laborLedgerBalanceDao.findBalancesForFiscalYear(fiscalYear, fieldValues, subFundGroupCodes, fundGroupCodes);
-    }
-
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findAccountsInFundGroups(java.lang.Integer, java.util.Map,
-     *      java.util.List, java.util.List)
-     */
-    public List<List<String>> findAccountsInFundGroups(Integer fiscalYear, Map<String, String> fieldValues, List<String> subFundGroupCodes, List<String> fundGroupCodes) {
-        return laborLedgerBalanceDao.findAccountsInFundGroups(fiscalYear, fieldValues, subFundGroupCodes, fundGroupCodes);
-    }
-
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerBalanceService#findLedgerBalances(java.util.Map, java.util.Map, java.util.Set,
-     *      java.util.List, java.util.List)
-     */
-    public Collection<LedgerBalance> findLedgerBalances(Map<String, List<String>> fieldValues, Map<String, List<String>> excludedFieldValues, Set<Integer> fiscalYears, List<String> balanceTypeList, List<String> positionObjectGroupCodes) {
-        return laborLedgerBalanceDao.findLedgerBalances(fieldValues, excludedFieldValues, fiscalYears, balanceTypeList, positionObjectGroupCodes);
-    }
-    
-    /**
-     * @see org.kuali.module.labor.service.LaborLedgerBalanceService#deleteLedgerBalancesPriorToYear(java.lang.Integer, java.lang.String)
-     */
-    public void deleteLedgerBalancesPriorToYear(Integer fiscalYear, String chartOfAccountsCode) {
-        laborLedgerBalanceDao.deleteLedgerBalancesPriorToYear(fiscalYear, chartOfAccountsCode);
+        try {
+            universalUser = SpringContext.getBean(UniversalUserService.class).getUniversalUser(empl);
+        }
+        catch (UserNotFoundException e) {
+            return LaborConstants.BalanceInquiries.UnknownPersonName;
+        }
+        return universalUser.getPersonName();
     }
 
     /**
