@@ -15,29 +15,33 @@
  */
 package org.kuali.module.purap;
 
-import org.kuali.kfs.ParameterKeyConstants;
-
 /**
  * Holds constants for PURAP business parameters.
  */
-public class PurapParameterConstants implements ParameterKeyConstants {
+public class PurapParameterConstants {
 
+    // NAMESPACE NAME
+    public static final String PURAP_NAMESPACE = "KFS-PA";
+    public static final String VENDOR_NAMESPACE = "KFS-VN";
+    
+    // COMPONENTS
+    public static class Components {
+        public static final String VENDOR = "Vendor";
+        public static final String ASSIGN_CONTRACT_MANAGER = "AssignContractManager";
+    }
+    
     // PARAMETER NAMES
     public static final String PURAP_OVERRIDE_ASSIGN_CONTRACT_MGR_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
-    public static final String PURAP_OVERRIDE_CM_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
-    public static final String PURAP_OVERRIDE_PO_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
     public static final String PURAP_OVERRIDE_PREQ_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
-    public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
-    public static final String PURAP_OVERRIDE_VENDOR_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";
+    public static final String PURAP_OVERRIDE_REQ_DOC_TITLE = "OVERRIDE_DOCUMENT_TITLE_IND";    
+    public static final String PURAP_OVERRIDE_VENDOR_DOC_TITLE = "OVERRIDE_VENDOR_DOC_TITLE";
     public static final String PURAP_DEFAULT_NEGATIVE_PAYMENT_REQUEST_APPROVAL_LIMIT = "DEFAULT_POS_APRVL_LMT";
     public static final String PURAP_PDP_EPIC_ORG_CODE = "PRE_DISBURSEMENT_EXTRACT_ORGANIZATION";
     public static final String PURAP_PDP_EPIC_SBUNT_CODE = "PRE_DISBURSEMENT_EXTRACT_SUB_UNIT";
     public static final String PURAP_PDP_USER_ID = "PRE_DISBURSEMENT_EXTRACT_USER";
     public static final String PURAP_DEFAULT_PO_TRANSMISSION_CODE = "DEFAULT_TRANSMISSION_CODE";
-    public static final String PURAP_PREQ_REQUIRE_ATTACHMENT = "REQUIRE_ATTACHMENT_IND";
-    public static final String PURAP_CM_REQUIRE_ATTACHMENT = "REQUIRE_ATTACHMENT_IND";
-    public static final String PURAP_PREQ_PAY_DATE_DEFAULT_NUMBER_OF_DAYS = "NUMBER_OF_DAYS_USED_TO_CALCULATE_DEFAULT_PAY_DATE";
-    public static final String PURAP_PO_RETRANSMIT_TRANSMISSION_METHOD_TYPES = "RETRANSMIT_TRANSMISSION_METHOD_TYPES";
+    public static final String PURAP_PREQ_REQUIRE_ATTACHMENT = "REQUIRE_ATTACHMENT";
+    public static final String PURAP_CM_REQUIRE_ATTACHMENT = "REQUIRE_ATTACHMENT";
 
     public static final String PURAP_PDP_PREQ_CANCEL_NOTE = "CANCEL_NOTE";
     public static final String PURAP_PDP_PREQ_RESET_NOTE = "RESET_NOTE";
@@ -47,42 +51,25 @@ public class PurapParameterConstants implements ParameterKeyConstants {
     public static final String PHONE_NUMBER_FORMATS_PARM_NM = "GENERIC_PHONE_NUMBER_FORMATS";
     public static final String DEFAULT_PHONE_NUMBER_DIGITS_PARM_NM = "GENERIC_DEFAULT_PHONE_NUMBER_LENGTH";
     
-    public static final String DEFAULT_QUANTITY_ITEM_TYPE = "DEFAULT_QUANTITY_ITEM_TYPE";
-    public static final String DEFAULT_NON_QUANTITY_ITEM_TYPE = "DEFAULT_NON_QUANTITY_ITEM_TYPE";
-    
-    public static final String ENABLE_RECEIVING_ADDRESS_IND = "ENABLE_RECEIVING_ADDRESS_IND";
-    public static final String ENABLE_ADDRESS_TO_VENDOR_SELECTION_IND = "ENABLE_ADDRESS_TO_VENDOR_SELECTION_IND";
-    
-    public static final String VALIDATE_ACCOUNT_DISTRIBUTION_IND = "VALIDATE_ACCOUNT_DISTRIBUTION_IND";
-    
-    public static final String SHOW_CLEAR_AND_LOAD_QTY_BUTTONS = "SHOW_CLEAR_AND_LOAD_QTY_BUTTONS";
-    
-    public static class CapitalAsset {
-        public static final String CAPITAL_ASSET_OBJECT_LEVELS = "CAPITAL_ASSET_OBJECT_LEVELS";
-        public static final String POSSIBLE_CAPITAL_ASSET_OBJECT_LEVELS = "POSSIBLE_CAPITAL_ASSET_OBJECT_LEVELS";
-        public static final String CAPITAL_ASSET_PRICE_THRESHOLD = "CAPITAL_ASSET_PRICE_THRESHOLD";
-        public static final String ASSET_NUMBER_CAMS_TRAN_TYPES = "CAPITAL_ASSET_TRANSACTION_TYPES_REQUIRING_ASSET_NUMBERS";
-        public static final String QUANTITY_OBJECT_CODE_SUBTYPES = "OBJECT_SUB_TYPES_REQUIRING_QUANTITY";
-        public static final String RECURRING_CAMS_TRAN_TYPES = "CAPITAL_ASSET_TRANSACTION_TYPES_REQUIRING_RECURRING_PAYMENT_TERMS";
-        
-        public static final String OVERRIDE_CAPITAL_ASSET_WARNINGS_IND = "OVERRIDE_CAPITAL_ASSET_WARNINGS_IND";
-    }
-
-    public static final String PRE_DISBURSEMENT_EXTRACT_CUTOFF_TIME = "PRE_DISBURSEMENT_EXTRACT_CUTOFF_TIME";
-    
     public static class Workgroups {
         public static final String SEARCH_SPECIAL_ACCESS = "SEARCH_SPECIAL_ACCESS_GROUP";
+
+        // ASSIGN A CONTRACT MANAGER DOCUMENT
+        //public static final String PURAP_DOCUMENT_ASSIGN_CM_ACTIONS = "DOCUMENT.ASSIGN.CM.ACTIONS";
 
         // PURCHASE ORDER DOCUMENT
         public static final String WORKGROUP_PURCHASING = "PURCHASING_GROUP";
         public static final String PURAP_DOCUMENT_PO_INITIATE_ACTION = "INITIATE_ACTION";
         public static final String PURAP_DOCUMENT_PO_ACTIONS = "ACTION_TAKING_GROUP";
+        // TODO PURAP: Below parameter not being used??
+//      public static final String WORKGROUP_TAXNBR_ACCESSIBLE = "WORKGROUP.TAXNBR_ACCESSIBLE";
 
         // ACCOUNTS PAYABLE DOCUMENT
         public static final String WORKGROUP_ACCOUNTS_PAYABLE = "ACCOUNTS_PAYABLE_GROUP";
-        public static final String WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR = "ACCOUNTS_PAYABLE_SUPERVISOR_GROUP";
+        //TODO PURAP: need an accounts payable supervisor group
+        public static final String WORKGROUP_ACCOUNTS_PAYABLE_SUPERVISOR = WORKGROUP_ACCOUNTS_PAYABLE;
     }
-
+    
     public static class WorkflowParameters {
         public static class RequisitionDocument {
             // config parameters
@@ -90,13 +77,10 @@ public class PurapParameterConstants implements ParameterKeyConstants {
             // Workgroups
             public static final String SEPARATION_OF_DUTIES_WORKGROUP_NAME = "SEPARATION_OF_DUTIES_GROUP";
         }
-
         public static class PurchaseOrderDocument {
             // Config parameter group names
-            public static final String CG_RESTRICTED_OBJECT_CODE_RULE_PARM_NM = "CG_ROUTE_OBJECT_CODES_BY_CHART";
-            public static final String NO_CG_RESTRICTED_OBJECT_CODE_RULE_PARM_NM = "NO_CG_ROUTE_OBJECT_CODES_BY_CHART";
+            public static final String CG_RESTRICTED_OBJECT_CODE_RULE_PARM_NM = "PurAp.CG_Restricted_Object_Codes";
             // Workgroups
-            public static final String CONTRACT_MANAGERS_WORKGROUP_NAME = "CONTRACT_MANAGERS_GROUP";
             public static final String INTERNAL_PURCHASING_WORKGROUP_NAME = "INTERNAL_PURCHASING_REVIEWERS_GROUP";
         }
     }

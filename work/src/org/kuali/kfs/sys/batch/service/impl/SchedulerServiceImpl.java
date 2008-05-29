@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.core.KualiModule;
 import org.kuali.core.service.DateTimeService;
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.core.service.KualiModuleService;
 import org.kuali.core.service.MailService;
 import org.kuali.kfs.KFSConstants;
@@ -34,11 +35,10 @@ import org.kuali.kfs.batch.BatchSpringContext;
 import org.kuali.kfs.batch.Job;
 import org.kuali.kfs.batch.JobDescriptor;
 import org.kuali.kfs.batch.JobListener;
-import org.kuali.kfs.batch.ScheduleStep;
 import org.kuali.kfs.batch.SimpleTriggerDescriptor;
 import org.kuali.kfs.batch.Step;
 import org.kuali.kfs.batch.TriggerDescriptor;
-import org.kuali.kfs.service.ParameterService;
+import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.service.SchedulerService;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -61,7 +61,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     private Scheduler scheduler;
     private JobListener jobListener;
     private KualiModuleService moduleService;
-    private ParameterService parameterService;
+    private KualiConfigurationService configurationService;
     private DateTimeService dateTimeService;
     private MailService mailService;
 
@@ -74,7 +74,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         jobStatuses.add(RUNNING_JOB_STATUS_CODE);
         jobStatuses.add(FAILED_JOB_STATUS_CODE);
     }
-
+    
     /**
      * @see org.kuali.kfs.service.SchedulerService#initialize()
      */
@@ -87,7 +87,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         catch (SchedulerException e) {
             throw new RuntimeException("SchedulerServiceImpl encountered an exception when trying to register the global job listener", e);
         }
-        for (String jobName : (List<String>) BatchSpringContext.getBatchComponents().get(JobDescriptor.class.getName())) {
+        for (String jobName : (List<String>)BatchSpringContext.getBatchComponents().get(JobDescriptor.class.getName())) {
             try {
                 loadJob(BatchSpringContext.getJobDescriptor(jobName));
             }
@@ -95,14 +95,14 @@ public class SchedulerServiceImpl implements SchedulerService {
                 LOG.error("unable to find job bean definition for job: " + ex.getBeanName(), ex);
             }
         }
-        for (String triggerName : (List<String>) BatchSpringContext.getBatchComponents().get(TriggerDescriptor.class.getName())) {
-            try {
-                addTrigger(BatchSpringContext.getTriggerDescriptor(triggerName).getTrigger());
+            for (String triggerName : (List<String>)BatchSpringContext.getBatchComponents().get(TriggerDescriptor.class.getName())) {
+                try {
+                    addTrigger(BatchSpringContext.getTriggerDescriptor(triggerName).getTrigger());
+                }
+                catch (NoSuchBeanDefinitionException ex) {
+                    LOG.error("unable to find trigger definition: " + ex.getBeanName(), ex);
+                }
             }
-            catch (NoSuchBeanDefinitionException ex) {
-                LOG.error("unable to find trigger definition: " + ex.getBeanName(), ex);
-            }
-        }
         for (KualiModule module : moduleService.getInstalledModules()) {
             LOG.info("Loading scheduled jobs for: " + module.getModuleId());
             for (String jobName : module.getJobNames()) {
@@ -138,9 +138,8 @@ public class SchedulerServiceImpl implements SchedulerService {
      */
     public void initializeJob(String jobName, Job job) {
         job.setSchedulerService(this);
-        job.setParameterService(parameterService);
+        job.setConfigurationService(configurationService);
         job.setSteps(BatchSpringContext.getJobDescriptor(jobName).getSteps());
-        job.setDateTimeService(dateTimeService);
     }
 
     /**
@@ -150,19 +149,19 @@ public class SchedulerServiceImpl implements SchedulerService {
         try {
             StringBuffer log = new StringBuffer("The schedule has incomplete jobs.");
             boolean hasIncompleteJob = false;
-            for (String scheduledJobName : scheduler.getJobNames(SCHEDULED_GROUP)) {
-                JobDetail scheduledJobDetail = getScheduledJobDetail(scheduledJobName);
-                boolean jobIsIncomplete = isIncomplete(scheduledJobDetail);
-                if (jobIsIncomplete) {
-                    log.append("\n\t").append(scheduledJobDetail.getFullName());
-                    hasIncompleteJob = true;
+                for (String scheduledJobName : scheduler.getJobNames(SCHEDULED_GROUP)) {
+                    JobDetail scheduledJobDetail = getScheduledJobDetail(scheduledJobName);
+                    boolean jobIsIncomplete = isIncomplete(scheduledJobDetail);
+                    if (jobIsIncomplete) {
+                        log.append("\n\t").append(scheduledJobDetail.getFullName());
+                        hasIncompleteJob = true;
+                    }
                 }
+                if (hasIncompleteJob) {
+                    LOG.info(log);
+                }
+                return hasIncompleteJob;
             }
-            if (hasIncompleteJob) {
-                LOG.info(log);
-            }
-            return hasIncompleteJob;
-        }
         catch (SchedulerException e) {
             throw new RuntimeException("Caught exception while getting list of jobs to check for incompletes", e);
         }
@@ -201,13 +200,12 @@ public class SchedulerServiceImpl implements SchedulerService {
         try {
             Date scheduleCutoffTimeTemp = scheduler.getTriggersOfJob(SCHEDULE_JOB_NAME, SCHEDULED_GROUP)[0].getPreviousFireTime();
             Calendar scheduleCutoffTime;
-            if (scheduleCutoffTimeTemp == null) {
+            if ( scheduleCutoffTimeTemp == null ) {
                 scheduleCutoffTime = dateTimeService.getCurrentCalendar();
+            } else {
+                scheduleCutoffTime = dateTimeService.getCalendar( scheduleCutoffTimeTemp );
             }
-            else {
-                scheduleCutoffTime = dateTimeService.getCalendar(scheduleCutoffTimeTemp);
-            }
-            String[] scheduleStepCutoffTime = StringUtils.split(parameterService.getParameterValue(ScheduleStep.class, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME), ":");
+            String[] scheduleStepCutoffTime = StringUtils.split(configurationService.getParameterValue(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.SCHEDULE_STEP, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME), ":");
             scheduleCutoffTime.set(Calendar.HOUR, Integer.parseInt(scheduleStepCutoffTime[0]));
             scheduleCutoffTime.set(Calendar.MINUTE, Integer.parseInt(scheduleStepCutoffTime[1]));
             scheduleCutoffTime.set(Calendar.SECOND, Integer.parseInt(scheduleStepCutoffTime[2]));
@@ -217,7 +215,7 @@ public class SchedulerServiceImpl implements SchedulerService {
             else {
                 scheduleCutoffTime.set(Calendar.AM_PM, Calendar.PM);
             }
-            if (parameterService.getIndicatorParameter(ScheduleStep.class, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY)) {
+            if (configurationService.getIndicatorParameter(KFSConstants.CORE_NAMESPACE, KFSConstants.Components.SCHEDULE_STEP, KFSConstants.SystemGroupParameterNames.BATCH_SCHEDULE_CUTOFF_TIME_IS_NEXT_DAY)) {
                 scheduleCutoffTime.add(Calendar.DAY_OF_YEAR, 1);
             }
             boolean isPastScheduleCutoffTime = dateTime.after(scheduleCutoffTime);
@@ -359,7 +357,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         }
         return false;
     }
-
+    
     private void addJob(JobDetail jobDetail) {
         try {
             LOG.info("Adding job: " + jobDetail.getFullName());
@@ -392,7 +390,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     private void scheduleJob(String groupName, String jobName, int startStep, int endStep, Date startTime, String requestorEmailAddress) {
         try {
             updateStatus(groupName, jobName, SchedulerService.SCHEDULED_JOB_STATUS_CODE);
-            SimpleTriggerDescriptor trigger = new SimpleTriggerDescriptor(jobName, groupName, jobName, dateTimeService);
+            SimpleTriggerDescriptor trigger = new SimpleTriggerDescriptor(jobName, groupName, jobName, getDateTimeService());
             trigger.setStartTime(startTime);
             Trigger qTrigger = trigger.getTrigger();
             qTrigger.getJobDataMap().put(JobListener.REQUESTOR_EMAIL_ADDRESS_KEY, requestorEmailAddress);
@@ -494,8 +492,13 @@ public class SchedulerServiceImpl implements SchedulerService {
         this.scheduler = scheduler;
     }
 
-    public void setParameterService(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    /**
+     * Sets the configurationService attribute value.
+     * 
+     * @param configurationService The configurationService to set.
+     */
+    public void setConfigurationService(KualiConfigurationService configurationService) {
+        this.configurationService = configurationService;
     }
 
     /**
@@ -523,6 +526,26 @@ public class SchedulerServiceImpl implements SchedulerService {
      */
     public void setJobListener(JobListener jobListener) {
         this.jobListener = jobListener;
+    }
+
+    public KualiConfigurationService getConfigurationService() {
+        return configurationService;
+    }
+
+    public DateTimeService getDateTimeService() {
+        return dateTimeService;
+    }
+
+    public JobListener getJobListener() {
+        return jobListener;
+    }
+
+    public KualiModuleService getModuleService() {
+        return moduleService;
+    }
+
+    public Scheduler getScheduler() {
+        return scheduler;
     }
 
     public List<BatchJobStatus> getJobs() {
@@ -682,6 +705,10 @@ public class SchedulerServiceImpl implements SchedulerService {
         BatchJobStatus job = getJob(groupName, jobName);
 
         return getNextStartTime(job);
+    }
+
+    public MailService getMailService() {
+        return mailService;
     }
 
     public void setMailService(MailService mailService) {

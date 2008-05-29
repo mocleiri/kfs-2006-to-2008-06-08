@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/fp/document/service/impl/CashReceiptCoverSheetServiceImpl.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +22,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DocumentTypeService;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.module.financial.document.authorization.CashReceiptDocumentAuthorizer;
+import org.kuali.module.financial.rules.CashReceiptDocumentRule;
 import org.kuali.module.financial.service.CashReceiptCoverSheetService;
 
 import com.lowagie.text.Document;
@@ -43,13 +45,13 @@ import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * Implementation of service for handling creation of the cover sheet of the <code>{@link CashReceiptDocument}</code>
+ * 
+ * 
  */
 public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetService {
     private static Log LOG = LogFactory.getLog(CashReceiptCoverSheetService.class);
-    
-    private DataDictionaryService dataDictionaryService;
-    private DocumentTypeService documentTypeService;
 
+    public static final String CR_COVERSHEET_TEMPLATE_RELATIVE_DIR = "templates/financial";
     public static final String CR_COVERSHEET_TEMPLATE_NM = "CashReceiptCoverSheetTemplate.pdf";
 
     private static final float LEFT_MARGIN = 45;
@@ -101,66 +103,39 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
 
 
     /**
-     * This method determines if cover sheet printing is allowed by reviewing the CashReceiptDocumentRule to see if the 
-     * cover sheet is printable.
-     * 
-     * @param crDoc The document the cover sheet is being printed for.
-     * @return True if the cover sheet is printable, false otherwise.
-     * 
      * @see org.kuali.module.financial.service.CashReceiptCoverSheetService#isCoverSheetPrintingAllowed(org.kuali.module.financial.document.CashReceiptDocument)
-     * @see org.kuali.module.financial.rules.CashReceiptDocumentRule#isCoverSheetPrintable(org.kuali.module.financial.document.CashReceiptFamilyBase)
      */
     public boolean isCoverSheetPrintingAllowed(CashReceiptDocument crDoc) {
-        CashReceiptDocumentAuthorizer authorizer = getCashReceiptDocumentAuthorizer(crDoc);
+        CashReceiptDocumentRule rule = (CashReceiptDocumentRule) SpringServiceLocator.getKualiRuleService().getBusinessRulesInstance(crDoc, CashReceiptDocumentRule.class);
 
-        return authorizer.isCoverSheetPrintable(crDoc);
-    }
-    
-    /**
-     * Gets the class of the CR's doc authorizer from the data dictionary and then returns an instance of that authorizer
-     * @param crDoc the document to authorize
-     * @return an instance of the proper authorization class
-     */
-    protected CashReceiptDocumentAuthorizer getCashReceiptDocumentAuthorizer(CashReceiptDocument crDoc) {
-        CashReceiptDocumentAuthorizer docAuthorizer = null;
-        
-        try {
-            Class documentAuthorizerClass = getDataDictionaryService().getDataDictionary().getDocumentEntry(getDocumentTypeService().getDocumentTypeNameByClass(crDoc.getClass())).getDocumentAuthorizerClass();
-            docAuthorizer = (CashReceiptDocumentAuthorizer)documentAuthorizerClass.newInstance();
-        }
-        catch (InstantiationException ie) {
-            throw new RuntimeException(ie);
-        }
-        catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
-        }
-        
-        return docAuthorizer;
+        return rule.isCoverSheetPrintable(crDoc);
     }
 
     /**
      * Generate a cover sheet for the <code>{@link CashReceiptDocument}</code>. An <code>{@link OutputStream}</code> is written
-     * to for the cover sheet.
+     * to for the coversheet.
      * 
-     * @param document The cash receipt document the cover sheet is for.
-     * @param searchPath The directory path to the template to be used to generate the cover sheet.
-     * @param returnStream The output stream the cover sheet will be written to.
-     * @exception DocumentException Thrown if the document provided is invalid, including null.
-     * @exception IOException Thrown if there is a problem writing to the output stream.
+     * @param document
+     * @param searchPath
+     * @param returnStream
+     * @exception DocumentException
+     * @exception IOException
      * @see org.kuali.core.module.financial.service.CashReceiptCoverSheetServiceImpl#generateCoverSheet(
      *      org.kuali.module.financial.documentCashReceiptDocument )
      */
     public void generateCoverSheet(CashReceiptDocument document, String searchPath, OutputStream returnStream) throws Exception {
 
         if (isCoverSheetPrintingAllowed(document)) {
-            ByteArrayOutputStream stamperStream = new ByteArrayOutputStream();
+            ByteArrayOutputStream stamperStream;
+            PdfWriter writer;
+            PdfReader reader;
+            Document pdfDoc;
 
+            stamperStream = new ByteArrayOutputStream();
             stampPdfFormValues(document, searchPath, stamperStream);
-            
-            PdfReader reader = new PdfReader(stamperStream.toByteArray());
-            Document pdfDoc = new Document(reader.getPageSize(FRONT_PAGE));
-            PdfWriter writer = PdfWriter.getInstance(pdfDoc, returnStream);
-
+            reader = new PdfReader(stamperStream.toByteArray());
+            pdfDoc = new Document(reader.getPageSize(FRONT_PAGE));
+            writer = PdfWriter.getInstance(pdfDoc, returnStream);
             pdfDoc.open();
             populateCheckDetail(document, writer, reader);
             pdfDoc.close();
@@ -172,9 +147,9 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
      * Use iText <code>{@link PdfStamper}</code> to stamp information from <code>{@link CashReceiptDocument}</code> into field
      * values on a PDF Form Template.
      * 
-     * @param document The cash receipt document the values will be pulled from.
-     * @param searchPath The directory path of the template to be used to generate the cover sheet.
-     * @param returnStream The output stream the cover sheet will be written to.
+     * @param document
+     * @param searchPath
+     * @param returnStream
      */
     private void stampPdfFormValues(CashReceiptDocument document, String searchPath, OutputStream returnStream) throws Exception {
         String templateName = CR_COVERSHEET_TEMPLATE_NM;
@@ -183,16 +158,16 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
             // populate form with document values
             PdfStamper stamper = new PdfStamper(new PdfReader(searchPath + File.separator + templateName), returnStream);
             AcroFields populatedCoverSheet = stamper.getAcroFields();
-            
+
             populatedCoverSheet.setField(DOCUMENT_NUMBER_FIELD, document.getDocumentNumber());
             populatedCoverSheet.setField(INITIATOR_FIELD, document.getDocumentHeader().getWorkflowDocument().getInitiatorNetworkId());
             populatedCoverSheet.setField(CREATED_DATE_FIELD, document.getDocumentHeader().getWorkflowDocument().getCreateDate().toString());
-            populatedCoverSheet.setField(AMOUNT_FIELD, document.getTotalDollarAmount().toString());
+            populatedCoverSheet.setField(AMOUNT_FIELD, document.getSumTotalAmount().toString());
             populatedCoverSheet.setField(ORG_DOC_NUMBER_FIELD, document.getDocumentHeader().getOrganizationDocumentNumber());
             populatedCoverSheet.setField(CAMPUS_FIELD, document.getCampusLocationCode());
             if (document.getDepositDate() != null) {
                 // This value won't be set until the CR document is
-                // deposited. A CR document is deposited only when it has
+                // deposited. A CR document is desposited only when it has
                 // been associated with a Cash Management Document (CMD)
                 // and with a Deposit within that CMD. And only when the
                 // CMD is submitted and FINAL, will the CR documents
@@ -203,16 +178,16 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
                 populatedCoverSheet.setField(DEPOSIT_DATE_FIELD, document.getDepositDate().toString());
             }
             populatedCoverSheet.setField(DESCRIPTION_FIELD, document.getDocumentHeader().getFinancialDocumentDescription());
-            populatedCoverSheet.setField(EXPLANATION_FIELD, document.getDocumentHeader().getExplanation());
+            populatedCoverSheet.setField(EXPLANATION_FIELD, document.getExplanation());
             populatedCoverSheet.setField(CHECKS_FIELD, document.getTotalCheckAmount().toString());
             populatedCoverSheet.setField(CURRENCY_FIELD, document.getTotalCashAmount().toString());
             populatedCoverSheet.setField(COIN_FIELD, document.getTotalCoinAmount().toString());
             /*
              * Fields currently not used. Pulling them out. These are advanced features of the CR which will come during the
              * post-3/31 timeframe populatedCoverSheet.setField( CREDIT_CARD_FIELD, document.getDocumentNumber() );
-             * populatedCoverSheet.setField( ADV_DEPOSIT_FIELD, document.getDocumentNumber() ); populatedCoverSheet.setField(
-             * CHANGE_OUT_FIELD, document.getDocumentNumber() ); populatedCoverSheet.setField( REVIV_FUND_OUT_FIELD,
-             * document.getDocumentNumber() );
+             * populatedCoverSheet.setField( ADV_DEPOSIT_FIELD, document.getDocumentNumber() );
+             * populatedCoverSheet.setField( CHANGE_OUT_FIELD, document.getDocumentNumber() );
+             * populatedCoverSheet.setField( REVIV_FUND_OUT_FIELD, document.getDocumentNumber() );
              */
 
             stamper.setFormFlattening(true);
@@ -224,54 +199,22 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
         }
     }
 
-    /**
-     * 
-     * This method writes the check number from the check provided to the PDF template.
-     * @param output The PDF output field the check number will be written to.
-     * @param check The check the check number will be retrieved from.
-     */
     private void writeCheckNumber(PdfContentByte output, Check check) {
         writeCheckField(output, CHECK_NUMBER_FIELD_POSITION, check.getCheckNumber().toString());
     }
 
-    /**
-     * 
-     * This method writes the check date from the check provided to the PDF template.
-     * @param output The PDF output field the check date will be written to.
-     * @param check The check the check date will be retrieved from.
-     */
     private void writeCheckDate(PdfContentByte output, Check check) {
         writeCheckField(output, CHECK_DATE_FIELD_POSITION, check.getCheckDate().toString());
     }
 
-    /**
-     * 
-     * This method writes the check description from the check provided to the PDF template.
-     * @param output The PDF output field the check description will be written to.
-     * @param check The check the check description will be retrieved from.
-     */
     private void writeCheckDescription(PdfContentByte output, Check check) {
         writeCheckField(output, CHECK_DESCRIPTION_FIELD_POSITION, check.getDescription());
     }
 
-    /**
-     * 
-     * This method writes the check amount from the check provided to the PDF template.
-     * @param output The PDF output field the check amount will be written to.
-     * @param check The check the check amount will be retrieved from.
-     */
     private void writeCheckAmount(PdfContentByte output, Check check) {
         writeCheckField(output, CHECK_AMOUNT_FIELD_POSITION, check.getAmount().toString());
     }
 
-    /**
-     * 
-     * This method writes out the value provided to the output provided and aligns the value outputted using the xPos float
-     * provided.
-     * @param output The content byte used to write out the field to the PDF template.
-     * @param xPos The x coordinate of the starting point on the document where the value will be written to.
-     * @param fieldValue The value to be written to the PDF cover sheet.
-     */
     private void writeCheckField(PdfContentByte output, float xPos, String fieldValue) {
         output.beginText();
         output.setTextMatrix(xPos, getCurrentRenderingYPosition());
@@ -280,28 +223,27 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
     }
 
     /**
-     * Read-only accessor for <code>{@link BaseFont}</code>. Used for creating the check detail information.  The font being 
-     * used is  Helvetica.
+     * Read-only accessor for <code>{@link BaseFont}</code>. Used for creating the check detail information
      * 
-     * @return A BaseFont object used to identify what type of font is used on the cover sheet.
+     * @return BaseFont
      */
     private BaseFont getTextFont() throws DocumentException, IOException {
         return BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
     }
 
     /**
-     * Defines a state of Y position for the text.
+     * Defines a state of Y positon for the text.
      * 
-     * @param y The y coordinate to be set.
+     * @param y
      */
     private void setCurrentRenderingYPosition(float y) {
         _yPos = y;
     }
 
     /**
-     * Defines a state of Y position for the text.
+     * Defines a state of Y positon for the text.
      * 
-     * @return The current y coordinate.
+     * @return float
      */
     private float getCurrentRenderingYPosition() {
         return _yPos;
@@ -310,9 +252,8 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
     /**
      * Method responsible for producing Check Detail section of the cover sheet. Not all Cash Receipt documents have checks.
      * 
-     * @param crDoc The CashReceipt document the cover sheet is being created for.
-     * @param writer The output writer used to write the check data to the PDF file.
-     * @param reader The input reader used to read data from the PDF file.
+     * @param pdfDoc
+     * @param crDoc
      */
     private void populateCheckDetail(CashReceiptDocument crDoc, PdfWriter writer, PdfReader reader) throws Exception {
         PdfContentByte content;
@@ -323,7 +264,9 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
         pageNumber = new ModifiableInteger(0);
         content = startNewPage(writer, reader, pageNumber);
 
-        for (Check current : crDoc.getChecks()) {
+        for (Iterator check_it = crDoc.getChecks().iterator(); check_it.hasNext();) {
+            Check current = (Check) check_it.next();
+
             writeCheckNumber(content, current);
             writeCheckDate(content, current);
             writeCheckDescription(content, current);
@@ -344,11 +287,11 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
      * Responsible for creating a new PDF page and workspace through <code>{@link PdfContentByte}</code> for direct writing to the
      * PDF.
      * 
-     * @param writer The PDF writer used to write to the new page with.
-     * @param reader The PDF reader used to read information from the PDF file.
-     * @param pageNumber The current number of pages in the PDF file, which will be incremented by one inside this method.
+     * @param writer
+     * @param reader
+     * @param pageNumber
      * 
-     * @return The PDFContentByte used to access the new PDF page.
+     * @return PdfContentByte
      * @exception DocumentException
      * @exception IOException
      */
@@ -380,142 +323,56 @@ public class CashReceiptCoverSheetServiceImpl implements CashReceiptCoverSheetSe
 
         return retval;
     }
-
-    /**
-     * Gets the dataDictionaryService attribute. 
-     * @return Returns the dataDictionaryService.
-     */
-    public DataDictionaryService getDataDictionaryService() {
-        return dataDictionaryService;
-    }
-
-    /**
-     * Sets the dataDictionaryService attribute value.
-     * @param dataDictionaryService The dataDictionaryService to set.
-     */
-    public void setDataDictionaryService(DataDictionaryService dataDictionaryService) {
-        this.dataDictionaryService = dataDictionaryService;
-    }
-
-    /**
-     * Gets the documentTypeService attribute. 
-     * @return Returns the documentTypeService.
-     */
-    public DocumentTypeService getDocumentTypeService() {
-        return documentTypeService;
-    }
-
-    /**
-     * Sets the documentTypeService attribute value.
-     * @param documentTypeService The documentTypeService to set.
-     */
-    public void setDocumentTypeService(DocumentTypeService documentTypeService) {
-        this.documentTypeService = documentTypeService;
-    }
 }
-
-
 
 /**
  * Utility class used to replace an <code>{@link Integer}</code> because an integer cannot be modified once it has been
  * instantiated.
+ * 
  */
 class ModifiableInteger {
     int _value;
 
-    /**
-     * 
-     * Constructs a ModifiableInteger object.
-     * @param val The initial value of the object.
-     */
     public ModifiableInteger(Integer val) {
         this(val.intValue());
     }
 
-    /**
-     * 
-     * Constructs a ModifiableInteger object.
-     * @param val The initial value of the object.
-     */
     public ModifiableInteger(int val) {
         setInt(val);
     }
 
-    /**
-     * 
-     * This method sets the local attribute to the value given.
-     * @param val The int value to be set.
-     */
     public void setInt(int val) {
         _value = val;
     }
 
-    /**
-     * 
-     * This method retrieves the value of the object.
-     * @return The int value of this object.
-     */
     public int getInt() {
         return _value;
     }
 
-    /**
-     * 
-     * This method increments the value of this class by one.
-     * @return An instance of this class with the value incremented by one.
-     */
     public ModifiableInteger increment() {
         _value++;
         return this;
     }
 
-    /**
-     * 
-     * This method increments the value of this class by the amount specified.
-     * @param inc The amount the class value should be incremented by.
-     * @return An instance of this class with the value incremented by the amount specified.
-     */
     public ModifiableInteger increment(int inc) {
         _value += inc;
         return this;
     }
 
-    /**
-     * 
-     * This method decrements the value of this class by one.
-     * @return An instance of this class with the value decremented by one.
-     */
     public ModifiableInteger decrement() {
         _value--;
         return this;
     }
 
-    /**
-     * 
-     * This method decrements the value of this class by the amount specified.
-     * @param dec The amount the class value should be decremented by.
-     * @return An instance of this class with the value decremented by the amount specified.
-     */
     public ModifiableInteger decrement(int dec) {
         _value -= dec;
         return this;
     }
 
-    /**
-     * 
-     * This method converts the value of this class and returns it as an Integer object.
-     * @return The value of this class formatted as an Integer.
-     */
     public Integer getInteger() {
         return new Integer(_value);
     }
 
-    /**
-     * This method generates and returns a String representation of this class.
-     * @return A string representation of this object.
-     * 
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return getInteger().toString();

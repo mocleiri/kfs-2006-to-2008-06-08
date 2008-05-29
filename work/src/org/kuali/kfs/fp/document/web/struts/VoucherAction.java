@@ -37,13 +37,12 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelper;
 import org.kuali.module.financial.bo.VoucherAccountingLineHelperBase;
 import org.kuali.module.financial.document.VoucherDocument;
-import org.kuali.module.financial.service.UniversityDateService;
 import org.kuali.module.financial.web.struts.form.VoucherForm;
 
 import edu.iu.uis.eden.exception.WorkflowException;
@@ -59,7 +58,7 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
     // these should not be used outside of this class
 
     /**
-     * We want to keep the bad data for the voucher.
+     *  We want to keep the bad data for the voucher.
      */
     @Override
     protected boolean revertAccountingLine(KualiAccountingDocumentFormBase transForm, int revertIndex, AccountingLine originalLine, AccountingLine brokenLine) {
@@ -72,10 +71,10 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
             String debitCreditCode = originalLine.getDebitCreditCode();
             if (StringUtils.equals(debitCreditCode, KFSConstants.GL_DEBIT_CODE)) {
                 helper.setDebit(originalLine.getAmount());
-                helper.setCredit(KualiDecimal.ZERO);
+                helper.setCredit(KFSConstants.ZERO);
             }
             else if (StringUtils.equals(debitCreditCode, KFSConstants.GL_CREDIT_CODE)) {
-                helper.setDebit(KualiDecimal.ZERO);
+                helper.setDebit(KFSConstants.ZERO);
                 helper.setCredit(originalLine.getAmount());
             }
             // intentionally ignoring the case where debitCreditCode is neither debit nor credir
@@ -87,9 +86,7 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
     /**
      * Overrides to call super, and then to repopulate the credit/debit amounts b/c the credit/debit code might change during a
      * voucher error correction.
-     * 
-     * @see org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase#correct(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase#correct(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
     public ActionForward correct(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -106,9 +103,7 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
     /**
      * Overrides parent to first populate the new source line with the correct debit or credit value, then it calls the parent's
      * implementation.
-     * 
-     * @see org.kuali.module.financial.web.struts.action.KualiFinancialDocumentActionBase#insertSourceLine(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.kuali.module.financial.web.struts.action.KualiFinancialDocumentActionBase#insertSourceLine(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
     public ActionForward insertSourceLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -134,9 +129,7 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
 
     /**
      * Overrides parent to remove the associated helper line also, and then it call the parent's implementation.
-     * 
-     * @see org.kuali.module.financial.web.struts.action.KualiFinancialDocumentActionBase#deleteSourceLine(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.kuali.module.financial.web.struts.action.KualiFinancialDocumentActionBase#deleteSourceLine(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
     public ActionForward deleteSourceLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -191,7 +184,7 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
                 selectedAccountingPeriod += voucherDocument.getPostingYear().toString();
             }
             else {
-                selectedAccountingPeriod += SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear().toString();
+                selectedAccountingPeriod += SpringServiceLocator.getUniversityDateService().getCurrentFiscalYear().toString();
             }
             voucherForm.setSelectedAccountingPeriod(selectedAccountingPeriod);
         }
@@ -249,11 +242,11 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
             if (StringUtils.isNotBlank(sourceAccountingLine.getDebitCreditCode())) {
                 if (sourceAccountingLine.getDebitCreditCode().equals(KFSConstants.GL_DEBIT_CODE)) {
                     avAcctLineHelperForm.setDebit(sourceAccountingLine.getAmount());
-                    avAcctLineHelperForm.setCredit(KualiDecimal.ZERO);
+                    avAcctLineHelperForm.setCredit(KFSConstants.ZERO);
                 }
                 else if (sourceAccountingLine.getDebitCreditCode().equals(KFSConstants.GL_CREDIT_CODE)) {
                     avAcctLineHelperForm.setCredit(sourceAccountingLine.getAmount());
-                    avAcctLineHelperForm.setDebit(KualiDecimal.ZERO);
+                    avAcctLineHelperForm.setDebit(KFSConstants.ZERO);
                 }
             }
         }
@@ -281,7 +274,7 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
         VoucherDocument avDoc = vForm.getVoucherDocument();
 
         String question = request.getParameter(KFSConstants.QUESTION_INST_ATTRIBUTE_NAME);
-        KualiConfigurationService kualiConfiguration = SpringContext.getBean(KualiConfigurationService.class);
+        KualiConfigurationService kualiConfiguration = SpringServiceLocator.getKualiConfigurationService();
 
         if (question == null) { // question hasn't been asked
             String currencyFormattedDebitTotal = (String) new CurrencyFormatter().format(avDoc.getDebitTotal());
@@ -363,16 +356,4 @@ public class VoucherAction extends KualiAccountingDocumentActionBase {
         populateAllVoucherAccountingLineHelpers((VoucherForm) form);
     }
 
-    /**
-     * Overridden to reset the available and selected accounting periods on the form, so that copies are moved forward to the current accounting period correctly
-     * @see org.kuali.kfs.web.struts.action.KualiAccountingDocumentActionBase#copy(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward copy(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ActionForward forward = super.copy(mapping, form, request, response);
-        VoucherForm voucherForm = (VoucherForm)form;
-        voucherForm.populateAccountingPeriodListForRendering();
-        voucherForm.populateDefaultSelectedAccountingPeriod();
-        return forward;
-    }
 }

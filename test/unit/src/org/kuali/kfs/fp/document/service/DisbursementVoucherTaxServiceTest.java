@@ -15,23 +15,26 @@
  */
 package org.kuali.module.financial.service;
 
+import static org.kuali.kfs.util.SpringServiceLocator.getDisbursementVoucherTaxService;
+
 import java.util.List;
 
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.bo.SourceAccountingLine;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.bo.DisbursementVoucherNonResidentAlienTax;
 import org.kuali.module.financial.bo.DisbursementVoucherPayeeDetail;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the DisbursementVoucherTax service.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
     private DisbursementVoucherDocument dvDocument;
 
@@ -62,13 +65,13 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
     public void testValidateNRA() throws Exception {
         // check tax is not created for attributes that it should not be generated for
         dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimal(100));
-        dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(KualiDecimal.ZERO);
-        dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(KualiDecimal.ZERO);
+        dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(new KualiDecimal(0));
+        dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimal(0));
 
         // should not be generated for non-reportable
         dvDocument.getDvNonResidentAlienTax().setIncomeClassCode("N");
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        List newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        List newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.isEmpty());
         assertTrue(GlobalVariables.getErrorMap().size() == 1);
         GlobalVariables.getErrorMap().clear();
@@ -76,8 +79,8 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         // should not be generated for foreign source
         dvDocument.getDvNonResidentAlienTax().setIncomeClassCode("F");
         dvDocument.getDvNonResidentAlienTax().setForeignSourceIncomeCode(true);
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.isEmpty());
         assertTrue(GlobalVariables.getErrorMap().size() == 1);
         GlobalVariables.getErrorMap().clear();
@@ -86,8 +89,8 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         dvDocument.getDvNonResidentAlienTax().setIncomeClassCode("F");
         dvDocument.getDvNonResidentAlienTax().setForeignSourceIncomeCode(false);
         dvDocument.getDvNonResidentAlienTax().setIncomeTaxTreatyExemptCode(true);
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.isEmpty());
         assertTrue(GlobalVariables.getErrorMap().size() == 1);
         GlobalVariables.getErrorMap().clear();
@@ -97,20 +100,20 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         dvDocument.getDvNonResidentAlienTax().setForeignSourceIncomeCode(false);
         dvDocument.getDvNonResidentAlienTax().setIncomeTaxTreatyExemptCode(false);
         dvDocument.getDvNonResidentAlienTax().setReferenceFinancialDocumentNumber("foo");
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.isEmpty());
         assertTrue(GlobalVariables.getErrorMap().size() == 1);
         GlobalVariables.getErrorMap().clear();
 
         // should not be generated if check amount is 0
-        dvDocument.setDisbVchrCheckTotalAmount(KualiDecimal.ZERO);
+        dvDocument.setDisbVchrCheckTotalAmount(new KualiDecimal(0));
         dvDocument.getDvNonResidentAlienTax().setIncomeClassCode("F");
         dvDocument.getDvNonResidentAlienTax().setForeignSourceIncomeCode(false);
         dvDocument.getDvNonResidentAlienTax().setIncomeTaxTreatyExemptCode(false);
         dvDocument.getDvNonResidentAlienTax().setReferenceFinancialDocumentNumber("");
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.isEmpty());
         assertTrue(GlobalVariables.getErrorMap().size() == 1);
         GlobalVariables.getErrorMap().clear();
@@ -119,6 +122,7 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
 
     /**
      * Test generation and clearing of nra tax lines.
+     * 
      */
     public void testGenerateNRATaxLines() {
         KualiDecimal orginalCheckAmount = new KualiDecimal(100);
@@ -131,8 +135,8 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(new KualiDecimal(3.4));
         dvDocument.getDvNonResidentAlienTax().setPostalCountryCode("USA");
 
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        List newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        List newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.size() == 2);
         assertTrue(newTaxNumbers.get(0).equals(new Integer(2)));
         assertTrue(newTaxNumbers.get(1).equals(new Integer(3)));
@@ -140,14 +144,14 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         assertTrue(dvDocument.getSourceAccountingLines().size() == 3);
 
         // test clearning
-        SpringContext.getBean(DisbursementVoucherTaxService.class).clearNRATaxLines(dvDocument);
+        getDisbursementVoucherTaxService().clearNRATaxLines(dvDocument);
         assertEquals(1, dvDocument.getSourceAccountingLines().size());
         assertEquals("Check total credited correctly", new KualiDecimal(100), dvDocument.getDisbVchrCheckTotalAmount());
         assertEquals("Source total does not match check total", new KualiDecimal(100), dvDocument.getSourceTotal());
 
 
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.size() == 2);
         assertTrue(newTaxNumbers.get(0).equals(new Integer(4)));
         assertTrue(newTaxNumbers.get(1).equals(new Integer(5)));
@@ -157,7 +161,7 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         // validate debit of check total amount and accounting lines
         assertEquals("Check total not debited correctly", new KualiDecimal(82.6), dvDocument.getDisbVchrCheckTotalAmount());
         assertEquals("Source total does not match check total", new KualiDecimal(82.6), dvDocument.getSourceTotal());
-        SpringContext.getBean(DisbursementVoucherTaxService.class).clearNRATaxLines(dvDocument);
+        getDisbursementVoucherTaxService().clearNRATaxLines(dvDocument);
     }
 
     /**
@@ -187,11 +191,12 @@ public class DisbursementVoucherTaxServiceTest extends KualiTestBase {
         dvDocument.getDvNonResidentAlienTax().setFederalIncomeTaxPercent(federalTax);
         dvDocument.getDvNonResidentAlienTax().setStateIncomeTaxPercent(stateTax);
 
-        SpringContext.getBean(DisbursementVoucherTaxService.class).processNonResidentAlienTax(dvDocument);
-        List newTaxNumbers = SpringContext.getBean(DisbursementVoucherTaxService.class).getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        getDisbursementVoucherTaxService().processNonResidentAlienTax(dvDocument);
+        getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
+        List newTaxNumbers = getDisbursementVoucherTaxService().getNRATaxLineNumbers(dvDocument.getDvNonResidentAlienTax().getFinancialDocumentAccountingLineText());
         assertTrue(newTaxNumbers.size() == 3);
         assertEquals("Check total does not match original amount", checkAmount, dvDocument.getDisbVchrCheckTotalAmount());
         assertEquals("Source total does not match original amount", checkAmount, dvDocument.getSourceTotal());
-        SpringContext.getBean(DisbursementVoucherTaxService.class).clearNRATaxLines(dvDocument);
+        getDisbursementVoucherTaxService().clearNRATaxLines(dvDocument);
     }
 }

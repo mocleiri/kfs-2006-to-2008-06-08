@@ -15,19 +15,22 @@
  */
 package org.kuali.module.financial.service;
 
+import static org.kuali.kfs.util.SpringServiceLocator.getDisbursementVoucherTravelService;
+import static org.kuali.rice.KNSServiceLocator.getDateTimeService;
+
 import java.sql.Timestamp;
 
-import org.kuali.core.service.DateTimeService;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.financial.document.DisbursementVoucherDocument;
-import org.kuali.test.ConfigureContext;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
 
 /**
  * This class tests the DisbursementVoucherTravel service.
+ * 
+ * 
  */
-@ConfigureContext
+@WithTestSpringContext
 public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
     private DisbursementVoucherDocument dvDocument;
 
@@ -44,7 +47,7 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 10:00 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 5:00 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), KualiDecimal.ZERO);
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 0:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/23/2006 0:01 AM");
@@ -88,11 +91,11 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 3:00 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 6:00 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), KualiDecimal.ZERO);
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 5:00 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 5:00 PM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), KualiDecimal.ZERO);
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0.00));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 4:59 AM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/21/2006 5:00 PM");
@@ -104,7 +107,7 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 11:59 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 6:00 AM");
-        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), KualiDecimal.ZERO);
+        runPerDiemTest(dvDocument.getDvNonEmployeeTravel().getDvPerdiemStartDttmStamp(), dvDocument.getDvNonEmployeeTravel().getDvPerdiemEndDttmStamp(), new KualiDecimal(10), new KualiDecimal(0));
 
         dvDocument.getDvNonEmployeeTravel().setPerDiemStartDateTime("04/21/2006 6:01 PM");
         dvDocument.getDvNonEmployeeTravel().setPerDiemEndDateTime("04/22/2006 5:59 AM");
@@ -117,22 +120,24 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
     }
 
     private void runPerDiemTest(Timestamp startTime, Timestamp endTime, KualiDecimal perDiemRate, KualiDecimal expectedPerDiemAmount) {
-        assertEquals("Per diem amount not correct ", expectedPerDiemAmount, SpringContext.getBean(DisbursementVoucherTravelService.class).calculatePerDiemAmount(startTime, endTime, perDiemRate));
+        assertEquals("Per diem amount not correct ", expectedPerDiemAmount, getDisbursementVoucherTravelService().calculatePerDiemAmount(startTime, endTime, perDiemRate));
     }
 
     /**
      * Tests the calculation of travel mileage amount. This is testing against the mileage rates defined currently, we need to find
-     * a way to fix this for when they change: 0-500 0.375 500-3000 0.18 3000 - 0
+     * a way to fix this for when they change:
+     * 
+     * 0-500 0.375 500-3000 0.18 3000 - 0
      * 
      * @throws Exception
      */
     public void testCalculateMileageAmount() throws Exception {
-        Timestamp effectiveDate = SpringContext.getBean(DateTimeService.class).getCurrentTimestamp();
+        Timestamp effectiveDate = getDateTimeService().getCurrentTimestamp();
 
-        runMileageAmountTest(new Integer(0), KualiDecimal.ZERO, effectiveDate);
+        runMileageAmountTest(new Integer(0), new KualiDecimal(0), effectiveDate);
         runMileageAmountTest(new Integer(1), new KualiDecimal(.38), effectiveDate);
         runMileageAmountTest(new Integer(10), new KualiDecimal(3.75), effectiveDate);
-        runMileageAmountTest(new Integer(15), new KualiDecimal(5.63), effectiveDate);
+        runMileageAmountTest(new Integer(15), new KualiDecimal(5.62), effectiveDate);
         runMileageAmountTest(new Integer(100), new KualiDecimal(37.5), effectiveDate);
         runMileageAmountTest(new Integer(200), new KualiDecimal(75.00), effectiveDate);
         runMileageAmountTest(new Integer(380), new KualiDecimal(142.5), effectiveDate);
@@ -148,7 +153,7 @@ public class DisbursementVoucherTravelServiceTest extends KualiTestBase {
     }
 
     private void runMileageAmountTest(Integer totalMiles, KualiDecimal expectedMileageAmount, Timestamp effectiveDate) {
-        assertEquals("Mileage amount not correct ", expectedMileageAmount, SpringContext.getBean(DisbursementVoucherTravelService.class).calculateMileageAmount(totalMiles, effectiveDate));
+        assertEquals("Mileage amount not correct ", expectedMileageAmount, getDisbursementVoucherTravelService().calculateMileageAmount(totalMiles, effectiveDate));
     }
 
 

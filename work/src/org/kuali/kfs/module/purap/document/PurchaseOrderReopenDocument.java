@@ -16,18 +16,11 @@
 
 package org.kuali.module.purap.document;
 
-import static org.kuali.kfs.KFSConstants.GL_DEBIT_CODE;
-
 import java.util.ArrayList;
 
 import org.kuali.core.rule.event.KualiDocumentEvent;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
-import org.kuali.module.purap.PurapConstants.PurapDocTypeCodes;
 import org.kuali.module.purap.PurapWorkflowConstants.NodeDetails;
 import org.kuali.module.purap.service.PurapGeneralLedgerService;
 import org.kuali.module.purap.service.PurapService;
@@ -98,18 +91,4 @@ public class PurchaseOrderReopenDocument extends PurchaseOrderDocument {
         return null;
     }
 
-    /**
-     * @see org.kuali.module.purap.rules.PurapAccountingDocumentRuleBase#customizeExplicitGeneralLedgerPendingEntry(org.kuali.kfs.document.AccountingDocument,
-     *      org.kuali.kfs.bo.AccountingLine, org.kuali.kfs.bo.GeneralLedgerPendingEntry)
-     */
-    @Override
-    public void customizeExplicitGeneralLedgerPendingEntry(GeneralLedgerPendingEntrySourceDetail postable, GeneralLedgerPendingEntry explicitEntry) {
-        super.customizeExplicitGeneralLedgerPendingEntry(postable, explicitEntry);
- 
-        SpringContext.getBean(PurapGeneralLedgerService.class).customizeGeneralLedgerPendingEntry(this, (AccountingLine)postable, explicitEntry, getPurapDocumentIdentifier(), GL_DEBIT_CODE, PurapDocTypeCodes.PO_DOCUMENT, true);
-
-        // don't think i should have to override this, but default isn't getting the right PO doc
-        explicitEntry.setFinancialDocumentTypeCode(PurapDocTypeCodes.PO_REOPEN_DOCUMENT);
-        explicitEntry.setFinancialDocumentApprovedCode(KFSConstants.PENDING_ENTRY_APPROVED_STATUS_CODE.APPROVED);
-    }
 }

@@ -18,21 +18,20 @@ package org.kuali.module.cg.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.Org;
+import org.kuali.module.kra.routingform.bo.RoutingFormOrganization;
 
 /**
- * Represents a relationship between a {@link Proposal} and an {@Org}.
+ * 
  */
-public class ProposalOrganization extends PersistableBusinessObjectBase implements Primaryable, Inactivateable {
+public class ProposalOrganization extends PersistableBusinessObjectBase implements Primaryable {
 
     private String chartOfAccountsCode;
     private String organizationCode;
     private Long proposalNumber;
     private boolean proposalPrimaryOrganizationIndicator;
-    private boolean active = true;
 
     private Org organization;
     private Chart chartOfAccounts;
@@ -41,12 +40,14 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
      * Default constructor.
      */
     public ProposalOrganization() {
+
     }
 
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
      * @return Returns the chartOfAccountsCode
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -56,6 +57,7 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
      * Sets the chartOfAccountsCode attribute.
      * 
      * @param chartOfAccountsCode The chartOfAccountsCode to set.
+     * 
      */
     public void setChartOfAccountsCode(String chartOfAccountsCode) {
         this.chartOfAccountsCode = chartOfAccountsCode;
@@ -66,6 +68,7 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
      * Gets the organizationCode attribute.
      * 
      * @return Returns the organizationCode
+     * 
      */
     public String getOrganizationCode() {
         return organizationCode;
@@ -75,6 +78,7 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
      * Sets the organizationCode attribute.
      * 
      * @param organizationCode The organizationCode to set.
+     * 
      */
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
@@ -85,6 +89,7 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
      * Gets the proposalNumber attribute.
      * 
      * @return Returns the proposalNumber
+     * 
      */
     public Long getProposalNumber() {
         return proposalNumber;
@@ -94,6 +99,7 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
      * Sets the proposalNumber attribute.
      * 
      * @param proposalNumber The proposalNumber to set.
+     * 
      */
     public void setProposalNumber(Long proposalNumber) {
         this.proposalNumber = proposalNumber;
@@ -121,27 +127,10 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
     }
 
     /**
-     * Gets the active attribute.
-     * 
-     * @return Returns the active attribute.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets the active attribute value.
-     * 
-     * @param active true if the instance is active, false otherwise
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
      * Gets the organization attribute.
      * 
      * @return Returns the organization
+     * 
      */
     public Org getOrganization() {
         return organization;
@@ -161,6 +150,7 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
      * Gets the chartOfAccounts attribute.
      * 
      * @return Returns the chartOfAccounts
+     * 
      */
     public Chart getChartOfAccounts() {
         return chartOfAccounts;
@@ -191,7 +181,6 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
 
     /**
      * This can be displayed by Proposal.xml lookup results.
-     * 
      * @see Object#toString()
      */
     @Override
@@ -199,5 +188,4 @@ public class ProposalOrganization extends PersistableBusinessObjectBase implemen
         // todo: get "primary" and "secondary" from ApplicationResources.properties via KFSKeyConstants?
         return getChartOfAccountsCode() + "-" + getOrganizationCode() + " " + (isProposalPrimaryOrganizationIndicator() ? "primary" : "secondary");
     }
-
 }
