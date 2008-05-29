@@ -1,85 +1,66 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.financial.document;
-
-import static org.kuali.core.util.AssertionUtils.assertThat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.core.service.DateTimeService;
-import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
-import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
+import org.kuali.Constants.DepositConstants;
+import org.kuali.core.document.FinancialDocumentBase;
+import org.kuali.core.service.impl.DocumentServiceImpl;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.workflow.service.KualiWorkflowDocument;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.KFSConstants.DepositConstants;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.document.AccountingDocumentBase;
-import org.kuali.kfs.document.GeneralLedgerPostingDocumentBase;
-import org.kuali.kfs.document.GeneralLedgerPendingEntrySource;
-import org.kuali.kfs.service.AccountingDocumentRuleHelperService;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryGenerationProcess;
 import org.kuali.module.financial.bo.CashDrawer;
-import org.kuali.module.financial.bo.CashieringItemInProcess;
-import org.kuali.module.financial.bo.CashieringTransaction;
-import org.kuali.module.financial.bo.Check;
 import org.kuali.module.financial.bo.Deposit;
-import org.kuali.module.financial.service.CashDrawerService;
-import org.kuali.module.financial.service.CashManagementService;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
  * This class represents the CashManagementDocument.
+ * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class CashManagementDocument extends GeneralLedgerPostingDocumentBase implements GeneralLedgerPendingEntrySource {
+public class CashManagementDocument extends FinancialDocumentBase {
     private static final long serialVersionUID = 7475843770851900297L;
     private static Logger LOG = Logger.getLogger(CashManagementDocument.class);
 
     private String workgroupName;
     private String referenceFinancialDocumentNumber;
 
-    private List<Deposit> deposits;
+    private List deposits;
 
-    private List<Check> checks;
-
-    private transient CashieringTransaction currentTransaction;
-    private CashDrawer cashDrawer;
-    
-    private final static String GENERAL_LEDGER_POSTING_HELPER_BEAN_ID = "kfsGenericGeneralLedgerPostingHelper";
 
     /**
      * Default constructor.
      */
     public CashManagementDocument() {
         super();
-        deposits = new ArrayList<Deposit>();
-        checks = new ArrayList<Check>();
-        this.resetCurrentTransaction();
+        deposits = new ArrayList();
     }
 
 
@@ -120,7 +101,10 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
      * Derives and returns the cash drawer status for the document's workgroup
      */
     public String getCashDrawerStatus() {
-        return getCashDrawer().getStatusCode();
+        CashDrawer drawer = SpringServiceLocator.getCashDrawerService().getByWorkgroupName(getWorkgroupName(), true);
+        String statusCode = drawer.getStatusCode();
+
+        return statusCode;
     }
 
     /**
@@ -142,7 +126,7 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
     /**
      * @return current List of Deposits
      */
-    public List<Deposit> getDeposits() {
+    public List getDeposits() {
         return deposits;
     }
 
@@ -151,7 +135,7 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
      * 
      * @param deposits
      */
-    public void setDeposits(List<Deposit> deposits) {
+    public void setDeposits(List deposits) {
         this.deposits = deposits;
     }
 
@@ -224,6 +208,7 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
         }
     }
 
+
     /**
      * @see org.kuali.core.document.DocumentBase#buildListOfDeletionAwareLists()
      */
@@ -236,71 +221,6 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
         return managedLists;
     }
 
-
-    /**
-     * Gets the cashDrawer attribute.
-     * 
-     * @return Returns the cashDrawer.
-     */
-    public CashDrawer getCashDrawer() {
-        return cashDrawer;
-        // return cashDrawerService.getByWorkgroupName(this.workgroupName, false);
-    }
-
-    /**
-     * Sets the cashDrawer attribute
-     * 
-     * @param cd the cash drawer to set
-     */
-    public void setCashDrawer(CashDrawer cd) {
-        cashDrawer = cd;
-    }
-
-    /**
-     * Gets the currentTransaction attribute.
-     * 
-     * @return Returns the currentTransaction.
-     */
-    public CashieringTransaction getCurrentTransaction() {
-        return currentTransaction;
-    }
-
-
-    /**
-     * Sets the currentTransaction attribute value.
-     * 
-     * @param currentTransaction The currentTransaction to set.
-     */
-    public void setCurrentTransaction(CashieringTransaction currentTransaction) {
-        this.currentTransaction = currentTransaction;
-    }
-
-    /**
-     * Gets the checks attribute.
-     * 
-     * @return Returns the checks.
-     */
-    public List<Check> getChecks() {
-        return checks;
-    }
-
-    /**
-     * Sets the checks attribute value.
-     * 
-     * @param checks The checks to set.
-     */
-    public void setChecks(List<Check> checks) {
-        this.checks = checks;
-    }
-
-    /**
-     * Add a check to the cash management document
-     * 
-     * @param check
-     */
-    public void addCheck(Check check) {
-        this.checks.add(check);
-    }
 
     /**
      * @see org.kuali.core.document.DocumentBase#handleRouteStatusChange()
@@ -317,11 +237,11 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
 
         if (kwd.stateIsProcessed()) {
             // all approvals have been processed, finalize everything
-            SpringContext.getBean(CashManagementService.class).finalizeCashManagementDocument(this);
+            SpringServiceLocator.getCashManagementService().finalizeCashManagementDocument(this);
         }
         else if (kwd.stateIsCanceled() || kwd.stateIsDisapproved()) {
             // document has been canceled or disapproved
-            SpringContext.getBean(CashManagementService.class).cancelCashManagementDocument(this);
+            SpringServiceLocator.getCashManagementService().cancelCashManagementDocument(this);
         }
     }
 
@@ -342,20 +262,6 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
         }
     }
 
-    /**
-     * @see org.kuali.core.document.DocumentBase#processAfterRetrieve()
-     */
-    @Override
-    public void processAfterRetrieve() {
-        super.processAfterRetrieve();
-        // grab the cash drawer
-        if (this.getWorkgroupName() != null) {
-            this.cashDrawer = SpringContext.getBean(CashDrawerService.class).getByWorkgroupName(this.getWorkgroupName(), false);
-            this.resetCurrentTransaction();
-        }
-        SpringContext.getBean(CashManagementService.class).populateCashDetailsForDeposit(this);
-    }
-
 
     /* utility methods */
     /**
@@ -364,177 +270,8 @@ public class CashManagementDocument extends GeneralLedgerPostingDocumentBase imp
     @Override
     protected LinkedHashMap toStringMapper() {
         LinkedHashMap m = new LinkedHashMap();
-        m.put(KFSPropertyConstants.DOCUMENT_NUMBER, getDocumentNumber());
+        m.put("financialDocumentNumber", getFinancialDocumentNumber());
         m.put("workgroupName", getWorkgroupName());
         return m;
     }
-
-    /**
-     * This method creates a clean current transaction to be the new current transaction on this document
-     */
-    public void resetCurrentTransaction() {
-        if (this.currentTransaction != null) {
-            this.currentTransaction.setTransactionEnded(SpringContext.getBean(DateTimeService.class).getCurrentDate());
-        }
-        currentTransaction = new CashieringTransaction(workgroupName, referenceFinancialDocumentNumber);
-        if (this.getWorkgroupName() != null) {
-            List<CashieringItemInProcess> openItemsInProcess = SpringContext.getBean(CashManagementService.class).getOpenItemsInProcess(this);
-            if (openItemsInProcess != null) {
-                currentTransaction.setOpenItemsInProcess(openItemsInProcess);
-            }
-            currentTransaction.setNextCheckSequenceId(SpringContext.getBean(CashManagementService.class).selectNextAvailableCheckLineNumber(this.documentNumber));
-        }
-    }
-
-
-    /**
-     * Does nothing, as there aren't any accounting lines on this doc, so no GeneralLedgerPendingEntrySourceDetail create GLPEs
-     * @see org.kuali.kfs.document.GeneralLedgerPostingHelper#customizeExplicitGeneralLedgerPendingEntry(org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail, org.kuali.kfs.bo.GeneralLedgerPendingEntry)
-     */
-    public void customizeExplicitGeneralLedgerPendingEntry(GeneralLedgerPendingEntrySourceDetail postable, GeneralLedgerPendingEntry explicitEntry) {}
-
-
-    /**
-     * Does nothing save return true, as this document has no GLPEs created from a source of GeneralLedgerPostables
-     * @see org.kuali.kfs.document.GeneralLedgerPostingHelper#customizeOffsetGeneralLedgerPendingEntry(org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail, org.kuali.kfs.bo.GeneralLedgerPendingEntry, org.kuali.kfs.bo.GeneralLedgerPendingEntry)
-     */
-    public boolean customizeOffsetGeneralLedgerPendingEntry(GeneralLedgerPendingEntrySourceDetail accountingLine, GeneralLedgerPendingEntry explicitEntry, GeneralLedgerPendingEntry offsetEntry) {
-        return true;
-    }
-
-
-    /**
-     * Returns an empty list as this document has no GeneralLedgerPostables
-     * @see org.kuali.kfs.document.GeneralLedgerPostingHelper#getGeneralLedgerPostables()
-     */
-    public List<GeneralLedgerPendingEntrySourceDetail> getGeneralLedgerPostables() {
-        return new ArrayList<GeneralLedgerPendingEntrySourceDetail>();
-    }
-
-
-    /**
-     * Always returns true, as there are no GeneralLedgerPostables to create GLPEs
-     * @see org.kuali.kfs.document.GeneralLedgerPostingHelper#isDebit(org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail)
-     */
-    public boolean isDebit(GeneralLedgerPendingEntrySourceDetail postable) {
-        return true;
-    }
-
-
-    /**
-     * Generates bank offset GLPEs for deposits, if enabled.
-     * 
-     * @param financialDocument submitted accounting document
-     * @param sequenceHelper helper class to keep track of sequence of general ledger pending entries
-     * @see org.kuali.kfs.document.GeneralLedgerPostingHelper#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
-     */
-    public boolean generateDocumentGeneralLedgerPendingEntries(GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
-        boolean success = true;
-        if (isBankCashOffsetEnabled()) {
-            GeneralLedgerPendingEntryService glpeService = SpringContext.getBean(GeneralLedgerPendingEntryService.class);
-            Integer universityFiscalYear = getUniversityFiscalYear();
-            int interimDepositNumber = 1;
-            for (Iterator iterator = getDeposits().iterator(); iterator.hasNext();) {
-                // todo: getDeposits() should return List<Deposit> not List
-                Deposit deposit = (Deposit) iterator.next();
-                deposit.refreshReferenceObject(KFSPropertyConstants.BANK_ACCOUNT);
-
-                GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
-                if (!glpeService.populateBankOffsetGeneralLedgerPendingEntry(deposit.getBankAccount(), deposit.getDepositAmount(), this, universityFiscalYear, sequenceHelper, bankOffsetEntry, KFSConstants.CASH_MANAGEMENT_DEPOSIT_ERRORS)) {
-                    success = false;
-                    LOG.warn("Skipping ledger entries for depost " + deposit.getDepositTicketNumber() + ".");
-                    continue; // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at
-                    // all.
-                }
-                bankOffsetEntry.setTransactionLedgerEntryDescription(createDescription(deposit, interimDepositNumber++));
-                getGeneralLedgerPendingEntries().add(bankOffsetEntry);
-                sequenceHelper.increment();
-
-                GeneralLedgerPendingEntry offsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(bankOffsetEntry);
-                success &= glpeService.populateOffsetGeneralLedgerPendingEntry(universityFiscalYear, bankOffsetEntry, sequenceHelper, offsetEntry);
-                getGeneralLedgerPendingEntries().add(offsetEntry);
-                sequenceHelper.increment();
-                /*
-                 * Only the final deposit will have non-null currency and coin. If this is the final deposit, generate the ledger
-                 * entries for currency and coin.
-                 */
-                if (deposit.getDepositTypeCode().equals(KFSConstants.DocumentStatusCodes.CashReceipt.FINAL)) {
-                    KualiDecimal totalCoinCurrencyAmount = deposit.getDepositedCurrency().getTotalAmount().add(deposit.getDepositedCoin().getTotalAmount());
-                    GeneralLedgerPendingEntry coinCurrencyBankOffsetEntry = new GeneralLedgerPendingEntry();
-                    if (!glpeService.populateBankOffsetGeneralLedgerPendingEntry(deposit.getBankAccount(), totalCoinCurrencyAmount, this, universityFiscalYear, sequenceHelper, coinCurrencyBankOffsetEntry, KFSConstants.CASH_MANAGEMENT_DEPOSIT_ERRORS)) {
-                        success = false;
-                        // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at all.
-                        LOG.warn("Skipping ledger entries for coin and currency.");
-                        continue;
-                    }
-
-                    coinCurrencyBankOffsetEntry.setTransactionLedgerEntryDescription(createDescription(deposit, interimDepositNumber++));
-                    getGeneralLedgerPendingEntries().add(coinCurrencyBankOffsetEntry);
-                    sequenceHelper.increment();
-
-                    GeneralLedgerPendingEntry coinCurrnecyOffsetEntry = (GeneralLedgerPendingEntry) ObjectUtils.deepCopy(coinCurrencyBankOffsetEntry);
-                    success &= glpeService.populateOffsetGeneralLedgerPendingEntry(universityFiscalYear, coinCurrencyBankOffsetEntry, sequenceHelper, coinCurrnecyOffsetEntry);
-                    getGeneralLedgerPendingEntries().add(coinCurrnecyOffsetEntry);
-                    sequenceHelper.increment();
-
-                }
-
-            }
-
-        }
-        return success;
-    }
-    
-    /**
-     * Create description for deposit
-     * 
-     * @param deposit deposit from cash management document
-     * @param interimDepositNumber
-     * @return the description for the given deposit's GLPE bank offset
-     */
-    private static String createDescription(Deposit deposit, int interimDepositNumber) {
-        String descriptionKey;
-        if (KFSConstants.DepositConstants.DEPOSIT_TYPE_FINAL.equals(deposit.getDepositTypeCode())) {
-            descriptionKey = KFSKeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_FINAL;
-        }
-        else {
-            assertThat(KFSConstants.DepositConstants.DEPOSIT_TYPE_INTERIM.equals(deposit.getDepositTypeCode()), deposit.getDepositTypeCode());
-            descriptionKey = KFSKeyConstants.CashManagement.DESCRIPTION_GLPE_BANK_OFFSET_INTERIM;
-        }
-        AccountingDocumentRuleHelperService accountingDocumentRuleUtil = SpringContext.getBean(AccountingDocumentRuleHelperService.class);
-        return accountingDocumentRuleUtil.formatProperty(descriptionKey, interimDepositNumber);
-    }
-
-    /**
-     * Gets the fiscal year for the GLPEs generated by this document. This works the same way as in TransactionalDocumentBase. The
-     * property is down in TransactionalDocument because no FinancialDocument (currently only CashManagementDocument) allows the
-     * user to override it. So, that logic is duplicated here. A comment in TransactionalDocumentBase says that this implementation
-     * is a hack right now because it's intended to be set by the
-     * <code>{@link org.kuali.module.chart.service.AccountingPeriodService}</code>, which suggests to me that pulling that
-     * property up to FinancialDocument is preferable to duplicating this logic here.
-     * 
-     * @return the fiscal year for the GLPEs generated by this document
-     */
-    private Integer getUniversityFiscalYear() {
-        return SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
-    }
-
-
-    /**
-     * @see org.kuali.kfs.document.GeneralLedgerPendingEntrySource#getGeneralLedgerPostingHelper()
-     */
-    public GeneralLedgerPendingEntryGenerationProcess getGeneralLedgerPostingHelper() {
-        Map<String, GeneralLedgerPendingEntryGenerationProcess> glPostingHelpers = SpringContext.getBeansOfType(GeneralLedgerPendingEntryGenerationProcess.class);
-        return glPostingHelpers.get(CashManagementDocument.GENERAL_LEDGER_POSTING_HELPER_BEAN_ID);
-    }
-
-
-    /**
-     * @see org.kuali.kfs.document.GeneralLedgerPendingEntrySource#getGeneralLedgerPendingEntryAmountForGeneralLedgerPostable(org.kuali.kfs.bo.GeneralLedgerPendingEntrySourceDetail)
-     */
-    public KualiDecimal getGeneralLedgerPendingEntryAmountForGeneralLedgerPostable(GeneralLedgerPendingEntrySourceDetail postable) {
-        return postable.getAmount().abs();
-    }
-
-    
 }

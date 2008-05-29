@@ -18,15 +18,19 @@ package org.kuali.module.labor.web.struts.form;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
+import org.kuali.kfs.context.SpringContext;
+import org.kuali.kfs.service.OptionsService;
+import org.kuali.module.labor.bo.ExpenseTransferAccountingLine;
 import org.kuali.module.labor.document.BenefitExpenseTransferDocument;
 
 /**
- * Struts Action Form for the Benefit Expense Transfer Document.
+ * This class is the form class for the Benefit Expense Transfer document.
  */
 public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase {
-
     private String chartOfAccountsCode;
     private String accountNumber;
     private String subAccountNumber;
@@ -40,9 +44,7 @@ public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase 
     }
 
     /**
-     * Gets the BenefitExpenseTransferDocument attribute.
-     * 
-     * @return Returns the BenefitExpenseTransferDocument
+     * @return Returns the BenefitExpenseTransferDocument.
      */
     public BenefitExpenseTransferDocument getBenefitExpenseTransferDocument() {
         return (BenefitExpenseTransferDocument) getDocument();
@@ -69,7 +71,7 @@ public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase 
     /**
      * Gets the subAccountNumber attribute.
      * 
-     * @return Return the subAccountNumber.
+     * @return Returns the subAccountNumber.
      */
     public String getSubAccountNumber() {
         return subAccountNumber;
@@ -87,7 +89,7 @@ public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase 
     /**
      * Gets the chartOfAccountsCode attribute.
      * 
-     * @return Return the chartOfAccountsCode.
+     * @return Returns the chartOfAccountsCode.
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -103,10 +105,7 @@ public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase 
     }
 
     /**
-     * Returns forced read only target fields (i.e only source target fields without chart of accounts code, 
-     * account number, sub-account number, financial sub object code, project code, organization reference id, and amount)
-     * 
-     * @see org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase#getForcedReadOnlyTargetFields()
+     * @see org.kuali.core.web.struts.form.KualiTransactionalDocumentFormBase#getForcedReadOnlyFields()
      */
     @Override
     public Map getForcedReadOnlyTargetFields() {
@@ -118,24 +117,22 @@ public class BenefitExpenseTransferForm extends ExpenseTransferDocumentFormBase 
         map.remove(KFSPropertyConstants.PROJECT_CODE);
         map.remove(KFSPropertyConstants.ORGANIZATION_REFERENCE_ID);
         map.remove(KFSPropertyConstants.AMOUNT);
-
+        
         return map;
     }
 
     /**
-     * Sets university fiscal year, chart of accounts code, account number, sub-account number from first source accounting line
-     * 
      * @see org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase#populateSearchFields()
      */
     @Override
-    public void populateSearchFields() {
+    public void populateSearchFields() {        
         List<SourceAccountingLine> sourceAccoutingLines = this.getBenefitExpenseTransferDocument().getSourceAccountingLines();
-        if (sourceAccoutingLines != null && !sourceAccoutingLines.isEmpty()) {
+        if(sourceAccoutingLines != null  && !sourceAccoutingLines.isEmpty()){
             SourceAccountingLine sourceAccountingLine = sourceAccoutingLines.get(0);
             this.setUniversityFiscalYear(sourceAccountingLine.getPostingYear());
             this.setChartOfAccountsCode(sourceAccountingLine.getChartOfAccountsCode());
             this.setAccountNumber(sourceAccountingLine.getAccountNumber());
             this.setSubAccountNumber(sourceAccountingLine.getSubAccountNumber());
-        }
+}
     }
 }

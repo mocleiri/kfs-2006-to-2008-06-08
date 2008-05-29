@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,16 +25,11 @@ import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.gl.bo.CorrectionCriteria;
 import org.kuali.module.gl.dao.CorrectionCriteriaDao;
 
-/**
- * An OJB implementation of CorrectionCriteriaDao
- */
 public class CorrectionCriteriaDaoOjb extends PlatformAwareDaoBaseOjb implements CorrectionCriteriaDao {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(CorrectionCriteriaDaoOjb.class);
 
     /**
-     * Deletes a correction criterion
      * 
-     * @param criterion the criterion to delete
      * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#delete(org.kuali.module.gl.bo.CorrectionCriteria)
      */
     public void delete(CorrectionCriteria criterion) {
@@ -44,13 +39,8 @@ public class CorrectionCriteriaDaoOjb extends PlatformAwareDaoBaseOjb implements
     }
 
     /**
-     * Queries the database for a list of all the correction criteria associated with the given GLCP document and correction group
      * 
-     * @param documentNumber the GLCP document number of correction criteria to find
-     * @param correctionGroupLineNumber the correction group of correction criteria to find
-     * @return a List of collection criteria
-     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#findByDocumentNumberAndCorrectionGroupNumber(java.lang.String,
-     *      java.lang.Integer)
+     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#findByDocumentNumberAndCorrectionGroupNumber(java.lang.String, java.lang.Integer)
      */
     public List findByDocumentNumberAndCorrectionGroupNumber(String documentNumber, Integer correctionGroupLineNumber) {
         LOG.debug("findByDocumentNumberAndCorrectionGroupNumber() started");
@@ -66,10 +56,10 @@ public class CorrectionCriteriaDaoOjb extends PlatformAwareDaoBaseOjb implements
         return returnList;
     }
 
-    /**
-     * Saves a GLCP criterion
+    /*
+     * (non-Javadoc)
      * 
-     * @param criterion the criterion to save
+     * @see org.kuali.module.gl.dao.CorrectionCriteriaDao#save(org.kuali.module.gl.bo.CorrectionCriteria)
      */
     public void save(CorrectionCriteria criterion) {
         LOG.debug("save() started");

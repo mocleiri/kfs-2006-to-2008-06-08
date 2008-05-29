@@ -18,222 +18,251 @@ package org.kuali.module.labor.bo;
 
 import java.util.LinkedHashMap;
 
+import org.kuali.core.bo.Inactivateable;
 import org.kuali.core.bo.PersistableBusinessObjectBase;
 import org.kuali.kfs.bo.Options;
 import org.kuali.module.chart.bo.Chart;
 import org.kuali.module.chart.bo.ObjectCode;
-import org.kuali.module.integration.bo.LaborLedgerObject;
-import org.kuali.module.integration.bo.LaborLedgerPositionObjectGroup;
 
 /**
- * Labor business object for LaborObject.
+ * Labor Object Code Business Object.
  */
-public class LaborObject extends PersistableBusinessObjectBase implements LaborLedgerObject {
-    private Integer universityFiscalYear;
-    private String chartOfAccountsCode;
-    private String financialObjectCode;
-    private boolean detailPositionRequiredIndicator;
-    private boolean financialObjectHoursRequiredIndicator;
-    private String financialObjectPayTypeCode;
-    private String financialObjectFringeOrSalaryCode;
-    private String positionObjectGroupCode;
+public class LaborObject extends PersistableBusinessObjectBase implements Inactivateable {
+
+	private Integer universityFiscalYear;
+	private String chartOfAccountsCode;
+	private String financialObjectCode;
+	private boolean detailPositionRequiredIndicator;
+	private boolean financialObjectHoursRequiredIndicator;
+	private String financialObjectPayTypeCode;
+	private String financialObjectFringeOrSalaryCode;
+	private String positionObjectGroupCode;
+
     private ObjectCode financialObject;
-    private Chart chartOfAccounts;
+	private Chart chartOfAccounts;
     private PositionObjectGroup positionObjectGroup;
     private Options option;
+    private boolean active;
+    
+	/**
+	 * Default constructor.
+	 */
+	public LaborObject() {
 
-    /**
-     * Default constructor.
-     */
-    public LaborObject() {
+	}
 
-    }
+	/**
+	 * Gets the universityFiscalYear attribute.
+	 * 
+	 * @return Returns the universityFiscalYear
+	 * 
+	 */
+	public Integer getUniversityFiscalYear() { 
+		return universityFiscalYear;
+	}
 
-    /**
-     * Gets the universityFiscalYear
-     * 
-     * @return Returns the universityFiscalYear
-     */
-    public Integer getUniversityFiscalYear() {
-        return universityFiscalYear;
-    }
+	/**
+	 * Sets the universityFiscalYear attribute.
+	 * 
+	 * @param universityFiscalYear The universityFiscalYear to set.
+	 * 
+	 */
+	public void setUniversityFiscalYear(Integer universityFiscalYear) {
+		this.universityFiscalYear = universityFiscalYear;
+	}
 
-    /**
-     * Sets the universityFiscalYear
-     * 
-     * @param universityFiscalYear The universityFiscalYear to set.
-     */
-    public void setUniversityFiscalYear(Integer universityFiscalYear) {
-        this.universityFiscalYear = universityFiscalYear;
-    }
 
-    /**
-     * Gets the chartOfAccountsCode
-     * 
-     * @return Returns the chartOfAccountsCode
-     */
-    public String getChartOfAccountsCode() {
-        return chartOfAccountsCode;
-    }
+	/**
+	 * Gets the chartOfAccountsCode attribute.
+	 * 
+	 * @return Returns the chartOfAccountsCode
+	 * 
+	 */
+	public String getChartOfAccountsCode() { 
+		return chartOfAccountsCode;
+	}
 
-    /**
-     * Sets the chartOfAccountsCode
-     * 
-     * @param chartOfAccountsCode The chartOfAccountsCode to set.
-     */
-    public void setChartOfAccountsCode(String chartOfAccountsCode) {
-        this.chartOfAccountsCode = chartOfAccountsCode;
-    }
+	/**
+	 * Sets the chartOfAccountsCode attribute.
+	 * 
+	 * @param chartOfAccountsCode The chartOfAccountsCode to set.
+	 * 
+	 */
+	public void setChartOfAccountsCode(String chartOfAccountsCode) {
+		this.chartOfAccountsCode = chartOfAccountsCode;
+	}
 
-    /**
-     * Gets the financialObjectCode
-     * 
-     * @return Returns the financialObjectCode
-     */
-    public String getFinancialObjectCode() {
-        return financialObjectCode;
-    }
 
-    /**
-     * Sets the financialObjectCode
-     * 
-     * @param financialObjectCode The financialObjectCode to set.
-     */
-    public void setFinancialObjectCode(String financialObjectCode) {
-        this.financialObjectCode = financialObjectCode;
-    }
+	/**
+	 * Gets the financialObjectCode attribute.
+	 * 
+	 * @return Returns the financialObjectCode
+	 * 
+	 */
+	public String getFinancialObjectCode() { 
+		return financialObjectCode;
+	}
 
-    /**
-     * Gets the detailPositionRequiredIndicator
-     * 
-     * @return Returns the detailPositionRequiredIndicator
-     */
-    public boolean isDetailPositionRequiredIndicator() {
-        return detailPositionRequiredIndicator;
-    }
+	/**
+	 * Sets the financialObjectCode attribute.
+	 * 
+	 * @param financialObjectCode The financialObjectCode to set.
+	 * 
+	 */
+	public void setFinancialObjectCode(String financialObjectCode) {
+		this.financialObjectCode = financialObjectCode;
+	}
 
-    /**
-     * Sets the detailPositionRequiredIndicator
-     * 
-     * @param detailPositionRequiredIndicator The detailPositionRequiredIndicator to set.
-     */
-    public void setDetailPositionRequiredIndicator(boolean detailPositionRequiredIndicator) {
-        this.detailPositionRequiredIndicator = detailPositionRequiredIndicator;
-    }
 
-    /**
-     * Gets the financialObjectHoursRequiredIndicator
-     * 
-     * @return Returns the financialObjectHoursRequiredIndicator
-     */
-    public boolean isFinancialObjectHoursRequiredIndicator() {
-        return financialObjectHoursRequiredIndicator;
-    }
+	/**
+	 * Gets the detailPositionRequiredIndicator attribute.
+	 * 
+	 * @return Returns the detailPositionRequiredIndicator
+	 * 
+	 */
+	public boolean isDetailPositionRequiredIndicator() { 
+		return detailPositionRequiredIndicator;
+	}
+	
 
-    /**
-     * Sets the financialObjectHoursRequiredIndicator
-     * 
-     * @param financialObjectHoursRequiredIndicator The financialObjectHoursRequiredIndicator to set.
-     */
-    public void setFinancialObjectHoursRequiredIndicator(boolean financialObjectHoursRequiredIndicator) {
-        this.financialObjectHoursRequiredIndicator = financialObjectHoursRequiredIndicator;
-    }
+	/**
+	 * Sets the detailPositionRequiredIndicator attribute.
+	 * 
+	 * @param detailPositionRequiredIndicator The detailPositionRequiredIndicator to set.
+	 * 
+	 */
+	public void setDetailPositionRequiredIndicator(boolean detailPositionRequiredIndicator) {
+		this.detailPositionRequiredIndicator = detailPositionRequiredIndicator;
+	}
 
-    /**
-     * Gets the financialObjectPayTypeCode
-     * 
-     * @return Returns the financialObjectPayTypeCode
-     */
-    public String getFinancialObjectPayTypeCode() {
-        return financialObjectPayTypeCode;
-    }
 
-    /**
-     * Sets the financialObjectPayTypeCode
-     * 
-     * @param financialObjectPayTypeCode The financialObjectPayTypeCode to set.
-     */
-    public void setFinancialObjectPayTypeCode(String financialObjectPayTypeCode) {
-        this.financialObjectPayTypeCode = financialObjectPayTypeCode;
-    }
+	/**
+	 * Gets the financialObjectHoursRequiredIndicator attribute.
+	 * 
+	 * @return Returns the financialObjectHoursRequiredIndicator
+	 * 
+	 */
+	public boolean isFinancialObjectHoursRequiredIndicator() { 
+		return financialObjectHoursRequiredIndicator;
+	}
+	
 
-    /**
-     * Gets the financialObjectFringeOrSalaryCode
-     * 
-     * @return Returns the financialObjectFringeOrSalaryCode
-     */
-    public String getFinancialObjectFringeOrSalaryCode() {
-        return financialObjectFringeOrSalaryCode;
-    }
+	/**
+	 * Sets the financialObjectHoursRequiredIndicator attribute.
+	 * 
+	 * @param financialObjectHoursRequiredIndicator The financialObjectHoursRequiredIndicator to set.
+	 * 
+	 */
+	public void setFinancialObjectHoursRequiredIndicator(boolean financialObjectHoursRequiredIndicator) {
+		this.financialObjectHoursRequiredIndicator = financialObjectHoursRequiredIndicator;
+	}
 
-    /**
-     * Sets the financialObjectFringeOrSalaryCode
-     * 
-     * @param financialObjectFringeOrSalaryCode The financialObjectFringeOrSalaryCode to set.
-     */
-    public void setFinancialObjectFringeOrSalaryCode(String financialObjectFringeOrSalaryCode) {
-        this.financialObjectFringeOrSalaryCode = financialObjectFringeOrSalaryCode;
-    }
 
-    /**
-     * Gets the positionObjectGroupCode
-     * 
-     * @return Returns the positionObjectGroupCode
-     */
-    public String getPositionObjectGroupCode() {
-        return positionObjectGroupCode;
-    }
+	/**
+	 * Gets the financialObjectPayTypeCode attribute.
+	 * 
+	 * @return Returns the financialObjectPayTypeCode
+	 * 
+	 */
+	public String getFinancialObjectPayTypeCode() { 
+		return financialObjectPayTypeCode;
+	}
 
-    /**
-     * Sets the positionObjectGroupCode
-     * 
-     * @param positionObjectGroupCode The positionObjectGroupCode to set.
-     */
-    public void setPositionObjectGroupCode(String positionObjectGroupCode) {
-        this.positionObjectGroupCode = positionObjectGroupCode;
-    }
+	/**
+	 * Sets the financialObjectPayTypeCode attribute.
+	 * 
+	 * @param financialObjectPayTypeCode The financialObjectPayTypeCode to set.
+	 * 
+	 */
+	public void setFinancialObjectPayTypeCode(String financialObjectPayTypeCode) {
+		this.financialObjectPayTypeCode = financialObjectPayTypeCode;
+	}
 
-    /**
-     * Gets the financialObject
-     * 
-     * @return Returns the financialObject
-     */
-    public ObjectCode getFinancialObject() {
-        return financialObject;
-    }
 
-    /**
-     * Sets the financialObject
-     * 
-     * @param financialObject The financialObject to set.
-     */
+	/**
+	 * Gets the financialObjectFringeOrSalaryCode attribute.
+	 * 
+	 * @return Returns the financialObjectFringeOrSalaryCode
+	 * 
+	 */
+	public String getFinancialObjectFringeOrSalaryCode() { 
+		return financialObjectFringeOrSalaryCode;
+	}
+
+	/**
+	 * Sets the financialObjectFringeOrSalaryCode attribute.
+	 * 
+	 * @param financialObjectFringeOrSalaryCode The financialObjectFringeOrSalaryCode to set.
+	 * 
+	 */
+	public void setFinancialObjectFringeOrSalaryCode(String financialObjectFringeOrSalaryCode) {
+		this.financialObjectFringeOrSalaryCode = financialObjectFringeOrSalaryCode;
+	}
+
+
+	/**
+	 * Gets the positionObjectGroupCode attribute.
+	 * 
+	 * @return Returns the positionObjectGroupCode
+	 * 
+	 */
+	public String getPositionObjectGroupCode() { 
+		return positionObjectGroupCode;
+	}
+
+	/**
+	 * Sets the positionObjectGroupCode attribute.
+	 * 
+	 * @param positionObjectGroupCode The positionObjectGroupCode to set.
+	 * 
+	 */
+	public void setPositionObjectGroupCode(String positionObjectGroupCode) {
+		this.positionObjectGroupCode = positionObjectGroupCode;
+	}
+
+
+	/**
+	 * Gets the financialObject attribute.
+	 * 
+	 * @return Returns the financialObject
+	 * 
+	 */
+	public ObjectCode getFinancialObject() { 
+		return financialObject;
+	}
+
+	/**
+	 * Sets the financialObject attribute.
+	 * 
+	 * @param financialObject The financialObject to set.
+	 */
     @Deprecated
-    public void setFinancialObject(ObjectCode financialObject) {
-        this.financialObject = financialObject;
-    }
+	public void setFinancialObject(ObjectCode financialObject) {
+		this.financialObject = financialObject;
+	}
 
-    /**
-     * Gets the chartOfAccounts
-     * 
-     * @return Returns the chartOfAccounts
-     */
-    public Chart getChartOfAccounts() {
-        return chartOfAccounts;
-    }
+	/**
+	 * Gets the chartOfAccounts attribute.
+	 * 
+	 * @return Returns the chartOfAccounts
+	 * 
+	 */
+	public Chart getChartOfAccounts() { 
+		return chartOfAccounts;
+	}
 
-    /**
-     * Sets the chartOfAccounts
-     * 
-     * @param chartOfAccounts The chartOfAccounts to set.
-     */
+	/**
+	 * Sets the chartOfAccounts attribute.
+	 * 
+	 * @param chartOfAccounts The chartOfAccounts to set.
+	 */
     @Deprecated
-    public void setChartOfAccounts(Chart chartOfAccounts) {
-        this.chartOfAccounts = chartOfAccounts;
-    }
+	public void setChartOfAccounts(Chart chartOfAccounts) {
+		this.chartOfAccounts = chartOfAccounts;
+	}
 
     /**
-     * Gets the positionObjectGroup attribute.
-     * 
+     * Gets the positionObjectGroup attribute. 
      * @return Returns the positionObjectGroup.
      */
     public PositionObjectGroup getPositionObjectGroup() {
@@ -242,32 +271,28 @@ public class LaborObject extends PersistableBusinessObjectBase implements LaborL
 
     /**
      * Sets the positionObjectGroup attribute value.
-     * 
      * @param positionObjectGroup The positionObjectGroup to set.
      */
-    @Deprecated
     public void setPositionObjectGroup(PositionObjectGroup positionObjectGroup) {
         this.positionObjectGroup = positionObjectGroup;
     }
-
+    
     /**
-     * @see org.kuali.kfs.bo.LaborLedgerObject#getLaborLedgerPositionObjectGroup()
+     * @see org.kuali.core.bo.Inactivateable#isActive()
      */
-    public LaborLedgerPositionObjectGroup getLaborLedgerPositionObjectGroup() {
-        return this.positionObjectGroup;
+    public boolean isActive() {
+        return this.active;
     }
 
     /**
-     * @see org.kuali.kfs.bo.LaborLedgerObject#setLaborLedgerPositionObjectGroup(org.kuali.kfs.bo.LaborLedgerPositionObjectGroup)
+     * @see org.kuali.core.bo.Inactivateable#setActive(boolean)
      */
-    @Deprecated
-    public void setLaborLedgerPositionObjectGroup(LaborLedgerPositionObjectGroup laborLedgerPositionObjectGroup) {
-        this.positionObjectGroup = (PositionObjectGroup) laborLedgerPositionObjectGroup;
+    public void setActive(boolean active) {
+        this.active = active;
     }
-
+    
     /**
-     * Gets the option
-     * 
+     * Gets the option attribute. 
      * @return Returns the option.
      */
     public Options getOption() {
@@ -275,8 +300,7 @@ public class LaborObject extends PersistableBusinessObjectBase implements LaborL
     }
 
     /**
-     * Sets the option
-     * 
+     * Sets the option attribute value.
      * @param option The option to set.
      */
     public void setOption(Options option) {
@@ -284,18 +308,16 @@ public class LaborObject extends PersistableBusinessObjectBase implements LaborL
     }
 
     /**
-     * construct the key list of the business object.
-     * 
      * @see org.kuali.core.bo.BusinessObjectBase#toStringMapper()
      */
     protected LinkedHashMap toStringMapper() {
-        LinkedHashMap m = new LinkedHashMap();
+        LinkedHashMap m = new LinkedHashMap();      
         if (this.universityFiscalYear != null) {
             m.put("universityFiscalYear", this.universityFiscalYear.toString());
         }
         m.put("chartOfAccountsCode", this.chartOfAccountsCode);
         m.put("financialObjectCode", this.financialObjectCode);
-
         return m;
-    }
+    }    
+
 }

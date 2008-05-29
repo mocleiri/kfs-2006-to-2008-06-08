@@ -26,8 +26,12 @@ import org.kuali.module.chart.bo.codes.BalanceTyp;
  * needed by the application. TODO - Continue to update this with new balance type as they are needed.
  */
 public interface BalanceTypService {
-
-    static final String ACTUAL_BALANCE_TYPE = "AC";
+    /**
+     * This method retrieves a full instance of the appropriate BalanceType instance - Actual.
+     * 
+     * @return
+     */
+    public BalanceTyp getActualBalanceTyp();
 
     /**
      * This method retrieves all valid balance types in the system.
@@ -35,7 +39,14 @@ public interface BalanceTypService {
      * @return A list of active balance types in Kuali.
      */
     public Collection getAllBalanceTyps();
-    
+
+    /**
+     * Get encumbrance balance TYPES
+     * 
+     * @return
+     */
+    public Collection getEncumbranceBalanceTypes();
+
     /**
      * This method retrieves a BalanceTyp instance from the Kuali database by its primary key - the balance typ's code.
      * 

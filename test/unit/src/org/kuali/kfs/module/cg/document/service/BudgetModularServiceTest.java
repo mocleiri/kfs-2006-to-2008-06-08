@@ -1,48 +1,66 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.service;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.util.KualiInteger;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.cg.bo.Agency;
+import org.kuali.module.kra.bo.AgencyExtension;
+import org.kuali.module.kra.bo.Budget;
+import org.kuali.module.kra.bo.BudgetModular;
+import org.kuali.module.kra.bo.BudgetModularPeriod;
+import org.kuali.module.kra.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.bo.BudgetNonpersonnelTest;
-import org.kuali.module.kra.budget.bo.AgencyExtension;
-import org.kuali.module.kra.budget.bo.Budget;
-import org.kuali.module.kra.budget.bo.BudgetModular;
-import org.kuali.module.kra.budget.bo.BudgetModularPeriod;
-import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
-import org.kuali.module.kra.budget.bo.BudgetPeriod;
-import org.kuali.module.kra.budget.bo.UserAppointmentTaskPeriod;
-import org.kuali.module.kra.budget.service.BudgetModularService;
-import org.kuali.module.kra.budget.service.BudgetNonpersonnelService;
-import org.kuali.test.ConfigureContext;
+import org.kuali.module.kra.bo.BudgetPeriod;
+import org.kuali.module.kra.bo.BudgetPeriodTest;
+import org.kuali.module.kra.bo.UserAppointmentTaskPeriod;
+import org.kuali.test.KualiTestBaseWithSession;
 
 /**
  * This class tests service methods in BudgetModularService.
+ * 
+ * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
-@ConfigureContext
-public class BudgetModularServiceTest extends KualiTestBase {
+public class BudgetModularServiceTest extends KualiTestBaseWithSession {
+
+    private BudgetModularService budgetModularService;
+    private BudgetNonpersonnelService budgetNonpersonnelService;
+
+    private List nonpersonnelCategories;
+
+    /**
+     * @see junit.framework.TestCase#setUp()
+     */
+    protected void setUp() throws Exception {
+        super.setUp();
+        budgetModularService = SpringServiceLocator.getBudgetModularService();
+        budgetNonpersonnelService = SpringServiceLocator.getBudgetNonpersonnelService();
+        nonpersonnelCategories = budgetNonpersonnelService.getAllNonpersonnelCategories();
+    }
 
     protected Budget setupBudget() {
         Budget budget = new Budget();
@@ -53,61 +71,38 @@ public class BudgetModularServiceTest extends KualiTestBase {
         agency.getAgencyExtension().setBudgetModularIncrementAmount(new KualiInteger(25000));
         agency.getAgencyExtension().setBudgetPeriodMaximumAmount(new KualiInteger(250000));
 
-        budget.setPeriods(createBudgetPeriods(2));
+        budget.setPeriods(BudgetPeriodTest.createBudgetPeriods(2));
 
         budget.setBudgetAgency(agency);
         return budget;
     }
 
 
-    public static List createBudgetPeriods(int numberOfPeriods) {
-        List budgetPeriods = new ArrayList();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-
-        for (int i = 0; i < numberOfPeriods; i++) {
-            BudgetPeriod budgetPeriod = new BudgetPeriod();
-            budgetPeriod.setBudgetPeriodSequenceNumber(new Integer(i + 1));
-            try {
-                budgetPeriod.setBudgetPeriodBeginDate(new Date(sdf.parse("07/01/" + 2000 + i).getTime()));
-                budgetPeriod.setBudgetPeriodEndDate(new Date(sdf.parse("06/30/" + 2001 + i).getTime()));
-            }
-            catch (ParseException e) {
-                throw new NullPointerException();
-            }
-            budgetPeriods.add(budgetPeriod);
-        }
-
-        return budgetPeriods;
-    }
-
-
     public void testGenerateModularBudget() {
-        List nonpersonnelCategories = SpringContext.getBean(BudgetNonpersonnelService.class).getAllNonpersonnelCategories();
-        KualiInteger zeroValue = KualiInteger.ZERO;
+        KualiInteger zeroValue = new KualiInteger(0);
 
         // Case 1: Budget with no costs
         Budget budget = setupBudget();
-        SpringContext.getBean(BudgetModularService.class).generateModularBudget(budget, nonpersonnelCategories);
+        budgetModularService.generateModularBudget(budget, nonpersonnelCategories);
         BudgetModular modularBudget = budget.getModularBudget();
 
         assertFalse(modularBudget.isInvalidMode());
         assertEquals(modularBudget.getIncrements().size(), 11);
         assertEquals(modularBudget.getBudgetModularDirectCostAmount(), zeroValue);
         assertEquals(modularBudget.getTotalActualDirectCostAmount(), zeroValue);
-        assertEquals(modularBudget.getTotalAdjustedModularDirectCostAmount(), KualiInteger.ZERO);
+        assertEquals(modularBudget.getTotalAdjustedModularDirectCostAmount(), new KualiInteger(0));
         assertEquals(modularBudget.getTotalConsortiumAmount(), zeroValue);
-        assertEquals(modularBudget.getTotalDirectCostAmount(), KualiInteger.ZERO);
+        assertEquals(modularBudget.getTotalDirectCostAmount(), new KualiInteger(0));
         assertEquals(modularBudget.getTotalModularDirectCostAmount(), zeroValue);
-        assertEquals(modularBudget.getTotalModularVarianceAmount(), KualiInteger.ZERO);
+        assertEquals(modularBudget.getTotalModularVarianceAmount(), new KualiInteger(0));
 
         for (Iterator iter = modularBudget.getBudgetModularPeriods().iterator(); iter.hasNext();) {
             BudgetModularPeriod modularPeriod = (BudgetModularPeriod) iter.next();
             assertEquals(modularPeriod.getActualDirectCostAmount(), zeroValue);
             assertEquals(modularPeriod.getConsortiumAmount(), zeroValue);
-            assertEquals(modularPeriod.getTotalPeriodDirectCostAmount(), KualiInteger.ZERO);
-            assertEquals(modularPeriod.getBudgetAdjustedModularDirectCostAmount(), KualiInteger.ZERO);
-            assertEquals(modularPeriod.getModularVarianceAmount(), KualiInteger.ZERO);
+            assertEquals(modularPeriod.getTotalPeriodDirectCostAmount(), new KualiInteger(0));
+            assertEquals(modularPeriod.getBudgetAdjustedModularDirectCostAmount(), new KualiInteger(0));
+            assertEquals(modularPeriod.getModularVarianceAmount(), new KualiInteger(0));
         }
 
         // Case 2: Budget with personnel, nonpersonnel, consortium costs
@@ -149,7 +144,7 @@ public class BudgetModularServiceTest extends KualiTestBase {
 
         budget.setAllUserAppointmentTaskPeriods(userAppointmentTaskPeriods);
 
-        SpringContext.getBean(BudgetModularService.class).generateModularBudget(budget, nonpersonnelCategories);
+        budgetModularService.generateModularBudget(budget, nonpersonnelCategories);
         modularBudget = budget.getModularBudget();
 
         assertFalse(modularBudget.isInvalidMode());
@@ -188,7 +183,7 @@ public class BudgetModularServiceTest extends KualiTestBase {
         userAppointmentTaskPeriods.add(taskPeriod4);
         budget.setAllUserAppointmentTaskPeriods(userAppointmentTaskPeriods);
 
-        SpringContext.getBean(BudgetModularService.class).generateModularBudget(budget, nonpersonnelCategories);
+        budgetModularService.generateModularBudget(budget, nonpersonnelCategories);
         modularBudget = budget.getModularBudget();
 
         assertTrue(modularBudget.isInvalidMode());
@@ -221,13 +216,13 @@ public class BudgetModularServiceTest extends KualiTestBase {
 
         // Case 1: Budget with no costs
         Budget budget = setupBudget();
-        SpringContext.getBean(BudgetModularService.class).resetModularBudget(budget);
+        budgetModularService.resetModularBudget(budget);
         BudgetModular modularBudget = budget.getModularBudget();
 
         assertFalse(modularBudget.isInvalidMode());
         for (Iterator iter = modularBudget.getBudgetModularPeriods().iterator(); iter.hasNext();) {
             BudgetModularPeriod modularPeriod = (BudgetModularPeriod) iter.next();
-            assertEquals(modularPeriod.getBudgetAdjustedModularDirectCostAmount(), KualiInteger.ZERO);
+            assertEquals(modularPeriod.getBudgetAdjustedModularDirectCostAmount(), new KualiInteger(0));
         }
 
         // Case 2: Budget with personnel, nonpersonnel, consortium costs
@@ -269,7 +264,7 @@ public class BudgetModularServiceTest extends KualiTestBase {
 
         budget.setAllUserAppointmentTaskPeriods(userAppointmentTaskPeriods);
 
-        SpringContext.getBean(BudgetModularService.class).resetModularBudget(budget);
+        budgetModularService.resetModularBudget(budget);
         modularBudget = budget.getModularBudget();
 
         assertFalse(modularBudget.isInvalidMode());
@@ -292,7 +287,7 @@ public class BudgetModularServiceTest extends KualiTestBase {
         userAppointmentTaskPeriods.add(taskPeriod4);
         budget.setAllUserAppointmentTaskPeriods(userAppointmentTaskPeriods);
 
-        SpringContext.getBean(BudgetModularService.class).resetModularBudget(budget);
+        budgetModularService.resetModularBudget(budget);
         modularBudget = budget.getModularBudget();
 
         BudgetModularPeriod modularPeriodInvalid1 = (BudgetModularPeriod) modularBudget.getBudgetModularPeriods().get(0);
@@ -306,21 +301,21 @@ public class BudgetModularServiceTest extends KualiTestBase {
     public void testAgencySupportsModular() {
 
         // Case 1: Agency is null.
-        assertFalse(SpringContext.getBean(BudgetModularService.class).agencySupportsModular(null));
+        assertFalse(budgetModularService.agencySupportsModular(null));
 
         // Case 2: Supports modular is true.
         Agency agency = new Agency();
         AgencyExtension agencyExtension = new AgencyExtension();
         agencyExtension.setAgencyModularIndicator(true);
         agency.setAgencyExtension(agencyExtension);
-        assertTrue(SpringContext.getBean(BudgetModularService.class).agencySupportsModular(agency));
+        assertTrue(budgetModularService.agencySupportsModular(agency));
 
         // Case 3: Supports modular is false.
         agency.getAgencyExtension().setAgencyModularIndicator(false);
-        assertFalse(SpringContext.getBean(BudgetModularService.class).agencySupportsModular(agency));
+        assertFalse(budgetModularService.agencySupportsModular(agency));
 
         // Case 5: Agency extension and reports to agency both null.
         agency.setAgencyExtension(null);
-        assertFalse(SpringContext.getBean(BudgetModularService.class).agencySupportsModular(agency));
+        assertFalse(budgetModularService.agencySupportsModular(agency));
     }
 }

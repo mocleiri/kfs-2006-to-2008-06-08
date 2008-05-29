@@ -16,22 +16,19 @@
 package org.kuali.kfs.context;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.kuali.core.service.DataDictionaryService;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.Timer;
 import org.kuali.core.util.cache.MethodCacheInterceptor;
-import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.service.SchedulerService;
 import org.kuali.kfs.util.MemoryMonitor;
 import org.kuali.rice.KNSServiceLocator;
@@ -46,18 +43,15 @@ import uk.ltd.getahead.dwr.create.SpringCreator;
 public class SpringContext {
     private static final Logger LOG = Logger.getLogger(SpringContext.class);
     private static final String APPLICATION_CONTEXT_DEFINITION = "SpringBeans.xml";
-    private static final String STANDALONE_RICE_DATASOURCE_CONTEXT_DEFINITION = "SpringStandaloneRiceDataSourceBeans.xml";
-    private static final String DATASOURCE_CONTEXT_DEFINITION = "SpringDataSourceBeans.xml";
     private static final String SPRING_SOURCE_FILES_KEY = "spring.source.files";
     private static final String SPRING_TEST_FILES_KEY = "spring.test.files";
-    private static final String SPRING_PLUGIN_FILES_KEY = "spring.plugin.files";
     private static final String MEMORY_MONITOR_THRESHOLD_KEY = "memory.monitor.threshold";
     private static ConfigurableApplicationContext applicationContext;
     private static Set<Class> SINGLETON_TYPES = new HashSet<Class>();
     private static Set<String> SINGLETON_NAMES = new HashSet<String>();
-    private static Map<Class, Object> SINGLETON_BEANS_BY_TYPE_CACHE = new HashMap<Class, Object>();
-    private static Map<String, Object> SINGLETON_BEANS_BY_NAME_CACHE = new HashMap<String, Object>();
-    private static Map<Class, Map> SINGLETON_BEANS_OF_TYPE_CACHE = new HashMap<Class, Map>();
+    private static Map<Class,Object> SINGLETON_BEANS_BY_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class,Object>());
+    private static Map<String,Object> SINGLETON_BEANS_BY_NAME_CACHE = Collections.synchronizedMap(new HashMap<String,Object>());
+    private static Map<Class,Map> SINGLETON_BEANS_OF_TYPE_CACHE = Collections.synchronizedMap(new HashMap<Class,Map>());
 
     /**
      * Use this method to retrieve a spring bean when one of the following is the case. Pass in the type of the service interface,
@@ -68,7 +62,7 @@ public class SpringContext {
      * specific DateTimeService.class as the type. To retrieve the latter, you should specify ConfigurableDateService.class as the
      * type. Unless you are writing a unit test and need to down cast to an implementation, you do not need to cast the result of
      * this method.
-     *
+     * 
      * @param <T>
      * @param type
      * @return an object that has been defined as a bean in our spring context and is of the specified type
@@ -77,10 +71,9 @@ public class SpringContext {
         verifyProperInitialization();
         T bean = null;
         if (SINGLETON_BEANS_BY_TYPE_CACHE.containsKey(type)) {
-            bean = (T) SINGLETON_BEANS_BY_TYPE_CACHE.get(type);
+            bean = (T)SINGLETON_BEANS_BY_TYPE_CACHE.get(type);
         }
         else {
-            LOG.info("Bean not already in cache: " + type + " - calling getBeansOfType() ");
             try {
                 Collection<T> beansOfType = getBeansOfType(type).values();
                 if (beansOfType.size() > 1) {
@@ -107,11 +100,11 @@ public class SpringContext {
         }
         return bean;
     }
-
+    
     /**
      * Use this method to retrieve all beans of a give type in our spring context. Pass in the type of the service interface, NOT
      * the service implementation.
-     *
+     * 
      * @param <T>
      * @param type
      * @return a map of the spring bean ids / beans that are of the specified type
@@ -124,41 +117,26 @@ public class SpringContext {
             beansOfType = SINGLETON_BEANS_OF_TYPE_CACHE.get(type);
         }
         else {
-            LOG.info("Bean not already in \"OF_TYPE\" cache: " + type + " - calling getBeansOfType() on KNS and locally");
-            boolean allOfTypeAreSingleton = true;
             beansOfType = KNSServiceLocator.getBeansOfType(type);
-            for ( String key : beansOfType.keySet() ) {
-                if ( !KNSServiceLocator.isSingleton(key) ) {
-                    allOfTypeAreSingleton = false;
-                }                
-            }
-            Map<String,T> localBeansOfType = applicationContext.getBeansOfType(type);
-            for ( String key : localBeansOfType.keySet() ) {
-                if ( !applicationContext.isSingleton(key) ) {
-                    allOfTypeAreSingleton = false;
-                }                
-            }
-            beansOfType.putAll( localBeansOfType );
-            if ( allOfTypeAreSingleton ) {
+            beansOfType.putAll(new HashMap(applicationContext.getBeansOfType(type)));
+            if (SINGLETON_TYPES.contains(type) || hasSingletonSuperType(type)) {
                 SINGLETON_TYPES.add(type);
                 SINGLETON_BEANS_OF_TYPE_CACHE.put(type, beansOfType);
             }
         }
         return beansOfType;
     }
-
+    
     @SuppressWarnings("unchecked")
     private static <T> T getBean(Class<T> type, String name) {
         verifyProperInitialization();
         T bean = null;
-        boolean isSingleton = true;
         if (SINGLETON_BEANS_BY_NAME_CACHE.containsKey(name)) {
-            bean = (T) SINGLETON_BEANS_BY_NAME_CACHE.get(name);
+            bean = (T)SINGLETON_BEANS_BY_NAME_CACHE.get(name);
         }
         else {
             try {
                 bean = (T) applicationContext.getBean(name);
-                isSingleton = applicationContext.isSingleton(name);
             }
             catch (NoSuchBeanDefinitionException nsbde) {
                 LOG.info("Could not find bean named " + name + " - checking KNS context");
@@ -170,7 +148,7 @@ public class SpringContext {
                     throw new NoSuchBeanDefinitionException(name, new StringBuffer("No bean of this type and name in the in KFS or KNS application contexts: ").append(type.getName()).append(", ").append(name).toString());
                 }
             }
-            if ( isSingleton ) {
+            if (SINGLETON_NAMES.contains(type)) {
                 SINGLETON_BEANS_BY_NAME_CACHE.put(name, bean);
             }
         }
@@ -178,7 +156,6 @@ public class SpringContext {
     }
 
     private static boolean hasSingletonSuperType(Class type) {
-        
         for (Class singletonType : SINGLETON_TYPES) {
             if (singletonType.isAssignableFrom(type)) {
                 return true;
@@ -187,7 +164,7 @@ public class SpringContext {
         return false;
     }
 
-    public static List<MethodCacheInterceptor> getMethodCacheInterceptors() {
+    protected static List<MethodCacheInterceptor> getMethodCacheInterceptors() {
         List<MethodCacheInterceptor> methodCacheInterceptors = new ArrayList();
         methodCacheInterceptors.add(getBean(MethodCacheInterceptor.class));
         methodCacheInterceptors.add(KNSServiceLocator.getBean(MethodCacheInterceptor.class));
@@ -204,23 +181,23 @@ public class SpringContext {
     }
 
     protected static void initializeApplicationContext() {
-        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY }), true, true);
-    }
-
-    protected static void initializeBatchApplicationContext() {
-        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY }), true, false);
+        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY }), true);
     }
 
     protected static void initializeTestApplicationContext() {
-        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY, SPRING_TEST_FILES_KEY }), false, false);
-    }
-
-    protected static void initializePluginApplicationContext() {
-        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY, SPRING_PLUGIN_FILES_KEY }), false, false);
+        initializeApplicationContext(getSpringConfigurationFiles(new String[] { SPRING_SOURCE_FILES_KEY, SPRING_TEST_FILES_KEY }), false);
     }
 
     protected static void close() {
         applicationContext.close();
+    }
+
+    public static String getStringConfigurationProperty(String propertyName) {
+        return ResourceBundle.getBundle(PropertyLoadingFactoryBean.CONFIGURATION_FILE_NAME).getString(propertyName);
+    }
+
+    protected static List<String> getListConfigurationProperty(String propertyName) {
+        return Arrays.asList(getStringConfigurationProperty(propertyName).split(","));
     }
 
     private static void verifyProperInitialization() {
@@ -232,35 +209,14 @@ public class SpringContext {
     private static String[] getSpringConfigurationFiles(String[] propertyNames) {
         List<String> springConfigurationFiles = new ArrayList<String>();
         springConfigurationFiles.add(APPLICATION_CONTEXT_DEFINITION);
-        if (Boolean.valueOf(PropertyLoadingFactoryBean.getBaseProperty(KFSConstants.USE_STANDALONE_WORKFLOW))) {
-            LOG.info("Initializing Spring Context to point to a Standalone Rice installation.");
-            springConfigurationFiles.add(STANDALONE_RICE_DATASOURCE_CONTEXT_DEFINITION);
-        } else {
-            springConfigurationFiles.add(DATASOURCE_CONTEXT_DEFINITION);
-        }
         for (int i = 0; i < propertyNames.length; i++) {
-            springConfigurationFiles.addAll(PropertyLoadingFactoryBean.getBaseListProperty(propertyNames[i]));
-        }
-        for (Iterator iterator = springConfigurationFiles.iterator(); iterator.hasNext();) {
-            String fileName = (String) iterator.next();
-            if (StringUtils.isEmpty(fileName)) {
-                iterator.remove();
-            }
+            springConfigurationFiles.addAll(getListConfigurationProperty(propertyNames[i]));
         }
         return springConfigurationFiles.toArray(new String[] {});
     }
 
-    private static void initializeApplicationContext(String[] springFiles, boolean initializeSchedule, boolean allowLazyDDValidation) {
-        LOG.info( "Starting Spring context initialization" );
+    private static void initializeApplicationContext(String[] springFiles, boolean initializeSchedule) {
         applicationContext = new ClassPathXmlApplicationContext(springFiles);
-        LOG.info( "Completed Spring context initialization" );
-        
-        LOG.info( "Starting Data Dictionary Initialization" );
-        getBean(DataDictionaryService.class).getDataDictionary().parseDataDictionaryConfigurationFiles( allowLazyDDValidation );
-        LOG.info( "Completed Data Dictionary Initialization" );
-        
-        SpringCreator.setOverrideBeanFactory(applicationContext.getBeanFactory());
-        
         if (Double.valueOf((getBean(KualiConfigurationService.class)).getPropertyString(MEMORY_MONITOR_THRESHOLD_KEY)) > 0) {
             MemoryMonitor.setPercentageUsageThreshold(Double.valueOf((getBean(KualiConfigurationService.class)).getPropertyString(MEMORY_MONITOR_THRESHOLD_KEY)));
             MemoryMonitor memoryMonitor = new MemoryMonitor(APPLICATION_CONTEXT_DEFINITION);
@@ -300,5 +256,12 @@ public class SpringContext {
                 LOG.error("Caught exception while starting the scheduler", e);
             }
         }
+        SpringCreator.setOverrideBeanFactory(applicationContext.getBeanFactory());
+        Collections.addAll(SINGLETON_NAMES, applicationContext.getBeanFactory().getSingletonNames());
+        for (String singletonName : SINGLETON_NAMES) {
+            SINGLETON_TYPES.add(applicationContext.getBeanFactory().getType(singletonName));
+        }
+        SINGLETON_NAMES.addAll(KNSServiceLocator.getSingletonNames());
+        SINGLETON_TYPES.addAll(KNSServiceLocator.getSingletonTypes());
     }
 }

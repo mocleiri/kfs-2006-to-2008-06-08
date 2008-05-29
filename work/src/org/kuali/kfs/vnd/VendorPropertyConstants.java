@@ -24,7 +24,6 @@ public class VendorPropertyConstants {
 
     public static final String VENDOR_HEADER_PREFIX = "vendorHeader.";
     public static final String VENDOR_NUMBER = "vendorNumber";
-    public static final String VENDOR_PARENT_INDICATOR = "vendorParentIndicator";
     public static final String VENDOR_FAX_NUMBER = "vendorFaxNumber";
     public static final String VENDOR_ADDRESS = "vendorAddresses";
     public static final String VENDOR_DEFAULT_ADDRESS = "vendorDefaultAddresses";
@@ -91,8 +90,4 @@ public class VendorPropertyConstants {
     public static final String VENDOR_CUSTOMER_NUMBER_CHART_OF_ACCOUNTS_CODE = "chartOfAccountsCode";
     public static final String VENDOR_CUSTOMER_NUMBER_ORGANIZATION_CODE = "vendorOrganizationCode";
 
-    // Vendor commodities code
-    public static final String VENDOR_COMMODITIES_CODE = "vendorCommodities";
-    public static final String VENDOR_COMMODITIES_CODE_PURCHASING_COMMODITY_CODE = "vendorCommodities.purchasingCommodityCode";
-    public static final String VENDOR_COMMODITIES_DEFAULT_INDICATOR = "commodityDefaultIndicator";
 }

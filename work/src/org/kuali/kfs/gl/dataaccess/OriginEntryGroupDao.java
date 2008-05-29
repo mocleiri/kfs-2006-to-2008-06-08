@@ -23,81 +23,73 @@ import org.kuali.module.gl.bo.OriginEntryGroup;
 
 public interface OriginEntryGroupDao {
     /**
-     * Given an origin entry group source type (defined in OriginEntrySource)
-     * 
-     * @param sourceCode the source code of the groups to find
-     * @return a OriginEntryGroup with the given source code and max ORIGIN_ENTRY_GRP_ID
-     * @see org.kuali.module.gl.bo.OriginEntrySource
+     * @param sourceCode
+     * @param date
+     * @return
      */
-    public OriginEntryGroup getGroupWithMaxIdFromSource(String sourceCode);
-
+    public Collection<OriginEntryGroup> getGroupsFromSourceForDate(String sourceCode, Date date);
+    
     /**
      * Get all the groups that are older than a date
      * 
-     * @param day the date groups returned should be older than
-     * @return a Collection of origin entry groups older than that date
+     * @param day
+     * @return
      */
     public Collection<OriginEntryGroup> getOlderGroups(Date day);
 
     /**
-     * Delete all the groups in the list.  Note...it doesn't delete the entries within them, you need
-     * OriginEntryDao.deleteGroups for that
+     * Delete all the groups in the list
      * 
-     * @params groups a Collection of origin entry groups to delete
+     * @params groups
      */
     public void deleteGroups(Collection<OriginEntryGroup> groups);
 
     /**
-     * Fetch all the groups that match the criteria
+     * Get all the groups that match the criteria
      * 
-     * @param searchCriteria a Map of search criteria to form the query
-     * @return a Collection of Origin Entry Groups that match that criteria
+     * @param searchCriteria
+     * @return
      */
     public Collection getMatchingGroups(Map searchCriteria);
 
     /**
-     * Get all the groups for the poster (that is to say, Groups with "Process" being true)
+     * Get all the groups for the poster
      * 
-     * @param groupSourceCode the source code of origin entry groups to return
-     * @return a Collection of origin entry groups that should be processed by the poster
+     * @param groupSourceCode
+     * @return
      */
     public Collection getPosterGroups(String groupSourceCode);
 
     /**
-     * Gets a collection of all backup groups that are scrubbable (i.e. valid, process, scrub indicators all set to true)
+     * Get all the backup groups to scrub
      * 
-     * @return a Collection of scrubbable origin entry groups
+     * @param groupDate
+     * @return
      */
-    public Collection<OriginEntryGroup> getAllScrubbableBackupGroups();
+    public Collection getBackupGroups(Date groupDate);
 
     /**
      * Get all the groups to be copied into the backup group
      * 
-     * @param groupDate the date returned origin entry groups must have been created on or before
-     * @return a Collection of origin entry groups to backup
+     * @param groupDate
+     * @return
      */
     public Collection getGroupsToBackup(Date groupDate);
 
     /**
      * Save a group
      * 
-     * @param group a group to save
+     * @param group
      */
     public void save(OriginEntryGroup group);
 
     /**
      * The the group for the ID passed. The EXACT one, not one that is close, it must be EXACTLY EXACT.
      * 
-     * @param id the group id of the group to return
-     * @return a highly exact origin entry group, or, if not found, null
+     * @param id
+     * @return
      */
     public OriginEntryGroup getExactMatchingEntryGroup(Integer id);
 
-    /**
-     * Fetches groups created on or after the given date
-     * 
-     * @param day the date origin entry groups to return must have been created on or after
-     * @return a Collection of origin entry groups created on or after that day
-     */
     public Collection<OriginEntryGroup> getRecentGroups(Date day);
 }

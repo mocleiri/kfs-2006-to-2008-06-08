@@ -1,56 +1,47 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.financial.document;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.document.Copyable;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DocumentTypeService;
-import org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper;
-import org.kuali.core.util.GlobalVariables;
+import org.kuali.Constants;
+import org.kuali.core.bo.AccountingLineParser;
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.core.util.ObjectUtils;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.core.web.format.CurrencyFormatter;
-import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.service.AccountingDocumentRuleHelperService;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryService;
-import org.kuali.kfs.service.GeneralLedgerPendingEntryGenerationProcess;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.module.financial.bo.BankAccount;
 import org.kuali.module.financial.bo.BasicFormatWithLineDescriptionAccountingLineParser;
 import org.kuali.module.financial.bo.CreditCardDetail;
-import org.kuali.module.financial.rules.CreditCardReceiptDocumentRuleConstants;
 
 /**
  * This is the business object that represents the CreditCardReceipt document in Kuali. This is a transactional document that will
  * eventually post transactions to the G/L. It integrates with workflow. Since a Credit Card Receipt is a one sided transactional
  * document, only accepting funds into the university, the accounting line data will be held in the source accounting line data
  * structure only.
+ * 
+ * @author Kuali Financial Transactions Team (kualidev@oncourse.iu.edu)
  */
-public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements Copyable, AmountTotaling {
+public class CreditCardReceiptDocument extends CashReceiptDocumentBase {
     // holds details about each credit card receipt
     private List<CreditCardDetail> creditCardReceipts = new ArrayList<CreditCardDetail>();
 
@@ -58,19 +49,13 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements 
     private Integer nextCcCrLineNumber = new Integer(1);
 
     // monetary attributes
-    private KualiDecimal totalCreditCardAmount = KualiDecimal.ZERO;
+    private KualiDecimal totalCreditCardAmount = new KualiDecimal(0);
 
     /**
      * Default constructor that calls super.
      */
     public CreditCardReceiptDocument() {
         super();
-    }
-
-
-    @Override
-    public boolean documentPerformsSufficientFundsCheck() {
-        return false;
     }
 
     /**
@@ -145,9 +130,9 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements 
      */
     public final void prepareNewCreditCardReceipt(CreditCardDetail creditCardReceiptDetail) {
         creditCardReceiptDetail.setFinancialDocumentLineNumber(this.nextCcCrLineNumber);
-        creditCardReceiptDetail.setFinancialDocumentColumnTypeCode(KFSConstants.CreditCardReceiptConstants.CASH_RECEIPT_CREDIT_CARD_RECEIPT_COLUMN_TYPE_CODE);
-        creditCardReceiptDetail.setDocumentNumber(this.getDocumentNumber());
-        creditCardReceiptDetail.setFinancialDocumentTypeCode(SpringContext.getBean(DocumentTypeService.class).getDocumentTypeCodeByClass(this.getClass()));
+        creditCardReceiptDetail.setFinancialDocumentColumnTypeCode(Constants.CreditCardReceiptConstants.CASH_RECEIPT_CREDIT_CARD_RECEIPT_COLUMN_TYPE_CODE);
+        creditCardReceiptDetail.setFinancialDocumentNumber(this.getFinancialDocumentNumber());
+        creditCardReceiptDetail.setFinancialDocumentTypeCode(SpringServiceLocator.getDocumentTypeService().getDocumentTypeCodeByClass(this.getClass()));
     }
 
     /**
@@ -190,11 +175,10 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements 
     /**
      * This method returns the overall total of the document - the credit card total.
      * 
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getTotalDollarAmount()
      * @return KualiDecimal
      */
     @Override
-    public KualiDecimal getTotalDollarAmount() {
+    public KualiDecimal getSumTotalAmount() {
         return this.totalCreditCardAmount;
     }
 
@@ -228,75 +212,10 @@ public class CreditCardReceiptDocument extends CashReceiptFamilyBase implements 
     }
 
     /**
-     * @see org.kuali.kfs.document.AccountingDocumentBase#getAccountingLineParser()
+     * @see org.kuali.core.document.TransactionalDocumentBase#getAccountingLineParser()
      */
     @Override
     public AccountingLineParser getAccountingLineParser() {
         return new BasicFormatWithLineDescriptionAccountingLineParser();
-    }
-    
-    /**
-     * Generates bank offset GLPEs for deposits, if enabled.
-     * 
-     * @param financialDocument submitted accounting document
-     * @param sequenceHelper helper class for keep track of sequence for GLPEs
-     * @return true if generation of GLPE's is successful for credit card receipt document
-     * 
-     * @see org.kuali.core.rule.GenerateGeneralLedgerDocumentPendingEntriesRule#processGenerateDocumentGeneralLedgerPendingEntries(org.kuali.core.document.FinancialDocument,org.kuali.core.util.GeneralLedgerPendingEntrySequenceHelper)
-     */
-    @Override
-    public boolean generateDocumentGeneralLedgerPendingEntries(GeneralLedgerPendingEntrySequenceHelper sequenceHelper) {
-        boolean success = true;
-        if (isBankCashOffsetEnabled()) {
-            KualiDecimal depositTotal = calculateCreditCardReceiptTotal();
-            GeneralLedgerPendingEntryService glpeService = SpringContext.getBean(GeneralLedgerPendingEntryService.class);
-            // todo: what if the total is 0? e.g., 5 minus 5, should we generate a 0 amount GLPE and offset? I think the other rules
-            // combine to prevent a 0 total, though.
-            GeneralLedgerPendingEntry bankOffsetEntry = new GeneralLedgerPendingEntry();
-            final BankAccount offsetBankAccount = getOffsetBankAccount();
-            if (ObjectUtils.isNull(offsetBankAccount)) {
-                success = false;
-                GlobalVariables.getErrorMap().putError("newCreditCardReceipt.financialDocumentCreditCardTypeCode", KFSKeyConstants.CreditCardReceipt.ERROR_DOCUMENT_CREDIT_CARD_BANK_MUST_EXIST_WHEN_FLEXIBLE, new String[] { KFSConstants.SystemGroupParameterNames.FLEXIBLE_CLAIM_ON_CASH_BANK_ENABLED_FLAG, CreditCardReceiptDocumentRuleConstants.CASH_OFFSET_BANK_ACCOUNT });
-            }
-            else {
-                success &= glpeService.populateBankOffsetGeneralLedgerPendingEntry(offsetBankAccount, depositTotal, this, getPostingYear(), sequenceHelper, bankOffsetEntry, KFSConstants.CREDIT_CARD_RECEIPTS_LINE_ERRORS);
-                // An unsuccessfully populated bank offset entry may contain invalid relations, so don't add it at all if not
-                // successful.
-                if (success) {
-                    AccountingDocumentRuleHelperService accountingDocumentRuleUtil = SpringContext.getBean(AccountingDocumentRuleHelperService.class);
-                    bankOffsetEntry.setTransactionLedgerEntryDescription(accountingDocumentRuleUtil.formatProperty(KFSKeyConstants.CreditCardReceipt.DESCRIPTION_GLPE_BANK_OFFSET));
-                    getGeneralLedgerPendingEntries().add(bankOffsetEntry);
-                    sequenceHelper.increment();
-
-                    GeneralLedgerPendingEntry offsetEntry = new GeneralLedgerPendingEntry(bankOffsetEntry);
-                    success &= glpeService.populateOffsetGeneralLedgerPendingEntry(getPostingYear(), bankOffsetEntry, sequenceHelper, offsetEntry);
-                    // unsuccessful offsets may be added, but that's consistent with the offsets for regular GLPEs (i.e., maybe
-                    // neither
-                    // should?)
-                    getGeneralLedgerPendingEntries().add(offsetEntry);
-                    sequenceHelper.increment();
-                }
-            }
-        }
-        return success;
-    }
-    
-    /**
-     * Returns a credit cards flexible offset bank account
-     * 
-     * @return the Credit Card Receipt's flexible offset bank account, as configured in the APC.
-     * @throws ApplicationParameterException if the CCR offset BankAccount is not defined in the APC.
-     */
-    private BankAccount getOffsetBankAccount() {
-        final String[] parameterValues = SpringContext.getBean(ParameterService.class).getParameterValues(CreditCardReceiptDocument.class, CreditCardReceiptDocumentRuleConstants.CASH_OFFSET_BANK_ACCOUNT).toArray(new String[] {});
-        if (parameterValues.length != 2) {
-            throw new RuntimeException(CreditCardReceiptDocument.class.getSimpleName() + "/" + CreditCardReceiptDocumentRuleConstants.CASH_OFFSET_BANK_ACCOUNT + ": invalid parameter format: must be 'bankCode;bankAccountNumber'");
-        }
-        final String bankCode = parameterValues[0];
-        final String bankAccountNumber = parameterValues[1];
-        final Map<String, Object> primaryKeys = new HashMap<String, Object>();
-        primaryKeys.put(KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE, bankCode);
-        primaryKeys.put(KFSPropertyConstants.FIN_DOCUMENT_BANK_ACCOUNT_NUMBER, bankAccountNumber);
-        return (BankAccount) SpringContext.getBean(BusinessObjectService.class).findByPrimaryKey(BankAccount.class, primaryKeys);
     }
 }

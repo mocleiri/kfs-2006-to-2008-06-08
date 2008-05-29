@@ -15,36 +15,28 @@
  */
 package org.kuali.module.gl.batch;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.kuali.core.service.KualiConfigurationService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.batch.AbstractStep;
 import org.kuali.module.chart.service.ChartService;
 import org.kuali.module.gl.service.BalanceService;
 
-/**
- * A step to run the process of purging old balances
- */
 public class PurgeBalanceStep extends AbstractStep {
     private static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PurgeBalanceStep.class);
     private ChartService chartService;
     private BalanceService balanceService;
+    private KualiConfigurationService kualiConfigurationService;
 
     /**
      * This step will purge data from the gl_encumbrance_t table older than a specified year. It purges the data one chart at a time
      * each within their own transaction so database transaction logs don't get completely filled up when doing this. This step
      * class should NOT be transactional.
-     * 
-     * @param jobName the name of the job this step is being run as part of
-     * @param jobRunDate the time/date the job was started
-     * @return true if the job completed successfully, false if otherwise
-     * @see org.kuali.kfs.batch.Step#execute(java.lang.String)
      */
-    public boolean execute(String jobName, Date jobRunDate) {
-        String yearStr = getParameterService().getParameterValue(getClass(), KFSConstants.SystemGroupParameterNames.PURGE_GL_BALANCE_T_BEFORE_YEAR);
-        LOG.info("PurgeBalanceStep was run with year = "+yearStr);
+    public boolean execute(String jobName) {
+        String yearStr = kualiConfigurationService.getApplicationParameterValue(KFSConstants.ParameterGroups.SYSTEM, KFSConstants.SystemGroupParameterNames.PURGE_GL_BALANCE_T_BEFORE_YEAR);
         int year = Integer.parseInt(yearStr);
         List charts = chartService.getAllChartCodes();
         for (Iterator iter = charts.iterator(); iter.hasNext();) {
@@ -54,23 +46,15 @@ public class PurgeBalanceStep extends AbstractStep {
         return true;
     }
 
-    /**
-     * Sets the balanceService attribute, allowing the injection of an implementation of the service.
-     * 
-     * @param chartService the balanceService implementation to set
-     * @see org.kuali.module.gl.service.BalanceService
-     */
     public void setBalanceService(BalanceService balanceService) {
         this.balanceService = balanceService;
     }
 
-    /**
-     * Sets the chartService attribute, allowing the injection of an implementation of the service.
-     * 
-     * @param chartService the chartService implementation to set
-     * @see org.kuali.module.chart.service.ChartService
-     */
     public void setChartService(ChartService chartService) {
         this.chartService = chartService;
+    }
+
+    public void setKualiConfigurationService(KualiConfigurationService kualiConfigurationService) {
+        this.kualiConfigurationService = kualiConfigurationService;
     }
 }

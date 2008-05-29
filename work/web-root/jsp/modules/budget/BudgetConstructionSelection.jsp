@@ -20,7 +20,7 @@
 	<script type='text/javascript' src="dwr/interface/AccountService.js"></script>
 	<script type='text/javascript' src="dwr/interface/SubAccountService.js"></script>
 	<script language="JavaScript" type="text/javascript" src="scripts/kfs/objectInfo.js"></script>
-	<c:set var="accountingLineScriptsLoaded" value="true" scope="request" />
+	<c:set var="accountingLineScriptsLoaded" value="true" scope="page" />
 </c:if>
 
 <c:set var="bcHeaderAttributes" value="${DataDictionary.BudgetConstructionHeader.attributes}" />
@@ -48,7 +48,7 @@
 
 <%--	<kul:hiddenDocumentFields /> --%>
 
-	<kul:errors keyMatch="budgetConstructionHeader" errorTitle="Errors found in Search Criteria:" />
+	<kul:errors errorTitle="Errors found in Search Criteria:" />
 	<kul:messages/>
 
     <table align="center" cellpadding="0" cellspacing="0" class="datatable-100">
@@ -358,9 +358,7 @@
     	<tr>
             <td class="grid" colspan="4">
             <div align="center">
-              <c:if test="${!KualiForm.salarySettingDisabled}">
               <html:image property="methodToCall.performOrgSalarySetting.anchororgControlsAnchor" src="${ConfigProperties.externalizable.images.url}buttonsmall_orgsalsetting.gif" title="Organization Salary Setting" alt="Organization Salary Setting" styleClass="tinybutton"/>&nbsp;&nbsp;&nbsp;
-              </c:if>
               <html:image property="methodToCall.performReportDump.anchororgControlsAnchor" src="${ConfigProperties.externalizable.images.url}buttonsmall_orgreportdump.gif" title="Organization Report/Dump" alt="Organization Report/Dump" styleClass="tinybutton"/>&nbsp;&nbsp;&nbsp;
               <html:image property="methodToCall.performRequestImport.anchororgControlsAnchor" src="${ConfigProperties.externalizable.images.url}buttonsmall_reqimport.gif" title="Organization Request Import" alt="Organization Request Import" styleClass="tinybutton" />
             </div>

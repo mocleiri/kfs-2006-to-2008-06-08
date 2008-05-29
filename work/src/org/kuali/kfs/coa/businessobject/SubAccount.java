@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/work/src/org/kuali/kfs/coa/businessobject/SubAccount.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +20,12 @@ package org.kuali.module.chart.bo;
 
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
+import org.kuali.core.bo.BusinessObjectBase;
 
 /**
  * 
  */
-public class SubAccount extends PersistableBusinessObjectBase {
+public class SubAccount extends BusinessObjectBase {
 
     private static final long serialVersionUID = 6853259976912014273L;
 
@@ -106,6 +108,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Gets the subAccountName attribute.
      * 
      * @return Returns the subAccountName
+     * 
      */
     public String getSubAccountName() {
         return subAccountName;
@@ -115,6 +118,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Sets the subAccountName attribute.
      * 
      * @param subAccountName The subAccountName to set.
+     * 
      */
     public void setSubAccountName(String subAccountName) {
         this.subAccountName = subAccountName;
@@ -124,6 +128,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Gets the subAccountActiveIndicator attribute.
      * 
      * @return Returns the subAccountActiveIndicator
+     * 
      */
     public boolean isSubAccountActiveIndicator() {
         return subAccountActiveIndicator;
@@ -133,6 +138,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Sets the subAccountActiveIndicator attribute.
      * 
      * @param subAccountActiveIndicator The subAccountActiveIndicator to set.
+     * 
      */
     public void setSubAccountActiveIndicator(boolean subAccountActiveIndicator) {
         this.subAccountActiveIndicator = subAccountActiveIndicator;
@@ -142,6 +148,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Gets the account attribute.
      * 
      * @return Returns the account
+     * 
      */
     public Account getAccount() {
         return account;
@@ -151,6 +158,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Sets the account attribute.
      * 
      * @param account The account to set.
+     * 
      */
     public void setAccount(Account account) {
         this.account = account;
@@ -160,6 +168,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Gets the subAccount attribute.
      * 
      * @return Returns the subAccount
+     * 
      */
     public String getSubAccountNumber() {
         return subAccountNumber;
@@ -178,6 +187,7 @@ public class SubAccount extends PersistableBusinessObjectBase {
      * Gets the financialReporting attribute.
      * 
      * @return Returns the financialReporting
+     * 
      */
     public ReportingCodes getReportingCode() {
         return reportingCode;

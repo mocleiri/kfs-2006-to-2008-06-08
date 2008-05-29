@@ -15,10 +15,6 @@
  */
 package org.kuali.kfs.web.struts.action;
 
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_LINE_SALES_TAX_INVALID_ACCOUNT;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_DOCUMENT_ACCOUNTING_LINE_SALES_TAX_REQUIRED;
-import static org.kuali.kfs.KFSKeyConstants.ERROR_REQUIRED;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -38,40 +34,28 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
-import org.kuali.core.document.AmountTotaling;
-import org.kuali.core.service.BusinessObjectService;
-import org.kuali.core.service.DictionaryValidationService;
-import org.kuali.core.service.DocumentTypeService;
-import org.kuali.core.service.KualiRuleService;
-import org.kuali.core.service.PersistenceService;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.ObjectUtils;
 import org.kuali.core.util.Timer;
 import org.kuali.core.util.UrlFactory;
 import org.kuali.core.web.struts.action.KualiTransactionalDocumentActionBase;
 import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.core.workflow.service.WorkflowDocumentService;
 import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.bo.AccountingLine;
+import org.kuali.kfs.bo.AccountingLineBase;
 import org.kuali.kfs.bo.AccountingLineOverride;
 import org.kuali.kfs.bo.AccountingLineParser;
-import org.kuali.kfs.bo.GeneralLedgerPendingEntry;
 import org.kuali.kfs.bo.SourceAccountingLine;
 import org.kuali.kfs.bo.TargetAccountingLine;
-import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.AccountingDocument;
 import org.kuali.kfs.exceptions.AccountingLineParserException;
 import org.kuali.kfs.rule.event.AddAccountingLineEvent;
 import org.kuali.kfs.rule.event.DeleteAccountingLineEvent;
 import org.kuali.kfs.rule.event.UpdateAccountingLineEvent;
-import org.kuali.kfs.rules.AccountingDocumentRuleBaseConstants.APPLICATION_PARAMETER;
-import org.kuali.kfs.service.ParameterEvaluator;
-import org.kuali.kfs.service.ParameterService;
-import org.kuali.kfs.service.impl.ParameterConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
 import org.kuali.kfs.web.ui.AccountingLineDecorator;
-import org.kuali.module.financial.bo.SalesTax;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -104,7 +88,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         processAccountingLineOverrides(transForm);
 
         // this refershes if the accounting lines within the form are editable or not
-        if (ObjectUtils.isNotNull(transForm.getDocument()) && ObjectUtils.isNotNull(transForm.getDocument().getDocumentHeader()) && ObjectUtils.isNotNull(transForm.getDocument().getDocumentNumber()) && SpringContext.getBean(WorkflowDocumentService.class).workflowDocumentExists(transForm.getDocument().getDocumentNumber())) {
+        if (ObjectUtils.isNotNull(transForm.getDocument()) && ObjectUtils.isNotNull(transForm.getDocument().getDocumentHeader()) && ObjectUtils.isNotNull(transForm.getDocument().getDocumentNumber()) && SpringServiceLocator.getWorkflowDocumentService().workflowDocumentExists(transForm.getDocument().getDocumentNumber())) {
             transForm.refreshEditableAccounts();
         }
 
@@ -150,14 +134,10 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         List baselineSourceLines = tform.getBaselineSourceAccountingLines();
         baselineSourceLines.clear();
         baselineSourceLines.addAll(tform.getFinancialDocument().getSourceAccountingLines());
-        // sales tax handling
-        handleSalesTaxRequiredAllLines(kualiDocumentFormBase, baselineSourceLines);
 
         List baselineTargetLines = tform.getBaselineTargetAccountingLines();
         baselineTargetLines.clear();
         baselineTargetLines.addAll(tform.getFinancialDocument().getTargetAccountingLines());
-        // sales tax handling
-        handleSalesTaxRequiredAllLines(kualiDocumentFormBase, baselineTargetLines);
 
         // populate decorator lists
         tform.resetSourceLineDecorators(baselineSourceLines.size());
@@ -168,34 +148,6 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         tform.setNewTargetLine(null);
 
         processAccountingLineOverrides(tform);
-    }
-
-    /**
-     * Needed to override this to keep from losing Sales Tax information
-     * 
-     * @see org.kuali.core.web.struts.action.KualiAction#refresh(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward refresh(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        super.refresh(mapping, form, request, response);
-        refreshSalesTaxInfo(form);
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
-    }
-
-    /**
-     * Needed to override this to keep from losing Sales Tax information
-     * 
-     * @see org.kuali.core.web.struts.action.KualiAction#toggleTab(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public ActionForward toggleTab(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        super.toggleTab(mapping, form, request, response);
-        refreshSalesTaxInfo(form);
-
-        return mapping.findForward(KFSConstants.MAPPING_BASIC);
     }
 
 
@@ -226,16 +178,16 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     /**
      * @param line
      */
-    protected void processAccountingLineOverrides(AccountingLine line) {
+    protected static void processAccountingLineOverrides(AccountingLine line) {
         processAccountingLineOverrides(Arrays.asList(new AccountingLine[] { line }));
     }
 
     /**
      * @param accountingLines
      */
-    protected void processAccountingLineOverrides(List accountingLines) {
+    protected static void processAccountingLineOverrides(List accountingLines) {
         if (!accountingLines.isEmpty()) {
-            SpringContext.getBean(PersistenceService.class).retrieveReferenceObjects(accountingLines, AccountingLineOverride.REFRESH_FIELDS);
+            SpringServiceLocator.getPersistenceService().retrieveReferenceObjects(accountingLines, AccountingLineOverride.REFRESH_FIELDS);
 
             for (Iterator i = accountingLines.iterator(); i.hasNext();) {
                 AccountingLine line = (AccountingLine) i.next();
@@ -255,20 +207,17 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         List formLines;
         List<AccountingLineDecorator> decorators;
         String pathPrefix;
-        boolean source;
         if (lineSet.equals(KFSConstants.SOURCE)) {
             baseLines = transForm.getBaselineSourceAccountingLines();
             formLines = transDoc.getSourceAccountingLines();
             decorators = transForm.getSourceLineDecorators(formLines.size());
             pathPrefix = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME;
-            source = true;
         }
         else {
             baseLines = transForm.getBaselineTargetAccountingLines();
             formLines = transDoc.getTargetAccountingLines();
             decorators = transForm.getTargetLineDecorators(formLines.size());
             pathPrefix = KFSConstants.DOCUMENT_PROPERTY_NAME + "." + KFSConstants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME;
-            source = false;
         }
 
         Map baseLineMap = new HashMap();
@@ -286,14 +235,6 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
             // always update decorator
             handleDecorator(formLine, baseLine, decorator);
-
-            // update sales tax required attribute for view
-            // handleSalesTaxRequired(transDoc, formLine, source, false, index);
-            checkSalesTax(transDoc, formLine, source, false, index);
-            if (baseLine != null) {
-                handleSalesTaxRequired(transDoc, baseLine, source, false, index);
-                // checkSalesTax(transDoc, baseLine, source, false, index);
-            }
 
             // only generate update events for specific action methods
             String methodToCall = transForm.getMethodToCall();
@@ -328,10 +269,10 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     private void handleUpdate(AccountingDocument transDoc, String errorPathPrefix, AccountingLine formLine, AccountingLine baseLine) {
         if ((baseLine != null) && !formLine.isLike(baseLine)) {
             // reluctantly refresh BOs for clearOverridesThatBecameUnneeded()
-            formLine.refreshNonUpdateableReferences();
+            formLine.refresh();
             clearOverridesThatBecameUnneeded(formLine);
             // the rule itself is responsible for adding error messages to the global ErrorMap
-            SpringContext.getBean(KualiRuleService.class).applyRules(new UpdateAccountingLineEvent(errorPathPrefix, transDoc, baseLine, formLine));
+            SpringServiceLocator.getKualiRuleService().applyRules(new UpdateAccountingLineEvent(errorPathPrefix, transDoc, baseLine, formLine));
         }
     }
 
@@ -343,7 +284,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
      * 
      * @param formLine
      */
-    protected void clearOverridesThatBecameUnneeded(AccountingLine formLine) {
+    private static void clearOverridesThatBecameUnneeded(AccountingLine formLine) {
         AccountingLineOverride currentlyNeeded = AccountingLineOverride.determineNeededOverrides(formLine);
         AccountingLineOverride currentOverride = AccountingLineOverride.valueOf(formLine.getOverrideCode());
         if (!currentOverride.isValidMask(currentlyNeeded)) {
@@ -425,14 +366,11 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     protected boolean revertAccountingLine(KualiAccountingDocumentFormBase transForm, int revertIndex, AccountingLine originalLine, AccountingLine newerLine) {
         boolean reverted = false;
 
-        SpringContext.getBean(PersistenceService.class).refreshAllNonUpdatingReferences(originalLine);
+        SpringServiceLocator.getPersistenceService().retrieveNonKeyFields(originalLine);
 
         // *always* revert (so that if someone manually changes the line to its original values, then hits revert, they won't get an
         // error message saying "couldn't revert")
         newerLine.copyFrom(originalLine);
-        if (isSalesTaxRequired((AccountingDocument) transForm.getDocument(), newerLine)) {
-            newerLine.setSalesTaxRequired(true);
-        }
         reverted = true;
         GlobalVariables.getMessageList().add(KFSKeyConstants.MESSAGE_REVERT_SUCCESSFUL);
 
@@ -462,9 +400,9 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         // (accountingLines without baselines haven't been persisted yet, so they can safely be deleted)
         if (financialDocumentForm.hasBaselineTargetAccountingLine(deleteIndex)) {
             TargetAccountingLine baseline = financialDocumentForm.getBaselineTargetAccountingLine(deleteIndex);
-            SpringContext.getBean(PersistenceService.class).refreshAllNonUpdatingReferences(baseline);
+            SpringServiceLocator.getPersistenceService().retrieveNonKeyFields(baseline);
 
-            rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new DeleteAccountingLineEvent(errorPath, financialDocumentForm.getDocument(), baseline, false));
+            rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new DeleteAccountingLineEvent(errorPath, financialDocumentForm.getDocument(), baseline, false));
         }
         else {
             rulePassed = true;
@@ -506,9 +444,9 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         // (accountingLines without baselines haven't been persisted yet, so they can safely be deleted)
         if (financialDocumentForm.hasBaselineSourceAccountingLine(deleteIndex)) {
             SourceAccountingLine baseline = financialDocumentForm.getBaselineSourceAccountingLine(deleteIndex);
-            SpringContext.getBean(PersistenceService.class).refreshAllNonUpdatingReferences(baseline);
+            SpringServiceLocator.getPersistenceService().retrieveNonKeyFields(baseline);
 
-            rulePassed = SpringContext.getBean(KualiRuleService.class).applyRules(new DeleteAccountingLineEvent(errorPath, financialDocumentForm.getDocument(), baseline, false));
+            rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new DeleteAccountingLineEvent(errorPath, financialDocumentForm.getDocument(), baseline, false));
         }
         else {
             rulePassed = true;
@@ -547,11 +485,6 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
                 financialDocumentForm.getBaselineSourceAccountingLines().remove(deleteIndex);
             }
             financialDocumentForm.getSourceLineDecorators().remove(deleteIndex);
-
-            // update the doc total
-            AccountingDocument tdoc = (AccountingDocument) financialDocumentForm.getDocument();
-            if (tdoc instanceof AmountTotaling)
-                financialDocumentForm.getDocument().getDocumentHeader().setFinancialDocumentTotalAmount(((AmountTotaling) tdoc).getTotalDollarAmount());
         }
         else {
             // remove from document
@@ -674,19 +607,14 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         KualiAccountingDocumentFormBase financialDocumentForm = (KualiAccountingDocumentFormBase) form;
 
         TargetAccountingLine line = financialDocumentForm.getNewTargetLine();
-        boolean rulePassed = true;
-        // before we check the regular rules we need to check the sales tax rules
-        // TODO: Refactor rules so we no longer have to call this before a copy of the
-        // accountingLine
-        rulePassed &= checkSalesTax((AccountingDocument) financialDocumentForm.getDocument(), line, false, true, 0);
 
         // check any business rules
-        rulePassed &= SpringContext.getBean(KualiRuleService.class).applyRules(new AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(KFSConstants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
 
         // if the rule evaluation passed, let's add it
         if (rulePassed) {
             // add accountingLine
-            SpringContext.getBean(PersistenceService.class).refreshAllNonUpdatingReferences(line);
+            SpringServiceLocator.getPersistenceService().retrieveNonKeyFields(line);
             insertAccountingLine(false, financialDocumentForm, line);
 
             // clear the used newTargetLine
@@ -712,17 +640,13 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         KualiAccountingDocumentFormBase financialDocumentForm = (KualiAccountingDocumentFormBase) form;
 
         SourceAccountingLine line = financialDocumentForm.getNewSourceLine();
-        boolean rulePassed = true;
-        // before we check the regular rules we need to check the sales tax rules
-        // TODO: Refactor rules so we no longer have to call this before a copy of the
-        // accountingLine
-        rulePassed &= checkSalesTax((AccountingDocument) financialDocumentForm.getDocument(), line, true, true, 0);
+
         // check any business rules
-        rulePassed &= SpringContext.getBean(KualiRuleService.class).applyRules(new AddAccountingLineEvent(KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
+        boolean rulePassed = SpringServiceLocator.getKualiRuleService().applyRules(new AddAccountingLineEvent(KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME, financialDocumentForm.getDocument(), line));
 
         if (rulePassed) {
             // add accountingLine
-            SpringContext.getBean(PersistenceService.class).refreshAllNonUpdatingReferences(line);
+            SpringServiceLocator.getPersistenceService().retrieveNonKeyFields(line);
             insertAccountingLine(true, financialDocumentForm, line);
 
             // clear the used newTargetLine
@@ -745,6 +669,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         decorator.setRevertible(false);
 
         AccountingDocument tdoc = financialDocumentForm.getFinancialDocument();
+
         if (isSource) {
             // add it to the document
             tdoc.addSourceAccountingLine((SourceAccountingLine) line);
@@ -754,15 +679,6 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
             // add the decorator
             financialDocumentForm.getSourceLineDecorators().add(decorator);
-
-            // add PK fields to sales tax if needed
-            if (line.isSalesTaxRequired()) {
-                populateSalesTax(line);
-            }
-
-            // Update the doc total
-            if (tdoc instanceof AmountTotaling)
-                financialDocumentForm.getDocument().getDocumentHeader().setFinancialDocumentTotalAmount(((AmountTotaling) tdoc).getTotalDollarAmount());
         }
         else {
             // add it to the document
@@ -773,11 +689,6 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
 
             // add the decorator
             financialDocumentForm.getTargetLineDecorators().add(decorator);
-
-            // add PK fields to sales tax if needed
-            if (line.isSalesTaxRequired()) {
-                populateSalesTax(line);
-            }
         }
     }
 
@@ -871,7 +782,7 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
     public ActionForward performBalanceInquiryForTargetLine(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         int lineIndex = getSelectedLine(request);
 
-        TargetAccountingLine line = (TargetAccountingLine)((KualiAccountingDocumentFormBase) form).getFinancialDocument().getTargetAccountingLine(lineIndex);
+        TargetAccountingLine line = (TargetAccountingLine) ObjectUtils.deepCopy(((KualiAccountingDocumentFormBase) form).getFinancialDocument().getTargetAccountingLine(lineIndex));
 
         return performBalanceInquiryForAccountingLine(mapping, form, request, line);
     }
@@ -966,302 +877,8 @@ public class KualiAccountingDocumentActionBase extends KualiTransactionalDocumen
         KualiAccountingDocumentFormBase tmpForm = (KualiAccountingDocumentFormBase) form;
         tmpForm.setBaselineSourceAccountingLines(tmpForm.getFinancialDocument().getSourceAccountingLines());
         tmpForm.setBaselineTargetAccountingLines(tmpForm.getFinancialDocument().getTargetAccountingLines());
-        // need to check on sales tax for all the accounting lines
-        checkSalesTaxRequiredAllLines(tmpForm, tmpForm.getFinancialDocument().getSourceAccountingLines());
-        checkSalesTaxRequiredAllLines(tmpForm, tmpForm.getFinancialDocument().getTargetAccountingLines());
-        return forward;
-    }
-
-
-    @Override
-    public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ActionForward forward = super.route(mapping, form, request, response);
-        KualiAccountingDocumentFormBase tmpForm = (KualiAccountingDocumentFormBase) form;
-        checkSalesTaxRequiredAllLines(tmpForm, tmpForm.getFinancialDocument().getSourceAccountingLines());
-        checkSalesTaxRequiredAllLines(tmpForm, tmpForm.getFinancialDocument().getTargetAccountingLines());
 
         return forward;
     }
 
-    /**
-     * Encapsulate the rule check so we can call it from multiple places
-     * 
-     * @param document
-     * @param line
-     * @return true if sales is either not required or it contains sales tax
-     */
-    private boolean checkSalesTax(AccountingDocument document, AccountingLine line, boolean source, boolean newLine, int index) {
-        boolean passed = true;
-        if (isSalesTaxRequired(document, line)) {
-            // then set the salesTaxRequired on the accountingLine
-            line.setSalesTaxRequired(true);
-            populateSalesTax(line);
-            // check to see if the sales tax info has been put in
-            passed &= isValidSalesTaxEntered(line, source, newLine, index);
-        }
-        return passed;
-    }
-
-    /**
-     * This method checks to see if this doctype needs sales tax If it does then it checks to see if the account and object code
-     * require sales tax If it does then it returns true. Note - this is hackish as we shouldn't have to call rules directly from
-     * the action class But we need to in this instance because we are copying the lines before calling rules and need a way to
-     * modify them before they go on
-     * 
-     * @param accountingLine
-     * @return true if sales tax check is needed, false otherwise
-     */
-    protected boolean isSalesTaxRequired(AccountingDocument financialDocument, AccountingLine accountingLine) {
-        boolean required = false;
-        DocumentTypeService docTypeService = SpringContext.getBean(DocumentTypeService.class);
-        String docType = docTypeService.getDocumentTypeCodeByClass(financialDocument.getClass());
-        // first we need to check just the doctype to see if it needs the sales tax check
-        ParameterService parameterService = SpringContext.getBean(ParameterService.class);
-        // apply the rule, see if it fails
-        ParameterEvaluator docTypeSalesTaxCheckEvaluator = SpringContext.getBean(ParameterService.class).getParameterEvaluator(ParameterConstants.FINANCIAL_PROCESSING_DOCUMENT.class, APPLICATION_PARAMETER.DOCTYPE_SALES_TAX_CHECK, docType);
-        if (docTypeSalesTaxCheckEvaluator.evaluationSucceeds()) {
-            required = true;
-        }
-
-        // second we need to check the account and object code combination to see if it needs sales tax
-        if (required) {
-            // get the object code and account
-            String objCd = accountingLine.getFinancialObjectCode();
-            String account = accountingLine.getAccountNumber();
-            if (!StringUtils.isEmpty(objCd) && !StringUtils.isEmpty(account)) {
-                String compare = account + ":" + objCd;
-                ParameterEvaluator salesTaxApplicableAcctAndObjectEvaluator = SpringContext.getBean(ParameterService.class).getParameterEvaluator(ParameterConstants.FINANCIAL_PROCESSING_DOCUMENT.class, APPLICATION_PARAMETER.SALES_TAX_APPLICABLE_ACCOUNTS_AND_OBJECT_CODES, compare);
-                if (!salesTaxApplicableAcctAndObjectEvaluator.evaluationSucceeds()) {
-                    required = false;
-                }
-            }
-            else {
-                // the two fields are currently empty and we don't need to check yet
-                required = false;
-            }
-        }
-        return required;
-    }
-
-    /**
-     * This method checks to see if the sales tax information was put into the accounting line
-     * 
-     * @param accountingLine
-     * @return true if entered correctly, false otherwise
-     */
-    private boolean isValidSalesTaxEntered(AccountingLine accountingLine, boolean source, boolean newLine, int index) {
-        boolean valid = true;
-        DictionaryValidationService dictionaryValidationService = SpringContext.getBean(DictionaryValidationService.class);
-        BusinessObjectService boService = SpringContext.getBean(BusinessObjectService.class);
-        String objCd = accountingLine.getFinancialObjectCode();
-        String account = accountingLine.getAccountNumber();
-        SalesTax salesTax = accountingLine.getSalesTax();
-        String pathPrefix = "";
-        if (source && !newLine) {
-            pathPrefix = "document." + KFSConstants.EXISTING_SOURCE_ACCT_LINE_PROPERTY_NAME + "[" + index + "]";
-        }
-        else if (!source && !newLine) {
-            pathPrefix = "document." + KFSConstants.EXISTING_TARGET_ACCT_LINE_PROPERTY_NAME + "[" + index + "]";
-        }
-        else if (source && newLine) {
-            pathPrefix = KFSConstants.NEW_SOURCE_ACCT_LINE_PROPERTY_NAME;
-        }
-        else if (!source && newLine) {
-            pathPrefix = KFSConstants.NEW_TARGET_ACCT_LINE_PROPERTY_NAME;
-        }
-        GlobalVariables.getErrorMap().addToErrorPath(pathPrefix);
-        if (ObjectUtils.isNull(salesTax)) {
-            valid &= false;
-            GlobalVariables.getErrorMap().putError("salesTax.chartOfAccountsCode", ERROR_DOCUMENT_ACCOUNTING_LINE_SALES_TAX_REQUIRED, account, objCd);
-        }
-        else {
-
-            if (StringUtils.isBlank(salesTax.getChartOfAccountsCode())) {
-                valid &= false;
-                GlobalVariables.getErrorMap().putError("salesTax.chartOfAccountsCode", ERROR_REQUIRED, "Chart of Accounts");
-            }
-            if (StringUtils.isBlank(salesTax.getAccountNumber())) {
-                valid &= false;
-                GlobalVariables.getErrorMap().putError("salesTax.accountNumber", ERROR_REQUIRED, "Account Number");
-            }
-            if (salesTax.getFinancialDocumentGrossSalesAmount() == null) {
-                valid &= false;
-                GlobalVariables.getErrorMap().putError("salesTax.financialDocumentGrossSalesAmount", ERROR_REQUIRED, "Gross Sales Amount");
-            }
-            if (salesTax.getFinancialDocumentTaxableSalesAmount() == null) {
-                valid &= false;
-                GlobalVariables.getErrorMap().putError("salesTax.financialDocumentTaxableSalesAmount", ERROR_REQUIRED, "Taxable Sales Amount");
-            }
-            if (salesTax.getFinancialDocumentSaleDate() == null) {
-                valid &= false;
-                GlobalVariables.getErrorMap().putError("salesTax.financialDocumentSaleDate", ERROR_REQUIRED, "Sale Date");
-            }
-            if (StringUtils.isNotBlank(salesTax.getChartOfAccountsCode()) && StringUtils.isNotBlank(salesTax.getAccountNumber())) {
-
-                if (boService.getReferenceIfExists(salesTax, "account") == null) {
-                    valid &= false;
-                    GlobalVariables.getErrorMap().putError("salesTax.accountNumber", ERROR_DOCUMENT_ACCOUNTING_LINE_SALES_TAX_INVALID_ACCOUNT, salesTax.getChartOfAccountsCode(), salesTax.getAccountNumber());
-
-                }
-            }
-            if (!valid) {
-                GlobalVariables.getErrorMap().putError("salesTax.chartOfAccountsCode", ERROR_DOCUMENT_ACCOUNTING_LINE_SALES_TAX_REQUIRED, account, objCd);
-            }
-        }
-        GlobalVariables.getErrorMap().removeFromErrorPath(pathPrefix);
-        return valid;
-    }
-
-    /**
-     * This method removes the sales tax information from a line that no longer requires it
-     * 
-     * @param accountingLine
-     */
-    private void removeSalesTax(AccountingLine accountingLine) {
-        SalesTax salesTax = accountingLine.getSalesTax();
-        if (ObjectUtils.isNotNull(salesTax)) {
-            accountingLine.setSalesTax(null);
-        }
-    }
-
-
-    /**
-     * This method checks to see if the given accounting needs sales tax and if it does it sets the salesTaxRequired variable on the
-     * line If it doesn't and it has it then it removes the sales tax information from the line This method is called from the
-     * execute() on all accounting lines that have been edited or lines that have already been added to the document, not on new
-     * lines
-     * 
-     * @param transDoc
-     * @param formLine
-     * @param baseLine
-     */
-    private void handleSalesTaxRequired(AccountingDocument transDoc, AccountingLine formLine, boolean source, boolean newLine, int index) {
-        boolean salesTaxRequired = isSalesTaxRequired(transDoc, formLine);
-        if (salesTaxRequired) {
-            formLine.setSalesTaxRequired(true);
-            populateSalesTax(formLine);
-        }
-        else if (!salesTaxRequired && hasSalesTaxBeenEntered(formLine, source, newLine, index)) {
-            // remove it if it has been added but is no longer required
-            removeSalesTax(formLine);
-        }
-    }
-
-    private boolean hasSalesTaxBeenEntered(AccountingLine accountingLine, boolean source, boolean newLine, int index) {
-        boolean entered = true;
-        String objCd = accountingLine.getFinancialObjectCode();
-        String account = accountingLine.getAccountNumber();
-        SalesTax salesTax = accountingLine.getSalesTax();
-        if (ObjectUtils.isNull(salesTax)) {
-            return false;
-        }
-        if (StringUtils.isBlank(salesTax.getChartOfAccountsCode())) {
-            entered &= false;
-        }
-        if (StringUtils.isBlank(salesTax.getAccountNumber())) {
-            entered &= false;
-        }
-        if (salesTax.getFinancialDocumentGrossSalesAmount() == null) {
-            entered &= false;
-        }
-        if (salesTax.getFinancialDocumentTaxableSalesAmount() == null) {
-            entered &= false;
-        }
-        if (salesTax.getFinancialDocumentSaleDate() == null) {
-            entered &= false;
-        }
-        return entered;
-    }
-
-    /**
-     * This method is called from the createDocument and processes through all the accouting lines and checks to see if they need
-     * sales tax fields
-     * 
-     * @param kualiDocumentFormBase
-     * @param baselineSourceLines
-     */
-    private void handleSalesTaxRequiredAllLines(KualiDocumentFormBase kualiDocumentFormBase, List<AccountingLine> baselineAcctingLines) {
-        AccountingDocument accoutingDocument = (AccountingDocument) kualiDocumentFormBase.getDocument();
-        int index = 0;
-        for (AccountingLine accountingLine : baselineAcctingLines) {
-            boolean source = false;
-            if (accountingLine.isSourceAccountingLine()) {
-                source = true;
-            }
-            handleSalesTaxRequired(accoutingDocument, accountingLine, source, false, index);
-            index++;
-        }
-
-    }
-
-    private boolean checkSalesTaxRequiredAllLines(KualiDocumentFormBase kualiDocumentFormBase, List<AccountingLine> baselineAcctingLines) {
-        AccountingDocument accoutingDocument = (AccountingDocument) kualiDocumentFormBase.getDocument();
-        boolean passed = true;
-        int index = 0;
-        for (AccountingLine accountingLine : baselineAcctingLines) {
-            boolean source = false;
-            if (accountingLine.isSourceAccountingLine()) {
-                source = true;
-            }
-            passed &= checkSalesTax(accoutingDocument, accountingLine, source, false, index);
-            index++;
-        }
-        return passed;
-    }
-
-    /**
-     * This method refreshes the sales tax fields on a refresh or tab toggle so that all the information that was there before is
-     * still there after a state change
-     * 
-     * @param form
-     */
-    private void refreshSalesTaxInfo(ActionForm form) {
-        KualiAccountingDocumentFormBase accountingForm = (KualiAccountingDocumentFormBase) form;
-        AccountingDocument document = (AccountingDocument) accountingForm.getDocument();
-        List sourceLines = document.getSourceAccountingLines();
-        List targetLines = document.getTargetAccountingLines();
-        handleSalesTaxRequiredAllLines(accountingForm, sourceLines);
-        handleSalesTaxRequiredAllLines(accountingForm, targetLines);
-
-        AccountingLine newTargetLine = accountingForm.getNewTargetLine();
-        AccountingLine newSourceLine = accountingForm.getNewSourceLine();
-        if (newTargetLine != null) {
-            handleSalesTaxRequired(document, newTargetLine, false, true, 0);
-        }
-        if (newSourceLine != null) {
-            handleSalesTaxRequired(document, newSourceLine, true, true, 0);
-        }
-    }
-
-    /**
-     * This method populates the sales tax for a given accounting line with the appropriate primary key fields from the accounting
-     * line since OJB won't do it automatically for us
-     * 
-     * @param line
-     */
-    private void populateSalesTax(AccountingLine line) {
-        SalesTax salesTax = line.getSalesTax();
-
-        if (ObjectUtils.isNotNull(salesTax)) {
-            salesTax.setDocumentNumber(line.getDocumentNumber());
-            salesTax.setFinancialDocumentLineTypeCode(line.getFinancialDocumentLineTypeCode());
-            salesTax.setFinancialDocumentLineNumber(line.getSequenceNumber());
-        }
-    }
-
-    @Override
-    public ActionForward performLookup(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // parse out the business object name from our methodToCall parameter
-        String fullParameter = (String) request.getAttribute(KFSConstants.METHOD_TO_CALL_ATTRIBUTE);
-        String boClassName = StringUtils.substringBetween(fullParameter, KFSConstants.METHOD_TO_CALL_BOPARM_LEFT_DEL, KFSConstants.METHOD_TO_CALL_BOPARM_RIGHT_DEL);
-
-        if (!StringUtils.equals(boClassName, GeneralLedgerPendingEntry.class.getName())) {
-            return super.performLookup(mapping, form, request, response);
-        }
-
-        String path = super.performLookup(mapping, form, request, response).getPath();
-        path = path.replaceFirst(KFSConstants.LOOKUP_ACTION, KFSConstants.GL_MODIFIED_INQUIRY_ACTION);
-
-        return new ActionForward(path, true);
-    }
 }

@@ -21,7 +21,8 @@
 	htmlFormAction="researchBudgetPermissions" 
 	showTabButtons="true"
 	headerDispatch="save"
-	headerTabActive="permissions">
+	headerTabActive="permissions" 
+	feedbackKey="app.krafeedback.link">
 	
 	<kul:errors keyMatch="${Constants.DOCUMENT_ERRORS}" />
 	

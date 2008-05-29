@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.bo.Note;
 import org.kuali.core.document.Document;
 import org.kuali.core.document.MaintenanceDocument;
 import org.kuali.core.service.BusinessObjectService;
@@ -30,13 +29,10 @@ import org.kuali.kfs.KFSConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.chart.rules.MaintenancePreRulesBase;
 import org.kuali.module.vendor.VendorConstants;
-import org.kuali.module.vendor.VendorKeyConstants;
 import org.kuali.module.vendor.bo.VendorDetail;
 import org.kuali.module.vendor.bo.VendorHeader;
 import org.kuali.module.vendor.bo.VendorTaxChange;
 import org.kuali.module.vendor.bo.VendorType;
-import org.kuali.module.vendor.service.VendorService;
-import org.kuali.module.vendor.util.VendorUtils;
 
 /**
  * Business Prerules applicable to VendorDetail documents. These PreRules checks for the VendorDetail that needs to occur while
@@ -48,6 +44,7 @@ public class VendorPreRules extends MaintenancePreRulesBase {
     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(VendorPreRules.class);
 
     private VendorDetail newVendorDetail;
+    private VendorDetail copyVendorDetail;
     private String universalUserId;
 
     public VendorPreRules() {
@@ -77,9 +74,6 @@ public class VendorPreRules extends MaintenancePreRulesBase {
         setVendorNamesAndIndicator(document);
         setVendorRestriction(document);
         setVendorTaxChange(document);
-        if (StringUtils.isBlank(question) || (question.equals(VendorConstants.CHANGE_TO_PARENT_QUESTION_ID))) {
-            detectAndConfirmChangeToParent(document);
-        }
         displayReview(document);
         return true;
     }
@@ -94,6 +88,8 @@ public class VendorPreRules extends MaintenancePreRulesBase {
     private void setupConvenienceObjects(MaintenanceDocument document) {
         // setup newAccount convenience objects, make sure all possible sub-objects are populated
         newVendorDetail = (VendorDetail) document.getNewMaintainableObject().getBusinessObject();
+        copyVendorDetail = (VendorDetail) ObjectUtils.deepCopy(newVendorDetail);
+        copyVendorDetail.refresh();
     }
 
     /**
@@ -104,14 +100,14 @@ public class VendorPreRules extends MaintenancePreRulesBase {
      * @param document - the maintenanceDocument being evaluated
      */
     private void setVendorNamesAndIndicator(MaintenanceDocument document) {
-        if (StringUtils.isBlank(newVendorDetail.getVendorName()) && !StringUtils.isBlank(newVendorDetail.getVendorFirstName()) && !StringUtils.isBlank(newVendorDetail.getVendorLastName())) {
+        if (StringUtils.isBlank(copyVendorDetail.getVendorName()) && !StringUtils.isBlank(copyVendorDetail.getVendorFirstName()) && !StringUtils.isBlank(copyVendorDetail.getVendorLastName())) {
 
             newVendorDetail.setVendorFirstLastNameIndicator(true);
             newVendorDetail.setVendorFirstName(removeDelimiter(newVendorDetail.getVendorFirstName()));
             newVendorDetail.setVendorLastName(removeDelimiter(newVendorDetail.getVendorLastName()));
 
         }
-        else if (!StringUtils.isBlank(newVendorDetail.getVendorName()) && StringUtils.isBlank(newVendorDetail.getVendorFirstName()) && StringUtils.isBlank(newVendorDetail.getVendorLastName())) {
+        else if (!StringUtils.isBlank(copyVendorDetail.getVendorName()) && StringUtils.isBlank(copyVendorDetail.getVendorFirstName()) && StringUtils.isBlank(copyVendorDetail.getVendorLastName())) {
             newVendorDetail.setVendorFirstLastNameIndicator(false);
         }
     }
@@ -216,37 +212,6 @@ public class VendorPreRules extends MaintenancePreRulesBase {
             if (!proceed) {
                 abortRulesCheck();
             }
-        }
-    }
-    
-   /**
-     * This method displays a review if indicated by the vendor type and the associated text from that type This method screens the
-     * current document for changes from division vendor to parent vendor. If the document does contain such a change, the question
-     * framework is invoked to obtain the user's confirmation for the change. If confirmation is obtained, a note is added to the
-     * old parent vendor. Indicators are set appropriately.
-     * 
-     * @param document The vendor-change-containing MaintenanceDocument under examination
-     */
-    private void detectAndConfirmChangeToParent(MaintenanceDocument document) {
-        boolean proceed = true;
-        VendorDetail oldVendorDetail = (VendorDetail) document.getOldMaintainableObject().getBusinessObject();
-        boolean oldVendorIsParent = oldVendorDetail.isVendorParentIndicator();
-        boolean newVendorIsParent = newVendorDetail.isVendorParentIndicator();
-        if (!oldVendorIsParent && newVendorIsParent) {
-            // A change to division is being tried. Obtain confirmation.
-            VendorDetail oldParentVendor = SpringContext.getBean(VendorService.class).getParentVendor(oldVendorDetail.getVendorHeaderGeneratedIdentifier());
-            String oldParentVendorName = oldParentVendor.getVendorName();
-            String oldParentVendorNumber = oldParentVendor.getVendorNumber();
-            proceed = askOrAnalyzeYesNoQuestion(VendorConstants.CHANGE_TO_PARENT_QUESTION_ID, VendorUtils.buildMessageText(VendorKeyConstants.CONFIRM_VENDOR_CHANGE_TO_PARENT, oldVendorDetail.getVendorName() + "  (" + oldVendorDetail.getVendorNumber() + ")", oldParentVendorName + " (" + oldParentVendorNumber + ")"));
-            if (proceed) {
-                newVendorDetail.setVendorParentIndicator(true);
-            }
-            else {
-                newVendorDetail.setVendorParentIndicator(false);
-            }
-        }
-        if (!proceed) {
-            abortRulesCheck();
         }
     }
 
