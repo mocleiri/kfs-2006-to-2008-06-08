@@ -1,0 +1,84 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <bean id="BudgetRecordingLevelMaintenanceDocument" parent="BudgetRecordingLevelMaintenanceDocument-parentBean" />
+
+  <bean id="BudgetRecordingLevelMaintenanceDocument-parentBean" abstract="true" parent="MaintenanceDocumentEntry">
+    <property name="businessObjectClass" value="org.kuali.module.chart.bo.codes.BudgetRecordingLevel" />
+    <property name="maintainableClass" value="org.kuali.core.maintenance.KualiMaintainableImpl" />
+    <property name="maintainableSections" >
+      <list>
+        <ref bean="BudgetRecordingLevelMaintenanceDocument-EditBudgetRecordingLevel" />
+      </list>
+    </property>
+    <property name="lockingKeys" >
+      <list>
+        <value>code</value>
+      </list>
+    </property>
+    <property name="label" value="Budget Recording Level Maintenance Document" />
+    <property name="shortLabel" value="BudgetRecLvlMaintDoc" />
+    <property name="summary" value="Budget Recording Level Maintenance Document" />
+    <property name="description" value="Document used to create or update Budget Recording Level objects" />
+    <property name="helpDefinition" >
+      <bean parent="HelpDefinition"
+            p:parameterNamespace="KFS-CA"
+            p:parameterName="BUDGET_RECORDING_LEVEL"
+            p:parameterDetailType="BudgetRecordingLevel" />
+    </property>
+    <property name="documentTypeName" value="BudgetRecordingLevelMaintenanceDocument" />
+    <property name="documentAuthorizerClass" value="org.kuali.core.document.authorization.MaintenanceDocumentAuthorizerBase" />
+    <property name="documentTypeCode" value="BRL" />
+    <property name="workflowProperties" >
+      <ref bean="BudgetRecordingLevelMaintenanceDocument-workflowProperties" />
+    </property>
+    <property name="authorizations" >
+      <list>
+        <bean parent="AuthorizationDefinition">
+          <property name="action" value="initiate" />
+          <property name="authorizedGroups" >
+            <set>
+              <value>SY_MAINTENANCE_USERS</value>
+            </set>
+          </property>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+<!-- Maintenance Section Definitions -->
+
+
+  <bean id="BudgetRecordingLevelMaintenanceDocument-EditBudgetRecordingLevel" parent="BudgetRecordingLevelMaintenanceDocument-EditBudgetRecordingLevel-parentBean" />
+
+  <bean id="BudgetRecordingLevelMaintenanceDocument-EditBudgetRecordingLevel-parentBean" abstract="true" parent="MaintainableSectionDefinition">
+    <property name="id" value="Edit Budget Recording Level" />
+    <property name="title" value="Edit Budget Recording Level" />
+    <property name="maintainableItems" >
+      <list>
+        <bean parent="MaintainableFieldDefinition"
+              p:name="code"
+              p:required="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="name"
+              p:required="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="active"
+              p:defaultValue="true" />
+        <bean parent="MaintainableFieldDefinition"
+              p:name="versionNumber" />
+      </list>
+    </property>
+  </bean>
+
+<!-- Exported Workflow Properties -->
+
+
+  <bean id="BudgetRecordingLevelMaintenanceDocument-workflowProperties" parent="BudgetRecordingLevelMaintenanceDocument-workflowProperties-parentBean" />
+
+  <bean id="BudgetRecordingLevelMaintenanceDocument-workflowProperties-parentBean" abstract="true" parent="WorkflowProperties">
+  </bean>
+</beans>
