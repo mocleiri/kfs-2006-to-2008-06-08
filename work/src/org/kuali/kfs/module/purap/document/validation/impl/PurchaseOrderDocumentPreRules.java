@@ -20,21 +20,15 @@ import org.kuali.core.document.AmountTotaling;
 import org.kuali.core.document.Document;
 import org.kuali.core.rules.PreRulesContinuationBase;
 import org.kuali.core.service.KualiConfigurationService;
-import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.KFSConstants;
-import org.kuali.kfs.KFSKeyConstants;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.module.purap.PurapConstants;
 import org.kuali.module.purap.PurapKeyConstants;
-import org.kuali.module.purap.PurapPropertyConstants;
 import org.kuali.module.purap.document.PurchaseOrderDocument;
-import org.kuali.module.purap.document.PurchasingAccountsPayableDocument;
 import org.kuali.module.purap.document.PurchasingDocument;
-import org.kuali.module.purap.service.PaymentRequestService;
 
 /**
  * Business Prerules applicable to purchase order document.
@@ -60,54 +54,9 @@ public class PurchaseOrderDocumentPreRules extends PreRulesContinuationBase {
             preRulesOK &= confirmNotToExceedOverride(purchaseOrderDocument);
         }
 
-        //only run rule if status is amendment        
-        if ( isAmendmentStatus(purchaseOrderDocument) ){
-            preRulesOK &= validateReceivingRequiredIndicator(purchaseOrderDocument) ;
-        }
-        
         return preRulesOK;
     }
 
-    private boolean isAmendmentStatus(PurchaseOrderDocument purchaseOrderDocument){
-        
-        boolean isAmendmentStatus = false;
-        
-        KualiWorkflowDocument workflowDocument = purchaseOrderDocument.getDocumentHeader().getWorkflowDocument();
-        if (purchaseOrderDocument.getStatusCode().equals(PurapConstants.PurchaseOrderStatuses.CHANGE_IN_PROCESS) && 
-            (workflowDocument.stateIsInitiated() || workflowDocument.stateIsSaved()) ) {
-            isAmendmentStatus = true;
-        }
-        
-        return isAmendmentStatus;
-    }
-    /**
-     * The receiving required indicator can only be set to Yes if there are no
-     * outstanding payment requests.
-     * 
-     * @param purchaseOrderDocument
-     * @return
-     */
-    private boolean validateReceivingRequiredIndicator(PurchaseOrderDocument purchaseOrderDocument){
-        
-        boolean valid = true;
-
-        ErrorMap errorMap = GlobalVariables.getErrorMap();
-        errorMap.clearErrorPath();
-        errorMap.addToErrorPath(KFSConstants.DOCUMENT_ERRORS);
-
-        if( purchaseOrderDocument.isReceivingDocumentRequiredIndicator() && 
-            SpringContext.getBean(PaymentRequestService.class).hasActivePaymentRequestsForPurchaseOrder(purchaseOrderDocument.getPurapDocumentIdentifier()) ){
-            
-            //set receiving required indicator back to no and add errors
-            purchaseOrderDocument.setReceivingDocumentRequiredIndicator(false);
-            event.setActionForwardName(KFSConstants.MAPPING_BASIC);            
-            errorMap.putError(PurapPropertyConstants.RECEIVING_DOCUMENT_REQUIRED_ID, PurapKeyConstants.ERROR_PURCHASE_ORDER_RECEIVING_DOC_REQUIRED_ID_PENDING_PREQ);
-            valid = false;
-        }
-        
-        return valid;
-    }
-    
     /**
      * Checks whether the 'Not-to-exceed' amount has been exceeded by the purchase order total dollar limit. If so, it
      * prompts the user for confirmation.

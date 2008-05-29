@@ -28,19 +28,19 @@ import org.kuali.core.document.authorization.DocumentActionFlags;
 import org.kuali.core.document.authorization.TransactionalDocumentActionFlags;
 import org.kuali.core.exceptions.DocumentTypeAuthorizationException;
 import org.kuali.core.util.Timer;
-import org.kuali.core.workflow.service.KualiWorkflowDocument;
 import org.kuali.kfs.bo.AccountingLine;
 import org.kuali.kfs.context.SpringContext;
 import org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase;
 import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.financial.bo.CashDrawer;
 import org.kuali.module.financial.document.CashReceiptDocument;
-import org.kuali.module.financial.document.CashReceiptFamilyBase;
 import org.kuali.module.financial.service.CashDrawerService;
 import org.kuali.module.financial.service.CashReceiptService;
 
 /**
  * Abstract base class for all TransactionalDocumentAuthorizers, since there's this one bit of common code.
+ * 
+ * 
  */
 public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerBase {
     private static Log LOG = LogFactory.getLog(CashReceiptDocumentAuthorizer.class);
@@ -59,15 +59,15 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
 
         // if an approval is requested, check to make sure that the cash drawer is open
         // if it's not, then they should not be able to verify the CR document
-        if (document.getDocumentHeader().getWorkflowDocument().isApprovalRequested() && !document.getDocumentHeader().getWorkflowDocument().isAdHocRequested()) {
+        if (document.getDocumentHeader().getWorkflowDocument().isApprovalRequested()) {
             CashReceiptDocument crd = (CashReceiptDocument) document;
 
             String unitName = SpringContext.getBean(CashReceiptService.class).getCashReceiptVerificationUnitForCampusCode(crd.getCampusLocationCode());
-            CashDrawer cd = SpringContext.getBean(CashDrawerService.class).getByWorkgroupName(unitName, true);
+            CashDrawer cd = SpringContext.getBean(CashDrawerService.class).getByWorkgroupName(unitName, false);
             if (cd == null) {
                 throw new IllegalStateException("There is no cash drawer associated with cash receipt: " + crd.getDocumentNumber());
             }
-            else if (cd.isClosed()) {
+            else if (cd.isClosed() || cd.getReferenceFinancialDocumentNumber() == null) {
                 flags.setCanBlanketApprove(false);
                 flags.setCanApprove(false);
             }
@@ -105,8 +105,7 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
     /**
      * Overrides parent to return an empty Map since FO routing doesn't apply to the CR doc.
      * 
-     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List,
-     *      org.kuali.module.chart.bo.ChartUser)
+     * @see org.kuali.kfs.document.authorization.AccountingDocumentAuthorizerBase#getEditableAccounts(java.util.List, org.kuali.module.chart.bo.ChartUser)
      */
     @Override
     public Map getEditableAccounts(List<AccountingLine> lines, ChartUser user) {
@@ -124,24 +123,11 @@ public class CashReceiptDocumentAuthorizer extends AccountingDocumentAuthorizerB
         boolean authorized = false;
         String unitName = SpringContext.getBean(CashReceiptService.class).getCashReceiptVerificationUnitForUser(user);
         if (unitName != null) {
-            authorized = !user.isMember(unitName);
+            authorized = !user.isMember( unitName );
         }
         if (!authorized) {
             // TODO: customize message indicating the required unitName using DocumentInitiationAuthorizationException
             throw new DocumentTypeAuthorizationException(user.getPersonUserIdentifier(), "initiate", documentTypeName);
         }
-    }
-    
-    /**
-     * Method used by <code>{@link org.kuali.module.financial.service.CashReceiptCoverSheetService}</code> to determine of the
-     * <code>{@link CashReceiptDocument}</code> validates business rules for generating a cover page. <br/> <br/> Rule is the
-     * <code>{@link Document}</code> must be ENROUTE.
-     * 
-     * @param document submitted cash receipt document
-     * @return true if state is not cancelled, initiated, disapproved, saved, or exception
-     */
-    public boolean isCoverSheetPrintable(CashReceiptFamilyBase document) {
-        KualiWorkflowDocument workflowDocument = document.getDocumentHeader().getWorkflowDocument();
-        return !(workflowDocument.stateIsCanceled() || workflowDocument.stateIsInitiated() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsException() || workflowDocument.stateIsDisapproved() || workflowDocument.stateIsSaved());
     }
 }

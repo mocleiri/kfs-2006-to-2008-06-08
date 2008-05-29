@@ -217,9 +217,10 @@ public class OrganizationReversionLogicTest extends OriginEntryTestBase {
         orgReversionUnitOfWorkService = SpringContext.getBean(OrgReversionUnitOfWorkService.class);
         organizationReversionProcessService = SpringContext.getBean(OrganizationReversionProcessService.class);
 
+        currentFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        previousFiscalYear = new Integer(currentFiscalYear.intValue() - 1);
+
         Map jobParameters = organizationReversionProcessService.getJobParameters();
-        currentFiscalYear = new Integer(((Number)jobParameters.get(KFSConstants.UNIV_FISCAL_YR)).intValue() + 1);
-        previousFiscalYear = new Integer(((Number)jobParameters.get(KFSConstants.UNIV_FISCAL_YR)).intValue());
         Map<String, Integer> organizationReversionCounts = new HashMap<String, Integer>();
 
         orgRevProcess = new OrganizationReversionProcess(null, false, organizationReversionService, balanceService, originEntryGroupService, originEntryService, persistenceService, dtService, cashOrganizationReversionCategoryLogic, priorYearAccountService, orgReversionUnitOfWorkService, jobParameters, organizationReversionCounts);
@@ -244,9 +245,7 @@ public class OrganizationReversionLogicTest extends OriginEntryTestBase {
         clearGlBalanceTable();
         clearOriginEntryTables();
         persistenceService.clearCache();
-        
         for (Balance bal : balancesToTestAgainst) {
-            bal.setUniversityFiscalYear(previousFiscalYear);
             balanceService.save(bal);
         }
         OriginEntryGroup outputGroup = organizationReversionProcessService.createOrganizationReversionProcessOriginEntryGroup();
@@ -255,14 +254,14 @@ public class OrganizationReversionLogicTest extends OriginEntryTestBase {
         orgRevProcess.organizationReversionProcess();
 
         // ye olde sanity check
-        assertEquals("Balances Read", new Integer(balancesToTestAgainst.size()), new Integer(orgRevProcess.getBalancesRead()));
+        assertEquals("Balances Read", new Integer(orgRevProcess.getBalancesRead()), new Integer(balancesToTestAgainst.size()));
 
         // make sure this resulted in one Org Rev origin entry group
         Collection groups = originEntryGroupService.getAllOriginEntryGroup();
-        assertEquals("Origin Entries Group Size", new Integer(1), new Integer(groups.size()));
+        assertEquals("Origin Entries Group Size", new Integer(groups.size()), new Integer(1));
 
         OriginEntryGroup group = (OriginEntryGroup) groups.iterator().next();
-        assertEquals("Origin Entry Group Source Code", OriginEntrySource.YEAR_END_ORG_REVERSION, group.getSourceCode());
+        assertEquals("Origin Entry Group Source Code", group.getSourceCode(), OriginEntrySource.YEAR_END_ORG_REVERSION);
         return group;
     }
 

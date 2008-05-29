@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,41 @@
 
 package org.kuali.module.financial.bo;
 
-import static org.kuali.kfs.KFSPropertyConstants.ACCOUNT_NUMBER;
-import static org.kuali.kfs.KFSPropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.CHART_OF_ACCOUNTS_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.ORGANIZATION_REFERENCE_ID;
-import static org.kuali.kfs.KFSPropertyConstants.PROJECT_CODE;
-import static org.kuali.kfs.KFSPropertyConstants.SUB_ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.ACCOUNT_NUMBER;
+import static org.kuali.PropertyConstants.BASE_BUDGET_ADJUSTMENT_AMOUNT;
+import static org.kuali.PropertyConstants.CHART_OF_ACCOUNTS_CODE;
+import static org.kuali.PropertyConstants.CURRENT_BUDGET_ADJUSTMENT_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT;
+import static org.kuali.PropertyConstants.FINANCIAL_OBJECT_CODE;
+import static org.kuali.PropertyConstants.FINANCIAL_SUB_OBJECT_CODE;
+import static org.kuali.PropertyConstants.ORGANIZATION_REFERENCE_ID;
+import static org.kuali.PropertyConstants.OVERRIDE_CODE;
+import static org.kuali.PropertyConstants.PROJECT_CODE;
+import static org.kuali.PropertyConstants.SUB_ACCOUNT_NUMBER;
 
-import org.kuali.kfs.bo.AccountingLineParserBase;
-
+import org.kuali.core.bo.AccountingLineParserBase;
 
 /**
- * This class represents a <code>BudgetAdjustmentDocument</code> accounting line parser
+ * <code>BudgetAdjustmentDocument</code> accounting line parser
+ * 
+ * 
  */
 public class BudgetAdjustmentAccountingLineParser extends AccountingLineParserBase {
-    private static final String[] AD_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, CURRENT_BUDGET_ADJUSTMENT_AMOUNT, BASE_BUDGET_ADJUSTMENT_AMOUNT, FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT };
+    private static final String[] AD_FORMAT = { CHART_OF_ACCOUNTS_CODE, ACCOUNT_NUMBER, SUB_ACCOUNT_NUMBER, FINANCIAL_OBJECT_CODE, FINANCIAL_SUB_OBJECT_CODE, PROJECT_CODE, ORGANIZATION_REFERENCE_ID, OVERRIDE_CODE, CURRENT_BUDGET_ADJUSTMENT_AMOUNT, BASE_BUDGET_ADJUSTMENT_AMOUNT, FINANCIAL_DOCUMENT_MONTH_1_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_2_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_3_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_4_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_5_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_6_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_7_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_8_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_9_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_10_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_11_LINE_AMOUNT, FINANCIAL_DOCUMENT_MONTH_12_LINE_AMOUNT };
 
     /**
+     * 
      * Constructs a AdvanceDepositAccountingLineParser.java.
      */
     public BudgetAdjustmentAccountingLineParser() {
@@ -63,6 +66,7 @@ public class BudgetAdjustmentAccountingLineParser extends AccountingLineParserBa
     }
 
     /**
+     * 
      * @see org.kuali.core.bo.AccountingLineParser#getTargetAccountingLineFormat()
      */
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 package org.kuali.module.financial.rules;
 
-import org.kuali.core.service.DataDictionaryService;
-import org.kuali.core.service.DictionaryValidationService;
+import org.kuali.KeyConstants;
+import org.kuali.PropertyConstants;
 import org.kuali.core.util.ErrorMap;
 import org.kuali.core.util.GlobalVariables;
-import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.financial.bo.AdvanceDepositDetail;
 
 /**
  * Common Advance Deposit Document rule utilities.
+ * 
+ * 
  */
 public class AdvanceDepositDocumentRuleUtil {
     /**
@@ -33,38 +33,38 @@ public class AdvanceDepositDocumentRuleUtil {
      * existence of the Bank and BankAccount attributes that hang off of it. This method assumes that the document hierarchy for the
      * error map path is managed outside of this call.
      * 
-     * @param advanceDeposit advanceDeposit object being validated
-     * @return boolean returns true if dollar amount is not 0 and bank-related references (i.e. bank and bank account) are valid
+     * @param advanceDeposit
+     * @return boolean
      */
     public static boolean validateAdvanceDeposit(AdvanceDepositDetail advanceDeposit) {
         ErrorMap errorMap = GlobalVariables.getErrorMap();
         int originalErrorCount = errorMap.getErrorCount();
 
         // call the DD validation which checks basic data integrity
-        SpringContext.getBean(DictionaryValidationService.class).validateBusinessObject(advanceDeposit);
+        SpringServiceLocator.getDictionaryValidationService().validateBusinessObject(advanceDeposit);
         boolean isValid = (errorMap.getErrorCount() == originalErrorCount);
 
         // check that dollar amount is not zero before continuing
         if (isValid) {
             isValid = !advanceDeposit.getFinancialDocumentAdvanceDepositAmount().isZero();
             if (!isValid) {
-                String label = SpringContext.getBean(DataDictionaryService.class).getAttributeLabel(AdvanceDepositDetail.class, KFSPropertyConstants.ADVANCE_DEPOSIT_AMOUNT);
-                errorMap.putError(KFSPropertyConstants.ADVANCE_DEPOSIT_AMOUNT, KFSKeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_ZERO_AMOUNT, label);
+                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, PropertyConstants.ADVANCE_DEPOSIT_AMOUNT);
+                errorMap.putError(PropertyConstants.ADVANCE_DEPOSIT_AMOUNT, KeyConstants.AdvanceDeposit.ERROR_DOCUMENT_ADVANCE_DEPOSIT_ZERO_AMOUNT, label);
             }
         }
 
         if (isValid) {
-            isValid = SpringContext.getBean(DictionaryValidationService.class).validateReferenceExists(advanceDeposit, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK);
+            isValid = SpringServiceLocator.getDictionaryValidationService().validateReferenceExists(advanceDeposit, PropertyConstants.FINANCIAL_DOCUMENT_BANK);
             if (!isValid) {
-                String label = SpringContext.getBean(DataDictionaryService.class).getAttributeLabel(AdvanceDepositDetail.class, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE);
-                errorMap.putError(KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE, KFSKeyConstants.ERROR_EXISTENCE, label);
+                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, PropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE);
+                errorMap.putError(PropertyConstants.FINANCIAL_DOCUMENT_BANK_CODE, KeyConstants.ERROR_EXISTENCE, label);
             }
         }
         if (isValid) {
-            isValid = SpringContext.getBean(DictionaryValidationService.class).validateReferenceExists(advanceDeposit, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT);
+            isValid = SpringServiceLocator.getDictionaryValidationService().validateReferenceExists(advanceDeposit, PropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT);
             if (!isValid) {
-                String label = SpringContext.getBean(DataDictionaryService.class).getAttributeLabel(AdvanceDepositDetail.class, KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER);
-                errorMap.putError(KFSPropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER, KFSKeyConstants.ERROR_EXISTENCE, label);
+                String label = SpringServiceLocator.getDataDictionaryService().getAttributeLabel(AdvanceDepositDetail.class, PropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER);
+                errorMap.putError(PropertyConstants.FINANCIAL_DOCUMENT_BANK_ACCOUNT_NUMBER, KeyConstants.ERROR_EXISTENCE, label);
             }
         }
 

@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +27,12 @@ import org.kuali.module.kra.budget.bo.BudgetUser;
 
 /**
  * This interface defines methods that an Budget Fringe Rate Service must provide
+ * 
+ * 
  */
 public interface BudgetFringeRateService {
-    /**
-     * Returns active AppointmentTypes.
-     * 
-     * @return active AppointmentType objects
-     */
+    // public void setFringeRate(Long documentNumber, Collection accountNumber);
+
     public Collection getDefaultFringeRates();
 
     public boolean isValidFringeRate(KualiDecimal fringeRate);
@@ -45,5 +46,4 @@ public interface BudgetFringeRateService {
     public BudgetFringeRate getBudgetFringeRateForDefaultAppointmentType(String documentNumber);
 
     public BudgetFringeRate getBudgetFringeRate(String documentNumber, String institutionAppointmentTypeCode);
-
 }

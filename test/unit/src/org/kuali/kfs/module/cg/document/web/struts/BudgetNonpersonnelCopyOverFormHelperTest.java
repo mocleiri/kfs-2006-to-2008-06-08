@@ -1,51 +1,55 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University Business Officers,
+ * Cornell University, Trustees of Indiana University, Michigan State University Board of Trustees,
+ * Trustees of San Joaquin Delta College, University of Hawai'i, The Arizona Board of Regents on
+ * behalf of the University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); By obtaining,
+ * using and/or copying this Original Work, you agree that you have read, understand, and will
+ * comply with the terms and conditions of the Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 package org.kuali.module.kra.web.struts.form;
-
-import static org.kuali.test.util.KualiTestAssertionUtils.assertEquality;
 
 import java.util.List;
 
 import org.kuali.core.util.KualiDecimal;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
+import org.kuali.module.kra.bo.BudgetNonpersonnel;
 import org.kuali.module.kra.bo.BudgetNonpersonnelTest;
 import org.kuali.module.kra.bo.BudgetPeriodTest;
-import org.kuali.module.kra.budget.bo.BudgetNonpersonnel;
-import org.kuali.module.kra.budget.service.BudgetNonpersonnelService;
-import org.kuali.module.kra.budget.web.struts.form.BudgetForm;
-import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelCopyOverFormHelper;
-import org.kuali.module.kra.budget.web.struts.form.BudgetNonpersonnelCopyOverFormHelper.NonpersonnelCopyOverCategoryHelper;
-import org.kuali.test.ConfigureContext;
+import org.kuali.module.kra.service.BudgetNonpersonnelService;
+import org.kuali.module.kra.web.struts.form.BudgetNonpersonnelCopyOverFormHelper.NonpersonnelCopyOverCategoryHelper;
+import org.kuali.test.KualiTestBaseWithSpring;
 
 /**
  * This class tests methods in BudgetNonpersonnelCopyOverFormHelper.
+ * 
+ * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
-@ConfigureContext
-public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBase {
+public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBaseWithSpring {
 
+    private BudgetNonpersonnelService budgetNonpersonnelService;
 
     private BudgetForm budgetForm;
 
-    @Override
     protected void setUp() throws Exception {
         super.setUp();
         budgetForm = new BudgetForm();
 
-        budgetForm.setNonpersonnelCategories(SpringContext.getBean(BudgetNonpersonnelService.class).getAllNonpersonnelCategories());
+        budgetNonpersonnelService = SpringServiceLocator.getBudgetNonpersonnelService();
+        budgetForm.setNonpersonnelCategories(budgetNonpersonnelService.getAllNonpersonnelCategories());
 
         String[] categories = { "CO", "CO", "FL" };
         String[] subCategories = { "C1", "C1", "F5" };
@@ -79,7 +83,7 @@ public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBase {
         List budgetNonpersonnelList = budgetForm.getBudgetDocument().getBudget().getNonpersonnelItems();
         assertTrue("Incorrect number of items found after copy over.", budgetNonpersonnelList.size() == 11);
 
-        // Could test values next for a more exhaustive test case, but this covers the basics for now.
+        /** @todo Could test values next for a more exhaustive test case ... */
     }
 
     public void testRefresh() {
@@ -99,11 +103,11 @@ public class BudgetNonpersonnelCopyOverFormHelperTest extends KualiTestBase {
         assertEquality(new KualiDecimal(1331), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(3));
         assertEquality(new KualiDecimal(1464), nonpersonnelCopyOverCategoryHelper.getAgencyRequestAmountTotal().get(4));
 
-        assertEquality(new KualiDecimal(4000), nonpersonnelCopyOverCategoryHelper.getBudgetInstitutionCostShareAmountTotal().get(0));
-        assertEquality(new KualiDecimal(2200), nonpersonnelCopyOverCategoryHelper.getBudgetInstitutionCostShareAmountTotal().get(1));
-        assertEquality(new KualiDecimal(2420), nonpersonnelCopyOverCategoryHelper.getBudgetInstitutionCostShareAmountTotal().get(2));
-        assertEquality(new KualiDecimal(2662), nonpersonnelCopyOverCategoryHelper.getBudgetInstitutionCostShareAmountTotal().get(3));
-        assertEquality(new KualiDecimal(2928), nonpersonnelCopyOverCategoryHelper.getBudgetInstitutionCostShareAmountTotal().get(4));
+        assertEquality(new KualiDecimal(4000), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(0));
+        assertEquality(new KualiDecimal(2200), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(1));
+        assertEquality(new KualiDecimal(2420), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(2));
+        assertEquality(new KualiDecimal(2662), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(3));
+        assertEquality(new KualiDecimal(2928), nonpersonnelCopyOverCategoryHelper.getBudgetUniversityCostShareAmountTotal().get(4));
 
         assertEquality(new KualiDecimal(6000), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(0));
         assertEquality(new KualiDecimal(3300), nonpersonnelCopyOverCategoryHelper.getBudgetThirdPartyCostShareAmountTotal().get(1));

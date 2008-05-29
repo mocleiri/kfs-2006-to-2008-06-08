@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,15 @@ package org.kuali.module.chart.service;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kuali.core.bo.user.UniversalUser;
-import org.kuali.kfs.bo.AccountingLine;
-import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.core.bo.user.KualiUser;
 import org.kuali.module.chart.bo.Account;
-import org.kuali.module.chart.bo.ChartUser;
 import org.kuali.module.chart.bo.Delegate;
 
 
 /**
  * This interface defines methods that an Account Service must provide
+ * 
+ * 
  */
 public interface AccountService {
     /**
@@ -74,16 +73,7 @@ public interface AccountService {
      * @param kualiUser
      * @return a list of Accounts that the user has responsibility for
      */
-    public List getAccountsThatUserIsResponsibleFor(UniversalUser kualiUser);
-
-    /**
-     * Does the given user have responsibilities on the given account?
-     * 
-     * @param kualiUser the universal user to check responsibilities for
-     * @param account the account to check responsibilities on
-     * @return true if user does have responsibilities, false if otherwise
-     */
-    public boolean hasResponsibilityOnAccount(UniversalUser kualiUser, Account account);
+    public List getAccountsThatUserIsResponsibleFor(KualiUser kualiUser);
 
     /**
      * get all accounts in the system. This is needed by a sufficient funds rebuilder job
@@ -91,13 +81,4 @@ public interface AccountService {
      * @return iterator of all accounts
      */
     public Iterator getAllAccounts();
-    
-    /**
-     * Given an accounting document, an accounting line, and a ChartUser, determines whether the given accounting line can be edited by the user, based on the account
-     * @param financialDocument the document containing the accounting line to check
-     * @param accountingLine the accounting line to check for accessibility
-     * @param user the chart user who may or may not have accessible accounting lines on the document
-     * @return true if the given accountingLine refers to an account which allows it to be added, deleted, or updated
-     */
-    public abstract boolean accountIsAccessible(AccountingDocument financialDocument, AccountingLine accountingLine, ChartUser user);
 }

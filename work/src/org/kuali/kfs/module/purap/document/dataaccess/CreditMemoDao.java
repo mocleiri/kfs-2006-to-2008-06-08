@@ -20,37 +20,23 @@ import java.util.Iterator;
 
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.purap.document.CreditMemoDocument;
-import org.kuali.module.purap.util.VendorGroupingHelper;
 
 /**
- * Credit Memo DAO Interface. Defines DB access methods that a CreditMemoDaoImpl must implement.
+ * Defines DB access methods that a CreditMemoDaoImpl must implement.
  */
 public interface CreditMemoDao {
-
     /**
      * Get all the credit memos that need to be extracted
      * 
-     * @param chartCode - if not null, limit results to a single chart
-     * @return - Iterator of credit memos
+     * @param chartCode if not null, limit results to a single chart
+     * @return Iterator of credit memos
      */
     public Iterator<CreditMemoDocument> getCreditMemosToExtract(String chartCode);
 
     /**
-     * Get all the credit memos that need to be extracted for a particular vendor record.
+     * This method tests for a duplicate entry of a credit memo by the combination of vendorNumber and creditMemoNumber. This method
+     * accepts the two values as arguments, and returns a boolean, describing whether a duplicate exists in the system or not.
      * 
-     * @param chartCode - if not null, limit results to a single chart
-     * @param vendorHeaderGeneratedIdentifier
-     * @param vendorDetailAssignedIdentifier
-     * @return - Iterator of credit memos
-     */
-    public Iterator<CreditMemoDocument> getCreditMemosToExtractByVendor(String chartCode, VendorGroupingHelper vendor );
-    
-    /**
-     * This method tests for a duplicate entry of a credit memo by the combination of vendorNumber HeaderId, vendorNumber and
-     * creditMemoNumber. This method accepts the three values as arguments, and returns a boolean, describing whether a duplicate
-     * exists in the system or not.
-     * 
-     * @param vendorNumberHeaderId - vendor number header id
      * @param vendorNumber - the composite two-part vendorNumber (headerId-detailId)
      * @param creditMemoNumber - the vendor-supplied creditMemoNumber
      * @return boolean - true if a match exists in the db, false if not
@@ -58,23 +44,20 @@ public interface CreditMemoDao {
     public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, String creditMemoNumber);
 
     /**
-     * This method tests for a duplicate entry of a credit memo by the combination of vendor number header id, vendor detail id,
-     * date and amount. This method accepts the values as arguments, and returns a boolean, describing whether a duplicate exists in
-     * the system or not.
+     * This method tests for a duplicate entry of a credit memo by the combination of vendorNumber, date and amount. This method
+     * accepts the values as arguments, and returns a boolean, describing whether a duplicate exists in the system or not.
      * 
-     * @param vendorNumberHeaderId
-     * @param vendorNumberDetailId
-     * @param date - date of transaction
-     * @param amount - amount of transaction
+     * @param vendorNumber - the composite two-part vendorNumber (headerId-detailId)
+     * @param creditMemoNumber - the vendor-supplied creditMemoNumber
      * @return boolean - true if a match exists in the db, false if not
      */
     public boolean duplicateExists(Integer vendorNumberHeaderId, Integer vendorNumberDetailId, Date date, KualiDecimal amount);
-
-    /**
+    
+    /** 
      * This method returns a credit memo document number by id.
      * 
-     * @param id - credit memo id
-     * @return - document number
+     * @param id
+     * @return
      */
     public String getDocumentNumberByCreditMemoId(Integer id);
 }

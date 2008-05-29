@@ -20,19 +20,15 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
-import org.kuali.core.util.KualiDecimal;
 import org.kuali.core.util.ObjectUtils;
+import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.kfs.bo.SourceAccountingLine;
 
-/**
- * Purap Accounting Line Base Business Object.
- */
-public abstract class PurApAccountingLineBase extends SourceAccountingLine implements PurApAccountingLine, Comparable {
+public abstract class PurApAccountingLineBase extends SourceAccountingLine implements PurApAccountingLine {
 
     protected Integer accountIdentifier;
     private Integer itemIdentifier;
     private BigDecimal accountLinePercent;
-    private KualiDecimal alternateAmountForGLEntryCreation; // not stored in DB; needed for disencumbrances and such
 
     public Integer getAccountIdentifier() {
         return accountIdentifier;
@@ -58,45 +54,42 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
         this.accountLinePercent = accountLinePercent;
     }
 
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#isEmpty()
-     */
     public boolean isEmpty() {
-        return !(StringUtils.isNotEmpty(getAccountNumber()) || StringUtils.isNotEmpty(getChartOfAccountsCode()) || StringUtils.isNotEmpty(getFinancialObjectCode()) || StringUtils.isNotEmpty(getFinancialSubObjectCode()) || StringUtils.isNotEmpty(getOrganizationReferenceId()) || StringUtils.isNotEmpty(getProjectCode()) || StringUtils.isNotEmpty(getSubAccountNumber()) || ObjectUtils.isNotNull(getAccountLinePercent()));
+        return !(StringUtils.isNotEmpty(getAccountNumber()) || 
+                 StringUtils.isNotEmpty(getChartOfAccountsCode()) || 
+                 StringUtils.isNotEmpty(getFinancialObjectCode()) || 
+                 StringUtils.isNotEmpty(getFinancialSubObjectCode()) || 
+                 StringUtils.isNotEmpty(getOrganizationReferenceId()) || 
+                 StringUtils.isNotEmpty(getProjectCode()) || 
+                 StringUtils.isNotEmpty(getSubAccountNumber()) ||
+                 ObjectUtils.isNotNull(getAccountLinePercent()));
     }
 
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#createBlankAmountsCopy()
-     */
     public PurApAccountingLine createBlankAmountsCopy() {
-        PurApAccountingLine newAccount = (PurApAccountingLine) ObjectUtils.deepCopy(this);
-        newAccount.setAccountLinePercent(BigDecimal.ZERO);
-        newAccount.setAmount(KualiDecimal.ZERO);
-        return newAccount;
+        // TODO PURAP - Finish Me
+        return null;
     }
 
-
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#accountStringsAreEqual(org.kuali.kfs.bo.SourceAccountingLine)
-     */
-    public boolean accountStringsAreEqual(SourceAccountingLine accountingLine) {
-        if (accountingLine == null) {
-            return false;
-        }
-        return new EqualsBuilder().append(getChartOfAccountsCode(), accountingLine.getChartOfAccountsCode()).append(getAccountNumber(), accountingLine.getAccountNumber()).append(getSubAccountNumber(), accountingLine.getSubAccountNumber()).append(getFinancialObjectCode(), accountingLine.getFinancialObjectCode()).append(getFinancialSubObjectCode(), accountingLine.getFinancialSubObjectCode()).append(getProjectCode(), accountingLine.getProjectCode()).append(getOrganizationReferenceId(), accountingLine.getOrganizationReferenceId())
-                .isEquals();
-    }
-
+    // TODO PURAP - need more fields for comparison or not? - look at org.kuali.kfs.bo.AccountingLineBase#getValuesMap()
     public boolean accountStringsAreEqual(PurApAccountingLine accountingLine) {
-        return accountStringsAreEqual((SourceAccountingLine) accountingLine);
-
+        if (accountingLine == null) { return false;}
+        return new EqualsBuilder()
+          .append(getChartOfAccountsCode(), accountingLine.getChartOfAccountsCode())
+          .append(getAccountNumber(),accountingLine.getAccountNumber())
+          .append(getSubAccountNumber(),accountingLine.getSubAccountNumber())
+          .append(getFinancialObjectCode(),accountingLine.getFinancialObjectCode())
+          .append(getFinancialSubObjectCode(),accountingLine.getFinancialSubObjectCode())
+          .append(getProjectCode(),accountingLine.getProjectCode())
+          .append(getOrganizationReferenceId(),accountingLine.getOrganizationReferenceId())
+//          .append(getReferenceOriginCode(),accountingLine.getReferenceOriginCode())
+//          .append(getReferenceNumber(),accountingLine.getReferenceNumber())
+//          .append(getReferenceTypeCode(),accountingLine.getReferenceTypeCode())
+          .isEquals();
     }
 
-    /**
-     * @see org.kuali.module.purap.bo.PurApAccountingLine#generateSourceAccountingLine()
-     */
+    // TODO PURAP - this method needs to copy any account field we need to display 
+    //              and its fields should probably match method 'accountStringsAreEqual' above
     public SourceAccountingLine generateSourceAccountingLine() {
-        // the fields here should probably match method 'accountStringsAreEqual' above
         SourceAccountingLine sourceLine = new SourceAccountingLine();
         sourceLine.setChartOfAccountsCode(getChartOfAccountsCode());
         sourceLine.setAccountNumber(getAccountNumber());
@@ -108,8 +101,9 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
         sourceLine.setAmount(getAmount());
         return sourceLine;
     }
-
+    
     /**
+     * 
      * @see org.kuali.kfs.bo.AccountingLineBase#toStringMapper()
      */
     @Override
@@ -126,42 +120,4 @@ public abstract class PurApAccountingLineBase extends SourceAccountingLine imple
 
         return m;
     }
-
-    public int compareTo(Object arg0) {
-        if (arg0 instanceof PurApAccountingLine) {
-            PurApAccountingLine account = (PurApAccountingLine) arg0;
-            return this.getString().compareTo(account.getString());
-        }
-        return -1;
-    }
-
-    public String getString() {
-        return getChartOfAccountsCode() + "~" + getAccountNumber() + "~" + getSubAccountNumber() + "~" + getFinancialObjectCode() + "~" + getFinancialSubObjectCode() + "~" + getProjectCode() + "~" + getOrganizationReferenceId();
-    }
-
-    public KualiDecimal getAlternateAmountForGLEntryCreation() {
-        return alternateAmountForGLEntryCreation;
-    }
-
-    public void setAlternateAmountForGLEntryCreation(KualiDecimal alternateAmount) {
-        this.alternateAmountForGLEntryCreation = alternateAmount;
-    }
-
-    /**
-     * @see org.kuali.kfs.bo.AccountingLineBase#getSequenceNumber()
-     */
-    @Override
-    public Integer getSequenceNumber() {
-        return this.getAccountIdentifier();
-    }
-    
-    protected void copyFrom(PurApAccountingLine other) {
-        
-        super.copyFrom(other);
-
-        setAccountLinePercent(other.getAccountLinePercent());      
-        setAlternateAmountForGLEntryCreation(other.getAlternateAmountForGLEntryCreation());            
- 
-    }
-
 }

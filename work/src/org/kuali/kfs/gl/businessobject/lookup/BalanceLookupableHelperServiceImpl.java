@@ -33,21 +33,13 @@ import org.kuali.module.gl.util.BusinessObjectFieldConverter;
 import org.kuali.module.gl.util.OJBUtility;
 import org.kuali.module.gl.web.Constant;
 import org.kuali.module.gl.web.inquirable.BalanceInquirableImpl;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- * An extension of KualiLookupableImpl to support balance lookups
- */
 public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelperServiceImpl {
     private BalanceCalculator postBalance;
     private BalanceService balanceService;
     private Map fieldValues;
 
     /**
-     * Returns the url for any drill down links within the lookup
-     * @param bo the business object with a property being drilled down on
-     * @param propertyName the name of the property being drilled down on
-     * @return a String with the URL of the property
      * @see org.kuali.core.lookup.Lookupable#getInquiryUrl(org.kuali.core.bo.BusinessObject, java.lang.String)
      */
     @Override
@@ -56,9 +48,6 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
     }
 
     /**
-     * Generates the list of search results for this inquiry
-     * @param fieldValues the field values of the query to carry out
-     * @return List the search results returned by the lookup
      * @see org.kuali.core.lookup.Lookupable#getSearchResults(java.util.Map)
      */
     @Override
@@ -99,13 +88,14 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
      * @param iterator the iterator of search results of balance
      * @param isConsolidated determine if the consolidated result is desired
      * @param pendingEntryOption the given pending entry option that can be no, approved or all
+     * 
      * @return the balance collection
      */
     private Collection buildBalanceCollection(Iterator iterator, boolean isConsolidated, String pendingEntryOption) {
         Collection balanceCollection = null;
 
         if (isConsolidated) {
-            balanceCollection = buildConsolidatedBalanceCollection(iterator, pendingEntryOption);
+            balanceCollection = buildCosolidatedBalanceCollection(iterator, pendingEntryOption);
         }
         else {
             balanceCollection = buildDetailedBalanceCollection(iterator, pendingEntryOption);
@@ -116,11 +106,12 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
     /**
      * This method builds the balance collection with consolidation option from an iterator
      * 
-     * @param iterator th iterator of balance results
+     * @param iterator
      * @param pendingEntryOption the selected pending entry option
+     * 
      * @return the consolidated balance collection
      */
-    private Collection buildConsolidatedBalanceCollection(Iterator iterator, String pendingEntryOption) {
+    private Collection buildCosolidatedBalanceCollection(Iterator iterator, String pendingEntryOption) {
         Collection balanceCollection = new ArrayList();
 
         while (iterator.hasNext()) {
@@ -177,6 +168,7 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
      * 
      * @param iterator the balance iterator
      * @param pendingEntryOption the selected pending entry option
+     * 
      * @return the detailed balance collection
      */
     private Collection buildDetailedBalanceCollection(Iterator iterator, String pendingEntryOption) {
@@ -293,13 +285,6 @@ public class BalanceLookupableHelperServiceImpl extends AbstractGLLookupableHelp
     }
 
     /**
-     * Updates pending entries before their results are included in the lookup results
-     * 
-     * @param entryCollection a collection of balance entries
-     * @param fieldValues the map containing the search fields and values
-     * @param isApproved flag whether the approved entries or all entries will be processed
-     * @param isConsolidated flag whether the results are consolidated or not
-     * @param isCostShareExcluded flag whether the user selects to see the results with cost share subaccount
      * @see org.kuali.module.gl.web.lookupable.AbstractGLLookupableImpl#updateEntryCollection(java.util.Collection, java.util.Map,
      *      boolean, boolean, boolean)
      */

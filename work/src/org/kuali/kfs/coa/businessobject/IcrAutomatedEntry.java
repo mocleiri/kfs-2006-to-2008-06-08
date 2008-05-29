@@ -1,41 +1,49 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright (c) 2004, 2005 The National Association of College and University 
+ * Business Officers, Cornell University, Trustees of Indiana University, 
+ * Michigan State University Board of Trustees, Trustees of San Joaquin Delta 
+ * College, University of Hawai'i, The Arizona Board of Regents on behalf of the 
+ * University of Arizona, and the r*smart group.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Educational Community License Version 1.0 (the "License"); 
+ * By obtaining, using and/or copying this Original Work, you agree that you 
+ * have read, understand, and will comply with the terms and conditions of the 
+ * Educational Community License.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * You may obtain a copy of the License at:
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://kualiproject.org/license.html
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,  DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
  */
 
 package org.kuali.module.chart.bo;
 
-import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
-import org.kuali.core.bo.PersistableBusinessObjectBase;
-import org.kuali.kfs.bo.Options;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.bo.BusinessObjectBase;
+import org.kuali.core.bo.user.Options;
+import org.kuali.core.util.KualiPercent;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.bo.codes.BalanceTyp;
-import org.kuali.module.financial.service.UniversityDateService;
 
 /**
- * 
+ * @author Kuali Nervous System Team (kualidev@oncourse.iu.edu)
  */
-public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
+public class IcrAutomatedEntry extends BusinessObjectBase {
 
     /**
      * Default no-arg constructor.
      */
     public IcrAutomatedEntry() {
         // initialize the object fiscal year to the current fiscal year
-        universityFiscalYear = SpringContext.getBean(UniversityDateService.class).getCurrentFiscalYear();
+        universityFiscalYear = SpringServiceLocator.getDateTimeService().getCurrentFiscalYear();
     }
 
     private Integer universityFiscalYear;
@@ -43,7 +51,7 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     private String balanceTypeCode;
     private Integer awardIndrCostRcvyEntryNbr;
     private String transactionDebitIndicator;
-    private BigDecimal awardIndrCostRcvyRatePct;
+    private KualiPercent awardIndrCostRcvyRatePct;
     private String chartOfAccountsCode;
     private String accountNumber;
     private String subAccountNumber;
@@ -55,13 +63,19 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     private BalanceTyp financialBalanceTyp;
 
     /*
-     * Don't use reference objects because Chart, Account, Sub-Account, etc. contain special characters. RO 2/8/06 private Chart
-     * chartOfAccounts; private Account account; private SubAccount subAccount; private ObjectCode financialObject; private SubObjCd
-     * financialSubObject; private ObjectCode offsetBalanceSheetObjectCode;
+     * Don't use reference objects because Chart, Account, Sub-Account, etc. contain special characters. RO 2/8/06
+     * 
+     * private Chart chartOfAccounts; private Account account; private SubAccount subAccount; private ObjectCode financialObject;
+     * private SubObjCd financialSubObject; private ObjectCode offsetBalanceSheetObjectCode;
+     * 
      */
 
     /*
-     * public Account getAccount() { return account; } public void setAccount(Account account) { this.account = account; }
+     * public Account getAccount() { return account; }
+     * 
+     * 
+     * public void setAccount(Account account) { this.account = account; }
+     * 
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -83,12 +97,12 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
 
-    public BigDecimal getAwardIndrCostRcvyRatePct() {
+    public KualiPercent getAwardIndrCostRcvyRatePct() {
         return awardIndrCostRcvyRatePct;
     }
 
 
-    public void setAwardIndrCostRcvyRatePct(BigDecimal awardIndrCostRcvyRatePct) {
+    public void setAwardIndrCostRcvyRatePct(KualiPercent awardIndrCostRcvyRatePct) {
         this.awardIndrCostRcvyRatePct = awardIndrCostRcvyRatePct;
     }
 
@@ -103,8 +117,11 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
     /*
-     * public Chart getChartOfAccounts() { return chartOfAccounts; } public void setChartOfAccounts(Chart chartOfAccounts) {
-     * this.chartOfAccounts = chartOfAccounts; }
+     * public Chart getChartOfAccounts() { return chartOfAccounts; }
+     * 
+     * 
+     * public void setChartOfAccounts(Chart chartOfAccounts) { this.chartOfAccounts = chartOfAccounts; }
+     * 
      */
     public String getChartOfAccountsCode() {
         return chartOfAccountsCode;
@@ -137,8 +154,11 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
 
 
     /*
-     * public ObjectCode getFinancialObject() { return financialObject; } public void setFinancialObject(ObjectCode financialObject) {
-     * this.financialObject = financialObject; }
+     * public ObjectCode getFinancialObject() { return financialObject; }
+     * 
+     * 
+     * public void setFinancialObject(ObjectCode financialObject) { this.financialObject = financialObject; }
+     * 
      */
     public String getFinancialObjectCode() {
         return financialObjectCode;
@@ -150,8 +170,10 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
     /*
-     * public SubObjCd getFinancialSubObject() { return financialSubObject; } public void setFinancialSubObject(SubObjCd
-     * financialSubObject) { this.financialSubObject = financialSubObject; }
+     * public SubObjCd getFinancialSubObject() { return financialSubObject; }
+     * 
+     * 
+     * public void setFinancialSubObject(SubObjCd financialSubObject) { this.financialSubObject = financialSubObject; }
      */
 
     public String getFinancialSubObjectCode() {
@@ -164,9 +186,12 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
     }
 
     /*
-     * public ObjectCode getOffsetBalanceSheetObjectCode() { return offsetBalanceSheetObjectCode; } public void
-     * setOffsetBalanceSheetObjectCode(ObjectCode offsetBalanceSheetObjectCode) { this.offsetBalanceSheetObjectCode =
+     * public ObjectCode getOffsetBalanceSheetObjectCode() { return offsetBalanceSheetObjectCode; }
+     * 
+     * 
+     * public void setOffsetBalanceSheetObjectCode(ObjectCode offsetBalanceSheetObjectCode) { this.offsetBalanceSheetObjectCode =
      * offsetBalanceSheetObjectCode; }
+     * 
      */
     public String getOffsetBalanceSheetObjectCodeNumber() {
         return offsetBalanceSheetObjectCodeNumber;
@@ -179,8 +204,10 @@ public class IcrAutomatedEntry extends PersistableBusinessObjectBase {
 
 
     /*
-     * public SubAccount getSubAccount() { return subAccount; } public void setSubAccount(SubAccount subAccount) { this.subAccount =
-     * subAccount; }
+     * public SubAccount getSubAccount() { return subAccount; }
+     * 
+     * 
+     * public void setSubAccount(SubAccount subAccount) { this.subAccount = subAccount; }
      */
 
     public String getSubAccountNumber() {

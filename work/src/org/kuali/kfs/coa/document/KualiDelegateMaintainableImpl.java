@@ -16,11 +16,11 @@
 package org.kuali.module.chart.maintenance;
 
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.core.document.MaintenanceDocument;
+import org.kuali.RiceConstants;
 import org.kuali.core.document.MaintenanceLock;
 import org.kuali.core.maintenance.KualiMaintainableImpl;
 import org.kuali.core.service.DataDictionaryService;
@@ -33,64 +33,51 @@ import org.kuali.module.chart.bo.Delegate;
 import org.kuali.rice.KNSServiceLocator;
 
 /**
- * This class is a special implementation of Maintainable specifically for Account Delegates. It was created to correctly update the
+ * 
+ * This class is a special implementation of Maintainable specifically for Account Delegates.  It was created to correctly update the
  * default Start Date on edits and copies, ala JIRA #KULRNE-62.
  */
 public class KualiDelegateMaintainableImpl extends KualiMaintainableImpl {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(KualiDelegateMaintainableImpl.class);
-
     /**
      * This method will reset AccountDelegate's Start Date to the current timestamp on edits and copies
-     * 
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterRetrieve()
      */
-    @Override
-    public void processAfterCopy( MaintenanceDocument document, Map<String,String[]> parameters ) {
+    public void processAfterCopy() {
         this.setStartDateDefault();
-        super.processAfterCopy( document, parameters );
+        super.processAfterCopy();
     }
-
-    /**
-     * This method will reset AccountDelegate's Start Date to the current timestamp on edits and copies
-     * 
-     * @see org.kuali.core.maintenance.KualiMaintainableImpl#processAfterEdit()
-     */
-    @Override
-    public void processAfterEdit( MaintenanceDocument document, Map<String,String[]> parameters ) {
+    
+    public void processAfterEdit() {
         this.setStartDateDefault();
-        super.processAfterEdit( document, parameters );
+        super.processAfterEdit();
     }
-
-    /**
-     * This method sets the start date on {@link Delegate} BO
-     */
+    
     private void setStartDateDefault() {
         if (this.businessObject != null && this.businessObject instanceof Delegate) {
-            Delegate delegate = (Delegate) this.businessObject;
+            Delegate delegate = (Delegate)this.businessObject;
             delegate.setAccountDelegateStartDate(SpringContext.getBean(DateTimeService.class).getCurrentTimestamp());
         }
     }
 
     /**
-     * Generates the appropriate maintenance locks for the {@link Delegate}
-     * 
      * @see org.kuali.core.maintenance.KualiMaintainableImpl#generateMaintenanceLocks()
      */
     @Override
     public List<MaintenanceLock> generateMaintenanceLocks() {
-        Delegate delegate = (Delegate) this.businessObject;
+        Delegate delegate = (Delegate)this.businessObject;
         List<MaintenanceLock> locks = super.generateMaintenanceLocks();
         if (delegate.isAccountsDelegatePrmrtIndicator()) {
-            locks.add(createMaintenanceLock(new String[] { "chartOfAccountsCode", "accountNumber", "financialDocumentTypeCode", "accountsDelegatePrmrtIndicator" }));
+            locks.add(createMaintenanceLock(new String[]{"chartOfAccountsCode","accountNumber","financialDocumentTypeCode","accountsDelegatePrmrtIndicator"}));
         }
         return locks;
     }
-
+    
     /**
-     * This method creates a maintenance lock for the field names supplied
      * 
+     * This method creates a maintenance lock for the field names supplied
      * @param fieldNames
-     * @return the maintenance lock for supplied field names
+     * @return
      */
     private MaintenanceLock createMaintenanceLock(String[] fieldNames) {
         MaintenanceLock lock = new MaintenanceLock();
@@ -99,50 +86,50 @@ public class KualiDelegateMaintainableImpl extends KualiMaintainableImpl {
         return lock;
 
     }
-
+    
     /**
-     * This method create a locking representation for the field names supplied
      * 
+     * This method create a locking representation for the field names supplied
      * @param fieldNames
-     * @return locking representation string
+     * @return
      */
     private String createLockingRepresentation(String[] fieldNames) {
         StringBuilder lockRepresentation = new StringBuilder();
-
+        
         lockRepresentation.append(Delegate.class.getName());
-        lockRepresentation.append(KFSConstants.Maintenance.AFTER_CLASS_DELIM);
-
+        lockRepresentation.append(RiceConstants.Maintenance.AFTER_CLASS_DELIM);
+        
         DataDictionaryService dataDictionaryService = KNSServiceLocator.getDataDictionaryService();
         EncryptionService encryptionService = KNSServiceLocator.getEncryptionService();
-
+        
         int count = 0;
-        for (String fieldName : fieldNames) {
+        for (String fieldName: fieldNames) {
             lockRepresentation.append(fieldName);
-            lockRepresentation.append(KFSConstants.Maintenance.AFTER_FIELDNAME_DELIM);
+            lockRepresentation.append(RiceConstants.Maintenance.AFTER_FIELDNAME_DELIM);
             lockRepresentation.append(retrieveFieldValueForLock(fieldName, dataDictionaryService, encryptionService));
             if (count < (fieldNames.length - 1)) {
-                lockRepresentation.append(KFSConstants.Maintenance.AFTER_VALUE_DELIM);
+                lockRepresentation.append(RiceConstants.Maintenance.AFTER_VALUE_DELIM);
             }
             count += 1;
         }
-
-
+        
+        
         return lockRepresentation.toString();
     }
-
+    
     /**
-     * This method returns the field value of a given field, converting the value to a String and encrypting it if necessary
      * 
+     * This method returns the field value of a given field, converting the value to a String and encrypting it if necessary
      * @param fieldName
      * @param ddService
-     * @return string field value for a lock
+     * @return
      */
     private String retrieveFieldValueForLock(String fieldName, DataDictionaryService ddService, EncryptionService encryptionService) {
         Object fieldValue = ObjectUtils.getPropertyValue(this.businessObject, fieldName);
         if (fieldValue == null) {
             fieldValue = "";
         }
-
+        
         // check if field is a secure
         String displayWorkgroup = ddService.getAttributeDisplayWorkgroup(getBoClass(), fieldName);
         if (StringUtils.isNotBlank(displayWorkgroup)) {

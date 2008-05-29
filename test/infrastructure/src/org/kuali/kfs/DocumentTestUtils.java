@@ -1,5 +1,7 @@
 /*
- * Copyright 2005-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source: /opt/cvs/kfs/test/infrastructure/src/org/kuali/kfs/DocumentTestUtils.java,v $
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +17,10 @@
  */
 package org.kuali.test;
 
-import org.kuali.core.bo.DocumentHeader;
+import org.kuali.core.bo.user.UniversalUser;
 import org.kuali.core.document.Document;
+import org.kuali.core.document.DocumentHeader;
+import org.kuali.core.document.DocumentNote;
 import org.kuali.core.service.DocumentService;
 import org.kuali.core.util.KualiDecimal;
 import org.kuali.module.financial.bo.InternalBillingItem;
@@ -25,6 +29,8 @@ import edu.iu.uis.eden.exception.WorkflowException;
 
 /**
  * DocumentTestUtils
+ * 
+ * 
  */
 public class DocumentTestUtils {
     /**
@@ -48,9 +54,26 @@ public class DocumentTestUtils {
         return item;
     }
 
-    public static <D extends Document> D createDocument(DocumentService documentService, Class<D> docmentClass) throws WorkflowException {
-        D document = (D) documentService.getNewDocument(docmentClass);
-        document.getDocumentHeader().setExplanation("unit test created document");
+
+    /**
+     * @param documentHeaderId
+     * @param documentNoteAuthor
+     * @param documentNoteText
+     * @return new DocumentNote initialized with the given values
+     */
+    public static DocumentNote createDocumentNote(String documentHeaderId, UniversalUser documentNoteAuthor, String documentNoteText) {
+        java.util.Date now = new java.util.Date();
+        DocumentNote documentNote = new DocumentNote();
+        documentNote.setDocumentNumber(documentHeaderId);
+        documentNote.setFinDocumentAuthorUniversalId(documentNoteAuthor.getPersonUniversalIdentifier());
+        documentNote.setFinancialDocumentNoteText(documentNoteText);
+        documentNote.setFinDocNotePostedDttmStamp(new java.sql.Timestamp(now.getTime()));
+
+        return documentNote;
+    }
+    public static <D extends Document> D createDocument(DocumentService documentService,Class<D> docmentClass) throws WorkflowException {
+        D document = (D)documentService.getNewDocument(docmentClass);
+        document.setExplanation("unit test created document");
 
         DocumentHeader documentHeader = document.getDocumentHeader();
         documentHeader.setFinancialDocumentDescription("unit test created document");

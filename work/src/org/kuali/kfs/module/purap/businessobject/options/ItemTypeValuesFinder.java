@@ -17,37 +17,46 @@ package org.kuali.module.purap.lookup.keyvalues;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.core.lookup.keyvalues.KeyValuesBase;
 import org.kuali.core.service.KeyValuesService;
 import org.kuali.core.web.ui.KeyLabelPair;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.module.purap.PurapConstants;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.purap.bo.ItemType;
+import org.kuali.module.purap.bo.OwnershipType;
 
 /**
- * Value Finder for Item Types.
+ * This class returns list containg A = Active or I = Inactive
+ * 
  */
 public class ItemTypeValuesFinder extends KeyValuesBase {
 
-    /**
-     * Returns code/description pairs of all Item Types.
-     * 
-     * @see org.kuali.core.lookup.keyvalues.KeyValuesFinder#getKeyValues()
+    /*
+     * @see org.kuali.keyvalues.KeyValuesFinder#getKeyValues()
      */
-    public List getKeyValues() {
-        KeyValuesService boService = SpringContext.getBean(KeyValuesService.class);
-        Collection codes = boService.findAll(ItemType.class);
-        List labels = new ArrayList();
-        for (Object code : codes) {
-            ItemType it = (ItemType) code;
-            //exclude certain item types from the list
-            if (it.isItemTypeAboveTheLineIndicator() && !PurapConstants.ItemTypeCodes.EXCLUDED_ITEM_TYPES.contains(it.getItemTypeCode()) ) {
-                labels.add(new KeyLabelPair(it.getItemTypeCode(), it.getItemTypeDescription()));
-            }
-        }
 
-        return labels;
+        public List getKeyValues() {
+
+            KeyValuesService boService = SpringServiceLocator.getKeyValuesService();
+            Collection codes = boService.findAll(ItemType.class);
+            List defaultAboveTheLine = new ArrayList();
+            //TODO: chris - get this from rules through db field
+            defaultAboveTheLine.add("ITEM");
+            defaultAboveTheLine.add("SRVC");
+            
+            List labels = new ArrayList();
+            for (Object code : codes) {
+                ItemType it = (ItemType) code;
+                if(defaultAboveTheLine.contains(it.getItemTypeCode())) {
+                    labels.add(new KeyLabelPair(it.getItemTypeCode(), it.getItemTypeDescription()));
+                }
+            }
+
+            
+
+            return labels;
     }
+
 }

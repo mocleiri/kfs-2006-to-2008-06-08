@@ -1,225 +1,191 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-
-  <bean id="July1PositionFunding" parent="July1PositionFunding-parentBean" />
-
-  <bean id="July1PositionFunding-parentBean" abstract="true" parent="BusinessObjectEntry">
-    <property name="businessObjectClass" value="org.kuali.module.labor.bo.July1PositionFunding" />
-    <property name="inquiryDefinition" >
-      <ref bean="July1PositionFunding-inquiryDefinition" />
-    </property>
-    <property name="lookupDefinition" >
-      <ref bean="July1PositionFunding-lookupDefinition" />
-    </property>
-    <property name="attributes" >
-      <list>
-        <ref bean="July1PositionFunding-universityFiscalYear" />
-        <ref bean="July1PositionFunding-chartOfAccountsCode" />
-        <ref bean="July1PositionFunding-accountNumber" />
-        <ref bean="July1PositionFunding-subAccountNumber" />
-        <ref bean="July1PositionFunding-financialObjectCode" />
-        <ref bean="July1PositionFunding-financialSubObjectCode" />
-        <ref bean="July1PositionFunding-emplid" />
-        <ref bean="July1PositionFunding-personName" />
-        <ref bean="July1PositionFunding-positionNumber" />
-        <ref bean="July1PositionFunding-versionNumber" />
-        <ref bean="July1PositionFunding-july1BudgetAmount" />
-        <ref bean="July1PositionFunding-july1BudgetFteQuantity" />
-        <ref bean="July1PositionFunding-july1BudgetTimePercent" />
-        <ref bean="July1PositionFunding-dummyBusinessObject.genericAmount" />
-      </list>
-    </property>
-  </bean>
-
-<!-- Attribute Definitions -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2006-2007 The Kuali Foundation.
+ 
+ Licensed under the Educational Community License, Version 1.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl1.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE dictionaryEntry PUBLIC
+    "-//Kuali Project//DTD Data Dictionary 1.0//EN"
+    "../dataDictionary-1_0.dtd">
+<dictionaryEntry>
+    <businessObject businessObjectClass="org.kuali.module.labor.bo.July1PositionFunding">
 
 
-  <bean id="July1PositionFunding-universityFiscalYear" parent="July1PositionFunding-universityFiscalYear-parentBean" />
+        <inquiry>
+            <title>July 1 Position Funding Inquiry</title>
+             
+            <inquirySections>
+                <inquirySection title="Header Text">
+                    <inquiryFields>
+                        <field attributeName="accountNumber" />
+                        <field attributeName="chartOfAccountsCode" />
+                        <field attributeName="emplid" />
+                        <field attributeName="financialObjectCode" />
+                        <field attributeName="financialSubObjectCode" />
+                        <field attributeName="july1BudgetAmount" />
+                        <field attributeName="july1BudgetFteQuantity" />
+                        <field attributeName="july1BudgetTimePercent" />
+                        <field attributeName="positionNumber" />
+                        <field attributeName="subAccountNumber" />
+                        <field attributeName="universityFiscalYear" />
+                    </inquiryFields>
+                </inquirySection>
+            </inquirySections>  
+        </inquiry>
 
-  <bean id="July1PositionFunding-universityFiscalYear-parentBean" abstract="true" parent="GenericAttributes-genericFiscalYear">
-    <property name="name" value="universityFiscalYear" />
-    <property name="label" value="Fiscal Year" />
-    <property name="shortLabel" value="Fiscal Year" />
-  </bean>
-  <bean id="July1PositionFunding-chartOfAccountsCode" parent="July1PositionFunding-chartOfAccountsCode-parentBean" />
+        <lookup>
+            <title>July 1 Position Funding Lookup</title>
 
-  <bean id="July1PositionFunding-chartOfAccountsCode-parentBean" abstract="true" parent="Chart-chartOfAccountsCode">
-  </bean>
-  <bean id="July1PositionFunding-accountNumber" parent="July1PositionFunding-accountNumber-parentBean" />
+            <instructions>Look up July 1 Position Funding</instructions>
 
-  <bean id="July1PositionFunding-accountNumber-parentBean" abstract="true" parent="Account-accountNumber">
-  </bean>
-  <bean id="July1PositionFunding-subAccountNumber" parent="July1PositionFunding-subAccountNumber-parentBean" />
+            <defaultSort sortAscending="true">
+                <sortAttributes>
+                    <sortAttribute attributeName="universityFiscalYear" />
+                    <sortAttribute attributeName="chartOfAccountsCode" />
+                    <sortAttribute attributeName="accountNumber" />
+                </sortAttributes>
+            </defaultSort>
 
-  <bean id="July1PositionFunding-subAccountNumber-parentBean" abstract="true" parent="SubAccount-subAccountNumber">
-  </bean>
-  <bean id="July1PositionFunding-financialObjectCode" parent="July1PositionFunding-financialObjectCode-parentBean" />
+            <lookupFields>
+                <lookupField attributeName="universityFiscalYear" required="false" />
+                <lookupField attributeName="chartOfAccountsCode" required="false" />                
+                <lookupField attributeName="accountNumber" required="false" />
+                <lookupField attributeName="subAccountNumber" required="false" />
+                <!-- 
+                <lookupField attributeName="emplid" required="false" />
+                <lookupField attributeName="financialObjectCode" required="false" />
+                <lookupField attributeName="financialSubObjectCode" required="false" />
+                <lookupField attributeName="july1BudgetAmount" required="false" />
+                <lookupField attributeName="july1BudgetFteQuantity" required="false" />
+                <lookupField attributeName="july1BudgetTimePercent" required="false" />
+                <lookupField attributeName="positionNumber" required="false" />
+				-->
+            </lookupFields>
 
-  <bean id="July1PositionFunding-financialObjectCode-parentBean" abstract="true" parent="ObjectCode-financialObjectCode">
-  </bean>
-  <bean id="July1PositionFunding-financialSubObjectCode" parent="July1PositionFunding-financialSubObjectCode-parentBean" />
+            <resultFields>
+                <field attributeName="universityFiscalYear" />
+                <field attributeName="chartOfAccountsCode" />                
+                <field attributeName="accountNumber" />
+                <field attributeName="subAccountNumber" />
+                <field attributeName="financialObjectCode" />
+                <field attributeName="financialSubObjectCode" />                                
+                <field attributeName="fundingPerson.personName" />
+				<field attributeName="positionNumber" />                
+                <field attributeName="july1BudgetAmount" />
+                <field attributeName="july1BudgetFteQuantity" />
+                <field attributeName="july1BudgetTimePercent" />                                
+            </resultFields>
+        </lookup>
 
-  <bean id="July1PositionFunding-financialSubObjectCode-parentBean" abstract="true" parent="SubObjCd-financialSubObjectCode">
-  </bean>
-  <bean id="July1PositionFunding-emplid" parent="July1PositionFunding-emplid-parentBean" />
+        <attributes>
 
-  <bean id="July1PositionFunding-emplid-parentBean" abstract="true" parent="UniversalUser-personPayrollIdentifier">
-    <property name="name" value="emplid" />
-  </bean>
-  <bean id="July1PositionFunding-personName" parent="July1PositionFunding-personName-parentBean" />
+			<attributeReference name="accountNumber" sourceClassName="org.kuali.module.chart.bo.Account" sourceAttributeName="accountNumber" />
 
-  <bean id="July1PositionFunding-personName-parentBean" abstract="true" parent="UniversalUser-personName">
-  </bean>
-  <bean id="July1PositionFunding-positionNumber" parent="July1PositionFunding-positionNumber-parentBean" />
+            <attributeReference name="chartOfAccountsCode" sourceClassName="org.kuali.module.chart.bo.Chart" sourceAttributeName="chartOfAccountsCode" />
+            
+            <attribute name="emplid" forceUppercase="true">
+                <label>Emplid</label>
+                <shortLabel>Emplid</shortLabel>
 
-  <bean id="July1PositionFunding-positionNumber-parentBean" abstract="true" parent="PositionData-positionNumber">
-  </bean>
-  <bean id="July1PositionFunding-versionNumber" parent="July1PositionFunding-versionNumber-parentBean" />
+                <maxLength>11</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="July1PositionFunding-versionNumber-parentBean" abstract="true" parent="GenericAttributes-versionNumber">
-  </bean>
-  <bean id="July1PositionFunding-july1BudgetAmount" parent="July1PositionFunding-july1BudgetAmount-parentBean" />
+                <control>
+                    <text size="13" />
+                </control>
 
-  <bean id="July1PositionFunding-july1BudgetAmount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="july1BudgetAmount" />
-    <property name="label" value="July1 Budget Amount" />
-    <property name="shortLabel" value="Amount" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
-  <bean id="July1PositionFunding-july1BudgetFteQuantity" parent="July1PositionFunding-july1BudgetFteQuantity-parentBean" />
+                <summary>emplid</summary>
+                <description>emplid description...</description>
+			</attribute>
 
-  <bean id="July1PositionFunding-july1BudgetFteQuantity-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="july1BudgetFteQuantity" />
-    <property name="label" value="July1 Budget FTE Quantity" />
-    <property name="shortLabel" value="Quantity" />
-  </bean>
-  <bean id="July1PositionFunding-july1BudgetTimePercent" parent="July1PositionFunding-july1BudgetTimePercent-parentBean" />
+            <attributeReference name="fundingPerson.personName" sourceClassName="org.kuali.core.bo.user.UniversalUser" sourceAttributeName="personName">
+                <label>Name</label>
+                <shortLabel>Name</shortLabel>
+                <required>false</required>
+                <summary>
+                    <![CDATA[&nbsp;]]>
+                </summary>
+                <description>Name.</description>
+            </attributeReference>
 
-  <bean id="July1PositionFunding-july1BudgetTimePercent-parentBean" abstract="true" parent="AttributeDefinition">
-    <property name="name" value="july1BudgetTimePercent" />
-    <property name="forceUppercase" value="true" />
-    <property name="label" value="July1 Budget Time Percent" />
-    <property name="shortLabel" value="Percent" />
-    <property name="maxLength" value="9" />
-    <property name="validationPattern" >
-      <bean parent="FloatingPointValidationPattern" />
-    </property>
-    <property name="control" >
-      <bean parent="TextControlDefinition"
-            p:size="11" />
-    </property>
-  </bean>
-  <bean id="July1PositionFunding-dummyBusinessObject.genericAmount" parent="July1PositionFunding-dummyBusinessObject.genericAmount-parentBean" />
+			<attributeReference name="financialObjectCode" sourceClassName="org.kuali.module.chart.bo.ObjectCode" sourceAttributeName="financialObjectCode" />
+			
+            <attributeReference name="financialSubObjectCode" sourceClassName="org.kuali.module.chart.bo.SubObjCd" sourceAttributeName="financialSubObjectCode" />
 
-  <bean id="July1PositionFunding-dummyBusinessObject.genericAmount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
-    <property name="name" value="dummyBusinessObject.genericAmount" />
-    <property name="label" value="Year End Close" />
-    <property name="shortLabel" value="Year End Close" />
-    <property name="formatterClass" value="org.kuali.core.web.format.CurrencyFormatter" />
-  </bean>
+            <attributeReference name="july1BudgetAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
+                <label>July1 Budget Amount</label>
+                <shortLabel>Amount</shortLabel>
+                <summary>july1BudgetAmount</summary>
+                <description>july1BudgetAmount description...</description>
+                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
+            </attributeReference>
+            
+            <attributeReference name="july1BudgetFteQuantity" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
+                <label>July1 Budget Fte Quantity</label>
+                <shortLabel>Quantity</shortLabel>
+                <summary>july1BudgetFteQuantity</summary>
+                <description>july1BudgetFteQuantity description...</description>
+                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
+            </attributeReference>
 
-<!-- Business Object Inquiry Definition -->
+            <attribute name="july1BudgetTimePercent" forceUppercase="true">
+                <label>July1 Budget Time Percent</label>
+                <shortLabel>Percent</shortLabel>
 
+                <maxLength>9</maxLength>
+                <validationPattern><floatingPoint /></validationPattern>
 
-  <bean id="July1PositionFunding-inquiryDefinition" parent="July1PositionFunding-inquiryDefinition-parentBean" />
+                <control>
+                    <text size="11" />
+                </control>
 
-  <bean id="July1PositionFunding-inquiryDefinition-parentBean" abstract="true" parent="InquiryDefinition">
-    <property name="title" value="July 1 Position Funding Inquiry" />
-    <property name="inquirySections" >
-      <list>
-        <bean parent="InquirySectionDefinition">
-          <property name="title" value="Header Text" />
-          <property name="numberOfColumns" value="1" />
-          <property name="inquiryFields" >
-            <list>
-              <bean parent="FieldDefinition"
-                    p:attributeName="accountNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="chartOfAccountsCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="emplid" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialObjectCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="financialSubObjectCode" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="july1BudgetAmount" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="july1BudgetFteQuantity" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="july1BudgetTimePercent" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="positionNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="subAccountNumber" />
-              <bean parent="FieldDefinition"
-                    p:attributeName="universityFiscalYear" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
+                <summary>july1BudgetTimePercent</summary>
+                <description>july1BudgetTimePercent description...</description>
+			</attribute>
 
-<!-- Business Object Lookup Definition -->
+            <attribute name="positionNumber" forceUppercase="true">
+                <label>Position Number</label>
+                <shortLabel>Number</shortLabel>
 
+                <maxLength>8</maxLength>
+                <validationPattern><anyCharacter /></validationPattern>
 
-  <bean id="July1PositionFunding-lookupDefinition" parent="July1PositionFunding-lookupDefinition-parentBean" />
+                <control>
+                    <text size="10" />
+                </control>
 
-  <bean id="July1PositionFunding-lookupDefinition-parentBean" abstract="true" parent="LookupDefinition">
-    <property name="title" value="July 1 Position Funding Lookup" />
-    <property name="lookupableID" value="july1PositionFundingLookupable" />
-    <property name="instructions" value="Look up July 1 Position Funding" />
-    <property name="defaultSort" >
-      <bean parent="SortDefinition">
-      </bean>
-    </property>
-    <property name="lookupFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:required="true"
-              p:attributeName="universityFiscalYear"
-              p:defaultValueFinderClass="org.kuali.kfs.lookup.valuefinder.FiscalYearFinder" />
-        <bean parent="FieldDefinition"
-              p:required="true"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:required="true"
-              p:attributeName="accountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="subAccountNumber" />
-      </list>
-    </property>
-    <property name="resultFields" >
-      <list>
-        <bean parent="FieldDefinition"
-              p:attributeName="universityFiscalYear" />
-        <bean parent="FieldDefinition"
-              p:attributeName="chartOfAccountsCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="accountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="subAccountNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="financialSubObjectCode" />
-        <bean parent="FieldDefinition"
-              p:attributeName="personName" />
-        <bean parent="FieldDefinition"
-              p:attributeName="emplid" />
-        <bean parent="FieldDefinition"
-              p:attributeName="positionNumber" />
-        <bean parent="FieldDefinition"
-              p:attributeName="july1BudgetAmount" />
-        <bean parent="FieldDefinition"
-              p:attributeName="july1BudgetFteQuantity" />
-        <bean parent="FieldDefinition"
-              p:attributeName="july1BudgetTimePercent" />
-      </list>
-    </property>
-  </bean>
-</beans>
+                <summary>positionNumber</summary>
+                <description>positionNumber description...</description>
+			</attribute>
+
+			<attributeReference name="subAccountNumber" sourceClassName="org.kuali.module.chart.bo.SubAccount" sourceAttributeName="subAccountNumber" />          
+
+            <attributeReference name="universityFiscalYear" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericFiscalYear">
+                <label>Fiscal Year</label>
+                <shortLabel>Fiscal Year</shortLabel>
+                <description>Identifies the Fiscal Year to which the balances apply.</description>
+            </attributeReference>
+
+            <attributeReference name="versionNumber" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="versionNumber" />
+
+            <attributeReference name="dummyBusinessObject.genericAmount" sourceClassName="org.kuali.core.bo.AttributeReferenceDummy" sourceAttributeName="genericAmount">
+                <label>Year End Close</label>
+                <shortLabel>Year End Close</shortLabel>
+                <summary>Year End Close</summary>
+                <description>Year End Close Amount...</description>
+                <formatterClass>org.kuali.core.web.format.CurrencyFormatter</formatterClass>
+            </attributeReference>
+
+        </attributes>
+    </businessObject>
+</dictionaryEntry>

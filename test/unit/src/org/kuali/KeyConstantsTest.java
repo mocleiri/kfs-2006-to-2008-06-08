@@ -18,11 +18,18 @@ package org.kuali;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.kfs.KFSKeyConstants;
-import org.kuali.kfs.context.KualiTestBase;
+import org.kuali.kfs.util.SpringServiceLocator;
+import org.kuali.test.KualiTestBase;
+
+import com.opensymphony.oscache.util.StringUtil;
+
+import junit.framework.TestCase;
 
 public class KeyConstantsTest extends KualiTestBase {
 
@@ -42,7 +49,7 @@ public class KeyConstantsTest extends KualiTestBase {
                 notFound.add(key);
             }
         }
-        assertTrue("The following keys found in KFSKeyConstants.java do not map to keys in ApplicationResources.properties: " + notFound, notFound.isEmpty());
+        assertTrue("The following keys found in KFSKeyConstants.java do not map to keys in ApplicationResources.properties: "+notFound, notFound.isEmpty());
 
     }
 

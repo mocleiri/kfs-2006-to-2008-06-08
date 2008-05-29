@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +20,13 @@ package org.kuali.module.gl.util;
 import java.util.Arrays;
 
 import org.kuali.core.service.DocumentTypeService;
-import org.kuali.kfs.context.SpringContext;
+import org.kuali.core.util.SpringServiceLocator;
 import org.kuali.module.chart.service.BalanceTypService;
-import org.kuali.module.gl.bo.OriginEntryFull;
+import org.kuali.module.gl.bo.OriginEntry;
 
-/**
- * This class represents an origin entry key
- */
 public class OriginEntryKey {
-    static BalanceTypService balanceTypService = (BalanceTypService) SpringContext.getBean(BalanceTypService.class);
-    static DocumentTypeService documentTypeService = (DocumentTypeService) SpringContext.getBean(DocumentTypeService.class);
+    static BalanceTypService balanceTypService = (BalanceTypService) SpringServiceLocator.getBalanceTypService();
+    static DocumentTypeService documentTypeService = (DocumentTypeService) SpringServiceLocator.getDocumentTypeService();
 
     /*
      * (non-Javadoc)
@@ -44,10 +43,11 @@ public class OriginEntryKey {
     }
 
     /**
+     * 
      * @param entry
      * @return
      */
-    static public OriginEntryKey buildFromOriginEntry(OriginEntryFull entry) {
+    static public OriginEntryKey buildFromOriginEntry(OriginEntry entry) {
         if (null == entry) {
             return null;
         }
@@ -70,9 +70,10 @@ public class OriginEntryKey {
     }
 
     /**
+     * 
      * @param entry
      */
-    public void setIntoOriginEntry(OriginEntryFull entry) {
+    public void setIntoOriginEntry(OriginEntry entry) {
         entry.setAccountNumber(getAccountNumber());
         entry.setBalanceType(balanceTypService.getBalanceTypByCode(getBalanceTypeCode()));
         entry.setChartOfAccountsCode(getChartCode());

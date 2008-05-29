@@ -15,52 +15,40 @@
  */
 package org.kuali.module.labor.web.struts.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.kuali.core.web.struts.form.KualiDocumentFormBase;
-import org.kuali.kfs.util.ObjectUtil;
-import org.kuali.module.labor.bo.LedgerBalance;
+import org.kuali.core.document.TransactionalDocument;
+import org.kuali.kfs.document.AccountingDocument;
+import org.kuali.kfs.web.struts.form.KualiAccountingDocumentFormBase;
+import org.kuali.module.labor.bo.SalaryExpenseTransferAccountingLine;
 import org.kuali.module.labor.document.SalaryExpenseTransferDocument;
-import org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase;
-import org.kuali.module.labor.web.struts.form.SalaryExpenseTransferForm;
 
 /**
- * Struts action class for Salary Expense Transfer Document. This class extends the parent KualiTransactionalDocumentActionBase
- * class, which contains all common action methods. Since the SEP follows the basic transactional document pattern, there are no
- * specific actions that it has to implement; however, this empty class is necessary for integrating into the framework.
+ * This class extends the parent KualiTransactionalDocumentActionBase class, which contains all common action methods. Since the SEP
+ * follows the basic transactional document pattern, there are no specific actions that it has to implement; however, this empty
+ * class is necessary for integrating into the framework.
+ * 
+ * 
  */
-public class SalaryExpenseTransferAction extends ExpenseTransferDocumentActionBase {
-    /**
-     * Resets lookup fields for salary expense transfer action
-     * 
-     * @see org.kuali.module.labor.web.struts.action.ExpenseTransferDocumentActionBase#resetLookupFields(org.kuali.module.labor.web.struts.form.ExpenseTransferDocumentFormBase, org.kuali.module.labor.bo.LedgerBalance)
-     */
-    @Override
-    protected void resetLookupFields(ExpenseTransferDocumentFormBase expenseTransferDocumentForm, LedgerBalance balance) {
-        SalaryExpenseTransferForm benefitExpenseTransferForm = (SalaryExpenseTransferForm) expenseTransferDocumentForm;
-        ObjectUtil.buildObject(benefitExpenseTransferForm, balance);
-    }
+public class SalaryExpenseTransferAction extends LaborDocumentActionBase {
 
-    /**
-     * If user is approving document, capture the object code balances for comparison in business rules on route
-     * 
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#docHandler(org.apache.struts.action.ActionMapping,
-     *      org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
-    public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ActionForward forward = super.docHandler(mapping, form, request, response);
+    protected void processAccountingLineOverrides(KualiAccountingDocumentFormBase transForm) {
+        
+        if (transForm.hasDocumentId()) {
 
-        SalaryExpenseTransferDocument salaryExpenseDocument = (SalaryExpenseTransferDocument) ((KualiDocumentFormBase) form).getDocument();
-        if (salaryExpenseDocument.getDocumentHeader().getWorkflowDocument().isApprovalRequested()) {
-            salaryExpenseDocument.setApprovalObjectCodeBalances(salaryExpenseDocument.getUnbalancedObjectCodes());
+            // Save the employee ID in all source and target accounting lines.
+            AccountingDocument transactionalDocument = (AccountingDocument) transForm.getDocument();
+            SalaryExpenseTransferDocument salaryExpenseTransferDocument = (SalaryExpenseTransferDocument) transactionalDocument;
+            List<SalaryExpenseTransferAccountingLine> accountingLines = new ArrayList();
+            accountingLines.addAll((List<SalaryExpenseTransferAccountingLine>) salaryExpenseTransferDocument.getSourceAccountingLines());
+            accountingLines.addAll((List<SalaryExpenseTransferAccountingLine>) salaryExpenseTransferDocument.getTargetAccountingLines());
+           
+            for (SalaryExpenseTransferAccountingLine line : accountingLines) {
+                line.setEmplid(salaryExpenseTransferDocument.getEmplid());
+            }
+            super.processAccountingLineOverrides(transForm);
         }
-
-        return forward;
     }
-
 }

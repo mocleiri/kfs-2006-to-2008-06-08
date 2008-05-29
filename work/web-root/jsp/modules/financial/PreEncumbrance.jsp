@@ -1,5 +1,5 @@
 <%--
- Copyright 2005-2007 The Kuali Foundation.
+ Copyright 2005-2006 The Kuali Foundation.
  
  Licensed under the Educational Community License, Version 1.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 --%>
-<%@ include file="/jsp/kfs/kfsTldHeader.jsp"%>
+<%@ include file="/jsp/core/tldHeader.jsp"%>
 <kul:documentPage showDocumentInfo="true"
-	documentTypeName="PreEncumbranceDocument"
+	documentTypeName="KualiPreEncumbranceDocument"
 	htmlFormAction="financialPreEncumbrance" renderMultipart="true"
 	showTabButtons="true">
 
@@ -27,7 +27,7 @@
 		extraTargetRowFields="referenceNumber"
 		editingMode="${KualiForm.editingMode}"
 		editableAccounts="${KualiForm.editableAccounts}" />
-	<gl:generalLedgerPendingEntries />
+	<kul:generalLedgerPendingEntries />
 	<kul:notes />
 	<kul:adHocRecipients />
 	<kul:routeLog />

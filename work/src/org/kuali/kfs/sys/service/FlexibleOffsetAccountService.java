@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2006 The Kuali Foundation.
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 package org.kuali.module.financial.service;
 
 import org.kuali.module.financial.bo.OffsetAccount;
-import org.kuali.module.gl.bo.FlexibleAccountUpdateable;
+import org.kuali.module.gl.bo.OriginEntry;
 
 /**
- * 
  * This interface defines methods that a FlexibleOffsetAccount Service must provide.
+ * 
  * 
  */
 public interface FlexibleOffsetAccountService {
@@ -29,9 +29,9 @@ public interface FlexibleOffsetAccountService {
      * Retrieves the OffsetAccount by its composite primary key (all passed in as parameters) if the SYSTEM parameter
      * FLEXIBLE_OFFSET_ENABLED_FLAG is true.
      * 
-     * @param chartOfAccountsCode The chart code of the account to be retrieved.
-     * @param accountNumber The account number of the account to be retrieved.
-     * @param financialOffsetObjectCode Offset object code used to retrieve the OffsetAccount.
+     * @param chartOfAccountsCode
+     * @param accountNumber
+     * @param financialOffsetObjectCode
      * @return An OffsetAccount object instance. Returns null if there is none with the given key, or if the SYSTEM parameter
      *         FLEXIBLE_OFFSET_ENABLED_FLAG is false.
      */
@@ -40,7 +40,7 @@ public interface FlexibleOffsetAccountService {
     /**
      * Retrieves whether the SYSTEM parameter FLEXIBLE_OFFSET_ENABLED_FLAG is true.
      * 
-     * @return Whether the SYSTEM parameter FLEXIBLE_OFFSET_ENABLED_FLAG is true.
+     * @return whether the SYSTEM parameter FLEXIBLE_OFFSET_ENABLED_FLAG is true.
      */
     public boolean getEnabled();
 
@@ -48,11 +48,10 @@ public interface FlexibleOffsetAccountService {
      * This method will apply the flexible offset account if necessary. It will only change the chart, account, sub account and sub
      * object on the transaction. If the flexible offset isn't enabled or valid for this transaction, it will be unchanged.
      * 
-     * It throws an InvalidFlexibleOffsetException if the flexible offset account associated with the transaction
-     * is invalid, closed or expired or if the object code is invalid for the flexible offset.
+     * It throws a FlexibleOffset
      * 
-     * @param transaction The OriginEntryFull object to be updated.
-     * @return True if transaction was changed, false if not.
+     * @param transaction
+     * @return true if transaction was changed, false if not
      */
-    public boolean updateOffset(FlexibleAccountUpdateable transaction);
+    public boolean updateOffset(OriginEntry transaction);
 }

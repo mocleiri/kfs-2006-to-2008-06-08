@@ -16,36 +16,33 @@
 package org.kuali.module.labor.service;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
-import org.kuali.kfs.KFSPropertyConstants;
-import org.kuali.kfs.context.KualiTestBase;
-import org.kuali.kfs.context.SpringContext;
-import org.kuali.kfs.util.ObjectUtil;
+import org.kuali.kfs.util.SpringServiceLocator;
 import org.kuali.module.gl.web.TestDataGenerator;
 import org.kuali.module.labor.bo.LedgerEntry;
-import org.kuali.module.labor.util.testobject.LedgerEntryForTesting;
-import org.kuali.test.ConfigureContext;
-import org.kuali.test.util.TestDataPreparator;
+import org.kuali.module.labor.util.ObjectUtil;
+import org.kuali.test.KualiTestBase;
+import org.kuali.test.WithTestSpringContext;
+import org.springframework.beans.factory.BeanFactory;
 
-@ConfigureContext
+@WithTestSpringContext
 public class LaborLedgerEntryServiceTest extends KualiTestBase {
 
     private Properties properties;
     private String fieldNames;
     private String deliminator;
     private List<String> keyFieldList;
-    private Map fieldValues;
 
+    private BeanFactory beanFactory;
     private LaborLedgerEntryService laborLedgerEntryService;
     private BusinessObjectService businessObjectService;
 
-    @Override
     public void setUp() throws Exception {
         super.setUp();
         String messageFileName = "test/src/org/kuali/module/labor/testdata/message.properties";
@@ -56,22 +53,17 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
         deliminator = properties.getProperty("deliminator");
         keyFieldList = Arrays.asList(StringUtils.split(fieldNames, deliminator));
 
-        laborLedgerEntryService = SpringContext.getBean(LaborLedgerEntryService.class);
-        businessObjectService = SpringContext.getBean(BusinessObjectService.class);
-
-        LedgerEntry cleanup = new LedgerEntry();
-        ObjectUtil.populateBusinessObject(cleanup, properties, "dataCleanup", fieldNames, deliminator);
-        fieldValues = ObjectUtil.buildPropertyMap(cleanup, Arrays.asList(StringUtils.split(fieldNames, deliminator)));
-        businessObjectService.deleteMatching(LedgerEntry.class, fieldValues);
+        beanFactory = SpringServiceLocator.getBeanFactory();
+        laborLedgerEntryService = (LaborLedgerEntryService) beanFactory.getBean("laborLedgerEntryService");
+        businessObjectService = (BusinessObjectService) beanFactory.getBean("businessObjectService");
     }
 
     public void testSave() throws Exception {
-        String testTarget = "save.";
         LedgerEntry input1 = new LedgerEntry();
-        ObjectUtil.populateBusinessObject(input1, properties, testTarget + "testData1", fieldNames, deliminator);
+        ObjectUtil.populateBusinessObject(input1, properties, "save.testData1", fieldNames, deliminator);
 
         LedgerEntry expected1 = new LedgerEntry();
-        ObjectUtil.populateBusinessObject(expected1, properties, testTarget + "expected1", fieldNames, deliminator);
+        ObjectUtil.populateBusinessObject(expected1, properties, "save.expected1", fieldNames, deliminator);
         Map fieldValues = ObjectUtil.buildPropertyMap(expected1, keyFieldList);
 
         businessObjectService.deleteMatching(LedgerEntry.class, fieldValues);
@@ -81,7 +73,7 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
         assertEquals(1, businessObjectService.countMatching(LedgerEntry.class, fieldValues));
 
         LedgerEntry input2 = new LedgerEntry();
-        ObjectUtil.populateBusinessObject(input2, properties, testTarget + "testData2", fieldNames, deliminator);
+        ObjectUtil.populateBusinessObject(input2, properties, "save.testData2", fieldNames, deliminator);
         try {
             laborLedgerEntryService.save(input2);
             fail();
@@ -91,29 +83,28 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
     }
 
     public void testGetMaxSequenceNumber() throws Exception {
-        String testTarget = "maxSeqNumber.";
         LedgerEntry input1 = new LedgerEntry();
-        ObjectUtil.populateBusinessObject(input1, properties, testTarget + "testData1", fieldNames, deliminator);
+        ObjectUtil.populateBusinessObject(input1, properties, "maxSeqNumber.testData1", fieldNames, deliminator);
 
         Map fieldValues = ObjectUtil.buildPropertyMap(input1, keyFieldList);
-        fieldValues.remove(KFSPropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER);
+        fieldValues.remove(PropertyConstants.TRANSACTION_ENTRY_SEQUENCE_NUMBER);
         businessObjectService.deleteMatching(LedgerEntry.class, fieldValues);
 
         Integer maxSeqNumber = laborLedgerEntryService.getMaxSequenceNumber(input1);
         assertEquals(Integer.valueOf(0), maxSeqNumber);
 
         LedgerEntry ledgerEntryExpected1 = new LedgerEntry();
-        String expectedSeqNumber1 = properties.getProperty(testTarget + "expected1");
+        String expectedSeqNumber1 = properties.getProperty("maxSeqNumber.expected1");
 
         laborLedgerEntryService.save(input1);
         maxSeqNumber = laborLedgerEntryService.getMaxSequenceNumber(input1);
         assertEquals(Integer.valueOf(expectedSeqNumber1), maxSeqNumber);
 
         LedgerEntry input2 = new LedgerEntry();
-        ObjectUtil.populateBusinessObject(input2, properties, testTarget + "testData2", fieldNames, deliminator);
+        ObjectUtil.populateBusinessObject(input2, properties, "maxSeqNumber.testData2", fieldNames, deliminator);
 
         LedgerEntry expected2 = new LedgerEntry();
-        String expectedSeqNumber2 = properties.getProperty(testTarget + "expected2");
+        String expectedSeqNumber2 = properties.getProperty("maxSeqNumber.expected2");
 
         laborLedgerEntryService.save(input2);
         maxSeqNumber = laborLedgerEntryService.getMaxSequenceNumber(input1);
@@ -121,26 +112,5 @@ public class LaborLedgerEntryServiceTest extends KualiTestBase {
 
         maxSeqNumber = laborLedgerEntryService.getMaxSequenceNumber(input2);
         assertEquals(Integer.valueOf(expectedSeqNumber2), maxSeqNumber);
-    }
-
-    public void testFind() throws Exception {
-        String testTarget = "find.";
-        int numberOfTestData = Integer.valueOf(properties.getProperty(testTarget + "numOfData"));
-        int expectedNumOfData = Integer.valueOf(properties.getProperty(testTarget + "expectedNumOfData"));
-
-        List inputDataList = TestDataPreparator.buildTestDataList(LedgerEntry.class, properties, testTarget + "testData", numberOfTestData);
-        businessObjectService.save(inputDataList);
-
-        Iterator<LedgerEntry> ledgerEntries = laborLedgerEntryService.find(fieldValues);
-        int counter = 0;
-        List expectedDataList = TestDataPreparator.buildExpectedValueList(LedgerEntryForTesting.class, properties, testTarget + "expected", fieldNames, deliminator, expectedNumOfData);
-        while (ledgerEntries != null && ledgerEntries.hasNext()) {
-            LedgerEntry entry = ledgerEntries.next();
-            LedgerEntryForTesting ledgerEntryForTesting = new LedgerEntryForTesting();
-            ObjectUtil.buildObject(ledgerEntryForTesting, entry);
-            assertTrue(expectedDataList.contains(ledgerEntryForTesting));
-            counter++;
-        }
-        assertEquals(expectedNumOfData, counter);
     }
 }

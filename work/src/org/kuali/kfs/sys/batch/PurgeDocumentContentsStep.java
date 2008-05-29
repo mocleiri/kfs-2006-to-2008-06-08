@@ -1,12 +1,12 @@
 /*
- * Copyright 2007 The Kuali Foundation.
- * 
+ * Copyright 2006-2007 The Kuali Foundation.
+ *
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.opensource.org/licenses/ecl1.php
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,6 @@
  */
 package org.kuali.kfs.batch;
 
-import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -23,6 +22,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.kuali.core.bo.DocumentHeader;
 import org.kuali.core.service.DocumentService;
+import org.kuali.kfs.KFSConstants;
 
 import edu.iu.uis.eden.exception.WorkflowException;
 
@@ -34,10 +34,10 @@ public class PurgeDocumentContentsStep extends AbstractStep {
     private DocumentService documentService;
 
     /**
-     * @see org.kuali.kfs.batch.Step#execute(String, Date)
+     * @see org.kuali.kfs.batch.Step#performStep()
      */
-    public boolean execute(String jobName, Date jobRunDate) {
-        int numberOfDaysFinal = Integer.parseInt(getParameterService().getParameterValue(getClass(), "NUMBER_OF_DAYS_FINAL"));
+    public boolean execute(String jobName) {
+        int numberOfDaysFinal = Integer.parseInt(getConfigurationService().getParameterValue(getNamespace(), getComponentName(), "NUMBER_OF_DAYS_FINAL"));
         Calendar financialDocumentFinalCalendar = getDateTimeService().getCurrentCalendar();
         financialDocumentFinalCalendar.add(GregorianCalendar.DAY_OF_YEAR, -numberOfDaysFinal);
         String currentDocumentNumber = null;
@@ -54,7 +54,7 @@ public class PurgeDocumentContentsStep extends AbstractStep {
         }
         return true;
     }
-
+    
     public void setFinalDocumentDocumentContent(DocumentHeader finalDocumentHeader) throws WorkflowException {
         // Added the special XML content flag here which indicates to the KEW engine not to execute searchable attribute indexing.
         // This allows for us to clear the content without worrying about losing our search capabilities
@@ -64,7 +64,7 @@ public class PurgeDocumentContentsStep extends AbstractStep {
 
     /**
      * Sets the documentService attribute value. For use by Spring.
-     * 
+     *
      * @param documentService The documentService to set.
      */
     public void setDocumentService(DocumentService documentService) {

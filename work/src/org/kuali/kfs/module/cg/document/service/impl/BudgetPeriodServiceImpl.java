@@ -1,5 +1,7 @@
 /*
- * Copyright 2006-2007 The Kuali Foundation.
+ * Copyright 2005-2006 The Kuali Foundation.
+ * 
+ * $Source$
  * 
  * Licensed under the Educational Community License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +23,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.PropertyConstants;
 import org.kuali.core.service.BusinessObjectService;
 import org.kuali.core.service.DateTimeService;
-import org.kuali.kfs.KFSPropertyConstants;
 import org.kuali.module.kra.budget.bo.BudgetPeriod;
 import org.kuali.module.kra.budget.service.BudgetPeriodService;
-import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 
+ * This class...
+ * 
+ * 
+ */
 public class BudgetPeriodServiceImpl implements BudgetPeriodService {
 
     private DateTimeService dateTimeService;
@@ -46,7 +53,7 @@ public class BudgetPeriodServiceImpl implements BudgetPeriodService {
     public void setDateTimeService(DateTimeService dateTimeService) {
         this.dateTimeService = dateTimeService;
     }
-
+    
     public void setBusinessObjectService(BusinessObjectService businessObjectService) {
         this.businessObjectService = businessObjectService;
     }
@@ -62,8 +69,8 @@ public class BudgetPeriodServiceImpl implements BudgetPeriodService {
 
     public BudgetPeriod getFirstBudgetPeriod(String documentNumber) {
         Map fieldValues = new HashMap();
-        fieldValues.put(KFSPropertyConstants.DOCUMENT_NUMBER, documentNumber);
-        List budgetPeriodList = new ArrayList(businessObjectService.findMatchingOrderBy(BudgetPeriod.class, fieldValues, KFSPropertyConstants.BUDGET_PERIOD_BEGIN_DATE, true));
+        fieldValues.put(PropertyConstants.DOCUMENT_NUMBER, documentNumber);
+        List budgetPeriodList = new ArrayList(businessObjectService.findMatchingOrderBy(BudgetPeriod.class, fieldValues, PropertyConstants.BUDGET_PERIOD_BEGIN_DATE, true));
         return (BudgetPeriod) budgetPeriodList.get(0);
     }
 
