@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.RicePropertyConstants;
 import org.kuali.core.bo.DocumentType;
 import org.kuali.core.document.Document;
 import org.kuali.core.service.BusinessObjectService;
@@ -182,7 +181,7 @@ public class AssetPaymentDocumentRule extends AccountingDocumentRuleBase {
         boolean result = true;
         if (!StringUtils.isBlank(originationCode)) {
             if (SpringContext.getBean(OriginationCodeService.class).getByPrimaryKey(originationCode) == null) {
-                String label = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(OriginationCode.class.getName()).getAttributeDefinition(RicePropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE).getLabel();
+                String label = SpringContext.getBean(DataDictionaryService.class).getDataDictionary().getBusinessObjectEntry(OriginationCode.class.getName()).getAttributeDefinition(KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE).getLabel();
                 GlobalVariables.getErrorMap().putError(CamsPropertyConstants.AssetPaymentDetail.ORIGINATION_CODE, KFSKeyConstants.ERROR_EXISTENCE, label);
                 result = false;
             }
