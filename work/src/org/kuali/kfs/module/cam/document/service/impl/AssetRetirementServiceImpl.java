@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.kuali.RiceConstants;
 import org.kuali.core.bo.PersistableBusinessObject;
 import org.kuali.core.exceptions.ReferentialIntegrityException;
 import org.kuali.core.service.BusinessObjectService;
@@ -53,6 +52,7 @@ import org.kuali.module.cams.service.AssetRetirementService;
 import org.kuali.module.chart.bo.Account;
 import org.kuali.module.chart.bo.ObjectCode;
 import org.kuali.module.financial.service.UniversityDateService;
+import org.kuali.rice.kns.util.KNSConstants;
 
 public class AssetRetirementServiceImpl implements AssetRetirementService {
 
@@ -230,7 +230,7 @@ public class AssetRetirementServiceImpl implements AssetRetirementService {
      */
     public boolean checkRetireMultipleAssets(String retirementReasonCode, List<AssetRetirementGlobalDetail> assetRetirementDetails, Integer maxNumber, boolean addErrorPath) {
         boolean success = true;
-        String errorPath = RiceConstants.MAINTENANCE_NEW_MAINTAINABLE + KFSConstants.MAINTENANCE_ADD_PREFIX + CamsPropertyConstants.AssetRetirementGlobal.ASSET_RETIREMENT_GLOBAL_DETAILS;
+        String errorPath = KNSConstants.MAINTENANCE_NEW_MAINTAINABLE + KFSConstants.MAINTENANCE_ADD_PREFIX + CamsPropertyConstants.AssetRetirementGlobal.ASSET_RETIREMENT_GLOBAL_DETAILS;
 
         if (addErrorPath) {
             GlobalVariables.getErrorMap().addToErrorPath(errorPath);
