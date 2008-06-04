@@ -838,23 +838,6 @@
             <unique-column name="OBJ_ID"/>
         </unique>
     </table>
-    <table name="AR_CUST_INT_NOTE_T">
-        <column name="CUST_NBR" primaryKey="true" size="9" type="VARCHAR"/>
-        <column name="CUST_INTNTE_CRT_TS" primaryKey="true" type="DATE"/>
-        <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
-        <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
-        <column name="CUST_INT_AUTHOR_ID" size="10" type="VARCHAR"/>
-        <column name="CUST_INT_NTE_TXT" size="400" type="VARCHAR"/>
-        <foreign-key foreignTable="AR_CUST_T" name="AR_CUST_INT_NOTE_TR1">
-            <reference foreign="CUST_NBR" local="CUST_NBR"/>
-        </foreign-key>
-        <unique name="AR_CUST_INT_NOTE_TC0">
-            <unique-column name="OBJ_ID"/>
-        </unique>
-        <index name="AR_CUST_INT_NOTE_TI2">
-            <index-column name="CUST_INT_AUTHOR_ID"/>
-        </index>
-    </table>
     <table name="AR_CUST_PRCS_TYP_T">
         <column name="CUST_SPCL_PRCS_CD" primaryKey="true" size="2" type="VARCHAR"/>
         <column name="OBJ_ID" required="true" size="36" type="VARCHAR"/>
@@ -4042,6 +4025,7 @@
         <column default="1" name="VER_NBR" required="true" size="8" type="DECIMAL"/>
         <column name="CPTLAST_NBR" size="12" type="DECIMAL"/>
         <column name="CPTLAST_PREV_TOT_CST_AMT" scale="2" size="19" type="DECIMAL"/>
+        <column name="NXT_AST_PMT_LN_NBR" size="7" type="DECIMAL"/>
         <foreign-key foreignTable="FP_DOC_HEADER_T" name="CM_AST_PMT_DOC_TR1">
             <reference foreign="FDOC_NBR" local="FDOC_NBR"/>
         </foreign-key>
