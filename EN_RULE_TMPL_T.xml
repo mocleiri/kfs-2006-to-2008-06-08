@@ -137,4 +137,7 @@
     <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
         RULE_TMPL_DESC="Rule Template to route documents to an appropriate lockbox"
         RULE_TMPL_ID="13157" RULE_TMPL_NM="LockboxTemplate"/>
+    <EN_RULE_TMPL_T DB_LOCK_VER_NBR="2"
+        RULE_TMPL_DESC="KualiNewUnorderedItemsTemplate"
+        RULE_TMPL_ID="13374" RULE_TMPL_NM="KualiNewUnorderedItemsTemplate"/>
 </dataset>

@@ -709,8 +709,8 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="297712" DOC_TYP_RTE_VER_NBR="1"
         DOC_TYP_VER_NBR="3" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T DB_LOCK_VER_NBR="4" DOC_TYP_ACTV_IND="1"
-        DOC_TYP_CUR_IND="1"
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="5" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="0"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/purapPurchaseOrder.do?methodToCall=docHandler"
         DOC_TYP_ID="316920" DOC_TYP_LBL_TXT="Purchase Order Amendment"
         DOC_TYP_NM="PurchaseOrderAmendmentDocument"
@@ -2342,7 +2342,7 @@
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_PREV_VER="318220" DOC_TYP_RTE_VER_NBR="2"
         DOC_TYP_VER_NBR="1" WRKGRP_ID="2752"/>
-    <EN_DOC_TYP_T DB_LOCK_VER_NBR="2" DOC_TYP_ACTV_IND="1"
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="3" DOC_TYP_ACTV_IND="1"
         DOC_TYP_CUR_IND="1" DOC_TYP_DESC="PurchaseOrderDocument"
         DOC_TYP_HDLR_URL_ADDR="${application.url}/purapPurchaseOrder.do?methodToCall=docHandler"
         DOC_TYP_ID="318281" DOC_TYP_LBL_TXT="Purchase Order"
@@ -2483,4 +2483,13 @@
         DOC_TYP_PARNT_ID="317581"
         DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
         DOC_TYP_RTE_VER_NBR="1" DOC_TYP_VER_NBR="0" WRKGRP_ID="2752"/>
+    <EN_DOC_TYP_T DB_LOCK_VER_NBR="1" DOC_TYP_ACTV_IND="1"
+        DOC_TYP_CUR_IND="1"
+        DOC_TYP_HDLR_URL_ADDR="${application.url}/purapPurchaseOrder.do?methodToCall=docHandler"
+        DOC_TYP_ID="318603" DOC_TYP_LBL_TXT="Purchase Order Amendment"
+        DOC_TYP_NM="PurchaseOrderAmendmentDocument"
+        DOC_TYP_PARNT_ID="318281"
+        DOC_TYP_POST_PRCSR_NM="org.kuali.workflow.postprocessor.KualiPostProcessor"
+        DOC_TYP_PREV_VER="316920" DOC_TYP_RTE_VER_NBR="2"
+        DOC_TYP_VER_NBR="8" WRKGRP_ID="2752"/>
 </dataset>

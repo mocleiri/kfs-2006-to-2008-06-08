@@ -652,6 +652,12 @@
         WRKGRP_CUR_IND="0" WRKGRP_DESC="Capital Assets administration"
         WRKGRP_ID="317720" WRKGRP_NM="CM_ADMINISTRATORS"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Users that are authorized to process a retirement document with multiple asset numbers."
+        WRKGRP_ID="318601"
+        WRKGRP_NM="MULTIPLE_ASSET_RETIREMENT_WORKGROUP"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="2" DOC_HDR_ID="317901"
         WRKGRP_ACTV_IND="1" WRKGRP_CUR_IND="1"
         WRKGRP_DESC="A workgroup that allows its members to claim electronic payments that have come into the institution."
@@ -696,6 +702,11 @@
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="Users in this workgroup can do everything that CM_ASSET_MERGE_SEPARATE_USERS can do, plus: &#xa;1. Update more fields on Asset maintenance document &#xa;2. Retire non-movable assets and 3. Asset transfers non-movable assets"
         WRKGRP_ID="318104" WRKGRP_NM="CM_SUPER_USERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Users that are authorized to merge assets, and use retirement reason &quot;asset separated retirement&quot;."
+        WRKGRP_ID="318602" WRKGRP_NM="MERGE_SEPARATE_WORKGROUP"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
     <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
         WRKGRP_CUR_IND="1" WRKGRP_DESC="PDP Cancels" WRKGRP_ID="297272"
@@ -758,5 +769,10 @@
         WRKGRP_CUR_IND="1"
         WRKGRP_DESC="For Accounts Payable to review changes to DV type vendors"
         WRKGRP_ID="318541" WRKGRP_NM="PA_AP_DV_VENDOR_REVIEWERS"
+        WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
+    <EN_WRKGRP_T DB_LOCK_VER_NBR="1" DOC_HDR_ID="-1" WRKGRP_ACTV_IND="1"
+        WRKGRP_CUR_IND="1"
+        WRKGRP_DESC="Users authorized to retire building assets as razed."
+        WRKGRP_ID="318600" WRKGRP_NM="RAZE_WORKGROUP"
         WRKGRP_TYP_CD="SystemWorkgroup" WRKGRP_VER_NBR="0"/>
 </dataset>

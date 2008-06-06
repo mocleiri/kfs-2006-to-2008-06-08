@@ -868,4 +868,11 @@
         RULE_ATTRIB_LBL_TXT="Payment Method Routing"
         RULE_ATTRIB_NM="LockboxAttribute"
         RULE_ATTRIB_TYP="RuleXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;routingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;lockboxNumber&quot; title=&quot;kuali_dd_label(SystemInformation)&quot; workflowType=&quot;ALL&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>text&lt;/type>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;validation required=&quot;true&quot;/>&#xd;&#xa;          &lt;quickfinder appliesTo=&quot;lockboxNumber&quot; draw=&quot;true&quot; service=&quot;workflow-org.kuali.module.ar.bo.SystemInformation-Lookupable(workflow-lockboxNumber:lockboxNumber)&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//document/lockboxNumber') = wf:ruledata('lockboxNumber')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/routingConfig>"/>
+    <EN_RULE_ATTRIB_T DB_LOCK_VER_NBR="1"
+        RULE_ATTRIB_CLS_NM="org.kuali.workflow.attribute.KualiXmlRuleAttributeImpl"
+        RULE_ATTRIB_DESC="New Unordered Items Routing"
+        RULE_ATTRIB_ID="13373"
+        RULE_ATTRIB_LBL_TXT="New Unordered Items Routing"
+        RULE_ATTRIB_NM="KualiNewUnorderedItemsAttribute"
+        RULE_ATTRIB_TYP="RuleXmlAttribute" RULE_ATTRIB_XML_RTE_TXT="&lt;routingConfig>&#xd;&#xa;        &lt;fieldDef name=&quot;newUnorderedItem&quot; title=&quot;kuali_dd_label(PurchaseOrderAmendmentDocument)&quot; workflowType=&quot;ALL&quot;>&#xd;&#xa;          &lt;display>&#xd;&#xa;            &lt;type>radio&lt;/type>&#xd;&#xa;            &lt;values title=&quot;true&quot;>true&lt;/values>&#xd;&#xa;            &lt;values title=&quot;false&quot;>false&lt;/values>&#xd;&#xa;          &lt;/display>&#xd;&#xa;          &lt;validation required=&quot;true&quot;/>&#xd;&#xa;          &lt;fieldEvaluation>&#xd;&#xa;            &lt;xpathexpression>wf:xstreamsafe('//document/newUnorderedItem') = wf:ruledata('newUnorderedItem')&lt;/xpathexpression>&#xd;&#xa;          &lt;/fieldEvaluation>&#xd;&#xa;        &lt;/fieldDef>&#xd;&#xa;      &lt;/routingConfig>"/>
 </dataset>
