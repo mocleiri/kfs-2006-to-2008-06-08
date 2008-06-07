@@ -4330,6 +4330,7 @@
         <column name="ORG_OWNER_COA_CD" size="2" type="VARCHAR"/>
         <column name="ORG_OWNER_ACCT_NBR" size="7" type="VARCHAR"/>
         <column name="CG_AGENCY_NBR" size="5" type="VARCHAR"/>
+        <column name="FDOC_TYP_CD" size="4" type="VARCHAR"/>
         <foreign-key foreignTable="CM_AST_STATUS_T" name="CM_CPTLAST_DOC_TR4">
             <reference foreign="AST_INVN_STAT_CD" local="AST_INVN_STAT_CD"/>
         </foreign-key>
